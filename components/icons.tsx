@@ -24,7 +24,7 @@ import {
   Twitter,
   User,
   X,
-  type Icon as LucideIcon,
+  type  LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
