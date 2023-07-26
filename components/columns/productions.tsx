@@ -1,5 +1,4 @@
 "use client";
-import { columnHeader } from "@/app/(auth)/sales/orders/components/columns";
 import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";

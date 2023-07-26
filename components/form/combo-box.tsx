@@ -1,5 +1,5 @@
 "use client";
-import { useDebounce } from "@/lib/use-debounce";
+import { useDebounce } from "@/hooks/use-debounce";
 import React from "react";
 import { UseFormReturn } from "react-hook-form/dist/types";
 import { Button } from "../ui/button";

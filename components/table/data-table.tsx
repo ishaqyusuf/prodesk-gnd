@@ -30,7 +30,7 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import { useRouter, useSearchParams } from "next/navigation";
 import __useTableQuery, { ITableIndexNames } from "./use-table";
 import useQueryParams from "@/lib/use-query-params";
-import { useDebounce } from "@/lib/use-debounce";
+import { useDebounce } from "@/hooks/use-debounce";
 // import { useQuery } from "@tanstack/react-query";
 
 // import { DataTablePagination } from "../components/data-table-pagination";
@@ -54,8 +54,9 @@ export function DataTable<TData, TValue>({
   baseQuery,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<
+    VisibilityState
+  >({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
