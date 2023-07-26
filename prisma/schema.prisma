@@ -1,0 +1,847 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model AddressBooks {
+  id         Int       @unique @default(autoincrement())
+  customerId Int?
+  name       String?   @db.VarChar(255)
+  address1   String?   @db.Text
+  address2   String?   @db.Text
+  country    String?   @db.VarChar(255)
+  state      String?   @db.VarChar(255)
+  city       String?   @db.VarChar(255)
+  email      String?   @db.VarChar(255)
+  phoneNo    String?   @db.VarChar(255)
+  meta       Json?
+  createdAt  DateTime? @db.Timestamp(0)
+  updatedAt  DateTime? @db.Timestamp(0)
+}
+
+model Builders {
+  id        Int       @unique @default(autoincrement())
+  name      String?   @db.VarChar(255)
+  slug      String?   @db.VarChar(255)
+  meta      Json?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model CacheManagers {
+  id           Int       @unique @default(autoincrement())
+  cacheKey     String    @db.Text
+  tags         Json?
+  data         Json?
+  rememberTill DateTime? @db.Timestamp(0)
+  createdAt    DateTime? @db.Timestamp(0)
+  updatedAt    DateTime? @db.Timestamp(0)
+}
+
+model Categories {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model CommunityModels {
+  id        Int       @unique @default(autoincrement())
+  projectId Int
+  modelName String    @db.VarChar(255)
+  meta      Json?
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+  slug      String    @db.VarChar(255)
+}
+
+model CostCharts {
+  id        Int       @unique @default(autoincrement())
+  title     String    @db.VarChar(255)
+  type      String    @db.VarChar(255)
+  model     String    @db.VarChar(255)
+  meta      Json?
+  startDate DateTime  @default(now()) @db.Timestamp(0)
+  endDate   DateTime? @db.Timestamp(0)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model CustomerTypes {
+  id          Int       @unique @default(autoincrement())
+  title       String    @db.VarChar(255)
+  coefficient Float?
+  meta        String?   @db.LongText
+  deletedAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0)
+  updatedAt   DateTime? @db.Timestamp(0)
+}
+
+model Customers {
+  id             Int       @unique @default(autoincrement())
+  addressId      Int?
+  customerTypeId Int?
+  name           String    @db.VarChar(255)
+  email          String?   @db.VarChar(255)
+  phoneNo        String?   @db.VarChar(255)
+  address        String?   @db.Text
+  meta           String?   @db.LongText
+  deletedAt      DateTime? @db.Timestamp(0)
+  createdAt      DateTime? @db.Timestamp(0)
+  updatedAt      DateTime? @db.Timestamp(0)
+}
+
+model FailedJobs {
+  id         Int      @unique @default(autoincrement())
+  uuid       String   @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failedAt   DateTime @default(now()) @db.Timestamp(0)
+}
+
+model HomeTasks {
+  id                        Int       @unique @default(autoincrement())
+  archived                  Boolean?
+  homeId                    Int?
+  type                      String?   @db.VarChar(255)
+  taskName                  String?   @db.VarChar(255)
+  taskUid                   String?   @db.VarChar(255)
+  status                    String?   @db.VarChar(255)
+  meta                      Json?
+  producerName              String?   @db.VarChar(255)
+  payrollCheckNo            String?   @db.VarChar(255)
+  payrollApprovedByName     String?   @db.VarChar(255)
+  installersName            String?   @db.VarChar(255)
+  search                    String?   @db.VarChar(255)
+  installationStatus        String?   @db.VarChar(255)
+  productionStatus          String?   @db.VarChar(255)
+  installNote               String?   @db.VarChar(255)
+  extraInstallReason        String?   @db.VarChar(255)
+  installStatus             String?   @db.VarChar(255)
+  extraInstallCostReason    String?   @db.VarChar(255)
+  checkNo                   String?   @db.VarChar(255)
+  projectId                 Int?
+  payrollApprovedById       Int?
+  billable                  Boolean?
+  produceable               Boolean?
+  installable               Boolean?
+  extraInstallCost          Float?
+  taxCost                   Float?
+  amountDue                 Float?
+  amountPaid                Float?
+  payableInstallerCost      Float?
+  payableInstallerExtraCost Float?
+  payableInstallerTotalCost Float?
+  completedAt               Float?
+  totalInstallCost          Float?
+  installCost               Float?
+  checkDate                 DateTime? @db.Timestamp(0)
+  statusDate                DateTime? @db.Timestamp(0)
+  payrollCheckDate          DateTime? @db.Timestamp(0)
+  sentToProductionAt        DateTime? @db.Timestamp(0)
+  producedAt                DateTime? @db.Timestamp(0)
+  prodStartedAt             DateTime? @db.Timestamp(0)
+  productionStatusDate      DateTime? @db.Timestamp(0)
+  productionDueDate         DateTime? @db.Timestamp(0)
+  installApprovedAt         DateTime? @db.Timestamp(0)
+  installStatusDate         DateTime? @db.Timestamp(0)
+  installedAt               DateTime? @db.Timestamp(0)
+  deletedAt                 DateTime? @db.Timestamp(0)
+  createdAt                 DateTime? @db.Timestamp(0)
+  updatedAt                 DateTime? @db.Timestamp(0)
+}
+
+model HomeTemplates {
+  id        Int       @unique @default(autoincrement())
+  builderId Int?
+  slug      String?   @db.VarChar(255)
+  modelNo   String?   @db.VarChar(255)
+  modelName String?   @db.VarChar(255)
+  meta      Json?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model Homes {
+  id             Int       @unique @default(autoincrement())
+  archived       Boolean?
+  projectId      Int?
+  builderId      Int?
+  homeTemplateId Int?
+  homeKey        String?   @db.VarChar(255)
+  slug           String?   @db.VarChar(255)
+  modelName      String?   @db.VarChar(255)
+  modelNo        String?   @db.VarChar(255)
+  lot            String?   @db.VarChar(255)
+  block          String?   @db.VarChar(255)
+  status         String?   @db.VarChar(255)
+  address        String?   @db.VarChar(255)
+  meta           Json?
+  installedAt    DateTime? @db.Timestamp(0)
+  deletedAt      DateTime? @db.Timestamp(0)
+  createdAt      DateTime? @db.Timestamp(0)
+  updatedAt      DateTime? @db.Timestamp(0)
+  search         String?   @db.VarChar(255)
+  punchoutAt     DateTime? @db.Timestamp(0)
+  installCost    Float?
+  punchoutCost   Float?
+}
+
+model InboundOrderItems {
+  id               Int       @unique @default(autoincrement())
+  inboundOrderId   Int?
+  salesOrderItemId Int?
+  salesOrderId     Int?
+  productVariantId Int
+  qty              Int
+  meta             String?   @db.LongText
+  deletedAt        DateTime? @db.Timestamp(0)
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+  productId        Int
+  unitCost         Float
+  totalCost        Float
+}
+
+model InboundOrders {
+  id         Int       @unique @default(autoincrement())
+  slug       String    @db.VarChar(255)
+  orderId    String    @db.VarChar(255)
+  supplierId Int?
+  totalCost  Float?
+  status     String    @db.VarChar(255)
+  meta       Json?
+  deletedAt  DateTime? @db.Timestamp(0)
+  createdAt  DateTime? @db.Timestamp(0)
+  updatedAt  DateTime? @db.Timestamp(0)
+}
+
+model Inventories {
+  id               Int       @unique @default(autoincrement())
+  qty              Int
+  productId        Int
+  productVariantId Int
+  meta             Json?
+  deletedAt        DateTime? @db.Timestamp(0)
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+}
+
+model InventoryProducts {
+  id                Int       @unique @default(autoincrement())
+  multiVariant      Boolean?
+  title             String    @db.VarChar(255)
+  description       String?   @db.Text
+  categoryId        Int?
+  subCategoryId     Int?
+  weight            Float?
+  meta              String?   @db.LongText
+  deletedAt         DateTime? @db.Timestamp(0)
+  createdAt         DateTime? @db.Timestamp(0)
+  updatedAt         DateTime? @db.Timestamp(0)
+  priceUpdateAt     String?   @db.VarChar(255)
+  type              String?   @db.VarChar(255)
+  slug              String    @db.VarChar(255)
+  sku               String?   @db.VarChar(255)
+  barcode           String?   @db.VarChar(255)
+  qty               Int?
+  price             Float?
+  minimumStockLevel Int?
+  img               String?   @db.VarChar(255)
+  status            String?   @db.VarChar(255)
+  category          String?   @db.VarChar(255)
+  subCategory       String?   @db.VarChar(255)
+  supplier          String?   @db.VarChar(255)
+}
+
+model Invoices {
+  id        Int       @unique @default(autoincrement())
+  projectId Int?
+  homeId    Int?
+  refNo     String?   @db.VarChar(255)
+  lot       String?   @db.VarChar(255)
+  block     String?   @db.VarChar(255)
+  taskId    Int?
+  checkNo   String?   @db.VarChar(255)
+  amount    Float?
+  taskName  String?   @db.VarChar(255)
+  meta      Json?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+  taskUid   String?   @db.VarChar(255)
+  checkDate DateTime? @db.Timestamp(0)
+}
+
+model MailGrids {
+  id        Int       @unique @default(autoincrement())
+  title     String    @db.VarChar(255)
+  subject   String?   @db.VarChar(255)
+  html      String?   @db.Text
+  message   String?   @db.Text
+  design    String?   @db.LongText
+  fromName  String?   @db.VarChar(255)
+  fromEmail String?   @db.VarChar(255)
+  meta      Json?
+  status    String    @db.VarChar(255)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+  slug      String?   @db.VarChar(255)
+  type      String?   @db.VarChar(255)
+}
+
+model Migrations {
+  id        Int    @unique @default(autoincrement())
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model ModelHasPermissions {
+  permissionId Int
+  modelType    String @db.VarChar(255)
+  modelId      BigInt @db.UnsignedBigInt
+
+  @@id([permissionId, modelId, modelType])
+  @@index([modelId, modelType], map: "model_has_permissions_model_id_model_type_index")
+}
+
+model ModelHasRoles {
+  roleId    Int
+  modelType String @db.VarChar(255)
+  modelId   Int
+
+  @@id([roleId, modelId, modelType])
+  @@index([modelId, modelType], map: "model_has_roles_model_id_model_type_index")
+}
+
+model Notifications {
+  id         Int       @unique @default(autoincrement())
+  meta       Json?
+  fromUserId Int
+  userId     Int
+  seenAt     DateTime? @db.Timestamp(0)
+  createdAt  DateTime? @db.Timestamp(0)
+}
+
+model OrderInventory {
+  id          Int       @unique @default(autoincrement())
+  category    String
+  meta        Json?
+  name        String
+  description String?
+  price       Float?
+  parentId    Int?
+  createdAt   DateTime? @db.Timestamp(0)
+}
+
+model OrderProductionSubmissions {
+  id               Int       @unique @default(autoincrement())
+  salesOrderId     Int
+  salesOrderItemId Int
+  qty              Int
+  deletedAt        DateTime? @db.Timestamp(0)
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+  meta             Json?
+}
+
+model OrderTemplateItems {
+  id                 Int       @unique @default(autoincrement())
+  orderTemplateId    Int
+  description        String?   @db.Text
+  qty                Int
+  productVariantId   Int?
+  productId          Int?
+  price              Float?
+  retailCost         Float?
+  salesCost          Float?
+  subTotal           Float?
+  totalCost          Float?
+  tax                Float?
+  taxPercenatage     Float?
+  discount           Float?
+  discountPercentage Float?
+  meta               Json?
+  deletedAt          DateTime? @db.Timestamp(0)
+  createdAt          DateTime? @db.Timestamp(0)
+  updatedAt          DateTime? @db.Timestamp(0)
+}
+
+model OrderTemplates {
+  id                 Int       @unique @default(autoincrement())
+  title              String    @db.VarChar(255)
+  slug               String    @db.VarChar(255)
+  meta               Json?
+  deletedAt          DateTime? @db.Timestamp(0)
+  createdAt          DateTime? @db.Timestamp(0)
+  updatedAt          DateTime? @db.Timestamp(0)
+  subTotal           Float?
+  discount           Float?
+  tax                Float?
+  taxPercentage      Float?
+  discountPercentage Float?
+  grandTotal         Float?
+}
+
+model Orders {
+  id        Int       @unique @default(autoincrement())
+  slug      String?   @db.Text
+  orderId   String?   @db.VarChar(255)
+  name      String?   @db.VarChar(255)
+  createdBy Int
+  phone     String?   @db.VarChar(255)
+  supplier  String?   @db.VarChar(255)
+  date      String?   @db.VarChar(255)
+  meta      Json?
+  status    String?   @db.VarChar(255)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PasswordResets {
+  email     String    @db.VarChar(255)
+  token     String    @db.VarChar(255)
+  createdAt DateTime? @db.Timestamp(0)
+
+  @@index([email], map: "password_resets_email_index")
+  @@ignore
+}
+
+model Permissions {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  guardName String    @db.VarChar(255)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+
+  @@unique([name, guardName], map: "permissions_name_guard_name_unique")
+}
+
+model PersonalAccessTokens {
+  id            Int?
+  tokenableType String    @db.VarChar(255)
+  tokenableId   Int       @unique @default(autoincrement())
+  name          String    @db.VarChar(255)
+  token         String    @db.VarChar(64)
+  abilities     String?   @db.Text
+  meta          Json?
+  lastUsedAt    DateTime? @db.Timestamp(0)
+  expiresAt     DateTime? @db.Timestamp(0)
+  createdAt     DateTime? @db.Timestamp(0)
+  updatedAt     DateTime? @db.Timestamp(0)
+}
+
+model Posts {
+  id        Int       @unique @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  slug      String?   @db.VarChar(255)
+  type      String    @db.VarChar(255)
+  content   String?   @db.Text
+  meta      Json?
+  status    String?   @db.VarChar(255)
+  parentId  Int?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model PriceLists {
+  id           Int       @unique @default(autoincrement())
+  userId       Int?
+  slug         String?   @db.Text
+  category     String?   @db.VarChar(255)
+  item         String?   @db.Text
+  price        Float?
+  sellingPrice Float?
+  size         String?   @db.VarChar(255)
+  supplier     String?   @db.VarChar(255)
+  status       String?   @db.VarChar(255)
+  meta         Json?
+  deletedAt    DateTime? @db.Timestamp(0)
+  createdAt    DateTime? @db.Timestamp(0)
+  updatedAt    DateTime? @db.Timestamp(0)
+}
+
+model ProductCategories {
+  id         Int       @unique @default(autoincrement())
+  productId  Int
+  categoryId Int
+  createdAt  DateTime? @db.Timestamp(0)
+  updatedAt  DateTime? @db.Timestamp(0)
+}
+
+model ProductTags {
+  id        Int       @unique @default(autoincrement())
+  productId Int
+  tagId     Int
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model ProductVariants {
+  id                Int       @unique @default(autoincrement())
+  productId         Int
+  weight            Float?
+  price             Float?
+  description       String?   @db.VarChar(255)
+  meta              Json?
+  deletedAt         DateTime? @db.Timestamp(0)
+  createdAt         DateTime? @db.Timestamp(0)
+  updatedAt         DateTime? @db.Timestamp(0)
+  slug              String    @db.VarChar(255)
+  title             String?   @db.VarChar(255)
+  variantTitle      String?   @db.Text
+  sku               String?   @db.VarChar(255)
+  barcode           String?   @db.VarChar(255)
+  qty               Int?
+  minimumStockLevel Int?
+  img               String?   @db.VarChar(255)
+  status            String?   @db.VarChar(255)
+  category          String?   @db.VarChar(255)
+  subCategory       String?   @db.VarChar(255)
+  supplier          String?   @db.VarChar(255)
+}
+
+model Products {
+  id          Int       @unique @default(autoincrement())
+  slug        String    @db.VarChar(255)
+  section     String    @db.VarChar(255)
+  name        String    @db.VarChar(255)
+  description String    @db.VarChar(255)
+  size        String?   @db.VarChar(255)
+  type        String?   @db.VarChar(255)
+  box         String?   @db.VarChar(255)
+  price       Float
+  finish      String?   @db.VarChar(255)
+  length      String?   @db.VarChar(255)
+  per         String?   @db.VarChar(255)
+  unitQty     String?   @db.VarChar(255)
+  itemNumber  String?   @db.VarChar(255)
+  lastUpdate  String    @db.VarChar(255)
+  note        String?   @db.Text
+  priceType   String?   @db.VarChar(255)
+  meta        Json?
+  deletedAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0)
+  updatedAt   DateTime? @db.Timestamp(0)
+}
+
+model Progress {
+  id               Int       @unique @default(autoincrement())
+  parentId         Int?
+  progressableId   Int?
+  progressableType String?   @db.VarChar(255)
+  userId           Int?
+  status           String?   @db.VarChar(255)
+  type             String?   @db.VarChar(255)
+  headline         String?   @db.VarChar(255)
+  description      String?   @db.Text
+  meta             Json?
+  deletedAt        DateTime? @db.Timestamp(0)
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+}
+
+model Projects {
+  id        Int       @unique @default(autoincrement())
+  archived  Boolean?
+  title     String?   @db.VarChar(255)
+  builderId Int?
+  address   String?   @db.VarChar(255)
+  slug      String?   @db.VarChar(255)
+  meta      Json?
+  refNo     String?   @db.VarChar(255)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model RoleHasPermissions {
+  permissionId Int
+  roleId       Int
+
+  @@id([permissionId, roleId])
+  @@index([roleId], map: "role_has_permissions_role_id_foreign")
+}
+
+model Roles {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  guardName String    @db.VarChar(255)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model SalesInvoiceItems {
+  id              Int       @unique @default(autoincrement())
+  uid             Int
+  productId       Int
+  salesInvoiceId  Int
+  item            String?   @db.VarChar(255)
+  description     String?   @db.VarChar(255)
+  qty             Int
+  salesPercentage Float?
+  costPrice       Float?
+  salesPrice      Float?
+  total           Float?
+  tax             Float?
+  meta            Json?
+  deletedAt       DateTime? @db.Timestamp(0)
+  createdAt       DateTime? @db.Timestamp(0)
+  updatedAt       DateTime? @db.Timestamp(0)
+}
+
+model SalesInvoices {
+  id              Int       @unique @default(autoincrement())
+  slug            String    @db.VarChar(255)
+  invoiceNumber   String    @db.VarChar(255)
+  customerName    String?   @db.VarChar(255)
+  sumTax          Float?
+  subTotal        Float?
+  total           Float
+  salesPercentage Float?
+  taxPercentage   Float?
+  meta            Json?
+  deletedAt       DateTime? @db.Timestamp(0)
+  createdAt       DateTime? @db.Timestamp(0)
+  updatedAt       DateTime? @db.Timestamp(0)
+}
+
+model SalesJobs {
+  id           Int       @unique @default(autoincrement())
+  jobId        String?   @db.VarChar(255)
+  salesOrderId Int
+  meta         Json?
+  status       String    @db.VarChar(255)
+  createdAt    DateTime? @db.Timestamp(0)
+  updatedAt    DateTime? @db.Timestamp(0)
+  deletedAt    DateTime? @db.Timestamp(0)
+}
+
+model SalesOrderItemComponents {
+  id               Int       @unique @default(autoincrement())
+  uid              String
+  type             String
+  salesOrderId     Int
+  salesOrderItemId Int
+  productId        Int
+  cost             Float?
+  qty              Float?
+  total            Float?
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+  deletedAt        DateTime? @db.Timestamp(0)
+}
+
+model SalesOrderItems {
+  id                  Int       @unique @default(autoincrement())
+  description         String?   @db.Text
+  productVariantId    Int?
+  productId           Int?
+  casingId            Int?
+  frameId             Int?
+  hingeId             Int?
+  swing               String?   @db.VarChar(255)
+  price               Float?
+  tax                 Float?
+  taxPercenatage      Float?
+  discount            Float?
+  discountPercentage  Float?
+  meta                Json?
+  createdAt           DateTime? @db.Timestamp(0)
+  updatedAt           DateTime? @db.Timestamp(0)
+  qty                 Float?
+  prebuiltQty         Float?
+  orderTemplateId     Int?
+  orderTemplateItemId Int?
+  salesOrderId        Int
+  rate                Float?
+  total               Float?
+  profitMargin        Float?
+  salesPercentage     Float?
+  prodStatus          String?   @db.VarChar(255)
+  prodStartedAt       DateTime? @db.Timestamp(0)
+  sentToProdAt        DateTime? @db.Timestamp(0)
+  prodCompletedAt     DateTime? @db.Timestamp(0)
+}
+
+model SalesOrderProducts {
+  id               Int       @unique @default(autoincrement())
+  salesOrderId     Int
+  salesOrderItemId Int
+  qty              Int?
+  stockQty         Int?
+  shortQty         Int?
+  productVariantId Int?
+  productId        Int?
+  status           String    @db.VarChar(255)
+  deletedAt        DateTime? @db.Timestamp(0)
+  createdAt        DateTime? @db.Timestamp(0)
+  updatedAt        DateTime? @db.Timestamp(0)
+}
+
+model SalesOrders {
+  id                 Int       @unique @default(autoincrement())
+  title              String?   @db.VarChar(255)
+  customerId         Int?
+  billingAddressId   Int?
+  shippingAddressId  Int?
+  salesRepId         Int
+  prodId             Int?
+  summary            String?   @db.Text
+  instruction        String?   @db.Text
+  meta               Json?
+  status             String    @db.VarChar(255)
+  deletedAt          DateTime? @db.Timestamp(0)
+  createdAt          DateTime? @db.Timestamp(0)
+  updatedAt          DateTime? @db.Timestamp(0)
+  orderId            String    @unique @db.VarChar(255)
+  slug               String    @db.VarChar(255)
+  type               String?   @db.VarChar(255)
+  prodQty            Float?
+  builtQty           Float?
+  subTotal           Float?
+  discount           Float?
+  profitMargin       Float?
+  tax                Float?
+  taxPercentage      Float?
+  discountPercentage Float?
+  grandTotal         Float?
+  amountDue          Float?
+  invoiceStatus      String?   @db.VarChar(255)
+  paidAt             DateTime? @db.Timestamp(0)
+  prodStatus         String?   @db.VarChar(255)
+  prodDueDate        DateTime? @db.Timestamp(0)
+}
+
+model SalesPayments {
+  id         Int       @unique @default(autoincrement())
+  customerId Int?
+  orderId    Int
+  amount     Float
+  meta       Json?
+  deletedAt  DateTime? @db.Timestamp(0)
+  createdAt  DateTime? @db.Timestamp(0)
+  updatedAt  DateTime? @db.Timestamp(0)
+}
+
+model SubCategories {
+  id         Int       @unique @default(autoincrement())
+  name       String    @db.VarChar(255)
+  categoryId Int
+  deletedAt  DateTime? @db.Timestamp(0)
+  createdAt  DateTime? @db.Timestamp(0)
+  updatedAt  DateTime? @db.Timestamp(0)
+}
+
+model Suppliers {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  email     String?   @db.VarChar(255)
+  phone     String?   @db.VarChar(255)
+  address   String?   @db.Text
+  meta      Json?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model Tags {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  type      String?   @db.VarChar(255)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model Tasks {
+  id          Int       @unique @default(autoincrement())
+  userId      Int
+  type        String    @db.VarChar(255)
+  homeId      Int?
+  unitId      Int?
+  projectId   Int?
+  taskId      Int?
+  amount      Int
+  title       String?   @db.VarChar(255)
+  subtitle    String?   @db.VarChar(255)
+  description String?   @db.Text
+  note        String?   @db.Text
+  doneBy      String?   @db.VarChar(255)
+  status      String    @db.VarChar(255)
+  meta        Json?
+  adminNote   String?   @db.Text
+  statusDate  DateTime? @db.Timestamp(0)
+  rejectedAt  DateTime? @db.Timestamp(0)
+  approvedAt  DateTime? @db.Timestamp(0)
+  paidAt      DateTime? @db.Timestamp(0)
+  approvedBy  Int?
+  paidBy      Int?
+  checkNo     String?   @db.VarChar(255)
+  deletedAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0)
+  updatedAt   DateTime? @db.Timestamp(0)
+}
+
+model Users {
+  id              Int       @unique @default(autoincrement())
+  name            String?   @db.VarChar(255)
+  username        String?   @db.VarChar(255)
+  email           String    @db.VarChar(255)
+  phoneNo         String?   @db.VarChar(255)
+  phoneCode       String?   @db.VarChar(255)
+  country         String?   @db.VarChar(255)
+  emailVerifiedAt DateTime? @db.Timestamp(0)
+  password        String?   @db.VarChar(255)
+  rememberToken   String?   @db.VarChar(100)
+  meta            Json?
+  deletedAt       DateTime? @db.Timestamp(0)
+  createdAt       DateTime? @db.Timestamp(0)
+  updatedAt       DateTime? @db.Timestamp(0)
+}
+
+model Variants {
+  id        Int       @unique @default(autoincrement())
+  name      String    @db.VarChar(255)
+  value     String    @db.VarChar(255)
+  meta      Json?
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+}
+
+model WorkOrders {
+  id           Int       @unique @default(autoincrement())
+  slug         String?   @db.VarChar(255)
+  description  String?   @db.Text
+  lot          String?   @db.VarChar(255)
+  block        String?   @db.VarChar(255)
+  projectName  String?   @db.VarChar(255)
+  builderName  String?   @db.VarChar(255)
+  requestDate  String?   @db.VarChar(255)
+  supervisor   String?   @db.VarChar(255)
+  scheduleDate String?   @db.VarChar(255)
+  scheduleTime String?   @db.VarChar(255)
+  homeAddress  String?   @db.VarChar(255)
+  homeOwner    String?   @db.VarChar(255)
+  homePhone    String?   @db.VarChar(255)
+  meta         Json?
+  status       String?   @db.VarChar(255)
+  completedAt  DateTime  @default(now()) @db.Timestamp(0)
+  deletedAt    DateTime? @db.Timestamp(0)
+  createdAt    DateTime? @db.Timestamp(0)
+  updatedAt    DateTime? @db.Timestamp(0)
+}
