@@ -450,12 +450,11 @@ model OrderTemplates {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model PasswordResets {
+  id        Int       @unique @default(autoincrement())
   email     String    @db.VarChar(255)
   token     String    @db.VarChar(255)
+  usedAt    DateTime? @db.Timestamp(0)
   createdAt DateTime? @db.Timestamp(0)
-
-  @@index([email], map: "password_resets_email_index")
-  @@ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

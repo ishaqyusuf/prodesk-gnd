@@ -25,6 +25,8 @@ import {
   User,
   X,
   type  LucideIcon,
+  EyeOff,
+  Eye,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -68,6 +70,8 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+    hide: EyeOff,
+    view: Eye,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

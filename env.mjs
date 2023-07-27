@@ -10,7 +10,10 @@ const server = z.object({
   NEXTAUTH_SECRET:
     process.env.NODE_ENV === "production"
       ? z.string().min(1)
-      : z.string().min(1).optional(),
+      : z
+          .string()
+          .min(1)
+          .optional(),
   NEXTAUTH_URL: z.preprocess(
     // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
@@ -28,6 +31,7 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
+  NEXT_PUBLIC_APP_URL: z.string().url(),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -38,6 +42,7 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
@@ -61,11 +66,9 @@ let env = /** @type {MergedOutput} */ (process.env);
 if (!!process.env.SKIP_ENV_VALIDATION == false) {
   const isServer = typeof window === "undefined";
 
-  const parsed = /** @type {MergedSafeParseReturn} */ (
-    isServer
-      ? merged.safeParse(processEnv) // on server we can validate all env vars
-      : client.safeParse(processEnv) // on client we can only validate the ones that are exposed
-  );
+  const parsed = /** @type {MergedSafeParseReturn} */ (isServer
+    ? merged.safeParse(processEnv) // on server we can validate all env vars
+    : client.safeParse(processEnv)); // on client we can only validate the ones that are exposed
 
   if (parsed.success === false) {
     console.error(

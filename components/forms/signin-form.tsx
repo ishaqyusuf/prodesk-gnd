@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,31 +20,77 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { useRouter } from "next/navigation";
 import { ILogin, loginSchema } from "@/lib/validations/auth";
+import { PasswordInput } from "../password-input";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function SignInForm({ className, ...props }: SignInFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<any>("");
-  const { register, handleSubmit } = useForm<ILogin>({
+  const form = useForm<ILogin>({
     resolver: zodResolver(loginSchema),
   });
   const { data: session } = useSession();
+
+  const [isPending, startTransition] = React.useTransition();
+  const { register, handleSubmit } = form;
   const router = useRouter();
   async function onSubmit(loginData: ILogin) {
     setIsLoading(true);
     setError(null);
-    const [resp, err] = await _useAsync<any>(
-      signIn("credentials", {
-        ...loginData,
-        callbackUrl: "/signedin",
-        redirect: true,
-      })
-    );
+    await signIn("credentials", {
+      ...loginData,
+      callbackUrl: "/",
+      redirect: true,
+    });
 
     setIsLoading(false);
   }
-
+  return (
+    <Form {...form}>
+      <form
+        className="grid gap-4"
+        onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+      >
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="rodneymullen180@gmail.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <PasswordInput placeholder="**********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button disabled={isPending}>
+          {isPending && (
+            <Icons.spinner
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
+          )}
+          Sign in
+          <span className="sr-only">Sign in</span>
+        </Button>
+      </form>
+    </Form>
+  );
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
