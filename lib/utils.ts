@@ -11,7 +11,6 @@ export function randomNumber(digit = 1) {
   if (digit > max) {
     return randomNumber(max) + randomNumber(digit - max);
   }
-
   max = Math.pow(10, digit + add);
   var min = max / 10; // Math.pow(10, n) basically
   var number = Math.floor(Math.random() * (max - min + 1)) + min;
