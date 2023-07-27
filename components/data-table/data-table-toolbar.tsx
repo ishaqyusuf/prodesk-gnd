@@ -5,7 +5,7 @@ import Link from "next/link"
 import type {
   DataTableFilterableColumn,
   DataTableSearchableColumn,
-} from "@/types/IDataTable"
+} from "@/types/data-table"
 import { Cross2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 

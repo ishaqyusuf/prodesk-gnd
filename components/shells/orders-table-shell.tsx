@@ -1,6 +1,6 @@
 "use client";
 
-import { TableShellProps } from "@/types/IDataTable";
+import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";

@@ -3,7 +3,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type {
   DataTableFilterableColumn,
   DataTableSearchableColumn,
-} from "@/types/IDataTable"
+} from "@/types/data-table"
 import {
   flexRender,
   getCoreRowModel,
