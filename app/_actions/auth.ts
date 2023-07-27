@@ -6,6 +6,9 @@ import { prisma } from "@/db";
 import { randomInt } from "crypto";
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
+import { resend } from "@/lib/resend";
+import PasswordResetRequestEmail from "@/components/emails/password-reset-request-email";
+import { env } from "@/env.mjs";
 
 export async function resetPasswordRequest({
   email,
@@ -23,6 +26,16 @@ export async function resetPasswordRequest({
       createdAt: new Date(),
       token: token.toString(),
     },
+  });
+  await resend.emails.send({
+    from: env.EMAIL_FROM_ADDRESS,
+    to: "ishaqyusuf024@gmail.com",
+    subject: "Password Reset Request",
+    react: PasswordResetRequestEmail({
+      firstName: user?.name ?? undefined,
+      fromEmail: env.EMAIL_FROM_ADDRESS,
+      token,
+    }),
   });
   return { id: user.id };
 }
