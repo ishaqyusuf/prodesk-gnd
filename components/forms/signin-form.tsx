@@ -30,7 +30,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
     const [resp, err] = await _useAsync<any>(
       signIn("credentials", {
         ...loginData,
-        callbackUrl: "/loggedin",
+        callbackUrl: "/signedin",
         redirect: true,
       })
     );
