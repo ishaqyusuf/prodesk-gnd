@@ -1,33 +1,33 @@
-import { SignInForm } from "@/components/forms/signin-form";
-import { Shell } from "@/components/shells/shell";
-import { Metadata } from "next";
+import { type Metadata } from "next"
+import { env } from "@/env.mjs"
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import Link from "next/link";
-import { env } from "@/env.mjs";
-import { ResetPasswordForm } from "@/components/forms/reset-password-form";
-import { ArrowLeft } from "lucide-react";
+} from "@/components/ui/card"
+import { ResetPasswordStep2Form } from "@/components/forms/reset-password-form-step2"
+import { Shell } from "@/components/shells/shell"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
+
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Reset Password",
   description: "Enter your email to reset your password",
-};
+}
 
-export default function LoginPage() {
+export default function ResetPasswordStep2Page() {
   return (
     <Shell className="max-w-lg">
       <Card>
         <CardHeader className="space-y-1">
-          <div className="">
+             <div className="">
             <Link
               aria-label="Reset password"
-              href="/signin/reset-password"
+              href="/signin"
               className="text-sm text-primary underline-offset-4 transition-colors hover:underline inline-flex items-center"
             >
               <ArrowLeft className="inline-flex w-4 mr-2" /> Sign In
@@ -38,10 +38,10 @@ export default function LoginPage() {
             Enter your email address and we will send you a verification code
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4">
-          <ResetPasswordForm />
+        <CardContent>
+          <ResetPasswordStep2Form />
         </CardContent>
       </Card>
     </Shell>
-  );
+  )
 }

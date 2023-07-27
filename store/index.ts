@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 // import orderItemComponentSlice from "./orderItemComponentSlice";
 // import customerProfiles from "./customerProfiles";
 // import headerSlice from "./headerNavSlice";
-// import slicers from "./slicers";
+import slicers from "./slicers";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +13,7 @@ export const store = configureStore({
     // customerProfiles,
     // orderItemComponent: orderItemComponentSlice,
     // headerSlice,
-    // slicers,
+    slicers,
   },
   middleware(getDefaultMiddleware) {
     return getDefaultMiddleware();

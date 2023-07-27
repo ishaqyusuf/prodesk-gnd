@@ -36,6 +36,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/signin",
     error: undefined,
+    
   },
   jwt: {
     secret: "super-secret",
@@ -85,7 +86,6 @@ export const authOptions: NextAuthOptions = {
         const where: Prisma.UsersWhereInput = {
           email,
         };
-        // console.log("AUTHORIZING......");
 
         const user = await prisma.users.findFirst({
           where,
@@ -134,6 +134,7 @@ export const authOptions: NextAuthOptions = {
             can[camel(p.name)] =
               permissionIds.includes(p.id) || _role?.name == "Admin";
           });
+     
 
           return {
             user,
