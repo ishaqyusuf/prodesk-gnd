@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -15,19 +16,23 @@ import {
   Banknote,
   Construction,
   Copy,
+  Info,
   MoreHorizontal,
   Pen,
   Printer,
   ShoppingBag,
+  Trash,
   View,
 } from "lucide-react";
 import Link from "next/link";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { copyOrderAction } from "@/app/_actions/sales";
+import { copyOrderAction, deleteOrderAction } from "@/app/_actions/sales";
 import { toast } from "sonner";
 import { dispatchSlice } from "@/store/slicers";
+import { useBool } from "@/lib/use-loader";
+import { Icons } from "../icons";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -65,11 +70,58 @@ export function OrderRowAction(props: IOrderRowProps) {
           </Link>
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction row={row} />
+          <DeleteRowMenuAction row={row} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
   );
 }
+export const DeleteRowMenuAction = typedMemo(({ row }: IOrderRowProps) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const confirm = useBool();
+  async function deleteOrder(e) {
+    e.preventDefault();
+    if (!confirm.bool) {
+      confirm.setBool(true);
+      setTimeout(() => {
+        confirm.setBool(false);
+      }, 3000);
+      return;
+    }
+    confirm.setBool(false);
+    startTransition(async () => {
+      toast.promise(
+        async () => {
+          await deleteOrderAction(row.id);
+          router.refresh();
+        },
+        {
+          loading: `Deleteting ${row.type} #${row.orderId}`,
+          success(data) {
+            return "Deleted Successfully";
+          },
+          error: "Unable to completed Delete Action",
+        }
+      );
+    });
+  }
+
+  const Icon = confirm.bool ? Info : isPending ? Icons.spinner : Trash;
+  return (
+    <DropdownMenuItem
+      disabled={isPending}
+      className="text-red-500 hover:text-red-600"
+      onClick={deleteOrder}
+    >
+      <Icon
+        className={`mr-2 ${isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"}`}
+      />
+      {confirm.bool ? "Sure?" : isPending ? "Deleting" : "Delete"}
+      <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+    </DropdownMenuItem>
+  );
+});
 export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
   function _print(mode: IOrderPrintMode) {
     dispatchSlice("printOrders", {

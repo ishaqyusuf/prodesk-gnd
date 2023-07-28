@@ -20,17 +20,20 @@ export default function OrderPrinter({}: Props) {
   const [sales, setSales] = useState<ISalesOrder[]>([]);
   useEffect(() => {
     if (sales?.length > 0) {
+      console.log("PRINTING>..");
       adjustWatermark(sales?.map((s) => s.orderId));
-      setTimeout(() => {
-        window.print();
-        dispatchSlice("printOrders", null);
-      }, 1000);
+      // setTimeout(() => {
+      window.print();
+      dispatchSlice("printOrders", null);
+      // setSales([]);
+      // }, 1000);
     }
   }, [sales]);
   async function print(printer: { mode; slugs: string[] }) {
     if (!printer) return;
     const sales = await salesPrintAction({ slugs: printer.slugs });
     setSales(sales as any);
+    console.log("PRINT TRIGGEREED");
   }
   return (
     <BasePrinter>

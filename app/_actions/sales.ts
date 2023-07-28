@@ -200,6 +200,20 @@ export async function saveOrderAction({
   await orderProdQtyUpdateAction(sale_order.id);
   return sale_order;
 }
+export async function deleteOrderAction(id) {
+  await prisma.salesOrderItems.deleteMany({
+    where: {
+      salesOrderId: id
+    }
+  })
+  await prisma.salesOrders.delete({
+    where: {id},
+    include: {
+      items: true
+    }
+  })
+  
+}
 export default async function orderProdQtyUpdateAction(salesOrderId) {
   let prodQty = 0;
   let builtQty = 0;
