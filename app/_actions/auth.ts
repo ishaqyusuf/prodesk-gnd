@@ -29,9 +29,9 @@ export async function resetPasswordRequest({
   });
   await resend.emails.send({
     from: "GND-Prodesk<ohno@gndprodesk.com>",
-    to: "ishaqyusuf024@gmail.com",
+    // to: "ishaqyusuf024@gmail.com",
+    to: user.email,
     subject: "Security Alert: Forgot Password OTP",
-
     react: PasswordResetRequestEmail({
       firstName: user?.name ?? undefined,
       token,

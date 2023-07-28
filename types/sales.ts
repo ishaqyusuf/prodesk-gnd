@@ -15,6 +15,7 @@ export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
 export type IOrderType = "order" | "estimate";
+export type IOrderPrintMode = "quote" | "order" | "production";
 export type ISalesOrder = SalesOrders & {
   customer?: Customers;
   billingAddress?: IAddressBook;
@@ -124,7 +125,6 @@ export interface ICustomer extends Customers {
   profile: CustomerTypes;
 }
 export type AddressType = "shippingAddress" | "billingAddress";
-export type IOrderPrintMode = "quote" | "order" | "production";
 
 export interface SalesQueryParams {
   _q?;

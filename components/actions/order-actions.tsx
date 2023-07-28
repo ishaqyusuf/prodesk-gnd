@@ -1,6 +1,6 @@
 "use client";
 
-import { IOrderType, ISalesOrder } from "@/types/sales";
+import { IOrderPrintMode, IOrderType, ISalesOrder } from "@/types/sales";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,11 @@ import {
 import { Button } from "../ui/button";
 import {
   Banknote,
+  Construction,
   Copy,
   MoreHorizontal,
   Pen,
+  Printer,
   ShoppingBag,
   View,
 } from "lucide-react";
@@ -25,6 +27,7 @@ import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { copyOrderAction } from "@/app/_actions/sales";
 import { toast } from "sonner";
+import { dispatchSlice } from "@/store/slicers";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -35,7 +38,6 @@ export interface IOrderRowProps {
 export function OrderRowAction(props: IOrderRowProps) {
   const { row, viewMode, estimate } = props;
   const _linkDir = `/sales/order/${row.slug}`;
-
   return (
     <div className="">
       <DropdownMenu>
@@ -62,12 +64,55 @@ export function OrderRowAction(props: IOrderRowProps) {
             </DropdownMenuItem>
           </Link>
           <CopyOrderMenuAction row={row} />
+          <PrintOrderMenuAction row={row} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
   );
 }
+export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
+  function _print(mode: IOrderPrintMode) {
+    dispatchSlice("printOrders", {
+      mode,
+      slugs: [props.row.slug],
+    });
+  }
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+        Print
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem
+          onClick={() => {
+            _print("quote");
+          }}
+        >
+          <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Estimates
+        </DropdownMenuItem>
 
+        <DropdownMenuItem
+          onClick={() => {
+            _print("order");
+          }}
+        >
+          <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Order
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            _print("production");
+          }}
+        >
+          <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Production
+        </DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  );
+});
 export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();

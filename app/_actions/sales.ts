@@ -319,3 +319,19 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     }) as any,
   });
 }
+export async function salesPrintAction({ slugs }: { slugs: string[] }) {
+  const sales = prisma.salesOrders.findMany({
+    where: {
+      slug: {
+        in: slugs,
+      },
+    },
+    include: {
+      items: {},
+      salesRep: {},
+      billingAddress: {},
+      shippingAddress: {},
+    },
+  });
+  return sales;
+}
