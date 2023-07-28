@@ -1,12 +1,19 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+let safelist = [];
+Object.keys(colors).map((c) => {
+  safelist.push(`bg-${c}-500`);
+  safelist.push(`text-${c}-500`);
+});
 module.exports = {
   darkMode: ["class"],
+  safelist,
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -50,6 +57,17 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        black: {
+          100: "#cdd0d6",
+          200: "#9ba2ae",
+          300: "#687385",
+          400: "#36455d",
+          500: "#041634",
+          600: "#03122a",
+          700: "#020d1f",
+          800: "#020915",
+          900: "#01040a",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,4 +91,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

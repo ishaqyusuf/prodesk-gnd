@@ -274,6 +274,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  if (!header.id.includes("_"))
                   return (
                     <TableHead key={header.id} className="whitespace-nowrap">
                       {header.isPlaceholder
@@ -295,14 +296,14 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map((cell) =>  cell.id.includes("__") ? null : (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </TableCell>
-                  ))}
+                  )).filter(Boolean)}
                 </TableRow>
               ))
             ) : (

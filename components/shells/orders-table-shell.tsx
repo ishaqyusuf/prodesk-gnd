@@ -6,7 +6,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
 import { CheckColumn, ColumnHeader } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
-import { OrderIdCell, OrderPriorityFlagColumn } from "../columns/sales-columns";
+import {
+  OrderCustomerCell,
+  OrderIdCell,
+  OrderInvoiceCell,
+  OrderPriorityFlagColumn,
+  OrderProductionCell,
+} from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 
 export default function OrdersTableShell<T>({
@@ -24,6 +30,33 @@ export default function OrdersTableShell<T>({
         accessorKey: "orderId",
         cell: ({ row }) => OrderIdCell(row.original, "/sales/orders/slug"),
         header: ColumnHeader("Order"),
+      },
+      {
+        accessorKey: "customer",
+        header: ColumnHeader("Customer"),
+        cell: ({ row }) => OrderCustomerCell(row.original.customer),
+      },
+      {
+        accessorKey: "invoice",
+        header: ColumnHeader("Total/Due"),
+        cell: ({ row }) => OrderInvoiceCell(row.original, false),
+      },
+      {
+        accessorKey: "production",
+        header: ColumnHeader("Production"),
+        cell: ({ row }) => OrderProductionCell(row.original),
+      },
+      {
+        accessorKey: "_status",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "_q",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "_priority",
+        enableHiding: false,
       },
     ],
     [data, isPending]
@@ -45,14 +78,12 @@ export default function OrdersTableShell<T>({
           //  },
         ]
       }
-      searchableColumns={
-        [
-          //  {
-          //    id: "name",
-          //    title: "names",
-          //  },
-        ]
-      }
+      searchableColumns={[
+        {
+          id: "_q" as any,
+          title: "name, orderId",
+        },
+      ]}
       newRowLink={`/sales/orders`}
       //  deleteRowsAction={() => void deleteSelectedRows()}
     />

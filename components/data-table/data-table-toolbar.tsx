@@ -40,7 +40,7 @@ export function DataTableToolbar<TData>({
         {searchableColumns.length > 0 &&
           searchableColumns.map(
             (column) =>
-              table.getColumn(column.id ? String(column.id) : "") && (
+              (table.getColumn(column.id ? String(column.id) : "") || String(column.id).startsWith('_')) && (
                 <Input
                   key={String(column.id)}
                   placeholder={`Filter ${column.title}...`}
