@@ -28,12 +28,12 @@ export async function resetPasswordRequest({
     },
   });
   await resend.emails.send({
-    from: env.EMAIL_FROM_ADDRESS,
+    from: "ohno@gndprodesk.com",
     to: "ishaqyusuf024@gmail.com",
-    subject: "Password Reset Request",
+    subject: "Security Alert: Forgot Password OTP",
+
     react: PasswordResetRequestEmail({
       firstName: user?.name ?? undefined,
-      fromEmail: env.EMAIL_FROM_ADDRESS,
       token,
     }),
   });
@@ -63,6 +63,14 @@ export async function resetPassword({
     },
     data: {
       password,
+    },
+  });
+  await prisma.passwordResets.update({
+    where: {
+      id: tok.id,
+    },
+    data: {
+      usedAt: new Date(),
     },
   });
   //   const user = await prisma.users.findFirst({

@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { PasswordInput } from "@/components/password-input"
+import { resetPassword } from "@/app/_actions/auth"
 
 export type ResetPasswordFormInputs = z.infer<typeof resetPasswordSchema>
 
@@ -42,6 +43,9 @@ export function ResetPasswordStep2Form() {
 
     startTransition(async () => {
       try {
+        const resp = await resetPassword(data)
+        toast.success("Password reset successfully.")
+        router.push('/singin')
         // const attemptFirstFactor = await signIn.attemptFirstFactor({
         //   strategy: "reset_password_email_code",
         //   code: data.code,
@@ -59,8 +63,9 @@ export function ResetPasswordStep2Form() {
         // } else {
         //   console.error(attemptFirstFactor)
         // }
-      } catch (err) {
-        // catchClerkError(err)
+      } catch (err: any) { 
+
+        toast.message(err.message)
       }
     })
   }
