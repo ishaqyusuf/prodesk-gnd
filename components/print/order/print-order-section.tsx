@@ -1,11 +1,11 @@
 "use client";
 
-import { ISalesOrder } from "@/types/ISales";
 import { OrderPrintFooter } from "./order-print-footer";
 import { OrderPrintHeader } from "./order-print-header";
 import { OrderPrintInvoiceLines } from "./order-print-invoice-lines";
 import "@/styles/sales.css";
 import { WaterMark } from "./water-mark";
+import { ISalesOrder } from "@/types/sales";
 interface Props {
   order: ISalesOrder;
   index: Number;
