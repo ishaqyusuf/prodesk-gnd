@@ -26,9 +26,9 @@ export interface DataTableFilterableColumn<TData>
 export interface TableShellProps<T> {
     data: T[]
     pageInfo: {
-        perPage;
-        total?;
-        pageCount?;
-        currentPage;
+       pageIndex?: number | undefined;
+    pageCount?: number | undefined;
+    totalItems?: number | undefined;
+    hasPreviousPage?: Boolean;
     }
 }

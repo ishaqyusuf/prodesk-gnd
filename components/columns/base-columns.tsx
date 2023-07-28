@@ -1,5 +1,6 @@
 "use client";
 
+import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { Checkbox } from "../ui/checkbox";
 
 export interface CheckColumnProps {
@@ -43,3 +44,9 @@ export function CheckColumn({ setSelectedRowIds, data }: CheckColumnProps) {
     enableHiding: false,
   };
 }
+export const ColumnHeader = (title) => {
+  let c = ({ column }) => (
+    <DataTableColumnHeader column={column} title={title} />
+  );
+  return c;
+};

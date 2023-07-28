@@ -125,3 +125,21 @@ export interface ICustomer extends Customers {
 }
 export type AddressType = "shippingAddress" | "billingAddress";
 export type IOrderPrintMode = "quote" | "order" | "production";
+
+export interface SalesQueryParams {
+  _q?;
+  skip?;
+  take?;
+  page?;
+  per_page?;
+  sort?: "customer" | "status";
+  sort_order?: "asc" | "desc" | undefined;
+  date?;
+  from?;
+  to?;
+  status?;
+  prodId?;
+  _page?: "production" | undefined;
+  type?: IOrderType;
+  _dateType?: "createdAt" | "prodDueDate";
+}
