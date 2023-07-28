@@ -141,7 +141,7 @@ export function OrderProductionCell(
       <p className="font-medium whitespace-nowrap">{order.producer?.name}</p>
       <Badge
         variant={"secondary"}
-        className={`h-5 px-1   text-xs text-slate-100 ${color}`}
+        className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
       >
         {order.prodStatus || "-"}
       </Badge>

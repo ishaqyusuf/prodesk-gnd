@@ -14,21 +14,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { TablePageInfo } from "@/types/data-table"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
-  pageSizeOptions?: number[]
+  pageSizeOptions?: number[],
+  pageInfo: TablePageInfo
 }
 
 export function DataTablePagination<TData>({
   table,
+  pageInfo,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTablePaginationProps<TData>) {
+  const {pageCount,from = 0,to = 0,totalItems = 0 } = pageInfo;
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 overflow-auto px-2 py-1 sm:flex-row sm:gap-8">
       <div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {from}-{to} of {totalItems}
+        {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected. */}
       </div>
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
         <div className="flex items-center space-x-2">

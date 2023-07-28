@@ -25,10 +25,14 @@ export interface DataTableFilterableColumn<TData>
  
 export interface TableShellProps<T> {
     data: T[]
-    pageInfo: {
-       pageIndex?: number | undefined;
+    pageInfo: TablePageInfo
+}
+export interface TablePageInfo {
+    pageIndex?: number | undefined;
+    currentPage?: number | undefined;
+    from?: number | undefined;
+    to?: number | undefined; 
     pageCount?: number | undefined;
     totalItems?: number | undefined;
     hasPreviousPage?: Boolean;
-    }
 }

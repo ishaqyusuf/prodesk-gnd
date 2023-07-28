@@ -3,6 +3,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type {
   DataTableFilterableColumn,
   DataTableSearchableColumn,
+  TablePageInfo,
 } from "@/types/data-table"
 import {
   flexRender,
@@ -35,7 +36,7 @@ import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  pageCount: number
+  pageInfo: TablePageInfo
   filterableColumns?: DataTableFilterableColumn<TData>[]
   searchableColumns?: DataTableSearchableColumn<TData>[]
   newRowLink?: string
@@ -45,7 +46,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pageCount,
+  pageInfo,
   filterableColumns = [],
   searchableColumns = [],
   newRowLink,
@@ -56,10 +57,10 @@ export function DataTable<TData, TValue>({
   const searchParams = useSearchParams()
 
   // Search params
-  const page = searchParams?.get("page") ?? "1"
-  const per_page = searchParams?.get("per_page") ?? "10"
-  const sort = searchParams?.get("sort")
-  const [column, order] = sort?.split(".") ?? []
+  const page = searchParams?.get("page") ?? "1";
+  const per_page = searchParams?.get("per_page") ?? "20";
+  const sort = searchParams?.get("sort");
+  const [column, order] = sort?.split(".") ?? [];
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -234,7 +235,8 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
-    pageCount: pageCount ?? -1,
+    
+    pageCount: pageInfo?.pageCount || -1,
     state: {
       pagination,
       sorting,
@@ -319,7 +321,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination pageInfo={pageInfo} table={table} />
     </div>
   )
 }

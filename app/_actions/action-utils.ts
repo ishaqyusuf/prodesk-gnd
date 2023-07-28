@@ -68,22 +68,26 @@ export async function queryFilter(input) {
     };
   }
   return {
-    take: per_page,
-    skip,
+    take: Number(per_page),
+    skip: Number(skip),
     orderBy,
   };
 }
 export async function getPageInfo(input, where, model) {
   const { page = 1, per_page = 20 } = input;
-  const skip = (page - 1) * per_page;
+  const skip = (page - 1) * Number(per_page);
   const count = await model.count({
     where,
   });
+  const from = skip + 1;
   const pageInfo = {
     hasPreviousPage: skip > 0,
     pageCount: Math.ceil(count / per_page),
     totalItems: count,
     pageIndex: skip / per_page,
+    currentPage: page,
+    from,
+    to: Math.min(skip + Number(per_page), count),
   };
   return pageInfo;
 }

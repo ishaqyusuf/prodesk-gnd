@@ -3,6 +3,7 @@ const colors = require("tailwindcss/colors");
 let safelist = [];
 Object.keys(colors).map((c) => {
   safelist.push(`bg-${c}-500`);
+  safelist.push(`hover:bg-${c}-600`);
   safelist.push(`text-${c}-500`);
 });
 module.exports = {

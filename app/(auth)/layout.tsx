@@ -32,7 +32,7 @@ export default function AccountLayout({ children }: any) {
         <SiteHeader nav={sb} />
         <div
           className={cn(
-            "relative py-4 lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px]"
+            "relative py-4 lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px] mb-16"
           )}
         >
           <div className="mx-auto w-full min-w-0">{children}</div>

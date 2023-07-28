@@ -77,8 +77,8 @@ export default function OrdersTableShell<T>({
   return (
     <DataTable
       columns={columns}
+      pageInfo={pageInfo}
       data={data}
-      pageCount={5}
       filterableColumns={
         [
           //  {

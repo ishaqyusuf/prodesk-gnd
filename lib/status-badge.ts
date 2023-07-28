@@ -1,7 +1,7 @@
 export function getBadgeColor(status: string | null) {
   let color: Colors | undefined = StatusColorMap[status?.toLowerCase() || ""];
   if (!color) color = "slate";
-  return `bg-${color}-500`;
+  return `bg-${color}-500 hover:bg-${color}-600`;
 }
 
 let StatusColorMap: { [key: string]: Colors } = {
