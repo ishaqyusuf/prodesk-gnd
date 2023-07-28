@@ -10,10 +10,11 @@ import {
   OrderCustomerCell,
   OrderIdCell,
   OrderInvoiceCell,
-  OrderPriorityFlagColumn,
+  OrderPriorityFlagCell,
   OrderProductionCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
+import { OrderRowAction } from "../actions/order-actions";
 
 export default function OrdersTableShell<T>({
   data,
@@ -25,7 +26,11 @@ export default function OrdersTableShell<T>({
   const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-      OrderPriorityFlagColumn(true),
+      {
+        maxSize: 10,
+        id: "flags",
+        cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
+      },
       {
         accessorKey: "orderId",
         cell: ({ row }) => OrderIdCell(row.original, "/sales/orders/slug"),
@@ -58,6 +63,14 @@ export default function OrdersTableShell<T>({
         accessorKey: "_priority",
         enableHiding: false,
       },
+      {
+        accessorKey: "actions",
+        header: ColumnHeader(""),
+        size: 15,
+        maxSize: 15,
+        enableSorting: false,
+        cell: ({ row }) => <OrderRowAction row={row.original} />,
+      },
     ],
     [data, isPending]
   );
@@ -81,7 +94,7 @@ export default function OrdersTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "name, orderId",
+          title: "orderId, customer",
         },
       ]}
       newRowLink={`/sales/orders`}

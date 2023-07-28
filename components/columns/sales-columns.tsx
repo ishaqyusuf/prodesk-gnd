@@ -3,30 +3,76 @@
 import { ICustomer, ISalesOrder } from "@/types/sales";
 import OrderFlag from "../sales/order-flag";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useTransition } from "react";
 import { formatDate } from "@/lib/use-day";
 import { Customers } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { getBadgeColor } from "@/lib/status-badge";
 import { Badge } from "../ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { priorities } from "@/lib/sales/order-priority";
+import { FlagIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { updateOrderPriorityActon } from "@/app/_actions/sales";
+import { toast } from "sonner";
+import { Icons } from "../icons";
 
-export const OrderPriorityFlagColumn = (editable: Boolean = false) => ({
-  // accessorKey: "flag",
-  maxSize: 10,
-  id: "flags",
-
-  // header: ({ column }) => (
-  //   <DataTableColumnHeader className="w-4" column={column} title="" />
-  // ),
-  cell: ({ row }) => {
-    return (
-      <div className="w-4">
-        <OrderFlag order={row.original} />
-      </div>
-    );
-  },
-  // filterFn
-});
+export const OrderPriorityFlagCell = (
+  order: ISalesOrder,
+  editable: Boolean = false
+) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const Update = async (priority) => {
+    startTransition(async () => {
+      try {
+        await updateOrderPriorityActon({
+          orderId: order.orderId,
+          priority,
+        });
+        toast.success("Priority updated!");
+        router.refresh();
+      } catch (error) {
+        toast.error("Unable to complete");
+      }
+    });
+  };
+  return (
+    <div className="w-4">
+      {!editable ? (
+        <OrderFlag order={order} />
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            {isPending ? (
+              <Icons.spinner
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            ) : (
+              <button className="focus:outline-none">
+                <OrderFlag order={order} />
+              </button>
+            )}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-[185px]">
+            {priorities.map((p, _) => (
+              <DropdownMenuItem key={_} onClick={() => Update(p.title)}>
+                <FlagIcon className={`mr-2 h-4 w-4 text-${p.color}-500`} />
+                {p.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </div>
+  );
+};
 export function OrderIdCell(
   order: ISalesOrder,
   link: string | undefined = undefined

@@ -143,3 +143,17 @@ export interface SalesQueryParams {
   type?: IOrderType;
   _dateType?: "createdAt" | "prodDueDate";
 }
+export interface UpdateOrderPriorityProps {
+  priority;
+  orderId;
+}
+export interface CopyOrderActionProps {
+  orderId;
+  as: "estimate" | "order";
+}
+export interface SaveOrderActionProps {
+  order: SalesOrders;
+  deleteIds?: Number[];
+  id?;
+  items: ISalesOrderItem[];
+}

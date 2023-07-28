@@ -28,7 +28,7 @@ export async function resetPasswordRequest({
     },
   });
   await resend.emails.send({
-    from: "ohno@gndprodesk.com",
+    from: "GND-Prodesk<ohno@gndprodesk.com>",
     to: "ishaqyusuf024@gmail.com",
     subject: "Security Alert: Forgot Password OTP",
 

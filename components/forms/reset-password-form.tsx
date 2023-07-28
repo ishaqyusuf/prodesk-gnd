@@ -38,10 +38,10 @@ export function ResetPasswordForm() {
   async function onSubmit(data: ResetPasswordRequestInputs) {
     startTransition(async () => {
       const resp = await resetPasswordRequest(data);
-      if (!resp) toast.message("User with email not found");
+      if (!resp) toast.error("User with email not found");
       else {
         router.push("/signin/reset-password/step2");
-        toast.message("Check your email", {
+        toast.error("Check your email", {
           description: "We sent you a 6-digit verification code.",
         });
       }

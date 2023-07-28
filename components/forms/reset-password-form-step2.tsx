@@ -65,7 +65,7 @@ export function ResetPasswordStep2Form() {
         // }
       } catch (err: any) { 
 
-        toast.message(err.message)
+        toast.error(err.message)
       }
     })
   }
