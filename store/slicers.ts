@@ -24,8 +24,18 @@ export interface ISlicer {
     isClient;
   };
   printUnits: string[];
+  modal: {
+    name: ModalName;
+    data: any;
+  };
 }
-const initialState: ISlicer = {} as any;
+export type ModalName = "assignProduction" | undefined;
+const initialState: ISlicer = ({
+  modal: {
+    name: undefined,
+    data: null,
+  },
+} as Partial<ISlicer>) as any;
 const headerNavSlice = createSlice({
   name: "slicers",
   initialState,

@@ -14,15 +14,20 @@ import {
 import { Button } from "../ui/button";
 import {
   Banknote,
+  BookOpen,
+  Check,
   Construction,
   Copy,
+  FlagIcon,
   Info,
+  ListOrderedIcon,
   MoreHorizontal,
   Pen,
   Printer,
   ShoppingBag,
   Trash,
   View,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { typedMemo } from "@/lib/hocs/typed-memo";
@@ -30,9 +35,15 @@ import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { copyOrderAction, deleteOrderAction } from "@/app/_actions/sales";
 import { toast } from "sonner";
-import { dispatchSlice } from "@/store/slicers";
+import { dispatchSlice, updateSlice } from "@/store/slicers";
 import { useBool } from "@/lib/use-loader";
 import { Icons } from "../icons";
+import { store } from "@/store";
+import {
+  adminCompleteProductionAction,
+  cancelProductionAssignmentAction,
+} from "@/app/_actions/sales-production";
+import { openModal } from "@/lib/modal";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -68,6 +79,7 @@ export function OrderRowAction(props: IOrderRowProps) {
               Edit
             </DropdownMenuItem>
           </Link>
+          <ProductionAction row={row} />
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction row={row} />
           <DeleteRowMenuAction row={row} />
@@ -209,6 +221,72 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
           <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
           Order
         </DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  );
+});
+export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
+  const assignProduction = useCallback(() => {
+    const { id, orderId, prodDueDate, prodId } = row;
+    openModal("assignProduction", { id, orderId, prodDueDate, prodId });
+    // store.dispatch(
+    //   updateSlice({
+    //     key: "assignProduction",
+    //     data: { id, orderId, prodDueDate, prodId },
+    //   })
+    // );
+  }, [row]);
+  const router = useRouter();
+
+  async function _clearAssignment() {
+    await cancelProductionAssignmentAction(row.id);
+    router.refresh();
+    toast.success("Production Assignment Cancelled");
+  }
+  async function completeProduction() {
+    await adminCompleteProductionAction(row.id);
+    router.refresh();
+    toast.success("Production Completed");
+  }
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <ListOrderedIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+        Production
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem className="" asChild>
+          <Link
+            href={`/sales/productions/${row.orderId}`}
+            className="flex w-full"
+          >
+            <BookOpen className={`mr-2 h-4 w-4`} />
+            <span>Open</span>
+          </Link>
+        </DropdownMenuItem>
+        {row.prodStatus == "Completed" ? (
+          <>
+            <DropdownMenuItem onClick={() => {}}>
+              <FlagIcon className={`mr-2 h-4 w-4`} />
+              <span>Incomplete</span>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem onClick={assignProduction}>
+              <FlagIcon className={`mr-2 h-4 w-4`} />
+              <span>{row.prodId ? "Update Assignment" : "Assign"}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={_clearAssignment}>
+              <X className={`mr-2 h-4 w-4`} />
+              <span>Clear Assign</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={completeProduction}>
+              <Check className={`mr-2 h-4 w-4`} />
+              <span>Mark as Completed</span>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuSubContent>
     </DropdownMenuSub>
   );
