@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAppSelector } from "@/store";
 import { ISalesOrderForm } from "@/types/sales";
 import { CustomerTypes } from "@prisma/client";
 

@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
 import { PrintOrderMenuAction } from "@/components/actions/order-actions";
 import OrderPrinter from "@/components/print/order/order-printer";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import { deepCopy } from "@/lib/deep-copy";
 import { numeric } from "@/lib/use-number";
@@ -27,6 +27,9 @@ import { Label } from "@/components/ui/label";
 import { formatDate } from "@/lib/use-day";
 import { SalesCustomerProfileInput } from "./customer-profile-input";
 import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
+import SalesInvoiceTable from "./sales-invoice-table";
+import { store } from "@/store";
+import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
 
 interface Props {
   data: SalesFormResponse;
@@ -40,6 +43,30 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   const form = useForm<ISalesOrder>({
     defaultValues,
   });
+  useEffect(() => {
+    let resp = data;
+
+    const _formData: any = resp?.form || { meta: {} };
+
+    form.reset({
+      ..._formData,
+      items: initInvoiceItems(resp?.form?.items),
+    });
+    //  const _baseLink = estimate ? "/sales/estimates" : "/sales/orders";
+    //  store.dispatch(
+    //    setNav(
+    //      [
+    //        { title: estimate ? "Estimates" : "Orders", link: _baseLink },
+    //        _formData.orderId &&
+    //          !estimate && {
+    //            title: _formData.orderId,
+    //            link: "/sales/orders/" + _formData.orderId,
+    //          },
+    //        { title: _formData.orderId ? "Edit" : "New" },
+    //      ].filter(Boolean) as any
+    //    )
+    //  );
+  }, [data]);
   const watchOrderId = form.watch("orderId");
   const [isSaving, startTransition] = useTransition();
   const router = useRouter();
@@ -101,7 +128,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   }
   return (
     <form className="px-8">
-      <div className="flex items-center justify-between">
+      <section id="header" className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
             {watchOrderId || newTitle}
@@ -153,8 +180,11 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           </DropdownMenu>
           <OrderPrinter />
         </div>
-      </div>
-      <div className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5">
+      </section>
+      <section
+        id="topForm"
+        className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5"
+      >
         <div className="col-span-2 ">
           <div className="group relative h-full w-full   rounded border p-2 text-start">
             <div className="space-y-1">
@@ -188,7 +218,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         <div className="col-span-2 ">
           <SalesCustomerModal form={form} profiles={data.ctx?.profiles} />
         </div>
-      </div>
+      </section>
+      <section id="invoiceForm">
+        <SalesInvoiceTable form={form} data={data} />
+      </section>
     </form>
   );
 }

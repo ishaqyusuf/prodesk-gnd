@@ -2,6 +2,7 @@ import {
   AddressBooks,
   CustomerTypes,
   Customers,
+  OrderInventory,
   OrderProductionSubmissions,
   Progress,
   SalesOrderItems,
@@ -168,4 +169,30 @@ export interface ISalesAddressForm {
   shippingAddress: IAddressBook;
   sameAddress: Boolean;
   profile: CustomerTypes;
+}
+export interface IFooterInfo {
+  rows: {
+    [name in any]: FooterRowInfo;
+  };
+}
+export interface FooterRowInfo {
+  rowIndex;
+  total?;
+  notTaxxed?;
+}
+export interface IOrderInventoryUpdate {
+  component: IOrderComponent;
+  parent?: IOrderComponent;
+  currentData?: OrderInventory;
+  checked?;
+}
+export interface ISaveOrderResponse {
+  components: IOrderComponent[];
+  updates: IOrderInventoryUpdate[];
+}
+export interface IOrderInventoryUpdate {
+  component: IOrderComponent;
+  parent?: IOrderComponent;
+  currentData?: OrderInventory;
+  checked?;
 }

@@ -70,9 +70,9 @@ export function SalesCustomerModal({
         ...addressForm.getValues(),
         sameAddress: checked as any,
       };
-      console.log(_form);
+
       const { profileUpdate, ...resp } = await saveAddressAction(_form);
-      console.log(resp);
+
       Object.entries(resp).map(([k, v]) => {
         form.setValue(k as any, v);
       });

@@ -1,5 +1,5 @@
 import { SalesFormResponse, salesFormAction } from "@/app/_actions/sales-form";
-import SalesForm from "@/components/forms/sales-form/sales-form";
+import SalesForm from "@/components/forms/sales-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

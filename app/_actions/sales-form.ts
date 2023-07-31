@@ -1,8 +1,10 @@
 "use server";
 
 import { prisma } from "@/db";
+import { authOptions } from "@/lib/auth-options";
 import { ISalesSettingMeta, PostTypes } from "@/types/post";
 import { IOrderType, ISalesOrder } from "@/types/sales";
+import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
 
 export interface ICreateOrderFormQuery {
@@ -83,6 +85,8 @@ async function newSalesFormAction(
   query: ICreateOrderFormQuery
 ): Promise<SalesFormResponse> {
   const ctx = await formCtx();
+
+  const session = await getServerSession(authOptions);
   const form = {
     taxPercentage: ctx?.settings?.tax_percentage,
     // salesRepId: query.salesRepId,
@@ -90,8 +94,9 @@ async function newSalesFormAction(
     meta: {
       sales_profile: ctx.settings?.sales_profile,
       sales_percentage: ctx?.settings?.sales_margin,
-      // rep: query.salesRep,
+      rep: session?.user.name,
     },
+    salesRepId: session?.user.id,
   } as ISalesOrder;
   console.log(query);
   if (query.customerId) {
