@@ -1,0 +1,206 @@
+"use client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SalesFormResponse } from "@/app/_actions/sales-form";
+import { ISalesOrder, ISaveOrder } from "@/types/sales";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
+import { PrintOrderMenuAction } from "@/components/actions/order-actions";
+import OrderPrinter from "@/components/print/order/order-printer";
+import { useTransition } from "react";
+import { toast } from "sonner";
+import { deepCopy } from "@/lib/deep-copy";
+import { numeric } from "@/lib/use-number";
+import { SalesOrderItems, SalesOrders } from "@prisma/client";
+import { saveOrderAction } from "@/app/_actions/sales";
+import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { formatDate } from "@/lib/use-day";
+import { SalesCustomerProfileInput } from "./customer-profile-input";
+import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
+
+interface Props {
+  data: SalesFormResponse;
+  newTitle;
+  slug;
+}
+export default function SalesForm({ data, newTitle, slug }: Props) {
+  const defaultValues: ISalesOrder = {
+    ...data?.form,
+  };
+  const form = useForm<ISalesOrder>({
+    defaultValues,
+  });
+  const watchOrderId = form.watch("orderId");
+  const [isSaving, startTransition] = useTransition();
+  const router = useRouter();
+  async function save(and: "close" | "new" | "default" = "default") {
+    startTransition(async () => {
+      const formData = saveData();
+      const response = await saveOrderAction(formData);
+      if (response.orderId) {
+        const type = form.getValues("type");
+        if (and == "close") router.push(`/sales/${type}s`);
+        else {
+          if (slug != response.orderId) router.push(`/sales/${type}/form`);
+        }
+      }
+      toast.message("Saved", {});
+    });
+    //  loader.action(async () => {
+    //  });
+  }
+  function saveData(): ISaveOrder {
+    let {
+      id,
+      items: _items,
+      shippingAddress,
+      billingAddress,
+      ...formValues
+    }: ISalesOrder = deepCopy(form.getValues());
+    console.log(formValues);
+    console.log(_items);
+    const deleteIds: number[] = [];
+    let items = _items
+      ?.map((item) => {
+        if (!item.description && !item?.total) {
+          if (item.id) deleteIds.push(item.id);
+          return null;
+        }
+        return numeric<SalesOrderItems>(
+          ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
+          item
+        );
+      })
+      .filter(Boolean);
+    return {
+      id,
+      order: numeric<SalesOrders>(
+        [
+          "discount",
+          "grandTotal",
+          "amountDue",
+          "tax",
+          "taxPercentage",
+          "subTotal",
+        ],
+        formValues
+      ) as any,
+      deleteIds,
+      items: items as any,
+    };
+  }
+  return (
+    <form className="px-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">
+            {watchOrderId || newTitle}
+          </h2>
+        </div>
+        <div className="sitems-center flex space-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm">Save</Button>
+              {/* isLoading={loader.isLoading} */}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[160px]">
+              <DropdownMenuItem onClick={() => save()}>
+                <Save className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Save
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => save("close")}>
+                <FolderClosed className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Save & Close
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => save("new")}>
+                <Plus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Save & New
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex data-[state=open]:bg-muted"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-[160px]">
+              <PrintOrderMenuAction row={{ slug } as any} />
+              {/* <DropdownMenuItem>
+            <Carrot className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Catalog
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Apply Payment
+          </DropdownMenuItem> */}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <OrderPrinter />
+        </div>
+      </div>
+      <div className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5">
+        <div className="col-span-2 ">
+          <div className="group relative h-full w-full   rounded border p-2 text-start">
+            <div className="space-y-1">
+              {orderInformation.map((line, key) => (
+                <div
+                  key={key}
+                  className="items-start md:grid md:grid-cols-2 xl:grid-cols-3"
+                >
+                  <Label className="text-muted-foreground">{line.label}</Label>
+
+                  <div className="text-end text-sm xl:col-span-2">
+                    {key == 0 ? (
+                      <SalesCustomerProfileInput
+                        form={form}
+                        profiles={data?.ctx?.profiles}
+                      />
+                    ) : (
+                      <div>
+                        {line.key == "prodDueDate"
+                          ? formatDate(form.getValues(line.key))
+                          : form.getValues(line.key as any) ?? "-"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* </OrderEditInfo> */}
+        </div>
+        <div className="col-span-2 ">
+          <SalesCustomerModal form={form} profiles={data.ctx?.profiles} />
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export const orderInformation = [
+  {
+    label: "Profile",
+    key: "meta.sales_profile",
+    value: "",
+  },
+  { label: "Sales Rep.", key: "meta.rep" },
+  { label: "P.O No.", key: "meta.po" },
+  { label: "Good Until", key: "meta.good_until" },
+  { label: "Due Date", key: "prodDueDate" },
+];

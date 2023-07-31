@@ -157,3 +157,15 @@ export interface SaveOrderActionProps {
   id?;
   items: ISalesOrderItem[];
 }
+export interface ISaveOrder {
+  order: SalesOrders;
+  deleteIds?: Number[];
+  id?;
+  items: ISalesOrderItem[];
+}
+export interface ISalesAddressForm {
+  billingAddress: IAddressBook;
+  shippingAddress: IAddressBook;
+  sameAddress: Boolean;
+  profile: CustomerTypes;
+}

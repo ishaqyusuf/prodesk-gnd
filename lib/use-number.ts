@@ -12,3 +12,10 @@ export function toFixed(value) {
   if (isNaN(value)) return value;
   return parseFloat(number.toFixed(2));
 }
+export function numeric<T>(cells: (keyof T)[], data) {
+  if (data)
+    cells.map((cell) => {
+      data[cell] = convertToNumber(data[cell]);
+    });
+  return data;
+}

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { ISidebar } from "@/lib/navs";
+import Notification from "../notification";
 export default function SiteHeader({ nav }: { nav: ISidebar }) {
   const { data: session } = useSession();
 
@@ -25,7 +26,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
   return (
     <header
       className={cn(
-        `flex h-14 items-center border-b px-4`,
+        `flex h-14 items-center border-b px-4 space-x-3`,
         nav.noSideBar && "lg:px-16"
       )}
     >
@@ -36,6 +37,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
         {/* <Breadcrumbs segments={navs} /> */}
       </div>
       <div className="flex-1" />
+      <Notification />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
