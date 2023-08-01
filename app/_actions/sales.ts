@@ -65,8 +65,16 @@ export async function getSalesOrder(
   query: SalesQueryParams
 ): ActionResponse<ISalesOrder> {
   query.type = "order";
-
-  const where = whereSales(query);
+return await getSales(query) 
+}
+export async function getSalesEstimates(
+  query: SalesQueryParams
+): ActionResponse<ISalesOrder> {
+  query.type = "estimate";
+return await getSales(query) 
+}
+export async function getSales(query: SalesQueryParams) {
+ const where = whereSales(query);
   const _items = await prisma.salesOrders.findMany({
     ...(await queryFilter(query)),
     include: {
