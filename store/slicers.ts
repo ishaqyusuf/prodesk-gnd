@@ -1,7 +1,7 @@
 // import { ISalesOrder, ISalesOrderItem } from "@/types/ISales";
 import { deepCopy } from "@/lib/deep-copy";
 import { formatDate } from "@/lib/use-day";
-import { Users } from "@prisma/client";
+import { CustomerTypes, Users } from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
@@ -28,8 +28,9 @@ export interface ISlicer {
     name: ModalName;
     data: any;
   };
+  customerProfiles: CustomerTypes[];
 }
-export type ModalName = "assignProduction" | undefined;
+export type ModalName = "assignProduction" | "salesComponent" | undefined;
 const initialState: ISlicer = ({
   modal: {
     name: undefined,

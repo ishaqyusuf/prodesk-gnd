@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form/dist/types";
 import {
   Command,
@@ -14,20 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { useDebounce } from "@/hooks/use-debounce";
 
-export default function Combobox<T>({
-  list = [],
-  form,
-  keyName,
-  allowCreate = false,
-  prompSize = "auto",
-  className,
-  searchFn,
-  labelKey,
-  align = "end",
-  selected,
-  valueKey,
-  ...props
-}: {
+interface ComboboxProps<T> {
   list?;
   selected?(T);
   form: UseFormReturn<any>;
@@ -41,7 +28,23 @@ export default function Combobox<T>({
   allowCreate?: Boolean;
   className?;
   prompSize?: "sm" | "md" | "lg" | "auto";
-}) {
+  onFocus?;
+}
+export default function Combobox<T>({
+  list = [],
+  form,
+  keyName,
+  allowCreate = false,
+  prompSize = "auto",
+  className,
+  searchFn,
+  labelKey,
+  align = "end",
+  selected,
+  valueKey,
+  onFocus,
+  ...props
+}: ComboboxProps<T>) {
   interface IItem {
     label?;
     value;
@@ -101,14 +104,15 @@ export default function Combobox<T>({
       setItems(resp.items.map(transformItem) as any);
     }
   }
+  const [searchable, setSearchable] = useState(false);
   React.useEffect(() => {
     // if (debouncedSearch) {
     // fetch(`/api/search?q=${debouncedSearch}`);
-    dynamicSearch();
+    if (searchable) dynamicSearch();
     //  fetchData();
     // table.getColumn(key)?.setFilterValue(debouncedSearch);
     // }
-  }, [debouncedQuery]);
+  }, [debouncedQuery, searchable]);
   // const [q, setQ] = React.useState("");
   function onOpen(e) {
     setOpen(e);
@@ -140,6 +144,13 @@ export default function Combobox<T>({
           {/* <Input className="h-8 p-1" {...props} {...form.register(keyName)} /> */}
           <Button
             variant="outline"
+            onBlur={(e) => {
+              setSearchable(false);
+            }}
+            onFocus={(e) => {
+              onFocus && onFocus(e);
+              setSearchable(true);
+            }}
             className="line-clamp-1 h-8 w-full justify-start px-2 text-start"
           >
             {form.getValues(keyName)}

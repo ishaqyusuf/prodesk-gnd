@@ -11,10 +11,10 @@ export default async function OrderFormPage({
   searchParams,
   params: { slug },
 }) {
-  //   console.log(args);
   const resp: SalesFormResponse = await salesFormAction({
     orderId: slug,
     type: "order",
   });
+  console.log(resp);
   return <SalesForm newTitle="New Order" slug={slug} data={resp}></SalesForm>;
 }

@@ -1,4 +1,5 @@
 export function convertToNumber(string, defult: any = null) {
+  if (typeof string === "number") return string;
   const number = parseFloat(string);
 
   if (isNaN(number)) {

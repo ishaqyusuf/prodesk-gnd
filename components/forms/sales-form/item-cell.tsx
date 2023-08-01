@@ -1,7 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { TableCell } from "@/components/ui/table";
-import { store } from "@/store";
-import { openItemComponent } from "@/store/invoice-item-component-slice";
+import { deepCopy } from "@/lib/deep-copy";
+import { openComponentModal } from "@/lib/sales/sales-invoice-form";
+
 import React from "react";
 
 export default function ItemCell({ rowIndex, form }) {
@@ -16,13 +17,7 @@ export default function ItemCell({ rowIndex, form }) {
   return (
     <TableCell
       onClick={() => {
-        if (isComponent)
-          store.dispatch(
-            openItemComponent({
-              rowIndex,
-              item: JSON.parse(JSON.stringify(item)),
-            })
-          );
+        if (isComponent) openComponentModal(deepCopy(item), rowIndex);
       }}
       id="description"
       className="cursor-pointer p-0 px-1"
@@ -37,7 +32,7 @@ export default function ItemCell({ rowIndex, form }) {
             dangerouslySetInnerHTML={{
               __html: form.getValues(`${baseKey}.description`),
             }}
-            className="line-clamp-2s relative w-full p-0.5 text-start font-semibold"
+            className="line-clamp-2s  relative w-full p-0.5 text-start font-semibold"
           >
             {/* {} */}
           </div>

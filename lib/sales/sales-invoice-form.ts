@@ -1,6 +1,12 @@
 import { convertToNumber, toFixed } from "@/lib/use-number";
-import { ISalesSettingMeta } from "@/types/post";
-import { IFooterInfo, ISalesOrderForm, ISalesOrderItem } from "@/types/sales";
+import { ISalesSettingMeta, ISalesWizard } from "@/types/post";
+import {
+  IFooterInfo,
+  ISalesOrderForm,
+  ISalesOrderItem,
+  WizardKvForm,
+} from "@/types/sales";
+import { openModal } from "../modal";
 
 export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
   if (!items) items = [];
@@ -121,4 +127,52 @@ export function footerEstimate({
   form.setValue("meta.ccc", +ccc);
   form.setValue("meta.ccc_percentage", cccPercentage);
   form.setValue("grandTotal", ccc + total);
+}
+
+export function openComponentModal(item: ISalesOrderItem, rowIndex) {
+  let c = item?.meta?.components;
+  const components =
+    c ||
+    ([
+      {
+        type: "Door",
+      },
+      {
+        type: "Frame",
+      },
+      {
+        type: "Hinge",
+      },
+      {
+        type: "Casing",
+      },
+    ] as any);
+  openModal("salesComponent", {
+    rowIndex,
+    item,
+    components,
+  });
+}
+interface ComposeItemDescriptionProps {
+  wizard: ISalesWizard;
+  kvForm: WizardKvForm;
+}
+export function composeItemDescription({
+  wizard,
+  kvForm,
+}: ComposeItemDescriptionProps) {
+  let description = wizard.titleMarkdown;
+  console.log("MARKDOWN:", description);
+  console.log(kvForm);
+  wizard.form.map((f) => {
+    let fv = kvForm[f.uuid];
+    console.log(fv);
+    let title = fv?.title || f?.defaultPrintValue || "";
+    description = description.replace(`@${f.label}`, title);
+  });
+  description = description.replace(/^\||\|$/g, "");
+  description = description.replace(/\|\s*\|/g, "|");
+  description = description.replace(/\|\s*$/g, "");
+
+  return description;
 }

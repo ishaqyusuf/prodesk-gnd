@@ -21,6 +21,7 @@ import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
 import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
 import { SalesFormResponse } from "@/app/_actions/sales-form";
+import SalesComponentModal from "@/components/modals/sales-component-modal";
 
 export default function SalesInvoiceTable({
   form,
@@ -112,9 +113,7 @@ export default function SalesInvoiceTable({
         floatingFooter={floatingFooter}
         form={form}
       />
-
-      {/* <InvoiceComponentDialog form={form} />
-      <CostUpdateDialog form={form} /> */}
+      <SalesComponentModal form={form} ctx={data.ctx} />
     </div>
   );
 }
