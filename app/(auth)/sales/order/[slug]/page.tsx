@@ -1,3 +1,41 @@
-export default async function OrderPage({ searchParams }) {
-  return <></>;
+import { getOrderAction } from "@/app/_actions/sales";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { OrderViewCrumb, OrdersCrumb } from "@/components/breadcrumbs/links";
+import OrderPrinter from "@/components/print/order/order-printer";
+import OverviewDetailsSection from "@/components/sales/overview/details-section";
+import ItemDetailsSection from "@/components/sales/overview/item-details";
+import { DataPageShell } from "@/components/shells/data-page-shell";
+import { ISalesOrder } from "@/types/sales";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Order Overview",
+  description: "Order Overview",
+};
+export default async function SalesOrderPage({ params: { slug } }) {
+  const order: ISalesOrder = (await getOrderAction(slug)) as any;
+  if (!order) notFound();
+  metadata.description = order.orderId;
+  return (
+    <DataPageShell className="px-8" data={order}>
+      <Breadcrumbs>
+        <OrdersCrumb isFirst />
+        <OrderViewCrumb slug={order.orderId} isLast />
+      </Breadcrumbs>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="col-span-2 flex flex-col space-y-4">
+          <OverviewDetailsSection />
+          <ItemDetailsSection />
+        </div>
+        <div className="space-y-4">{/* <OrderPaymentHistory />   */}</div>
+      </div>
+      {/* <ProductionAssignDialog />
+      <UpdateOrderTimelineDialog />
+      <OrderApplyPaymentDialog /> 
+     */}
+      <OrderPrinter />
+    </DataPageShell>
+  );
 }

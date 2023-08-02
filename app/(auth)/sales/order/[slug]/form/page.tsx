@@ -1,4 +1,10 @@
 import { SalesFormResponse, salesFormAction } from "@/app/_actions/sales-form";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import {
+  BreadLink,
+  OrderViewCrumb,
+  OrdersCrumb,
+} from "@/components/breadcrumbs/links";
 import SalesForm from "@/components/forms/sales-form";
 import { Metadata } from "next";
 
@@ -15,6 +21,15 @@ export default async function OrderFormPage({
     orderId: slug,
     type: "order",
   });
-  console.log(resp);
-  return <SalesForm newTitle="New Order" slug={slug} data={resp}></SalesForm>;
+  const orderId = resp?.form?.orderId;
+  return (
+    <>
+      <Breadcrumbs>
+        <OrdersCrumb isFirst />
+        {orderId && <OrderViewCrumb slug={orderId} />}
+        <BreadLink title={orderId ? "Edit" : "New"} isLast />
+      </Breadcrumbs>
+      <SalesForm newTitle="New Order" slug={slug} data={resp}></SalesForm>
+    </>
+  );
 }

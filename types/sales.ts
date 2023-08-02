@@ -196,3 +196,10 @@ export interface IOrderInventoryUpdate {
   currentData?: OrderInventory;
   checked?;
 }
+export type ProdActions = "Start" | "Cancel" | "Complete" | "Stop";
+export interface ProdActionProps {
+  action: ProdActions;
+  itemId;
+  qty?;
+  note?;
+}

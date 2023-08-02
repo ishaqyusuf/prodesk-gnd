@@ -33,7 +33,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
       <div className={cn(!nav.noSideBar && "md:hidden", "mr-4  h-10 w-10")}>
         <Icons.logo />
       </div>
-      <div id="breadCrumbs" className="flex items-center space-x-1">
+      <div id="breadCrumb" className="flex items-center space-x-1">
         {/* <Breadcrumbs segments={navs} /> */}
       </div>
       <div className="flex-1" />

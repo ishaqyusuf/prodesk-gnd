@@ -2,6 +2,9 @@
 
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { Checkbox } from "../ui/checkbox";
+import { Fragment } from "react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -50,3 +53,21 @@ export const ColumnHeader = (title) => {
   );
   return c;
 };
+export const LinkCell = ({ row, link, children }) => {
+  if (!row) return <></>;
+  link = link?.replace("slug", row.id?.toString());
+  const Node = link ? Link : Fragment;
+  return (
+    <div className="w-full">
+      <Node href={link || ""} className={cn(link && "hover:underline")}>
+        {children}
+      </Node>
+    </div>
+  );
+};
+export function PrimaryCellContent({ children }) {
+  return <div className="font-semibold">{children}</div>;
+}
+export function SecondaryCellContent({ children }) {
+  return <div className="text-muted-foreground text-sm">{children}</div>;
+}

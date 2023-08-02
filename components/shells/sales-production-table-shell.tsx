@@ -10,11 +10,17 @@ import {
   OrderCustomerCell,
   OrderIdCell,
   OrderInvoiceCell,
+  OrderMemoCell,
+  OrderPriorityFlagCell,
+  OrderProductionStatusCell,
+  ProdOrderCell,
+  ProdStatusCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
+import { formatDate } from "@/lib/use-day";
 
-export default function EstimatesTableShell<T>({
+export default function SalesProductionTableShell<T>({
   data,
   pageInfo,
 }: TableShellProps<ISalesOrder>) {
@@ -24,23 +30,45 @@ export default function EstimatesTableShell<T>({
   const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-
+      {
+        maxSize: 10,
+        id: "flags",
+        cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
+      },
       {
         accessorKey: "orderId",
-        cell: ({ row }) => OrderIdCell(row.original, "/sales/estimates/slug"),
-        header: ColumnHeader("Estimate #"),
+        cell: ({ row }) =>
+          ProdOrderCell(row.original, "/sales/production/slug"),
+        header: ColumnHeader("Order"),
       },
       {
-        accessorKey: "customer",
-        header: ColumnHeader("Customer"),
-        cell: ({ row }) => OrderCustomerCell(row.original.customer),
-      },
-      {
-        accessorKey: "invoice",
-        header: ColumnHeader("Total"),
-        cell: ({ row }) => OrderInvoiceCell(row.original, true),
+        accessorKey: "salesRep",
+        header: ColumnHeader("Sales Rep"),
+        cell: ({ row }) => {
+          return (
+            <>
+              <p>{row.original.salesRep?.name}</p>
+            </>
+          );
+        },
       },
 
+      {
+        accessorKey: "dueDate",
+        header: ColumnHeader("Due Date"),
+        cell: ({ row }) => {
+          return (
+            <>
+              <p>{formatDate(row.original.prodDueDate)}</p>
+            </>
+          );
+        },
+      },
+      {
+        accessorKey: "status",
+        header: ColumnHeader("Status"),
+        cell: ({ row }) => <ProdStatusCell order={row.original} />,
+      },
       {
         accessorKey: "_status",
         enableHiding: false,
@@ -87,7 +115,7 @@ export default function EstimatesTableShell<T>({
           title: "orderId, customer",
         },
       ]}
-      newRowLink={`/sales/estimate/new/form`}
+      newRowLink={`/sales/order/new/form`}
       //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );

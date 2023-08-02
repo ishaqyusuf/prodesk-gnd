@@ -1,9 +1,9 @@
 "use client";
 
-import { ICustomer, ISalesOrder } from "@/types/sales";
+import { IAddressBook, ICustomer, ISalesOrder } from "@/types/sales";
 import OrderFlag from "../sales/order-flag";
 import Link from "next/link";
-import { Fragment, useTransition } from "react";
+import { Fragment, useEffect, useState, useTransition } from "react";
 import { formatDate } from "@/lib/use-day";
 import { Customers } from "@prisma/client";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,12 @@ import { useRouter } from "next/navigation";
 import { updateOrderPriorityActon } from "@/app/_actions/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
+import { Progress } from "../ui/progress";
+import {
+  LinkCell,
+  PrimaryCellContent,
+  SecondaryCellContent,
+} from "./base-columns";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -109,28 +115,40 @@ export function OrderCustomerCell(
     </div>
   );
 }
+export function OrderMemoCell(
+  customer: IAddressBook | undefined,
+  link: string | undefined = undefined
+) {
+  if (!customer) return <></>;
+  link = link?.replace("slug", customer.id?.toString());
+  const Node = link ? Link : Fragment;
+  return (
+    <div className="w-full">
+      <Node href={link || ""} className={cn(link && "hover:underline")}>
+        <span className="text-muted-foreground line-clamp-1">
+          {customer?.address1}
+        </span>
+      </Node>
+    </div>
+  );
+}
 export function OrderInvoiceCell(
   order: ISalesOrder | undefined,
   isEstimate = false,
   link: string | undefined = undefined
 ) {
-  if (!order) return <></>;
-  link = link?.replace("slug", order.id?.toString());
-  const Node = link ? Link : Fragment;
   return (
-    <div className="w-full">
-      <Node href={link || ""} className={cn(link && "hover:underline")}>
-        <div className="font-medium uppercase">${order.grandTotal}</div>
-        {!isEstimate && (
-          <span className="text-muted-foreground">
-            ${order.amountDue || "0.00"}
-          </span>
-        )}
-      </Node>
-    </div>
+    <LinkCell link={link} row={order}>
+      <div className="font-medium uppercase">${order?.grandTotal}</div>
+      {!isEstimate && (
+        <span className="text-muted-foreground">
+          ${order?.amountDue || "0.00"}
+        </span>
+      )}
+    </LinkCell>
   );
 }
-export function OrderProductionCell(
+export function OrderProductionStatusCell(
   order: ISalesOrder | undefined,
   link: string | undefined = undefined
 ) {
@@ -145,6 +163,46 @@ export function OrderProductionCell(
       >
         {order.prodStatus || "-"}
       </Badge>
+    </div>
+  );
+}
+
+export function ProdOrderCell(
+  order: ISalesOrder | undefined,
+  link: string | undefined = undefined
+) {
+  return (
+    <LinkCell row={order} link={link}>
+      <PrimaryCellContent>{order?.customer?.name}</PrimaryCellContent>
+      <SecondaryCellContent>{order?.orderId}</SecondaryCellContent>
+    </LinkCell>
+  );
+}
+export function ProdStatusCell({ order }: { order: ISalesOrder }) {
+  const [percentage, setPercentage] = useState(0);
+  const [color, setColor] = useState("gray");
+  useEffect(() => {
+    const p = ((order.builtQty || 0) / (order.prodQty || 1)) * 100;
+    setPercentage(p);
+    if (p < 25) {
+      setColor("red");
+    } else if (p < 50) {
+      setColor("yellow");
+    } else if (p < 75) {
+      setColor("orange");
+    } else {
+      setColor("green");
+    }
+  }, [order]);
+
+  return (
+    <div className="w-20">
+      {percentage > 0 && (
+        <p>
+          <Progress value={percentage} color={color} className="h-2" />
+        </p>
+      )}
+      <p className="">{order.prodStatus}</p>
     </div>
   );
 }

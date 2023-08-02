@@ -29,6 +29,10 @@ export interface ISlicer {
     data: any;
   };
   customerProfiles: CustomerTypes[];
+  dataPage: {
+    id;
+    data;
+  };
 }
 export type ModalName = "assignProduction" | "salesComponent" | undefined;
 const initialState: ISlicer = ({

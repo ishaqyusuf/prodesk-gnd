@@ -20,8 +20,9 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
+import { getProgress } from "./progress";
 
-async function whereSales(query: SalesQueryParams) {
+  function whereSales(query: SalesQueryParams) {
   const {
     _q,
     _dateType = "createdAt",
@@ -54,11 +55,12 @@ async function whereSales(query: SalesQueryParams) {
     };
   }
   if (query._page == "production") {
-    if (!prodId)
+    if (!prodId) { 
       where.prodId = {
-        gt: 0,
+        gt: 1,
       };
-  }
+    }
+  } 
   return where;
 }
 export async function getSalesOrder(
@@ -67,6 +69,50 @@ export async function getSalesOrder(
   query.type = "order";
 return await getSales(query) 
 }
+export async function getOrderAction(orderId,isProd = false) {
+    const order = await prisma.salesOrders.findFirst({
+    where: {
+      orderId,
+      // type: {
+      //   notIn: ["estimate"],
+      // },
+    },
+    include: {
+      customer: true,
+      items: {
+        // orderBy: {
+        //   swing: "desc",
+        // },
+      },
+      billingAddress: true,
+      producer: true,
+      salesRep: true,
+      shippingAddress: true,
+      payments: !isProd,
+      productions: isProd,
+    },
+  });
+  if (!order) return null;
+  console.log(order);
+  const progress = await getProgress({
+    where: [
+      {
+        progressableId: order.id,
+        progressableType: "SalesOrder",
+        type: "production",
+      },
+      {
+        parentId: order.id,
+        progressableType: "SalesOrderItem",
+        type: isProd ? "production" : undefined,
+      },
+    ],
+  });
+  return {
+    ...order,
+    progress,
+  };
+}
 export async function getSalesEstimates(
   query: SalesQueryParams
 ): ActionResponse<ISalesOrder> {
@@ -74,16 +120,20 @@ export async function getSalesEstimates(
 return await getSales(query) 
 }
 export async function getSales(query: SalesQueryParams) {
+ 
  const where = whereSales(query);
+//  console.log
   const _items = await prisma.salesOrders.findMany({
+    where,
     ...(await queryFilter(query)),
     include: {
       customer: true,
+      shippingAddress: true,
       producer: true,
       salesRep: true,
     },
-  });
-  const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
+  }); 
+  const pageInfo = await getPageInfo(query, where, prisma.salesOrders); 
   return {
     pageInfo,
     data: _items as any,

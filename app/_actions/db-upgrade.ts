@@ -40,9 +40,8 @@ async function addTypeToSalesOrder() {
   });
   await Promise.all(
     Object.entries(updates).map(async ([type, ids]) => {
-      let data = {
+      let data: any = {
         type,
-        prodId: null,
       };
       if (type == "estimate") data.prodId = null;
       await prisma.salesOrders.updateMany({

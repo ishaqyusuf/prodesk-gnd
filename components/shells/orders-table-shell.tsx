@@ -10,8 +10,9 @@ import {
   OrderCustomerCell,
   OrderIdCell,
   OrderInvoiceCell,
+  OrderMemoCell,
   OrderPriorityFlagCell,
-  OrderProductionCell,
+  OrderProductionStatusCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
@@ -33,13 +34,18 @@ export default function OrdersTableShell<T>({
       },
       {
         accessorKey: "orderId",
-        cell: ({ row }) => OrderIdCell(row.original, "/sales/orders/slug"),
+        cell: ({ row }) => OrderIdCell(row.original, "/sales/order/slug"),
         header: ColumnHeader("Order"),
       },
       {
         accessorKey: "customer",
         header: ColumnHeader("Customer"),
         cell: ({ row }) => OrderCustomerCell(row.original.customer),
+      },
+      {
+        accessorKey: "memo",
+        header: ColumnHeader("Memo"),
+        cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
       },
       {
         accessorKey: "invoice",
@@ -49,7 +55,7 @@ export default function OrdersTableShell<T>({
       {
         accessorKey: "production",
         header: ColumnHeader("Production"),
-        cell: ({ row }) => OrderProductionCell(row.original),
+        cell: ({ row }) => OrderProductionStatusCell(row.original),
       },
       {
         accessorKey: "_status",
