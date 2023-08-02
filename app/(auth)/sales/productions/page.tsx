@@ -14,7 +14,7 @@ export default async function SalesProductionPage({ searchParams }) {
   return (
     <>
       <Breadcrumbs>
-        <ProductionsCrumb />
+        <ProductionsCrumb isLast />
       </Breadcrumbs>
       <div className="space-y-4 px-8">
         <div className="flex items-center justify-between space-y-2">
