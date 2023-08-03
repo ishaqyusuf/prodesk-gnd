@@ -59,7 +59,24 @@ export default function SalesProdSubmitModal() {
   return (
     <BaseModal<{ item: ISalesOrderItem; action: "Submit" | "Cancel" }>
       className=""
-      onOpen={(item) => {}}
+      onOpen={(item) => {
+        const {
+          id: itemId,
+          qty,
+          meta: { produced_qty = 0 },
+        } = item.item;
+        let pendingQty = (qty || 0) - (produced_qty || 0);
+        if (item.action == "Cancel") pendingQty = produced_qty;
+        const _data = {
+          pendingQty,
+          qty: Math.min(1, pendingQty).toString(),
+          submittedQty: produced_qty,
+          note: "",
+          itemId,
+        };
+        form.reset(_data);
+        console.log(_data);
+      }}
       onClose={() => {}}
       modalName="prodItemUpdate"
       Title={({ data: ctx }) => <div>{ctx?.action} Item Production</div>}
