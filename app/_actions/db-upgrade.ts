@@ -163,7 +163,6 @@ async function transformItemComponent() {
       },
     },
   });
-  console.log(items?.length);
   (items as ISalesOrderItem[]).map(async (item) => {
     let { productVariantId, meta } = item;
     let {

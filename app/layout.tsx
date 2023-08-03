@@ -12,6 +12,7 @@ import Upgrader from "@/components/upgrader";
 // import { TailwindIndicator } from "@/components/tailwind-indicator";
 // import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
+import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "GND-PRODESK",
   description: "home page",
@@ -29,11 +30,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="print:hidden">
           <AppProvider>{children}</AppProvider>
-          {!isProd && (
-            <div className="fixed bottom-0 right-0 m-4">
-              <Upgrader />
-            </div>
-          )}
+
+          <div
+            className={cn(
+              isProd
+                ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
+                : "fixed bottom-0 right-0 m-4"
+            )}
+          >
+            <Upgrader />
+          </div>
         </div>
         <Toaster />
         <Analytics />
