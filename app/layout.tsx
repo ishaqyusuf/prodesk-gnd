@@ -11,6 +11,7 @@ import Upgrader from "@/components/upgrader";
 // import { SiteHeader } from "@/components/site-header";
 // import { TailwindIndicator } from "@/components/tailwind-indicator";
 // import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
 export const metadata: Metadata = {
   title: "GND-PRODESK",
   description: "home page",
@@ -35,6 +36,7 @@ export default function RootLayout({
           )}
         </div>
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
