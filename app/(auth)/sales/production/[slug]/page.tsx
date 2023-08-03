@@ -1,8 +1,12 @@
 import { getOrderAction } from "@/app/_actions/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { OrderViewCrumb, OrdersCrumb } from "@/components/breadcrumbs/links";
+import {
+  EstimatesCrumb,
+  OrderViewCrumb,
+  OrdersCrumb,
+} from "@/components/breadcrumbs/links";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
-import SalesProductionModal from "@/components/modals/sales-production-modal";
+import SalesProdSubmitModal from "@/components/modals/sales-prod-submit-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
 import OrderPrinter from "@/components/print/order/order-printer";
 import OverviewDetailsSection from "@/components/sales/overview/details-section";
@@ -20,12 +24,15 @@ export const metadata: Metadata = {
 };
 export default async function SalesOrderPage({ params: { slug } }) {
   const order: ISalesOrder = (await getOrderAction(slug)) as any;
+  order.ctx = {
+    prodPage: true,
+  };
   if (!order) notFound();
   metadata.description = order.orderId;
   return (
     <DataPageShell className="px-8" data={order}>
       <Breadcrumbs>
-        <OrdersCrumb isFirst />
+        <EstimatesCrumb isFirst />
         <OrderViewCrumb slug={order.orderId} isLast />
       </Breadcrumbs>
 
@@ -35,14 +42,16 @@ export default async function SalesOrderPage({ params: { slug } }) {
           <ItemDetailsSection />
         </div>
         <div className="space-y-4">
-          <PaymentHistory />
+          {/* <PaymentHistory /> */}
           <Timeline />
         </div>
       </div>
-      <SalesProductionModal />
+      {/* <ProductionAssignDialog />
+       */}
       <SalesTimelineModal />
       <SalesPaymentModal />
       <OrderPrinter />
+      <SalesProdSubmitModal />
     </DataPageShell>
   );
 }

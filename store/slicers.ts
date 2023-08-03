@@ -34,7 +34,13 @@ export interface ISlicer {
     data;
   };
 }
-export type ModalName = "assignProduction" | "salesComponent" | undefined;
+export type ModalName =
+  | "assignProduction"
+  | "salesComponent"
+  | "salesPayment"
+  | "salesTimeline"
+  | "prodItemUpdate"
+  | undefined;
 const initialState: ISlicer = ({
   modal: {
     name: undefined,

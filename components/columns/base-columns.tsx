@@ -53,9 +53,9 @@ export const ColumnHeader = (title) => {
   );
   return c;
 };
-export const LinkCell = ({ row, link, children }) => {
+export const LinkCell = ({ row, link, children, slug = "id" }) => {
   if (!row) return <></>;
-  link = link?.replace("slug", row.id?.toString());
+  link = link?.replace("slug", row?.[slug].toString());
   const Node = link ? Link : Fragment;
   return (
     <div className="w-full">

@@ -1,5 +1,7 @@
 # AUG 03    00.00
-    03:40-
+    05:20-
+    04:30-05:00
+    03:45-04:15
     11:40-01:00
 # AUG 02    00.00
     02:00-04:00
@@ -23,12 +25,16 @@
 # PABLO CALL REQUEST
 
 # TODO
+breadcrumb section dropdown
+estimates: if type is estimates, hide production,print order & production,
+    timeline: default type (estimate)
 DIT COMPONENT (COMBO BOX)
 AFTER TAX SAME TOTAL IN FOOTER
 ADDRESS COLUMN IN SALES
 <!-- Login Redirect -->
 Notifications (Vercel Notification Style)
-Route Guard
+    notification events
+Route Guard (Middleware)
 Send Email.
 Sales Email Events.
 <!-- Checkmark Flicker -->

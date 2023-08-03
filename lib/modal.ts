@@ -14,7 +14,7 @@ export function openModal(name: ModalName, data) {
     })
   );
 }
-export function closeModal(name: ModalName) {
+export function closeModal(name?: ModalName) {
   store.dispatch(
     updateSlice({
       key: "modal",

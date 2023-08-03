@@ -31,6 +31,9 @@ export type ISalesOrder = SalesOrders & {
   productions: OrderProductionSubmissions[];
   type: IOrderType;
   meta: ISalesOrderMeta;
+  ctx: {
+    prodPage?: Boolean;
+  };
 };
 export type ISalesOrderMeta = {
   manual_cost_price;
@@ -202,4 +205,13 @@ export interface ProdActionProps {
   itemId;
   qty?;
   note?;
+}
+export interface ISalesPayment extends SalesPayments {
+  meta: {
+    ccc;
+    ccc_percentage;
+    sub_total;
+    total_due;
+    paymentOption;
+  };
 }

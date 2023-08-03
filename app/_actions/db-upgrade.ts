@@ -3,7 +3,6 @@
 import { prisma } from "@/db";
 
 import {
-  ISalesOrder,
   ISalesOrderItem,
   ISalesOrderItemMeta,
   ISalesOrderMeta,
@@ -19,6 +18,36 @@ export async function dbUpgradeAction() {
   await addTypeToSalesOrder();
   await upgradeOrderQty();
   await transformItemComponent();
+  await updateProgressTypes();
+}
+async function updateProgressTypes() {
+  let updates: { [id in string]: number[] } = {};
+  (
+    await prisma.progress.findMany({
+      select: {
+        id: true,
+        progressableType: true,
+      },
+    })
+  ).map((p) => {
+    let type: string = p.progressableType?.split("\\")?.pop() as any;
+
+    if (!updates[type]) updates[type] = [p.id];
+    else updates?.[type]?.push(p.id);
+  });
+
+  Object.entries(updates).map(async ([k, ids]) => {
+    await prisma.progress.updateMany({
+      where: {
+        id: {
+          in: ids as any,
+        },
+      },
+      data: {
+        progressableType: k,
+      },
+    });
+  });
 }
 async function addTypeToSalesOrder() {
   const updates: any = {
@@ -112,9 +141,8 @@ async function transformItemComponent() {
         defaultQty: 1,
       })
   );
-  titleMarkdown =
-    "@Door \n    Frame: @Frame \n   Hinge: @Hinge \n    Casing: @Casing";
-  await prisma.posts.update({
+  titleMarkdown = "@Door | Frame: @Frame | Hinge: @Hinge | Casing: @Casing";
+  await prisma.settings.update({
     where: {
       id,
     },

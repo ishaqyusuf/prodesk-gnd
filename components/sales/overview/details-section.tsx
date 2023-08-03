@@ -13,9 +13,9 @@ import { convertToNumber } from "@/lib/use-number";
 interface Props {
   isProd?: Boolean;
 }
-export default function DetailsSection({ isProd }: Props) {
+export default function DetailsSection({}: Props) {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
-
+  const isProd = order?.ctx?.prodPage;
   return (
     <div className="">
       <Card>

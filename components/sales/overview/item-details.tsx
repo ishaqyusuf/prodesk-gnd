@@ -14,8 +14,9 @@ import {
 import XProgress from "@/components/x-progress";
 import { ProdItemActions } from "@/components/actions/prod-item-actions";
 
-export default function ItemDetailsSection({ isProd }: { isProd?: Boolean }) {
+export default function ItemDetailsSection() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+  const isProd = order?.ctx?.prodPage;
   return (
     <div className="">
       <Card>
@@ -73,7 +74,6 @@ export default function ItemDetailsSection({ isProd }: { isProd?: Boolean }) {
                         ) : (
                           "-"
                         )}
-                        Section{" "}
                       </TableCell>
                       <TableCell className="p-2 font-semibold text-muted-foreground">
                         {item.swing && <ProdItemActions item={item} />}

@@ -107,7 +107,7 @@ export async function getOrderAction(orderId,isProd = false) {
         type: isProd ? "production" : undefined,
       },
     ],
-  });
+  }); 
   return {
     ...order,
     progress,

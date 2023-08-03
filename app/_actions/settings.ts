@@ -4,13 +4,13 @@ import { PostType } from "@/types/post";
 
 export async function getSettingAction<T>(type: PostType) {
   // const type: PostType = "sales-settings";
-  const setting = await prisma.posts.findFirst({
+  const setting = await prisma.settings.findFirst({
     where: {
       type,
     },
   });
   if (!setting) {
-    let newSetting = await prisma.posts.create({
+    let newSetting = await prisma.settings.create({
       data: {
         type,
         meta: {},
@@ -22,7 +22,7 @@ export async function getSettingAction<T>(type: PostType) {
 }
 export async function saveSettingAction(id, data): Promise<any> {
   // const type: PostType = "sales-settings";
-  const setting = await prisma.posts.update({
+  const setting = await prisma.settings.update({
     where: {
       id,
     },

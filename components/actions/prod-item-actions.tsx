@@ -1,25 +1,18 @@
 "use client";
 import Btn from "@/components/btn";
 import { ToolTip } from "@/components/tool-tip";
-import { store, useAppSelector } from "@/store";
-import { dispatchSlice, updateSlice } from "@/store/slicers";
-import { typedMemo } from "@/lib/hocs/typed-memo";
-import {
-  CheckCheck,
-  CheckCircle,
-  Delete,
-  Play,
-  StopCircle,
-  Undo,
-} from "lucide-react";
+import { useAppSelector } from "@/store";
+import { CheckCircle, Play, StopCircle, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useTransition } from "react";
 import { ISalesOrderItem, ProdActions } from "@/types/sales";
 import { orderItemProductionAction } from "@/app/_actions/sales-production";
+import { openModal } from "@/lib/modal";
+import { toast } from "sonner";
 interface IProp {
   item: ISalesOrderItem;
 }
-export const ProdItemActions = typedMemo(({ item }: IProp) => {
+export const ProdItemActions = ({ item }: IProp) => {
   const [order, isProd] = useAppSelector((state) => [
     state.slicers.order,
     state.slicers.orderProdView,
@@ -32,6 +25,7 @@ export const ProdItemActions = typedMemo(({ item }: IProp) => {
     "Started" | "Completed" | "Pending"
   >("Pending");
   const [ls, setLs] = useState<ProdActions>();
+  const [isLoading, startTransition] = useTransition();
   const router = useRouter();
   const __action = useCallback(
     async (action: ProdActions) => {
@@ -42,6 +36,7 @@ export const ProdItemActions = typedMemo(({ item }: IProp) => {
       });
       setLs(null as any);
       router.refresh();
+      toast.success("Success");
     },
     [item, router]
   );
@@ -71,7 +66,7 @@ export const ProdItemActions = typedMemo(({ item }: IProp) => {
           <Btn
             icon
             onClick={() => {
-              dispatchSlice("prodItemUpdate", {
+              openModal("prodItemUpdate", {
                 item,
                 action: "Cancel",
               });
@@ -89,7 +84,7 @@ export const ProdItemActions = typedMemo(({ item }: IProp) => {
           <Btn
             icon
             onClick={() => {
-              dispatchSlice("prodItemUpdate", {
+              openModal("prodItemUpdate", {
                 item,
                 action: "Complete",
               });
@@ -116,4 +111,4 @@ export const ProdItemActions = typedMemo(({ item }: IProp) => {
       )}
     </div>
   );
-});
+};

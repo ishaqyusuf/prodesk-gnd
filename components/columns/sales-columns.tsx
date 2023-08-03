@@ -172,7 +172,7 @@ export function ProdOrderCell(
   link: string | undefined = undefined
 ) {
   return (
-    <LinkCell row={order} link={link}>
+    <LinkCell row={order} link={link} slug="orderId">
       <PrimaryCellContent>{order?.customer?.name}</PrimaryCellContent>
       <SecondaryCellContent>{order?.orderId}</SecondaryCellContent>
     </LinkCell>

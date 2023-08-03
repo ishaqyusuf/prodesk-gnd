@@ -13,6 +13,7 @@ interface IProp {
     type?: ProgressType;
   }[];
 }
+import { getServerSession } from "next-auth";
 export async function getProgress({ where: _where }: IProp) {
   const where: Prisma.ProgressWhereInput = {};
 
@@ -56,3 +57,23 @@ export async function saveProgress(
 }
 type ProgressType = "production" | undefined;
 type ProgressableType = "SalesOrder" | "SalesOrderItem";
+
+export interface TimelineUpdateProps {
+  parentId;
+  userId;
+  note;
+  status;
+  type;
+}
+export async function updateTimelineAction(
+  progressableType: ProgressableType,
+  { parentId, note, status, type }: TimelineUpdateProps
+) {
+  const session = await getServerSession();
+  await saveProgress(progressableType, parentId, {
+    headline: note,
+    userId: session?.user.id,
+    type,
+    status,
+  });
+}
