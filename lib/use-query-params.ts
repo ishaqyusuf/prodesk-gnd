@@ -8,7 +8,7 @@ export default function useQueryParams<T = {}>() {
 
   function setQueryParams(params: Partial<T>, clear = false) {
     const urlSearchParams = new URLSearchParams(
-      clear ? undefined : searchParams
+      clear ? undefined : searchParams.toString()
     );
     Object.entries(params).forEach(([key, value]) => {
       urlSearchParams.set(key, String(value));
