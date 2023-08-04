@@ -9,6 +9,8 @@ import bcrypt from "bcrypt";
 import { resend } from "@/lib/resend";
 import PasswordResetRequestEmail from "@/components/emails/password-reset-request-email";
 import { env } from "@/env.mjs";
+import { _email } from "./_email";
+import { FROM_EMAILS } from "@/enums/email";
 
 export async function resetPasswordRequest({
   email,
@@ -26,6 +28,15 @@ export async function resetPasswordRequest({
       createdAt: new Date(),
       token: token.toString(),
     },
+  });
+  await _email({
+    user: user,
+    from: FROM_EMAILS.ohno,
+    react: PasswordResetRequestEmail({
+      firstName: user?.name ?? undefined,
+      token,
+    }),
+    subject: "Security Alert: Forgot Password OTP",
   });
   await resend.emails.send({
     from: "GND-Prodesk<ohno@gndprodesk.com>",

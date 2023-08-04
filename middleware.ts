@@ -5,14 +5,18 @@ export default withAuth({
   callbacks: {
     authorized({ req, token }) {
       // `/admin` requires admin role
+
       console.log(">>>>>.");
-      if (req.nextUrl.pathname === "/admin") {
-        return token?.userRole === "admin";
-      }
-      // `/me` only requires the user to be logged in
-      return !!token;
+      return true;
+      // if (req.nextUrl.pathname === "/admin") {
+      //   return token?.userRole === "admin";
+      // }
+      // // `/me` only requires the user to be logged in
+      // return !!token;
     },
   },
 });
 
-export const config = { matcher: ["/admin", "/me"] };
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};

@@ -11,11 +11,19 @@ import {
 import dayjs from "dayjs";
 import orderProdQtyUpdateAction, { getSales } from "./sales";
 import { saveProgress } from "./progress";
+import { getServerSession } from "next-auth";
 
 export async function getSalesProductionsAction(
   query: SalesQueryParams
 ): ActionResponse<ISalesOrder> {
   query._page = "production";
+  if (!query._dateType) query._dateType = "prodDueDate";
+  return await getSales(query);
+}
+export async function getMySalesProductionsAction(query: SalesQueryParams) {
+  const session = await getServerSession();
+  query._page = "production";
+  // query.prodId = session?.user?.id || -1;
   if (!query._dateType) query._dateType = "prodDueDate";
   return await getSales(query);
 }

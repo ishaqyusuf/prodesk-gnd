@@ -14,11 +14,16 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { formatDate } from "@/lib/use-day";
 import { DataTable2 } from "../data-table/data-table-2";
+import { ProdActions } from "../actions/prod-actions";
 
+interface Props extends TableShellProps<ISalesOrder> {
+  myProd?: Boolean;
+}
 export default function SalesProductionTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<ISalesOrder>) {
+  myProd,
+}: Props) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -33,7 +38,10 @@ export default function SalesProductionTableShell<T>({
       {
         accessorKey: "orderId",
         cell: ({ row }) =>
-          ProdOrderCell(row.original, "/sales/production/slug"),
+          ProdOrderCell(
+            row.original,
+            myProd ? "/tasks/sales-production/slug" : "/sales/production/slug"
+          ),
         header: ColumnHeader("Order"),
       },
       {
@@ -47,7 +55,6 @@ export default function SalesProductionTableShell<T>({
           );
         },
       },
-
       {
         accessorKey: "dueDate",
         header: ColumnHeader("Due Date"),
@@ -86,7 +93,7 @@ export default function SalesProductionTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => <OrderRowAction row={row.original} />,
+        cell: ({ row }) => <ProdActions myProd={myProd} row={row.original} />,
       },
     ],
     [data, isPending]

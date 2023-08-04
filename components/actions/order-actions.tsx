@@ -50,10 +50,11 @@ export interface IOrderRowProps {
   viewMode?: Boolean;
   estimate?: Boolean;
   print?(mode: IOrderType | "production");
+  myProd?: Boolean;
 }
 export function OrderRowAction(props: IOrderRowProps) {
   const { row, viewMode, estimate } = props;
-  const _linkDir = `/sales/order/${row.slug}`;
+  const _linkDir = `/sales/${row.type}/${row.slug}`;
   return (
     <div className="">
       <DropdownMenu>
@@ -148,23 +149,27 @@ export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
         Print
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent>
-        <DropdownMenuItem
-          onClick={() => {
-            _print("quote");
-          }}
-        >
-          <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Estimates
-        </DropdownMenuItem>
+        {!props.myProd && (
+          <>
+            <DropdownMenuItem
+              onClick={() => {
+                _print("quote");
+              }}
+            >
+              <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Estimates
+            </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onClick={() => {
-            _print("order");
-          }}
-        >
-          <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Order
-        </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                _print("order");
+              }}
+            >
+              <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Order
+            </DropdownMenuItem>
+          </>
+        )}
         <DropdownMenuItem
           onClick={() => {
             _print("production");
