@@ -1,7 +1,7 @@
 # BILLABLE HOURS: 
 
-# AUG 04    02.10   == 20.40
-    04:40-
+# AUG 04    02.40   == 23.20
+    04:40-06:15
     03:00-04:05
 # AUG 04    02.10   == 20.40
     11:45-12:45
@@ -30,6 +30,7 @@
     10:00-11:00
 
 # TODO
+fix bloated posts
 breadcrumb section dropdown
 estimates: if type is estimates, hide production,print order & production,
     timeline: default type (estimate)
