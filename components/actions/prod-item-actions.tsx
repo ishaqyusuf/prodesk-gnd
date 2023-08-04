@@ -1,7 +1,6 @@
 "use client";
 import Btn from "@/components/btn";
 import { ToolTip } from "@/components/tool-tip";
-import { useAppSelector } from "@/store";
 import { CheckCircle, Play, StopCircle, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useCallback, useState, useTransition } from "react";
@@ -13,10 +12,6 @@ interface IProp {
   item: ISalesOrderItem;
 }
 export const ProdItemActions = ({ item }: IProp) => {
-  const [order, isProd] = useAppSelector((state) => [
-    state.slicers.order,
-    state.slicers.orderProdView,
-  ]);
   const {
     qty,
     meta: { produced_qty },
@@ -41,12 +36,12 @@ export const ProdItemActions = ({ item }: IProp) => {
     [item, router]
   );
   useEffect(() => {
-    // console.log(qty, produced_qty);
+    console.log(qty, produced_qty);
     if (qty == produced_qty) setProdState("Completed");
     if (produced_qty == 0 || (qty as any) > produced_qty)
       setProdState("Started");
     if (!produced_qty && produced_qty != 0) setProdState("Pending");
-  }, [qty, produced_qty, setProdState]);
+  }, [item]);
   return (
     <div className="flex items-end space-x-2">
       {prodState != "Pending" && (

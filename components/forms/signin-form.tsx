@@ -36,16 +36,15 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   const { register, handleSubmit } = form;
   const router = useRouter();
   async function onSubmit(loginData: ILogin) {
-    setIsLoading(true);
-    setError(null);
-    await signIn("credentials", {
-      ...loginData,
-      callbackUrl: "/",
-      redirect: true,
+    startTransition(async () => {
+      setError(null);
+      await signIn("credentials", {
+        ...loginData,
+        callbackUrl: "/",
+        redirect: true,
+      });
+      console.log(".");
     });
-    console.log(".");
-    // console.log(resp);
-    setIsLoading(false);
   }
   return (
     <Form {...form}>

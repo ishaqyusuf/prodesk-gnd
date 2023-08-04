@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 };
 export default async function SalesOrderPage({ params: { slug } }) {
   const order: ISalesOrder = (await getOrderAction(slug)) as any;
+  console.log(order);
   order.ctx = {
     prodPage: true,
   };

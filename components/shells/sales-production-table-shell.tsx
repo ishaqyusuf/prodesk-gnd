@@ -19,6 +19,7 @@ import {
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { formatDate } from "@/lib/use-day";
+import { DataTable2 } from "../data-table/data-table-2";
 
 export default function SalesProductionTableShell<T>({
   data,
@@ -78,7 +79,11 @@ export default function SalesProductionTableShell<T>({
         enableHiding: false,
       },
       {
-        accessorKey: "_priority",
+        accessorKey: "_dateType",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "_date",
         enableHiding: false,
       },
       {
@@ -93,26 +98,41 @@ export default function SalesProductionTableShell<T>({
     [data, isPending]
   );
   return (
-    <DataTable
+    <DataTable2
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={
-        [
-          //  {
-          //    id: "category",
-          //    title: "Category",
-          //    options: products.category.enumValues.map((category) => ({
-          //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-          //      value: category,
-          //    })),
-          //  },
-        ]
-      }
+      filterableColumns={[
+        {
+          id: "status",
+          title: "Status",
+          options: [
+            { label: "Started", value: "Started" },
+            { label: "Queued", value: "Queued" },
+            { label: "Completed", value: "Completed" },
+          ],
+        },
+      ]}
       searchableColumns={[
         {
           id: "_q" as any,
           title: "orderId, customer",
+        },
+      ]}
+      dateFilterColumns={[
+        {
+          id: "_date" as any,
+          title: "Date",
+          rangeSwitch: true,
+          filter: {
+            single: true,
+            title: "Type",
+            id: "_dateType" as any,
+            options: [
+              { label: "Due Date", value: "prodDueDate" },
+              { label: "Order Date", value: "createdAt" },
+            ],
+          },
         },
       ]}
       newRowLink={`/sales/order/new/form`}

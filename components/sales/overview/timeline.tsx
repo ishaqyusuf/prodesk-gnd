@@ -36,13 +36,18 @@ export default function Timeline() {
             <TableBody>
               {order.progress?.map((item, key) => (
                 <TableRow key={key}>
-                  <TableCell className="p-1">
-                    {/* <p>{item.orderId}</p> */}
-                    <p>{item.createdAt as any}</p>
-                  </TableCell>
+                  {/* <TableCell className="p-1">
+                      <p>{item.createdAt as any}</p>
+                  </TableCell> */}
 
-                  <TableCell className="p-1 text-left">
-                    <span className="font-medium">{item.status}</span>
+                  <TableCell className="p-1 space-y-1">
+                    <div className="flex justify-between space-x-2">
+                      <p className="font-medium">{item.status}</p>
+                      <p className="text-muted-foreground font-semibold">
+                        {item.createdAt as any}
+                      </p>
+                    </div>
+                    <p className="text-muted-foreground">{item.headline}</p>
                   </TableCell>
                 </TableRow>
               ))}

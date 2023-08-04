@@ -27,7 +27,7 @@ export function DataPageShell<T>({
         },
       })
     );
-  }, []);
+  }, [data]);
   if (id != dataP?.id) return null;
   return <div className={cn(className)}>{children}</div>;
 }

@@ -29,13 +29,14 @@ export interface Option {
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
+  single?: Boolean
   options: Option[]
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
-  options,
+  options,single
 }: DataTableFacetedFilter<TData, TValue>) {
   const selectedValues = new Set(column?.getFilterValue() as string[])
 

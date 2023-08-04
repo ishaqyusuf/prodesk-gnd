@@ -12,14 +12,23 @@ export interface Option {
 }
   
 
-export interface DataTableSearchableColumn<TData> {
+export interface DataTableDateFilterColumn<TData> {
   id: keyof TData
   title: string
+   rangeSwitch?: Boolean;
+  range?: Boolean;
+  filter?: DataTableFilterableColumn<TData>
+}
+export interface DataTableSearchableColumn<TData> {
+  id: keyof TData
+  title: string, 
 }
 
 export interface DataTableFilterableColumn<TData>
   extends DataTableSearchableColumn<TData> {
   options: Option[]
+  single?: Boolean;
+  
 }
  
  

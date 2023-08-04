@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import type {
+  DataTableDateFilterColumn,
   DataTableFilterableColumn,
   DataTableSearchableColumn,
 } from "@/types/data-table"
@@ -15,11 +16,14 @@ import { Input } from "@/components/ui/input"
  
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
+import { DataTableFacetedDate } from "./data-table-facetted-date"
+import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
   filterableColumns?: DataTableFilterableColumn<TData>[]
   searchableColumns?: DataTableSearchableColumn<TData>[]
+  dateFilterColumns?: DataTableDateFilterColumn<TData>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
 }
@@ -28,6 +32,7 @@ export function DataTableToolbar<TData>({
   table,
   filterableColumns = [],
   searchableColumns = [],
+  dateFilterColumns = [],
   newRowLink,
   deleteRowsAction,
 }: DataTableToolbarProps<TData>) {
@@ -62,14 +67,26 @@ export function DataTableToolbar<TData>({
           filterableColumns.map(
             (column) =>
               table.getColumn(column.id ? String(column.id) : "") && (
-                <DataTableFacetedFilter
+                <DataTableFacetedFilter2
                   key={String(column.id)}
                   column={table.getColumn(column.id ? String(column.id) : "")}
                   title={column.title}
+                  single={column.single}
                   options={column.options}
                 />
               )
           )}
+          {
+            dateFilterColumns.length > 0 && dateFilterColumns.map(
+              (column) => table.getColumn(column.id ? String(column.id): "")
+              && <DataTableFacetedDate
+              {...column}
+              column={table.getColumn(column.id ? String(column.id) : "")}
+              table={table}
+              key={String(column.id)}
+               />
+            )
+          }
         {isFiltered && (
           <Button
             aria-label="Reset filters"

@@ -1,6 +1,7 @@
 import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type {
+  DataTableDateFilterColumn,
   DataTableFilterableColumn,
   DataTableSearchableColumn,
   TablePageInfo,
@@ -39,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   pageInfo: TablePageInfo
   filterableColumns?: DataTableFilterableColumn<TData>[]
   searchableColumns?: DataTableSearchableColumn<TData>[]
+  dateFilterColumns?: DataTableDateFilterColumn<TData>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
 }
@@ -49,6 +51,7 @@ export function DataTable<TData, TValue>({
   pageInfo,
   filterableColumns = [],
   searchableColumns = [],
+  dateFilterColumns = [],
   newRowLink,
   deleteRowsAction,
 }: DataTableProps<TData, TValue>) {
@@ -162,9 +165,9 @@ export function DataTable<TData, TValue>({
 
   const filterableColumnFilters = columnFilters.filter((filter) => {
     return filterableColumns.find((column) => column.id === filter.id)
-  })
-
+  }) 
   React.useEffect(() => {
+    console.log("FILTERABLE COLUMN FILTERS")
     for (const column of debouncedSearchableColumnFilters) {
       if (typeof column.value === "string") {
         router.push(
@@ -259,14 +262,17 @@ export function DataTable<TData, TValue>({
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-  })
+    // initialState: {
 
+    // }
+  }) 
   return (
     <div className="w-full space-y-3 overflow-auto">
       <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
         searchableColumns={searchableColumns}
+        dateFilterColumns={dateFilterColumns}
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
       />
