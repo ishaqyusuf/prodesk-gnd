@@ -80,7 +80,7 @@ export function DataTable2<TData, TValue>({
   });
    React.useEffect(() => {
     // setItems(data);
-    setPageCount(pageInfo?.pageCount);
+    setPageCount(pageInfo?.pageCount || 0);
   }, [data,pageInfo]);
    
   const debouncedQuery = useDebounce(dataQueryString, 800);
