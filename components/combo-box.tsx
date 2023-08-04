@@ -121,21 +121,6 @@ export default function Combobox<T>({
       dynamicSearch();
     }
   }
-  // return (
-  //   <AutoComplete
-  //     // {...form.register(keyName)}
-  //     value={form.getValues(keyName)}
-  //     onChange={(v) => {
-  //       setQ(v);
-  //       form.setValue(keyName, v);
-  //       // setNewItem(v.trim());
-  //       search(v);
-  //     }}
-  //     options={items}
-  //     {...props}
-  //     // onSearch={searchHandler}
-  //   />
-  // );
   return (
     <>
       <Popover open={open} onOpenChange={onOpen}>
@@ -144,13 +129,6 @@ export default function Combobox<T>({
           {/* <Input className="h-8 p-1" {...props} {...form.register(keyName)} /> */}
           <Button
             variant="outline"
-            onBlur={(e) => {
-              setSearchable(false);
-            }}
-            onFocus={(e) => {
-              onFocus && onFocus(e);
-              setSearchable(true);
-            }}
             className="line-clamp-1 h-8 w-full justify-start px-2 text-start"
           >
             {form.getValues(keyName)}
@@ -165,6 +143,14 @@ export default function Combobox<T>({
         >
           <Command shouldFilter={false}>
             <CommandInput
+              onFocus={() => {
+                // console.log("FOCUS");
+                setQ(form.getValues(keyName));
+                setSearchable(true);
+              }}
+              onBlur={() => {
+                setSearchable(false);
+              }}
               className=""
               value={q}
               onValueChange={(v) => {

@@ -5,14 +5,8 @@ import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
 import { CheckColumn, ColumnHeader } from "../columns/base-columns";
-import { DataTable } from "../data-table/data-table";
 import {
-  OrderCustomerCell,
-  OrderIdCell,
-  OrderInvoiceCell,
-  OrderMemoCell,
   OrderPriorityFlagCell,
-  OrderProductionStatusCell,
   ProdOrderCell,
   ProdStatusCell,
 } from "../columns/sales-columns";
@@ -122,12 +116,13 @@ export default function SalesProductionTableShell<T>({
       dateFilterColumns={[
         {
           id: "_date" as any,
-          title: "Date",
+          title: "Due Date",
           rangeSwitch: true,
           filter: {
             single: true,
-            title: "Type",
+            title: "Filter By",
             id: "_dateType" as any,
+            defaultValue: "Due Date",
             options: [
               { label: "Due Date", value: "prodDueDate" },
               { label: "Order Date", value: "createdAt" },

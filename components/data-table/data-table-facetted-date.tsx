@@ -23,7 +23,7 @@ import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2";
 interface DataTableFacetedFilter<TData, TValue> {
   title?: string;
 
-  filter?: DataTableFilterableColumn<TData>;
+  filter?: DataTableFilterableColumn<TData, TValue>;
   range?;
   column?: Column<TData, TValue>;
   dateTypeColumn?: Column<TData, TValue>;
@@ -56,7 +56,7 @@ export function DataTableFacetedDate<TData, TValue>({
 
   useEffect(() => {
     const cVal = fv;
-    console.log(cVal);
+    // console.log(cVal);
     // if (!cVal) return;
     // const isArray = Array.isArray(cVal);
     // let _v = isArray ? cVal : [cVal];
@@ -114,6 +114,7 @@ export function DataTableFacetedDate<TData, TValue>({
               title={filter.title}
               single={filter.single}
               options={filter.options}
+              defaultValue={filter.defaultValue}
             />
           )}
 

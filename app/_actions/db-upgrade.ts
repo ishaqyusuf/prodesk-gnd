@@ -11,14 +11,30 @@ import {
 import { Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
 import orderProdQtyUpdateAction from "./sales";
-import { ISalesSetting, ISalesSettingMeta } from "@/types/post";
+import { ISalesSetting, ISalesSettingMeta, PostTypes } from "@/types/post";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { getSettingAction } from "./settings";
 export async function dbUpgradeAction() {
+  await transformSettings();
+
   await addTypeToSalesOrder();
   await upgradeOrderQty();
   await transformItemComponent();
   await updateProgressTypes();
+}
+async function transformSettings() {
+  const s = await prisma.posts.findFirst({
+    where: {
+      type: PostTypes.SALES_SETTINGS,
+    },
+  });
+
+  await prisma.settings.create({
+    data: {
+      type: PostTypes.SALES_SETTINGS,
+      meta: s?.meta || {},
+    },
+  });
 }
 async function updateProgressTypes() {
   let updates: { [id in string]: number[] } = {};

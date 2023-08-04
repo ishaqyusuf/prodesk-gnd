@@ -19,23 +19,23 @@ import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { DataTableFacetedDate } from "./data-table-facetted-date"
 import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2"
 
-interface DataTableToolbarProps<TData> {
+interface DataTableToolbarProps<TData,TValue> {
   table: Table<TData>
-  filterableColumns?: DataTableFilterableColumn<TData>[]
+  filterableColumns?: DataTableFilterableColumn<TData,TValue>[]
   searchableColumns?: DataTableSearchableColumn<TData>[]
-  dateFilterColumns?: DataTableDateFilterColumn<TData>[]
+  dateFilterColumns?: DataTableDateFilterColumn<TData,TValue>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData,TValue>({
   table,
   filterableColumns = [],
   searchableColumns = [],
   dateFilterColumns = [],
   newRowLink,
   deleteRowsAction,
-}: DataTableToolbarProps<TData>) {
+}: DataTableToolbarProps<TData,TValue>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const [isPending, startTransition] = React.useTransition()
 

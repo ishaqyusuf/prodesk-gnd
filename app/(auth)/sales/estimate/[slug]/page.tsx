@@ -10,7 +10,6 @@ import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
 import OrderPrinter from "@/components/print/order/order-printer";
 import OverviewDetailsSection from "@/components/sales/overview/details-section";
 import ItemDetailsSection from "@/components/sales/overview/item-details";
-import PaymentHistory from "@/components/sales/overview/payment-history";
 import Timeline from "@/components/sales/overview/timeline";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
 };
 export default async function SalesOrderPage({ params: { slug } }) {
   const order: ISalesOrder = (await getOrderAction(slug)) as any;
-  if (!order) notFound();
+  if (!order) return notFound();
   metadata.description = order.orderId;
   return (
     <DataPageShell className="px-8" data={order}>

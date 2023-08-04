@@ -45,7 +45,7 @@ export async function salesFormAction(query: ICreateOrderFormQuery) {
   };
 }
 async function formCtx(): Promise<SalesFormCtx> {
-  const setting = await prisma.posts.findFirst({
+  const setting = await prisma.settings.findFirst({
     where: {
       type: PostTypes.SALES_SETTINGS,
     },
@@ -70,6 +70,7 @@ async function formCtx(): Promise<SalesFormCtx> {
       title: true,
     },
   });
+  // console.log(meta);
   return {
     settings: meta,
     profiles: profiles as any,

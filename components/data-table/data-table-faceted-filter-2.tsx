@@ -1,6 +1,6 @@
 import * as React from "react" 
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
-import { type Column } from "@tanstack/react-table"
+import { Table, type Column } from "@tanstack/react-table"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -21,24 +21,35 @@ import {
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { Check } from "lucide-react"
+import { DataTableFilterableColumn } from "@/types/data-table"
 
 export interface Option {
   label: string
   value: string
   icon?: React.ComponentType<{ className?: string }>
 }
+// interface DataTableFacetedFilter<TData, TValue> {
+//   column?: Column<TData, TValue>
+//   title?: string
+//   single?: Boolean
+//   options: Option[]
+// }
 interface DataTableFacetedFilter<TData, TValue> {
-  column?: Column<TData, TValue>
-  title?: string
+  title?: string;
+options: Option[]
+  filter?: DataTableFilterableColumn<TData, TValue>;
+  range?;
   single?: Boolean
-  options: Option[]
+  column?: Column<TData, TValue>;
+  dateTypeColumn?: Column<TData, TValue>;
+  rangeSwitch?: Boolean;
+  defaultValue?: String
 }
-
 export function DataTableFacetedFilter2<TData, TValue>({
-  column,
   title,
-  options,single
-}: DataTableFacetedFilter<TData, TValue>) {
+  options,single,column,defaultValue
+}: DataTableFacetedFilter<TData,TValue>) {
+
   const facets = column?.getFacetedUniqueValues();
   // const selectedValues = new Set();
   const [_selectedValues, setSelectedValue] = React.useState(new Set());
@@ -105,6 +116,11 @@ export function DataTableFacetedFilter2<TData, TValue>({
               </div>
             </>
           )}
+          {
+            _selectedValues.size == 0 && defaultValue && <Badge>
+              { defaultValue }
+            </Badge>
+          }
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">

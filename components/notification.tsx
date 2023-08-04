@@ -9,6 +9,7 @@ import { Badge } from "./ui/badge";
 export default function Notification({}) {
   const [newNotificationCount, setNewNotificationCount] = useState(1);
   const [notifications, setNotifications] = useState([]);
+
   async function loadNotifications() {}
   return (
     <div>

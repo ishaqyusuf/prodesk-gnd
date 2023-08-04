@@ -3,6 +3,7 @@ import { type z } from "zod"
  
  
 import { type Icons } from "@/components/icons"
+import { Column } from "@tanstack/react-table"
 
  
 export interface Option {
@@ -12,23 +13,24 @@ export interface Option {
 }
   
 
-export interface DataTableDateFilterColumn<TData> {
+export interface DataTableDateFilterColumn<TData,TValue> {
   id: keyof TData
   title: string
    rangeSwitch?: Boolean;
   range?: Boolean;
-  filter?: DataTableFilterableColumn<TData>
+  filter?: DataTableFilterableColumn<TData,TValue>
 }
 export interface DataTableSearchableColumn<TData> {
   id: keyof TData
   title: string, 
 }
 
-export interface DataTableFilterableColumn<TData>
+export interface DataTableFilterableColumn<TData,TValue>
   extends DataTableSearchableColumn<TData> {
+    column?: Column<TData, TValue>
   options: Option[]
   single?: Boolean;
-  
+  defaultValue?:string;
 }
  
  

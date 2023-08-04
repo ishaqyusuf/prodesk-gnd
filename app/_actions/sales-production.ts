@@ -16,6 +16,7 @@ export async function getSalesProductionsAction(
   query: SalesQueryParams
 ): ActionResponse<ISalesOrder> {
   query._page = "production";
+  if (!query._dateType) query._dateType = "prodDueDate";
   return await getSales(query);
 }
 export async function adminCompleteProductionAction(id) {

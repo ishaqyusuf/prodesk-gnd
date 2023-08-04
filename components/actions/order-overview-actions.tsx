@@ -10,9 +10,7 @@ import { useAppSelector } from "@/store";
 interface Props {}
 export default function OrderOverviewActions({}: Props) {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
-  const _linkDir = `/sales/${order?.type || "order"}/form?orderId=${
-    order?.orderId
-  }`;
+  const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
   return (
     <div className="flex space-x-2">
       <Link href={_linkDir} className="hover:underline">

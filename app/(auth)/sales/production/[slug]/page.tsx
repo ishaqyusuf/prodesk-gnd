@@ -28,7 +28,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
   order.ctx = {
     prodPage: true,
   };
-  if (!order) notFound();
+  if (!order) return notFound();
   metadata.description = order.orderId;
   return (
     <DataPageShell className="px-8" data={order}>

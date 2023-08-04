@@ -7,7 +7,11 @@ import SalesProductionTableShell from "@/components/shells/sales-production-tabl
 import { getSalesProductionsAction } from "@/app/_actions/sales-production";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductionsCrumb } from "@/components/breadcrumbs/links";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Sales Production",
+  description: "",
+};
 interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
   const response = await getSalesProductionsAction(queryParams(searchParams));

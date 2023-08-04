@@ -41,9 +41,9 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pageInfo: TablePageInfo
-  filterableColumns?: DataTableFilterableColumn<TData>[]
+  filterableColumns?: DataTableFilterableColumn<TData,TValue>[]
   searchableColumns?: DataTableSearchableColumn<TData>[]
-  dateFilterColumns?: DataTableDateFilterColumn<TData>[]
+  dateFilterColumns?: DataTableDateFilterColumn<TData,TValue>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
 }

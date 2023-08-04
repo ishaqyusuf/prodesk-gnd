@@ -126,7 +126,7 @@ export function footerEstimate({
   form.setValue("tax", toFixed(tax));
   form.setValue("meta.ccc", +ccc);
   form.setValue("meta.ccc_percentage", cccPercentage);
-  form.setValue("grandTotal", ccc + total);
+  form.setValue("grandTotal", ccc + tax + total);
 }
 
 export function openComponentModal(item: ISalesOrderItem, rowIndex) {

@@ -1,4 +1,8 @@
 # BILLABLE HOURS: 
+
+# AUG 04    02.10   == 20.40
+    04:40-
+    03:00-04:05
 # AUG 04    02.10   == 20.40
     11:45-12:45
     10:15-11:25
@@ -29,15 +33,16 @@
 breadcrumb section dropdown
 estimates: if type is estimates, hide production,print order & production,
     timeline: default type (estimate)
-DIT COMPONENT (COMBO BOX)
-AFTER TAX SAME TOTAL IN FOOTER
-ADDRESS COLUMN IN SALES
+<!-- DI COMPONENT (COMBO BOX) -->
+<!-- AFTER TAX SAME TOTAL IN FOOTER -->
+<!-- ADDRESS COLUMN IN SALES -->
 <!-- Login Redirect -->
 Notifications (Vercel Notification Style)
     notification events
 Route Guard (Middleware)
 Send Email.
 Sales Email Events.
+reset email not working
 <!-- Checkmark Flicker -->
 Order Prod col link
 Table Pagination Info 1-20 of 1,000
