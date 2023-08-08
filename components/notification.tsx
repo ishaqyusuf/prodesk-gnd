@@ -24,7 +24,7 @@ export default function Notification({}) {
           >
             <Bell className="w-4 h-4 text-muted-foreground" />
             {newNotificationCount > 0 && (
-              <Badge variant="default" className="">
+              <Badge variant="default" className="p-0.5 leading-none px-1">
                 {newNotificationCount}
               </Badge>
             )}

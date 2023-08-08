@@ -166,7 +166,7 @@ function Address({
             ?.map((f, _) => (
               <p
                 key={_}
-                className="line-clamp-1 text-sm font-medium text-muted-foreground"
+                className="line-clamp-1 text-sm font-medium text-primary"
               >
                 {f}
               </p>

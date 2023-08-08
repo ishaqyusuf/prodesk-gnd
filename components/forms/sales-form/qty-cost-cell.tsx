@@ -28,6 +28,8 @@ function QtyCostCell({ rowIndex, form }: { rowIndex; form: ISalesOrderForm }) {
   }, [slice.itemPriceData, rowIndex]);
   React.useEffect(() => {
     const total = toFixed(convertToNumber(qty * price, 0));
+    form.setValue(`items.${rowIndex}.qty`, qty);
+    form.setValue(`items.${rowIndex}.rate`, price);
     form.setValue(`items.${rowIndex}.total`, +total);
     store.dispatch(updateFooterInfo({ rowIndex, total }));
   }, [qty, price, rowIndex]);

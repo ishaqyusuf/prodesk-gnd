@@ -1,5 +1,6 @@
 
 # AUG 08  (-10)  00.00   == 00.00
+    09:25-
     02:10-03:50
     11:25-12:45
     10:50-11:05
@@ -46,10 +47,13 @@
     make invoice footer show inp overview.
     black footer weird
     footer total showing 4 decimal (fix)
-    save & close having /undefined.
+<!-- save & close having /undefined. -->
     bring catalog.
     persistent modal.
     batch print checkmarks:
+    print no right margin.****
+<!-- rate not printing. -->
+    get production status for items in order overview.
     
 
 old site: builder tasks
