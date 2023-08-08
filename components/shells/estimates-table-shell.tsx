@@ -59,7 +59,7 @@ export default function EstimatesTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => <OrderRowAction row={row.original} />,
+        cell: ({ row }) => <OrderRowAction estimate row={row.original} />,
       },
     ],
     [data, isPending]

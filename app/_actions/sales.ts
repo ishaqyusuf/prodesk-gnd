@@ -313,7 +313,7 @@ export default async function orderProdQtyUpdateAction(salesOrderId) {
   if (order?.prodId) {
     prodStatus = "Queued";
     if (started) prodStatus = "Started";
-    if (prodQty == builtQty) prodStatus = "Completed";
+    if (prodQty == builtQty && builtQty > 0) prodStatus = "Completed";
   }
   await prisma.salesOrders.update({
     where: {

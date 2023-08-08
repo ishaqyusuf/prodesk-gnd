@@ -5,6 +5,7 @@ import { lastId, nextId } from "@/lib/nextId";
 import { ISaveOrder } from "@/types/sales";
 import dayjs from "dayjs";
 import orderProdQtyUpdateAction from "./sales";
+import va from "@/lib/va";
 
 export async function saveOrderAction({
   id,
@@ -128,5 +129,7 @@ export async function saveOrderAction({
     });
   }
   await orderProdQtyUpdateAction(sale_order.id);
+  if (id) va.track("sales updated", { type: sale_order.type });
+  else va.track("sales created", { type: sale_order.type });
   return sale_order;
 }

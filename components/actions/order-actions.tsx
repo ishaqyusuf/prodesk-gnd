@@ -98,9 +98,9 @@ export function OrderRowAction(props: IOrderRowProps) {
             <MessageSquarePlus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Email
           </DropdownMenuItem>
-          <ProductionAction row={row} />
+          {!estimate && <ProductionAction row={row} />}
           <CopyOrderMenuAction row={row} />
-          <PrintOrderMenuAction row={row} />
+          <PrintOrderMenuAction estimate={estimate} row={row} />
           <DeleteRowMenuAction row={row} />
         </DropdownMenuContent>
       </DropdownMenu>
@@ -160,34 +160,43 @@ export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
       slugs: [props.row.slug],
     });
   }
-  return (
+  return props.myProd || props.estimate ? (
+    <DropdownMenuItem
+      onClick={() => {
+        if (props.estimate) _print("quote");
+        else _print("production");
+      }}
+    >
+      <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+      Print
+    </DropdownMenuItem>
+  ) : (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
         <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
         Print
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent>
-        {!props.myProd && (
-          <>
-            <DropdownMenuItem
-              onClick={() => {
-                _print("quote");
-              }}
-            >
-              <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Estimates
-            </DropdownMenuItem>
+        <>
+          <DropdownMenuItem
+            onClick={() => {
+              _print("quote");
+            }}
+          >
+            <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Estimates
+          </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onClick={() => {
-                _print("order");
-              }}
-            >
-              <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Order
-            </DropdownMenuItem>
-          </>
-        )}
+          <DropdownMenuItem
+            onClick={() => {
+              _print("order");
+            }}
+          >
+            <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Order
+          </DropdownMenuItem>
+        </>
+
         <DropdownMenuItem
           onClick={() => {
             _print("production");
