@@ -6,7 +6,7 @@ import OrderPrinter from "@/components/print/order/order-printer";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
 import { Metadata } from "next";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "Sales Orders",
 };
 interface Props {}

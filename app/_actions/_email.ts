@@ -8,6 +8,7 @@ interface Props {
   user;
   subject;
   react;
+  // to,
 }
 
 export async function _email({ from, user, subject, react }: Props) {

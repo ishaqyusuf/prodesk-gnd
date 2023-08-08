@@ -7,13 +7,13 @@ import { prisma } from "@/db";
 import dayjs from "dayjs";
 import { myId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
+import va from "@/lib/va";
 
 export async function sendMessage(data: EmailProps) {
   const trs = transformEmail(data.subject, data.body, data.data);
   await _email({
     from: data.from,
-    to: data.to as string,
-    parentId: data.parentId,
+    user: { email: data.to as any },
     subject: trs.subject,
     react: MailComposer({
       body: trs.body,
@@ -30,5 +30,8 @@ export async function sendMessage(data: EmailProps) {
       parentId: data.parentId,
       createdAt: new Date(),
     },
+  });
+  va.track("new email", {
+    type: data.type,
   });
 }
