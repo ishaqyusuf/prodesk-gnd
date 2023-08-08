@@ -102,8 +102,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       billingAddress,
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
-    console.log(formValues);
-    console.log(_items);
+    // console.log(formValues);
+    // console.log(_items);
+    if (!id) formValues.amountDue = formValues.grandTotal;
     const deleteIds: number[] = [];
     let items = _items
       ?.map((item) => {

@@ -54,7 +54,12 @@
     print no right margin.****
 <!-- rate not printing. -->
     get production status for items in order overview.
-    
+    show all payable orders (no estimates) in payment form, add payment amount input
+    packing list: no supplier qty shipped, qty back order.
+    print doc address bar example: https://www.zoho.com/us/invoice/templates/excel-invoice-template/
+
+    production: show due for today first and other dues at the bottom (show due for today red.)
+
 
 old site: builder tasks
 analytics

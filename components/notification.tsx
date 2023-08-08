@@ -20,7 +20,7 @@ export default function Notification({}) {
             variant="outline"
             size="sm"
             className={`rounded-full relative  space-x-2 ${newNotificationCount >
-              0 && "p-1"}`}
+              0 && "p-1s"}`}
           >
             <Bell className="w-4 h-4 text-muted-foreground" />
             {newNotificationCount > 0 && (
