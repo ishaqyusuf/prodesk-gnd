@@ -37,6 +37,19 @@
     10:00-11:00
 
 # TODO
+
+# SALES
+    decimal on all cost 00.00
+    production date from order list
+    mark incomplete not working
+    mark as completed.
+    make invoice footer show inp overview.
+    black footer weird
+    footer total showing 4 decimal (fix)
+    save & close having /undefined.
+    bring catalog.
+    
+
 old site: builder tasks
 analytics
 bloated tasks

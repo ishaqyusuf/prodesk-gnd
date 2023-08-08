@@ -43,6 +43,7 @@ import { store } from "@/store";
 import {
   adminCompleteProductionAction,
   cancelProductionAssignmentAction,
+  markProductionIncompleteAction,
 } from "@/app/_actions/sales-production";
 import { openModal } from "@/lib/modal";
 import { EmailModalProps } from "@/types/email";
@@ -272,13 +273,19 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
 
   async function _clearAssignment() {
     await cancelProductionAssignmentAction(row.id);
+    __refresh("Production Assignment Cancelled");
+  }
+  function __refresh(_toast: string = "") {
     router.refresh();
-    toast.success("Production Assignment Cancelled");
+    if (_toast) toast.success(_toast);
+  }
+  async function markIncomplete() {
+    await markProductionIncompleteAction(row.id);
+    __refresh("Production Marked as Incomplete");
   }
   async function completeProduction() {
     await adminCompleteProductionAction(row.id);
-    router.refresh();
-    toast.success("Production Completed");
+    __refresh("Production Completed");
   }
   return (
     <DropdownMenuSub>
@@ -289,7 +296,7 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
       <DropdownMenuSubContent>
         <DropdownMenuItem className="" asChild>
           <Link
-            href={`/sales/productions/${row.orderId}`}
+            href={`/sales/production/${row.orderId}`}
             className="flex w-full"
           >
             <BookOpen className={`mr-2 h-4 w-4`} />

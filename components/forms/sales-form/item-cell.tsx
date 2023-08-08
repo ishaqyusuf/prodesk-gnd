@@ -29,12 +29,12 @@ export default function ItemCell({ rowIndex, form }) {
       {isComponent == true ? (
         <button className="">
           <div
-            dangerouslySetInnerHTML={{
-              __html: form.getValues(`${baseKey}.description`),
-            }}
+            // dangerouslySetInnerHTML={{
+            //   __html: form.getValues(`${baseKey}.description`),
+            // }}
             className="line-clamp-2s  relative w-full p-0.5 text-start font-semibold"
           >
-            {/* {} */}
+            {form.getValues(`${baseKey}.description`)}
           </div>
         </button>
       ) : (

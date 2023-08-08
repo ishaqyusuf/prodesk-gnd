@@ -13,6 +13,7 @@ import {
   OrderMemoCell,
   OrderPriorityFlagCell,
   OrderProductionStatusCell,
+  OrderStatus,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
@@ -56,6 +57,11 @@ export default function OrdersTableShell<T>({
         accessorKey: "production",
         header: ColumnHeader("Production"),
         cell: ({ row }) => OrderProductionStatusCell(row.original),
+      },
+      {
+        accessorKey: "status",
+        header: ColumnHeader("Status"),
+        cell: ({ row }) => OrderStatus(row.original),
       },
       {
         accessorKey: "_status",

@@ -28,17 +28,18 @@ export async function getMySalesProductionsAction(query: SalesQueryParams) {
   return await getSales(query);
 }
 export async function adminCompleteProductionAction(id) {
-  await prisma.salesOrders.update({
-    where: {
-      id,
-    },
-    data: {
-      prodDueDate: null,
-      prodId: null,
-      //   builtQty
-    },
-  });
+  // await prisma.salesOrders.update({
+  //   where: {
+  //     id,
+  //   },
+  //   data: {
+  //     prodDueDate: null,
+  //     prodId: null,
+  //     //   builtQty
+  //   },
+  // });
 }
+export async function markProductionIncompleteAction(id) {}
 export async function cancelProductionAssignmentAction(id) {
   await prisma.salesOrders.update({
     where: {

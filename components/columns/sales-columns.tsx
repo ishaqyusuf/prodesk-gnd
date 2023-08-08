@@ -148,21 +148,28 @@ export function OrderInvoiceCell(
     </LinkCell>
   );
 }
+export function OrderStatus(order: ISalesOrder | undefined) {
+  const color = getBadgeColor(order?.prodStatus || "");
+  return (
+    <div className="w-16">
+      <Badge
+        variant={"secondary"}
+        className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
+      >
+        {order?.prodStatus || "-"}
+      </Badge>
+    </div>
+  );
+}
 export function OrderProductionStatusCell(
   order: ISalesOrder | undefined,
   link: string | undefined = undefined
 ) {
   if (!order) return <></>;
-  const color = getBadgeColor(order.prodStatus);
   return (
     <div className="w-16">
       <p className="font-medium whitespace-nowrap">{order.producer?.name}</p>
-      <Badge
-        variant={"secondary"}
-        className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
-      >
-        {order.prodStatus || "-"}
-      </Badge>
+      <p className="text-muted-foreground">{formatDate(order.prodDueDate)}</p>
     </div>
   );
 }

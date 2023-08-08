@@ -28,7 +28,7 @@ import { store } from "@/store";
 import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
 import { Input } from "@/components/ui/input";
 import {
-  Form,
+  // Form,
   FormControl,
   FormField,
   FormItem,
@@ -131,7 +131,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     };
   }
   return (
-    <form className="px-8">
+    <div className="px-8">
       <section id="header" className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
@@ -208,7 +208,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                     )}
                     {key == 1 && (
                       <div className="flex justify-end">
-                        <Form {...form}>
+                        {/* <Form {...form}>
                           <FormField
                             control={form.control}
                             name="meta.qb"
@@ -223,7 +223,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                               </FormItem>
                             )}
                           />
-                        </Form>
+                        </Form> */}
                       </div>
                     )}
                     {key > 1 && (
@@ -247,7 +247,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       <section id="invoiceForm">
         <SalesInvoiceTable form={form} data={data} />
       </section>
-    </form>
+    </div>
   );
 }
 
