@@ -256,6 +256,7 @@ export async function saveOrderAction({
     });
   }
   await orderProdQtyUpdateAction(sale_order.id);
+  console.log(sale_order)
   return sale_order;
 }
 export async function deleteOrderAction(id) {

@@ -150,13 +150,16 @@ export function OrderInvoiceCell(
 }
 export function OrderStatus(order: ISalesOrder | undefined) {
   const color = getBadgeColor(order?.prodStatus || "");
+  let status = order?.prodStatus;
+  if (!status && order?.prodId) status = "Queued";
   return (
     <div className="w-16">
       <Badge
         variant={"secondary"}
         className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
       >
-        {order?.prodStatus || "-"}
+        {/* {order?.prodStatus || "-"} */}
+        {status || "no status"}
       </Badge>
     </div>
   );

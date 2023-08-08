@@ -1,6 +1,6 @@
 
 # AUG 08  (-10)  00.00   == 00.00
-    02:10-
+    02:10-03:50
     11:25-12:45
     10:50-11:05
 # AUG 07    00.00   == 00.00
@@ -48,6 +48,8 @@
     footer total showing 4 decimal (fix)
     save & close having /undefined.
     bring catalog.
+    persistent modal.
+    batch print checkmarks:
     
 
 old site: builder tasks

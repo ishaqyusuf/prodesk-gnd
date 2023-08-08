@@ -79,10 +79,14 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       const formData = saveData();
       const response = await saveOrderAction(formData);
       if (response.orderId) {
-        const type = form.getValues("type");
+        const type = response.type;
         if (and == "close") router.push(`/sales/${type}s`);
         else {
-          if (slug != response.orderId) router.push(`/sales/${type}/form`);
+          if (and == "new") router.push(`/sales/${type}/new/form`);
+          else {
+            if (slug != response.orderId)
+              router.push(`/sales/${type}/${response.orderId}/form`);
+          }
         }
       }
       toast.message("Saved", {});
