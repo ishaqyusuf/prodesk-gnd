@@ -56,7 +56,7 @@ export default function ItemDetailsSection() {
                   </TableCell>
                   {!isProd ? (
                     <TableCell className="p-2 text-right font-semibold text-muted-foreground">
-                      <span>${item.total}</span>
+                      {item.total && <span>${item.total}</span>}
                     </TableCell>
                   ) : (
                     <>
