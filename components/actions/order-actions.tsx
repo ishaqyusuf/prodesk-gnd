@@ -21,6 +21,7 @@ import {
   FlagIcon,
   Info,
   ListOrderedIcon,
+  MessageSquarePlus,
   MoreHorizontal,
   Pen,
   Printer,
@@ -44,6 +45,7 @@ import {
   cancelProductionAssignmentAction,
 } from "@/app/_actions/sales-production";
 import { openModal } from "@/lib/modal";
+import { EmailModalProps } from "@/types/email";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -80,6 +82,22 @@ export function OrderRowAction(props: IOrderRowProps) {
               Edit
             </DropdownMenuItem>
           </Link>
+          <DropdownMenuItem
+            onClick={() => {
+              console.log(row);
+              openModal<EmailModalProps>("email", {
+                type: "sales",
+                parentId: row.id,
+                toName: row.customer?.name,
+                toEmail: row.customer?.email,
+                from: "GND Millwork<sales@gndprodesk.com>",
+                data: row,
+              });
+            }}
+          >
+            <MessageSquarePlus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Email
+          </DropdownMenuItem>
           <ProductionAction row={row} />
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction row={row} />

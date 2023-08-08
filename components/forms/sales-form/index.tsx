@@ -2,15 +2,11 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SalesFormResponse } from "@/app/_actions/sales-form";
-import { ISalesOrder, ISaveOrder } from "@/types/sales";
+import { ISalesOrder, ISalesOrderMeta, ISaveOrder } from "@/types/sales";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
@@ -30,6 +26,14 @@ import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store } from "@/store";
 import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 
 interface Props {
   data: SalesFormResponse;
@@ -196,12 +200,33 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                   <Label className="text-muted-foreground">{line.label}</Label>
 
                   <div className="text-end text-sm xl:col-span-2">
-                    {key == 0 ? (
+                    {key == 0 && (
                       <SalesCustomerProfileInput
                         form={form}
                         profiles={data?.ctx?.profiles}
                       />
-                    ) : (
+                    )}
+                    {key == 1 && (
+                      <div className="flex justify-end">
+                        <Form {...form}>
+                          <FormField
+                            control={form.control}
+                            name="meta.qb"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    className="h-6 w-[100px] uppercase"
+                                    {...field}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </Form>
+                      </div>
+                    )}
+                    {key > 1 && (
                       <div>
                         {line.key == "prodDueDate"
                           ? formatDate(form.getValues(line.key))
@@ -226,12 +251,17 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   );
 }
 
-export const orderInformation = [
+export const orderInformation: {
+  label: string;
+  key: string; //: keyof ISalesOrder;
+  value?: any;
+}[] = [
   {
     label: "Profile",
     key: "meta.sales_profile",
     value: "",
   },
+  { label: "Q.B Order #.", key: "meta.qb" },
   { label: "Sales Rep.", key: "meta.rep" },
   { label: "P.O No.", key: "meta.po" },
   { label: "Good Until", key: "meta.good_until" },

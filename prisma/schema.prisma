@@ -346,6 +346,22 @@ model MailGrids {
     type      String?   @db.VarChar(255)
 }
 
+model Inbox {
+    id        Int       @unique @default(autoincrement())
+    clientId  Int?
+    senderId  Int
+    parentId  Int?
+    subject   String?   @db.Text()
+    from      String    @db.Text()
+    to        String    @db.Text()
+    type      String    @db.Text()
+    body      String    @db.Text()
+    meta      Json?     @db.Json
+    sentAt    DateTime? @db.Timestamp(0)
+    createdAt DateTime? @db.Timestamp(0)
+    sender    Users     @relation(fields: [senderId], references: [id])
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Migrations {
     id        Int    @unique @default(autoincrement())
@@ -908,6 +924,7 @@ model Users {
     reppedProductions SalesOrders[]   @relation(name: "salesRep")
     roles             ModelHasRoles[]
     notifications     Notifications[]
+    inbox             Inbox[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

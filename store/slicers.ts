@@ -40,6 +40,7 @@ export type ModalName =
   | "salesPayment"
   | "salesTimeline"
   | "prodItemUpdate"
+  | "email"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

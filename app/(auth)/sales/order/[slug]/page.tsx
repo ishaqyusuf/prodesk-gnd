@@ -8,6 +8,7 @@ import OrderPrinter from "@/components/print/order/order-printer";
 import OverviewDetailsSection from "@/components/sales/overview/details-section";
 import ItemDetailsSection from "@/components/sales/overview/item-details";
 import PaymentHistory from "@/components/sales/overview/payment-history";
+import TabbedItemEmailOverview from "@/components/sales/overview/tabbed-item-email-overview";
 import Timeline from "@/components/sales/overview/timeline";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
@@ -32,7 +33,8 @@ export default async function SalesOrderPage({ params: { slug } }) {
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2 flex flex-col space-y-4">
           <OverviewDetailsSection />
-          <ItemDetailsSection />
+          {/* <ItemDetailsSection /> */}
+          <TabbedItemEmailOverview />
         </div>
         <div className="space-y-4">
           <PaymentHistory />

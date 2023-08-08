@@ -4,7 +4,11 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
+import { Metadata } from "next";
 
+export const meta: Metadata = {
+  title: "Sales Orders",
+};
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
   const response = await getSalesOrder(queryParams(searchParams));

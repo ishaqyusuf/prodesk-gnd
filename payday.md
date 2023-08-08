@@ -1,5 +1,12 @@
-# BILLABLE HOURS: 
 
+# AUG 08  (-10)  00.00   == 00.00
+    02:10-
+    11:25-12:45
+    10:50-11:05
+# AUG 07    00.00   == 00.00
+    02:00-02:20
+    09:50-12:30
+# -------------------------- 
 # AUG 04    02.40   == 23.20
     04:40-06:15
     03:00-04:05
@@ -30,6 +37,11 @@
     10:00-11:00
 
 # TODO
+old site: builder tasks
+analytics
+bloated tasks
+bloated home-tasks
+mobile-responsive
 fix bloated posts
 breadcrumb section dropdown
 estimates: if type is estimates, hide production,print order & production,
@@ -46,7 +58,7 @@ Sales Email Events.
 reset email not working
 <!-- Checkmark Flicker -->
 Order Prod col link
-Table Pagination Info 1-20 of 1,000
+<!-- Table Pagination Info 1-20 of 1,000 -->
 Payments
 Customers
 

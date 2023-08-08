@@ -105,7 +105,9 @@ function TotalCell({ rowIndex, form }) {
   const itemTotal = form.watch(`${baseKey}.total`);
   return (
     <TableCell align="right" id="total" className="p-0 px-1">
-      <Label>{itemTotal || "0.00"}</Label>
+      <Label className="whitespace-nowrap">
+        {itemTotal > 0 && <span>$</span>} {itemTotal || "0.00"}
+      </Label>
     </TableCell>
   );
 }

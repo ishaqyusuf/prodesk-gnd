@@ -11,6 +11,7 @@ import PasswordResetRequestEmail from "@/components/emails/password-reset-reques
 import { env } from "@/env.mjs";
 import { _email } from "./_email";
 import { FROM_EMAILS } from "@/enums/email";
+import va from "@/lib/va";
 
 export async function resetPasswordRequest({
   email,
@@ -38,16 +39,17 @@ export async function resetPasswordRequest({
     }),
     subject: "Security Alert: Forgot Password OTP",
   });
-  await resend.emails.send({
-    from: "GND-Prodesk<ohno@gndprodesk.com>",
-    // to: "ishaqyusuf024@gmail.com",
-    to: user.email,
-    subject: "Security Alert: Forgot Password OTP",
-    react: PasswordResetRequestEmail({
-      firstName: user?.name ?? undefined,
-      token,
-    }),
-  });
+  va.track("Password Reset");
+  // await resend.emails.send({
+  //   from: "GND-Prodesk<ohno@gndprodesk.com>",
+  //   // to: "ishaqyusuf024@gmail.com",
+  //   to: user.email,
+  //   subject: "Security Alert: Forgot Password OTP",
+  //   react: PasswordResetRequestEmail({
+  //     firstName: user?.name ?? undefined,
+  //     token,
+  //   }),
+  // });
   return { id: user.id };
 }
 export async function resetPassword({

@@ -23,7 +23,7 @@ export function ProdActions(props: IOrderRowProps) {
   const { row, myProd } = props;
   const _linkDir = myProd
     ? `/tasks/sales-production/${row.orderId}`
-    : `/sales/productions/${row.orderId}`;
+    : `/sales/production/${row.orderId}`;
   return (
     <div className="">
       <DropdownMenu>

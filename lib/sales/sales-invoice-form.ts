@@ -116,7 +116,10 @@ export function footerEstimate({
 
   const labourCost = convertToNumber(form.getValues("meta.labour_cost"), 0);
   let total = +toFixed(subTotal + tax + labourCost);
-  if (form.getValues("meta.payment_option") == "Check" && cccPercentage > 0) {
+  if (
+    form.getValues("meta.payment_option") == "Credit Card" &&
+    cccPercentage > 0
+  ) {
     ccc = +toFixed((cccPercentage / 100) * total);
   }
   if (taxxableSubTotal > 0 && taxPercentage > 0)

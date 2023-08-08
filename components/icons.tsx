@@ -72,6 +72,7 @@ export const Icons = {
   laptop: Laptop,
     hide: EyeOff,
     view: Eye,
+    flag: (props:LucideProps) => (<svg viewBox="0 0 24 24" {...props}  ><path fill="currentColor" d="M5 21V4h9l.4 2H20v10h-7l-.4-2H7v7H5Z"></path></svg>),
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

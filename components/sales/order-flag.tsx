@@ -3,6 +3,7 @@ import React from "react";
 
 import { ISalesOrder } from "@/types/sales";
 import { orderPriorityColorMap } from "@/lib/sales/order-priority";
+import { Icons } from "../icons";
 
 export default function OrderFlag({ order }: { order: ISalesOrder }) {
   const [color, setColor] = React.useState("gray");
@@ -12,7 +13,7 @@ export default function OrderFlag({ order }: { order: ISalesOrder }) {
 
   return (
     <>
-      <FlagIcon className={`h-4 w-4 text-${color}-500`} />
+      <Icons.flag className={`h-5 w-5 text-${color}-500`} />
     </>
   );
 }

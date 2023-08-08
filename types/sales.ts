@@ -40,7 +40,7 @@ export type ISalesOrderMeta = {
   cost_price;
   production_status;
   pre_build_qty: any;
-
+  qb;
   ccc;
   priority: IPriority;
   ccc_percentage;
