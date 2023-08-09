@@ -97,7 +97,7 @@ export function OrderPrintHeader({ order }: Props) {
               </tr>
               <tr>
                 <Address address={order.billingAddress} title="Sold To" />
-                <td colSpan={2} />
+                {/* <td colSpan={2} /> */}
                 <Address address={order.billingAddress} title="Ship To" />
                 <td colSpan={3} />
               </tr>
@@ -149,9 +149,11 @@ function Address({
   title;
 }) {
   return (
-    <td colSpan={6}>
-      <div className="my-4 border border-gray-400">
-        <p className="bg-slate-200 p-0.5 px-1 text-sm  font-bold">{title}</p>
+    <td colSpan={7}>
+      <div className="mt-4 border border-gray-300">
+        <p className="border-b-2 p-0.5 px-1 bg-gray-300 text-sm  font-bold">
+          {title}
+        </p>
         <div className="flex flex-col p-2">
           {[
             address?.name,

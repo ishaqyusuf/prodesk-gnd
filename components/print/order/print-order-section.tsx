@@ -19,7 +19,7 @@ export function PrintOrderSection({ order, index }: Props) {
         id={`s${order.orderId}`}
         className={cn(index > 0 && "print:break-before-page")}
       >
-        <table className="report-table mr-10 w-full text-xs">
+        <table className="report-table mr-10s w-full text-xs">
           <OrderPrintHeader order={order} />
           <OrderPrintInvoiceLines order={order} />
           <OrderPrintFooter order={order} />
