@@ -72,7 +72,7 @@ export default function OrdersTableShell<T>({
         enableHiding: false,
       },
       {
-        accessorKey: "_priority",
+        accessorKey: "_payment",
         enableHiding: false,
       },
       {
@@ -91,18 +91,37 @@ export default function OrdersTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={
-        [
-          //  {
-          //    id: "category",
-          //    title: "Category",
-          //    options: products.category.enumValues.map((category) => ({
-          //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-          //      value: category,
-          //    })),
-          //  },
-        ]
-      }
+      filterableColumns={[
+        {
+          id: "status",
+          title: "Status",
+          single: true,
+          options: [
+            { label: "Production Started", value: "Started" },
+            { label: "Production Assigned", value: "Queued" },
+            { label: "Production Completed", value: "Completed" },
+            { label: "Production Not Assigned", value: "Unassigned" },
+          ],
+        },
+        {
+          id: "_payment" as any,
+          title: "Payment",
+          single: true,
+          options: [
+            { label: "Paid Fully", value: "Paid" },
+            { label: "Part Paid", value: "Part" },
+            { label: "Pending", value: "Pending" },
+          ],
+        },
+        //  {
+        //    id: "category",
+        //    title: "Category",
+        //    options: products.category.enumValues.map((category) => ({
+        //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
+        //      value: category,
+        //    })),
+        //  },
+      ]}
       searchableColumns={[
         {
           id: "_q" as any,

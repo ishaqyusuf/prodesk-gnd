@@ -923,7 +923,8 @@ model Users {
     salesProductions  SalesOrders[]   @relation(name: "producer")
     reppedProductions SalesOrders[]   @relation(name: "salesRep")
     roles             ModelHasRoles[]
-    notifications     Notifications[]
+    notifications     Notifications[] @relation(name: "notifications")
+    sentNotifications Notifications[] @relation(name: "fromUser")
     inbox             Inbox[]
 }
 
@@ -965,9 +966,14 @@ model WorkOrders {
 model Notifications {
     id         Int       @unique @default(autoincrement())
     meta       Json?     @db.Json
+    type       String
     fromUserId Int
     userId     Int
-    user       Users     @relation(fields: [userId], references: [id])
+    message    String
+    link       String?   @db.Text()
+    user       Users     @relation(name: "notifications", fields: [userId], references: [id])
+    fromUser   Users     @relation(name: "fromUser", fields: [fromUserId], references: [id])
     seenAt     DateTime? @db.Timestamp(0)
+    archivedAt DateTime? @db.Timestamp(0)
     createdAt  DateTime? @db.Timestamp(0)
 }

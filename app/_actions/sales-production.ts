@@ -5,6 +5,7 @@ import { ActionResponse } from "@/types/action";
 import {
   ISalesOrder,
   ISalesOrderItem,
+  ISalesOrderItemMeta,
   ProdActionProps,
   SalesQueryParams,
 } from "@/types/sales";
@@ -12,34 +13,86 @@ import dayjs from "dayjs";
 import orderProdQtyUpdateAction, { getSales } from "./sales";
 import { saveProgress } from "./progress";
 import { getServerSession } from "next-auth";
+import { myId } from "./utils";
+import { _notifyProductionAssigned } from "./notifications";
+import { formatDate } from "@/lib/use-day";
 
 export async function getSalesProductionsAction(
-  query: SalesQueryParams
+  query: SalesQueryParams,
+  admin = false
 ): ActionResponse<ISalesOrder> {
+  const sessionId = await myId();
   query._page = "production";
+  if (!admin) query.prodId = sessionId || -1;
   if (!query._dateType) query._dateType = "prodDueDate";
+  if (!query.sort) {
+    query.sort = "prodDueDate";
+    query.sort_order = "desc";
+  }
   return await getSales(query);
 }
-export async function getMySalesProductionsAction(query: SalesQueryParams) {
-  const session = await getServerSession();
-  query._page = "production";
-  // query.prodId = session?.user?.id || -1;
-  if (!query._dateType) query._dateType = "prodDueDate";
-  return await getSales(query);
+export async function prodsDueToday(admin: Boolean) {
+  const q: SalesQueryParams = {
+    _page: "production",
+    date: formatDate(dayjs(), "YYYY-MM-DD"),
+    _dateType: "prodDueDate",
+  };
+  const sessionId = await myId();
+  if (!admin) q.prodId = sessionId || -1;
+
+  return await getSales(q);
 }
 export async function adminCompleteProductionAction(id) {
-  // await prisma.salesOrders.update({
-  //   where: {
-  //     id,
-  //   },
-  //   data: {
-  //     prodDueDate: null,
-  //     prodId: null,
-  //     //   builtQty
-  //   },
-  // });
+  await markProduction(id, "completed");
 }
-export async function markProductionIncompleteAction(id) {}
+export async function markProductionIncompleteAction(id) {
+  await markProduction(id, "incomplete");
+}
+export async function markProduction(id, as: "completed" | "incomplete") {
+  const completed = as == "completed";
+  let prevProducedQty: number = 0;
+  const order = await prisma.salesOrders.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      items: true,
+    },
+  });
+  let items = order?.items;
+  items?.map((item) => async () => {
+    console.log(item.swing, item.qty);
+    if (!item.swing || !item?.qty || !item) return;
+    const meta: ISalesOrderItemMeta = item.meta as any;
+    if (completed)
+      prevProducedQty += (item.qty || 0) - (meta.produced_qty || 0);
+    else prevProducedQty += meta.produced_qty || 0;
+
+    meta.produced_qty = completed ? item.qty : 0;
+    console.log([meta.produced_qty]);
+    await prisma.salesOrderItems.update({
+      where: {
+        id: item.id,
+      },
+      data: {
+        meta: meta as any,
+      },
+    });
+  });
+  if (prevProducedQty > 0) {
+    await saveProgress("SalesOrder", id, {
+      type: "production",
+      // parentId: salesOrderId,
+      status: completed ? "Production Completed" : "Production Reset",
+      headline: completed
+        ? "Production Completed by admin"
+        : "Production Reset by admin",
+      userId: await myId(),
+    });
+  }
+  await orderProdQtyUpdateAction(id);
+  if (order?.prodId && !completed) await _notifyProductionAssigned(order);
+}
 export async function cancelProductionAssignmentAction(id) {
   await prisma.salesOrders.update({
     where: {
@@ -61,7 +114,7 @@ export async function assignProductionAction({
   userId,
   prodDueDate,
 }: AssignProductionActionProps) {
-  await prisma.salesOrders.update({
+  const order = await prisma.salesOrders.update({
     where: {
       id,
     },
@@ -70,6 +123,7 @@ export async function assignProductionAction({
       prodId: userId,
     },
   });
+  await _notifyProductionAssigned(order);
 }
 export interface UserProductionEventsProps {
   userId;
@@ -143,7 +197,7 @@ export async function orderItemProductionAction({
   const producedQty = _update.meta.produced_qty || 0;
   switch (action) {
     case "Stop":
-      _update.meta.produced_qty = null;
+      _update.meta.produced_qty = undefined;
       await updateProgress(item, qty, "Production Stopped");
       break;
     case "Start":

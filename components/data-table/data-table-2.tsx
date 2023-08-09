@@ -46,6 +46,8 @@ interface DataTableProps<TData, TValue> {
   dateFilterColumns?: DataTableDateFilterColumn<TData,TValue>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
+  hideHeader?: Boolean
+  hideFooter?: Boolean
 }
 
 export function DataTable2<TData, TValue>({
@@ -55,7 +57,7 @@ export function DataTable2<TData, TValue>({
   filterableColumns = [],
   searchableColumns = [],
   dateFilterColumns = [],
-  newRowLink,
+  newRowLink, hideFooter,hideHeader,
   deleteRowsAction,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({});
@@ -241,14 +243,14 @@ export function DataTable2<TData, TValue>({
   }, []);
   return (
     <div className="w-full space-y-3 overflow-auto">
-      <DataTableToolbar
+      {!hideHeader && <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
         searchableColumns={searchableColumns}
         dateFilterColumns={dateFilterColumns}
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
-      />
+      />}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -300,7 +302,7 @@ export function DataTable2<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination pageInfo={pageInfo} table={table} />
+      { !hideFooter && <DataTablePagination pageInfo={pageInfo} table={table} />}
     </div>
   )
 }
