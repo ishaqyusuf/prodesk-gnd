@@ -38,7 +38,7 @@ export const ProdItemActions = ({ item }: IProp) => {
   useEffect(() => {
     console.log(qty, produced_qty);
     if (qty == produced_qty) setProdState("Completed");
-    if (produced_qty == 0 || (qty as any) > produced_qty)
+    if (produced_qty == 0 || (qty as any) > (produced_qty || 0))
       setProdState("Started");
     if (!produced_qty && produced_qty != 0) setProdState("Pending");
   }, [item]);
@@ -56,7 +56,7 @@ export const ProdItemActions = ({ item }: IProp) => {
           </Btn>
         </ToolTip>
       )}
-      {produced_qty > 0 && (
+      {(produced_qty || 0) > 0 && (
         <ToolTip info="Reverse Production">
           <Btn
             icon
