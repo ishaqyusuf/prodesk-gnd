@@ -47,7 +47,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user: cred }) => {
       // console.log({ token, cred });
-
+      console.log("CRED")
+      console.log(token?.jti)
+      // console.log(cred)
       if (cred) {
         const { role, can, user } = cred;
         token.user = user;

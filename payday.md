@@ -1,4 +1,5 @@
 # AUG 09  00.00   == 00.00
+    10:20-
     02:30-04:00
     10:25-01:00
 # AUG 08  00.00   == 00.00
@@ -53,11 +54,11 @@
     bring catalog.
     persistent modal.
     batch print checkmarks:
-    print no right margin.****
+    print no right margin.
 <!-- rate not printing. -->
     get production status for items in order overview.
     show all payable orders (no estimates) in payment form, add payment amount input
-    packing list: no supplier qty shipped, qty back order.
+<!-- packing list: no supplier qty shipped, qty back order. -->
     print doc address bar example: https://www.zoho.com/us/invoice/templates/excel-invoice-template/
 
 <!-- production: show due for today first and other dues at the bottom (show due for today red.) -->

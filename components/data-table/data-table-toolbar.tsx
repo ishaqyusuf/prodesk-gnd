@@ -26,6 +26,7 @@ interface DataTableToolbarProps<TData,TValue> {
   dateFilterColumns?: DataTableDateFilterColumn<TData,TValue>[]
   newRowLink?: string
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
+  SelectionAction?
 }
 
 export function DataTableToolbar<TData,TValue>({
@@ -34,6 +35,7 @@ export function DataTableToolbar<TData,TValue>({
   searchableColumns = [],
   dateFilterColumns = [],
   newRowLink,
+  SelectionAction,
   deleteRowsAction,
 }: DataTableToolbarProps<TData,TValue>) {
   const isFiltered = table.getState().columnFilters.length > 0
@@ -100,6 +102,7 @@ export function DataTableToolbar<TData,TValue>({
         )}
       </div>
       <div className="flex items-center space-x-2">
+        {table.getSelectedRowModel().rows.length > 0 && SelectionAction && <SelectionAction items={table.getSelectedRowModel().rows} />}
         {deleteRowsAction && table.getSelectedRowModel().rows.length > 0 ? (
           <Button
             aria-label="Delete selected rows"

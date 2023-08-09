@@ -155,68 +155,86 @@ export const DeleteRowMenuAction = typedMemo(({ row }: IOrderRowProps) => {
     </DropdownMenuItem>
   );
 });
-export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
-  function _print(mode: IOrderPrintMode) {
-    dispatchSlice("printOrders", {
-      mode,
-      slugs: [props.row.slug],
-    });
-  }
-  return props.myProd || props.estimate ? (
-    <DropdownMenuItem
-      onClick={() => {
-        if (props.estimate) _print("quote");
-        else _print("production");
-      }}
-    >
-      <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-      Print
-    </DropdownMenuItem>
-  ) : (
-    <DropdownMenuSub>
-      <DropdownMenuSubTrigger>
+export const PrintOrderMenuAction = typedMemo(
+  (
+    props: IOrderRowProps & {
+      slugs?: string[];
+    }
+  ) => {
+    function _print(mode: IOrderPrintMode) {
+      console.log(props.slugs || [props.row.slug]);
+      dispatchSlice("printOrders", {
+        mode,
+        slugs: props.slugs || [props.row.slug],
+      });
+    }
+    function PrintOptions() {
+      return (
+        <>
+          <DropdownMenuItem
+            onClick={() => {
+              _print("quote");
+            }}
+          >
+            <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Estimates
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onClick={() => {
+              _print("order");
+            }}
+          >
+            <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Order
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onClick={() => {
+              _print("packing list");
+            }}
+          >
+            <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Packing List
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              _print("production");
+            }}
+          >
+            <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Production
+          </DropdownMenuItem>
+        </>
+      );
+    }
+    if (props.slugs) {
+      return <PrintOptions />;
+    }
+    return props.myProd || props.estimate ? (
+      <DropdownMenuItem
+        onClick={() => {
+          if (props.estimate) _print("quote");
+          else _print("production");
+        }}
+      >
         <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
         Print
-      </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent>
-        <DropdownMenuItem
-          onClick={() => {
-            _print("quote");
-          }}
-        >
-          <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Estimates
-        </DropdownMenuItem>
+      </DropdownMenuItem>
+    ) : (
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>
+          <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Print
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent>
+          <PrintOptions />
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+    );
+  }
+);
 
-        <DropdownMenuItem
-          onClick={() => {
-            _print("order");
-          }}
-        >
-          <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Order
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onClick={() => {
-            _print("packing list");
-          }}
-        >
-          <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Packing List
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            _print("production");
-          }}
-        >
-          <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Production
-        </DropdownMenuItem>
-      </DropdownMenuSubContent>
-    </DropdownMenuSub>
-  );
-});
 export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();

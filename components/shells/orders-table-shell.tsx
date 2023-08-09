@@ -16,7 +16,15 @@ import {
   OrderStatus,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/order-actions";
+import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
+import { DataTable2 } from "../data-table/data-table-2";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Printer } from "lucide-react";
 
 export default function OrdersTableShell<T>({
   data,
@@ -87,10 +95,37 @@ export default function OrdersTableShell<T>({
     [data, isPending]
   );
   return (
-    <DataTable
+    <DataTable2
       columns={columns}
       pageInfo={pageInfo}
       data={data}
+      SelectionAction={({ items }) => {
+        console.log(items);
+        return (
+          <>
+            {/* <span>{JSON.stringify(items)}</span> */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label="Toggle columns"
+                  variant="outline"
+                  size="icon"
+                  className="ml-auto hidden h-8 lg:flex"
+                >
+                  <Printer className=" h-4 w-4" />
+                  {/* View */}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[150px]">
+                <PrintOrderMenuAction
+                  row={null as any}
+                  slugs={items?.map((i) => i?.original?.slug)}
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        );
+      }}
       filterableColumns={[
         {
           id: "status",

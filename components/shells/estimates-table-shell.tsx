@@ -13,6 +13,7 @@ import {
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
+import { DataTable2 } from "../data-table/data-table-2";
 
 export default function EstimatesTableShell<T>({
   data,
@@ -65,7 +66,7 @@ export default function EstimatesTableShell<T>({
     [data, isPending]
   );
   return (
-    <DataTable
+    <DataTable2
       columns={columns}
       pageInfo={pageInfo}
       data={data}
