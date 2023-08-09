@@ -66,7 +66,7 @@ export default function SalesProdSubmitModal() {
           meta: { produced_qty = 0 },
         } = item.item;
         let pendingQty = (qty || 0) - (produced_qty || 0);
-        if (item.action == "Cancel") pendingQty = produced_qty;
+        if (item.action == "Cancel") pendingQty = produced_qty || 0;
         const _data = {
           pendingQty,
           qty: Math.min(1, pendingQty).toString(),

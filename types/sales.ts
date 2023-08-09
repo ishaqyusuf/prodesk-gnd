@@ -16,7 +16,7 @@ export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
 export type IOrderType = "order" | "estimate";
-export type IOrderPrintMode = "quote" | "order" | "production";
+export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 export type ISalesOrder = SalesOrders & {
   customer?: Customers;
   billingAddress?: IAddressBook;
@@ -84,7 +84,7 @@ export interface ISalesOrderItemMeta {
   door_qty_selector;
   frame;
   product_cost;
-  produced_qty;
+  produced_qty: number | undefined | null;
   casing;
   hinge;
   line_index;
@@ -136,12 +136,19 @@ export interface SalesQueryParams {
   take?;
   page?;
   per_page?;
-  sort?: "customer" | "status";
+  sort?: "customer" | "status" | "prodDueDate";
   sort_order?: "asc" | "desc" | undefined;
   date?;
   from?;
   to?;
-  status?;
+  status?:
+    | "Queued"
+    | "Started"
+    | "Completed"
+    | "No Status"
+    | "Unassigned"
+    | undefined;
+  _payment?: "Paid" | "Part" | "Pending";
   prodId?;
   _page?: "production" | undefined;
   type?: IOrderType;

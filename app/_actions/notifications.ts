@@ -2,6 +2,7 @@
 
 import { prisma } from "@/db";
 import { authOptions } from "@/lib/auth-options";
+import { SalesOrders } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export async function loadNotifications() {
@@ -12,3 +13,23 @@ export async function loadNotifications() {
     },
   });
 }
+async function _notify() {
+  //  await prisma.notifications.create({
+  //    data: {
+  //      userId: userId,
+  //      fromUser: {
+  //        connect: {
+  //          id: (await myId()) || 0,
+  //        },
+  //      },
+  //      user: {
+  //        connect: {
+  //          id: userId,
+  //        },
+  //      },
+  //      meta: {},
+  //      message: "",
+  //    },
+  //  });
+}
+export async function _notifyProductionAssigned(order: SalesOrders) {}

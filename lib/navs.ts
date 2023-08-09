@@ -43,9 +43,10 @@ export function nav(
 ): ISidebar | undefined {
   // {user,role,can}
   if (!session?.user) return undefined;
-  const prodQuery = `?_dateType=prodDueDate&date=${dayjs().format(
-    "YYYY-MM-DD"
-  )}`;
+  const prodQuery = ``;
+  //`?_dateType=prodDueDate&date=${dayjs().format(
+  // "YYYY-MM-DD"
+  // )}`;
   const __can = session?.can;
   const role: "Production" | "Punchout" | "Installation" = session?.role
     ?.name as any;

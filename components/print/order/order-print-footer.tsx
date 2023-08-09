@@ -9,7 +9,7 @@ interface Props {
 }
 export function OrderPrintFooter({ order }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
-  const isClient = po?.mode != "production";
+  const isClient = !["production", "packing list"].includes(po?.mode);
 
   const [footer, setFooter] = useState<
     {

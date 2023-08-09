@@ -9,7 +9,9 @@ interface Props {
 }
 export function OrderPrintInvoiceLines({ order }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
-  const isClient = po?.mode != "production";
+  const isClient = !["production", "packing list"].includes(po?.mode);
+  const packingList = po?.mode == "packing list";
+
   const lineIndex = order?.items?.slice(-1)[0]?.meta?.line_index;
   const totalLines = lineIndex ? lineIndex + 1 : order?.items?.length;
   let _index = 0;
@@ -48,18 +50,16 @@ export function OrderPrintInvoiceLines({ order }: Props) {
             Swing
           </th>
           <th colSpan={1}>Qty</th>
-          {isClient ? (
+          {packingList && <th colSpan={1}>Packed Qty</th>}
+          {isClient && (
             <>
               <th colSpan={2} align="right">
                 Rate
               </th>
               <th colSpan={2}>Total</th>
             </>
-          ) : (
-            <>
-              <th colSpan={4}>Supplier</th>
-            </>
-          )}
+          )}{" "}
+          {!isClient && !packingList && <th colSpan={4}>Supplier</th>}
         </tr>
       </thead>
       <tbody id="invoiceLines">
@@ -84,7 +84,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
             <td colSpan={1} align="center" valign="middle">
               <p className="font-bold">{line?.qty}</p>
             </td>
-            {isClient ? (
+            {isClient && (
               <>
                 <td colSpan={2} valign="middle" align="right">
                   {line?.rate && (
@@ -97,12 +97,16 @@ export function OrderPrintInvoiceLines({ order }: Props) {
                   )}
                 </td>
               </>
-            ) : (
+            )}
+            {!isClient && !packingList && (
               <>
                 <td colSpan={4} valign="top" align="right">
                   <p className="pr-2">{line?.meta?.supplier}</p>
                 </td>
               </>
+            )}
+            {packingList && (
+              <td colSpan={1} align="center" valign="middle"></td>
             )}
           </tr>
         ))}

@@ -62,9 +62,9 @@ export function DataTableFacetedFilter2<TData, TValue>({
     if (v) {
       const ns = new Set(_selectedValues);
       if (single) {
-        console.log(isArray ? v[0] : v);
+        // console.log(isArray ? v[0] : v);
         ns.add(isArray ? v[0] : v);
-        console.log(_selectedValues.size);
+        // console.log(_selectedValues.size);
       } else {
         (isArray ? v : [v]).map((_v) => ns.add(_v));
       }
@@ -145,8 +145,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
                           return;
                         }
                         ns.clear();
-                        ns.add(option.value);
-                        console.log([option.value, ns.size]);
+                        ns.add(option.value); 
                         setOpen(false);
                       } else {
                         if (isSelected) {
@@ -157,12 +156,14 @@ export function DataTableFacetedFilter2<TData, TValue>({
                       }
                       const filterValues = Array.from(ns);
 
+                      // const fv = filterValues.length
+                      //     ? single
+                      //       ? [filterValues[0]]
+                      //       : filterValues
+                      //     : undefined
+                        
                       column?.setFilterValue(
-                        filterValues.length
-                          ? single
-                            ? filterValues[0]
-                            : filterValues
-                          : undefined
+                        filterValues
                       );
                       setSelectedValue(ns);
                     }}

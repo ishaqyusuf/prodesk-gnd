@@ -9,6 +9,7 @@ import { Info } from "../../info";
 import { AddressBooks } from "@prisma/client";
 import OrderOverviewActions from "../../actions/order-overview-actions";
 import { convertToNumber } from "@/lib/use-number";
+import Money from "@/components/money";
 
 interface Props {
   isProd?: Boolean;
@@ -35,10 +36,8 @@ export default function DetailsSection({}: Props) {
           </Info>
           <Info hidden={isProd} label="Invoice (Paid)">
             <span>
-              <span className="font-medium"> ${order.grandTotal}</span> ($
-              {convertToNumber(
-                (order.grandTotal || 0) - (order.amountDue || 0)
-              )}
+              <Money className="font-medium" value={order.grandTotal} /> (
+              <Money value={(order.grandTotal || 0) - (order.amountDue || 0)} />
               )
             </span>
           </Info>

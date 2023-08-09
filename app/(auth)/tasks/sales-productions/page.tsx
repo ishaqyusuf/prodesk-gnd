@@ -2,7 +2,7 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
 import SalesProductionTableShell from "@/components/shells/sales-production-table-shell";
-import { getMySalesProductionsAction } from "@/app/_actions/sales-production";
+import { getSalesProductionsAction } from "@/app/_actions/sales-production";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductionsCrumb } from "@/components/breadcrumbs/links";
 import { Metadata } from "next";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
-  const response = await getMySalesProductionsAction(queryParams(searchParams));
+  const response = await getSalesProductionsAction(queryParams(searchParams));
   return (
     <div className="h-full flex-1 flex-col space-y-4 px-8">
       <Breadcrumbs>

@@ -11,17 +11,18 @@ import {
   ProdStatusCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/order-actions";
 import { formatDate } from "@/lib/use-day";
 import { DataTable2 } from "../data-table/data-table-2";
 import { ProdActions } from "../actions/prod-actions";
 
 interface Props extends TableShellProps<ISalesOrder> {
   myProd?: Boolean;
+  simple?: Boolean;
 }
 export default function SalesProductionTableShell<T>({
   data,
   pageInfo,
+  simple,
   myProd,
 }: Props) {
   const [isPending, startTransition] = useTransition();
@@ -36,6 +37,7 @@ export default function SalesProductionTableShell<T>({
         cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
       },
       {
+        enableSorting: !simple,
         accessorKey: "orderId",
         cell: ({ row }) =>
           ProdOrderCell(
@@ -45,6 +47,7 @@ export default function SalesProductionTableShell<T>({
         header: ColumnHeader("Order"),
       },
       {
+        enableSorting: !simple,
         accessorKey: "salesRep",
         header: ColumnHeader("Sales Rep"),
         cell: ({ row }) => {
@@ -56,6 +59,7 @@ export default function SalesProductionTableShell<T>({
         },
       },
       {
+        enableSorting: !simple,
         accessorKey: "dueDate",
         header: ColumnHeader("Due Date"),
         cell: ({ row }) => {
@@ -67,6 +71,7 @@ export default function SalesProductionTableShell<T>({
         },
       },
       {
+        enableSorting: !simple,
         accessorKey: "status",
         header: ColumnHeader("Status"),
         cell: ({ row }) => <ProdStatusCell order={row.original} />,
@@ -107,6 +112,7 @@ export default function SalesProductionTableShell<T>({
         {
           id: "status",
           title: "Status",
+          single: true,
           options: [
             { label: "Started", value: "Started" },
             { label: "Queued", value: "Queued" },
@@ -137,6 +143,8 @@ export default function SalesProductionTableShell<T>({
           },
         },
       ]}
+      hideHeader={simple}
+      hideFooter={simple}
       newRowLink={`/sales/order/new/form`}
       //  deleteRowsAction={() => void deleteSelectedRows()}
     />

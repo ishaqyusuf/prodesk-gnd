@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import {
   Table,
+  TableBody,
   TableCell,
   TableFooter,
   TableHead,
@@ -19,6 +20,8 @@ import { store, useAppSelector } from "@/store";
 import { footerEstimate } from "@/lib/sales/sales-invoice-form";
 import { IPaymentOptions, ISalesOrderForm } from "@/types/sales";
 import { SalesFormCtx } from "@/app/_actions/sales-form";
+import Money from "@/components/money";
+import { cn } from "@/lib/utils";
 export default function InvoiceTableFooter({
   form,
   floatingFooter,
@@ -92,9 +95,15 @@ function Footer({
   // </TableCell>
   const FloatRow = floatingFooter ? TableRow : React.Fragment;
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        className,
+        "shadow-xl bg-slate-50 border-slate-300 border z-10",
+        floatingFooter ? "rounded-full" : "rounded p-2"
+      )}
+    >
       <Table id="invoiceFooter" className="w-full">
-        <TableFooter>
+        <TableBody>
           <FloatRow>
             <X>
               <TableHead>Payment Option</TableHead>
@@ -138,31 +147,31 @@ function Footer({
             <X>
               <TableHead>Sub Total</TableHead>
               <TableCell className="whitespace-nowrap p-1">
-                $ {subTotal || "0.00"}
+                <Money value={subTotal || 0} />
               </TableCell>
             </X>
             <X>
               <TableHead>Tax ({taxPercentage}%)</TableHead>
               <TableCell className="whitespace-nowrap p-1">
-                $ {tax || "0.00"}
+                <Money value={tax || 0} />
               </TableCell>
             </X>
             {cccPayment ? (
               <X>
                 <TableHead>C.C.C ({cccPercentage}%)</TableHead>
                 <TableCell className="whitespace-nowrap p-1">
-                  $ {cccPayment || "0.00"}
+                  <Money value={cccPayment || 0} />
                 </TableCell>
               </X>
             ) : null}
             <X>
               <TableHead>Total</TableHead>
               <TableCell className="whitespace-nowrap p-1">
-                $ {grandTotal || "0.00"}
+                <Money value={grandTotal || 0} />
               </TableCell>
             </X>
           </FloatRow>
-        </TableFooter>
+        </TableBody>
       </Table>
     </div>
   );

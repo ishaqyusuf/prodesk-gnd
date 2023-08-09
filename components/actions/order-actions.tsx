@@ -23,6 +23,7 @@ import {
   ListOrderedIcon,
   MessageSquarePlus,
   MoreHorizontal,
+  Package,
   Pen,
   Printer,
   ShoppingBag,
@@ -178,26 +179,32 @@ export const PrintOrderMenuAction = typedMemo((props: IOrderRowProps) => {
         Print
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent>
-        <>
-          <DropdownMenuItem
-            onClick={() => {
-              _print("quote");
-            }}
-          >
-            <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Estimates
-          </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            _print("quote");
+          }}
+        >
+          <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Estimates
+        </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={() => {
-              _print("order");
-            }}
-          >
-            <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Order
-          </DropdownMenuItem>
-        </>
+        <DropdownMenuItem
+          onClick={() => {
+            _print("order");
+          }}
+        >
+          <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Order
+        </DropdownMenuItem>
 
+        <DropdownMenuItem
+          onClick={() => {
+            _print("packing list");
+          }}
+        >
+          <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Packing List
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             _print("production");
@@ -305,7 +312,7 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
         </DropdownMenuItem>
         {row.prodStatus == "Completed" ? (
           <>
-            <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuItem onClick={markIncomplete}>
               <FlagIcon className={`mr-2 h-4 w-4`} />
               <span>Incomplete</span>
             </DropdownMenuItem>

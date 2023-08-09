@@ -1,6 +1,8 @@
-
-# AUG 08  (-10)  00.00   == 00.00
-    09:25-
+# AUG 09  00.00   == 00.00
+    02:30-
+    10:25-01:00
+# AUG 08  00.00   == 00.00
+    09:25-10:35
     02:10-03:50
     11:25-12:45
     10:50-11:05
@@ -40,13 +42,13 @@
 # TODO
 
 # SALES
-    decimal on all cost 00.00
-    production date from order list
-    mark incomplete not working
-    mark as completed.
-    make invoice footer show inp overview.
-    black footer weird
-    footer total showing 4 decimal (fix)
+<!-- decimal on all cost 00.00 -->
+<!-- production date from order list -->
+<!-- mark incomplete not working -->
+<!-- mark as completed. -->
+    make invoice footer show in overview.
+<!-- black footer weird -->
+<!-- footer total showing 4 decimal (fix) -->
 <!-- save & close having /undefined. -->
     bring catalog.
     persistent modal.
@@ -58,8 +60,10 @@
     packing list: no supplier qty shipped, qty back order.
     print doc address bar example: https://www.zoho.com/us/invoice/templates/excel-invoice-template/
 
-    production: show due for today first and other dues at the bottom (show due for today red.)
+<!-- production: show due for today first and other dues at the bottom (show due for today red.) -->
 
+    more filters in sales orders.
+<!-- filters not working. (single filter issue) -->
 
 old site: builder tasks
 analytics
@@ -75,7 +79,9 @@ estimates: if type is estimates, hide production,print order & production,
 <!-- ADDRESS COLUMN IN SALES -->
 <!-- Login Redirect -->
 Notifications (Vercel Notification Style)
-    notification events
+    notification events.
+    notification emails.
+
 Route Guard (Middleware)
 Send Email.
 Sales Email Events.

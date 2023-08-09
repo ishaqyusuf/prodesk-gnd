@@ -27,6 +27,7 @@ import {
   PrimaryCellContent,
   SecondaryCellContent,
 } from "./base-columns";
+import { toFixed } from "@/lib/use-number";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -139,10 +140,10 @@ export function OrderInvoiceCell(
 ) {
   return (
     <LinkCell link={link} row={order}>
-      <div className="font-medium uppercase">${order?.grandTotal}</div>
+      <div className="font-medium uppercase">${toFixed(order?.grandTotal)}</div>
       {!isEstimate && (
         <span className="text-muted-foreground">
-          ${order?.amountDue || "0.00"}
+          ${toFixed(order?.amountDue) || "0.00"}
         </span>
       )}
     </LinkCell>
