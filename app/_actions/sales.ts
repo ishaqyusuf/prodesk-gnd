@@ -363,6 +363,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     orderId: oldOrderId,
     id,
     status,
+    slug,
     amountDue,
     invoiceStatus,
     prodStatus,
@@ -382,6 +383,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
         id,
         salesOrderId,
         meta, //: { produced_qty, ..._meta },
+
         ...item
       } = i;
       const { produced_qty, ..._meta } = meta as ISalesOrderItemMeta;
@@ -407,4 +409,14 @@ export async function salesPrintAction({ slugs }: { slugs: string[] }) {
     },
   });
   return sales;
+}
+export async function moveEstimateToOrderAction(id) {
+    await prisma.salesOrders.update({
+      where:{
+        id
+      },
+      data: {
+        type: 'order'
+      }
+    })
 }

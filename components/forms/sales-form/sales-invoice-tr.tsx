@@ -27,7 +27,6 @@ import Combobox from "@/components/combo-box";
 import ItemCell from "./item-cell";
 import QtyCostCell from "./qty-cost-cell";
 import { Label } from "@/components/ui/label";
-import { addLine } from "@/lib/sales/sales-invoice-form";
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
 import { SalesFormCtx } from "@/app/_actions/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";

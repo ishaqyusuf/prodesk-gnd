@@ -35,7 +35,11 @@ import Link from "next/link";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { copyOrderAction, deleteOrderAction } from "@/app/_actions/sales";
+import {
+  copyOrderAction,
+  deleteOrderAction,
+  moveEstimateToOrderAction,
+} from "@/app/_actions/sales";
 import { toast } from "sonner";
 import { dispatchSlice, updateSlice } from "@/store/slicers";
 import { useBool } from "@/lib/use-loader";
@@ -59,6 +63,12 @@ export interface IOrderRowProps {
 export function OrderRowAction(props: IOrderRowProps) {
   const { row, viewMode, estimate } = props;
   const _linkDir = `/sales/${row.type}/${row.slug}`;
+  const router = useRouter();
+  async function moveEstimateToOrder() {
+    await moveEstimateToOrderAction(row.id);
+    toast.message("Estimate moved to order");
+    router.push(`/sales/order/${row.orderId}`);
+  }
   return (
     <div className="">
       <DropdownMenu>
@@ -78,7 +88,7 @@ export function OrderRowAction(props: IOrderRowProps) {
               View
             </DropdownMenuItem>
           </Link>
-          <Link href={`${_linkDir}/form?orderId=${row.orderId}`}>
+          <Link href={`${_linkDir}/${row.orderId}/form`}>
             <DropdownMenuItem>
               <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
               Edit
@@ -100,7 +110,18 @@ export function OrderRowAction(props: IOrderRowProps) {
             <MessageSquarePlus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Email
           </DropdownMenuItem>
-          {!estimate && <ProductionAction row={row} />}
+          {!estimate ? (
+            <>
+              <ProductionAction row={row} />
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem onClick={moveEstimateToOrder}>
+                <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Move to Order
+              </DropdownMenuItem>
+            </>
+          )}
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction estimate={estimate} row={row} />
           <DeleteRowMenuAction row={row} />
@@ -249,7 +270,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
         toast.success(`${as} copied successfully`, {
           action: {
             label: "Open",
-            onClick: () => router.push(`/sales/${as}/form?orderId=${_.slug}`),
+            onClick: () => router.push(`/sales/${as}/${_.orderId}/form`),
           },
         });
       });
