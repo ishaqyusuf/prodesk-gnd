@@ -87,7 +87,6 @@ export default function SalesInvoiceTable({
               rowIndex={i}
               field={field}
               form={form}
-              replace={replace}
               key={field.id}
             />
           ))}

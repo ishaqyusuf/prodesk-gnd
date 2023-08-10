@@ -36,13 +36,12 @@ interface IProps {
   rowIndex;
   field;
   form;
-  replace;
   ctx: SalesFormCtx;
 }
 
 export const SalesInvoiceTr = ({
   field,
-  replace,
+
   form,
   ctx,
   rowIndex: i,
@@ -92,11 +91,7 @@ export const SalesInvoiceTr = ({
       <TableCell id="tax" align="center" className="p-0 px-1">
         <TaxSwitchCell form={form} rowIndex={i} />
       </TableCell>
-      <InvoiceTableRowAction
-        form={form}
-        rowIndex={i}
-        addLine={(toIndex) => replace(addLine(toIndex, watchItems as any))}
-      />
+      <InvoiceTableRowAction form={form} rowIndex={i} />
     </TableRow>
   );
 };

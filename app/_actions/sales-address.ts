@@ -54,6 +54,11 @@ export async function saveAddressAction({
   profile,
   sameAddress,
 }: ISalesAddressForm) {
+  console.log({
+    sameAddress,
+    billingAddress,
+    shippingAddress,
+  });
   let customerId: number | null;
   const response: {
     customerId?;
@@ -101,7 +106,7 @@ export async function saveAddressAction({
       let eAddr = (await prisma.addressBooks.findFirst({
         where,
       })) as IAddressBook | null;
-
+      console.log(eAddr);
       if (eAddr) {
         let _update: any = null;
         const columns: (keyof IAddressBook)[] = [

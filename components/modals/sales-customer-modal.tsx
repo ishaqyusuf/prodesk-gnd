@@ -63,14 +63,15 @@ export function SalesCustomerModal({
     });
     setChecked(shippingAddress?.id == billingAddress?.id);
   }, [open]);
+  const [checked, setChecked] = React.useState<boolean>(true);
   const loader = useLoader();
-  const submit = React.useCallback(() => {
+  const submit = () => {
     loader.action(async () => {
       const _form = {
         ...addressForm.getValues(),
         sameAddress: checked as any,
       };
-
+      console.log(_form);
       const { profileUpdate, ...resp } = await saveAddressAction(_form);
 
       Object.entries(resp).map(([k, v]) => {
@@ -78,7 +79,7 @@ export function SalesCustomerModal({
       });
       setOpen(false);
     });
-  }, [addressForm]);
+  };
   function getAddressLine(type: AddressType) {
     const { getValues } = form;
 
@@ -95,7 +96,6 @@ export function SalesCustomerModal({
         .join(","),
     }; //.filter(Boolean);
   }
-  const [checked, setChecked] = React.useState<boolean>(true);
   return (
     <Dialog
       onOpenChange={(e) => {
@@ -110,6 +110,7 @@ export function SalesCustomerModal({
             coefficient,
             title,
           } as any);
+          setTab("billingAddress");
         }
       }}
       open={open}
@@ -159,7 +160,10 @@ export function SalesCustomerModal({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Customer Info</DialogTitle>
+          <DialogTitle>
+            Customer Info {checked ? "checked" : "undecked"}
+            {checked}
+          </DialogTitle>
         </DialogHeader>
         <Tabs defaultValue={tab} className="">
           <TabsList className="grid w-full grid-cols-2">
@@ -199,7 +203,9 @@ export function SalesCustomerModal({
                   <Checkbox
                     id="sameAddress"
                     checked={checked}
-                    onCheckedChange={setChecked as any}
+                    onCheckedChange={(e) => {
+                      setChecked(e as any);
+                    }}
                   />
                   <label
                     htmlFor="sameAddress"

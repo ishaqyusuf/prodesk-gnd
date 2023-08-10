@@ -19,7 +19,7 @@ export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
     data: orders.map(
       (o) =>
         ({
-          amount: o.amountPaid,
+          amount: +o.amountPaid,
           createdAt: new Date(),
           updatedAt: new Date(),
           orderId: o.id,

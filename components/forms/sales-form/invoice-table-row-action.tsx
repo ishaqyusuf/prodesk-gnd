@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell } from "@/components/ui/table";
+import { addLine } from "@/lib/sales/sales-invoice-form";
 import { store, useAppSelector } from "@/store";
 import { openItemComponent } from "@/store/invoice-item-component-slice";
 import { ISalesOrderForm } from "@/types/sales";
@@ -24,20 +25,31 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
+import { useFieldArray } from "react-hook-form";
 
 export default function InvoiceTableRowAction({
   form,
   rowIndex,
-  addLine,
 }: {
   rowIndex: number;
   form: ISalesOrderForm;
-  addLine(toIndex);
 }) {
   const orderItemComponentSlice = useAppSelector(
     (state) => state.orderItemComponent
   );
   const baseKey: any = `items.${rowIndex}`;
+  const watchItems = form.watch("items");
+  const { control } = form;
+  const { replace, fields, remove } = useFieldArray({
+    control,
+    name: "items",
+  });
+  function _addLine(toIndex) {
+    replace(addLine(toIndex, watchItems as any));
+  }
+  function _removeLine() {
+    remove(rowIndex);
+  }
   return (
     <TableCell className="p-0 px-1">
       <DropdownMenu>
@@ -74,17 +86,17 @@ export default function InvoiceTableRowAction({
               Add Line
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuItem onClick={() => addLine(rowIndex - 1)}>
+              <DropdownMenuItem onClick={() => _addLine(rowIndex - 1)}>
                 <ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Before
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => addLine(rowIndex + 1)}>
+              <DropdownMenuItem onClick={() => _addLine(rowIndex + 1)}>
                 <ArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 After
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
-          <DropdownMenuSub>
+          {/* <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Move className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
               Move To
@@ -92,9 +104,9 @@ export default function InvoiceTableRowAction({
             <DropdownMenuSubContent>
               <DropdownMenuItem>1</DropdownMenuItem>
             </DropdownMenuSubContent>
-          </DropdownMenuSub>
+          </DropdownMenuSub> */}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={_removeLine}>
             <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Remove
           </DropdownMenuItem>

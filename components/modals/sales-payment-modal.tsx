@@ -1,10 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useTransition } from "react";
-import { store, useAppSelector } from "@/store";
-
-import { useLoader } from "@/lib/use-loader";
-import { dispatchSlice, updateSlice } from "@/store/slicers";
 import {
   Table,
   TableBody,
@@ -13,23 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CheckCircle } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-
-import { formatDate } from "@/lib/use-day";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { ISalesOrder } from "@/types/sales";
-import {
-  UserProductionEventsProps,
-  assignProductionAction,
-  getUserProductionEventsAction,
-} from "@/app/_actions/sales-production";
-import { getProductionUsersAction } from "@/app/_actions/hrm";
+
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
 import BaseModal from "./base-modal";
-import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 import {
   PaymentOrderProps,
@@ -38,6 +23,17 @@ import {
 import { Checkbox } from "../ui/checkbox";
 import { deepCopy } from "@/lib/deep-copy";
 import { Info } from "../info";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import Money from "../money";
+import { useForm } from "react-hook-form";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { closeModal } from "@/lib/modal";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function SalesPaymentModal() {
@@ -46,20 +42,40 @@ export default function SalesPaymentModal() {
       [id in string]: ISalesOrder | undefined;
     }
   >({});
+  const form = useForm<{
+    // pay: number | null | undefined | string
+    pay: number;
+  }>({
+    defaultValues: {
+      pay: 0,
+    },
+  });
+  // const watchPay = form.watch("pay");
   const [total, setTotal] = useState(0);
   useEffect(() => {
     let total = 0;
     Object.values<ISalesOrder | undefined>(selection).map(
       (v) => (total += v?.amountDue || 0)
     );
-    console.log(selection);
+    // console.log(selection);
     setTotal(total);
+    form.setValue("pay", total);
   }, [selection]);
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
   async function submit() {
     startTransition(async () => {
-      let _total = total;
+      let _total = form.getValues("pay");
+      if (_total > total) {
+        toast.error(
+          "Invalid: Payment cannot be greater than Total Amount Due."
+        );
+        return;
+      }
+      if (_total == 0) {
+        toast.error("Invalid: Payment must be greater than 0");
+        return;
+      }
       const orders: PaymentOrderProps[] = [];
       Object.values<ISalesOrder | undefined>(selection).map((s) => {
         if (!s) return null;
@@ -84,14 +100,18 @@ export default function SalesPaymentModal() {
       // .filter((f) => (f?.amountPaid || 0) > 0);
       await applyPaymentAction({ orders });
       route.refresh();
-      dispatchSlice("applyPayment", null as any);
+      closeModal();
       toast.message("Payment Applied Succesfully");
     });
   }
   return (
     <BaseModal<ISalesOrder[]>
       className="sm:max-w-[550px]"
-      onOpen={(order) => {}}
+      onOpen={(orders) => {
+        const _checked: any = {};
+        orders?.map((o) => (_checked[o.id] = o));
+        setSelection(_checked);
+      }}
       onClose={() => {}}
       modalName="salesPayment"
       Title={({ data: orders }) => <div>Apply Payment</div>}
@@ -100,7 +120,9 @@ export default function SalesPaymentModal() {
           <Table className="w-full ">
             <TableHeader>
               <TableRow>
-                {orders?.length && <TableHead className=""></TableHead>}
+                {(orders?.length || 0) > 1 && (
+                  <TableHead className=""></TableHead>
+                )}
                 <TableHead className="">Order</TableHead>
                 <TableHead className="text-end">Amount Due</TableHead>
               </TableRow>
@@ -134,16 +156,37 @@ export default function SalesPaymentModal() {
               ))}
             </TableBody>
           </Table>
-          <div className="flex justify-end">
-            <Info className="text-end" label="Total">
-              $ {total}
-            </Info>
+          <div className="flex space-x-4 justify-end">
+            <div className="grid gap-2">
+              <Label>Pay</Label>
+              <Input
+                {...form.register("pay")}
+                className="h-8 w-24"
+                type="number"
+              />
+            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  onClick={() => {
+                    form.setValue("pay", total);
+                  }}
+                >
+                  <Info className="text-end cursor-pointer" label="Total">
+                    <Money value={total} />
+                  </Info>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Click to pay all total</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       )}
       Footer={({ data }) => (
         <Btn
-          disabled={total == 0}
+          disabled={form.getValues("pay") == 0}
           isLoading={isSaving}
           onClick={() => submit()}
           size="sm"

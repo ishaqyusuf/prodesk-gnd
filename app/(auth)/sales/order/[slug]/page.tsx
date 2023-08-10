@@ -5,6 +5,7 @@ import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
 import OrderPrinter from "@/components/print/order/order-printer";
+import CostBreakdown from "@/components/sales/overview/cost-breakdown";
 import OverviewDetailsSection from "@/components/sales/overview/details-section";
 import ItemDetailsSection from "@/components/sales/overview/item-details";
 import PaymentHistory from "@/components/sales/overview/payment-history";
@@ -37,6 +38,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
           <TabbedItemEmailOverview />
         </div>
         <div className="space-y-4">
+          <CostBreakdown />
           <PaymentHistory />
           <Timeline />
         </div>

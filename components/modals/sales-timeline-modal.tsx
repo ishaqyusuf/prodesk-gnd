@@ -60,20 +60,6 @@ interface Props {
   isProd?: Boolean;
 }
 export default function SalesTimelineModal({ isProd }: Props) {
-  const [selection, setSelection] = useState<
-    {
-      [id in string]: ISalesOrder | undefined;
-    }
-  >({});
-  const [total, setTotal] = useState(0);
-  useEffect(() => {
-    let total = 0;
-    Object.values<ISalesOrder | undefined>(selection).map(
-      (v) => (total += v?.amountDue || 0)
-    );
-    console.log(selection);
-    setTotal(total);
-  }, [selection]);
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
   const form = useForm<TimelineUpdateProps>({
