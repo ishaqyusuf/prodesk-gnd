@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell } from "@/components/ui/table";
-import { addLine } from "@/lib/sales/sales-invoice-form";
+import { addLine, generateItem } from "@/lib/sales/sales-invoice-form";
 import { store, useAppSelector } from "@/store";
 import { openItemComponent } from "@/store/invoice-item-component-slice";
 import { ISalesOrderForm } from "@/types/sales";
@@ -40,12 +40,13 @@ export default function InvoiceTableRowAction({
   const baseKey: any = `items.${rowIndex}`;
   const watchItems = form.watch("items");
   const { control } = form;
-  const { replace, fields, remove } = useFieldArray({
+  const { replace, fields, remove, insert } = useFieldArray({
     control,
     name: "items",
   });
   function _addLine(toIndex) {
     replace(addLine(toIndex, watchItems as any));
+    // insert(toIndex, generateItem(toIndex));
   }
   function _removeLine() {
     remove(rowIndex);

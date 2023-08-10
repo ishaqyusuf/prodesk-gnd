@@ -107,11 +107,15 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     if (!id) formValues.amountDue = formValues.grandTotal;
     const deleteIds: number[] = [];
     let items = _items
-      ?.map((item) => {
+      ?.map((item, index) => {
         if (!item.description && !item?.total) {
           if (item.id) deleteIds.push(item.id);
           return null;
         }
+        item.meta = {
+          line_index: index,
+          ...(item.meta as any),
+        };
         return numeric<SalesOrderItems>(
           ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
           item

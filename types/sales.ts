@@ -11,6 +11,7 @@ import {
   Users,
 } from "@prisma/client";
 import { UseFormReturn } from "react-hook-form";
+import { ICustomer } from "./customers";
 export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
@@ -125,9 +126,7 @@ export interface IAddressBook extends AddressBooks {
   };
   customer: ICustomer;
 }
-export interface ICustomer extends Customers {
-  profile: CustomerTypes;
-}
+
 export type AddressType = "shippingAddress" | "billingAddress";
 
 export interface SalesQueryParams {

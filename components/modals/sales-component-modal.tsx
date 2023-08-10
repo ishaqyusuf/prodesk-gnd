@@ -59,12 +59,12 @@ export default function SalesComponentModal({
   });
   const [isSaving, startTransition] = useTransition();
   const settings = ctx.settings;
-  console.log(settings);
+
   const [wFields, setWFields] = useState<string[]>([]);
   const watchSums = frm.watch(wFields as any);
   const [total, setTotal] = useState<number>();
   useEffect(() => {
-    console.log(">#");
+    console.log(watchSums, "...");
     let totals = 0;
     watchSums.map((c) => (totals += convertToNumber(c)));
     setTotal(totals?.toFixed(2) as any);

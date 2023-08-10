@@ -1,5 +1,6 @@
 # AUG 10  00.00  == 00.00
-    04:30-
+    09:20-
+    04:30-06:30
     02:40-02:50
     10:30-12:45
 # AUG 09  05.05   == 12.30
@@ -47,6 +48,9 @@
 # TODO
 
 # SALES
+New order says paid when not paid
+print index not synchronized
+
 <!-- decimal on all cost 00.00 -->
 <!-- production date from order list -->
 <!-- mark incomplete not working -->

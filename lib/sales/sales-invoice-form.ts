@@ -32,7 +32,7 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
   console.log(_items);
   return _items;
 }
-function generateItem(line_index, baseItem: any = null) {
+export function generateItem(line_index, baseItem: any = null) {
   if (!baseItem) baseItem = { meta: {} };
   let price = baseItem?.rate || baseItem?.price;
 
@@ -75,7 +75,7 @@ export function addLine(toIndex, fields: ISalesOrderItem[]) {
       generateItem(toIndex),
       ...fields.slice(toIndex),
     ];
-
+  console.log(fields.length);
   return calibrateLines(fields);
 }
 export function calibrateLines(fields) {

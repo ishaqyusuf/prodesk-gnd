@@ -1,6 +1,6 @@
 "use client";
 
-import { IAddressBook, ICustomer, ISalesOrder } from "@/types/sales";
+import { IAddressBook, ISalesOrder } from "@/types/sales";
 import OrderFlag from "../sales/order-flag";
 import Link from "next/link";
 import { Fragment, useEffect, useState, useTransition } from "react";

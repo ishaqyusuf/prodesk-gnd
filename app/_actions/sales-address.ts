@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/db";
-import { IAddressBook, ICustomer, ISalesAddressForm } from "@/types/sales";
+import { ICustomer } from "@/types/customers";
+import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
 
 export async function findAddressAction({ q }: { q: string }) {
