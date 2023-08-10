@@ -10,6 +10,9 @@
 #salesPrinter tfoot td {
   @apply border border-gray-400;
 }
+#salesPrinter thead#header th {
+  @apply capitalize;
+}
 #salesPrinter thead#header,
 #salesPrinter table#specialInstruction,
 #salesPrinter table#specialInstruction th {

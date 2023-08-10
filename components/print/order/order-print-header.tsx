@@ -20,12 +20,12 @@ export function OrderPrintHeader({ order }: Props) {
           <table className="w-full  table-fixed text-xs">
             <tbody>
               <tr>
-                <td colSpan={9}>
+                <td className="" valign="top" colSpan={9}>
                   <Link href="/">
                     <Image alt="" width={178} height={80} src={logo} />
                   </Link>
                 </td>
-                <td colSpan={5}>
+                <td valign="top" colSpan={5}>
                   <div className="text-xs font-semibold text-black-900">
                     <p>13285 SW 131 ST</p>
                     <p>Miami, Fl 33186</p>
@@ -34,7 +34,7 @@ export function OrderPrintHeader({ order }: Props) {
                   </div>
                 </td>
                 <td colSpan={1}></td>
-                <td valign="top" rowSpan={2} colSpan={9}>
+                <td valign="top" colSpan={9}>
                   <div className="flex justify-end"></div>
                   <p className="text-black mb-2 text-end text-xl font-bold capitalize">
                     {po?.mode}
@@ -150,11 +150,13 @@ function Address({
 }) {
   return (
     <td colSpan={7}>
-      <div className="mt-4 border border-gray-300">
-        <p className="border-b-2 p-0.5 px-1 bg-gray-300 text-sm  font-bold">
-          {title}
-        </p>
-        <div className="flex flex-col p-2">
+      <div className="mt-4 flex flex-col ">
+        <div>
+          <span className="p-1 border border-b-0 border-gray-400 text-gray-700 text-sm  font-bold">
+            {title}
+          </span>
+        </div>
+        <div className="flex flex-col p-2 border border-gray-400">
           {[
             address?.name,
             address?.phoneNo,
