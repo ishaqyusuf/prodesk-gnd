@@ -36,61 +36,76 @@ interface IProps {
   field;
   form;
   ctx: SalesFormCtx;
+  startTransition2;
+  isPending;
 }
 
 export const SalesInvoiceTr = ({
   field,
-
+  startTransition2,
+  isPending,
   form,
   ctx,
   rowIndex: i,
 }: IProps) => {
   //   const orderFormSlice = useAppSelector((state) => state.orderForm);
-  const watchItems = form.watch("items");
+  // const watchItems = form.watch("items");
+  // const [isPending, startTransition] = React.useTransition();
+
   return (
     <TableRow className="border-b-0 hover:bg-none">
-      <TableCell className="p-0 px-1 font-medium">{i + 1}</TableCell>
-      <TableCell id="component" className="p-0 px-1">
-        <FormField<ISalesOrder>
-          name={`items.${i}.meta.isComponent`}
-          control={form.control}
-          render={({ field }) => (
-            <Checkbox
-              id="component"
-              checked={field.value as CheckedState}
-              onCheckedChange={field.onChange}
+      {isPending ? (
+        <TableCell colSpan={9} />
+      ) : (
+        <>
+          <TableCell className="p-0 px-1 font-medium">{i + 1}</TableCell>
+          <TableCell id="component" className="p-0 px-1">
+            <FormField<ISalesOrder>
+              name={`items.${i}.meta.isComponent`}
+              control={form.control}
+              render={({ field }) => (
+                <Checkbox
+                  id="component"
+                  checked={field.value as CheckedState}
+                  onCheckedChange={field.onChange}
+                />
+              )}
             />
-          )}
-        />
-      </TableCell>
-      <ItemCell rowIndex={i} form={form} />
-      <TableCell id="swing" className="p-1">
-        <Combobox
-          keyName={`items.${i}.swing`}
-          className="w-24"
-          id="swing"
-          allowCreate
-          form={form}
-          list={ctx.swings}
-        />
-      </TableCell>
-      <TableCell id="supplier" className="p-0 px-1">
-        <Combobox
-          keyName={`items.${i}.meta.supplier`}
-          id="swing"
-          allowCreate
-          form={form}
-          list={ctx.suppliers}
-        />
-      </TableCell>
-      <QtyCostCell form={form} rowIndex={i} />
+          </TableCell>
+          <ItemCell rowIndex={i} form={form} />
+          <TableCell id="swing" className="p-1">
+            <Combobox
+              keyName={`items.${i}.swing`}
+              className="w-24"
+              id="swing"
+              allowCreate
+              form={form}
+              list={ctx.swings}
+            />
+          </TableCell>
+          <TableCell id="supplier" className="p-0 px-1">
+            <Combobox
+              keyName={`items.${i}.meta.supplier`}
+              id="swing"
+              allowCreate
+              form={form}
+              list={ctx.suppliers}
+            />
+          </TableCell>
+          <QtyCostCell form={form} rowIndex={i} />
 
-      <TotalCell form={form} rowIndex={i} />
+          <TotalCell form={form} rowIndex={i} />
 
-      <TableCell id="tax" align="center" className="p-0 px-1">
-        <TaxSwitchCell form={form} rowIndex={i} />
-      </TableCell>
-      <InvoiceTableRowAction form={form} rowIndex={i} />
+          <TableCell id="tax" align="center" className="p-0 px-1">
+            <TaxSwitchCell form={form} rowIndex={i} />
+          </TableCell>
+        </>
+      )}
+      <InvoiceTableRowAction
+        startTransition={startTransition2}
+        form={form}
+        rowIndex={i}
+      />
     </TableRow>
   );
 };

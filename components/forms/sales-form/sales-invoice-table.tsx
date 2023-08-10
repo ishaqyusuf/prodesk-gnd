@@ -60,6 +60,7 @@ export default function SalesInvoiceTable({
       }
     };
   }, [hideFooter.isLoading]);
+  const [isPending, startTransition] = React.useTransition();
   return (
     <div className="relative">
       <Table>
@@ -85,6 +86,8 @@ export default function SalesInvoiceTable({
             <SalesInvoiceTr
               ctx={data.ctx}
               rowIndex={i}
+              startTransition2={startTransition}
+              isPending={isPending}
               field={field}
               form={form}
               key={field.id}

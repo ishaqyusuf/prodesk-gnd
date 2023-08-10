@@ -106,6 +106,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     // console.log(_items);
     if (!id) formValues.amountDue = formValues.grandTotal;
     const deleteIds: number[] = [];
+    console.log(_items);
     let items = _items
       ?.map((item, index) => {
         if (!item.description && !item?.total) {
@@ -113,8 +114,8 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           return null;
         }
         item.meta = {
-          line_index: index,
           ...(item.meta as any),
+          line_index: index,
         };
         return numeric<SalesOrderItems>(
           ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
@@ -122,6 +123,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         );
       })
       .filter(Boolean);
+    console.log(items);
     return {
       id,
       order: numeric<SalesOrders>(

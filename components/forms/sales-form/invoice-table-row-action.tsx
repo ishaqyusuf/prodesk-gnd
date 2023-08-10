@@ -30,9 +30,11 @@ import { useFieldArray } from "react-hook-form";
 export default function InvoiceTableRowAction({
   form,
   rowIndex,
+  startTransition,
 }: {
   rowIndex: number;
   form: ISalesOrderForm;
+  startTransition;
 }) {
   const orderItemComponentSlice = useAppSelector(
     (state) => state.orderItemComponent
@@ -45,11 +47,15 @@ export default function InvoiceTableRowAction({
     name: "items",
   });
   function _addLine(toIndex) {
-    replace(addLine(toIndex, watchItems as any));
+    startTransition(() => {
+      replace(addLine(toIndex, watchItems as any));
+    });
     // insert(toIndex, generateItem(toIndex));
   }
   function _removeLine() {
-    remove(rowIndex);
+    startTransition(() => {
+      remove(rowIndex);
+    });
   }
   return (
     <TableCell className="p-0 px-1">
