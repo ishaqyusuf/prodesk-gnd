@@ -31,6 +31,7 @@ export function OrderPrintHeader({ order }: Props) {
                     <p>Miami, Fl 33186</p>
                     <p>Phone: 305-278-6555</p>
                     {po?.mode == "production" && <p>Fax: 305-278-2003</p>}
+                    <p>support@gndmillwork.com</p>
                   </div>
                 </td>
                 <td colSpan={1}></td>
@@ -97,7 +98,7 @@ export function OrderPrintHeader({ order }: Props) {
               </tr>
               <tr>
                 <Address address={order.billingAddress} title="Sold To" />
-                {/* <td colSpan={2} /> */}
+                <td colSpan={2} />
                 <Address address={order.billingAddress} title="Ship To" />
                 <td colSpan={3} />
               </tr>
@@ -149,8 +150,8 @@ function Address({
   title;
 }) {
   return (
-    <td colSpan={7}>
-      <div className="mt-4 mr-4 mb-4 flex flex-col ">
+    <td colSpan={6}>
+      <div className="my-4  mb-4 flex flex-col ">
         <div>
           <span className="p-1 px-2 border border-b-0 border-gray-400 bg-slate-200 text-gray-700 text-sm  font-bold">
             {title}
