@@ -25,7 +25,11 @@ function QtyCostCell({ rowIndex, form }: { rowIndex; form: ISalesOrderForm }) {
       setPrice(_price);
     }
     // if (rowIndex == 0) console.log(rowIndex, ...itemTotal);
-  }, [slice.itemPriceData, rowIndex]);
+  }, [slice.itemPriceData]);
+  // React.useEffect(() => {
+  //   setQty(form.getValues(`${baseKey}.qty` as any));
+  //   setPrice(form.getValues(`${baseKey}.price` as any));
+  // }, [rowIndex, form]);
   React.useEffect(() => {
     const total = toFixed(convertToNumber(qty * price, 0));
     form.setValue(`items.${rowIndex}.qty`, qty);

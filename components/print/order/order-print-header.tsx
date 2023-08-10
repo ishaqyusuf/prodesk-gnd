@@ -150,13 +150,13 @@ function Address({
 }) {
   return (
     <td colSpan={7}>
-      <div className="mt-4 flex flex-col ">
+      <div className="mt-4 mr-4 mb-4 flex flex-col ">
         <div>
-          <span className="p-1 border border-b-0 border-gray-400 text-gray-700 text-sm  font-bold">
+          <span className="p-1 px-2 border border-b-0 border-gray-400 bg-slate-200 text-gray-700 text-sm  font-bold">
             {title}
           </span>
         </div>
-        <div className="flex flex-col p-2 border border-gray-400">
+        <div className="flex flex-col p-2 border border-gray-400 ">
           {[
             address?.name,
             address?.phoneNo,
