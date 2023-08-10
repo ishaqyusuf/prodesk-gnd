@@ -71,9 +71,9 @@ function AddressInfo({
   if (!address) return <Info label={label}>Not Specified</Info>;
   return (
     <Info label={label}>
-      <span>{address?.name}</span>
-      <span>{address?.phoneNo}</span>
-      <span>{address?.address1}</span>
+      <p>{address?.name}</p>
+      <p>{address?.phoneNo}</p>
+      <p>{address?.address1}</p>
     </Info>
   );
 }
