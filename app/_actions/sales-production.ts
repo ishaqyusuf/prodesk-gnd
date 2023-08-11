@@ -16,6 +16,7 @@ import { getServerSession } from "next-auth";
 import { myId } from "./utils";
 import { _notifyProductionAssigned } from "./notifications";
 import { formatDate } from "@/lib/use-day";
+import { deepCopy } from "@/lib/deep-copy";
 
 export async function getSalesProductionsAction(
   query: SalesQueryParams,
@@ -59,9 +60,10 @@ export async function markProduction(id, as: "completed" | "incomplete") {
       items: true,
     },
   });
-  let items = order?.items;
-  items?.map((item) => async () => {
-    console.log(item.swing, item.qty);
+  if (!order) throw Error("Order not found");
+  console.log(order.items.length);
+  order.items.map(async (item) => {
+    console.log(item.swing, item.qty, ">>>>");
     if (!item.swing || !item?.qty || !item) return;
     const meta: ISalesOrderItemMeta = item.meta as any;
     if (completed)

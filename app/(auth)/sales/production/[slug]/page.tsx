@@ -1,6 +1,10 @@
 import { getOrderAction } from "@/app/_actions/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { EstimatesCrumb, OrderViewCrumb } from "@/components/breadcrumbs/links";
+import {
+  EstimatesCrumb,
+  OrderViewCrumb,
+  ProductionsCrumb,
+} from "@/components/breadcrumbs/links";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/modals/sales-prod-submit-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
@@ -15,7 +19,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Order Overview",
+  title: "Sales Production",
   description: "Order Overview",
 };
 export default async function SalesOrderPage({ params: { slug } }) {
@@ -29,7 +33,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
   return (
     <DataPageShell className="px-8" data={order}>
       <Breadcrumbs>
-        <EstimatesCrumb isFirst />
+        <ProductionsCrumb isFirst />
         <OrderViewCrumb slug={order.orderId} isLast />
       </Breadcrumbs>
 
