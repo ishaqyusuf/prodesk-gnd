@@ -77,6 +77,8 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   async function save(and: "close" | "new" | "default" = "default") {
     startTransition(async () => {
       const formData = saveData();
+      console.log(formData);
+
       const response = await saveOrderAction(formData);
       if (response.orderId) {
         const type = response.type;
@@ -100,6 +102,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       items: _items,
       shippingAddress,
       billingAddress,
+      customer,
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
     // console.log(formValues);

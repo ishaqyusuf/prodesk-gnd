@@ -189,6 +189,7 @@ export function ProdOrderCell(
     </LinkCell>
   );
 }
+
 export function ProdStatusCell({ order }: { order: ISalesOrder }) {
   const [percentage, setPercentage] = useState(0);
   const [color, setColor] = useState("gray");

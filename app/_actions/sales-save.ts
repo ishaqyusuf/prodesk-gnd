@@ -45,23 +45,31 @@ export async function saveOrderAction({
     updatedAt: new Date(),
     slug,
     orderId,
-    customer: customerId && {
-      connect: {
-        id: customerId as any,
-        // id: undefined,
-      },
-    },
-    shippingAddress: shippingAddressId && {
-      connect: {
-        id: shippingAddressId as any,
-      },
-    },
-    billingAddress: shippingAddressId && {
-      connect: {
-        id: billingAddressId as any,
-      },
-    },
+    // customer: customerId && {
+    //   connect: {
+    //     id: customerId as any,
+    //     // id: undefined,
+    //   },
+    // },
+    // shippingAddress: shippingAddressId && {
+    //   connect: {
+    //     id: shippingAddressId as any,
+    //   },
+    // },
+    // billingAddress: shippingAddressId && {
+    //   connect: {
+    //     id: billingAddressId as any,
+    //   },
+    // },
   };
+  // Object.entries({
+  //   customer: customerId,
+  //   shippingAddress: shippingAddressId,
+  //   billingAddress: billingAddressId,
+  // }).map(([k, v]) => {
+  //   v && (metadata[k] = { connect: { id: v } });
+  // });
+  // console.log(metadata);
   if (!id && salesRepId)
     metadata.salesRep = {
       connect: {
@@ -101,7 +109,7 @@ export async function saveOrderAction({
     ? await prisma.salesOrders.update({
         where: { id },
         data: {
-          ...metadata,
+          // ...metadata,
           items: {
             updateMany,
             createMany,

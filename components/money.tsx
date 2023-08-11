@@ -6,5 +6,6 @@ interface Props {
   className?: string;
 }
 export default function Money({ value, className }: Props) {
-  return <span className={cn(className)}>${+toFixed(value)}</span>;
+  if (!value) value = 0;
+  return <span className={cn(className)}>${toFixed(value)}</span>;
 }

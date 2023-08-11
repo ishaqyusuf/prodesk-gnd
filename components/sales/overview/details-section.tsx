@@ -10,6 +10,8 @@ import { AddressBooks } from "@prisma/client";
 import OrderOverviewActions from "../../actions/order-overview-actions";
 import { convertToNumber } from "@/lib/use-number";
 import Money from "@/components/money";
+import { ProdStatusCell } from "@/components/columns/sales-columns";
+import StatusBadge from "@/components/status-badge";
 
 interface Props {
   isProd?: Boolean;
@@ -25,6 +27,7 @@ export default function DetailsSection({}: Props) {
             <div className="inline-flex items-center space-x-2">
               <span>Order Information</span>
               <OrderFlag order={order} />
+              <StatusBadge status={order?.prodStatus || "no status"} />
             </div>
             {isProd ? <></> : <OrderOverviewActions />}
           </CardTitle>
