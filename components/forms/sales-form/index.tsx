@@ -202,7 +202,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             </DropdownMenuContent>
           </DropdownMenu>
           <OrderPrinter />
-          {/* <CatalogModal /> */}
+          <CatalogModal form={form} ctx={data.ctx} />
         </div>
       </section>
       <section

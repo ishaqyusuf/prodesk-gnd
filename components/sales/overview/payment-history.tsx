@@ -1,5 +1,6 @@
 "use client";
 
+import Money from "@/components/money";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -42,7 +43,10 @@ export default function PaymentHistory() {
                   </TableCell>
 
                   <TableCell className="p-1 text-left">
-                    <span className="font-medium">${item.amount}</span>
+                    <Money value={item.amount} className="font-medium" />
+                    <p className="text-muted-foreground">
+                      {item?.meta?.paymentOption || item?.meta?.payment_option}
+                    </p>
                   </TableCell>
                 </TableRow>
               ))}

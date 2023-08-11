@@ -1,10 +1,11 @@
 import { InventoryProducts, ProductVariants, Products } from "@prisma/client";
 
 export interface IProduct extends InventoryProducts {
-  variants: IProductVariants[];
+  variants: IProductVariant[];
 }
-export interface IProductVariants extends ProductVariants {
+export interface IProductVariant extends ProductVariants {
   meta: {
     componentTitle;
   };
+  product: IProduct;
 }

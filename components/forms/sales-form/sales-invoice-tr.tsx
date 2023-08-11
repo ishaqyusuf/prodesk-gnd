@@ -74,14 +74,18 @@ export const SalesInvoiceTr = ({
           </TableCell>
           <ItemCell rowIndex={i} form={form} />
           <TableCell id="swing" className="p-1">
-            <Combobox
+            <Input
+              className="h-8 w-24  p-1  font-medium"
+              {...form.register(`items.${i}.swing`)}
+            />
+            {/* <Combobox
               keyName={`items.${i}.swing`}
               className="w-24"
               id="swing"
               allowCreate
               form={form}
               list={ctx.swings}
-            />
+            /> */}
           </TableCell>
           <TableCell id="supplier" className="p-0 px-1">
             <Combobox

@@ -27,7 +27,7 @@ export type ISalesOrder = SalesOrders & {
 
   salesRep?: Users;
   items: ISalesOrderItem[] | undefined;
-  payments: SalesPayments[] | undefined;
+  payments: ISalesPayment[] | undefined;
   prodStatus: ProdStatus;
   productions: OrderProductionSubmissions[];
   type: IOrderType;
@@ -218,6 +218,7 @@ export interface ISalesPayment extends SalesPayments {
     ccc_percentage;
     sub_total;
     total_due;
+    payment_option;
     paymentOption;
   };
 }

@@ -134,22 +134,21 @@ export function footerEstimate({
 
 export function openComponentModal(item: ISalesOrderItem, rowIndex) {
   let c = item?.meta?.components;
-  const components =
-    c ||
-    ([
-      {
-        type: "Door",
-      },
-      {
-        type: "Frame",
-      },
-      {
-        type: "Hinge",
-      },
-      {
-        type: "Casing",
-      },
-    ] as any);
+  const components = c || {};
+  // ([
+  //   {
+  //     type: "Door",
+  //   },
+  //   {
+  //     type: "Frame",
+  //   },
+  //   {
+  //     type: "Hinge",
+  //   },
+  //   {
+  //     type: "Casing",
+  //   },
+  // ] as any);
   openModal("salesComponent", {
     rowIndex,
     item,
