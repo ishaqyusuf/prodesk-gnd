@@ -10,10 +10,10 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
-import orderProdQtyUpdateAction from "./sales";
+import orderProdQtyUpdateAction from "../sales";
 import { ISalesSetting, ISalesSettingMeta, PostTypes } from "@/types/post";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
-import { getSettingAction } from "./settings";
+import { getSettingAction } from "../settings";
 export async function dbUpgradeAction() {
   // const _ = await prisma.posts.groupBy({
   //   by: ["type"],

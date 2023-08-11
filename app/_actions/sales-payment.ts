@@ -48,3 +48,17 @@ export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
   );
   return true;
 }
+export async function fixPaymentAction({
+  amountDue,
+  id,
+}: {
+  id: number;
+  amountDue: number;
+}) {
+  await prisma.salesOrders.update({
+    where: { id },
+    data: {
+      amountDue,
+    },
+  });
+}
