@@ -88,7 +88,7 @@ export function OrderRowAction(props: IOrderRowProps) {
               View
             </DropdownMenuItem>
           </Link>
-          <Link href={`${_linkDir}/${row.orderId}/form`}>
+          <Link href={`${_linkDir}/form`}>
             <DropdownMenuItem>
               <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
               Edit
