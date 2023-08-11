@@ -22,9 +22,12 @@ export default function CostBreakdown() {
     keyValue("Payment Option", order?.meta?.payment_option),
     keyValue("Labour", <Money value={order?.meta?.labor_cost} />),
     keyValue("Sub Total", <Money value={order?.subTotal} />),
-    keyValue(`Tax ${order?.taxPercentage}%`, <Money value={order?.tax} />),
     keyValue(
-      `C.C.C ${order?.meta?.ccc_percentage}`,
+      `Tax (${order?.taxPercentage || 0}%)`,
+      <Money value={order?.tax} />
+    ),
+    keyValue(
+      `C.C.C (${order?.meta?.ccc_percentage}%)`,
       <Money value={order?.meta?.ccc || 0} />
     ),
     keyValue(`Total`, <Money value={order?.grandTotal} />),

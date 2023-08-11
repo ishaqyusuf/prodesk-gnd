@@ -109,7 +109,7 @@ export async function saveOrderAction({
     ? await prisma.salesOrders.update({
         where: { id },
         data: {
-          // ...metadata,
+          ...metadata,
           items: {
             updateMany,
             createMany,

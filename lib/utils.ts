@@ -24,3 +24,22 @@ export function capitalizeFirstLetter(string) {
 export function keyValue(key, value) {
   return { key, value };
 }
+export function removeEmptyValues(obj) {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (obj[key] && typeof obj[key] === "object") {
+        // Recurse into nested objects
+        removeEmptyValues(obj[key]);
+        if (Object.keys(obj[key]).length === 0) {
+          delete obj[key]; // Delete the key if the nested object is empty after removal
+        }
+      } else if (
+        obj[key] === null ||
+        obj[key] === undefined ||
+        obj[key] === ""
+      ) {
+        delete obj[key]; // Delete keys with empty, null, or undefined values
+      }
+    }
+  }
+}

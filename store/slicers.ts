@@ -5,6 +5,7 @@ import { CustomerTypes, Users } from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
+import { IProduct } from "@/types/product";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
@@ -33,6 +34,7 @@ export interface ISlicer {
     id;
     data;
   };
+  products: IProduct[];
 }
 export type ModalName =
   | "assignProduction"
@@ -41,6 +43,7 @@ export type ModalName =
   | "salesTimeline"
   | "prodItemUpdate"
   | "email"
+  | "catalog"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

@@ -22,6 +22,7 @@ export interface BaseModalProps<T> {
   Content?({ data }: { data?: T });
   Footer?({ data }: { data?: T });
   className?;
+  noFooter?: Boolean;
 }
 export default function BaseModal<T>({
   onOpen,
@@ -31,6 +32,7 @@ export default function BaseModal<T>({
   Content,
   Footer,
   className,
+  noFooter,
 }: BaseModalProps<T>) {
   const modal = useAppSelector((state) => state.slicers.modal);
   //   const open =
@@ -55,7 +57,9 @@ export default function BaseModal<T>({
           <DialogTitle>{Title && <Title data={modal?.data} />}</DialogTitle>
         </DialogHeader>
         {Content && <Content data={modal?.data} />}
-        <DialogFooter>{Footer && <Footer data={modal?.data} />}</DialogFooter>
+        {!noFooter && (
+          <DialogFooter>{Footer && <Footer data={modal?.data} />}</DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

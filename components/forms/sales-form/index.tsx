@@ -34,6 +34,8 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { openModal } from "@/lib/modal";
+import CatalogModal from "@/components/modals/catalog-modal";
 
 interface Props {
   data: SalesFormResponse;
@@ -153,6 +155,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           </h2>
         </div>
         <div className="sitems-center flex space-x-2">
+          <Button size="sm" onClick={() => openModal("catalog", {})}>
+            Catalog
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm">Save</Button>
@@ -197,6 +202,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             </DropdownMenuContent>
           </DropdownMenu>
           <OrderPrinter />
+          <CatalogModal />
         </div>
       </section>
       <section

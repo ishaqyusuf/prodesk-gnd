@@ -1,6 +1,6 @@
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["filteredRelationCount"]
+    provider = "prisma-client-js"
+    // previewFeatures = ["filteredRelationCount"]
 }
 
 datasource db {
@@ -281,30 +281,31 @@ model OrderInventory {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model InventoryProducts {
-    id                Int       @unique @default(autoincrement())
+    id                Int               @unique @default(autoincrement())
     multiVariant      Boolean?
-    title             String    @db.VarChar(255)
-    description       String?   @db.Text
+    title             String            @db.VarChar(255)
+    description       String?           @db.Text
     categoryId        Int?
     subCategoryId     Int?
     weight            Float?
-    meta              String?   @db.LongText
-    deletedAt         DateTime? @db.Timestamp(0)
-    createdAt         DateTime? @db.Timestamp(0)
-    updatedAt         DateTime? @db.Timestamp(0)
-    priceUpdateAt     String?   @db.VarChar(255)
-    type              String?   @db.VarChar(255)
-    slug              String    @db.VarChar(255)
-    sku               String?   @db.VarChar(255)
-    barcode           String?   @db.VarChar(255)
+    meta              String?           @db.LongText
+    deletedAt         DateTime?         @db.Timestamp(0)
+    createdAt         DateTime?         @db.Timestamp(0)
+    updatedAt         DateTime?         @db.Timestamp(0)
+    priceUpdateAt     String?           @db.VarChar(255)
+    type              String?           @db.VarChar(255)
+    slug              String            @db.VarChar(255)
+    sku               String?           @db.VarChar(255)
+    barcode           String?           @db.VarChar(255)
     qty               Int?
     price             Float?
     minimumStockLevel Int?
-    img               String?   @db.VarChar(255)
-    status            String?   @db.VarChar(255)
-    category          String?   @db.VarChar(255)
-    subCategory       String?   @db.VarChar(255)
-    supplier          String?   @db.VarChar(255)
+    img               String?           @db.VarChar(255)
+    status            String?           @db.VarChar(255)
+    category          String?           @db.VarChar(255)
+    subCategory       String?           @db.VarChar(255)
+    supplier          String?           @db.VarChar(255)
+    variants          ProductVariants[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -588,27 +589,28 @@ model ProductTags {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model ProductVariants {
-    id                Int       @unique @default(autoincrement())
+    id                Int               @unique @default(autoincrement())
     productId         Int
     weight            Float?
     price             Float?
-    description       String?   @db.VarChar(255)
-    meta              Json?     @db.Json
-    deletedAt         DateTime? @db.Timestamp(0)
-    createdAt         DateTime? @db.Timestamp(0)
-    updatedAt         DateTime? @db.Timestamp(0)
-    slug              String    @db.VarChar(255)
-    title             String?   @db.VarChar(255)
-    variantTitle      String?   @db.Text
-    sku               String?   @db.VarChar(255)
-    barcode           String?   @db.VarChar(255)
+    description       String?           @db.VarChar(255)
+    meta              Json?             @db.Json
+    deletedAt         DateTime?         @db.Timestamp(0)
+    createdAt         DateTime?         @db.Timestamp(0)
+    updatedAt         DateTime?         @db.Timestamp(0)
+    slug              String            @db.VarChar(255)
+    title             String?           @db.VarChar(255)
+    variantTitle      String?           @db.Text
+    sku               String?           @db.VarChar(255)
+    barcode           String?           @db.VarChar(255)
     qty               Int?
     minimumStockLevel Int?
-    img               String?   @db.VarChar(255)
-    status            String?   @db.VarChar(255)
-    category          String?   @db.VarChar(255)
-    subCategory       String?   @db.VarChar(255)
-    supplier          String?   @db.VarChar(255)
+    img               String?           @db.VarChar(255)
+    status            String?           @db.VarChar(255)
+    category          String?           @db.VarChar(255)
+    subCategory       String?           @db.VarChar(255)
+    supplier          String?           @db.VarChar(255)
+    product           InventoryProducts @relation(fields: [productId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

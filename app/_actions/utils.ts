@@ -6,6 +6,7 @@ export async function myId() {
   const data = await getServerSession(authOptions);
   return data?.user.id;
 }
+
 export async function streamlineMeta(meta: any = null) {
   if (meta == null) return {};
 
