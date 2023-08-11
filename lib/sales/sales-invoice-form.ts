@@ -106,11 +106,11 @@ export function footerEstimate({
   // const b = form.getValues("");
   const taxPercentage = convertToNumber(form.getValues("taxPercentage"), 0);
   const cccPercentage = settings?.ccc;
-
+  console.log(footerInfo.rows);
   Object.entries(footerInfo.rows).map(([k, row]) => {
     if (row.total > 0) {
-      subTotal += row.total;
-      if (!row.notTaxxed) taxxableSubTotal += row.total;
+      subTotal += +row.total;
+      if (!row.notTaxxed) taxxableSubTotal += +row.total;
     }
   });
 
