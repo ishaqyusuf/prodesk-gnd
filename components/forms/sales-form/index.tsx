@@ -45,7 +45,9 @@ interface Props {
   slug;
 }
 export default function SalesForm({ data, newTitle, slug }: Props) {
-  const pageData: SalesFormResponse = useAppSelector((s) => s.slicers.dataPage);
+  const pageData: SalesFormResponse = useAppSelector(
+    (s) => s.slicers.dataPage.data
+  );
   const defaultValues: ISalesOrder = {
     ...data?.form,
   };
