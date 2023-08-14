@@ -10,7 +10,7 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
-import orderProdQtyUpdateAction from "../sales";
+import orderProdQtyUpdateAction from "../sales/sales";
 import { ISalesSetting, ISalesSettingMeta, PostTypes } from "@/types/post";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { getSettingAction } from "../settings";
