@@ -20,8 +20,8 @@ export type IOrderType = "order" | "estimate";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 export type ISalesOrder = SalesOrders & {
   customer?: Customers;
-  billingAddress?: IAddressBook;
-  // shippingAddress?: IAddressBook;
+  billingAddress?: any;
+  shippingAddress?: any;
   progress?: Progress[];
   producer?: Users;
 
