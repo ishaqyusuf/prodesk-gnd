@@ -220,5 +220,6 @@ export interface ISalesPayment extends SalesPayments {
     total_due;
     payment_option;
     paymentOption;
+    checkNo;
   };
 }

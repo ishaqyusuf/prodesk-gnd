@@ -10,6 +10,7 @@ export interface PaymentOrderProps {
   amountPaid;
   customerId;
   paymentOption;
+  checkNo;
 }
 export interface ApplyPaymentProps {
   orders: PaymentOrderProps[];
@@ -30,6 +31,7 @@ export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
           //   },
           meta: {
             paymentOption: o.paymentOption,
+            checkNo: o.checkNo,
           },
         } as ISalesPayment)
     ),

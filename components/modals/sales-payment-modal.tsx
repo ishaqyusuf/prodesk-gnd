@@ -53,13 +53,14 @@ export default function SalesPaymentModal() {
   const form = useForm<{
     // pay: number | null | undefined | string
     pay: number;
-    paymentOption: string;
+    checkNo: string;
+    paymentOption: IPaymentOptions;
   }>({
     defaultValues: {
       pay: 0,
     },
   });
-  // const watchPay = form.watch("pay");
+  const watchPaymentOption = form.watch("paymentOption");
   const [total, setTotal] = useState(0);
   useEffect(() => {
     let total = 0;
@@ -108,6 +109,7 @@ export default function SalesPaymentModal() {
           id,
           amountDue,
           customerId,
+          checkNo: form.getValues("checkNo"),
           paymentOption: form.getValues("paymentOption"),
         });
       });
@@ -171,13 +173,32 @@ export default function SalesPaymentModal() {
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell align="right">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger
+                        onClick={() => {
+                          form.setValue("pay", total);
+                        }}
+                      >
+                        <Money className="font-semibold" value={total} />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Click to pay all total</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
           <div className="flex space-x-4 justify-end">
             <div className="grid gap-2">
               <Label>Payment Option</Label>
               <Select
-                value={form.getValues("paymentOption")}
+                value={watchPaymentOption}
                 onValueChange={(value) => {
                   form.setValue("paymentOption", value as IPaymentOptions);
                 }}
@@ -203,6 +224,16 @@ export default function SalesPaymentModal() {
               </Select>
             </div>
             <div className="grid gap-2">
+              <Label>Check No</Label>
+              <Input
+                disabled={form.getValues("paymentOption") != "Check"}
+                {...form.register("checkNo")}
+                className="h-8 w-28"
+                type="number"
+              />
+            </div>
+
+            <div className="grid gap-2">
               <Label>Pay</Label>
               <Input
                 {...form.register("pay")}
@@ -210,22 +241,6 @@ export default function SalesPaymentModal() {
                 type="number"
               />
             </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger
-                  onClick={() => {
-                    form.setValue("pay", total);
-                  }}
-                >
-                  <Info className="text-end cursor-pointer" label="Total">
-                    <Money value={total} />
-                  </Info>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Click to pay all total</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
           </div>
         </div>
       )}

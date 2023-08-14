@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { openModal } from "@/lib/modal";
 import { useAppSelector } from "@/store";
-import { dispatchSlice } from "@/store/slicers";
 import { ISalesOrder } from "@/types/sales";
 import { Plus } from "lucide-react";
 
@@ -41,8 +40,11 @@ export default function PaymentHistory() {
                     {/* <p>{item.orderId}</p> */}
                     <p>{item.createdAt as any}</p>
                   </TableCell>
-
-                  <TableCell className="p-1 text-left">
+                  <TableCell className="p-1">
+                    {/* <p>{item.orderId}</p> */}
+                    <p>{item.meta?.checkNo}</p>
+                  </TableCell>
+                  <TableCell align="right" className="p-1">
                     <Money value={item.amount} className="font-medium" />
                     <p className="text-muted-foreground">
                       {item?.meta?.paymentOption ||

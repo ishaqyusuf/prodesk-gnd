@@ -39,6 +39,10 @@ export default function RecentPayments({ className }: Props) {
                   {/* <p>{item.orderId}</p> */}
                   <p>{item.createdAt as any}</p>
                 </TableCell>
+                <TableCell className="p-1">
+                  {/* <p>{item.orderId}</p> */}
+                  <p>{item.meta?.checkNo}</p>
+                </TableCell>
 
                 <TableCell className="p-1 text-left">
                   <Money value={item.amount} className="font-medium" />
