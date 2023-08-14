@@ -6,6 +6,7 @@ import { ISalesSettingMeta, PostTypes } from "@/types/post";
 import { IOrderType, ISalesOrder } from "@/types/sales";
 import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
+import { sum } from "@/lib/utils";
 
 export interface ICreateOrderFormQuery {
   customerId?;
@@ -18,6 +19,7 @@ export interface ICreateOrderFormQuery {
 export interface SalesFormResponse {
   form: ISalesOrder;
   ctx: SalesFormCtx;
+  paidAmount: number;
 }
 export interface SalesFormCtx {
   settings: ISalesSettingMeta;
@@ -25,7 +27,9 @@ export interface SalesFormCtx {
   suppliers: (string | null)[];
   profiles: CustomerTypes[];
 }
-export async function salesFormAction(query: ICreateOrderFormQuery) {
+export async function salesFormAction(
+  query: ICreateOrderFormQuery
+): Promise<SalesFormResponse> {
   const order = await prisma.salesOrders.findFirst({
     where: {
       orderId: query.orderId,
@@ -35,13 +39,22 @@ export async function salesFormAction(query: ICreateOrderFormQuery) {
       items: true,
       billingAddress: true,
       shippingAddress: true,
+      payments: {
+        select: {
+          // id:true,
+          amount: true,
+        },
+      },
     },
   });
   if (!order) return await newSalesFormAction(query);
+  const { payments, ..._order } = order;
   const ctx = await formCtx();
+  let paidAmount = sum(payments, "amount");
   return {
     form: order as any,
     ctx,
+    paidAmount,
   };
 }
 async function formCtx(): Promise<SalesFormCtx> {
@@ -129,5 +142,6 @@ async function newSalesFormAction(
   return {
     form,
     ctx,
+    paidAmount: 0,
   };
 }

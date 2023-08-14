@@ -6,7 +6,10 @@ import { toast } from "sonner";
 import { dbUpgradeAction } from "@/app/_actions/upgrade/db-upgrade";
 import Btn from "./btn";
 import { fixSales } from "@/app/_actions/upgrade/fix-sales";
-import { changeIzriEmail } from "@/app/_actions/upgrade/hrm-upgrade";
+import {
+  changeIzriEmail,
+  fixUsersMeta,
+} from "@/app/_actions/upgrade/hrm-upgrade";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -15,7 +18,8 @@ export default function Upgrader() {
     startTransaction(async () => {
       // await dbUpgradeAction();
       // await fixSales();
-      await changeIzriEmail();
+      // await changeIzriEmail();
+      // console.log(await fixUsersMeta());
       toast.success("completed");
     });
   }, []);

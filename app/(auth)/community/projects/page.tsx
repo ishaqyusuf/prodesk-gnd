@@ -20,7 +20,7 @@ export default async function OrdersPage({ searchParams }) {
     <div className="space-y-4 px-8">
       <Breadcrumbs>
         <BreadLink isFirst title="Community" />
-        <BreadLink isLast title="Units" />
+        <BreadLink isLast title="Projects" />
       </Breadcrumbs>
       <PageHeader title="Projects" newDialog="project" />
       <OrdersTableShell<IProject> {...response} />

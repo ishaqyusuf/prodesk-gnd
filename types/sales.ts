@@ -31,6 +31,7 @@ export type ISalesOrder = SalesOrders & {
   productions: OrderProductionSubmissions[];
   type: IOrderType;
   meta: ISalesOrderMeta;
+
   ctx: {
     prodPage?: Boolean;
   };

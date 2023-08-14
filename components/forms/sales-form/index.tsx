@@ -24,7 +24,7 @@ import { formatDate } from "@/lib/use-day";
 import { SalesCustomerProfileInput } from "./customer-profile-input";
 import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
-import { store } from "@/store";
+import { store, useAppSelector } from "@/store";
 import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
 import { Input } from "@/components/ui/input";
 import {
@@ -45,6 +45,7 @@ interface Props {
   slug;
 }
 export default function SalesForm({ data, newTitle, slug }: Props) {
+  const pageData: SalesFormResponse = useAppSelector((s) => s.slicers.dataPage);
   const defaultValues: ISalesOrder = {
     ...data?.form,
   };
@@ -109,7 +110,8 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       customer,
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
-    if (!id) formValues.amountDue = formValues.grandTotal;
+    formValues.amountDue =
+      Number(formValues.grandTotal || 0) - pageData.paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
     const deleteIds: number[] = [];
     let items = _items
