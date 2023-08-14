@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
-import { ISalesOrder } from "@/types/sales";
+import { IPaymentOptions, ISalesOrder } from "@/types/sales";
 
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
@@ -34,6 +34,14 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { closeModal } from "@/lib/modal";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function SalesPaymentModal() {
@@ -45,6 +53,7 @@ export default function SalesPaymentModal() {
   const form = useForm<{
     // pay: number | null | undefined | string
     pay: number;
+    paymentOption: string;
   }>({
     defaultValues: {
       pay: 0,
@@ -94,7 +103,13 @@ export default function SalesPaymentModal() {
           amountDue = (amountDue || 0) - _total;
           _total = 0;
         }
-        orders.push({ amountPaid, id, amountDue, customerId, paymentOption });
+        orders.push({
+          amountPaid,
+          id,
+          amountDue,
+          customerId,
+          paymentOption: form.getValues("paymentOption"),
+        });
       });
       // .filter((f) => (f?.amountPaid || 0) > 0);
       await applyPaymentAction({ orders });
@@ -107,6 +122,9 @@ export default function SalesPaymentModal() {
     <BaseModal<ISalesOrder[]>
       className="sm:max-w-[550px]"
       onOpen={(orders) => {
+        form.reset({
+          paymentOption: orders[0]?.meta?.payment_option,
+        });
         const _checked: any = {};
         orders?.map((o) => (_checked[o.id] = o));
         setSelection(_checked);
@@ -156,6 +174,34 @@ export default function SalesPaymentModal() {
             </TableBody>
           </Table>
           <div className="flex space-x-4 justify-end">
+            <div className="grid gap-2">
+              <Label>Payment Option</Label>
+              <Select
+                value={form.getValues("paymentOption")}
+                onValueChange={(value) => {
+                  form.setValue("paymentOption", value as IPaymentOptions);
+                }}
+              >
+                <SelectTrigger className="h-8 w-28">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {[
+                      "Cash",
+                      // "Credit Card",
+                      "Check",
+                      "COD",
+                      "Zelle",
+                    ].map((opt, i) => (
+                      <SelectItem value={opt} key={i}>
+                        {opt}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="grid gap-2">
               <Label>Pay</Label>
               <Input
