@@ -183,7 +183,6 @@ export const PrintOrderMenuAction = typedMemo(
     }
   ) => {
     function _print(mode: IOrderPrintMode) {
-      console.log(props.slugs || [props.row.slug]);
       dispatchSlice("printOrders", {
         mode,
         slugs: props.slugs || [props.row.slug],

@@ -2,20 +2,8 @@
 
 import { useAppSelector } from "@/store";
 import { ISalesOrder } from "@/types/sales";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import XProgress from "@/components/x-progress";
-import { ProdItemActions } from "@/components/actions/prod-item-actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ItemDetailsSection from "./item-details";
-import SalesEmailSection from "./sales-email-section";
 
 export default function TabbedItemEmailOverview() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);

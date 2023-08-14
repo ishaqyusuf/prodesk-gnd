@@ -12,7 +12,11 @@ export function OrderPrintInvoiceLines({ order }: Props) {
   const isClient = !["production", "packing list"].includes(po?.mode);
   const packingList = po?.mode == "packing list";
 
-  const lineIndex = order?.items?.slice(-1)[0]?.meta?.line_index;
+  const lineIndex = Math.max(
+    ...(order?.items
+      ?.map((item) => item?.meta?.line_index || item?.meta?.uid)
+      .filter((i) => i > -1) as any)
+  );
   const totalLines = lineIndex ? lineIndex + 1 : order?.items?.length;
   let _index = 0;
   const invoiceLines: { sn?; id; line?: ISalesOrderItem | undefined }[] = Array(
@@ -20,7 +24,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
   )
     .fill(null)
     .map((_, index) => {
-      const item = order?.items?.find((i) => i.meta?.line_index == index);
+      const item = order?.items?.find((i) => i.meta?.uid == index);
       // const { qty = 0, total = 0 } = item;
       let qty = item?.qty || 0;
       let total = item?.total || 0;

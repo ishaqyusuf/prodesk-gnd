@@ -25,6 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const isProd = env.NODE_ENV === "production";
+  const prodDB = env.DATABASE_URL?.includes("pscale");
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -43,6 +44,11 @@ export default function RootLayout({
         </div>
         <Toaster />
         <Analytics />
+        {prodDB && !isProd && (
+          <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
+            Production Database
+          </div>
+        )}
       </body>
     </html>
   );

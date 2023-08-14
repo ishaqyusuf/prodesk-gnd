@@ -120,7 +120,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         }
         item.meta = removeEmptyValues({
           ...(item.meta as any),
-          line_index: index,
+          uid: index,
         });
         return numeric<SalesOrderItems>(
           ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
@@ -128,7 +128,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         );
       })
       .filter(Boolean);
-    console.log(items);
     return {
       id,
       order: numeric<SalesOrders>(

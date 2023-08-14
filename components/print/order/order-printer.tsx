@@ -33,7 +33,7 @@ export default function OrderPrinter({}: Props) {
     if (!printer) return;
     const sales = await salesPrintAction({ slugs: printer.slugs });
     setSales(sales as any);
-    console.log("PRINT TRIGGEREED");
+    console.log(sales);
   }
   return (
     <BasePrinter>

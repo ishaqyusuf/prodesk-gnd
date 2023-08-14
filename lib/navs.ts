@@ -183,6 +183,7 @@ export function nav(
 
 export const upRoutes = [
   "Dashboard",
+  "Community/Projects",
   "Sales/Estimates",
   "Sales/Orders",
   "Sales/Customers",

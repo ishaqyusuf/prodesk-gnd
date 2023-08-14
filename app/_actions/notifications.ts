@@ -13,6 +13,17 @@ export async function loadNotifications() {
     },
   });
 }
+export async function getNotificationCountAction() {
+  const data = await getServerSession(authOptions);
+  return await prisma.notifications.count({
+    where: {
+      userId: data?.user?.id,
+      archivedAt: {
+        not: null,
+      },
+    },
+  });
+}
 async function _notify() {
   //  await prisma.notifications.create({
   //    data: {

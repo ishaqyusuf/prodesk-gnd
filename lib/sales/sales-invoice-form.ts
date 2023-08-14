@@ -31,7 +31,7 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
     });
   return _items;
 }
-export function generateItem(line_index, baseItem: any = null) {
+export function generateItem(uid, baseItem: any = null) {
   if (!baseItem) baseItem = { meta: {} };
   let price = baseItem?.rate || baseItem?.price;
 
@@ -43,7 +43,9 @@ export function generateItem(line_index, baseItem: any = null) {
       tax: "Tax",
       sales_margin: "Default",
       ...(baseItem?.meta ?? {}),
-      line_index,
+      uid,
+      lineIndex: null,
+      line_index: null,
     },
   };
   if (_.meta.length == 0) _.meta = {};
