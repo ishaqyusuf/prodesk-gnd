@@ -9,13 +9,15 @@ import PageHeader from "@/components/page-header";
 import { IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
+import ProjectsTableShell from "@/components/shells/projects-table-shell";
+import { getProjectsAction } from "@/app/_actions/community/projects";
 
 export const metadata: Metadata = {
   title: "Projects",
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
-  const response = await getSalesOrder(queryParams(searchParams));
+  const response = await getProjectsAction(queryParams(searchParams));
   return (
     <div className="space-y-4 px-8">
       <Breadcrumbs>
@@ -23,7 +25,7 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isLast title="Projects" />
       </Breadcrumbs>
       <PageHeader title="Projects" newDialog="project" />
-      <OrdersTableShell<IProject> {...response} />
+      <ProjectsTableShell<IProject> {...response} />
       <OrderPrinter />
       <SalesProductionModal />
     </div>

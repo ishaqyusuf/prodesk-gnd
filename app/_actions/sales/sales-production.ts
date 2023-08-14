@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { ActionResponse } from "@/types/action";
+import { TableApiResponse } from "@/types/action";
 import {
   ISalesOrder,
   ISalesOrderItem,
@@ -21,7 +21,7 @@ import { deepCopy } from "@/lib/deep-copy";
 export async function getSalesProductionsAction(
   query: SalesQueryParams,
   admin = false
-): ActionResponse<ISalesOrder> {
+): TableApiResponse<ISalesOrder> {
   const sessionId = await myId();
   query._page = "production";
   if (!admin) query.prodId = sessionId || -1;

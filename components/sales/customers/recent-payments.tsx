@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  LinkCell,
+  Cell,
   PrimaryCellContent,
   SecondaryCellContent,
 } from "@/components/columns/base-columns";

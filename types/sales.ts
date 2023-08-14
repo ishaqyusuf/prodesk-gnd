@@ -11,6 +11,7 @@ import {
 } from "@prisma/client";
 import { UseFormReturn } from "react-hook-form";
 import { ICustomer } from "./customers";
+import { BaseQuery } from "./action";
 export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
@@ -136,7 +137,7 @@ export type SalesStatus =
   | "No Status"
   | "Unassigned"
   | undefined;
-export interface SalesQueryParams {
+export interface SalesQueryParams extends BaseQuery {
   _q?;
   skip?;
   take?;

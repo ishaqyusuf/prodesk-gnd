@@ -8,7 +8,7 @@ import {
 import { prisma } from "@/db";
 import { lastId, nextId } from "@/lib/nextId";
 import { convertToNumber } from "@/lib/use-number";
-import { ActionResponse } from "@/types/action";
+import { TableApiResponse } from "@/types/action";
 import {
   CopyOrderActionProps,
   ISalesOrder,
@@ -65,7 +65,7 @@ import { getProgress } from "../progress";
 }
 export async function getSalesOrder(
   query: SalesQueryParams
-): ActionResponse<ISalesOrder> {
+): TableApiResponse<ISalesOrder> {
   query.type = "order";
 return await getSales(query) 
 }
@@ -115,7 +115,7 @@ export async function getOrderAction(orderId,isProd = false) {
 }
 export async function getSalesEstimates(
   query: SalesQueryParams
-): ActionResponse<ISalesOrder> {
+): TableApiResponse<ISalesOrder> {
   query.type = "estimate";
 return await getSales(query) 
 }

@@ -1,4 +1,4 @@
-export type ActionResponse<T> = Promise<{
+export type TableApiResponse<T> = Promise<{
   data: T[];
   pageInfo: {
     pageIndex?: number | undefined;
@@ -7,3 +7,15 @@ export type ActionResponse<T> = Promise<{
     hasPreviousPage?: Boolean;
   };
 }>;
+export interface BaseQuery {
+  _q?;
+  _dateType?;
+  status?;
+  date?;
+  from?;
+  to?;
+  page?;
+  per_page?;
+  sort_order?;
+  sort?;
+}

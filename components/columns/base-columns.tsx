@@ -5,6 +5,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Fragment } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { formatDate } from "@/lib/use-day";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -53,8 +54,18 @@ export const ColumnHeader = (title) => {
   );
   return c;
 };
-export const LinkCell = ({ row, link, children, slug }) => {
-  if (!row) return <></>;
+export const Cell = ({
+  row,
+  link,
+  children,
+  slug,
+}: {
+  row?;
+  link?;
+  children?;
+  slug?;
+}) => {
+  // if (!row) return <></>;
   link = link?.replace("slug", slug?.toString());
   const Node = link && slug ? Link : Fragment;
   return (
@@ -70,4 +81,15 @@ export function PrimaryCellContent({ children }) {
 }
 export function SecondaryCellContent({ children }) {
   return <div className="text-muted-foreground text-sm">{children}</div>;
+}
+export function DateCellContent({
+  children,
+  primary,
+}: {
+  children?;
+  primary?: Boolean;
+}) {
+  const Node = primary ? PrimaryCellContent : SecondaryCellContent;
+  const value = formatDate(children);
+  return <Node>{value}</Node>;
 }

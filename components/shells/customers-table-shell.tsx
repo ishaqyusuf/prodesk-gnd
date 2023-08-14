@@ -7,7 +7,7 @@ import { useMemo, useState, useTransition } from "react";
 import {
   CheckColumn,
   ColumnHeader,
-  LinkCell,
+  Cell,
   PrimaryCellContent,
   SecondaryCellContent,
 } from "../columns/base-columns";
@@ -38,14 +38,14 @@ export default function CustomersTableShell<T>({
         accessorKey: "customer",
         header: ColumnHeader("Customer"),
         cell: ({ row }) => (
-          <LinkCell
+          <Cell
             row={row.original}
             slug={row.original.id}
             link="/sales/customer/slug"
           >
             <PrimaryCellContent>{row.original.name}</PrimaryCellContent>
             <SecondaryCellContent>{row.original.phoneNo}</SecondaryCellContent>
-          </LinkCell>
+          </Cell>
         ),
       },
 

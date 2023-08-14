@@ -27,15 +27,7 @@ import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
 import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
 import { Input } from "@/components/ui/input";
-import {
-  Form,
-  // Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { openModal } from "@/lib/modal";
+
 import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
 
@@ -110,6 +102,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       shippingAddress,
       billingAddress,
       customer,
+
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
     formValues.amountDue =

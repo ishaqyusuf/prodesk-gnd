@@ -52,7 +52,7 @@ export async function salesFormAction(
   const ctx = await formCtx();
   let paidAmount = sum(payments, "amount");
   return {
-    form: order as any,
+    form: _order as any,
     ctx,
     paidAmount,
   };

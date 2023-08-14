@@ -7,7 +7,7 @@ import { ICustomer } from "@/types/customers";
 import { useAppSelector } from "@/store";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import {
-  LinkCell,
+  Cell,
   PrimaryCellContent,
   SecondaryCellContent,
 } from "../columns/base-columns";
@@ -40,7 +40,7 @@ export default function RecentSalesDashboardCard({ className }: Props) {
             {db?.recentSales?.map((order, key) => (
               <TableRow key={key}>
                 <TableCell className="p-1">
-                  <LinkCell
+                  <Cell
                     row={order}
                     link="/sales/order/slug"
                     slug={order.orderId}
@@ -49,10 +49,10 @@ export default function RecentSalesDashboardCard({ className }: Props) {
                     <SecondaryCellContent>
                       {formatDate(order.createdAt)}
                     </SecondaryCellContent>
-                  </LinkCell>
+                  </Cell>
                 </TableCell>
                 <TableCell className="p-1">
-                  <LinkCell
+                  <Cell
                     row={order}
                     link="/sales/customer/slug"
                     slug={order?.customerId}
@@ -63,7 +63,7 @@ export default function RecentSalesDashboardCard({ className }: Props) {
                     <SecondaryCellContent>
                       {order?.customer?.phoneNo}
                     </SecondaryCellContent>
-                  </LinkCell>
+                  </Cell>
                 </TableCell>
                 <TableCell align="right" className="p-1">
                   <div>

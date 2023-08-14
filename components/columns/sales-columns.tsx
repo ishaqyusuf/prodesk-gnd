@@ -22,11 +22,7 @@ import { updateOrderPriorityActon } from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
 import { Progress } from "../ui/progress";
-import {
-  LinkCell,
-  PrimaryCellContent,
-  SecondaryCellContent,
-} from "./base-columns";
+import { Cell, PrimaryCellContent, SecondaryCellContent } from "./base-columns";
 import { toFixed } from "@/lib/use-number";
 
 export const OrderPriorityFlagCell = (
@@ -194,10 +190,10 @@ export function ProdOrderCell(
   link: string | undefined = undefined
 ) {
   return (
-    <LinkCell row={order} link={link} slug={order?.orderId}>
+    <Cell row={order} link={link} slug={order?.orderId}>
       <PrimaryCellContent>{order?.customer?.name}</PrimaryCellContent>
       <SecondaryCellContent>{order?.orderId}</SecondaryCellContent>
-    </LinkCell>
+    </Cell>
   );
 }
 

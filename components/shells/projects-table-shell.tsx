@@ -1,12 +1,17 @@
 "use client";
 
 import { TableShellProps } from "@/types/data-table";
-// import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import { CheckColumn, ColumnHeader } from "../columns/base-columns";
+import {
+  CheckColumn,
+  ColumnHeader,
+  Cell,
+  PrimaryCellContent,
+  DateCellContent,
+  SecondaryCellContent,
+} from "../columns/base-columns";
 
-import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import {
@@ -16,53 +21,61 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Printer } from "lucide-react";
+import { IProject } from "@/types/community";
 
 export default function ProjectsTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<ISalesOrder>) {
+}: TableShellProps<IProject>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
+  const columns = useMemo<ColumnDef<IProject, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
         maxSize: 10,
-        id: "flags",
-        // cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
+        id: "refNo",
+        header: ColumnHeader("Ref/Id"),
+        cell: ({ row }) => (
+          <Cell link="/community/projects/slug" slug={row.original.slug}>
+            <PrimaryCellContent>{row.original.refNo}</PrimaryCellContent>
+            <DateCellContent>{row.original.createdAt}</DateCellContent>
+          </Cell>
+        ),
+      },
+      {
+        header: ColumnHeader("Project"),
+        id: "title",
+        cell: ({ row }) => (
+          <Cell link="/community/projects/slug" slug={row.original.slug}>
+            <PrimaryCellContent>{row.original.title}</PrimaryCellContent>
+          </Cell>
+        ),
       },
       {
         accessorKey: "orderId",
-        // cell: ({ row }) => OrderIdCell(row.original, "/sales/order/slug"),
-        header: ColumnHeader("Order"),
+        cell: ({ row }) => (
+          <Cell>
+            <SecondaryCellContent>
+              {row.original?.meta?.supervisor?.name}
+            </SecondaryCellContent>
+          </Cell>
+        ),
+        header: ColumnHeader("Supervisor"),
       },
       {
         accessorKey: "customer",
-        header: ColumnHeader("Customer"),
-        // cell: ({ row }) =>
-        // OrderCustomerCell(row.original.customer, "/sales/customer/slug"),
+        header: ColumnHeader("Units"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>
+              {row.original._count?.homes}
+            </PrimaryCellContent>
+          </Cell>
+        ),
       },
-      {
-        accessorKey: "memo",
-        header: ColumnHeader("Memo"),
-        // cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
-      },
-      {
-        accessorKey: "invoice",
-        header: ColumnHeader("Total/Due"),
-        // cell: ({ row }) => <OrderInvoiceCell order={row.original} />,
-      },
-      {
-        accessorKey: "production",
-        header: ColumnHeader("Production"),
-        // cell: ({ row }) => OrderProductionStatusCell(row.original),
-      },
-      {
-        accessorKey: "status",
-        header: ColumnHeader("Status"),
-        // cell: ({ row }) => OrderStatus(row.original),
-      },
+
       {
         accessorKey: "_status",
         enableHiding: false,
@@ -81,7 +94,7 @@ export default function ProjectsTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => <OrderRowAction row={row.original} />,
+        // cell: ({ row }) => <OrderRowAction row={row.original} />,
       },
     ],
     [data, isPending]
