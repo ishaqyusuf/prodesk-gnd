@@ -7,7 +7,7 @@ import {
   prodsDueToday,
 } from "@/app/_actions/sales/sales-production";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { ProductionsCrumb } from "@/components/breadcrumbs/links";
+import { BreadLink, ProductionsCrumb } from "@/components/breadcrumbs/links";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/use-day";
 import dayjs from "dayjs";
@@ -25,8 +25,10 @@ export default async function SalesProductionPage({ searchParams }) {
   return (
     <>
       <Breadcrumbs>
+        <BreadLink isFirst title="Sales" />
         <ProductionsCrumb isLast />
       </Breadcrumbs>
+
       <div className="space-y-4 px-8">
         <div className="flex items-center justify-between space-y-2">
           <div>

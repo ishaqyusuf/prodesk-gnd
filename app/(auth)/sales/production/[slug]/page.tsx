@@ -1,6 +1,7 @@
 import { getOrderAction } from "@/app/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
+  BreadLink,
   EstimatesCrumb,
   OrderViewCrumb,
   ProductionsCrumb,
@@ -33,7 +34,9 @@ export default async function SalesOrderPage({ params: { slug } }) {
   return (
     <DataPageShell className="px-8" data={order}>
       <Breadcrumbs>
-        <ProductionsCrumb isFirst />
+        <BreadLink isFirst title="Sales" />
+
+        <ProductionsCrumb />
         <OrderViewCrumb slug={order.orderId} isLast />
       </Breadcrumbs>
 

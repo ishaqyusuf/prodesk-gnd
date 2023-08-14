@@ -6,6 +6,8 @@ import OrderPrinter from "@/components/print/order/order-printer";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
 import { Metadata } from "next";
 import PageHeader from "@/components/page-header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { BreadLink } from "@/components/breadcrumbs/links";
 
 export const metadata: Metadata = {
   title: "Sales Orders",
@@ -15,6 +17,10 @@ export default async function OrdersPage({ searchParams }) {
   const response = await getSalesOrder(queryParams(searchParams));
   return (
     <div className="space-y-4 px-8">
+      <Breadcrumbs>
+        <BreadLink isFirst title="Sales" />
+        <BreadLink isLast title="Orders" />
+      </Breadcrumbs>
       <PageHeader title="Sales Orders" newLink="/sales/order/new/form" />
       <OrdersTableShell<ISalesOrder> {...response} />
       <OrderPrinter />
