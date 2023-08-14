@@ -21,7 +21,7 @@ export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 export type ISalesOrder = SalesOrders & {
   customer?: Customers;
   billingAddress?: IAddressBook;
-  shippingAddress?: IAddressBook;
+  // shippingAddress?: IAddressBook;
   progress?: Progress[];
   producer?: Users;
 
