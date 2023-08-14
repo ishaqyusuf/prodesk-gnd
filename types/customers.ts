@@ -4,14 +4,14 @@ import {
   Customers,
   SalesPayments,
 } from "@prisma/client";
-import { ISalesOrder, ISalesPayment } from "./sales";
+import { IAddressBook, ISalesOrder, ISalesPayment } from "./sales";
 
 export interface ICustomer extends Customers {
   profile: CustomerTypes;
   salesOrders: ISalesOrder[];
   payments: ISalesPayment[];
-  primaryAddress: AddressBooks;
-  addressBook: AddressBooks[];
+  primaryAddress: any;
+  addressBook: any[];
   _count: {
     salesOrders;
     totalDoors;
