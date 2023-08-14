@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ISidebar } from "@/lib/navs";
-import { cn } from "@/lib/utils";
+import { cn, toSingular } from "@/lib/utils";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,8 @@ export default function SiteNav({ className, onClick, nav }: SidebarProps) {
   //   }, [session?.user?.id]);
   const pathname = usePathname();
   function routeBtn(route: { icon: any; path: string; title: string }, i) {
-    const isActive = pathname?.startsWith(route.path);
+    const parentPath = toSingular(route.path);
+    const isActive = pathname?.startsWith(parentPath);
     return (
       <Button
         key={i}

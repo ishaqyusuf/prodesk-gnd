@@ -4,7 +4,7 @@ import {
   Customers,
   SalesPayments,
 } from "@prisma/client";
-import { IAddressBook, ISalesOrder, ISalesPayment } from "./sales";
+import { ISalesOrder, ISalesPayment } from "./sales";
 
 export interface ICustomer extends Customers {
   profile: CustomerTypes;
@@ -16,7 +16,7 @@ export interface ICustomer extends Customers {
     salesOrders;
     totalDoors;
     pendingDoors;
-    totalCost;
+    totalSales;
     amountDue;
     pendingOrders;
     completedOrders;

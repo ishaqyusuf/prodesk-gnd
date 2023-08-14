@@ -48,7 +48,7 @@ export async function getCustomerAction(id) {
   if (!_customer) throw new Error("Customer not Found");
   let customer: ICustomer = _customer as any;
 
-  customer._count.totalCost = sum(customer.salesOrders, "grandTotal");
+  customer._count.totalSales = sum(customer.salesOrders, "grandTotal");
   customer._count.amountDue = sum(customer.salesOrders, "amountDue");
   let pd = (customer._count.pendingDoors = sum(
     customer.salesOrders,

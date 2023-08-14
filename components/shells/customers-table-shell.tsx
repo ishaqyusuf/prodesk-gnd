@@ -11,18 +11,8 @@ import {
   PrimaryCellContent,
   SecondaryCellContent,
 } from "../columns/base-columns";
-import { DataTable } from "../data-table/data-table";
-import {
-  OrderCustomerCell,
-  OrderIdCell,
-  OrderInvoiceCell,
-  OrderMemoCell,
-  OrderPriorityFlagCell,
-  OrderProductionStatusCell,
-  OrderStatus,
-} from "../columns/sales-columns";
-import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
+
+import { PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import {
   DropdownMenu,

@@ -34,7 +34,8 @@ export default function EstimatesTableShell<T>({
       {
         accessorKey: "customer",
         header: ColumnHeader("Customer"),
-        cell: ({ row }) => OrderCustomerCell(row.original.customer),
+        cell: ({ row }) =>
+          OrderCustomerCell(row.original.customer, "/sales/customer/slug"),
       },
       {
         accessorKey: "invoice",

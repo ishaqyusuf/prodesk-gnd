@@ -69,3 +69,19 @@ export const formatCurrency = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD", // Replace with your desired currency code
 });
+export function toSingular(plural) {
+  const rules = [
+    { suffix: "s", replace: "" },
+    { suffix: "es", replace: "" },
+    { suffix: "ies", replace: "y" },
+    // Add more rules as needed
+  ];
+
+  for (const rule of rules) {
+    if (plural.endsWith(rule.suffix)) {
+      return plural.slice(0, -rule.suffix.length) + rule.replace;
+    }
+  }
+
+  return plural; // Return unchanged if no matching rule found
+}

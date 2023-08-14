@@ -22,7 +22,7 @@ export default async function CustomerPage({ searchParams, params }) {
     salesOrders,
     totalDoors,
     pendingDoors,
-    totalCost,
+    totalSales,
     amountDue,
     completedOrders,
     completedDoors,
@@ -63,7 +63,7 @@ export default async function CustomerPage({ searchParams, params }) {
         <StatCardContainer>
           <StartCard
             icon="dollar"
-            value={totalCost}
+            value={totalSales}
             label="Total Sales"
             money
           />
