@@ -8,7 +8,7 @@ import { useState } from "react";
 import { PrintOrderSection } from "./print-order-section";
 import { WaterMark } from "./water-mark";
 import { adjustWatermark } from "@/lib/adjust-watermark";
-import { salesPrintAction } from "@/app/_actions/sales";
+import { salesPrintAction } from "@/app/_actions/sales/sales";
 import { ISalesOrder } from "@/types/sales";
 
 interface Props {}

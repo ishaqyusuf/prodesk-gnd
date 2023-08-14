@@ -144,7 +144,6 @@ export default function Combobox<T>({
           <Command shouldFilter={false}>
             <CommandInput
               onFocus={() => {
-                // console.log("FOCUS");
                 setQ(form.getValues(keyName));
                 setSearchable(true);
               }}

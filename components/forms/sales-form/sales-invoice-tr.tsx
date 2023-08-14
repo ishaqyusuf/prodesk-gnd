@@ -9,18 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { store, useAppSelector } from "@/store";
-import { useForm, useFieldArray } from "react-hook-form";
+import { store } from "@/store";
 import * as React from "react";
 
-import { Layers } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { Button } from "@/components/ui/button";
-import { useLoader } from "@/lib/use-loader";
-import { timeout } from "@/lib/timeout";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { typedMemo } from "@/lib/hocs/typed-memo";
 import { FormField } from "@/components/ui/form";
 import { ISalesOrder, ISalesOrderForm } from "@/types/sales";
 import Combobox from "@/components/combo-box";
@@ -28,8 +22,9 @@ import ItemCell from "./item-cell";
 import QtyCostCell from "./qty-cost-cell";
 import { Label } from "@/components/ui/label";
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
-import { SalesFormCtx } from "@/app/_actions/sales-form";
+import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";
+import SwingCell from "./swing-cell";
 
 interface IProps {
   rowIndex;
@@ -39,7 +34,11 @@ interface IProps {
   startTransition2;
   isPending;
 }
-
+export interface SalesInvoiceCellProps {
+  rowIndex;
+  form: ISalesOrderForm;
+  ctx?: SalesFormCtx;
+}
 export const SalesInvoiceTr = ({
   field,
   startTransition2,
@@ -73,20 +72,7 @@ export const SalesInvoiceTr = ({
             />
           </TableCell>
           <ItemCell rowIndex={i} form={form} />
-          <TableCell id="swing" className="p-1">
-            <Input
-              className="h-8 w-24  p-1  font-medium"
-              {...form.register(`items.${i}.swing`)}
-            />
-            {/* <Combobox
-              keyName={`items.${i}.swing`}
-              className="w-24"
-              id="swing"
-              allowCreate
-              form={form}
-              list={ctx.swings}
-            /> */}
-          </TableCell>
+          <SwingCell rowIndex={i} form={form} />
           <TableCell id="supplier" className="p-0 px-1">
             <Combobox
               keyName={`items.${i}.meta.supplier`}

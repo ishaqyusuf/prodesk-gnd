@@ -158,6 +158,7 @@ export function nav(
       title: len < 2 ? null : title,
       routes: r
         .map((_r) =>
+          upRoutes.includes(`${title}`) ||
           upRoutes.includes(`${title}/**`) ||
           upRoutes.includes(`${title}/${_r.title}`) ||
           !isProd
@@ -181,6 +182,7 @@ export function nav(
 }
 
 export const upRoutes = [
+  "Dashboard",
   "Sales/Estimates",
   "Sales/Orders",
   "Sales/Customers",

@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "@/db";
+import { removeEmptyValues } from "@/lib/utils";
+import { IProductVariantMeta } from "@/types/product";
 import { InventoryComponentCategory } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 
@@ -66,4 +68,24 @@ export async function getComponentCostHistoryAction(
   });
   console.log(products);
   return products;
+}
+export interface InvCompTitleProps {
+  title;
+  oldTitle?;
+  variantId;
+  meta: IProductVariantMeta;
+}
+export async function updateInventoryComponentTitleAction({
+  title,
+  oldTitle,
+  variantId,
+  meta,
+}: InvCompTitleProps) {
+  meta.componentTitle = title;
+  await prisma.productVariants.update({
+    where: { id: variantId },
+    data: {
+      meta: removeEmptyValues(meta),
+    },
+  });
 }

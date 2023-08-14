@@ -11,10 +11,10 @@ import {
 } from "@/types/sales";
 import dayjs from "dayjs";
 import orderProdQtyUpdateAction, { getSales } from "./sales";
-import { saveProgress } from "./progress";
+import { saveProgress } from "../progress";
 import { getServerSession } from "next-auth";
-import { myId } from "./utils";
-import { _notifyProductionAssigned } from "./notifications";
+import { myId } from "../utils";
+import { _notifyProductionAssigned } from "../notifications";
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
 

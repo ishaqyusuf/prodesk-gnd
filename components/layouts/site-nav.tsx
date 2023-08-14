@@ -11,11 +11,10 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   nav: ISidebar;
 }
 
-export default function SideNav({ className, nav }: SidebarProps) {
+export default function SiteNav({ className, onClick, nav }: SidebarProps) {
   //   const [routes, setRoutes] = useState<any>([]);
   //   useEffect(() => {
-  //     // console.log(session);
-  //     setRoutes(useSidebarRoutes(session));
+  //       //     setRoutes(useSidebarRoutes(session));
   //   }, [session?.user?.id]);
   const pathname = usePathname();
   function routeBtn(route: { icon: any; path: string; title: string }, i) {
@@ -28,7 +27,7 @@ export default function SideNav({ className, nav }: SidebarProps) {
         size="sm"
         className={`w-full justify-start ${isActive ? "bg-accent" : ""}`}
       >
-        <Link href={route.path}>
+        <Link onClick={onClick as any} href={route.path}>
           {route.icon && <route.icon className="mr-2 h-4 w-4" />}
           {route.title}
         </Link>

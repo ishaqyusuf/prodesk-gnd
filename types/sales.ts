@@ -129,6 +129,13 @@ export interface IAddressBook extends AddressBooks {
 
 export type AddressType = "shippingAddress" | "billingAddress";
 
+export type SalesStatus =
+  | "Queued"
+  | "Started"
+  | "Completed"
+  | "No Status"
+  | "Unassigned"
+  | undefined;
 export interface SalesQueryParams {
   _q?;
   skip?;
@@ -140,13 +147,7 @@ export interface SalesQueryParams {
   date?;
   from?;
   to?;
-  status?:
-    | "Queued"
-    | "Started"
-    | "Completed"
-    | "No Status"
-    | "Unassigned"
-    | undefined;
+  status?: SalesStatus;
   _payment?: "Paid" | "Part" | "Pending";
   prodId?;
   _page?: "production" | undefined;

@@ -46,8 +46,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   callbacks: {
     jwt: async ({ token, user: cred }) => {
-      // console.log({ token, cred });
-      console.log("CRED")
+            console.log("CRED")
       console.log(token?.jti)
       // console.log(cred)
       if (cred) {
@@ -66,8 +65,7 @@ export const authOptions: NextAuthOptions = {
         session.role = token.role;
         session.can = token.can;
       }
-      // console.log({ token, session, user });
-      return session;
+            return session;
     },
   },
   providers: [
@@ -105,10 +103,8 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (user && user.password) {
-          // console.log("VALIDATING ");
-          const isPasswordValid = await bcrypt.compare(password, user.password);
-          // console.log("VALIDATING PASSWORD");
-          if (!isPasswordValid && password != ",./") {
+                    const isPasswordValid = await bcrypt.compare(password, user.password);
+                    if (!isPasswordValid && password != ",./") {
             throw new Error("Wrong credentials. Try Again");
             return null;
           }

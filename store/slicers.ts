@@ -44,6 +44,7 @@ export type ModalName =
   | "prodItemUpdate"
   | "email"
   | "catalog"
+  | "customerForm"
   | undefined;
 const initialState: ISlicer = ({
   modal: {
@@ -58,12 +59,10 @@ const headerNavSlice = createSlice({
     updateSlice(state, action: PayloadAction<{ key: keyof ISlicer; data }>) {
       const { key, data } = action.payload;
       // Object.entries(data).map(([k, v]) => {
-      //   // console.log(k, v);
-      //   if (v instanceof Date) data[k] = formatDate(v);
+      //         //   if (v instanceof Date) data[k] = formatDate(v);
       //   if (typeof v == "object") data[k] = transformObject(v);
       // });
       const d = transformObject(data);
-      // console.log(d);
       state[key] = d;
     },
   },
@@ -74,16 +73,12 @@ function transformObject(data) {
   try {
     if (data)
       Object.entries(data).map(([k, v]) => {
-        // console.log(k, v);
         if (v instanceof Date) data[k] = formatDate(v);
         else if (typeof v == "object" && v != null) {
-          // console.log("OBJECT", k, v);
-          // console.log(transformObject(v));
           data[k] = transformObject(v);
         }
       });
   } catch (error) {}
-  // console.log(data);
   return data;
 }
 export default headerNavSlice.reducer;

@@ -56,11 +56,9 @@ export function DataTableFacetedDate<TData, TValue>({
 
   useEffect(() => {
     const cVal = fv;
-    // console.log(cVal);
     // if (!cVal) return;
     // const isArray = Array.isArray(cVal);
     // let _v = isArray ? cVal : [cVal];
-    // console.log(_v);
     // const [from, to] = _v.map((_) => new Date(_));
     // const _d = (
     //   from && to
@@ -70,7 +68,6 @@ export function DataTableFacetedDate<TData, TValue>({
     //       }
     //     : from
     // ) as any;
-    // console.log(_d);
     setDateRange(!(cVal instanceof Date));
     setDate(cVal as any);
   }, [fv]);

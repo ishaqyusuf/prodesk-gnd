@@ -93,7 +93,7 @@ export default function InvoiceTableRowAction({
               Add Line
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuItem onClick={() => _addLine(rowIndex - 1)}>
+              <DropdownMenuItem onClick={() => _addLine(rowIndex)}>
                 <ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Before
               </DropdownMenuItem>

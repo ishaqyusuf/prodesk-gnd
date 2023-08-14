@@ -19,7 +19,7 @@ export function Breadcrumbs({ children, separator }: BreadcrumbsProps) {
   return createPortal(
     <nav
       aria-label="breadcrumbs"
-      className="flex items-center text-sm font-medium text-muted-foreground"
+      className="  items-center text-sm font-medium text-muted-foreground hidden md:flex"
     >
       {children}
     </nav>,

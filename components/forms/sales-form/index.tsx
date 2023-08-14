@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SalesFormResponse } from "@/app/_actions/sales-form";
+import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import { ISalesOrder, ISalesOrderMeta, ISaveOrder } from "@/types/sales";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { deepCopy } from "@/lib/deep-copy";
 import { numeric } from "@/lib/use-number";
 import { SalesOrderItems, SalesOrders } from "@prisma/client";
-import { saveOrderAction } from "@/app/_actions/sales";
+import { saveOrderAction } from "@/app/_actions/sales/sales";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { formatDate } from "@/lib/use-day";
@@ -28,6 +28,7 @@ import { store } from "@/store";
 import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
 import { Input } from "@/components/ui/input";
 import {
+  Form,
   // Form,
   FormControl,
   FormField,
@@ -36,6 +37,7 @@ import {
 } from "@/components/ui/form";
 import { openModal } from "@/lib/modal";
 import CatalogModal from "@/components/modals/catalog-modal";
+import { removeEmptyValues } from "@/lib/utils";
 
 interface Props {
   data: SalesFormResponse;
@@ -107,21 +109,19 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       customer,
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
-    // console.log(formValues);
-    // console.log(_items);
     if (!id) formValues.amountDue = formValues.grandTotal;
+    formValues.meta = removeEmptyValues(formValues.meta);
     const deleteIds: number[] = [];
-    console.log(_items);
     let items = _items
       ?.map((item, index) => {
         if (!item.description && !item?.total) {
           if (item.id) deleteIds.push(item.id);
           return null;
         }
-        item.meta = {
+        item.meta = removeEmptyValues({
           ...(item.meta as any),
           line_index: index,
-        };
+        });
         return numeric<SalesOrderItems>(
           ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
           item
@@ -155,9 +155,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           </h2>
         </div>
         <div className="sitems-center flex space-x-2">
-          <Button size="sm" onClick={() => openModal("catalog", {})}>
-            Catalog
-          </Button>
+          <CatalogModal form={form} ctx={data.ctx} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm">Save</Button>
@@ -202,7 +200,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             </DropdownMenuContent>
           </DropdownMenu>
           <OrderPrinter />
-          <CatalogModal form={form} ctx={data.ctx} />
         </div>
       </section>
       <section
@@ -210,7 +207,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5"
       >
         <div className="col-span-2 ">
-          <div className="group relative h-full w-full   rounded border p-2 text-start">
+          <div className="group relative  h-full w-full  rounded border border-slate-300 p-2 text-start hover:bg-slate-100s hover:shadows">
             <div className="space-y-1">
               {orderInformation.map((line, key) => (
                 <div
@@ -228,22 +225,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                     )}
                     {key == 1 && (
                       <div className="flex justify-end">
-                        {/* <Form {...form}>
-                          <FormField
-                            control={form.control}
-                            name="meta.qb"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    className="h-6 w-[100px] uppercase"
-                                    {...field}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </Form> */}
+                        <Input
+                          className="h-6 w-[100px] uppercase"
+                          {...form.register("meta.qb")}
+                        />
                       </div>
                     )}
                     {key > 1 && (

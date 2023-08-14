@@ -18,6 +18,7 @@ import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { ISidebar } from "@/lib/navs";
 import Notification from "../notification";
+import { MobileNav } from "../mobile-nav";
 export default function SiteHeader({ nav }: { nav: ISidebar }) {
   const { data: session } = useSession();
 
@@ -30,6 +31,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
         nav.noSideBar && "lg:px-16"
       )}
     >
+      <MobileNav nav={nav} />
       <div className={cn(!nav.noSideBar && "md:hidden", "mr-4  h-10 w-10")}>
         <Icons.logo />
       </div>

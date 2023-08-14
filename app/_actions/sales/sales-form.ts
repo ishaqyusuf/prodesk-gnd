@@ -70,7 +70,6 @@ async function formCtx(): Promise<SalesFormCtx> {
       title: true,
     },
   });
-  // console.log(meta);
   return {
     settings: meta,
     profiles: profiles as any,
@@ -114,7 +113,6 @@ async function newSalesFormAction(
       },
     });
     if (customer) {
-      // console.log(customer);
       form.customerId = customer.id;
       form.meta.sales_profile =
         customer.profile?.title || ctx.settings?.sales_profile;

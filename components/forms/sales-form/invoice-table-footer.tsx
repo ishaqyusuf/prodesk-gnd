@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableRow,
 } from "@/components/ui/table";
@@ -19,7 +18,7 @@ import {
 import { store, useAppSelector } from "@/store";
 import { footerEstimate } from "@/lib/sales/sales-invoice-form";
 import { IPaymentOptions, ISalesOrderForm } from "@/types/sales";
-import { SalesFormCtx } from "@/app/_actions/sales-form";
+import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import Money from "@/components/money";
 import { cn } from "@/lib/utils";
 export default function InvoiceTableFooter({
@@ -38,8 +37,6 @@ export default function InvoiceTableFooter({
 
   const paymentOption = form.watch("meta.payment_option");
   React.useEffect(() => {
-    console.log("TOTAL CHANGED!");
-    // console.log(slice.footerInfo);
     footerEstimate({
       form,
       footerInfo: slice.footerInfo,

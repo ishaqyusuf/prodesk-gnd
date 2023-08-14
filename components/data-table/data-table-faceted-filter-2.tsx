@@ -44,9 +44,10 @@ options: Option[]
   dateTypeColumn?: Column<TData, TValue>;
   rangeSwitch?: Boolean;
   defaultValue?: String
+  value?,setValue?
 }
 export function DataTableFacetedFilter2<TData, TValue>({
-  title,
+  title,value,setValue,
   options,single,column,defaultValue
 }: DataTableFacetedFilter<TData,TValue>) {
 
@@ -62,10 +63,8 @@ export function DataTableFacetedFilter2<TData, TValue>({
     if (v) {
       const ns = new Set(_selectedValues);
       if (single) {
-        // console.log(isArray ? v[0] : v);
-        ns.add(isArray ? v[0] : v);
-        // console.log(_selectedValues.size);
-      } else {
+                ns.add(isArray ? v[0] : v);
+              } else {
         (isArray ? v : [v]).map((_v) => ns.add(_v));
       }
       setSelectedValue(ns);
@@ -166,6 +165,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
                         filterValues
                       );
                       setSelectedValue(ns);
+                      setValue &&setValue(single? filterValues?.[0]: filterValues)
                     }}
                   >
                     {!single && (
@@ -201,6 +201,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
                     onSelect={() => {
                       setSelectedValue(new Set());
                       column?.setFilterValue(undefined);
+                      setValue && setValue(undefined)
                     }}
                     className="justify-center text-center"
                   >

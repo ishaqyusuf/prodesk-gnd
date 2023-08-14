@@ -59,7 +59,7 @@ export default function OrdersTableShell<T>({
       {
         accessorKey: "invoice",
         header: ColumnHeader("Total/Due"),
-        cell: ({ row }) => OrderInvoiceCell(row.original, false),
+        cell: ({ row }) => <OrderInvoiceCell order={row.original} />,
       },
       {
         accessorKey: "production",

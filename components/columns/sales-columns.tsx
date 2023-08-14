@@ -18,7 +18,7 @@ import {
 import { priorities } from "@/lib/sales/order-priority";
 import { FlagIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { updateOrderPriorityActon } from "@/app/_actions/sales";
+import { updateOrderPriorityActon } from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
 import { Progress } from "../ui/progress";
@@ -133,20 +133,25 @@ export function OrderMemoCell(
     </div>
   );
 }
-export function OrderInvoiceCell(
-  order: ISalesOrder | undefined,
-  isEstimate = false,
-  link: string | undefined = undefined
-) {
+interface OrderInvoiceCellProps {
+  order: ISalesOrder | undefined;
+  isEstimate?: Boolean;
+  link?: string | undefined;
+}
+export function OrderInvoiceCell({
+  order,
+  isEstimate,
+  link,
+}: OrderInvoiceCellProps) {
   return (
-    <LinkCell link={link} row={order}>
+    <div>
       <div className="font-medium uppercase">${toFixed(order?.grandTotal)}</div>
       {!isEstimate && (
         <span className="text-muted-foreground">
           ${toFixed(order?.amountDue) || "0.00"}
         </span>
       )}
-    </LinkCell>
+    </div>
   );
 }
 export function OrderStatus(order: ISalesOrder | undefined) {
@@ -183,7 +188,7 @@ export function ProdOrderCell(
   link: string | undefined = undefined
 ) {
   return (
-    <LinkCell row={order} link={link} slug="orderId">
+    <LinkCell row={order} link={link} slug={order?.orderId}>
       <PrimaryCellContent>{order?.customer?.name}</PrimaryCellContent>
       <SecondaryCellContent>{order?.orderId}</SecondaryCellContent>
     </LinkCell>

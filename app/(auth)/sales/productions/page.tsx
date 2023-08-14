@@ -5,7 +5,7 @@ import SalesProductionTableShell from "@/components/shells/sales-production-tabl
 import {
   getSalesProductionsAction,
   prodsDueToday,
-} from "@/app/_actions/sales-production";
+} from "@/app/_actions/sales/sales-production";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductionsCrumb } from "@/components/breadcrumbs/links";
 import { Metadata } from "next";

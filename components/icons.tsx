@@ -27,6 +27,7 @@ import {
   type  LucideIcon,
   EyeOff,
   Eye,
+  Menu,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -47,6 +48,7 @@ export const Icons = {
     </Link>
   ),
   close: X,
+  menu: Menu,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,

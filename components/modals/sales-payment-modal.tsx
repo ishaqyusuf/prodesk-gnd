@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import {
   PaymentOrderProps,
   applyPaymentAction,
-} from "@/app/_actions/sales-payment";
+} from "@/app/_actions/sales/sales-payment";
 import { Checkbox } from "../ui/checkbox";
 import { deepCopy } from "@/lib/deep-copy";
 import { Info } from "../info";
@@ -57,7 +57,6 @@ export default function SalesPaymentModal() {
     Object.values<ISalesOrder | undefined>(selection).map(
       (v) => (total += v?.amountDue || 0)
     );
-    // console.log(selection);
     setTotal(total);
     form.setValue("pay", total);
   }, [selection]);

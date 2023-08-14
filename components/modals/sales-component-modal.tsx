@@ -25,7 +25,7 @@ import {
 import Combobox from "../combo-box";
 import { OrderInventory } from "@prisma/client";
 import { UseFormReturn, useForm } from "react-hook-form";
-import { searchOrderInventoryAction } from "@/app/_actions/inventory";
+import { searchOrderInventoryAction } from "@/app/_actions/sales/inventory";
 import { Input } from "../ui/input";
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import { Label } from "../ui/label";
@@ -33,11 +33,11 @@ import { ComponentPriceHistory } from "../sales/component-price-history-pop";
 import { ToolTip } from "../tool-tip";
 import { Button } from "../ui/button";
 import { Eraser } from "lucide-react";
-import { SalesFormCtx } from "@/app/_actions/sales-form";
+import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import { ISalesComponentModal } from "@/types/modal";
 import Btn from "../btn";
 import { deepCopy } from "@/lib/deep-copy";
-import { saveSalesComponentAction } from "@/app/_actions/sales-components";
+import { saveSalesComponentAction } from "@/app/_actions/sales/sales-components";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { closeModal } from "@/lib/modal";
 import { store } from "@/store";
@@ -64,7 +64,6 @@ export default function SalesComponentModal({
   const watchSums = frm.watch(wFields as any);
   const [total, setTotal] = useState<number>();
   useEffect(() => {
-    console.log(watchSums, "...");
     let totals = 0;
     watchSums.map((c) => (totals += convertToNumber(c)));
     setTotal(totals?.toFixed(2) as any);
@@ -91,10 +90,7 @@ export default function SalesComponentModal({
         if (_wizardComponent) _wizardForm[w.uuid] = _wizardComponent;
       }
     });
-    console.log(">>>>");
-    // console.log(wFields);
     setWFields(wFields);
-    console.log(_componentWizard);
     setWizardForm(_componentWizard);
 
     frm.setValue("components", _wizardForm);
@@ -109,11 +105,8 @@ export default function SalesComponentModal({
         if (!v) return;
         const { qty, price } = v;
         let _total = (v.total = convertToNumber(qty) * convertToNumber(price));
-        // console.log(qty, price, _total);
-        // console.log(qty, price, _total);
         components[k] = v;
         total += convertToNumber(_total);
-        // console.log(total);
       });
       const response = await saveSalesComponentAction(
         components,
@@ -134,16 +127,11 @@ export default function SalesComponentModal({
 
       const itemK = `items.${rowIndex}`;
       form.setValue(`items.${rowIndex}.description`, description);
-      // console.log(description);
-      // console.log(_fields);
       form.setValue(`items.${rowIndex}.meta.components`, components);
       form.setValue(`items.${rowIndex}.meta.isComponent`, true);
-      console.log(total);
       form.setValue(`items.${rowIndex}.price`, convertToNumber(total, 0));
       const validQty = (qty || 0) > 0;
-      console.log([qty, validQty]);
       if (!validQty) {
-        // console.log(form.getValues(`items.${slice.rowIndex}.qty`));
         qty = 1;
         // form.setValue(`items.${slice.rowIndex}.qty`, 1);
       }
@@ -321,7 +309,6 @@ function ComponentInput({
   // const [history]
   async function searchFn(q) {
     // 628.45 1071.6
-    console.log("SEACHING", field.category);
     const query = {
       category: field.category,
       q,
@@ -337,9 +324,7 @@ function ComponentInput({
   return (
     <Combobox<OrderInventory>
       allowCreate
-      selected={(product) => {
-        // console.log(product);
-      }}
+      selected={(product) => {}}
       labelKey="name"
       valueKey="name"
       align="start"

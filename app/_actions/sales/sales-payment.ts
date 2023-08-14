@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { toFixed } from "@/lib/use-number";
 import { ISalesPayment } from "@/types/sales";
 
 export interface PaymentOrderProps {
@@ -60,5 +61,25 @@ export async function fixPaymentAction({
     data: {
       amountDue,
     },
+  });
+}
+export async function fixSalesPaymentAction(id) {
+  const order = await prisma.salesOrders.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      payments: true,
+    },
+  });
+  let totalPaid = 0;
+  order?.payments?.map((p) => {
+    totalPaid += p.amount || 0;
+  });
+
+  let amountDue = (order?.grandTotal || 0) - totalPaid;
+  await fixPaymentAction({
+    id,
+    amountDue: +toFixed(amountDue),
   });
 }

@@ -13,7 +13,7 @@ export default function OrderOverviewActions({}: Props) {
   const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
   return (
     <div className="flex space-x-2">
-      <Link href={_linkDir} className="hover:underline">
+      <Link className="hidden sm:block" href={_linkDir}>
         <Button className="h-8 w-8 p-0" variant="outline">
           <Pencil className="h-4 w-4" />
         </Button>

@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useDebounce } from "@/hooks/use-debounce";
 import { AddressType, IAddressBook, ISalesAddressForm } from "@/types/sales";
-import { findAddressAction } from "@/app/_actions/sales-address";
+import { findAddressAction } from "@/app/_actions/sales/sales-address";
 
 export default function AddressSearchPop({
   type,
@@ -43,7 +43,6 @@ export default function AddressSearchPop({
       form.setValue("profile", customer.profile);
   }
   useEffect(() => {
-    // console.log("SEARCH", q);
     loadAddress();
   }, [debouncedQuery]);
   return (
@@ -64,7 +63,6 @@ export default function AddressSearchPop({
             <CommandInput
               value={q}
               onValueChange={(v) => {
-                // console.log(v);
                 setQ(v);
               }}
               placeholder="Search Address..."

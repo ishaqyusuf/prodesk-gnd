@@ -39,7 +39,7 @@ import {
   copyOrderAction,
   deleteOrderAction,
   moveEstimateToOrderAction,
-} from "@/app/_actions/sales";
+} from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { dispatchSlice, updateSlice } from "@/store/slicers";
 import { useBool } from "@/lib/use-loader";
@@ -49,7 +49,7 @@ import {
   adminCompleteProductionAction,
   cancelProductionAssignmentAction,
   markProductionIncompleteAction,
-} from "@/app/_actions/sales-production";
+} from "@/app/_actions/sales/sales-production";
 import { openModal } from "@/lib/modal";
 import { EmailModalProps } from "@/types/email";
 

@@ -2,7 +2,7 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
 import SalesProductionTableShell from "@/components/shells/sales-production-table-shell";
-import { getSalesProductionsAction } from "@/app/_actions/sales-production";
+import { getSalesProductionsAction } from "@/app/_actions/sales/sales-production";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductionsCrumb } from "@/components/breadcrumbs/links";
 import { Metadata } from "next";

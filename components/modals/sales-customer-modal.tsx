@@ -19,10 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAppSelector } from "@/store";
 import { useLoader } from "@/lib/use-loader";
-import { CustomerTypes } from "@prisma/client";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { Edit2, MapPin, Phone, User } from "lucide-react";
 import * as React from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -34,7 +31,7 @@ import {
 } from "@/types/sales";
 import Btn from "../btn";
 import AddressSearchPop from "../sales/address-search-pop";
-import { saveAddressAction } from "@/app/_actions/sales-address";
+import { saveAddressAction } from "@/app/_actions/sales/sales-address";
 
 export function SalesCustomerModal({
   form,
@@ -101,7 +98,6 @@ export function SalesCustomerModal({
       onOpenChange={(e) => {
         if (!e) setOpen(e);
         else {
-          // console.log(">>>>>>>>>");
           const [title, coefficient] = form.getValues([
             "meta.sales_profile",
             "meta.sales_percentage",

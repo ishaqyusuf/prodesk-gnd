@@ -21,7 +21,6 @@ export async function dbUpgradeAction() {
   //     type: true,
   //   },
   // });
-  // console.log(_);
   // return;
 
   await transformSettings();

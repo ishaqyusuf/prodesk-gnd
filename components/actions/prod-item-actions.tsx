@@ -5,7 +5,7 @@ import { CheckCircle, Play, StopCircle, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useCallback, useState, useTransition } from "react";
 import { ISalesOrderItem, ProdActions } from "@/types/sales";
-import { orderItemProductionAction } from "@/app/_actions/sales-production";
+import { orderItemProductionAction } from "@/app/_actions/sales/sales-production";
 import { openModal } from "@/lib/modal";
 import { toast } from "sonner";
 interface IProp {

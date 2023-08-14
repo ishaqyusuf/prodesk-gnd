@@ -1,6 +1,6 @@
 "use client";
 
-import { fixPaymentAction } from "@/app/_actions/sales-payment";
+import { fixPaymentAction } from "@/app/_actions/sales/sales-payment";
 import Btn from "@/components/btn";
 import Money from "@/components/money";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,7 +27,7 @@ export default function CostBreakdown() {
       <Money value={order?.tax} />
     ),
     keyValue(
-      `C.C.C (${order?.meta?.ccc_percentage}%)`,
+      `C.C.C (${order?.meta?.ccc_percentage || 0}%)`,
       <Money value={order?.meta?.ccc || 0} />
     ),
     keyValue(`Total`, <Money value={order?.grandTotal} />),
@@ -50,7 +50,7 @@ export default function CostBreakdown() {
     });
   }
   return (
-    <div className="col-span-1">
+    <div className="sm:col-span-1">
       <Card>
         <CardContent className="bg-gray-100">
           <Table>

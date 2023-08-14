@@ -120,22 +120,7 @@ export function DataTableToolbar<TData,TValue>({
             <TrashIcon className="mr-2 h-4 w-4" aria-hidden="true" />
             Delete
           </Button>
-        ) : newRowLink ? (
-          <Link aria-label="Create new row" href={newRowLink}>
-            <div
-              className={cn(
-                buttonVariants({
-                  variant: "outline",
-                  size: "sm",
-                  className: "h-8",
-                })
-              )}
-            >
-              <PlusCircledIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-              New
-            </div>
-          </Link>
-        ) : null}
+        )  : null}
         <DataTableViewOptions table={table} />
       </div>
     </div>

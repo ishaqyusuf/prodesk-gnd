@@ -6,6 +6,8 @@ import { ISaveOrder } from "@/types/sales";
 import dayjs from "dayjs";
 import orderProdQtyUpdateAction from "./sales";
 import va from "@/lib/va";
+import { fixSalesPaymentAction } from "./sales-payment";
+import { transformData } from "@/lib/utils";
 
 export async function saveOrderAction({
   id,
@@ -40,9 +42,7 @@ export async function saveOrderAction({
   }
   console.log(slug);
   const metadata = {
-    createdAt: new Date(),
-    ...(_order as any),
-    updatedAt: new Date(),
+    ...transformData<any>(_order, id != null),
     slug,
     orderId,
     // customer: customerId && {
@@ -62,14 +62,13 @@ export async function saveOrderAction({
     //   },
     // },
   };
-  // Object.entries({
-  //   customer: customerId,
-  //   shippingAddress: shippingAddressId,
-  //   billingAddress: billingAddressId,
-  // }).map(([k, v]) => {
-  //   v && (metadata[k] = { connect: { id: v } });
-  // });
-  // console.log(metadata);
+  Object.entries({
+    customer: customerId,
+    shippingAddress: shippingAddressId,
+    billingAddress: billingAddressId,
+  }).map(([k, v]) => {
+    v && (metadata[k] = { connect: { id: v } });
+  });
   if (!id && salesRepId)
     metadata.salesRep = {
       connect: {
@@ -100,8 +99,7 @@ export async function saveOrderAction({
     data: items
       .map((item) => {
         if (item.id) return null;
-        item.createdAt = item.updatedAt = new Date();
-        return item;
+        return transformData(item, true);
       })
       .filter(Boolean) as any,
   };
@@ -119,7 +117,6 @@ export async function saveOrderAction({
     : await prisma.salesOrders.create({
         data: {
           ...metadata,
-          createdAt: new Date(),
           items: {
             createMany,
           },
@@ -139,5 +136,6 @@ export async function saveOrderAction({
   await orderProdQtyUpdateAction(sale_order.id);
   if (id) va.track("sales updated", { type: sale_order.type });
   else va.track("sales created", { type: sale_order.type });
+  if (id && order.type == "order") await fixSalesPaymentAction(id);
   return sale_order;
 }

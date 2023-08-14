@@ -1,4 +1,4 @@
-import { getOrderAction } from "@/app/_actions/sales";
+import { getOrderAction } from "@/app/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   EstimatesCrumb,

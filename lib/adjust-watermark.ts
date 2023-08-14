@@ -17,11 +17,8 @@ export function adjustWatermark(orderIds: string[]) {
 
     let totalLineHeight = 0;
     document.querySelectorAll(selector("tbody  tr")).forEach((e, i) => {
-      // console.log([e.id, e.clientHeight, th]);
       if (e.id == "filler") {
         // e.classList.remove('hidden');
-        // console.log(e);
-        // console.log(e.querySelector('td div#filler'));
       } else totalLineHeight += e.clientHeight;
     });
     const lp = totalLineHeight % invoiceHeight;
@@ -42,13 +39,10 @@ export function adjustWatermark(orderIds: string[]) {
         const topPx = Math.ceil(
           pgHeight * pages + headerHeight + invoiceHeight / 2
         );
-        // console.log([pgHeight, pages, headerHeight, invoiceHeight]);
         n.style.top = `${topPx}px`;
-        // console.log([topPx]);
         w.after(n);
         pages++;
       }
-    // console.log(pages);
     // if (fl) {
     //   const h = `${px}px`;
     //   //   fl.style.height = h;

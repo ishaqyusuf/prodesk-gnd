@@ -29,7 +29,6 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
       const _ = generateItem(uid, _itemsByIndex[uid]);
       return _;
     });
-  console.log(_items);
   return _items;
 }
 export function generateItem(line_index, baseItem: any = null) {
@@ -64,7 +63,6 @@ export function moreInvoiceLines(fields: ISalesOrderItem[]) {
       fields.push(generateItem(uid + baseUID));
     });
   return fields;
-  // console.log(".......");
 }
 export function addLine(toIndex, fields: ISalesOrderItem[]) {
   if (toIndex == -1) fields.unshift(generateItem(0));
@@ -75,7 +73,6 @@ export function addLine(toIndex, fields: ISalesOrderItem[]) {
       generateItem(toIndex),
       ...fields.slice(toIndex),
     ];
-  console.log(fields.length);
   return calibrateLines(fields);
 }
 export function calibrateLines(fields) {
@@ -106,7 +103,6 @@ export function footerEstimate({
   // const b = form.getValues("");
   const taxPercentage = convertToNumber(form.getValues("taxPercentage"), 0);
   const cccPercentage = settings?.ccc;
-  console.log(footerInfo.rows);
   Object.entries(footerInfo.rows).map(([k, row]) => {
     if (row.total > 0) {
       subTotal += +row.total;
@@ -164,11 +160,8 @@ export function composeItemDescription({
   kvForm,
 }: ComposeItemDescriptionProps) {
   let description = wizard.titleMarkdown;
-  console.log("MARKDOWN:", description);
-  console.log(kvForm);
   wizard.form.map((f) => {
     let fv = kvForm[f.uuid];
-    console.log(fv);
     let title = fv?.title || f?.defaultPrintValue || "";
     description = description.replace(`@${f.label}`, title);
   });

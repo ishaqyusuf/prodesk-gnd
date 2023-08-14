@@ -3,7 +3,7 @@ import { TableCell } from "@/components/ui/table";
 import { deepCopy } from "@/lib/deep-copy";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ItemCell({ rowIndex, form }) {
   const { register } = form;
@@ -14,6 +14,11 @@ export default function ItemCell({ rowIndex, form }) {
   const baseKey = `items.${rowIndex}`;
   const isComponent = form.watch(`${baseKey}.meta.isComponent`);
   const item = form.watch(baseKey);
+  const getCellValue = () => form.getValues(`items.${rowIndex}.description`);
+  const [cellValue, setCellValue] = useState(getCellValue() || undefined);
+  useEffect(() => {
+    setCellValue(getCellValue() || undefined);
+  }, [rowIndex]);
   return (
     <TableCell
       onClick={() => {
@@ -27,12 +32,12 @@ export default function ItemCell({ rowIndex, form }) {
         {...register(`${baseKey}.description`)}
       /> */}
       {isComponent == true ? (
-        <button className="">
+        <button className="p-0.5">
           <div
             // dangerouslySetInnerHTML={{
             //   __html: form.getValues(`${baseKey}.description`),
             // }}
-            className="line-clamp-2s  relative w-full p-0.5 text-start font-semibold"
+            className="line-clamp-2s font-medium text-primary text-sm relative w-full p-0.5 text-start"
           >
             {form.getValues(`${baseKey}.description`)}
           </div>
@@ -40,7 +45,12 @@ export default function ItemCell({ rowIndex, form }) {
       ) : (
         <Input
           className="h-8 w-full p-1 font-medium"
-          {...register(`${baseKey}.description`)}
+          // {...register(`${baseKey}.description`)}
+          value={cellValue}
+          onChange={(e) => {
+            setCellValue(e.target.value);
+            form.setValue(`items.${rowIndex}.description`, e.target.value);
+          }}
         />
       )}
     </TableCell>

@@ -53,10 +53,10 @@ export const ColumnHeader = (title) => {
   );
   return c;
 };
-export const LinkCell = ({ row, link, children, slug = "id" }) => {
+export const LinkCell = ({ row, link, children, slug }) => {
   if (!row) return <></>;
-  link = link?.replace("slug", row?.[slug].toString());
-  const Node = link ? Link : Fragment;
+  link = link?.replace("slug", slug?.toString());
+  const Node = link && slug ? Link : Fragment;
   return (
     <div className="w-full">
       <Node href={link || ""} className={cn(link && "hover:underline")}>

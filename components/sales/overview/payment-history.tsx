@@ -45,7 +45,9 @@ export default function PaymentHistory() {
                   <TableCell className="p-1 text-left">
                     <Money value={item.amount} className="font-medium" />
                     <p className="text-muted-foreground">
-                      {item?.meta?.paymentOption || item?.meta?.payment_option}
+                      {item?.meta?.paymentOption ||
+                        item?.meta?.payment_option ||
+                        order?.meta?.payment_option}
                     </p>
                   </TableCell>
                 </TableRow>

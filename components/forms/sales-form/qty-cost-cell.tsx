@@ -6,8 +6,9 @@ import { convertToNumber, toFixed } from "@/lib/use-number";
 import React, { memo } from "react";
 import { ISalesOrderForm } from "@/types/sales";
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
+import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 
-function QtyCostCell({ rowIndex, form }: { rowIndex; form: ISalesOrderForm }) {
+function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
   const { register } = form;
   const baseKey = `items.${rowIndex}`;
 
@@ -24,8 +25,8 @@ function QtyCostCell({ rowIndex, form }: { rowIndex; form: ISalesOrderForm }) {
       setQty(_qty);
       setPrice(_price);
     }
-    // if (rowIndex == 0) console.log(rowIndex, ...itemTotal);
   }, [slice.itemPriceData]);
+  // if (rowIndex == 0)   }, [slice.itemPriceData]);
   // React.useEffect(() => {
   //   setQty(form.getValues(`${baseKey}.qty` as any));
   //   setPrice(form.getValues(`${baseKey}.price` as any));

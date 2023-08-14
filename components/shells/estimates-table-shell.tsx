@@ -39,7 +39,7 @@ export default function EstimatesTableShell<T>({
       {
         accessorKey: "invoice",
         header: ColumnHeader("Total"),
-        cell: ({ row }) => OrderInvoiceCell(row.original, true),
+        cell: ({ row }) => <OrderInvoiceCell order={row.original} isEstimate />,
       },
 
       {

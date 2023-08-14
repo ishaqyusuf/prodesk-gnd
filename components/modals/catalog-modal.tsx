@@ -1,54 +1,69 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import Btn from "../btn";
-import { ScrollArea } from "../ui/scroll-area";
-import BaseModal from "./base-modal";
-import { IProduct, IProductVariant } from "@/types/product";
+import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import { useDebounce } from "@/hooks/use-debounce";
-import { loadCatalog } from "@/app/_actions/catalog";
-import Money from "../money";
-import { Icons } from "../icons";
-import { useAppSelector } from "@/store";
-import { dispatchSlice } from "@/store/slicers";
-import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import {
+  IProduct,
+  IProductVariant,
+  IProductVariantMeta,
+} from "@/types/product";
+import { ISalesOrderForm } from "@/types/sales";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { Button } from "../ui/button";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { cn, keyValue } from "@/lib/utils";
+import Money from "../money";
+import { loadCatalog } from "@/app/_actions/sales/catalog";
+import { Skeleton } from "../ui/skeleton";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { useForm } from "react-hook-form";
+import { DialogFooter, DialogTitle } from "../ui/dialog";
 import { ArrowLeft } from "lucide-react";
-import { ISalesOrder, ISalesOrderForm } from "@/types/sales";
-import { closeModal, openModal } from "@/lib/modal";
+import Btn from "../btn";
+import { updateInventoryComponentTitleAction } from "@/app/_actions/sales/inventory";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
-import { SalesFormCtx } from "@/app/_actions/sales-form";
+import { DataTableFacetedFilter2 } from "../data-table/data-table-faceted-filter-2";
+import { productCategories } from "@/data/product-category";
 
 interface Props {
   form: ISalesOrderForm;
   ctx: SalesFormCtx;
 }
 export default function CatalogModal({ form: bigForm, ctx }: Props) {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const sliceProducts = useAppSelector((state) => state.slicers.products);
-  const [q, setQ] = useState("");
-  const [page, setPage] = useState(1);
-  const [selection, setSelection] = useState<IProductVariant | null>(null);
-  const debounceQuery = useDebounce(q, 800);
-  useEffect(() => {
-    setPage(1);
-    search();
-  }, [debounceQuery]);
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [category, setCategory] = React.useState("");
+  const debouncedQuery = useDebounce(query, 300);
+  const [products, setProducts] = React.useState<IProduct[]>([]);
+  const [selection, setSelection] = React.useState<IProductVariant | null>(
+    null
+  );
+  const [isPending, startTransition] = React.useTransition();
+
+  const [page, setPage] = React.useState(1);
+  const [lastPage, setLastPage] = React.useState(1);
   async function search() {
-    if (sliceProducts?.length > 0) return;
+    // if (sliceProducts?.length > 0) return;
     startTransition(async () => {
       //   if (products.length > 0) return;
-
-      const prods = await loadCatalog({
+      // console.log(debounceQuery);
+      const { items, pageInfo } = await loadCatalog({
         page,
-        q: debounceQuery,
+        q: debouncedQuery,
       });
-      setProducts([...products, ...(prods as IProduct[])]);
-      dispatchSlice("products", [...products, ...(prods as IProduct[])]);
+      setProducts([...products, ...(items as IProduct[])]);
+      setLastPage(pageInfo.pageCount);
+      // dispatchSlice("products", [...products, ...(prods as IProduct[])]);
     });
   }
   const form = useForm<{
@@ -58,168 +73,230 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
       title: "",
     },
   });
-  useEffect(() => {
-    setProducts([]);
-    // search();
-  }, []);
   function selectComponent() {
-    const items = bigForm.getValues("items");
-    const len = items?.length || 0;
-    let rowIndex = -1;
-    for (let i = 0; i < len; i++) {
-      if (rowIndex == -1) {
-        let itemIndex = i - 1;
-        let _item = items?.[itemIndex];
-        if (
-          !_item?.swing &&
-          !_item?.description &&
-          !_item?.qty &&
-          !_item?.total
-        ) {
-          rowIndex = itemIndex;
+    startTransition(async () => {
+      const items = bigForm.getValues("items");
+      const len = items?.length || 0;
+      let rowIndex = -1;
+      for (let i = 0; i < len; i++) {
+        if (rowIndex == -1) {
+          let itemIndex = i - 1;
+          let _item = items?.[itemIndex];
+          if (
+            !_item?.swing &&
+            !_item?.description &&
+            !_item?.qty &&
+            !_item?.total
+          ) {
+            rowIndex = itemIndex;
+          }
         }
       }
-    }
-    console.log(rowIndex);
-    closeModal();
-    if (rowIndex > -1) {
-      // const item: Partial<ISalesOrder> = ;
-      const uuid = ctx.settings?.wizard?.form.filter(
-        (f) => f.label == "Door"
-      )?.[0]?.uuid;
-      openComponentModal(
-        {
-          meta: {
-            uid: rowIndex,
-            isComponent: true,
-            components: {
-              [uuid]: {
-                title: form.getValues("title"),
-                qty: 1,
-                price: selection?.price || 0,
+      const title = form.getValues("title");
+      await updateInventoryComponentTitleAction({
+        title,
+        variantId: selection?.id,
+        meta: (selection?.meta || {}) as IProductVariantMeta,
+      });
+      //  closeModal();
+      setIsOpen(false);
+      if (rowIndex > -1) {
+        // const item: Partial<ISalesOrder> = ;
+        const uuid = ctx.settings?.wizard?.form.filter(
+          (f) => f.label == "Door"
+        )?.[0]?.uuid;
+        openComponentModal(
+          {
+            meta: {
+              uid: rowIndex,
+              isComponent: true,
+              components: {
+                [uuid]: {
+                  title: form.getValues("title"),
+                  qty: 1,
+                  price: selection?.price || 0,
+                },
               },
             },
-          },
-        } as any,
-        rowIndex
-      );
-    }
-  }
-  return (
-    <BaseModal<any>
-      onOpen={() => {
-        search();
-      }}
-      modalName="catalog"
-      className="sm:max-w-[500px]"
-      Title={() =>
-        selection ? (
-          <div className="flex items-center space-x-2">
-            <Button
-              onClick={() => setSelection(null)}
-              className="h-8 w-8 p-0"
-              variant="ghost"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <span>Component Title</span>
-          </div>
-        ) : (
-          <div>Product Catalog (Legacy)</div>
-        )
+          } as any,
+          rowIndex
+        );
       }
-      Content={() =>
-        !selection ? (
-          <div className="flex flex-col">
-            <ScrollArea className="max-h-[350px] text-sm">
-              {sliceProducts.map((product) => (
-                <table className="table-fixed w-full" key={product.id}>
-                  <thead>
-                    <tr>
-                      <th
-                        className="p-1  text-muted-foreground uppercase border-y border-slate-400 text-start"
-                        colSpan={12}
+    });
+  }
+  React.useEffect(() => {
+    search();
+  }, [debouncedQuery]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setIsOpen((isOpen) => !isOpen);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+  const handleSelect = React.useCallback((variant) => {
+    // setIsOpen(false);
+    // callback();
+    setSelection(variant);
+  }, []);
+  React.useEffect(() => {
+    if (!isOpen) {
+      setPage(1);
+      setProducts([]);
+
+      setQuery("");
+    }
+  }, [isOpen]);
+  return (
+    <>
+      <Button size="sm" onClick={() => setIsOpen(true)}>
+        Catalog
+      </Button>
+      <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
+        {!selection ? (
+          <>
+            <div className="relative">
+              <CommandInput
+                placeholder="Search catalog..."
+                value={query}
+                onValueChange={(e) => {
+                  setProducts([]);
+                  setPage(1);
+                  setQuery(e);
+                }}
+              />
+              <div className="absolutes hidden top-0 right-0 m-4 mx-12">
+                a
+                <DataTableFacetedFilter2
+                  title="Category"
+                  options={productCategories}
+                  single
+                  value={category}
+                  setValue={setCategory}
+                />
+              </div>
+            </div>
+            <CommandList>
+              <CommandEmpty
+                className={cn(
+                  isPending ? "hidden" : "py-6 text-center text-sm"
+                )}
+              >
+                No products found.
+              </CommandEmpty>
+              {isPending && products?.length == 0 ? (
+                <div className="space-y-1 overflow-hidden px-1 py-2">
+                  <Skeleton className="h-4 w-10 rounded" />
+                  <Skeleton className="h-8 rounded-sm" />
+                  <Skeleton className="h-8 rounded-sm" />
+                </div>
+              ) : (
+                products?.map((product, pid) => (
+                  <CommandGroup
+                    key={`prod-${pid}`}
+                    className="capitalize  text-sm"
+                    heading={product.title}
+                  >
+                    {product.variants?.map((variant, vid) => (
+                      <CommandItem
+                        className="p-0 cursor-pointer"
+                        key={`var-${vid}`}
+                        onSelect={() => handleSelect(variant)}
                       >
-                        {product.title}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {product.variants?.map((variant, i) => (
-                      <tr
-                        onClick={() => {
-                          const { variants, ...prod } = product;
-                          setSelection({
-                            ...variant,
-                            product: prod as any,
-                          });
-                          form.setValue(
-                            "title",
-                            variant.meta?.componentTitle || variant.title
-                          );
-                        }}
-                        className="cursor-pointer hover:bg-slate-100"
-                        key={variant.id}
-                      >
-                        <td colSpan={2} />
-                        <td
-                          colSpan={8}
-                          className={cn(i > 0 && "border-t border-slate-300")}
-                        >
-                          <p className="text-primary p-1">
-                            <span className="">{variant.variantTitle}</span>
-                            <span className="text-muted-foreground uppercase mx-2">
+                        <div className="w-full grid grid-cols-12">
+                          <span></span>
+                          <div className="col-span-9">
+                            <p className="text-sm font-medium leading-none">
+                              {variant.variantTitle}
+                            </p>
+                            <span className="text-muted-foreground uppercase text-sm">
                               ({variant.sku})
                             </span>
-                          </p>
-                        </td>
-                        <td
-                          colSpan={2}
-                          align="right"
-                          className={cn(i > 0 && "border-t", "px-2")}
-                        >
-                          <Money value={variant.price} />
-                        </td>
-                      </tr>
+                          </div>
+                          <div className="col-span-2 font-medium text-base flex justify-end">
+                            <Money value={variant.price} />
+                          </div>
+                        </div>
+
+                        {/* <div className="flex justify-between space-x-4">
+                      <div>
+                        <p>{variant.variantTitle}</p>
+                        <span className="text-muted-foreground uppercase">
+                          ({variant.sku})
+                        </span>
+                      </div>
+                      <Money value={variant.price} />
+                    </div> */}
+                      </CommandItem>
                     ))}
-                  </tbody>
-                </table>
-              ))}
-            </ScrollArea>
-            <div className="flex justify-center">
-              {isPending && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                    {products?.length - 1 == pid && lastPage > page && (
+                      <div className="flex justify-center my-2">
+                        <Btn
+                          className=""
+                          isLoading={isPending}
+                          onClick={() => {
+                            setPage(page + 1);
+                            search();
+                          }}
+                        >
+                          Load More
+                        </Btn>
+                      </div>
+                    )}
+                  </CommandGroup>
+                ))
               )}
-            </div>
-          </div>
+            </CommandList>
+          </>
         ) : (
-          <div>
-            <div className="inline-flex">
-              <div>
-                {/* <p className="font-semibold">{selection.product.title}</p> */}
-                <div className="flex justify-between">
-                  <p>{selection.title}</p>
-                  <p>
-                    <Money value={selection.price} />
-                  </p>
+          <CommandList>
+            <CommandGroup>
+              <div className="p-4 pt-2 space-y-4">
+                <div className="">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      onClick={() => setSelection(null)}
+                      className="h-8 w-8 p-0"
+                      variant="ghost"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                    <DialogTitle>Component Title</DialogTitle>
+                  </div>
                 </div>
+                <div className="inline-flex">
+                  <div>
+                    {/* <p className="font-semibold">{selection.product.title}</p> */}
+                    <div className="flex justify-between">
+                      <p>{selection.title}</p>
+                      <p>
+                        <Money value={selection.price} />
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="">
+                  <div className="grid gap-2">
+                    <Label>Component Title</Label>
+                    <Input {...form.register("title")} />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <div>
+                    <Btn isLoading={isPending} onClick={selectComponent}>
+                      Proceed
+                    </Btn>
+                  </div>
+                </DialogFooter>
               </div>
-            </div>
-            <div className="mt-4">
-              <div className="grid gap-2">
-                <Label>Component Title</Label>
-                <Input {...form.register("title")} />
-              </div>
-            </div>
-          </div>
-        )
-      }
-      noFooter={!selection}
-      Footer={({ data }) => (
-        <div>
-          <Btn onClick={selectComponent}>Proceed</Btn>
-        </div>
-      )}
-    />
+            </CommandGroup>
+          </CommandList>
+        )}
+      </CommandDialog>
+    </>
   );
 }

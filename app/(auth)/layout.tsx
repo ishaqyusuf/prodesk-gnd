@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { cn } from "@/lib/utils";
 import SiteHeader from "@/components/layouts/site-header";
 import { nav } from "@/lib/navs";
-import SideNav from "@/components/layouts/side-nav";
+import SiteNav from "@/components/layouts/site-nav";
 import EmailComposerModal from "@/components/modals/email-composer-modal";
 
 export default function AccountLayout({ children }: any) {
@@ -25,7 +25,7 @@ export default function AccountLayout({ children }: any) {
           "md:grid-cols-[220px_minmax(0,1fr)]   lg:grid-cols-[240px_minmax(0,1fr)]"} md:grid `}
       >
         {!sb.noSideBar && (
-          <SideNav
+          <SiteNav
             nav={sb}
             className="fixed top-0 z-30 -ml-2 hidden h-[calc(100vh)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block"
           />

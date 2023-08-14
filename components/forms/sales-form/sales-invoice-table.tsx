@@ -20,7 +20,7 @@ import { ISalesOrderForm } from "@/types/sales";
 import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
 import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
-import { SalesFormResponse } from "@/app/_actions/sales-form";
+import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import SalesComponentModal from "@/components/modals/sales-component-modal";
 
 export default function SalesInvoiceTable({

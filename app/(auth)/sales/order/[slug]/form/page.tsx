@@ -1,4 +1,7 @@
-import { SalesFormResponse, salesFormAction } from "@/app/_actions/sales-form";
+import {
+  SalesFormResponse,
+  salesFormAction,
+} from "@/app/_actions/sales/sales-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   BreadLink,

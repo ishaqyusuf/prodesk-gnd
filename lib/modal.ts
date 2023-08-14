@@ -3,7 +3,7 @@
 import { store, useAppSelector } from "@/store";
 import { ModalName, updateSlice } from "@/store/slicers";
 
-export function openModal<T>(name: ModalName, data: T) {
+export function openModal<T>(name: ModalName, data?: T) {
   store.dispatch(
     updateSlice({
       key: "modal",

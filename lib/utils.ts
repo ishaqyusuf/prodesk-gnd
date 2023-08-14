@@ -21,10 +21,14 @@ export function capitalizeFirstLetter(string) {
   if (!string) return string;
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+export function labelValue(key, value, extras: any = {}) {
+  return { key, value, extras };
+}
 export function keyValue(key, value) {
   return { key, value };
 }
 export function removeEmptyValues(obj) {
+  if (!obj) return obj;
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       if (obj[key] && typeof obj[key] === "object") {
@@ -42,4 +46,26 @@ export function removeEmptyValues(obj) {
       }
     }
   }
+  return obj;
 }
+export function transformData<T>(data: T, store = false) {
+  let date = new Date();
+  Object.entries({
+    createdAt: date,
+    updatedAt: date,
+  }).map(([k, v]) => !(store && k == "createdAt") && (data[k] = date));
+  let _data = data as any;
+  let meta = _data?.meta;
+  if (meta) _data.meta = removeEmptyValues(meta);
+  return _data as T;
+}
+export function sum<T>(array: T[], key: keyof T) {
+  return array.reduce(
+    (sum, product) => sum + ((product?.[key] || 0) as number),
+    0
+  );
+}
+export const formatCurrency = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD", // Replace with your desired currency code
+});

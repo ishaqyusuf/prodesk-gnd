@@ -24,7 +24,7 @@ import {
   UserProductionEventsProps,
   assignProductionAction,
   getUserProductionEventsAction,
-} from "@/app/_actions/sales-production";
+} from "@/app/_actions/sales/sales-production";
 import { getProductionUsersAction } from "@/app/_actions/hrm";
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
@@ -34,7 +34,7 @@ import { toast } from "sonner";
 import {
   PaymentOrderProps,
   applyPaymentAction,
-} from "@/app/_actions/sales-payment";
+} from "@/app/_actions/sales/sales-payment";
 import { Checkbox } from "../ui/checkbox";
 import { deepCopy } from "@/lib/deep-copy";
 import { Info } from "../info";

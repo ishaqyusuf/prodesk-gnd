@@ -20,7 +20,7 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
-import { getProgress } from "./progress";
+import { getProgress } from "../progress";
 
   function whereSales(query: SalesQueryParams) {
   const {
@@ -293,10 +293,8 @@ export default async function orderProdQtyUpdateAction(salesOrderId) {
   const _startedItems = (order?.items as ISalesOrderItem[])?.filter(
     (i) => i.swing && typeof i.meta.produced_qty === "number"
   );
-  // console.log(_startedItems);
-  const started = _startedItems?.length > 0;
-  // console.log(started);
-  if (order != null)
+    const started = _startedItems?.length > 0;
+    if (order != null)
     order.items.map((item) => {
       let {
         qty,

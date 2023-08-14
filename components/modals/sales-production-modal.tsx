@@ -24,7 +24,7 @@ import {
   UserProductionEventsProps,
   assignProductionAction,
   getUserProductionEventsAction,
-} from "@/app/_actions/sales-production";
+} from "@/app/_actions/sales/sales-production";
 import { getProductionUsersAction } from "@/app/_actions/hrm";
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
@@ -85,7 +85,6 @@ export default function SalesProductionModal() {
     [setUserId]
   );
   const monthChange = React.useCallback((e) => {
-    // console.log(e);
     setSelectedMonth(e);
   }, []);
   return (

@@ -23,7 +23,7 @@ import { UseFormReturn } from "react-hook-form";
 import { ISalesWizardForm } from "@/types/post";
 import { IComponentForm } from "../modals/sales-component-modal";
 import { IOrderInventory } from "@/types/inventory";
-import { getComponentCostHistoryAction } from "@/app/_actions/inventory";
+import { getComponentCostHistoryAction } from "@/app/_actions/sales/inventory";
 
 export function ComponentPriceHistory({
   form,
@@ -64,7 +64,6 @@ export function ComponentPriceHistory({
       open={open}
       onOpenChange={(e) => {
         setOpen(e);
-        // console.log("OPEN CHANGED", e);
         if (e) loadComponents();
       }}
     >

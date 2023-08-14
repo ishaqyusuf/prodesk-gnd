@@ -109,8 +109,7 @@ export function DataTable2<TData, TValue>({
       }
     });
     _sorting.map(({ id, desc }) => {
-      // console.log({ id, value });
-      if (!id) return;
+            if (!id) return;
       params.sort = id;
       params.sort_order = desc ? "desc" : "asc";
     });

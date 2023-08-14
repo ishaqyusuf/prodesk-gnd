@@ -88,20 +88,22 @@ model CostCharts {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Customers {
-    id             Int            @unique @default(autoincrement())
+    id             Int             @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-    name           String         @db.VarChar(255)
-    email          String?        @db.VarChar(255)
-    phoneNo        String?        @db.VarChar(255)
-    address        String?        @db.Text
-    meta           String?        @db.LongText
-    deletedAt      DateTime?      @db.Timestamp(0)
-    createdAt      DateTime?      @db.Timestamp(0)
-    updatedAt      DateTime?      @db.Timestamp(0)
+    name           String          @db.VarChar(255)
+    email          String?         @db.VarChar(255)
+    phoneNo        String?         @db.VarChar(255)
+    address        String?         @db.Text
+    meta           String?         @db.LongText
+    deletedAt      DateTime?       @db.Timestamp(0)
+    createdAt      DateTime?       @db.Timestamp(0)
+    updatedAt      DateTime?       @db.Timestamp(0)
     salesOrders    SalesOrders[]
-    profile        CustomerTypes? @relation(fields: [customerTypeId], references: [id])
-    addressBooks   AddressBooks[] @relation(name: "addressBooks")
+    profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
+    // primaryAddress        AddressBooks?  @relation(name: "primaryAddress",fields: [id], references: [id])
+    addressBooks   AddressBooks[]  @relation(name: "addressBooks")
+    payments       SalesPayments[] @relation()
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -833,7 +835,7 @@ model SalesOrders {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesPayments {
     id         Int         @unique @default(autoincrement())
-    customerId Int?
+    customerId Int
     orderId    Int
     amount     Float
     meta       Json?       @db.Json
@@ -841,6 +843,7 @@ model SalesPayments {
     createdAt  DateTime?   @db.Timestamp(0)
     updatedAt  DateTime?   @db.Timestamp(0)
     order      SalesOrders @relation(name: "salesPayment", fields: [orderId], references: [id])
+    customer   Customers   @relation(fields: [customerId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
