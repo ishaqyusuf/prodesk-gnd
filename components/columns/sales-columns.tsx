@@ -147,7 +147,13 @@ export function OrderInvoiceCell({
     <div>
       <div className="font-medium uppercase">${toFixed(order?.grandTotal)}</div>
       {!isEstimate && (
-        <span className="text-muted-foreground">
+        <span
+          className={cn(
+            (order?.amountDue || 0) > 0
+              ? " text-red-400"
+              : "text-muted-foreground"
+          )}
+        >
           ${toFixed(order?.amountDue) || "0.00"}
         </span>
       )}

@@ -1,6 +1,6 @@
 
 # AUG 14  00.00 == 00.00
-    10:05-
+    10:05-01:00
 ---------------------------
 PAYMENT REQUEST FOR AUG 05 - AUG 13 ESTIMATES TO ($815)
 TIME-STAMPS
