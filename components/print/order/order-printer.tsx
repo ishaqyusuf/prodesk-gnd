@@ -34,14 +34,15 @@ export default function OrderPrinter({}: Props) {
 
   async function print(printer: { mode; slugs: string[] }) {
     if (!printer) return;
+    setSales(printer.slugs.map((slug) => ({ slug, loading: true })) as any);
     const _sales = await salesPrintAction({ slugs: printer.slugs });
     setSales(_sales as any);
     await timeout(900);
     adjustWatermark(sales?.map((s) => s.orderId));
     console.log(sales);
-    await timeout(800);
+    // await timeout(800);
     window.print();
-    await timeout(200);
+    // await timeout(200);
     dispatchSlice("printOrders", null);
   }
   const Logo = ({}) => (
@@ -68,8 +69,12 @@ export default function OrderPrinter({}: Props) {
           >
             <table className="report-table mr-10s w-full text-xs">
               <OrderPrintHeader Logo={Logo} order={order} />
-              <OrderPrintInvoiceLines order={order} />
-              <OrderPrintFooter order={order} />
+              {order.id && (
+                <>
+                  <OrderPrintInvoiceLines order={order} />
+                  <OrderPrintFooter order={order} />
+                </>
+              )}
             </table>
           </div>
         </div>

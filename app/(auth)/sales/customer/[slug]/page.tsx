@@ -28,12 +28,10 @@ export default async function CustomerPage({ searchParams, params }) {
   const {
     salesOrders,
     totalDoors,
-    pendingDoors,
     totalSales,
     amountDue,
     completedOrders,
     completedDoors,
-    pendingOrders,
   } = customer._count;
   //   console.log(customer._count);
   return (

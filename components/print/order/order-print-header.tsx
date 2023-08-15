@@ -24,83 +24,95 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                 <td className="" valign="top" colSpan={9}>
                   <Logo />
                 </td>
-                <td valign="top" colSpan={5}>
-                  <div className="text-xs font-semibold text-black-900">
-                    <p>13285 SW 131 ST</p>
-                    <p>Miami, Fl 33186</p>
-                    <p>Phone: 305-278-6555</p>
-                    {po?.mode == "production" && <p>Fax: 305-278-2003</p>}
-                    <p>support@gndmillwork.com</p>
-                  </div>
-                </td>
-                <td colSpan={1}></td>
-                <td valign="top" colSpan={9}>
-                  <div className="flex justify-end"></div>
-                  <p className="text-black mb-2 text-end text-xl font-bold capitalize">
-                    {po?.mode}
-                  </p>
-                  <table className="w-full table-fixed">
-                    <tbody>
-                      <Info1Line
-                        label={`${po?.mode == "quote" ? "Quote #" : "Order #"}`}
-                        value={
-                          <span className="text-sm font-bold">
-                            {order.orderId}
-                          </span>
-                        }
-                      />
-                      <Info1Line
-                        label={`${
-                          po?.mode == "quote" ? "Quote Date" : "Order Date"
-                        }`}
-                        value={formatDate(order.createdAt)}
-                      />
-                      {po?.mode == "production" && (
-                        <Info1Line
-                          label="Due Date"
-                          value={formatDate(order.prodDueDate) || "-"}
-                        />
-                      )}
-                    </tbody>
-                  </table>
-                  <table className="text-fixed w-full">
-                    <tbody>
-                      <InfoLine label="Rep." value={order?.meta?.rep} />
-                      <InfoLine
-                        label="Good Until."
-                        value={order?.meta?.good_until}
-                      />
-                      {po?.mode == "production" ? (
-                        <></>
-                      ) : (
-                        <>
-                          <InfoLine label="P.O No." value={order?.meta?.po} />
-                          <InfoLine
-                            label="Amount Due"
+                {order?.id && (
+                  <>
+                    {" "}
+                    <td valign="top" colSpan={5}>
+                      <div className="text-xs font-semibold text-black-900">
+                        <p>13285 SW 131 ST</p>
+                        <p>Miami, Fl 33186</p>
+                        <p>Phone: 305-278-6555</p>
+                        {po?.mode == "production" && <p>Fax: 305-278-2003</p>}
+                        <p>support@gndmillwork.com</p>
+                      </div>
+                    </td>
+                    <td colSpan={1}></td>
+                    <td valign="top" colSpan={9}>
+                      <div className="flex justify-end"></div>
+                      <p className="text-black mb-2 text-end text-xl font-bold capitalize">
+                        {po?.mode}
+                      </p>
+                      <table className="w-full table-fixed">
+                        <tbody>
+                          <Info1Line
+                            label={`${
+                              po?.mode == "quote" ? "Quote #" : "Order #"
+                            }`}
                             value={
-                              <span className="font-medium">
-                                {(order?.amountDue || 0) > 0
-                                  ? `$${order?.amountDue}`
-                                  : "-"}
+                              <span className="text-sm font-bold">
+                                {order.orderId}
                               </span>
                             }
                           />
-                          <InfoLine
-                            label="Invoice Status"
-                            value={order?.invoiceStatus}
+                          <Info1Line
+                            label={`${
+                              po?.mode == "quote" ? "Quote Date" : "Order Date"
+                            }`}
+                            value={formatDate(order.createdAt)}
                           />
-                        </>
-                      )}
-                    </tbody>
-                  </table>
-                </td>
+                          {po?.mode == "production" && (
+                            <Info1Line
+                              label="Due Date"
+                              value={formatDate(order.prodDueDate) || "-"}
+                            />
+                          )}
+                        </tbody>
+                      </table>
+                      <table className="text-fixed w-full">
+                        <tbody>
+                          <InfoLine label="Rep." value={order?.meta?.rep} />
+                          <InfoLine
+                            label="Good Until."
+                            value={order?.meta?.good_until}
+                          />
+                          {po?.mode == "production" ? (
+                            <></>
+                          ) : (
+                            <>
+                              <InfoLine
+                                label="P.O No."
+                                value={order?.meta?.po}
+                              />
+                              <InfoLine
+                                label="Amount Due"
+                                value={
+                                  <span className="font-medium">
+                                    {(order?.amountDue || 0) > 0
+                                      ? `$${order?.amountDue}`
+                                      : "-"}
+                                  </span>
+                                }
+                              />
+                              <InfoLine
+                                label="Invoice Status"
+                                value={order?.invoiceStatus}
+                              />
+                            </>
+                          )}
+                        </tbody>
+                      </table>
+                    </td>
+                  </>
+                )}
               </tr>
-              <tr>
-                <Address address={order.billingAddress} title="Sold To" />
-                <td colSpan={2} />
-                <Address address={order.billingAddress} title="Ship To" />
-                <td colSpan={3} />
-              </tr>
+              {order?.id && (
+                <tr>
+                  <Address address={order.billingAddress} title="Sold To" />
+                  <td colSpan={2} />
+                  <Address address={order.billingAddress} title="Ship To" />
+                  <td colSpan={3} />
+                </tr>
+              )}
             </tbody>
           </table>
         </td>
