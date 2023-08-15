@@ -984,4 +984,5 @@ model Notifications {
     seenAt     DateTime? @db.Timestamp(0)
     archivedAt DateTime? @db.Timestamp(0)
     createdAt  DateTime? @db.Timestamp(0)
+    updatedAt  DateTime? @db.Timestamp(0)
 }

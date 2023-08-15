@@ -1,4 +1,6 @@
 import { salesDashboardAction } from "@/app/_actions/dashboard/sales-dashboard";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { BreadLink } from "@/components/breadcrumbs/links";
 import BarChartComponent from "@/components/charts/bar-chart";
 import Portal from "@/components/portal";
 import RecentSalesDashboardCard from "@/components/sales/recent-sales-dashboard-card";
@@ -24,6 +26,10 @@ export default async function SalesDashboardPage({}: Props) {
   } = salesDashboard;
   return (
     <DataPageShell className="space-y-4" data={salesDashboard}>
+      <Breadcrumbs>
+        <BreadLink isFirst title="Dashboard" />
+        <BreadLink isLast title="Sales" />
+      </Breadcrumbs>
       <Portal nodeId="dashboardTitle">Sales Dashboard</Portal>
 
       <StatCardContainer>

@@ -1,3 +1,4 @@
+import { env } from "@/env.mjs";
 import { ICan } from "@/types/auth";
 import dayjs from "dayjs";
 import {
@@ -181,9 +182,10 @@ export function nav(
   };
 }
 
+const isProd = env.NEXT_PUBLIC_NODE_ENV == "production";
 export const upRoutes = [
   "Dashboard",
-  // "Community/Projects",
+  !isProd && "Community/Projects",
   "Sales/Estimates",
   "Sales/Orders",
   "Sales/Customers",

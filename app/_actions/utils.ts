@@ -2,9 +2,12 @@
 
 import { authOptions } from "@/lib/auth-options";
 import { getServerSession } from "next-auth";
-export async function myId() {
+export async function user() {
   const data = await getServerSession(authOptions);
-  return data?.user.id;
+  return data?.user;
+}
+export async function myId() {
+  return (await user())?.id;
 }
 
 export async function streamlineMeta(meta: any = null) {

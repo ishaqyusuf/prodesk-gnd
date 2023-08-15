@@ -14,7 +14,7 @@ interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
   const response = await getSalesProductionsAction(queryParams(searchParams));
   return (
-    <div className="h-full flex-1 flex-col space-y-4 px-8">
+    <div className="h-full flex-1 flex-col space-y-4">
       <Breadcrumbs>
         <ProductionsCrumb isLast />
       </Breadcrumbs>

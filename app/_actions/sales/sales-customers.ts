@@ -37,10 +37,18 @@ export async function getCustomerAction(id) {
     },
     include: {
       profile: true,
-      salesOrders: true,
+      salesOrders: {
+        where: {
+          type: "order",
+        },
+      },
       _count: {
         select: {
-          salesOrders: {},
+          salesOrders: {
+            where: {
+              type: "order",
+            },
+          },
         },
       },
     },
@@ -63,7 +71,10 @@ export async function getCustomerAction(id) {
   customer._count.completedOrders = _customer.salesOrders?.filter(
     (s) => s.prodStatus == "Completed"
   ).length;
-  customer.salesOrders = customer.salesOrders.slice(-1);
+  customer.salesOrders = customer.salesOrders;
+  // .slice(
+  //   customer.salesOrders.length - 5
+  // );
   return { customer };
 }
 

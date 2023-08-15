@@ -34,6 +34,7 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url(),
+  NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -47,6 +48,7 @@ const processEnv = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
   EMAIL_FROM_ADDRESS: process.env.EMAIL_FROM_ADDRESS,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,

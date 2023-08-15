@@ -31,7 +31,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
   if (!order) return notFound();
   metadata.description = order.orderId;
   return (
-    <DataPageShell className="px-8" data={order}>
+    <DataPageShell className="" data={order}>
       <Breadcrumbs>
         <EstimatesCrumb isFirst />
         <OrderViewCrumb slug={order.orderId} isLast />

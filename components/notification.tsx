@@ -24,7 +24,8 @@ export default function Notification({}) {
     // Fetch notification count from the server
     const fetchNotificationCount = async () => {
       const count = await getNotificationCountAction();
-      setNotificationCount(count);
+      console.log(count);
+      setNotificationCount(count as any);
     };
     fetchNotificationCount();
     const intervalId = setInterval(fetchNotificationCount, 60000);
