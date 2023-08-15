@@ -54,7 +54,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
   const [lastPage, setLastPage] = React.useState(1);
   async function search() {
     // if (sliceProducts?.length > 0) return;
-    console.log("q", debouncedQuery);
+    // console.log("q", debouncedQuery);
     startTransition(async () => {
       //   if (products.length > 0) return;
       // console.log(debounceQuery);
@@ -63,7 +63,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
         q: debouncedQuery,
       });
       setProducts([...products, ...(items as IProduct[])]);
-      console.log(items?.length);
+      // console.log(items);
       setLastPage(pageInfo.pageCount);
       // dispatchSlice("products", [...products, ...(prods as IProduct[])]);
     });
@@ -95,11 +95,12 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
         }
       }
       const title = form.getValues("title");
-      await updateInventoryComponentTitleAction({
-        title,
-        variantId: selection?.id,
-        meta: (selection?.meta || {}) as IProductVariantMeta,
-      });
+      if (title != selection?.meta?.componentTitle)
+        await updateInventoryComponentTitleAction({
+          title,
+          variantId: selection?.id,
+          meta: (selection?.meta || {}) as IProductVariantMeta,
+        });
       //  closeModal();
       setIsOpen(false);
       if (rowIndex > -1) {
@@ -140,25 +141,30 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-  const handleSelect = React.useCallback((variant) => {
+  const handleSelect = React.useCallback((variant: IProductVariant) => {
     // setIsOpen(false);
     // callback();
     setSelection(variant);
+    form.setValue("title", variant?.meta?.componentTitle || variant?.title);
   }, []);
   React.useEffect(() => {
-    if (!isOpen) {
-      setPage(1);
-      setProducts([]);
-
-      setQuery("");
-    }
+    setPage(1);
+    setProducts([]);
+    setQuery("");
+    form.reset({});
+    setSelection(null);
+    if (isOpen) search();
   }, [isOpen]);
   return (
     <>
       <Button size="sm" onClick={() => setIsOpen(true)}>
         Catalog
       </Button>
-      <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
+      <CommandDialog
+        shouldFilter={false}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
         {!selection ? (
           <>
             <div className="relative">
@@ -258,7 +264,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
             <CommandGroup>
               <div className="p-4 pt-2 space-y-4">
                 <div className="">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex -mx-2 items-center space-x-2">
                     <Button
                       onClick={() => setSelection(null)}
                       className="h-8 w-8 p-0"
