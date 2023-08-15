@@ -2,15 +2,16 @@
 
 import { useAppSelector } from "@/store";
 import Image from "next/image";
-import logo from "@/public/logo.png";
 import { formatDate } from "@/lib/use-day";
 import Link from "next/link";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
 
 interface Props {
   order: ISalesOrder;
+  // onImageLoaded?
+  Logo;
 }
-export function OrderPrintHeader({ order }: Props) {
+export function OrderPrintHeader({ order, Logo }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
 
   return (
@@ -21,9 +22,7 @@ export function OrderPrintHeader({ order }: Props) {
             <tbody>
               <tr>
                 <td className="" valign="top" colSpan={9}>
-                  <Link href="/">
-                    <Image alt="" width={178} height={80} src={logo} />
-                  </Link>
+                  <Logo />
                 </td>
                 <td valign="top" colSpan={5}>
                   <div className="text-xs font-semibold text-black-900">
