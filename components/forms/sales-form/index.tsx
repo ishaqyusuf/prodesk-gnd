@@ -76,7 +76,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   async function save(and: "close" | "new" | "default" = "default") {
     startTransition(async () => {
       const formData = saveData();
-      console.log(formData);
+      // console.log(formData);
 
       const response = await saveOrderAction(formData);
       if (response.orderId) {
@@ -90,7 +90,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           }
         }
       }
-      toast.message("Saved", {});
+      toast.success("Saved", {});
     });
     //  loader.action(async () => {
     //  });
@@ -208,7 +208,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
               {orderInformation.map((line, key) => (
                 <div
                   key={key}
-                  className="items-start md:grid md:grid-cols-2 xl:grid-cols-3"
+                  className="  md:grid md:grid-cols-2 items-center xl:grid-cols-3"
                 >
                   <Label className="text-muted-foreground">{line.label}</Label>
 
@@ -219,16 +219,16 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                         profiles={data?.ctx?.profiles}
                       />
                     )}
-                    {key == 1 && (
+                    {[1, 3, 4].includes(key) && (
                       <div className="flex justify-end">
                         <Input
                           className="h-6 w-[100px] uppercase"
-                          {...form.register("meta.qb")}
+                          {...form.register(line.key as any)}
                         />
                       </div>
                     )}
                     {key > 1 && (
-                      <div>
+                      <div className="">
                         {line.key == "prodDueDate"
                           ? formatDate(form.getValues(line.key))
                           : form.getValues(line.key as any) ?? "-"}
@@ -266,5 +266,5 @@ export const orderInformation: {
   { label: "Sales Rep.", key: "meta.rep" },
   { label: "P.O No.", key: "meta.po" },
   { label: "Good Until", key: "meta.good_until" },
-  { label: "Due Date", key: "prodDueDate" },
+  // { label: "Due Date", key: "prodDueDate" },
 ];

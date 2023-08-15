@@ -1,10 +1,11 @@
 "use client";
 
-import { Toaster as RadToaster } from "sonner";
+import { Toaster as SonnerToaster } from "sonner";
 
 export function Toaster() {
   return (
-    <RadToaster
+    <SonnerToaster
+      richColors
       position="bottom-right"
       toastOptions={{
         style: {

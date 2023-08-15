@@ -54,6 +54,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
   const [lastPage, setLastPage] = React.useState(1);
   async function search() {
     // if (sliceProducts?.length > 0) return;
+    console.log("q", debouncedQuery);
     startTransition(async () => {
       //   if (products.length > 0) return;
       // console.log(debounceQuery);
@@ -62,6 +63,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
         q: debouncedQuery,
       });
       setProducts([...products, ...(items as IProduct[])]);
+      console.log(items?.length);
       setLastPage(pageInfo.pageCount);
       // dispatchSlice("products", [...products, ...(prods as IProduct[])]);
     });
@@ -170,14 +172,13 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
                 }}
               />
               <div className="absolutes hidden top-0 right-0 m-4 mx-12">
-                a
-                <DataTableFacetedFilter2
+                {/* <DataTableFacetedFilter2
                   title="Category"
                   options={productCategories}
                   single
                   value={category}
                   setValue={setCategory}
-                />
+                /> */}
               </div>
             </div>
             <CommandList>
