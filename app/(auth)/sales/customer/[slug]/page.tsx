@@ -39,7 +39,8 @@ export default async function CustomerPage({ searchParams, params }) {
   return (
     <DataPageShell<ICustomer> data={customer} className="space-y-4 px-8">
       <Breadcrumbs>
-        <BreadLink isFirst link="sales/customers" title="Customers" />
+        <BreadLink isFirst title="Sales" />
+        <BreadLink link="/sales/customers" title="Customers" />
         <BreadLink isLast title={customer.name} />
       </Breadcrumbs>
       <div className="flex items-center justify-between space-y-2">
