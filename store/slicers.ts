@@ -6,6 +6,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
+import { INotification } from "@/app/_actions/notifications";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
@@ -19,6 +20,7 @@ export interface ISlicer {
     action: "Complete" | "Cancel";
   };
   applyPayment: ISalesOrder[];
+  notifications: INotification[];
   printOrders: {
     mode: IOrderPrintMode;
     slugs;
@@ -70,7 +72,7 @@ const headerNavSlice = createSlice({
 });
 function transformObject(data) {
   if (!data) return;
-  // let _data = deepCopy(data)
+
   try {
     if (data)
       Object.entries(data).map(([k, v]) => {

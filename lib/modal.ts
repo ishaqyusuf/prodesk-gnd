@@ -1,27 +1,16 @@
 "use client";
 
-import { store, useAppSelector } from "@/store";
-import { ModalName, updateSlice } from "@/store/slicers";
+import { ModalName, dispatchSlice } from "@/store/slicers";
 
 export function openModal<T>(name: ModalName, data?: T) {
-  store.dispatch(
-    updateSlice({
-      key: "modal",
-      data: {
-        name,
-        data,
-      },
-    })
-  );
+  dispatchSlice("modal", {
+    name,
+    data,
+  });
 }
 export function closeModal(name?: ModalName) {
-  store.dispatch(
-    updateSlice({
-      key: "modal",
-      data: {
-        name: null,
-        data: null,
-      },
-    })
-  );
+  dispatchSlice("modal", {
+    name: null,
+    data: null,
+  });
 }

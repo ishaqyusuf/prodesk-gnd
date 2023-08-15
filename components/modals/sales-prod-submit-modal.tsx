@@ -20,6 +20,7 @@ import { orderItemProductionAction } from "@/app/_actions/sales/sales-production
 import { closeModal } from "@/lib/modal";
 import Btn from "../btn";
 import { toast } from "sonner";
+import { useAppSelector } from "@/store";
 export interface ICompleteItemProd {
   itemId;
   note;
@@ -31,6 +32,8 @@ export default function SalesProdSubmitModal() {
   const form = useForm<ICompleteItemProd>({
     defaultValues: {},
   });
+  const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+  const { orderId, slug, id } = order;
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
   const watchQty = form.watch("qty");
@@ -40,6 +43,11 @@ export default function SalesProdSubmitModal() {
         ...form.getValues(),
         action: ctx.action,
         qty: +watchQty,
+        order: {
+          orderId,
+          slug,
+          id,
+        },
       });
       closeModal();
       route.refresh();

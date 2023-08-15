@@ -14,7 +14,10 @@ import orderProdQtyUpdateAction, { getSales } from "./sales";
 import { saveProgress } from "../progress";
 import { getServerSession } from "next-auth";
 import { myId } from "../utils";
-import { _notifyProductionAssigned } from "../notifications";
+import {
+  _notifyProdStarted,
+  _notifyProductionAssigned,
+} from "../notifications";
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
 
@@ -172,6 +175,7 @@ export async function orderItemProductionAction({
   note,
   qty,
   action,
+  order,
 }: ProdActionProps) {
   const item: ISalesOrderItem = (await prisma.salesOrderItems.findFirst({
     where: {
@@ -205,6 +209,7 @@ export async function orderItemProductionAction({
     case "Start":
       _update.meta.produced_qty = 0;
       await updateProgress(item, qty, "Production Started");
+      await _notifyProdStarted(item, order);
       break;
     case "Complete":
       _update.meta.produced_qty = producedQty + qty;

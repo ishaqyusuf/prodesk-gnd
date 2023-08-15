@@ -213,6 +213,11 @@ export interface ProdActionProps {
   itemId;
   qty?;
   note?;
+  order: {
+    orderId;
+    slug;
+    id;
+  };
 }
 export interface ISalesPayment extends SalesPayments {
   meta: {

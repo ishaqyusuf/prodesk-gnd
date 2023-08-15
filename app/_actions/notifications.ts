@@ -2,32 +2,61 @@
 
 import { prisma } from "@/db";
 import { authOptions } from "@/lib/auth-options";
-import { SalesOrders } from "@prisma/client";
+import { SalesOrders, Notifications } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { myId, user } from "./utils";
 import { transformData } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
+import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 
-export async function loadNotifications() {
-  const data = await getServerSession(authOptions);
-  const noficiations = await prisma.notifications.findMany({
+export type INotification = Notifications & {
+  archived: Boolean;
+  time;
+};
+export async function loadNotificationsAction() {
+  const userId = await myId();
+  const noficiations: INotification[] = (await prisma.notifications.findMany({
     where: {
-      userId: data?.user?.id,
+      userId,
     },
-  });
+    orderBy: {
+      createdAt: "desc",
+    },
+  })) as any;
+  return noficiations;
 }
 export async function getNotificationCountAction() {
   const userId = await myId();
   const count = await prisma.notifications.count({
     where: {
-      userId: userId || 0,
+      userId,
       archivedAt: {
-        not: null,
+        equals: undefined,
       },
     },
   });
-  console.log(userId, count);
   return count;
+}
+
+export async function markAsReadAction(id) {
+  await prisma.notifications.update({
+    where: {
+      id,
+    },
+    data: {
+      seenAt: new Date(),
+    },
+  });
+}
+export async function archiveAction(id) {
+  await prisma.notifications.update({
+    where: {
+      id,
+    },
+    data: {
+      archivedAt: new Date(),
+    },
+  });
 }
 export type NotificationType = "sales production";
 async function _notify(userId, type: NotificationType, message, link) {
@@ -49,6 +78,18 @@ async function _notify(userId, type: NotificationType, message, link) {
       link,
     }),
   });
+}
+export async function _notifyProdStarted(
+  item: ISalesOrderItem,
+  order: { orderId; slug; id }
+) {
+  const me = await user();
+  await _notify(
+    1,
+    "sales production",
+    `Production Started: ${item?.description}. by ${me.name}`,
+    `/tasks/sales-production/${order.orderId}`
+  );
 }
 export async function _notifyProductionAssigned(order: SalesOrders) {
   // const me = await user();

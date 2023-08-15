@@ -1,30 +1,10 @@
 "use client";
 
 import React, { useEffect, useState, useTransition } from "react";
-import { store, useAppSelector } from "@/store";
 
-import { useLoader } from "@/lib/use-loader";
-import { dispatchSlice, updateSlice } from "@/store/slicers";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { CheckCircle } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-
-import { formatDate } from "@/lib/use-day";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { ISalesOrder } from "@/types/sales";
-import {
-  UserProductionEventsProps,
-  assignProductionAction,
-  getUserProductionEventsAction,
-} from "@/app/_actions/sales/sales-production";
+
 import { getProductionUsersAction } from "@/app/_actions/hrm";
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";

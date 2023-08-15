@@ -4,14 +4,17 @@ import { ToolTip } from "@/components/tool-tip";
 import { CheckCircle, Play, StopCircle, Undo } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useCallback, useState, useTransition } from "react";
-import { ISalesOrderItem, ProdActions } from "@/types/sales";
+import { ISalesOrder, ISalesOrderItem, ProdActions } from "@/types/sales";
 import { orderItemProductionAction } from "@/app/_actions/sales/sales-production";
 import { openModal } from "@/lib/modal";
 import { toast } from "sonner";
+import { useAppSelector } from "@/store";
 interface IProp {
   item: ISalesOrderItem;
 }
 export const ProdItemActions = ({ item }: IProp) => {
+  const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+  const { orderId, slug, id } = order;
   const {
     qty,
     meta: { produced_qty },
@@ -28,6 +31,11 @@ export const ProdItemActions = ({ item }: IProp) => {
       await orderItemProductionAction({
         itemId: item.id,
         action,
+        order: {
+          orderId,
+          slug,
+          id,
+        } as any,
       });
       setLs(null as any);
       router.refresh();

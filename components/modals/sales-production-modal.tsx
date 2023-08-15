@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useTransition } from "react";
-import { store, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 
-import { useLoader } from "@/lib/use-loader";
-import { dispatchSlice, updateSlice } from "@/store/slicers";
+import { dispatchSlice } from "@/store/slicers";
 import {
   Table,
   TableBody,

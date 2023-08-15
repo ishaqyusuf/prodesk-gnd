@@ -1,6 +1,6 @@
 import { getCustomerProfilesList } from "@/app/_actions/hrm";
 import { store } from "..";
-import { dispatchSlice, updateSlice } from "../slicers";
+import { dispatchSlice } from "../slicers";
 
 export async function loadCustomerProfiles() {
   //  if (state.profiles.length == 0)
