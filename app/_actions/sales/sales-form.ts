@@ -103,6 +103,7 @@ async function newSalesFormAction(
   const form = {
     taxPercentage: ctx?.settings?.tax_percentage,
     // salesRepId: query.salesRepId,
+    type: query.type,
     status: "Active",
     meta: {
       sales_profile: ctx.settings?.sales_profile,

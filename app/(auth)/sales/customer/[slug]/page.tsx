@@ -6,10 +6,17 @@ import RecentSalesCard from "@/components/sales/recent-sales-card";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/stat-card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICustomer } from "@/types/customers";
-import { DollarSign, Plus } from "lucide-react";
+import { Banknote, DollarSign, Plus, ShoppingBag } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Customer Overview",
@@ -39,10 +46,31 @@ export default async function CustomerPage({ searchParams, params }) {
         <h2 className="text-3xl font-bold tracking-tight">{customer?.name}</h2>
         <div className="flex items-center space-x-2">
           {/* <CalendarDateRangePicker /> */}
-          <Button className="h-8">
-            <Plus className="h-4 w-4 mr-2" />
-            New
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="secondary"
+                className="flex h-8  data-[state=open]:bg-muted"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="">New</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[185px]">
+              <Link href={`/sales/estimate/new/form?customerId=${customer.id}`}>
+                <DropdownMenuItem>
+                  <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                  Estimates
+                </DropdownMenuItem>
+              </Link>
+              <Link href={`/sales/order/new/form?customerId=${customer.id}`}>
+                <DropdownMenuItem>
+                  <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                  Order
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       {/* <Tabs defaultValue="overview" className="space-y-4">

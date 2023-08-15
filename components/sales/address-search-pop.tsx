@@ -59,7 +59,7 @@ export default function AddressSearchPop({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end">
-          <Command>
+          <Command shouldFilter={false}>
             <CommandInput
               value={q}
               onValueChange={(v) => {
