@@ -418,7 +418,7 @@ export async function salesPrintAction({ ids,printMode }: { ids: number[],printM
   if(printMode == 'order')
   await Promise.all(
     ids.map(async(id) => {
-      await fixSalesPaymentAction(id)
+      await fixSalesPaymentAction(Number(id))
     })
   )
   const sales = prisma.salesOrders.findMany({
