@@ -202,34 +202,35 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
                   <Skeleton className="h-8 rounded-sm" />
                 </div>
               ) : (
-                products?.map((product, pid) => (
-                  <CommandGroup
-                    key={`prod-${pid}`}
-                    className="capitalize  text-sm"
-                    heading={product.title}
-                  >
-                    {product.variants?.map((variant, vid) => (
-                      <CommandItem
-                        className="p-0 cursor-pointer"
-                        key={`var-${vid}`}
-                        onSelect={() => handleSelect(variant)}
-                      >
-                        <div className="w-full grid grid-cols-12">
-                          <span></span>
-                          <div className="col-span-9">
-                            <p className="text-sm font-medium leading-none">
-                              {variant.variantTitle}
-                            </p>
-                            <span className="text-muted-foreground uppercase text-sm">
-                              ({variant.sku})
-                            </span>
+                <>
+                  {products?.map((product, pid) => (
+                    <CommandGroup
+                      key={`prod-${pid}`}
+                      className="capitalize  text-sm"
+                      heading={product.title}
+                    >
+                      {product.variants?.map((variant, vid) => (
+                        <CommandItem
+                          className="p-0 cursor-pointer"
+                          key={`var-${vid}`}
+                          onSelect={() => handleSelect(variant)}
+                        >
+                          <div className="w-full grid grid-cols-12">
+                            <span></span>
+                            <div className="col-span-9">
+                              <p className="text-sm font-medium leading-none">
+                                {variant.variantTitle}
+                              </p>
+                              <span className="text-muted-foreground uppercase text-sm">
+                                ({variant.sku})
+                              </span>
+                            </div>
+                            <div className="col-span-2 font-medium text-base flex justify-end">
+                              <Money value={variant.price} />
+                            </div>
                           </div>
-                          <div className="col-span-2 font-medium text-base flex justify-end">
-                            <Money value={variant.price} />
-                          </div>
-                        </div>
 
-                        {/* <div className="flex justify-between space-x-4">
+                          {/* <div className="flex justify-between space-x-4">
                       <div>
                         <p>{variant.variantTitle}</p>
                         <span className="text-muted-foreground uppercase">
@@ -238,24 +239,25 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
                       </div>
                       <Money value={variant.price} />
                     </div> */}
-                      </CommandItem>
-                    ))}
-                    {products?.length - 1 == pid && lastPage > page && (
-                      <div className="flex justify-center my-2">
-                        <Btn
-                          className=""
-                          isLoading={isPending}
-                          onClick={() => {
-                            setPage(page + 1);
-                            search();
-                          }}
-                        >
-                          Load More
-                        </Btn>
-                      </div>
-                    )}
-                  </CommandGroup>
-                ))
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  ))}
+                  {lastPage > page && (
+                    <div className="flex justify-center my-2">
+                      <Btn
+                        className=""
+                        isLoading={isPending}
+                        onClick={() => {
+                          setPage(page + 1);
+                          search();
+                        }}
+                      >
+                        Load More
+                      </Btn>
+                    </div>
+                  )}
+                </>
               )}
             </CommandList>
           </>
