@@ -25,6 +25,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Printer } from "lucide-react";
+import { SalesSelectionAction } from "../sales/sales-selection-action";
 
 export default function OrdersTableShell<T>({
   data,
@@ -100,33 +101,7 @@ export default function OrdersTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      SelectionAction={({ items }) => {
-        console.log(items);
-        return (
-          <>
-            {/* <span>{JSON.stringify(items)}</span> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Toggle columns"
-                  variant="outline"
-                  size="icon"
-                  className="ml-auto hidden h-8 lg:flex"
-                >
-                  <Printer className=" h-4 w-4" />
-                  {/* View */}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[150px]">
-                <PrintOrderMenuAction
-                  row={null as any}
-                  slugs={items?.map((i) => i?.original?.slug)}
-                />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
-        );
-      }}
+      SelectionAction={SalesSelectionAction}
       filterableColumns={[
         {
           id: "status",

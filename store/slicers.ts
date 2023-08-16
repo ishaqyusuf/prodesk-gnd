@@ -23,7 +23,7 @@ export interface ISlicer {
   notifications: INotification[];
   printOrders: {
     mode: IOrderPrintMode;
-    slugs;
+    ids: number[];
     isClient;
   };
   printUnits: string[];

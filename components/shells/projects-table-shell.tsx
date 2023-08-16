@@ -104,45 +104,7 @@ export default function ProjectsTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      SelectionAction={({ items }) => {
-        console.log(items);
-        return (
-          <>
-            {/* <span>{JSON.stringify(items)}</span> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Toggle columns"
-                  variant="outline"
-                  size="icon"
-                  className="ml-auto hidden h-8 lg:flex"
-                >
-                  <Printer className=" h-4 w-4" />
-                  {/* View */}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[150px]">
-                <PrintOrderMenuAction
-                  row={null as any}
-                  slugs={items?.map((i) => i?.original?.slug)}
-                />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
-        );
-      }}
       filterableColumns={[
-        {
-          id: "status",
-          title: "Status",
-          single: true,
-          options: [
-            { label: "Production Started", value: "Started" },
-            { label: "Production Assigned", value: "Queued" },
-            { label: "Production Completed", value: "Completed" },
-            { label: "Production Not Assigned", value: "Unassigned" },
-          ],
-        },
         {
           id: "_payment" as any,
           title: "Payment",

@@ -14,6 +14,7 @@ import {
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
+import { SalesSelectionAction } from "../sales/sales-selection-action";
 
 export default function EstimatesTableShell<T>({
   data,
@@ -71,6 +72,7 @@ export default function EstimatesTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
+      SelectionAction={SalesSelectionAction}
       filterableColumns={
         [
           //  {

@@ -179,13 +179,13 @@ export const DeleteRowMenuAction = typedMemo(({ row }: IOrderRowProps) => {
 export const PrintOrderMenuAction = typedMemo(
   (
     props: IOrderRowProps & {
-      slugs?: string[];
+      ids?: number[];
     }
   ) => {
     function _print(mode: IOrderPrintMode) {
       dispatchSlice("printOrders", {
         mode,
-        slugs: props.slugs || [props.row.slug],
+        ids: props.ids || [props.row.id],
       });
     }
     function PrintOptions() {
@@ -228,7 +228,7 @@ export const PrintOrderMenuAction = typedMemo(
         </>
       );
     }
-    if (props.slugs) {
+    if (props.ids) {
       return <PrintOptions />;
     }
     return props.myProd || props.estimate ? (

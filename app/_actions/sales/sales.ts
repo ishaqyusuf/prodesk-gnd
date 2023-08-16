@@ -11,6 +11,7 @@ import { convertToNumber } from "@/lib/use-number";
 import { TableApiResponse } from "@/types/action";
 import {
   CopyOrderActionProps,
+  IOrderPrintMode,
   ISalesOrder,
   ISalesOrderItem,
   ISalesOrderItemMeta,
@@ -21,6 +22,7 @@ import {
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getProgress } from "../progress";
+import { fixSalesPaymentAction } from "./sales-payment";
 
   function whereSales(query: SalesQueryParams) {
   const {
@@ -39,9 +41,29 @@ import { getProgress } from "../progress";
       { orderId: inputQ },
       {
         customer: {
-          name: inputQ,
+          OR: [
+            {
+              name: inputQ,
+            },
+            {
+              email: inputQ,
+            },
+            {
+              phoneNo: inputQ,
+            } 
+          ]
         },
       },
+      {
+         shippingAddress: {
+          address1: inputQ
+        }
+      },
+      {
+        producer: {
+          name: inputQ
+        }
+      }
     ],
     type,
     ...dateQuery({ from, to, _dateType, date }),
@@ -392,11 +414,17 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     }) as any,
   });
 }
-export async function salesPrintAction({ slugs }: { slugs: string[] }) {
+export async function salesPrintAction({ ids,printMode }: { ids: number[],printMode:IOrderPrintMode }) {
+  if(printMode == 'order')
+  await Promise.all(
+    ids.map(async(id) => {
+      await fixSalesPaymentAction(id)
+    })
+  )
   const sales = prisma.salesOrders.findMany({
     where: {
-      slug: {
-        in: slugs,
+      id: {
+        in: ids,
       },
     },
     include: {
@@ -409,6 +437,7 @@ export async function salesPrintAction({ slugs }: { slugs: string[] }) {
   return sales;
 }
 export async function moveEstimateToOrderAction(id) {
+
     await prisma.salesOrders.update({
       where:{
         id

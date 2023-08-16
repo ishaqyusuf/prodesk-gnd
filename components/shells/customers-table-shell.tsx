@@ -103,7 +103,7 @@ export default function CustomersTableShell<T>({
               <DropdownMenuContent align="end" className="w-[150px]">
                 <PrintOrderMenuAction
                   row={null as any}
-                  slugs={items?.map((i) => i?.original?.slug)}
+                  ids={items?.map((i) => i?.original?.id)}
                 />
               </DropdownMenuContent>
             </DropdownMenu>

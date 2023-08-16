@@ -32,10 +32,13 @@ export default function OrderPrinter({}: Props) {
     }
   }, [sales]);
 
-  async function print(printer: { mode; slugs: string[] }) {
+  async function print(printer: { mode; ids: number[] }) {
     if (!printer) return;
-    setSales(printer.slugs.map((slug) => ({ slug, loading: true })) as any);
-    const _sales = await salesPrintAction({ slugs: printer.slugs });
+    setSales(printer.ids.map((slug) => ({ slug, loading: true })) as any);
+    const _sales = await salesPrintAction({
+      ids: printer.ids,
+      printMode: printer.mode,
+    });
     setSales(_sales as any);
     await timeout(900);
     adjustWatermark(sales?.map((s) => s.orderId));

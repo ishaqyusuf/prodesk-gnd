@@ -11,6 +11,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import ProjectsTableShell from "@/components/shells/projects-table-shell";
 import { getProjectsAction } from "@/app/_actions/community/projects";
+import ProjectModal from "@/components/modals/project-modal";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -26,8 +27,7 @@ export default async function OrdersPage({ searchParams }) {
       </Breadcrumbs>
       <PageHeader title="Projects" newDialog="project" />
       <ProjectsTableShell<IProject> {...response} />
-      <OrderPrinter />
-      <SalesProductionModal />
+      <ProjectModal />
     </div>
   );
 }
