@@ -59,7 +59,8 @@ export function DataTableFacetedFilter2<TData, TValue>({
   const fv = column?.getFilterValue();
   React.useEffect(() => {
     const v = fv; // as string[];
-
+    
+    
     const isArray = Array.isArray(v);
     // selectedValues.clear();
     if (v) {
@@ -70,8 +71,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
         (isArray ? v : [v]).map((_v) => ns.add(_v));
       }
       setSelectedValue(ns);
-      
-    }
+    } else setSelectedValue(new Set())
   }, [fv]);
 
   const [open, setOpen] = React.useState(false);
@@ -138,8 +138,9 @@ export function DataTableFacetedFilter2<TData, TValue>({
 
                 return (
                   <CommandItem
-                    key={option[valueKey]}
+                    key={option[valueKey]?.toString()}
                     onSelect={() => {
+                      let _value = option[valueKey]?.toString();
                       const ns = new Set(_selectedValues);
                       if (single) {
                         if (isSelected) {
@@ -147,13 +148,13 @@ export function DataTableFacetedFilter2<TData, TValue>({
                           return;
                         }
                         ns.clear();
-                        ns.add(option[valueKey]); 
+                        ns.add(_value); 
                         setOpen(false);
                       } else {
                         if (isSelected) {
-                          ns.delete(option[valueKey]);
+                          ns.delete(_value);
                         } else {
-                          ns.add(option[valueKey]);
+                          ns.add(_value);
                         }
                       }
                       const filterValues = Array.from(ns);

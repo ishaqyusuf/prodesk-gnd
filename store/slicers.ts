@@ -51,6 +51,7 @@ export type ModalName =
   | "catalog"
   | "customerForm"
   | "project"
+  | "home"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

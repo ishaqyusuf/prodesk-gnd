@@ -114,7 +114,7 @@ export default function CustomersTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "orderId, customer",
+          title: "customer, phone, address",
         },
       ]}
       newRowLink={`/sales/order/new/form`}

@@ -24,6 +24,8 @@ import { Icons } from "../icons";
 import { Progress } from "../ui/progress";
 import { Cell, PrimaryCellContent, SecondaryCellContent } from "./base-columns";
 import { toFixed } from "@/lib/use-number";
+import { Progressor, getProgress } from "@/lib/status";
+import ProgressStatus from "../progress-status";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -198,30 +200,15 @@ export function ProdOrderCell(
 }
 
 export function ProdStatusCell({ order }: { order: ISalesOrder }) {
-  const [percentage, setPercentage] = useState(0);
-  const [color, setColor] = useState("gray");
+  const [progress, setProgress] = useState<Progressor>({} as any);
   useEffect(() => {
-    const p = ((order.builtQty || 0) / (order.prodQty || 1)) * 100;
-    setPercentage(p);
-    if (p < 25) {
-      setColor("red");
-    } else if (p < 50) {
-      setColor("yellow");
-    } else if (p < 75) {
-      setColor("orange");
-    } else {
-      setColor("green");
-    }
+    setProgress(getProgress(order.builtQty, order.prodQty));
   }, [order]);
-
   return (
-    <div className="w-20">
-      {percentage > 0 && (
-        <p>
-          <Progress value={percentage} color={color} className="h-2" />
-        </p>
-      )}
-      <p className="">{order.prodStatus}</p>
-    </div>
+    <ProgressStatus
+      score={order.builtQty}
+      total={order.prodQty}
+      status={order.prodStatus}
+    />
   );
 }

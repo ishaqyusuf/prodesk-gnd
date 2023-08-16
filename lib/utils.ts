@@ -1,6 +1,6 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
+import slugify from "slugify";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -58,6 +58,18 @@ export function transformData<T>(data: T, store = false) {
   let meta = _data?.meta;
   if (meta) _data.meta = removeEmptyValues(meta);
   return _data as T;
+}
+export async function slugModel(value, model, c = 0) {
+  let slug = slugify([value, c > 0 ? c : null].filter(Boolean).join(" "));
+  console.log(slug);
+  let count = await model.count({
+    where: {
+      slug,
+    },
+  });
+  if (count > 0) return await slugModel(value, model, c + 1);
+
+  return slug;
 }
 export function sum<T>(array: T[], key: keyof T) {
   return array.reduce(

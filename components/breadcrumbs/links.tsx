@@ -19,7 +19,7 @@ export function BreadLink({ isFirst, isLast, link, title }: Props) {
         href={link || "/"}
         className={cn(
           "truncate transition-colors hover:text-muted-foreground",
-          isLast
+          isLast || !link
             ? "pointer-events-none text-muted-foreground"
             : "text-foreground"
         )}

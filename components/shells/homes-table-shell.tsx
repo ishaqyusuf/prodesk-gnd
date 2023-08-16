@@ -21,65 +21,89 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Printer } from "lucide-react";
-import { IProject } from "@/types/community";
+import { IHome } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
+import { HomeProductionStatus } from "../columns/community-columns";
 
-export default function ProjectsTableShell<T>({
+export default function HomesTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<IProject>) {
+  projectView,
+}: TableShellProps<IHome> & {
+  projectView: Boolean;
+}) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<IProject, unknown>[]>(
+  const columns = useMemo<ColumnDef<IHome, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
         maxSize: 10,
-        id: "refNo",
-        header: ColumnHeader("Ref/Id"),
+        id: "id",
+        header: ColumnHeader("ID"),
         cell: ({ row }) => (
-          <Cell link="/community/projects/slug" slug={row.original.slug}>
-            <PrimaryCellContent>{row.original.refNo}</PrimaryCellContent>
+          <Cell>
+            <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
             <DateCellContent>{row.original.createdAt}</DateCellContent>
           </Cell>
         ),
       },
+      ...(!projectView
+        ? ([
+            {
+              header: ColumnHeader("Project"),
+              id: "title",
+              cell: ({ row }) => (
+                <Cell
+                  link="/community/project/slug"
+                  slug={row.original.project}
+                >
+                  <PrimaryCellContent>
+                    {row.original?.project?.title}
+                  </PrimaryCellContent>
+
+                  <SecondaryCellContent>
+                    {row.original?.project?.builder?.name}
+                  </SecondaryCellContent>
+                </Cell>
+              ),
+            },
+          ] as ColumnDef<IHome, unknown>[])
+        : []),
       {
-        header: ColumnHeader("Project"),
-        id: "title",
-        cell: ({ row }) => (
-          <Cell link="/community/projects/slug" slug={row.original.slug}>
-            <PrimaryCellContent>{row.original.title}</PrimaryCellContent>
-            <SecondaryCellContent>
-              {row.original?.builder?.name}
-            </SecondaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        accessorKey: "orderId",
+        accessorKey: "model",
         cell: ({ row }) => (
           <Cell>
             <SecondaryCellContent>
-              {row.original?.meta?.supervisor?.name}
+              {row.original?.modelName}
             </SecondaryCellContent>
           </Cell>
         ),
-        header: ColumnHeader("Supervisor"),
+        header: ColumnHeader("Model No"),
       },
       {
-        accessorKey: "customer",
-        header: ColumnHeader("Units"),
+        accessorKey: "lot",
+        header: ColumnHeader("Lot/Block"),
         cell: ({ row }) => (
           <Cell>
             <PrimaryCellContent>
-              {row.original._count?.homes}
+              {row.original.lot}
+              {"/"}
+              {row.original.block}
             </PrimaryCellContent>
           </Cell>
         ),
       },
-
+      {
+        accessorKey: "prod",
+        header: ColumnHeader("Production"),
+        cell: ({ row }) => (
+          <Cell>
+            <HomeProductionStatus home={row.original} />
+          </Cell>
+        ),
+      },
       {
         accessorKey: "_status",
         enableHiding: false,
@@ -100,7 +124,7 @@ export default function ProjectsTableShell<T>({
         enableSorting: false,
         // cell: ({ row }) => <OrderRowAction row={row.original} />,
       },
-    ],
+    ], //.filter(Boolean) as any,
     [data, isPending]
   );
   return (
@@ -108,26 +132,16 @@ export default function ProjectsTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={[
-        // {
-        //   id: "_payment" as any,
-        //   title: "Payment",
-        //   single: true,
-        //   options: [
-        //     { label: "Paid Fully", value: "Paid" },
-        //     { label: "Part Paid", value: "Part" },
-        //     { label: "Pending", value: "Pending" },
-        //   ],
-        // },
-        BuilderFilter,
-      ]}
+      filterableColumns={[BuilderFilter]}
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "orderId, customer",
+          title: projectView
+            ? "project Name,model,lot/block"
+            : "model, lot/block",
         },
       ]}
-      newRowLink={`/sales/order/new/form`}
+
       //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );

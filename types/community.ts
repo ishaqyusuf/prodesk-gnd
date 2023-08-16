@@ -1,4 +1,4 @@
-import { Builders, Projects } from "@prisma/client";
+import { Builders, HomeTasks, Homes, Projects } from "@prisma/client";
 
 export type IProject = Projects & {
   meta: {
@@ -17,3 +17,19 @@ export type IProject = Projects & {
 export type IBuilder = Builders & {
   meta: {};
 };
+export type IHome = Homes & {
+  meta: {};
+  project: IProject;
+  tasks: ITasks[];
+};
+
+export type ITasks = HomeTasks & {
+  meta: {};
+};
+export interface IHomeStatus {
+  produceables: number;
+  produced: number;
+  pendingProduction: number;
+  productionStatus;
+  badgeColor;
+}

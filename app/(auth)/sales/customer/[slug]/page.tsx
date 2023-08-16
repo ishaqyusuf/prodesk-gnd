@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICustomer } from "@/types/customers";
-import { Banknote, DollarSign, Plus, ShoppingBag } from "lucide-react";
+import { Banknote, Plus, ShoppingBag } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 

@@ -9,15 +9,22 @@ import { ModalName } from "@/store/slicers";
 
 interface Props {
   title;
+  subtitle?;
   newLink?;
   newDialog?: ModalName;
 }
-export default function PageHeader({ title, newLink, newDialog }: Props) {
+export default function PageHeader({
+  title,
+  newLink,
+  subtitle,
+  newDialog,
+}: Props) {
   const Node = newLink ? Link : Fragment;
   return (
     <div className="flex items-center justify-between space-y-2">
-      <div>
+      <div className="space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+        {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
       </div>
       <div className="flex items-center space-x-2">
         {(newLink || newDialog) && (

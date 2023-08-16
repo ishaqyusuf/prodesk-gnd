@@ -32,6 +32,11 @@ import {
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
 import { IProject } from "@/types/community";
+import { useAppSelector } from "@/store";
+import { loadStaticList } from "@/store/slicers";
+import { staticBuildersAction } from "@/app/_actions/community/builders";
+import { projectSchema } from "@/lib/validations/community-validations";
+import { saveProject } from "@/app/_actions/community/projects";
 
 export default function ProjectModal() {
   const route = useRouter();
@@ -44,13 +49,14 @@ export default function ProjectModal() {
     startTransition(async () => {
       // if(!form.getValues)
       try {
-        // const isValid = emailSchema.parse(form.getValues());
+        const isValid = projectSchema.parse(form.getValues());
 
-        // await saveCustomer({
-        //   ...form.getValues(),
-        // });
+        await saveProject({
+          ...form.getValues(),
+        });
         closeModal();
         toast.message("Customer Created!");
+        route.refresh();
       } catch (error) {
         console.log(error);
         toast.message("Invalid Form");
@@ -58,8 +64,11 @@ export default function ProjectModal() {
       }
     });
   }
+  const builders = useAppSelector((state) => state?.slicers?.staticBuilders);
 
   async function init(data) {
+    loadStaticList("staticBuilders", builders, staticBuildersAction);
+
     form.reset(
       !data
         ? {}
@@ -68,6 +77,7 @@ export default function ProjectModal() {
           }
     );
   }
+  const watchBuilderId = form.watch("builderId");
   return (
     <BaseModal<IProject | undefined>
       className="sm:max-w-[550px]"
@@ -98,17 +108,16 @@ export default function ProjectModal() {
                 onValueChange={(value) => {
                   form.setValue("builderId", Number(value));
                 }}
-                value={`${form.getValues("builderId")}`}
+                value={`${watchBuilderId}`}
               >
                 <SelectTrigger className="h-8">
                   <SelectValue placeholder="" />
                 </SelectTrigger>
-
                 <SelectContent>
                   <SelectGroup>
-                    {profiles?.map((profile, _) => (
-                      <SelectItem key={_} value={`${profile.id}`}>
-                        {profile.title}
+                    {builders?.map((builder, _) => (
+                      <SelectItem key={_} value={`${builder.id}`}>
+                        {builder.name}
                       </SelectItem>
                     ))}
                   </SelectGroup>

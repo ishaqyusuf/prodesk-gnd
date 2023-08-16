@@ -13,7 +13,8 @@ interface Props {
 }
 export function OrderPrintHeader({ order, Logo }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
-
+  const isProd = po?.mode == "production";
+  const showInvoice = ["order", "quote", "invoice"].includes(po?.mode);
   return (
     <thead id="topHeader">
       <tr>
@@ -60,7 +61,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                             }`}
                             value={formatDate(order.createdAt)}
                           />
-                          {po?.mode == "production" && (
+                          {isProd && (
                             <Info1Line
                               label="Due Date"
                               value={formatDate(order.prodDueDate) || "-"}
@@ -75,9 +76,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                             label="Good Until."
                             value={order?.meta?.good_until}
                           />
-                          {po?.mode == "production" ? (
-                            <></>
-                          ) : (
+                          {showInvoice && (
                             <>
                               <InfoLine
                                 label="P.O No."
