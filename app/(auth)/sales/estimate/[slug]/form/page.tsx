@@ -33,7 +33,7 @@ export default async function OrderFormPage({
         {orderId && (
           <BreadLink
             title={orderId}
-            link="/sales/estimate/slug"
+            link={`/sales/estimate/${orderId}`}
             slug={orderId}
           />
         )}
