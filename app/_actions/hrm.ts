@@ -3,7 +3,6 @@
 import { prisma } from "@/db";
 
 export async function getProductionUsersAction() {
-  console.log("#");
   const users = await prisma.users.findMany({
     include: {
       _count: {

@@ -5,10 +5,28 @@ import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
+import { BaseQuery } from "@/types/action";
 
-export interface IGetCustomerActionQuery {}
+export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
-  const where: Prisma.CustomersWhereInput = {};
+  const q = { contains: query._q || undefined };
+  const where: Prisma.CustomersWhereInput = {
+    OR: [
+      {
+        name: q,
+      },
+      {
+        address: q,
+      },
+      {
+        addressBooks: {
+          some: {
+            address1: q,
+          },
+        },
+      },
+    ],
+  };
   const _items = await prisma.customers.findMany({
     where,
     ...(await queryFilter(query)),

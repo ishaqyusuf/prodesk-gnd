@@ -41,7 +41,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pageInfo: TablePageInfo
-  filterableColumns?: DataTableFilterableColumn<TData,TValue>[]
+  filterableColumns?: (DataTableFilterableColumn<TData,TValue> |any ) [] 
   searchableColumns?: DataTableSearchableColumn<TData>[]
   dateFilterColumns?: DataTableDateFilterColumn<TData,TValue>[]
   newRowLink?: string
@@ -201,7 +201,7 @@ export function DataTable2<TData, TValue>({
     [{ date, from, to }, params].map((e, i) =>
       Object.entries(e).map(([k, v]) => {
         if (!v) {
-          console.log([k, v]);
+         
           return;
         } else {
           let __value = typeof v === "string" ? (v as any)?.split(",") : [v];
@@ -233,8 +233,7 @@ export function DataTable2<TData, TValue>({
 
     __updateQuery(_q);
     setInitialized(true);
-    console.log(_q);
-    console.log(filter);
+   
   }
   
   const searchParams = useSearchParams();

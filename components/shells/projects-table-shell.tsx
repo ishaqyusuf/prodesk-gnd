@@ -22,6 +22,7 @@ import {
 import { Button } from "../ui/button";
 import { Printer } from "lucide-react";
 import { IProject } from "@/types/community";
+import { BuilderFilter } from "../filters/builder-filter";
 
 export default function ProjectsTableShell<T>({
   data,
@@ -50,6 +51,9 @@ export default function ProjectsTableShell<T>({
         cell: ({ row }) => (
           <Cell link="/community/projects/slug" slug={row.original.slug}>
             <PrimaryCellContent>{row.original.title}</PrimaryCellContent>
+            <SecondaryCellContent>
+              {row.original?.builder?.name}
+            </SecondaryCellContent>
           </Cell>
         ),
       },
@@ -85,7 +89,7 @@ export default function ProjectsTableShell<T>({
         enableHiding: false,
       },
       {
-        accessorKey: "_payment",
+        accessorKey: "_builderId",
         enableHiding: false,
       },
       {
@@ -105,24 +109,17 @@ export default function ProjectsTableShell<T>({
       pageInfo={pageInfo}
       data={data}
       filterableColumns={[
-        {
-          id: "_payment" as any,
-          title: "Payment",
-          single: true,
-          options: [
-            { label: "Paid Fully", value: "Paid" },
-            { label: "Part Paid", value: "Part" },
-            { label: "Pending", value: "Pending" },
-          ],
-        },
-        //  {
-        //    id: "category",
-        //    title: "Category",
-        //    options: products.category.enumValues.map((category) => ({
-        //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-        //      value: category,
-        //    })),
-        //  },
+        // {
+        //   id: "_payment" as any,
+        //   title: "Payment",
+        //   single: true,
+        //   options: [
+        //     { label: "Paid Fully", value: "Paid" },
+        //     { label: "Part Paid", value: "Part" },
+        //     { label: "Pending", value: "Pending" },
+        //   ],
+        // },
+        BuilderFilter,
       ]}
       searchableColumns={[
         {

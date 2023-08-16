@@ -6,7 +6,9 @@ import { IProject } from "@/types/community";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 
-export interface ProjectsQueryParams extends BaseQuery {}
+export interface ProjectsQueryParams extends BaseQuery {
+  _builderId;
+}
 
 export async function getProjectsAction(
   query: ProjectsQueryParams
@@ -20,7 +22,9 @@ export async function getProjectsAction(
           homes: true,
         },
       },
+      builder: true,
     },
+
     ...(await queryFilter(query)),
   });
   const pageInfo = await getPageInfo(query, where, prisma.projects);
@@ -30,6 +34,14 @@ export async function getProjectsAction(
   };
 }
 function whereProject(query: ProjectsQueryParams) {
-  const where: Prisma.ProjectsWhereInput = {};
+  const q = {
+    contains: query._q || undefined,
+  };
+  const where: Prisma.ProjectsWhereInput = {
+    builderId: {
+      equals: Number(query._builderId) || undefined,
+    },
+  };
+
   return where;
 }

@@ -36,7 +36,7 @@ export interface Option {
 // }
 interface DataTableFacetedFilter<TData, TValue> {
   title?: string;
-options: Option[]
+options: (Option | any)[]
   filter?: DataTableFilterableColumn<TData, TValue>;
   range?;
   single?: Boolean
@@ -45,10 +45,12 @@ options: Option[]
   rangeSwitch?: Boolean;
   defaultValue?: String
   value?,setValue?
+  labelKey?,valueKey?
 }
 export function DataTableFacetedFilter2<TData, TValue>({
   title,value,setValue,
   options,single,column,defaultValue
+  ,labelKey='label', valueKey='value'
 }: DataTableFacetedFilter<TData,TValue>) {
 
   const facets = column?.getFacetedUniqueValues();
@@ -68,6 +70,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
         (isArray ? v : [v]).map((_v) => ns.add(_v));
       }
       setSelectedValue(ns);
+      
     }
   }, [fv]);
 
@@ -101,14 +104,14 @@ export function DataTableFacetedFilter2<TData, TValue>({
                   </Badge>
                 ) : (
                   options
-                    .filter((option) => _selectedValues.has(option.value))
+                    .filter((option) => _selectedValues.has(option[valueKey]?.toString()))
                     .map((option) => (
                       <Badge
                         variant="secondary"
-                        key={option.value}
+                        key={option[valueKey]}
                         className="rounded-sm px-1 font-normal"
                       >
-                        {option.label}
+                        {option[labelKey]}
                       </Badge>
                     ))
                 )}
@@ -124,18 +127,18 @@ export function DataTableFacetedFilter2<TData, TValue>({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
         <Command>
-          {!(single || options.map?.length < 5) && (
+          {!(single || options?.map?.length < 5) && (
             <CommandInput placeholder={title} />
           )}
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
-                const isSelected = _selectedValues.has(option.value);
+              {options?.map((option) => {
+                const isSelected = _selectedValues.has(option[valueKey]);
 
                 return (
                   <CommandItem
-                    key={option.value}
+                    key={option[valueKey]}
                     onSelect={() => {
                       const ns = new Set(_selectedValues);
                       if (single) {
@@ -144,13 +147,13 @@ export function DataTableFacetedFilter2<TData, TValue>({
                           return;
                         }
                         ns.clear();
-                        ns.add(option.value); 
+                        ns.add(option[valueKey]); 
                         setOpen(false);
                       } else {
                         if (isSelected) {
-                          ns.delete(option.value);
+                          ns.delete(option[valueKey]);
                         } else {
-                          ns.add(option.value);
+                          ns.add(option[valueKey]);
                         }
                       }
                       const filterValues = Array.from(ns);
@@ -183,10 +186,10 @@ export function DataTableFacetedFilter2<TData, TValue>({
                     {option.icon && (
                       <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
-                    <span>{option.label}</span>
-                    {facets?.get(option.value) && (
+                    <span>{option[labelKey]}</span>
+                    {facets?.get(option[valueKey]) && (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                        {facets.get(option.value)}
+                        {facets.get(option[valueKey])}
                       </span>
                     )}
                   </CommandItem>

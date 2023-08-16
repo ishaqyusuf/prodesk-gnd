@@ -1,4 +1,4 @@
-import { Projects } from "@prisma/client";
+import { Builders, Projects } from "@prisma/client";
 
 export type IProject = Projects & {
   meta: {
@@ -12,4 +12,8 @@ export type IProject = Projects & {
   _count: {
     homes;
   };
+  builder: IBuilder;
+};
+export type IBuilder = Builders & {
+  meta: {};
 };

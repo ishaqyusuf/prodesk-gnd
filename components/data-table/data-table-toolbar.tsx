@@ -67,17 +67,23 @@ export function DataTableToolbar<TData,TValue>({
           )}
         {filterableColumns.length > 0 &&
           filterableColumns.map(
-            (column) =>
-              table.getColumn(column.id ? String(column.id) : "") && (
+            (column,id) => {
+              // iReact.isValidElement(column) ? <coluColumnmn key={id} /> :
+              if(typeof column === 'function') {
+                 let Column = column as any;
+                return <Column key={id} table={table}/>
+              } 
+              // console.log(typeof column)
+              return  table.getColumn(column.id ? String(column.id) : "") && (
                 <DataTableFacetedFilter2
                   key={String(column.id)}
                   column={table.getColumn(column.id ? String(column.id) : "")}
                   title={column.title}
                   single={column.single}
                   options={column.options}
-                />
-              )
-          )}
+                />)
+            })
+          }
           {
             dateFilterColumns.length > 0 && dateFilterColumns.map(
               (column) => table.getColumn(column.id ? String(column.id): "")

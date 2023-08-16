@@ -1,7 +1,7 @@
 // import { ISalesOrder, ISalesOrderItem } from "@/types/ISales";
 import { deepCopy } from "@/lib/deep-copy";
 import { formatDate } from "@/lib/use-day";
-import { CustomerTypes, Users } from "@prisma/client";
+import { Builders, CustomerTypes, Users } from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
@@ -37,7 +37,10 @@ export interface ISlicer {
     data;
   };
   products: IProduct[];
+  // staticList: IStaticList;
+  staticBuilders: Builders[];
 }
+
 export type ModalName =
   | "assignProduction"
   | "salesComponent"
@@ -53,6 +56,7 @@ const initialState: ISlicer = ({
   modal: {
     name: undefined,
     data: null,
+    staticList: {},
   },
 } as Partial<ISlicer>) as any;
 const headerNavSlice = createSlice({
@@ -94,4 +98,10 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
       data: deepCopy(data),
     })
   );
+}
+export async function loadStaticList(key: keyof ISlicer, list, _loader) {
+  if (!list) {
+    const data = await _loader();
+    dispatchSlice(key, deepCopy(data));
+  }
 }
