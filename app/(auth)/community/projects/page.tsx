@@ -4,9 +4,10 @@ import PageHeader from "@/components/page-header";
 import { IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
-import ProjectsTableShell from "@/components/shells/homes-table-shell";
+
 import { getProjectsAction } from "@/app/_actions/community/projects";
 import ProjectModal from "@/components/modals/project-modal";
+import ProjectsTableShell from "@/components/shells/projects-table-shell";
 
 export const metadata: Metadata = {
   title: "Projects",

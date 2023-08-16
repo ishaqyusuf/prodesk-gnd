@@ -15,21 +15,18 @@ import {
 import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { IHome } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
 import { HomeProductionStatus } from "../columns/community-columns";
+import { IProject } from "@/types/community";
 
-export default function HomesTableShell<T>({
+export default function ProjectsTableShell<T>({
   data,
   pageInfo,
-  projectView,
-}: TableShellProps<IHome> & {
-  projectView: Boolean;
-}) {
+}: TableShellProps<IProject>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<IHome, unknown>[]>(
+  const columns = useMemo<ColumnDef<IProject, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
@@ -43,61 +40,7 @@ export default function HomesTableShell<T>({
           </Cell>
         ),
       },
-      ...(!projectView
-        ? ([
-            {
-              header: ColumnHeader("Project"),
-              id: "title",
-              cell: ({ row }) => (
-                <Cell
-                  link="/community/project/slug"
-                  slug={row.original.project}
-                >
-                  <PrimaryCellContent>
-                    {row.original?.project?.title}
-                  </PrimaryCellContent>
 
-                  <SecondaryCellContent>
-                    {row.original?.project?.builder?.name}
-                  </SecondaryCellContent>
-                </Cell>
-              ),
-            },
-          ] as ColumnDef<IHome, unknown>[])
-        : []),
-      {
-        accessorKey: "model",
-        cell: ({ row }) => (
-          <Cell>
-            <SecondaryCellContent>
-              {row.original?.modelName}
-            </SecondaryCellContent>
-          </Cell>
-        ),
-        header: ColumnHeader("Model No"),
-      },
-      {
-        accessorKey: "lot",
-        header: ColumnHeader("Lot/Block"),
-        cell: ({ row }) => (
-          <Cell>
-            <PrimaryCellContent>
-              {row.original.lot}
-              {"/"}
-              {row.original.block}
-            </PrimaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        accessorKey: "prod",
-        header: ColumnHeader("Production"),
-        cell: ({ row }) => (
-          <Cell>
-            <HomeProductionStatus home={row.original} />
-          </Cell>
-        ),
-      },
       {
         accessorKey: "_status",
         enableHiding: false,
@@ -130,9 +73,7 @@ export default function HomesTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: projectView
-            ? "project Name,model,lot/block"
-            : "model, lot/block",
+          title: "title, builder",
         },
       ]}
 
