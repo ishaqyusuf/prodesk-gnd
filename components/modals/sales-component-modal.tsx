@@ -126,10 +126,12 @@ export default function SalesComponentModal({
       });
 
       const itemK = `items.${rowIndex}`;
-      form.setValue(`items.${rowIndex}.description`, description);
+      console.log(description);
       form.setValue(`items.${rowIndex}.meta.components`, components);
       form.setValue(`items.${rowIndex}.meta.isComponent`, true);
       form.setValue(`items.${rowIndex}.price`, convertToNumber(total, 0));
+
+      form.setValue(`items.${rowIndex}.description`, description);
       const validQty = (qty || 0) > 0;
       if (!validQty) {
         qty = 1;

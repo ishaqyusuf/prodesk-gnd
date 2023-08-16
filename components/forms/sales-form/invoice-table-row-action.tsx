@@ -10,7 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell } from "@/components/ui/table";
-import { addLine, generateItem } from "@/lib/sales/sales-invoice-form";
+import { deepCopy } from "@/lib/deep-copy";
+import {
+  addLine,
+  generateItem,
+  openComponentModal,
+} from "@/lib/sales/sales-invoice-form";
 import { store, useAppSelector } from "@/store";
 import { openItemComponent } from "@/store/invoice-item-component-slice";
 import { ISalesOrderForm } from "@/types/sales";
@@ -72,12 +77,7 @@ export default function InvoiceTableRowAction({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
             onClick={() => {
-              store.dispatch(
-                openItemComponent({
-                  rowIndex,
-                  item: form.getValues(baseKey),
-                })
-              );
+              openComponentModal(deepCopy(form.getValues(baseKey)), rowIndex);
             }}
           >
             <Layers className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
