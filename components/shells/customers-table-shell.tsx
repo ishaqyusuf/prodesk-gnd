@@ -100,12 +100,6 @@ export default function CustomersTableShell<T>({
                   {/* View */}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[150px]">
-                <PrintOrderMenuAction
-                  row={null as any}
-                  ids={items?.map((i) => i?.original?.id)}
-                />
-              </DropdownMenuContent>
             </DropdownMenu>
           </>
         );

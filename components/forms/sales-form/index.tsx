@@ -189,6 +189,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
 
             <DropdownMenuContent align="end" className="w-[160px]">
               <PrintOrderMenuAction row={{ id: form.getValues("id") } as any} />
+              <PrintOrderMenuAction
+                pdf
+                row={{ id: form.getValues("id") } as any}
+              />
               {/* <DropdownMenuItem>
             <Carrot className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Catalog

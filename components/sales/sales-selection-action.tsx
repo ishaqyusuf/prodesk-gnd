@@ -30,6 +30,11 @@ export function SalesSelectionAction({ items }) {
             row={null as any}
             ids={items?.map((i) => i?.original?.id)}
           />
+          <PrintOrderMenuAction
+            pdf
+            row={null as any}
+            ids={items?.map((i) => i?.original?.id)}
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </>

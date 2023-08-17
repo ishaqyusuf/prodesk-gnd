@@ -18,6 +18,7 @@ import {
   Check,
   Construction,
   Copy,
+  FileText,
   FlagIcon,
   Info,
   ListOrderedIcon,
@@ -124,6 +125,7 @@ export function OrderRowAction(props: IOrderRowProps) {
           )}
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction estimate={estimate} row={row} />
+          <PrintOrderMenuAction pdf estimate={estimate} row={row} />
           <DeleteRowMenuAction row={row} />
         </DropdownMenuContent>
       </DropdownMenu>
@@ -176,15 +178,18 @@ export const DeleteRowMenuAction = typedMemo(({ row }: IOrderRowProps) => {
     </DropdownMenuItem>
   );
 });
+
 export const PrintOrderMenuAction = typedMemo(
   (
     props: IOrderRowProps & {
       ids?: number[];
+      pdf?: Boolean;
     }
   ) => {
     function _print(mode: IOrderPrintMode) {
       dispatchSlice("printOrders", {
         mode,
+        pdf: props.pdf,
         ids: props.ids || [props.row.id],
       });
     }
@@ -244,8 +249,17 @@ export const PrintOrderMenuAction = typedMemo(
     ) : (
       <DropdownMenuSub>
         <DropdownMenuSubTrigger>
-          <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Print
+          {!props.pdf ? (
+            <>
+              <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Print
+            </>
+          ) : (
+            <>
+              <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Pdf
+            </>
+          )}
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent>
           <PrintOptions />

@@ -1,5 +1,5 @@
 "use client";
-
+import html2pdf from "html2pdf.js";
 import { useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
 import { useEffect } from "react";
@@ -18,12 +18,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
-
+import { jsPDF } from "jspdf";
 interface Props {}
 export default function OrderPrinter({}: Props) {
   const printer = useAppSelector((state) => state.slicers.printOrders);
   useEffect(() => {
-    print(printer);
+    print();
   }, [printer]);
   const [sales, setSales] = useState<ISalesOrder[]>([]);
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function OrderPrinter({}: Props) {
     }
   }, [sales]);
 
-  async function print(printer: { mode; ids: number[] }) {
+  async function print() {
     if (!printer) return;
     setSales(printer.ids.map((slug) => ({ slug, loading: true })) as any);
     const _sales = await salesPrintAction({
@@ -44,7 +44,48 @@ export default function OrderPrinter({}: Props) {
     adjustWatermark(sales?.map((s) => s.orderId));
     console.log(sales);
     // await timeout(800);
-    window.print();
+    if (!printer.pdf) window.print();
+    else {
+      //
+      const mainDoc = document.getElementById("orderPrintSection");
+      if (mainDoc) {
+        // const doc = document.getElementById("orderPrintSection")?.cloneNode();
+        const doc = document.createElement("div");
+        doc.innerHTML = mainDoc.innerHTML;
+        doc?.classList?.remove("hidden");
+        const filename = `${_sales.filter((s) => s.orderId).join("-")} ${
+          printer.mode
+        }.pdf`;
+        const options = {
+          // margin: 20
+
+          margin: [0, 10, 0, 10], //top, lef
+          // margin: [15, 0, 15, 0],
+          filename, //: 'document.pdf',
+          // jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          image: { type: "jpeg", quality: 1 },
+          html2canvas: {
+            dpi: 192,
+            scale: 4,
+            letterRendering: true,
+            useCORS: true,
+          },
+        };
+        // const pdf = await html2pdf()
+        //   .from(doc)
+        //   .set(options)
+        //   .outputPDF('');
+        html2pdf()
+          .set(options)
+          .from(doc)
+          .toPdf()
+          .save(filename);
+        // doc?.classList?.add("hidden");
+      }
+      // .output("blob");
+      // pdf.save();
+    }
     // await timeout(200);
     dispatchSlice("printOrders", null);
   }
@@ -62,7 +103,7 @@ export default function OrderPrinter({}: Props) {
     </Link>
   );
   return (
-    <BasePrinter>
+    <BasePrinter id="orderPrintSection">
       {sales.map((order, _) => (
         // <PrintOrderSection index={_} order={order} key={_} />
         <div id={`salesPrinter`} key={_}>

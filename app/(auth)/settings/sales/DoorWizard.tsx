@@ -8,6 +8,7 @@ import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import WizardForm from "./components/wizard-form";
 import * as React from "react";
 
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as randomUUID } from "uuid";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -25,7 +26,7 @@ export default function DoorWizardSettings({
 }: {
   form: UseFormReturn<ISalesSetting>;
 }) {
-  const { fields, append, update } = useFieldArray({
+  const { fields, append, update, replace } = useFieldArray({
     control: form.control,
     name: "meta.wizard.form",
   });
@@ -38,6 +39,13 @@ export default function DoorWizardSettings({
   }>({
     defaultValues: {},
   });
+  const handleOndragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(fields);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem as any);
+    replace(items);
+  };
   return (
     <div className="space-y-6">
       <div className="flex justify-between">
@@ -101,55 +109,81 @@ export default function DoorWizardSettings({
          
         </Plate> */}
       </div>
+      <DragDropContext onDragEnd={handleOndragEnd}>
+        <Droppable droppableId="droppable-1">
+          {(provided) => {
+            return (
+              <ul
+                role="list"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {fields
+                  // .filter((item) => !item.deleted)
+                  .map(
+                    (field, rowIndex) =>
+                      !field.deleted && (
+                        <Draggable
+                          key={rowIndex}
+                          draggableId={field.id}
+                          index={rowIndex}
+                        >
+                          {(provided) => {
+                            return (
+                              <div
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                ref={provided.innerRef}
+                                key={field.id}
+                                className="flex w-full items-center rounded border-b p-2"
+                              >
+                                <div className="flex flex-1">
+                                  {/* <div className="w-5">{rowIndex + 1}.</div> */}
+                                  <h4>{field.label || "No Label"}</h4>
+                                </div>
+                                <div className="inline-flex space-x-2">
+                                  <Button
+                                    className="h-8"
+                                    onClick={() => {
+                                      wizardForm.reset({
+                                        rowIndex,
+                                        wizard: deepCopy(field),
+                                      });
+                                      setOpen(true);
+                                    }}
+                                    size="sm"
+                                    variant={"secondary"}
+                                  >
+                                    <Edit2 className="h-3.5 w-3.5 " />
+                                  </Button>
+                                  <Button
+                                    className="h-8"
+                                    onClick={() => {
+                                      // wizardForm.setValue('')
+                                      update(rowIndex, {
+                                        ...field,
+                                        deleted: true,
+                                      });
+                                    }}
+                                    size="sm"
+                                    variant={"secondary"}
+                                  >
+                                    <Trash className="h-3.5 w-3.5 " />
+                                  </Button>
+                                </div>
+                              </div>
+                            );
+                          }}
+                        </Draggable>
+                      )
+                  )}
+                {provided.placeholder}
+              </ul>
+            );
+          }}
+        </Droppable>
+      </DragDropContext>
 
-      <div className="space-y-4">
-        {fields
-          // .filter((item) => !item.deleted)
-          .map(
-            (field, rowIndex) =>
-              !field.deleted && (
-                <div
-                  key={field.id}
-                  className="flex w-full items-center rounded border-b p-2"
-                >
-                  <div className="flex flex-1">
-                    {/* <div className="w-5">{rowIndex + 1}.</div> */}
-                    <h4>{field.label || "No Label"}</h4>
-                  </div>
-                  <div className="inline-flex space-x-2">
-                    <Button
-                      className="h-8"
-                      onClick={() => {
-                        wizardForm.reset({
-                          rowIndex,
-                          wizard: deepCopy(field),
-                        });
-                        setOpen(true);
-                      }}
-                      size="sm"
-                      variant={"secondary"}
-                    >
-                      <Edit2 className="h-3.5 w-3.5 " />
-                    </Button>
-                    <Button
-                      className="h-8"
-                      onClick={() => {
-                        // wizardForm.setValue('')
-                        update(rowIndex, {
-                          ...field,
-                          deleted: true,
-                        });
-                      }}
-                      size="sm"
-                      variant={"secondary"}
-                    >
-                      <Trash className="h-3.5 w-3.5 " />
-                    </Button>
-                  </div>
-                </div>
-              )
-          )}
-      </div>
       <WizardForm
         form={wizardForm}
         append={append}

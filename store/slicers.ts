@@ -25,6 +25,7 @@ export interface ISlicer {
     mode: IOrderPrintMode;
     ids: number[];
     isClient;
+    pdf?: Boolean;
   };
   printUnits: string[];
   modal: {
