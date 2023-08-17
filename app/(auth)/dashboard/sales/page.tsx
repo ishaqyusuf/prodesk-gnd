@@ -33,8 +33,8 @@ export default async function SalesDashboardPage({}: Props) {
       <Portal nodeId="dashboardTitle">Sales Dashboard</Portal>
 
       <StatCardContainer>
-        <StartCard icon="dollar" value={totalSales} label="Total Sales" money />
-        <StartCard icon="dollar" value={amountDue} label="Amount Due" money />
+        <StartCard masked icon="dollar" value={totalSales} label="Total Sales" money />
+        <StartCard masked icon="dollar" value={amountDue} label="Amount Due" money />
         <StartCard
           label="Total Orders"
           icon="line"

@@ -14,11 +14,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { useDebounce } from "@/hooks/use-debounce";
 
-interface ComboboxProps<T> {
+export interface ComboboxProps<T> {
   list?;
   selected?(T);
-  form: UseFormReturn<any>;
-  keyName;
+  form?: UseFormReturn<any>;
+  keyName?;
   labelKey?;
   valueKey?;
   align?: "start" | "end" | "center" | undefined;
@@ -29,6 +29,8 @@ interface ComboboxProps<T> {
   className?;
   prompSize?: "sm" | "md" | "lg" | "auto";
   onFocus?;
+  value?;
+  setValue?;
 }
 export default function Combobox<T>({
   list = [],
@@ -43,6 +45,8 @@ export default function Combobox<T>({
   selected,
   valueKey,
   onFocus,
+  value,
+  setValue,
   ...props
 }: ComboboxProps<T>) {
   interface IItem {
@@ -55,7 +59,8 @@ export default function Combobox<T>({
   const [items, setItems] = React.useState<IItem[]>([]);
   function selectItem(v: IItem) {
     setOpen(false);
-    form.setValue(keyName, v.value);
+    if (form) form.setValue(keyName, v.value);
+    setValue && setValue(v.value);
     setQ("");
     selected && selected(v.data);
   }
@@ -65,7 +70,7 @@ export default function Combobox<T>({
   function getValue(v) {
     return typeof v === "string" ? v : labelKey ? v[labelKey] : v?.value;
   }
-  const watch = form.watch(keyName);
+  const watch = form ? form.watch(keyName) : value;
   const [q, setQ] = React.useState("");
   React.useEffect(() => {
     setItems(list?.map(transformItem));
@@ -131,7 +136,7 @@ export default function Combobox<T>({
             variant="outline"
             className="line-clamp-1 h-8 w-full justify-start px-2 text-start"
           >
-            {form.getValues(keyName)}
+            {form ? form.getValues(keyName) : value}
           </Button>
           {/* </div> */}
         </PopoverTrigger>
@@ -144,7 +149,7 @@ export default function Combobox<T>({
           <Command shouldFilter={false}>
             <CommandInput
               onFocus={() => {
-                setQ(form.getValues(keyName));
+                setQ(form ? form.getValues(keyName) : value);
                 setSearchable(true);
               }}
               onBlur={() => {

@@ -61,6 +61,7 @@ export default function SalesComponentModal({
   const settings = ctx.settings;
 
   const [wFields, setWFields] = useState<string[]>([]);
+  const [swing, setSwing] = useState<string | undefined>();
   const watchSums = frm.watch(wFields as any);
   const [total, setTotal] = useState<number>();
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function SalesComponentModal({
     watchSums.map((c) => (totals += convertToNumber(c)));
     setTotal(totals?.toFixed(2) as any);
   }, [watchSums]);
+
   function _init({ item, components, rowIndex }: ISalesComponentModal) {
     setWizardForm([]);
     const wizard = settings.wizard.form;
@@ -94,6 +96,7 @@ export default function SalesComponentModal({
     setWizardForm(_componentWizard);
 
     frm.setValue("components", _wizardForm);
+    setSwing(form.getValues(`items.${rowIndex}.swing`) as any);
     return;
   }
   function save({ rowIndex }: ISalesComponentModal) {
@@ -130,6 +133,7 @@ export default function SalesComponentModal({
       form.setValue(`items.${rowIndex}.meta.components`, components);
       form.setValue(`items.${rowIndex}.meta.isComponent`, true);
       form.setValue(`items.${rowIndex}.price`, convertToNumber(total, 0));
+      form.setValue(`items.${rowIndex}.swing`, swing as any);
 
       form.setValue(`items.${rowIndex}.description`, description);
       const validQty = (qty || 0) > 0;
@@ -167,6 +171,19 @@ export default function SalesComponentModal({
               </TableRow>
             </TableHeader>
             <TableBody>
+              <TableRow>
+                <TableHead className="">Swing</TableHead>
+                <TableCell id="Name" className="p-0 px-1">
+                  <Combobox
+                    // className="w-24"
+                    id="swing"
+                    allowCreate
+                    value={swing}
+                    setValue={setSwing}
+                    list={ctx.swings}
+                  />
+                </TableCell>
+              </TableRow>
               {wizardForm.map((field, i) => (
                 <ComponentRow
                   form={form}
@@ -176,18 +193,6 @@ export default function SalesComponentModal({
                 />
               ))}
             </TableBody>
-            <TableFooter className="">
-              <TableRow className="hover:bg-inherit">
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                {/* <TableCell></TableCell> */}
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell className="whitespace-nowrap text-center">
-                  {/* $ {total} */}
-                </TableCell>
-              </TableRow>
-            </TableFooter>
           </Table>
         </>
       )}

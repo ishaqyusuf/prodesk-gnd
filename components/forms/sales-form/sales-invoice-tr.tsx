@@ -72,7 +72,7 @@ export const SalesInvoiceTr = ({
             />
           </TableCell>
           <ItemCell rowIndex={i} form={form} />
-          <SwingCell rowIndex={i} form={form} />
+          <SwingCell rowIndex={i} form={form} ctx={ctx} />
           <TableCell id="supplier" className="p-0 px-1">
             <Combobox
               keyName={`items.${i}.meta.supplier`}

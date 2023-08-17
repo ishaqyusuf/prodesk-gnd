@@ -1,5 +1,6 @@
 "use client";
 
+import Money from "@/components/money";
 import { _useId } from "@/hooks/use-id";
 import { useAppSelector } from "@/store";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
@@ -96,9 +97,11 @@ export function OrderPrintInvoiceLines({ order }: Props) {
                   )}
                 </td>
                 <td colSpan={2} valign="middle" align="right">
-                  {line?.total && (
-                    <p className="pr-2 font-medium">${line?.total}</p>
-                  )}
+                  <Money
+                    validOnly
+                    className="pr-2 font-medium"
+                    value={line?.total}
+                  />
                 </td>
               </>
             )}

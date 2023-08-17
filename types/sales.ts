@@ -51,7 +51,7 @@ export type ISalesOrderMeta = {
   sales_percentage;
   po;
   manual_estimate: Boolean;
-  good_until;
+
   rep;
   job_address;
   type: "estimate" | null;

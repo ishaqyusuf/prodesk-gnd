@@ -4,8 +4,13 @@ import { TableCell } from "@/components/ui/table";
 import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
+import AutoComplete from "@/components/auto-complete";
 
-export default function SwingCell({ rowIndex, form }: SalesInvoiceCellProps) {
+export default function SwingCell({
+  rowIndex,
+  ctx,
+  form,
+}: SalesInvoiceCellProps) {
   const getSwingValue = () => form.getValues(`items.${rowIndex}.swing`);
   const [swing, setSwing] = useState<string | undefined>(
     getSwingValue() || undefined
@@ -23,14 +28,14 @@ export default function SwingCell({ rowIndex, form }: SalesInvoiceCellProps) {
           form.setValue(`items.${rowIndex}.swing`, e.target.value);
         }}
       />
-      {/* <Combobox
-              keyName={`items.${i}.swing`}
-              className="w-24"
-              id="swing"
-              allowCreate
-              form={form}
-              list={ctx.swings}
-            /> */}
+      {/* <AutoComplete
+        keyName={`items.${rowIndex}.swing`}
+        className="w-24"
+        id="swing"
+        allowCreate
+        form={form}
+        list={ctx?.swings}
+      /> */}
     </TableCell>
   );
 }

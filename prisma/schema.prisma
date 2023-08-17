@@ -810,6 +810,8 @@ model SalesOrders {
     orderId            String                       @unique @db.VarChar(255)
     slug               String                       @db.VarChar(255)
     type               String?                      @db.VarChar(255)
+    goodUntil          DateTime?
+    paymentTerm        String?
     prodQty            Float?
     builtQty           Float?
     subTotal           Float?

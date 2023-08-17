@@ -30,6 +30,8 @@ import { Input } from "@/components/ui/input";
 
 import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
+import Btn from "@/components/btn";
+import InfoCard from "./info-card";
 
 interface Props {
   data: SalesFormResponse;
@@ -105,6 +107,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
 
       ...formValues
     }: ISalesOrder = deepCopy(form.getValues());
+
     formValues.amountDue =
       Number(formValues.grandTotal || 0) - pageData.paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
@@ -144,6 +147,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   }
   return (
     <div className="px-8">
+      <OrderPrinter />
       <section id="header" className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
@@ -195,7 +199,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
-          <OrderPrinter />
         </div>
       </section>
       <section
@@ -203,43 +206,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5"
       >
         <div className="col-span-2 ">
-          <div className="group relative  h-full w-full  rounded border border-slate-300 p-2 text-start hover:bg-slate-100s hover:shadows">
-            <div className="space-y-1">
-              {orderInformation.map((line, key) => (
-                <div
-                  key={key}
-                  className="  md:grid md:grid-cols-2 items-center xl:grid-cols-3"
-                >
-                  <Label className="text-muted-foreground">{line.label}</Label>
-
-                  <div className="text-end text-sm xl:col-span-2">
-                    {key == 0 && (
-                      <SalesCustomerProfileInput
-                        form={form}
-                        profiles={data?.ctx?.profiles}
-                      />
-                    )}
-                    {[1, 3, 4].includes(key) && (
-                      <div className="flex justify-end">
-                        <Input
-                          className="h-6 w-[100px] uppercase"
-                          {...form.register(line.key as any)}
-                        />
-                      </div>
-                    )}
-                    {key > 1 && (
-                      <div className="">
-                        {line.key == "prodDueDate"
-                          ? formatDate(form.getValues(line.key))
-                          : form.getValues(line.key as any) ?? "-"}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* </OrderEditInfo> */}
+          <InfoCard data={data} form={form} />
         </div>
         <div className="col-span-2 ">
           <SalesCustomerModal form={form} profiles={data.ctx?.profiles} />
@@ -251,20 +218,3 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     </div>
   );
 }
-
-export const orderInformation: {
-  label: string;
-  key: string; //: keyof ISalesOrder;
-  value?: any;
-}[] = [
-  {
-    label: "Profile",
-    key: "meta.sales_profile",
-    value: "",
-  },
-  { label: "Q.B Order #.", key: "meta.qb" },
-  { label: "Sales Rep.", key: "meta.rep" },
-  { label: "P.O No.", key: "meta.po" },
-  { label: "Good Until", key: "meta.good_until" },
-  // { label: "Due Date", key: "prodDueDate" },
-];

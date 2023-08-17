@@ -1,8 +1,9 @@
 "use client";
 
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { DollarSign, LineChart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Props {
   children?;
@@ -18,8 +19,16 @@ interface StatCardProps {
   money?: Boolean;
   icon?: "dollar" | "line";
   value;
+  masked?: Boolean;
 }
-export function StartCard({ label, value, money, icon, info }: StatCardProps) {
+export function StartCard({
+  label,
+  masked,
+  value,
+  money,
+  icon,
+  info,
+}: StatCardProps) {
   let Icon: any = null;
   switch (icon) {
     case "dollar":
@@ -29,7 +38,24 @@ export function StartCard({ label, value, money, icon, info }: StatCardProps) {
       Icon = LineChart;
       break;
   }
+  const [isMasked, setIsMasked] = useState(masked);
+  const [displayValue, setDisplayValue] = useState("");
+  useEffect(() => {
+    // {money ? formatCurrency.format(value) : value}
+    if (!money) setDisplayValue(value);
+    else {
+      //
+      if (masked && isMasked) setDisplayValue(maskedValue());
+      else setDisplayValue(unmaskedValue());
+    }
+  }, [money, value, isMasked, masked]);
 
+  function unmaskedValue() {
+    return formatCurrency.format(value);
+  }
+  function maskedValue() {
+    return unmaskedValue().replace(/\d/g, "*");
+  }
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -48,9 +74,18 @@ export function StartCard({ label, value, money, icon, info }: StatCardProps) {
           <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg> */}
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">
-          {money ? formatCurrency.format(value) : value}
+      <CardContent className="">
+        <div
+          onClick={() => {
+            setIsMasked(!isMasked);
+          }}
+          className={cn(
+            "text-2xl font-bold",
+            masked && isMasked && "tracking-wider",
+            masked && "cursor-pointer"
+          )}
+        >
+          {displayValue}
         </div>
         <p className="text-xs text-muted-foreground">
           {/* +20.1% from last month */}
