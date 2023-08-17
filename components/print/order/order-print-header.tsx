@@ -74,7 +74,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                           <InfoLine label="Rep." value={order?.meta?.rep} />
                           <InfoLine
                             label="Good Until."
-                            value={order?.meta?.good_until}
+                            value={order?.goodUntil}
                           />
                           {showInvoice && (
                             <>
