@@ -53,7 +53,7 @@ export default function OrderPrinter({}: Props) {
         const doc = document.createElement("div");
         doc.innerHTML = mainDoc.innerHTML;
         doc?.classList?.remove("hidden");
-        const filename = `${_sales.filter((s) => s.orderId).join("-")} ${
+        const filename = `${_sales.map((s) => s.orderId).join("-")} ${
           printer.mode
         }.pdf`;
         const options = {
