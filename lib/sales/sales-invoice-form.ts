@@ -85,8 +85,9 @@ export function calibrateLines(fields) {
     return {
       ...i,
       meta: removeEmptyValues({
-        ...i.meta,
+        ...(i.meta || {}),
         uid,
+        line_index: null,
       }),
     };
   });

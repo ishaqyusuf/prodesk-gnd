@@ -17,6 +17,7 @@ import { ProdItemActions } from "@/components/actions/prod-item-actions";
 export default function ItemDetailsSection() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
   const isProd = order?.ctx?.prodPage;
+  console.log(order);
   return (
     <div className="">
       <Card>
@@ -45,7 +46,9 @@ export default function ItemDetailsSection() {
               {order.items?.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell className="p-2">
-                    <p className="">{item.description}</p>
+                    <p className="">
+                      {item.description} {item?.meta?.uid}
+                    </p>
                   </TableCell>
                   <TableCell className="p-2 ">
                     <p className="whitespace-nowrap font-semibold text-muted-foreground">

@@ -116,8 +116,7 @@ export async function getOrderAction(orderId,isProd = false) {
     },
   });
   if (!order) return null;
-  console.log(order);
-  const progress = await getProgress({
+   const progress = await getProgress({
     where: [
       {
         progressableId: order.id,
@@ -131,8 +130,13 @@ export async function getOrderAction(orderId,isProd = false) {
       },
     ],
   }); 
+  function lineIndex(line)
+  {
+    return Number(line?.meta?.line_index || line?.meta?.uid || 0); 
+  }
   return {
     ...order,
+    items: order.items.sort((a,b) => lineIndex(a) - lineIndex(b)),
     progress,
   };
 }

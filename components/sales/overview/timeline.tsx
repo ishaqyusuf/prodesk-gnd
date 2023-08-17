@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { openModal } from "@/lib/modal";
+import { formatDate } from "@/lib/use-day";
 import { useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
 import { ISalesOrder } from "@/types/sales";
@@ -44,7 +45,7 @@ export default function Timeline() {
                     <div className="flex justify-between space-x-2">
                       <p className="font-medium">{item.status}</p>
                       <p className="text-muted-foreground font-semibold">
-                        {item.createdAt as any}
+                        {formatDate(item.createdAt)}
                       </p>
                     </div>
                     <p className="text-muted-foreground">{item.headline}</p>

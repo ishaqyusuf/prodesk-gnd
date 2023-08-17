@@ -22,7 +22,7 @@ import InvoiceTableFooter from "./invoice-table-footer";
 import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import SalesComponentModal from "@/components/modals/sales-component-modal";
-
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 export default function SalesInvoiceTable({
   form,
   data,
@@ -61,6 +61,7 @@ export default function SalesInvoiceTable({
     };
   }, [hideFooter.isLoading]);
   const [isPending, startTransition] = React.useTransition();
+
   return (
     <div className="relative">
       <Table>
@@ -81,6 +82,7 @@ export default function SalesInvoiceTable({
             <TableHead className="w-10 px-1"></TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {fields.map((field, i) => (
             <SalesInvoiceTr

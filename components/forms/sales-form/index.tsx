@@ -53,7 +53,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   });
   useEffect(() => {
     let resp = data;
-
+    console.log(resp);
     const _formData: any = resp?.form || { meta: {} };
 
     form.reset({
@@ -117,6 +117,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const deleteIds: number[] = [];
     let items = calibrateLines(_items)
       ?.map((item, index) => {
+        delete item.salesOrderId;
         if (!item.description && !item?.total) {
           if (item.id) deleteIds.push(item.id);
           return null;
@@ -128,6 +129,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         );
       })
       .filter(Boolean);
+    console.log(items);
     return {
       id,
       order: numeric<SalesOrders>(
