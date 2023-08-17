@@ -8,7 +8,6 @@ interface Props {
 }
 export default function Money({ value, validOnly, className }: Props) {
   if (!value) value = 0;
-  if ((value || 0) > 0)
-    return <span className={cn(className)}>${toFixed(value)}</span>;
-  return null;
+  if (!value && validOnly) return null;
+  return <span className={cn(className)}>${toFixed(value)}</span>;
 }

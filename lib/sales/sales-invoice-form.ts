@@ -4,9 +4,12 @@ import {
   IFooterInfo,
   ISalesOrderForm,
   ISalesOrderItem,
+  ISalesOrderItemMeta,
   WizardKvForm,
 } from "@/types/sales";
 import { openModal } from "../modal";
+import { removeEmptyValues } from "../utils";
+import { deepCopy } from "../deep-copy";
 
 export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
   if (!items) items = [];
@@ -81,14 +84,17 @@ export function calibrateLines(fields) {
   return fields.map((i, uid) => {
     return {
       ...i,
-      meta: {
+      meta: removeEmptyValues({
         ...i.meta,
         uid,
-      },
+      }),
     };
   });
 }
-
+export function insertLine(items, index, item) {
+  if (!items) items = [];
+  return [...items.slice(0, index), item, ...items.slice(index)];
+}
 export function footerEstimate({
   form,
   footerInfo,
@@ -172,4 +178,16 @@ export function composeItemDescription({
   description = description.replace(/\|\s*$/g, "");
 
   return description;
+}
+export function copySalesItem(item) {
+  const { id, meta, createdAt, updatedAt, ...itemData } = deepCopy(
+    item || {
+      meta: {},
+    }
+  ) as ISalesOrderItem;
+  const { produced_qty, uid, ..._meta } = meta as ISalesOrderItemMeta;
+  return {
+    ...itemData,
+    meta: _meta,
+  };
 }

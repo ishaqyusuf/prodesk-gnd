@@ -25,7 +25,10 @@ import { SalesCustomerProfileInput } from "./customer-profile-input";
 import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
-import { initInvoiceItems } from "@/lib/sales/sales-invoice-form";
+import {
+  calibrateLines,
+  initInvoiceItems,
+} from "@/lib/sales/sales-invoice-form";
 import { Input } from "@/components/ui/input";
 
 import CatalogModal from "@/components/modals/catalog-modal";
@@ -112,16 +115,13 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       Number(formValues.grandTotal || 0) - pageData.paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
     const deleteIds: number[] = [];
-    let items = _items
+    let items = calibrateLines(_items)
       ?.map((item, index) => {
         if (!item.description && !item?.total) {
           if (item.id) deleteIds.push(item.id);
           return null;
         }
-        item.meta = removeEmptyValues({
-          ...(item.meta as any),
-          uid: index,
-        });
+
         return numeric<SalesOrderItems>(
           ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
           item

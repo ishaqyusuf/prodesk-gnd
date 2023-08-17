@@ -13,16 +13,19 @@ import { TableCell } from "@/components/ui/table";
 import { deepCopy } from "@/lib/deep-copy";
 import {
   addLine,
+  copySalesItem,
   generateItem,
+  insertLine,
   openComponentModal,
 } from "@/lib/sales/sales-invoice-form";
 import { store, useAppSelector } from "@/store";
 import { openItemComponent } from "@/store/invoice-item-component-slice";
-import { ISalesOrderForm } from "@/types/sales";
+import { ISalesOrderForm, ISalesOrderItem } from "@/types/sales";
 
 import {
   ArrowDown,
   ArrowUp,
+  Copy,
   Delete,
   Layers,
   MoreHorizontal,
@@ -62,6 +65,19 @@ export default function InvoiceTableRowAction({
       remove(rowIndex);
     });
   }
+  function clearLine() {
+    startTransition(() => {});
+  }
+  function copyLine() {
+    startTransition(() => {
+      let _fields = watchItems || [];
+      let copy: ISalesOrderItem = copySalesItem(_fields?.[rowIndex]) as any;
+
+      if (copy) {
+        replace(insertLine(_fields, rowIndex, copy));
+      }
+    });
+  }
   return (
     <TableCell className="p-0 px-1">
       <DropdownMenu>
@@ -83,10 +99,16 @@ export default function InvoiceTableRowAction({
             <Layers className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Component
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={clearLine}>
             <Delete className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Clear
           </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={copyLine}>
+            <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Copy
+          </DropdownMenuItem>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Plus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />

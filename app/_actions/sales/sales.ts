@@ -23,6 +23,7 @@ import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getProgress } from "../progress";
 import { fixSalesPaymentAction } from "./sales-payment";
+import { removeEmptyValues } from "@/lib/utils";
 
   function whereSales(query: SalesQueryParams) {
   const {
@@ -402,6 +403,8 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
       const {
         id,
         salesOrderId,
+        createdAt,
+        updatedAt,
         meta, //: { produced_qty, ..._meta },
 
         ...item
@@ -409,7 +412,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
       const { produced_qty, ..._meta } = meta as ISalesOrderItemMeta;
       return {
         ...item,
-        meta: _meta,
+        meta: removeEmptyValues(_meta),
       };
     }) as any,
   });
