@@ -48,23 +48,44 @@ export default function InfoCard({
             {...form.register("meta.po")}
           />
         </InfoLine>
-        <InfoLine label="Payment Terms">
-          <Select
-            value={watchPaymentTerm as any}
-            onValueChange={(e) => form.setValue("paymentTerm", e)}
-          >
-            <SelectTrigger className="h-6 w-[100px]">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="Net10">Net10</SelectItem>
-                <SelectItem value="Net20">Net20</SelectItem>
-                <SelectItem value="Net30">Net30</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </InfoLine>
+        {watchType == "order" && (
+          <InfoLine label="Payment Terms">
+            <Select
+              value={watchPaymentTerm as any}
+              onValueChange={(e) => form.setValue("paymentTerm", e)}
+            >
+              <SelectTrigger className="h-6 w-[100px]">
+                <SelectValue placeholder="" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="Net10">Net10</SelectItem>
+                  <SelectItem value="Net20">Net20</SelectItem>
+                  <SelectItem value="Net30">Net30</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </InfoLine>
+        )}
+        {watchType == "estimate" && (
+          <InfoLine label="Good Until">
+            {/* <Select
+              value={watchPaymentTerm as any}
+              onValueChange={(e) => form.setValue("paymentTerm", e)}
+            >
+              <SelectTrigger className="h-6 w-[100px]">
+                <SelectValue placeholder="" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="Net10">Net10</SelectItem>
+                  <SelectItem value="Net20">Net20</SelectItem>
+                  <SelectItem value="Net30">Net30</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select> */}
+          </InfoLine>
+        )}
       </div>
     </div>
   );
