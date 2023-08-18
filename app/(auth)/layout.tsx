@@ -22,12 +22,12 @@ export default function AccountLayout({ children }: any) {
     <>
       <div
         className={`${!sb.noSideBar &&
-          "md:grid-cols-[220px_minmax(0,1fr)]   lg:grid-cols-[240px_minmax(0,1fr)]"} md:grid `}
+          "smd:grid-cols-[220px_minmax(0,1fr)]   lg:grid-cols-[240px_minmax(0,1fr)]"} lg:grid `}
       >
         {!sb.noSideBar && (
           <SiteNav
             nav={sb}
-            className="fixed top-0 z-30 -ml-2 hidden h-[calc(100vh)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block"
+            className="fixed top-0 z-30 -ml-2 hidden h-[calc(100vh)] w-full shrink-0 overflow-y-auto border-r lg:sticky lg:block"
           />
         )}
         <main className="">

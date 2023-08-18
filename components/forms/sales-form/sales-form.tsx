@@ -35,6 +35,7 @@ import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
 import Btn from "@/components/btn";
 import InfoCard from "./info-card";
+import dayjs from "dayjs";
 
 interface Props {
   data: SalesFormResponse;
@@ -48,6 +49,8 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   const defaultValues: ISalesOrder = {
     ...data?.form,
   };
+  //old payment term
+  const opTerm = data?.form?.paymentTerm;
   const form = useForm<ISalesOrder>({
     defaultValues,
   });
@@ -115,6 +118,18 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       Number(formValues.grandTotal || 0) - pageData.paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
     const deleteIds: number[] = [];
+    if (formValues.type == "order") {
+      if (!id || formValues.paymentTerm != opTerm) {
+        const ts = formValues.paymentTerm?.replace("Net", "");
+        const term = Number(ts);
+        if (term)
+          formValues.goodUntil = new Date(
+            dayjs()
+              .add(term, "D")
+              .toISOString()
+          );
+      }
+    }
     let items = calibrateLines(_items)
       ?.map((item, index) => {
         delete item.salesOrderId;

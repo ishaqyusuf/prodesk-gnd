@@ -13,6 +13,7 @@ import Upgrader from "@/components/upgrader";
 // import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 export const metadata: Metadata = {
   title: "GND-PRODESK",
   description: "home page",
@@ -44,6 +45,7 @@ export default function RootLayout({
         </div>
         <Toaster />
         <Analytics />
+        <TailwindIndicator/>
         {prodDB && !isProd && (
           <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
             Production Database

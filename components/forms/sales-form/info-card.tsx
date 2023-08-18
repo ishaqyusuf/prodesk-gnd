@@ -14,6 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/date-range-picker";
+import { formatDate } from "@/lib/use-day";
+import { ResetIcon } from "@radix-ui/react-icons";
+import Btn from "@/components/btn";
+import { useCallback, useEffect, useTransition } from "react";
+import { toast } from "sonner";
+import dayjs from "dayjs";
+import { updatePaymentTerm } from "@/app/_actions/sales/sales-payment";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function InfoCard({
   form,
@@ -26,6 +39,55 @@ export default function InfoCard({
   const watchType = form.getValues("type");
   const watchGoodUntil = form.getValues("goodUntil");
 
+  const [resetting, startTransition] = useTransition();
+
+  useEffect(() => {
+    console.log("......", watchGoodUntil);
+  }, [watchGoodUntil]);
+  const resetTerm = useCallback(() => {
+    startTransition(async () => {
+      const ts = watchPaymentTerm?.replace("Net", "");
+      const term = Number(ts);
+      if (term) {
+        const goodUntil = new Date(
+          dayjs()
+            .add(term, "days")
+            .toISOString()
+        );
+        console.log(watchPaymentTerm, goodUntil);
+        await updatePaymentTerm(
+          form.getValues("id"),
+          watchPaymentTerm,
+          goodUntil
+        );
+        form.setValue("goodUntil", goodUntil);
+
+        toast.success("Payment term reset successfully");
+      } else toast.error("set a valid payment terms");
+    });
+  }, [watchGoodUntil, watchPaymentTerm]);
+  // function resetTerm() {
+  //   startTransition(async () => {
+  //     const ts = watchPaymentTerm?.replace("Net", "");
+  //     const term = Number(ts);
+  //     if (term) {
+  //       const goodUntil = new Date(
+  //         dayjs()
+  //           .add(term, "D")
+  //           .toISOString()
+  //       );
+  //       console.log(watchPaymentTerm, goodUntil);
+  //       await updatePaymentTerm(
+  //         form.getValues("id"),
+  //         watchPaymentTerm,
+  //         goodUntil
+  //       );
+  //       form.setValue("goodUntil", goodUntil);
+
+  //       toast.success("Payment term reset successfully");
+  //     } else toast.error("set a valid payment terms");
+  //   });
+  // }
   return (
     <div className="group relative  h-full w-full  rounded border border-slate-300 p-2 text-start hover:bg-slate-100s hover:shadows">
       <div className="space-y-1">
@@ -52,21 +114,44 @@ export default function InfoCard({
         </InfoLine>
         {watchType == "order" && (
           <InfoLine label="Payment Terms">
-            <Select
-              value={watchPaymentTerm as any}
-              onValueChange={(e) => form.setValue("paymentTerm", e)}
-            >
-              <SelectTrigger className="h-6 w-[100px]">
-                <SelectValue placeholder="" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="Net10">Net10</SelectItem>
-                  <SelectItem value="Net20">Net20</SelectItem>
-                  <SelectItem value="Net30">Net30</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <div className="">
+              <Select
+                value={`${watchPaymentTerm}`}
+                onValueChange={(e) => {
+                  form.setValue("paymentTerm", e);
+                }}
+              >
+                <SelectTrigger className="h-6 w-auto">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="Net10">Net10</SelectItem>
+                    <SelectItem value="Net20">Net20</SelectItem>
+                    <SelectItem value="Net30">Net30</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <div className="text-xs inline-flex text-red-500 items-center font-medium">
+                {watchGoodUntil && (
+                  <>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger onClick={resetTerm}>
+                          <span>{`${formatDate(
+                            watchGoodUntil,
+                            "MMM DD"
+                          )}`}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click to reset payment term</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </>
+                )}
+              </div>
+            </div>
           </InfoLine>
         )}
         {watchType == "estimate" && (

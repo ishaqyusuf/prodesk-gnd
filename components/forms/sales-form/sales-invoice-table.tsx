@@ -64,7 +64,7 @@ export default function SalesInvoiceTable({
 
   return (
     <div className="relative">
-      <Table>
+      <Table className="">
         <TableHeader>
           <TableRow>
             {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
@@ -73,12 +73,12 @@ export default function SalesInvoiceTable({
               <Layers className="h-3.5 w-3.5" />
             </TableHead>
             <TableHead className="px-1">Item</TableHead>
-            <TableHead className="w-24 px-1">Swing</TableHead>
-            <TableHead className="w-24 px-1">Supplier</TableHead>
-            <TableHead className="w-16 px-1 text-center">Qty</TableHead>
+            <TableHead className="w-20  px-1">Swing</TableHead>
+            <TableHead className="w-20 px-1">Supplier</TableHead>
+            <TableHead className="w-14 px-1 text-center">Qty</TableHead>
             <TableHead className="w-20 px-1">Cost</TableHead>
-            <TableHead className="w-16 px-1 text-right">Total</TableHead>
-            <TableHead className="w-12 px-1 text-center">Tax</TableHead>
+            <TableHead className="w-8 px-1 text-right">Total</TableHead>
+            <TableHead className="w-8 px-1 text-center">Tax</TableHead>
             <TableHead className="w-10 px-1"></TableHead>
           </TableRow>
         </TableHeader>

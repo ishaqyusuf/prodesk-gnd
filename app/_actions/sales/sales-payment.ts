@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { toFixed } from "@/lib/use-number";
-import { ISalesPayment } from "@/types/sales";
+import { ISalesOrderMeta, ISalesPayment } from "@/types/sales";
 
 export interface PaymentOrderProps {
   id;
@@ -84,4 +84,19 @@ export async function fixSalesPaymentAction(id) {
     id,
     amountDue: +toFixed(amountDue),
   });
+}
+export async function updatePaymentTerm(id, paymentTerm, goodUntil) {
+  await prisma.salesOrders.update({
+    where: { id },
+    data: {
+      paymentTerm,
+      goodUntil,
+    },
+  });
+  // const d = await prisma.salesOrders.findUnique({
+  //   where: { id },
+  // });
+  // if (!d) throw new Error("Order Not Found");
+  // const meta: ISalesOrderMeta = d.meta as any;
+  // meta.pa
 }

@@ -21,7 +21,7 @@ export default function SwingCell({
   return (
     <TableCell id="swing" className="p-1">
       <Input
-        className="h-8 w-24  p-1  font-medium"
+        className="h-8 w-16  p-1  font-medium"
         value={swing}
         onChange={(e) => {
           setSwing(e.target.value);

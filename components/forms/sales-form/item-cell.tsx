@@ -3,7 +3,7 @@ import { TableCell } from "@/components/ui/table";
 import { deepCopy } from "@/lib/deep-copy";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function ItemCell({ rowIndex, form }) {
   const { register } = form;
@@ -16,6 +16,7 @@ export default function ItemCell({ rowIndex, form }) {
   const item = form.watch(baseKey);
   const getCellValue = () => form.getValues(`items.${rowIndex}.description`);
   const [cellValue, setCellValue] = useState(getCellValue() || undefined);
+  // const input = useRef();
   useEffect(() => {
     setCellValue(getCellValue() || undefined);
   }, [rowIndex]);
@@ -23,9 +24,12 @@ export default function ItemCell({ rowIndex, form }) {
     <TableCell
       onClick={() => {
         if (isComponent) openComponentModal(deepCopy(item), rowIndex);
+        else {
+          // input?.current?.focus();
+        }
       }}
       id="description"
-      className="cursor-pointer p-0 px-1 py-0.5"
+      className="cursor-pointer p-0 px-1 py-0.5 w-auto"
     >
       {/* <Input
         className="h-8 w-full p-1 font-medium"
@@ -37,14 +41,15 @@ export default function ItemCell({ rowIndex, form }) {
             // dangerouslySetInnerHTML={{
             //   __html: form.getValues(`${baseKey}.description`),
             // }}
-            className="line-clamp-2s font-medium text-primary text-sm relative w-full p-0.5 text-start"
+            className="line-clamp-2s font-medium text-primary uppercase text-sm relative w-full p-0.5 text-start"
           >
             {form.getValues(`${baseKey}.description`)}
           </div>
         </button>
       ) : (
         <Input
-          className="h-8 w-full p-1 font-medium"
+          // ref={input}
+          className="h-8 w-full p-1 font-medium uppercase"
           // {...register(`${baseKey}.description`)}
           value={cellValue}
           onChange={(e) => {
