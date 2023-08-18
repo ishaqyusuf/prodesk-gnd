@@ -12,6 +12,7 @@ import { convertToNumber } from "@/lib/use-number";
 import Money from "@/components/money";
 import { ProdStatusCell } from "@/components/columns/sales-columns";
 import StatusBadge from "@/components/status-badge";
+import { formatDate } from "@/lib/use-day";
 
 interface Props {
   isProd?: Boolean;
@@ -32,32 +33,54 @@ export default function DetailsSection({}: Props) {
             {isProd ? <></> : <OrderOverviewActions />}
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
-          <Info label="Order ID">{order.orderId}</Info>
-          <Info label="Production (Due)">
-            {order.prodStatus} ({order.prodDueDate || "-"})
-          </Info>
-          <Info hidden={isProd} label="Invoice (Paid)">
-            <span>
-              <Money className="font-medium" value={order.grandTotal} /> (
-              <Money value={(order.grandTotal || 0) - (order.amountDue || 0)} />
-              )
-            </span>
-          </Info>
-          <Info label="Order Date">
-            <span>{order.createdAt as any}</span>
-          </Info>
-          <Info label="Sales Rep">
-            <span>{order.salesRep?.name}</span>
-          </Info>
-          <Info label="Production">
-            <span>{order.producer?.name || "Not Assigned"}</span>
-          </Info>
+        <CardContent className="divide-y space-y-4 flex flex-col">
+          <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+            <Info label="Order ID">{order.orderId}</Info>
+            <Info label="Production (Due)">
+              {order.prodStatus} ({order.prodDueDate || "-"})
+            </Info>
+            <Info hidden={isProd} label="Invoice (Paid)">
+              <span>
+                <Money className="font-medium" value={order.grandTotal} /> (
+                <Money
+                  value={(order.grandTotal || 0) - (order.amountDue || 0)}
+                />
+                )
+              </span>
+            </Info>
+            <Info
+              label={order.type == "estimate" ? "Estimate Date" : "Order Date"}
+            >
+              <span>{formatDate(order.createdAt as any)}</span>
+            </Info>
+            {order.type == "estimate" ? (
+              <>
+                <Info label="Good Until">
+                  <span>{formatDate(order.goodUntil as any)}</span>
+                </Info>
+              </>
+            ) : (
+              <>
+                <Info label="Payment Terms">
+                  <p>{order.paymentTerm}</p>
+                  <p>{formatDate(order.goodUntil as any)}</p>
+                </Info>
+              </>
+            )}
+            <Info label="Sales Rep">
+              <span>{order.salesRep?.name}</span>
+            </Info>
+            <Info label="Production">
+              <span>{order.producer?.name || "Not Assigned"}</span>
+            </Info>
+          </div>
           {!isProd && (
-            <>
-              <AddressInfo label="Bill To" address={order.billingAddress} />
-              <AddressInfo label="Ship To" address={order.billingAddress} />
-            </>
+            <div className="">
+              <div className="pt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+                <AddressInfo label="Bill To" address={order.billingAddress} />
+                <AddressInfo label="Ship To" address={order.billingAddress} />
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

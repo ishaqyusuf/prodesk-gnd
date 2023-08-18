@@ -1,4 +1,4 @@
-import { CalendarDateRangePicker } from "@/components/date-range-picker";
+import { DatePicker } from "@/components/date-range-picker";
 
 export default async function DashboardLayout({ children }) {
   return (
@@ -9,7 +9,7 @@ export default async function DashboardLayout({ children }) {
           id="dashboardTitle"
         ></h2>
         <div className="flex items-center space-x-2">
-          <CalendarDateRangePicker />
+          <DatePicker />
           {/* <Button>Download</Button> */}
         </div>
       </div>

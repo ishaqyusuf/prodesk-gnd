@@ -396,6 +396,8 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     builtQty,
     createdAt,
     updatedAt,
+    goodUntil,
+    paymentTerm,
     items: cItems,
     ...orderData
   } = _cloneData;

@@ -124,7 +124,7 @@ export function OrderMemoCell(
   return (
     <div className="w-full">
       <Node href={link || ""} className={cn(link && "hover:underline")}>
-        <span className="text-muted-foreground line-clamp-1">
+        <span className="text-muted-foreground line-clamp-2">
           {customer?.address1}
         </span>
       </Node>

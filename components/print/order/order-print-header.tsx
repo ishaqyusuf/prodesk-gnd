@@ -25,18 +25,17 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                 <td className="" valign="top" colSpan={9}>
                   <Logo />
                 </td>
+                <td valign="top" colSpan={5}>
+                  <div className="text-xs font-semibold text-black-900">
+                    <p>13285 SW 131 ST</p>
+                    <p>Miami, Fl 33186</p>
+                    <p>Phone: 305-278-6555</p>
+                    {po?.mode == "production" && <p>Fax: 305-278-2003</p>}
+                    <p>support@gndmillwork.com</p>
+                  </div>
+                </td>
                 {order?.id && (
                   <>
-                    {" "}
-                    <td valign="top" colSpan={5}>
-                      <div className="text-xs font-semibold text-black-900">
-                        <p>13285 SW 131 ST</p>
-                        <p>Miami, Fl 33186</p>
-                        <p>Phone: 305-278-6555</p>
-                        {po?.mode == "production" && <p>Fax: 305-278-2003</p>}
-                        <p>support@gndmillwork.com</p>
-                      </div>
-                    </td>
                     <td colSpan={1}></td>
                     <td valign="top" colSpan={9}>
                       <div className="flex justify-end"></div>
@@ -107,9 +106,9 @@ export function OrderPrintHeader({ order, Logo }: Props) {
               {order?.id && (
                 <tr>
                   <Address address={order.billingAddress} title="Sold To" />
-                  <td colSpan={2} />
+                  <td colSpan={1} />
                   <Address address={order.billingAddress} title="Ship To" />
-                  <td colSpan={3} />
+                  <td colSpan={2} />
                 </tr>
               )}
             </tbody>
@@ -160,7 +159,7 @@ function Address({
   title;
 }) {
   return (
-    <td colSpan={6}>
+    <td colSpan={10}>
       <div className="my-4  mb-4 flex flex-col ">
         <div>
           <span className="p-1 px-2 border border-b-0 border-gray-400 bg-slate-200 text-gray-700 text-sm  font-bold">
@@ -181,7 +180,7 @@ function Address({
             ?.map((f, _) => (
               <p
                 key={_}
-                className="line-clamp-1 text-sm font-medium text-primary"
+                className="line-clamp-2 text-sm font-medium text-primary"
               >
                 {f}
               </p>

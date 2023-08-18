@@ -14,49 +14,87 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function CalendarDateRangePicker({
+interface Props {
+  range?: Boolean;
+  hideIcon?: Boolean;
+  value?: any;
+  setValue?: any;
+}
+export function DatePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20),
-  });
+  value,
+  range,
+  setValue,
+  hideIcon,
+  placeholder = "Pick a date",
+}: React.HTMLAttributes<HTMLDivElement> & Props) {
+  const [date, setDate] = React.useState<DateRange | undefined | Date>(
+    value ? value : range ? { form: null, to: null } : null
+  );
 
+  // const [date, setDate] = React.useState<DateRange | undefined>({
+  //   from: new Date(2023, 0, 20),
+  //   to: addDays(new Date(2023, 0, 20), 20),
+  // });
+  function from() {
+    if (!range) return null;
+    return (date as any).from;
+  }
+  function to() {
+    if (!range) return null;
+    return (date as any).from;
+  }
+  function _date() {
+    if (range) return null;
+    return date as any;
+  }
+  const [open, setOpen] = React.useState(false);
   return (
-    <div className={cn("grid gap-2", className)}>
-      <Popover>
+    <div className={cn("grid gap-2")}>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
               "w-[260px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !date && "text-muted-foreground",
+              className
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
+            {!hideIcon && <CalendarIcon className="mr-2 h-4 w-4" />}
+            {range &&
+              (from() ? (
+                to() ? (
+                  <>
+                    {format(from(), "LLL dd, y")} - {format(to(), "LLL dd, y")}
+                  </>
+                ) : (
+                  format(from(), "LLL dd, y")
+                )
               ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
+                <span className="whitespace-nowrap">{placeholder}</span>
+              ))}
+            {!range &&
+              (!date ? (
+                <span className="whitespace-nowrap">{placeholder}</span>
+              ) : (
+                format(_date(), "LLL dd, y")
+              ))}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="end">
           <Calendar
             initialFocus
-            mode="range"
-            defaultMonth={date?.from}
+            mode={(range ? "range" : "single") as any}
+            defaultMonth={range ? from() : date}
             selected={date}
-            onSelect={setDate}
-            numberOfMonths={2}
+            onSelect={(v) => {
+              setDate(v);
+              setValue?.(v);
+              setOpen(false);
+            }}
+            numberOfMonths={range ? 2 : 1}
           />
         </PopoverContent>
       </Popover>

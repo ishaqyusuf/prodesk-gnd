@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/date-range-picker";
 
 export default function InfoCard({
   form,
@@ -23,6 +24,7 @@ export default function InfoCard({
 }) {
   const watchPaymentTerm = form.getValues("paymentTerm");
   const watchType = form.getValues("type");
+  const watchGoodUntil = form.getValues("goodUntil");
 
   return (
     <div className="group relative  h-full w-full  rounded border border-slate-300 p-2 text-start hover:bg-slate-100s hover:shadows">
@@ -69,6 +71,11 @@ export default function InfoCard({
         )}
         {watchType == "estimate" && (
           <InfoLine label="Good Until">
+            <DatePicker
+              value={watchGoodUntil}
+              setValue={(v) => form.setValue("goodUntil", v)}
+              className="h-8 w-[150px]"
+            />
             {/* <Select
               value={watchPaymentTerm as any}
               onValueChange={(e) => form.setValue("paymentTerm", e)}

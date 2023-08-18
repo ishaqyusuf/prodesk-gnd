@@ -25,14 +25,14 @@ export default function ItemCell({ rowIndex, form }) {
         if (isComponent) openComponentModal(deepCopy(item), rowIndex);
       }}
       id="description"
-      className="cursor-pointer p-0 px-1"
+      className="cursor-pointer p-0 px-1 py-0.5"
     >
       {/* <Input
         className="h-8 w-full p-1 font-medium"
         {...register(`${baseKey}.description`)}
       /> */}
       {isComponent == true ? (
-        <button className="p-0.5">
+        <button className="border  rounded-md border-input ring-offset-background min-h-[32px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full p-1 font-medium">
           <div
             // dangerouslySetInnerHTML={{
             //   __html: form.getValues(`${baseKey}.description`),

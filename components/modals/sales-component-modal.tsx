@@ -323,7 +323,7 @@ function ComponentInput({
     const products = await searchOrderInventoryAction(query);
 
     return {
-      items: products,
+      items: products as any,
       // items: products,
     };
   }
@@ -335,6 +335,7 @@ function ComponentInput({
       labelKey="name"
       valueKey="name"
       align="start"
+      uppercase
       searchFn={searchFn}
       // onFocus={() => {
       //   setWatchReady(true);

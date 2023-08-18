@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
 import { PrintOrderMenuAction } from "@/components/actions/order-actions";
 import OrderPrinter from "@/components/print/order/order-printer";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deepCopy } from "@/lib/deep-copy";
 import { numeric } from "@/lib/use-number";
@@ -129,7 +129,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         );
       })
       .filter(Boolean);
-    console.log(items);
+
     return {
       id,
       order: numeric<SalesOrders>(
@@ -150,6 +150,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   return (
     <div className="px-8">
       <OrderPrinter />
+      {/* <AutoExpandInput /> */}
       <section id="header" className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
@@ -221,6 +222,46 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       <section id="invoiceForm">
         <SalesInvoiceTable form={form} data={data} />
       </section>
+    </div>
+  );
+}
+
+function AutoExpandInput() {
+  const [text, setText] = useState("");
+  const [lineCount, setLineCount] = useState(1);
+  useEffect(() => {
+    const textarea: HTMLElement = document.querySelector(
+      ".auto-expand-input"
+    ) as any;
+    if (!textarea) return;
+    const adjustHeight = () => {
+      textarea.style.height = "32px";
+      if (textarea.scrollHeight > 50) {
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+      console.log(textarea.scrollHeight);
+    };
+
+    textarea.addEventListener("input", adjustHeight);
+    return () => {
+      textarea.removeEventListener("input", adjustHeight);
+    };
+  }, []);
+  const handleTextChange = (event) => {
+    const newText = event.target.value;
+    setText(newText);
+    const newLineCount = newText.split("\n").length;
+    setLineCount(newLineCount);
+  };
+  return (
+    <div className="relative w-full">
+      <textarea
+        value={text}
+        onChange={handleTextChange}
+        className="auto-expand-input w-full h-[32px] resize-none overflow-hidden border p-0.5 rounded-md"
+        placeholder="Type something..."
+      />
+      {lineCount}
     </div>
   );
 }

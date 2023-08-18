@@ -13,6 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
 
 export interface ComboboxProps<T> {
   list?;
@@ -31,6 +32,7 @@ export interface ComboboxProps<T> {
   onFocus?;
   value?;
   setValue?;
+  uppercase?: Boolean;
 }
 export default function Combobox<T>({
   list = [],
@@ -46,6 +48,7 @@ export default function Combobox<T>({
   valueKey,
   onFocus,
   value,
+  uppercase,
   setValue,
   ...props
 }: ComboboxProps<T>) {
@@ -155,7 +158,7 @@ export default function Combobox<T>({
               onBlur={() => {
                 setSearchable(false);
               }}
-              className=""
+              className={cn(uppercase && "uppercase")}
               value={q}
               onValueChange={(v) => {
                 setQ(v);
@@ -174,7 +177,7 @@ export default function Combobox<T>({
                       key={0}
                       onSelect={() => selectItem({ value: q })}
                     >
-                      <span>{q}</span>
+                      <span className={cn(uppercase && "uppercase")}>{q}</span>
                     </CommandItem>
                     <CommandSeparator />
                   </>
