@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import dayjs from "dayjs";
 
 interface Props {
   range?: Boolean;
@@ -44,6 +45,9 @@ export function DatePicker({
     if (!range) return null;
     return (date as any).from;
   }
+  function format(date) {
+    return dayjs(date).format("MMM DD, YY");
+  }
   function _date() {
     if (range) return null;
     return date as any;
@@ -67,10 +71,10 @@ export function DatePicker({
               (from() ? (
                 to() ? (
                   <>
-                    {format(from(), "LLL dd, y")} - {format(to(), "LLL dd, y")}
+                    {format(from())} - {format(to())}
                   </>
                 ) : (
-                  format(from(), "LLL dd, y")
+                  format(from())
                 )
               ) : (
                 <span className="whitespace-nowrap">{placeholder}</span>
@@ -79,7 +83,7 @@ export function DatePicker({
               (!date ? (
                 <span className="whitespace-nowrap">{placeholder}</span>
               ) : (
-                format(_date(), "LLL dd, y")
+                format(_date())
               ))}
           </Button>
         </PopoverTrigger>

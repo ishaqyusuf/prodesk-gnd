@@ -19,6 +19,13 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import Money from "../money";
 import { cn } from "@/lib/utils";
+import {
+  DeleteRowAction,
+  RowActionCell,
+  RowActionMenuItem,
+  RowActionMoreMenu,
+} from "../data-table/data-table-row-actions";
+import { deleteHomeTemplateAction } from "@/app/_actions/community/home-template";
 
 export default function ModelCostTableShell<T>({
   data,
@@ -132,7 +139,26 @@ export default function ModelCostTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        // cell: ({ row }) => <OrderRowAction row={row.original} />,
+        cell: ({ row }) => (
+          <RowActionCell>
+            <DeleteRowAction
+              action={deleteHomeTemplateAction}
+              row={row.original}
+            />
+            <RowActionMoreMenu>
+              <RowActionMenuItem
+                SubMenu={
+                  <>
+                    <RowActionMenuItem>Units</RowActionMenuItem>
+                    <RowActionMenuItem>Invoices</RowActionMenuItem>
+                  </>
+                }
+              >
+                View
+              </RowActionMenuItem>
+            </RowActionMoreMenu>
+          </RowActionCell>
+        ),
       },
     ], //.filter(Boolean) as any,
     [data, isPending]

@@ -15,7 +15,7 @@ import {
 import HomeTemplatesTableShell from "@/components/shells/home-templates-table-shell";
 import CommunityTemplateTableShell from "@/components/shells/community-templates-table-shell";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "Community Templates",
 };
 export default async function CommunityTemplatesPage({ searchParams }) {

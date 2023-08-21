@@ -129,3 +129,4 @@ export async function saveCommunityTemplateDesign(id, meta) {
     },
   });
 }
+export async function deleteHomeTemplateAction(id) {}

@@ -11,7 +11,7 @@ import { getBuildersAction } from "@/app/_actions/community/builders";
 import { getHomeTemplates } from "@/app/_actions/community/home-template";
 import HomeTemplatesTableShell from "@/components/shells/home-templates-table-shell";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "Builders",
 };
 export default async function ModelTemplatesPage({ searchParams }) {

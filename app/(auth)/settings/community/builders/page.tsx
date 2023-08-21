@@ -8,7 +8,7 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { getBuildersAction } from "@/app/_actions/community/builders";
 import BuilderModal from "@/components/modals/builder-modal";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "Builders",
 };
 export default async function BuildersPage({ searchParams }) {

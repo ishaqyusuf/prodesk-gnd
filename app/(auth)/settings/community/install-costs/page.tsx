@@ -5,7 +5,7 @@ import { InstallCostForm } from "@/components/forms/community/install-cost-form"
 import CommunitySettingsLayoutComponent from "@/components/settings/community/community-settings-layout";
 import { Metadata } from "next";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: "Install Costs",
 };
 export default async function InstallCostsPage({}) {

@@ -81,20 +81,23 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                                 label="P.O No."
                                 value={order?.meta?.po}
                               />
-                              <InfoLine
-                                label="Amount Due"
-                                value={
-                                  <span className="font-medium">
-                                    {(order?.amountDue || 0) > 0
-                                      ? `$${order?.amountDue}`
-                                      : "-"}
-                                  </span>
-                                }
-                              />
-                              <InfoLine
-                                label="Invoice Status"
-                                value={order?.invoiceStatus}
-                              />
+                              {(order?.amountDue || 0) > 0 ? (
+                                <InfoLine
+                                  label="Amount Due"
+                                  value={
+                                    <span className="font-medium">
+                                      {(order?.amountDue || 0) > 0
+                                        ? `$${order?.amountDue}`
+                                        : "-"}
+                                    </span>
+                                  }
+                                />
+                              ) : (
+                                <InfoLine
+                                  label="Invoice Status"
+                                  value={"Paid"}
+                                />
+                              )}
                             </>
                           )}
                         </tbody>
