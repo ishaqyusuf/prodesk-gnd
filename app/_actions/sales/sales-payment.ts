@@ -51,6 +51,19 @@ export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
   );
   return true;
 }
+export async function deleteSalesPayment(id, orderId, amountDue) {
+  await prisma.salesPayments.delete({
+    where: { id },
+  });
+  await prisma.salesOrders.update({
+    where: {
+      id: orderId,
+    },
+    data: {
+      amountDue,
+    },
+  });
+}
 export async function fixPaymentAction({
   amountDue,
   id,

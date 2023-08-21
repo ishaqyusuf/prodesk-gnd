@@ -2,6 +2,7 @@
     01:45-
     09:45-01:00
 ------------------------
+https://link.payoneer.com/Token?t=22E9FEB7E5FB4E8C9D99B8CC8475165B&signupUrlResourceParams=83962F140A9541468818E4CADE4C7F9D
 # AUG 20  03.40 == 27.35 ($957.25)
     05:30-07:00
     02:25-03:55
