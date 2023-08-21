@@ -7,6 +7,7 @@ import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
 import { INotification } from "@/app/_actions/notifications";
+import { IHome } from "@/types/community";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
@@ -21,6 +22,9 @@ export interface ISlicer {
   };
   applyPayment: ISalesOrder[];
   notifications: INotification[];
+  printHomes: {
+    homes: IHome[];
+  };
   printOrders: {
     mode: IOrderPrintMode;
     ids: number[];
@@ -53,6 +57,11 @@ export type ModalName =
   | "customerForm"
   | "project"
   | "home"
+  | "builder"
+  | "modelTemplate"
+  | "communityTemplate"
+  | "modelCost"
+  | "installCost"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

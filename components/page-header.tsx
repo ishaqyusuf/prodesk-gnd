@@ -6,17 +6,20 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { openModal } from "@/lib/modal";
 import { ModalName } from "@/store/slicers";
+import LinkableNode from "./link-node";
 
 interface Props {
   title;
   subtitle?;
   newLink?;
+  Action?;
   newDialog?: ModalName;
 }
 export default function PageHeader({
   title,
   newLink,
   subtitle,
+  Action,
   newDialog,
 }: Props) {
   const Node = newLink ? Link : Fragment;
@@ -35,12 +38,13 @@ export default function PageHeader({
             size="sm"
             className="h-8"
           >
-            <Node className="inline-flex items-center" href={newLink}>
+            <LinkableNode className="inline-flex items-center" href={newLink}>
               <Plus className="h-4 w-4 mr-2" />
               <span>New </span>
-            </Node>
+            </LinkableNode>
           </Button>
         )}
+        {Action && <Action />}
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ export default function SiteNav({ className, onClick, nav }: SidebarProps) {
         asChild
         variant={isActive ? "outline" : "ghost"}
         size="sm"
-        className={`w-full justify-start ${isActive ? "bg-accent" : ""}`}
+        className={`w-full h-8 justify-start ${isActive ? "bg-accent" : ""}`}
       >
         <Link onClick={onClick as any} href={route.path}>
           {route.icon && <route.icon className="mr-2 h-4 w-4" />}
@@ -40,11 +40,11 @@ export default function SiteNav({ className, onClick, nav }: SidebarProps) {
       <div className="mx-4 mt-2">
         <Icons.logoLg />
       </div>
-      <div className="space-y-4 py-4">
+      <div className="space-y-2 py-4">
         {nav.routeGroup.map((route, index) => {
           if (!route?.title && route?.routes?.length > 1)
             return (
-              <div key={index} className="-mb-4 px-4">
+              <div key={index} className="-mb-2 px-4">
                 {route.routes?.map((cr, i) => routeBtn(cr, i))}
               </div>
             );
@@ -53,7 +53,7 @@ export default function SiteNav({ className, onClick, nav }: SidebarProps) {
               <h2 className="mb-2 pr-2 text-sm font-semibold tracking-tight text-muted-foreground">
                 {route.title}
               </h2>
-              <div className="space-y-1">
+              <div className="space-y-1s">
                 {route.routes?.map((cr, i) => routeBtn(cr, i))}
               </div>
             </div>

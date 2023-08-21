@@ -53,6 +53,10 @@ import {
 } from "@/app/_actions/sales/sales-production";
 import { openModal } from "@/lib/modal";
 import { EmailModalProps } from "@/types/email";
+import {
+  DeleteRowAction,
+  RowActionMenuItem,
+} from "../data-table/data-table-row-actions";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -117,67 +121,24 @@ export function OrderRowAction(props: IOrderRowProps) {
             </>
           ) : (
             <>
-              <DropdownMenuItem onClick={moveEstimateToOrder}>
-                <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              <RowActionMenuItem
+                Icon={ShoppingBag}
+                onClick={moveEstimateToOrder}
+              >
                 Move to Order
-              </DropdownMenuItem>
+              </RowActionMenuItem>
             </>
           )}
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction estimate={estimate} row={row} />
           <PrintOrderMenuAction pdf estimate={estimate} row={row} />
-          <DeleteRowMenuAction row={row} />
+
+          <DeleteRowAction menu row={row} action={deleteOrderAction} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
   );
 }
-export const DeleteRowMenuAction = typedMemo(({ row }: IOrderRowProps) => {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const confirm = useBool();
-  async function deleteOrder(e) {
-    e.preventDefault();
-    if (!confirm.bool) {
-      confirm.setBool(true);
-      setTimeout(() => {
-        confirm.setBool(false);
-      }, 3000);
-      return;
-    }
-    confirm.setBool(false);
-    startTransition(async () => {
-      toast.promise(
-        async () => {
-          await deleteOrderAction(row.id);
-          router.refresh();
-        },
-        {
-          loading: `Deleteting ${row.type} #${row.orderId}`,
-          success(data) {
-            return "Deleted Successfully";
-          },
-          error: "Unable to completed Delete Action",
-        }
-      );
-    });
-  }
-
-  const Icon = confirm.bool ? Info : isPending ? Icons.spinner : Trash;
-  return (
-    <DropdownMenuItem
-      disabled={isPending}
-      className="text-red-500 hover:text-red-600"
-      onClick={deleteOrder}
-    >
-      <Icon
-        className={`mr-2 ${isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"}`}
-      />
-      {confirm.bool ? "Sure?" : isPending ? "Deleting" : "Delete"}
-      <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-    </DropdownMenuItem>
-  );
-});
 
 export const PrintOrderMenuAction = typedMemo(
   (

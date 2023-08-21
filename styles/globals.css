@@ -88,3 +88,6 @@ table#invoiceFooter tr {
   height: unset;
   @apply px-0;
 }
+#unitModelForm tbody td {
+  @apply p-0.5;
+}

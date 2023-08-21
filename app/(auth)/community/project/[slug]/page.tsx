@@ -25,7 +25,7 @@ export default async function ProjectHomesPage({ searchParams, params }) {
       <Breadcrumbs>
         <BreadLink isFirst title="Community" />
         <BreadLink link="/community/projects" title="Projects" />
-        <BreadLink link="/community/projects" title="All Units" />
+        <BreadLink link="/community/units" title="All Units" />
         <BreadLink title={project.title} isLast />
       </Breadcrumbs>
       <PageHeader

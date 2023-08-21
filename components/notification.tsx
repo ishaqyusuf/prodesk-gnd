@@ -23,11 +23,12 @@ import { useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
 import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "./ui/scroll-area";
+import LinkableNode from "./link-node";
 
 export default function Notification({}) {
   const [notificationCount, setNotificationCount] = useState(0);
 
-  const notifications = useAppSelector((state) => state.slicers.notifications);
+  const notifications = useAppSelector((state) => state.slicers?.notifications);
   useEffect(() => {
     // Fetch notification count from the server
     const fetchNotificationCount = async () => {
@@ -144,7 +145,7 @@ function NotificationItem({
   return (
     <div className="relative" key={item.id}>
       <Button variant="ghost" className=" w-full h-full p-4">
-        <Node
+        <LinkableNode
           href={item.link as any}
           onClick={async () => {
             await markAsReadAction(item.id);
@@ -158,7 +159,7 @@ function NotificationItem({
             <p className="text-sm font-medium">{item.message}</p>
             <p className="text-sm text-muted-foreground">{item.time}</p>
           </div>
-        </Node>
+        </LinkableNode>
       </Button>
       {type == "inbox" && (
         <div className="ml-auto absolute right-0 top-0 m-4 font-medium">

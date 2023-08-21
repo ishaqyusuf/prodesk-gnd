@@ -31,14 +31,15 @@ model AddressBooks {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Builders {
-    id        Int        @unique @default(autoincrement())
-    name      String?    @db.VarChar(255)
-    slug      String?    @db.VarChar(255)
-    meta      Json?      @db.Json
-    deletedAt DateTime?  @db.Timestamp(0)
-    createdAt DateTime?  @db.Timestamp(0)
-    updatedAt DateTime?  @db.Timestamp(0)
-    projects  Projects[]
+    id            Int             @unique @default(autoincrement())
+    name          String?         @db.VarChar(255)
+    slug          String?         @db.VarChar(255)
+    meta          Json?           @db.Json
+    deletedAt     DateTime?       @db.Timestamp(0)
+    createdAt     DateTime?       @db.Timestamp(0)
+    updatedAt     DateTime?       @db.Timestamp(0)
+    projects      Projects[]
+    homeTemplates HomeTemplates[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -69,21 +70,25 @@ model CommunityModels {
     meta      Json?     @db.Json
     createdAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @db.Timestamp(0)
-    slug      String    @db.VarChar(255)
+    slug      String    @unique @db.VarChar(255)
+    project   Projects  @relation(fields: [projectId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CostCharts {
-    id        Int       @unique @default(autoincrement())
-    title     String    @db.VarChar(255)
-    type      String    @db.VarChar(255)
-    model     String    @db.VarChar(255)
-    meta      Json?     @db.Json
-    startDate DateTime  @default(now()) @db.Timestamp(0)
-    endDate   DateTime? @db.Timestamp(0)
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
+    id        Int            @unique @default(autoincrement())
+    parentId  Int?
+    current   Boolean?
+    title     String         @db.VarChar(255)
+    type      String         @db.VarChar(255)
+    model     String         @db.VarChar(255)
+    meta      Json?          @db.Json
+    startDate DateTime       @default(now()) @db.Timestamp(0)
+    endDate   DateTime?      @db.Timestamp(0)
+    deletedAt DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @db.Timestamp(0)
+    updatedAt DateTime?      @db.Timestamp(0)
+    template  HomeTemplates? @relation(fields: [parentId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -134,30 +139,32 @@ model FailedJobs {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 
 model Homes {
-    id             Int         @unique @default(autoincrement())
+    id             Int            @unique @default(autoincrement())
     archived       Boolean?
     projectId      Int
     builderId      Int?
     homeTemplateId Int?
-    homeKey        String?     @db.VarChar(255)
-    slug           String?     @unique @db.VarChar(255)
-    modelName      String?     @db.VarChar(255)
-    modelNo        String?     @db.VarChar(255)
-    lot            String?     @db.VarChar(255)
-    block          String?     @db.VarChar(255)
-    status         String?     @db.VarChar(255)
-    address        String?     @db.VarChar(255)
-    meta           Json?       @db.Json
-    installedAt    DateTime?   @db.Timestamp(0)
-    deletedAt      DateTime?   @db.Timestamp(0)
-    createdAt      DateTime?   @db.Timestamp(0)
-    updatedAt      DateTime?   @db.Timestamp(0)
-    search         String?     @db.VarChar(255)
-    punchoutAt     DateTime?   @db.Timestamp(0)
+    homeKey        String?        @db.VarChar(255)
+    slug           String?        @unique @db.VarChar(255)
+    modelName      String?        @db.VarChar(255)
+    modelNo        String?        @db.VarChar(255)
+    lot            String?        @db.VarChar(255)
+    block          String?        @db.VarChar(255)
+    status         String?        @db.VarChar(255)
+    address        String?        @db.VarChar(255)
+    meta           Json?          @db.Json
+    installedAt    DateTime?      @db.Timestamp(0)
+    deletedAt      DateTime?      @db.Timestamp(0)
+    createdAt      DateTime?      @db.Timestamp(0)
+    updatedAt      DateTime?      @db.Timestamp(0)
+    search         String?        @db.VarChar(255)
+    punchoutAt     DateTime?      @db.Timestamp(0)
     installCost    Float?
     punchoutCost   Float?
-    project        Projects    @relation(fields: [projectId], references: [id])
+    project        Projects       @relation(fields: [projectId], references: [id])
+    homeTemplate   HomeTemplates? @relation(fields: [homeTemplateId], references: [id])
     tasks          HomeTasks[]
+    jobs           Tasks[]
 }
 
 model HomeTasks {
@@ -215,15 +222,18 @@ model HomeTasks {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model HomeTemplates {
-    id        Int       @unique @default(autoincrement())
+    id        Int          @unique @default(autoincrement())
     builderId Int?
-    slug      String?   @db.VarChar(255)
-    modelNo   String?   @db.VarChar(255)
-    modelName String?   @db.VarChar(255)
-    meta      Json?     @db.Json
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
+    slug      String       @unique @db.VarChar(255)
+    modelNo   String?      @db.VarChar(255)
+    modelName String?      @db.VarChar(255)
+    meta      Json?        @db.Json
+    deletedAt DateTime?    @db.Timestamp(0)
+    createdAt DateTime?    @db.Timestamp(0)
+    updatedAt DateTime?    @db.Timestamp(0)
+    builder   Builders?    @relation(fields: [builderId], references: [id])
+    homes     Homes[]
+    costs     CostCharts[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -636,19 +646,21 @@ model Progress {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Projects {
-    id        Int       @unique @default(autoincrement())
-    archived  Boolean?
-    title     String?   @db.VarChar(255)
-    builderId Int?
-    address   String?   @db.VarChar(255)
-    slug      String?   @unique @db.VarChar(255)
-    meta      Json?     @db.Json
-    refNo     String?   @db.VarChar(255)
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
-    homes     Homes[]
-    builder   Builders? @relation(fields: [builderId], references: [id])
+    id              Int               @unique @default(autoincrement())
+    archived        Boolean?
+    title           String?           @db.VarChar(255)
+    builderId       Int?
+    address         String?           @db.VarChar(255)
+    slug            String?           @unique @db.VarChar(255)
+    meta            Json?             @db.Json
+    refNo           String?           @db.VarChar(255)
+    deletedAt       DateTime?         @db.Timestamp(0)
+    createdAt       DateTime?         @db.Timestamp(0)
+    updatedAt       DateTime?         @db.Timestamp(0)
+    homes           Homes[]
+    builder         Builders?         @relation(fields: [builderId], references: [id])
+    jobs            Tasks[]
+    communityModels CommunityModels[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -911,6 +923,8 @@ model Tasks {
     deletedAt   DateTime? @db.Timestamp(0)
     createdAt   DateTime? @db.Timestamp(0)
     updatedAt   DateTime? @db.Timestamp(0)
+    home        Homes?    @relation(fields: [homeId], references: [id])
+    project     Projects? @relation(fields: [projectId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

@@ -1,0 +1,128 @@
+import { Label } from "@/components/ui/label";
+import { ModelFormProps } from "./model-form";
+import { Input } from "@/components/ui/input";
+import { UseFormRegister } from "react-hook-form";
+import { HomeTemplateDesign } from "@/types/community";
+import { addSpacesToCamelCase } from "@/lib/utils";
+import { _useId } from "@/hooks/use-id";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useAppSelector } from "@/store";
+
+interface ModelFormSectionProps<T> {
+  section?;
+  title?;
+  rows(
+    f: (ck: keyof T, cells?: CellSize, label?) => any,
+    f2: (ck: keyof T, label?, cells?: CellSize) => any
+  );
+  node: keyof HomeTemplateDesign;
+}
+export function ModelFormSection<T>({
+  //   children,
+  title,
+  section,
+  rows,
+  form,
+  node,
+}: ModelFormSectionProps<T> & ModelFormProps) {
+  const Ctx = ModelComponents<T>({ form, node });
+  const _rows = rows(Ctx._field, Ctx._field2);
+  return (
+    <table className="w-full table-fixed overflow-x-hidden">
+      <thead className="">
+        {section && (
+          <tr className="border">
+            <th colSpan={12} className="text-center bg-slate-200">
+              {section}
+            </th>
+          </tr>
+        )}
+        {title && (
+          <tr className="border">
+            <th colSpan={12} className="text-left bg-slate-100 p-0.5 px-4">
+              {title}
+            </th>
+          </tr>
+        )}
+      </thead>
+      <tbody>
+        {_rows?.map((row, i) => (
+          <tr key={`${_useId()}`}>
+            {Array.isArray(row) ? (
+              row.map((cell, i) => <Ctx.Field key={`${_useId()}`} {...cell} />)
+            ) : (
+              <Ctx.Field key={`${_useId()}`} {...row} />
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export function ModelComponents<T>({
+  form,
+  node,
+}: ModelFormProps & { node: keyof HomeTemplateDesign }) {
+  const community = useAppSelector(
+    (s) => s.slicers.dataPage?.data?.community
+  ) as any;
+  console.log(community);
+  // const name = `${node}.${ck}` as any;
+  const Field = ({
+    label,
+    cells = [2, 10],
+    ck,
+  }: {
+    label: string;
+    cells?: number[];
+    ck: keyof T;
+  }) => {
+    const [open, setOpen] = useState(false);
+    let formKey = `${node}.${ck as string}`;
+    let checked = community ? form.watch(`${formKey}.c` as any) : false;
+    if (community) formKey = `${formKey}.v`;
+    return (
+      <>
+        <td align="right" colSpan={cells[0]}>
+          <div className="inline-flex space-x-2">
+            {community && (
+              <Checkbox
+                checked={checked}
+                onCheckedChange={(e) => {
+                  form.setValue(`${node}.${ck as string}.c` as any, e);
+                }}
+              />
+            )}
+            <Label className="mr-2 capitalize">{label}</Label>
+          </div>
+        </td>
+        <td colSpan={cells[1]}>
+          <div className="relative w-full">
+            <Input
+              className="h-7 uppercase w-full"
+              {...form.register(formKey as any)}
+            />
+          </div>
+        </td>
+      </>
+    );
+  };
+  function _field(ck: keyof T, cells: CellSize = "2,10", label?) {
+    return {
+      ck,
+      label: label || addSpacesToCamelCase(ck),
+      cells: cells.split(",").map((c) => Number(c)),
+    };
+  }
+  return {
+    Field,
+    _field2(ck: keyof T, label?, cells: CellSize = "2,1") {
+      return _field(ck, cells, label);
+    },
+    _field,
+  };
+}
+type CellSize = "2,10" | "2,4" | "2,1" | "2,6";

@@ -1,6 +1,6 @@
 import { env } from "@/env.mjs";
 import { ICan } from "@/types/auth";
-import dayjs from "dayjs";
+
 import {
   Banknote,
   Briefcase,
@@ -27,16 +27,18 @@ import { Session } from "next-auth";
 function _route(title, icon, path) {
   return { title, icon, path };
 }
+type Route = { title; icon; path };
 interface ISidebarRoute {
   title?;
-  routes: { title; icon; path }[];
+  routes: Route[];
 }
 export interface ISidebar {
   routeGroup: ISidebarRoute[];
   totalRoutes?;
   homeRoute;
   noSideBar: Boolean;
-  flatRoutes: { title; icon; path }[];
+  flatRoutes: Route[];
+  CommunitySettings: Route[];
 }
 export function nav(
   session: Session | null,
@@ -65,7 +67,7 @@ export function nav(
     viewPriceList,
     viewCustomerService,
   }: ICan = __can;
-  type Route = { title; icon; path };
+
   const routes: {
     [key in
       | "Dashboard"
@@ -105,12 +107,7 @@ export function nav(
     routes.Community.push(
       _route("Invoices", NewspaperIcon, "/community/invoices")
     );
-  viewBuilders &&
-    routes.Community.push(_route("Builders", School, "/community/builders"));
-  (viewCost || viewPriceList) &&
-    routes.Community.push(
-      _route("Models", LayoutTemplate, "/community/models")
-    );
+
   if (role == "Production") {
     routes.Services.push(
       _route(
@@ -145,6 +142,40 @@ export function nav(
       ]
     );
   }
+
+  const CommunitySettings: Route[] = [];
+
+  let _communitySettings = (() => {
+    const _rw: any = {};
+    let href: any = null;
+    function setHref(title, _href) {
+      href = _href;
+      _rw[_href] = _route(title, LayoutTemplate, `/settings/community/${href}`);
+    }
+    if (viewCost || viewPriceList) {
+      setHref("Install Costs", "install-costs");
+      setHref("Model Costs", "model-costs");
+    }
+    if (viewProject) {
+      setHref("Model Templates", "model-templates");
+      setHref("Community Templates", "community-templates");
+    }
+    if (viewBuilders) setHref("Builders", "builders");
+    CommunitySettings.push(
+      ...[
+        _rw.builders,
+        _rw["model-costs"],
+        _rw["model-templates"],
+        _rw["community-templates"],
+        _rw["install-costs"],
+      ].filter(Boolean)
+    );
+    if (href)
+      return _route("Community", LayoutTemplate, `/settings/community/${href}`);
+    return null;
+  })();
+  if (_communitySettings) routes.Settings.push(_communitySettings);
+
   let routeGroup: { routes: Route[]; title }[] = [];
   let totalRoutes = 0;
   let flatRoutes: Route[] = [];
@@ -179,13 +210,17 @@ export function nav(
     totalRoutes,
     homeRoute: homeRoute || "/login",
     noSideBar: totalRoutes < 6,
+    CommunitySettings,
   };
 }
 
 const isProd = env.NEXT_PUBLIC_NODE_ENV == "production";
 export const upRoutes = [
   "Dashboard",
-  !isProd && "Community/Projects",
+  !isProd && "Community",
+  !isProd && "Settings",
+  // !isProd && "Community/Units",
+  // !isProd && "Community/C"/,
   "Sales/Estimates",
   "Sales/Orders",
   "Sales/Customers",

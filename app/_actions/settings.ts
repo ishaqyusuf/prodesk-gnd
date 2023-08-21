@@ -1,8 +1,9 @@
 "use server";
 import { prisma } from "@/db";
 import { PostType } from "@/types/post";
+import { SettingType } from "@/types/settings";
 
-export async function getSettingAction<T>(type: PostType) {
+export async function getSettingAction<T>(type: SettingType) {
   // const type: PostType = "sales-settings";
   const setting = await prisma.settings.findFirst({
     where: {

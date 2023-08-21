@@ -26,6 +26,7 @@ import { Cell, PrimaryCellContent, SecondaryCellContent } from "./base-columns";
 import { toFixed } from "@/lib/use-number";
 import { Progressor, getProgress } from "@/lib/status";
 import ProgressStatus from "../progress-status";
+import LinkableNode from "../link-node";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -83,10 +84,9 @@ export function OrderIdCell(
   link: string | undefined = undefined
 ) {
   link = link?.replace("slug", order.slug);
-  const Node = link ? Link : Fragment;
   return (
     <div>
-      <Node href={link || ""} className={cn(link && "hover:underline")}>
+      <LinkableNode href={link || ""} className={cn(link && "hover:underline")}>
         <p className="whitespace-nowrap font-medium uppercase">
           {order.orderId}
         </p>
@@ -94,7 +94,7 @@ export function OrderIdCell(
         <span className="text-muted-foreground">
           {formatDate(order.createdAt)}
         </span>
-      </Node>
+      </LinkableNode>
     </div>
   );
 }
@@ -107,10 +107,10 @@ export function OrderCustomerCell(
   const Node = link ? Link : Fragment;
   return (
     <div className="w-full">
-      <Node href={link || ""} className={cn(link && "hover:underline")}>
+      <LinkableNode href={link || ""} className={cn(link && "hover:underline")}>
         <div className="font-medium uppercase">{customer?.name}</div>
         <span className="text-muted-foreground">{customer?.phoneNo}</span>
-      </Node>
+      </LinkableNode>
     </div>
   );
 }
@@ -123,11 +123,11 @@ export function OrderMemoCell(
   const Node = link ? Link : Fragment;
   return (
     <div className="w-full">
-      <Node href={link || ""} className={cn(link && "hover:underline")}>
+      <LinkableNode href={link || ""} className={cn(link && "hover:underline")}>
         <span className="text-muted-foreground line-clamp-2">
           {customer?.address1}
         </span>
-      </Node>
+      </LinkableNode>
     </div>
   );
 }

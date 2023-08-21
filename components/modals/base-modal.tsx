@@ -34,7 +34,7 @@ export default function BaseModal<T>({
   className,
   noFooter,
 }: BaseModalProps<T>) {
-  const modal = useAppSelector((state) => state.slicers.modal);
+  const modal = useAppSelector((state) => state.slicers?.modal);
   //   const open =
   useEffect(() => {
     if (modal?.name == modalName) {

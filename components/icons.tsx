@@ -28,6 +28,7 @@ import {
   EyeOff,
   Eye,
   Menu,
+  Pencil,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -47,6 +48,7 @@ export const Icons = {
       <Image alt="" src={logo} width={48} height={48} />
     </Link>
   ),
+  edit: Pencil,
   close: X,
   menu: Menu,
   spinner: Loader2,
@@ -75,6 +77,7 @@ export const Icons = {
     hide: EyeOff,
     view: Eye,
     flag: (props:LucideProps) => (<svg viewBox="0 0 24 24" {...props}  ><path fill="currentColor" d="M5 21V4h9l.4 2H20v10h-7l-.4-2H7v7H5Z"></path></svg>),
+    move: (props: LucideProps) => <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"   stroke-width="4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M17 8h2v2h-2V8ZM17 23h2v2h-2v-2ZM17 38h2v2h-2v-2ZM29 8h2v2h-2V8ZM29 23h2v2h-2v-2ZM29 38h2v2h-2v-2Z" fill="currentColor" stroke="none"></path><path d="M17 8h2v2h-2V8ZM17 23h2v2h-2v-2ZM17 38h2v2h-2v-2ZM29 8h2v2h-2V8ZM29 23h2v2h-2v-2ZM29 38h2v2h-2v-2Z"></path></svg>,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

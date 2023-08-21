@@ -35,12 +35,48 @@ export default function ProjectsTableShell<T>({
         header: ColumnHeader("ID"),
         cell: ({ row }) => (
           <Cell>
-            <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
+            <PrimaryCellContent>{row.original.refNo}</PrimaryCellContent>
             <DateCellContent>{row.original.createdAt}</DateCellContent>
           </Cell>
         ),
       },
-
+      {
+        id: "title",
+        header: ColumnHeader("Project"),
+        cell: ({ row }) => (
+          <Cell link={`/community/project/slug`} slug={row.original.slug}>
+            <PrimaryCellContent>{row.original.title}</PrimaryCellContent>
+            <SecondaryCellContent>
+              {row.original.builder?.name}
+            </SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        id: "supervisor",
+        header: ColumnHeader("Supervisor"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>
+              {row.original.meta?.supervisor?.name}
+            </PrimaryCellContent>
+            <SecondaryCellContent>
+              {row.original.meta?.supervisor?.email}
+            </SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        id: "homes",
+        header: ColumnHeader("Units"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>
+              {row.original._count?.homes}
+            </PrimaryCellContent>
+          </Cell>
+        ),
+      },
       {
         accessorKey: "_status",
         enableHiding: false,

@@ -9,6 +9,34 @@ export interface HomeQueryParams extends BaseQuery {
   _builderId;
   _projectSlug;
 }
+export async function getHomesAction(query: HomeQueryParams) {
+  const where = whereHome(query);
+  const homes = await prisma.homes.findMany({
+    ...(await queryFilter(query)),
+    include: {
+      project: {
+        include: {
+          builder: true,
+        },
+      },
+      tasks: {
+        select: {
+          taskUid: true,
+          produceable: true,
+          producedAt: true,
+          installable: true,
+          sentToProductionAt: true,
+          installedAt: true,
+        },
+      },
+    },
+  });
+  const pageInfo = await getPageInfo(query, where, prisma.homes);
+  return {
+    pageInfo,
+    data: homes,
+  };
+}
 export async function getProjectHomesAction(query: HomeQueryParams) {
   const where = whereHome(query, true);
   const project = await prisma.projects.findUnique({
@@ -21,10 +49,17 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
         ...(await queryFilter(query)),
         where,
         include: {
+          jobs: {
+            select: {
+              id: true,
+              createdAt: true,
+            },
+          },
           tasks: {
             select: {
               taskUid: true,
               produceable: true,
+              installable: true,
               producedAt: true,
               sentToProductionAt: true,
               installedAt: true,
@@ -39,11 +74,28 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
   const { homes, ...pdata } = project;
   return {
     pageInfo,
-    data: homes,
+    data: homes.map((home) => {
+      return {
+        ...home,
+        project: pdata,
+      };
+    }),
     project: pdata,
   };
 }
-function whereHome(query: HomeQueryParams, include = false) {
+export async function deleteHome(id) {
+  //delete home along with accessories
+  await prisma.homes.delete({
+    where: {
+      id,
+    },
+    include: {
+      jobs: true,
+      tasks: true,
+    },
+  });
+}
+function whereHome(query: HomeQueryParams, asInclude = false) {
   const q = {
     contains: query._q || undefined,
   };
@@ -55,7 +107,7 @@ function whereHome(query: HomeQueryParams, include = false) {
     search: q,
     ...dateQuery(query),
   };
-  if (!include && query._projectSlug) {
+  if (!asInclude && query._projectSlug) {
     where.project = {
       slug: query._projectSlug,
     };

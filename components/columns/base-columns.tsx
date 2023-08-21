@@ -2,10 +2,18 @@
 
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { Checkbox } from "../ui/checkbox";
-import { Fragment } from "react";
+import { Fragment, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { formatDate } from "@/lib/use-day";
+import { typedMemo } from "@/lib/hocs/typed-memo";
+import { useRouter } from "next/navigation";
+import { useBool } from "@/lib/use-loader";
+import { toast } from "sonner";
+import { Icons } from "../icons";
+import { DropdownMenuItem, DropdownMenuShortcut } from "../ui/dropdown-menu";
+import { Info, Trash } from "lucide-react";
+import LinkableNode from "../link-node";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -59,20 +67,24 @@ export const Cell = ({
   link,
   children,
   slug,
+  className,
+  ...mainProps
 }: {
   row?;
   link?;
   children?;
   slug?;
+  className?;
+  onClick?;
 }) => {
   // if (!row) return <></>;
   link = link?.replace("slug", slug?.toString());
-  const Node = link && slug ? Link : Fragment;
+
   return (
-    <div className="w-full">
-      <Node href={link || ""} className={cn(link && "hover:underline")}>
+    <div {...mainProps} className={cn("w-full", className)}>
+      <LinkableNode href={link || ""} className={cn(link && "hover:underline")}>
         {children}
-      </Node>
+      </LinkableNode>
     </div>
   );
 };
