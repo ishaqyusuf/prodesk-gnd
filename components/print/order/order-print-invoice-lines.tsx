@@ -40,9 +40,9 @@ export function OrderPrintInvoiceLines({ order }: Props) {
         line: item,
       };
     });
-  invoiceLines.push({
-    id: "filler",
-  });
+  // invoiceLines.push({
+  //   id: "filler",
+  // });
   return (
     <>
       <thead id="header">
