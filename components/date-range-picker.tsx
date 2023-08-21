@@ -14,12 +14,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import dayjs from "dayjs";
+import { DateFormats, formatDate } from "@/lib/use-day";
 
 interface Props {
   range?: Boolean;
   hideIcon?: Boolean;
   value?: any;
   setValue?: any;
+  format?: DateFormats;
 }
 export function DatePicker({
   className,
@@ -27,6 +29,7 @@ export function DatePicker({
   range,
   setValue,
   hideIcon,
+  format = "MMM DD, YYYY",
   placeholder = "Pick a date",
 }: React.HTMLAttributes<HTMLDivElement> & Props) {
   const [date, setDate] = React.useState<DateRange | undefined | Date>(
@@ -45,12 +48,13 @@ export function DatePicker({
     if (!range) return null;
     return (date as any).from;
   }
-  function format(date) {
-    return dayjs(date).format("MMM DD, YY");
-  }
+
   function _date() {
     if (range) return null;
     return date as any;
+  }
+  function __format(d) {
+    return formatDate(d, format);
   }
   const [open, setOpen] = React.useState(false);
   return (
@@ -71,10 +75,10 @@ export function DatePicker({
               (from() ? (
                 to() ? (
                   <>
-                    {format(from())} - {format(to())}
+                    {__format(from())} - {__format(to())}
                   </>
                 ) : (
-                  format(from())
+                  __format(from())
                 )
               ) : (
                 <span className="whitespace-nowrap">{placeholder}</span>
@@ -83,7 +87,7 @@ export function DatePicker({
               (!date ? (
                 <span className="whitespace-nowrap">{placeholder}</span>
               ) : (
-                format(_date())
+                __format(_date())
               ))}
           </Button>
         </PopoverTrigger>

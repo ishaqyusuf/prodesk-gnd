@@ -39,7 +39,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
 
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2 flex flex-col space-y-4">
-          <OverviewDetailsSection />
+          <OverviewDetailsSection myProd />
           <ItemDetailsSection />
         </div>
         <div className="space-y-4">

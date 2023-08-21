@@ -91,6 +91,17 @@ export async function _notifyProdStarted(
     `/tasks/sales-production/${order.orderId}`
   );
 }
+export async function _notifyProductionDateUpdate(order: SalesOrders) {
+  if (order.prodId)
+    await _notify(
+      order.prodId,
+      "sales production",
+      `Production due date for (${
+        order.orderId
+      }) has been updated, new date: ${formatDate(order.prodDueDate)}`,
+      `/tasks/sales-production/${order.orderId}`
+    );
+}
 export async function _notifyProductionAssigned(order: SalesOrders) {
   // const me = await user();
   await _notify(

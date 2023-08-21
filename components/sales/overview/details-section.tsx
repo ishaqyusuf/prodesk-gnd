@@ -13,11 +13,13 @@ import Money from "@/components/money";
 import { ProdStatusCell } from "@/components/columns/sales-columns";
 import StatusBadge from "@/components/status-badge";
 import { formatDate } from "@/lib/use-day";
+import ProductionDueDate from "../prod-due-date";
 
 interface Props {
   isProd?: Boolean;
+  myProd?: Boolean;
 }
-export default function DetailsSection({}: Props) {
+export default function DetailsSection({ myProd }: Props) {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
   const isProd = order?.ctx?.prodPage;
   return (
@@ -37,8 +39,11 @@ export default function DetailsSection({}: Props) {
           <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
             <Info label="Order ID">{order.orderId}</Info>
             <Info label="Production (Due)">
-              {order.prodStatus} ({order.prodDueDate || "-"})
+              {order.prodStatus}
+              {order.prodDueDate && `(${formatDate(order.prodDueDate)})`}
+              {/* <ProductionDueDate hideIcon data={order} editable={!myProd} /> */}
             </Info>
+
             <Info hidden={isProd} label="Invoice (Paid)">
               <span>
                 <Money className="font-medium" value={order.grandTotal} /> (

@@ -17,6 +17,7 @@ import { myId } from "../utils";
 import {
   _notifyProdStarted,
   _notifyProductionAssigned,
+  _notifyProductionDateUpdate,
 } from "../notifications";
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
@@ -245,7 +246,15 @@ export async function orderItemProductionAction({
   // if (action == "Cancel")
   await orderProdQtyUpdateAction(item.salesOrderId);
 }
-
+export async function updateProductionDate(orderId, newDate) {
+  const order = await prisma.salesOrders.update({
+    where: { id: newDate },
+    data: {
+      prodDueDate: newDate,
+    },
+  });
+  await _notifyProductionDateUpdate(order);
+}
 async function updateProgress(item, qty, status) {
   let headline = [qty, item.description].filter(Boolean).join(" ");
 

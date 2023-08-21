@@ -14,6 +14,7 @@ import { ISalesOrder } from "@/types/sales";
 import { formatDate } from "@/lib/use-day";
 import { DataTable2 } from "../data-table/data-table-2";
 import { ProdActions } from "../actions/prod-actions";
+import ProductionDueDate from "../sales/prod-due-date";
 
 interface Props extends TableShellProps<ISalesOrder> {
   myProd?: Boolean;
@@ -62,13 +63,9 @@ export default function SalesProductionTableShell<T>({
         enableSorting: !simple,
         accessorKey: "dueDate",
         header: ColumnHeader("Due Date"),
-        cell: ({ row }) => {
-          return (
-            <>
-              <p>{formatDate(row.original.prodDueDate)}</p>
-            </>
-          );
-        },
+        cell: ({ row }) => (
+          <ProductionDueDate hideIcon data={row.original} editable={!myProd} />
+        ),
       },
       {
         enableSorting: !simple,
