@@ -441,6 +441,7 @@ export async function salesPrintAction({ ids,printMode }: { ids: number[],printM
       salesRep: {},
       billingAddress: {},
       shippingAddress: {},
+      payments:true
     },
   });
   return sales;

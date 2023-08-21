@@ -20,12 +20,20 @@ export function OrderPrintFooter({ order }: Props) {
   useEffect(() => {
     if (isClient) {
       const ccc = order?.meta?.ccc;
+      const totalPaid = order?.payments
+        ?.map((p) => p.amount)
+        .reduce((sum, p) => sum + p, 0);
+      const paymentMethod = order?.payments?.map((p) => p.meta?.paymentOption);
       setFooter(
         [
           { title: "Subtotal", value: order?.subTotal },
           { title: `Tax (${order?.taxPercentage})`, value: order?.tax },
           { title: "Labor", value: (order?.meta?.labor_cost || 0)?.toFixed(2) },
           ccc && { title: `C.C.C ${order?.meta?.ccc_percentage}%`, value: ccc },
+          totalPaid && {
+            title: "Payments/Credits",
+            value: `-$${totalPaid}`,
+          },
           { title: "Total", value: `$${order?.grandTotal}` },
         ].filter(Boolean)
       );
