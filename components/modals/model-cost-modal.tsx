@@ -128,12 +128,14 @@ export default function ModelCostModal() {
                 </div>
                 <div className="">
                   <Input
+                    type="number"
                     className="h-8"
                     {...form.register(`costs.${index}.meta.costs.${t.uid}`)}
                   />
                 </div>
                 <div className="">
                   <Input
+                    type="number"
                     className="h-8"
                     {...form.register(`costs.${index}.meta.tax.${t.uid}`)}
                   />
