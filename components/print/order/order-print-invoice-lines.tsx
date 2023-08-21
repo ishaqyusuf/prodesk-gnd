@@ -84,7 +84,9 @@ export function OrderPrintInvoiceLines({ order }: Props) {
               <LineDescription line={line} sn={sn} />
             </td>
             <td colSpan={2} valign="middle">
-              <p className="text-center font-semibold">{line?.swing}</p>
+              <p className="text-center font-semibold capitalize">
+                {line?.swing}
+              </p>
             </td>
             <td colSpan={1} align="center" valign="middle">
               <p className="font-bold">{line?.qty}</p>
@@ -137,12 +139,12 @@ function LineDescription({
         <div className="font-semibold">
           {!sn && line.description ? (
             <div
-              className={`-m-1 min-h-[20px] bg-gray-300 text-center text-primary`}
+              className={`-m-1 min-h-[20px] bg-gray-300 text-center text-primary capitalize`}
             >
               {line?.description}
             </div>
           ) : (
-            <div className="  min-h-[20px]">{line.description}</div>
+            <div className="capitalize  min-h-[20px]">{line.description}</div>
           )}
         </div>
         {/* {line?.meta?.components && (
