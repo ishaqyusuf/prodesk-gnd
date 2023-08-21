@@ -248,7 +248,7 @@ export async function orderItemProductionAction({
 }
 export async function updateProductionDate(orderId, newDate) {
   const order = await prisma.salesOrders.update({
-    where: { id: newDate },
+    where: { id: orderId },
     data: {
       prodDueDate: newDate,
     },
