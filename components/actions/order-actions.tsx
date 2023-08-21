@@ -323,6 +323,10 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
             <span>Open</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={assignProduction}>
+          <FlagIcon className={`mr-2 h-4 w-4`} />
+          <span>{row.prodId ? "Update Assignment" : "Assign"}</span>
+        </DropdownMenuItem>
         {row.prodStatus == "Completed" ? (
           <>
             <DropdownMenuItem onClick={markIncomplete}>
@@ -332,10 +336,6 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
           </>
         ) : (
           <>
-            <DropdownMenuItem onClick={assignProduction}>
-              <FlagIcon className={`mr-2 h-4 w-4`} />
-              <span>{row.prodId ? "Update Assignment" : "Assign"}</span>
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={_clearAssignment}>
               <X className={`mr-2 h-4 w-4`} />
               <span>Clear Assign</span>
