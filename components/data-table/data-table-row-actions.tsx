@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Info, MoreHorizontal, Trash } from "lucide-react";
 import { Cell } from "../columns/base-columns";
 import { Button } from "../ui/button";
 import {
@@ -18,7 +18,7 @@ import { Fragment, useTransition } from "react";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useRouter } from "next/navigation";
 import { useBool } from "@/lib/use-loader";
-import { Info } from "../info";
+
 import { Icons } from "../icons";
 import { toast } from "sonner";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
