@@ -42,10 +42,10 @@ export default function RootLayout({
           >
             <Upgrader />
           </div>
+          <Toaster />
         </div>
-        <Toaster />
         <Analytics />
-        <TailwindIndicator/>
+        <TailwindIndicator />
         {prodDB && !isProd && (
           <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
             Production Database

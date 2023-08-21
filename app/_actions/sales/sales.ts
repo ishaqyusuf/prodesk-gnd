@@ -72,6 +72,9 @@ import { removeEmptyValues } from "@/lib/utils";
   if (prodId) where.prodId = prodId;
   if (status) {
     const statusIsArray = Array.isArray(status);
+    if(status == 'Unassigned')
+      where.prodId = null;
+    else
     where.prodStatus = {
       equals: statusIsArray ? undefined : status,
       in: statusIsArray ? status : undefined,
