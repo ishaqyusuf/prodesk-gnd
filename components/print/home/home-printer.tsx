@@ -79,7 +79,7 @@ export default function HomePrinter({}: Props) {
         // <PrintOrderSection index={_} order={order} key={_} />
         <div id={`orderPrinter`} key={_}>
           <div
-            id={`s${order.id}`}
+            id={`s${order.home.id}`}
             className={cn(_ > 0 && "print:break-before-page")}
           ></div>
         </div>
