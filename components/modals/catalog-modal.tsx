@@ -207,23 +207,25 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
                   {products?.map((product, pid) => (
                     <CommandGroup
                       key={`prod-${pid}`}
-                      className="capitalize  text-sm"
+                      className="capitalize  text-base text-primary"
                       heading={product.title}
                     >
                       {product.variants?.map((variant, vid) => (
                         <CommandItem
-                          className="p-0 cursor-pointer"
+                          className="p-1 cursor-pointer"
                           key={`var-${vid}`}
                           onSelect={() => handleSelect(variant)}
                         >
                           <div className="w-full grid grid-cols-12">
                             <span></span>
-                            <div className="col-span-9">
+                            <div className="col-span-7">
                               <p className="text-sm font-medium leading-none">
                                 {variant.variantTitle}
                               </p>
+                            </div>
+                            <div className="col-span-2">
                               <span className="text-muted-foreground uppercase text-sm">
-                                ({variant.sku})
+                                {variant.sku}
                               </span>
                             </div>
                             <div className="col-span-2 font-medium text-base flex justify-end">
