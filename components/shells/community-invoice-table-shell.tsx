@@ -12,9 +12,10 @@ import {
   SecondaryCellContent,
 } from "../columns/base-columns";
 
+import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { ExtendedHome, IHome } from "@/types/community";
+import { ExtendedHome, IInvoice, IProject } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
 import {
   HomeInstallationStatus,
@@ -34,19 +35,29 @@ import { dispatchSlice } from "@/store/slicers";
 import { HomesSelectionAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
-import { DeleteRowAction } from "../data-table/data-table-row-actions";
+import {
+  ActionButton,
+  DeleteRowAction,
+  RowActionCell,
+  RowActionMoreMenu,
+} from "../data-table/data-table-row-actions";
+import Money from "../money";
+import { sum } from "@/lib/utils";
+import { Icons } from "../icons";
+import { openModal } from "@/lib/modal";
+import { ProjectsFilter } from "../filters/projects-filter";
 
-export default function HomesTableShell<T>({
+export default function CommunityInvoiceTableShell<T>({
   data,
   pageInfo,
-  projectView,
-}: TableShellProps<ExtendedHome> & {
-  projectView: Boolean;
+  project,
+}: TableShellProps<IInvoice> & {
+  project?: IProject;
 }) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<ExtendedHome, unknown>[]>(
+  const columns = useMemo<ColumnDef<IInvoice, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
@@ -60,7 +71,7 @@ export default function HomesTableShell<T>({
           </Cell>
         ),
       },
-      ...(!projectView
+      ...(!project
         ? ([
             {
               header: ColumnHeader("Project"),
@@ -80,54 +91,32 @@ export default function HomesTableShell<T>({
                 </Cell>
               ),
             },
-          ] as ColumnDef<ExtendedHome, unknown>[])
+          ] as ColumnDef<IInvoice, unknown>[])
         : []),
       {
-        accessorKey: "unit",
-        header: ColumnHeader("Unit"),
+        accessorKey: "lotBlock",
+        header: ColumnHeader("Lot/Block"),
         cell: ({ row }) => (
-          <Cell link="/community/unit/slug" slug={row.original?.slug}>
+          <Cell
+          // link="/community/unit/slug" slug={row.original?.slug}
+          >
             <PrimaryCellContent>
               {row.original.lot}
               {"/"}
               {row.original.block}
             </PrimaryCellContent>
             <SecondaryCellContent>
-              {row.original?.modelName}
+              {row.original?.home?.modelName}
             </SecondaryCellContent>
           </Cell>
         ),
       },
-      // {
-      //   accessorKey: "model",
-      //   cell: ({ row }) => (
-      //     <Cell>
-      //       <SecondaryCellContent>
-      //         {row.original?.modelName}
-      //       </SecondaryCellContent>
-      //     </Cell>
-      //   ),
-      //   header: ColumnHeader("Model No"),
-      // },
-      // {
-      //   accessorKey: "lot",
-      //   header: ColumnHeader("Lot/Block"),
-      //   cell: ({ row }) => (
-      //     <Cell>
-      //       <PrimaryCellContent>
-      //         {row.original.lot}
-      //         {"/"}
-      //         {row.original.block}
-      //       </PrimaryCellContent>
-      //     </Cell>
-      //   ),
-      // },
       {
         accessorKey: "prod",
         header: ColumnHeader("Production"),
         cell: ({ row }) => (
           <Cell>
-            <HomeProductionStatus home={row.original} />
+            <HomeProductionStatus home={row.original.home} />
           </Cell>
         ),
       },
@@ -136,9 +125,27 @@ export default function HomesTableShell<T>({
         header: ColumnHeader("Installation"),
         cell: ({ row }) => (
           <Cell>
-            <HomeInstallationStatus home={row.original} />
+            <HomeInstallationStatus home={row.original.home} />
           </Cell>
         ),
+      },
+      {
+        accessorKey: "inst",
+        header: ColumnHeader("Invoice"),
+        cell: ({ row }) => {
+          const paid = sum(row?.original?.home?.tasks, "amountPaid");
+          const due = sum(row?.original?.home?.tasks, "amountDue");
+          return (
+            <Cell>
+              <PrimaryCellContent className="">
+                <Money value={paid} />
+              </PrimaryCellContent>
+              <SecondaryCellContent className="text-red-400">
+                <Money value={due} />
+              </SecondaryCellContent>
+            </Cell>
+          );
+        },
       },
       {
         accessorKey: "_status",
@@ -159,43 +166,14 @@ export default function HomesTableShell<T>({
         maxSize: 15,
         enableSorting: false,
         cell: ({ row }) => (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open Menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[185px]">
-              <Link
-                href={`/community/unit-model/${row.original.homeTemplateId}`}
-              >
-                <DropdownMenuItem>
-                  <View className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                  Edit Model
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem
-                onClick={() => {
-                  dispatchSlice("printHomes", {
-                    homes: [deepCopy(row.original)],
-                  });
-                }}
-              >
-                <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Print
-              </DropdownMenuItem>
-              <DeleteRowAction
-                menu
-                row={row.original}
-                action={deleteHome}
-                // action={async () => deleteOrderAction(row.id)}
+          <RowActionCell>
+            <RowActionMoreMenu>
+              <ActionButton
+                Icon={Icons.edit}
+                onClick={() => openModal("editInvoice", row.original)}
               />
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </RowActionMoreMenu>
+          </RowActionCell>
         ),
       },
     ], //.filter(Boolean) as any,
@@ -203,22 +181,24 @@ export default function HomesTableShell<T>({
   );
   return (
     <>
-      <HomePrinter />
       <DataTable2
         columns={columns}
         pageInfo={pageInfo}
         data={data}
         SelectionAction={HomesSelectionAction}
-        filterableColumns={[BuilderFilter]}
+        filterableColumns={[ProjectsFilter]}
         searchableColumns={[
           {
             id: "_q" as any,
-            title: projectView
-              ? "project Name,model,lot/block"
-              : "model, lot/block",
+            title: "search invoice",
           },
         ]}
-
+        dateFilterColumns={[
+          {
+            id: "_date" as any,
+            title: "Date",
+          },
+        ]}
         //  deleteRowsAction={() => void deleteSelectedRows()}
       />
     </>

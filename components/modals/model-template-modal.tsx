@@ -23,7 +23,7 @@ import {
   saveBuilderTasks,
 } from "@/app/_actions/community/builders";
 
-export default function BuilderModal() {
+export default function ModelTemplateModal() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
   const form = useForm<IBuilder>({
@@ -68,7 +68,7 @@ export default function BuilderModal() {
         init(data?.data);
       }}
       onClose={() => {}}
-      modalName="builder"
+      modalName="modelTemplate"
       Title={({ data }) => <div>Builder Form</div>}
       Content={({ data }) => (
         <div>

@@ -5,6 +5,7 @@ import {
   HomeTasks,
   HomeTemplates,
   Homes,
+  Invoices,
   Projects,
   Tasks,
 } from "@prisma/client";
@@ -41,14 +42,21 @@ export type IBuilder = Builders & {
 };
 export type IHome = Homes & {
   meta: {};
+};
+export interface ExtendedHome extends IHome {
   project: IProject;
-  tasks: ITasks[];
+  tasks: IHomeTask[];
   jobs: Tasks[];
+}
+export type IHomeTask = HomeTasks & {
+  meta: {
+    system_task: Boolean;
+  };
 };
-
-export type ITasks = HomeTasks & {
-  meta: {};
-};
+export interface ExtendedHomeTasks extends IHomeTask {
+  project: IProject;
+  home: IHome;
+}
 export interface IHomeStatus {
   produceables: number;
   produced: number;
@@ -56,10 +64,18 @@ export interface IHomeStatus {
   productionStatus;
   badgeColor;
 }
+export type IInvoice = Invoices & {
+  project: IProject;
+  home: ExtendedHome;
+  meta: {};
+};
 export type IHomeTemplate = HomeTemplates & {
   meta: HomeTemplateMeta;
   builder: IBuilder;
-  homes: IHome[];
+  homes: (IHome & {
+    project: IProject;
+    tasks: IHomeTask[];
+  })[];
   costs: ICostChart[];
   _count: {
     homes;

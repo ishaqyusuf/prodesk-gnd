@@ -53,3 +53,12 @@ function whereProject(query: ProjectsQueryParams) {
 
   return where;
 }
+export async function staticProjectsAction() {
+  const _data = await prisma.projects.findMany({
+    select: {
+      id: true,
+      title: true,
+    },
+  });
+  return _data;
+}

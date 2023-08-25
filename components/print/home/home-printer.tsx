@@ -17,7 +17,7 @@ import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
 import { jsPDF } from "jspdf";
-import { IHome } from "@/types/community";
+import { ExtendedHome } from "@/types/community";
 import { printHomes } from "@/app/_actions/community/home-template";
 import { HomeTemplates } from "@prisma/client";
 interface Props {}
@@ -27,7 +27,7 @@ export default function HomePrinter({}: Props) {
     print();
   }, [printer]);
   const [homes, setHomes] = useState<
-    { home: IHome; template: HomeTemplates }[]
+    { home: ExtendedHome; template: HomeTemplates }[]
   >([]);
   //   useEffect(() => {
   //     if (sales?.length > 0) {

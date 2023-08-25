@@ -23,6 +23,8 @@ import { Icons } from "../icons";
 import { toast } from "sonner";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import LinkableNode from "../link-node";
+import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export function RowActionCell({ children }: { children? }) {
   return <div className="flex justify-end space-x-2">{children}</div>;
@@ -82,6 +84,27 @@ export function RowActionMenuItem({
       </LinkableNode>
     );
   return <Frag />;
+}
+export function ActionButton({
+  Icon,
+  label,
+  className,
+  ...props
+}: PrimitiveButtonProps & {
+  Icon?;
+  label?;
+}) {
+  if (Icon)
+    return (
+      <Button
+        variant="outline"
+        className={cn("flex h-8 w-8 p-0", className)}
+        {...props}
+      >
+        <Icon className={`h-4 w-4`} />
+        <span className="sr-only">{label}</span>
+      </Button>
+    );
 }
 export const DeleteRowAction = typedMemo(
   ({ row, action, menu }: { row: any; action; menu?: Boolean }) => {

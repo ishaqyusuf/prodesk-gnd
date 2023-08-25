@@ -165,6 +165,7 @@ model Homes {
     homeTemplate   HomeTemplates? @relation(fields: [homeTemplateId], references: [id])
     tasks          HomeTasks[]
     jobs           Tasks[]
+    invoices       Invoices[]
 }
 
 model HomeTasks {
@@ -218,6 +219,7 @@ model HomeTasks {
     createdAt                 DateTime? @db.Timestamp(0)
     updatedAt                 DateTime? @db.Timestamp(0)
     home                      Homes?    @relation(fields: [homeId], references: [id])
+    project                   Projects? @relation(fields: [projectId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -301,7 +303,7 @@ model InventoryProducts {
     categoryId        Int?
     subCategoryId     Int?
     weight            Float?
-    meta              String?           @db.LongText
+    meta              Json?             @db.Json
     deletedAt         DateTime?         @db.Timestamp(0)
     createdAt         DateTime?         @db.Timestamp(0)
     updatedAt         DateTime?         @db.Timestamp(0)
@@ -319,6 +321,18 @@ model InventoryProducts {
     subCategory       String?           @db.VarChar(255)
     supplier          String?           @db.VarChar(255)
     variants          ProductVariants[]
+}
+
+model JoomagProduct {
+    id          Int       @unique @default(autoincrement())
+    title       String?
+    description String?
+    price       Float?
+    sku         String?
+    section     String?
+    meta        Json?     @db.Json
+    createdAt   DateTime? @db.Timestamp(0)
+    updatedAt   DateTime? @db.Timestamp(0)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -339,6 +353,8 @@ model Invoices {
     updatedAt DateTime? @db.Timestamp(0)
     taskUid   String?   @db.VarChar(255)
     checkDate DateTime? @db.Timestamp(0)
+    project   Projects? @relation(fields: [projectId], references: [id])
+    home      Homes?    @relation(fields: [homeId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -661,6 +677,8 @@ model Projects {
     builder         Builders?         @relation(fields: [builderId], references: [id])
     jobs            Tasks[]
     communityModels CommunityModels[]
+    invoices        Invoices[]
+    homeTasks       HomeTasks[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

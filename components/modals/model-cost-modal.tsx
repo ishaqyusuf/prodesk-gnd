@@ -75,6 +75,7 @@ export default function ModelCostModal() {
             </div>
             <div className="">
               <Button
+                disabled={fields.find((f) => !f.id) != null}
                 onClick={() => {
                   append({
                     type: "task-costs",
@@ -106,6 +107,7 @@ export default function ModelCostModal() {
               <Label>From</Label>
               <DatePicker
                 className="w-auto h-8"
+                setValue={(e) => form.setValue(`costs.${index}.startDate`, e)}
                 value={form.getValues(`costs.${index}.startDate`)}
               />
             </div>
@@ -113,6 +115,7 @@ export default function ModelCostModal() {
               <Label>To</Label>
               <DatePicker
                 className="w-auto h-8"
+                setValue={(e) => form.setValue(`costs.${index}.endDate`, e)}
                 value={form.getValues(`costs.${index}.endDate`)}
               />
             </div>

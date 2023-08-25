@@ -1,7 +1,7 @@
 import { queryParams } from "@/app/_actions/action-utils";
 import { Metadata } from "next";
 import PageHeader from "@/components/page-header";
-import { IHome, IProject } from "@/types/community";
+import { ExtendedHome, IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import ProjectsTableShell from "@/components/shells/homes-table-shell";
@@ -33,7 +33,7 @@ export default async function ProjectHomesPage({ searchParams, params }) {
         subtitle={project?.builder?.name}
         newDialog="home"
       />
-      <HomesTableShell<IHome>
+      <HomesTableShell<ExtendedHome>
         projectView
         data={response.data as any}
         pageInfo={response.pageInfo}

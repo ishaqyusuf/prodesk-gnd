@@ -1,7 +1,7 @@
 import { queryParams } from "@/app/_actions/action-utils";
 import { Metadata } from "next";
 import PageHeader from "@/components/page-header";
-import { IHome, IProject } from "@/types/community";
+import { ExtendedHome, IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 
@@ -30,7 +30,7 @@ export default async function HomesPage({ searchParams, params }) {
         <BreadLink link="/community/units" title="All Units" isLast />
       </Breadcrumbs>
       <PageHeader title={"Units"} subtitle={``} newDialog="home" />
-      <HomesTableShell<IHome>
+      <HomesTableShell<ExtendedHome>
         projectView={false}
         data={response.data as any}
         pageInfo={response.pageInfo}

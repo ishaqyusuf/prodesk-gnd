@@ -71,11 +71,11 @@ export async function slugModel(value, model, c = 0) {
 
   return slug;
 }
-export function sum<T>(array: T[], key: keyof T) {
-  return array.reduce(
-    (sum, product) => sum + ((product?.[key] || 0) as number),
-    0
-  );
+export function sum<T>(array: T[], key: keyof T | undefined = undefined) {
+  return array
+    .map((v) => (!key ? v : v?.[key]))
+    .filter((v) => (v as any) > 0 && !isNaN(v as any))
+    .reduce((sum, val) => sum + (val as number), 0);
 }
 export const formatCurrency = new Intl.NumberFormat("en-US", {
   style: "currency",

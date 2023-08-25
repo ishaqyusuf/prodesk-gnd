@@ -14,6 +14,7 @@ import { Icons } from "../icons";
 import { DropdownMenuItem, DropdownMenuShortcut } from "../ui/dropdown-menu";
 import { Info, Trash } from "lucide-react";
 import LinkableNode from "../link-node";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -88,11 +89,27 @@ export const Cell = ({
     </div>
   );
 };
-export function PrimaryCellContent({ children }) {
-  return <div className="font-semibold">{children}</div>;
+export function PrimaryCellContent({
+  children,
+  className,
+  ...props
+}: PrimitiveDivProps) {
+  return (
+    <div {...props} className={cn("font-semibold", className)}>
+      {children}
+    </div>
+  );
 }
-export function SecondaryCellContent({ children }) {
-  return <div className="text-muted-foreground text-sm">{children}</div>;
+export function SecondaryCellContent({
+  children,
+  className,
+  ...props
+}: PrimitiveDivProps) {
+  return (
+    <div {...props} className={cn("text-muted-foreground text-sm", className)}>
+      {children}
+    </div>
+  );
 }
 export function DateCellContent({
   children,

@@ -238,7 +238,7 @@ function ComponentRow({ field, form, frm }: { field; form; frm }) {
   return (
     <TableRow className="">
       <TableHead className="">{field.label}</TableHead>
-      <TableCell id="Name" className="p-0 px-1">
+      <TableCell id="Name" className="p-0 px-1 w-">
         <ComponentInput
           {...props}
           keyName={`components.${field.uuid}.title`}

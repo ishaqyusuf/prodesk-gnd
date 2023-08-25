@@ -1,10 +1,10 @@
 import { getBadgeColor } from "@/lib/status-badge";
-import { IHome, IHomeStatus } from "@/types/community";
+import { ExtendedHome, IHomeStatus } from "@/types/community";
 import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 interface Props {
-  home: IHome;
+  home: ExtendedHome;
 }
 export function HomeProductionStatus({ home }: Props) {
   let [status, setStatus] = useState<IHomeStatus>({} as any);

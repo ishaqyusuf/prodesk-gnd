@@ -71,7 +71,7 @@ export default function ModelCostTableShell<T>({
         cell: ({ row }) => (
           <Cell>
             <PrimaryCellContent>
-              {row.original._count?.homes}
+              {row.original._count?.homes || 0}
             </PrimaryCellContent>
           </Cell>
         ),
@@ -108,26 +108,26 @@ export default function ModelCostTableShell<T>({
           );
         },
       },
-      {
-        id: "units",
-        header: ColumnHeader("Install Costs"),
-        cell: ({ row }) => (
-          <Cell
-            className="cursor-pointer"
-            onClick={() => openModal("installCost", row.original)}
-          >
-            <Badge
-              className={cn(
-                row.original.meta?.installCosts?.length > 0
-                  ? "bg-green-200 text-green-700 hover:bg-green-200"
-                  : "bg-slate-200 text-slate-700 hover:bg-slate-200"
-              )}
-            >
-              {row.original.meta?.installCosts?.length || 0} Costs
-            </Badge>
-          </Cell>
-        ),
-      },
+      // {
+      //   id: "units",
+      //   header: ColumnHeader("Install Costs"),
+      //   cell: ({ row }) => (
+      //     <Cell
+      //       className="cursor-pointer"
+      //       onClick={() => openModal("installCost", row.original)}
+      //     >
+      //       <Badge
+      //         className={cn(
+      //           row.original.meta?.installCosts?.length > 0
+      //             ? "bg-green-200 text-green-700 hover:bg-green-200"
+      //             : "bg-slate-200 text-slate-700 hover:bg-slate-200"
+      //         )}
+      //       >
+      //         {row.original.meta?.installCosts?.length || 0} Costs
+      //       </Badge>
+      //     </Cell>
+      //   ),
+      // },
 
       {
         accessorKey: "_q",
@@ -149,8 +149,16 @@ export default function ModelCostTableShell<T>({
               <RowActionMenuItem
                 SubMenu={
                   <>
-                    <RowActionMenuItem>Units</RowActionMenuItem>
-                    <RowActionMenuItem>Invoices</RowActionMenuItem>
+                    <RowActionMenuItem
+                      link={`/community/units?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
+                    >
+                      Units
+                    </RowActionMenuItem>
+                    <RowActionMenuItem
+                      link={`/community/invoices?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
+                    >
+                      Invoices
+                    </RowActionMenuItem>
                   </>
                 }
               >
