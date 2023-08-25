@@ -1,7 +1,13 @@
 // import { ISalesOrder, ISalesOrderItem } from "@/types/ISales";
 import { deepCopy } from "@/lib/deep-copy";
 import { formatDate } from "@/lib/use-day";
-import { Builders, CustomerTypes, Projects, Users } from "@prisma/client";
+import {
+  Builders,
+  CustomerTypes,
+  HomeTemplates,
+  Projects,
+  Users,
+} from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
@@ -45,6 +51,7 @@ export interface ISlicer {
   // staticList: IStaticList;
   staticBuilders: Builders[];
   staticProjects: Projects[];
+  staticModels: HomeTemplates[];
 }
 
 export type ModalName =

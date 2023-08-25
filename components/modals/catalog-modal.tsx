@@ -33,6 +33,7 @@ import { updateInventoryComponentTitleAction } from "@/app/_actions/sales/invent
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
 import { DataTableFacetedFilter2 } from "../data-table/data-table-faceted-filter-2";
 import { productCategories } from "@/data/product-category";
+import { CatalogCommandDialog } from "../sales/command";
 
 interface Props {
   form: ISalesOrderForm;
@@ -160,7 +161,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
       <Button size="sm" onClick={() => setIsOpen(true)}>
         Catalog
       </Button>
-      <CommandDialog
+      <CatalogCommandDialog
         shouldFilter={false}
         open={isOpen}
         onOpenChange={setIsOpen}
@@ -187,7 +188,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
                 /> */}
               </div>
             </div>
-            <CommandList>
+            <CommandList className=" max-h-none   h-[80vh]">
               <CommandEmpty
                 className={cn(
                   isPending ? "hidden" : "py-6 text-center text-sm"
@@ -305,7 +306,7 @@ export default function CatalogModal({ form: bigForm, ctx }: Props) {
             </CommandGroup>
           </CommandList>
         )}
-      </CommandDialog>
+      </CatalogCommandDialog>
     </>
   );
 }

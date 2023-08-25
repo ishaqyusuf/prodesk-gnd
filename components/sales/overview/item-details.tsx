@@ -46,9 +46,7 @@ export default function ItemDetailsSection() {
               {order.items?.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell className="p-2">
-                    <p className="">
-                      {item.description} {item?.meta?.uid}
-                    </p>
+                    <p className="">{item.description}</p>
                   </TableCell>
                   <TableCell className="p-2 ">
                     <p className="whitespace-nowrap font-semibold text-muted-foreground">

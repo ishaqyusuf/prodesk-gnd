@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import orderProdQtyUpdateAction, { getSales } from "./sales";
 import { saveProgress } from "../progress";
 import { getServerSession } from "next-auth";
-import { myId } from "../utils";
+import { myId, user } from "../utils";
 import {
   _notifyProdStarted,
   _notifyProductionAssigned,
@@ -86,14 +86,15 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     });
   });
   if (prevProducedQty > 0) {
+    const me = await user();
     await saveProgress("SalesOrder", id, {
       type: "production",
       // parentId: salesOrderId,
       status: completed ? "Production Completed" : "Production Reset",
       headline: completed
-        ? "Production Completed by admin"
-        : "Production Reset by admin",
-      userId: await myId(),
+        ? `Production Completed by ${me.name}`
+        : `Production Reset by ${me.name}`,
+      userId: me.id,
     });
   }
   await orderProdQtyUpdateAction(id);
