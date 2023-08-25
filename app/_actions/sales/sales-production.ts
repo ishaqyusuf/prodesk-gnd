@@ -65,7 +65,7 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     },
   });
   if (!order) throw Error("Order not found");
-  console.log(order.items.length);
+
   order.items.map(async (item) => {
     console.log(item.swing, item.qty, ">>>>");
     if (!item.swing || !item?.qty || !item) return;

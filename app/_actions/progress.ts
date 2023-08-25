@@ -55,7 +55,7 @@ export async function saveProgress(
     },
   });
 }
-type ProgressType = "production" | undefined;
+type ProgressType = "production" | "sales" | undefined;
 type ProgressableType = "SalesOrder" | "SalesOrderItem";
 
 export interface TimelineUpdateProps {

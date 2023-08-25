@@ -21,9 +21,10 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
-import { getProgress } from "../progress";
+import { getProgress, saveProgress } from "../progress";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { removeEmptyValues } from "@/lib/utils";
+import { user } from "../utils";
 
   function whereSales(query: SalesQueryParams) {
   const {
@@ -449,14 +450,22 @@ export async function salesPrintAction({ ids,printMode }: { ids: number[],printM
   });
   return sales;
 }
-export async function moveEstimateToOrderAction(id) {
+export async function moveSales(id,type: "order" | "estimate") {
 
-    await prisma.salesOrders.update({
+  const order =  await prisma.salesOrders.update({
       where:{
         id
       },
       data: {
-        type: 'order'
+        type
       }
     })
+    let title = `Moved to ${type}`
+    await saveProgress(
+      'SalesOrder',id,{
+        type: 'sales',
+        status: title,
+        headline: `${title} by ${(await user()).name}`
+      }
+    )
 }

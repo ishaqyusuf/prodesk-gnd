@@ -8,6 +8,8 @@ import orderProdQtyUpdateAction from "./sales";
 import va from "@/lib/va";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { transformData } from "@/lib/utils";
+import { saveProgress } from "../progress";
+import { user } from "../utils";
 
 export async function saveOrderAction({
   id,
@@ -137,5 +139,11 @@ export async function saveOrderAction({
   if (id) va.track("sales updated", { type: sale_order.type });
   else va.track("sales created", { type: sale_order.type });
   if (id && order.type == "order") await fixSalesPaymentAction(id);
+  if (!id)
+    await saveProgress("SalesOrder", id, {
+      type: "sales",
+      status: `${order.type} created`,
+      headline: `${order.type} created by ${(await user()).name}`,
+    });
   return sale_order;
 }

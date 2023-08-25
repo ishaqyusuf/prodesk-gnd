@@ -39,7 +39,7 @@ import { useRouter } from "next/navigation";
 import {
   copyOrderAction,
   deleteOrderAction,
-  moveEstimateToOrderAction,
+  moveSales,
 } from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { dispatchSlice } from "@/store/slicers";
@@ -70,9 +70,14 @@ export function OrderRowAction(props: IOrderRowProps) {
   const _linkDir = `/sales/${row.type}/${row.slug}`;
   const router = useRouter();
   async function moveEstimateToOrder() {
-    await moveEstimateToOrderAction(row.id);
+    await moveSales(row.id, "order");
     toast.message("Estimate moved to order");
     router.push(`/sales/order/${row.orderId}`);
+  }
+  async function moveToEstimate() {
+    await moveSales(row.id, "estimate");
+    toast.message("Order moved to estimate");
+    router.push(`/sales/estimate/${row.orderId}`);
   }
   return (
     <div className="">
@@ -118,6 +123,9 @@ export function OrderRowAction(props: IOrderRowProps) {
           {!estimate ? (
             <>
               <ProductionAction row={row} />
+              <RowActionMenuItem Icon={ShoppingBag} onClick={moveToEstimate}>
+                Move to Estimate
+              </RowActionMenuItem>
             </>
           ) : (
             <>
