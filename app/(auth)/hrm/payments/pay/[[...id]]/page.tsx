@@ -19,19 +19,11 @@ export const metadata: Metadata = {
   title: "Payment Portal",
 };
 export default async function PaymentPage({ params }) {
-  console.log(params);
   const userId = params?.id?.[0];
-  const payables = await getPayableUsers();
-  const jobs = userId
-    ? await getJobs({
-        userId,
-        show: "unpaid",
-        per_page: 25,
-      })
-    : null;
+  const { payables, jobs } = await getPayableUsers(userId);
   const user = payables?.find((u) => u.id == userId);
   if (user) metadata.title = user.name;
-
+  console.log(user);
   return (
     <HrmLayout>
       <Breadcrumbs>
@@ -60,7 +52,7 @@ export default async function PaymentPage({ params }) {
         <div className="flex-1">
           {jobs && user && (
             <div className="space-y-4">
-              <JobTableShell payment {...jobs} />
+              <JobTableShell payment {...(jobs as any)} />
               <JobPaymentForm user={user as any} />
             </div>
           )}

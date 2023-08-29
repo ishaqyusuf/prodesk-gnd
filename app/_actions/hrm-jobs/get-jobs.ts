@@ -33,11 +33,13 @@ function whereJobs(query: JobsQueryParamsProps) {
     contains: query._q || undefined,
   };
   const where: Prisma.TasksWhereInput = {};
-  if (query.show == "unpaid") where.paymentId = null;
+  if (query.show == "unpaid") where.paymentId = undefined;
   if (query.show == "paid")
     where.paymentId = {
       gt: 0,
     };
   if (query.userId) query.userId = +query.userId;
+
+  console.log("QUERY++>", query);
   return where;
 }

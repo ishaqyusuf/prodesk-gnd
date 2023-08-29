@@ -6,7 +6,7 @@ import { EmployeeProfile, JobPayments } from "@prisma/client";
 import { userId } from "../utils";
 import { _notifyProdStarted, _notifyWorkerPaymentPaid } from "../notifications";
 
-export async function getPayableUsers() {
+export async function getPayableUsers(userId) {
   const users = await prisma.users.findMany({
     where: {},
     include: {
@@ -20,7 +20,7 @@ export async function getPayableUsers() {
       },
     },
   });
-  return users
+  const payables = users
     .filter((user) => user.jobs.length > 0)
 
     .map((user) => {
@@ -42,6 +42,22 @@ export async function getPayableUsers() {
       };
     })
     .filter((u) => u != null);
+
+  const jobs = !userId
+    ? []
+    : await prisma.tasks.findMany({
+        where: {
+          paymentId: null,
+          userId: Number(userId),
+        },
+      });
+  return {
+    payables,
+    jobs: {
+      data: jobs,
+      pageInfo: {},
+    },
+  };
 }
 interface Props {
   jobIds: number[];
