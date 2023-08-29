@@ -6,7 +6,8 @@ export type DateFormats =
   | "YYYY-MM-DD"
   | "MMM DD, YYYY"
   | "YYYY-MM-DD HH:mm:ss"
-  | "YYYY-MM-DD HH:mm";
+  | "YYYY-MM-DD HH:mm"
+  | any;
 export function formatDate(date, format: DateFormats = "MM/DD/YY") {
   if (!date) return date;
   return dayjs(date).format(format);
