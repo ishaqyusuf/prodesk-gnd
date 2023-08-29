@@ -1,5 +1,5 @@
 import { toFixed } from "@/lib/use-number";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 interface Props {
   value;
@@ -9,5 +9,5 @@ interface Props {
 export default function Money({ value, validOnly, className }: Props) {
   if (!value) value = 0;
   if (!value && validOnly) return null;
-  return <span className={cn(className)}>${toFixed(value)}</span>;
+  return <span className={cn(className)}>{formatCurrency.format(value)}</span>;
 }

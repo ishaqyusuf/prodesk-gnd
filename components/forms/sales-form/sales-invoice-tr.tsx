@@ -25,6 +25,7 @@ import { updateFooterInfo } from "@/store/invoice-item-component-slice";
 import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
+import AutoComplete2 from "@/components/auto-complete-headless";
 
 interface IProps {
   rowIndex;
@@ -74,13 +75,11 @@ export const SalesInvoiceTr = ({
           <ItemCell rowIndex={i} form={form} />
           <SwingCell rowIndex={i} form={form} ctx={ctx} />
           <TableCell id="supplier" className="p-0 px-1">
-            <Combobox
-              className=""
-              keyName={`items.${i}.meta.supplier`}
-              id="swing"
+            <AutoComplete2
+              formKey={`items.${i}.meta.supplier`}
               allowCreate
               form={form}
-              list={ctx.suppliers}
+              options={ctx.suppliers}
             />
           </TableCell>
           <QtyCostCell form={form} rowIndex={i} />

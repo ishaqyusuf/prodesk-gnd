@@ -9,9 +9,15 @@ import { Icons } from "../icons";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   nav: ISidebar;
+  mobile?: Boolean;
 }
 
-export default function SiteNav({ className, onClick, nav }: SidebarProps) {
+export default function SiteNav({
+  className,
+  mobile,
+  onClick,
+  nav,
+}: SidebarProps) {
   //   const [routes, setRoutes] = useState<any>([]);
   //   useEffect(() => {
   //       //     setRoutes(useSidebarRoutes(session));
@@ -36,20 +42,20 @@ export default function SiteNav({ className, onClick, nav }: SidebarProps) {
     );
   }
   return (
-    <aside className={cn("border-r pb-12", className)}>
+    <aside className={cn(!mobile && "border-r pb-12", className)}>
       <div className="mx-4 mt-2">
         <Icons.logoLg />
       </div>
-      <div className="space-y-2 py-4">
+      <div className="py-4">
         {nav.routeGroup.map((route, index) => {
-          if (!route?.title && route?.routes?.length > 1)
+          if (!route?.title || route?.routes?.length < 1)
             return (
-              <div key={index} className="-mb-2 px-4">
+              <div key={index} className="-mb-2 pt-2 px-4">
                 {route.routes?.map((cr, i) => routeBtn(cr, i))}
               </div>
             );
           return (
-            <div key={index} className="py-1s px-4">
+            <div key={index} className="py-1s -mb-2 px-4 mt-4">
               <h2 className="mb-2 pr-2 text-sm font-semibold tracking-tight text-muted-foreground">
                 {route.title}
               </h2>

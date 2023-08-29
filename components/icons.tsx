@@ -29,6 +29,7 @@ import {
   Eye,
   Menu,
   Pencil,
+  BadgeDollarSign,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -62,6 +63,7 @@ export const Icons = {
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
+  dollar:BadgeDollarSign,
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,

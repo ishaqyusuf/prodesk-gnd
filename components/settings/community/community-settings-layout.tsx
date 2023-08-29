@@ -24,7 +24,7 @@ export default function CommunitySettingsLayoutComponent({
   const [tabs, setTabs] = useState<{ label; value }[]>([]);
   const route = useRouter();
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-8">
       <Tabs
         defaultValue={tab}
         onChange={(v) => {

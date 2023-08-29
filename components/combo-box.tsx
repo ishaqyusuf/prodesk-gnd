@@ -73,7 +73,7 @@ export default function Combobox<T>({
   function getValue(v) {
     return typeof v === "string" ? v : labelKey ? v[labelKey] : v?.value;
   }
-  const watch = form ? form.watch(keyName) : value;
+  const watch = form && keyName ? form.watch(keyName) : value;
   const [q, setQ] = React.useState("");
   React.useEffect(() => {
     setItems(list?.map(transformItem));
@@ -112,6 +112,7 @@ export default function Combobox<T>({
       setItems(resp.items.map(transformItem) as any);
     }
   }
+
   const [searchable, setSearchable] = useState(false);
   React.useEffect(() => {
     // if (debouncedSearch) {

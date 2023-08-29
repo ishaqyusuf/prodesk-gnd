@@ -5,7 +5,7 @@ import { _email } from "./_email";
 import MailComposer from "@/components/emails/mail-composer";
 import { prisma } from "@/db";
 import dayjs from "dayjs";
-import { myId } from "./utils";
+import { userId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
 import va from "@/lib/va";
 
@@ -24,7 +24,7 @@ export async function sendMessage(data: EmailProps) {
       from: data.from,
       type: data.type,
       body: data.body,
-      senderId: (await myId()) as number,
+      senderId: (await userId()) as number,
       to: data.to,
       subject: data?.subject,
       parentId: data.parentId,

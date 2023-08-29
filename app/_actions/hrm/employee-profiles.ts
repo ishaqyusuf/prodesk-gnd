@@ -1,0 +1,47 @@
+"use server";
+
+import { prisma } from "@/db";
+import { transformData } from "@/lib/utils";
+import { EmployeeProfile } from "@prisma/client";
+import { getPageInfo } from "../action-utils";
+
+export async function getProfiles() {
+  const pageInfo = await getPageInfo({}, {}, prisma.employeeProfile);
+
+  return {
+    pageInfo,
+    data: (await prisma.employeeProfile.findMany({})) as any,
+  };
+}
+export async function staticEmployeeProfiles() {
+  const pageInfo = await getPageInfo({}, {}, prisma.employeeProfile);
+
+  return (await prisma.employeeProfile.findMany({})) as any;
+}
+
+export async function saveEmployeeProfile(data: EmployeeProfile) {
+  const { id, ...rest } = data;
+  if (!id)
+    await prisma.employeeProfile.create({
+      data: transformData(rest) as any,
+    });
+  else
+    await prisma.employeeProfile.update({
+      where: { id },
+      data: transformData(rest) as any,
+    });
+}
+export async function setEmployeeProfileAction(id, profileId) {
+  await prisma.users.update({
+    where: {
+      id,
+    },
+    data: {
+      employeeProfile: {
+        connect: {
+          id: profileId,
+        },
+      },
+    },
+  });
+}

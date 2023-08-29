@@ -42,14 +42,19 @@ import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { closeModal } from "@/lib/modal";
 import { store } from "@/store";
 import { itemQuoteUpdated } from "@/store/invoice-item-component-slice";
+import AutoComplete2 from "../auto-complete-headless";
+import ReRender from "../re-render";
 
 export interface IComponentForm {
   components: WizardKvForm;
+  swing;
 }
 export default function SalesComponentModal({
   form,
   ctx,
+  startTransition2,
 }: {
+  startTransition2;
   ctx: SalesFormCtx;
   form: ISalesOrderForm;
 }) {
@@ -61,7 +66,7 @@ export default function SalesComponentModal({
   const settings = ctx.settings;
 
   const [wFields, setWFields] = useState<string[]>([]);
-  const [swing, setSwing] = useState<string | undefined>();
+
   const watchSums = frm.watch(wFields as any);
   const [total, setTotal] = useState<number>();
   useEffect(() => {
@@ -96,7 +101,8 @@ export default function SalesComponentModal({
     setWizardForm(_componentWizard);
 
     frm.setValue("components", _wizardForm);
-    setSwing(form.getValues(`items.${rowIndex}.swing`) as any);
+    frm.setValue("swing", form.getValues(`items.${rowIndex}.swing`) as any);
+
     return;
   }
   function save({ rowIndex }: ISalesComponentModal) {
@@ -133,7 +139,9 @@ export default function SalesComponentModal({
       form.setValue(`items.${rowIndex}.meta.components`, components);
       form.setValue(`items.${rowIndex}.meta.isComponent`, true);
       form.setValue(`items.${rowIndex}.price`, convertToNumber(total, 0));
-      form.setValue(`items.${rowIndex}.swing`, swing as any);
+      const swingChanged =
+        form.getValues(`items.${rowIndex}.swing`) != frm.getValues("swing");
+      form.setValue(`items.${rowIndex}.swing`, frm.getValues("swing"));
 
       form.setValue(`items.${rowIndex}.description`, description);
       const validQty = (qty || 0) > 0;
@@ -141,7 +149,7 @@ export default function SalesComponentModal({
         qty = 1;
         // form.setValue(`items.${slice.rowIndex}.qty`, 1);
       }
-      closeModal("salesComponent");
+
       store.dispatch(
         itemQuoteUpdated({
           rowIndex,
@@ -149,6 +157,8 @@ export default function SalesComponentModal({
           price: tCost,
         })
       );
+      closeModal("salesComponent");
+      if (swingChanged) startTransition2(() => {});
     });
   }
   return (
@@ -158,7 +168,7 @@ export default function SalesComponentModal({
       onOpen={(data) => _init(data)}
       Title={({ data }) => <span>Door Component</span>}
       Content={({ data }) => (
-        <>
+        <ReRender form={frm}>
           <Table>
             <TableHeader>
               <TableRow>
@@ -174,13 +184,14 @@ export default function SalesComponentModal({
               <TableRow>
                 <TableHead className="">Swing</TableHead>
                 <TableCell id="Name" className="p-0 px-1">
-                  <Combobox
-                    // className="w-24"
-                    id="swing"
+                  <AutoComplete2
+                    form={frm}
+                    formKey={"swing"}
+                    // onChange={(e) => setSwing(e.id)}
                     allowCreate
-                    value={swing}
-                    setValue={setSwing}
-                    list={ctx.swings}
+                    // value={swing}
+                    uppercase
+                    options={ctx?.swings}
                   />
                 </TableCell>
               </TableRow>
@@ -194,7 +205,7 @@ export default function SalesComponentModal({
               ))}
             </TableBody>
           </Table>
-        </>
+        </ReRender>
       )}
       Footer={({ data }) => (
         <>
@@ -328,6 +339,18 @@ function ComponentInput({
     };
   }
   // return <AutoComplete />;
+  return (
+    <AutoComplete2
+      placeholder=""
+      form={form}
+      formKey={keyName}
+      itemText="name"
+      itemValue="name"
+      searchFn={searchFn}
+      uppercase
+      allowCreate
+    />
+  );
   return (
     <Combobox<OrderInventory>
       allowCreate

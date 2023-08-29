@@ -4,8 +4,10 @@ import { formatDate } from "@/lib/use-day";
 import {
   Builders,
   CustomerTypes,
+  EmployeeProfile,
   HomeTemplates,
   Projects,
+  Roles,
   Users,
 } from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -52,6 +54,8 @@ export interface ISlicer {
   staticBuilders: Builders[];
   staticProjects: Projects[];
   staticModels: HomeTemplates[];
+  staticRoles: Roles[];
+  staticEmployeeProfiles: EmployeeProfile[];
 }
 
 export type ModalName =
@@ -71,6 +75,11 @@ export type ModalName =
   | "modelCost"
   | "editInvoice"
   | "installCost"
+  | "employee"
+  | "jobOverview"
+  | "editJob"
+  | "submitJob"
+  | "employeeProfile"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

@@ -2,22 +2,23 @@
 
 import { prisma } from "@/db";
 import { authOptions } from "@/lib/auth-options";
-import { SalesOrders, Notifications } from "@prisma/client";
+import { SalesOrders, Notifications, Tasks, JobPayments } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { myId, user } from "./utils";
+import { userId, user } from "./utils";
 import { transformData } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
+import { IJobs } from "@/types/hrm";
 
 export type INotification = Notifications & {
   archived: Boolean;
   time;
 };
 export async function loadNotificationsAction() {
-  const userId = await myId();
+  const id = await userId();
   const noficiations: INotification[] = (await prisma.notifications.findMany({
     where: {
-      userId,
+      userId: id,
     },
     orderBy: {
       createdAt: "desc",
@@ -26,10 +27,10 @@ export async function loadNotificationsAction() {
   return noficiations;
 }
 export async function getNotificationCountAction() {
-  const userId = await myId();
+  const id = await userId();
   const count = await prisma.notifications.count({
     where: {
-      userId,
+      userId: id,
       archivedAt: {
         equals: undefined,
       },
@@ -58,13 +59,16 @@ export async function archiveAction(id) {
     },
   });
 }
-export type NotificationType = "sales production";
+export type NotificationType =
+  | "sales production"
+  | "installation"
+  | "punchount";
 async function _notify(userId, type: NotificationType, message, link) {
   await prisma.notifications.create({
     data: transformData({
       fromUser: {
         connect: {
-          id: (await myId()) || 0,
+          id: (await userId()) || 0,
         },
       },
       user: {
@@ -115,3 +119,15 @@ export async function _notifyProductionAssigned(order: SalesOrders) {
     `/tasks/sales-production/${order.orderId}`
   );
 }
+export async function _notifyAdminJobSubmitted(job: IJobs) {
+  await _notify(
+    1,
+    job.type as any,
+    `New Job Submission: ${job.title} ${job.subtitle}`,
+    `/hrm/jobs?id=${job.id}`
+  );
+}
+export async function _notifyWorkerPaymentPaid(
+  payment: JobPayments,
+  jobCount
+) {}

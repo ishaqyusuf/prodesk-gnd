@@ -915,34 +915,64 @@ model Tags {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Tasks {
-    id          Int       @unique @default(autoincrement())
+    id          Int          @unique @default(autoincrement())
     userId      Int
-    type        String    @db.VarChar(255)
+    type        String       @db.VarChar(255)
     homeId      Int?
     unitId      Int?
     projectId   Int?
     taskId      Int?
     amount      Int
-    title       String?   @db.VarChar(255)
-    subtitle    String?   @db.VarChar(255)
-    description String?   @db.Text
-    note        String?   @db.Text
-    doneBy      String?   @db.VarChar(255)
-    status      String    @db.VarChar(255)
-    meta        Json?     @db.Json
-    adminNote   String?   @db.Text
-    statusDate  DateTime? @db.Timestamp(0)
-    rejectedAt  DateTime? @db.Timestamp(0)
-    approvedAt  DateTime? @db.Timestamp(0)
-    paidAt      DateTime? @db.Timestamp(0)
+    title       String?      @db.VarChar(255)
+    subtitle    String?      @db.VarChar(255)
+    description String?      @db.Text
+    note        String?      @db.Text
+    doneBy      String?      @db.VarChar(255)
+    status      String       @db.VarChar(255)
+    meta        Json?        @db.Json
+    adminNote   String?      @db.Text
+    statusDate  DateTime?    @db.Timestamp(0)
+    rejectedAt  DateTime?    @db.Timestamp(0)
+    approvedAt  DateTime?    @db.Timestamp(0)
+    paidAt      DateTime?    @db.Timestamp(0)
     approvedBy  Int?
     paidBy      Int?
-    checkNo     String?   @db.VarChar(255)
-    deletedAt   DateTime? @db.Timestamp(0)
-    createdAt   DateTime? @db.Timestamp(0)
-    updatedAt   DateTime? @db.Timestamp(0)
-    home        Homes?    @relation(fields: [homeId], references: [id])
-    project     Projects? @relation(fields: [projectId], references: [id])
+    paymentId   Int?
+    checkNo     String?      @db.VarChar(255)
+    deletedAt   DateTime?    @db.Timestamp(0)
+    createdAt   DateTime?    @db.Timestamp(0)
+    updatedAt   DateTime?    @db.Timestamp(0)
+    payment     JobPayments? @relation(fields: [paymentId], references: [id])
+    home        Homes?       @relation(fields: [homeId], references: [id])
+    user        Users?       @relation(fields: [userId], references: [id])
+    project     Projects?    @relation(fields: [projectId], references: [id])
+}
+
+model JobPayments {
+    id            Int       @unique @default(autoincrement())
+    amount        Int
+    charges       Int?
+    subTotal      Int?
+    userId        Int
+    paidBy        Int
+    checkNo       String?
+    paymentMethod String?
+    meta          Json?     @db.Json
+    createdAt     DateTime? @db.Timestamp(0)
+    updatedAt     DateTime? @db.Timestamp(0)
+    jobs          Tasks[]
+    user          Users?    @relation(name: "worker", fields: [userId], references: [id])
+    payer         Users?    @relation(name: "payer", fields: [paidBy], references: [id])
+}
+
+model EmployeeProfile {
+    id        Int       @unique @default(autoincrement())
+    name      String
+    discount  Int?
+    meta      Json?     @db.Json
+    createdAt DateTime? @db.Timestamp(0)
+    updatedAt DateTime? @db.Timestamp(0)
+    employees Users[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -962,12 +992,18 @@ model Users {
     createdAt       DateTime? @db.Timestamp(0)
     updatedAt       DateTime? @db.Timestamp(0)
 
-    salesProductions  SalesOrders[]   @relation(name: "producer")
-    reppedProductions SalesOrders[]   @relation(name: "salesRep")
+    employeeProfileId Int?
+
+    salesProductions  SalesOrders[]    @relation(name: "producer")
+    reppedProductions SalesOrders[]    @relation(name: "salesRep")
     roles             ModelHasRoles[]
-    notifications     Notifications[] @relation(name: "notifications")
-    sentNotifications Notifications[] @relation(name: "fromUser")
+    notifications     Notifications[]  @relation(name: "notifications")
+    sentNotifications Notifications[]  @relation(name: "fromUser")
     inbox             Inbox[]
+    jobs              Tasks[]
+    myIssuedPayments  JobPayments[]    @relation(name: "payer")
+    payments          JobPayments[]    @relation(name: "worker")
+    employeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

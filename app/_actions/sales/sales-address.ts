@@ -47,7 +47,7 @@ export async function findAddressAction({ q }: { q: string }) {
       },
     },
   });
-  return items;
+  return { items };
 }
 export async function saveAddressAction({
   billingAddress,

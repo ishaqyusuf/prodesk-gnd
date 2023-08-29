@@ -149,3 +149,7 @@ export function generateRandomString(length) {
 
   return randomString;
 }
+export function truthy<T>(condition, _true: T[] = [], _false: T[] = []): any {
+  if (condition) return _true;
+  return _false;
+}

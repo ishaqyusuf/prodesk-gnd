@@ -71,7 +71,9 @@ export default function ProjectModal() {
 
     form.reset(
       !data
-        ? {}
+        ? {
+            meta: {},
+          }
         : {
             ...data,
           }

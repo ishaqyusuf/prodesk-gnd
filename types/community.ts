@@ -91,15 +91,16 @@ export interface HomeTemplateMeta {
   design: HomeTemplateDesign;
   // taskCosts: { [id in string]: number };
 
-  installCosts: {
-    costings: {
-      title?;
-      cost?: number;
-      maxQty?: number;
-    }[];
+  installCosts: InstallCost[];
+}
+export interface InstallCost {
+  costings: {
     title?;
-    uid?;
+    cost?: number;
+    maxQty?: number;
   }[];
+  title?;
+  uid?;
 }
 export interface TemplateDesign<T> {
   entry: Entry<T>;

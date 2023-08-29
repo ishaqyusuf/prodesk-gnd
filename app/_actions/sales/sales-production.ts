@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import orderProdQtyUpdateAction, { getSales } from "./sales";
 import { saveProgress } from "../progress";
 import { getServerSession } from "next-auth";
-import { myId, user } from "../utils";
+import { userId, user } from "../utils";
 import {
   _notifyProdStarted,
   _notifyProductionAssigned,
@@ -26,7 +26,7 @@ export async function getSalesProductionsAction(
   query: SalesQueryParams,
   admin = false
 ): TableApiResponse<ISalesOrder> {
-  const sessionId = await myId();
+  const sessionId = await userId();
   query._page = "production";
   if (!admin) query.prodId = sessionId || -1;
   if (!query._dateType) query._dateType = "prodDueDate";
@@ -42,7 +42,7 @@ export async function prodsDueToday(admin: Boolean) {
     date: formatDate(dayjs(), "YYYY-MM-DD"),
     _dateType: "prodDueDate",
   };
-  const sessionId = await myId();
+  const sessionId = await userId();
   if (!admin) q.prodId = sessionId || -1;
 
   return await getSales(q);

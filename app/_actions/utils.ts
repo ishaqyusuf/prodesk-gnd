@@ -2,12 +2,13 @@
 
 import { authOptions } from "@/lib/auth-options";
 import { getServerSession } from "next-auth";
+import bcrypt from "bcrypt";
 export async function user() {
   const data = await getServerSession(authOptions);
   if (!data) throw new Error();
   return data.user;
 }
-export async function myId() {
+export async function userId() {
   return (await user()).id;
 }
 
@@ -30,4 +31,7 @@ export async function streamlineMeta(meta: any = null) {
     }
   }
   return _streamline(meta);
+}
+export async function hashPassword(pwrd) {
+  return await bcrypt.hash(pwrd, 10);
 }

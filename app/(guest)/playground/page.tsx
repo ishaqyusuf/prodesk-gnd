@@ -1,9 +1,29 @@
-import AutoCompleteInput from "@/components/auto-complete-input";
+"use client";
+import AutoComplete2 from "@/components/auto-complete-headless";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-export default async function PlaygroundPage({}) {
+export default function PlaygroundPage({}) {
+  const form = useForm({
+    defaultValues: {
+      id: "ishaq",
+    },
+  });
+  const watchId = form.watch("id");
+  useEffect(() => {
+    setTimeout(() => {
+      form.setValue("id", "abu-awf");
+    }, 3000);
+  }, []);
   return (
     <div className="flex flex-col h-screen justify-center items-center">
-      <AutoCompleteInput
+      {watchId}
+      <AutoComplete2
+        value={watchId}
+        form={form}
+        formKey={"id"}
+        itemText={"label"}
+        itemValue={"id"}
         options={[
           { id: "ishaq", label: "Ishaq Yusuf" },
           { id: "danmairomo", label: "Sulaiman DanMairomo" },
@@ -11,8 +31,6 @@ export default async function PlaygroundPage({}) {
           { id: "abu-awf", label: "Abu Awf" },
           { id: "abu-nafeesah", label: "Abu Nafeesah" },
         ]}
-        labelKey="label"
-        valueKey="id"
       />
     </div>
   );

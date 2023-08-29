@@ -31,7 +31,11 @@ import {
 } from "@/types/sales";
 import Btn from "../btn";
 import AddressSearchPop from "../sales/address-search-pop";
-import { saveAddressAction } from "@/app/_actions/sales/sales-address";
+import {
+  findAddressAction,
+  saveAddressAction,
+} from "@/app/_actions/sales/sales-address";
+import AutoComplete2 from "../auto-complete-headless";
 
 export function SalesCustomerModal({
   form,
@@ -243,9 +247,39 @@ function OrderAddress({
         <Label htmlFor="name" className="">
           Name
         </Label>
-        <div className="col-span-3 flex space-x-2">
-          <Input id="name" {...register(`${type}.name`)} className="h-8" />
-          <AddressSearchPop form={form} type={type} />
+        <div className="col-span-3 ">
+          <AutoComplete2
+            form={form}
+            formKey={`${type}.name`}
+            searchAction={findAddressAction}
+            allowCreate
+            itemValue="name"
+            onChange={(e) => {
+              const { data: address } = e || {};
+              const { customer, ..._address } = address;
+              form.setValue(type, _address as any);
+              if (customer?.profile && type == "billingAddress")
+                form.setValue("profile", customer.profile);
+            }}
+            Item={({ data: address }) => (
+              <div
+                key={address.id}
+                className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
+              >
+                <div className="flex w-full items-center justify-between">
+                  <p>{address.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {address.phoneNo}
+                  </p>
+                </div>
+                <p className="text-sm text-muted-foreground ">
+                  {address.address1}
+                </p>
+              </div>
+            )}
+          />
+          {/* <Input id="name" {...register(`${type}.name`)} className="h-8" /> */}
+          {/* <AddressSearchPop form={form} type={type} /> */}
         </div>
       </div>
       <div className="grid gap-2">

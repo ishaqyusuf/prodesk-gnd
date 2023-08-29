@@ -59,6 +59,9 @@ export async function staticProjectsAction() {
       id: true,
       title: true,
     },
+    orderBy: {
+      title: "asc",
+    },
   });
   return _data;
 }

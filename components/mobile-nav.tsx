@@ -32,10 +32,10 @@ export function MobileNav({ nav }: MobileNavProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="pl-1 pr-0">
-        <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-          <div className="pl-1 pr-7">
-            <SiteNav nav={nav} onClick={() => setIsOpen(false)} />
+      <SheetContent side="left" className="pl-1 pr-0 w-56">
+        <ScrollArea className=" h-[calc(100vh-8rem)] ">
+          <div className="pl-1 ">
+            <SiteNav nav={nav} mobile onClick={() => setIsOpen(false)} />
           </div>
         </ScrollArea>
       </SheetContent>

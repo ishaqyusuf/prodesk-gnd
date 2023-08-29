@@ -5,12 +5,9 @@ import { ExtendedHome, IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 
-import ProjectModal from "@/components/modals/project-modal";
-import {
-  getHomesAction,
-  getProjectHomesAction,
-} from "@/app/_actions/community/home";
+import { getHomesAction } from "@/app/_actions/community/home";
 import HomesTableShell from "@/components/shells/homes-table-shell";
+import HomeModal from "@/components/modals/home-modal";
 
 export const metadata: Metadata = {
   title: "All Units",
@@ -35,7 +32,7 @@ export default async function HomesPage({ searchParams, params }) {
         data={response.data as any}
         pageInfo={response.pageInfo}
       />
-      <ProjectModal />
+      <HomeModal />
     </div>
   );
 }

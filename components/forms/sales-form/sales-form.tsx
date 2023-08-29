@@ -37,6 +37,10 @@ import Btn from "@/components/btn";
 import InfoCard from "./info-card";
 import dayjs from "dayjs";
 
+import AutoComplete2 from "@/components/auto-complete-headless";
+import { loadStaticList } from "@/store/slicers";
+import { staticHomeModels } from "@/app/_actions/community/static-home-models";
+
 interface Props {
   data: SalesFormResponse;
   newTitle;

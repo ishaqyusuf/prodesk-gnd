@@ -21,6 +21,7 @@ import {
   Settings2,
   ShoppingBag,
   User,
+  UsersIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
 
@@ -39,6 +40,7 @@ export interface ISidebar {
   noSideBar: Boolean;
   flatRoutes: Route[];
   CommunitySettings: Route[];
+  Hrm: Route[];
 }
 export function nav(
   session: Session | null,
@@ -78,10 +80,10 @@ export function nav(
       | "Settings"]: Route[];
   } = {
     Dashboard: [],
+    Hrm: [],
+    Services: [],
     Community: [],
     Sales: [],
-    Services: [],
-    Hrm: [],
     Settings: [_route("Profile Settings", Settings2, "/settings/profile")],
   };
   const isAdmin =
@@ -144,13 +146,18 @@ export function nav(
   }
 
   const CommunitySettings: Route[] = [];
+  const Hrm: Route[] = [];
 
   let _communitySettings = (() => {
     const _rw: any = {};
     let href: any = null;
     function setHref(title, _href) {
       href = _href;
-      _rw[_href] = _route(title, LayoutTemplate, `/settings/community/${href}`);
+      _rw[_href] = _route(
+        title,
+        LayoutTemplate,
+        `/settings/community/${_href}`
+      );
     }
     if (viewCost || viewPriceList) {
       setHref("Install Costs", "install-costs");
@@ -176,28 +183,51 @@ export function nav(
   })();
   if (_communitySettings) routes.Settings.push(_communitySettings);
 
+  let _hrm = (() => {
+    const _rw: any = {};
+    let href: any = null;
+    function setHref(title, _href) {
+      if (!href) href = _href;
+      _rw[_href] = _route(title, LayoutTemplate, `/hrm/${_href}`);
+    }
+    if (viewEmployee) setHref("Employees", "employees");
+    // if (viewEmployee)
+    if (viewHrm || isAdmin) {
+      setHref("Profiles", "profiles");
+      setHref("Roles", "roles");
+    }
+    if (viewProject && viewOrders) setHref("Jobs", "jobs");
+    if (viewProject && viewOrders) setHref("Payments", "payments");
+    Hrm.push(...(Object.values(_rw) as any));
+
+    if (href) return _route("HRM", UsersIcon, `/hrm/${href}`);
+  })();
+  if (_hrm) routes.Hrm.push(_hrm);
   let routeGroup: { routes: Route[]; title }[] = [];
   let totalRoutes = 0;
   let flatRoutes: Route[] = [];
   let homeRoute = null;
   Object.entries(routes).map(([title, r]) => {
     let len = r?.length;
+
     if (len == 0) return;
     totalRoutes += len;
     if (!homeRoute) homeRoute = r?.[0]?.path;
     flatRoutes.push(...r);
+    const __routes = r
+      .map((_r) =>
+        upRoutes.includes(`${title}`) ||
+        upRoutes.includes(`${title}/**`) ||
+        upRoutes.includes(`${title}/${_r.title}`) ||
+        !isProd
+          ? _r
+          : null
+      )
+      .filter(Boolean) as Route[];
+
     routeGroup.push({
       title: len < 2 ? null : title,
-      routes: r
-        .map((_r) =>
-          upRoutes.includes(`${title}`) ||
-          upRoutes.includes(`${title}/**`) ||
-          upRoutes.includes(`${title}/${_r.title}`) ||
-          !isProd
-            ? _r
-            : null
-        )
-        .filter(Boolean) as Route[],
+      routes: __routes,
     });
   });
   routeGroup = routeGroup?.filter(
@@ -211,6 +241,7 @@ export function nav(
     homeRoute: homeRoute || "/login",
     noSideBar: totalRoutes < 6,
     CommunitySettings,
+    Hrm,
   };
 }
 
@@ -218,6 +249,8 @@ const isProd = env.NEXT_PUBLIC_NODE_ENV == "production";
 export const upRoutes = [
   "Dashboard",
   !isProd && "Community",
+  !isProd && "Hrm",
+  !isProd && "Services",
   !isProd && "Settings",
   // !isProd && "Community/Units",
   // !isProd && "Community/C"/,

@@ -117,7 +117,11 @@ export default function SalesInvoiceTable({
         floatingFooter={floatingFooter}
         form={form}
       />
-      <SalesComponentModal form={form} ctx={data.ctx} />
+      <SalesComponentModal
+        startTransition2={startTransition}
+        form={form}
+        ctx={data.ctx}
+      />
     </div>
   );
 }

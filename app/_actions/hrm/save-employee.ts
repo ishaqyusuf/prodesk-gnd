@@ -1,0 +1,65 @@
+"use server";
+
+import { prisma } from "@/db";
+import { transformData } from "@/lib/utils";
+import { IUser } from "@/types/hrm";
+import { hashPassword } from "../utils";
+
+export async function createEmployeeAction(data: IUser) {
+  const { name, username, email, meta, role } = data;
+  const user = await prisma.users.create({
+    data: transformData({
+      name,
+      username,
+      email,
+      meta,
+    }),
+  });
+  if (role?.id) {
+    const mhr = await prisma.modelHasRoles.create({
+      data: {
+        roleId: role.id,
+        modelId: user.id,
+        modelType: "User",
+      },
+    });
+  }
+}
+export async function saveEmployeeAction(data: IUser) {
+  const { id, name, createdAt, username, email, meta, role } = data;
+  const user = await prisma.users.update({
+    where: { id },
+    data: transformData({
+      name,
+      createdAt,
+      username,
+      email,
+      meta,
+    }),
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  });
+  const roleId = user?.roles[0]?.role?.id;
+  if (roleId && role?.id != roleId)
+    await prisma.modelHasRoles.updateMany({
+      where: {
+        modelId: user.id,
+      },
+      data: {
+        roleId: role?.id,
+      },
+    });
+}
+export async function resetEmployeePassword(id) {
+  await prisma.users.update({
+    where: { id },
+    data: {
+      password: await hashPassword("Millwork"),
+    },
+  });
+}

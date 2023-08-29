@@ -29,6 +29,7 @@ import {
 } from "@/app/_actions/upgrade/community";
 import { Icons } from "./icons";
 import { dotArray } from "@/lib/utils";
+import { upgradeJobPayments } from "@/app/_actions/upgrade/jobs-upgrade";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -45,6 +46,10 @@ export default function Upgrader() {
         { label: "Cost Chart", action: upgradeCostCharts },
         { label: "Link Home Total Cost", action: linkHomeTemplateCosts },
       ],
+    },
+    {
+      label: "Hrm",
+      children: [{ label: "Job Payments", action: upgradeJobPayments }],
     },
   ];
   const upgrade = useCallback(async () => {

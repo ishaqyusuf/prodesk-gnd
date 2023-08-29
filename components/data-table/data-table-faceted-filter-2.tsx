@@ -75,8 +75,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
   }, [fv]);
 
   const [open, setOpen] = React.useState(false);
-  if (!column || !column.id) {
-    console.log("NULL COLUMN", column);
+  if (!column || !column.id) { 
     return null;
   }
   return (
