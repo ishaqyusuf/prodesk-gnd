@@ -111,7 +111,7 @@ export default function EmployeesTableShell<T>({
                   className="flex h-8  data-[state=open]:bg-muted"
                 >
                   <span className="whitespace-nowrap">
-                    {row.original.employeProfile?.name || "Select Profile"}
+                    {row.original.employeeProfile?.name || "Select Profile"}
                   </span>
                 </Button>
               </DropdownMenuTrigger>

@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 };
 export default async function EmployeesPage({ searchParams }) {
   const response = await getEmployees(queryParams(searchParams));
+
   return (
     <HrmLayout>
       <Breadcrumbs>

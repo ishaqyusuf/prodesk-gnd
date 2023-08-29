@@ -14,8 +14,6 @@ export async function getProfiles() {
   };
 }
 export async function staticEmployeeProfiles() {
-  const pageInfo = await getPageInfo({}, {}, prisma.employeeProfile);
-
   return (await prisma.employeeProfile.findMany({})) as any;
 }
 

@@ -13,7 +13,7 @@ export type IUser = Users & {
   meta: {};
   role: Roles;
   roles: Roles[];
-  employeProfile: EmployeeProfile;
+  employeeProfile: EmployeeProfile;
 };
 export type IJobs = Tasks & {
   meta: {

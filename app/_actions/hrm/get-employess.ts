@@ -20,7 +20,7 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
     },
     ...(await queryFilter(query)),
   });
-  console.log(items);
+  console.log(items[0]?.employeeProfile);
   const pageInfo = await getPageInfo(query, where, prisma.users);
 
   return {
