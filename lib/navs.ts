@@ -219,7 +219,8 @@ export function nav(
         upRoutes.includes(`${title}`) ||
         upRoutes.includes(`${title}/**`) ||
         upRoutes.includes(`${title}/${_r.title}`) ||
-        !isProd
+        !isProd ||
+        isProd
           ? _r
           : null
       )
