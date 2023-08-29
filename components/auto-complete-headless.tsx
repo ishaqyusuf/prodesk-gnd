@@ -45,8 +45,12 @@ export default function AutoComplete2({
   const [query, setQuery] = useState("");
   const [items, setItems] = useState<any[]>([]);
   const [results, setResults] = useState<any[]>([]);
-  const [selected, setSelected] = useState();
-  const watch = form && formKey ? form.getValues(formKey) : value;
+  const [selected, setSelected] = useState<{
+    id;
+    name;
+    data;
+  }>();
+  const watch = form && formKey ? form.watch(formKey) : value;
 
   const searchMode = searchFn || searchAction;
   const debouncedQuery = useDebounce(query, searchMode ? 800 : 50);
@@ -128,34 +132,58 @@ export default function AutoComplete2({
   };
 
   function valueChange(e) {
-    setTyping(false);
-    setDirty(true);
+    // console.log("VAL CHANGED", e);
     setSelect(true);
-    onChange && onChange(e);
-    console.log(e?.id);
     setSelected(e);
     if (form && formKey) {
-      // setTimeout(() => {
       form.setValue(formKey, e?.id);
-      // }, 2000);
     }
+    onChange && onChange(e);
   }
   const [focus, setFocus] = useState(false);
   const [select, setSelect] = useState(false);
-  const [dirty, setDirty] = useState(false);
   function onFocus(e) {
     setTyping(false);
-    console.log("FOCUs");
+    setSelect(false);
     setFocus(true);
     // setSearchable(true);
     // if (!select) buttonRef?.current?.click();
     // else setSelect(false);
     if (searchMode && results.length == 0) loadResult();
   }
+  useEffect(() => {
+    if (typing && !select && !focus) {
+      // console.log("BLURRRED:::", query);
+      if (allowCreate) {
+        setSelected({
+          id: query,
+          name: query,
+          data: query,
+        });
+        if (form && formKey) {
+          form.setValue(formKey, query);
+        }
+        onChange &&
+          onChange({
+            id: query,
+            name: query,
+            data: query,
+          });
+      }
+    }
+  }, [typing, select, focus, query]);
   function onBlur(e) {
-    setTyping(false);
-    setFocus(false);
-    setDirty(true);
+    // setTimeout(() => {
+    // setTyping(false);
+    setTimeout(() => {
+      setFocus(false);
+    }, 500);
+    // setDirty(true);
+    // if (!select) {
+    //   console.log("BLURR");
+    //   console.log(selected);
+    // }
+    // }, 100);
   }
   const buttonRef = useRef<HTMLButtonElement>();
   const inputRef = useRef<HTMLInputElement>();
@@ -192,7 +220,7 @@ export default function AutoComplete2({
   return (
     <div className="grid gap-2">
       {label && <Label>{label}</Label>}
-      <Combobox value={selected || getSelected()} onChange={valueChange}>
+      <Combobox value={selected} onChange={valueChange}>
         <div className="relative mt-1">
           <div
             className={cn(
@@ -239,7 +267,7 @@ export default function AutoComplete2({
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            afterLeave={() => setQuery("")}
+            // afterLeave={() => setQuery("")}
           >
             <Combobox.Options
               style={{

@@ -925,7 +925,7 @@ model Tasks {
     amount      Int
     title       String?      @db.VarChar(255)
     subtitle    String?      @db.VarChar(255)
-    description String?      @db.Text
+    description String?      @db.LongText
     note        String?      @db.Text
     doneBy      String?      @db.VarChar(255)
     status      String       @db.VarChar(255)

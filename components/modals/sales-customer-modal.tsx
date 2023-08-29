@@ -256,10 +256,12 @@ function OrderAddress({
             itemValue="name"
             onChange={(e) => {
               const { data: address } = e || {};
-              const { customer, ..._address } = address;
-              form.setValue(type, _address as any);
-              if (customer?.profile && type == "billingAddress")
-                form.setValue("profile", customer.profile);
+              if (typeof address === "object") {
+                const { customer, ..._address } = address;
+                form.setValue(type, _address as any);
+                if (customer?.profile && type == "billingAddress")
+                  form.setValue("profile", customer.profile);
+              }
             }}
             Item={({ data: address }) => (
               <div

@@ -8,6 +8,7 @@ export async function upgradeJobPayments() {
   const jobs = await prisma.tasks.findMany({
     where: {},
   });
+  await prisma.jobPayments.deleteMany({});
   jobs.map((j) => {
     if (!j.paymentId && j.paidAt) {
       const date = formatDate(j.paidAt, "YYYY-MM-DD HH:mm");
