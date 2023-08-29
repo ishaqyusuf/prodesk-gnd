@@ -36,6 +36,7 @@ function whereEmployee(query: EmployeeQueryParamsProps) {
     contains: query._q || undefined,
   };
   const where: Prisma.UsersWhereInput = {
+    name: q,
     // builderId: {
     //   equals: Number(query._builderId) || undefined,
     // },

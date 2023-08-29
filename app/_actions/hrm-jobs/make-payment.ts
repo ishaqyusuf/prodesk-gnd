@@ -27,12 +27,18 @@ export async function getPayableUsers(userId) {
       const vjobs = user.jobs.filter((j) => !j.paymentId);
       let total = +sum(vjobs, "amount");
       //   if(!total)return null;
+      if (user.employeeProfile) {
+        console.log("EMPLOYEE PROFILE");
+        console.log(user.employeeProfile);
+      }
       let discountPercentage = user.employeeProfile?.discount || 0;
       let discount = 0;
-      if (discountPercentage > 0) discount = (total || 0) * (discount / 100);
+      if (discountPercentage > 0)
+        discount = (total || 0) * (discountPercentage / 100);
       return {
         jobIds: vjobs.map((v) => v.id),
         id: user.id,
+        pid: user.employeeProfileId,
         name: user.name,
         subTotal: total,
         discount,
