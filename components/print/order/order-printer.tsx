@@ -12,7 +12,7 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderPrintHeader } from "./order-print-header";
 import { OrderPrintInvoiceLines } from "./order-print-invoice-lines";
 import { OrderPrintFooter } from "./order-print-footer";
-import { cn } from "@/lib/utils";
+import { addPercentage, cn } from "@/lib/utils";
 import logo from "@/public/logo.png";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,7 +42,8 @@ export default function OrderPrinter({}: Props) {
     const mockup = printer.mockup;
     setSales(
       _sales.map((sale) => {
-        if (mockup) {
+        const mockPercentage = sale.meta.mockupPercentage;
+        if (mockup && mockPercentage > 0) {
           let subTotal = 0;
           let tax = 0;
           let taxxableSubTotal = 0;
@@ -50,6 +51,7 @@ export default function OrderPrinter({}: Props) {
           let taxPercentage = sale.taxPercentage || 0;
           const cccPercentage = sale.meta.ccc_percentage || 0;
           sale.items = sale.items?.map((item) => {
+            item.rate = addPercentage(item.rate, mockPercentage);
             return item;
           });
         }

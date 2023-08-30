@@ -17,10 +17,7 @@ import { Label } from "../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { ICustomer } from "@/types/customers";
 import { CustomerTypes } from "@prisma/client";
-import {
-  getCustomerProfiles,
-  saveCustomer,
-} from "@/app/_actions/sales/sales-customers";
+import { saveCustomer } from "@/app/_actions/sales/sales-customers";
 import {
   Select,
   SelectContent,
@@ -44,7 +41,7 @@ export default function ProjectModal() {
   const form = useForm<IProject>({
     defaultValues: {},
   });
-  const [profiles, setProfiles] = useState<CustomerProfiles[]>([]);
+  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
   async function submit() {
     startTransition(async () => {
       // if(!form.getValues)
