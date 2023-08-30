@@ -44,16 +44,16 @@ export default function OrderPrinter({}: Props) {
       _sales.map((sale) => {
         const mockPercentage = sale.meta.mockupPercentage;
         if (mockup && mockPercentage > 0) {
-          let subTotal = 0;
-          let tax = 0;
-          let taxxableSubTotal = 0;
-          let ccc = 0;
-          let taxPercentage = sale.taxPercentage || 0;
-          const cccPercentage = sale.meta.ccc_percentage || 0;
           sale.items = sale.items?.map((item) => {
             item.rate = addPercentage(item.rate, mockPercentage);
+            item.total = addPercentage(item.total, mockPercentage);
             return item;
           });
+
+          sale.tax = addPercentage(sale.tax, mockPercentage);
+          sale.subTotal = addPercentage(sale.subTotal, mockPercentage);
+          sale.meta.ccc = addPercentage(sale.meta.ccc, mockPercentage);
+          sale.grandTotal = addPercentage(sale.grandTotal, mockPercentage);
         }
         return sale;
       }) as any
