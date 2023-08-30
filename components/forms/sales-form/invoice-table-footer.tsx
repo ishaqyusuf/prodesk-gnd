@@ -33,7 +33,7 @@ export default function InvoiceTableFooter({
   const slice = useAppSelector((state) => state.orderItemComponent);
   // const orderForm = useAppSelector((state) => state.orderForm);
 
-  const labourCost = form.watch("meta.labour_cost");
+  const labourCost = form.watch("meta.labor_cost");
 
   const paymentOption = form.watch("meta.payment_option");
   React.useEffect(() => {
@@ -135,7 +135,7 @@ function Footer({
               <TableHead>Labour</TableHead>
               <TableCell className="p-1">
                 <Input
-                  {...form.register("meta.labour_cost")}
+                  {...form.register("meta.labor_cost")}
                   className="h-6 w-16"
                   prefix="$"
                 />

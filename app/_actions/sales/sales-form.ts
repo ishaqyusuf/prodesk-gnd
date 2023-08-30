@@ -26,6 +26,7 @@ export interface SalesFormCtx {
   swings: (string | null)[];
   suppliers: (string | null)[];
   profiles: CustomerTypes[];
+  defaultProfile: CustomerTypes;
 }
 export async function salesFormAction(
   query: ICreateOrderFormQuery
@@ -80,12 +81,14 @@ async function formCtx(): Promise<SalesFormCtx> {
     select: {
       id: true,
       coefficient: true,
+      defaultProfile: true,
       title: true,
     },
   });
   return {
     settings: meta,
     profiles: profiles as any,
+    defaultProfile: profiles.find((p) => p.defaultProfile) as any,
     swings: extras
       .filter((e) => e.type == PostTypes.SWINGS)
       .map((e) => e.title),
@@ -106,8 +109,8 @@ async function newSalesFormAction(
     type: query.type,
     status: "Active",
     meta: {
-      sales_profile: ctx.settings?.sales_profile,
-      sales_percentage: ctx?.settings?.sales_margin,
+      sales_profile: ctx.defaultProfile?.title,
+      sales_percentage: ctx.defaultProfile?.coefficient,
       rep: session?.user.name,
     },
     salesRepId: session?.user.id,

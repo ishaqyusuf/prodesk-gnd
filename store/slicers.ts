@@ -37,6 +37,7 @@ export interface ISlicer {
     mode: IOrderPrintMode;
     ids: number[];
     isClient;
+    mockup?: Boolean;
     pdf?: Boolean;
   };
   printUnits: string[];
@@ -44,13 +45,13 @@ export interface ISlicer {
     name: ModalName;
     data: any;
   };
-  customerProfiles: CustomerTypes[];
   dataPage: {
     id;
     data;
   };
   products: IProduct[];
   // staticList: IStaticList;
+  staticCustomerProfiles: CustomerTypes[];
   staticBuilders: Builders[];
   staticProjects: Projects[];
   staticModels: HomeTemplates[];
@@ -80,6 +81,7 @@ export type ModalName =
   | "editJob"
   | "submitJob"
   | "employeeProfile"
+  | "customerProfile"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

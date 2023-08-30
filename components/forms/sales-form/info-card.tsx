@@ -15,8 +15,6 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/date-range-picker";
 import { formatDate } from "@/lib/use-day";
-import { ResetIcon } from "@radix-ui/react-icons";
-import Btn from "@/components/btn";
 import { useCallback, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import dayjs from "dayjs";
@@ -27,6 +25,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
+import { FormField } from "@/components/ui/form";
+import { useAppSelector } from "@/store";
 
 export default function InfoCard({
   form,
@@ -88,9 +89,15 @@ export default function InfoCard({
   //     } else toast.error("set a valid payment terms");
   //   });
   // }
+  const mockupMode = useAppSelector(
+    (state) => state.orderItemComponent?.showMockup
+  );
   return (
     <div className="group relative  h-full w-full  rounded border border-slate-300 p-2 text-start hover:bg-slate-100s hover:shadows">
-      <div className="space-y-1">
+      <div className="grid gap-2 xl:grid-cols-2 xl:gap-x-4">
+        <InfoLine label="Sales Rep">
+          <span>{form.getValues("meta.rep")}</span>
+        </InfoLine>
         <InfoLine label="Profile">
           <SalesCustomerProfileInput
             form={form}
@@ -103,26 +110,24 @@ export default function InfoCard({
             {...form.register("meta.qb")}
           />
         </InfoLine>
-        <InfoLine label="Sales Rep">
-          <span>{form.getValues("meta.rep")}</span>
-        </InfoLine>
-        <InfoLine label="P.O No.">
+
+        {/* <InfoLine label="P.O No.">
           <Input
             className="h-6 w-[100px] uppercase"
             {...form.register("meta.po")}
           />
-        </InfoLine>
+        </InfoLine> */}
         {watchType == "order" && (
           <InfoLine label="Payment Terms">
-            <div className="">
+            <div className="flex">
               <Select
                 value={`${watchPaymentTerm}`}
                 onValueChange={(e) => {
                   form.setValue("paymentTerm", e);
                 }}
               >
-                <SelectTrigger className="h-6 w-auto">
-                  <SelectValue placeholder="" />
+                <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                  <SelectValue placeholder="Select Term" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -178,14 +183,33 @@ export default function InfoCard({
             </Select> */}
           </InfoLine>
         )}
+        <InfoLine label="Mockup %">
+          <Input
+            disabled={mockupMode}
+            className="h-6 w-[100px] uppercase"
+            {...form.register("meta.mockupPercentage")}
+          />
+        </InfoLine>
+        <InfoLine label="Profile Estimate">
+          <FormField
+            control={form.control}
+            name="meta.profileEstimate"
+            render={({ field }) => (
+              <Switch
+                checked={field.value as any}
+                onCheckedChange={field.onChange}
+              />
+            )}
+          />
+        </InfoLine>
       </div>
     </div>
   );
 }
 function InfoLine({ label, children }) {
   return (
-    <div className="  md:grid md:grid-cols-2 items-center xl:grid-cols-3">
-      <Label className="text-muted-foreground">{label}</Label>
+    <div className="md:grid md:grid-cols-2 items-center xl:grid-cols-3">
+      <Label className="text-muted-foreground whitespace-nowrap">{label}</Label>
       <div className="text-end flex justify-end text-sm xl:col-span-2">
         {children}
       </div>

@@ -26,6 +26,7 @@ import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
 import AutoComplete2 from "@/components/auto-complete-headless";
+import Money from "@/components/money";
 
 interface IProps {
   rowIndex;
@@ -105,7 +106,8 @@ function TotalCell({ rowIndex, form }) {
   return (
     <TableCell align="right" id="total" className="p-0 px-1">
       <Label className="whitespace-nowrap">
-        {itemTotal > 0 && <span>$</span>} {itemTotal || "0.00"}
+        {/* {itemTotal > 0 && <span>$</span>} {itemTotal || "0.00"} */}
+        <Money value={itemTotal} />
       </Label>
     </TableCell>
   );

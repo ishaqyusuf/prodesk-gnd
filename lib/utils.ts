@@ -153,3 +153,6 @@ export function truthy<T>(condition, _true: T[] = [], _false: T[] = []): any {
   if (condition) return _true;
   return _false;
 }
+export function addPercentage(value, percentage) {
+  return value + (value || 0) * ((percentage || 100) / 100);
+}

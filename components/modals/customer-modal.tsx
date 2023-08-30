@@ -38,7 +38,7 @@ export default function CustomerModal() {
   const form = useForm<ICustomer>({
     defaultValues: {},
   });
-  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
+  const [profiles, setProfiles] = useState<CustomerProfiles[]>([]);
   async function submit() {
     startTransition(async () => {
       // if(!form.getValues)

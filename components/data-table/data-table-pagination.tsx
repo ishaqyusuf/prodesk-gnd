@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { TablePageInfo } from "@/types/data-table"
+import { cn } from "@/lib/utils"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -27,16 +28,19 @@ export function DataTablePagination<TData>({
   pageInfo,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTablePaginationProps<TData>) {
-  const {pageCount,from = 0,to = 0,totalItems = 0 } = pageInfo;
+  const {pageCount,from = 0,to = 0,totalItems = 0,perPage } = pageInfo;
   return (
-    <div className="flex w-full flex-col items-center justify-between gap-4 overflow-auto px-2 py-1 sm:flex-row sm:gap-8">
+    <div className="flex w-full flex-col items-center   gap-4 overflow-auto px-2 py-1 sm:flex-row sm:gap-8">
       <div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
         {from}-{to} of {totalItems}
         {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected. */}
       </div>
-      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
-        <div className="flex items-center space-x-2">
+      <div className="flex-1"></div>
+      <div className={cn(" flex-col items-center gap-4  sm:gap-6 lg:gap-8",
+    (!perPage || perPage == 20) && pageCount == 1 ? "hidden" :"flex sm:flex-row"
+      )}>
+        <div className="hidden sflex items-center space-x-2">
           <p className="whitespace-nowrap text-sm font-medium">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}

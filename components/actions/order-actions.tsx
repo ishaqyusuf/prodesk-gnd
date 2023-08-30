@@ -139,7 +139,9 @@ export function OrderRowAction(props: IOrderRowProps) {
           )}
           <CopyOrderMenuAction row={row} />
           <PrintOrderMenuAction estimate={estimate} row={row} />
-          <PrintOrderMenuAction pdf estimate={estimate} row={row} />
+          <PrintOrderMenuAction mockup estimate={estimate} row={row} />
+          {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
+          {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
 
           <DeleteRowAction menu row={row} action={deleteOrderAction} />
         </DropdownMenuContent>
@@ -153,12 +155,14 @@ export const PrintOrderMenuAction = typedMemo(
     props: IOrderRowProps & {
       ids?: number[];
       pdf?: Boolean;
+      mockup?: Boolean;
     }
   ) => {
     function _print(mode: IOrderPrintMode) {
       dispatchSlice("printOrders", {
         mode,
         pdf: props.pdf,
+        mockup: props.mockup,
         ids: props.ids || [props.row.id],
       });
     }
@@ -182,23 +186,26 @@ export const PrintOrderMenuAction = typedMemo(
             <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Order
           </DropdownMenuItem>
-
-          <DropdownMenuItem
-            onClick={() => {
-              _print("packing list");
-            }}
-          >
-            <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Packing List
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              _print("production");
-            }}
-          >
-            <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Production
-          </DropdownMenuItem>
+          {!props.mockup && (
+            <>
+              <DropdownMenuItem
+                onClick={() => {
+                  _print("packing list");
+                }}
+              >
+                <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Packing List
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  _print("production");
+                }}
+              >
+                <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Production
+              </DropdownMenuItem>
+            </>
+          )}
         </>
       );
     }
@@ -213,7 +220,7 @@ export const PrintOrderMenuAction = typedMemo(
         }}
       >
         <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-        Print
+        Print {props.mockup && " Mockup"}
       </DropdownMenuItem>
     ) : (
       <DropdownMenuSub>
@@ -221,7 +228,7 @@ export const PrintOrderMenuAction = typedMemo(
           {!props.pdf ? (
             <>
               <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Print
+              Print {props.mockup && " Mockup"}
             </>
           ) : (
             <>

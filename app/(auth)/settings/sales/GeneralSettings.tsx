@@ -24,7 +24,9 @@ export default function GeneralSettings({
 }: {
   form: UseFormReturn<ISalesSetting>;
 }) {
-  const profiles = useAppSelector((state) => state.slicers.customerProfiles);
+  const profiles = useAppSelector(
+    (state) => state.slicers.staticCustomerProfiles
+  );
 
   return (
     <div className="space-y-6">

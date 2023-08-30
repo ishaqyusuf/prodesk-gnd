@@ -1,28 +1,21 @@
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import * as React from "react";
 import { Layers } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useLoader } from "@/lib/use-loader";
-import { timeout } from "@/lib/timeout";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { ISalesOrderForm } from "@/types/sales";
 import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
 import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import SalesComponentModal from "@/components/modals/sales-component-modal";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 export default function SalesInvoiceTable({
   form,
   data,
@@ -32,11 +25,15 @@ export default function SalesInvoiceTable({
 }) {
   const { watch, control, register } = form;
   const watchItems = watch("items");
+  const watchProfileEstimate = watch("meta.profileEstimate");
+  const profileChange = watch("meta.sales_percentage");
   const { fields, replace } = useFieldArray({
     control,
     name: "items",
   });
-
+  React.useEffect(() => {
+    startTransition(() => {});
+  }, [watchProfileEstimate, profileChange]);
   const tableRef = React.useRef(null);
   const [floatingFooter, setFloatingFooter] = React.useState(false);
 
@@ -77,6 +74,13 @@ export default function SalesInvoiceTable({
             <TableHead className="w-20 px-1">Supplier</TableHead>
             <TableHead className="w-14 px-1 text-center">Qty</TableHead>
             <TableHead className="w-20 px-1">Cost</TableHead>
+            {watchProfileEstimate ? (
+              <>
+                <TableHead className="w-8 px-1">Rate</TableHead>
+              </>
+            ) : (
+              <></>
+            )}
             <TableHead className="w-8 px-1 text-right">Total</TableHead>
             <TableHead className="w-8 px-1 text-center">Tax</TableHead>
             <TableHead className="w-10 px-1"></TableHead>

@@ -87,10 +87,9 @@ export function calibrateLines(fields) {
       meta: removeEmptyValues({
         ...(i.meta || {}),
         uid,
-        line_index: null,
       }),
     };
-  });
+  }) as ISalesOrderItem[];
 }
 export function insertLine(items, index, item) {
   if (!items) items = [];
@@ -119,7 +118,7 @@ export function footerEstimate({
     }
   });
 
-  const labourCost = convertToNumber(form.getValues("meta.labour_cost"), 0);
+  const labourCost = convertToNumber(form.getValues("meta.labor_cost"), 0);
   let total = +toFixed(subTotal + tax + labourCost);
   if (
     form.getValues("meta.payment_option") == "Credit Card" &&

@@ -1,4 +1,4 @@
-import CommunitySettingsLayoutComponent from "@/components/settings/community/community-settings-layout";
+import CommunitySettingsLayoutComponent from "@/components/tab-layouts/community-settings-layout";
 import CommunitySettingsLayout from "../layout";
 import PageHeader from "@/components/page-header";
 import { Metadata } from "next";

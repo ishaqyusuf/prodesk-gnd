@@ -4,20 +4,33 @@ import { store, useAppSelector } from "@/store";
 
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import React, { memo } from "react";
-import { ISalesOrderForm } from "@/types/sales";
+
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
 import { SalesInvoiceCellProps } from "./sales-invoice-tr";
+import Money from "@/components/money";
+import { Label } from "@/components/ui/label";
+import { addPercentage } from "@/lib/utils";
 
 function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
   const { register } = form;
   const baseKey = `items.${rowIndex}`;
 
   //   const itemTotal = form.watch([`${baseKey}.qty`, `${baseKey}.price`] as any);
+  const profitRate = form.watch("meta.sales_percentage");
+  const profileEstimate = form.watch("meta.profileEstimate");
+  const mockPercent = form.watch("meta.mockupPercentage");
 
   const slice = useAppSelector((state) => state.orderItemComponent);
+  const toggleMockup = useAppSelector(
+    (state) => state.orderItemComponent?.showMockup
+  );
+
   const [qty, setQty] = React.useState(form.getValues(`${baseKey}.qty` as any));
   const [price, setPrice] = React.useState(
     form.getValues(`${baseKey}.price` as any)
+  );
+  const [rate, setRate] = React.useState(
+    form.getValues(`${baseKey}.rate` as any)
   );
   React.useEffect(() => {
     if (rowIndex == slice.itemPriceData?.rowIndex) {
@@ -26,18 +39,33 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
       setPrice(_price);
     }
   }, [slice.itemPriceData]);
+
   // if (rowIndex == 0)   }, [slice.itemPriceData]);
   // React.useEffect(() => {
   //   setQty(form.getValues(`${baseKey}.qty` as any));
   //   setPrice(form.getValues(`${baseKey}.price` as any));
   // }, [rowIndex, form]);
   React.useEffect(() => {
-    const total = toFixed(convertToNumber(qty * price, 0));
     form.setValue(`items.${rowIndex}.qty`, qty);
-    form.setValue(`items.${rowIndex}.rate`, price);
+    let _rate =
+      profileEstimate && profitRate
+        ? toFixed(Number(price) / Number(profitRate || 1))
+        : price;
+    if (toggleMockup) _rate = addPercentage(_rate, mockPercent);
+    form.setValue(`items.${rowIndex}.rate`, _rate);
+    setRate(_rate);
+    const total = toFixed(convertToNumber(qty * _rate, 0));
     form.setValue(`items.${rowIndex}.total`, +total);
     store.dispatch(updateFooterInfo({ rowIndex, total }));
-  }, [qty, price, rowIndex]);
+  }, [
+    qty,
+    price,
+    rowIndex,
+    profitRate,
+    profileEstimate,
+    toggleMockup,
+    mockPercent,
+  ]);
   function _setQty(e) {
     setQty(+e.target?.value);
     form.setValue(`items.${rowIndex}.qty`, +e.target?.value);
@@ -62,9 +90,17 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
           type="number"
           className="h-8 w-full p-1 text-right font-medium"
           value={price || ""}
+          disabled={toggleMockup}
           onChange={_setPrice}
         />
       </TableCell>
+      {profileEstimate && (
+        <TableCell align="right" id="estimate" className="p-0 px-1">
+          <Label className="whitespace-nowrap">
+            <Money value={rate} />
+          </Label>
+        </TableCell>
+      )}
     </>
   );
 }

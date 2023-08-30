@@ -142,7 +142,7 @@ export default function EmployeesTableShell<T>({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
-            <DeleteRowAction row={row.original} action={deleteBuilderAction} />
+            {/* <DeleteRowAction row={row.original} action={} /> */}
             <RowActionMoreMenu>
               <RowActionMenuItem
                 onClick={() => {

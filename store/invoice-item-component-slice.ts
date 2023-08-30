@@ -20,6 +20,7 @@ export interface OrderItemFormState {
     qty;
     price;
   };
+  showMockup;
 }
  
 const initialState: OrderItemFormState = {
@@ -28,6 +29,7 @@ const initialState: OrderItemFormState = {
   footerInfo: {
     rows: {},
   },
+  showMockup: false
 } as any;
 const orderItemComponentSlice = createSlice({
   name: "order-item-component",
@@ -85,6 +87,9 @@ const orderItemComponentSlice = createSlice({
         ...action.payload,
       };
     },
+    toggleMockup(state,action) {
+      state.showMockup = action.payload
+    }
   },
 });
 export default orderItemComponentSlice.reducer;
@@ -94,4 +99,5 @@ export const {
   updateFooterInfo,
   itemQuoteUpdated,
   closeCostUpdater,
+  toggleMockup
 } = orderItemComponentSlice.actions;

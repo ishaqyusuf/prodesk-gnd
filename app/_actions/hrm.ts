@@ -31,13 +31,3 @@ export async function getProductionUsersAction() {
   console.log(users);
   return users;
 }
-export async function getCustomerProfilesList() {
-  const profiles = await prisma.customerTypes.findMany({
-    select: {
-      id: true,
-      title: true,
-      coefficient: true,
-    },
-  });
-  return profiles;
-}

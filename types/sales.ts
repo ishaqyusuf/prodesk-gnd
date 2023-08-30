@@ -12,13 +12,15 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { ICustomer } from "./customers";
 import { BaseQuery } from "./action";
+import { OmitMeta } from "./type";
 export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
 export type IOrderType = "order" | "estimate";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
-export type ISalesOrder = SalesOrders & {
+
+export type ISalesOrder = OmitMeta<SalesOrders> & {
   customer?: ICustomer;
   billingAddress?: any;
   shippingAddress?: any;
@@ -43,6 +45,8 @@ export type ISalesOrderMeta = {
   production_status;
   pre_build_qty: any;
   qb;
+  profileEstimate: Boolean;
+
   ccc;
   priority: IPriority;
   ccc_percentage;
@@ -51,7 +55,7 @@ export type ISalesOrderMeta = {
   sales_percentage;
   po;
   manual_estimate: Boolean;
-
+  mockupPercentage: number;
   rep;
   job_address;
   type: "estimate" | null;

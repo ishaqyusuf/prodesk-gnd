@@ -27,7 +27,9 @@ import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
 
 export function RowActionCell({ children }: { children? }) {
-  return <div className="flex justify-end space-x-2">{children}</div>;
+  return (
+    <div className="flex justify-end items-center space-x-2">{children}</div>
+  );
 }
 export function RowActionMoreMenu({ children }: { children }) {
   return (

@@ -43,7 +43,7 @@ export default function HomeModal() {
     control: form.control,
     name: "units",
   });
-  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
+  const [profiles, setProfiles] = useState<CustomerProfiles[]>([]);
   async function submit() {
     startTransition(async () => {
       // if(!form.getValues)

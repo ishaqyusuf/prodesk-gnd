@@ -43,3 +43,18 @@ export async function setEmployeeProfileAction(id, profileId) {
     },
   });
 }
+export async function deleteEmployeeProfile(id) {
+  await prisma.users.updateMany({
+    where: {
+      employeeProfileId: id,
+    },
+    data: {
+      employeeProfileId: null,
+    },
+  });
+  await prisma.employeeProfile.delete({
+    where: {
+      id,
+    },
+  });
+}

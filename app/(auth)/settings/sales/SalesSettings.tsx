@@ -1,7 +1,6 @@
 "use client";
 
 import { saveSettingAction } from "@/app/_actions/settings";
-import { loadCustomerProfiles } from "@/store/actions/customers";
 import { ISalesSetting } from "@/types/post";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,9 @@ import { toast } from "sonner";
 import GeneralSettings from "./GeneralSettings";
 import DoorWizardSettings from "./DoorWizard";
 import Btn from "@/components/btn";
+import { loadStaticList } from "@/store/slicers";
+import { staticCustomerProfiles } from "@/app/_actions/sales/sales-customer-profiles";
+import { useAppSelector } from "@/store";
 
 export default function SalesSettings({ data }) {
   const defaultValues: ISalesSetting = {
@@ -17,8 +19,9 @@ export default function SalesSettings({ data }) {
   const form = useForm<ISalesSetting>({
     defaultValues,
   });
+  const profiles = useAppSelector((s) => s.slicers.staticEmployeeProfiles);
   useEffect(() => {
-    loadCustomerProfiles();
+    loadStaticList("staticCustomerProfiles", profiles, staticCustomerProfiles);
   }, []);
   const [isPending, startTransition] = useTransition();
   async function save() {

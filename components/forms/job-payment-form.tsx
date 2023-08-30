@@ -102,7 +102,7 @@ export default function JobPaymentForm({ user }: Props) {
       </div>
       <div className="">
         <Btn onClick={submit} isLoading={loading}>
-          Make Pay
+          Make Payment
         </Btn>
       </div>
     </div>

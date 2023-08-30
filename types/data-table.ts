@@ -45,5 +45,6 @@ export interface TablePageInfo {
     to?: number | undefined; 
     pageCount?: number | undefined;
     totalItems?: number | undefined;
+    perPage?: number | undefined;
     hasPreviousPage?: Boolean;
 }

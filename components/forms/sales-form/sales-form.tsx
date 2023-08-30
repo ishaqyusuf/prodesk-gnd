@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
-import { ISalesOrder, ISalesOrderMeta, ISaveOrder } from "@/types/sales";
+import { ISalesOrder, ISaveOrder } from "@/types/sales";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
@@ -19,9 +19,7 @@ import { numeric } from "@/lib/use-number";
 import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import { saveOrderAction } from "@/app/_actions/sales/sales";
 import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { formatDate } from "@/lib/use-day";
-import { SalesCustomerProfileInput } from "./customer-profile-input";
+
 import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
@@ -29,17 +27,15 @@ import {
   calibrateLines,
   initInvoiceItems,
 } from "@/lib/sales/sales-invoice-form";
-import { Input } from "@/components/ui/input";
 
 import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
-import Btn from "@/components/btn";
+
 import InfoCard from "./info-card";
 import dayjs from "dayjs";
-
-import AutoComplete2 from "@/components/auto-complete-headless";
-import { loadStaticList } from "@/store/slicers";
-import { staticHomeModels } from "@/app/_actions/community/static-home-models";
+import { Switch } from "@/components/ui/switch";
+import { toggleMockup } from "@/store/invoice-item-component-slice";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   data: SalesFormResponse;
@@ -137,9 +133,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     }
     let items = calibrateLines(_items)
       ?.map((item, index) => {
-        delete item.salesOrderId;
+        delete (item as any)?.salesOrderId;
         if (!item.description && !item?.total) {
           if (item.id) deleteIds.push(item.id);
+
           return null;
         }
 
@@ -167,6 +164,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       items: items as any,
     };
   }
+  const mockupMode = useAppSelector(
+    (state) => state.orderItemComponent?.showMockup
+  );
+  const mockPercent = form.watch("meta.mockupPercentage");
   return (
     <div className="px-8">
       <OrderPrinter />
@@ -178,10 +179,23 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
           </h2>
         </div>
         <div className="sitems-center flex space-x-2">
+          {(mockPercent || 0) > 0 && (
+            <div className="inline-flex items-center space-x-2">
+              <Label>Mockup Mode</Label>
+              <Switch
+                checked={mockupMode as any}
+                onCheckedChange={(e) => {
+                  store.dispatch(toggleMockup(e));
+                }}
+              />
+            </div>
+          )}
           <CatalogModal form={form} ctx={data.ctx} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm">Save</Button>
+              <Button disabled={mockupMode} size="sm">
+                Save
+              </Button>
               {/* isLoading={loader.isLoading} */}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
@@ -213,7 +227,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             <DropdownMenuContent align="end" className="w-[160px]">
               <PrintOrderMenuAction row={{ id: form.getValues("id") } as any} />
               <PrintOrderMenuAction
-                pdf
+                mockup
                 row={{ id: form.getValues("id") } as any}
               />
               {/* <DropdownMenuItem>
@@ -230,12 +244,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
       </section>
       <section
         id="topForm"
-        className="mt-4 grid grid-cols-4 gap-x-8 xl:grid-cols-5"
+        className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
       >
-        <div className="col-span-2 ">
+        <div className="xl:col-span-3">
           <InfoCard data={data} form={form} />
         </div>
-        <div className="col-span-2 ">
+        <div className="xl:col-span-2">
           <SalesCustomerModal form={form} profiles={data.ctx?.profiles} />
         </div>
       </section>

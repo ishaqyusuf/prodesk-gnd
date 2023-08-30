@@ -35,11 +35,24 @@ export default function OrderPrinter({}: Props) {
   async function print() {
     if (!printer) return;
     setSales(printer.ids.map((slug) => ({ slug, loading: true })) as any);
-    const _sales = await salesPrintAction({
+    const _sales: ISalesOrder[] = (await salesPrintAction({
       ids: printer.ids,
       printMode: printer.mode,
-    });
-    setSales(_sales as any);
+    })) as any;
+    const mockup = printer.mockup;
+    setSales(
+      _sales.map((sale) => {
+        if (mockup) {
+          let subTotal = 0;
+          let tax = 0;
+          let taxxableSubTotal = 0;
+          let ccc = 0;
+          let taxPercentage = sale.taxPercentage || 0;
+          const cccPercentage = sale.meta.ccc_percentage || 0;
+        }
+        return sale;
+      }) as any
+    );
     await timeout(900);
     adjustWatermark(sales?.map((s) => s.orderId));
     console.log(sales);

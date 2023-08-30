@@ -366,14 +366,14 @@ export async function updateOrderPriorityActon({
         orderId,
       },
     })
-  )[0] as ISalesOrder;
+  )[0] as any as ISalesOrder;
   meta.priority = priority;
   await prisma.salesOrders.update({
     where: {
       id,
     },
     data: {
-      meta,
+      meta: meta as any,
     },
   });
 }

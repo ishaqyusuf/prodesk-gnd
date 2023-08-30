@@ -88,6 +88,7 @@ export async function getPageInfo(input, where, model) {
     currentPage: page,
     from,
     to: Math.min(skip + Number(per_page), count),
+    perPage: per_page,
   };
   return pageInfo;
 }

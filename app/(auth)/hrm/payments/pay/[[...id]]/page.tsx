@@ -7,7 +7,7 @@ import {
   SecondaryCellContent,
 } from "@/components/columns/base-columns";
 import JobPaymentForm from "@/components/forms/job-payment-form";
-import HrmLayout from "@/components/hrm/hrm-layout";
+import HrmLayout from "@/components/tab-layouts/hrm-layout";
 import Money from "@/components/money";
 import PageHeader from "@/components/page-header";
 import JobTableShell from "@/components/shells/job-table-shell";

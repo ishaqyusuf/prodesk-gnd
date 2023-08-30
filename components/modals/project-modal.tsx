@@ -44,7 +44,7 @@ export default function ProjectModal() {
   const form = useForm<IProject>({
     defaultValues: {},
   });
-  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
+  const [profiles, setProfiles] = useState<CustomerProfiles[]>([]);
   async function submit() {
     startTransition(async () => {
       // if(!form.getValues)

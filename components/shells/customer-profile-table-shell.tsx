@@ -4,44 +4,40 @@ import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
 import {
-  CheckColumn,
   ColumnHeader,
   Cell,
   PrimaryCellContent,
-  DateCellContent,
   SecondaryCellContent,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { BuilderFilter } from "../filters/builder-filter";
-import { HomeProductionStatus } from "../columns/community-columns";
-import { IBuilder, IProject } from "@/types/community";
+
 import {
   DeleteRowAction,
   RowActionCell,
-  RowActionMenuItem,
-  RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
-import { deleteBuilderAction } from "@/app/_actions/community/builders";
-import { Icons } from "../icons";
-import { openModal } from "@/lib/modal";
-import { IUser } from "@/types/hrm";
-import { Key } from "lucide-react";
-import { resetEmployeePassword } from "@/app/_actions/hrm/save-employee";
-import { toast } from "sonner";
-import { EmployeeProfile } from "@prisma/client";
-import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 
-export default function EmployeeProfileTableShell<T>({
+import { CustomerTypes } from "@prisma/client";
+import {
+  deleteCustomerProfile,
+  makeDefaultCustomerProfile,
+} from "@/app/_actions/sales/sales-customer-profiles";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import Btn from "../btn";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+export default function CustomerProfileTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<EmployeeProfile>) {
+}: TableShellProps<CustomerTypes>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<EmployeeProfile, unknown>[]>(
+  const columns = useMemo<ColumnDef<CustomerTypes, unknown>[]>(
     () => [
       {
         maxSize: 10,
@@ -59,17 +55,17 @@ export default function EmployeeProfileTableShell<T>({
         cell: ({ row }) => (
           <Cell>
             {/* link={`/community/project/slug`} slug={row.original.slug} */}
-            <PrimaryCellContent>{row.original.name}</PrimaryCellContent>
+            <PrimaryCellContent>{row.original.title}</PrimaryCellContent>
           </Cell>
         ),
       },
       {
         id: "discount",
-        header: ColumnHeader("Discount"),
+        header: ColumnHeader("Sales Margin"),
         cell: ({ row }) => (
           <Cell>
             <SecondaryCellContent>
-              {row.original.discount || 0}%{" "}
+              {row.original.coefficient || 0}
             </SecondaryCellContent>
           </Cell>
         ),
@@ -83,9 +79,10 @@ export default function EmployeeProfileTableShell<T>({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
+            <DefaultActionCell row={row.original} />
             <DeleteRowAction
               row={row.original}
-              action={deleteEmployeeProfile}
+              action={deleteCustomerProfile}
             />
           </RowActionCell>
         ),
@@ -106,7 +103,34 @@ export default function EmployeeProfileTableShell<T>({
         },
       ]}
 
-      //  deleteRowsAction={() => void deleteSelectedRows()}
+      //  deleteRowsAction={() => void deleteCustomerProfile()}
     />
+  );
+}
+function DefaultActionCell({ row }) {
+  const [isLoading, startTransition] = useTransition();
+  const route = useRouter();
+  async function makeDefault() {
+    startTransition(async () => {
+      await makeDefaultCustomerProfile(row.id);
+      toast.success("Profile set successfully.");
+      route.refresh();
+    });
+  }
+  return (
+    <SecondaryCellContent>
+      {row.defaultProfile ? (
+        <Badge>Default</Badge>
+      ) : (
+        <Btn
+          isLoading={isLoading}
+          onClick={makeDefault}
+          variant="secondary"
+          className="flex h-8"
+        >
+          <span className="whitespace-nowrap">{"Set Default"}</span>
+        </Btn>
+      )}
+    </SecondaryCellContent>
   );
 }

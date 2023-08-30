@@ -31,6 +31,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
     where,
     ...(await queryFilter(query)),
     include: {
+      profile: true,
       _count: {
         select: {
           salesOrders: true,
@@ -138,7 +139,4 @@ export async function getCustomerProfileId(customer: ICustomer) {
   }
 
   return id;
-}
-export async function getCustomerProfiles() {
-  return await prisma.customerTypes.findMany({});
 }

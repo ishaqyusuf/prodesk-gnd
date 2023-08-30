@@ -102,6 +102,27 @@ export default function JobTableShell<T>({
             },
           ]
         : []),
+      {
+        id: "total",
+        header: ColumnHeader("Total"),
+        cell: ({ row }) => (
+          <Cell>
+            <SecondaryCellContent>
+              <Money value={row.original?.amount} />
+            </SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        id: "status",
+        header: ColumnHeader("Status"),
+        cell: ({ row }) => (
+          <Cell>
+            <SecondaryCellContent>{row.original.status}</SecondaryCellContent>
+            <DateCellContent>{row.original.statusDate}</DateCellContent>
+          </Cell>
+        ),
+      },
       ...truthy<any>(
         payment,
         [],
@@ -160,27 +181,7 @@ export default function JobTableShell<T>({
           },
         ]
       ),
-      {
-        id: "total",
-        header: ColumnHeader("Total"),
-        cell: ({ row }) => (
-          <Cell>
-            <SecondaryCellContent>
-              <Money value={row.original?.amount} />
-            </SecondaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "status",
-        header: ColumnHeader("Status"),
-        cell: ({ row }) => (
-          <Cell>
-            <SecondaryCellContent>{row.original.status}</SecondaryCellContent>
-            <DateCellContent>{row.original.statusDate}</DateCellContent>
-          </Cell>
-        ),
-      },
+
       {
         accessorKey: "_q",
         enableHiding: false,
