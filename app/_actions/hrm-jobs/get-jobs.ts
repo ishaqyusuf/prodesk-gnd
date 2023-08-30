@@ -32,7 +32,7 @@ function whereJobs(query: JobsQueryParamsProps) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: prisma.jobsWhereInput = {};
+  const where: Prisma.JobsWhereInput = {};
   if (query.show == "unpaid") where.paymentId = undefined;
   if (query.show == "paid")
     where.paymentId = {
