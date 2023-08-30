@@ -1,5 +1,5 @@
 "use client";
-
+// import fs from "fs";
 // import dbUpgrade from "@/app/actions/upgrade/upgrade";
 import { useCallback, useTransition } from "react";
 import { toast } from "sonner";
@@ -29,7 +29,12 @@ import {
 } from "@/app/_actions/upgrade/community";
 import { Icons } from "./icons";
 import { dotArray } from "@/lib/utils";
-import { upgradeJobPayments } from "@/app/_actions/upgrade/jobs-upgrade";
+import {
+  exportPrisma,
+  removeRedundantPayments,
+  resetJobUpgrade,
+  upgradeJobPayments,
+} from "@/app/_actions/upgrade/jobs-upgrade";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -49,7 +54,26 @@ export default function Upgrader() {
     },
     {
       label: "Hrm",
-      children: [{ label: "Job Payments", action: upgradeJobPayments }],
+      children: [
+        { label: "Reset Payment ", action: resetJobUpgrade },
+        {
+          label: "Job Payments",
+          action: async () => {
+            let res = 1;
+            while (res > 0) {
+              toast.message(`${res} pending...`);
+              const [res2] = await upgradeJobPayments();
+              res = res2 || 0;
+            }
+            return res;
+            //  if(res > 0)
+          },
+        },
+        {
+          label: "Remove Redundancy Payments",
+          action: removeRedundantPayments,
+        },
+      ],
     },
   ];
   const upgrade = useCallback(async () => {

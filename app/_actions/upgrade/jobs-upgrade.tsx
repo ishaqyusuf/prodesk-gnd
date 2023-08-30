@@ -3,25 +3,49 @@
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
 
-export async function upgradeJobPayments() {
-  const groupings = {};
-  // await prisma.jobPayments.deleteMany({});
-  // await prisma.tasks.updateMany({
-  //   where: {},
-  //   data: {
-  //     paymentId: null,
-  //   },
-  // });
+export async function exportPrisma() {
+  await prisma.jobs.create({
+    data: {
+      amount: 100,
+      status: "Paid",
+      type: "installation",
+      adminNote: "Note",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      description: "Non",
+      meta: {},
+      subtitle: "None",
+    },
+  });
+  const tasks = await prisma.jobs.count({});
+  return [tasks];
+  const payments = await prisma.jobPayments.findMany({});
+
+  return {
+    tasks,
+    payments,
+  };
+}
+export async function resetJobUpgrade() {
+  await prisma.jobPayments.deleteMany({});
+  await prisma.jobs.updateMany({
+    where: {},
+    data: {
+      paymentId: null,
+    },
+  });
+}
+export async function removeRedundantPayments() {
   const set = new Set<number>();
   (
-    await prisma.tasks.findMany({
+    await prisma.jobs.findMany({
       select: {
         paymentId: true,
       },
     })
   ).map((i) => i.paymentId && set.add(i.paymentId)); // as number[];
   const pids = Array.from(set);
-  // return pids;
+
   const __ = await prisma.jobPayments.findMany({
     where: {
       id: {
@@ -40,7 +64,12 @@ export async function upgradeJobPayments() {
     },
   });
   return [__.length, pids];
-  const jobs = await prisma.tasks.findMany({
+}
+export async function upgradeJobPayments() {
+  // return await exportPrisma
+  const groupings = {};
+
+  const jobs = await prisma.jobs.findMany({
     where: {},
     include: {
       // payment: true,
@@ -68,7 +97,7 @@ export async function upgradeJobPayments() {
   // return c;
   await Promise.all(
     Object.values(groupings)
-      .filter((_, i) => i < 50)
+      .filter((_, i) => i < 20)
       .map(async (v) => {
         const { paidBy, checkNo, jobIds, paidAt, amount, userId } = v as any;
         const payment = await prisma.jobPayments.create({
@@ -83,7 +112,7 @@ export async function upgradeJobPayments() {
             updatedAt: paidAt,
           },
         });
-        await prisma.tasks.updateMany({
+        await prisma.jobs.updateMany({
           where: {
             id: {
               in: jobIds,

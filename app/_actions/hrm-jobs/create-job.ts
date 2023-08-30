@@ -11,7 +11,7 @@ export async function createJobAction(data: Tasks) {
   data.statusDate = new Date();
   if (!data.userId) data.userId = await userId();
 
-  const job = await prisma.tasks.create({
+  const job = await prisma.jobs.create({
     data: transformData(data) as any,
     include: {
       user: true,

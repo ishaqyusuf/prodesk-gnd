@@ -51,7 +51,7 @@ export async function getPayableUsers(userId) {
 
   const jobs = !userId
     ? []
-    : await prisma.tasks.findMany({
+    : await prisma.jobs.findMany({
         where: {
           paymentId: null,
           userId: Number(userId),
@@ -75,7 +75,7 @@ export async function makePayment({ payment, jobIds }: Props) {
   const p = await prisma.jobPayments.create({
     data: transformData(payment) as any,
   });
-  const jobs = await prisma.tasks.updateMany({
+  const jobs = await prisma.jobs.updateMany({
     where: {
       id: {
         in: jobIds,

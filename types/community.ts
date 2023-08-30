@@ -6,11 +6,12 @@ import {
   HomeTemplates,
   Homes,
   Invoices,
+  Jobs,
   Projects,
-  Tasks,
 } from "@prisma/client";
+import { OmitMeta } from "./type";
 
-export type IProject = Projects & {
+export type IProject = OmitMeta<Projects> & {
   meta: {
     supervisor: {
       name;
@@ -46,7 +47,7 @@ export type IHome = Homes & {
 export interface ExtendedHome extends IHome {
   project: IProject;
   tasks: IHomeTask[];
-  jobs: Tasks[];
+  jobs: Jobs[];
 }
 export type IHomeTask = HomeTasks & {
   meta: {

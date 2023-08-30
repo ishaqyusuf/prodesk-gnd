@@ -165,7 +165,7 @@ model Homes {
     project        Projects       @relation(fields: [projectId], references: [id])
     homeTemplate   HomeTemplates? @relation(fields: [homeTemplateId], references: [id])
     tasks          HomeTasks[]
-    jobs           Tasks[]
+    jobs           Jobs[]
     invoices       Invoices[]
 }
 
@@ -676,7 +676,7 @@ model Projects {
     updatedAt       DateTime?         @db.Timestamp(0)
     homes           Homes[]
     builder         Builders?         @relation(fields: [builderId], references: [id])
-    jobs            Tasks[]
+    jobs            Jobs[]
     communityModels CommunityModels[]
     invoices        Invoices[]
     homeTasks       HomeTasks[]
@@ -911,7 +911,7 @@ model Tags {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model Tasks {
+model Jobs {
     id          Int          @unique @default(autoincrement())
     userId      Int
     type        String       @db.VarChar(255)
@@ -957,7 +957,7 @@ model JobPayments {
     meta          Json?     @db.Json
     createdAt     DateTime? @db.Timestamp(0)
     updatedAt     DateTime? @db.Timestamp(0)
-    jobs          Tasks[]
+    jobs          Jobs[]
     user          Users?    @relation(name: "worker", fields: [userId], references: [id])
     payer         Users?    @relation(name: "payer", fields: [paidBy], references: [id])
 }
@@ -997,7 +997,7 @@ model Users {
     notifications     Notifications[]  @relation(name: "notifications")
     sentNotifications Notifications[]  @relation(name: "fromUser")
     inbox             Inbox[]
-    jobs              Tasks[]
+    jobs              Jobs[]
     myIssuedPayments  JobPayments[]    @relation(name: "payer")
     payments          JobPayments[]    @relation(name: "worker")
     employeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])

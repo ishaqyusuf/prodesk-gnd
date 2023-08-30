@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { user } from "../utils";
 
 export async function approveJob(jobId) {
-  await prisma.tasks.update({
+  await prisma.jobs.update({
     where: {
       id: jobId,
     },
@@ -17,7 +17,7 @@ export async function approveJob(jobId) {
   });
 }
 export async function rejectJob(jobId) {
-  await prisma.tasks.update({
+  await prisma.jobs.update({
     where: {
       id: jobId,
     },

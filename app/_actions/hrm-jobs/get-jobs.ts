@@ -11,7 +11,7 @@ export interface JobsQueryParamsProps extends BaseQuery {
 }
 export async function getJobs(query: JobsQueryParamsProps) {
   const where = whereJobs(query);
-  const items = await prisma.tasks.findMany({
+  const items = await prisma.jobs.findMany({
     where,
     include: {
       user: true,
@@ -21,7 +21,7 @@ export async function getJobs(query: JobsQueryParamsProps) {
     ...(await queryFilter(query)),
   });
 
-  const pageInfo = await getPageInfo(query, where, prisma.tasks);
+  const pageInfo = await getPageInfo(query, where, prisma.jobs);
 
   return {
     pageInfo,
@@ -32,7 +32,7 @@ function whereJobs(query: JobsQueryParamsProps) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: Prisma.TasksWhereInput = {};
+  const where: prisma.jobsWhereInput = {};
   if (query.show == "unpaid") where.paymentId = undefined;
   if (query.show == "paid")
     where.paymentId = {
