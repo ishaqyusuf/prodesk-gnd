@@ -2,9 +2,9 @@ import {
   EmployeeProfile,
   Homes,
   JobPayments,
+  Jobs,
   Projects,
   Roles,
-  Tasks,
   Users,
 } from "@prisma/client";
 import { InstallCost } from "./community";
@@ -15,7 +15,7 @@ export type IUser = Users & {
   roles: Roles[];
   employeeProfile: EmployeeProfile;
 };
-export type IJobs = Tasks & {
+export type IJobs = Jobs & {
   meta: {
     additional_cost;
     taskCost;

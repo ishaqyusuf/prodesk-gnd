@@ -2,11 +2,11 @@
 
 import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
-import { Tasks } from "@prisma/client";
 import { userId } from "../utils";
 import { _notifyAdminJobSubmitted } from "../notifications";
+import { Jobs } from "@prisma/client";
 
-export async function createJobAction(data: Tasks) {
+export async function createJobAction(data: Jobs) {
   data.status = "Submited";
   data.statusDate = new Date();
   if (!data.userId) data.userId = await userId();
