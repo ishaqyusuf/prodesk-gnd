@@ -49,6 +49,9 @@ export default function OrderPrinter({}: Props) {
           let ccc = 0;
           let taxPercentage = sale.taxPercentage || 0;
           const cccPercentage = sale.meta.ccc_percentage || 0;
+          sale.items = sale.items?.map((item) => {
+            return item;
+          });
         }
         return sale;
       }) as any

@@ -182,13 +182,13 @@ async function transformItemComponent() {
   });
   const items = await prisma.salesOrderItems.findMany({
     where: {
-      productVariantId: {
-        gt: 0,
-      },
+      // productVariantId: {
+      //   gt: 0,
+      // },
     },
   });
   (items as ISalesOrderItem[]).map(async (item) => {
-    let { productVariantId, meta } = item;
+    let { meta } = item;
     let {
       components,
       product_cost,
@@ -196,7 +196,7 @@ async function transformItemComponent() {
       line_index,
       ..._meta
     } = meta as ISalesOrderItemMeta;
-    if (productVariantId && (components as any)?.length > 0) {
+    if ((components as any)?.length > 0) {
       let oc: oldComponentCost[] = components as any;
       let wiz: WizardKvForm = {};
       const eDoor =
