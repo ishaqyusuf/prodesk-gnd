@@ -1,6 +1,6 @@
 "use client";
 
-import Money from "@/components/money";
+import { formatCurrency } from "@/lib/utils";
 import { useAppSelector } from "@/store";
 import { ISalesOrder } from "@/types/sales";
 import { useEffect, useState } from "react";
@@ -27,15 +27,31 @@ export function OrderPrintFooter({ order }: Props) {
       const paymentMethod = order?.payments?.map((p) => p.meta?.paymentOption);
       setFooter(
         [
-          { title: "Subtotal", value: order?.subTotal },
-          { title: `Tax (${order?.taxPercentage})`, value: order?.tax },
-          { title: "Labor", value: (order?.meta?.labor_cost || 0)?.toFixed(2) },
-          ccc && { title: `C.C.C ${order?.meta?.ccc_percentage}%`, value: ccc },
+          {
+            title: "Subtotal",
+            value: `${formatCurrency.format(order?.subTotal || 0)}`,
+          },
+          {
+            title: `Tax (${order?.taxPercentage})`,
+            value: `${formatCurrency.format(order?.tax || 0)}`,
+            // value: order?.tax
+          },
+          {
+            title: "Labor",
+            value: `${formatCurrency.format(order?.meta?.labor_cost || 0)}`,
+          },
+          ccc && {
+            title: `C.C.C ${order?.meta?.ccc_percentage}%`,
+            value: `${formatCurrency.format(ccc || 0)}`,
+          },
           totalPaid && {
             title: "Payments/Credits",
-            value: `-$${totalPaid}`,
+            value: `-${formatCurrency.format(totalPaid)}`,
           },
-          { title: "Total", value: `$${order?.grandTotal}` },
+          {
+            title: "Total",
+            value: `${formatCurrency.format(order?.grandTotal || 0)}`,
+          },
         ].filter(Boolean)
       );
     }
@@ -72,10 +88,7 @@ export function OrderPrintFooter({ order }: Props) {
                     <p className="whitespace-nowrap px-1 py-1">{line.title}</p>
                   </td>
                   <td className="" colSpan={2}>
-                    <Money
-                      value={line.value}
-                      className="whitespace-nowrap px-1"
-                    />
+                    <p className="whitespace-nowrap px-1">{line.value}</p>
                   </td>
                 </tr>
               ))}
