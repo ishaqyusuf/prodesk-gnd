@@ -1,5 +1,6 @@
 "use client";
 
+import Money from "@/components/money";
 import { useAppSelector } from "@/store";
 import { ISalesOrder } from "@/types/sales";
 import { useEffect, useState } from "react";
@@ -71,7 +72,10 @@ export function OrderPrintFooter({ order }: Props) {
                     <p className="whitespace-nowrap px-1 py-1">{line.title}</p>
                   </td>
                   <td className="" colSpan={2}>
-                    <p className="whitespace-nowrap px-1">{line.value}</p>
+                    <Money
+                      value={line.value}
+                      className="whitespace-nowrap px-1"
+                    />
                   </td>
                 </tr>
               ))}
