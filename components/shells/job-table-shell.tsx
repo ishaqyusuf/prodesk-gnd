@@ -38,8 +38,10 @@ export default function JobTableShell<T>({
   data,
   pageInfo,
   payment,
+  adminMode,
 }: TableShellProps<IJobs> & {
   payment?: Boolean;
+  adminMode?: Boolean;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -75,7 +77,7 @@ export default function JobTableShell<T>({
           </Cell>
         ),
       },
-      ...(!payment
+      ...(!payment && adminMode
         ? [
             {
               id: "user",
@@ -201,9 +203,9 @@ export default function JobTableShell<T>({
             labelValue("Pending Payment", "unpaid"),
           ],
         },
-        ProjectsFilter,
-        PayableEmployees,
-      ]}
+        adminMode && ProjectsFilter,
+        adminMode && PayableEmployees,
+      ].filter(Boolean)}
       searchableColumns={[
         {
           id: "_q" as any,

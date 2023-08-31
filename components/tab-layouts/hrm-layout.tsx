@@ -6,6 +6,8 @@ import { useId, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { nav } from "@/lib/navs";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function HrmLayout({ children }: { children }) {
   const { data: session } = useSession({
@@ -17,16 +19,29 @@ export default function HrmLayout({ children }: { children }) {
   const _nav = nav(session);
   const path = usePathname();
   const [tab, setTab] = useState<any>(path);
-  const [tabs, setTabs] = useState<{ label; value }[]>([]);
+  // const [tabs, setTabs] = useState<{ label; value }[]>([]);
   const route = useRouter();
   return (
-    <div className="space-y-4 px-8">
+    <div className="space-y-4 ">
+      <div className="hidden space-x-2">
+        {_nav?.Hrm.map((c, i) => (
+          <Button
+            size="sm"
+            className="p-2 h-8 px-4"
+            variant={c.path == tab ? "default" : "link"}
+            key={i}
+            asChild
+          >
+            <Link href={c.path}>{c.title}</Link>
+          </Button>
+        ))}
+      </div>
       <Tabs
         defaultValue={tab}
         onChange={(v) => {
           console.log(v);
         }}
-        className="space-y-4"
+        className=" px-8"
       >
         <TabsList>
           {_nav?.Hrm.map((c, i) => (
@@ -42,7 +57,7 @@ export default function HrmLayout({ children }: { children }) {
           ))}
         </TabsList>
       </Tabs>
-      {children}
+      <div className="px-8">{children}</div>
     </div>
   );
 }

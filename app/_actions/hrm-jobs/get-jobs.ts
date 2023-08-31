@@ -4,9 +4,15 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { userId } from "../utils";
 
 export interface JobsQueryParamsProps extends Omit<BaseQuery, "_show"> {
   _show?: "unpaid" | "paid" | "approved" | "submitted";
+}
+
+export async function getMyJobs(query: JobsQueryParamsProps) {
+  query._userId = await userId();
+  return await getJobs(query);
 }
 export async function getJobs(query: JobsQueryParamsProps) {
   const where = whereJobs(query);
