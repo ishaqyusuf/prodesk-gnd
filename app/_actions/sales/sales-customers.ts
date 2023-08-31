@@ -140,3 +140,11 @@ export async function getCustomerProfileId(customer: ICustomer) {
 
   return id;
 }
+export async function getStaticCustomers() {
+  const customers = await prisma.customers.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+  return customers;
+}

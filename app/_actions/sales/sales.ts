@@ -35,6 +35,7 @@ import { user } from "../utils";
     from,
     to,
     prodId,
+    _payment,
     type = "order",
   } = query;
   const inputQ = { contains: _q || undefined };
@@ -81,6 +82,12 @@ import { user } from "../utils";
       in: statusIsArray ? status : undefined,
     };
   }
+  if(_payment == 'Paid')
+    where.amountDue = 0;
+    else if (_payment == 'Pending')
+      where.amountDue = {
+        gt: 0
+      }
   if (query._page == "production") {
     if (!prodId) { 
       where.prodId = {
@@ -88,6 +95,8 @@ import { user } from "../utils";
       };
     }
   } 
+  if(query._customerId)
+    where.customerId = +query._customerId
   return where;
 }
 export async function getSalesOrder(

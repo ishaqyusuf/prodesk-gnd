@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/use-day";
 import {
   Builders,
   CustomerTypes,
+  Customers,
   EmployeeProfile,
   HomeTemplates,
   Projects,
@@ -58,6 +59,7 @@ export interface ISlicer {
   staticRoles: Roles[];
   staticEmployeeProfiles: EmployeeProfile[];
   staticPayableEmployees: Users[];
+  staticSalesCustomers: Customers[];
 }
 
 export type ModalName =

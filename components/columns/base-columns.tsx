@@ -130,6 +130,7 @@ type FilterKeys =
   | "_payment"
   | "_userId"
   | "_builderId"
+  | "_customerId"
   | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   const filters = assessorKeys.map((accessorKey) => ({

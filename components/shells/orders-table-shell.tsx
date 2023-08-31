@@ -4,7 +4,11 @@ import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import { CheckColumn, ColumnHeader } from "../columns/base-columns";
+import {
+  CheckColumn,
+  ColumnHeader,
+  _FilterColumn,
+} from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
   OrderCustomerCell,
@@ -26,6 +30,7 @@ import {
 import { Button } from "../ui/button";
 import { Printer } from "lucide-react";
 import { SalesSelectionAction } from "../sales/sales-selection-action";
+import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 
 export default function OrdersTableShell<T>({
   data,
@@ -73,18 +78,7 @@ export default function OrdersTableShell<T>({
         header: ColumnHeader("Status"),
         cell: ({ row }) => OrderStatus(row.original),
       },
-      {
-        accessorKey: "_status",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_payment",
-        enableHiding: false,
-      },
+      ..._FilterColumn("_status", "_q", "_payment", "_customerId"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -116,22 +110,15 @@ export default function OrdersTableShell<T>({
         },
         {
           id: "_payment" as any,
-          title: "Payment",
+          title: "Invoice",
           single: true,
           options: [
-            { label: "Paid Fully", value: "Paid" },
-            { label: "Part Paid", value: "Part" },
+            { label: "Paid", value: "Paid" },
+            // { label: "Part Paid", value: "Part" },
             { label: "Pending", value: "Pending" },
           ],
         },
-        //  {
-        //    id: "category",
-        //    title: "Category",
-        //    options: products.category.enumValues.map((category) => ({
-        //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-        //      value: category,
-        //    })),
-        //  },
+        SalesCustomerFilter,
       ]}
       searchableColumns={[
         {
