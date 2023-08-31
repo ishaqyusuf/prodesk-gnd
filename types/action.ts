@@ -9,6 +9,10 @@ export type TableApiResponse<T> = Promise<{
 }>;
 export interface BaseQuery {
   _q?;
+  _projectId;
+  _builderId;
+  _userId;
+  _show;
   _dateType?;
   status?;
   date?;

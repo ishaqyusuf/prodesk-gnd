@@ -21,8 +21,8 @@ export function capitalizeFirstLetter(string) {
   if (!string) return string;
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-export function labelValue(key, value, extras: any = {}) {
-  return { key, value, extras };
+export function labelValue(label, value, extras: any = {}) {
+  return { label, value, ...extras };
 }
 export function keyValue(key, value) {
   return { key, value };

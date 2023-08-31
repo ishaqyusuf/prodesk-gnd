@@ -3,28 +3,18 @@
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
 
-export async function exportPrisma() {
-  await prisma.jobs.create({
+export async function upgradeJobPaidStatus() {
+  await prisma.jobs.updateMany({
+    where: {
+      paymentId: {
+        gt: 0,
+      },
+    },
     data: {
-      amount: 100,
       status: "Paid",
-      type: "installation",
-      adminNote: "Note",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      description: "Non",
-      meta: {},
-      subtitle: "None",
     },
   });
-  const tasks = await prisma.jobs.count({});
-  return [tasks];
-  const payments = await prisma.jobPayments.findMany({});
-
-  return {
-    tasks,
-    payments,
-  };
+  // return p;
 }
 export async function resetJobUpgrade() {
   await prisma.jobPayments.deleteMany({});

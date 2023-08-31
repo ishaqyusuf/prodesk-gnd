@@ -29,7 +29,6 @@ export function DynamicFilter({
   useEffect(() => {
     // init();
     loadStaticList(listKey, list, loader);
-    console.log("LOADING>>> STATIC");
   }, [list, listKey, loader]);
   if (!list) return null;
   return (

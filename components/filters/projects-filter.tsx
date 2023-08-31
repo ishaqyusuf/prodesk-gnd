@@ -1,8 +1,7 @@
 "use client";
 
-import { staticBuildersAction } from "@/app/_actions/community/builders";
-
 import { DynamicFilter } from "../data-table/data-table-dynamic-filter";
+import { staticProjectsAction } from "@/app/_actions/community/projects";
 
 export function ProjectsFilter({ table }) {
   return (
@@ -14,7 +13,7 @@ export function ProjectsFilter({ table }) {
       valueKey="id"
       title="Projects"
       columnId="_projectId"
-      loader={staticBuildersAction}
+      loader={staticProjectsAction}
     />
   );
 }

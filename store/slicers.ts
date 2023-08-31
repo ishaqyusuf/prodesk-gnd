@@ -57,6 +57,7 @@ export interface ISlicer {
   staticModels: HomeTemplates[];
   staticRoles: Roles[];
   staticEmployeeProfiles: EmployeeProfile[];
+  staticPayableEmployees: Users[];
 }
 
 export type ModalName =
@@ -133,6 +134,7 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
 export async function loadStaticList(key: keyof ISlicer, list, _loader) {
   if (!list) {
     const data = await _loader();
+    console.log();
     dispatchSlice(key, deepCopy(data));
   }
 }

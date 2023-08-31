@@ -3,13 +3,7 @@
 // import dbUpgrade from "@/app/actions/upgrade/upgrade";
 import { useCallback, useTransition } from "react";
 import { toast } from "sonner";
-import { dbUpgradeAction } from "@/app/_actions/upgrade/db-upgrade";
-import Btn from "./btn";
-import { fixSales } from "@/app/_actions/upgrade/fix-sales";
-import {
-  changeIzriEmail,
-  fixUsersMeta,
-} from "@/app/_actions/upgrade/hrm-upgrade";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,17 +16,15 @@ import {
 import { Button } from "./ui/button";
 import {
   linkHomeTemplateCosts,
-  upgradeCommunity,
   upgradeCostCharts,
   upgradeHomeTemplates,
   upgradeInstallPriceChart,
 } from "@/app/_actions/upgrade/community";
 import { Icons } from "./icons";
-import { dotArray } from "@/lib/utils";
 import {
-  exportPrisma,
   removeRedundantPayments,
   resetJobUpgrade,
+  upgradeJobPaidStatus,
   upgradeJobPayments,
 } from "@/app/_actions/upgrade/jobs-upgrade";
 
@@ -55,6 +47,7 @@ export default function Upgrader() {
     {
       label: "Hrm",
       children: [
+        { label: "Update Job Paid Status", action: upgradeJobPaidStatus },
         { label: "Reset Payment ", action: resetJobUpgrade },
         {
           label: "Job Payments",

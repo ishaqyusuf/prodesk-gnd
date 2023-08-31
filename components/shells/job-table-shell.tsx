@@ -10,14 +10,11 @@ import {
   PrimaryCellContent,
   DateCellContent,
   SecondaryCellContent,
+  _FilterColumn,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
-import { HomeProductionStatus } from "../columns/community-columns";
-import { IBuilder, IProject } from "@/types/community";
 import {
   DeleteRowAction,
   RowActionCell,
@@ -27,13 +24,15 @@ import {
 import { deleteBuilderAction } from "@/app/_actions/community/builders";
 import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
-import { IJobs, IUser } from "@/types/hrm";
-import { CheckCheck, Key, X } from "lucide-react";
-import { resetEmployeePassword } from "@/app/_actions/hrm/save-employee";
+import { IJobs } from "@/types/hrm";
+import { CheckCheck, X } from "lucide-react";
 import { toast } from "sonner";
 import Money from "../money";
 import { approveJob, rejectJob } from "@/app/_actions/hrm-jobs/job-actions";
-import { truthy } from "@/lib/utils";
+import { labelValue, truthy } from "@/lib/utils";
+import { ProjectsFilter } from "../filters/projects-filter";
+import { BuilderFilter } from "../filters/builder-filter";
+import { PayableEmployees } from "../filters/payable-employees-filter";
 
 export default function JobTableShell<T>({
   data,
@@ -181,11 +180,7 @@ export default function JobTableShell<T>({
           },
         ]
       ),
-
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
+      ..._FilterColumn("_projectId", "_q", "_userId", "_show", "_builderId"),
     ], //.filter(Boolean) as any,
     [data, isPending]
   );
@@ -194,11 +189,25 @@ export default function JobTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={[BuilderFilter]}
+      filterableColumns={[
+        {
+          id: "_show",
+          title: "Show",
+          single: true,
+          options: [
+            labelValue("Approved", "approved"),
+            labelValue("Pending Approved", "submitted"),
+            labelValue("Paid", "paid"),
+            labelValue("Pending Payment", "unpaid"),
+          ],
+        },
+        ProjectsFilter,
+        PayableEmployees,
+      ]}
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "title, builder",
+          title: "job, description",
         },
       ]}
 

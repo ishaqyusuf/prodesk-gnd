@@ -122,3 +122,20 @@ export function DateCellContent({
   const value = formatDate(children);
   return <Node>{value}</Node>;
 }
+
+type FilterKeys =
+  | "_q"
+  | "_projectId"
+  | "_status"
+  | "_payment"
+  | "_userId"
+  | "_builderId"
+  | "_show";
+export function _FilterColumn(...assessorKeys: FilterKeys[]) {
+  const filters = assessorKeys.map((accessorKey) => ({
+    accessorKey,
+    enableHiding: false,
+  }));
+
+  return filters;
+}
