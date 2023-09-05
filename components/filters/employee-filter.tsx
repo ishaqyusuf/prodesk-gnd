@@ -2,7 +2,6 @@
 
 import { staticEmployees } from "@/app/_actions/hrm/get-employess";
 import { DynamicFilter } from "../data-table/data-table-dynamic-filter";
-import { staticBuildersAction } from "@/app/_actions/community/builders";
 
 export function PayableEmployees({ table }) {
   return (
@@ -15,6 +14,24 @@ export function PayableEmployees({ table }) {
       title="Employee"
       columnId="_userId"
       loader={staticEmployees}
+    />
+  );
+}
+export function TechEmployeeFilter({ table }) {
+  return (
+    <DynamicFilter
+      table={table}
+      single
+      listKey="staticTechEmployees"
+      labelKey="name"
+      valueKey="id"
+      title="Tech"
+      columnId="_userId"
+      loader={async () => {
+        return await staticEmployees({
+          role: "Punchout",
+        });
+      }}
     />
   );
 }

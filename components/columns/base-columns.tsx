@@ -15,6 +15,8 @@ import { DropdownMenuItem, DropdownMenuShortcut } from "../ui/dropdown-menu";
 import { Info, Trash } from "lucide-react";
 import LinkableNode from "../link-node";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { Badge } from "../ui/badge";
+import { getBadgeColor } from "@/lib/status-badge";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -131,6 +133,10 @@ type FilterKeys =
   | "_userId"
   | "_builderId"
   | "_customerId"
+  | "_roleId"
+  | "_date"
+  | "_installation"
+  | "_production"
   | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   const filters = assessorKeys.map((accessorKey) => ({
@@ -139,4 +145,18 @@ export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   }));
 
   return filters;
+}
+export function StatusCell({ status }) {
+  const color = getBadgeColor(status);
+  return (
+    <div className="w-16">
+      <Badge
+        variant={"secondary"}
+        className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
+      >
+        {/* {order?.prodStatus || "-"} */}
+        {status || "no status"}
+      </Badge>
+    </div>
+  );
 }

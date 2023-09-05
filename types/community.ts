@@ -12,20 +12,21 @@ import {
 import { OmitMeta } from "./type";
 
 export type IProject = OmitMeta<Projects> & {
-  meta: {
-    supervisor: {
-      name;
-      email;
-    };
-    media?: string[];
-    addon?;
-  };
+  meta: IProjectMeta;
   _count: {
     homes;
   };
   builder: IBuilder;
 };
-export type IBuilder = Builders & {
+export type IProjectMeta = {
+  supervisor: {
+    name;
+    email;
+  };
+  media?: string[];
+  addon?;
+};
+export type IBuilder = OmitMeta<Builders> & {
   meta: {
     address;
     tasks: {
@@ -41,7 +42,7 @@ export type IBuilder = Builders & {
     projects;
   };
 };
-export type IHome = Homes & {
+export type IHome = OmitMeta<Homes> & {
   meta: {};
 };
 export interface ExtendedHome extends IHome {
@@ -49,9 +50,10 @@ export interface ExtendedHome extends IHome {
   tasks: IHomeTask[];
   jobs: Jobs[];
 }
-export type IHomeTask = HomeTasks & {
+export type IHomeTask = OmitMeta<HomeTasks> & {
   meta: {
     system_task: Boolean;
+    system_task_cost: number;
   };
 };
 export interface ExtendedHomeTasks extends IHomeTask {
@@ -65,12 +67,12 @@ export interface IHomeStatus {
   productionStatus;
   badgeColor;
 }
-export type IInvoice = Invoices & {
+export type IInvoice = OmitMeta<Invoices> & {
   project: IProject;
   home: ExtendedHome;
   meta: {};
 };
-export type IHomeTemplate = HomeTemplates & {
+export type IHomeTemplate = OmitMeta<HomeTemplates> & {
   meta: HomeTemplateMeta;
   builder: IBuilder;
   homes: (IHome & {
@@ -82,7 +84,7 @@ export type IHomeTemplate = HomeTemplates & {
     homes;
   };
 };
-export type ICommunityTemplate = CommunityModels & {
+export type ICommunityTemplate = OmitMeta<CommunityModels> & {
   project: IProject;
   meta: {
     design: CommunityTemplateDesign;
@@ -90,20 +92,19 @@ export type ICommunityTemplate = CommunityModels & {
 };
 export interface HomeTemplateMeta {
   design: HomeTemplateDesign;
-  // taskCosts: { [id in string]: number };
-
+  task_costs: { [id in string]: number };
   installCosts: InstallCost[];
 }
+export type InstallCostingTemplate<T> = {
+  [uid in string]: T;
+};
 export interface InstallCost {
-  costings: {
-    title?;
-    cost?: number;
-    maxQty?: number;
-  }[];
+  costings: InstallCostingTemplate<number | string>;
   title?;
   uid?;
 }
 export interface TemplateDesign<T> {
+  project: ProjectHeader<T>;
   entry: Entry<T>;
   garageDoor: GarageDoor<T>;
   interiorDoor: InteriorDoor<T>;
@@ -115,12 +116,13 @@ export interface TemplateDesign<T> {
 export type HomeTemplateDesign = TemplateDesign<string>;
 export type CommunityTemplateDesign = TemplateDesign<{ k: string; c: boolean }>;
 
-export type ICostChart = CostCharts & {
+export type ICostChart = OmitMeta<CostCharts> & {
   meta: {
     totalCost;
+    totalTax;
     totalTask;
-    tax: { [k in string]: number };
-    costs: { [k in string]: number };
+    tax: { [uid in string]: number };
+    costs: { [uid in string]: number };
     totalUnits: { [k in string]: number };
     lastSync: {
       date;
@@ -129,6 +131,15 @@ export type ICostChart = CostCharts & {
     };
   };
 };
+export interface ProjectHeader<T> {
+  projectName;
+  builder;
+  modelName;
+  lot;
+  block;
+  address;
+  deadbolt;
+}
 export interface Entry<T> {
   material: T;
   bore: T;

@@ -16,6 +16,9 @@ export async function upgradeJobPaidStatus() {
   });
   // return p;
 }
+export async function upgradeNewJobs() {
+  const lastJobId = 4063;
+}
 export async function resetJobUpgrade() {
   await prisma.jobPayments.deleteMany({});
   await prisma.jobs.updateMany({
@@ -60,7 +63,11 @@ export async function upgradeJobPayments() {
   const groupings = {};
 
   const jobs = await prisma.jobs.findMany({
-    where: {},
+    where: {
+      id: {
+        gt: 4063,
+      },
+    },
     include: {
       // payment: true,
     },

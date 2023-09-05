@@ -18,7 +18,10 @@ import { CustomerTypes } from "@prisma/client";
 import { IHome, IProject } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
-import { projectSchema } from "@/lib/validations/community-validations";
+import {
+  homeSchema,
+  projectSchema,
+} from "@/lib/validations/community-validations";
 import { staticProjectsAction } from "@/app/_actions/community/projects";
 import { staticHomeModels } from "@/app/_actions/community/static-home-models";
 import SelectInput from "../ui-customs/select";
@@ -28,36 +31,55 @@ import { Input } from "../ui/input";
 import { DatePicker } from "../date-range-picker";
 import ConfirmBtn from "../confirm-btn";
 import AutoComplete2 from "../auto-complete-headless";
+import { createHomesAction } from "@/app/_actions/community/create-homes";
+import { getModelNumber } from "@/lib/utils";
+import { homeSearchMeta } from "@/lib/community/community-utils";
 
+interface FormProps {
+  units: IHome[];
+  projectId: null;
+}
 export default function HomeModal() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
-  const form = useForm<{
-    units: IHome[];
-  }>({
+  const form = useForm<FormProps>({
     defaultValues: {
-      units: [],
+      units: [{ meta: {} }],
     },
   });
   const { fields, remove, append } = useFieldArray({
     control: form.control,
     name: "units",
   });
-  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
   async function submit() {
     startTransition(async () => {
       // if(!form.getValues)
       try {
-        const isValid = projectSchema.parse(form.getValues());
+        const formData = form.getValues();
+        // console.log(formData);
 
+        const isValid = homeSchema.parse(form.getValues());
+        await createHomesAction(
+          formData.units.map((u) => {
+            const pid = (u.projectId = Number(formData.projectId));
+            u.modelName = models.find((f) => f.id == u.homeTemplateId)
+              ?.modelName as any;
+            u.modelNo = getModelNumber(u.modelName);
+            u.builderId = Number(projects.find((p) => p.id == pid)?.builderId);
+            // u.search
+            u.search = homeSearchMeta(u);
+            u.slug;
+            return u;
+          }) as any
+        );
         // await saveProject({
         //   ...form.getValues(),
         // });
-        closeModal();
+        // closeModal();
         toast.message("Customer Created!");
         route.refresh();
       } catch (error) {
-        console.log(error);
+        console.log((error as any).flatten());
         toast.message("Invalid Form");
         return;
       }
@@ -71,23 +93,7 @@ export default function HomeModal() {
   async function init(data) {
     loadStaticList("staticProjects", projects, staticProjectsAction);
     loadStaticList("staticModels", models, staticHomeModels);
-    console.log(">>>");
-    form.reset(
-      !data
-        ? {
-            units: [
-              { meta: {} },
-              { meta: {} },
-              { meta: {} },
-              { meta: {} },
-              { meta: {} },
-              { meta: {} },
-            ],
-          }
-        : {
-            ...data,
-          }
-    );
+    form.setValue("units", [{ meta: {} }] as any);
   }
   return (
     <BaseModal<IProject | undefined>
@@ -97,7 +103,7 @@ export default function HomeModal() {
       }}
       onClose={() => {}}
       modalName="home"
-      Title={({ data }) => <div>Create Project</div>}
+      Title={({ data }) => <div>Create Units</div>}
       Content={({ data }) => (
         <div>
           <div className="grid md:grid-cols-2 gap-4">
@@ -111,7 +117,7 @@ export default function HomeModal() {
                 itemValue="id"
               />
               {/* <SelectInput
-                label="Project"
+                label="Project" 
                 form={form}
                 formKey={"projectId"}
                 options={projects}
@@ -144,7 +150,7 @@ export default function HomeModal() {
                       /> */}
                       <AutoComplete2
                         form={form}
-                        formKey={`units.${i}.modelName`}
+                        formKey={`units.${i}.homeTemplateId`}
                         options={models}
                         itemText={"modelName"}
                         itemValue="id"

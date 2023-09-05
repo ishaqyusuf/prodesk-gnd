@@ -8,6 +8,7 @@ import { BreadLink } from "@/components/breadcrumbs/links";
 import { getHomesAction } from "@/app/_actions/community/home";
 import HomesTableShell from "@/components/shells/homes-table-shell";
 import HomeModal from "@/components/modals/home-modal";
+import ActivateProductionModal from "@/components/modals/activate-production-modal";
 
 export const metadata: Metadata = {
   title: "All Units",
@@ -33,6 +34,7 @@ export default async function HomesPage({ searchParams, params }) {
         pageInfo={response.pageInfo}
       />
       <HomeModal />
+      <ActivateProductionModal />
     </div>
   );
 }

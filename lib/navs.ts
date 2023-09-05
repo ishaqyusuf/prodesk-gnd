@@ -53,7 +53,7 @@ export function nav(
   // "YYYY-MM-DD"
   // )}`;
   const __can = session?.can;
-  const role: "Production" | "Punchout" | "Installation" = session?.role
+  const role: "Production" | "Punchout" | "1099 Contractor" = session?.role
     ?.name as any;
   const {
     viewProject,
@@ -120,15 +120,17 @@ export function nav(
       _route("Unit Production", Construction, "/tasks/unit-productions")
     );
   }
-  if (role == "Installation") {
+  if (role == "1099 Contractor") {
     routes.Services.push(_route("Installations", Pin, "/tasks/installations"));
+    routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
   }
   if (role == "Punchout") {
     routes.Services.push(_route("Punchout", Cpu, "/tasks/punchouts"));
+    routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
   }
   if (viewCustomerService)
     routes.Services.push(
-      _route("Customer Service", ClipboardList, "work-orders/customer-services")
+      _route("Customer Service", ClipboardList, "/customer-services")
     );
   if (viewOrders) {
     routes.Sales.push(

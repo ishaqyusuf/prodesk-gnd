@@ -8,6 +8,7 @@ import { getHomeTemplates } from "@/app/_actions/community/home-template";
 import ModelCostTableShell from "@/components/shells/model-costs-table-shell";
 import ModelCostModal from "@/components/modals/model-cost-modal";
 import ModelTemplateModal from "@/components/modals/model-template-modal";
+import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 
 export const metadata: Metadata = {
   title: "Model Costs",
@@ -25,6 +26,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
       <ModelCostTableShell {...response} />
       <ModelCostModal />
       <ModelTemplateModal />
+      <ModelInstallCostModal />
     </CommunitySettingsLayoutComponent>
   );
 }

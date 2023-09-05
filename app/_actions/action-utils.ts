@@ -92,3 +92,7 @@ export async function getPageInfo(input, where, model) {
   };
   return pageInfo;
 }
+export function serverDate(date) {
+  if (!date) return date;
+  return dayjs(date).toISOString();
+}

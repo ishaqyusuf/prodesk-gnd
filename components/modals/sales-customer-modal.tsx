@@ -160,10 +160,7 @@ export function SalesCustomerModal({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            Customer Info {checked ? "checked" : "undecked"}
-            {checked}
-          </DialogTitle>
+          <DialogTitle>Customer Info</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue={tab} className="">
           <TabsList className="grid w-full grid-cols-2">

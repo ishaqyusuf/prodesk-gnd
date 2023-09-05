@@ -78,7 +78,7 @@ export default function OrdersTableShell<T>({
         header: ColumnHeader("Status"),
         cell: ({ row }) => OrderStatus(row.original),
       },
-      ..._FilterColumn("_status", "_q", "_payment", "_customerId"),
+      ..._FilterColumn("_status", "_q", "_payment", "_customerId", "_date"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -124,6 +124,12 @@ export default function OrdersTableShell<T>({
         {
           id: "_q" as any,
           title: "orderId, customer",
+        },
+      ]}
+      dateFilterColumns={[
+        {
+          id: "_date" as any,
+          title: "Date",
         },
       ]}
       newRowLink={`/sales/order/new/form`}

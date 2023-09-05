@@ -2,10 +2,15 @@
 
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { dateQuery, getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { userId } from "../utils";
 
 export interface JobPaymentQueryParamsProps extends BaseQuery {}
+export async function getMyPayments(query: JobPaymentQueryParamsProps) {
+  query._userId = await userId();
+  return await getJobPayments(query);
+}
 export async function getJobPayments(query: JobPaymentQueryParamsProps) {
   const where = whereJobPayment(query);
   const items = await prisma.jobPayments.findMany({
@@ -35,9 +40,13 @@ export async function getJobPayments(query: JobPaymentQueryParamsProps) {
   };
 }
 function whereJobPayment(query: JobPaymentQueryParamsProps) {
-  const q = {
-    contains: query._q || undefined,
+  // const q = {
+  //   contains: query._q || undefined,
+  // };
+  const where: Prisma.JobPaymentsWhereInput = {
+    ...dateQuery(query),
   };
-  const where: Prisma.JobPaymentsWhereInput = {};
+  if (query._userId) where.userId = query._userId;
+
   return where;
 }

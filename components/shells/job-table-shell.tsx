@@ -21,7 +21,6 @@ import {
   RowActionMenuItem,
   RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
-import { deleteBuilderAction } from "@/app/_actions/community/builders";
 import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { IJobs } from "@/types/hrm";
@@ -31,8 +30,8 @@ import Money from "../money";
 import { approveJob, rejectJob } from "@/app/_actions/hrm-jobs/job-actions";
 import { labelValue, truthy } from "@/lib/utils";
 import { ProjectsFilter } from "../filters/projects-filter";
-import { BuilderFilter } from "../filters/builder-filter";
-import { PayableEmployees } from "../filters/payable-employees-filter";
+import { PayableEmployees } from "../filters/employee-filter";
+import { deleteJobAction } from "@/app/_actions/hrm-jobs/delete-job";
 
 export default function JobTableShell<T>({
   data,
@@ -138,7 +137,8 @@ export default function JobTableShell<T>({
               <RowActionCell>
                 <DeleteRowAction
                   row={row.original}
-                  action={deleteBuilderAction}
+                  action={deleteJobAction}
+                  disabled={row.original.paymentId > 0}
                 />
                 <RowActionMoreMenu>
                   <RowActionMenuItem
@@ -149,7 +149,7 @@ export default function JobTableShell<T>({
                   >
                     Edit
                   </RowActionMenuItem>
-                  {!row.original.approvedAt && (
+                  {!row.original.approvedAt && adminMode && (
                     <RowActionMenuItem
                       onClick={async () => {
                         await approveJob(row.original?.id);
@@ -160,7 +160,7 @@ export default function JobTableShell<T>({
                       Approve Job
                     </RowActionMenuItem>
                   )}
-                  {!row.original.rejectedAt && (
+                  {!row.original.rejectedAt && adminMode && (
                     <RowActionMenuItem
                       onClick={async () => {
                         await rejectJob(row.original?.id);
@@ -173,8 +173,9 @@ export default function JobTableShell<T>({
                   )}
                   <DeleteRowAction
                     menu
+                    disabled={row.original.paymentId > 0}
                     row={row.original}
-                    action={deleteBuilderAction}
+                    action={deleteJobAction}
                   />
                 </RowActionMoreMenu>
               </RowActionCell>
@@ -182,7 +183,14 @@ export default function JobTableShell<T>({
           },
         ]
       ),
-      ..._FilterColumn("_projectId", "_q", "_userId", "_show", "_builderId"),
+      ..._FilterColumn(
+        "_projectId",
+        "_q",
+        "_userId",
+        "_show",
+        "_builderId",
+        "_date"
+      ),
     ], //.filter(Boolean) as any,
     [data, isPending]
   );
@@ -212,7 +220,12 @@ export default function JobTableShell<T>({
           title: "job, description",
         },
       ]}
-
+      dateFilterColumns={[
+        {
+          id: "_date" as any,
+          title: "Date",
+        },
+      ]}
       //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );

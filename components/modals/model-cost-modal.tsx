@@ -19,6 +19,9 @@ import { DatePicker } from "../date-range-picker";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { saveModelCost } from "@/app/_actions/community/model-costs";
+import { deepCopy } from "@/lib/deep-copy";
+import dayjs from "dayjs";
+import { sum } from "@/lib/utils";
 
 export default function ModelCostModal() {
   const route = useRouter();
@@ -36,15 +39,35 @@ export default function ModelCostModal() {
       // if(!form.getValues)
       try {
         // const isValid = emailSchema.parse(form.getValues());
-        const cost = fields[index];
+        const costs = deepCopy<ICostChart[]>(form.getValues(`costs`));
+        const cost = costs[index];
+        if (!cost) return;
+        if (!cost.startDate) {
+          toast.error("Add a valid starting date");
+          return;
+        }
+        if (!cost.endDate) {
+          const cIndex = costs.findIndex((c) => c.id && !c.endDate);
+          if (cIndex > -1 && cIndex != index) {
+            toast.error("Only one cost can have empty end date");
+            return;
+          }
+        }
+        // console.log(JSON.stringify(cost));
+        cost.model = data.modelNo as any;
+        cost.meta.totalCost = sum(Object.values(cost.meta.costs));
+        console.log(cost.meta.totalCost);
         if (!cost) {
           return;
         }
+        console.log([data.id, cost.id, index]);
         const c = await saveModelCost(cost, data.id);
+        console.log(c);
         form.setValue(`tasks.${index}` as any, c as any);
         //    form.setValue
         // closeModal();
         toast.message("Saved!");
+        route.refresh();
       } catch (error) {
         console.log(error);
         toast.message("Invalid Form");
@@ -54,7 +77,11 @@ export default function ModelCostModal() {
   }
   async function init(data: IHomeTemplate) {
     form.reset({
-      costs: data.costs || [],
+      costs: data.costs || [
+        {
+          meta: {},
+        },
+      ],
     });
   }
   return (
@@ -62,7 +89,6 @@ export default function ModelCostModal() {
       className="sm:max-w-[700px]"
       onOpen={(data) => {
         init(data);
-        console.log(data);
       }}
       onClose={() => {}}
       modalName="modelCost"
@@ -77,10 +103,13 @@ export default function ModelCostModal() {
               <Button
                 disabled={fields.find((f) => !f.id) != null}
                 onClick={() => {
-                  append({
-                    type: "task-costs",
-                    model: data?.modelName,
-                  } as any);
+                  if (form.getValues("costs")?.filter((c) => !c.id)) {
+                    toast.error("You have unsaved costs");
+                  } else
+                    append({
+                      type: "task-costs",
+                      model: data?.modelName,
+                    } as any);
                 }}
                 variant="outline"
                 className="w-full h-7 mt-1"

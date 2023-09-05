@@ -32,7 +32,6 @@ export default function ModelCostTableShell<T>({
   pageInfo,
 }: TableShellProps<IHomeTemplate>) {
   const [isPending, startTransition] = useTransition();
-  console.log(data);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<IHomeTemplate, unknown>[]>(
     () => [
@@ -84,7 +83,7 @@ export default function ModelCostTableShell<T>({
             (c) => c.current
           ) as any;
 
-          let money = cost?.meta?.totalCost;
+          let money = cost?.meta?.totalCost + Number(cost?.meta?.totalTax);
           return (
             <Cell
               className="cursor-pointer"
@@ -108,27 +107,26 @@ export default function ModelCostTableShell<T>({
           );
         },
       },
-      // {
-      //   id: "units",
-      //   header: ColumnHeader("Install Costs"),
-      //   cell: ({ row }) => (
-      //     <Cell
-      //       className="cursor-pointer"
-      //       onClick={() => openModal("installCost", row.original)}
-      //     >
-      //       <Badge
-      //         className={cn(
-      //           row.original.meta?.installCosts?.length > 0
-      //             ? "bg-green-200 text-green-700 hover:bg-green-200"
-      //             : "bg-slate-200 text-slate-700 hover:bg-slate-200"
-      //         )}
-      //       >
-      //         {row.original.meta?.installCosts?.length || 0} Costs
-      //       </Badge>
-      //     </Cell>
-      //   ),
-      // },
-
+      {
+        id: "install-costs",
+        header: ColumnHeader("Install Costs"),
+        cell: ({ row }) => (
+          <Cell
+            className="cursor-pointer"
+            onClick={() => openModal("installCost", row.original)}
+          >
+            <Badge
+              className={cn(
+                row.original.meta?.installCosts?.length > 0
+                  ? "bg-green-200 text-green-700 hover:bg-green-200"
+                  : "bg-slate-200 text-slate-700 hover:bg-slate-200"
+              )}
+            >
+              {row.original.meta?.installCosts?.length || 0} Costs
+            </Badge>
+          </Cell>
+        ),
+      },
       {
         accessorKey: "_q",
         enableHiding: false,

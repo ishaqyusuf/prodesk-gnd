@@ -10,6 +10,7 @@ import {
   PrimaryCellContent,
   DateCellContent,
   SecondaryCellContent,
+  _FilterColumn,
 } from "../columns/base-columns";
 
 import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
@@ -24,7 +25,6 @@ import {
   RowActionMenuItem,
   RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
-import { deleteBuilderAction } from "@/app/_actions/community/builders";
 import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { IUser } from "@/types/hrm";
@@ -35,7 +35,7 @@ import { loadStaticList } from "@/store/slicers";
 import { useAppSelector } from "@/store";
 import {
   setEmployeeProfileAction,
-  staticEmployeeProfiles,
+  getStaticEmployeeProfiles,
 } from "@/app/_actions/hrm/employee-profiles";
 import {
   DropdownMenu,
@@ -45,6 +45,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { RolesFilter } from "../filters/roles-filter";
 
 export default function EmployeesTableShell<T>({
   data,
@@ -55,7 +56,11 @@ export default function EmployeesTableShell<T>({
     (state) => state?.slicers?.staticEmployeeProfiles
   );
   useEffect(() => {
-    loadStaticList("staticEmployeeProfiles", profiles, staticEmployeeProfiles);
+    loadStaticList(
+      "staticEmployeeProfiles",
+      profiles,
+      getStaticEmployeeProfiles
+    );
   }, []);
   const route = useRouter();
   async function setEmployeeProfile(employeeId, profile) {
@@ -130,10 +135,7 @@ export default function EmployeesTableShell<T>({
         ),
       },
 
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
+      ..._FilterColumn("_q", "_roleId"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -161,11 +163,11 @@ export default function EmployeesTableShell<T>({
               >
                 Reset Password
               </RowActionMenuItem>
-              <DeleteRowAction
+              {/* <DeleteRowAction
                 menu
                 row={row.original}
-                action={deleteBuilderAction}
-              />
+                action={}
+              /> */}
             </RowActionMoreMenu>
           </RowActionCell>
         ),
@@ -178,7 +180,7 @@ export default function EmployeesTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={[BuilderFilter]}
+      filterableColumns={[BuilderFilter, RolesFilter]}
       searchableColumns={[
         {
           id: "_q" as any,

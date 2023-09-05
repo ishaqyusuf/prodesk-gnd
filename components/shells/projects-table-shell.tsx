@@ -12,12 +12,18 @@ import {
   SecondaryCellContent,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { BuilderFilter } from "../filters/builder-filter";
 import { HomeProductionStatus } from "../columns/community-columns";
 import { IProject } from "@/types/community";
+import Money from "../money";
+import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import AddonCell from "../community/addon-cell";
 
 export default function ProjectsTableShell<T>({
   data,
@@ -32,7 +38,7 @@ export default function ProjectsTableShell<T>({
       {
         maxSize: 10,
         id: "id",
-        header: ColumnHeader("ID"),
+        header: ColumnHeader("Ref/Date"),
         cell: ({ row }) => (
           <Cell>
             <PrimaryCellContent>{row.original.refNo}</PrimaryCellContent>
@@ -76,6 +82,11 @@ export default function ProjectsTableShell<T>({
             </PrimaryCellContent>
           </Cell>
         ),
+      },
+      {
+        id: "addons",
+        header: ColumnHeader("Addons"),
+        cell: ({ row }) => <AddonCell project={row.original} />,
       },
       {
         accessorKey: "_status",

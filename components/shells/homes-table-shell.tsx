@@ -10,6 +10,7 @@ import {
   PrimaryCellContent,
   DateCellContent,
   SecondaryCellContent,
+  _FilterColumn,
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
@@ -35,6 +36,8 @@ import { HomesSelectionAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import { DeleteRowAction } from "../data-table/data-table-row-actions";
+import { ProjectsFilter } from "../filters/projects-filter";
+import { labelValue } from "@/lib/utils";
 
 export default function HomesTableShell<T>({
   data,
@@ -140,18 +143,15 @@ export default function HomesTableShell<T>({
           </Cell>
         ),
       },
-      {
-        accessorKey: "_status",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_builderId",
-        enableHiding: false,
-      },
+      ..._FilterColumn(
+        "_status",
+        "_q",
+        "_builderId",
+        "_projectId"
+        // "_installation",
+        // "_production"
+      ),
+
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -209,7 +209,30 @@ export default function HomesTableShell<T>({
         pageInfo={pageInfo}
         data={data}
         SelectionAction={HomesSelectionAction}
-        filterableColumns={[BuilderFilter]}
+        filterableColumns={[
+          BuilderFilter,
+          ProjectsFilter,
+          {
+            id: "_production",
+            title: "Production",
+            single: true,
+            options: [
+              labelValue("Completed", "completed"),
+              labelValue("Not In Production", "idle"),
+              labelValue("Started", "started"),
+              labelValue("Queued", "queued"),
+            ],
+          },
+          {
+            id: "_installation",
+            title: "Installation",
+            single: true,
+            options: [
+              labelValue("Submitted", "submitted"),
+              labelValue("No Submission", "no-submission"),
+            ],
+          },
+        ]}
         searchableColumns={[
           {
             id: "_q" as any,

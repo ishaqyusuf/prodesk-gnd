@@ -1,5 +1,7 @@
 export function getBadgeColor(status: string | null) {
-  let color: Colors | undefined = StatusColorMap[status?.toLowerCase() || ""];
+  let color: Colors | undefined = status
+    ? StatusColorMap[status?.toLowerCase() || ""]
+    : "slate";
   if (!color) color = "slate";
   return `bg-${color}-500 hover:bg-${color}-600`;
 }
@@ -8,6 +10,7 @@ let StatusColorMap: { [key: string]: Colors } = {
   queued: "orange",
   completed: "green",
   started: "blue",
+  scheduled: "blue",
 };
 
 export type Colors =

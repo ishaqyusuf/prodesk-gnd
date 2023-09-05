@@ -26,18 +26,23 @@ interface Props {
   data: IHomeTemplate;
 }
 export interface ModelFormProps {
-  form: UseFormReturn<HomeTemplateDesign, any, undefined>;
+  form: UseFormReturn<DesignTemplateForm, any, undefined>;
+}
+export interface DesignTemplateForm extends HomeTemplateDesign {
+  ctx: {
+    print;
+  };
 }
 export default function ModelForm({ data }: Props) {
   const community = useAppSelector(
     (s) => s.slicers.dataPage?.data?.community
   ) as any;
-  const form = useForm<HomeTemplateDesign>({
+  const form = useForm<DesignTemplateForm>({
     defaultValues: {
       ...(data?.meta?.design || {}),
     },
   });
-  console.log(data);
+
   const [isSaving, startTransition] = useTransition();
   function save() {
     startTransition(async () => {

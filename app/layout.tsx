@@ -14,18 +14,19 @@ import Upgrader from "@/components/upgrader";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { isProduction } from "@/lib/is-prod";
 export const metadata: Metadata = {
   title: "GND-PRODESK",
   description: "home page",
 };
 
 const inter = Inter({ subsets: ["latin"] });
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const isProd = env.NODE_ENV === "production";
+  const isProd = await isProduction();
   const prodDB = env.DATABASE_URL?.includes("pscale");
   return (
     <html lang="en">

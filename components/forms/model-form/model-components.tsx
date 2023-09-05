@@ -3,7 +3,7 @@ import { ModelFormProps } from "./model-form";
 import { Input } from "@/components/ui/input";
 import { UseFormRegister } from "react-hook-form";
 import { HomeTemplateDesign } from "@/types/community";
-import { addSpacesToCamelCase } from "@/lib/utils";
+import { addSpacesToCamelCase, cn, dotArray } from "@/lib/utils";
 import { _useId } from "@/hooks/use-id";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { useState } from "react";
@@ -28,7 +28,29 @@ export function ModelFormSection<T>({
   node,
 }: ModelFormSectionProps<T> & ModelFormProps) {
   const Ctx = ModelComponents<T>({ form, node });
-  const _rows = rows(Ctx._field, Ctx._field2);
+
+  const print = form.watch("ctx.print");
+
+  let _rows = rows(Ctx._field, Ctx._field2);
+  if (print) {
+    const nodeKeys = Object.keys(dotArray(form.getValues()));
+    _rows = _rows
+      ?.map((row) => {
+        if (Array.isArray(row)) {
+          const fr = row
+            .map((cell) => {
+              if (!nodeKeys.includes(`${node}.${cell.ck}`)) return null;
+              return row;
+            })
+            .filter(Boolean);
+          if (fr?.length == 0) return null;
+          return row;
+        }
+        if (!nodeKeys.includes(`${node}.${row.ck}`)) return null;
+        return row;
+      })
+      .filter(Boolean);
+  }
   return (
     <table className="w-full table-fixed overflow-x-hidden">
       <thead className="">
@@ -39,25 +61,33 @@ export function ModelFormSection<T>({
             </th>
           </tr>
         )}
-        {title && (
+        {title && _rows.length ? (
           <tr className="border">
             <th colSpan={12} className="text-left bg-slate-100 p-0.5 px-4">
               {title}
             </th>
           </tr>
+        ) : (
+          <></>
         )}
       </thead>
-      <tbody>
-        {_rows?.map((row, i) => (
-          <tr key={`${_useId()}`}>
-            {Array.isArray(row) ? (
-              row.map((cell, i) => <Ctx.Field key={`${_useId()}`} {...cell} />)
-            ) : (
-              <Ctx.Field key={`${_useId()}`} {...row} />
-            )}
-          </tr>
-        ))}
-      </tbody>
+      {!_rows.length ? (
+        <></>
+      ) : (
+        <tbody>
+          {_rows?.map((row, i) => (
+            <tr key={`${_useId()}`}>
+              {Array.isArray(row) ? (
+                row.map((cell, i) => (
+                  <Ctx.Field key={`${_useId()}`} {...cell} />
+                ))
+              ) : (
+                <Ctx.Field key={`${_useId()}`} {...row} />
+              )}
+            </tr>
+          ))}
+        </tbody>
+      )}
     </table>
   );
 }
@@ -69,8 +99,6 @@ export function ModelComponents<T>({
   const community = useAppSelector(
     (s) => s.slicers.dataPage?.data?.community
   ) as any;
-  console.log(community);
-  // const name = `${node}.${ck}` as any;
   const Field = ({
     label,
     cells = [2, 10],
@@ -83,6 +111,9 @@ export function ModelComponents<T>({
     const [open, setOpen] = useState(false);
     let formKey = `${node}.${ck as string}`;
     let checked = community ? form.watch(`${formKey}.c` as any) : false;
+
+    const print = form.watch("ctx.print");
+    const value = print ? form.watch(formKey as any) : null;
     if (community) formKey = `${formKey}.v`;
     return (
       <>
@@ -96,15 +127,24 @@ export function ModelComponents<T>({
                 }}
               />
             )}
-            <Label className="mr-2 capitalize">{label}</Label>
+            <Label className={cn("mr-2 capitalize", print && "font-semibold")}>
+              {label}
+              {print ? ":" : ""}
+            </Label>
           </div>
         </td>
         <td colSpan={cells[1]}>
           <div className="relative w-full">
-            <Input
-              className="h-7 uppercase w-full"
-              {...form.register(formKey as any)}
-            />
+            {print ? (
+              <span className="uppercase">
+                {form.getValues(formKey as any)}
+              </span>
+            ) : (
+              <Input
+                className="h-7 uppercase w-full"
+                {...form.register(formKey as any)}
+              />
+            )}
           </div>
         </td>
       </>

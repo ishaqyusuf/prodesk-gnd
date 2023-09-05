@@ -16,3 +16,16 @@ export const projectSchema = z.object({
     })
     .optional(),
 });
+export const homeSchema = z.object({
+  projectId: z.number(),
+  units: z
+    .object({
+      homeTemplateId: z.number(),
+      lot: z.string().optional(),
+      block: z.string().optional(),
+      createdAt: z.date().optional(),
+      homeKey: z.string().optional(),
+      meta: z.object({}),
+    })
+    .array(),
+});

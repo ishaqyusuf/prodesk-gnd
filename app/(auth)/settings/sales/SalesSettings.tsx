@@ -9,8 +9,9 @@ import GeneralSettings from "./GeneralSettings";
 import DoorWizardSettings from "./DoorWizard";
 import Btn from "@/components/btn";
 import { loadStaticList } from "@/store/slicers";
-import { staticCustomerProfiles } from "@/app/_actions/sales/sales-customer-profiles";
+
 import { useAppSelector } from "@/store";
+import { getStaticEmployeeProfiles } from "@/app/_actions/hrm/employee-profiles";
 
 export default function SalesSettings({ data }) {
   const defaultValues: ISalesSetting = {
@@ -21,7 +22,11 @@ export default function SalesSettings({ data }) {
   });
   const profiles = useAppSelector((s) => s.slicers.staticEmployeeProfiles);
   useEffect(() => {
-    loadStaticList("staticCustomerProfiles", profiles, staticCustomerProfiles);
+    loadStaticList(
+      "staticCustomerProfiles",
+      profiles,
+      getStaticEmployeeProfiles
+    );
   }, []);
   const [isPending, startTransition] = useTransition();
   async function save() {

@@ -140,7 +140,6 @@ export function InstallCostForm({data}: {data:InstallCostSettings}) {
 }
 function CostInput({form,formKey,type = 'text'}:{form:any,formKey,type?}) {
   const q = form.watch(formKey)
-  const l1 = form.watch('list.1.title')
   const debouncedQuery = useDebounce(q, 800);
   const [watcher,startWatcher] = React.useState(false)
   // React.useEffect(() => {

@@ -16,7 +16,7 @@ import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
 import { INotification } from "@/app/_actions/notifications";
-import { IHome } from "@/types/community";
+import { ExtendedHome, IHome } from "@/types/community";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
@@ -32,7 +32,10 @@ export interface ISlicer {
   applyPayment: ISalesOrder[];
   notifications: INotification[];
   printHomes: {
-    homes: IHome[];
+    homes: ExtendedHome[];
+    design: {
+      [id in string]: string;
+    };
   };
   printOrders: {
     mode: IOrderPrintMode;
@@ -59,6 +62,7 @@ export interface ISlicer {
   staticRoles: Roles[];
   staticEmployeeProfiles: EmployeeProfile[];
   staticPayableEmployees: Users[];
+  staticTechEmployees: Users[];
   staticSalesCustomers: Customers[];
 }
 
@@ -85,6 +89,8 @@ export type ModalName =
   | "submitJob"
   | "employeeProfile"
   | "customerProfile"
+  | "activateProduction"
+  | "customerServices"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

@@ -50,18 +50,16 @@ export default function AutoComplete2({
     name;
     data;
   }>();
-  const watch = form && formKey ? form.watch(formKey) : value;
+  const watch = form && formKey ? form.getValues(formKey) : value;
 
   const searchMode = searchFn || searchAction;
   const debouncedQuery = useDebounce(query, searchMode ? 800 : 50);
 
   // const [searchable, setSearchable] = useState(false);
   const [typing, setTyping] = useState(false);
+
   useEffect(() => {
-    // console.log(formKey, watch);
-  }, [watch]);
-  useEffect(() => {
-    if (!searchMode) setResults(filteredOptions());
+    if (!searchMode && typing) setResults(filteredOptions());
     else {
       if (typing) {
         loadResult();
@@ -132,7 +130,7 @@ export default function AutoComplete2({
   };
 
   function valueChange(e) {
-    // console.log("VAL CHANGED", e);
+    console.log("val change", e);
     setSelect(true);
     setSelected(e);
     if (form && formKey) {
@@ -142,6 +140,9 @@ export default function AutoComplete2({
   }
   const [focus, setFocus] = useState(false);
   const [select, setSelect] = useState(false);
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
   function onFocus(e) {
     setTyping(false);
     setSelect(false);
@@ -153,7 +154,7 @@ export default function AutoComplete2({
   }
   useEffect(() => {
     if (typing && !select && !focus) {
-      // console.log("BLURRRED:::", query);
+      console.log("BLURRRED:::", query);
       if (allowCreate) {
         setSelected({
           id: query,

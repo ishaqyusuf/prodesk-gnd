@@ -7,7 +7,7 @@ import { BreadLink } from "@/components/breadcrumbs/links";
 
 import { getHomesAction } from "@/app/_actions/community/home";
 import CommunityInvoiceTableShell from "@/components/shells/community-invoice-table-shell";
-import { getInvoices } from "@/app/_actions/community-invoice/get-invoices";
+import { getHomeInvoices } from "@/app/_actions/community-invoice/get-invoices";
 import EditInvoiceModal from "@/components/modals/edit-invoice-modal";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function InvoicesPage({ searchParams, params }) {
-  const response = await getInvoices(queryParams({ ...searchParams }));
+  const response = await getHomeInvoices(queryParams({ ...searchParams }));
   // metadata.title = `${project.title} | Homes`;
 
   return (
@@ -27,6 +27,7 @@ export default async function InvoicesPage({ searchParams, params }) {
       </Breadcrumbs>
       <PageHeader title={"Unit Invoices"} subtitle={``} />
       <CommunityInvoiceTableShell
+        projectView={false}
         data={response.data as any}
         pageInfo={response.pageInfo}
       />

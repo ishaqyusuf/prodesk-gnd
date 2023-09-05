@@ -85,7 +85,9 @@ function whereHomeTemplate(query: HomeTemplatesQueryParams) {
 
   return where;
 }
-export async function printHomes(homes: { builderId: number; modelName }[]) {
+export async function printHomesAction(
+  homes: { builderId: number; projectId: number; modelName }[]
+) {
   const prints = await prisma.homeTemplates.findMany({
     where: {
       OR: homes.map(({ builderId, modelName }) => {
@@ -97,7 +99,18 @@ export async function printHomes(homes: { builderId: number; modelName }[]) {
       }),
     },
   });
-  return prints;
+  const communityPrints = await prisma.communityModels.findMany({
+    where: {
+      OR: homes.map(({ projectId, modelName }) => {
+        const w: Prisma.CommunityModelsWhereInput = {
+          projectId,
+          modelName,
+        };
+        return w;
+      }),
+    },
+  });
+  return { prints, communityPrints };
 }
 export async function getHomeTemplate(slug) {
   const homeTemplate = await prisma.homeTemplates.findUnique({

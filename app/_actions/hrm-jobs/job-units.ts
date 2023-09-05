@@ -26,7 +26,7 @@ export async function getUnitJobs(projectId) {
     template.meta.installCosts?.map((cost) => {
       let name = [
         `BLK${unit.block} LOT${unit.lot} (${unit.modelName})`,
-        cost.title,
+        cost.title == "Default" ? "" : cost.title,
       ]
         .filter(Boolean)
         .join(" ");

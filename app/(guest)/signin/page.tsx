@@ -10,12 +10,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { isProduction } from "@/lib/is-prod";
+import QuickLogin from "@/components/quick-login";
 export const metadata: Metadata = {
   title: "Sign In - GND Prodesk",
   description: "",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const isProd = await isProduction();
   return (
     <Shell className="max-w-lg">
       <Card>
@@ -24,6 +27,7 @@ export default function LoginPage() {
           <CardDescription>
             Enter your email & password to continue
           </CardDescription>
+          {!isProd && <QuickLogin />}
         </CardHeader>
         <CardContent className="grid gap-4">
           <SignInForm />

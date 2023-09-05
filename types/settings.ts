@@ -1,6 +1,7 @@
 import { Settings } from "@prisma/client";
+import { OmitMeta } from "./type";
 
-export type InstallCostSettings = Settings & {
+export type InstallCostSettings = OmitMeta<Settings> & {
   meta: InstallCostMeta;
 };
 export interface InstallCostMeta {
@@ -9,6 +10,7 @@ export interface InstallCostMeta {
     id;
     title;
     cost;
+    uid?;
   }[];
 }
 

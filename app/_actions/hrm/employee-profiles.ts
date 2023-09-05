@@ -13,7 +13,7 @@ export async function getProfiles() {
     data: (await prisma.employeeProfile.findMany({})) as any,
   };
 }
-export async function staticEmployeeProfiles() {
+export async function getStaticEmployeeProfiles() {
   return (await prisma.employeeProfile.findMany({})) as any;
 }
 

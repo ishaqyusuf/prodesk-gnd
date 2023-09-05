@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, MoreHorizontal, Trash } from "lucide-react";
+import { Info, MoreHorizontal, Pen, Pencil, Trash } from "lucide-react";
 import { Cell } from "../columns/base-columns";
 import { Button } from "../ui/button";
 import {
@@ -108,8 +108,54 @@ export function ActionButton({
       </Button>
     );
 }
+interface DeleteRowActionProps {
+  row: any;
+  action;
+  menu?: boolean;
+  disabled?: boolean;
+}
+
+export const EditRowAction = typedMemo(
+  ({ onClick, menu, disabled }: { menu?: boolean } & PrimitiveButtonProps) => {
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+
+    function _edit(e) {
+      onClick && onClick(e);
+    }
+    if (!menu)
+      return (
+        <Button
+          variant="outline"
+          disabled={isPending || disabled}
+          className="flex h-8 w-8 p-0 "
+          onClick={_edit}
+        >
+          <Icons.edit
+            className={`${isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"}`}
+          />
+          <span className="sr-only">Delete</span>
+        </Button>
+      );
+    return (
+      <DropdownMenuItem
+        disabled={isPending || disabled}
+        className=""
+        onClick={_edit}
+      >
+        <Icons.edit
+          className={`mr-2 ${
+            isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"
+          }`}
+        />
+
+        <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+      </DropdownMenuItem>
+    );
+  }
+);
 export const DeleteRowAction = typedMemo(
-  ({ row, action, menu }: { row: any; action; menu?: Boolean }) => {
+  ({ row, action, menu, disabled }: DeleteRowActionProps) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const confirm = useBool();
@@ -145,7 +191,7 @@ export const DeleteRowAction = typedMemo(
       return (
         <Button
           variant="outline"
-          disabled={isPending}
+          disabled={isPending || disabled}
           className="flex h-8 w-8 p-0 text-red-500 hover:text-red-600"
           onClick={deleteOrder}
         >
@@ -157,7 +203,7 @@ export const DeleteRowAction = typedMemo(
       );
     return (
       <DropdownMenuItem
-        disabled={isPending}
+        disabled={isPending || disabled}
         className="text-red-500 hover:text-red-600"
         onClick={deleteOrder}
       >

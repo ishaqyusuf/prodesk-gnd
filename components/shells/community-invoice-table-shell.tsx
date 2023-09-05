@@ -10,16 +10,18 @@ import {
   PrimaryCellContent,
   DateCellContent,
   SecondaryCellContent,
+  _FilterColumn,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { ExtendedHome, IInvoice, IProject } from "@/types/community";
+import { ExtendedHome, IHome } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
 import {
   HomeInstallationStatus,
+  HomeInvoiceColumn,
   HomeProductionStatus,
+  HomeStatus,
 } from "../columns/community-columns";
 import {
   DropdownMenu,
@@ -36,28 +38,24 @@ import { HomesSelectionAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import {
-  ActionButton,
   DeleteRowAction,
-  RowActionCell,
-  RowActionMoreMenu,
+  EditRowAction,
 } from "../data-table/data-table-row-actions";
-import Money from "../money";
-import { sum } from "@/lib/utils";
-import { Icons } from "../icons";
-import { openModal } from "@/lib/modal";
 import { ProjectsFilter } from "../filters/projects-filter";
+import { labelValue } from "@/lib/utils";
+import { openModal } from "@/lib/modal";
 
-export default function CommunityInvoiceTableShell<T>({
+export default function HomesTableShell<T>({
   data,
   pageInfo,
-  project,
-}: TableShellProps<IInvoice> & {
-  project?: IProject;
+  projectView,
+}: TableShellProps<ExtendedHome> & {
+  projectView: Boolean;
 }) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<IInvoice, unknown>[]>(
+  const columns = useMemo<ColumnDef<ExtendedHome, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
@@ -71,7 +69,7 @@ export default function CommunityInvoiceTableShell<T>({
           </Cell>
         ),
       },
-      ...(!project
+      ...(!projectView
         ? ([
             {
               header: ColumnHeader("Project"),
@@ -91,74 +89,71 @@ export default function CommunityInvoiceTableShell<T>({
                 </Cell>
               ),
             },
-          ] as ColumnDef<IInvoice, unknown>[])
+          ] as ColumnDef<ExtendedHome, unknown>[])
         : []),
       {
-        accessorKey: "lotBlock",
-        header: ColumnHeader("Lot/Block"),
+        accessorKey: "unit",
+        header: ColumnHeader("Unit"),
         cell: ({ row }) => (
-          <Cell
-          // link="/community/unit/slug" slug={row.original?.slug}
-          >
+          <Cell link="/community/unit/slug" slug={row.original?.slug}>
             <PrimaryCellContent>
               {row.original.lot}
               {"/"}
               {row.original.block}
             </PrimaryCellContent>
             <SecondaryCellContent>
-              {row.original?.home?.modelName}
+              {row.original?.modelName}
             </SecondaryCellContent>
           </Cell>
         ),
       },
+      // {
+      //   accessorKey: "model",
+      //   cell: ({ row }) => (
+      //     <Cell>
+      //       <SecondaryCellContent>
+      //         {row.original?.modelName}
+      //       </SecondaryCellContent>
+      //     </Cell>
+      //   ),
+      //   header: ColumnHeader("Model No"),
+      // },
+      // {
+      //   accessorKey: "lot",
+      //   header: ColumnHeader("Lot/Block"),
+      //   cell: ({ row }) => (
+      //     <Cell>
+      //       <PrimaryCellContent>
+      //         {row.original.lot}
+      //         {"/"}
+      //         {row.original.block}
+      //       </PrimaryCellContent>
+      //     </Cell>
+      //   ),
+      // },
+
       {
-        accessorKey: "prod",
-        header: ColumnHeader("Production"),
+        accessorKey: "status",
+        header: ColumnHeader("Status"),
         cell: ({ row }) => (
           <Cell>
-            <HomeProductionStatus home={row.original.home} />
+            <HomeStatus home={row.original} />
           </Cell>
         ),
       },
       {
-        accessorKey: "inst",
-        header: ColumnHeader("Installation"),
-        cell: ({ row }) => (
-          <Cell>
-            <HomeInstallationStatus home={row.original.home} />
-          </Cell>
-        ),
-      },
-      {
-        accessorKey: "inst",
+        accessorKey: "invoice",
         header: ColumnHeader("Invoice"),
-        cell: ({ row }) => {
-          const paid = sum(row?.original?.home?.tasks, "amountPaid");
-          const due = sum(row?.original?.home?.tasks, "amountDue");
-          return (
-            <Cell>
-              <PrimaryCellContent className="">
-                <Money value={paid} />
-              </PrimaryCellContent>
-              <SecondaryCellContent className="text-red-400">
-                <Money value={due} />
-              </SecondaryCellContent>
-            </Cell>
-          );
-        },
+        cell: ({ row }) => <HomeInvoiceColumn home={row.original} />,
       },
-      {
-        accessorKey: "_status",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_builderId",
-        enableHiding: false,
-      },
+      ..._FilterColumn(
+        "_status",
+        "_q",
+        "_builderId",
+        "_projectId"
+        // "_installation",
+        // "_production"
+      ),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -166,14 +161,13 @@ export default function CommunityInvoiceTableShell<T>({
         maxSize: 15,
         enableSorting: false,
         cell: ({ row }) => (
-          <RowActionCell>
-            <RowActionMoreMenu>
-              <ActionButton
-                Icon={Icons.edit}
-                onClick={() => openModal("editInvoice", row.original)}
-              />
-            </RowActionMoreMenu>
-          </RowActionCell>
+          <div className="">
+            <EditRowAction
+              onClick={(e) => {
+                openModal("editInvoice", row.original);
+              }}
+            />
+          </div>
         ),
       },
     ], //.filter(Boolean) as any,
@@ -181,24 +175,45 @@ export default function CommunityInvoiceTableShell<T>({
   );
   return (
     <>
+      <HomePrinter />
       <DataTable2
         columns={columns}
         pageInfo={pageInfo}
         data={data}
         SelectionAction={HomesSelectionAction}
-        filterableColumns={[ProjectsFilter]}
+        filterableColumns={[
+          BuilderFilter,
+          ProjectsFilter,
+          {
+            id: "_production",
+            title: "Production",
+            single: true,
+            options: [
+              labelValue("Completed", "completed"),
+              labelValue("Not In Production", "idle"),
+              labelValue("Started", "started"),
+              labelValue("Queued", "queued"),
+            ],
+          },
+          {
+            id: "_installation",
+            title: "Installation",
+            single: true,
+            options: [
+              labelValue("Submitted", "submitted"),
+              labelValue("No Submission", "no-submission"),
+            ],
+          },
+        ]}
         searchableColumns={[
           {
             id: "_q" as any,
-            title: "search invoice",
+            title: projectView
+              ? "project Name,model,lot/block"
+              : "model, lot/block",
           },
         ]}
-        dateFilterColumns={[
-          {
-            id: "_date" as any,
-            title: "Date",
-          },
-        ]}
+
         //  deleteRowsAction={() => void deleteSelectedRows()}
       />
     </>

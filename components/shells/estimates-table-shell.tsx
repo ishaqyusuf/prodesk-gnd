@@ -4,7 +4,11 @@ import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import { CheckColumn, ColumnHeader } from "../columns/base-columns";
+import {
+  CheckColumn,
+  ColumnHeader,
+  _FilterColumn,
+} from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
   OrderCustomerCell,
@@ -15,6 +19,7 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../sales/sales-selection-action";
+import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 
 export default function EstimatesTableShell<T>({
   data,
@@ -44,18 +49,7 @@ export default function EstimatesTableShell<T>({
         cell: ({ row }) => <OrderInvoiceCell order={row.original} isEstimate />,
       },
 
-      {
-        accessorKey: "_status",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_priority",
-        enableHiding: false,
-      },
+      ..._FilterColumn("_q", "_status", "_date", "_customerId"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -73,22 +67,17 @@ export default function EstimatesTableShell<T>({
       pageInfo={pageInfo}
       data={data}
       SelectionAction={SalesSelectionAction}
-      filterableColumns={
-        [
-          //  {
-          //    id: "category",
-          //    title: "Category",
-          //    options: products.category.enumValues.map((category) => ({
-          //      label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-          //      value: category,
-          //    })),
-          //  },
-        ]
-      }
+      filterableColumns={[SalesCustomerFilter]}
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "orderId, customer",
+          title: "estimate id, customer...",
+        },
+      ]}
+      dateFilterColumns={[
+        {
+          id: "_date" as any,
+          title: "Date",
         },
       ]}
       newRowLink={`/sales/estimate/new/form`}

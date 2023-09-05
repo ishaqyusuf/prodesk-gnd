@@ -8,11 +8,15 @@ import { Prisma } from "@prisma/client";
 export interface HomeQueryParams extends BaseQuery {
   _builderId;
   _projectSlug;
+  _projectId?;
+  _production?: "Started" | "Queued" | "Idle" | "Completed";
+  _installation?: "Submitted" | "No Submission";
 }
 export async function getHomesAction(query: HomeQueryParams) {
-  const where = whereHome(query);
+  const where = await whereHome(query);
   const homes = await prisma.homes.findMany({
     ...(await queryFilter(query)),
+    where,
     include: {
       project: {
         include: {
@@ -27,6 +31,8 @@ export async function getHomesAction(query: HomeQueryParams) {
           installable: true,
           sentToProductionAt: true,
           installedAt: true,
+          amountDue: true,
+          amountPaid: true,
         },
       },
     },
@@ -38,7 +44,7 @@ export async function getHomesAction(query: HomeQueryParams) {
   };
 }
 export async function getProjectHomesAction(query: HomeQueryParams) {
-  const where = whereHome(query, true);
+  const where = await whereHome(query, true);
   const project = await prisma.projects.findUnique({
     where: {
       slug: query._projectSlug,
@@ -70,7 +76,11 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
     },
   });
   if (!project) throw new Error("Project Not found");
-  const pageInfo = await getPageInfo(query, whereHome(query), prisma.homes);
+  const pageInfo = await getPageInfo(
+    query,
+    await whereHome(query),
+    prisma.homes
+  );
   const { homes, ...pdata } = project;
   return {
     pageInfo,
@@ -95,7 +105,7 @@ export async function deleteHome(id) {
     },
   });
 }
-function whereHome(query: HomeQueryParams, asInclude = false) {
+export async function whereHome(query: HomeQueryParams, asInclude = false) {
   const q = {
     contains: query._q || undefined,
   };
@@ -106,11 +116,33 @@ function whereHome(query: HomeQueryParams, asInclude = false) {
     },
     search: q,
     ...dateQuery(query),
+    // tasks: {
+    //   every: {},
+    // },
   };
-  if (!asInclude && query._projectSlug) {
-    where.project = {
-      slug: query._projectSlug,
-    };
+  if (!asInclude) {
+    if (query._projectSlug) {
+      where.project = {
+        slug: query._projectSlug,
+      };
+    }
+  }
+  if (query._projectId) where.projectId = query._projectId;
+  switch (query._production) {
+    case "Completed":
+      break;
+    case "Idle":
+      break;
+    case "Queued":
+      break;
+    case "Started":
+      break;
+  }
+  switch (query._installation) {
+    case "No Submission":
+      break;
+    case "Submitted":
+      break;
   }
   return where;
 }

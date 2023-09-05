@@ -6,7 +6,9 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 
 export interface EmployeeQueryParamsProps extends BaseQuery {
-  _show: "payroll" | undefined;
+  _show?: "payroll" | undefined;
+  _roleId?;
+  role?;
 }
 export async function getEmployees(query: EmployeeQueryParamsProps) {
   const where = whereEmployee(query);
@@ -21,6 +23,9 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
       },
     },
     ...(await queryFilter(query)),
+    orderBy: {
+      name: "asc",
+    },
   });
   console.log(items[0]?.employeeProfile);
   const pageInfo = await getPageInfo(query, where, prisma.users);
@@ -40,7 +45,21 @@ function whereEmployee(query: EmployeeQueryParamsProps) {
   const where: Prisma.UsersWhereInput = {
     name: q,
   };
-
+  if (query._roleId) {
+    where.roles = {
+      some: {
+        roleId: +query._roleId,
+      },
+    };
+  }
+  if (query.role)
+    where.roles = {
+      some: {
+        role: {
+          name: query.role,
+        },
+      },
+    };
   return where;
 }
 export async function staticEmployees(

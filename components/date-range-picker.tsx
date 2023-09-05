@@ -29,7 +29,7 @@ export function DatePicker({
   range,
   setValue,
   hideIcon,
-  format = "MMM DD, YYYY",
+  format = "YYYY-MM-DD",
   placeholder = "Pick a date",
 }: React.HTMLAttributes<HTMLDivElement> & Props) {
   const [date, setDate] = React.useState<DateRange | undefined | Date>(

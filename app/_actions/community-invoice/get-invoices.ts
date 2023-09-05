@@ -3,28 +3,24 @@
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
-import { getPageInfo } from "../action-utils";
+import { getPageInfo, queryFilter } from "../action-utils";
+import { HomeQueryParams, whereHome } from "../community/home";
 export interface InvoiceQueryParams extends BaseQuery {}
-export async function getInvoices(query: InvoiceQueryParams) {
-  const where = whereInvoice(query);
-  const _items = await prisma.invoices.findMany({
-    where: {},
+export async function getHomeInvoices(query: HomeQueryParams) {
+  const where = await whereHome(query);
+  const _items = await prisma.homes.findMany({
+    where,
+    ...(await queryFilter(query)),
     include: {
-      home: {
-        select: {
-          tasks: {
-            // select: {}
-          },
-        },
-      },
       project: {
-        select: {
+        include: {
           builder: true,
         },
       },
+      tasks: true,
     },
   });
-  const pageInfo = await getPageInfo(query, where, prisma.invoices);
+  const pageInfo = await getPageInfo(query, where, prisma.homes);
 
   return {
     pageInfo,

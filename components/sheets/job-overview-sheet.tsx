@@ -34,7 +34,7 @@ export default function JobOverviewSheet() {
   async function init(data) {}
   return (
     <BaseSheet<IJobs>
-      className="sm:max-w-[550px]"
+      className="w-full sm:max-w-[550px]"
       onOpen={(data) => {
         init(data);
       }}

@@ -10,41 +10,22 @@ import BaseModal from "./base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { emailSchema } from "@/lib/validations/email";
-import { ICustomer } from "@/types/customers";
-import { CustomerTypes } from "@prisma/client";
-import { saveCustomer } from "@/app/_actions/sales/sales-customers";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
-import { IHome, IProject } from "@/types/community";
+import { InstallCostingTemplate } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
-import { staticBuildersAction } from "@/app/_actions/community/builders";
-import { projectSchema } from "@/lib/validations/community-validations";
 import {
   saveProject,
   staticProjectsAction,
 } from "@/app/_actions/community/projects";
 import { HomeJobList, IJobs, IUser } from "@/types/hrm";
-import AutoComplete2 from "../auto-complete-headless";
-import { staticRolesAction } from "@/app/_actions/hrm/static-roles";
-import { employeeSchema } from "@/lib/validations/hrm";
-import {
-  createEmployeeAction,
-  saveEmployeeAction,
-} from "@/app/_actions/hrm/save-employee";
+
 import {
   PrimaryCellContent,
   SecondaryCellContent,
@@ -65,40 +46,38 @@ import { InstallCostSettings } from "@/types/settings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
 import { createJobAction } from "@/app/_actions/hrm-jobs/create-job";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { sum } from "@/lib/utils";
 
 export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
-  const form = useForm<
-    IJobs & {
-      costChart: {
-        [id in string]: { cost: number; qty: number; total: number };
-      };
-    }
-  >({
+  const form = useForm<IJobs>({
     defaultValues: {
       meta: {},
     },
   });
   const [page, setPage] = useState(1);
+
   async function submit(data) {
     startTransition(async () => {
       // if(!form.getValues)
       try {
         // const isValid = employeeSchema.parse(form.getValues());
-        const { homeData, unit, project, costChart, ...job } = form.getValues();
+        const { homeData, unit, project, ...job } = form.getValues();
         job.type = type;
-        job.amount = +sum([addon, taskCost, job.meta.additional_cost]);
+        job.amount = 0;
+        [job.meta.addon, job.meta.taskCost, job.meta.additional_cost].map(
+          (n) => n > 0 && (job.amount += Number(n))
+        );
+
         if (!job.id) await createJobAction(job as any);
-        // if (!data?.id)
-        //   await createEmployeeAction({
-        //     ...form.getValues(),
-        //   });
-        // else
-        //   await saveEmployeeAction({
-        //     ...form.getValues(),
-        //   });
+
         closeModal();
         toast.message("Success!");
         route.refresh();
@@ -125,7 +104,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     setTab("project");
     setAddCost(null as any);
   }
-
   async function selectProject(project) {
     const projectId = project?.id;
     form.setValue("projectId", projectId);
@@ -137,23 +115,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
       _setTab("unit");
     } else setTab("general");
   }
-  const [units, setUnits] = useState<HomeJobList[]>([]);
-  const [costChart, setCostChart] = useState<any>({});
-  const [addCost, setAddCost] = useState(0);
-
-  useEffect(() => {
-    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
-      // console.log(res)
-      const puc: any = {};
-      res?.meta?.list?.map((ls) => {
-        puc[ls.title] = {
-          cost: ls.cost || 0,
-        };
-      });
-      // console.log(puc);
-      setCostChart(puc);
-    });
-  }, []);
   async function loadUnits(projectId) {
     const ls = await getUnitJobs(projectId);
 
@@ -164,39 +125,54 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   async function selectUnit(unit: HomeJobList) {
     form.setValue("homeData", unit);
     form.setValue("unitId", unit.id);
-    replace(
-      unit.costing.costings
-        .map((c) => {
-          const { cost, title, maxQty } = c;
-          return { cost: cost || costChart[title]?.cost, title, maxQty };
-        })
-        .filter((c) => c.cost > 0) as any
-    );
+    setUnitCosting(unit.costing.costings);
+    const costData = {};
+    Object.entries(unit.costing.costings).map(([k, v]) => {
+      costData[k] = {
+        cost: costSetting?.meta?.list?.find((d) => d.uid == k)?.cost,
+      };
+    });
+    form.setValue("meta.costData", costData);
     form.setValue("subtitle", unit.name);
     _setTab("tasks");
   }
+  const [units, setUnits] = useState<HomeJobList[]>([]);
+  const [costChart, setCostChart] = useState<any>({});
+  const [addCost, setAddCost] = useState(0);
+  const [costSetting, setCostSetting] = useState<InstallCostSettings>(
+    {} as any
+  );
+  const [unitCosting, setUnitCosting] = useState<
+    InstallCostingTemplate<number | string>
+  >({} as any);
+
+  useEffect(() => {
+    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
+      setCostSetting(res);
+      // // console.log(res)
+      // const puc: any = {};
+      // res?.meta?.list?.map((ls) => {
+      //   puc[ls.title] = {
+      //     cost: ls.cost || 0,
+      //   };
+      // });
+      // // console.log(puc);
+      // setCostChart(puc);
+    });
+  }, []);
+
   const [tab, setTab] = useState("project");
   const [prevTab, setPrevTab] = useState<any>([]);
   function _setTab(t) {
     setPrevTab([tab, ...prevTab]);
     setTab(t);
   }
-  // const costData = form.watch("homeData");
-  const { fields, replace, update } = useFieldArray({
-    control: form.control,
-    name: "meta.cost_data",
-  });
   function calculateTasks() {
     // form.setValue('amount')
-    const tasks = form.getValues("meta.cost_data");
+    const tasks = form.getValues("meta.costData");
     let total = 0;
-    tasks.map((task, i) => {
-      const c = costChart[task.title]?.cost;
-      if (task.qty > 0 && c > 0) {
-        const tot = task.qty * c;
-        form.setValue(`meta.cost_data.${i}.total`, tot);
-        total += tot;
-      }
+    Object.entries(tasks).map(([k, v]) => {
+      if (v.qty > 0 && v.cost > 0) total += Number(v.qty) * Number(v.cost);
     });
     form.setValue("meta.taskCost", total);
     // form.setValue("amount", total + addon);
@@ -228,7 +204,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                 const unitFields = [
                   "homeData",
                   "meta.taskCosts",
-                  "meta.cost_data",
+                  "meta.costData",
                   "unitId",
                   "subtitle",
                 ];
@@ -324,66 +300,18 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {fields?.map((row, i) => {
-                        return (
-                          <TableRow key={i}>
-                            <TableCell className="px-1">
-                              <PrimaryCellContent>
-                                {row.title}
-                              </PrimaryCellContent>
-                              <SecondaryCellContent>
-                                {/* <Money
-                                  value={form.getValues(
-                                    `costChart.${row.title}.cost`
-                                  )}
-                                /> */}
-                                <Money value={row.cost} />
-                                {" per qty"}
-                              </SecondaryCellContent>
-                            </TableCell>
-                            <TableCell className="px-1">
-                              <div className="flex items-center space-x-0.5">
-                                <Input
-                                  max={+row.maxQty}
-                                  value={form.getValues(
-                                    `meta.cost_data.${i}.qty` as any
-                                  )}
-                                  onChange={(e) => {
-                                    const v = +e.target.value;
-
-                                    const cost = form.getValues(
-                                      `costChart.${row.title}.cost`
-                                    );
-                                    form.setValue(
-                                      `meta.cost_data.${i}.qty` as any,
-                                      v
-                                    );
-                                    form.setValue(
-                                      `meta.cost_data.${i}.total` as any,
-                                      (cost || 0) * (v || 0)
-                                    );
-                                  }}
-                                  type="number"
-                                  className="w-16 h-8"
-                                />
-                                <span className="px-1">
-                                  {" /"}
-                                  {row?.maxQty}
-                                </span>
-                              </div>
-                            </TableCell>
-                            {/* <TableCell className="px-1 w-28" align="right">
-                              <SecondaryCellContent>
-                                <Money
-                                  value={form.getValues(
-                                    `meta.cost_data.${i}.total` as any
-                                  )}
-                                />
-                              </SecondaryCellContent>
-                            </TableCell> */}
-                          </TableRow>
-                        );
-                      })}
+                      {costSetting?.meta?.list
+                        ?.filter((v) => unitCosting[v.uid])
+                        .map((row, i) => {
+                          return (
+                            <Row
+                              key={i}
+                              form={form}
+                              row={row}
+                              unitCosting={unitCosting}
+                            />
+                          );
+                        })}
                     </TableBody>
                   </Table>
                 </div>
@@ -420,11 +348,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                   </div>
                   <div className="grid gap-2">
                     <Label>Reason</Label>
-                    <Input
-                      className="h-8"
-                      type="number"
-                      {...form.register("description")}
-                    />
+                    <Input className="h-8" {...form.register("description")} />
                   </div>
                   <div className="grid gap-2 col-span-2">
                     <Label>Install Report</Label>
@@ -470,11 +394,102 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
           );
         if (tab == "tasks")
           return (
-            <Btn onClick={calculateTasks} size="sm" variant="secondary">
+            <Btn onClick={calculateTasks} size="sm">
               Proceed
             </Btn>
           );
       }}
     />
+  );
+}
+export function Row({ form, row, unitCosting }) {
+  return (
+    <TableRow>
+      <TableCell className="px-1">
+        <PrimaryCellContent>{row.title}</PrimaryCellContent>
+        <SecondaryCellContent>
+          <Money value={row.cost} />
+          {" per qty"}
+        </SecondaryCellContent>
+      </TableCell>
+      <TableCell className="px-1">
+        <div className="flex items-center space-x-0.5">
+          <div className="hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="sm" className="flex h-8">
+                  <span className="">
+                    {form.getValues(
+                      `meta.costData.${row.uid}
+                                          .qty` as any
+                    ) || "-"}
+                  </span>
+                  {" /"}
+                  {unitCosting[row.uid]}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[185px]">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    form.setValue(`meta.costData.${row.uid}.qty`, null as any);
+                  }}
+                >
+                  -
+                </DropdownMenuItem>
+                {Array(unitCosting[row.uid])
+                  .fill(null as any)
+                  .map((_, i) => (
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        form.setValue(`meta.costData.${row.uid}.qty`, i + 1);
+                      }}
+                      key={i}
+                    >
+                      {i + 1}
+                    </DropdownMenuItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Input
+            max={unitCosting[row.uid]}
+            min={0}
+            value={form.getValues(`meta.costData.${row.uid}.qty` as any)}
+            onBlur={(e) => {
+              const maxQty = Number(unitCosting[row.uid]);
+              let val = form.getValues(`meta.costData.${row.uid}.qty` as any);
+              if (val > maxQty) {
+                toast.error("max qty exceeded");
+
+                form.setValue(`meta.costData.${row.uid}.qty`, maxQty);
+              }
+              if (val < 0) {
+                toast.error("min qty exceeded");
+                form.setValue(`meta.costData.${row.uid}.qty`, 0);
+              }
+            }}
+            onChange={(e) => {
+              let v = +e.target.value;
+              form.setValue(`meta.costData.${row.uid}.qty`, v);
+            }}
+            type="number"
+            className="w-16 h-8 hiddens"
+          />
+          <Label className="px-1">
+            {" /"}
+            {unitCosting[row.uid]}
+          </Label>
+        </div>
+      </TableCell>
+      {/* <TableCell className="px-1 w-28" align="right">
+                              <SecondaryCellContent>
+                                <Money
+                                  value={form.getValues(
+                                    `meta.cost_data.${i}.total` as any
+                                  )}
+                                />
+                              </SecondaryCellContent>
+                            </TableCell> */}
+    </TableRow>
   );
 }

@@ -1,6 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import slugify from "slugify";
+import { env } from "@/env.mjs";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -74,8 +75,9 @@ export async function slugModel(value, model, c = 0) {
 export function sum<T>(array: T[], key: keyof T | undefined = undefined) {
   return array
     .map((v) => (!key ? v : v?.[key]))
+    .map((v) => (v ? Number(v) : null))
     .filter((v) => (v as any) > 0 && !isNaN(v as any))
-    .reduce((sum, val) => sum + (val as number), 0);
+    .reduce((sum, val) => (sum || 0) + (val as number), 0);
 }
 export const formatCurrency = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -99,7 +101,7 @@ export function toSingular(plural) {
 }
 export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
   let result = {};
-
+  if (!obj) obj = {};
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const newKey = parentKey ? `${parentKey}.${key}` : key;
@@ -121,6 +123,21 @@ export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
   }
 
   return result;
+}
+const camelCaseKey = (key) =>
+  key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
+
+export function designDotToObject(object) {
+  // return toDotNotation(object);
+  let tr = {};
+  Object.entries(object).map(([k, v]) => {
+    const [k1, k2] = k.split(".").map(camelCaseKey) as any;
+    if (k1 && k2) {
+      if (!tr[k1]) tr[k1] = {};
+      tr[k1][k2] = v;
+    }
+  });
+  return tr;
 }
 export function addSpacesToCamelCase(input) {
   return input.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -155,4 +172,10 @@ export function truthy<T>(condition, _true: T[] = [], _false: T[] = []): any {
 }
 export function addPercentage(value, percentage) {
   return value + (value || 0) * ((percentage || 100) / 100);
+}
+export function getModelNumber(modelName) {
+  return modelName
+    ?.split(" ")
+    .filter((f) => ["lh", "rh", "unkn", "unkwn"].includes(f?.toLowercase()))
+    .join(" ");
 }

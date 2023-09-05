@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { dateQuery, getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 import { userId } from "../utils";
 
@@ -42,6 +42,7 @@ function whereJobs(query: JobsQueryParamsProps) {
     subtitle: q,
     title: q,
     projectId: Number(query._projectId) || undefined,
+    ...dateQuery(query),
   };
 
   if (query._show == "unpaid") where.paymentId = null;

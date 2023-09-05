@@ -15,10 +15,13 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import {
+  convertModelInstallCost,
   linkHomeTemplateCosts,
   upgradeCostCharts,
   upgradeHomeTemplates,
+  upgradeInstallCostToKeyValue,
   upgradeInstallPriceChart,
+  upgradeJobCostData,
 } from "@/app/_actions/upgrade/community";
 import { Icons } from "./icons";
 import {
@@ -27,6 +30,7 @@ import {
   upgradeJobPaidStatus,
   upgradeJobPayments,
 } from "@/app/_actions/upgrade/jobs-upgrade";
+import { upgradeWorkOrder } from "@/app/_actions/upgrade/work-order";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -36,12 +40,20 @@ export default function Upgrader() {
       action: null,
     },
     {
+      label: "Work Orders",
+      children: [{ label: "Upgrade Tech", action: upgradeWorkOrder }],
+    },
+    {
       label: "Community",
       children: [
         { label: "Home Template", action: upgradeHomeTemplates },
         { label: "Install Price Chart", action: upgradeInstallPriceChart },
         { label: "Cost Chart", action: upgradeCostCharts },
         { label: "Link Home Total Cost", action: linkHomeTemplateCosts },
+        {
+          label: "Install Cost to Key Value",
+          action: upgradeInstallCostToKeyValue,
+        },
       ],
     },
     {
@@ -65,6 +77,10 @@ export default function Upgrader() {
         {
           label: "Remove Redundancy Payments",
           action: removeRedundantPayments,
+        },
+        {
+          label: "Jobs Cost Data",
+          action: upgradeJobCostData,
         },
       ],
     },

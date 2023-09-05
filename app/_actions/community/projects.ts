@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { BaseQuery, TableApiResponse } from "@/types/action";
-import { IProject } from "@/types/community";
+import { IProject, IProjectMeta } from "@/types/community";
 import { Prisma, Projects } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { slugModel, transformData } from "@/lib/utils";
@@ -58,10 +58,21 @@ export async function staticProjectsAction() {
     select: {
       id: true,
       title: true,
+      builderId: true,
     },
     orderBy: {
       title: "asc",
     },
   });
   return _data;
+}
+export async function updateProjectMeta(id, meta: IProjectMeta) {
+  await prisma.projects.update({
+    where: {
+      id,
+    },
+    data: {
+      meta,
+    },
+  });
 }

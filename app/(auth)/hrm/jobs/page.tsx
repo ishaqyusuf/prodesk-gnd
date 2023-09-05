@@ -13,7 +13,7 @@ import EditJobModal from "@/components/modals/edit-job";
 import SubmitJobModal from "@/components/modals/submit-job-modal";
 
 export const metadata: Metadata = {
-  title: "Employees",
+  title: "Jobs",
 };
 export default async function EmployeesPage({ searchParams }) {
   const response = await getJobs(queryParams(searchParams));

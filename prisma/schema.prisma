@@ -9,6 +9,13 @@ datasource db {
     url          = env("DATABASE_URL")
 }
 
+model AutoCompletes {
+    id        Int    @unique @default(autoincrement())
+    type      String
+    fieldName String
+    value     String
+}
+
 /// The underlying table does notnpx contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model AddressBooks {
     id             Int           @unique @default(autoincrement())
@@ -202,7 +209,7 @@ model HomeTasks {
     payableInstallerCost      Float?
     payableInstallerExtraCost Float?
     payableInstallerTotalCost Float?
-    completedAt               Float?
+    completedAt               DateTime?
     totalInstallCost          Float?
     installCost               Float?
     checkDate                 DateTime? @db.Timestamp(0)
@@ -991,6 +998,7 @@ model Users {
 
     employeeProfileId Int?
 
+    workOrders        WorkOrders[]
     salesProductions  SalesOrders[]    @relation(name: "producer")
     reppedProductions SalesOrders[]    @relation(name: "salesRep")
     roles             ModelHasRoles[]
@@ -1017,6 +1025,7 @@ model Variants {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model WorkOrders {
     id           Int       @unique @default(autoincrement())
+    techId       Int?
     slug         String?   @db.VarChar(255)
     description  String?   @db.Text
     lot          String?   @db.VarChar(255)
@@ -1032,10 +1041,12 @@ model WorkOrders {
     homePhone    String?   @db.VarChar(255)
     meta         Json?     @db.Json
     status       String?   @db.VarChar(255)
+    assignedAt   DateTime? @db.Timestamp(0)
     completedAt  DateTime  @default(now()) @db.Timestamp(0)
     deletedAt    DateTime? @db.Timestamp(0)
     createdAt    DateTime? @db.Timestamp(0)
     updatedAt    DateTime? @db.Timestamp(0)
+    tech         Users?    @relation(fields: [techId], references: [id])
 }
 
 model Notifications {

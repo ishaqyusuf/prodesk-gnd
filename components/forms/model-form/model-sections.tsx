@@ -6,8 +6,9 @@ import {
   GarageDoor,
   InteriorDoor,
   LockHardWare,
+  ProjectHeader,
 } from "@/types/community";
-import { ModelComponents, ModelFormSection } from "./model-components";
+import { ModelFormSection } from "./model-components";
 import { ModelFormProps } from "./model-form";
 import { _useId } from "@/hooks/use-id";
 
@@ -24,6 +25,24 @@ export function ExteriorFrame<T>({ form }: ModelFormProps) {
       ]}
       node="entry"
       section="Exterior Frame"
+    />
+  );
+}
+export function ProjectHeaderForm<T>({ form }: ModelFormProps) {
+  return (
+    <ModelFormSection<ProjectHeader<T>>
+      form={form}
+      rows={(f) => [
+        [f("projectName", "2,6", "Project"), f("builder", "2,6", "Builder")],
+        [
+          f("modelName", "2,6", "Model"),
+          f("lot", "2,1"),
+          f("block", "2,1", "blk"),
+        ],
+        f("address"),
+        f("deadbolt"),
+      ]}
+      node="project"
     />
   );
 }
@@ -100,7 +119,7 @@ export function InteriorDoorForm<T>({ form }: ModelFormProps) {
         ],
       ]}
       node="interiorDoor"
-      title="Garage Door"
+      title="Interior Door"
     />
   );
 }

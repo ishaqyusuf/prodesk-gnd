@@ -12,27 +12,14 @@ import {
   SecondaryCellContent,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { BuilderFilter } from "../filters/builder-filter";
-import { HomeProductionStatus } from "../columns/community-columns";
-import { IBuilder, IProject } from "@/types/community";
-import {
-  DeleteRowAction,
-  RowActionCell,
-  RowActionMenuItem,
-  RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
-import { deleteBuilderAction } from "@/app/_actions/community/builders";
-import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { IJobPayment, IUser } from "@/types/hrm";
 import { CheckCheck, Key, X } from "lucide-react";
-import { resetEmployeePassword } from "@/app/_actions/hrm/save-employee";
-import { toast } from "sonner";
-import Money from "../money";
 import { approveJob, rejectJob } from "@/app/_actions/hrm-jobs/job-actions";
+import Money from "../money";
 
 export default function JobPaymentTableShell<T>({
   data,
@@ -134,7 +121,7 @@ export default function JobPaymentTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "title, builder",
+          title: "filter",
         },
       ]}
 

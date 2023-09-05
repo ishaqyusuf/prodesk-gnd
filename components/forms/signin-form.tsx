@@ -43,7 +43,6 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         callbackUrl: "/",
         redirect: true,
       });
-      console.log(".");
     });
   }
   return (
