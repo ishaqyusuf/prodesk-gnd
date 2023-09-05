@@ -82,7 +82,7 @@ export async function getCustomerAction(id) {
     "builtQty"
   ));
   let td = (customer._count.totalDoors = sum(customer.salesOrders, "prodQty"));
-  customer._count.completedDoors = td - pd;
+  customer._count.completedDoors = (td || 0) - (pd || 0);
   let pendingCompletion = _customer.salesOrders?.filter(
     (s) => s.prodStatus != "Completed"
   ).length;

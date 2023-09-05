@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { sum, transformData } from "@/lib/utils";
-import { EmployeeProfile, JobPayments } from "@prisma/client";
+import { EmployeeProfile, JobPayments, Jobs } from "@prisma/client";
 import { userId } from "../utils";
 import { _notifyProdStarted, _notifyWorkerPaymentPaid } from "../notifications";
 
@@ -24,8 +24,9 @@ export async function getPayableUsers(userId) {
     .filter((user) => user.jobs.length > 0)
 
     .map((user) => {
-      const vjobs = user.jobs.filter((j) => !j.paymentId);
-      let total = +sum(vjobs, "amount");
+      const vjobs: Jobs[] = user.jobs.filter((j) => !j.paymentId);
+
+      let total = !vjobs ? 0 : +(sum(vjobs, "amount") || 0);
       //   if(!total)return null;
       if (user.employeeProfile) {
         console.log("EMPLOYEE PROFILE");

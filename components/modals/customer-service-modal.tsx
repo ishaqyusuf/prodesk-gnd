@@ -192,7 +192,7 @@ export default function CustomerServiceModal() {
         init(data);
       }}
       onClose={() => {}}
-      modalName="submitJob"
+      modalName="customerServices"
       Title={({ data }) => (
         <div className="flex space-x-2 items-center">
           {prevTab?.length > 0 && (

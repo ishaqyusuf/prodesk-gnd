@@ -55,7 +55,7 @@ export async function salesFormAction(
   return {
     form: _order as any,
     ctx,
-    paidAmount,
+    paidAmount: paidAmount as any,
   };
 }
 async function formCtx(): Promise<SalesFormCtx> {
