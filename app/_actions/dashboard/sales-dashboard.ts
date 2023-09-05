@@ -40,8 +40,8 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
   } as any;
   response.totalSales = sum(payments, "amount");
   response.amountDue = sum(sales, "amountDue");
-  let pd = (response.pendingDoors = sum(sales, "builtQty"));
-  let td = (response.totalDoors = sum(sales, "prodQty"));
+  let pd = (response.pendingDoors = sum(sales, "builtQty")) || 0;
+  let td = (response.totalDoors = sum(sales, "prodQty")) || 0;
   response.completedDoors = td - pd;
   let pendingCompletion = sales?.filter((s) => s.prodStatus != "Completed")
     .length;
