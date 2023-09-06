@@ -1,17 +1,12 @@
 import { getOrderAction } from "@/app/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import {
-  BreadLink,
-  OrderViewCrumb,
-  OrdersCrumb,
-} from "@/components/breadcrumbs/links";
+import { BreadLink, OrderViewCrumb } from "@/components/breadcrumbs/links";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
 import OrderPrinter from "@/components/print/order/order-printer";
 import CostBreakdown from "@/components/sales/overview/cost-breakdown";
 import OverviewDetailsSection from "@/components/sales/overview/details-section";
-import ItemDetailsSection from "@/components/sales/overview/item-details";
 import PaymentHistory from "@/components/sales/overview/payment-history";
 import TabbedItemEmailOverview from "@/components/sales/overview/tabbed-item-email-overview";
 import Timeline from "@/components/sales/overview/timeline";

@@ -1,11 +1,14 @@
 "use server";
 
 import { prisma } from "@/db";
-import { transformData } from "@/lib/utils";
+import { slugModel, transformData } from "@/lib/utils";
 import { WorkOrders } from "@prisma/client";
-import dayjs from "dayjs";
 
 export async function createCustomerService(data: WorkOrders) {
+  data.slug = await slugModel(
+    `${data.projectName} ${data.lot} ${data.block}`,
+    prisma.workOrders
+  );
   await prisma.workOrders.create({
     data: transformData(data) as any,
   });

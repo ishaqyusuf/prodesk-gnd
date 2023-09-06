@@ -70,7 +70,7 @@ export function transformData<T>(data: T, update = false) {
 }
 export async function slugModel(value, model, c = 0) {
   let slug = slugify([value, c > 0 ? c : null].filter(Boolean).join(" "));
-  console.log(slug);
+
   let count = await model.count({
     where: {
       slug,

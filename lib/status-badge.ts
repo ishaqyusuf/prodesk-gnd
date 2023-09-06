@@ -11,6 +11,7 @@ let StatusColorMap: { [key: string]: Colors } = {
   completed: "green",
   started: "blue",
   scheduled: "blue",
+  incomplete: "orange",
 };
 
 export type Colors =

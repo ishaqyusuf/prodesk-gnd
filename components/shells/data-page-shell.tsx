@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { store, useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,8 +14,7 @@ export function DataPageShell<T>({
 }: {
   data: T;
   children?;
-  className?;
-}) {
+} & PrimitiveDivProps) {
   const id = usePathname();
   const dataP = useAppSelector((state) => state.slicers.dataPage);
   useEffect(() => {
