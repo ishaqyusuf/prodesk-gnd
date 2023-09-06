@@ -115,6 +115,7 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
       equals: Number(query._builderId) || undefined,
     },
     search: q,
+    modelName: q,
     ...dateQuery(query),
     // tasks: {
     //   every: {},

@@ -117,7 +117,9 @@ export async function upgradeCostCharts() {
 }
 export async function upgradeInstallCostToKeyValue() {
   const s: InstallCostSettings = await getSettingAction("install-price-chart");
+
   const list = s.meta.list.map((ls) => {
+    if (ls.uid) return ls;
     ls.uid = generateRandomString(4);
     return ls;
   });

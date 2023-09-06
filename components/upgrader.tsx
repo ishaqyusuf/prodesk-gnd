@@ -62,8 +62,8 @@ export default function Upgrader() {
     {
       label: "Hrm",
       children: [
-        { label: "Update Job Paid Status", action: upgradeJobPaidStatus },
         { label: "Reset Payment ", action: resetJobUpgrade },
+        { label: "Update Job Paid Status", action: upgradeJobPaidStatus },
         {
           label: "Job Payments",
           action: async () => {

@@ -64,9 +64,7 @@ export async function upgradeJobPayments() {
 
   const jobs = await prisma.jobs.findMany({
     where: {
-      id: {
-        gt: 4063,
-      },
+      id: {},
     },
     include: {
       // payment: true,
