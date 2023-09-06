@@ -54,7 +54,7 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
     },
     ...(await queryFilter(query)),
   });
-  const pageInfo = await getPageInfo(query, where, prisma.homeTemplates);
+  const pageInfo = await getPageInfo(query, where, prisma.communityModels);
 
   return {
     pageInfo,
@@ -67,9 +67,7 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
   };
   const where: Prisma.CommunityModelsWhereInput = {
     modelName: q,
-    project: {
-      title: q,
-    },
+    project: { title: q },
     // builderId: {
     //   equals: Number(query._builderId) || undefined,
     // },
