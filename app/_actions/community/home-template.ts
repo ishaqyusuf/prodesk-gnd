@@ -67,6 +67,9 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
   };
   const where: Prisma.CommunityModelsWhereInput = {
     modelName: q,
+    project: {
+      title: q,
+    },
     // builderId: {
     //   equals: Number(query._builderId) || undefined,
     // },
