@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <AspectRatio ratio={16 / 9}>
         <Image
           src="/images/auth-layout.webp"
-          alt="A skateboarder doing a high drop"
+          alt=""
           fill
           className="absolute inset-0 object-cover"
           priority

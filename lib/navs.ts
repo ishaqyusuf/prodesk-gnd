@@ -53,8 +53,11 @@ export function nav(
   // "YYYY-MM-DD"
   // )}`;
   const __can = session?.can;
-  const role: "Production" | "Punchout" | "1099 Contractor" = session?.role
-    ?.name as any;
+  const role:
+    | "Production"
+    | "Punchout"
+    | "1099 Contractor"
+    | "Customer Service" = session?.role?.name as any;
   const {
     viewProject,
     viewProduction,
@@ -69,7 +72,7 @@ export function nav(
     viewPriceList,
     viewCustomerService,
   }: ICan = __can;
-
+  console.log(__can);
   const routes: {
     [key in
       | "Dashboard"
@@ -86,8 +89,7 @@ export function nav(
     Sales: [],
     Settings: [_route("Profile Settings", Settings2, "/settings/profile")],
   };
-  const isAdmin =
-    Object.values(__can).every(Boolean) || session.role?.name == "Admin";
+  const isAdmin = session.role?.name == "Admin";
   if (isAdmin) {
     routes.Dashboard.push(_route("Dashboard", LayoutDashboard, "/dashboard"));
     routes.Settings.push(_route("Sales", Cog, "/settings/sales"));
@@ -132,7 +134,7 @@ export function nav(
     routes.Services.push(
       _route("Customer Service", ClipboardList, "/customer-services")
     );
-  if (viewOrders) {
+  if (viewOrders && role != "Customer Service") {
     routes.Sales.push(
       ...[
         _route("Estimates", Banknote, "/sales/estimates"), //employees,roles
