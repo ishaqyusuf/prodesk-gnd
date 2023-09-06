@@ -1032,7 +1032,7 @@ model WorkOrders {
     block        String?   @db.VarChar(255)
     projectName  String?   @db.VarChar(255)
     builderName  String?   @db.VarChar(255)
-    requestDate  String?   @db.VarChar(255)
+    requestDate  DateTime?
     supervisor   String?   @db.VarChar(255)
     scheduleDate String?   @db.VarChar(255)
     scheduleTime String?   @db.VarChar(255)

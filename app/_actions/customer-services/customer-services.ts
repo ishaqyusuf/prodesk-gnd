@@ -31,7 +31,11 @@ function whereCustomerService(query: CustomerServiceQueryParamsProps) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: Prisma.WorkOrdersWhereInput = {};
+  const where: Prisma.WorkOrdersWhereInput = {
+    status: query._show || undefined,
+    description: q,
+    projectName: q,
+  };
   if (query._userId) where.techId = query._userId;
   return where;
 }

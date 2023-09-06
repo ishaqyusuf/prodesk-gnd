@@ -9,75 +9,58 @@ import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
-
 import { useForm } from "react-hook-form";
-
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
-import { InstallCostingTemplate } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
-import {
-  saveProject,
-  staticProjectsAction,
-} from "@/app/_actions/community/projects";
-import { HomeJobList, IJobs, IUser } from "@/types/hrm";
+import { staticProjectsAction } from "@/app/_actions/community/projects";
+import { IJobs } from "@/types/hrm";
 
-import {
-  PrimaryCellContent,
-  SecondaryCellContent,
-} from "../columns/base-columns";
 import { ScrollArea } from "../ui/scroll-area";
-import { getUnitJobs } from "@/app/_actions/hrm-jobs/job-units";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import Money from "../money";
-import { getSettingAction } from "@/app/_actions/settings";
-import { InstallCostSettings } from "@/types/settings";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
-import { createJobAction } from "@/app/_actions/hrm-jobs/create-job";
+
+import { getProjectUnitList } from "@/app/_actions/customer-services/get-project-units";
+import { IWorkOrder } from "@/types/customer-service";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { sum } from "@/lib/utils";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { DatePicker } from "../date-range-picker";
+import AutoComplete2 from "../auto-complete-headless";
+import { findHomeOwnerAction } from "@/app/_actions/customer-services/find-home-owner";
+import { customerServiceSchema } from "@/lib/validations/customer-service";
+import {
+  createCustomerService,
+  updateCustomerService,
+} from "@/app/_actions/customer-services/save-customer-service";
 
 export default function CustomerServiceModal() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
-  const form = useForm<IJobs>({
+  const form = useForm<IWorkOrder>({
     defaultValues: {
       meta: {},
     },
   });
-  const [page, setPage] = useState(1);
 
   async function submit(data) {
     startTransition(async () => {
       // if(!form.getValues)
       try {
-        // const isValid = employeeSchema.parse(form.getValues());
-        const { homeData, unit, project, ...job } = form.getValues();
-
-        job.amount = 0;
-        [job.meta.addon, job.meta.taskCost, job.meta.additional_cost].map(
-          (n) => n > 0 && (job.amount += Number(n))
-        );
-
-        if (!job.id) await createJobAction(job as any);
-
+        const isValid = customerServiceSchema.parse(form.getValues());
+        const data = form.getValues();
+        if (data.id) await updateCustomerService(data.id, data as any);
+        else await createCustomerService(data as any);
         closeModal();
         toast.message("Success!");
         route.refresh();
@@ -89,101 +72,55 @@ export default function CustomerServiceModal() {
     });
   }
   const projects = useAppSelector((state) => state?.slicers?.staticProjects);
-
-  async function init(data) {
-    setPage(1);
-    loadStaticList("staticProjects", projects, staticProjectsAction);
-
-    form.reset(
-      !data
-        ? {}
-        : {
-            ...data,
-          }
-    );
-    setTab("project");
-    setAddCost(null as any);
-  }
-  async function selectProject(project) {
-    const projectId = project?.id;
-    form.setValue("projectId", projectId);
-    form.setValue("project", project as any);
-    form.setValue("unit", null as any);
-    form.setValue("title", project.title);
-    if (project?.id) {
-      await loadUnits(projectId);
-      _setTab("unit");
-    } else setTab("general");
-  }
-  async function loadUnits(projectId) {
-    const ls = await getUnitJobs(projectId);
-
-    form.setValue("meta.addon", ls.addon || 0);
-    setUnits(ls.homeList);
-    // form.setValue('homeData',ls.homeList)
-  }
-  async function selectUnit(unit: HomeJobList) {
-    form.setValue("homeData", unit);
-    form.setValue("unitId", unit.id);
-    setUnitCosting(unit.costing.costings);
-    const costData = {};
-    Object.entries(unit.costing.costings).map(([k, v]) => {
-      costData[k] = {
-        cost: costSetting?.meta?.list?.find((d) => d.uid == k)?.cost,
-      };
-    });
-    form.setValue("meta.costData", costData);
-    form.setValue("subtitle", unit.name);
-    _setTab("tasks");
-  }
-  const [units, setUnits] = useState<HomeJobList[]>([]);
-  const [costChart, setCostChart] = useState<any>({});
-  const [addCost, setAddCost] = useState(0);
-  const [costSetting, setCostSetting] = useState<InstallCostSettings>(
-    {} as any
-  );
-  const [unitCosting, setUnitCosting] = useState<
-    InstallCostingTemplate<number | string>
-  >({} as any);
-
   useEffect(() => {
-    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
-      setCostSetting(res);
-      // // console.log(res)
-      // const puc: any = {};
-      // res?.meta?.list?.map((ls) => {
-      //   puc[ls.title] = {
-      //     cost: ls.cost || 0,
-      //   };
-      // });
-      // // console.log(puc);
-      // setCostChart(puc);
-    });
+    loadStaticList("staticProjects", projects, staticProjectsAction);
   }, []);
+  async function init(data) {
+    let formData: IWorkOrder = data;
+    if (!formData)
+      formData = {
+        requestDate: new Date(),
+        status: "Pending",
+        meta: {
+          lotBlock: "",
+        },
+      } as any;
+    const pid = projects.find((p) => p.title == formData.projectName)?.id;
+    if (pid) loadUnits(pid);
+    if (!formData.meta.lotBlock) {
+      const { lot, block } = formData;
+      if (lot && block) formData.meta.lotBlock = `${lot}/${block}`;
+    }
+    form.reset({
+      ...formData,
+    });
+    setTab("general");
+    // setAddCost(null as any);
+  }
 
-  const [tab, setTab] = useState("project");
+  async function loadUnits(projectId) {
+    const ls = await getProjectUnitList(projectId);
+    setUnits(ls.filter((u) => u.lot && u.block));
+  }
+
+  const [units, setUnits] = useState<{ id; lotBlock; lot; block }[]>([]);
+
+  const [tab, setTab] = useState("general");
   const [prevTab, setPrevTab] = useState<any>([]);
   function _setTab(t) {
     setPrevTab([tab, ...prevTab]);
     setTab(t);
   }
-  function calculateTasks() {
-    // form.setValue('amount')
-    const tasks = form.getValues("meta.costData");
-    let total = 0;
-    Object.entries(tasks).map(([k, v]) => {
-      if (v.qty > 0 && v.cost > 0) total += Number(v.qty) * Number(v.cost);
-    });
-    form.setValue("meta.taskCost", total);
-    // form.setValue("amount", total + addon);
-    _setTab("general");
-  }
-  const amount = form.watch("amount");
-  const taskCost = form.watch("meta.taskCost");
-  const addon = form.watch("meta.addon");
-  // const addCost = form.watch("meta.additional_cost");
   function resetFields(k) {
     k.map((v) => form.setValue(v, null));
+  }
+  async function findHomeOwner(unit) {
+    const [projectName, id] = form.getValues(["projectName", "id"]);
+    if (!id) {
+      Object.entries(
+        await findHomeOwnerAction(projectName, unit.lot, unit.block)
+      ).map(([k, v]) => form.setValue(k as any, v));
+    }
   }
   return (
     <BaseModal<IJobs | undefined>
@@ -201,23 +138,10 @@ export default function CustomerServiceModal() {
                 const [tab1, ...tabs] = prevTab;
                 setTab(tab1);
                 setPrevTab(tabs);
-                const unitFields = [
-                  "homeData",
-                  "meta.taskCosts",
-                  "meta.costData",
-                  "unitId",
-                  "subtitle",
-                ];
+                const unitFields = [];
                 if (tab1 == "unit") resetFields(unitFields);
                 if (tab1 == "project")
-                  resetFields([
-                    "projectId",
-                    "meta.addon",
-                    "title",
-                    "unit",
-                    "project",
-                    ...unitFields,
-                  ]);
+                  resetFields(["lot", "block", ...unitFields]);
               }}
               className="h-8 w-8 p-0"
               variant="ghost"
@@ -242,117 +166,133 @@ export default function CustomerServiceModal() {
               <TabsList className="hidden">
                 <TabsTrigger value="project" />
                 <TabsTrigger value="unit" />
-                <TabsTrigger value="tasks" />
                 <TabsTrigger value="general" />
               </TabsList>
-              <TabsContent value="project">
-                <div className="flex flex-col divide-y">
-                  <Button
-                    onClick={() => _setTab("general")}
-                    variant={"ghost"}
-                    className=""
-                  >
-                    <p className="flex w-full">Custom Task</p>
-                  </Button>
-                  {projects?.map((project) => (
-                    <Button
-                      onClick={() => selectProject(project)}
-                      variant={"ghost"}
-                      key={project.id}
-                      className=""
-                    >
-                      <p className="flex w-full">{project.title}</p>
-                    </Button>
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="unit">
-                <div className="flex flex-col divide-y">
-                  <Button
-                    onClick={() => _setTab("general")}
-                    variant={"ghost"}
-                    className=""
-                  >
-                    <p className="flex w-full">Custom Task</p>
-                  </Button>
-                  {units?.map((unit) => (
-                    <Button
-                      onClick={() => selectUnit(unit)}
-                      variant={"ghost"}
-                      key={unit.id}
-                      className=""
-                    >
-                      <p className="flex w-full">{unit.name}</p>
-                    </Button>
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="tasks">
-                <div className="col-span-2">
-                  <Table className="">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="px-1">Task</TableHead>
-                        <TableHead className="px-1">Qty</TableHead>
-                        {/* <TableHead className="px-1 text-right" align="right">
-                          Total
-                        </TableHead> */}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {costSetting?.meta?.list
-                        ?.filter((v) => unitCosting[v.uid])
-                        .map((row, i) => {
-                          return (
-                            <Row
-                              key={i}
-                              form={form}
-                              row={row}
-                              unitCosting={unitCosting}
-                            />
-                          );
-                        })}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TabsContent>
+
               <TabsContent value="general">
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="grid gap-2 col-span-2">
-                    <Label>Title</Label>
-                    <Input
-                      placeholder=""
-                      disabled={form.getValues("projectId") != null}
-                      className="h-8"
-                      {...form.register("title")}
-                    />
-                  </div>
-                  <div className="grid gap-2 col-span-2">
-                    <Label>Subtitle</Label>
-                    <Input
-                      placeholder=""
-                      disabled={form.getValues("unitId") != null}
-                      className="h-8"
-                      {...form.register("subtitle")}
+                  <div className="grid gap-2">
+                    {/* <Label>Project</Label> */}
+                    <AutoComplete2
+                      label="Project"
+                      form={form}
+                      formKey={"projectName"}
+                      options={projects}
+                      itemText={"title"}
+                      itemValue={"title"}
+                      onChange={(e: any) => {
+                        loadUnits(e.data.id);
+                        form.setValue("lot", e.data.lot);
+                        form.setValue("block", e.data.block);
+                      }}
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Additional Cost ($)</Label>
+                    {/* <Label>Project</Label> */}
+                    <AutoComplete2
+                      label="Unit"
+                      form={form}
+                      formKey={"meta.lotBlock"}
+                      options={units}
+                      itemText={"lotBlock"}
+                      itemValue={"lotBlock"}
+                      onChange={(e: any) => {
+                        console.log(e);
+                        form.setValue("lot", e.data.lot);
+                        form.setValue("block", e.data.block);
+                        findHomeOwner(e.data);
+                      }}
+                    />
+                  </div>
+                  <div className="grid gap-2 col-span-2">
+                    <Label>Supervisor</Label>
                     <Input
+                      placeholder=""
                       className="h-8"
-                      type="number"
-                      // value={addCost}
-                      // onChange={(e) => setAddCost(+e.target.value)}
-                      {...form.register("meta.additional_cost")}
+                      {...form.register("supervisor")}
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Reason</Label>
-                    <Input className="h-8" {...form.register("description")} />
+                    <Label>Request Date</Label>
+                    <DatePicker
+                      format={"YYYY-MM-DD"}
+                      className="flex-1 w-full h-8"
+                      setValue={(e) => form.setValue("requestDate", e)}
+                      value={form.getValues("requestDate")}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Status</Label>
+                    <Select
+                      onValueChange={(v) => form.setValue("status", v)}
+                      defaultValue={form.getValues("status") as any}
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue placeholder="" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {[
+                            "Pending",
+                            "Scheduled",
+                            "Incomplete",
+                            "Completed",
+                          ].map((opt, _) => (
+                            <SelectItem key={_} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Home Owner</Label>
+                    <Input className="h-8" {...form.register("homeOwner")} />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Home/Cell</Label>
+                    <Input className="h-8" {...form.register("homePhone")} />
                   </div>
                   <div className="grid gap-2 col-span-2">
-                    <Label>Install Report</Label>
-                    <Textarea className="h-8" {...form.register("note")} />
+                    <Label>Home Address</Label>
+                    <Input className="h-8" {...form.register("homeAddress")} />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Schedule Date</Label>
+                    <DatePicker
+                      format={"YYYY-MM-DD"}
+                      className="flex-1 w-full h-8"
+                      setValue={(e) => form.setValue("scheduleDate", e)}
+                      value={form.getValues("scheduleDate")}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Schedule Time</Label>
+                    <Select
+                      onValueChange={(v) => form.setValue("scheduleTime", v)}
+                      defaultValue={form.getValues("scheduleTime") as any}
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue placeholder="" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {["8AM - 12PM", "1PM to 4PM"].map((opt, _) => (
+                            <SelectItem key={_} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2 col-span-2">
+                    <Label>Work Description</Label>
+                    <Textarea
+                      className="h-8"
+                      {...form.register("description")}
+                    />
                   </div>
                 </div>
               </TabsContent>
@@ -364,24 +304,6 @@ export default function CustomerServiceModal() {
         if (tab == "general")
           return (
             <div className="space-x-4 items-center flex">
-              <div className="">
-                <Label>Task Costs</Label>
-                <SecondaryCellContent>
-                  <Money value={taskCost} />
-                </SecondaryCellContent>
-              </div>
-              <div className="">
-                <Label>Addon</Label>
-                <SecondaryCellContent>
-                  <Money value={addon} />
-                </SecondaryCellContent>
-              </div>
-              {/* <div className="">
-                <Label>Total Cost</Label>
-                <SecondaryCellContent>
-                  <Money value={addon + taskCost + addCost} />
-                </SecondaryCellContent>
-              </div> */}
               <Btn
                 isLoading={isSaving}
                 onClick={submit}
@@ -394,102 +316,11 @@ export default function CustomerServiceModal() {
           );
         if (tab == "tasks")
           return (
-            <Btn onClick={calculateTasks} size="sm">
+            <Btn onClick={() => {}} size="sm">
               Proceed
             </Btn>
           );
       }}
     />
-  );
-}
-export function Row({ form, row, unitCosting }) {
-  return (
-    <TableRow>
-      <TableCell className="px-1">
-        <PrimaryCellContent>{row.title}</PrimaryCellContent>
-        <SecondaryCellContent>
-          <Money value={row.cost} />
-          {" per qty"}
-        </SecondaryCellContent>
-      </TableCell>
-      <TableCell className="px-1">
-        <div className="flex items-center space-x-0.5">
-          <div className="hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="sm" className="flex h-8">
-                  <span className="">
-                    {form.getValues(
-                      `meta.costData.${row.uid}
-                                          .qty` as any
-                    ) || "-"}
-                  </span>
-                  {" /"}
-                  {unitCosting[row.uid]}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[185px]">
-                <DropdownMenuItem
-                  onClick={(e) => {
-                    form.setValue(`meta.costData.${row.uid}.qty`, null as any);
-                  }}
-                >
-                  -
-                </DropdownMenuItem>
-                {Array(unitCosting[row.uid])
-                  .fill(null as any)
-                  .map((_, i) => (
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        form.setValue(`meta.costData.${row.uid}.qty`, i + 1);
-                      }}
-                      key={i}
-                    >
-                      {i + 1}
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <Input
-            max={unitCosting[row.uid]}
-            min={0}
-            value={form.getValues(`meta.costData.${row.uid}.qty` as any)}
-            onBlur={(e) => {
-              const maxQty = Number(unitCosting[row.uid]);
-              let val = form.getValues(`meta.costData.${row.uid}.qty` as any);
-              if (val > maxQty) {
-                toast.error("max qty exceeded");
-
-                form.setValue(`meta.costData.${row.uid}.qty`, maxQty);
-              }
-              if (val < 0) {
-                toast.error("min qty exceeded");
-                form.setValue(`meta.costData.${row.uid}.qty`, 0);
-              }
-            }}
-            onChange={(e) => {
-              let v = +e.target.value;
-              form.setValue(`meta.costData.${row.uid}.qty`, v);
-            }}
-            type="number"
-            className="w-16 h-8 hiddens"
-          />
-          <Label className="px-1">
-            {" /"}
-            {unitCosting[row.uid]}
-          </Label>
-        </div>
-      </TableCell>
-      {/* <TableCell className="px-1 w-28" align="right">
-                              <SecondaryCellContent>
-                                <Money
-                                  value={form.getValues(
-                                    `meta.cost_data.${i}.total` as any
-                                  )}
-                                />
-                              </SecondaryCellContent>
-                            </TableCell> */}
-    </TableRow>
   );
 }

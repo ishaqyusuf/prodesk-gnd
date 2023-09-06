@@ -32,6 +32,7 @@ import { loadStaticList } from "@/store/slicers";
 import { staticEmployees } from "@/app/_actions/hrm/get-employess";
 import { labelValue } from "@/lib/utils";
 import { TechEmployeeFilter } from "../filters/employee-filter";
+import { openModal } from "@/lib/modal";
 
 export default function CustomerServiceTableShell<T>({
   data,
@@ -62,7 +63,9 @@ export default function CustomerServiceTableShell<T>({
             <PrimaryCellContent>
               <DateCellContent>{row.original.scheduleDate}</DateCellContent>
             </PrimaryCellContent>
-            <DateCellContent>{row.original.scheduleTime}</DateCellContent>
+            <SecondaryCellContent>
+              {row.original.scheduleTime}
+            </SecondaryCellContent>
           </Cell>
         ),
       },
@@ -75,7 +78,7 @@ export default function CustomerServiceTableShell<T>({
               {row.original.projectName}{" "}
               <Badge
                 className="p-0.5 leading-none bg-accent
-              text-primary hover:text-primary px-1 rounded-sm"
+              text-primary hover:bg-accent  px-1 rounded-sm"
               >
                 {row.original.lot || "-"}
                 {"/"}
@@ -115,7 +118,9 @@ export default function CustomerServiceTableShell<T>({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
-            <EditRowAction />
+            <EditRowAction
+              onClick={() => openModal("customerServices", row.original)}
+            />
             <DeleteRowAction row={row.original} action={async () => {}} />
           </RowActionCell>
         ),

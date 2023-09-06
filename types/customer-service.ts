@@ -7,6 +7,7 @@ export interface IWorkOrder extends OmitMeta<WorkOrders> {
 }
 export interface IWorkOrderMeta {
   signatory;
+  lotBlock;
   signature: {
     path;
   };

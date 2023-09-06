@@ -41,7 +41,10 @@ export default function Upgrader() {
     },
     {
       label: "Work Orders",
-      children: [{ label: "Upgrade Tech", action: upgradeWorkOrder }],
+      children: [
+        { label: "Upgrade Tech", action: upgradeWorkOrder },
+        { label: "Upgrade Request Date", action: upgradeWorkOrder },
+      ],
     },
     {
       label: "Community",

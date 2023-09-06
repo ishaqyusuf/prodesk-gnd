@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useEffect, useRef, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -25,7 +25,7 @@ interface Props {
   placeholder?;
   form?;
 }
-export default function AutoComplete2({
+function AutoComplete2({
   options,
   value,
   onChange,
@@ -43,7 +43,7 @@ export default function AutoComplete2({
   uppercase,
 }: Props & PrimitiveDivProps) {
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<any[]>(transformItems(options || []));
   const [results, setResults] = useState<any[]>([]);
   const [selected, setSelected] = useState<{
     id;
@@ -100,11 +100,12 @@ export default function AutoComplete2({
   //   setSelected(getItem(watch));
   // }, [watch]);
 
-  useEffect(() => {
-    const _items = transformItems(options || []);
-    setItems(_items);
-    setSelected(getItem(watch));
-  }, [options]);
+  // useEffect(() => {
+  //   const _items = transformItems(options || []);
+  //   setItems(_items);
+  //   console.log(label, "options changed");
+  //   // setSelected(getItem(watch));
+  // }, [options]);
   useEffect(() => {
     const _items = transformItems(options || []);
     setItems(_items);
@@ -141,7 +142,7 @@ export default function AutoComplete2({
   const [focus, setFocus] = useState(false);
   const [select, setSelect] = useState(false);
   useEffect(() => {
-    console.log(selected);
+    console.log(label, selected);
   }, [selected]);
   function onFocus(e) {
     setTyping(false);
@@ -332,3 +333,4 @@ export default function AutoComplete2({
     </div>
   );
 }
+export default memo(AutoComplete2);

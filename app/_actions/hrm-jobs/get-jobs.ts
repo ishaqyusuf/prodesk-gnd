@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { userId } from "../utils";
 
 export interface JobsQueryParamsProps extends Omit<BaseQuery, "_show"> {
+  _type?: "punchout" | "installation";
   _show?: "unpaid" | "paid" | "approved" | "submitted";
 }
 
