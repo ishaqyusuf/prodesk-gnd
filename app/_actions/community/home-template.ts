@@ -78,6 +78,8 @@ function whereHomeTemplate(query: HomeTemplatesQueryParams) {
     contains: query._q || undefined,
   };
   const where: Prisma.HomeTemplatesWhereInput = {
+    modelName: q,
+
     // builderId: {
     //   equals: Number(query._builderId) || undefined,
     // },
