@@ -25,7 +25,9 @@ import {
   EditRowAction,
   RowActionCell,
 } from "../data-table/data-table-row-actions";
-import WorkOrderTechCell from "../work-order/tech-cell";
+import WorkOrderTechCell, {
+  WorkOrderStatusCell,
+} from "../work-order/tech-cell";
 import { IWorkOrder } from "@/types/customer-service";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
@@ -103,7 +105,7 @@ export default function CustomerServiceTableShell<T>({
         header: ColumnHeader("Status"),
         cell: ({ row }) => (
           <Cell>
-            <StatusCell status={row.original.status} />
+            <WorkOrderStatusCell workOrder={row.original} />
           </Cell>
         ),
       },
