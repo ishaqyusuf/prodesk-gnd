@@ -2,17 +2,16 @@
 
 import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 
 export function Info({
   label,
   children,
   hidden,
   className = "",
-}: {
+}: Omit<PrimitiveDivProps, "hidden"> & {
   label?;
   hidden?: Boolean;
-  children: any;
-  className?;
 }) {
   if (hidden) return <></>;
   return (

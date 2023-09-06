@@ -25,6 +25,7 @@ import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import LinkableNode from "../link-node";
 import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 export function RowActionCell({ children }: { children? }) {
   return (
@@ -111,6 +112,7 @@ export function ActionButton({
 interface DeleteRowActionProps {
   row: any;
   action;
+  deleteKey?;
   menu?: boolean;
   disabled?: boolean;
 }
@@ -174,6 +176,7 @@ export const DeleteRowAction = typedMemo(
           async () => {
             (await action) && action(row.id);
             router.refresh();
+            // revalidatePath("");
           },
           {
             loading: `Deleteting ${row.type} #${row.orderId}`,

@@ -2,17 +2,17 @@
 
 import { prisma } from "@/db";
 
-export async function getCustomerService(id) {
+export async function getCustomerService(slug) {
   const wo = await prisma.workOrders.findFirst({
-    where: { id },
+    where: { slug },
     include: {
       tech: true,
     },
   });
   return wo;
 }
-export async function deleteCustomerService(id) {
+export async function deleteCustomerService(slug) {
   await prisma.workOrders.delete({
-    where: { id },
+    where: { slug },
   });
 }

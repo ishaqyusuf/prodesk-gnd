@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { updateWorkOrderStatus } from "@/app/_actions/customer-services/update-status";
+import { revalidatePath } from "next/cache";
 
 interface Props {
   workOrder: IWorkOrder;
@@ -83,7 +84,7 @@ export function WorkOrderStatusCell({ workOrder }: Props) {
       await updateWorkOrderStatus(workOrder.id, status);
       setIsOpen(false);
       toast.success("Status Updated!");
-      route.refresh();
+      // route.refresh();
     });
   }
   const [isOpen, setIsOpen] = useState(false);

@@ -76,7 +76,7 @@ export default function CustomerServiceTableShell<T>({
         id: "title",
         header: ColumnHeader("Description"),
         cell: ({ row }) => (
-          <Cell link={`/community/project/slug`} slug={row.original.slug}>
+          <Cell link={`/customer-service/slug`} slug={row.original.slug}>
             <PrimaryCellContent>
               {row.original.projectName}{" "}
               <Badge
@@ -126,8 +126,8 @@ export default function CustomerServiceTableShell<T>({
             />
             <DeleteRowAction
               row={row.original}
-              action={async () => {
-                await deleteCustomerService(row.id);
+              action={async (id) => {
+                await deleteCustomerService(row.original.slug);
               }}
             />
           </RowActionCell>

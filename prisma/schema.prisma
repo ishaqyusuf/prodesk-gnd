@@ -1026,7 +1026,7 @@ model Variants {
 model WorkOrders {
     id           Int       @unique @default(autoincrement())
     techId       Int?
-    slug         String?   @db.VarChar(255)
+    slug         String    @unique @db.VarChar(255)
     description  String?   @db.Text
     lot          String?   @db.VarChar(255)
     block        String?   @db.VarChar(255)

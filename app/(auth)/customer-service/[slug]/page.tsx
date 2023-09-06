@@ -4,6 +4,7 @@ import { BreadLink } from "@/components/breadcrumbs/links";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import WorkOrderOverviewSection from "@/components/work-order/work-order-overview-section";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Customer Service",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default async function CustomerServicePage({ params: { slug } }) {
   const workOrder = await getCustomerService(slug);
   metadata.description = workOrder?.homeOwner;
-
+  if (!workOrder) return notFound();
   return (
     <DataPageShell className="px-8" data={workOrder}>
       <Breadcrumbs>
