@@ -40,6 +40,7 @@ import {
   updateCustomerService,
 } from "@/app/_actions/customer-services/save-customer-service";
 import { findHomeOwnerAction } from "@/app/_actions/customer-services/find-home-owner";
+import { deepCopy } from "@/lib/deep-copy";
 
 export default function CustomerServiceModal() {
   const route = useRouter();
@@ -56,7 +57,7 @@ export default function CustomerServiceModal() {
       try {
         const isValid = customerServiceSchema.parse(form.getValues());
         const data = form.getValues();
-        if (data.id) await updateCustomerService(data.id, data as any);
+        if (data.id) await updateCustomerService(data as any);
         else await createCustomerService(data as any);
         closeModal();
         toast.message("Success!");
@@ -73,25 +74,40 @@ export default function CustomerServiceModal() {
     loadStaticList("staticProjects", projects, staticProjectsAction);
   }, []);
   async function init(data) {
-    let formData: IWorkOrder = data;
-    if (!formData)
-      formData = {
-        requestDate: new Date(),
-        status: "Pending",
-        meta: {
-          lotBlock: "",
-        },
-      } as any;
-    const pid = projects.find((p) => p.title == formData.projectName)?.id;
-    if (pid) loadUnits(pid);
-    if (!formData.meta.lotBlock) {
+    let { tech, createdAt, ...formData }: IWorkOrder = deepCopy(
+      data
+        ? data
+        : {
+            requestDate: new Date(),
+            status: "Pending",
+            meta: {
+              lotBlock: "",
+            },
+          }
+    );
+
+    if (!formData.meta) formData.meta = {} as any;
+    const { meta } = formData;
+
+    const pid = projects?.find((p) => p.title == formData.projectName)?.id;
+
+    if (!meta.lotBlock) {
       const { lot, block } = formData;
-      if (lot && block) formData.meta.lotBlock = `${lot}/${block}`;
+
+      if (lot && block) {
+        const lb = `${lot}/${block}`;
+
+        console.log(formData);
+
+        meta.lotBlock = lb;
+      }
     }
     console.log(formData);
     form.reset({
       ...formData,
+      meta,
     });
+    if (pid) loadUnits(pid);
   }
 
   async function loadUnits(projectId) {
@@ -227,7 +243,7 @@ export default function CustomerServiceModal() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {["8AM - 12PM", "1PM to 4PM"].map((opt, _) => (
+                      {["8AM To 12PM", "1PM To 4PM"].map((opt, _) => (
                         <SelectItem key={_} value={opt}>
                           {opt}
                         </SelectItem>

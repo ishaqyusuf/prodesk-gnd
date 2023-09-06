@@ -18,6 +18,11 @@ import { WorkOrders } from "@prisma/client";
 import { IWorkOrder } from "@/types/customer-service";
 import { useAppSelector } from "@/store";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import { assignTech } from "@/app/_actions/customer-services/assign-tech";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 
 interface Props {
   workOrder: IWorkOrder;
@@ -25,31 +30,47 @@ interface Props {
 export default function WorkOrderTechCell({ workOrder }: Props) {
   const techEmployees = useAppSelector((s) => s.slicers.staticTechEmployees);
   const [isPending, startTransition] = useTransition();
-  async function submit() {
+  const route = useRouter();
+  async function submit(e) {
     startTransition(async () => {
+      await assignTech(workOrder.id, e.id);
       setIsOpen(false);
+      toast.success("Tech Assigned");
+      route.refresh();
     });
   }
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Cell>
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="secondary"
-            className="flex h-8  data-[state=open]:bg-muted"
+      <div className="">
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 border-dashed w-full"
+            >
+              <span className="whitespace-nowrap">
+                {workOrder.tech ? workOrder.tech.name : "Select"}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-[185px] p-4 grid gap-2 text-sm"
           >
-            <span className="whitespace-nowrap">
-              {workOrder.tech ? workOrder.tech.name : "Select"}
-            </span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[185px] p-4 grid gap-2">
-          {techEmployees?.map((e) => (
-            <DropdownMenuItem key={e.id}>{e.name}</DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            {techEmployees?.map((e) => (
+              <DropdownMenuItem
+                onClick={(_e) => submit(e)}
+                className="cursor-pointer hover:bg-accent"
+                key={e.id}
+              >
+                {e.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </Cell>
   );
 }

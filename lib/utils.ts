@@ -2,6 +2,7 @@ import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import slugify from "slugify";
 import { env } from "@/env.mjs";
+import dayjs from "dayjs";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -49,14 +50,21 @@ export function removeEmptyValues(obj) {
   }
   return obj;
 }
-export function transformData<T>(data: T, store = false) {
+export function transformData<T>(data: T, update = false) {
   let date = new Date();
   Object.entries({
     createdAt: date,
     updatedAt: date,
-  }).map(([k, v]) => !(store && k == "createdAt") && (data[k] = date));
+  }).map(
+    ([k, v]) => (!update || (update && k != "createdAt")) && (data[k] = date)
+  );
   let _data = data as any;
   let meta = _data?.meta;
+  Object.entries(_data).map(([k, v]) => {
+    if (v instanceof Date) {
+      _data[k] = v.toISOString();
+    }
+  });
   if (meta) _data.meta = removeEmptyValues(meta);
   return _data as T;
 }
