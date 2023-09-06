@@ -31,7 +31,7 @@ export default function SalesEmailSection({}: Props) {
         <CardContent className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
           <Info label="Order ID">{order.orderId}</Info>
           <Info label="Production (Due)">
-            {order.prodStatus} ({order.prodDueDate || "-"})
+            {order.prodStatus} ({(order.prodDueDate || "-") as string})
           </Info>
           <Info hidden={isProd} label="Invoice (Paid)">
             <span>
