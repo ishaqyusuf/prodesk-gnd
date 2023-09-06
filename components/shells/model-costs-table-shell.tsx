@@ -83,7 +83,7 @@ export default function ModelCostTableShell<T>({
             (c) => c.current
           ) as any;
 
-          let money = cost?.meta?.totalCost + Number(cost?.meta?.totalTax);
+          let money = cost?.meta?.totalCost;
           return (
             <Cell
               className="cursor-pointer"

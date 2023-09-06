@@ -50,7 +50,7 @@ export default function Upgrader() {
       label: "Community",
       children: [
         { label: "Home Template", action: upgradeHomeTemplates },
-        { label: "Install Price Chart", action: upgradeInstallPriceChart },
+        // { label: "Install Price Chart", action: upgradeInstallPriceChart },
         { label: "Cost Chart", action: upgradeCostCharts },
         { label: "Link Home Total Cost", action: linkHomeTemplateCosts },
         {
