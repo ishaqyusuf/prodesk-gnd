@@ -5,6 +5,7 @@ import Image from "next/image";
 import { formatDate } from "@/lib/use-day";
 import Link from "next/link";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
+import { DateCellContent } from "@/components/columns/base-columns";
 
 interface Props {
   order: ISalesOrder;
@@ -73,7 +74,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                           <InfoLine label="Rep." value={order?.meta?.rep} />
                           <InfoLine
                             label="Good Until."
-                            value={order?.goodUntil}
+                            value={formatDate(order?.goodUntil)}
                           />
                           {showInvoice && (
                             <>
