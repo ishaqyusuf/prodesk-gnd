@@ -1,14 +1,30 @@
 "use server";
 
 import { prisma } from "@/db";
-import { removeEmptyValues } from "@/lib/utils";
+import { removeEmptyValues, slugModel } from "@/lib/utils";
 import dayjs from "dayjs";
 
 export async function upgradeRequestDate() {}
 export async function upgradeWorkOrder() {
   const workOrders = await prisma.workOrders.findMany({
-    where: {},
+    where: {
+      slug: null,
+    },
   });
+  const w = workOrders[0];
+
+  await prisma.workOrders.update({
+    where: {
+      id: w?.id,
+    },
+    data: {
+      slug: await slugModel(
+        `${w?.projectName} ${w?.lot} ${w?.block}`,
+        prisma.workOrders
+      ),
+    },
+  });
+  return { workOrders };
 
   await Promise.all(
     workOrders.map(async (a) => {

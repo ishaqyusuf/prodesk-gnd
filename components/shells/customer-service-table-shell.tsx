@@ -35,6 +35,7 @@ import { staticEmployees } from "@/app/_actions/hrm/get-employess";
 import { labelValue } from "@/lib/utils";
 import { TechEmployeeFilter } from "../filters/employee-filter";
 import { openModal } from "@/lib/modal";
+import { deleteCustomerService } from "@/app/_actions/customer-services/crud";
 
 export default function CustomerServiceTableShell<T>({
   data,
@@ -123,7 +124,12 @@ export default function CustomerServiceTableShell<T>({
             <EditRowAction
               onClick={() => openModal("customerServices", row.original)}
             />
-            <DeleteRowAction row={row.original} action={async () => {}} />
+            <DeleteRowAction
+              row={row.original}
+              action={async () => {
+                await deleteCustomerService(row.id);
+              }}
+            />
           </RowActionCell>
         ),
       },

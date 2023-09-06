@@ -11,3 +11,8 @@ export async function getCustomerService(id) {
   });
   return wo;
 }
+export async function deleteCustomerService(id) {
+  await prisma.workOrders.delete({
+    where: { id },
+  });
+}
