@@ -105,7 +105,7 @@ export default function ProductsTableShell({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
-            <EditRowAction />
+            {/* <EditRowAction /> */}
             <DeleteRowAction
               row={row.original}
               action={deleteLegacyProductAction}
