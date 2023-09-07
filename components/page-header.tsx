@@ -40,25 +40,23 @@ export default function PageHeader({
         {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
       </div>
       <div className="flex items-center space-x-2">
-        {(newLink || newDialog) && (
-          <Button
-            onClick={() => {
-              newDialog && openModal(newDialog);
-            }}
-            size="sm"
-            className="h-8"
-          >
-            <LinkableNode className="inline-flex items-center" href={newLink}>
-              <BtnIcon className="h-4 w-4 mr-2" />
-              <span>{buttonText} </span>
-            </LinkableNode>
-          </Button>
-        )}
-        {Action && (
-          <AuthGuard permissions={permissions || []}>
-            <Action />
-          </AuthGuard>
-        )}
+        <AuthGuard permissions={permissions || []}>
+          {(newLink || newDialog) && (
+            <Button
+              onClick={() => {
+                newDialog && openModal(newDialog);
+              }}
+              size="sm"
+              className="h-8"
+            >
+              <LinkableNode className="inline-flex items-center" href={newLink}>
+                <BtnIcon className="h-4 w-4 mr-2" />
+                <span>{buttonText} </span>
+              </LinkableNode>
+            </Button>
+          )}
+        </AuthGuard>
+        {Action && <Action />}
       </div>
     </div>
   );

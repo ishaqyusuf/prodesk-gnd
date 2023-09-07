@@ -222,9 +222,9 @@ export function nav(
     if (viewEmployee) setHref("Employees", "employees");
     // if (viewEmployee)
     if (viewHrm || isAdmin) {
-      setHref("Profiles", "profiles");
       setHref("Roles", "roles");
     }
+    if (isAdmin) setHref("Profiles", "profiles");
 
     Hrm.push(...(Object.values(_rw) as any));
     if (href) return _route("HRM", UsersIcon, `/hrm/${href}`);

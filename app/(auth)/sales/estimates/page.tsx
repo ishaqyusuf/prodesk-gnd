@@ -17,7 +17,11 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isFirst title="Sales" />
         <BreadLink isLast title="Estimates" />
       </Breadcrumbs>
-      <PageHeader title="Sales Estimates" newLink="/sales/estimate/new/form" />
+      <PageHeader
+        title="Sales Estimates"
+        permissions={["editOrders"]}
+        newLink="/sales/estimate/new/form"
+      />
       <EstimatesTableShell<ISalesOrder> {...response} />
       <OrderPrinter />
     </div>

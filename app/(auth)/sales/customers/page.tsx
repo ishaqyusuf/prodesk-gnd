@@ -22,7 +22,11 @@ export default async function CustomersPage({ searchParams }) {
         <BreadLink isFirst title="Sales" />
         <BreadLink isLast title="Customers" />
       </Breadcrumbs>
-      <PageHeader title="Customers" newDialog="customerForm" />
+      <PageHeader
+        title="Customers"
+        permissions={["editOrders"]}
+        newDialog="customerForm"
+      />
       <CustomersTableShell<ICustomer> {...response} />
       <CustomerModal />
     </CustomersLayout>

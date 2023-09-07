@@ -37,6 +37,7 @@ import {
   RowActionCell,
 } from "../data-table/data-table-row-actions";
 import { openModal } from "@/lib/modal";
+import AuthGuard from "../auth-guard";
 
 export default function CustomersTableShell<T>({
   data,
@@ -144,11 +145,13 @@ export default function CustomersTableShell<T>({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
-            <EditRowAction
-              onClick={(e) => {
-                openModal("customerForm", row.original);
-              }}
-            />
+            <AuthGuard permissions={["editOrders"]}>
+              <EditRowAction
+                onClick={(e) => {
+                  openModal("customerForm", row.original);
+                }}
+              />
+            </AuthGuard>
           </RowActionCell>
         ),
       },

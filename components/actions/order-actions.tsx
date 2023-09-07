@@ -57,6 +57,7 @@ import {
   DeleteRowAction,
   RowActionMenuItem,
 } from "../data-table/data-table-row-actions";
+import AuthGuard from "../auth-guard";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -80,7 +81,7 @@ export function OrderRowAction(props: IOrderRowProps) {
     router.push(`/sales/estimate/${row.orderId}`);
   }
   return (
-    <div className="">
+    <AuthGuard permissions={["editOrders"]} className="">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -146,7 +147,7 @@ export function OrderRowAction(props: IOrderRowProps) {
           <DeleteRowAction menu row={row} action={deleteOrderAction} />
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </AuthGuard>
   );
 }
 
