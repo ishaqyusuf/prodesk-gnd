@@ -74,7 +74,7 @@ export default function CustomerServiceModal() {
     loadStaticList("staticProjects", projects, staticProjectsAction);
   }, []);
   async function init(data) {
-    console.log(data);
+    // console.log(data);
     let {
       tech,
       createdAt,
@@ -84,7 +84,7 @@ export default function CustomerServiceModal() {
       data
         ? data
         : {
-            requestDate: new Date().toISOString(),
+            requestDate: new Date(),
             status: "Pending",
             meta: {
               lotBlock: "",
@@ -92,7 +92,10 @@ export default function CustomerServiceModal() {
           }
     );
     if (formData.id) {
-      // if (formData.scheduleDate) formData.scheduleDate = new Date(scheduleDate);
+      if (formData.scheduleDate)
+        formData.scheduleDate = new Date(formData.scheduleDate);
+      if (formData.requestDate)
+        formData.scheduleDate = new Date(formData.requestDate);
     }
     if (!formData.meta) formData.meta = {} as any;
     const { meta } = formData;

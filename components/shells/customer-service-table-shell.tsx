@@ -52,7 +52,6 @@ export default function CustomerServiceTableShell<T>({
         role: "Punchout",
       });
     });
-    console.log(data);
   }, []);
   const columns = useMemo<ColumnDef<IWorkOrder, unknown>[]>(
     () => [
