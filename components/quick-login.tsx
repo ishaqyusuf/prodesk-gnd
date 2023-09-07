@@ -12,6 +12,10 @@ import { useEffect, useState } from "react";
 import { IUser } from "@/types/hrm";
 import { getEmployees } from "@/app/_actions/hrm/get-employess";
 import { signIn } from "next-auth/react";
+import {
+  PrimaryCellContent,
+  SecondaryCellContent,
+} from "./columns/base-columns";
 
 export default function QuickLogin() {
   const [employees, setEmployees] = useState<IUser[]>([]);
@@ -19,6 +23,7 @@ export default function QuickLogin() {
     const e = await getEmployees({
       per_page: 1000,
     });
+    console.log(e.data);
     setEmployees(e.data as any);
   }
   useEffect(() => {
@@ -43,13 +48,11 @@ export default function QuickLogin() {
             <Plus className="h-4 w-4 mr-2" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="w-[185px] h-56 overflow-auto"
-        >
+        <DropdownMenuContent align="end" className=" h-56 overflow-auto">
           {employees?.map((e) => (
             <DropdownMenuItem onClick={() => login(e)} key={e.id}>
-              {e.name}
+              <PrimaryCellContent>{e.name}</PrimaryCellContent>
+              <SecondaryCellContent>{e.role?.name}</SecondaryCellContent>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

@@ -36,7 +36,7 @@ export async function getSalesProductionsAction(
   }
   return await getSales(query);
 }
-export async function prodsDueToday(admin: Boolean) {
+export async function prodsDueToday(admin: Boolean = false) {
   const q: SalesQueryParams = {
     _page: "production",
     date: formatDate(dayjs(), "YYYY-MM-DD"),

@@ -25,7 +25,7 @@ import { Printer } from "lucide-react";
 import { ICustomer } from "@/types/customers";
 import {
   setCustomerProfileAction,
-  staticCustomerProfiles,
+  staticCustomerProfilesAction,
 } from "@/app/_actions/sales/sales-customer-profiles";
 import { loadStaticList } from "@/store/slicers";
 import { useAppSelector } from "@/store";
@@ -36,6 +36,7 @@ import {
   EditRowAction,
   RowActionCell,
 } from "../data-table/data-table-row-actions";
+import { openModal } from "@/lib/modal";
 
 export default function CustomersTableShell<T>({
   data,
@@ -46,7 +47,11 @@ export default function CustomersTableShell<T>({
     (state) => state?.slicers?.staticCustomerProfiles
   );
   useEffect(() => {
-    loadStaticList("staticCustomerProfiles", profiles, staticCustomerProfiles);
+    loadStaticList(
+      "staticCustomerProfiles",
+      profiles,
+      staticCustomerProfilesAction
+    );
   }, []);
   useEffect(() => {
     setDefaultProfile(profiles?.find((p) => p.defaultProfile) as any);
@@ -74,7 +79,9 @@ export default function CustomersTableShell<T>({
             slug={row.original.id}
             link="/sales/customer/slug"
           >
-            <PrimaryCellContent>{row.original.name}</PrimaryCellContent>
+            <PrimaryCellContent>
+              {row.original.businessName || row.original.name}
+            </PrimaryCellContent>
             <SecondaryCellContent>{row.original.phoneNo}</SecondaryCellContent>
           </Cell>
         ),
@@ -137,7 +144,11 @@ export default function CustomersTableShell<T>({
         enableSorting: false,
         cell: ({ row }) => (
           <RowActionCell>
-            <EditRowAction />
+            <EditRowAction
+              onClick={(e) => {
+                openModal("customerForm", row.original);
+              }}
+            />
           </RowActionCell>
         ),
       },

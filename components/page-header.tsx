@@ -8,6 +8,8 @@ import { openModal } from "@/lib/modal";
 import { ModalName } from "@/store/slicers";
 import LinkableNode from "./link-node";
 import { Icons } from "./icons";
+import { ICan } from "@/types/auth";
+import AuthGuard from "./auth-guard";
 
 interface Props {
   title;
@@ -17,12 +19,14 @@ interface Props {
   buttonText?;
   newDialog?: ModalName;
   ButtonIcon?;
+  permissions?: (keyof ICan)[];
 }
 export default function PageHeader({
   title,
   newLink,
   subtitle,
   Action,
+  permissions,
   newDialog,
   buttonText = "New",
   ButtonIcon = "add",
@@ -50,7 +54,11 @@ export default function PageHeader({
             </LinkableNode>
           </Button>
         )}
-        {Action && <Action />}
+        {Action && (
+          <AuthGuard permissions={permissions || []}>
+            <Action />
+          </AuthGuard>
+        )}
       </div>
     </div>
   );

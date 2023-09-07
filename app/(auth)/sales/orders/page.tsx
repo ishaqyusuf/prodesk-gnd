@@ -21,7 +21,11 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isFirst title="Sales" />
         <BreadLink isLast title="Orders" />
       </Breadcrumbs>
-      <PageHeader title="Sales Orders" newLink="/sales/order/new/form" />
+      <PageHeader
+        title="Sales Orders"
+        newLink="/sales/order/new/form"
+        permissions={["editOrders"]}
+      />
       <OrdersTableShell<ISalesOrder> {...response} />
       <OrderPrinter />
       <SalesProductionModal />

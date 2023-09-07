@@ -13,7 +13,7 @@ export async function getCustomerProfiles() {
     data: (await prisma.customerTypes.findMany({})) as any,
   };
 }
-export async function staticCustomerProfiles() {
+export async function staticCustomerProfilesAction() {
   return (await prisma.customerTypes.findMany({})) as any;
 }
 

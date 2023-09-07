@@ -28,7 +28,10 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
-import { staticCustomerProfiles } from "@/app/_actions/sales/sales-customer-profiles";
+
+import { updateCustomerAction } from "@/app/_actions/sales/customer.crud";
+import { staticCustomerProfilesAction } from "@/app/_actions/sales/sales-customer-profiles";
+import refresh from "@/lib/refresh";
 
 export default function CustomerModal() {
   const route = useRouter();
@@ -42,12 +45,18 @@ export default function CustomerModal() {
       // if(!form.getValues)
       try {
         // const isValid = emailSchema.parse(form.getValues());
-
-        await saveCustomer({
-          ...form.getValues(),
-        });
+        const data = form.getValues();
+        if (!data.id)
+          await saveCustomer({
+            ...data,
+          });
+        else
+          await updateCustomerAction({
+            ...data,
+          });
         closeModal();
-        toast.message("Customer Created!");
+        toast.message("Saved!");
+        refresh();
       } catch (error) {
         console.log(error);
         toast.message("Invalid Form");
@@ -67,7 +76,7 @@ export default function CustomerModal() {
     );
     setProfiles([
       { id: -1, title: "New Profile" },
-      ...(await staticCustomerProfiles()),
+      ...(await staticCustomerProfilesAction()),
     ] as any);
   }
   return (
@@ -82,6 +91,14 @@ export default function CustomerModal() {
       Content={({ data: order }) => (
         <div>
           <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid gap-2 col-span-2">
+              <Label>Business Name</Label>
+              <Input
+                placeholder=""
+                className="h-8"
+                {...form.register("businessName")}
+              />
+            </div>
             <div className="grid gap-2 col-span-2">
               <Label>Name</Label>
               <Input
