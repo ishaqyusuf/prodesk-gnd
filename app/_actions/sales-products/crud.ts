@@ -43,6 +43,7 @@ export async function createProductAction(
           title: product.title,
           category: product.category,
           slug: await slugModel(product.title, prisma.inventoryProducts),
+          meta: {},
         },
       })
     ).id;
@@ -60,6 +61,7 @@ export async function createProductAction(
       title,
       slug: await slugModel(title, prisma.productVariants),
       price: variant.price,
+      meta: {},
     },
   });
 }

@@ -63,7 +63,7 @@ export type NotificationType =
   | "sales production"
   | "installation"
   | "punchount";
-async function _notify(userId, type: NotificationType, message, link) {
+async function _notify(_userId, type: NotificationType, message, link) {
   await prisma.notifications.create({
     data: transformData({
       fromUser: {
@@ -73,7 +73,7 @@ async function _notify(userId, type: NotificationType, message, link) {
       },
       user: {
         connect: {
-          id: userId,
+          id: _userId,
         },
       },
       meta: {},
