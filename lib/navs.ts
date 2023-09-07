@@ -168,7 +168,7 @@ export function nav(
       ...[
         _route("Sales Jobs", Briefcase, "/sales/jobs"),
         _route("Payments", CreditCard, "/sales/payments"),
-        _route("Products", PackageOpen, "/sales/products"),
+        _route("Catalogs", PackageOpen, "/sales/catalogs"),
         _route("Productions", Construction, `/sales/productions${prodQuery}`),
         _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]

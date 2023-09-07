@@ -157,7 +157,7 @@ export const EditRowAction = typedMemo(
   }
 );
 export const DeleteRowAction = typedMemo(
-  ({ row, action, menu, disabled }: DeleteRowActionProps) => {
+  ({ row, action, menu, deleteKey = "id", disabled }: DeleteRowActionProps) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const confirm = useBool();
@@ -174,7 +174,7 @@ export const DeleteRowAction = typedMemo(
       startTransition(async () => {
         toast.promise(
           async () => {
-            (await action) && action(row.id);
+            (await action) && action(row[deleteKey]);
             router.refresh();
             // revalidatePath("");
           },

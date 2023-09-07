@@ -137,6 +137,7 @@ type FilterKeys =
   | "_date"
   | "_installation"
   | "_production"
+  | "_category"
   | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   const filters = assessorKeys.map((accessorKey) => ({

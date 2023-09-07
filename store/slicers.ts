@@ -7,6 +7,7 @@ import {
   Customers,
   EmployeeProfile,
   HomeTemplates,
+  InventoryProducts,
   Projects,
   Roles,
   Users,
@@ -64,6 +65,8 @@ export interface ISlicer {
   staticPayableEmployees: Users[];
   staticTechEmployees: Users[];
   staticSalesCustomers: Customers[];
+  staticProducts: InventoryProducts[];
+  staticProductCategories: string[];
   refreshToken: string | undefined;
 }
 
@@ -91,6 +94,7 @@ export type ModalName =
   | "employeeProfile"
   | "customerProfile"
   | "activateProduction"
+  | "product"
   | "customerServices"
   | undefined;
 const initialState: ISlicer = ({

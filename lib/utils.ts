@@ -187,3 +187,21 @@ export function getModelNumber(modelName) {
     .filter((f) => ["lh", "rh", "unkn", "unkwn"].includes(f?.toLowercase()))
     .join(" ");
 }
+export const uniqueBy = (data, key) => {
+  const unique = [...new Set(data.map((item) => item[key]?.toLowerCase()))];
+  console.log(unique);
+  return unique.map((s) => {
+    const d = data.find((h) => h[key]?.toLowerCase() == s);
+    return {
+      ...d,
+    };
+  });
+};
+// data.reduce((result, item) => {
+//   const lowercaseCategory = item[key].trim().toLowerCase();
+//   if (!result.some((x) => x?.[key] === lowercaseCategory)) {
+//     result.push({ ...item, [key]: lowercaseCategory });
+//   }
+//   console.log(result);
+//   return result;
+// }, []);
