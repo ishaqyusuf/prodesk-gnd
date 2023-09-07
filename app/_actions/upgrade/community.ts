@@ -69,11 +69,13 @@ export async function upgradeHomeTemplates() {
           install_costings?.map(({ _title, uid, costings }) => ({
             title: _title,
             uid,
-            costings: costings?.map(({ title, unitValue, max_qty }) => ({
-              title,
-              cost: unitValue,
-              maxQty: max_qty,
-            })),
+            costings: costings?.map(
+              ({ title, unitValue, max_qty, checked }) => ({
+                title,
+                cost: unitValue,
+                maxQty: checked ? max_qty : 0,
+              })
+            ),
           })) || [],
       };
       await prisma.homeTemplates.update({

@@ -32,6 +32,10 @@ import { useAppSelector } from "@/store";
 import { CustomerTypes } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  EditRowAction,
+  RowActionCell,
+} from "../data-table/data-table-row-actions";
 
 export default function CustomersTableShell<T>({
   data,
@@ -131,7 +135,11 @@ export default function CustomersTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        // cell: ({ row }) => <OrderRowAction row={row.original} />,
+        cell: ({ row }) => (
+          <RowActionCell>
+            <EditRowAction />
+          </RowActionCell>
+        ),
       },
     ],
     [data, isPending]
@@ -142,25 +150,7 @@ export default function CustomersTableShell<T>({
       pageInfo={pageInfo}
       data={data}
       SelectionAction={({ items }) => {
-        console.log(items);
-        return (
-          <>
-            {/* <span>{JSON.stringify(items)}</span> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Toggle columns"
-                  variant="outline"
-                  size="icon"
-                  className="ml-auto hidden h-8 lg:flex"
-                >
-                  <Printer className=" h-4 w-4" />
-                  {/* View */}
-                </Button>
-              </DropdownMenuTrigger>
-            </DropdownMenu>
-          </>
-        );
+        return <></>;
       }}
       filterableColumns={[]}
       searchableColumns={[
@@ -169,8 +159,6 @@ export default function CustomersTableShell<T>({
           title: "customer, phone, address",
         },
       ]}
-      newRowLink={`/sales/order/new/form`}
-      //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );
 }

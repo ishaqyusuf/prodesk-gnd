@@ -41,6 +41,7 @@ export interface ISidebar {
   flatRoutes: Route[];
   CommunitySettings: Route[];
   Hrm: Route[];
+  Job: Route[];
 }
 export function nav(
   session: Session | null,
@@ -65,6 +66,9 @@ export function nav(
     viewInvoice,
     viewOrders,
     viewCost,
+    editOrders,
+    editProject,
+
     viewInstallation,
     viewTech,
     viewHrm,
@@ -72,7 +76,6 @@ export function nav(
     viewPriceList,
     viewCustomerService,
   }: ICan = __can;
-  console.log(__can);
   const routes: {
     [key in
       | "Dashboard"
@@ -80,10 +83,12 @@ export function nav(
       | "Sales"
       | "Services"
       | "Hrm"
+      | "Job"
       | "Settings"]: Route[];
   } = {
     Dashboard: [],
     Hrm: [],
+    Job: [],
     Services: [],
     Community: [],
     Sales: [],
@@ -134,12 +139,33 @@ export function nav(
     routes.Services.push(
       _route("Customer Service", ClipboardList, "/customer-services")
     );
-  if (viewOrders && role != "Customer Service") {
+  const Job: Route[] = [];
+  let _job = (() => {
+    const _rw: any = {};
+    let href: any = null;
+    function setHref(title, _href) {
+      if (!href) href = _href;
+      _rw[_href] = _route(title, LayoutTemplate, `${_href}`);
+    }
+
+    if (viewProject && viewOrders) setHref("Jobs", "/jobs");
+    if (viewProject && viewOrders) setHref("Payments", "/jobs/payments");
+    Job.push(...(Object.values(_rw) as any));
+    if (href) return _route("Jobs", UsersIcon, `${href}`);
+  })();
+  if (_job) routes.Job.push(_job);
+  if (viewOrders) {
     routes.Sales.push(
       ...[
         _route("Estimates", Banknote, "/sales/estimates"), //employees,roles
         _route("Orders", ShoppingBag, "/sales/orders"), //employees,roles
         _route("Customers", User, "/sales/customers"),
+      ]
+    );
+  }
+  if (editOrders)
+    routes.Sales.push(
+      ...[
         _route("Sales Jobs", Briefcase, "/sales/jobs"),
         _route("Payments", CreditCard, "/sales/payments"),
         _route("Products", PackageOpen, "/sales/products"),
@@ -147,8 +173,6 @@ export function nav(
         _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]
     );
-  }
-
   const CommunitySettings: Route[] = [];
   const Hrm: Route[] = [];
 
@@ -200,10 +224,8 @@ export function nav(
       setHref("Profiles", "profiles");
       setHref("Roles", "roles");
     }
-    if (viewProject && viewOrders) setHref("Jobs", "jobs");
-    if (viewProject && viewOrders) setHref("Payments", "payments");
-    Hrm.push(...(Object.values(_rw) as any));
 
+    Hrm.push(...(Object.values(_rw) as any));
     if (href) return _route("HRM", UsersIcon, `/hrm/${href}`);
   })();
   if (_hrm) routes.Hrm.push(_hrm);
@@ -218,17 +240,7 @@ export function nav(
     totalRoutes += len;
     if (!homeRoute) homeRoute = r?.[0]?.path;
     flatRoutes.push(...r);
-    const __routes = r
-      .map((_r) =>
-        upRoutes.includes(`${title}`) ||
-        upRoutes.includes(`${title}/**`) ||
-        upRoutes.includes(`${title}/${_r.title}`) ||
-        !isProd ||
-        isProd
-          ? _r
-          : null
-      )
-      .filter(Boolean) as Route[];
+    const __routes = r.filter(Boolean) as Route[];
 
     routeGroup.push({
       title: len < 2 ? null : title,
@@ -247,6 +259,7 @@ export function nav(
     noSideBar: totalRoutes < 6,
     CommunitySettings,
     Hrm,
+    Job,
   };
 }
 

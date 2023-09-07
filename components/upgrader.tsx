@@ -17,6 +17,7 @@ import { Button } from "./ui/button";
 import {
   convertModelInstallCost,
   linkHomeTemplateCosts,
+  upgradeCommunity,
   upgradeCostCharts,
   upgradeHomeTemplates,
   upgradeInstallCostToKeyValue,
@@ -49,6 +50,7 @@ export default function Upgrader() {
     {
       label: "Community",
       children: [
+        { label: "Community", action: upgradeCommunity },
         { label: "Home Template", action: upgradeHomeTemplates },
         // { label: "Install Price Chart", action: upgradeInstallPriceChart },
         { label: "Cost Chart", action: upgradeCostCharts },

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
+import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 export const metadata: Metadata = {
   title: "Payment Portal",
 };
@@ -25,7 +26,7 @@ export default async function PaymentPage({ params }) {
   if (user) metadata.title = user.name;
   console.log(user);
   return (
-    <HrmLayout>
+    <TabbedLayout tabKey="Job">
       <Breadcrumbs>
         <BreadLink isFirst title="Hrm" />
         <BreadLink isLast title="Payment Portal" />
@@ -58,6 +59,6 @@ export default async function PaymentPage({ params }) {
           )}
         </div>
       </div>
-    </HrmLayout>
+    </TabbedLayout>
   );
 }

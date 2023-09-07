@@ -105,6 +105,7 @@ model Customers {
     addressId      Int?
     customerTypeId Int?
     name           String          @db.VarChar(255)
+    businessName   String?         @db.VarChar(255)
     email          String?         @db.VarChar(255)
     phoneNo        String?         @db.VarChar(255)
     address        String?         @db.Text

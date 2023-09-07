@@ -11,6 +11,7 @@ import JobTableShell from "@/components/shells/job-table-shell";
 import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 import EditJobModal from "@/components/modals/edit-job";
 import SubmitJobModal from "@/components/modals/submit-job-modal";
+import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 
 export const metadata: Metadata = {
   title: "Jobs",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default async function EmployeesPage({ searchParams }) {
   const response = await getJobs(queryParams(searchParams));
   return (
-    <HrmLayout>
+    <TabbedLayout tabKey="Job">
       <Breadcrumbs>
         <BreadLink isFirst title="Hrm" />
         <BreadLink isLast title="Jobs" />
@@ -28,6 +29,6 @@ export default async function EmployeesPage({ searchParams }) {
       <JobOverviewSheet />
       <EditJobModal />
       <SubmitJobModal />
-    </HrmLayout>
+    </TabbedLayout>
   );
 }

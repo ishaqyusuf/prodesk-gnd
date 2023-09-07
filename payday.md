@@ -3,7 +3,10 @@ ACTIONS, HRM, INSTALL PORTAL,CUSTOMER SERVICES.
 
 ORDER INVOICE EDIT ALERT
 Percentage Mockup.
-# SEP 06: 00.00
+# SEP 07: 00.00
+    11:00-
+# SEP 06: 05.35
+    09:50-11:20
     02:10-04:00
     10:40-12:55
     09:10-10:10
@@ -16,7 +19,7 @@ Percentage Mockup.
     10:50-12:50
     09:45-10:30
 ----------------------------------
-# 
+# $956.55
 # SEP 01: 05.10 == 27.20
     04:50-05:40
     02:50-03:50
