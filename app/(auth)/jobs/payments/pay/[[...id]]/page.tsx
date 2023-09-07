@@ -37,7 +37,7 @@ export default async function PaymentPage({ params }) {
           {payables.map((user) => (
             <Link
               key={user.id}
-              href={`/hrm/payments/pay/${user.id}`}
+              href={`/jobs/payments/pay/${user.id}`}
               className={cn(
                 "p-2 text-sm pr-4",
                 userId == user.id ? "bg-accent" : "hover:bg-accent"

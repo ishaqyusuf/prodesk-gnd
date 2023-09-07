@@ -50,7 +50,7 @@ export default function JobPaymentForm({ user }: Props) {
         },
       });
       toast.success("Payment Applied Successfully!");
-      route.push("/hrm/payments/pay");
+      route.push("/jobs/payments/pay");
     });
   }
   return (
