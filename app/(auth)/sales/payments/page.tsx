@@ -25,7 +25,6 @@ export default async function OrdersPage({ searchParams }) {
         newLink="/sales/estimate/new/form"
       />
       <SalesPaymentTableShell {...response} />
-      <OrderPrinter />
     </div>
   );
 }

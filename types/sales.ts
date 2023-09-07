@@ -226,6 +226,7 @@ export interface ProdActionProps {
 }
 export interface ISalesPayment extends OmitMeta<SalesPayments> {
   customer: ICustomer;
+  order: ISalesOrder;
   meta: {
     ccc;
     ccc_percentage;

@@ -71,7 +71,7 @@ function AutoComplete2({
     const { items } = searchFn
       ? await searchFn(debouncedQuery)
       : await searchAction({ q: debouncedQuery });
-    console.log(items);
+    // console.log(items);
     setItems(transformItems(items));
   }
   useEffect(() => {
@@ -131,7 +131,7 @@ function AutoComplete2({
   };
 
   function valueChange(e) {
-    console.log("val change", e);
+    // console.log("val change", e);
     setSelect(true);
     setSelected(e);
     if (form && formKey) {
@@ -142,7 +142,7 @@ function AutoComplete2({
   const [focus, setFocus] = useState(false);
   const [select, setSelect] = useState(false);
   useEffect(() => {
-    console.log(label, selected);
+    // console.log(label, selected);
   }, [selected]);
   function onFocus(e) {
     setTyping(false);
@@ -155,7 +155,7 @@ function AutoComplete2({
   }
   useEffect(() => {
     if (typing && !select && !focus) {
-      console.log("BLURRRED:::", query);
+      // console.log("BLURRRED:::", query);
       if (allowCreate) {
         setSelected({
           id: query,

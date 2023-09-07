@@ -1035,7 +1035,7 @@ model WorkOrders {
     builderName  String?   @db.VarChar(255)
     requestDate  DateTime?
     supervisor   String?   @db.VarChar(255)
-    scheduleDate String?   @db.VarChar(255)
+    scheduleDate DateTime? @db.Timestamp(0)
     scheduleTime String?   @db.VarChar(255)
     homeAddress  String?   @db.VarChar(255)
     homeOwner    String?   @db.VarChar(255)

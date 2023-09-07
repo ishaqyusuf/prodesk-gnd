@@ -31,7 +31,10 @@ import {
   upgradeJobPaidStatus,
   upgradeJobPayments,
 } from "@/app/_actions/upgrade/jobs-upgrade";
-import { upgradeWorkOrder } from "@/app/_actions/upgrade/work-order";
+import {
+  dateUpdate,
+  upgradeWorkOrder,
+} from "@/app/_actions/upgrade/work-order";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -43,6 +46,7 @@ export default function Upgrader() {
     {
       label: "Work Orders",
       children: [
+        { label: "Date Update", action: dateUpdate },
         { label: "Upgrade Tech", action: upgradeWorkOrder },
         { label: "Upgrade Request Date", action: upgradeWorkOrder },
       ],

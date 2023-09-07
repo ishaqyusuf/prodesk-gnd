@@ -2,16 +2,19 @@
 
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { dateQuery, getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 
-export interface salesPaymentsQueryParamsProps extends BaseQuery {}
+export interface salesPaymentsQueryParamsProps extends BaseQuery {
+  _customerId?;
+}
 export async function getsalesPayments(query: salesPaymentsQueryParamsProps) {
   const where = wheresalesPayments(query);
   const items = await prisma.salesPayments.findMany({
     where,
     include: {
       customer: true,
+      order: true,
     },
     ...(await queryFilter(query)),
   });
@@ -27,6 +30,14 @@ function wheresalesPayments(query: salesPaymentsQueryParamsProps) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: Prisma.SalesPaymentsWhereInput = {};
+  const where: Prisma.SalesPaymentsWhereInput = {
+    customerId: +query._customerId || undefined,
+    customer: {
+      businessName: q,
+      name: q,
+      phoneNo: q,
+    },
+    ...dateQuery(query),
+  };
   return where;
 }

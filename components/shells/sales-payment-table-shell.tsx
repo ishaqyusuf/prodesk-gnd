@@ -41,16 +41,27 @@ export default function SalesPaymentTableShell({
         cell: ({ row }) => (
           <Cell>
             <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
-            <DateCellContent>row.original.createdAt</DateCellContent>
+            <DateCellContent>{row.original.createdAt}</DateCellContent>
           </Cell>
         ),
-        header: ColumnHeader("Estimate #"),
+        header: ColumnHeader("#"),
       },
       {
         accessorKey: "customer",
         header: ColumnHeader("Customer"),
         cell: ({ row }) =>
           OrderCustomerCell(row.original.customer, "/sales/customer/slug"),
+      },
+      {
+        accessorKey: "order",
+        header: ColumnHeader("Order"),
+        cell: ({ row }) => (
+          <Cell>
+            <SecondaryCellContent>
+              {row.original.order.orderId}
+            </SecondaryCellContent>
+          </Cell>
+        ),
       },
       {
         accessorKey: "invoice",
@@ -89,7 +100,7 @@ export default function SalesPaymentTableShell({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "estimate id, customer...",
+          title: "",
         },
       ]}
       dateFilterColumns={[

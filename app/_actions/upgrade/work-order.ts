@@ -4,7 +4,32 @@ import { prisma } from "@/db";
 import { removeEmptyValues, slugModel } from "@/lib/utils";
 import dayjs from "dayjs";
 
-export async function upgradeRequestDate() {}
+export async function dateUpdate() {
+  const workOrders = await prisma.workOrders.findMany({
+    where: {},
+  });
+  const data: string[] = [];
+  workOrders.map((w) => {
+    if (w.scheduleDate) {
+      data.push(
+        `UPDATE WorkOrders SET scheduleDate = '${dayjs(w.scheduleDate).format(
+          "YYYY-MM-DD HH:mm:ss"
+        )}' WHERE id =${w.id};`
+      );
+    }
+  });
+  return data;
+  // await Promise.all(
+  //   workOrders.map(async (wo) => {
+  //     await prisma.workOrders.update({
+  //       where: { id: wo.id },
+  //       data: {
+  //         scheduleDate: dayjs(wo.scheduleDate).toISOString(),
+  //       },
+  //     });
+  //   })
+  // );
+}
 export async function upgradeWorkOrder() {
   const workOrders = await prisma.workOrders.findMany({
     where: {},

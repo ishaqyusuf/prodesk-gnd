@@ -78,8 +78,7 @@ export default function CustomerServiceModal() {
     let {
       tech,
       createdAt,
-      requestDate,
-      scheduleDate,
+
       ...formData
     }: IWorkOrder = deepCopy(
       data
@@ -93,7 +92,7 @@ export default function CustomerServiceModal() {
           }
     );
     if (formData.id) {
-      if (scheduleDate) formData.scheduleDate = new Date(scheduleDate);
+      if (formData.scheduleDate) formData.scheduleDate = new Date(scheduleDate);
     }
     if (!formData.meta) formData.meta = {} as any;
     const { meta } = formData;
