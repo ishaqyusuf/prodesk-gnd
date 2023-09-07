@@ -92,7 +92,7 @@ export default function CustomerServiceModal() {
           }
     );
     if (formData.id) {
-      if (formData.scheduleDate) formData.scheduleDate = new Date(scheduleDate);
+      // if (formData.scheduleDate) formData.scheduleDate = new Date(scheduleDate);
     }
     if (!formData.meta) formData.meta = {} as any;
     const { meta } = formData;

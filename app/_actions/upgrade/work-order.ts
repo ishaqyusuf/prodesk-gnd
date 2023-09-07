@@ -8,17 +8,28 @@ export async function dateUpdate() {
   const workOrders = await prisma.workOrders.findMany({
     where: {},
   });
-  const data: string[] = [];
+  const data: any = {};
   workOrders.map((w) => {
     if (w.scheduleDate) {
-      data.push(
-        `UPDATE WorkOrders SET scheduleDate = '${dayjs(w.scheduleDate).format(
-          "YYYY-MM-DD HH:mm:ss"
-        )}' WHERE id =${w.id};`
-      );
+      const d = dayjs(w.scheduleDate).format("YYYY-MM-DD HH:mm:ss");
+      if (!data[d]) data[d] = [];
+      data[d].push(w.id);
     }
   });
-  return data;
+  const sql: any = [];
+  Object.entries(data).map(([k, ids]: any) => {
+    if (ids.length == 1)
+      sql.push(
+        `UPDATE WorkOrders SET scheduleDate = '${k}' WHERE id =${ids[0]};`
+      );
+    else
+      sql.push(
+        `UPDATE WorkOrders SET scheduleDate = '${k}' WHERE id IN (${ids.join(
+          ","
+        )});`
+      );
+  });
+  return sql.join("\n");
   // await Promise.all(
   //   workOrders.map(async (wo) => {
   //     await prisma.workOrders.update({
