@@ -23,7 +23,6 @@ export default function QuickLogin() {
     const e = await getEmployees({
       per_page: 1000,
     });
-    console.log(e.data);
     setEmployees(e.data as any);
   }
   useEffect(() => {

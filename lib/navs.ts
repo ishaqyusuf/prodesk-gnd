@@ -192,7 +192,7 @@ export function nav(
       setHref("Install Costs", "install-costs");
       setHref("Model Costs", "model-costs");
     }
-    if (viewProject) {
+    if (editProject) {
       setHref("Model Templates", "model-templates");
       setHref("Community Templates", "community-templates");
     }

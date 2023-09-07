@@ -224,7 +224,8 @@ export interface ProdActionProps {
     id;
   };
 }
-export interface ISalesPayment extends SalesPayments {
+export interface ISalesPayment extends OmitMeta<SalesPayments> {
+  customer: ICustomer;
   meta: {
     ccc;
     ccc_percentage;
