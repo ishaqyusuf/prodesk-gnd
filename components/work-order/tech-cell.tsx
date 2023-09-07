@@ -93,7 +93,7 @@ export function WorkOrderStatusCell({ workOrder }: Props) {
       <div className="">
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8">
+            <Button variant="ghost" size="sm" className="h-8 p-0">
               <StatusCell status={workOrder.status} />
             </Button>
           </DropdownMenuTrigger>

@@ -72,6 +72,18 @@ export default function CustomerServiceTableShell<T>({
         ),
       },
       {
+        id: "customer",
+        header: ColumnHeader("Customer"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>{row.original.homeOwner}</PrimaryCellContent>
+            <SecondaryCellContent>
+              {row.original.homePhone}
+            </SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
         id: "title",
         header: ColumnHeader("Description"),
         cell: ({ row }) => (
@@ -93,6 +105,7 @@ export default function CustomerServiceTableShell<T>({
           </Cell>
         ),
       },
+
       {
         id: "tech",
         header: ColumnHeader("Tech"),
