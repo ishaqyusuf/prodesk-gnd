@@ -54,6 +54,7 @@ export function nav(
   // "YYYY-MM-DD"
   // )}`;
   const __can = session?.can;
+  console.log(__can);
   const role:
     | "Production"
     | "Punchout"
