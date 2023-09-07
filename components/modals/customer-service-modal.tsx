@@ -74,18 +74,27 @@ export default function CustomerServiceModal() {
     loadStaticList("staticProjects", projects, staticProjectsAction);
   }, []);
   async function init(data) {
-    let { tech, createdAt, ...formData }: IWorkOrder = deepCopy(
+    console.log(data);
+    let {
+      tech,
+      createdAt,
+      requestDate,
+      scheduleDate,
+      ...formData
+    }: IWorkOrder = deepCopy(
       data
         ? data
         : {
-            requestDate: new Date(),
+            requestDate: new Date().toISOString(),
             status: "Pending",
             meta: {
               lotBlock: "",
             },
           }
     );
-
+    if (formData.id) {
+      if (scheduleDate) formData.scheduleDate = new Date(scheduleDate);
+    }
     if (!formData.meta) formData.meta = {} as any;
     const { meta } = formData;
 
@@ -107,6 +116,7 @@ export default function CustomerServiceModal() {
       ...formData,
       meta,
     });
+
     if (pid) loadUnits(pid);
   }
 
@@ -137,10 +147,9 @@ export default function CustomerServiceModal() {
       )}
       Content={({ data }) => (
         <div>
-          <ScrollArea className="h-[350px] pr-4">
+          <div className="h-[450px] overflow-auto pr-4 ">
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                {/* <Label>Project</Label> */}
+              <div id="projectName" className="grid gap-2">
                 <AutoComplete2
                   label="Project"
                   form={form}
@@ -156,7 +165,6 @@ export default function CustomerServiceModal() {
                 />
               </div>
               <div className="grid gap-2">
-                {/* <Label>Project</Label> */}
                 <AutoComplete2
                   label="Unit"
                   form={form}
@@ -165,7 +173,6 @@ export default function CustomerServiceModal() {
                   itemText={"lotBlock"}
                   itemValue={"lotBlock"}
                   onChange={(e: any) => {
-                    console.log(e);
                     form.setValue("lot", e.data.lot);
                     form.setValue("block", e.data.block);
                     findHomeOwner(e.data);
@@ -215,9 +222,14 @@ export default function CustomerServiceModal() {
                 <Label>Home Owner</Label>
                 <Input className="h-8" {...form.register("homeOwner")} />
               </div>
+
               <div className="grid gap-2">
                 <Label>Home/Cell</Label>
-                <Input className="h-8" {...form.register("homePhone")} />
+                <Input
+                  id="homePhone"
+                  className="h-8"
+                  {...form.register("homePhone")}
+                />
               </div>
               <div className="grid gap-2 col-span-2">
                 <Label>Home Address</Label>
@@ -252,12 +264,13 @@ export default function CustomerServiceModal() {
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="grid gap-2 col-span-2">
                 <Label>Work Description</Label>
                 <Textarea className="h-8" {...form.register("description")} />
               </div>
             </div>
-          </ScrollArea>
+          </div>
         </div>
       )}
       Footer={({ data }) => {
