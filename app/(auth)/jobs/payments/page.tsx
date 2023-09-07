@@ -23,7 +23,7 @@ export default async function EmployeesPage({ searchParams }) {
       </Breadcrumbs>
       <PageHeader
         title="Payments"
-        newLink={"/hrm/payments/pay"}
+        newLink={"/jobs/payments/pay"}
         buttonText={"Make Payment"}
         ButtonIcon={"dollar"}
       />
