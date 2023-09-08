@@ -18,6 +18,7 @@ import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
 import { INotification } from "@/app/_actions/notifications";
 import { ExtendedHome, IHome } from "@/types/community";
+import { ICustomer } from "@/types/customers";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
@@ -66,6 +67,7 @@ export interface ISlicer {
   staticTechEmployees: Users[];
   staticSalesCustomers: Customers[];
   staticProducts: InventoryProducts[];
+  salesPaymentCustomers: ICustomer[];
   staticProductCategories: string[];
   refreshToken: string | undefined;
 }
@@ -96,6 +98,9 @@ export type ModalName =
   | "activateProduction"
   | "product"
   | "customerServices"
+  | "salesPaymentCustomer"
+  | "deletePaymentPrompt"
+  | "deleteTransactionPrompt"
   | undefined;
 const initialState: ISlicer = ({
   modal: {

@@ -2,25 +2,48 @@
 
 import { prisma } from "@/db";
 import { toFixed } from "@/lib/use-number";
-import { ISalesOrderMeta, ISalesPayment } from "@/types/sales";
+import { ISalesPayment } from "@/types/sales";
+import { getCustomerWallet } from "../customer-wallet/wallet";
+import {
+  creditTransaction,
+  debitTransaction,
+} from "../customer-wallet/transaction";
+import { sum } from "@/lib/utils";
 
 export interface PaymentOrderProps {
   id;
   amountDue;
   amountPaid;
   customerId;
+  orderId;
   paymentOption;
   checkNo;
 }
 export interface ApplyPaymentProps {
   orders: PaymentOrderProps[];
+  credit;
+  debit;
+  balance;
 }
-export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
-  console.log(orders);
+export async function applyPaymentAction({
+  orders,
+  credit,
+  debit,
+  balance,
+}: ApplyPaymentProps) {
+  const wallet = await getCustomerWallet(orders[0]?.customerId);
+  await creditTransaction(wallet.id, credit);
+
+  const transaction = await debitTransaction(
+    wallet.id,
+    debit,
+    `Payment for order: ${orders.map((o) => o.orderId)}`
+  );
   await prisma.salesPayments.createMany({
     data: orders.map(
       (o) =>
         ({
+          transactionId: transaction.id,
           amount: +o.amountPaid,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -51,18 +74,36 @@ export async function applyPaymentAction({ orders }: ApplyPaymentProps) {
   );
   return true;
 }
-export async function deleteSalesPayment(id, orderId, amountDue) {
+export async function deleteSalesPayment({
+  id,
+  amount,
+  orderId,
+  amountDue,
+  refund,
+}) {
   await prisma.salesPayments.delete({
     where: { id },
   });
-  await prisma.salesOrders.update({
+
+  const sales = await prisma.salesOrders.update({
     where: {
       id: orderId,
     },
     data: {
       amountDue,
     },
+    include: {
+      customer: true,
+    },
   });
+  const wallet = await getCustomerWallet(sales.customerId);
+  await creditTransaction(
+    wallet.id,
+    refund ? amount : 0,
+    refund
+      ? `Sales Payment deleted and refunded (${sales.orderId})`
+      : `Sales Payment deleted with no refund (${sales.orderId}). $${amount}`
+  );
 }
 export async function fixPaymentAction({
   amountDue,

@@ -42,6 +42,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { ICustomer } from "@/types/customers";
+import { DateCellContent, SecondaryCellContent } from "../columns/base-columns";
+import { ScrollArea } from "../ui/scroll-area";
+import { dispatchSlice } from "@/store/slicers";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function SalesPaymentModal() {
@@ -72,16 +76,19 @@ export default function SalesPaymentModal() {
   }, [selection]);
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
-  async function submit() {
+  async function submit(data: ICustomer) {
     startTransition(async () => {
-      let _total = form.getValues("pay");
-      if (_total > total) {
-        toast.error(
-          "Invalid: Payment cannot be greater than Total Amount Due."
-        );
-        return;
-      }
-      if (_total == 0) {
+      let credit = +form.getValues("pay");
+      let balance = +form.getValues("pay") + (data.wallet?.balance || 0);
+      let debit = 0;
+
+      // if (_total > total) {
+      //   toast.error(
+      //     "Invalid: Payment cannot be greater than Total Amount Due."
+      //   );
+      //   return;
+      // }
+      if (balance == 0) {
         toast.error("Invalid: Payment must be greater than 0");
         return;
       }
@@ -93,108 +100,130 @@ export default function SalesPaymentModal() {
           id,
           amountDue = 0,
           customerId,
+          orderId,
           meta: { payment_option: paymentOption } = {},
         } = s;
-        if (amountDue && _total >= amountDue) {
-          _total -= amountDue;
+        if (amountDue && balance >= amountDue) {
+          balance -= amountDue;
           amountPaid = Number(s.amountDue);
           amountDue -= amountPaid;
-        } else if (_total > 0 && (amountDue || 0) > _total) {
-          amountPaid = _total;
-          amountDue = (amountDue || 0) - _total;
-          _total = 0;
+          debit += amountDue;
+        } else if (balance > 0 && (amountDue || 0) > balance) {
+          amountPaid = balance;
+          debit += balance;
+          amountDue = (amountDue || 0) - balance;
+          balance = 0;
         }
         orders.push({
           amountPaid,
           id,
           amountDue,
           customerId,
+          orderId,
           checkNo: form.getValues("checkNo"),
           paymentOption: form.getValues("paymentOption"),
         });
       });
+
+      // console.log({ orders, totalAmount, balance });
+      // return;
       // .filter((f) => (f?.amountPaid || 0) > 0);
-      await applyPaymentAction({ orders });
+      await applyPaymentAction({ orders, debit, credit, balance });
       route.refresh();
       closeModal();
       toast.message("Payment Applied Succesfully");
+      dispatchSlice("salesPaymentCustomers");
     });
   }
   return (
-    <BaseModal<ISalesOrder[]>
+    <BaseModal<ICustomer>
       className="sm:max-w-[550px]"
-      onOpen={(orders) => {
+      onOpen={(customer) => {
         form.reset({
-          paymentOption: orders[0]?.meta?.payment_option,
+          paymentOption: customer.salesOrders[0]?.meta?.payment_option,
         });
         const _checked: any = {};
-        orders?.map((o) => (_checked[o.id] = o));
+        customer.salesOrders?.map((o) => (_checked[o.orderId] = o));
         setSelection(_checked);
       }}
       onClose={() => {}}
       modalName="salesPayment"
-      Title={({ data: orders }) => <div>Apply Payment</div>}
-      Content={({ data: orders }) => (
+      Title={({ data: customer }) => (
+        <div>Apply Payment - {customer?.businessName || customer?.name}</div>
+      )}
+      Content={({ data: customer }) => (
         <div className="grid gap-2">
-          <Table className="w-full ">
-            <TableHeader>
-              <TableRow>
-                {(orders?.length || 0) > 1 && (
-                  <TableHead className=""></TableHead>
-                )}
-                <TableHead className="">Order</TableHead>
-                <TableHead className="text-end">Amount Due</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders?.map((item) => (
-                <TableRow key={item.id}>
-                  {orders.length > 1 && (
-                    <TableCell id="checker">
-                      <Checkbox
-                        checked={selection[item.orderId] != null}
-                        onCheckedChange={(e) => {
-                          selection[item.orderId as any] = e
-                            ? deepCopy(item)
-                            : undefined;
-                          setSelection(selection);
-                        }}
-                      />
-                    </TableCell>
+          <ScrollArea className="min-h-[150px] max-h-[450px]">
+            <Table className="w-full ">
+              <TableHeader>
+                <TableRow>
+                  {(customer?.salesOrders?.length || 0) > 1 && (
+                    <TableHead className=""></TableHead>
                   )}
-                  <TableCell id="order">
-                    <p className="font-semibold">{item.orderId}</p>
-                  </TableCell>
-                  <TableCell className="text-end" id="order">
-                    <p>$ {item.amountDue}</p>
-                    <p className="text-muted-foreground">
-                      {item.meta?.payment_option}
-                    </p>
+                  <TableHead className="">Order</TableHead>
+                  <TableHead className="text-end">Amount Due</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {customer?.salesOrders?.map((item) => (
+                  <TableRow key={item.id}>
+                    {customer.salesOrders.length > 1 && (
+                      <TableCell className="p-2" id="checker">
+                        <Checkbox
+                          checked={selection[item.orderId] != null}
+                          onCheckedChange={(e) => {
+                            console.log(e);
+                            const selectn: any = deepCopy(selection);
+                            selectn[item.orderId as any] = e
+                              ? deepCopy(item)
+                              : null;
+                            setSelection(selectn);
+                          }}
+                        />
+                      </TableCell>
+                    )}
+                    <TableCell className="p-2" id="order">
+                      <p className="font-semibold">{item.orderId}</p>
+                      <SecondaryCellContent>
+                        <DateCellContent>{item.createdAt}</DateCellContent>
+                      </SecondaryCellContent>
+                    </TableCell>
+                    <TableCell className="text-end p-2" id="order">
+                      <p>$ {item.amountDue}</p>
+                      <p className="text-muted-foreground">
+                        {item.meta?.payment_option}
+                      </p>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell align="right">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger
+                          onClick={() => {
+                            form.setValue("pay", total);
+                          }}
+                        >
+                          <Money className="font-semibold" value={total} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click to pay all total</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </TableCell>
                 </TableRow>
-              ))}
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="right">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger
-                        onClick={() => {
-                          form.setValue("pay", total);
-                        }}
-                      >
-                        <Money className="font-semibold" value={total} />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Click to pay all total</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+              </TableBody>
+            </Table>
+          </ScrollArea>
           <div className="flex space-x-4 justify-end">
+            <div className="grid gap-2">
+              <Label>Wallet</Label>
+              <Money value={customer?.wallet?.balance} />
+            </div>
             <div className="grid gap-2">
               <Label>Payment Option</Label>
               <Select
@@ -237,7 +266,7 @@ export default function SalesPaymentModal() {
               <Label>Pay</Label>
               <Input
                 {...form.register("pay")}
-                className="h-8 w-24"
+                className="h-8 w-28"
                 type="number"
               />
             </div>
@@ -248,7 +277,7 @@ export default function SalesPaymentModal() {
         <Btn
           disabled={form.getValues("pay") == 0}
           isLoading={isSaving}
-          onClick={() => submit()}
+          onClick={() => submit(data as any)}
           size="sm"
           type="submit"
         >

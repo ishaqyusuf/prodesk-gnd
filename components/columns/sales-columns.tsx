@@ -27,6 +27,7 @@ import { toFixed } from "@/lib/use-number";
 import { Progressor, getProgress } from "@/lib/status";
 import ProgressStatus from "../progress-status";
 import LinkableNode from "../link-node";
+import { ICustomer } from "@/types/customers";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -99,7 +100,7 @@ export function OrderIdCell(
   );
 }
 export function OrderCustomerCell(
-  customer: Customers | undefined,
+  customer: ICustomer | undefined,
   link: string | undefined = undefined
 ) {
   if (!customer) return <></>;

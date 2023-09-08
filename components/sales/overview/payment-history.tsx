@@ -24,7 +24,12 @@ export default function PaymentHistory() {
             <div>
               <Button
                 onClick={() => {
-                  openModal("salesPayment", [order]);
+                  openModal("salesPayment", [
+                    {
+                      ...order.customer,
+                      salesOrders: [order],
+                    },
+                  ]);
                 }}
                 className="h-8 w-8 p-0"
                 variant="outline"

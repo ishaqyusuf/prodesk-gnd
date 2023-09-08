@@ -25,6 +25,9 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../sales/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import Money from "../money";
+import { DeleteRowAction } from "../data-table/data-table-row-actions";
+import { deleteSalesPayment } from "@/app/_actions/sales/sales-payment";
+import { openModal } from "@/lib/modal";
 
 export default function SalesPaymentTableShell({
   data,
@@ -50,7 +53,10 @@ export default function SalesPaymentTableShell({
         accessorKey: "customer",
         header: ColumnHeader("Customer"),
         cell: ({ row }) =>
-          OrderCustomerCell(row.original.customer, "/sales/customer/slug"),
+          OrderCustomerCell(
+            row.original.customer as any,
+            "/sales/customer/slug"
+          ),
       },
       {
         accessorKey: "order",
@@ -77,7 +83,6 @@ export default function SalesPaymentTableShell({
           </Cell>
         ),
       },
-
       ..._FilterColumn("_q", "_status", "_date", "_customerId"),
       {
         accessorKey: "actions",
@@ -85,7 +90,18 @@ export default function SalesPaymentTableShell({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => <></>,
+        cell: ({ row }) => (
+          <>
+            <DeleteRowAction
+              row={row}
+              noRefresh
+              noToast
+              action={async (id) => {
+                openModal("deletePaymentPrompt", row.original);
+              }}
+            />
+          </>
+        ),
       },
     ],
     [data, isPending]

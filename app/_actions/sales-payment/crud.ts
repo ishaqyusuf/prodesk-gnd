@@ -13,14 +13,17 @@ export async function getsalesPayments(query: salesPaymentsQueryParamsProps) {
   const items = await prisma.salesPayments.findMany({
     where,
     include: {
-      customer: true,
+      customer: {
+        include: {
+          wallet: true,
+        },
+      },
       order: true,
     },
     ...(await queryFilter(query)),
   });
 
   const pageInfo = await getPageInfo(query, where, prisma.salesPayments);
-
   return {
     pageInfo,
     data: items as any,

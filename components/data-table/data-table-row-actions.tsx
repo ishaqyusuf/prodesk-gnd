@@ -115,6 +115,8 @@ interface DeleteRowActionProps {
   deleteKey?;
   menu?: boolean;
   disabled?: boolean;
+  noRefresh?: boolean;
+  noToast?: boolean;
 }
 
 export const EditRowAction = typedMemo(
@@ -157,7 +159,15 @@ export const EditRowAction = typedMemo(
   }
 );
 export const DeleteRowAction = typedMemo(
-  ({ row, action, menu, deleteKey = "id", disabled }: DeleteRowActionProps) => {
+  ({
+    row,
+    action,
+    menu,
+    noRefresh,
+    deleteKey = "id",
+    disabled,
+    noToast,
+  }: DeleteRowActionProps) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const confirm = useBool();
@@ -172,20 +182,28 @@ export const DeleteRowAction = typedMemo(
       }
       confirm.setBool(false);
       startTransition(async () => {
-        toast.promise(
-          async () => {
-            (await action) && action(row[deleteKey]);
-            router.refresh();
-            // revalidatePath("");
-          },
-          {
-            loading: `Deleteting ${row.type} #${row.orderId}`,
-            success(data) {
-              return "Deleted Successfully";
-            },
-            error: "Unable to completed Delete Action",
+        if (noToast) {
+          if (action) {
+            await action(row[deleteKey]);
+            if (!noRefresh) router.refresh();
           }
-        );
+        } else
+          toast.promise(
+            async () => {
+              if (action) {
+                await action(row[deleteKey]);
+                if (!noRefresh) router.refresh();
+              }
+              // revalidatePath("");
+            },
+            {
+              loading: `Deleteting ${row.type} #${row.orderId}`,
+              success(data) {
+                return "Deleted Successfully";
+              },
+              error: "Unable to completed Delete Action",
+            }
+          );
       });
     }
 

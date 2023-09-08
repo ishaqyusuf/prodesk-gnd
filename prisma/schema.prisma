@@ -104,12 +104,13 @@ model Customers {
     id             Int             @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
+    walletId       Int?            @unique
     name           String          @db.VarChar(255)
     businessName   String?         @db.VarChar(255)
     email          String?         @db.VarChar(255)
     phoneNo        String?         @db.VarChar(255)
     address        String?         @db.Text
-    meta           String?         @db.LongText
+    meta           Json?           @db.Json
     deletedAt      DateTime?       @db.Timestamp(0)
     createdAt      DateTime?       @db.Timestamp(0)
     updatedAt      DateTime?       @db.Timestamp(0)
@@ -118,6 +119,30 @@ model Customers {
     // primaryAddress        AddressBooks?  @relation(name: "primaryAddress",fields: [id], references: [id])
     addressBooks   AddressBooks[]  @relation(name: "addressBooks")
     payments       SalesPayments[] @relation()
+    wallet         CustomerWallet?
+}
+
+model CustomerWallet {
+    id           Int                   @unique @default(autoincrement())
+    balance      Float
+    meta         Json?                 @db.Json
+    customer     Customers             @relation(fields: [id], references: [walletId])
+    transactions CustomerTransaction[]
+    createdAt    DateTime?             @db.Timestamp(0)
+    updatedAt    DateTime?             @db.Timestamp(0)
+}
+
+model CustomerTransaction {
+    id            Int             @unique @default(autoincrement())
+    authorId      Int
+    amount        Float
+    walletId      Int
+    description   String?         @db.LongText
+    meta          Json?           @db.Json
+    createdAt     DateTime?       @db.Timestamp(0)
+    updatedAt     DateTime?       @db.Timestamp(0)
+    wallet        CustomerWallet  @relation(fields: [walletId], references: [id])
+    salesPayments SalesPayments[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -126,7 +151,7 @@ model CustomerTypes {
     title          String    @db.VarChar(255)
     coefficient    Float?
     defaultProfile Boolean?
-    meta           String?   @db.LongText
+    meta           Json?     @db.Json
     deletedAt      DateTime? @db.Timestamp(0)
     createdAt      DateTime? @db.Timestamp(0)
     updatedAt      DateTime? @db.Timestamp(0)
@@ -874,16 +899,18 @@ model SalesOrders {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesPayments {
-    id         Int         @unique @default(autoincrement())
-    customerId Int
-    orderId    Int
-    amount     Float
-    meta       Json?       @db.Json
-    deletedAt  DateTime?   @db.Timestamp(0)
-    createdAt  DateTime?   @db.Timestamp(0)
-    updatedAt  DateTime?   @db.Timestamp(0)
-    order      SalesOrders @relation(name: "salesPayment", fields: [orderId], references: [id])
-    customer   Customers   @relation(fields: [customerId], references: [id])
+    id            Int                  @unique @default(autoincrement())
+    customerId    Int
+    transactionId Int?
+    orderId       Int
+    amount        Float
+    meta          Json?                @db.Json
+    deletedAt     DateTime?            @db.Timestamp(0)
+    createdAt     DateTime?            @db.Timestamp(0)
+    updatedAt     DateTime?            @db.Timestamp(0)
+    order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id])
+    customer      Customers            @relation(fields: [customerId], references: [id])
+    transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
