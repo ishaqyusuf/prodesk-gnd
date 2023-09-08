@@ -105,11 +105,11 @@ export default function SalesPaymentModal() {
         } = s;
         if (amountDue && balance >= amountDue) {
           balance -= amountDue;
+          debit += amountDue;
           amountPaid = Number(s.amountDue);
           amountDue -= amountPaid;
-          debit += amountDue;
         } else if (balance > 0 && (amountDue || 0) > balance) {
-          amountPaid = balance;
+          amountPaid += balance;
           debit += balance;
           amountDue = (amountDue || 0) - balance;
           balance = 0;
@@ -125,7 +125,7 @@ export default function SalesPaymentModal() {
         });
       });
 
-      // console.log({ orders, totalAmount, balance });
+      // console.log({ orders, debit, credit, balance });
       // return;
       // .filter((f) => (f?.amountPaid || 0) > 0);
       await applyPaymentAction({ orders, debit, credit, balance });
@@ -275,7 +275,7 @@ export default function SalesPaymentModal() {
       )}
       Footer={({ data }) => (
         <Btn
-          disabled={form.getValues("pay") == 0}
+          disabled={form.getValues("pay") == 0 && data?.wallet?.balance == 0}
           isLoading={isSaving}
           onClick={() => submit(data as any)}
           size="sm"

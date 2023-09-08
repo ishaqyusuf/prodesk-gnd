@@ -57,6 +57,7 @@ export default function DeletePaymentPrompt() {
         refund: action == "yes",
       });
       toast.success("Deleted!");
+      closeModal();
     });
   }
   const [isLoading, startTransition] = useTransition();
