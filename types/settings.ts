@@ -5,13 +5,13 @@ export type InstallCostSettings = OmitMeta<Settings> & {
   meta: InstallCostMeta;
 };
 export interface InstallCostMeta {
-  list: {
-    defaultQty;
-    id;
-    title;
-    cost;
-    uid?;
-  }[];
+  list: InstallCostLine[];
 }
-
+export interface InstallCostLine {
+  defaultQty;
+  id;
+  title;
+  cost;
+  uid?;
+}
 export type SettingType = "sales-settings" | "install-price-chart";

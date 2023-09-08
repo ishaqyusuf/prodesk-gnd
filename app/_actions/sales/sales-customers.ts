@@ -72,6 +72,7 @@ export async function getCustomerAction(id) {
           type: "order",
         },
       },
+      wallet: true,
       _count: {
         select: {
           salesOrders: {

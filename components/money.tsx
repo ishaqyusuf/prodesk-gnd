@@ -1,4 +1,3 @@
-import { toFixed } from "@/lib/use-number";
 import { cn, formatCurrency } from "@/lib/utils";
 
 interface Props {

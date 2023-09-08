@@ -27,7 +27,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
     <DataPageShell className="px-8" data={order}>
       <Breadcrumbs>
         <BreadLink isFirst title="Sales" />
-        <BreadLink title="Orders" />
+        <BreadLink title="Orders" link="/sales/orders" />
         <OrderViewCrumb slug={order.orderId} isLast />
       </Breadcrumbs>
 

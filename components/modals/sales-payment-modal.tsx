@@ -139,6 +139,7 @@ export default function SalesPaymentModal() {
     <BaseModal<ICustomer>
       className="sm:max-w-[550px]"
       onOpen={(customer) => {
+        console.log(customer);
         form.reset({
           paymentOption: customer.salesOrders[0]?.meta?.payment_option,
         });

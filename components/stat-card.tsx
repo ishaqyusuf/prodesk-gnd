@@ -51,7 +51,7 @@ export function StartCard({
   }, [money, value, isMasked, masked]);
 
   function unmaskedValue() {
-    return formatCurrency.format(value);
+    return formatCurrency.format(value || 0);
   }
   function maskedValue() {
     return unmaskedValue().replace(/\d/g, "*");

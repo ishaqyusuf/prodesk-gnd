@@ -90,6 +90,12 @@ export default async function CustomerPage({ searchParams, params }) {
         <StatCardContainer>
           <StartCard
             icon="dollar"
+            value={customer.wallet?.balance}
+            label="Wallet"
+            money
+          />
+          <StartCard
+            icon="dollar"
             value={totalSales}
             label="Total Sales"
             money
@@ -101,12 +107,12 @@ export default async function CustomerPage({ searchParams, params }) {
             value={salesOrders}
             info={`${completedOrders || 0} completed`}
           />
-          <StartCard
+          {/* <StartCard
             icon="line"
             label="Doors Ordered"
             value={totalDoors}
             info={`${completedDoors || 0} completed`}
-          />
+          /> */}
         </StatCardContainer>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <RecentSalesCard className="col-span-4" />

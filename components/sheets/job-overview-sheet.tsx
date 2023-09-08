@@ -26,12 +26,15 @@ import {
 import { useDebounce } from "@/hooks/use-debounce";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
+import { getSettingAction } from "@/app/_actions/settings";
+import { InstallCostLine, InstallCostSettings } from "@/types/settings";
 
 export default function JobOverviewSheet() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
 
   async function init(data) {}
+
   return (
     <BaseSheet<IJobs>
       className="w-full sm:max-w-[550px]"
@@ -66,35 +69,48 @@ export default function JobOverviewSheet() {
 }
 function Content({ data }: { data }) {
   const [job, setJob] = useState<IJobs>(data);
-
+  const [costSetting, setCostSetting] = useState<InstallCostSettings>(
+    {} as any
+  );
+  useEffect(() => {
+    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
+      setCostSetting(res);
+    });
+  }, []);
+  const [showAll, setShowAll] = useState(false);
   return (
     <>
-      <Info label="Done By">
-        <p>{data?.user?.name}</p>
-        <DateCellContent>{data?.user?.createdAt}</DateCellContent>
-      </Info>
-      <Info label="Job Type">
-        <p>{data?.type}</p>
-      </Info>
-      <Info label="Additional Cost">
-        <Money value={data?.meta.additional_cost} />
-      </Info>
-      <Info label="Total Cost">
-        <Money value={job?.amount} />
-      </Info>
-      <Info label="Payment">
-        {job?.paidAt ? (
-          <>
-            <p>{job?.checkNo}</p>
-            <DateCellContent>{job?.paidAt}</DateCellContent>
-          </>
-        ) : (
-          <>No payment</>
-        )}
-      </Info>
-      <Info className="col-span-2" label="Job Comment">
-        <div>{data?.note || "No Comment"}</div>
-      </Info>
+      <section
+        id="info"
+        className="grid grid-cols-2 items-start gap-4 col-span-2"
+      >
+        <Info label="Done By">
+          <p>{data?.user?.name}</p>
+          <DateCellContent>{data?.user?.createdAt}</DateCellContent>
+        </Info>
+        <Info label="Job Type">
+          <p>{data?.type}</p>
+        </Info>
+        <Info label="Additional Cost">
+          <Money value={data?.meta.additional_cost} />
+        </Info>
+        <Info label="Total Cost">
+          <Money value={job?.amount} />
+        </Info>
+        <Info label="Payment">
+          {job?.paidAt ? (
+            <>
+              <p>{job?.checkNo}</p>
+              <DateCellContent>{job?.paidAt}</DateCellContent>
+            </>
+          ) : (
+            <>No payment</>
+          )}
+        </Info>
+        <Info className="col-span-2" label="Job Comment">
+          <div>{data?.note || "No Comment"}</div>
+        </Info>
+      </section>
       <div className="col-span-2">
         <Table className="">
           <TableHeader>
@@ -105,21 +121,30 @@ function Content({ data }: { data }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.meta?.cost_data?.map((cd, i) => (
-              <TaskRow key={i} job={job} index={i} setJob={setJob} row={cd} />
-            ))}
+            {costSetting?.meta?.list
+              ?.filter((l) => (job.meta.costData[l.uid]?.qty || 0) > 0)
+              .map((cd, i) => (
+                <TaskRow key={i} job={job} index={i} setJob={setJob} row={cd} />
+              ))}
           </TableBody>
         </Table>
       </div>
     </>
   );
 }
-function TaskRow({ row, index, job, setJob }) {
-  const [qty, setQty] = useState(row.qty);
+interface TaskRowProps {
+  row: InstallCostLine;
+  job: IJobs;
+  index;
+  setJob;
+}
+function TaskRow({ row, index, job, setJob }: TaskRowProps) {
+  const { cost, qty: __qty } = job.meta.costData[row.uid] as any;
+  const [qty, setQty] = useState(__qty);
   const [dVal, setDVal] = useState(false);
   useEffect(() => {
-    if (qty != row.qty) setDVal(qty);
-  }, [qty, row.qty]);
+    if (qty != job.meta.costData[row.uid]?.qty) setDVal(qty);
+  }, [qty, job]);
   const deb = useDebounce(dVal, 800);
   useEffect(() => {
     // console.log(deb);
@@ -132,12 +157,13 @@ function TaskRow({ row, index, job, setJob }) {
       <TableCell className="px-1">
         <PrimaryCellContent>{row.title}</PrimaryCellContent>
         <SecondaryCellContent>
-          <Money value={row.unit_value || row.cost} />
+          <Money value={cost || row.cost} />
         </SecondaryCellContent>
       </TableCell>
       <TableCell className="px-1">
         <Input
           onBlur={blurred}
+          disabled
           value={qty}
           onChange={(e) => setQty(e.target.value)}
           type="number"
@@ -146,7 +172,7 @@ function TaskRow({ row, index, job, setJob }) {
       </TableCell>
       <TableCell className="px-1">
         <SecondaryCellContent>
-          <Money value={qty * (row.unit_value || row.cost)} />
+          <Money value={qty * (cost || row.cost)} />
         </SecondaryCellContent>
       </TableCell>
     </TableRow>
