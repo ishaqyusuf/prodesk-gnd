@@ -24,5 +24,15 @@ export async function getCustomerWallet(customerId) {
       },
     },
   });
+  await prisma.customers.update({
+    where: { id: customerId },
+    data: {
+      wallet: {
+        connect: {
+          id: wallet.id,
+        },
+      },
+    },
+  });
   return wallet;
 }

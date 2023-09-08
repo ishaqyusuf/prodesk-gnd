@@ -8,27 +8,7 @@ import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { closeModal, openModal } from "@/lib/modal";
-import { toast } from "sonner";
 
-import { useForm } from "react-hook-form";
-
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { CustomerTypes } from "@prisma/client";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { IProject } from "@/types/community";
-import { useAppSelector } from "@/store";
-import { loadStaticList } from "@/store/slicers";
-import { staticBuildersAction } from "@/app/_actions/community/builders";
-import { projectSchema } from "@/lib/validations/community-validations";
-import { saveProject } from "@/app/_actions/community/projects";
 import { getSalesPaymentCustomers } from "@/app/_actions/sales-payment/get-sales-payment-customer";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import {
@@ -62,6 +42,7 @@ export default function SelectSalesPaymentCustomerModal() {
                 {salesPaymentCustomers?.map((customer) => (
                   <TableRow
                     onClick={() => {
+                      console.log(customer);
                       openModal("salesPayment", customer);
                     }}
                     className="cursor-pointer"
