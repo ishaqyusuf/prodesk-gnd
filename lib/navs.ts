@@ -166,11 +166,11 @@ export function nav(
   if (editOrders)
     routes.Sales.push(
       ...[
-        _route("Sales Jobs", Briefcase, "/sales/jobs"),
+        // _route("Sales Jobs", Briefcase, "/sales/jobs"),
         _route("Payments", CreditCard, "/sales/payments"),
         _route("Catalogs", PackageOpen, "/sales/catalogs"),
         _route("Productions", Construction, `/sales/productions${prodQuery}`),
-        _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
+        // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]
     );
   const CommunitySettings: Route[] = [];
