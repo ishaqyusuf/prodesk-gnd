@@ -14,11 +14,12 @@ export async function creditTransaction(walletId, amount, description?) {
       amount,
       description,
       authorId: await userId(),
-      wallet: {
-        connect: {
-          id: walletId,
-        },
-      },
+      walletId,
+      //   wallet: {
+      //     connect: {
+      //       id: walletId,
+      //     },
+      //   },
     },
   });
   await prisma.$queryRaw`UPDATE CustomerWallet SET balance=balance+${amount} WHERE id=${walletId}`;
@@ -33,11 +34,12 @@ export async function debitTransaction(walletId, amount, description?) {
       amount,
       description,
       authorId: await userId(),
-      wallet: {
-        connect: {
-          id: walletId,
-        },
-      },
+      walletId,
+      //   wallet: {
+      //     connect: {
+      //       id: walletId,
+      //     },
+      //   },
     },
   });
 }

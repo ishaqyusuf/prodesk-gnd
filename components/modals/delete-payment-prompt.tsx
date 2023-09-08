@@ -80,7 +80,7 @@ export default function DeletePaymentPrompt() {
           <RadioGroup
             className="my-2"
             defaultValue={action}
-            onValueChange={(v) => setAction(v)}
+            onValueChange={(v) => setAction(v as any)}
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="yes" id="option-one" />
