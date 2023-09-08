@@ -133,7 +133,7 @@ export async function upgradeInstallCostToKeyValue() {
       meta: {
         ...s.meta,
         list,
-      },
+      } as any,
     },
   });
   await Promise.all(
