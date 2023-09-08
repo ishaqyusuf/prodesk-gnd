@@ -76,6 +76,15 @@ import { user } from "../utils";
     const statusIsArray = Array.isArray(status);
     if(status == 'Unassigned')
       where.prodId = null;
+    else if(status == 'Late')
+      {
+        where.prodStatus = {
+          notIn: ['Completed']
+        }
+        where.prodDueDate = {
+          lt: dayjs().subtract(1).toISOString()
+        }
+      }
     else
     where.prodStatus = {
       equals: statusIsArray ? undefined : status,

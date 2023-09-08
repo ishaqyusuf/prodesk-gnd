@@ -140,6 +140,7 @@ export type SalesStatus =
   | "Completed"
   | "No Status"
   | "Unassigned"
+  | "Late"
   | undefined;
 export interface SalesQueryParams extends BaseQuery {
   _q?;

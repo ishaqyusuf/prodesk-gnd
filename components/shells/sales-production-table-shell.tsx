@@ -114,6 +114,7 @@ export default function SalesProductionTableShell<T>({
             { label: "Started", value: "Started" },
             { label: "Queued", value: "Queued" },
             { label: "Completed", value: "Completed" },
+            { label: "Late", value: "Late" },
           ],
         },
       ]}

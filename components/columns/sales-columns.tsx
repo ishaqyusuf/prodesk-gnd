@@ -28,6 +28,8 @@ import { Progressor, getProgress } from "@/lib/status";
 import ProgressStatus from "../progress-status";
 import LinkableNode from "../link-node";
 import { ICustomer } from "@/types/customers";
+import dayjs from "dayjs";
+import StatusBadge from "../status-badge";
 
 export const OrderPriorityFlagCell = (
   order: ISalesOrder,
@@ -202,14 +204,32 @@ export function ProdOrderCell(
 
 export function ProdStatusCell({ order }: { order: ISalesOrder }) {
   const [progress, setProgress] = useState<Progressor>({} as any);
+  const [isLate, setIsLate] = useState<boolean>(false);
   useEffect(() => {
     setProgress(getProgress(order.builtQty, order.prodQty));
+    setIsLate(
+      order.prodDueDate &&
+        dayjs(order.prodDueDate).diff(dayjs(), "days") < 0 &&
+        order.prodStatus != "Completed"
+        ? true
+        : false
+    );
   }, [order]);
+  if (progress.score > 0)
+    return (
+      <ProgressStatus
+        score={order.builtQty}
+        total={order.prodQty}
+        status={isLate ? "Late" : order.prodStatus}
+      />
+    );
   return (
-    <ProgressStatus
-      score={order.builtQty}
-      total={order.prodQty}
-      status={order.prodStatus}
+    <StatusBadge
+      status={
+        isLate
+          ? "Late"
+          : order.prodStatus || (order.prodId ? "Queued" : "Unknown")
+      }
     />
   );
 }
