@@ -114,7 +114,13 @@ export async function getOrderAction(orderId,isProd = false) {
       // },
     },
     include: {
-      customer: true,
+      customer: {
+include: {
+  wallet:true
+}
+        // wallet: true
+      },
+      
       items: {
         // orderBy: {
         //   swing: "desc",

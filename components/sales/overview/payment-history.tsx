@@ -65,12 +65,13 @@ export default function PaymentHistory() {
                   <TableCell className="p-1" align="right">
                     <DeleteRowAction
                       row={item}
+                      noRefresh
+                      noToast
                       action={async (id) => {
-                        await deleteSalesPayment(
-                          item.id,
-                          order.id,
-                          (order.amountDue || 0) + item.amount
-                        );
+                        openModal("deletePaymentPrompt", {
+                          ...item,
+                          order: order,
+                        });
                       }}
                     />
                   </TableCell>
