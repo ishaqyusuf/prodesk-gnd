@@ -142,8 +142,6 @@ export default function SalesProductionTableShell<T>({
       ]}
       hideHeader={simple}
       hideFooter={simple}
-      newRowLink={`/sales/order/new/form`}
-      //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );
 }

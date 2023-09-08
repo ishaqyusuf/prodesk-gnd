@@ -111,7 +111,6 @@ export default function SalesPaymentTableShell({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      SelectionAction={SalesSelectionAction}
       filterableColumns={[SalesCustomerFilter]}
       searchableColumns={[
         {
@@ -125,8 +124,6 @@ export default function SalesPaymentTableShell({
           title: "Date",
         },
       ]}
-      newRowLink={`/sales/estimate/new/form`}
-      //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );
 }

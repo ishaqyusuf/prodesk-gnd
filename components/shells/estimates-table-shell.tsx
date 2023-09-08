@@ -80,8 +80,6 @@ export default function EstimatesTableShell<T>({
           title: "Date",
         },
       ]}
-      newRowLink={`/sales/estimate/new/form`}
-      //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );
 }

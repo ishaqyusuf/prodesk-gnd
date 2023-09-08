@@ -132,8 +132,6 @@ export default function OrdersTableShell<T>({
           title: "Date",
         },
       ]}
-      newRowLink={`/sales/order/new/form`}
-      //  deleteRowsAction={() => void deleteSelectedRows()}
     />
   );
 }

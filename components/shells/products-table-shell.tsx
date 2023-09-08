@@ -121,7 +121,6 @@ export default function ProductsTableShell({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      SelectionAction={SalesSelectionAction}
       filterableColumns={[
         ({ table }) => (
           <DynamicFilter

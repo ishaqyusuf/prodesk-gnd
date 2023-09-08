@@ -208,7 +208,6 @@ export default function HomesTableShell<T>({
         columns={columns}
         pageInfo={pageInfo}
         data={data}
-        SelectionAction={HomesSelectionAction}
         filterableColumns={[
           BuilderFilter,
           ProjectsFilter,
