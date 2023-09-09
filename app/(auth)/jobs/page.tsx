@@ -24,7 +24,13 @@ export default async function EmployeesPage({ searchParams }) {
         <BreadLink isFirst title="Hrm" />
         <BreadLink isLast title="Jobs" />
       </Breadcrumbs>
-      <PageHeader title="Jobs" newDialog="submitJob" />
+      <PageHeader
+        title="Jobs"
+        newDialog="submitJob"
+        modalData={{
+          defaultTab: "user",
+        }}
+      />
       <JobTableShell adminMode {...response} />
       <JobOverviewSheet />
       <EditJobModal />

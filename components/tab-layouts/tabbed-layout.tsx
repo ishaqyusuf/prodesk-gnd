@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 import { ISidebar, nav } from "@/lib/navs";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
 
 export default function TabbedLayout({
   children,
@@ -27,29 +29,45 @@ export default function TabbedLayout({
   const [tab, setTab] = useState<any>(path);
   // const [tabs, setTabs] = useState<{ label; value }[]>([]);
   const route = useRouter();
+  const TabElement = document?.getElementById("tab");
+  if (!TabElement) return <></>;
+
   return (
     <div className="space-y-4 ">
-      <div className="hidden space-x-2">
-        {_nav?.[tabKey].map((c, i) => (
-          <Button
-            size="sm"
-            className="p-2 h-8 px-4"
-            variant={c.path == tab ? "default" : "link"}
-            key={i}
-            asChild
-          >
-            <Link href={c.path}>{c.title}</Link>
-          </Button>
-        ))}
-      </div>
-      <Tabs
+      {createPortal(
+        <div className="flex -mt-2">
+          {_nav?.[tabKey].map((c, i) => (
+            <div className="flex flex-col" key={i}>
+              <Button
+                size="sm"
+                className={cn(
+                  "p-1 h-8 px-4",
+                  c.path != tab && "text-muted-foreground"
+                )}
+                variant={c.path == tab ? "ghost" : "ghost"}
+                asChild
+              >
+                <Link href={c.path}>{c.title}</Link>
+              </Button>
+              <div
+                className={cn(
+                  "h-0.5 w-full mt-1",
+                  c.path == tab && "bg-primary"
+                )}
+              ></div>
+            </div>
+          ))}
+        </div>,
+        TabElement
+      )}
+      {/* <Tabs
         defaultValue={tab}
         onChange={(v) => {
           console.log(v);
         }}
         className=" px-8"
       >
-        <TabsList>
+        <TabsList className="bg-transparent">
           {_nav?.[tabKey].map((c, i) => (
             <TabsTrigger
               onClick={() => {
@@ -62,7 +80,7 @@ export default function TabbedLayout({
             </TabsTrigger>
           ))}
         </TabsList>
-      </Tabs>
+      </Tabs> */}
       <div className="px-8">{children}</div>
     </div>
   );

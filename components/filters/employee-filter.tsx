@@ -1,6 +1,9 @@
 "use client";
 
-import { staticEmployees } from "@/app/_actions/hrm/get-employess";
+import {
+  staticEmployees,
+  staticLoadTechEmployees,
+} from "@/app/_actions/hrm/get-employess";
 import { DynamicFilter } from "../data-table/data-table-dynamic-filter";
 
 export function PayableEmployees({ table }) {
@@ -27,11 +30,7 @@ export function TechEmployeeFilter({ table }) {
       valueKey="id"
       title="Tech"
       columnId="_userId"
-      loader={async () => {
-        return await staticEmployees({
-          role: "Punchout",
-        });
-      }}
+      loader={staticLoadTechEmployees}
     />
   );
 }

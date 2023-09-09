@@ -74,3 +74,8 @@ export async function staticEmployees(
 
   return employees;
 }
+export async function staticLoadTechEmployees() {
+  return await staticEmployees({
+    role: "Punchout",
+  });
+}

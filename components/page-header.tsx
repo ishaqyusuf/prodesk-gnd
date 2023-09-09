@@ -16,6 +16,7 @@ interface Props {
   subtitle?;
   newLink?;
   Action?;
+  modalData?;
   buttonText?;
   newDialog?: ModalName;
   ButtonIcon?;
@@ -30,6 +31,7 @@ export default function PageHeader({
   newDialog,
   buttonText = "New",
   ButtonIcon = "add",
+  modalData,
 }: Props) {
   const Node = newLink ? Link : Fragment;
   const BtnIcon = Icons[ButtonIcon];

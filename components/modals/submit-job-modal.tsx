@@ -45,15 +45,22 @@ import { getSettingAction } from "@/app/_actions/settings";
 import { InstallCostSettings } from "@/types/settings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
-import { createJobAction } from "@/app/_actions/hrm-jobs/create-job";
+import {
+  createJobAction,
+  updateJobAction,
+} from "@/app/_actions/hrm-jobs/create-job";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { sum } from "@/lib/utils";
+import { staticLoadTechEmployees } from "@/app/_actions/hrm/get-employess";
 
+interface ModalInterface {
+  data: IJobs | undefined;
+  defaultTab?;
+}
 export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
@@ -62,7 +69,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
       meta: {},
     },
   });
-  const [page, setPage] = useState(1);
 
   async function submit(data) {
     startTransition(async () => {
@@ -77,7 +83,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
         );
 
         if (!job.id) await createJobAction(job as any);
-
+        else await updateJobAction(job as any);
         closeModal();
         toast.message("Success!");
         route.refresh();
@@ -90,18 +96,17 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   }
   const projects = useAppSelector((state) => state?.slicers?.staticProjects);
 
-  async function init(data) {
-    setPage(1);
+  async function init(data: ModalInterface) {
+    console.log(data);
     loadStaticList("staticProjects", projects, staticProjectsAction);
-
     form.reset(
-      !data
+      !data?.data
         ? {}
         : {
-            ...data,
+            ...data.data,
           }
     );
-    setTab("project");
+    setTab(data?.defaultTab || "project");
     setAddCost(null as any);
   }
   async function selectProject(project) {
@@ -117,7 +122,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   }
   async function loadUnits(projectId) {
     const ls = await getUnitJobs(projectId);
-
     form.setValue("meta.addon", ls.addon || 0);
     setUnits(ls.homeList);
     // form.setValue('homeData',ls.homeList)
@@ -126,6 +130,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     form.setValue("homeData", unit);
     form.setValue("unitId", unit.id);
     setUnitCosting(unit.costing.costings);
+    console.log(unit.costing.costings);
     const costData = {};
     Object.entries(unit.costing.costings).map(([k, v]) => {
       costData[k] = {
@@ -145,20 +150,17 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const [unitCosting, setUnitCosting] = useState<
     InstallCostingTemplate<number | string>
   >({} as any);
-
+  const techEmployees = useAppSelector((s) => s.slicers.staticTechEmployees);
   useEffect(() => {
     getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
       setCostSetting(res);
-      // // console.log(res)
-      // const puc: any = {};
-      // res?.meta?.list?.map((ls) => {
-      //   puc[ls.title] = {
-      //     cost: ls.cost || 0,
-      //   };
-      // });
-      // // console.log(puc);
-      // setCostChart(puc);
     });
+
+    loadStaticList(
+      "staticTechEmployees",
+      techEmployees,
+      staticLoadTechEmployees
+    );
   }, []);
 
   const [tab, setTab] = useState("project");
@@ -185,8 +187,9 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   function resetFields(k) {
     k.map((v) => form.setValue(v, null));
   }
+
   return (
-    <BaseModal<IJobs | undefined>
+    <BaseModal<ModalInterface>
       className="sm:max-w-[550px]"
       onOpen={(data) => {
         init(data);
@@ -227,6 +230,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
           )}
           {
             {
+              user: "Select Employee",
               project: "Select Project",
               unit: "Select Unit",
               tasks: "Task Information",
@@ -240,11 +244,30 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
           <ScrollArea className="h-[350px] pr-4">
             <Tabs defaultValue={tab} className="">
               <TabsList className="hidden">
+                <TabsTrigger value="user" />
                 <TabsTrigger value="project" />
                 <TabsTrigger value="unit" />
                 <TabsTrigger value="tasks" />
                 <TabsTrigger value="general" />
               </TabsList>
+              <TabsContent value="user">
+                <div className="flex flex-col divide-y">
+                  {techEmployees?.map((user) => (
+                    <Button
+                      onClick={() => {
+                        form.setValue("userId", user.id);
+
+                        _setTab("project");
+                      }}
+                      variant={"ghost"}
+                      key={user.id}
+                      className=""
+                    >
+                      <p className="flex w-full">{user.name}</p>
+                    </Button>
+                  ))}
+                </div>
+              </TabsContent>
               <TabsContent value="project">
                 <div className="flex flex-col divide-y">
                   <Button
@@ -294,9 +317,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                       <TableRow>
                         <TableHead className="px-1">Task</TableHead>
                         <TableHead className="px-1">Qty</TableHead>
-                        {/* <TableHead className="px-1 text-right" align="right">
-                          Total
-                        </TableHead> */}
                       </TableRow>
                     </TableHeader>
                     <TableBody>

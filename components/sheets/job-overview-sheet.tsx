@@ -28,6 +28,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { getSettingAction } from "@/app/_actions/settings";
 import { InstallCostLine, InstallCostSettings } from "@/types/settings";
+import { Button } from "../ui/button";
 
 export default function JobOverviewSheet() {
   const route = useRouter();
@@ -43,8 +44,28 @@ export default function JobOverviewSheet() {
       }}
       onClose={() => {}}
       modalName="jobOverview"
-      Title={({ data }) => <div className="">{data?.title}</div>}
-      Description={({ data }) => <div>{data?.subtitle}</div>}
+      Title={({ data }) => (
+        <div>
+          <div className="">{data?.title}</div>
+        </div>
+      )}
+      Description={({ data }) => (
+        <div className="flex justify-between">
+          <div>{data?.subtitle}</div>
+          <div className="relative">
+            <div className="">
+              <Button
+                onClick={() => {}}
+                variant={"default"}
+                className="px-2 h-6"
+                size={"sm"}
+              >
+                <span>Edit</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       Content={({ data }) => (
         <div>
           <ScrollArea className="h-screen ">

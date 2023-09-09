@@ -143,7 +143,10 @@ export default function JobTableShell<T>({
                 <RowActionMoreMenu>
                   <RowActionMenuItem
                     onClick={() => {
-                      openModal("editJob", row.original);
+                      openModal("submitJob", {
+                        data: row.original,
+                        defaultTab: "tasks",
+                      });
                     }}
                     Icon={Icons.edit}
                   >

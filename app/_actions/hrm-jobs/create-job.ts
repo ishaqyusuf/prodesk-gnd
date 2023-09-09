@@ -19,3 +19,12 @@ export async function createJobAction(data: Jobs) {
   });
   _notifyAdminJobSubmitted(job as any);
 }
+export async function updateJobAction({ id, ...jdata }: Jobs) {
+  const job = await prisma.jobs.update({
+    where: { id },
+    data: {
+      ...jdata,
+      ...transformData({}, true),
+    } as any,
+  });
+}
