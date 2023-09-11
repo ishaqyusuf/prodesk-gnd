@@ -163,6 +163,17 @@ function Address({
   title;
 }) {
   console.log("title", address);
+  const lines = [
+    address?.name,
+    address?.phoneNo,
+    address?.email,
+    address?.address1,
+    [address?.city, address?.state, address?.meta?.zip_code]
+      ?.filter(Boolean)
+      ?.join(" "),
+  ]?.filter(Boolean);
+  console.log("ADDRESS LINES", lines.length);
+
   return (
     <td colSpan={10}>
       <div className="my-4  mb-4 flex flex-col ">
@@ -172,24 +183,17 @@ function Address({
           </span>
         </div>
         <div className="flex flex-col p-2 border border-gray-400 ">
-          {[
-            address?.name,
-            address?.phoneNo,
-            address?.email,
-            address?.address1,
-            [address?.city, address?.state, address?.meta?.zip_code]
-              ?.filter(Boolean)
-              ?.join(" "),
-          ]
-            ?.filter(Boolean)
-            ?.map((f, _) => (
+          {lines?.map((f, _) => {
+            console.log(f);
+            return (
               <p
                 key={_}
                 className="line-clamp-2 text-sm font-medium text-primary"
               >
                 {f}
               </p>
-            ))}
+            );
+          })}
         </div>
       </div>
       {/* lines: [name, phone_no, email, address_1, [city, state, zip_code].filter(Boolean).join(' ')].filter(Boolean), */}

@@ -24,7 +24,7 @@ import { useAppSelector } from "@/store";
 
 interface Props {
   data: IHomeTemplate;
-  title;
+  title?;
 }
 export interface ModelFormProps {
   form: UseFormReturn<DesignTemplateForm, any, undefined>;
