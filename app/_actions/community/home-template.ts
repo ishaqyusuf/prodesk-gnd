@@ -130,17 +130,19 @@ export async function getCommunityTemplate(slug) {
   if (!homeTemplate) throw new Error("Home template not found");
   return homeTemplate;
 }
-export async function saveHomeTemplateDesign(id, meta) {
+export async function saveHomeTemplateDesign(slug, meta) {
   await prisma.homeTemplates.update({
-    where: { id },
+    where: { slug },
     data: {
       meta: removeEmptyValues(meta) as any,
     },
   });
 }
-export async function saveCommunityTemplateDesign(id, meta) {
-  await prisma.homeTemplates.update({
-    where: { id },
+export async function saveCommunityTemplateDesign(slug, meta) {
+  await prisma.communityModels.update({
+    where: {
+      slug,
+    },
     data: {
       meta: meta as any,
     },

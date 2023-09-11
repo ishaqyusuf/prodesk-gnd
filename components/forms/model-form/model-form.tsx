@@ -48,7 +48,7 @@ export default function ModelForm({ data }: Props) {
   function save() {
     startTransition(async () => {
       await (community ? saveCommunityTemplateDesign : saveHomeTemplateDesign)(
-        data.id,
+        data.slug,
         {
           ...((data?.meta || {}) as any),
           design: form.getValues(),
