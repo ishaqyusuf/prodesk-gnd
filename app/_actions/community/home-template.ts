@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { removeEmptyValues } from "@/lib/utils";
+import { removeEmptyValues, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
@@ -134,6 +134,7 @@ export async function saveHomeTemplateDesign(slug, meta) {
   await prisma.homeTemplates.update({
     where: { slug },
     data: {
+      ...transformData({}, true),
       meta: removeEmptyValues(meta) as any,
     },
   });
@@ -144,6 +145,7 @@ export async function saveCommunityTemplateDesign(slug, meta) {
       slug,
     },
     data: {
+      ...transformData({}, true),
       meta: meta as any,
     },
   });

@@ -38,6 +38,10 @@ import { deepCopy } from "@/lib/deep-copy";
 import { DeleteRowAction } from "../data-table/data-table-row-actions";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
+import { Icons } from "../icons";
+import { getUnitTemplateLink } from "@/app/_actions/community/get-unit-template";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function HomesTableShell<T>({
   data,
@@ -47,7 +51,7 @@ export default function HomesTableShell<T>({
   projectView: Boolean;
 }) {
   const [isPending, startTransition] = useTransition();
-
+  const route = useRouter();
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<ExtendedHome, unknown>[]>(
     () => [
@@ -169,15 +173,27 @@ export default function HomesTableShell<T>({
                 <span className="sr-only">Open Menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[185px]">
-              <Link
+            <DropdownMenuContent
+              onClick={async (e) => {
+                const edit = await getUnitTemplateLink(
+                  row.original.projectId,
+                  row.original.homeTemplateId,
+                  row.original.modelName
+                );
+                if (edit) route.push(edit);
+                else toast.error("Model Template Not Found");
+              }}
+              align="end"
+              className="w-[185px]"
+            >
+              {/* <Link
                 href={`/community/unit-model/${row.original.homeTemplateId}`}
-              >
-                <DropdownMenuItem>
-                  <View className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                  Edit Model
-                </DropdownMenuItem>
-              </Link>
+              > */}
+              <DropdownMenuItem>
+                <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Edit Model
+              </DropdownMenuItem>
+              {/* </Link> */}
               <DropdownMenuItem
                 onClick={() => {
                   dispatchSlice("printHomes", {
