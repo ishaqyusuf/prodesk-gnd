@@ -20,33 +20,42 @@ export function OrderPrintInvoiceLines({ order }: Props) {
   >([]);
   useEffect(() => {
     let _index = 0;
+    console.log(order);
     const lineIndex = Math.max(
       ...(order?.items
-        ?.map((item) => item?.meta?.line_index || item?.meta?.uid)
+        ?.map((item) => {
+          const li = item?.meta?.line_index;
+          const ui = item?.meta?.uid;
+          return ui > -1 ? ui : li;
+        })
         .filter((i) => i > -1) as any)
     );
     const totalLines = lineIndex ? lineIndex + 1 : order?.items?.length;
-    setInvoiceLines(
-      Array(totalLines)
-        .fill(null)
-        .map((_, index) => {
-          const item = order?.items?.find((i) => i.meta?.uid == index);
-          // const { qty = 0, total = 0 } = item;
-          let qty = item?.qty || 0;
-          let total = item?.total || 0;
-          let sn: number | null = null;
-          if (qty > 0 || total > 0) {
-            _index++;
-            sn = _index;
-          }
-          return {
-            sn,
-            id: _useId("inv"),
-            line: item,
-          };
-        })
-    );
-    console.log(invoiceLines);
+    const ilines = Array(totalLines)
+      .fill(null)
+      .map((_, index) => {
+        const item = order?.items?.find((iitem) => {
+          const li = iitem?.meta?.line_index;
+          const ui = iitem?.meta?.uid;
+          if (li > -1) return index == li;
+          return ui == index;
+        });
+        // const { qty = 0, total = 0 } = item;
+        let qty = item?.qty || 0;
+        let total = item?.total || 0;
+        let sn: number | null = null;
+        if (qty > 0 || total > 0) {
+          _index++;
+          sn = _index;
+        }
+        return {
+          sn,
+          id: _useId("inv"),
+          line: item,
+        };
+      });
+    setInvoiceLines(ilines);
+    console.log(ilines);
   }, []);
   // invoiceLines.push({
   //   id: "filler",
