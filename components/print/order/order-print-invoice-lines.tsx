@@ -11,6 +11,7 @@ interface Props {
 export function OrderPrintInvoiceLines({ order }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
   const isClient = !["production", "packing list"].includes(po?.mode);
+  const showInvoice = ["order", "quote", "invoice"].includes(po?.mode);
   const packingList = po?.mode == "packing list";
 
   const lineIndex = Math.max(
@@ -56,7 +57,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
           </th>
           <th colSpan={1}>Qty</th>
           {packingList && <th colSpan={1}>Packed Qty</th>}
-          {isClient && (
+          {showInvoice && (
             <>
               <th colSpan={2} align="right">
                 Rate
@@ -91,7 +92,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
             <td colSpan={1} align="center" valign="middle">
               <p className="font-bold">{line?.qty}</p>
             </td>
-            {isClient && (
+            {showInvoice && (
               <>
                 <td colSpan={2} valign="middle" align="right">
                   {line?.rate && (

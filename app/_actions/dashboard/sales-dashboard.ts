@@ -23,6 +23,9 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
   let bar = composeBar(salesByMonthAndYear);
 
   const sales = await prisma.salesOrders.findMany({
+    where: {
+      type: "order",
+    },
     select: {
       amountDue: true,
       prodQty: true,
@@ -31,6 +34,7 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
     },
   });
   const payments = await prisma.salesPayments.findMany({
+    where: {},
     select: {
       amount: true,
     },
