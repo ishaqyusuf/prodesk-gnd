@@ -24,6 +24,7 @@ import { useAppSelector } from "@/store";
 
 interface Props {
   data: IHomeTemplate;
+  title;
 }
 export interface ModelFormProps {
   form: UseFormReturn<DesignTemplateForm, any, undefined>;
@@ -33,7 +34,7 @@ export interface DesignTemplateForm extends HomeTemplateDesign {
     print;
   };
 }
-export default function ModelForm({ data }: Props) {
+export default function ModelForm({ data, title = "Edit Model" }: Props) {
   // console.log(data);
   const community = useAppSelector(
     (s) => s.slicers.dataPage?.data?.community
@@ -60,11 +61,11 @@ export default function ModelForm({ data }: Props) {
   return (
     <div id="unitModelForm">
       <PageHeader
-        title={"Edit Model"}
+        title={title}
         subtitle={``}
         Action={() => (
           <>
-            <Btn isLoading={isSaving} onClick={save}>
+            <Btn size="sm" isLoading={isSaving} onClick={save}>
               Save
             </Btn>
           </>

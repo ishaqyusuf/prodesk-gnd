@@ -32,7 +32,7 @@ export default async function CommunityModelTemplatePage({ params }) {
         <BreadLink title={response.modelName} isLast />
       </Breadcrumbs>
 
-      <ModelForm data={response as any} />
+      <ModelForm title="Edit Community Model" data={response as any} />
     </DataPageShell>
   );
 }
