@@ -46,7 +46,7 @@ export default function PageHeader({
           {(newLink || newDialog) && (
             <Button
               onClick={() => {
-                newDialog && openModal(newDialog);
+                newDialog && openModal(newDialog, modalData);
               }}
               size="sm"
               className="h-8"

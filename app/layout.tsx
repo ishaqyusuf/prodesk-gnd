@@ -15,7 +15,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
-import Refresh from "@/components/refresh";
+
 export const metadata: Metadata = {
   title: "GND-PRODESK",
   description: "home page",
@@ -33,11 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="print:hidden">
-          <AppProvider>
-            {children}
-
-            <Refresh />
-          </AppProvider>
+          <AppProvider>{children}</AppProvider>
 
           <div
             className={cn(

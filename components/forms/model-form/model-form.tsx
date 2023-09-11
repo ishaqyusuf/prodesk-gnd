@@ -34,6 +34,7 @@ export interface DesignTemplateForm extends HomeTemplateDesign {
   };
 }
 export default function ModelForm({ data }: Props) {
+  // console.log(data);
   const community = useAppSelector(
     (s) => s.slicers.dataPage?.data?.community
   ) as any;

@@ -108,6 +108,8 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     );
     setTab(data?.defaultTab || "project");
     setAddCost(null as any);
+    if (data?.data && data?.defaultTab == "tasks") {
+    }
   }
   async function selectProject(project) {
     const projectId = project?.id;

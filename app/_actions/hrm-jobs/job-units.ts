@@ -4,6 +4,14 @@ import { prisma } from "@/db";
 import { IHomeTemplate, IProject } from "@/types/community";
 import { HomeJobList } from "@/types/hrm";
 
+export async function getJobCostData(id) {
+  const home = await prisma.homes.findUnique({
+    where: { id },
+    include: {
+      homeTemplate: true,
+    },
+  });
+}
 export async function getUnitJobs(projectId) {
   const project = await prisma.projects.findFirst({
     where: {

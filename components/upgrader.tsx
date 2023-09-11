@@ -19,6 +19,7 @@ import {
   linkHomeTemplateCosts,
   upgradeCommunity,
   upgradeCostCharts,
+  upgradeHomeTemplateDesign,
   upgradeHomeTemplates,
   upgradeInstallCostToKeyValue,
   upgradeInstallPriceChart,
@@ -56,6 +57,7 @@ export default function Upgrader() {
       children: [
         { label: "Community", action: upgradeCommunity },
         { label: "Home Template", action: upgradeHomeTemplates },
+        { label: "Home Template Design", action: upgradeHomeTemplateDesign },
         // { label: "Install Price Chart", action: upgradeInstallPriceChart },
         { label: "Cost Chart", action: upgradeCostCharts },
         { label: "Link Home Total Cost", action: linkHomeTemplateCosts },

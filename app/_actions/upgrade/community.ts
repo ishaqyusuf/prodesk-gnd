@@ -12,6 +12,7 @@ import { InstallCostMeta, InstallCostSettings } from "@/types/settings";
 import { promise } from "zod";
 import { getSettingAction } from "../settings";
 import { IJobMeta } from "@/types/hrm";
+import homeDesign from "@/lib/data/home-design";
 export async function upgradeCommunity() {
   const templates = await prisma.communityModels.findMany({});
   await Promise.all(
@@ -45,9 +46,58 @@ export async function upgradeCommunity() {
     })
   );
 }
+export async function upgradeHomeTemplateDesign() {
+  let fields: any = {};
+  const templates = await prisma.homeTemplates.findMany({});
+  const designs = homeDesign;
+  const deb: any = [];
+  const sql: string[] = [];
+  await Promise.all(
+    templates?.map(async (v, i) => {
+      const design = designs[v.modelName as any];
+      if (v.modelName == "4296 LH")
+        deb.push({
+          v,
+          design: design,
+          leng: Object.keys(designs).length,
+        });
+      // if (i > 2) return;
+      if (!design || Array.isArray(design)) return;
+      // console.log("ARR");
+      // deb.push();
+      let meta: HomeTemplateMeta = (v.meta || {}) as any;
+      let { ...rest } = meta as any;
+
+      const dotObject = dotArray(design);
+      Object.keys(dotObject).map((k) => (fields[k] = true));
+      let _design = _transformDesign(dotObject);
+      sql.push(
+        `UPDATE HomeTemplates SET meta = JSON_SET(meta,'$.design','${JSON.stringify(
+          _design
+        )}') WHERE modelName='${v.modelName}';`
+      );
+      return;
+      // meta.design = _design;
+      let newMeta = {
+        design: _design,
+        ...rest,
+      };
+      await prisma.homeTemplates.update({
+        where: { id: v.id },
+        data: {
+          meta: removeEmptyValues(newMeta) as any,
+        },
+      });
+    })
+  );
+  return sql.join("\n");
+  return deb;
+  // return _transformDesign(fields);
+}
 export async function upgradeHomeTemplates() {
   let fields: any = {};
   const templates = await prisma.homeTemplates.findMany({});
+  const sql: string[] = [];
   await Promise.all(
     templates?.map(async (v) => {
       let meta: HomeTemplateMeta = (v.meta || {}) as any;
