@@ -60,12 +60,14 @@ export default function OrderPrinter({}: Props) {
     );
     await timeout(900);
     adjustWatermark(sales?.map((s) => s.orderId));
-    console.log(sales);
+
     // await timeout(800);
     if (!printer.pdf) window.print();
     else {
       //
+      await timeout(5000);
       const mainDoc = document.getElementById("orderPrintSection");
+      console.log(mainDoc);
       if (mainDoc) {
         // const doc = document.getElementById("orderPrintSection")?.cloneNode();
         const doc = document.createElement("div");

@@ -4,6 +4,7 @@ import Money from "@/components/money";
 import { _useId } from "@/hooks/use-id";
 import { useAppSelector } from "@/store";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
+import { useEffect, useState } from "react";
 
 interface Props {
   order: ISalesOrder;
@@ -14,33 +15,39 @@ export function OrderPrintInvoiceLines({ order }: Props) {
   const showInvoice = ["order", "quote", "invoice"].includes(po?.mode);
   const packingList = po?.mode == "packing list";
 
-  const lineIndex = Math.max(
-    ...(order?.items
-      ?.map((item) => item?.meta?.line_index || item?.meta?.uid)
-      .filter((i) => i > -1) as any)
-  );
-  const totalLines = lineIndex ? lineIndex + 1 : order?.items?.length;
-  let _index = 0;
-  const invoiceLines: { sn?; id; line?: ISalesOrderItem | undefined }[] = Array(
-    totalLines
-  )
-    .fill(null)
-    .map((_, index) => {
-      const item = order?.items?.find((i) => i.meta?.uid == index);
-      // const { qty = 0, total = 0 } = item;
-      let qty = item?.qty || 0;
-      let total = item?.total || 0;
-      let sn: number | null = null;
-      if (qty > 0 || total > 0) {
-        _index++;
-        sn = _index;
-      }
-      return {
-        sn,
-        id: _useId("inv"),
-        line: item,
-      };
-    });
+  const [invoiceLines, setInvoiceLines] = useState<
+    { sn?; id; line?: ISalesOrderItem | undefined }[]
+  >([]);
+  useEffect(() => {
+    let _index = 0;
+    const lineIndex = Math.max(
+      ...(order?.items
+        ?.map((item) => item?.meta?.line_index || item?.meta?.uid)
+        .filter((i) => i > -1) as any)
+    );
+    const totalLines = lineIndex ? lineIndex + 1 : order?.items?.length;
+    setInvoiceLines(
+      Array(totalLines)
+        .fill(null)
+        .map((_, index) => {
+          const item = order?.items?.find((i) => i.meta?.uid == index);
+          // const { qty = 0, total = 0 } = item;
+          let qty = item?.qty || 0;
+          let total = item?.total || 0;
+          let sn: number | null = null;
+          if (qty > 0 || total > 0) {
+            _index++;
+            sn = _index;
+          }
+          return {
+            sn,
+            id: _useId("inv"),
+            line: item,
+          };
+        })
+    );
+    console.log(invoiceLines);
+  }, []);
   // invoiceLines.push({
   //   id: "filler",
   // });

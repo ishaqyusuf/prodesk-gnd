@@ -3,7 +3,8 @@ import { env } from "@/env.mjs";
 import puppeteer from "puppeteer";
 export async function printSalesPdf() {
   const browser = await puppeteer.launch({});
-  const url = env.NODE_ENV !== "production" ? `` : ``;
+  const url =
+    env.NODE_ENV !== "production" ? `http://localhost:3000/print-sales` : ``;
   const page = await browser.newPage();
   await page.goto(url);
   const pdf = await page.pdf({
@@ -12,5 +13,6 @@ export async function printSalesPdf() {
     printBackground: true,
   });
   await browser.close();
-  return pdf;
+  const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
+  return pdfDataUri;
 }

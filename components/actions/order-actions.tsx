@@ -58,6 +58,7 @@ import {
   RowActionMenuItem,
 } from "../data-table/data-table-row-actions";
 import AuthGuard from "../auth-guard";
+import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 
 export interface IOrderRowProps {
   row: ISalesOrder;
@@ -143,6 +144,7 @@ export function OrderRowAction(props: IOrderRowProps) {
           <PrintOrderMenuAction mockup estimate={estimate} row={row} />
           {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
           {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
+          {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
 
           <DeleteRowAction menu row={row} action={deleteOrderAction} />
         </DropdownMenuContent>
@@ -159,7 +161,7 @@ export const PrintOrderMenuAction = typedMemo(
       mockup?: Boolean;
     }
   ) => {
-    function _print(mode: IOrderPrintMode) {
+    async function _print(mode: IOrderPrintMode) {
       dispatchSlice("printOrders", {
         mode,
         pdf: props.pdf,

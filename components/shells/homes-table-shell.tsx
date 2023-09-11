@@ -173,23 +173,21 @@ export default function HomesTableShell<T>({
                 <span className="sr-only">Open Menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              onClick={async (e) => {
-                const edit = await getUnitTemplateLink(
-                  row.original.projectId,
-                  row.original.homeTemplateId,
-                  row.original.modelName
-                );
-                if (edit) route.push(edit);
-                else toast.error("Model Template Not Found");
-              }}
-              align="end"
-              className="w-[185px]"
-            >
+            <DropdownMenuContent align="end" className="w-[185px]">
               {/* <Link
                 href={`/community/unit-model/${row.original.homeTemplateId}`}
               > */}
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async (e) => {
+                  const edit = await getUnitTemplateLink(
+                    row.original.projectId,
+                    row.original.homeTemplateId,
+                    row.original.modelName
+                  );
+                  if (edit) route.push(edit);
+                  else toast.error("Model Template Not Found");
+                }}
+              >
                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Edit Model
               </DropdownMenuItem>
