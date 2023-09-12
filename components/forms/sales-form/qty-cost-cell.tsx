@@ -55,6 +55,7 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     form.setValue(`items.${rowIndex}.rate`, _rate);
     setRate(_rate);
     const total = toFixed(convertToNumber(qty * _rate, 0));
+    // if(form.getValue(``))
     form.setValue(`items.${rowIndex}.total`, +total);
     store.dispatch(updateFooterInfo({ rowIndex, total }));
   }, [

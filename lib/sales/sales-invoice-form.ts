@@ -15,6 +15,7 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
   if (!items) items = [];
   const _itemsByIndex: any = {};
   let rows = 20;
+  console.log(items);
   items.map((item) => {
     const li = [
       item.meta?.line_index,
@@ -51,7 +52,7 @@ export function generateItem(uid, baseItem: any = null) {
       line_index: null,
     },
   } as any;
-  if (_.id) _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
+  // if (_.id) _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
   return _;
 }
 export function moreInvoiceLines(fields: ISalesOrderItem[]) {
@@ -108,7 +109,11 @@ export function footerEstimate({
   Object.entries(footerInfo.rows).map(([k, row]) => {
     if (row.total > 0) {
       subTotal += +row.total;
-      if (!row.notTaxxed) taxxableSubTotal += +row.total;
+      if (!row.notTaxxed) {
+        taxxableSubTotal += +row.total;
+        const lineTax = +row.total * (taxPercentage / 100);
+        form.setValue(`items.${row.rowIndex}.tax`, +lineTax || 0);
+      }
     }
   });
 
