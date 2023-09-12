@@ -162,7 +162,6 @@ function Address({
   address: IAddressBook | undefined;
   title;
 }) {
-  console.log("title", address);
   const lines = [
     address?.name,
     address?.phoneNo,
@@ -172,7 +171,6 @@ function Address({
       ?.filter(Boolean)
       ?.join(" "),
   ]?.filter(Boolean);
-  console.log("ADDRESS LINES", lines.length);
 
   return (
     <td colSpan={10}>
@@ -182,14 +180,10 @@ function Address({
             {title}
           </span>
         </div>
-        <div className="flex flex-col p-2 border border-gray-400 ">
+        <div className="flex flex-col p-2 border border-gray-400">
           {lines?.map((f, _) => {
-            console.log(f);
             return (
-              <p
-                key={_}
-                className="line-clamp-2 text-sm font-medium text-primary"
-              >
+              <p key={_} className="sline-clamp-2 text-sm font-medium">
                 {f}
               </p>
             );

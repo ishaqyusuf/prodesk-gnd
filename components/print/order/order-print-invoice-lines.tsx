@@ -20,7 +20,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
   >([]);
   useEffect(() => {
     let _index = 0;
-    console.log(order);
+
     const lineIndex = Math.max(
       ...(order?.items
         ?.map((item) => {

@@ -19,6 +19,7 @@ import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
 import { jsPDF } from "jspdf";
+import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 interface Props {}
 export default function OrderPrinter({}: Props) {
   const printer = useAppSelector((state) => state.slicers.printOrders);
@@ -65,6 +66,11 @@ export default function OrderPrinter({}: Props) {
     if (!printer.pdf) window.print();
     else {
       //
+      // const doc = document.documentElement.outerHTML;
+      // const durl = await printSalesPdf(doc);
+      // console.log(doc);
+      // console.log(durl);
+      // return;
       await timeout(5000);
       const mainDoc = document.getElementById("orderPrintSection");
       console.log(mainDoc);
@@ -79,9 +85,10 @@ export default function OrderPrinter({}: Props) {
         const options = {
           // margin: 20
 
-          margin: [0, 10, 0, 10], //top, lef
+          margin: [10, 10, 10, 10], //top, lef
           // margin: [15, 0, 15, 0],
           filename, //: 'document.pdf',
+          pagebreak: { avoid: ["tr", "td"] },
           // jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
           image: { type: "jpeg", quality: 1 },
@@ -113,9 +120,7 @@ export default function OrderPrinter({}: Props) {
     <Link href="/">
       <Image
         alt=""
-        onLoadingComplete={(img) => {
-          console.log("LOGO READY");
-        }}
+        onLoadingComplete={(img) => {}}
         width={178}
         height={80}
         src={logo}
