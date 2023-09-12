@@ -310,7 +310,10 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
               <TabsContent value="unit">
                 <div className="flex flex-col divide-y">
                   <Button
-                    onClick={() => _setTab("general")}
+                    onClick={() => {
+                      form.setValue("meta.addon", null as any);
+                      _setTab("general");
+                    }}
                     variant={"ghost"}
                     className=""
                   >

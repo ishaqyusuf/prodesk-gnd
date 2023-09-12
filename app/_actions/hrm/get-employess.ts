@@ -11,6 +11,10 @@ export interface EmployeeQueryParamsProps extends BaseQuery {
   role?;
 }
 export async function getEmployees(query: EmployeeQueryParamsProps) {
+  if (!query.sort) {
+    query.sort = "name";
+    query.sort_order = "asc";
+  }
   const where = whereEmployee(query);
   const items = await prisma.users.findMany({
     where,
@@ -23,9 +27,6 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
       },
     },
     ...(await queryFilter(query)),
-    orderBy: {
-      name: "asc",
-    },
   });
   const pageInfo = await getPageInfo(query, where, prisma.users);
 

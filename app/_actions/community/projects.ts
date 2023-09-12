@@ -49,6 +49,7 @@ function whereProject(query: ProjectsQueryParams) {
     builderId: {
       equals: Number(query._builderId) || undefined,
     },
+    title: q,
   };
 
   return where;

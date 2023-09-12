@@ -106,27 +106,26 @@ export async function deleteHome(id) {
   });
 }
 export async function whereHome(query: HomeQueryParams, asInclude = false) {
-  const q = {
+  const q: any = {
     contains: query._q || undefined,
   };
+  // if (query._q) q.contains = query._q;
 
   const where: Prisma.HomesWhereInput = {
     builderId: {
       equals: Number(query._builderId) || undefined,
     },
-    OR: [
+    ...dateQuery(query),
+  };
+  if (q.contains)
+    where.OR = [
       {
         search: q,
       },
       {
         modelName: q,
       },
-    ],
-    ...dateQuery(query),
-    // tasks: {
-    //   every: {},
-    // },
-  };
+    ];
   if (!asInclude) {
     if (query._projectSlug) {
       where.project = {
