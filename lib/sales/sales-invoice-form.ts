@@ -51,7 +51,7 @@ export function generateItem(uid, baseItem: any = null) {
       line_index: null,
     },
   } as any;
-  _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
+  if (_.id) _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
   return _;
 }
 export function moreInvoiceLines(fields: ISalesOrderItem[]) {
