@@ -38,7 +38,7 @@ export function generateItem(uid, baseItem: any = null) {
   if (!baseItem) baseItem = { meta: {} };
   let price = baseItem?.rate || baseItem?.price;
 
-  const _ = {
+  const _: ISalesOrderItem = {
     ...baseItem,
     rate: null,
     price,
@@ -50,14 +50,8 @@ export function generateItem(uid, baseItem: any = null) {
       lineIndex: null,
       line_index: null,
     },
-  };
-  if (_.meta.length == 0) _.meta = {};
-  // const _s = salesFormStore();
-  if (_.product_variant_id) {
-    // const pvid = useId(_.product_variant_id);
-    //   _s.variantCheckBox[pvid] = true;
-    // _.variant_id = pvid;
-  }
+  } as any;
+  _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
   return _;
 }
 export function moreInvoiceLines(fields: ISalesOrderItem[]) {

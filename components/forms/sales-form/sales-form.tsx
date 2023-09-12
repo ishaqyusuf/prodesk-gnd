@@ -57,7 +57,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   });
   useEffect(() => {
     let resp = data;
-    console.log(resp);
+
     const _formData: any = resp?.form || { meta: {} };
 
     form.reset({
