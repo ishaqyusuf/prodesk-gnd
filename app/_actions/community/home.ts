@@ -114,8 +114,14 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
     builderId: {
       equals: Number(query._builderId) || undefined,
     },
-    search: q,
-    modelName: q,
+    OR: [
+      {
+        search: q,
+      },
+      {
+        modelName: q,
+      },
+    ],
     ...dateQuery(query),
     // tasks: {
     //   every: {},

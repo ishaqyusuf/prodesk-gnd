@@ -108,7 +108,7 @@ export default function CustomerServiceModal() {
       if (lot && block) {
         const lb = `${lot}/${block}`;
 
-        console.log(formData);
+        // console.log(formData);
 
         meta.lotBlock = lb;
       }
