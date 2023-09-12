@@ -27,7 +27,6 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
       name: "asc",
     },
   });
-  console.log(items[0]?.employeeProfile);
   const pageInfo = await getPageInfo(query, where, prisma.users);
 
   return {
