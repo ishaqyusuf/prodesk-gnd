@@ -224,40 +224,40 @@ export async function upgradeJobCostData() {
   const jobNotFound: any[] = [];
   await Promise.all(
     (await prisma.jobs.findMany({})).map(async (k) => {
-      const { cost_data, ...meta }: IJobMeta = k.meta as any;
-      if (cost_data) {
-        meta.costData = {};
-        cost_data.map((cd) => {
-          if (cd.title == "Addon") meta.addon = +cd.cost;
-          else {
-            let title = cd.title;
-            if (title == "BALLCATCH DOOR") {
-              if (cd.cost == 30) title = `${title} 6/8`;
-              else title = `${title} 8/0`;
-            }
-            const uid = settings?.meta?.list?.find((f) => f.title == title);
-            if (!uid)
-              jobNotFound.push({
-                title: cd.title,
-                value: cd.qty,
-                cost: cd.cost,
-              });
-            else
-              meta.costData[uid.uid] = {
-                qty: cd.qty,
-                cost: cd.cost,
-              };
-          }
-        });
-        await prisma.jobs.update({
-          where: {
-            id: k.id,
-          },
-          data: {
-            meta: meta as any,
-          },
-        });
-      }
+      // const { cost_data, ...meta }: IJobMeta = k.meta as any;
+      // if (cost_data) {
+      //   meta.costData = {};
+      //   cost_data.map((cd) => {
+      //     if (cd.title == "Addon") meta.addon = +cd.cost;
+      //     else {
+      //       let title = cd.title;
+      //       if (title == "BALLCATCH DOOR") {
+      //         if (cd.cost == 30) title = `${title} 6/8`;
+      //         else title = `${title} 8/0`;
+      //       }
+      //       const uid = settings?.meta?.list?.find((f) => f.title == title);
+      //       if (!uid)
+      //         jobNotFound.push({
+      //           title: cd.title,
+      //           value: cd.qty,
+      //           cost: cd.cost,
+      //         });
+      //       else
+      //         meta.costData[uid.uid] = {
+      //           qty: cd.qty,
+      //           cost: cd.cost,
+      //         };
+      //     }
+      //   });
+      //   await prisma.jobs.update({
+      //     where: {
+      //       id: k.id,
+      //     },
+      //     data: {
+      //       meta: meta as any,
+      //     },
+      //   });
+      // }
     })
   );
   return [jobNotFound, settings.meta.list];
