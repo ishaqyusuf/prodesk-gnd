@@ -95,7 +95,7 @@ export default function CustomerServiceModal() {
       if (formData.scheduleDate)
         formData.scheduleDate = new Date(formData.scheduleDate);
       if (formData.requestDate)
-        formData.scheduleDate = new Date(formData.requestDate);
+        formData.requestDate = new Date(formData.requestDate);
     }
     if (!formData.meta) formData.meta = {} as any;
     const { meta } = formData;
