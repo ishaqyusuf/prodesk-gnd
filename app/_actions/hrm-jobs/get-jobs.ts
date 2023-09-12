@@ -45,7 +45,7 @@ function whereJobs(query: JobsQueryParamsProps) {
     projectId: Number(query._projectId) || undefined,
     ...dateQuery(query),
   };
-
+  if (query.id) where.id = +query.id;
   if (query._show == "unpaid") where.paymentId = null;
   else if (query._show == "paid")
     where.paymentId = {

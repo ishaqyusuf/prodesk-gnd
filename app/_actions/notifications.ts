@@ -31,9 +31,18 @@ export async function getNotificationCountAction() {
   const count = await prisma.notifications.count({
     where: {
       userId: id,
-      archivedAt: {
-        equals: undefined,
-      },
+      OR: [
+        {
+          seenAt: {
+            equals: null,
+          },
+        },
+        {
+          archivedAt: {
+            equals: null,
+          },
+        },
+      ],
     },
   });
   return count;
@@ -49,12 +58,13 @@ export async function markAsReadAction(id) {
     },
   });
 }
-export async function archiveAction(id) {
+export async function archiveAction(id, seenAt) {
   await prisma.notifications.update({
     where: {
       id,
     },
     data: {
+      seenAt: seenAt ? seenAt : new Date(),
       archivedAt: new Date(),
     },
   });
@@ -124,7 +134,7 @@ export async function _notifyAdminJobSubmitted(job: IJobs) {
     1,
     job.type as any,
     `New Job Submission: ${job.title} ${job.subtitle}`,
-    `/hrm/jobs?id=${job.id}`
+    `/jobs?id=${job.id}`
   );
 }
 export async function _notifyWorkerPaymentPaid(

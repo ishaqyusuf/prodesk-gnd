@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Archive, Bell } from "lucide-react";
+import { AlertTriangle, Archive, Bell, Dot } from "lucide-react";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import React, { useEffect, useState, useTransition } from "react";
@@ -87,13 +87,13 @@ export default function Notification({}) {
               <TabsTrigger value="archive">Archive</TabsTrigger>
             </TabsList>
             <TabsContent value="inbox">
-              <NotificationList type="inbox" />
+              <NotificationList type="inbox" setOpen={setOpen} />
               <div className="flex border-t justify-center items-center p-2">
                 <Button variant="ghost">Archive All</Button>
               </div>
             </TabsContent>
             <TabsContent value="archive">
-              <NotificationList type="archive" />
+              <NotificationList setOpen={setOpen} type="archive" />
             </TabsContent>
           </Tabs>
         </DropdownMenuContent>
@@ -101,14 +101,32 @@ export default function Notification({}) {
     </div>
   );
 }
-function NotificationList({ type }: { type: "inbox" | "archive" }) {
+function NotificationList({
+  type,
+  setOpen,
+}: {
+  type: "inbox" | "archive";
+  setOpen;
+}) {
   const notifications = useAppSelector((state) => state.slicers.notifications);
 
   return (
-    <ScrollArea className="max-h-[350px] min-h-[300px] ">
+    <ScrollArea className="  -mt-2 min-h-[400px] h-[350px] ">
       <div className="divide-y">
-        {notifications?.map((item, index) => (
-          <NotificationItem type={type} key={index} index={index} item={item} />
+        {// Array(30)
+        //   .fill(null)
+        //   .map((a) => notifications?.[0] as any)
+        //   .filter(Boolean)
+        notifications?.map((item, index) => (
+          <NotificationItem
+            type={type}
+            onClick={() => {
+              setOpen(false);
+            }}
+            key={index}
+            index={index}
+            item={item}
+          />
         ))}
       </div>
     </ScrollArea>
@@ -118,9 +136,11 @@ function NotificationItem({
   item,
   index,
   type,
+  onClick,
 }: {
   item: INotification;
   index;
+  onClick;
   type;
 }) {
   const visible = type == "inbox" ? !item.archived : item.archived;
@@ -129,50 +149,65 @@ function NotificationItem({
   if (!visible) return null;
   function archive() {
     startTransition(async () => {
-      await archiveAction(item.id);
+      await archiveAction(item.id, item.seenAt);
       let len = notifications.length;
-      dispatchSlice("notifications", [
-        ...notifications.slice(0, len - index),
-        {
-          ...deepCopy(item),
-          archived: true,
-        },
-        ...notifications.slice(index + 1),
-      ]);
+      if (!item.seenAt)
+        dispatchSlice("notifications", [
+          ...notifications.slice(0, len - index),
+          {
+            ...deepCopy(item),
+            archived: true,
+          },
+          ...notifications.slice(index + 1),
+        ]);
     });
   }
-  let Node = item?.link ? Link : React.Component;
   return (
-    <div className="relative" key={item.id}>
-      <Button variant="ghost" className=" w-full h-full p-4">
+    <div className="relative group" key={item.id}>
+      <Button variant="ghost" className="border-b w-full h-full p-4 py-3">
         <LinkableNode
-          href={item.link as any}
+          href={item.link?.replace("/hrm/jobs", "/jobs")}
           onClick={async () => {
-            await markAsReadAction(item.id);
+            if (!item.seenAt) await markAsReadAction(item.id);
+            onClick();
           }}
           className="mr-10 flex w-full items-center justify-start text-start"
         >
-          <div className="h-9 w-9">
-            <AlertTriangle className="text-yellow-600" />
+          <div className="">
+            <div className=" rounded-full border p-1.5 bg-amber-50">
+              <AlertTriangle className="text-amber-500 h-5 w-5" />
+            </div>
           </div>
-          <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium">{item.message}</p>
-            <p className="text-sm text-muted-foreground">{item.time}</p>
+          <div className="ml-4 space-y-1 ">
+            <p
+              className={cn(
+                "text-sm  leading-snug",
+                !item.seenAt ? "font-medium" : "font-normal"
+              )}
+            >
+              {item.message}
+            </p>
+            <p className="text-sm leading-none text-muted-foreground">
+              {item.time}
+            </p>
           </div>
         </LinkableNode>
       </Button>
       {type == "inbox" && (
-        <div className="ml-auto absolute right-0 top-0 m-4 font-medium">
-          <ToolTip info="Archive">
-            <Btn
-              isLoading={archiving}
-              onClick={archive}
-              variant="secondary"
-              size="icon"
-            >
-              <Archive className="w-4 h-4" />
-            </Btn>
-          </ToolTip>
+        <div className="ml-auto absolute right-0 top-0 m-4 font-medium flex flex-col items-end">
+          <div className="group-hover:block hidden">
+            <ToolTip info="Archive">
+              <Btn
+                isLoading={archiving}
+                onClick={archive}
+                variant="secondary"
+                size="icon"
+              >
+                <Archive className="w-4 h-4" />
+              </Btn>
+            </ToolTip>
+          </div>
+          {!item.seenAt && <Dot className="w-10 h-10 text-blue-700" />}
         </div>
       )}
     </div>

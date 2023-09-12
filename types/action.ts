@@ -8,6 +8,7 @@ export type TableApiResponse<T> = Promise<{
   };
 }>;
 export interface BaseQuery {
+  id;
   _q?;
   _projectId?;
   _builderId?;
