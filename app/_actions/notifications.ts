@@ -130,10 +130,11 @@ export async function _notifyProductionAssigned(order: SalesOrders) {
   );
 }
 export async function _notifyAdminJobSubmitted(job: IJobs) {
+  // const ids = [job.id]
   await _notify(
     1,
     job.type as any,
-    `New Job Submission: ${job.title} ${job.subtitle}`,
+    `New Job: ${job.title} ${job.subtitle} by ${job.user.name}`,
     `/jobs?id=${job.id}`
   );
 }

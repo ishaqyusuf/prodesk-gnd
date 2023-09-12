@@ -949,6 +949,7 @@ model Tags {
 model Jobs {
     id          Int          @unique @default(autoincrement())
     userId      Int
+    coWorkerId  Int?
     type        String       @db.VarChar(255)
     homeId      Int?
     unitId      Int?
@@ -976,7 +977,8 @@ model Jobs {
     updatedAt   DateTime?    @db.Timestamp(0)
     payment     JobPayments? @relation(fields: [paymentId], references: [id])
     home        Homes?       @relation(fields: [homeId], references: [id])
-    user        Users?       @relation(fields: [userId], references: [id])
+    user        Users?       @relation(name: "installer", fields: [userId], references: [id])
+    coWorker    Users?       @relation(name: "co-worker", fields: [coWorkerId], references: [id])
     project     Projects?    @relation(fields: [projectId], references: [id])
 }
 
@@ -1033,7 +1035,8 @@ model Users {
     notifications     Notifications[]  @relation(name: "notifications")
     sentNotifications Notifications[]  @relation(name: "fromUser")
     inbox             Inbox[]
-    jobs              Jobs[]
+    jobs              Jobs[]           @relation(name: "installer")
+    coWorkerJobs      Jobs[]           @relation(name: "co-worker")
     myIssuedPayments  JobPayments[]    @relation(name: "payer")
     payments          JobPayments[]    @relation(name: "worker")
     employeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])

@@ -28,19 +28,6 @@ export interface IJobMeta {
   taskCost: number;
   addon: number;
   costData: InstallCostingTemplate<{ qty: number; cost: number }>;
-  cost_data: {
-    id;
-    title;
-    maxQty;
-    cost;
-    unit_value;
-    total;
-    qty;
-    ctx: {
-      __qty;
-      __total;
-    };
-  }[];
 }
 export type IJobPayment = JobPayments & {
   meta: {};

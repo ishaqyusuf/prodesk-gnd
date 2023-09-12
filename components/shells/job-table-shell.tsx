@@ -24,7 +24,7 @@ import {
 import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { IJobs } from "@/types/hrm";
-import { CheckCheck, X } from "lucide-react";
+import { CheckCheck, Unlink, X } from "lucide-react";
 import { toast } from "sonner";
 import Money from "../money";
 import { approveJob, rejectJob } from "@/app/_actions/hrm-jobs/job-actions";
@@ -32,6 +32,7 @@ import { labelValue, truthy } from "@/lib/utils";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { PayableEmployees } from "../filters/employee-filter";
 import { deleteJobAction } from "@/app/_actions/hrm-jobs/delete-job";
+import { Badge } from "../ui/badge";
 
 export default function JobTableShell<T>({
   data,
@@ -84,7 +85,14 @@ export default function JobTableShell<T>({
               cell: ({ row }) => (
                 <Cell>
                   <SecondaryCellContent>
-                    {row.original.user.name}
+                    {row.original.user.name}{" "}
+                    {row.original.coWorkerId && (
+                      <>
+                        <Badge className="leading-none bg-accent text-accent-foreground hover:bg-accent">
+                          joint task
+                        </Badge>
+                      </>
+                    )}
                   </SecondaryCellContent>
                 </Cell>
               ),

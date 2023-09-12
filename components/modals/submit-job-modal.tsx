@@ -31,7 +31,7 @@ import {
   SecondaryCellContent,
 } from "../columns/base-columns";
 import { ScrollArea } from "../ui/scroll-area";
-import { getUnitJobs } from "@/app/_actions/hrm-jobs/job-units";
+import { getJobCostData, getUnitJobs } from "@/app/_actions/hrm-jobs/job-units";
 import {
   Table,
   TableBody,
@@ -55,7 +55,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { staticLoadTechEmployees } from "@/app/_actions/hrm/get-employess";
+import {
+  loadStatic1099Contractors,
+  staticLoadTechEmployees,
+} from "@/app/_actions/hrm/get-employess";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface ModalInterface {
   data: IJobs | undefined;
@@ -97,7 +108,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const projects = useAppSelector((state) => state?.slicers?.staticProjects);
 
   async function init(data: ModalInterface) {
-    console.log(data);
     loadStaticList("staticProjects", projects, staticProjectsAction);
     form.reset(
       !data?.data
@@ -109,6 +119,12 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     setTab(data?.defaultTab || "project");
     setAddCost(null as any);
     if (data?.data && data?.defaultTab == "tasks") {
+      const costdat = await getJobCostData(
+        data?.data?.unitId,
+        data?.data.subtitle
+      );
+      // console.log(costdat);
+      setUnitCosting(costdat as any);
     }
   }
   async function selectProject(project) {
@@ -132,7 +148,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     form.setValue("homeData", unit);
     form.setValue("unitId", unit.id);
     setUnitCosting(unit.costing.costings);
-    console.log(unit.costing.costings);
+
     const costData = {};
     Object.entries(unit.costing.costings).map(([k, v]) => {
       costData[k] = {
@@ -152,16 +168,16 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const [unitCosting, setUnitCosting] = useState<
     InstallCostingTemplate<number | string>
   >({} as any);
-  const techEmployees = useAppSelector((s) => s.slicers.staticTechEmployees);
+  const techEmployees = useAppSelector((s) => s.slicers.staticInstallers);
   useEffect(() => {
     getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
       setCostSetting(res);
     });
 
     loadStaticList(
-      "staticTechEmployees",
+      "staticInstallers",
       techEmployees,
-      staticLoadTechEmployees
+      loadStatic1099Contractors
     );
   }, []);
 
@@ -375,6 +391,27 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                   <div className="grid gap-2 col-span-2">
                     <Label>Install Report</Label>
                     <Textarea className="h-8" {...form.register("note")} />
+                  </div>
+                  <div className="grid gap-2 col-span-2">
+                    <Label>Co-Worker</Label>
+                    <Select
+                      onValueChange={(e) => form.setValue("coWorkerId", +e)}
+                      defaultValue={form.getValues("coWorkerId")?.toString()}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectGroup>
+                          {techEmployees?.map((profile, _) => (
+                            <SelectItem key={_} value={profile.id?.toString()}>
+                              {profile.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </TabsContent>

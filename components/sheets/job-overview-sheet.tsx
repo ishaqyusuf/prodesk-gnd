@@ -70,7 +70,7 @@ export default function JobOverviewSheet() {
         <div>
           <ScrollArea className="h-screen ">
             <div className="grid grid-cols-2 items-start gap-4 text-sm mt-6 mb-28">
-              <Content data={data} />
+              <Content data={data as any} />
             </div>
           </ScrollArea>
         </div>
@@ -88,7 +88,7 @@ export default function JobOverviewSheet() {
     />
   );
 }
-function Content({ data }: { data }) {
+function Content({ data }: { data: IJobs }) {
   const [job, setJob] = useState<IJobs>(data);
   const [costSetting, setCostSetting] = useState<InstallCostSettings>(
     {} as any
@@ -98,6 +98,7 @@ function Content({ data }: { data }) {
       setCostSetting(res);
     });
   }, []);
+  const [divider, setDivider] = useState(data?.coWorkerId ? 2 : 1);
   const [showAll, setShowAll] = useState(false);
   return (
     <>
@@ -113,7 +114,10 @@ function Content({ data }: { data }) {
           <p>{data?.type}</p>
         </Info>
         <Info label="Additional Cost">
-          <Money value={data?.meta.additional_cost} />
+          <Money value={data?.meta.additional_cost / divider} />
+        </Info>
+        <Info label="Additional Cost">
+          <Money value={job?.meta.addon / divider} />
         </Info>
         <Info label="Total Cost">
           <Money value={job?.amount} />
@@ -163,6 +167,7 @@ function TaskRow({ row, index, job, setJob }: TaskRowProps) {
   const { cost, qty: __qty } = job.meta.costData[row.uid] as any;
   const [qty, setQty] = useState(__qty);
   const [dVal, setDVal] = useState(false);
+  const [divider, setDivider] = useState(job?.coWorkerId ? 2 : 1);
   useEffect(() => {
     if (qty != job.meta.costData[row.uid]?.qty) setDVal(qty);
   }, [qty, job]);

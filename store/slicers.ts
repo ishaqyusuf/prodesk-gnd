@@ -65,6 +65,7 @@ export interface ISlicer {
   staticEmployeeProfiles: EmployeeProfile[];
   staticPayableEmployees: Users[];
   staticTechEmployees: Users[];
+  staticInstallers: Users[];
   staticSalesCustomers: Customers[];
   staticProducts: InventoryProducts[];
   salesPaymentCustomers: ICustomer[];

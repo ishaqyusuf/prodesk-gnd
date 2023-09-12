@@ -78,3 +78,8 @@ export async function staticLoadTechEmployees() {
     role: "Punchout",
   });
 }
+export async function loadStatic1099Contractors() {
+  return await staticEmployees({
+    role: "1099 Contractor",
+  });
+}
