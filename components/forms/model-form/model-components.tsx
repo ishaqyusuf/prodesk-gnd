@@ -28,7 +28,6 @@ export function ModelFormSection<T>({
   node,
 }: ModelFormSectionProps<T> & ModelFormProps) {
   const Ctx = ModelComponents<T>({ form, node });
-
   const print = form.watch("ctx.print");
 
   let _rows = rows(Ctx._field, Ctx._field2);
@@ -114,12 +113,12 @@ export function ModelComponents<T>({
 
     const print = form.watch("ctx.print");
     const value = print ? form.watch(formKey as any) : null;
-    if (community) formKey = `${formKey}.v`;
+    if (community && !print) formKey = `${formKey}.v`;
     return (
       <>
         <td align="right" colSpan={cells[0]}>
           <div className="inline-flex space-x-2">
-            {community && (
+            {community && !print && (
               <Checkbox
                 checked={checked}
                 onCheckedChange={(e) => {

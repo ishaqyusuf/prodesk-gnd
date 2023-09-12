@@ -11,6 +11,7 @@ export async function createEmployeeAction(data: IUser) {
     data: transformData({
       name,
       username,
+      password: await hashPassword("Millwork"),
       email,
       meta,
     }),
