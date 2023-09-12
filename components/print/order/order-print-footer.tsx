@@ -10,7 +10,6 @@ interface Props {
 }
 export function OrderPrintFooter({ order }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
-  const isClient = !["production", "packing list"].includes(po?.mode);
 
   const [footer, setFooter] = useState<
     {
@@ -19,7 +18,7 @@ export function OrderPrintFooter({ order }: Props) {
     }[]
   >([]);
   useEffect(() => {
-    if (isClient) {
+    if (po?.isClient) {
       const ccc = order?.meta?.ccc;
       const totalPaid = order?.payments
         ?.map((p) => p.amount)
@@ -55,11 +54,11 @@ export function OrderPrintFooter({ order }: Props) {
         ].filter(Boolean)
       );
     }
-  }, [isClient, order]);
-  if (!isClient) return null;
+  }, [po?.isClient, order]);
+  if (!po?.isClient) return null;
   return (
     <tfoot id="footer" className="">
-      <tr className={`text-right font-bold ${!isClient ? "hidden" : ""}`}>
+      <tr className={`text-right font-bold ${!po?.isClient ? "hidden" : ""}`}>
         <td colSpan={9} valign="top" className={`border border-gray-400`}>
           <p className="mb-2 text-left text-xs font-normal italic text-red-600">
             Note: Payments made with Cards will have an additional 3% charge to

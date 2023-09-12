@@ -167,6 +167,10 @@ export const PrintOrderMenuAction = typedMemo(
         pdf: props.pdf,
         mockup: props.mockup,
         ids: props.ids || [props.row.id],
+        isClient: !["production", "packing list"].includes(mode),
+        showInvoice: ["order", "quote", "invoice"].includes(mode),
+        packingList: mode == "packing list",
+        isProd: mode == "production",
       });
     }
     function PrintOptions() {

@@ -42,9 +42,12 @@ export interface ISlicer {
   printOrders: {
     mode: IOrderPrintMode;
     ids: number[];
-    isClient;
+    showInvoice?: Boolean;
+    packingList?: Boolean;
+    isProd?: Boolean;
     mockup?: Boolean;
     pdf?: Boolean;
+    isClient?: Boolean;
   };
   printUnits: string[];
   modal: {

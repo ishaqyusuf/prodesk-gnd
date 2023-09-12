@@ -11,9 +11,6 @@ interface Props {
 }
 export function OrderPrintInvoiceLines({ order }: Props) {
   const po = useAppSelector((state) => state.slicers.printOrders);
-  const isClient = !["production", "packing list"].includes(po?.mode);
-  const showInvoice = ["order", "quote", "invoice"].includes(po?.mode);
-  const packingList = po?.mode == "packing list";
 
   const [invoiceLines, setInvoiceLines] = useState<
     { sn?; id; line?: ISalesOrderItem | undefined }[]
@@ -72,8 +69,8 @@ export function OrderPrintInvoiceLines({ order }: Props) {
             Swing
           </th>
           <th colSpan={1}>Qty</th>
-          {packingList && <th colSpan={1}>Packed Qty</th>}
-          {showInvoice && (
+          {po?.packingList && <th colSpan={1}>Packed Qty</th>}
+          {po?.showInvoice && (
             <>
               <th colSpan={2} align="right">
                 Rate
@@ -81,7 +78,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
               <th colSpan={2}>Total</th>
             </>
           )}{" "}
-          {!isClient && !packingList && <th colSpan={4}>Supplier</th>}
+          {!po?.isClient && !po?.packingList && <th colSpan={4}>Supplier</th>}
         </tr>
       </thead>
       <tbody id="invoiceLines">
@@ -108,7 +105,7 @@ export function OrderPrintInvoiceLines({ order }: Props) {
             <td colSpan={1} align="center" valign="middle">
               <p className="font-bold">{line?.qty}</p>
             </td>
-            {showInvoice && (
+            {po?.showInvoice && (
               <>
                 <td colSpan={2} valign="middle" align="right">
                   {line?.rate && (
@@ -124,14 +121,14 @@ export function OrderPrintInvoiceLines({ order }: Props) {
                 </td>
               </>
             )}
-            {!isClient && !packingList && (
+            {!po?.isClient && !po?.packingList && (
               <>
                 <td colSpan={4} valign="top" align="right">
                   <p className="pr-2">{line?.meta?.supplier}</p>
                 </td>
               </>
             )}
-            {packingList && (
+            {po?.packingList && (
               <td colSpan={1} align="center" valign="middle"></td>
             )}
           </tr>
