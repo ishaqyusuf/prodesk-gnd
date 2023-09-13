@@ -274,19 +274,21 @@ model HomeTemplates {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model InboundOrderItems {
-    id               Int       @unique @default(autoincrement())
+    id               Int               @unique @default(autoincrement())
     inboundOrderId   Int?
     salesOrderItemId Int?
     salesOrderId     Int?
     productVariantId Int
     qty              Int
-    meta             String?   @db.LongText
-    deletedAt        DateTime? @db.Timestamp(0)
-    createdAt        DateTime? @db.Timestamp(0)
-    updatedAt        DateTime? @db.Timestamp(0)
+    meta             Json?             @db.Json
+    status           String?           @db.VarChar(255)
+    deletedAt        DateTime?         @db.Timestamp(0)
+    createdAt        DateTime?         @db.Timestamp(0)
+    updatedAt        DateTime?         @db.Timestamp(0)
     productId        Int
     unitCost         Float
     totalCost        Float
+    items            SalesOrderItems[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -294,6 +296,7 @@ model InboundOrders {
     id         Int       @unique @default(autoincrement())
     slug       String    @db.VarChar(255)
     orderId    String    @db.VarChar(255)
+    supplier   String?
     supplierId Int?
     totalCost  Float?
     status     String    @db.VarChar(255)
@@ -805,34 +808,36 @@ model SalesOrderItemComponents {
 }
 
 model SalesOrderItems {
-    id          Int     @unique @default(autoincrement())
-    description String? @db.Text
-
-    productId Int?
-
-    swing              String?                      @db.VarChar(255)
+    id                 Int       @unique @default(autoincrement())
+    description        String?   @db.Text
+    productId          Int?
+    supplier           String?
+    inboundOrderItemId Int?
+    swing              String?   @db.VarChar(255)
     price              Float?
     tax                Float?
     taxPercenatage     Float?
     discount           Float?
     discountPercentage Float?
-    meta               Json?                        @db.Json
-    createdAt          DateTime?                    @db.Timestamp(0)
-    updatedAt          DateTime?                    @db.Timestamp(0)
+    meta               Json?     @db.Json
+    createdAt          DateTime? @db.Timestamp(0)
+    updatedAt          DateTime? @db.Timestamp(0)
     qty                Float?
     prebuiltQty        Float?
     salesOrderId       Int
-    profitMargin       Float?
-    rate               Float?
-    total              Float?
-    salesPercentage    Float?
-    prodStatus         String?                      @db.VarChar(255)
-    prodStartedAt      DateTime?                    @db.Timestamp(0)
-    sentToProdAt       DateTime?                    @db.Timestamp(0)
-    prodCompletedAt    DateTime?                    @db.Timestamp(0)
-    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
-    productions        OrderProductionSubmissions[]
-    components         SalesOrderItemComponents[]
+
+    profitMargin     Float?
+    rate             Float?
+    total            Float?
+    salesPercentage  Float?
+    prodStatus       String?                      @db.VarChar(255)
+    prodStartedAt    DateTime?                    @db.Timestamp(0)
+    sentToProdAt     DateTime?                    @db.Timestamp(0)
+    prodCompletedAt  DateTime?                    @db.Timestamp(0)
+    inboundOrderItem InboundOrderItems?           @relation(fields: [inboundOrderItemId], references: [id])
+    salesOrder       SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
+    productions      OrderProductionSubmissions[]
+    components       SalesOrderItemComponents[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -954,24 +959,24 @@ model Jobs {
     homeId      Int?
     unitId      Int?
     projectId   Int?
-    taskId      Int?
-    amount      Int
+    // taskId      Int?
+    amount      Float
     title       String?      @db.VarChar(255)
     subtitle    String?      @db.VarChar(255)
     description String?      @db.LongText
     note        String?      @db.Text
-    doneBy      String?      @db.VarChar(255)
+    // doneBy      String?      @db.VarChar(255)
     status      String       @db.VarChar(255)
     meta        Json?        @db.Json
     adminNote   String?      @db.Text
     statusDate  DateTime?    @db.Timestamp(0)
     rejectedAt  DateTime?    @db.Timestamp(0)
     approvedAt  DateTime?    @db.Timestamp(0)
-    paidAt      DateTime?    @db.Timestamp(0)
+    // paidAt      DateTime?    @db.Timestamp(0)
     approvedBy  Int?
-    paidBy      Int?
+    // paidBy      Int?
     paymentId   Int?
-    checkNo     String?      @db.VarChar(255)
+    // checkNo     String?      @db.VarChar(255)
     deletedAt   DateTime?    @db.Timestamp(0)
     createdAt   DateTime?    @db.Timestamp(0)
     updatedAt   DateTime?    @db.Timestamp(0)

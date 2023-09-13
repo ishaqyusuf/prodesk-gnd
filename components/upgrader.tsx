@@ -29,20 +29,21 @@ import { Icons } from "./icons";
 import {
   removeRedundantPayments,
   resetJobUpgrade,
+  upgradeCustomJobRemoveAddon,
   upgradeJobPaidStatus,
-  upgradeJobPayments,
 } from "@/app/_actions/upgrade/jobs-upgrade";
 import {
   dateUpdate,
   upgradeWorkOrder,
 } from "@/app/_actions/upgrade/work-order";
+import { salesSuppliers } from "@/app/_actions/upgrade/fix-sales";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
   const actions: { label; action?; children?: { label?; action? }[] }[] = [
     {
       label: "Sales Order",
-      action: null,
+      children: [{ label: "Suppliers", action: salesSuppliers }],
     },
     {
       label: "Work Orders",
@@ -67,24 +68,17 @@ export default function Upgrader() {
         },
       ],
     },
+
     {
-      label: "Hrm",
+      label: "Jobs",
       children: [
+        {
+          label: "Remove Addon on Custom Jobs ",
+          action: upgradeCustomJobRemoveAddon,
+        },
         { label: "Reset Payment ", action: resetJobUpgrade },
         { label: "Update Job Paid Status", action: upgradeJobPaidStatus },
-        {
-          label: "Job Payments",
-          action: async () => {
-            let res = 1;
-            while (res > 0) {
-              toast.message(`${res} pending...`);
-              const [res2] = await upgradeJobPayments();
-              res = res2 || 0;
-            }
-            return res;
-            //  if(res > 0)
-          },
-        },
+
         {
           label: "Remove Redundancy Payments",
           action: removeRedundantPayments,

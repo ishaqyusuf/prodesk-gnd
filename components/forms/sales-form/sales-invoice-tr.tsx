@@ -77,7 +77,7 @@ export const SalesInvoiceTr = ({
           <SwingCell rowIndex={i} form={form} ctx={ctx} />
           <TableCell id="supplier" className="p-0 px-1">
             <AutoComplete2
-              formKey={`items.${i}.meta.supplier`}
+              formKey={`items.${i}.supplier`}
               allowCreate
               form={form}
               options={ctx.suppliers}
