@@ -48,7 +48,7 @@ export default function JobPaymentTableShell<T>({
         cell: ({ row }) => (
           <Cell
             className="cursor-pointer"
-            onClick={() => openModal("jobOverview", row.original)}
+            onClick={() => openModal("paymentOverview", row.original)}
           >
             <PrimaryCellContent>{row.original.user?.name}</PrimaryCellContent>
             <SecondaryCellContent>

@@ -22,6 +22,7 @@ export async function getJobPayments(query: JobPaymentQueryParamsProps) {
           roles: true,
         },
       },
+      jobs: true,
       //   jobs: true,
       _count: {
         select: {

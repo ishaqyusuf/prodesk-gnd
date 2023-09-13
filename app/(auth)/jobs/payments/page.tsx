@@ -9,6 +9,7 @@ import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 import { getJobPayments } from "@/app/_actions/hrm-jobs/get-payments";
 import JobPaymentTableShell from "@/components/shells/job-payment-table-shell";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
+import PaymentOverviewSheet from "@/components/sheets/payment-overview-sheet";
 
 export const metadata: Metadata = {
   title: "Employees",
@@ -28,7 +29,7 @@ export default async function EmployeesPage({ searchParams }) {
         ButtonIcon={"dollar"}
       />
       <JobPaymentTableShell {...response} />
-      <JobOverviewSheet />
+      <PaymentOverviewSheet />
     </TabbedLayout>
   );
 }

@@ -33,6 +33,7 @@ export interface IJobMeta {
 export type IJobPayment = JobPayments & {
   meta: {};
   user: IUser;
+  jobs: IJobs[];
   payer: IUser;
   _count: {
     jobs;
