@@ -136,24 +136,32 @@ function Content({ data }: { data: IJobs }) {
           <div>{data?.note || "No Comment"}</div>
         </Info>
       </section>
-      <div className="col-span-2">
-        <Table className="">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="px-1">Task</TableHead>
-              <TableHead className="px-1">Qty</TableHead>
-              <TableHead className="px-1">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {costSetting?.meta?.list
-              ?.filter((l) => (job.meta.costData[l.uid]?.qty || 0) > 0)
-              .map((cd, i) => (
-                <TaskRow key={i} job={job} index={i} setJob={setJob} row={cd} />
-              ))}
-          </TableBody>
-        </Table>
-      </div>
+      {job.homeId && (
+        <div className="col-span-2">
+          <Table className="">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-1">Task</TableHead>
+                <TableHead className="px-1">Qty</TableHead>
+                <TableHead className="px-1">Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {costSetting?.meta?.list
+                ?.filter((l) => (job.meta.costData[l.uid]?.qty || 0) > 0)
+                .map((cd, i) => (
+                  <TaskRow
+                    key={i}
+                    job={job}
+                    index={i}
+                    setJob={setJob}
+                    row={cd}
+                  />
+                ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </>
   );
 }

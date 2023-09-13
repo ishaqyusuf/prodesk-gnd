@@ -40,7 +40,14 @@ import { cn } from "@/lib/utils";
 export default function PaymentOverviewSheet() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
-
+  useEffect(() => {
+    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
+      setCostSetting(res);
+    });
+  }, []);
+  const [costSetting, setCostSetting] = useState<InstallCostSettings>(
+    {} as any
+  );
   async function init(data) {}
   return (
     <BaseSheet<IJobPayment>
@@ -70,6 +77,7 @@ export default function PaymentOverviewSheet() {
               {data?.jobs.map((job, index) => (
                 <Content
                   key={index}
+                  costSetting={costSetting}
                   index={index}
                   data={{
                     ...job,
@@ -96,16 +104,16 @@ export default function PaymentOverviewSheet() {
   );
 }
 // function CollapsibleJob({data}:{data:Ijob})
-function Content({ data, index }: { index; data: IJobs }) {
+function Content({
+  data,
+  index,
+  costSetting,
+}: {
+  index;
+  costSetting;
+  data: IJobs;
+}) {
   const [job, setJob] = useState<IJobs>(data);
-  const [costSetting, setCostSetting] = useState<InstallCostSettings>(
-    {} as any
-  );
-  useEffect(() => {
-    getSettingAction<InstallCostSettings>("install-price-chart").then((res) => {
-      setCostSetting(res);
-    });
-  }, []);
 
   const [isOpen, setIsOpen] = useState<any>(false);
   const [divider, setDivider] = useState(data?.coWorkerId ? 2 : 1);
@@ -176,30 +184,32 @@ function Content({ data, index }: { index; data: IJobs }) {
               <div>{data?.note || "No Comment"}</div>
             </Info>
           </section>
-          <div className="col-span-2">
-            <Table className="">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="px-1">Task</TableHead>
-                  <TableHead className="px-1">Qty</TableHead>
-                  <TableHead className="px-1">Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {costSetting?.meta?.list
-                  ?.filter((l) => (job.meta.costData[l.uid]?.qty || 0) > 0)
-                  .map((cd, i) => (
-                    <TaskRow
-                      key={i}
-                      job={job}
-                      index={i}
-                      setJob={setJob}
-                      row={cd}
-                    />
-                  ))}
-              </TableBody>
-            </Table>
-          </div>
+          {job.homeId && (
+            <div className="col-span-2">
+              <Table className="">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="px-1">Task</TableHead>
+                    <TableHead className="px-1">Qty</TableHead>
+                    <TableHead className="px-1">Total</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {costSetting?.meta?.list
+                    ?.filter((l) => (job.meta.costData[l.uid]?.qty || 0) > 0)
+                    .map((cd, i) => (
+                      <TaskRow
+                        key={i}
+                        job={job}
+                        index={i}
+                        setJob={setJob}
+                        row={cd}
+                      />
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </>
       </CollapsibleContent>
     </Collapsible>
