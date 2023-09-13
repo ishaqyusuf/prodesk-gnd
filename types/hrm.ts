@@ -17,6 +17,7 @@ export type IUser = Users & {
   employeeProfile: EmployeeProfile;
 };
 export type IJobs = OmitMeta<Jobs> & {
+  payment: IJobPayment;
   meta: IJobMeta;
   unit: Homes;
   homeData: HomeJobList;

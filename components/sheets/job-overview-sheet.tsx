@@ -123,10 +123,10 @@ function Content({ data }: { data: IJobs }) {
           <Money value={job?.amount} />
         </Info>
         <Info label="Payment">
-          {job?.paidAt ? (
+          {job?.payment ? (
             <>
-              <p>{job?.checkNo}</p>
-              <DateCellContent>{job?.paidAt}</DateCellContent>
+              <p>{job?.payment.checkNo}</p>
+              <DateCellContent>{job?.payment.createdAt}</DateCellContent>
             </>
           ) : (
             <>No payment</>
