@@ -61,9 +61,9 @@ export default function InboundsTableShell<T>({
             link={`/sales/inbounds/putaway?orderId=${row.original.orderId}`}
           >
             <Badge>
-              {row.original.items.filter((i) => i?.putawayAt)?.length}
+              {row.original.inboundItems.filter((i) => i?.putawayAt)?.length}
               {"/"}
-              {row.original.items.length}
+              {row.original.inboundItems.length}
             </Badge>
           </Cell>
         ),
