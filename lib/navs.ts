@@ -68,7 +68,6 @@ export function nav(
     viewCost,
     editOrders,
     editProject,
-
     viewInstallation,
     viewTech,
     viewHrm,
@@ -122,7 +121,8 @@ export function nav(
       _route(
         "Sales Production",
         Construction,
-        `/tasks/sales-productions${prodQuery}`
+        `/tasks/sales-productions`
+        // `/tasks/sales-productions${prodQuery}`
       ),
       _route("Unit Production", Construction, "/tasks/unit-productions")
     );
@@ -169,7 +169,9 @@ export function nav(
         // _route("Sales Jobs", Briefcase, "/sales/jobs"),
         _route("Payments", CreditCard, "/sales/payments"),
         _route("Catalogs", PackageOpen, "/sales/catalogs"),
-        _route("Productions", Construction, `/sales/productions${prodQuery}`),
+        // _route("Productions", Construction, `/sales/productions${prodQuery}`),
+        _route("Productions", Construction, `/sales/productions`),
+        _route("Inbounds", Construction, `/sales/inbounds`),
         // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]
     );
@@ -211,24 +213,6 @@ export function nav(
   })();
   if (_communitySettings) routes.Settings.push(_communitySettings);
 
-  let _hrm = (() => {
-    const _rw: any = {};
-    let href: any = null;
-    function setHref(title, _href) {
-      if (!href) href = _href;
-      _rw[_href] = _route(title, LayoutTemplate, `/hrm/${_href}`);
-    }
-    if (viewEmployee) setHref("Employees", "employees");
-    // if (viewEmployee)
-    if (viewHrm || isAdmin) {
-      setHref("Roles", "roles");
-    }
-    if (isAdmin) setHref("Profiles", "profiles");
-
-    Hrm.push(...(Object.values(_rw) as any));
-    if (href) return _route("HRM", UsersIcon, `/hrm/${href}`);
-  })();
-  if (_hrm) routes.Hrm.push(_hrm);
   let routeGroup: { routes: Route[]; title }[] = [];
   let totalRoutes = 0;
   let flatRoutes: Route[] = [];

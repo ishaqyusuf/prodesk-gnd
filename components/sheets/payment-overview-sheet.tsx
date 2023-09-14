@@ -64,9 +64,24 @@ export default function PaymentOverviewSheet() {
       )}
       Description={({ data }) => (
         <div className="flex justify-between">
-          <div>{data?.jobs?.length} Jobs</div>
-          <div className="font-bold">
-            <Money value={data?.amount} />
+          {/* <div>{data?.jobs?.length} Jobs</div> */}
+          {/* <div></div> */}
+          <div className="inline-flex space-x-4">
+            <Info label="Total Jobs">
+              <div className="font-bold">
+                <Money value={data?.jobs?.length} />
+              </div>
+            </Info>
+            <Info label="Discount">
+              <div className="font-bold">
+                <Money value={data?.charges} />
+              </div>
+            </Info>
+            <Info label="Paid">
+              <div className="font-bold">
+                <Money value={data?.amount} />
+              </div>
+            </Info>
           </div>
         </div>
       )}
@@ -184,7 +199,7 @@ function Content({
               <div>{data?.note || "No Comment"}</div>
             </Info>
           </section>
-          {job.homeId && (
+          {job.meta?.costData && (
             <div className="col-span-2">
               <Table className="">
                 <TableHeader>

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { IProjectMeta } from "@/types/community";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 
 export async function salesSuppliers() {
@@ -9,6 +10,7 @@ export async function salesSuppliers() {
       supplier: null,
     },
   });
+
   const inserts: any = {};
   salsItems.map((i) => {
     const m: ISalesOrderItemMeta = i.meta as any;

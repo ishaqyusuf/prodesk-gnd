@@ -85,21 +85,25 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
   async function save(and: "close" | "new" | "default" = "default") {
     startTransition(async () => {
       const formData = saveData();
-      // console.log(formData);
 
-      const response = await saveOrderAction(formData);
-      if (response.orderId) {
-        const type = response.type;
-        if (and == "close") router.push(`/sales/${type}s`);
-        else {
-          if (and == "new") router.push(`/sales/${type}/new/form`);
+      console.log(formData);
+      try {
+        const response = await saveOrderAction(formData);
+        if (response.orderId) {
+          const type = response.type;
+          if (and == "close") router.push(`/sales/${type}s`);
           else {
-            if (slug != response.orderId)
-              router.push(`/sales/${type}/${response.orderId}/form`);
+            if (and == "new") router.push(`/sales/${type}/new/form`);
+            else {
+              if (slug != response.orderId)
+                router.push(`/sales/${type}/${response.orderId}/form`);
+            }
           }
         }
+        toast.success("Saved", {});
+      } catch (error) {
+        console.log(error);
       }
-      toast.success("Saved", {});
     });
     //  loader.action(async () => {
     //  });

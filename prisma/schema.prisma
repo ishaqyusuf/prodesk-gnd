@@ -282,6 +282,9 @@ model InboundOrderItems {
     qty              Int
     meta             Json?             @db.Json
     status           String?           @db.VarChar(255)
+    location         String?           @db.VarChar(255)
+    putAwayBy        Int?
+    putawayAt        DateTime?         @db.Timestamp(0)
     deletedAt        DateTime?         @db.Timestamp(0)
     createdAt        DateTime?         @db.Timestamp(0)
     updatedAt        DateTime?         @db.Timestamp(0)

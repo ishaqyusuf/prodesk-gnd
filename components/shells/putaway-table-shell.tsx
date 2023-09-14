@@ -20,7 +20,7 @@ import {
 import { EmployeeProfile } from "@prisma/client";
 import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 
-export default function EmployeeProfileTableShell<T>({
+export default function PutawayTableShell<T>({
   data,
   pageInfo,
 }: TableShellProps<EmployeeProfile>) {

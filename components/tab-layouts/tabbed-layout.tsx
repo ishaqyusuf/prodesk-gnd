@@ -1,8 +1,7 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ISidebar, nav } from "@/lib/navs";
@@ -14,9 +13,14 @@ import { cn } from "@/lib/utils";
 export default function TabbedLayout({
   children,
   tabKey,
+  tabs = [],
 }: {
   children;
-  tabKey: keyof ISidebar;
+  tabs?: {
+    path;
+    title;
+  }[];
+  tabKey?: keyof ISidebar;
 }) {
   const { data: session } = useSession({
     required: true,
@@ -36,7 +40,7 @@ export default function TabbedLayout({
     <div className="space-y-4 ">
       {createPortal(
         <div className="flex -mt-2">
-          {_nav?.[tabKey].map((c, i) => (
+          {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
             <div className="flex flex-col" key={i}>
               <Button
                 size="sm"

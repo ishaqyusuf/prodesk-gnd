@@ -3,21 +3,18 @@ import { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 
-import { queryParams } from "@/app/_actions/action-utils";
-
 import HrmLayout from "@/components/tab-layouts/hrm-layout";
-import EmployeesTableShell from "@/components/shells/employees-table-shell";
-import { getEmployees } from "@/app/_actions/hrm/get-employess";
-import EmployeeModal from "@/components/modals/employee-modal";
+
 import { getProfiles } from "@/app/_actions/hrm/employee-profiles";
 import EmployeeProfileTableShell from "@/components/shells/employee-profile-table-shell";
 import EmployeeProfileModal from "@/components/modals/employee-profile-modal";
+import { queryParams } from "@/app/_actions/action-utils";
 
 export const metadata: Metadata = {
   title: "Employee Profiles",
 };
 export default async function EmployeesPage({ searchParams }) {
-  const response = await getProfiles();
+  const response = await getProfiles(queryParams(searchParams));
   return (
     <HrmLayout>
       <Breadcrumbs>

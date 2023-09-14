@@ -186,6 +186,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   function _setTab(t) {
     setPrevTab([tab, ...prevTab]);
     setTab(t);
+    setQ("");
   }
   function calculateTasks() {
     // form.setValue('amount')
@@ -205,7 +206,13 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   function resetFields(k) {
     k.map((v) => form.setValue(v, null));
   }
-
+  const [q, setQ] = useState("");
+  function search<T>(list: T[], key: keyof T) {
+    return list;
+    return list.filter((l) =>
+      (l?.[key] as any)?.toLowerCase()?.includes(q?.toString())
+    );
+  }
   return (
     <BaseModal<ModalInterface>
       className="sm:max-w-[550px]"
@@ -259,18 +266,26 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
       )}
       Content={({ data }) => (
         <div>
-          <ScrollArea className="h-[350px] pr-4">
-            <Tabs defaultValue={tab} className="">
-              <TabsList className="hidden">
-                <TabsTrigger value="user" />
-                <TabsTrigger value="project" />
-                <TabsTrigger value="unit" />
-                <TabsTrigger value="tasks" />
-                <TabsTrigger value="general" />
-              </TabsList>
-              <TabsContent value="user">
+          <Tabs defaultValue={tab} className="">
+            <TabsList className="hidden">
+              <TabsTrigger value="user" />
+              <TabsTrigger value="project" />
+              <TabsTrigger value="unit" />
+              <TabsTrigger value="tasks" />
+              <TabsTrigger value="general" />
+            </TabsList>
+            <TabsContent value="user">
+              <div className="">
+                <Input
+                  placeholder="Search"
+                  className="h-8"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                />
+              </div>
+              <ScrollArea className="h-[350px] pr-4">
                 <div className="flex flex-col divide-y">
-                  {techEmployees?.map((user) => (
+                  {search(techEmployees, "name")?.map((user) => (
                     <Button
                       onClick={() => {
                         form.setValue("userId", user.id);
@@ -285,29 +300,39 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     </Button>
                   ))}
                 </div>
-              </TabsContent>
-              <TabsContent value="project">
-                <div className="flex flex-col divide-y">
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="project">
+              <div className="">
+                <Input
+                  placeholder="Search"
+                  className="h-7"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col divide-y">
+                <Button
+                  onClick={() => _setTab("general")}
+                  variant={"ghost"}
+                  className=""
+                >
+                  <p className="flex w-full">Custom Task</p>
+                </Button>
+                {projects?.map((project) => (
                   <Button
-                    onClick={() => _setTab("general")}
+                    onClick={() => selectProject(project)}
                     variant={"ghost"}
+                    key={project.id}
                     className=""
                   >
-                    <p className="flex w-full">Custom Task</p>
+                    <p className="flex w-full">{project.title}</p>
                   </Button>
-                  {projects?.map((project) => (
-                    <Button
-                      onClick={() => selectProject(project)}
-                      variant={"ghost"}
-                      key={project.id}
-                      className=""
-                    >
-                      <p className="flex w-full">{project.title}</p>
-                    </Button>
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="unit">
+                ))}
+              </div>
+            </TabsContent>
+            <TabsContent value="unit">
+              <ScrollArea className="h-[350px] pr-4">
                 <div className="flex flex-col divide-y">
                   <Button
                     onClick={() => {
@@ -330,8 +355,10 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     </Button>
                   ))}
                 </div>
-              </TabsContent>
-              <TabsContent value="tasks">
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="tasks">
+              <ScrollArea className="h-[350px] pr-4">
                 <div className="col-span-2">
                   <Table className="">
                     <TableHeader>
@@ -356,8 +383,10 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     </TableBody>
                   </Table>
                 </div>
-              </TabsContent>
-              <TabsContent value="general">
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="general">
+              <ScrollArea className="h-[350px] pr-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="grid gap-2 col-span-2">
                     <Label>Title</Label>
@@ -417,9 +446,9 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     </Select>
                   </div>
                 </div>
-              </TabsContent>
-            </Tabs>
-          </ScrollArea>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
         </div>
       )}
       Footer={({ data }) => {

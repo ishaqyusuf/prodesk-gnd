@@ -8,6 +8,7 @@ import {
   Cell,
   PrimaryCellContent,
   SecondaryCellContent,
+  DateCellContent,
 } from "../columns/base-columns";
 import { DataTable2 } from "../data-table/data-table-2";
 
@@ -19,44 +20,60 @@ import {
 
 import { EmployeeProfile } from "@prisma/client";
 import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
+import { IInboundOrder } from "@/types/sales-inbound";
+import StatusBadge from "../status-badge";
+import { Badge } from "../ui/badge";
 
-export default function EmployeeProfileTableShell<T>({
+export default function InboundsTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<EmployeeProfile>) {
+}: TableShellProps<IInboundOrder>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<EmployeeProfile, unknown>[]>(
+  const columns = useMemo<ColumnDef<IInboundOrder, unknown>[]>(
     () => [
       {
         maxSize: 10,
         id: "id",
-        header: ColumnHeader("#"),
+        header: ColumnHeader("Date"),
         cell: ({ row }) => (
           <Cell>
-            <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
+            <DateCellContent>{row.original.status}</DateCellContent>
           </Cell>
         ),
       },
       {
         id: "title",
-        header: ColumnHeader("Profile Name"),
+        header: ColumnHeader("Order #"),
         cell: ({ row }) => (
           <Cell>
             {/* link={`/community/project/slug`} slug={row.original.slug} */}
-            <PrimaryCellContent>{row.original.name}</PrimaryCellContent>
+            <PrimaryCellContent>{row.original.orderId}</PrimaryCellContent>
           </Cell>
         ),
       },
       {
-        id: "discount",
-        header: ColumnHeader("Discount"),
+        id: "putaway",
+        header: ColumnHeader("Putaway"),
+        cell: ({ row }) => (
+          <Cell
+            link={`/sales/inbounds/putaway?orderId=${row.original.orderId}`}
+          >
+            <Badge>
+              {row.original.items.filter((i) => i?.putawayAt)?.length}
+              {"/"}
+              {row.original.items.length}
+            </Badge>
+          </Cell>
+        ),
+      },
+      {
+        id: "status",
+        header: ColumnHeader("Status"),
         cell: ({ row }) => (
           <Cell>
-            <SecondaryCellContent>
-              {row.original.discount || 0}%{" "}
-            </SecondaryCellContent>
+            <StatusBadge>{row.original.status}</StatusBadge>
           </Cell>
         ),
       },

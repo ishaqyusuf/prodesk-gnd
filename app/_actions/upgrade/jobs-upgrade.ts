@@ -2,6 +2,7 @@
 
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
+import { IProjectMeta } from "@/types/community";
 import { IJobMeta } from "@/types/hrm";
 export async function upgradeCustomJobRemoveAddon() {
   const j = await prisma.jobs.findMany({
@@ -9,13 +10,23 @@ export async function upgradeCustomJobRemoveAddon() {
       paymentId: null,
     },
   });
+  const projectAddons: any = {};
+  (await prisma.projects.findMany()).map((project) => {
+    const meta: IProjectMeta = project.meta as any;
+    if (meta?.addon) projectAddons[project.id] = Number(meta?.addon);
+  });
+
   return await Promise.all(
     j.map(async (job, i) => {
       const meta: IJobMeta = job.meta as any;
-      if (!job.homeId && meta.addon > 0) {
+      const addon = projectAddons[job.projectId || ""] || 0;
+      if (meta.addon == 0 && meta.taskCost && addon) {
+        // return { job, addon: projectAddons[job.projectId] };
+        meta.addon = addon;
         let total =
-          Number(meta.taskCost || 0) + Number(meta.additional_cost || 0);
-        meta.addon = 0;
+          Number(meta.taskCost || 0) +
+          Number(meta.additional_cost || 0) +
+          addon;
         if (job.coWorkerId) total /= 2;
         if (total > 0)
           await prisma.jobs.update({
@@ -25,7 +36,7 @@ export async function upgradeCustomJobRemoveAddon() {
               meta: meta as any,
             },
           });
-        else return job;
+        else return null;
       }
     })
   );

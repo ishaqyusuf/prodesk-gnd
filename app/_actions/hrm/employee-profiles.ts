@@ -5,7 +5,7 @@ import { transformData } from "@/lib/utils";
 import { EmployeeProfile } from "@prisma/client";
 import { getPageInfo } from "../action-utils";
 
-export async function getProfiles() {
+export async function getProfiles(query) {
   const pageInfo = await getPageInfo({}, {}, prisma.employeeProfile);
 
   return {

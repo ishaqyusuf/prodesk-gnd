@@ -90,7 +90,7 @@ export default function CommunityTemplateTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "title, builder",
+          title: "",
         },
       ]}
 

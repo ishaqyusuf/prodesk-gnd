@@ -120,7 +120,7 @@ export default function ProjectsTableShell<T>({
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "title, builder",
+          title: "",
         },
       ]}
 

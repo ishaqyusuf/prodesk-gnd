@@ -5,9 +5,10 @@ import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  status;
+  status?;
+  children?;
 }
-export default function StatusBadge({ status }: Props) {
-  const color = getBadgeColor(status);
-  return <Badge className={cn(color)}>{status}</Badge>;
+export default function StatusBadge({ status, children }: Props) {
+  const color = getBadgeColor(status || children);
+  return <Badge className={cn(color)}>{status || children}</Badge>;
 }

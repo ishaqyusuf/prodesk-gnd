@@ -34,7 +34,9 @@ export default function JobOverviewSheet() {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
 
-  async function init(data) {}
+  async function init(data) {
+    console.log(data);
+  }
 
   return (
     <BaseSheet<IJobs>
@@ -136,7 +138,7 @@ function Content({ data }: { data: IJobs }) {
           <div>{data?.note || "No Comment"}</div>
         </Info>
       </section>
-      {job.homeId && (
+      {job.meta.costData && (
         <div className="col-span-2">
           <Table className="">
             <TableHeader>
