@@ -300,7 +300,8 @@ export async function saveOrderAction({
         },
       });
   if (id) {
-    await prisma.salesOrderItems.deleteMany({
+    const ids = 
+    await prisma.salesOrderItems.findMany({
       where: {
         id: {
           lte: lastItemId,
@@ -308,7 +309,28 @@ export async function saveOrderAction({
         },
         salesOrderId: sale_order.id,
       },
+      select: {
+        id: true
+      }
     });
+    if(ids.length > 0 )
+    {
+      const _ids = ids.map( i=> i.id)
+      await prisma.orderProductionSubmissions.deleteMany({
+        where: {
+          salesOrderItemId: {
+            in: _ids
+          }
+        }
+      })
+      await prisma.salesOrderItems.deleteMany({
+        where: {
+          id: {
+            in: _ids
+          }
+        }
+      })
+    }
   }
   await orderProdQtyUpdateAction(sale_order.id);
   console.log(sale_order)
