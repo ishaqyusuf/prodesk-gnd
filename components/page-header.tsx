@@ -21,6 +21,7 @@ interface Props {
   newDialog?: ModalName;
   ButtonIcon?;
   permissions?: (keyof ICan)[];
+  newAction?;
 }
 export default function PageHeader({
   title,
@@ -29,6 +30,7 @@ export default function PageHeader({
   Action,
   permissions,
   newDialog,
+  newAction,
   buttonText = "New",
   ButtonIcon = "add",
   modalData,
@@ -43,10 +45,11 @@ export default function PageHeader({
       </div>
       <div className="flex items-center space-x-2">
         <AuthGuard permissions={permissions || []}>
-          {(newLink || newDialog) && (
+          {(newLink || newDialog || newAction) && (
             <Button
               onClick={() => {
                 newDialog && openModal(newDialog, modalData);
+                newAction && newAction();
               }}
               size="sm"
               className="h-8"

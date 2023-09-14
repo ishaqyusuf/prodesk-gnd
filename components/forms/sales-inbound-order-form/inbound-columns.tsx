@@ -1,0 +1,94 @@
+import {
+  Cell,
+  CheckColumn,
+  ColumnHeader,
+  PrimaryCellContent,
+  SecondaryCellContent,
+  _FilterColumn,
+} from "@/components/columns/base-columns";
+import { OrderCustomerCell } from "@/components/columns/sales-columns";
+import {
+  DeleteRowAction,
+  RowActionCell,
+  RowActionMenuItem,
+  RowActionMoreMenu,
+} from "@/components/data-table/data-table-row-actions";
+import StatusBadge from "@/components/status-badge";
+import { ISalesOrderItem } from "@/types/sales";
+import { ColumnDef } from "@tanstack/react-table";
+import { useMemo } from "react";
+
+export const InboundColumns = (selectedRowIds, setSelectedRowIds, data) =>
+  useMemo<ColumnDef<ISalesOrderItem, unknown>[]>(
+    () => [
+      CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
+      {
+        id: "title",
+        header: ColumnHeader("Item"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>{row.original.description}</PrimaryCellContent>
+            <SecondaryCellContent>
+              {row.original?.salesOrder?.orderId}
+            </SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        accessorKey: "customer",
+        header: ColumnHeader("Customer"),
+        cell: ({ row }) => OrderCustomerCell(row.original.salesOrder.customer),
+      },
+      {
+        id: "supplier",
+        header: ColumnHeader("Supplier"),
+        cell: ({ row }) => (
+          <Cell>
+            <SecondaryCellContent>{row.original.supplier}</SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        id: "qty",
+        header: ColumnHeader("Qty"),
+        cell: ({ row }) => (
+          <Cell>
+            <PrimaryCellContent>{row.original.qty}</PrimaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        accessorKey: "invoice",
+        header: ColumnHeader("Invoice"),
+        cell: ({ row }) => {
+          const order = row.original.salesOrder;
+          const { amountDue = 0, grandTotal = 0 } = order;
+          const status =
+            amountDue == grandTotal
+              ? "Pending"
+              : (amountDue || 0) < (grandTotal || 0)
+              ? "Part Paid"
+              : "Paid";
+          return (
+            <Cell>
+              <StatusBadge>{status}</StatusBadge>
+            </Cell>
+          );
+        },
+      },
+      ..._FilterColumn("_q", "_supplier"),
+      {
+        accessorKey: "actions",
+        header: ColumnHeader(""),
+        size: 15,
+        maxSize: 15,
+        enableSorting: false,
+        cell: ({ row }) => (
+          <RowActionCell>
+            {/* <RowActionMoreMenu></RowActionMoreMenu> */}
+          </RowActionCell>
+        ),
+      },
+    ], //.filter(Boolean) as any,
+    [data]
+  );

@@ -10,9 +10,14 @@ interface Props {
   suppliers: string[];
 }
 export default function InboundForm({ form, list, suppliers }: Props) {
+  async function create() {}
   return (
     <>
-      <PageHeader title="New Inbound" newLink="/sales/order/new/form" />
+      <PageHeader
+        title="New Inbound"
+        newAction={create}
+        buttonText={"Create Inbound"}
+      />
       <InboundFormTableShell {...list} suppliers={suppliers} />
     </>
   );

@@ -83,7 +83,7 @@ export default function DetailsSection({ myProd }: Props) {
             <div className="">
               <div className="pt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
                 <AddressInfo label="Bill To" address={order.billingAddress} />
-                <AddressInfo label="Ship To" address={order.billingAddress} />
+                <AddressInfo label="Ship To" address={order.shippingAddress} />
               </div>
             </div>
           )}

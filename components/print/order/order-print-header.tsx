@@ -110,7 +110,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                 <tr>
                   <Address address={order.billingAddress} title="Sold To" />
                   <td colSpan={1} />
-                  <Address address={order.billingAddress} title="Ship To" />
+                  <Address address={order.shippingAddress} title="Ship To" />
                   <td colSpan={2} />
                 </tr>
               )}
