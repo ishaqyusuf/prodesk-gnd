@@ -8,6 +8,7 @@ export interface InboundOrderableItemQueryParamProps
   extends Omit<BaseQuery, "_show"> {
   salesOrderItemIds?: number[];
   _show?: "paid" | "all";
+  _supplier?;
 }
 export async function getOrderableItems(
   query: InboundOrderableItemQueryParamProps
@@ -43,6 +44,30 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
       not: "Completed",
     },
   };
+  if (query._supplier) {
+    let noSupply = false;
+    const suppliers = (Array.isArray(query._supplier)
+      ? query._supplier
+      : [query._supplier]
+    )
+      ?.map((f) => {
+        if (!noSupply) noSupply = f == "No Supplier";
+        return noSupply ? "" : f;
+      })
+      .filter(Boolean);
+    const orSupplier: any = [];
+    if (noSupply) orSupplier.push({ supplier: null });
+    if (suppliers.length)
+      orSupplier.push({
+        supplier: { in: suppliers },
+      });
+    if (orSupplier.length) {
+      if (!where.OR) where.OR = [];
+      where.OR?.push({
+        OR: orSupplier,
+      });
+    }
+  }
   // if (query.salesOrderItemIds)
   //   where.inboundOrderItemId = {
   //     in: query.salesOrderItemIds,

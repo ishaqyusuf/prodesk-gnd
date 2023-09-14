@@ -4,6 +4,7 @@ import { ICan } from "@/types/auth";
 import {
   Banknote,
   Briefcase,
+  Building,
   CircleDot,
   ClipboardList,
   Cog,
@@ -153,7 +154,7 @@ export function nav(
       setHref("Profile", "profiles");
     }
     Hrm.push(...(Object.values(_rw) as any));
-    if (href) return _route("Hrm", LayoutTemplate, `/hrm/${href}`);
+    if (href) return _route("Hrm", Building, `/hrm/${href}`);
     return null;
   })();
 
@@ -170,7 +171,7 @@ export function nav(
     if (viewProject && viewOrders) setHref("Jobs", "/jobs");
     if (viewProject && viewOrders) setHref("Payments", "/jobs/payments");
     Job.push(...(Object.values(_rw) as any));
-    if (href) return _route("Jobs", UsersIcon, `${href}`);
+    if (href) return _route("Jobs", Briefcase, `${href}`);
   })();
   if (_job) routes.Job.push(_job);
   if (viewOrders) {

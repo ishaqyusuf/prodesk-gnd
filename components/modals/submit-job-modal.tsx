@@ -275,14 +275,14 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
               <TabsTrigger value="general" />
             </TabsList>
             <TabsContent value="user">
-              <div className="">
+              {/* <div className="">
                 <Input
                   placeholder="Search"
                   className="h-8"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                 />
-              </div>
+              </div> */}
               <ScrollArea className="h-[350px] pr-4">
                 <div className="flex flex-col divide-y">
                   {search(techEmployees, "name")?.map((user) => (
@@ -303,33 +303,35 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
               </ScrollArea>
             </TabsContent>
             <TabsContent value="project">
-              <div className="">
+              {/* <div className="">
                 <Input
                   placeholder="Search"
                   className="h-7"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                 />
-              </div>
-              <div className="flex flex-col divide-y">
-                <Button
-                  onClick={() => _setTab("general")}
-                  variant={"ghost"}
-                  className=""
-                >
-                  <p className="flex w-full">Custom Task</p>
-                </Button>
-                {projects?.map((project) => (
+              </div> */}
+              <ScrollArea className="h-[350px] pr-4">
+                <div className="flex flex-col divide-y">
                   <Button
-                    onClick={() => selectProject(project)}
+                    onClick={() => _setTab("general")}
                     variant={"ghost"}
-                    key={project.id}
                     className=""
                   >
-                    <p className="flex w-full">{project.title}</p>
+                    <p className="flex w-full">Custom Task</p>
                   </Button>
-                ))}
-              </div>
+                  {projects?.map((project) => (
+                    <Button
+                      onClick={() => selectProject(project)}
+                      variant={"ghost"}
+                      key={project.id}
+                      className=""
+                    >
+                      <p className="flex w-full">{project.title}</p>
+                    </Button>
+                  ))}
+                </div>
+              </ScrollArea>
             </TabsContent>
             <TabsContent value="unit">
               <ScrollArea className="h-[350px] pr-4">

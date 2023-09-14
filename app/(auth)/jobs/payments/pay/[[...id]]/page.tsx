@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
+import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 export const metadata: Metadata = {
   title: "Payment Portal",
 };
@@ -59,6 +60,7 @@ export default async function PaymentPage({ params }) {
           )}
         </div>
       </div>
+      <JobOverviewSheet />
     </TabbedLayout>
   );
 }

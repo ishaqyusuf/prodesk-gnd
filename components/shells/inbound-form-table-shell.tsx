@@ -172,14 +172,17 @@ export default function InboundFormTableShell<T>({
         {
           id: "_supplier",
           title: "Supplier",
-          single: true,
-          options: suppliers?.map((label) => ({ label, value: label })),
+          // single: true,
+          options: [
+            { label: "No Supplier", value: "No Supplier" },
+            ...suppliers?.map((label) => ({ label, value: label })),
+          ],
         },
       ]}
       searchableColumns={[
         {
           id: "_q" as any,
-          title: "title, builder",
+          title: "",
         },
       ]}
 
