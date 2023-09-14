@@ -17,6 +17,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
+import EditJobModal from "@/components/modals/edit-job";
 export const metadata: Metadata = {
   title: "Payment Portal",
 };
@@ -32,7 +33,15 @@ export default async function PaymentPage({ params }) {
         <BreadLink isFirst title="Hrm" />
         <BreadLink isLast title="Payment Portal" />
       </Breadcrumbs>
-      <PageHeader title={user ? user.name : "Make Payment"} />
+      <PageHeader
+        title={
+          user
+            ? user.name
+            : !payables.length
+            ? "No Pending Payment"
+            : "Make Payment"
+        }
+      />
       <div className="flex gap-4">
         <div className="flex flex-col divide-y">
           {payables.map((user) => (
@@ -61,6 +70,7 @@ export default async function PaymentPage({ params }) {
         </div>
       </div>
       <JobOverviewSheet />
+      <EditJobModal />
     </TabbedLayout>
   );
 }

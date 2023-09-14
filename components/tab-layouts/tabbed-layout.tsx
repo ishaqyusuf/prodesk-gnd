@@ -9,19 +9,20 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 
 export default function TabbedLayout({
   children,
   tabKey,
   tabs = [],
+  className,
 }: {
-  children;
   tabs?: {
     path;
     title;
   }[];
   tabKey?: keyof ISidebar;
-}) {
+} & PrimitiveDivProps) {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -85,7 +86,7 @@ export default function TabbedLayout({
           ))}
         </TabsList>
       </Tabs> */}
-      <div className="px-8">{children}</div>
+      <div className={cn("px-8 space-y-4", className)}>{children}</div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default async function EmployeesPage({ searchParams }) {
         <BreadLink isLast title="Payments" />
       </Breadcrumbs>
       <PageHeader
-        title="Payments"
+        title="Payment Receipts"
         newLink={"/jobs/payments/pay"}
         buttonText={"Make Payment"}
         ButtonIcon={"dollar"}

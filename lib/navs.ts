@@ -168,8 +168,11 @@ export function nav(
       _rw[_href] = _route(title, LayoutTemplate, `${_href}`);
     }
 
-    if (viewProject && viewOrders) setHref("Jobs", "/jobs");
-    if (viewProject && viewOrders) setHref("Payments", "/jobs/payments");
+    if (viewProject && viewInvoice) setHref("Jobs", "/jobs");
+    if (viewProject && viewInvoice)
+      setHref("Payment Receipts", "/jobs/payments");
+    if (viewProject && viewInvoice)
+      setHref("Pending Payments", "/jobs/payments/pay");
     Job.push(...(Object.values(_rw) as any));
     if (href) return _route("Jobs", Briefcase, `${href}`);
   })();
