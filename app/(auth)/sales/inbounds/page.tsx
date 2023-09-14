@@ -23,7 +23,7 @@ export default async function InboundPage({ searchParams }) {
       <PageHeader
         title="Inbound Orders"
         buttonText={`New (${op})`}
-        newLink={"/sales/inbound/form/new"}
+        newLink={"/sales/inbound/new/form"}
       />
       <InboundsTableShell {...response} />
     </InboundLayout>

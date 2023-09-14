@@ -12,11 +12,11 @@ export function DataPageShell<T>({
   className,
   children,
 }: {
-  data: T;
+  data?: T;
   children?;
 } & PrimitiveDivProps) {
   const id = usePathname();
-  const dataP = useAppSelector((state) => state.slicers.dataPage);
+  const dataP = useAppSelector((state) => state.slicers?.dataPage);
   useEffect(() => {
     dispatchSlice("dataPage", {
       id,

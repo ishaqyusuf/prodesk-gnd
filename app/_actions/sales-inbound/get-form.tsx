@@ -1,0 +1,50 @@
+"use server";
+
+import { prisma } from "@/db";
+import {
+  InboundOrderableItemQueryParamProps,
+  getOrderableItems,
+} from "./get-orderable-items";
+import { IInboundOrder } from "@/types/sales-inbound";
+import { uniqueBy } from "@/lib/utils";
+
+export async function getInboundForm(
+  slug = null,
+  query: InboundOrderableItemQueryParamProps
+) {
+  let form: IInboundOrder = slug
+    ? await prisma.inboundOrders.findUnique({
+        where: {
+          slug,
+        },
+        include: {
+          inboundItems: {
+            include: {
+              salesOrderItems: true,
+            },
+          },
+        },
+      })
+    : ({} as any);
+  const salesItemIds = form?.inboundItems?.map((i) => i.salesOrderItemId);
+  query.salesOrderItemIds = salesItemIds;
+  const orderables = await getOrderableItems(query);
+  const suppliers = await prisma.salesOrderItems.findMany({
+    distinct: "supplier",
+    where: {
+      supplier: {
+        not: null,
+      },
+    },
+    select: {
+      supplier: true,
+    },
+  });
+  return {
+    form,
+    suppliers: uniqueBy(suppliers, "supplier")
+      .map((s) => s.supplier)
+      ?.filter(Boolean),
+    list: orderables,
+  };
+}

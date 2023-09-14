@@ -139,6 +139,25 @@ export function nav(
     routes.Services.push(
       _route("Customer Service", ClipboardList, "/customer-services")
     );
+  const Hrm: Route[] = [];
+
+  let _hrm = (() => {
+    const _rw: any = {};
+    let href: any = null;
+    function setHref(title, _href) {
+      if (!href) href = _href;
+      _rw[_href] = _route(title, LayoutTemplate, `/hrm/${_href}`);
+    }
+    if (viewHrm || viewEmployee) {
+      setHref("Employees", "employees");
+      setHref("Profile", "profiles");
+    }
+    Hrm.push(...(Object.values(_rw) as any));
+    if (href) return _route("Hrm", LayoutTemplate, `/hrm/${href}`);
+    return null;
+  })();
+
+  if (_hrm) routes.Hrm.push(_hrm);
   const Job: Route[] = [];
   let _job = (() => {
     const _rw: any = {};
@@ -175,9 +194,8 @@ export function nav(
         // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]
     );
-  const CommunitySettings: Route[] = [];
-  const Hrm: Route[] = [];
 
+  const CommunitySettings: Route[] = [];
   let _communitySettings = (() => {
     const _rw: any = {};
     let href: any = null;
@@ -219,13 +237,11 @@ export function nav(
   let homeRoute = null;
   Object.entries(routes).map(([title, r]) => {
     let len = r?.length;
-
     if (len == 0) return;
     totalRoutes += len;
     if (!homeRoute) homeRoute = r?.[0]?.path;
     flatRoutes.push(...r);
     const __routes = r.filter(Boolean) as Route[];
-
     routeGroup.push({
       title: len < 2 ? null : title,
       routes: __routes,

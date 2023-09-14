@@ -274,39 +274,41 @@ model HomeTemplates {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model InboundOrderItems {
-    id               Int               @unique @default(autoincrement())
+    id               Int              @unique @default(autoincrement())
+    salesOrderItemId Int
     inboundOrderId   Int?
-    salesOrderItemId Int?
-    salesOrderId     Int?
     productVariantId Int
     qty              Int
-    meta             Json?             @db.Json
-    status           String?           @db.VarChar(255)
-    location         String?           @db.VarChar(255)
+    meta             Json?            @db.Json
+    status           String?          @db.VarChar(255)
+    location         String?          @db.VarChar(255)
     putAwayBy        Int?
-    putawayAt        DateTime?         @db.Timestamp(0)
-    deletedAt        DateTime?         @db.Timestamp(0)
-    createdAt        DateTime?         @db.Timestamp(0)
-    updatedAt        DateTime?         @db.Timestamp(0)
+    putawayAt        DateTime?        @db.Timestamp(0)
+    deletedAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @db.Timestamp(0)
+    updatedAt        DateTime?        @db.Timestamp(0)
     productId        Int
     unitCost         Float
     totalCost        Float
-    items            SalesOrderItems[]
+    salesOrderItems  SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
+    InboundOrders    InboundOrders?   @relation(fields: [inboundOrderId], references: [id])
+    inboundOrdersId  Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model InboundOrders {
-    id         Int       @unique @default(autoincrement())
-    slug       String    @db.VarChar(255)
-    orderId    String    @db.VarChar(255)
-    supplier   String?
-    supplierId Int?
-    totalCost  Float?
-    status     String    @db.VarChar(255)
-    meta       Json?     @db.Json
-    deletedAt  DateTime? @db.Timestamp(0)
-    createdAt  DateTime? @db.Timestamp(0)
-    updatedAt  DateTime? @db.Timestamp(0)
+    id           Int                 @unique @default(autoincrement())
+    slug         String              @unique @db.VarChar(255)
+    orderId      String              @db.VarChar(255)
+    supplier     String?
+    supplierId   Int?
+    totalCost    Float?
+    status       String              @db.VarChar(255)
+    meta         Json?               @db.Json
+    deletedAt    DateTime?           @db.Timestamp(0)
+    createdAt    DateTime?           @db.Timestamp(0)
+    updatedAt    DateTime?           @db.Timestamp(0)
+    inboundItems InboundOrderItems[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -815,7 +817,6 @@ model SalesOrderItems {
     description        String?   @db.Text
     productId          Int?
     supplier           String?
-    inboundOrderItemId Int?
     swing              String?   @db.VarChar(255)
     price              Float?
     tax                Float?
@@ -837,7 +838,7 @@ model SalesOrderItems {
     prodStartedAt    DateTime?                    @db.Timestamp(0)
     sentToProdAt     DateTime?                    @db.Timestamp(0)
     prodCompletedAt  DateTime?                    @db.Timestamp(0)
-    inboundOrderItem InboundOrderItems?           @relation(fields: [inboundOrderItemId], references: [id])
+    inboundOrderItem InboundOrderItems[]
     salesOrder       SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
     productions      OrderProductionSubmissions[]
     components       SalesOrderItemComponents[]

@@ -189,7 +189,7 @@ export function getModelNumber(modelName) {
 }
 export const uniqueBy = (data, key) => {
   const unique = [...new Set(data.map((item) => item[key]?.toLowerCase()))];
-  console.log(unique);
+  // console.log(unique);
   return unique.map((s) => {
     const d = data.find((h) => h[key]?.toLowerCase() == s);
     return {
