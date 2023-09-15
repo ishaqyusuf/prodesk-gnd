@@ -36,5 +36,5 @@ function whereCustomerService(query: CustomerServiceQueryParamsProps) {
   _where.searchQuery("description", "projectName", "homeOwner", "homePhone");
   _where.register("status", query._show);
   _where.register("techId", Number(query._userId));
-  return _where.where;
+  return _where.get();
 }

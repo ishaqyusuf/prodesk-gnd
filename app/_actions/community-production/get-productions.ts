@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 
 export interface ProductionsQueryParams extends BaseQuery {}
 export async function getProductions(query: ProductionsQueryParams) {
-  const where = whereQuery(query);
+  const where = whereProductionQuery(query);
   const _items = await prisma.homeTasks.findMany({
     ...(await queryFilter(query)),
     where,
@@ -22,7 +22,7 @@ export async function getProductions(query: ProductionsQueryParams) {
     data: _items as any,
   };
 }
-function whereQuery(query: ProductionsQueryParams) {
+function whereProductionQuery(query: ProductionsQueryParams) {
   const q = {
     contains: query._q || undefined,
   };

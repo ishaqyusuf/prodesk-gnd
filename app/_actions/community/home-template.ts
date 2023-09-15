@@ -5,6 +5,7 @@ import { removeEmptyValues, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
+import { whereQuery } from "@/lib/db-utils";
 
 export interface HomeTemplatesQueryParams extends BaseQuery {}
 export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
@@ -65,13 +66,16 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: Prisma.CommunityModelsWhereInput = {
-    modelName: q,
-    project: { title: q },
-    // builderId: {
-    //   equals: Number(query._builderId) || undefined,
-    // },
-  };
+  const where = whereQuery<Prisma.CommunityModelsWhereInput>(query);
+  where.searchQuery("modelName");
+  where.search({
+    project: { title: where.q },
+  });
+  return where.get();
+  // const where: Prisma.CommunityModelsWhereInput = {
+  //   modelName: q,
+  //   project: { title: q },
+  // };
 
   return where;
 }

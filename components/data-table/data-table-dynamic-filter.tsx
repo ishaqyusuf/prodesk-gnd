@@ -24,7 +24,7 @@ export function DynamicFilter({
   listKey,
   ...props
 }: Props) {
-  const list = useAppSelector((state) => state.slicers[listKey]);
+  const list = useAppSelector((state) => state.slicers?.[listKey]);
 
   useEffect(() => {
     // init();
