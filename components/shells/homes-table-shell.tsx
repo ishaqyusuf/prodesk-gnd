@@ -103,7 +103,7 @@ export default function HomesTableShell<T>({
               );
               if (edit) route.push(edit);
             }}
-            xlink="/community/unit/slug"
+            // xlink="/community/unit/slug"
             slug={row.original?.slug}
           >
             <PrimaryCellContent>
