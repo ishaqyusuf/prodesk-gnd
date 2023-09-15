@@ -196,8 +196,10 @@ export function DataTableFacetedFilter2<TData, TValue>({
                 );
               })}
             </CommandGroup>
+            
             {_selectedValues.size > 0 && (
-              <>
+              <div className="h-[34px]">
+                <div className="absolute bottom-0 bg-white w-full">
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
@@ -211,7 +213,8 @@ export function DataTableFacetedFilter2<TData, TValue>({
                     Clear filters
                   </CommandItem>
                 </CommandGroup>
-              </>
+              </div>
+              </div>
             )}
           </CommandList>
         </Command>
