@@ -126,7 +126,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
         <Command>
-          {!(single || options?.map?.length < 5) && (
+          {options?.length > 5 && (
             <CommandInput placeholder={title} />
           )}
           <CommandList>
