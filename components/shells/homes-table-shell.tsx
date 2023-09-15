@@ -93,7 +93,19 @@ export default function HomesTableShell<T>({
         accessorKey: "unit",
         header: ColumnHeader("Unit"),
         cell: ({ row }) => (
-          <Cell link="/community/unit/slug" slug={row.original?.slug}>
+          <Cell
+            className={"hover:underline cursor-pointer"}
+            onClick={async (e) => {
+              const edit = await getUnitTemplateLink(
+                row.original.projectId,
+                row.original.homeTemplateId,
+                row.original.modelName
+              );
+              if (edit) route.push(edit);
+            }}
+            xlink="/community/unit/slug"
+            slug={row.original?.slug}
+          >
             <PrimaryCellContent>
               {row.original.lot}
               {"/"}
