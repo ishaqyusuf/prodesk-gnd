@@ -56,6 +56,9 @@ export function DatePicker({
   function __format(d) {
     return formatDate(d, format);
   }
+  // React.useEffect(() => {
+  //   console.log(value);
+  // }, []);
   const [open, setOpen] = React.useState(false);
   return (
     <div className={cn("grid gap-2")}>

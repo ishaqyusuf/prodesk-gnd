@@ -41,6 +41,7 @@ import {
 } from "@/app/_actions/customer-services/save-customer-service";
 import { findHomeOwnerAction } from "@/app/_actions/customer-services/find-home-owner";
 import { deepCopy } from "@/lib/deep-copy";
+import dayjs from "dayjs";
 
 export default function CustomerServiceModal() {
   const route = useRouter();
@@ -84,7 +85,7 @@ export default function CustomerServiceModal() {
       data
         ? data
         : {
-            requestDate: new Date(),
+            requestDate: null, //new Date(),
             status: "Pending",
             meta: {
               lotBlock: "",
