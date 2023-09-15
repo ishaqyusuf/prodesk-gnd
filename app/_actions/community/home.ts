@@ -133,7 +133,7 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
       };
     }
   }
-  if (query._projectId) where.projectId = query._projectId;
+  if (query._projectId) where.projectId = Number(query._projectId);
   switch (query._production) {
     case "Completed":
       break;
