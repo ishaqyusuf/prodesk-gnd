@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { whereQuery } from "@/lib/db-utils";
 
 export interface CustomerServiceQueryParamsProps extends BaseQuery {
   _show: "scheduled" | "incomplete" | "completed";
@@ -31,11 +32,9 @@ function whereCustomerService(query: CustomerServiceQueryParamsProps) {
   const q = {
     contains: query._q || undefined,
   };
-  const where: Prisma.WorkOrdersWhereInput = {
-    status: query._show || undefined,
-    description: q,
-    projectName: q,
-  };
-  if (query._userId) where.techId = query._userId;
-  return where;
+  const _where = whereQuery<Prisma.WorkOrdersWhereInput>(query);
+  _where.searchQuery("description", "projectName", "homeOwner", "homePhone");
+  _where.register("status", query._show);
+  _where.register("techId", Number(query._userId));
+  return _where.where;
 }

@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   LayoutTemplate,
   NewspaperIcon,
+  Package,
   PackageOpen,
   Pin,
   School,
@@ -23,6 +24,7 @@ import {
   ShoppingBag,
   User,
   UsersIcon,
+  Workflow,
 } from "lucide-react";
 import { Session } from "next-auth";
 
@@ -193,8 +195,8 @@ export function nav(
         _route("Payments", CreditCard, "/sales/payments"),
         _route("Catalogs", PackageOpen, "/sales/catalogs"),
         // _route("Productions", Construction, `/sales/productions${prodQuery}`),
-        _route("Productions", Construction, `/sales/productions`),
-        _route("Inbounds", Construction, `/sales/inbounds`),
+        _route("Productions", Workflow, `/sales/productions`),
+        _route("Inbounds", Package, `/sales/inbounds`),
         // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
       ]
     );
