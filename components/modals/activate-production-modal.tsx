@@ -26,7 +26,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { DatePicker } from "../date-range-picker";
 import ConfirmBtn from "../confirm-btn";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 import { activateHomeProductionAction } from "@/app/_actions/community/activate-production";
 import {
   Table,

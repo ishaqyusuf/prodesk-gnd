@@ -21,7 +21,7 @@ export function HomesSelectionAction({ items }) {
         size="icon"
         onClick={() => {
           dispatchSlice("printHomes", {
-            homes: items?.map((row) => deepCopy(row.original)),
+            homes: items?.map((row) => deepCopy(row)),
           });
         }}
         className="ml-auto bg-rose-950 hidden h-8 lg:flex"

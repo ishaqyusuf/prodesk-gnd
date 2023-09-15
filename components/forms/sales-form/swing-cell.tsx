@@ -4,8 +4,8 @@ import { TableCell } from "@/components/ui/table";
 import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import AutoComplete from "@/components/auto-complete";
-import AutoComplete2 from "@/components/auto-complete-headless";
+
+import AutoComplete2 from "@/components/auto-complete";
 
 export default function SwingCell({
   rowIndex,

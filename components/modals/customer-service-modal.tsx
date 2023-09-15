@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { DatePicker } from "../date-range-picker";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 
 import { customerServiceSchema } from "@/lib/validations/customer-service";
 import {

@@ -276,23 +276,22 @@ model HomeTemplates {
 model InboundOrderItems {
     id               Int              @unique @default(autoincrement())
     salesOrderItemId Int
-    inboundOrderId   Int?
-    productVariantId Int
+    inboundOrderId   Int
     qty              Int
+    productId        Int?
     meta             Json?            @db.Json
-    status           String?          @db.VarChar(255)
+    status           String           @db.VarChar(255)
     location         String?          @db.VarChar(255)
+    supplier         String?
     putAwayBy        Int?
     putawayAt        DateTime?        @db.Timestamp(0)
     deletedAt        DateTime?        @db.Timestamp(0)
     createdAt        DateTime?        @db.Timestamp(0)
     updatedAt        DateTime?        @db.Timestamp(0)
-    productId        Int
-    unitCost         Float
-    totalCost        Float
+    unitCost         Float?
+    totalCost        Float?
     salesOrderItems  SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
     InboundOrders    InboundOrders?   @relation(fields: [inboundOrderId], references: [id])
-    inboundOrdersId  Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -300,10 +299,11 @@ model InboundOrders {
     id           Int                 @unique @default(autoincrement())
     slug         String              @unique @db.VarChar(255)
     orderId      String              @db.VarChar(255)
+    reference    String?
     supplier     String?
     supplierId   Int?
     totalCost    Float?
-    status       String              @db.VarChar(255)
+    status       String?             @db.VarChar(255)
     meta         Json?               @db.Json
     deletedAt    DateTime?           @db.Timestamp(0)
     createdAt    DateTime?           @db.Timestamp(0)

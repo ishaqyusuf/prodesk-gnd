@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "../ui/table";
 import Money from "../money";
 import { useForm } from "react-hook-form";
 import { IJobPayment, IJobs } from "@/types/hrm";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 import { Input } from "../ui/input";
 import { useTransition } from "react";
 import { makePayment } from "@/app/_actions/hrm-jobs/make-payment";

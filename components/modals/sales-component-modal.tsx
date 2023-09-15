@@ -42,7 +42,7 @@ import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { closeModal } from "@/lib/modal";
 import { store } from "@/store";
 import { itemQuoteUpdated } from "@/store/invoice-item-component-slice";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 import ReRender from "../re-render";
 
 export interface IComponentForm {

@@ -35,7 +35,7 @@ import {
   findAddressAction,
   saveAddressAction,
 } from "@/app/_actions/sales/sales-address";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 
 export function SalesCustomerModal({
   form,

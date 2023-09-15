@@ -13,6 +13,7 @@ import {
   RowActionMenuItem,
   RowActionMoreMenu,
 } from "@/components/data-table/data-table-row-actions";
+import Money from "@/components/money";
 import StatusBadge from "@/components/status-badge";
 import { ISalesOrderItem } from "@/types/sales";
 import { ColumnDef } from "@tanstack/react-table";
@@ -45,6 +46,15 @@ export const InboundColumns = (selectedRowIds, setSelectedRowIds, data) =>
         cell: ({ row }) => (
           <Cell>
             <SecondaryCellContent>{row.original.supplier}</SecondaryCellContent>
+          </Cell>
+        ),
+      },
+      {
+        id: "sales",
+        header: ColumnHeader("Sales"),
+        cell: ({ row }) => (
+          <Cell>
+            <Money value={row.original.total} />
           </Cell>
         ),
       },

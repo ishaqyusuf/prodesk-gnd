@@ -28,7 +28,7 @@ export function SalesSelectionAction({ items }) {
         <DropdownMenuContent align="end" className="w-[150px]">
           <PrintOrderMenuAction
             row={null as any}
-            ids={items?.map((i) => i?.original?.id)}
+            ids={items?.map((i) => i?.id)}
           />
         </DropdownMenuContent>
       </DropdownMenu>

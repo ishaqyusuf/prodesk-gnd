@@ -35,7 +35,7 @@ import { staticBuildersAction } from "@/app/_actions/community/builders";
 import { projectSchema } from "@/lib/validations/community-validations";
 import { saveProject } from "@/app/_actions/community/projects";
 import { IUser } from "@/types/hrm";
-import AutoComplete2 from "../auto-complete-headless";
+import AutoComplete2 from "../auto-complete";
 import { staticRolesAction } from "@/app/_actions/hrm/static-roles";
 import { employeeSchema } from "@/lib/validations/hrm";
 import {

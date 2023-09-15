@@ -1,184 +1,336 @@
+import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { Combobox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
-import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { InputProps } from "./ui/input";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { Label } from "./ui/label";
 
 interface Props {
   options?: any[];
   value?: any;
   onChange?;
+  Item?;
   itemText?;
   itemValue?;
+  label?;
   transformValue?;
   transformText?;
+  searchAction?;
+  searchFn?;
+  allowCreate?;
+  formKey?;
+  uppercase?: Boolean;
+  placeholder?;
+  form?;
 }
-export default function Autocomplete({
+function AutoComplete2({
   options,
   value,
   onChange,
+  label,
+  searchAction,
+  allowCreate,
   itemText = "name",
   itemValue = "id",
-}: Props) {
-  const [showOptions, setShowOptions] = useState(false);
-  const [cursor, setCursor] = useState(-1);
-  function __options(items) {
+  className,
+  Item,
+  searchFn,
+  form,
+  placeholder,
+  formKey,
+  uppercase,
+}: Props & PrimitiveDivProps) {
+  const [query, setQuery] = useState("");
+  const [items, setItems] = useState<any[]>(transformItems(options || []));
+  const [results, setResults] = useState<any[]>([]);
+  const [selected, setSelected] = useState<{
+    id;
+    name;
+    data;
+  }>();
+  const watch = form && formKey ? form.getValues(formKey) : value;
+
+  const searchMode = searchFn || searchAction;
+  const debouncedQuery = useDebounce(query, searchMode ? 800 : 50);
+
+  // const [searchable, setSearchable] = useState(false);
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    if (!searchMode && typing) setResults(filteredOptions());
+    else {
+      if (typing) {
+        loadResult();
+      }
+    }
+  }, [debouncedQuery, typing]);
+  async function loadResult() {
+    // console.log("RELOAD RESULTS", dirty);
+    const { items } = searchFn
+      ? await searchFn(debouncedQuery)
+      : await searchAction({ q: debouncedQuery });
+    // console.log(items);
+    setItems(transformItems(items));
+  }
+  useEffect(() => {
+    setResults(filteredOptions());
+  }, [items]);
+  function transformItems(items) {
     return items?.map((o) => {
-      if (typeof o === "string") return { id: o, text: o, data: o };
+      if (typeof o === "string") return { id: o, name: o, data: o };
       return {
-        value: o?.[itemValue],
-        text: o?.[itemText],
+        id: o?.[itemValue],
+        name: o?.[itemText],
         data: o,
       };
     });
   }
-  const [items, setItems] = useState(__options(options) || []);
-  const [filters, setFilters] = useState(__options(options) || []);
-  const ref = useRef();
-  function getItem(value, by: "text" | "value" = "text") {
-    return items.find((o) => o?.[by] == value);
+  function getItem(value, by: "id" | "name" = "id") {
+    let item = items?.find((o) => o?.[by] == value) as any;
+    if (allowCreate && !item) return { id: value, name: value, data: value };
+    return item;
   }
-
   function getItemText(value) {
-    return getItem(value)?.text;
+    return (getItem(value) as any)?.name;
   }
-  const [data, setData] = useState({
-    text: getItemText(value),
-    value,
-    data: getItem(value)?.data,
-  });
+  // useEffect(() => {
+  //   console.log(getItem(watch));
+  //   setSelected(getItem(watch));
+  // }, [watch]);
+
+  // useEffect(() => {
+  //   const _items = transformItems(options || []);
+  //   setItems(_items);
+  //   console.log(label, "options changed");
+  //   // setSelected(getItem(watch));
+  // }, [options]);
   useEffect(() => {
-    setItems(__options(options));
-    setData({
-      text: getItemText(value),
-      value,
-      data: getItem(value)?.data,
-    });
-    filteredOptions();
-  }, [options]);
-
-  const select = (option) => {
-    onChange(option);
-    setData({
-      text: option.text,
-      value: option.value,
-      data: option?.data,
-    });
-    setShowOptions(false);
-  };
-
-  const handleChange = (text) => {
-    // onChange(text);
-    setData({
-      text,
-      value: [data.value],
-      data: [data.data],
-    });
-    setCursor(-1);
-    if (!showOptions) {
-      setShowOptions(true);
-    }
-    filteredOptions();
-  };
-  const debouncedQuery = useDebounce(data.text, 800);
-  useEffect(() => {}, [debouncedQuery]);
-
+    const _items = transformItems(options || []);
+    setItems(_items);
+    setSelected(getItem(watch));
+    // setResults(filteredOptions());
+    setQuery(watch);
+  }, []);
   const filteredOptions = () => {
-    const escapedText = data?.text?.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const escapedText = !debouncedQuery
+      ? ""
+      : debouncedQuery?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
     // Create a regex pattern to match the search string anywhere in the text
     const pattern = new RegExp(escapedText, "i");
-    const filteredOptions = items.filter((option) => pattern.test(option.text));
-    setFilters(filteredOptions);
+    const filteredOptions = items?.filter((option) =>
+      pattern.test(option.name)
+    );
+    return filteredOptions;
+    // setFilters(filteredOptions);
     // return __options(options).filter(
     //   (option) => option.text.includes(data?.text) || !data?.text
     //   );
   };
 
-  const moveCursorDown = () => {
-    if (cursor < filteredOptions.length - 1) {
-      setCursor((c) => c + 1);
+  function valueChange(e) {
+    // console.log("val change", e);
+    setSelect(true);
+    setSelected(e);
+    if (form && formKey) {
+      form.setValue(formKey, e?.id);
     }
-  };
-
-  const moveCursorUp = () => {
-    if (cursor > 0) {
-      setCursor((c) => c - 1);
-    }
-  };
-
-  const handleNav = (e) => {
-    switch (e.key) {
-      case "ArrowUp":
-        moveCursorUp();
-        break;
-      case "ArrowDown":
-        moveCursorDown();
-        break;
-      case "Enter":
-        if (cursor >= 0 && cursor < filteredOptions.length) {
-          select(filteredOptions[cursor]);
-        }
-        break;
-    }
-  };
-
+    onChange && onChange(e);
+  }
+  const [focus, setFocus] = useState(false);
+  const [select, setSelect] = useState(false);
   useEffect(() => {
-    const listener = (e) => {
-      if (!(ref?.current as any)?.contains(e.target)) {
-        setShowOptions(false);
-        setCursor(-1);
+    // console.log(label, selected);
+  }, [selected]);
+  function onFocus(e) {
+    setTyping(false);
+    setSelect(false);
+    setFocus(true);
+    // setSearchable(true);
+    // if (!select) buttonRef?.current?.click();
+    // else setSelect(false);
+    if (searchMode && results.length == 0) loadResult();
+  }
+  useEffect(() => {
+    if (typing && !select && !focus) {
+      // console.log("BLURRRED:::", query);
+      if (allowCreate) {
+        setSelected({
+          id: query,
+          name: query,
+          data: query,
+        });
+        if (form && formKey) {
+          form.setValue(formKey, query);
+        }
+        onChange &&
+          onChange({
+            id: query,
+            name: query,
+            data: query,
+          });
       }
-    };
+    }
+  }, [typing, select, focus, query]);
+  function onBlur(e) {
+    // setTimeout(() => {
+    // setTyping(false);
+    setTimeout(() => {
+      setFocus(false);
+    }, 500);
+    // setDirty(true);
+    // if (!select) {
+    //   console.log("BLURR");
+    //   console.log(selected);
+    // }
+    // }, 100);
+  }
+  const buttonRef = useRef<HTMLButtonElement>();
+  const inputRef = useRef<HTMLInputElement>();
 
-    document.addEventListener("click", listener);
-    document.addEventListener("focusin", listener);
+  const [isScrollBlocked, setIsScrollBlocked] = useState(false);
+
+  const [position, setPosition] = useState<any>({ x: 0, y: 0 });
+
+  const updatePosition = () => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setPosition({
+        x: rect.left,
+        y: rect.top,
+        bottom: rect.bottom,
+        top: rect.top,
+      });
+    }
+  };
+  function getSelected() {
+    return getItem(watch);
+  }
+  useEffect(() => {
+    window.addEventListener("scroll", updatePosition);
+    window.addEventListener("resize", updatePosition);
+
+    updatePosition();
+
     return () => {
-      document.removeEventListener("click", listener);
-      document.removeEventListener("focusin", listener);
+      window.removeEventListener("scroll", updatePosition);
+      window.removeEventListener("resize", updatePosition);
     };
   }, []);
-
   return (
-    <div className="relative z-[9999] w-64 " ref={ref as any}>
-      <input
-        type="text"
-        className="w-full border-2 px-4 py-2 outline-none rounded-lg"
-        value={value}
-        onChange={(e) => handleChange(e.target.value)}
-        onFocus={() => setShowOptions(true)}
-        onKeyDown={handleNav}
-      />
-
-      <ul
-        className={`absolute w-full bg-white z-[9999] rounded-lg shadow-lg ${!showOptions &&
-          "hidden"} select-none`}
-      >
-        {items.length > 0 ? (
-          items.map((option, i, arr) => {
-            let className = "px-4 hover:bg-gray-100 ";
-
-            if (i === 0) className += "pt-2 pb-1 rounded-t-lg";
-            else if (i === arr.length) className += "pt-1 pb-2 rounded-b-lg";
-            else if (i === 0 && arr.length === 1)
-              className += "py-2 rounded-lg";
-            else className += "py-1";
-
-            if (cursor === i) {
-              className += " bg-gray-100";
-            }
-
-            return (
-              <li
-                className={className}
-                key={option.value}
-                onClick={() => select(option)}
+    <div className="grid gap-2">
+      {label && <Label>{label}</Label>}
+      <Combobox value={selected} onChange={valueChange}>
+        <div className="relative mt-1">
+          <div
+            className={cn(
+              focus && "outline-none ring-2  ring-ring  ring-offset-2 ",
+              "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-white text-left  sm:text-sm border border-input h-8",
+              className
+            )}
+          >
+            <Combobox.Input
+              onClick={() => {
+                if (!select) buttonRef?.current?.click();
+              }}
+              onKeyDown={(e) => {
+                setTyping(true);
+              }}
+              ref={inputRef as any}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              placeholder={placeholder}
+              className={cn(
+                "w-full border-none spy-2 h-full focus:outline-none p-1 text-sm leading-5 text-gray-900 focus:ring-0",
+                uppercase && "uppercase"
+              )}
+              displayValue={(person) => (person as any).name}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <div className="absolute top-0 w-0 h-0 cursor-text">
+              <Combobox.Button
+                ref={buttonRef as any}
+                className="w-full cursor-text  h-12s"
               >
-                {option.text}
-              </li>
-            );
-          })
-        ) : (
-          <li className="px-4 py-2 text-gray-500">No results</li>
-        )}
-      </ul>
+                &nbsp;
+              </Combobox.Button>
+            </div>
+            {/* <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronsUpDownIcon
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </Combobox.Button> */}
+          </div>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+            // afterLeave={() => setQuery("")}
+          >
+            <Combobox.Options
+              style={{
+                minWidth: `${inputRef.current?.clientWidth}px`,
+                top: `${position.bottom}px`,
+              }}
+              className={cn(
+                "fixed mt-1 max-h-60  overflow-auto rounded-md bg-white py-1 text-base shadow-lg   ring-opacity-5 border-input focus:outline-none min-w-au  sm:text-sm z-[9999]",
+                `min-w-[]`
+              )}
+            >
+              {results?.length === 0 && (
+                <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                  Nothing found.
+                </div>
+              )}
+              {query?.length > 0 && allowCreate && (
+                <Combobox.Option
+                  className="w-0 h-0 opacity-0"
+                  value={{ id: query, name: query }}
+                >
+                  Create `{query}``
+                </Combobox.Option>
+              )}
+              {/* relative flex cursor-default select-none items-center rounded-sm
+              px-2 py-1.5 text-sm outline-none aria-selected:bg-accent
+              aria-selected:text-accent-foreground
+              data-[disabled]:pointer-events-none data-[disabled]:opacity-50 */}
+              {results?.map((person) => (
+                <Combobox.Option
+                  key={person.id}
+                  className={({ active }) =>
+                    `flex cursor-default select-none items-center rounded-sm
+              px-2 py-1.5 text-sm outline-none ${
+                active ? "bg-accent text-accent-foreground" : ""
+              }`
+                  }
+                  value={person}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <div
+                        className={cn(
+                          `block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`,
+                          uppercase && "uppercase",
+                          Item && "w-full"
+                        )}
+                      >
+                        {Item ? <Item {...person} /> : person.name}
+                      </div>
+                    </>
+                  )}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
+          </Transition>
+        </div>
+      </Combobox>
     </div>
   );
 }
+export default memo(AutoComplete2);

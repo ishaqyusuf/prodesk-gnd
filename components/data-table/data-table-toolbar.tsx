@@ -108,7 +108,7 @@ export function DataTableToolbar<TData,TValue>({
         )}
       </div>
       <div className="flex items-center space-x-2">
-        {table.getSelectedRowModel().rows.length > 0 && SelectionAction && <SelectionAction items={table.getSelectedRowModel().rows} />}
+        {table.getSelectedRowModel().rows.length > 0 && SelectionAction && <SelectionAction items={table.getSelectedRowModel().rows?.map(r => r.original)} />}
         {deleteRowsAction && table.getSelectedRowModel().rows.length > 0 ? (
           <Button
             aria-label="Delete selected rows"

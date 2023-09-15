@@ -16,9 +16,10 @@ export default async function InboundFormPage({
   searchParams,
 }) {
   const response = await getInboundForm(slug, queryParams(searchParams));
+  // return <>a</>;
   return (
     <div className="space-y-4 px-8">
-      <DataPageShell>
+      <DataPageShell data={response}>
         <Breadcrumbs>
           <BreadLink title="Sales" isFirst />
           <BreadLink title="Inbounds" link="/sales/inbounds" />

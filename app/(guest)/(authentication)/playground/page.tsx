@@ -1,5 +1,5 @@
 "use client";
-import AutoComplete2 from "@/components/auto-complete-headless";
+import AutoComplete2 from "@/components/auto-complete";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 

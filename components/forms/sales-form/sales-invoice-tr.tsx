@@ -25,7 +25,7 @@ import { updateFooterInfo } from "@/store/invoice-item-component-slice";
 import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
-import AutoComplete2 from "@/components/auto-complete-headless";
+import AutoComplete2 from "@/components/auto-complete";
 import Money from "@/components/money";
 
 interface IProps {

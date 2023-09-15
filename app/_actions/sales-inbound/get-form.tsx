@@ -7,11 +7,15 @@ import {
 } from "./get-orderable-items";
 import { IInboundOrder } from "@/types/sales-inbound";
 import { uniqueBy } from "@/lib/utils";
-
+export interface GetInboundFormReponse {
+  form;
+  suppliers: string[];
+  list;
+}
 export async function getInboundForm(
   slug = null,
   query: InboundOrderableItemQueryParamProps
-) {
+): Promise<GetInboundFormReponse> {
   let form: IInboundOrder = slug
     ? await prisma.inboundOrders.findUnique({
         where: {
