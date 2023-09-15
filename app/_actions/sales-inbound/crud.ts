@@ -15,6 +15,9 @@ export async function getInboundOrders(query: InboundOrderQueryParamsProps) {
   const items = await prisma.inboundOrders.findMany({
     where,
     ...(await queryFilter(query)),
+    include: {
+      inboundItems: true,
+    },
   });
 
   const pageInfo = await getPageInfo(query, where, prisma.inboundOrders);

@@ -43,6 +43,13 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
     prodStatus: {
       not: "Completed",
     },
+    inboundOrderItem: {
+      none: {
+        id: {
+          gt: 0,
+        },
+      },
+    },
   };
   if (query._supplier) {
     let noSupply = false;
@@ -93,6 +100,13 @@ export async function getOrderableItemsCount() {
       },
       salesOrder: {
         amountDue: 0,
+      },
+      inboundOrderItem: {
+        none: {
+          id: {
+            gt: 0,
+          },
+        },
       },
     },
   });

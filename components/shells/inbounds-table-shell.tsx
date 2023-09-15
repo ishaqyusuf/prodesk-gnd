@@ -29,27 +29,18 @@ export default function InboundsTableShell<T>({
   pageInfo,
 }: TableShellProps<IInboundOrder>) {
   const [isPending, startTransition] = useTransition();
-
+  // console.log(data);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<IInboundOrder, unknown>[]>(
     () => [
       {
         maxSize: 10,
         id: "id",
-        header: ColumnHeader("Date"),
+        header: ColumnHeader("#/Date"),
         cell: ({ row }) => (
           <Cell>
-            <DateCellContent>{row.original.status}</DateCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "title",
-        header: ColumnHeader("Order #"),
-        cell: ({ row }) => (
-          <Cell>
-            {/* link={`/community/project/slug`} slug={row.original.slug} */}
             <PrimaryCellContent>{row.original.orderId}</PrimaryCellContent>
+            <DateCellContent>{row.original.createdAt}</DateCellContent>
           </Cell>
         ),
       },
