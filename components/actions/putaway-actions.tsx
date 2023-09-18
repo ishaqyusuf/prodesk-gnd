@@ -11,6 +11,7 @@ import { Icons } from "../icons";
 import { _updateInboundItemLocation } from "@/app/_actions/sales-inbound/putaway.crud";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Btn from "../btn";
 
 interface Props {
   data: IInboundOrderItems;
@@ -45,11 +46,13 @@ export default function PutawayActions({ data }: Props) {
             <Input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="h-8"
+              className="h-8 uppercase"
             />
           </div>
           <div className="mt-2 flex justify-end">
-            <Button className="h-8">Putaway</Button>
+            <Btn onClick={updateLocation} isLoading={isPending} className="h-8">
+              Putaway
+            </Btn>
           </div>
         </PopoverContent>
       </Popover>

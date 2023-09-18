@@ -23,7 +23,7 @@ export function SmartTable<T>(data) {
       ...props
     }: Omit<IColumn, "id" | "header"> & {
       link?;
-      content?(data: T): { as?; link?; story: ReactElement[] | IStory[] };
+      content?(data: T): { as?; link?; story: (IStory | ReactElement)[] };
     }
   ): IColumn {
     return {
@@ -56,7 +56,7 @@ export function SmartTable<T>(data) {
     column,
     simpleColumn(
       header,
-      content: (data: T) => { as?; link?; story: IStory[] | ReactElement[] },
+      content: (data: T) => { as?; link?; story: (IStory | ReactElement)[] },
       params: Omit<IColumn, "id" | "header"> = {}
     ) {
       return column(header?.toLowerCase(), header, {

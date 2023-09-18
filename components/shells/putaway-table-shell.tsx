@@ -57,13 +57,14 @@ export default function PutawayTableShell<T>({
         },
       }),
       table.simpleColumn(
-        "Item",
+        "Item/Location",
         (data) => ({
           story: [
             // table.primaryText(data.salesOrderItems?.description)
             <table.Primary className="line-clamp-2" key={1}>
               {data.salesOrderItems?.description}
             </table.Primary>,
+            table.secondary(data.location),
           ],
         }),
         { maxSize: 50 }
@@ -94,10 +95,10 @@ export default function PutawayTableShell<T>({
           title: "Status",
           single: true,
           options: [
-            { label: "Started", value: "Started" },
-            { label: "Queued", value: "Queued" },
-            { label: "Completed", value: "Completed" },
-            { label: "Late", value: "Late" },
+            { label: "All", value: "All" },
+            { label: "Pending Putaway", value: "Pending" },
+            { label: "Stored", value: "Stored" },
+            { label: "Pending Arrival", value: "Pending Arrival" },
           ],
         },
       ]}

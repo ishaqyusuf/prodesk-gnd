@@ -32,11 +32,12 @@ export async function queryBuilder<T>(query, table) {
   };
 }
 export function whereQuery<T>(query) {
-  const where: any = {} as any;
+  let where: any = {} as any;
   const q = {
     contains: query._q || undefined,
   };
   return {
+    where,
     get: () => where as any,
     register(column: keyof T, value: any) {
       where[column] = value || undefined;
@@ -47,6 +48,13 @@ export function whereQuery<T>(query) {
       );
     },
     q,
+    raw(rq: T) {
+      where = {
+        ...where,
+        ...rq,
+      };
+      // Object.entries(rq as any).map(([k, v]) => (where[k] = v));
+    },
     search(_search: T) {
       if (q.contains) {
         if (!where.OR) where.OR = [];

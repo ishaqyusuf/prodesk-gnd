@@ -18,7 +18,7 @@ export default async function PutawayPage({ searchParams }) {
         <BreadLink isFirst title="Inbounds" />
         <BreadLink isLast title="Inbound Orders" />
       </Breadcrumbs>
-      <PageHeader title="Putaways" newLink={"/sales/inbounds/edit/new"} />
+      <PageHeader title="Putaways" />
       <PutawayTableShell {...response} />
     </InboundLayout>
   );
