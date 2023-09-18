@@ -22,21 +22,22 @@ import { EmployeeProfile, Roles } from "@prisma/client";
 import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 import { SmartTable } from "../data-table/smart-table";
 import { openModal } from "@/lib/modal";
+import { Badge } from "../ui/badge";
+import { IRole } from "@/types/hrm";
 
 export default function RolesTableShell({
   data,
   pageInfo,
-}: TableShellProps<Roles>) {
+}: TableShellProps<IRole>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const table = SmartTable<Roles>(data);
-  const columns = useMemo<ColumnDef<Roles, unknown>[]>(
+  const table = SmartTable<IRole>(data);
+  const columns = useMemo<ColumnDef<IRole, unknown>[]>(
     () => [
       table.simpleColumn("#", (data) => ({
         story: [table.primaryText(data.id), table.secondary(data.createdAt)],
       })),
-
       {
         id: "title",
         header: ColumnHeader("Role"),
@@ -47,7 +48,9 @@ export default function RolesTableShell({
           </Cell>
         ),
       },
-
+      table.simpleColumn("Permissions", (data) => ({
+        story: [table.status(`${data._count?.RoleHasPermissions} Permissions`)],
+      })),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),

@@ -58,6 +58,7 @@ export function SmartTable<T>(data) {
       });
     },
     primaryText: (value) => ({ type: "primary", value } as IStory),
+    badgeText: (value) => ({ type: "badge", value } as IStory),
     secondary: (value) => ({ type: "secondary", value } as IStory),
     dateText: (value, format?) => ({ type: "date", format, value } as IStory),
     status: (value) => ({ type: "status", value } as IStory),
@@ -103,7 +104,7 @@ function Story({ story, link }: { story; link }) {
   );
 }
 export interface IStory {
-  type: "primary" | "secondary" | "date" | "status";
+  type: "primary" | "secondary" | "date" | "status" | "badge";
   value;
   format?;
   defaultStatus?;

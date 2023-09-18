@@ -68,4 +68,9 @@ export interface ICan {
   viewCommunity?: Boolean;
   viewHrm?: Boolean;
   viewSales?: Boolean;
+
+  viewInboundOrder?: Boolean;
+  editInboundOrder?: Boolean;
+  viewPutaway?: Boolean;
+  editPutaway?: Boolean;
 }

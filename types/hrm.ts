@@ -44,9 +44,14 @@ export interface HomeJobList {
   id?;
   costing: InstallCost;
 }
-export interface IRole extends Roles {}
+export interface IRole extends Roles {
+  _count: {
+    RoleHasPermissions;
+  };
+}
 export interface IRoleForm {
   roleId;
   name;
+
   permission: { [key in string]: boolean };
 }

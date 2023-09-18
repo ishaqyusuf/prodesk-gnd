@@ -22,7 +22,13 @@ export async function _getRoles(query: Props) {
     await prisma.roles.findMany({
       where: builder.getWhere(),
       ...builder.queryFilters,
-      include: {},
+      include: {
+        _count: {
+          select: {
+            RoleHasPermissions: true,
+          },
+        },
+      },
     })
   );
 }

@@ -71,8 +71,6 @@ export function nav(
     viewCost,
     editOrders,
     editProject,
-    viewInstallation,
-    viewTech,
     viewHrm,
     viewEmployee,
     viewPriceList,
