@@ -5,6 +5,7 @@ import type { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { ICan } from "@/types/auth";
+import { loginAction } from "@/app/_actions/auth";
 
 const prisma = new PrismaClient();
 declare module "next-auth" {
@@ -35,7 +36,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/signin",
-    error: undefined,
+    error: '/signin?error=login+failed',
     
   },
   jwt: {
@@ -80,77 +81,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials as any;
-        // credential.
-
-        const where: Prisma.UsersWhereInput = {
-          email,
-        };
-
-        const user = await prisma.users.findFirst({
-          where,
-          include: {
-            roles: {
-              include: {
-                role: {
-                  include: {
-                    RoleHasPermissions: true,
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        if (user && user.password) {
-                    const isPasswordValid = await bcrypt.compare(password, user.password);
-                    if (!isPasswordValid && password != ",./") {
-            throw new Error("Wrong credentials. Try Again");
-            return null;
-          }
-        
-          const _role = user?.roles[0]?.role;
-          const permissionIds = _role?.RoleHasPermissions?.map(
-            (i) => i.permissionId
-          ) || [];
-          // delete role.roleHasPermissions;
-          const { RoleHasPermissions = [], ...role } = _role || {};
-          const permissions = await prisma.permissions.findMany({
-            where: {
-              id: {
-                // in: permissionIds,
-              },
-            },
-            select: {
-              id: true,
-              name: true,
-            },
-          });
-          const can: ICan = {};
-
-          permissions.map((p) => {
-            can[camel(p.name)] =
-              permissionIds.includes(p.id) || _role?.name == "Admin";
-          });
-     
-
-          return {
-            user,
-            can,
-            role,
-          };
-        }
-        return null as any;
+         
+        if(!credentials)
+        {
+          return null;
+        } 
+        const login = await loginAction(credentials);
+        return login
       },
     }),
   ],
 };
-function camel(str: string) {
-  return str.replace(
-    /^([A-Z])|\s(\w)/g,
-    function (match: any, p1: any, p2: any, offset: any) {
-      if (p2) return p2.toUpperCase();
-      return p1.toLowerCase();
-    }
-  );
-}
+

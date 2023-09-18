@@ -1,9 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { authOptions } from "@/lib/auth-options";
 import { SalesOrders, Notifications, JobPayments } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import { userId, user } from "./utils";
 import { transformData } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";

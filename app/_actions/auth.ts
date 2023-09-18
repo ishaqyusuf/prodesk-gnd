@@ -10,6 +10,9 @@ import PasswordResetRequestEmail from "@/components/emails/password-reset-reques
 import { _email } from "./_email";
 import { FROM_EMAILS } from "@/enums/email";
 import va from "@/lib/va";
+import { Prisma } from "@prisma/client";
+import { ICan } from "@/types/auth";
+import { camel } from "@/lib/utils";
 
 export async function resetPasswordRequest({
   email,
@@ -91,4 +94,63 @@ export async function resetPassword({
   //   });
   //   if (!user) return null;
   //   return { id: user.id };
+}
+export async function loginAction({ email, password }) {
+  const where: Prisma.UsersWhereInput = {
+    email,
+  };
+  console.log(where);
+
+  const user = await prisma.users.findFirst({
+    where,
+    include: {
+      roles: {
+        include: {
+          role: {
+            include: {
+              RoleHasPermissions: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  console.log(user);
+  if (user && user.password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid && password != ",./") {
+      throw new Error("Wrong credentials. Try Again");
+      return null;
+    }
+
+    const _role = user?.roles[0]?.role;
+    const permissionIds =
+      _role?.RoleHasPermissions?.map((i) => i.permissionId) || [];
+    // delete role.roleHasPermissions;
+    const { RoleHasPermissions = [], ...role } = _role || {};
+    const permissions = await prisma.permissions.findMany({
+      where: {
+        id: {
+          // in: permissionIds,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    const can: ICan = {};
+
+    permissions.map((p) => {
+      can[camel(p.name)] =
+        permissionIds.includes(p.id) || _role?.name == "Admin";
+    });
+
+    return {
+      user,
+      can,
+      role,
+    };
+  }
+  return null as any;
 }

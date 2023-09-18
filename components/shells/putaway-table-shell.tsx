@@ -7,7 +7,7 @@ import {
   ColumnHeader,
   Cell,
   PrimaryCellContent,
-  SecondaryCellContent,
+  DateCellContent,
 } from "../columns/base-columns";
 import { DataTable2 } from "../data-table/data-table-2";
 
@@ -17,49 +17,53 @@ import {
   RowActionCell,
 } from "../data-table/data-table-row-actions";
 
-import { EmployeeProfile } from "@prisma/client";
 import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
+import { IInboundOrderItems } from "@/types/sales-inbound";
+import { SmartTable } from "../data-table/smart-table";
+import { InboundStatus } from "@/lib/status";
+import { labelValue } from "@/lib/utils";
 
 export default function PutawayTableShell<T>({
   data,
   pageInfo,
-}: TableShellProps<EmployeeProfile>) {
+}: TableShellProps<IInboundOrderItems>) {
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<EmployeeProfile, unknown>[]>(
+  const table = SmartTable<IInboundOrderItems>(data);
+  // const _columns = table.Columns([
+  //   table.column("id", "#", {
+  //     content: (data) => ({
+  //       link: ``,
+  //       story: [
+  //         table.primaryText(data.InboundOrder?.orderId),
+  //         table.secondary(data.createdAt),
+  //       ],
+  //     }),
+  //   }),
+  // ]);
+  const columns = useMemo<ColumnDef<IInboundOrderItems, unknown>[]>(
     () => [
-      {
+      table.column("id", "#", {
         maxSize: 10,
-        id: "id",
-        header: ColumnHeader("#"),
-        cell: ({ row }) => (
-          <Cell>
-            <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "title",
-        header: ColumnHeader("Profile Name"),
-        cell: ({ row }) => (
-          <Cell>
-            {/* link={`/community/project/slug`} slug={row.original.slug} */}
-            <PrimaryCellContent>{row.original.name}</PrimaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "discount",
-        header: ColumnHeader("Discount"),
-        cell: ({ row }) => (
-          <Cell>
-            <SecondaryCellContent>
-              {row.original.discount || 0}%{" "}
-            </SecondaryCellContent>
-          </Cell>
-        ),
-      },
+        content(data) {
+          return {
+            story: [
+              table.primaryText(data.InboundOrder?.orderId),
+              table.secondary(data.createdAt),
+            ],
+          };
+        },
+      }),
+      table.simpleColumn("Item", (data) => ({
+        story: [table.primaryText(data.salesOrderItems?.description)],
+      })),
+      table.simpleColumn("Qty", (data) => ({
+        story: [table.primaryText(data.qty)],
+      })),
+      table.simpleColumn("Status", (data) => ({
+        story: [table.status(data.status)],
+      })),
 
       {
         accessorKey: "actions",
@@ -84,7 +88,27 @@ export default function PutawayTableShell<T>({
       columns={columns}
       pageInfo={pageInfo}
       data={data}
-      filterableColumns={[BuilderFilter]}
+      filterableColumns={[
+        {
+          id: "status",
+          title: "Status",
+          single: true,
+          options: [
+            { label: "Started", value: "Started" },
+            { label: "Queued", value: "Queued" },
+            { label: "Completed", value: "Completed" },
+            { label: "Late", value: "Late" },
+          ],
+        },
+        // {
+        //   id: "status",
+        //   title: "status",
+        //   single: true,
+        //   options: [...InboundStatus, "Stocked"].map((value) =>
+        //     labelValue(value, value)
+        //   ),
+        // },
+      ]}
       searchableColumns={[
         {
           id: "_q" as any,

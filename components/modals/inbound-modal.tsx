@@ -36,6 +36,7 @@ import { ISalesOrderItem } from "@/types/sales";
 import { inboundFormSchema } from "@/lib/validations/inbound-validation";
 import { uniqueBy } from "@/lib/utils";
 import { createInboundOrder } from "@/app/_actions/sales-inbound/crud";
+import { InboundStatus } from "@/lib/status";
 
 export default function InboundModal() {
   const route = useRouter();
@@ -132,13 +133,7 @@ export default function InboundModal() {
               <AutoComplete
                 form={form}
                 formKey={"status"}
-                options={[
-                  "Pending",
-                  "Order Placed",
-                  "In Transit",
-                  "Arrived Warehouse",
-                  "Stocked",
-                ]}
+                options={InboundStatus}
                 placeholder=""
                 className="h-8"
               />

@@ -21,6 +21,7 @@ import { _useAsync } from "@/lib/use-async";
 import { useRouter } from "next/navigation";
 import { ILogin, loginSchema } from "@/lib/validations/auth";
 import { PasswordInput } from "../password-input";
+import { loginAction } from "@/app/_actions/auth";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -38,6 +39,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   async function onSubmit(loginData: ILogin) {
     startTransition(async () => {
       setError(null);
+      // console.log(await loginAction(loginData));
       await signIn("credentials", {
         ...loginData,
         callbackUrl: "/",

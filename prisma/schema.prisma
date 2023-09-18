@@ -291,7 +291,7 @@ model InboundOrderItems {
     unitCost         Float?
     totalCost        Float?
     salesOrderItems  SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
-    InboundOrders    InboundOrders?   @relation(fields: [inboundOrderId], references: [id])
+    InboundOrder     InboundOrders?   @relation(fields: [inboundOrderId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -549,13 +549,12 @@ model PasswordResets {
 model Permissions {
     id                    Int                   @unique @default(autoincrement())
     name                  String                @db.VarChar(255)
-    guardName             String                @db.VarChar(255)
     createdAt             DateTime?             @db.Timestamp(0)
     updatedAt             DateTime?             @db.Timestamp(0)
     model_has_permissions ModelHasPermissions[]
     role_has_permissions  RoleHasPermissions[]
 
-    @@unique([name, guardName], map: "permissions_name_guard_name_unique")
+    @@unique([name], map: "permissions_name_guard_name_unique")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -727,7 +726,7 @@ model Projects {
 model RoleHasPermissions {
     permissionId Int
     roleId       Int
-    permissions  Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
+    permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
     role         Roles       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_role_id_foreign")
 
     @@id([permissionId, roleId])
@@ -738,7 +737,6 @@ model RoleHasPermissions {
 model Roles {
     id                 Int                  @unique @default(autoincrement())
     name               String               @db.VarChar(255)
-    guardName          String               @db.VarChar(255)
     createdAt          DateTime?            @db.Timestamp(0)
     updatedAt          DateTime?            @db.Timestamp(0)
     ModelHasRoles      ModelHasRoles[]

@@ -154,6 +154,7 @@ export function nav(
     if (viewHrm || viewEmployee) {
       setHref("Employees", "employees");
       setHref("Profile", "profiles");
+      setHref("Roles", "roles");
     }
     Hrm.push(...(Object.values(_rw) as any));
     if (href) return _route("Hrm", Building, `/hrm/${href}`);

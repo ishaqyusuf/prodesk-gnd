@@ -7,7 +7,6 @@ import {
   ColumnHeader,
   Cell,
   PrimaryCellContent,
-  SecondaryCellContent,
   DateCellContent,
 } from "../columns/base-columns";
 import { DataTable2 } from "../data-table/data-table-2";
@@ -16,6 +15,8 @@ import { BuilderFilter } from "../filters/builder-filter";
 import {
   DeleteRowAction,
   RowActionCell,
+  RowActionMenuItem,
+  RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
 
 import { EmployeeProfile } from "@prisma/client";
@@ -23,6 +24,10 @@ import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 import { IInboundOrder } from "@/types/sales-inbound";
 import StatusBadge from "../status-badge";
 import { Badge } from "../ui/badge";
+import { InboundStatus } from "@/lib/status";
+import { updateInboundStatusAction } from "@/app/_actions/sales-inbound/update-inbound-status";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function InboundsTableShell<T>({
   data,
@@ -31,6 +36,12 @@ export default function InboundsTableShell<T>({
   const [isPending, startTransition] = useTransition();
   // console.log(data);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+  const route = useRouter();
+  async function updateStatus(slug, status) {
+    await updateInboundStatusAction(slug, status);
+    toast.success("Updated");
+    route.refresh();
+  }
   const columns = useMemo<ColumnDef<IInboundOrder, unknown>[]>(
     () => [
       {
@@ -81,6 +92,24 @@ export default function InboundsTableShell<T>({
               row={row.original}
               action={deleteEmployeeProfile}
             />
+            <RowActionMoreMenu>
+              <RowActionMenuItem
+                SubMenu={
+                  <>
+                    {InboundStatus.map((status) => (
+                      <RowActionMenuItem
+                        onClick={() => updateStatus(row.original.slug, status)}
+                        key={status}
+                      >
+                        {status}
+                      </RowActionMenuItem>
+                    ))}
+                  </>
+                }
+              >
+                Status
+              </RowActionMenuItem>
+            </RowActionMoreMenu>
           </RowActionCell>
         ),
       },

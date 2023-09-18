@@ -1,3 +1,5 @@
+import { getPageInfo, queryFilter } from "@/app/_actions/action-utils";
+
 export function searchQuery<T>(query, ...columns: (keyof T)[]) {
   if (!query._q) return {};
   const q = {
@@ -11,6 +13,22 @@ export function searchQuery<T>(query, ...columns: (keyof T)[]) {
   });
   return {
     OR,
+  };
+}
+export async function queryBuilder<T>(query, table) {
+  const where = whereQuery<T>(query);
+  const queryFilters = await queryFilter(query);
+  return {
+    ...where,
+    getWhere: where.get,
+    queryFilters,
+    async response(data) {
+      const pageInfo = await getPageInfo(query, where.get(), table);
+      return {
+        pageInfo,
+        data,
+      };
+    },
   };
 }
 export function whereQuery<T>(query) {

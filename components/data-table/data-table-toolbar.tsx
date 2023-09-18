@@ -73,11 +73,13 @@ export function DataTableToolbar<TData,TValue>({
                  let Column = column as any;
                 return <Column key={id} table={table}/>
               } 
+              const _column = table.getColumn(String(column?.id))
+              if(!_column || _column === undefined)return null;
               // console.log(typeof column)
-              return  table.getColumn(column.id ? String(column.id) : "") && (
+              return  (
                 <DataTableFacetedFilter2
                   key={String(column.id)}
-                  column={table.getColumn(column.id ? String(column.id) : "")}
+                  column={_column}
                   title={column.title}
                   single={column.single}
                   options={column.options}

@@ -134,7 +134,17 @@ export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
 }
 const camelCaseKey = (key) =>
   key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
-
+export function camel(str: string) {
+  return str.replace(/^([A-Z])|\s(\w)/g, function(
+    match: any,
+    p1: any,
+    p2: any,
+    offset: any
+  ) {
+    if (p2) return p2.toUpperCase();
+    return p1.toLowerCase();
+  });
+}
 export function designDotToObject(object) {
   // return toDotNotation(object);
   let tr = {};

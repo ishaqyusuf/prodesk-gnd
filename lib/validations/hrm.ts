@@ -8,3 +8,8 @@ export const employeeSchema = z.object({
     id: z.number(),
   }),
 });
+export const roleSchema = z.object({
+  name: z.string(),
+  roleId: z.number().optional(),
+  // permission: z.object({}),
+});
