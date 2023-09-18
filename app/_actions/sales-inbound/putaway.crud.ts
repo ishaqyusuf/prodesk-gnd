@@ -52,3 +52,12 @@ function wherePutaway(query: PutawayQueryParams) {
   });
   return queryBuilder.get();
 }
+export async function _updateInboundItemLocation(id, data) {
+  await prisma.inboundOrderItems.update({
+    where: { id },
+    data: {
+      ...data,
+      updatedAt: new Date(),
+    },
+  });
+}

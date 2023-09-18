@@ -2,12 +2,13 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Cell, ColumnHeader } from "../columns/base-columns";
-import { useMemo } from "react";
+import React, { ReactElement, useMemo } from "react";
 import LinkableNode from "../link-node";
 import { cn, labelValue } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { Badge } from "../ui/badge";
 import { getBadgeColor } from "@/lib/status-badge";
+import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 
 export function SmartTable<T>(data) {
   type IColumn = ColumnDef<T, unknown>;
@@ -22,26 +23,30 @@ export function SmartTable<T>(data) {
       ...props
     }: Omit<IColumn, "id" | "header"> & {
       link?;
-      content?(data: T): { as?; link?; story: IStory[] };
+      content?(data: T): { as?; link?; story: ReactElement[] | IStory[] };
     }
   ): IColumn {
     return {
       ...props,
       id,
       header: ColumnHeader(header),
-      //   header:
-      //     header && typeof header === "string" ? ColumnHeader(header) : header,
+
       cell: ({ row }) => {
         if (!content) return <></>;
         const _content = content(row.original);
+
         return (
           <LinkableNode
             href={_content.link}
             className={cn(_content.story?.length > 1 ? "flex flex-col" : "")}
           >
-            {_content.story?.map((story, id) => (
-              <Story story={story} link={_content.link} key={id} />
-            ))}
+            {_content.story?.map((story, id) =>
+              React.isValidElement(story) ? (
+                <>{story}</>
+              ) : (
+                <Story story={story} link={_content.link} key={id} />
+              )
+            )}
           </LinkableNode>
         );
       },
@@ -51,20 +56,34 @@ export function SmartTable<T>(data) {
     column,
     simpleColumn(
       header,
-      content: (data: T) => { as?; link?; story: IStory[] }
+      content: (data: T) => { as?; link?; story: IStory[] | ReactElement[] },
+      params: Omit<IColumn, "id" | "header"> = {}
     ) {
       return column(header?.toLowerCase(), header, {
         content,
+        ...params,
+      });
+    },
+    simpleStatus(cellKey: keyof T, header = "Status") {
+      return column(header?.toLowerCase(), header, {
+        content: (data) => ({
+          story: [this.status(data[cellKey])],
+        }),
       });
     },
     primaryText: (value) => ({ type: "primary", value } as IStory),
     badgeText: (value) => ({ type: "badge", value } as IStory),
+    text: (value) => ({ type: "default", value } as IStory),
     secondary: (value) => ({ type: "secondary", value } as IStory),
     dateText: (value, format?) => ({ type: "date", format, value } as IStory),
     status: (value) => ({ type: "status", value } as IStory),
     // linkColumn(id:IdType,header,)
     Columns: (...columns) => useMemo<IColumn[]>(() => [...columns], [data]),
+    Primary,
   };
+}
+function Primary({ className, children }: {} & PrimitiveDivProps) {
+  return <div className={cn("font-semibold", className)}>{children}</div>;
 }
 function Story({ story, link }: { story; link }) {
   if (Array.isArray(story))
@@ -104,7 +123,7 @@ function Story({ story, link }: { story; link }) {
   );
 }
 export interface IStory {
-  type: "primary" | "secondary" | "date" | "status" | "badge";
+  type: "primary" | "secondary" | "date" | "status" | "badge" | "default";
   value;
   format?;
   defaultStatus?;

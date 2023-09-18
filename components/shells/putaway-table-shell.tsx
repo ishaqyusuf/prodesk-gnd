@@ -20,8 +20,9 @@ import {
 import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 import { IInboundOrderItems } from "@/types/sales-inbound";
 import { SmartTable } from "../data-table/smart-table";
-import { InboundStatus } from "@/lib/status";
-import { labelValue } from "@/lib/utils";
+import Btn from "../btn";
+import { CheckCircle } from "lucide-react";
+import PutawayActions from "../actions/putaway-actions";
 
 export default function PutawayTableShell<T>({
   data,
@@ -55,30 +56,29 @@ export default function PutawayTableShell<T>({
           };
         },
       }),
-      table.simpleColumn("Item", (data) => ({
-        story: [table.primaryText(data.salesOrderItems?.description)],
-      })),
+      table.simpleColumn(
+        "Item",
+        (data) => ({
+          story: [
+            // table.primaryText(data.salesOrderItems?.description)
+            <table.Primary className="line-clamp-2" key={1}>
+              {data.salesOrderItems?.description}
+            </table.Primary>,
+          ],
+        }),
+        { maxSize: 50 }
+      ),
       table.simpleColumn("Qty", (data) => ({
         story: [table.primaryText(data.qty)],
       })),
-      table.simpleColumn("Status", (data) => ({
-        story: [table.status(data.status)],
-      })),
-
+      table.simpleStatus("status"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => (
-          <RowActionCell>
-            <DeleteRowAction
-              row={row.original}
-              action={deleteEmployeeProfile}
-            />
-          </RowActionCell>
-        ),
+        cell: ({ row }) => <PutawayActions data={row.original} />,
       },
     ], //.filter(Boolean) as any,
     [data, isPending]
@@ -90,7 +90,7 @@ export default function PutawayTableShell<T>({
       data={data}
       filterableColumns={[
         {
-          id: "status",
+          id: "Status",
           title: "Status",
           single: true,
           options: [
@@ -100,14 +100,6 @@ export default function PutawayTableShell<T>({
             { label: "Late", value: "Late" },
           ],
         },
-        // {
-        //   id: "status",
-        //   title: "status",
-        //   single: true,
-        //   options: [...InboundStatus, "Stocked"].map((value) =>
-        //     labelValue(value, value)
-        //   ),
-        // },
       ]}
       searchableColumns={[
         {

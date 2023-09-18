@@ -36,6 +36,7 @@ import { labelValue } from "@/lib/utils";
 import { TechEmployeeFilter } from "../filters/employee-filter";
 import { openModal } from "@/lib/modal";
 import { deleteCustomerService } from "@/app/_actions/customer-services/crud";
+import { SmartTable } from "../data-table/smart-table";
 
 export default function CustomerServiceTableShell<T>({
   data,
@@ -53,7 +54,63 @@ export default function CustomerServiceTableShell<T>({
       });
     });
   }, []);
+
+  const table = SmartTable<IWorkOrder>(data);
   const columns = useMemo<ColumnDef<IWorkOrder, unknown>[]>(
+    () => [
+      CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
+      table.simpleColumn("Appointment", (data) => ({
+        story: [
+          table.primaryText(data.scheduleDate),
+          table.secondary(data.scheduleTime),
+        ],
+      })),
+      table.simpleColumn("Customer", (data) => ({
+        story: [
+          table.primaryText(data.homeOwner),
+          table.secondary(data.homePhone),
+        ],
+      })),
+      table.simpleColumn("Description", (data) => ({
+        link: `/customer-service/${data.slug}`,
+        story: [
+          table.primaryText(data.projectName),
+          table.secondary(data.description),
+        ],
+      })),
+      table.simpleColumn("Description", (data) => ({
+        story: [
+          <WorkOrderTechCell key={1} workOrder={data}></WorkOrderTechCell>,
+        ],
+      })),
+      table.simpleColumn("Status", (data) => ({
+        story: [<WorkOrderStatusCell workOrder={data} key={1} />],
+      })),
+      ..._FilterColumn("_q", "_show", "_userId"),
+      {
+        accessorKey: "actions",
+        header: ColumnHeader(""),
+        size: 15,
+        maxSize: 15,
+        enableSorting: false,
+        cell: ({ row }) => (
+          <RowActionCell>
+            <EditRowAction
+              onClick={() => openModal("customerServices", row.original)}
+            />
+            <DeleteRowAction
+              row={row.original}
+              action={async (id) => {
+                await deleteCustomerService(row.original.slug);
+              }}
+            />
+          </RowActionCell>
+        ),
+      },
+    ],
+    [data, isPending]
+  );
+  const columns1 = useMemo<ColumnDef<IWorkOrder, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
       {
@@ -105,7 +162,6 @@ export default function CustomerServiceTableShell<T>({
           </Cell>
         ),
       },
-
       {
         id: "tech",
         header: ColumnHeader("Tech"),
@@ -122,9 +178,7 @@ export default function CustomerServiceTableShell<T>({
           </Cell>
         ),
       },
-
       ..._FilterColumn("_q", "_show", "_userId"),
-
       {
         accessorKey: "actions",
         header: ColumnHeader(""),

@@ -28,6 +28,7 @@ import { InboundStatus } from "@/lib/status";
 import { updateInboundStatusAction } from "@/app/_actions/sales-inbound/update-inbound-status";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { SmartTable } from "../data-table/smart-table";
 
 export default function InboundsTableShell<T>({
   data,
@@ -42,6 +43,8 @@ export default function InboundsTableShell<T>({
     toast.success("Updated");
     route.refresh();
   }
+  const table = SmartTable<IInboundOrder>(data);
+
   const columns = useMemo<ColumnDef<IInboundOrder, unknown>[]>(
     () => [
       {
@@ -55,31 +58,14 @@ export default function InboundsTableShell<T>({
           </Cell>
         ),
       },
-      {
-        id: "putaway",
-        header: ColumnHeader("Putaway"),
-        cell: ({ row }) => (
-          <Cell
-            link={`/sales/inbounds/putaway?orderId=${row.original.orderId}`}
-          >
-            <Badge>
-              {row.original.inboundItems.filter((i) => i?.putawayAt)?.length}
-              {"/"}
-              {row.original.inboundItems.length}
-            </Badge>
-          </Cell>
-        ),
-      },
-      {
-        id: "status",
-        header: ColumnHeader("Status"),
-        cell: ({ row }) => (
-          <Cell>
-            <StatusBadge>{row.original.status}</StatusBadge>
-          </Cell>
-        ),
-      },
-
+      table.simpleColumn("Putaway", (data) => {
+        const putAway = data.inboundItems.filter((ii) => ii.putawayAt).length;
+        const total = data.inboundItems.length;
+        return {
+          story: [table.status(`${putAway}/${total}`)],
+        };
+      }),
+      table.simpleStatus("status"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),

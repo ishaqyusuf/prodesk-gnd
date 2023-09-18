@@ -5,9 +5,6 @@ import { IProject } from "@/types/community";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 
-import { getProjectsAction } from "@/app/_actions/community/projects";
-import ProjectModal from "@/components/modals/project-modal";
-import ProjectsTableShell from "@/components/shells/projects-table-shell";
 import { getCustomerServices } from "@/app/_actions/customer-services/customer-services";
 import CustomerServiceTableShell from "@/components/shells/customer-service-table-shell";
 import CustomerServiceModal from "@/components/modals/customer-service-modal";
