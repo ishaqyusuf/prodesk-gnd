@@ -39,6 +39,7 @@ export default function InfoCard({
   const watchPaymentTerm = form.getValues("paymentTerm");
   const watchType = form.getValues("type");
   const watchGoodUntil = form.getValues("goodUntil");
+  const watchDelivery = form.getValues("deliveryOption");
 
   const [resetting, startTransition] = useTransition();
 
@@ -118,46 +119,68 @@ export default function InfoCard({
           />
         </InfoLine> */}
         {watchType == "order" && (
-          <InfoLine label="Payment Terms">
-            <div className="flex">
-              <Select
-                value={`${watchPaymentTerm}`}
-                onValueChange={(e) => {
-                  form.setValue("paymentTerm", e);
-                }}
-              >
-                <SelectTrigger className="h-6   w-auto min-w-[100px]">
-                  <SelectValue placeholder="Select Term" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="Net10">Net10</SelectItem>
-                    <SelectItem value="Net20">Net20</SelectItem>
-                    <SelectItem value="Net30">Net30</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <div className="text-xs inline-flex text-red-500 items-center font-medium">
-                {watchGoodUntil && (
-                  <>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger onClick={resetTerm}>
-                          <span>{`${formatDate(
-                            watchGoodUntil,
-                            "MMM DD"
-                          )}`}</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Click to reset payment term</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </>
-                )}
+          <>
+            <InfoLine label="Payment Terms">
+              <div className="flex">
+                <Select
+                  value={`${watchPaymentTerm}`}
+                  onValueChange={(e) => {
+                    form.setValue("paymentTerm", e);
+                  }}
+                >
+                  <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                    <SelectValue placeholder="Select Term" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="Net10">Net10</SelectItem>
+                      <SelectItem value="Net20">Net20</SelectItem>
+                      <SelectItem value="Net30">Net30</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <div className="text-xs inline-flex text-red-500 items-center font-medium">
+                  {watchGoodUntil && (
+                    <>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger onClick={resetTerm}>
+                            <span>{`${formatDate(
+                              watchGoodUntil,
+                              "MMM DD"
+                            )}`}</span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Click to reset payment term</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </InfoLine>
+            </InfoLine>
+            <InfoLine label="Delivery Option">
+              <div className="flex">
+                <Select
+                  value={`${watchDelivery}`}
+                  onValueChange={(e) => {
+                    form.setValue("deliveryOption", e);
+                  }}
+                >
+                  <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                    <SelectValue placeholder="Delivery" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="pickup">Pickup</SelectItem>
+                      <SelectItem value="delivery">Delivery</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </InfoLine>
+          </>
         )}
         {watchType == "estimate" && (
           <InfoLine label="Good Until">

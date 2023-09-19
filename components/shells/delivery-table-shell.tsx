@@ -26,6 +26,7 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../sales/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
+import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 
 export default function DeliveryTableShell<T>({
   data,
@@ -66,7 +67,7 @@ export default function DeliveryTableShell<T>({
       {
         accessorKey: "status",
         header: ColumnHeader("Delivery"),
-        cell: ({ row }) => OrderStatus(row.original, true),
+        cell: ({ row }) => <DeliveryStatusCell order={row.original} />,
       },
       ..._FilterColumn("_status", "_customerId", "_deliveryStatus"),
       {
