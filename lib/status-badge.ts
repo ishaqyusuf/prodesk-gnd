@@ -9,9 +9,11 @@ export function getBadgeColor(status: string | null) {
 let StatusColorMap: { [key: string]: Colors } = {
   queued: "orange",
   completed: "green",
+  available: "green",
   started: "blue",
   scheduled: "blue",
   incomplete: "orange",
+  unknown: "orange",
   late: "red",
   in_transit: "fuchsia",
   order_placed: "sky",

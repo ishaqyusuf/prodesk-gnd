@@ -47,17 +47,18 @@ export default function InboundsTableShell<T>({
 
   const columns = useMemo<ColumnDef<IInboundOrder, unknown>[]>(
     () => [
-      {
-        maxSize: 10,
-        id: "id",
-        header: ColumnHeader("#/Date"),
-        cell: ({ row }) => (
-          <Cell>
-            <PrimaryCellContent>{row.original.orderId}</PrimaryCellContent>
-            <DateCellContent>{row.original.createdAt}</DateCellContent>
-          </Cell>
-        ),
-      },
+      table.simpleColumn(
+        "#/Date",
+        (data) => ({
+          link: `/sales/inbounds/putaway?_q=${data.slug}`,
+          story: [
+            table.primaryText(data.orderId),
+            table.secondary(data.createdAt),
+          ],
+        }),
+        { id: "id" }
+      ),
+
       table.simpleColumn("Putaway", (data) => {
         const putAway = data.inboundItems.filter((ii) => ii.putawayAt).length;
         const total = data.inboundItems.length;

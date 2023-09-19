@@ -8,6 +8,7 @@ import {
   Cell,
   PrimaryCellContent,
   DateCellContent,
+  _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable2 } from "../data-table/data-table-2";
 
@@ -73,6 +74,10 @@ export default function PutawayTableShell<T>({
         story: [table.primaryText(data.qty)],
       })),
       table.simpleStatus("status"),
+      table.simpleColumn("Order", (data) => ({
+        story: [table.primaryText(data.salesOrderItems.salesOrder.orderId)],
+      })),
+      ..._FilterColumn("_q"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),

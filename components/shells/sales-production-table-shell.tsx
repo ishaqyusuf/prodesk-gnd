@@ -4,7 +4,12 @@ import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import { CheckColumn, ColumnHeader } from "../columns/base-columns";
+import {
+  CheckColumn,
+  ColumnHeader,
+  ProgressStatusCell,
+  _FilterColumn,
+} from "../columns/base-columns";
 import {
   OrderPriorityFlagCell,
   ProdOrderCell,
@@ -15,6 +20,8 @@ import { formatDate } from "@/lib/use-day";
 import { DataTable2 } from "../data-table/data-table-2";
 import { ProdActions } from "../actions/prod-actions";
 import ProductionDueDate from "../sales/prod-due-date";
+import { SmartTable } from "../data-table/smart-table";
+import { getProgress } from "@/lib/status";
 
 interface Props extends TableShellProps<ISalesOrder> {
   myProd?: Boolean;
@@ -29,6 +36,7 @@ export default function SalesProductionTableShell<T>({
   const [isPending, startTransition] = useTransition();
 
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+  const table = SmartTable<ISalesOrder>(data);
   const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
     () => [
       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
@@ -67,28 +75,46 @@ export default function SalesProductionTableShell<T>({
           <ProductionDueDate hideIcon data={row.original} editable={!myProd} />
         ),
       },
+      table.simpleColumn("Inventory", (data) => {
+        let status = "Unknown";
+        let totalQty = 0;
+        let arrivedWarehouse = 0;
+        data.items?.map((item) => {
+          const pqty = item.meta.produced_qty || 0;
+          const qty = item.qty || 0;
+          totalQty += qty;
+          if (pqty == qty || item.prodCompletedAt) {
+            arrivedWarehouse += qty;
+          } else {
+            if (item.inboundOrderItem?.status === "Arrived Warehouse") {
+              arrivedWarehouse += item.inboundOrderItem?.qty;
+            } else {
+              if (pqty != qty && (pqty || 0) > 0) {
+                arrivedWarehouse += qty;
+              }
+            }
+          }
+        });
+        if (arrivedWarehouse == totalQty) status = "Available";
+        else if (arrivedWarehouse > 0) status = "Partial";
+        return {
+          story: [
+            <ProgressStatusCell
+              key={1}
+              score={arrivedWarehouse}
+              total={totalQty}
+              status={status}
+            />,
+          ],
+        };
+      }),
       {
         enableSorting: !simple,
         accessorKey: "status",
         header: ColumnHeader("Status"),
         cell: ({ row }) => <ProdStatusCell order={row.original} />,
       },
-      {
-        accessorKey: "_status",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_dateType",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "_date",
-        enableHiding: false,
-      },
+      ..._FilterColumn("_status", "_q", "_date", "_dateType"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),

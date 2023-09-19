@@ -2,7 +2,7 @@
 
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { Checkbox } from "../ui/checkbox";
-import { Fragment, useTransition } from "react";
+import { Fragment, useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { formatDate } from "@/lib/use-day";
@@ -17,6 +17,9 @@ import LinkableNode from "../link-node";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { Badge } from "../ui/badge";
 import { getBadgeColor } from "@/lib/status-badge";
+import { Progressor, getProgress } from "@/lib/status";
+import ProgressStatus from "../progress-status";
+import StatusBadge from "../status-badge";
 
 export interface CheckColumnProps {
   setSelectedRowIds;
@@ -139,6 +142,7 @@ type FilterKeys =
   | "_production"
   | "_supplier"
   | "_category"
+  | "_dateType"
   | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   const filters = assessorKeys.map((accessorKey) => ({
@@ -161,4 +165,21 @@ export function StatusCell({ status }) {
       </Badge>
     </div>
   );
+}
+export function ProgressStatusCell({
+  score,
+  total,
+  status,
+}: {
+  status?;
+  score;
+  total;
+}) {
+  const [progress, setProgress] = useState<Progressor>(
+    getProgress(score, total)
+  );
+
+  if (progress.score > 0)
+    return <ProgressStatus score={score} total={total} status={status} />;
+  return <StatusBadge status={status} />;
 }

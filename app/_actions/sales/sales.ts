@@ -124,13 +124,15 @@ export async function getOrderAction(orderId,isProd = false) {
     },
     include: {
       customer: {
-include: {
-  wallet:true
-}
+        include: {
+          wallet:true
+        }
         // wallet: true
-      },
-      
+      }, 
       items: {
+        include: {
+          inboundOrderItem: true
+        }
         // orderBy: {
         //   swing: "desc",
         // },
@@ -141,6 +143,7 @@ include: {
       shippingAddress: true,
       payments: !isProd,
       productions: isProd,
+      
     },
   });
   if (!order) return null;
@@ -186,6 +189,28 @@ export async function getSales(query: SalesQueryParams) {
       shippingAddress: true,
       producer: true,
       salesRep: true,
+      items: {
+        where: {
+          swing: {
+            not: null
+          }
+        },
+        select: {
+          inboundOrderItem: {
+             select: {
+              qty: true,
+              status: true,
+              location: true
+            }
+          },
+          id:true,
+          qty:true,
+          prodCompletedAt: true,
+          meta: true,
+          
+        },
+         
+      }
     },
   }); 
   const pageInfo = await getPageInfo(query, where, prisma.salesOrders); 

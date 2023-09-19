@@ -25,7 +25,7 @@ export default function ProgressStatus({ status, score, total }: Props) {
           />
         </p>
       )}
-      {status && <p className="">{status}</p>}
+      {status && <p className="text-sm text-muted-foreground">{status}</p>}
     </div>
   );
 }

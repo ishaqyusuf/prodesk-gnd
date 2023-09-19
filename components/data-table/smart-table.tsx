@@ -38,7 +38,10 @@ export function SmartTable<T>(data) {
         return (
           <LinkableNode
             href={_content.link}
-            className={cn(_content.story?.length > 1 ? "flex flex-col" : "")}
+            className={cn(
+              _content.story?.length > 1 ? "flex flex-col" : "",
+              _content.link && "hover:underline"
+            )}
           >
             {_content.story?.map((story, id) =>
               React.isValidElement(story) ? (
@@ -57,9 +60,10 @@ export function SmartTable<T>(data) {
     simpleColumn(
       header,
       content: (data: T) => { as?; link?; story: (IStory | ReactElement)[] },
-      params: Omit<IColumn, "id" | "header"> = {}
+      params: Omit<IColumn, "id" | "header"> & { id? } = {}
     ) {
-      return column(header?.toLowerCase(), header, {
+      if (!params.id) params.id = header?.toLowerCase();
+      return column(params.id, header, {
         content,
         ...params,
       });

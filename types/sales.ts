@@ -13,6 +13,7 @@ import { UseFormReturn } from "react-hook-form";
 import { ICustomer } from "./customers";
 import { BaseQuery } from "./action";
 import { OmitMeta } from "./type";
+import { IInboundOrderItems } from "./sales-inbound";
 export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
@@ -75,6 +76,7 @@ export type ISalesOrderItem = SalesOrderItems & {
   productions: OrderProductionSubmissions[];
   meta: ISalesOrderItemMeta;
   salesOrder: ISalesOrder;
+  inboundOrderItem: IInboundOrderItems;
 };
 export interface ISalesOrderItemMeta {
   supplier;

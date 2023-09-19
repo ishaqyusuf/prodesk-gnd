@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/table";
 import XProgress from "@/components/x-progress";
 import { ProdItemActions } from "@/components/actions/prod-item-actions";
+import { Badge } from "@/components/ui/badge";
 
 export default function ItemDetailsSection() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
   const isProd = order?.ctx?.prodPage;
-  console.log(order);
+
   return (
     <div className="">
       <Card>
@@ -46,7 +47,12 @@ export default function ItemDetailsSection() {
               {order.items?.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell className="p-2">
-                    <p className="">{item.description}</p>
+                    <p className="uppercase">{item.description}</p>
+                    {item.swing && (
+                      <div className="">
+                        <Badge>{item.inboundOrderItem?.id}</Badge>
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell className="p-2 ">
                     <p className="whitespace-nowrap font-semibold text-muted-foreground">

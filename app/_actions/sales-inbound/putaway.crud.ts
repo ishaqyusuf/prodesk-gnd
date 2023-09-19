@@ -17,7 +17,17 @@ export async function getPutwaysAction(query: PutawayQueryParams) {
     ...(await queryFilter(query)),
     include: {
       InboundOrder: true,
-      salesOrderItems: true,
+      salesOrderItems: {
+        include: {
+          salesOrder: {
+            select: {
+              id: true,
+              slug: true,
+              orderId: true,
+            },
+          },
+        },
+      },
     },
   });
   const pageInfo = await getPageInfo(query, where, prisma.inboundOrderItems);
@@ -51,6 +61,11 @@ function wherePutaway(query: PutawayQueryParams) {
           },
         },
       ],
+    },
+  });
+  queryBuilder.search({
+    InboundOrder: {
+      slug: queryBuilder.q,
     },
   });
   switch (query.status) {
