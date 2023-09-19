@@ -154,14 +154,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     return {
       id,
       order: numeric<SalesOrders>(
-        [
-          "discount",
-          "grandTotal",
-          "amountDue",
-          "tax",
-          "taxPercentage",
-          "subTotal",
-        ],
+        ["grandTotal", "amountDue", "tax", "taxPercentage", "subTotal"],
         formValues
       ) as any,
       deleteIds,
