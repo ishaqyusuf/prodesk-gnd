@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function ProjectHomesPage({ searchParams, params }) {
-  const { project, ...response } = await getProjectHomesAction(
+  const { project, ...response } = (await getProjectHomesAction(
     queryParams({ ...searchParams, _projectSlug: params.slug })
-  );
+  )) as any;
   metadata.title = `${project.title} | Homes`;
 
   return (

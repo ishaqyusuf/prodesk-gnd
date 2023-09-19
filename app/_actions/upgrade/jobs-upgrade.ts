@@ -6,26 +6,26 @@ import { IProjectMeta } from "@/types/community";
 import { IJobMeta } from "@/types/hrm";
 
 export async function _updateJobHomeIdFromUnitId() {
-  const units = await prisma.jobs.findMany({
-    where: {
-      homeId: null,
-      unitId: { not: null },
-    },
-  });
-  try {
-    await Promise.all(
-      units.map(async (unit) => {
-        await prisma.jobs.update({
-          where: { id: unit.id },
-          data: {
-            homeId: unit.unitId,
-            unitId: null,
-          },
-        });
-      })
-    );
-  } catch (e) {}
-  return [units.length];
+  // const units = await prisma.jobs.findMany({
+  //   where: {
+  //     homeId: null,
+  //     unitId: { not: null },
+  //   },
+  // });
+  // try {
+  //   await Promise.all(
+  //     units.map(async (unit) => {
+  //       await prisma.jobs.update({
+  //         where: { id: unit.id },
+  //         data: {
+  //           homeId: unit.homeId,
+  //           unitId: null,
+  //         },
+  //       });
+  //     })
+  //   );
+  // } catch (e) {}
+  // return [units.length];
 }
 export async function upgradeCustomJobRemoveAddon() {
   const j = await prisma.jobs.findMany({
