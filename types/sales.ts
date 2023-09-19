@@ -162,6 +162,13 @@ export interface SalesQueryParams extends BaseQuery {
   _page?: "production" | undefined;
   type?: IOrderType;
   _dateType?: "createdAt" | "prodDueDate";
+  deliveryOption?: "delivery" | "pickup";
+  _deliveryStatus?:
+    | "pending production"
+    | "pending"
+    | "ready"
+    | "transit"
+    | "delivered";
 }
 export interface UpdateOrderPriorityProps {
   priority;

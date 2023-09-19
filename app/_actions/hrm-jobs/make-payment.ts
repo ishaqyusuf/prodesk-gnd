@@ -32,19 +32,19 @@ export async function getPayableUsers(userId) {
         console.log("EMPLOYEE PROFILE");
         console.log(user.employeeProfile);
       }
-      let discountPercentage = user.employeeProfile?.discount || 0;
-      let discount = 0;
-      if (discountPercentage > 0)
-        discount = (total || 0) * (discountPercentage / 100);
+      let chargePercentage = user.employeeProfile?.discount || 0;
+      let charge = 0;
+      if (chargePercentage > 0)
+        charge = (total || 0) * (chargePercentage / 100);
       return {
         jobIds: vjobs.map((v) => v.id),
         id: user.id,
         pid: user.employeeProfileId,
         name: user.name,
         subTotal: total,
-        discount,
-        discountPercentage,
-        total: total - discount,
+        charge,
+        chargePercentage,
+        total: total - charge,
         profile: user.employeeProfile,
       };
     })

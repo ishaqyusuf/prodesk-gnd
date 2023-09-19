@@ -203,57 +203,57 @@ model Homes {
 }
 
 model HomeTasks {
-    id                        Int       @unique @default(autoincrement())
-    archived                  Boolean?
-    homeId                    Int?
-    type                      String?   @db.VarChar(255)
-    taskName                  String?   @db.VarChar(255)
-    taskUid                   String?   @db.VarChar(255)
-    status                    String?   @db.VarChar(255)
-    meta                      Json?     @db.Json
-    producerName              String?   @db.VarChar(255)
-    payrollCheckNo            String?   @db.VarChar(255)
-    payrollApprovedByName     String?   @db.VarChar(255)
-    installersName            String?   @db.VarChar(255)
-    search                    String?   @db.VarChar(255)
-    installationStatus        String?   @db.VarChar(255)
-    productionStatus          String?   @db.VarChar(255)
-    installNote               String?   @db.VarChar(255)
-    extraInstallReason        String?   @db.VarChar(255)
-    installStatus             String?   @db.VarChar(255)
-    extraInstallCostReason    String?   @db.VarChar(255)
-    checkNo                   String?   @db.VarChar(255)
-    projectId                 Int?
-    payrollApprovedById       Int?
-    billable                  Boolean?
-    produceable               Boolean?
-    installable               Boolean?
-    extraInstallCost          Float?
-    taxCost                   Float?
-    amountDue                 Float?
-    amountPaid                Float?
-    payableInstallerCost      Float?
-    payableInstallerExtraCost Float?
-    payableInstallerTotalCost Float?
-    completedAt               DateTime?
-    totalInstallCost          Float?
-    installCost               Float?
-    checkDate                 DateTime? @db.Timestamp(0)
-    statusDate                DateTime? @db.Timestamp(0)
-    payrollCheckDate          DateTime? @db.Timestamp(0)
-    sentToProductionAt        DateTime? @db.Timestamp(0)
-    producedAt                DateTime? @db.Timestamp(0)
-    prodStartedAt             DateTime? @db.Timestamp(0)
-    productionStatusDate      DateTime? @db.Timestamp(0)
-    productionDueDate         DateTime? @db.Timestamp(0)
-    installApprovedAt         DateTime? @db.Timestamp(0)
-    installStatusDate         DateTime? @db.Timestamp(0)
-    installedAt               DateTime? @db.Timestamp(0)
-    deletedAt                 DateTime? @db.Timestamp(0)
-    createdAt                 DateTime? @db.Timestamp(0)
-    updatedAt                 DateTime? @db.Timestamp(0)
-    home                      Homes?    @relation(fields: [homeId], references: [id])
-    project                   Projects? @relation(fields: [projectId], references: [id])
+    id                   Int       @unique @default(autoincrement())
+    archived             Boolean?
+    homeId               Int?
+    type                 String?   @db.VarChar(255)
+    taskName             String?   @db.VarChar(255)
+    taskUid              String?   @db.VarChar(255)
+    status               String?   @db.VarChar(255)
+    meta                 Json?     @db.Json
+    producerName         String?   @db.VarChar(255)
+    // payrollCheckNo            String?   @db.VarChar(255)
+    // payrollApprovedByName     String?   @db.VarChar(255)
+    // installersName            String?   @db.VarChar(255)
+    search               String?   @db.VarChar(255)
+    // installationStatus        String?   @db.VarChar(255)
+    productionStatus     String?   @db.VarChar(255)
+    // installNote               String?   @db.VarChar(255)
+    // extraInstallReason        String?   @db.VarChar(255)
+    // installStatus             String?   @db.VarChar(255)
+    // extraInstallCostReason    String?   @db.VarChar(255)
+    checkNo              String?   @db.VarChar(255)
+    projectId            Int?
+    // payrollApprovedById       Int?
+    billable             Boolean?
+    produceable          Boolean?
+    installable          Boolean?
+    // extraInstallCost          Float?
+    taxCost              Float?
+    amountDue            Float?
+    amountPaid           Float?
+    // payableInstallerCost      Float?
+    // payableInstallerExtraCost Float?
+    // payableInstallerTotalCost Float?
+    completedAt          DateTime?
+    // totalInstallCost          Float?
+    // installCost               Float?
+    checkDate            DateTime? @db.Timestamp(0)
+    statusDate           DateTime? @db.Timestamp(0)
+    // payrollCheckDate          DateTime? @db.Timestamp(0)
+    sentToProductionAt   DateTime? @db.Timestamp(0)
+    producedAt           DateTime? @db.Timestamp(0)
+    prodStartedAt        DateTime? @db.Timestamp(0)
+    productionStatusDate DateTime? @db.Timestamp(0)
+    productionDueDate    DateTime? @db.Timestamp(0)
+    // installApprovedAt         DateTime? @db.Timestamp(0)
+    // installStatusDate         DateTime? @db.Timestamp(0)
+    // installedAt               DateTime? @db.Timestamp(0)
+    deletedAt            DateTime? @db.Timestamp(0)
+    createdAt            DateTime? @db.Timestamp(0)
+    updatedAt            DateTime? @db.Timestamp(0)
+    home                 Homes?    @relation(fields: [homeId], references: [id])
+    project              Projects? @relation(fields: [projectId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -365,19 +365,6 @@ model InventoryProducts {
     variants          ProductVariants[]
 }
 
-model JoomagProduct {
-    id          Int       @unique @default(autoincrement())
-    title       String?
-    description String?
-    price       Float?
-    sku         String?
-    section     String?
-    meta        Json?     @db.Json
-    createdAt   DateTime? @db.Timestamp(0)
-    updatedAt   DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Invoices {
     id        Int       @unique @default(autoincrement())
     projectId Int?
@@ -477,63 +464,6 @@ model OrderProductionSubmissions {
     meta             Json?           @db.Json
     order            SalesOrders     @relation(fields: [salesOrderId], references: [id])
     item             SalesOrderItems @relation(fields: [salesOrderItemId], references: [id])
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model Orders {
-    id        Int       @unique @default(autoincrement())
-    slug      String?   @db.Text
-    orderId   String?   @db.VarChar(255)
-    name      String?   @db.VarChar(255)
-    createdBy Int
-    phone     String?   @db.VarChar(255)
-    supplier  String?   @db.VarChar(255)
-    date      String?   @db.VarChar(255)
-    meta      Json?     @db.Json
-    status    String?   @db.VarChar(255)
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model OrderTemplateItems {
-    id                 Int       @unique @default(autoincrement())
-    orderTemplateId    Int
-    description        String?   @db.Text
-    qty                Int
-    productVariantId   Int?
-    productId          Int?
-    price              Float?
-    retailCost         Float?
-    salesCost          Float?
-    subTotal           Float?
-    totalCost          Float?
-    tax                Float?
-    taxPercenatage     Float?
-    discount           Float?
-    discountPercentage Float?
-    meta               Json?     @db.Json
-    deletedAt          DateTime? @db.Timestamp(0)
-    createdAt          DateTime? @db.Timestamp(0)
-    updatedAt          DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model OrderTemplates {
-    id                 Int       @unique @default(autoincrement())
-    title              String    @db.VarChar(255)
-    slug               String    @db.VarChar(255)
-    meta               Json?     @db.Json
-    deletedAt          DateTime? @db.Timestamp(0)
-    createdAt          DateTime? @db.Timestamp(0)
-    updatedAt          DateTime? @db.Timestamp(0)
-    subTotal           Float?
-    discount           Float?
-    tax                Float?
-    taxPercentage      Float?
-    discountPercentage Float?
-    grandTotal         Float?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -811,35 +741,34 @@ model SalesOrderItemComponents {
 }
 
 model SalesOrderItems {
-    id                 Int       @unique @default(autoincrement())
-    description        String?   @db.Text
+    id                 Int                          @unique @default(autoincrement())
+    description        String?                      @db.Text
     productId          Int?
     supplier           String?
-    swing              String?   @db.VarChar(255)
+    swing              String?                      @db.VarChar(255)
     price              Float?
     tax                Float?
     taxPercenatage     Float?
     discount           Float?
     discountPercentage Float?
-    meta               Json?     @db.Json
-    createdAt          DateTime? @db.Timestamp(0)
-    updatedAt          DateTime? @db.Timestamp(0)
+    meta               Json?                        @db.Json
+    createdAt          DateTime?                    @db.Timestamp(0)
+    updatedAt          DateTime?                    @db.Timestamp(0)
     qty                Float?
     prebuiltQty        Float?
     salesOrderId       Int
-
-    profitMargin     Float?
-    rate             Float?
-    total            Float?
-    salesPercentage  Float?
-    prodStatus       String?                      @db.VarChar(255)
-    prodStartedAt    DateTime?                    @db.Timestamp(0)
-    sentToProdAt     DateTime?                    @db.Timestamp(0)
-    prodCompletedAt  DateTime?                    @db.Timestamp(0)
-    inboundOrderItem InboundOrderItems[]
-    salesOrder       SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
-    productions      OrderProductionSubmissions[]
-    components       SalesOrderItemComponents[]
+    profitMargin       Float?
+    rate               Float?
+    total              Float?
+    salesPercentage    Float?
+    prodStatus         String?                      @db.VarChar(255)
+    prodStartedAt      DateTime?                    @db.Timestamp(0)
+    sentToProdAt       DateTime?                    @db.Timestamp(0)
+    prodCompletedAt    DateTime?                    @db.Timestamp(0)
+    inboundOrderItem   InboundOrderItems[]
+    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
+    productions        OrderProductionSubmissions[]
+    components         SalesOrderItemComponents[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -860,48 +789,48 @@ model SalesOrderProducts {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesOrders {
-    id                 Int                          @unique @default(autoincrement())
-    title              String?                      @db.VarChar(255)
-    customerId         Int?
-    billingAddressId   Int?
-    shippingAddressId  Int?
-    salesRepId         Int
-    prodId             Int?
-    summary            String?                      @db.Text
-    instruction        String?                      @db.Text
-    meta               Json?                        @db.Json
-    status             String                       @db.VarChar(255)
-    deletedAt          DateTime?                    @db.Timestamp(0)
-    createdAt          DateTime?                    @db.Timestamp(0)
-    updatedAt          DateTime?                    @db.Timestamp(0)
-    orderId            String                       @unique @db.VarChar(255)
-    slug               String                       @db.VarChar(255)
-    type               String?                      @db.VarChar(255)
-    goodUntil          DateTime?
-    paymentTerm        String?
-    prodQty            Float?
-    builtQty           Float?
-    subTotal           Float?
-    discount           Float?
-    profitMargin       Float?
-    tax                Float?
-    taxPercentage      Float?
-    discountPercentage Float?
-    grandTotal         Float?
-    amountDue          Float?
-    invoiceStatus      String?                      @db.VarChar(255)
-    paidAt             DateTime?                    @db.Timestamp(0)
-    prodStatus         String?                      @db.VarChar(255)
-    prodDueDate        DateTime?                    @db.Timestamp(0)
-    customer           Customers?                   @relation(fields: [customerId], references: [id])
-    items              SalesOrderItems[]
-    shippingAddress    AddressBooks?                @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
-    billingAddress     AddressBooks?                @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
-    producer           Users?                       @relation(name: "producer", fields: [prodId], references: [id])
-    salesRep           Users?                       @relation(name: "salesRep", fields: [salesRepId], references: [id])
-    payments           SalesPayments[]              @relation(name: "salesPayment")
-    productions        OrderProductionSubmissions[]
-    components         SalesOrderItemComponents[]
+    id                Int                          @unique @default(autoincrement())
+    title             String?                      @db.VarChar(255)
+    customerId        Int?
+    billingAddressId  Int?
+    shippingAddressId Int?
+    salesRepId        Int
+    prodId            Int?
+    summary           String?                      @db.Text
+    instruction       String?                      @db.Text
+    meta              Json?                        @db.Json
+    status            String                       @db.VarChar(255)
+    deletedAt         DateTime?                    @db.Timestamp(0)
+    createdAt         DateTime?                    @db.Timestamp(0)
+    updatedAt         DateTime?                    @db.Timestamp(0)
+    orderId           String                       @unique @db.VarChar(255)
+    slug              String                       @db.VarChar(255)
+    type              String?                      @db.VarChar(255)
+    goodUntil         DateTime?
+    paymentTerm       String?
+    prodQty           Float?
+    builtQty          Float?
+    subTotal          Float?
+    profitMargin      Float?
+    tax               Float?
+    taxPercentage     Float?
+    grandTotal        Float?
+    amountDue         Float?
+    invoiceStatus     String?                      @db.VarChar(255)
+    paidAt            DateTime?                    @db.Timestamp(0)
+    prodStatus        String?                      @db.VarChar(255)
+    prodDueDate       DateTime?                    @db.Timestamp(0)
+    deliveredAt       DateTime?
+    deliveryOption    String?
+    customer          Customers?                   @relation(fields: [customerId], references: [id])
+    items             SalesOrderItems[]
+    shippingAddress   AddressBooks?                @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
+    billingAddress    AddressBooks?                @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
+    producer          Users?                       @relation(name: "producer", fields: [prodId], references: [id])
+    salesRep          Users?                       @relation(name: "salesRep", fields: [salesRepId], references: [id])
+    payments          SalesPayments[]              @relation(name: "salesPayment")
+    productions       OrderProductionSubmissions[]
+    components        SalesOrderItemComponents[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -959,7 +888,7 @@ model Jobs {
     coWorkerId  Int?
     type        String       @db.VarChar(255)
     homeId      Int?
-    unitId      Int?
+    // unitId      Int?
     projectId   Int?
     // taskId      Int?
     amount      Float

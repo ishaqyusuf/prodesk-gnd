@@ -25,8 +25,9 @@ import { DataTable2 } from "../data-table/data-table-2";
 
 import { SalesSelectionAction } from "../sales/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { labelValue } from "@/lib/utils";
 
-export default function OrdersTableShell<T>({
+export default function DeliveryTableShell<T>({
   data,
   pageInfo,
 }: TableShellProps<ISalesOrder>) {
@@ -58,21 +59,16 @@ export default function OrdersTableShell<T>({
         cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
       },
       {
-        accessorKey: "invoice",
-        header: ColumnHeader("Total/Due"),
-        cell: ({ row }) => <OrderInvoiceCell order={row.original} />,
-      },
-      {
         accessorKey: "production",
         header: ColumnHeader("Production"),
         cell: ({ row }) => OrderProductionStatusCell(row.original),
       },
       {
         accessorKey: "status",
-        header: ColumnHeader("Status"),
-        cell: ({ row }) => OrderStatus(row.original),
+        header: ColumnHeader("Delivery"),
+        cell: ({ row }) => OrderStatus(row.original, true),
       },
-      ..._FilterColumn("_status", "_q", "_payment", "_customerId", "_date"),
+      ..._FilterColumn("_status", "_customerId", "_deliveryStatus"),
       {
         accessorKey: "actions",
         header: ColumnHeader(""),
@@ -92,14 +88,14 @@ export default function OrdersTableShell<T>({
       SelectionAction={SalesSelectionAction}
       filterableColumns={[
         {
-          id: "status",
+          id: "_deliveryStatus",
           title: "Status",
           single: true,
           options: [
-            { label: "Production Started", value: "Started" },
-            { label: "Production Assigned", value: "Queued" },
-            { label: "Production Completed", value: "Completed" },
-            { label: "Production Not Assigned", value: "Unassigned" },
+            labelValue("Pending Production", "pending production"),
+            labelValue("Ready For Delivery", "ready"),
+            labelValue("In Transit", "transit"),
+            labelValue("Delivered", "delivered"),
           ],
         },
         {

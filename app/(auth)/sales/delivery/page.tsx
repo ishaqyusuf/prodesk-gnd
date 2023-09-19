@@ -1,36 +1,28 @@
-import { getSalesOrder } from "@/app/_actions/sales/sales";
+import { getSalesEstimates, getSalesOrder } from "@/app/_actions/sales/sales";
 import OrdersTableShell from "@/components/shells/orders-table-shell";
 import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
-import SalesProductionModal from "@/components/modals/sales-production-modal";
-import { Metadata } from "next";
+import EstimatesTableShell from "@/components/shells/estimates-table-shell";
 import PageHeader from "@/components/page-header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
+import DeliveryTableShell from "@/components/shells/delivery-table-shell";
+import { getSalesDelivery } from "@/app/_actions/sales/sales-delivery";
 
-export const metadata: Metadata = {
-  title: "Sales Orders",
-};
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
-  const response = await getSalesOrder(queryParams(searchParams));
+  const response = await getSalesDelivery(queryParams(searchParams));
   return (
     <SalesTabLayout>
       <Breadcrumbs>
         <BreadLink isFirst title="Sales" />
-        <BreadLink isLast title="Orders" />
+        <BreadLink isLast title="Delivery" />
       </Breadcrumbs>
-      <PageHeader
-        title="Sales Orders"
-        newLink="/sales/order/new/form"
-        permissions={["editOrders"]}
-      />
-
-      <OrdersTableShell<ISalesOrder> {...response} />
+      <PageHeader title="Sales Delivery" />
+      <DeliveryTableShell<ISalesOrder> {...response} />
       <OrderPrinter />
-      <SalesProductionModal />
     </SalesTabLayout>
   );
 }

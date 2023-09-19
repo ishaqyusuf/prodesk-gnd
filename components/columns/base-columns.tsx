@@ -143,6 +143,7 @@ type FilterKeys =
   | "_supplier"
   | "_category"
   | "_dateType"
+  | "_deliveryStatus"
   | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
   const filters = assessorKeys.map((accessorKey) => ({

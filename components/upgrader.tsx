@@ -27,6 +27,7 @@ import {
 } from "@/app/_actions/upgrade/community";
 import { Icons } from "./icons";
 import {
+  _updateJobHomeIdFromUnitId,
   removeRedundantPayments,
   resetJobUpgrade,
   upgradeCustomJobRemoveAddon,
@@ -68,10 +69,10 @@ export default function Upgrader() {
         },
       ],
     },
-
     {
       label: "Jobs",
       children: [
+        { label: "update job home id", action: _updateJobHomeIdFromUnitId },
         {
           label: "Remove Addon on Custom Jobs ",
           action: upgradeCustomJobRemoveAddon,

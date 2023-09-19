@@ -7,12 +7,13 @@ import EstimatesTableShell from "@/components/shells/estimates-table-shell";
 import PageHeader from "@/components/page-header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
+import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
 
 interface Props {}
-export default async function OrdersPage({ searchParams }) {
+export default async function DeliveryPage({ searchParams }) {
   const response = await getSalesEstimates(queryParams(searchParams));
   return (
-    <div className="space-y-4 px-8">
+    <SalesTabLayout>
       <Breadcrumbs>
         <BreadLink isFirst title="Sales" />
         <BreadLink isLast title="Estimates" />
@@ -24,6 +25,6 @@ export default async function OrdersPage({ searchParams }) {
       />
       <EstimatesTableShell<ISalesOrder> {...response} />
       <OrderPrinter />
-    </div>
+    </SalesTabLayout>
   );
 }

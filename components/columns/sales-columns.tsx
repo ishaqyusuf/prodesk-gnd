@@ -161,10 +161,12 @@ export function OrderInvoiceCell({
     </div>
   );
 }
-export function OrderStatus(order: ISalesOrder | undefined) {
+export function OrderStatus(order: ISalesOrder | undefined, delivery = false) {
+  let status: any = order?.prodStatus;
+  if (["In Transit", "Return", "Delivered"].includes(order?.status as any))
+    status = order?.status;
+  if (!status) status = delivery ? "-" : order?.prodId ? "Prod Queued" : "";
   const color = getBadgeColor(order?.prodStatus || "");
-  let status = order?.prodStatus;
-  if (!status && order?.prodId) status = "Queued";
   return (
     <div className="w-16">
       <Badge
@@ -201,7 +203,7 @@ export function ProdOrderCell(
     </Cell>
   );
 }
-
+export function DeliveryStatus({ order }: { order: ISalesOrder }) {}
 export function ProdStatusCell({ order }: { order: ISalesOrder }) {
   const [progress, setProgress] = useState<Progressor>({} as any);
   const [isLate, setIsLate] = useState<boolean>(false);

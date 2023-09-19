@@ -120,7 +120,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     setAddCost(null as any);
     if (data?.data && data?.defaultTab == "tasks") {
       const costdat = await getJobCostData(
-        data?.data?.unitId,
+        data?.data?.homeId,
         data?.data.subtitle
       );
       // console.log(costdat);
@@ -146,7 +146,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
   }
   async function selectUnit(unit: HomeJobList) {
     form.setValue("homeData", unit);
-    form.setValue("unitId", unit.id);
+    form.setValue("homeId", unit.id);
     setUnitCosting(unit.costing.costings);
 
     const costData = {};
@@ -233,7 +233,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                   "homeData",
                   "meta.taskCosts",
                   "meta.costData",
-                  "unitId",
+                  "homeId",
                   "subtitle",
                 ];
                 if (tab1 == "unit") resetFields(unitFields);
@@ -403,7 +403,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     <Label>Subtitle</Label>
                     <Input
                       placeholder=""
-                      disabled={form.getValues("unitId") != null}
+                      disabled={form.getValues("homeId") != null}
                       className="h-8"
                       {...form.register("subtitle")}
                     />

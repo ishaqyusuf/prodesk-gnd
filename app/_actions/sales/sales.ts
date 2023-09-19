@@ -36,6 +36,8 @@ import { user } from "../utils";
     to,
     prodId,
     _payment,
+    _deliveryStatus,
+    deliveryOption,
     type = "order",
   } = query;
   const inputQ = { contains: _q || undefined };
@@ -71,6 +73,8 @@ import { user } from "../utils";
     type,
     ...dateQuery({ from, to, _dateType, date }),
   };
+  if(query.deliveryOption)
+    where.deliveryOption  = query.deliveryOption
   if (prodId) where.prodId = prodId;
   if (status) {
     const statusIsArray = Array.isArray(status);
@@ -106,6 +110,26 @@ import { user } from "../utils";
   } 
   if(query._customerId)
     where.customerId = +query._customerId
+    switch(_deliveryStatus) {
+      case "delivered":
+        where.deliveredAt = {not: null}  
+      break;
+
+      case "pending production":
+        where.prodStatus = {
+          not: "Completed"
+        }  
+      break;
+      case "ready": 
+        where.prodStatus = 'Completed'
+        where.status = {
+          notIn: ['In Transit','Return','Delivered']
+        }
+      break;
+      case "transit":
+        where.status = "In Transit";  
+      break;
+    }
   return where;
 }
 export async function getSalesOrder(

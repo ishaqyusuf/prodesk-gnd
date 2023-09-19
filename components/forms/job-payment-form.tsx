@@ -22,8 +22,8 @@ interface Props {
     jobIds: number[];
     subTotal;
     total;
-    discount;
-    discountPercentage;
+    charge;
+    chargePercentage;
     profile: EmployeeProfile;
   };
 }
@@ -40,7 +40,7 @@ export default function JobPaymentForm({ user }: Props) {
       await makePayment({
         jobIds: user.jobIds,
         payment: {
-          charges: user.discount,
+          charges: user.charge,
           amount: user.total,
           subTotal: user.subTotal,
           checkNo: form.getValues("checkNo"),
@@ -66,11 +66,11 @@ export default function JobPaymentForm({ user }: Props) {
             </TableRow>
             <TableRow>
               <TableHead>
-                Adujustment Discount ({user.discountPercentage}%):
+                Adujustment Discount ({user.chargePercentage}%):
               </TableHead>
               <TableCell align="right">
                 <span>
-                  -<Money value={user.discount} />
+                  -<Money value={user.charge} />
                 </span>
               </TableCell>
             </TableRow>
