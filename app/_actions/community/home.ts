@@ -30,7 +30,7 @@ export async function getHomesAction(query: HomeQueryParams) {
           producedAt: true,
           installable: true,
           sentToProductionAt: true,
-          installedAt: true,
+
           amountDue: true,
           amountPaid: true,
         },
@@ -68,7 +68,6 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
               installable: true,
               producedAt: true,
               sentToProductionAt: true,
-              installedAt: true,
             },
           },
         },
@@ -81,7 +80,7 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
     await whereHome(query),
     prisma.homes
   );
-  const { homes, ...pdata } = project;
+  const { homes, ...pdata } = project as any;
   return {
     pageInfo,
     data: homes.map((home) => {
