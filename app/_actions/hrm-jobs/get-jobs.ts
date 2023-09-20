@@ -15,6 +15,7 @@ export async function getMyJobs(query: JobsQueryParamsProps) {
   query._userId = await userId();
   return await getJobs(query);
 }
+export async function getMyPunchoutJobs(query: JobsQueryParamsProps) {}
 export async function getJobs(query: JobsQueryParamsProps) {
   const where = whereJobs(query);
   const items = await prisma.jobs.findMany({

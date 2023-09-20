@@ -97,21 +97,19 @@ export default function RoleModal() {
                       <Label className="capitalize col-span-5">
                         {permission}
                       </Label>
-                      {["view", "edit"].map((k) => (
-                        <div key={k} className="text-center">
-                          <Checkbox
-                            checked={form.getValues(
-                              `permission.${k} ${permission}` as any
-                            )}
-                            onCheckedChange={(e) => {
-                              form.setValue(
-                                `permission.${k} ${permission}` as any,
-                                e
-                              );
-                            }}
-                          />
-                        </div>
-                      ))}
+                      {["view", "edit"].map((k) => {
+                        const _k = `permission.${k} ${permission}` as any;
+                        return (
+                          <div key={k} className="text-center">
+                            <Checkbox
+                              checked={form.getValues(_k)}
+                              onCheckedChange={(e) => {
+                                form.setValue(_k, e);
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   ))}
                 </div>

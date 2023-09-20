@@ -67,6 +67,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { cn } from "@/lib/utils";
 
 interface ModalInterface {
   data: IJobs | undefined;
@@ -74,6 +75,7 @@ interface ModalInterface {
 }
 export default function SubmitJobModal({ type = "installation" }: { type? }) {
   const route = useRouter();
+  const isPunchout = type == "punchout";
   const [isSaving, startTransition] = useTransition();
   const form = useForm<IJobs>({
     defaultValues: {
@@ -111,7 +113,10 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     loadStaticList("staticProjects", projects, staticProjectsAction);
     form.reset(
       !data?.data
-        ? {}
+        ? {
+            type,
+            meta: {},
+          }
         : {
             ...data.data,
           }
@@ -133,7 +138,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     form.setValue("project", project as any);
     form.setValue("unit", null as any);
     form.setValue("title", project.title);
-    if (project?.id) {
+    if (project?.id && type != "punchout") {
       await loadUnits(projectId);
       _setTab("unit");
     } else setTab("general");
@@ -391,7 +396,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
               <ScrollArea className="h-[350px] pr-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="grid gap-2 col-span-2">
-                    <Label>Title</Label>
+                    <Label>Job Title</Label>
                     <Input
                       placeholder=""
                       disabled={form.getValues("projectId") != null}
@@ -400,7 +405,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     />
                   </div>
                   <div className="grid gap-2 col-span-2">
-                    <Label>Subtitle</Label>
+                    <Label>Description</Label>
                     <Input
                       placeholder=""
                       disabled={form.getValues("homeId") != null}
@@ -409,7 +414,9 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Additional Cost ($)</Label>
+                    <Label>
+                      {!isPunchout ? "Additional Cost ($)" : "Cost ($)"}
+                    </Label>
                     <Input
                       className="h-8"
                       type="number"
@@ -418,21 +425,24 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                       {...form.register("meta.additional_cost")}
                     />
                   </div>
-                  <div className="grid gap-2">
-                    <Label>Reason</Label>
-                    <Input className="h-8" {...form.register("description")} />
-                  </div>
-                  <div className="grid gap-2 col-span-2">
-                    <Label>Install Report</Label>
-                    <Textarea className="h-8" {...form.register("note")} />
-                  </div>
-                  <div className="grid gap-2 col-span-2">
+                  {!isPunchout && (
+                    <div className="grid gap-2">
+                      <Label>Reason</Label>
+                      <Input
+                        className="h-8"
+                        {...form.register("description")}
+                      />
+                    </div>
+                  )}
+                  <div
+                    className={cn("grid gap-2", !isPunchout && "col-span-2")}
+                  >
                     <Label>Co-Worker</Label>
                     <Select
                       onValueChange={(e) => form.setValue("coWorkerId", +e)}
                       defaultValue={form.getValues("coWorkerId")?.toString()}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-8">
                         <SelectValue placeholder="" />
                       </SelectTrigger>
 
@@ -447,6 +457,13 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="grid gap-2 col-span-2">
+                    <Label>Report</Label>
+                    <Textarea
+                      className="h-8"
+                      {...form.register(isPunchout ? "description" : "note")}
+                    />
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
@@ -457,24 +474,22 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
         if (tab == "general")
           return (
             <div className="space-x-4 items-center flex">
-              <div className="">
-                <Label>Task Costs</Label>
-                <SecondaryCellContent>
-                  <Money value={taskCost} />
-                </SecondaryCellContent>
-              </div>
-              <div className="">
-                <Label>Addon</Label>
-                <SecondaryCellContent>
-                  <Money value={addon} />
-                </SecondaryCellContent>
-              </div>
-              {/* <div className="">
-                <Label>Total Cost</Label>
-                <SecondaryCellContent>
-                  <Money value={addon + taskCost + addCost} />
-                </SecondaryCellContent>
-              </div> */}
+              {!isPunchout && (
+                <>
+                  <div className="">
+                    <Label>Task Costs</Label>
+                    <SecondaryCellContent>
+                      <Money value={taskCost} />
+                    </SecondaryCellContent>
+                  </div>
+                  <div className="">
+                    <Label>Addon</Label>
+                    <SecondaryCellContent>
+                      <Money value={addon} />
+                    </SecondaryCellContent>
+                  </div>{" "}
+                </>
+              )}
               <Btn
                 isLoading={isSaving}
                 onClick={submit}

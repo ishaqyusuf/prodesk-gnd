@@ -43,7 +43,7 @@ import {
   saveEmployeeAction,
 } from "@/app/_actions/hrm/save-employee";
 
-export default function EditJobModal() {
+export default function EditJobModal({ punchout }: { punchout?: Boolean }) {
   const route = useRouter();
   const [isSaving, startTransition] = useTransition();
   const form = useForm<IUser>({
