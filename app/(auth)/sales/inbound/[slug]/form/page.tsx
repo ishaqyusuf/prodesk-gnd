@@ -25,7 +25,7 @@ export default async function InboundFormPage({
           <BreadLink title="Inbounds" link="/sales/inbounds" />
           <BreadLink title={"New"} isLast />
         </Breadcrumbs>
-        <InboundForm searchParams={searchParams} {...response} />
+        <InboundForm {...response} />
       </DataPageShell>
     </div>
   );
