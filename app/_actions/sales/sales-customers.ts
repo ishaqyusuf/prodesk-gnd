@@ -1,15 +1,20 @@
 "use server";
 
 import { prisma } from "@/db";
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaPromise } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
+import { whereQuery } from "@/lib/db-utils";
 
 export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
+  const qb = whereQuery<Prisma.CustomersWhereInput>(query);
+  qb.searchQuery("name", "address");
+
   const q = { contains: query._q || undefined };
+
   const where: Prisma.CustomersWhereInput = {
     OR: [
       {
@@ -18,17 +23,10 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
       {
         address: q,
       },
-      {
-        addressBooks: {
-          some: {
-            address1: q,
-          },
-        },
-      },
     ],
   };
   const _items = await prisma.customers.findMany({
-    where,
+    where: qb.get(),
     ...(await queryFilter(query)),
     include: {
       profile: true,
