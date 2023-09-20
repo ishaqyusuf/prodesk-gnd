@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ISidebar, nav } from "@/lib/navs";
@@ -10,6 +10,7 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { timeout } from "@/lib/timeout";
 
 export default function TabbedLayout({
   children,
@@ -34,37 +35,44 @@ export default function TabbedLayout({
   const [tab, setTab] = useState<any>(path);
   // const [tabs, setTabs] = useState<{ label; value }[]>([]);
   const route = useRouter();
-  const TabElement = document?.getElementById("tab");
-  if (!TabElement) return <></>;
+  const [TabElement, setTabElement] = useState(document?.getElementById("tab"));
+  useEffect(() => {
+    (async () => {
+      await timeout(2000);
+      setTabElement(document?.getElementById("tab"));
+    })();
+  }, []);
+  // if (!TabElement) return <></>;
 
   return (
     <div className="space-y-4 ">
-      {createPortal(
-        <div className="flex -mt-2">
-          {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
-            <div className="flex flex-col" key={i}>
-              <Button
-                size="sm"
-                className={cn(
-                  "p-1 h-8 px-4",
-                  c.path != tab && "text-muted-foreground"
-                )}
-                variant={c.path == tab ? "ghost" : "ghost"}
-                asChild
-              >
-                <Link href={c.path}>{c.title}</Link>
-              </Button>
-              <div
-                className={cn(
-                  "h-0.5 w-full mt-1",
-                  c.path == tab && "bg-primary"
-                )}
-              ></div>
-            </div>
-          ))}
-        </div>,
-        TabElement
-      )}
+      {TabElement &&
+        createPortal(
+          <div className="flex -mt-2">
+            {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
+              <div className="flex flex-col" key={i}>
+                <Button
+                  size="sm"
+                  className={cn(
+                    "p-1 h-8 px-4",
+                    c.path != tab && "text-muted-foreground"
+                  )}
+                  variant={c.path == tab ? "ghost" : "ghost"}
+                  asChild
+                >
+                  <Link href={c.path}>{c.title}</Link>
+                </Button>
+                <div
+                  className={cn(
+                    "h-0.5 w-full mt-1",
+                    c.path == tab && "bg-primary"
+                  )}
+                ></div>
+              </div>
+            ))}
+          </div>,
+          TabElement
+        )}
       {/* <Tabs
         defaultValue={tab}
         onChange={(v) => {

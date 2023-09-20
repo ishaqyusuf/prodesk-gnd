@@ -28,9 +28,10 @@ import AddonCell from "../community/addon-cell";
 export default function ProjectsTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IProject>) {
   const [isPending, startTransition] = useTransition();
-
+  console.log(searchParams);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<IProject, unknown>[]>(
     () => [

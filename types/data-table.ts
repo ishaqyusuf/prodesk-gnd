@@ -37,6 +37,7 @@ export interface DataTableFilterableColumn<TData,TValue>
 export interface TableShellProps<T> {
     data: T[]
     pageInfo: TablePageInfo
+    searchParams?
 }
 export interface TablePageInfo {
     pageIndex?: number | undefined;

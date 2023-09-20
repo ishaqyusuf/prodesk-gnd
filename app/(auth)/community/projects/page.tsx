@@ -23,7 +23,7 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isLast title="Projects" />
       </Breadcrumbs>
       <PageHeader title="Projects" newDialog="project" />
-      <ProjectsTableShell<IProject> {...response} />
+      <ProjectsTableShell<IProject> searchParams={searchParams} {...response} />
       <ProjectModal />
     </div>
   );

@@ -10,7 +10,7 @@ export default function SalesTabLayout({
   children;
   query?;
 }) {
-  console.log(query);
+  // console.log(query);
   const [tabs, setTabs] = useState([
     { title: "Orders", path: "/sales/orders" },
     { title: "Estimates", path: "/sales/estimates" },
