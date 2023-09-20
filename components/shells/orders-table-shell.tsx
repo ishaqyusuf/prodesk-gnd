@@ -3,7 +3,7 @@
 import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   CheckColumn,
   ColumnHeader,
@@ -31,7 +31,10 @@ export default function OrdersTableShell<T>({
   pageInfo,
 }: TableShellProps<ISalesOrder>) {
   const [isPending, startTransition] = useTransition();
-
+  useEffect(() => {
+    console.log("ORDERS", data);
+  }, [data]);
+  console.log(data);
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
     () => [
