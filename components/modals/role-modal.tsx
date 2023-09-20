@@ -100,14 +100,11 @@ export default function RoleModal() {
                       {["view", "edit"].map((k) => {
                         const _k = `permission.${k} ${permission}` as any;
                         return (
-                          <div key={k} className="text-center">
-                            <Checkbox
-                              checked={form.getValues(_k)}
-                              onCheckedChange={(e) => {
-                                form.setValue(_k, e);
-                              }}
-                            />
-                          </div>
+                          <PermissionCheckBox
+                            key={k}
+                            permission={_k}
+                            form={form}
+                          />
                         );
                       })}
                     </div>
@@ -129,5 +126,18 @@ export default function RoleModal() {
         </Btn>
       )}
     />
+  );
+}
+function PermissionCheckBox({ permission, form }: { permission; form }) {
+  const value = form.watch(permission);
+  return (
+    <div className="text-center">
+      <Checkbox
+        checked={value}
+        onCheckedChange={(e) => {
+          form.setValue(permission, e);
+        }}
+      />
+    </div>
   );
 }
