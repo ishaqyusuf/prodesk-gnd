@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
+  console.log(searchParams);
   const response = await getProjectsAction(queryParams(searchParams));
   return (
     <div className="space-y-4 px-8">
