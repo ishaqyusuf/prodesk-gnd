@@ -9,5 +9,6 @@ export default function SalesTabLayout({ children }: { children }) {
     { title: "Estimates", path: "/sales/estimates" },
     { title: "Delivery", path: "/sales/delivery" },
   ]);
+  console.log("SALES TAB");
   return <TabbedLayout tabs={tabs}>{children}</TabbedLayout>;
 }
