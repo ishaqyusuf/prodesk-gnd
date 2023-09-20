@@ -18,7 +18,7 @@ export default async function OrdersPage({ searchParams }) {
   const response = await getSalesOrder(queryParams(searchParams));
   console.log(response, searchParams);
   return (
-    <SalesTabLayout>
+    <SalesTabLayout query={searchParams}>
       <Breadcrumbs>
         <BreadLink isFirst title="Sales" />
         <BreadLink isLast title="Orders" />
