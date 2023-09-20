@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
   const response = await getSalesOrder(queryParams(searchParams));
+  console.log(response, searchParams);
   return (
     <SalesTabLayout>
       <Breadcrumbs>
