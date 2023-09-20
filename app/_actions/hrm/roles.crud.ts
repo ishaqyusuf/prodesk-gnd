@@ -59,12 +59,15 @@ export async function _saveRole(role: IRoleForm) {
   const pl = await prisma.permissions.findMany({
     select: { name: true, id: true },
   });
-
+  console.log(pl);
   const ids: number[] = [];
+  console.log(role.permission);
   await Promise.all(
     Object.entries(role.permission).map(async ([k, v]) => {
+      if (!v) return;
+      console.log([[k, v]]);
       const e = pl.find((p) => p.name == k);
-      if (e && v) {
+      if (e && v == true) {
         ids.push(e.id);
       } else {
         const newPermission = await prisma.permissions.create({
@@ -77,6 +80,7 @@ export async function _saveRole(role: IRoleForm) {
       }
     })
   );
+  console.log(ids);
   if (!role.roleId)
     role.roleId = (
       await prisma.roles.create({

@@ -36,7 +36,7 @@ export default function RoleModal() {
       try {
         const formData = form.getValues();
         // const isValid = roleSchema.parse(formData);
-
+        console.log(formData);
         const role = await _saveRole(formData);
         closeModal();
         toast.message("Success!");
