@@ -23,7 +23,7 @@ export default async function CustomerProfilesPage({ searchParams }) {
         <BreadLink isLast title="Customer Profiles" />
       </Breadcrumbs>
       <PageHeader title="Customer Profiles" newDialog="customerProfile" />
-      <CustomerProfileTableShell {...response} />
+      <CustomerProfileTableShell searchParams={searchParams} {...response} />
       <CustomerProfileModal />
     </CustomersLayout>
   );

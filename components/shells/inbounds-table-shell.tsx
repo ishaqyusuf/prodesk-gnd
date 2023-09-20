@@ -33,6 +33,7 @@ import { SmartTable } from "../data-table/smart-table";
 export default function InboundsTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IInboundOrder>) {
   const [isPending, startTransition] = useTransition();
   // console.log(data);
@@ -105,6 +106,7 @@ export default function InboundsTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

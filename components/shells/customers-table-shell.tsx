@@ -42,6 +42,7 @@ import AuthGuard from "../auth-guard";
 export default function CustomersTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ICustomer>) {
   const [isPending, startTransition] = useTransition();
   const profiles = useAppSelector(
@@ -160,6 +161,7 @@ export default function CustomersTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

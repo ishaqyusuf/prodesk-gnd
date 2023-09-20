@@ -22,7 +22,7 @@ export default async function TaskInstallationPage({ searchParams }) {
         <BreadLink isLast title="Jobs" />
       </Breadcrumbs>
       <PageHeader title="Jobs" newDialog="submitJob" />
-      <JobTableShell {...response} />
+      <JobTableShell searchParams={searchParams} {...response} />
       <JobOverviewSheet />
       <EditJobModal />
       <SubmitJobModal />

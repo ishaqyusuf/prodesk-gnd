@@ -35,6 +35,7 @@ import { DynamicFilter } from "../data-table/data-table-dynamic-filter";
 export default function ProductsTableShell({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IProductVariant>) {
   const [isPending, startTransition] = useTransition();
 
@@ -118,6 +119,7 @@ export default function ProductsTableShell({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

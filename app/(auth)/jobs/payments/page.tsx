@@ -28,7 +28,7 @@ export default async function EmployeesPage({ searchParams }) {
         buttonText={"Make Payment"}
         ButtonIcon={"dollar"}
       />
-      <JobPaymentTableShell {...response} />
+      <JobPaymentTableShell searchParams={searchParams} {...response} />
       <PaymentOverviewSheet />
     </TabbedLayout>
   );

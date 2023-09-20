@@ -28,7 +28,10 @@ export default async function OrdersPage({ searchParams }) {
         newLink="/sales/order/new/form"
         permissions={["editOrders"]}
       />
-      <OrdersTableShell<ISalesOrder> {...response} />
+      <OrdersTableShell<ISalesOrder>
+        searchParams={searchParams}
+        {...response}
+      />
       <OrderPrinter />
       <SalesProductionModal />
     </SalesTabLayout>

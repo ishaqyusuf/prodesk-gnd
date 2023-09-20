@@ -25,7 +25,7 @@ export default async function MyJobPaymentsPage({ searchParams }) {
         <BreadLink isLast title="Payments" />
       </Breadcrumbs>
       <PageHeader title="My Payments" />
-      <JobPaymentTableShell {...response} />
+      <JobPaymentTableShell searchParams={searchParams} {...response} />
       <JobOverviewSheet />
     </div>
   );

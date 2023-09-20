@@ -23,6 +23,7 @@ import { deleteEmployeeProfile } from "@/app/_actions/hrm/employee-profiles";
 export default function EmployeeProfileTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<EmployeeProfile>) {
   const [isPending, startTransition] = useTransition();
 
@@ -81,6 +82,7 @@ export default function EmployeeProfileTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

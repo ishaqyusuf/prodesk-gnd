@@ -50,6 +50,7 @@ import { RolesFilter } from "../filters/roles-filter";
 export default function EmployeesTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IUser>) {
   const [isPending, startTransition] = useTransition();
   const profiles = useAppSelector(
@@ -177,6 +178,7 @@ export default function EmployeesTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

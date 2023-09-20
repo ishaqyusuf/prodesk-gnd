@@ -30,6 +30,7 @@ import { deleteHomeTemplateAction } from "@/app/_actions/community/home-template
 export default function ModelCostTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IHomeTemplate>) {
   const [isPending, startTransition] = useTransition();
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -171,6 +172,7 @@ export default function ModelCostTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

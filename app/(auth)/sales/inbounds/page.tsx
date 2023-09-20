@@ -25,7 +25,7 @@ export default async function InboundPage({ searchParams }) {
         buttonText={`New (${op})`}
         newLink={"/sales/inbound/new/form"}
       />
-      <InboundsTableShell {...response} />
+      <InboundsTableShell searchParams={searchParams} {...response} />
     </InboundLayout>
   );
 }

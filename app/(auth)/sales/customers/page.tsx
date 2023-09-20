@@ -27,7 +27,10 @@ export default async function CustomersPage({ searchParams }) {
         permissions={["editOrders"]}
         newDialog="customerForm"
       />
-      <CustomersTableShell<ICustomer> {...response} />
+      <CustomersTableShell<ICustomer>
+        searchParams={searchParams}
+        {...response}
+      />
       <CustomerModal />
     </CustomersLayout>
   );

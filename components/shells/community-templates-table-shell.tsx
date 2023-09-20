@@ -21,6 +21,7 @@ import { ICommunityTemplate, IHomeTemplate } from "@/types/community";
 export default function CommunityTemplateTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ICommunityTemplate>) {
   const [isPending, startTransition] = useTransition();
 
@@ -83,6 +84,7 @@ export default function CommunityTemplateTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

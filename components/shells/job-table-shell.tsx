@@ -37,6 +37,7 @@ import { Badge } from "../ui/badge";
 export default function JobTableShell<T>({
   data,
   pageInfo,
+  searchParams,
   payment,
   adminMode,
 }: TableShellProps<IJobs> & {
@@ -207,6 +208,7 @@ export default function JobTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

@@ -23,7 +23,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
         <BreadLink isLast title="Model Costs" />
       </Breadcrumbs>
       <PageHeader title="Model Costs" newDialog="modelTemplate" />
-      <ModelCostTableShell {...response} />
+      <ModelCostTableShell searchParams={searchParams} {...response} />
       <ModelCostModal />
       <ModelTemplateModal />
       <ModelInstallCostModal />

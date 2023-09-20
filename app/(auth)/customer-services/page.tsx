@@ -22,7 +22,10 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isFirst title="Customer Services" />
       </Breadcrumbs>
       <PageHeader title="Customer Services" newDialog="customerServices" />
-      <CustomerServiceTableShell<IProject> {...response} />
+      <CustomerServiceTableShell<IProject>
+        searchParams={searchParams}
+        {...response}
+      />
       <CustomerServiceModal />
     </div>
   );

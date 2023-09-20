@@ -28,6 +28,7 @@ import { IRole } from "@/types/hrm";
 export default function RolesTableShell({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IRole>) {
   const [isPending, startTransition] = useTransition();
 
@@ -76,6 +77,7 @@ export default function RolesTableShell({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

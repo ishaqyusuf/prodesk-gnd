@@ -24,6 +24,7 @@ import { Button } from "../ui/button";
 export default function InboundFormTableShell<T>({
   data,
   pageInfo,
+  searchParams,
   suppliers,
   create,
 }: TableShellProps<ISalesOrderItem> & {
@@ -38,6 +39,7 @@ export default function InboundFormTableShell<T>({
   return (
     <>
       <DataTable2
+        searchParams={searchParams}
         columns={columns}
         pageInfo={pageInfo}
         data={data}

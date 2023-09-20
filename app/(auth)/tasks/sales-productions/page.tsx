@@ -30,7 +30,11 @@ export default async function SalesProductionPage({ searchParams }) {
         <SalesProductionTableShell<ISalesOrder> simple {...todaysProd} />
         <PageHeader title="Productions" />
 
-        <SalesProductionTableShell<ISalesOrder> myProd {...response} />
+        <SalesProductionTableShell<ISalesOrder>
+          myProd
+          searchParams={searchParams}
+          {...response}
+        />
         <OrderPrinter />
       </div>
     </div>

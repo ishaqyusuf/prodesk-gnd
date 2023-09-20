@@ -38,6 +38,7 @@ import useQueryParams from "@/lib/use-query-params"
 import * as qs from "qs";
 
 interface DataTableProps<TData, TValue> {
+  searchParams?;
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pageInfo: TablePageInfo
@@ -60,6 +61,7 @@ export function DataTable2<TData, TValue>({
   dateFilterColumns = [],
   newRowLink, hideFooter,hideHeader,SelectionAction,
   deleteRowsAction,
+  searchParams: _searchParams
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -67,6 +69,9 @@ export function DataTable2<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  React.useEffect(() => {
+    console.log(_searchParams)
+  },[])
   function __updateQuery(q) {
     setDataQueryString(qs.stringify(q));
   }

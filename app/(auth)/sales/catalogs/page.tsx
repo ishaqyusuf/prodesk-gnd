@@ -27,7 +27,7 @@ export default async function SalesProducts({ searchParams }) {
         permissions={["editOrders"]}
         newDialog="product"
       />
-      <ProductsTableShell {...response} />
+      <ProductsTableShell searchParams={searchParams} {...response} />
       <ProductCatalogModal />
     </div>
   );

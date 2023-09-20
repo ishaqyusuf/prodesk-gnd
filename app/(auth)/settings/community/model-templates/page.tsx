@@ -24,7 +24,7 @@ export default async function ModelTemplatesPage({ searchParams }) {
         <BreadLink isLast title="Model Templates" />
       </Breadcrumbs>
       <PageHeader title="Model Templates" newDialog="modelTemplate" />
-      <HomeTemplatesTableShell {...response} />
+      <HomeTemplatesTableShell searchParams={searchParams} {...response} />
     </CommunitySettingsLayoutComponent>
   );
 }

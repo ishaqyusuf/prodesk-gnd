@@ -21,7 +21,10 @@ export default async function OrdersPage({ searchParams }) {
         <BreadLink isLast title="Delivery" />
       </Breadcrumbs>
       <PageHeader title="Sales Delivery" />
-      <DeliveryTableShell<ISalesOrder> {...response} />
+      <DeliveryTableShell<ISalesOrder>
+        searchParams={searchParams}
+        {...response}
+      />
       <OrderPrinter />
     </SalesTabLayout>
   );

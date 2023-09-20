@@ -41,6 +41,7 @@ import { SmartTable } from "../data-table/smart-table";
 export default function CustomerServiceTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IWorkOrder>) {
   const [isPending, startTransition] = useTransition();
 
@@ -204,6 +205,7 @@ export default function CustomerServiceTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

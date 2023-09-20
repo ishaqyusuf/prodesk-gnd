@@ -46,6 +46,7 @@ import { toast } from "sonner";
 export default function HomesTableShell<T>({
   data,
   pageInfo,
+  searchParams,
   projectView,
 }: TableShellProps<ExtendedHome> & {
   projectView: Boolean;
@@ -231,6 +232,7 @@ export default function HomesTableShell<T>({
     <>
       <HomePrinter />
       <DataTable2
+        searchParams={searchParams}
         columns={columns}
         pageInfo={pageInfo}
         data={data}

@@ -19,7 +19,7 @@ export default async function PutawayPage({ searchParams }) {
         <BreadLink isLast title="Inbound Orders" />
       </Breadcrumbs>
       <PageHeader title="Putaways" />
-      <PutawayTableShell {...response} />
+      <PutawayTableShell searchParams={searchParams} {...response} />
     </InboundLayout>
   );
 }

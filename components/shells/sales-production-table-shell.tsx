@@ -30,6 +30,7 @@ interface Props extends TableShellProps<ISalesOrder> {
 export default function SalesProductionTableShell<T>({
   data,
   pageInfo,
+  searchParams,
   simple,
   myProd,
 }: Props) {
@@ -128,6 +129,7 @@ export default function SalesProductionTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

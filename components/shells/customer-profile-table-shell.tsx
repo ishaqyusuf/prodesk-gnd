@@ -33,6 +33,7 @@ import { toast } from "sonner";
 export default function CustomerProfileTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<CustomerTypes>) {
   const [isPending, startTransition] = useTransition();
 
@@ -92,6 +93,7 @@ export default function CustomerProfileTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

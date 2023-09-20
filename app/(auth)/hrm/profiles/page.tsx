@@ -22,7 +22,7 @@ export default async function EmployeesPage({ searchParams }) {
         <BreadLink isLast title="Employee Profiles" />
       </Breadcrumbs>
       <PageHeader title="Employee Profiles" newDialog="employeeProfile" />
-      <EmployeeProfileTableShell {...response} />
+      <EmployeeProfileTableShell searchParams={searchParams} {...response} />
       <EmployeeProfileModal />
     </HrmLayout>
   );

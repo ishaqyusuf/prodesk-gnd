@@ -24,6 +24,7 @@ import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 export default function EstimatesTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ISalesOrder>) {
   const [isPending, startTransition] = useTransition();
 
@@ -63,6 +64,7 @@ export default function EstimatesTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

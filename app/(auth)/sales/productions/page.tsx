@@ -43,7 +43,10 @@ export default async function SalesProductionPage({ searchParams }) {
           </div>
           <div className="flex items-center space-x-2"></div>
         </div>
-        <SalesProductionTableShell<ISalesOrder> {...response} />
+        <SalesProductionTableShell<ISalesOrder>
+          searchParams={searchParams}
+          {...response}
+        />
         <OrderPrinter />
       </div>
     </>

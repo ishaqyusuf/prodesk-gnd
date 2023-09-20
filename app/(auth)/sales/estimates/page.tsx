@@ -23,7 +23,10 @@ export default async function DeliveryPage({ searchParams }) {
         permissions={["editOrders"]}
         newLink="/sales/estimate/new/form"
       />
-      <EstimatesTableShell<ISalesOrder> {...response} />
+      <EstimatesTableShell<ISalesOrder>
+        searchParams={searchParams}
+        {...response}
+      />
       <OrderPrinter />
     </SalesTabLayout>
   );

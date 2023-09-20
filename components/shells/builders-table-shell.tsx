@@ -31,6 +31,7 @@ import { openModal } from "@/lib/modal";
 export default function BuildersTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IBuilder>) {
   const [isPending, startTransition] = useTransition();
 
@@ -145,6 +146,7 @@ export default function BuildersTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

@@ -31,6 +31,7 @@ import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 export default function DeliveryTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ISalesOrder>) {
   const [isPending, startTransition] = useTransition();
 
@@ -83,6 +84,7 @@ export default function DeliveryTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

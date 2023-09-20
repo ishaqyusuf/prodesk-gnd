@@ -29,6 +29,7 @@ import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 export default function OrdersTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ISalesOrder>) {
   const [isPending, startTransition] = useTransition();
   useEffect(() => {
@@ -89,6 +90,7 @@ export default function OrdersTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

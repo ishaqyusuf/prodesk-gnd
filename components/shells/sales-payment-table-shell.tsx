@@ -32,6 +32,7 @@ import { openModal } from "@/lib/modal";
 export default function SalesPaymentTableShell({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ISalesPayment>) {
   const [isPending, startTransition] = useTransition();
 
@@ -108,6 +109,7 @@ export default function SalesPaymentTableShell({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

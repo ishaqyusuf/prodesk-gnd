@@ -28,6 +28,7 @@ import PutawayActions from "../actions/putaway-actions";
 export default function PutawayTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IInboundOrderItems>) {
   const [isPending, startTransition] = useTransition();
 
@@ -91,6 +92,7 @@ export default function PutawayTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

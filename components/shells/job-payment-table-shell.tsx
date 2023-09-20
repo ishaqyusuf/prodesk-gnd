@@ -24,6 +24,7 @@ import Money from "../money";
 export default function JobPaymentTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IJobPayment>) {
   const [isPending, startTransition] = useTransition();
 
@@ -114,6 +115,7 @@ export default function JobPaymentTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

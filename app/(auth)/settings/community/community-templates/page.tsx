@@ -28,7 +28,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
         <BreadLink isLast title="Community Templates" />
       </Breadcrumbs>
       <PageHeader title="Community Templates" newDialog="communityTemplate" />
-      <CommunityTemplateTableShell {...response} />
+      <CommunityTemplateTableShell searchParams={searchParams} {...response} />
     </CommunitySettingsLayoutComponent>
   );
 }

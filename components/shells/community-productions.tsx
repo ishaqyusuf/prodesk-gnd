@@ -58,6 +58,7 @@ import StatusBadge from "../status-badge";
 export default function CommunityProductionsTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<ExtendedHomeTasks>) {
   const [isPending, startTransition] = useTransition();
 
@@ -150,6 +151,7 @@ export default function CommunityProductionsTableShell<T>({
   return (
     <>
       <DataTable2
+        searchParams={searchParams}
         columns={columns}
         pageInfo={pageInfo}
         data={data}

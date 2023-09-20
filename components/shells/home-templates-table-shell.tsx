@@ -21,6 +21,7 @@ import { IHomeTemplate } from "@/types/community";
 export default function HomeTemplatesTableShell<T>({
   data,
   pageInfo,
+  searchParams,
 }: TableShellProps<IHomeTemplate>) {
   const [isPending, startTransition] = useTransition();
 
@@ -85,6 +86,7 @@ export default function HomeTemplatesTableShell<T>({
   );
   return (
     <DataTable2
+      searchParams={searchParams}
       columns={columns}
       pageInfo={pageInfo}
       data={data}

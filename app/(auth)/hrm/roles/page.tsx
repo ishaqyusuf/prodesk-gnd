@@ -25,7 +25,7 @@ export default async function EmployeesPage({ searchParams }) {
         <BreadLink isLast title="Roles" />
       </Breadcrumbs>
       <PageHeader title="Roles" newDialog="role" />
-      <RolesTableShell {...response} />
+      <RolesTableShell searchParams={searchParams} {...response} />
       <RoleModal />
     </HrmLayout>
   );

@@ -31,7 +31,7 @@ export default async function SalesPaymentPage({ searchParams }) {
         permissions={["editOrders"]}
         newDialog="salesPaymentCustomer"
       />
-      <SalesPaymentTableShell {...response} />
+      <SalesPaymentTableShell searchParams={searchParams} {...response} />
       <SelectSalesPaymentCustomerModal />
       <SalesPaymentModal />
       <DeletePaymentPrompt />

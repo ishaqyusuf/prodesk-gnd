@@ -31,7 +31,7 @@ export default async function EmployeesPage({ searchParams }) {
           defaultTab: "user",
         }}
       />
-      <JobTableShell adminMode {...response} />
+      <JobTableShell adminMode searchParams={searchParams} {...response} />
       <JobOverviewSheet />
       <EditJobModal />
       <SubmitJobModal />

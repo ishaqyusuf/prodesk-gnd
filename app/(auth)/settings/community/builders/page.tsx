@@ -21,7 +21,7 @@ export default async function BuildersPage({ searchParams }) {
         <BreadLink isLast title="Builders" />
       </Breadcrumbs>
       <PageHeader title="Builders" newDialog="builder" />
-      <BuildersTableShell {...response} />
+      <BuildersTableShell searchParams={searchParams} {...response} />
       <BuilderModal />
     </CommunitySettingsLayoutComponent>
   );
