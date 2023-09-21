@@ -34,7 +34,7 @@ function whereCustomerService(query: CustomerServiceQueryParamsProps) {
   };
   const _where = whereQuery<Prisma.WorkOrdersWhereInput>(query);
   _where.searchQuery("description", "projectName", "homeOwner", "homePhone");
-  _where.register("status", query._show);
-  _where.register("techId", Number(query._userId));
+  _where.register("status", query._show | undefined);
+  _where.register("techId", Number(query._userId) | undefined);
   return _where.get();
 }
