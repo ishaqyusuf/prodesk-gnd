@@ -63,7 +63,7 @@ export default function SalesPaymentTableShell({
         accessorKey: "order",
         header: ColumnHeader("Order"),
         cell: ({ row }) => (
-          <Cell>
+          <Cell slug={row.original.order?.slug} link="/sales/order/slug">
             <SecondaryCellContent>
               {row.original.order.orderId}
             </SecondaryCellContent>

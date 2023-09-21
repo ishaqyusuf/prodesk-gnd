@@ -1,6 +1,7 @@
 import { getOrderAction } from "@/app/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink, OrderViewCrumb } from "@/components/breadcrumbs/links";
+import DeletePaymentPrompt from "@/components/modals/delete-payment-prompt";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProductionModal from "@/components/modals/sales-production-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
@@ -47,6 +48,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
       <SalesTimelineModal />
       <SalesPaymentModal />
       <OrderPrinter />
+      <DeletePaymentPrompt />
     </DataPageShell>
   );
 }

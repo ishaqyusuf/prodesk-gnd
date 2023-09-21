@@ -66,7 +66,7 @@ export default function Notification({}) {
             size="sm"
             className={cn(
               "rounded-full relative h-auto  space-x-2",
-              notificationCount > 0 ? "p-1.5 px-2" : "p-1.5"
+              notificationCount > 0 ? "p-1" : "p-1"
             )}
           >
             <Bell className="w-4 h-4 text-muted-foreground" />
