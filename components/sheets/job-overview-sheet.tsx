@@ -117,6 +117,7 @@ function Content({ data }: { data: IJobs }) {
         </Info>
         <Info label="Additional Cost">
           <Money value={data?.meta.additional_cost / divider} />
+          <div className="">{data?.description}</div>
         </Info>
         <Info label="Addon Cost">
           <Money value={job?.meta.addon / divider} />

@@ -38,6 +38,7 @@ import {
   upgradeWorkOrder,
 } from "@/app/_actions/upgrade/work-order";
 import { salesSuppliers } from "@/app/_actions/upgrade/fix-sales";
+import { insertJobs } from "@/app/_actions/hrm-jobs/restore-jobs";
 
 export default function Upgrader() {
   const [isPending, startTransaction] = useTransition();
@@ -72,6 +73,7 @@ export default function Upgrader() {
     {
       label: "Jobs",
       children: [
+        { label: "upgrade job 2.0", action: insertJobs },
         { label: "update job home id", action: _updateJobHomeIdFromUnitId },
         {
           label: "Remove Addon on Custom Jobs ",

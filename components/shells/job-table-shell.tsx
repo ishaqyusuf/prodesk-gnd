@@ -106,6 +106,9 @@ export default function JobTableShell<T>({
                   <SecondaryCellContent>
                     <Money value={row.original?.meta.additional_cost} />
                   </SecondaryCellContent>
+                  {/* <SecondaryCellContent className="line-clamp-1">
+                    {row.original?.description}
+                  </SecondaryCellContent> */}
                 </Cell>
               ),
             },

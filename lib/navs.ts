@@ -22,6 +22,7 @@ import {
   School,
   Settings2,
   ShoppingBag,
+  Truck,
   User,
   UsersIcon,
   Workflow,
@@ -73,6 +74,7 @@ export function nav(
     editProject,
     viewHrm,
     viewEmployee,
+    viewDelivery,
     viewPriceList,
     viewCustomerService,
   }: ICan = __can;
@@ -178,7 +180,7 @@ export function nav(
     if (href) return _route("Jobs", Briefcase, `${href}`);
   })();
   if (_job) routes.Job.push(_job);
-  if (viewOrders) {
+  if (viewOrders || isAdmin) {
     routes.Sales.push(
       ...[
         _route("Estimates", Banknote, "/sales/estimates"), //employees,roles
@@ -187,6 +189,8 @@ export function nav(
       ]
     );
   }
+  if (viewDelivery || isAdmin)
+    routes.Sales.push(_route("Order Delivery", Truck, "/sales/delivery"));
   if (editOrders)
     routes.Sales.push(
       ...[
