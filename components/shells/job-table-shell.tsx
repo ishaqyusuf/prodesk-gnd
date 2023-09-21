@@ -73,7 +73,7 @@ export default function JobTableShell<T>({
             <SecondaryCellContent>
               {row.original.subtitle ||
                 row.original.description ||
-                row.original.description ||
+                row.original.note ||
                 ""}
             </SecondaryCellContent>
           </Cell>
