@@ -46,6 +46,7 @@ import { ISalesPayment } from "@/types/sales";
 
 export default function DeletePaymentPrompt() {
   const [action, setAction] = useState<"yes" | "no">("no");
+  const route = useRouter();
   async function onSubmit(row: ISalesPayment) {
     startTransition(async () => {
       const amountDue = (row.order.amountDue || 0) + row.amount;
@@ -58,6 +59,7 @@ export default function DeletePaymentPrompt() {
       });
       toast.success("Deleted!");
       closeModal();
+      route.refresh();
     });
   }
   const [isLoading, startTransition] = useTransition();
