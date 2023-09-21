@@ -72,7 +72,7 @@ export function HomeInstallationStatus({ home }: Props) {
             : "bg-pink-600 hover:bg-pink-600"
         )}
       >
-        {home.jobs?.length || 0} submitted
+        {home.jobs?.length} submitted
       </Badge>
     </div>
   );

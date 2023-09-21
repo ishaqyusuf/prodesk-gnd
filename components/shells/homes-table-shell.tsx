@@ -155,7 +155,14 @@ export default function HomesTableShell<T>({
         accessorKey: "inst",
         header: ColumnHeader("Installation"),
         cell: ({ row }) => (
-          <Cell>
+          <Cell
+            slug="jobs"
+            link={
+              row.original.jobs?.length > 0
+                ? `/slug?_homeId=${row.original.id}`
+                : null
+            }
+          >
             <HomeInstallationStatus home={row.original} />
           </Cell>
         ),
