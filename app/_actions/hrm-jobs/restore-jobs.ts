@@ -33,6 +33,13 @@ export async function getRestorableJobs(query: Props) {
   );
 }
 export async function insertJobs() {
+  //   await prisma.jobs.deleteMany({
+  //     where: {
+  //       id: {
+  //         gt: 4074,
+  //       },
+  //     },
+  //   });
   const installSetting: InstallCostSettings = (await getSettingAction(
     "install-price-chart"
   )) as any;
@@ -46,7 +53,9 @@ export async function insertJobs() {
       const meta: IJobMeta = {} as any;
 
       meta.costData = {};
-      meta.taskCost = meta.additional_cost = ometa?.additional_cost;
+      meta.taskCost = ometa?.sub_total;
+      meta.additional_cost = ometa?.additional_cost;
+
       if (ometa?.cost_data?.length > 0) {
         ometa?.cost_data.map((cd) => {
           if (cd.title == "Addon") meta.addon = cd.total;
@@ -80,6 +89,7 @@ export async function insertJobs() {
         user_id: userId,
       } = job;
       const coWorkerId = ometa?.co_installer_id;
+
       const newJob: Jobs = {
         amount: Number(job.amount),
         adminNote,
@@ -102,6 +112,16 @@ export async function insertJobs() {
       } as any;
       inserts.push(newJob);
     });
+  //   console.log(
+  //     await prisma.jobs.findFirst({
+  //       orderBy: {
+  //         id: "desc",
+  //       },
+  //     })
+  //   );
+  await prisma.jobs.createMany({
+    data: inserts as any,
+  });
   return { inserts, notFound };
   //   console.log(inserts);
 }

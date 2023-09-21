@@ -69,11 +69,9 @@ export default function JobTableShell<T>({
             className="cursor-pointer"
             onClick={() => openModal("jobOverview", row.original)}
           >
-            <PrimaryCellContent>
-              {row.original.title || "No Title"}
-            </PrimaryCellContent>
+            <PrimaryCellContent>{row.original.title || "-"}</PrimaryCellContent>
             <SecondaryCellContent>
-              {row.original.subtitle || "No Description"}
+              {row.original.subtitle || row.original.description || ""}
             </SecondaryCellContent>
           </Cell>
         ),
