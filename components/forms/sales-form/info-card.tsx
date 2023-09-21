@@ -122,23 +122,28 @@ export default function InfoCard({
           <>
             <InfoLine label="Payment Terms">
               <div className="flex">
-                <Select
-                  value={`${watchPaymentTerm}`}
-                  onValueChange={(e) => {
-                    form.setValue("paymentTerm", e);
-                  }}
-                >
-                  <SelectTrigger className="h-6   w-auto min-w-[100px]">
-                    <SelectValue placeholder="Select Term" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="Net10">Net10</SelectItem>
-                      <SelectItem value="Net20">Net20</SelectItem>
-                      <SelectItem value="Net30">Net30</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <FormField
+                  control={form.control}
+                  name="paymentTerm"
+                  render={({ field }) => (
+                    <Select
+                      value={`${field.value}`}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                        <SelectValue placeholder="Select Term" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="Net10">Net10</SelectItem>
+                          <SelectItem value="Net20">Net20</SelectItem>
+                          <SelectItem value="Net30">Net30</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+
                 <div className="text-xs inline-flex text-red-500 items-center font-medium">
                   {watchGoodUntil && (
                     <>
@@ -162,22 +167,26 @@ export default function InfoCard({
             </InfoLine>
             <InfoLine label="Delivery Option">
               <div className="flex">
-                <Select
-                  value={`${watchDelivery}`}
-                  onValueChange={(e) => {
-                    form.setValue("deliveryOption", e);
-                  }}
-                >
-                  <SelectTrigger className="h-6   w-auto min-w-[100px]">
-                    <SelectValue placeholder="Delivery" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="pickup">Pickup</SelectItem>
-                      <SelectItem value="delivery">Delivery</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <FormField
+                  control={form.control}
+                  name="deliveryOption"
+                  render={({ field }) => (
+                    <Select
+                      value={`${field.value}`}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                        <SelectValue placeholder="Delivery" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="pickup">Pickup</SelectItem>
+                          <SelectItem value="delivery">Delivery</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
             </InfoLine>
           </>

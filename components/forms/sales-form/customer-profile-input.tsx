@@ -32,7 +32,7 @@ export function SalesCustomerProfileInput({
           }
         }}
       >
-        <SelectTrigger className="h-6 w-[100px]">
+        <SelectTrigger className="h-6 min-w-[100px]">
           <SelectValue placeholder="Profile" />
         </SelectTrigger>
         <SelectContent>

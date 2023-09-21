@@ -77,7 +77,7 @@ export default function DeliveryTableShell<T>({
         size: 15,
         maxSize: 15,
         enableSorting: false,
-        cell: ({ row }) => <OrderRowAction row={row.original} />,
+        cell: ({ row }) => <></>,
       },
     ],
     [data, isPending]
