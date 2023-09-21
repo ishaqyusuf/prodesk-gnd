@@ -12,7 +12,7 @@ import { Plus } from "lucide-react";
 
 export default function Timeline() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
-  console.log(order.progress);
+
   return (
     <div className="col-span-1">
       <Card>

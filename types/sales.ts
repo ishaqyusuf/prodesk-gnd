@@ -76,7 +76,7 @@ export type ISalesOrderItem = SalesOrderItems & {
   productions: OrderProductionSubmissions[];
   meta: ISalesOrderItemMeta;
   salesOrder: ISalesOrder;
-  inboundOrderItem: IInboundOrderItems;
+  inboundOrderItem: IInboundOrderItems[];
 };
 export interface ISalesOrderItemMeta {
   supplier;

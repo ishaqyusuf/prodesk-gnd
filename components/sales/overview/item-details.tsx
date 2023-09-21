@@ -14,6 +14,8 @@ import {
 import XProgress from "@/components/x-progress";
 import { ProdItemActions } from "@/components/actions/prod-item-actions";
 import { Badge } from "@/components/ui/badge";
+import { IInboundOrderItems } from "@/types/sales-inbound";
+import StatusBadge from "@/components/status-badge";
 
 export default function ItemDetailsSection() {
   const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
@@ -49,9 +51,7 @@ export default function ItemDetailsSection() {
                   <TableCell className="p-2">
                     <p className="uppercase">{item.description}</p>
                     {item.swing && (
-                      <div className="">
-                        <Badge>{item.inboundOrderItem?.id}</Badge>
-                      </div>
+                      <ItemInbound inbound={item.inboundOrderItem?.[0]} />
                     )}
                   </TableCell>
                   <TableCell className="p-2 ">
@@ -97,4 +97,9 @@ export default function ItemDetailsSection() {
       </Card>
     </div>
   );
+}
+function ItemInbound({ inbound }: { inbound?: IInboundOrderItems }) {
+  if (!inbound) return <></>;
+  if (inbound.location) return <Badge>{inbound.location}</Badge>;
+  return <StatusBadge>{inbound.status}</StatusBadge>;
 }

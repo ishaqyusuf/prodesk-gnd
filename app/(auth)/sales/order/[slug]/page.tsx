@@ -24,6 +24,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
   const order: ISalesOrder = (await getOrderAction(slug)) as any;
   if (!order) return notFound();
   metadata.description = order.orderId;
+  // console.log(order.items?.[4]);
   return (
     <DataPageShell className="px-8" data={order}>
       <Breadcrumbs>

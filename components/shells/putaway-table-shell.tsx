@@ -76,6 +76,7 @@ export default function PutawayTableShell<T>({
       })),
       table.simpleStatus("status"),
       table.simpleColumn("Order", (data) => ({
+        link: `/sales/order/${data.salesOrderItems?.salesOrder?.slug}`,
         story: [table.primaryText(data.salesOrderItems.salesOrder.orderId)],
       })),
       ..._FilterColumn("_q"),
