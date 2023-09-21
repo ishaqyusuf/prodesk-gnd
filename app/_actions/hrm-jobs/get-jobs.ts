@@ -20,10 +20,10 @@ export async function getMyPunchoutJobs(query: JobsQueryParamsProps) {}
 export async function getJobs(query: JobsQueryParamsProps) {
   const builder = await queryBuilder<Prisma.JobsWhereInput>(query, prisma.jobs);
   builder.searchQuery("description", "subtitle", "title");
-  builder.register("projectId", Number(query._projectId) || undefined);
-  builder.register("id", Number(query.id) || undefined);
-  builder.register("userId", Number(query._userId) || undefined);
-  builder.register("homeId", Number(query._homeId) || undefined);
+  builder.orWhere("projectId", Number(query._projectId));
+  builder.orWhere("id", Number(query.id));
+  builder.orWhere("userId", Number(query._userId));
+  builder.orWhere("homeId", Number(query._homeId));
 
   if (query._show == "unpaid") builder.register("paymentId", null);
   else if (query._show == "paid")
