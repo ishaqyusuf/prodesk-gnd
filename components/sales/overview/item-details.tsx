@@ -108,8 +108,10 @@ function ItemInbound({
   item: ISalesOrderItem;
   inbound?: IInboundOrderItems;
 }) {
-  if (!inbound && !item.meta.produced_qty) {
-    return <StatusBadge>Item not available</StatusBadge>;
+  if (!inbound) {
+    if (!item.meta.produced_qty)
+      return <StatusBadge>Item not available</StatusBadge>;
+    return <></>;
   }
   if (inbound.location) return <Badge>{inbound.location}</Badge>;
   return <StatusBadge>{inbound.status}</StatusBadge>;
