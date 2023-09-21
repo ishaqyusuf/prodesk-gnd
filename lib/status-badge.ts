@@ -18,6 +18,7 @@ let StatusColorMap: { [key: string]: Colors } = {
   in_transit: "fuchsia",
   order_placed: "sky",
   arrived_warehouse: "emerald",
+  item_not_available: "orange",
 };
 
 export type Colors =

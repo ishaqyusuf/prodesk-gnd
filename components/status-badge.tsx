@@ -9,6 +9,7 @@ interface Props {
   children?;
 }
 export default function StatusBadge({ status, children }: Props) {
-  const color = getBadgeColor(status || children);
-  return <Badge className={cn(color)}>{status || children}</Badge>;
+  if (!status) status = children;
+  const color = getBadgeColor(status);
+  return <Badge className={cn(color)}>{status}</Badge>;
 }

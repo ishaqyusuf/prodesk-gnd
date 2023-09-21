@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppSelector } from "@/store";
-import { ISalesOrder } from "@/types/sales";
+import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -51,7 +51,10 @@ export default function ItemDetailsSection() {
                   <TableCell className="p-2">
                     <p className="uppercase">{item.description}</p>
                     {item.swing && (
-                      <ItemInbound inbound={item.inboundOrderItem?.[0]} />
+                      <ItemInbound
+                        item={item}
+                        inbound={item.inboundOrderItem?.[0]}
+                      />
                     )}
                   </TableCell>
                   <TableCell className="p-2 ">
@@ -98,8 +101,16 @@ export default function ItemDetailsSection() {
     </div>
   );
 }
-function ItemInbound({ inbound }: { inbound?: IInboundOrderItems }) {
-  if (!inbound) return <></>;
+function ItemInbound({
+  inbound,
+  item,
+}: {
+  item: ISalesOrderItem;
+  inbound?: IInboundOrderItems;
+}) {
+  if (!inbound && !item.meta.produced_qty) {
+    return <StatusBadge>Item not available</StatusBadge>;
+  }
   if (inbound.location) return <Badge>{inbound.location}</Badge>;
   return <StatusBadge>{inbound.status}</StatusBadge>;
 }
