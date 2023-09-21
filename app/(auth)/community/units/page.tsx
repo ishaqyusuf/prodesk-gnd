@@ -31,6 +31,7 @@ export default async function HomesPage({ searchParams, params }) {
       <HomesTableShell<ExtendedHome>
         projectView={false}
         data={response.data as any}
+        searchParams={searchParams}
         pageInfo={response.pageInfo}
       />
       <HomeModal />
