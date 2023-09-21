@@ -31,17 +31,44 @@ export async function getRestorableJobs(query: Props) {
   );
 }
 export async function insertJobs() {
-  //   const inserts: Jobs[] = oldSiteJobs.map((job) => {
-  //     const ometa = JSON.parse(job.meta || "");
-  //     const meta: IJobMeta = {} as any;
-  //     meta.additional_cost = ometa?.additional_cost;
-  //     meta.taskCost
-  //     const {   } = job
-  //     return {
-  //         amount: Number(job.amount),
-  //         adminNote,approvedAt,approvedBy,
-  //         coWorkerId,description,homeId,note,
-  //         status,statusDate,subtitle,title
-  //     };
-  //   });
+  const inserts: Jobs[] = oldSiteJobs.map((job) => {
+    const ometa = JSON.parse(job.meta || "");
+    const meta: IJobMeta = {} as any;
+    meta.costData;
+    meta.additional_cost = ometa?.additional_cost;
+    meta.taskCost;
+    const {
+      approved_at: approvedAt,
+      approved_by: approvedBy,
+      admin_note: adminNote,
+      description,
+      home_id: homeId,
+      note,
+      status,
+      status_date: statusDate,
+      subtitle,
+      title,
+      created_at: createdAt,
+      updated_at: updatedAt,
+    } = job;
+    const coWorkerId = ometa?.co_installer_id;
+    return {
+      amount: Number(job.amount),
+      adminNote,
+      approvedAt,
+      approvedBy,
+      coWorkerId,
+      description,
+      homeId,
+      note,
+      status,
+      statusDate,
+      subtitle,
+      title,
+      createdAt,
+      updatedAt,
+      meta,
+    } as any;
+  });
+  console.log(inserts);
 }

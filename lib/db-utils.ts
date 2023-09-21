@@ -40,7 +40,7 @@ export function whereQuery<T>(query) {
     where,
     get: () => where as any,
     register(column: keyof T, value: any) {
-      where[column] = value || undefined;
+      where[column] = value;
     },
     searchRelationQuery: <T1>(...columns: (keyof T)[]) => {
       Object.entries(searchQuery<T>(query, ...columns)).map(

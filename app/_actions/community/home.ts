@@ -30,9 +30,14 @@ export async function getHomesAction(query: HomeQueryParams) {
           producedAt: true,
           installable: true,
           sentToProductionAt: true,
-
           amountDue: true,
           amountPaid: true,
+        },
+      },
+      jobs: {
+        select: {
+          id: true,
+          createdAt: true,
         },
       },
     },
