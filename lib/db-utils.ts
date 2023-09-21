@@ -42,6 +42,9 @@ export function whereQuery<T>(query) {
     register(column: keyof T, value: any) {
       where[column] = value;
     },
+    orWhere(column: keyof T, value: any) {
+      this.register(column, value || undefined);
+    },
     searchRelationQuery: <T1>(...columns: (keyof T)[]) => {
       Object.entries(searchQuery<T>(query, ...columns)).map(
         ([k, v]) => (where[k] = v)
