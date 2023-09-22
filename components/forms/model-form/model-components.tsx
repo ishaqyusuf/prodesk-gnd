@@ -9,6 +9,7 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAppSelector } from "@/store";
+import AutoComplete from "@/components/auto-complete";
 
 interface ModelFormSectionProps<T> {
   section?;
@@ -98,6 +99,7 @@ export function ModelComponents<T>({
   const community = useAppSelector(
     (s) => s.slicers.dataPage?.data?.community
   ) as any;
+  const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
   const Field = ({
     label,
     cells = [2, 10],
@@ -110,7 +112,7 @@ export function ModelComponents<T>({
     const [open, setOpen] = useState(false);
     let formKey = `${node}.${ck as string}`;
     let checked = community ? form.watch(`${formKey}.c` as any) : false;
-
+    // console.log(formKey);
     const print = form.watch("ctx.print");
     const value = print ? form.watch(formKey as any) : null;
     if (community && !print) formKey = `${formKey}.v`;
@@ -139,9 +141,16 @@ export function ModelComponents<T>({
                 {form.getValues(formKey as any)}
               </span>
             ) : (
-              <Input
-                className="h-7 uppercase w-full"
-                {...form.register(formKey as any)}
+              // <Input
+              //   className="h-7 uppercase w-full"
+              //   {...form.register(formKey as any)}
+              // />
+              <AutoComplete
+                value={value}
+                form={form}
+                allowCreate
+                formKey={formKey}
+                options={(suggestions?.[formKey] || []) as any}
               />
             )}
           </div>

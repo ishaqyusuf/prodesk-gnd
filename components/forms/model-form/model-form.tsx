@@ -8,7 +8,7 @@ import Btn from "@/components/btn";
 import PageHeader from "@/components/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HomeTemplateDesign, IHomeTemplate } from "@/types/community";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import {
   BifoldDoorForm,
@@ -21,6 +21,8 @@ import {
 } from "./model-sections";
 import { toast } from "sonner";
 import { useAppSelector } from "@/store";
+import { loadStaticList } from "@/store/slicers";
+import { getHomeTemplateSuggestions } from "@/app/_actions/community/home-template-suggestion";
 
 interface Props {
   data: IHomeTemplate;
@@ -44,8 +46,15 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
       ...(data?.meta?.design || {}),
     },
   });
-
+  const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
   const [isSaving, startTransition] = useTransition();
+  useEffect(() => {
+    loadStaticList(
+      "templateFormSuggestion",
+      suggestions,
+      getHomeTemplateSuggestions
+    );
+  }, []);
   function save() {
     startTransition(async () => {
       await (community ? saveCommunityTemplateDesign : saveHomeTemplateDesign)(
