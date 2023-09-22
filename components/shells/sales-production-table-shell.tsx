@@ -87,8 +87,9 @@ export default function SalesProductionTableShell<T>({
           if (pqty == qty || item.prodCompletedAt) {
             arrivedWarehouse += qty;
           } else {
-            if (item.inboundOrderItem?.status === "Arrived Warehouse") {
-              arrivedWarehouse += item.inboundOrderItem?.qty;
+            const inbountItem = item.inboundOrderItem?.[0];
+            if (inbountItem?.status === "Arrived Warehouse") {
+              arrivedWarehouse += inbountItem?.qty;
             } else {
               if (pqty != qty && (pqty || 0) > 0) {
                 arrivedWarehouse += qty;
