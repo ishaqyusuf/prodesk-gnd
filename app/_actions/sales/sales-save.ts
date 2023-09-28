@@ -146,6 +146,6 @@ export async function saveOrderAction({
             status: `${order.type} created`,
             headline: `${order.type} created by ${(await user()).name}`
         });
-    revalidatePath("/(auth)/sales/order/[slug]/form");
+    revalidatePath(`/(auth)/sales/${order.type}/${order.slug}/form`, "page");
     return sale_order;
 }
