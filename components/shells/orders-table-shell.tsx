@@ -32,10 +32,7 @@ export default function OrdersTableShell<T>({
   searchParams,
 }: TableShellProps<ISalesOrder>) {
   const [isPending, startTransition] = useTransition();
-  useEffect(() => {
-    console.log("ORDERS", data);
-  }, [data]);
-  console.log(data);
+
   const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
   const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
     () => [

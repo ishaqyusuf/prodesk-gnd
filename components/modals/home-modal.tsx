@@ -56,7 +56,7 @@ export default function HomeModal() {
       // if(!form.getValues)
       try {
         const formData = form.getValues();
-        // console.log(formData);
+        console.log(formData);
 
         const isValid = homeSchema.parse(form.getValues());
         await createHomesAction(
@@ -65,6 +65,7 @@ export default function HomeModal() {
             u.modelName = models.find((f) => f.id == u.homeTemplateId)
               ?.modelName as any;
             u.modelNo = getModelNumber(u.modelName);
+
             u.builderId = Number(projects.find((p) => p.id == pid)?.builderId);
             // u.search
             u.search = homeSearchMeta(u);
@@ -76,10 +77,10 @@ export default function HomeModal() {
         //   ...form.getValues(),
         // });
         // closeModal();
-        toast.message("Customer Created!");
+        toast.message("Units Created!");
         route.refresh();
       } catch (error) {
-        console.log((error as any).flatten());
+        console.log(error);
         toast.message("Invalid Form");
         return;
       }

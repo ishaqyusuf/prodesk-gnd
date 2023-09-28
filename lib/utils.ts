@@ -194,7 +194,7 @@ export function addPercentage(value, percentage) {
 export function getModelNumber(modelName) {
   return modelName
     ?.split(" ")
-    .filter((f) => ["lh", "rh", "unkn", "unkwn"].includes(f?.toLowercase()))
+    .filter((f) => !["lh", "rh", "unkn", "unkwn"].includes(f?.toLowerCase()))
     .join(" ");
 }
 export const uniqueBy = (data, key) => {

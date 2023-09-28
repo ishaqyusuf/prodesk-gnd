@@ -73,7 +73,6 @@ export default function OrderPrinter({}: Props) {
       // return;
       await timeout(5000);
       const mainDoc = document.getElementById("orderPrintSection");
-      console.log(mainDoc);
       if (mainDoc) {
         // const doc = document.getElementById("orderPrintSection")?.cloneNode();
         const doc = document.createElement("div");
@@ -85,10 +84,13 @@ export default function OrderPrinter({}: Props) {
         const options = {
           // margin: 20
 
-          margin: [10, 10, 10, 10], //top, lef
+          margin: 10, //[10, 10, 10, 10], //top, lef
           // margin: [15, 0, 15, 0],
           filename, //: 'document.pdf',
-          pagebreak: { avoid: ["tr", "td"] },
+          // pagebreak: { avoid: ["tr", "td"] },
+          pagebreak: {
+            mode: ["avoid-all", "css", "legacy"],
+          },
           // jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
           image: { type: "jpeg", quality: 1 },
