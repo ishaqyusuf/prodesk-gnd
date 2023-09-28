@@ -11,27 +11,32 @@ import { getHomeInvoices } from "@/app/_actions/community-invoice/get-invoices";
 import EditInvoiceModal from "@/components/modals/edit-invoice-modal";
 
 export const metadata: Metadata = {
-  title: "All Unit Invoices",
+    title: "All Unit Invoices"
 };
 interface Props {}
 export default async function InvoicesPage({ searchParams, params }) {
-  const response = await getHomeInvoices(queryParams({ ...searchParams }));
-  // metadata.title = `${project.title} | Homes`;
+    const response = await getHomeInvoices(queryParams({ ...searchParams }));
+    // metadata.title = `${project.title} | Homes`;
 
-  return (
-    <div className="space-y-4 px-8">
-      <Breadcrumbs>
-        <BreadLink isFirst title="Community" />
-        <BreadLink link="/community/projects" title="Projects" />
-        <BreadLink link="/community/invoices" title="All Invoices" isLast />
-      </Breadcrumbs>
-      <PageHeader title={"Unit Invoices"} subtitle={``} />
-      <CommunityInvoiceTableShell
-        projectView={false}
-        data={response.data as any}
-        pageInfo={response.pageInfo}
-      />
-      <EditInvoiceModal />
-    </div>
-  );
+    return (
+        <div className="space-y-4 px-8">
+            <Breadcrumbs>
+                <BreadLink isFirst title="Community" />
+                <BreadLink link="/community/projects" title="Projects" />
+                <BreadLink
+                    link="/community/invoices"
+                    title="All Invoices"
+                    isLast
+                />
+            </Breadcrumbs>
+            <PageHeader title={"Unit Invoices"} subtitle={``} />
+            <CommunityInvoiceTableShell
+                projectView={false}
+                searchParams={searchParams}
+                data={response.data as any}
+                pageInfo={response.pageInfo}
+            />
+            <EditInvoiceModal />
+        </div>
+    );
 }
