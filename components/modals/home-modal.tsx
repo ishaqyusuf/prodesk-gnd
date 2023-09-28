@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import { Label } from "../ui/label";
-import { CustomerTypes } from "@prisma/client";
 
 import { IHome, IProject } from "@/types/community";
 import { useAppSelector } from "@/store";
