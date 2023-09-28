@@ -23,6 +23,6 @@ export const permissions: any[] = [
     "deco shutter install"
 ]; //.sort((a, b) => a - b);
 export const adminPermissions = permissions.reduce((acc, val, index, arr) => {
-    const p = arr[index + 1];
+    const p = arr[index];
     return { ...acc, [camel(`view ${p}`)]: true, [camel(`edit ${p}`)]: true };
 }, {});

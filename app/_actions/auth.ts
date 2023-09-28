@@ -141,7 +141,7 @@ export async function loginAction({ email, password }) {
         let can: ICan = {};
         if (role.name == "Admin") {
             can = adminPermissions;
-            console.log(can.viewDelivery);
+            console.log(can.viewProject);
         } else
             permissions.map(p => {
                 can[camel(p.name)] =
