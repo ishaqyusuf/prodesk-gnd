@@ -525,6 +525,17 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                             />
                                         </div>
                                     )}
+                                    <div className="grid gap-2 col-span-2">
+                                        <Label>Report</Label>
+                                        <Textarea
+                                            className="h-8"
+                                            {...form.register(
+                                                isPunchout
+                                                    ? "description"
+                                                    : "note"
+                                            )}
+                                        />
+                                    </div>
                                     <div
                                         className={cn(
                                             "grid gap-2",
@@ -559,17 +570,6 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
-                                    </div>
-                                    <div className="grid gap-2 col-span-2">
-                                        <Label>Report</Label>
-                                        <Textarea
-                                            className="h-8"
-                                            {...form.register(
-                                                isPunchout
-                                                    ? "description"
-                                                    : "note"
-                                            )}
-                                        />
                                     </div>
                                 </div>
                             </ScrollArea>
