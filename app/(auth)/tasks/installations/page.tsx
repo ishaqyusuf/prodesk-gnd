@@ -10,22 +10,27 @@ import JobTableShell from "@/components/shells/job-table-shell";
 import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 import EditJobModal from "@/components/modals/edit-job";
 import SubmitJobModal from "@/components/modals/submit-job-modal";
+import TaskAction from "@/components/tasks/task-action";
 
 export const metadata: Metadata = {
-  title: "Installations",
+    title: "Installations"
 };
 export default async function TaskInstallationPage({ searchParams }) {
-  const response = await getMyJobs(queryParams(searchParams));
-  return (
-    <div className="space-y-4 flex flex-col">
-      <Breadcrumbs>
-        <BreadLink isLast title="Jobs" />
-      </Breadcrumbs>
-      <PageHeader title="Jobs" newDialog="submitJob" />
-      <JobTableShell searchParams={searchParams} {...response} />
-      <JobOverviewSheet />
-      <EditJobModal />
-      <SubmitJobModal />
-    </div>
-  );
+    const response = await getMyJobs(queryParams(searchParams));
+    return (
+        <div className="space-y-4 flex flex-col">
+            <Breadcrumbs>
+                <BreadLink isLast title="Jobs" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Jobs"
+                // newDialog="submitJob"
+                Action={TaskAction}
+            />
+            <JobTableShell searchParams={searchParams} {...response} />
+            <JobOverviewSheet />
+            <EditJobModal />
+            <SubmitJobModal />
+        </div>
+    );
 }

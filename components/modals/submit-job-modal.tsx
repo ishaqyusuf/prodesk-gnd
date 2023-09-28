@@ -74,23 +74,28 @@ interface ModalInterface {
     data: IJobs | undefined;
     defaultTab?;
 }
-export default function SubmitJobModal({ type = "installation" }: { type? }) {
+export default function SubmitJobModal() {
     const route = useRouter();
-    const isPunchout = type == "punchout";
+    // const isPunchout = type == "punchout";
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IJobs>({
         defaultValues: {
             meta: {}
         }
     });
-
+    function is(type: "punchout" | "deco-shutter" | "installation") {
+        return form.getValues("type") == type;
+    }
+    const isPunchout = () => is("punchout");
+    const isDecoShutter = () => is("deco-shutter");
+    const isInstallation = () => is("installation");
     async function submit(data) {
         startTransition(async () => {
             // if(!form.getValues)
             try {
                 // const isValid = employeeSchema.parse(form.getValues());
                 const { homeData, unit, project, ...job } = form.getValues();
-                job.type = type;
+                // job.type = form.getValues("type");
                 job.amount = 0;
                 [
                     job.meta.addon,
@@ -115,10 +120,10 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
     async function init(data: ModalInterface) {
         loadStaticList("staticProjects", projects, staticProjectsAction);
         form.reset(
-            !data?.data
+            !data?.data?.id
                 ? {
                       title: "Custom Project",
-                      type,
+                      type: data?.data?.type,
                       meta: {}
                   }
                 : {
@@ -453,7 +458,18 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                         <TableBody>
                                             {costSetting?.meta?.list
                                                 ?.filter(
-                                                    v => unitCosting[v.uid]
+                                                    v =>
+                                                        isDecoShutter() ||
+                                                        unitCosting[v.uid]
+                                                )
+                                                ?.filter(
+                                                    v =>
+                                                        (isDecoShutter() &&
+                                                            v.title.toLowerCase() ==
+                                                                "deco-shutters") ||
+                                                        (!isDecoShutter() &&
+                                                            v.title.toLowerCase() !=
+                                                                "deco-shutters")
                                                 )
                                                 .map((row, i) => {
                                                     return (
@@ -500,7 +516,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label>
-                                            {!isPunchout
+                                            {isInstallation()
                                                 ? "Additional Cost ($)"
                                                 : "Cost ($)"}
                                         </Label>
@@ -514,7 +530,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                             )}
                                         />
                                     </div>
-                                    {!isPunchout && (
+                                    {!isPunchout() && (
                                         <div className="grid gap-2">
                                             <Label>Reason</Label>
                                             <Input
@@ -530,47 +546,54 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                         <Textarea
                                             className="h-8"
                                             {...form.register(
-                                                isPunchout
+                                                !isInstallation()
                                                     ? "description"
                                                     : "note"
                                             )}
                                         />
                                     </div>
-                                    <div
-                                        className={cn(
-                                            "grid gap-2",
-                                            !isPunchout && "col-span-2"
-                                        )}
-                                    >
-                                        <Label>Co-Worker</Label>
-                                        <Select
-                                            onValueChange={e =>
-                                                form.setValue("coWorkerId", +e)
-                                            }
-                                            defaultValue={form
-                                                .getValues("coWorkerId")
-                                                ?.toString()}
+                                    {!isDecoShutter() && (
+                                        <div
+                                            className={cn(
+                                                "grid gap-2",
+                                                !isPunchout() && "col-span-2"
+                                            )}
                                         >
-                                            <SelectTrigger className="h-8">
-                                                <SelectValue placeholder="" />
-                                            </SelectTrigger>
+                                            <Label>Co-Worker</Label>
+                                            <Select
+                                                onValueChange={e =>
+                                                    form.setValue(
+                                                        "coWorkerId",
+                                                        +e
+                                                    )
+                                                }
+                                                defaultValue={form
+                                                    .getValues("coWorkerId")
+                                                    ?.toString()}
+                                            >
+                                                <SelectTrigger className="h-8">
+                                                    <SelectValue placeholder="" />
+                                                </SelectTrigger>
 
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    {techEmployees?.map(
-                                                        (profile, _) => (
-                                                            <SelectItem
-                                                                key={_}
-                                                                value={profile.id?.toString()}
-                                                            >
-                                                                {profile.name}
-                                                            </SelectItem>
-                                                        )
-                                                    )}
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {techEmployees?.map(
+                                                            (profile, _) => (
+                                                                <SelectItem
+                                                                    key={_}
+                                                                    value={profile.id?.toString()}
+                                                                >
+                                                                    {
+                                                                        profile.name
+                                                                    }
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    )}
                                 </div>
                             </ScrollArea>
                         </TabsContent>
@@ -581,7 +604,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                 if (tab == "general")
                     return (
                         <div className="space-x-4 items-center flex">
-                            {!isPunchout && (
+                            {!isPunchout() && (
                                 <>
                                     <div className="">
                                         <Label>Task Costs</Label>

@@ -12,22 +12,22 @@ import EditJobModal from "@/components/modals/edit-job";
 import SubmitJobModal from "@/components/modals/submit-job-modal";
 
 export const metadata: Metadata = {
-  title: "Installations",
+    title: "Installations"
 };
 export default async function PunchoutPage({ searchParams }) {
-  const response = await getMyJobs(
-    queryParams(searchParams, { type: "punchout" })
-  );
-  return (
-    <div className="space-y-4 flex flex-col">
-      <Breadcrumbs>
-        <BreadLink isLast title="Jobs" />
-      </Breadcrumbs>
-      <PageHeader title="Jobs" newDialog="submitJob" />
-      <JobTableShell searchParams={searchParams} {...response} />
-      <JobOverviewSheet />
-      <EditJobModal punchout />
-      <SubmitJobModal type="punchout" />
-    </div>
-  );
+    const response = await getMyJobs(
+        queryParams(searchParams, { type: "punchout" })
+    );
+    return (
+        <div className="space-y-4 flex flex-col">
+            <Breadcrumbs>
+                <BreadLink isLast title="Jobs" />
+            </Breadcrumbs>
+            <PageHeader title="Jobs" newDialog="submitJob" />
+            <JobTableShell searchParams={searchParams} {...response} />
+            <JobOverviewSheet />
+            <EditJobModal />
+            <SubmitJobModal />
+        </div>
+    );
 }

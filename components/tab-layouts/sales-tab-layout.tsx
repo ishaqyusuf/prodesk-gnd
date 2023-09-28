@@ -15,7 +15,6 @@ export default function SalesTabLayout({
         required: false
     });
     const can = session?.can;
-    console.log(can?.viewDelivery);
     // useEffect(() =>)
     const [tabs, setTabs] = useState(
         [
