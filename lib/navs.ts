@@ -147,7 +147,7 @@ export function nav(
         }
         if (__can.viewDecoShutterInstall) {
             routes.Services.push(
-                _route("Installations", Cpu, "/tasks/deco-shutters")
+                _route("Installations", Cpu, "/tasks/installations")
             );
             routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
         }
