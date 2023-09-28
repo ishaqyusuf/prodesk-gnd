@@ -11,7 +11,7 @@ export const permissions: any[] = [
     "customer service",
     "tech",
     "installation",
-    "assign installer",
+    // "assign installer",
     "builders",
     "cost",
     "orders",
@@ -19,7 +19,8 @@ export const permissions: any[] = [
     "email template",
     "home key",
     "inbound order",
-    "putaway"
+    "putaway",
+    "deco shutter install"
 ]; //.sort((a, b) => a - b);
 export const adminPermissions = permissions.reduce((acc, val, index, arr) => {
     const p = arr[index + 1];
