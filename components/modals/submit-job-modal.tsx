@@ -318,7 +318,7 @@ export default function SubmitJobModal({ type = "installation" }: { type? }) {
                                                         user.id
                                                     );
 
-                                                    _setTab("project");
+                                                    _setTab("tasks");
                                                 }}
                                                 variant={"ghost"}
                                                 key={user.id}
