@@ -37,15 +37,10 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
     };
     const where: Prisma.SalesOrderItemsWhereInput = {
         prodStartedAt: null,
-        // swing: {
-        //   not: null,
-        // },
         supplier: {
             not: null
         },
-        prodStatus: {
-            not: "Completed"
-        },
+        prodCompletedAt: null,
         inboundOrderItem: {
             none: {
                 id: {
@@ -54,6 +49,27 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
             }
         }
     };
+    if (q.contains) {
+        where.OR = [
+            {
+                salesOrder: {
+                    OR: [
+                        {
+                            orderId: q
+                        },
+                        {
+                            customer: {
+                                OR: [{ name: q }, { phoneNo: q }]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                description: q
+            }
+        ];
+    }
     if (query._supplier) {
         let noSupply = false;
         const suppliers = (Array.isArray(query._supplier)
@@ -68,15 +84,18 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
         const orSupplier: any = [];
         if (noSupply) orSupplier.push({ supplier: null });
         if (suppliers.length)
-            orSupplier.push({
-                supplier: { in: suppliers }
-            });
-        if (orSupplier.length) {
-            if (!where.OR) where.OR = [];
-            where.OR?.push({
-                OR: orSupplier
-            });
-        }
+            where.supplier = {
+                in: suppliers
+            };
+        // orSupplier.push({
+        //     supplier: { in: suppliers }
+        // });
+        // if (orSupplier.length) {
+        //     if (!where.OR) where.OR = [];
+        //     where.OR?.push({
+        //         OR: orSupplier
+        //     });
+        // }
     }
     // if (query.salesOrderItemIds)
     //   where.inboundOrderItemId = {
@@ -95,15 +114,10 @@ export async function getOrderableItemsCount() {
     const count = await prisma.salesOrderItems.count({
         where: {
             prodStartedAt: null,
-            swing: {
+            supplier: {
                 not: null
             },
-            prodStatus: {
-                not: "Completed"
-            },
-            salesOrder: {
-                amountDue: 0
-            },
+            prodCompletedAt: null,
             inboundOrderItem: {
                 none: {
                     id: {
@@ -111,6 +125,18 @@ export async function getOrderableItemsCount() {
                     }
                 }
             }
+            // prodStatus: {
+            //     not: {
+            //         contains: "Completed"
+            //     }
+            // }
+            // inboundOrderItem: {
+            //     none: {
+            //         id: {
+            //             gt: 0
+            //         }
+            //     }
+            // }
         }
     });
     return count;

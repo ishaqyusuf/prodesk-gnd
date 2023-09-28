@@ -44,7 +44,7 @@ export function InstallCostForm({data}: {data:InstallCostSettings}) {
             list: form.getValues('list')
           }
         })
-        toast.success("Password reset successfully.")
+        toast.success("Saved.")
         
       } catch (err: any) { 
 
