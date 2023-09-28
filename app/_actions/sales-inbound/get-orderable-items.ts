@@ -5,110 +5,113 @@ import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 export interface InboundOrderableItemQueryParamProps
-  extends Omit<BaseQuery, "_show"> {
-  salesOrderItemIds?: number[];
-  _show?: "paid" | "all";
-  _supplier?;
+    extends Omit<BaseQuery, "_show"> {
+    salesOrderItemIds?: number[];
+    _show?: "paid" | "all";
+    _supplier?;
 }
 export async function getOrderableItems(
-  query: InboundOrderableItemQueryParamProps
+    query: InboundOrderableItemQueryParamProps
 ) {
-  const where = buildQuery(query);
-  const items = await prisma.salesOrderItems.findMany({
-    where,
-    include: {
-      salesOrder: {
+    const where = buildQuery(query);
+    const items = await prisma.salesOrderItems.findMany({
+        where,
         include: {
-          customer: true,
+            salesOrder: {
+                include: {
+                    customer: true
+                }
+            }
         },
-      },
-    },
-    ...(await queryFilter(query)),
-  });
-  const pageInfo = await getPageInfo(query, where, prisma.salesOrderItems);
-  return {
-    pageInfo,
-    data: items as any,
-  };
+        ...(await queryFilter(query))
+    });
+    const pageInfo = await getPageInfo(query, where, prisma.salesOrderItems);
+    return {
+        pageInfo,
+        data: items as any
+    };
 }
 function buildQuery(query: InboundOrderableItemQueryParamProps) {
-  const q = {
-    contains: query._q || undefined,
-  };
-  const where: Prisma.SalesOrderItemsWhereInput = {
-    prodStartedAt: null,
-    swing: {
-      not: null,
-    },
-    prodStatus: {
-      not: "Completed",
-    },
-    inboundOrderItem: {
-      none: {
-        id: {
-          gt: 0,
+    const q = {
+        contains: query._q || undefined
+    };
+    const where: Prisma.SalesOrderItemsWhereInput = {
+        prodStartedAt: null,
+        // swing: {
+        //   not: null,
+        // },
+        supplier: {
+            not: null
         },
-      },
-    },
-  };
-  if (query._supplier) {
-    let noSupply = false;
-    const suppliers = (Array.isArray(query._supplier)
-      ? query._supplier
-      : [query._supplier]
-    )
-      ?.map((f) => {
-        if (!noSupply) noSupply = f == "No Supplier";
-        return noSupply ? "" : f;
-      })
-      .filter(Boolean);
-    const orSupplier: any = [];
-    if (noSupply) orSupplier.push({ supplier: null });
-    if (suppliers.length)
-      orSupplier.push({
-        supplier: { in: suppliers },
-      });
-    if (orSupplier.length) {
-      if (!where.OR) where.OR = [];
-      where.OR?.push({
-        OR: orSupplier,
-      });
+        prodStatus: {
+            not: "Completed"
+        },
+        inboundOrderItem: {
+            none: {
+                id: {
+                    gt: 0
+                }
+            }
+        }
+    };
+    if (query._supplier) {
+        let noSupply = false;
+        const suppliers = (Array.isArray(query._supplier)
+            ? query._supplier
+            : [query._supplier]
+        )
+            ?.map(f => {
+                if (!noSupply) noSupply = f == "No Supplier";
+                return noSupply ? "" : f;
+            })
+            .filter(Boolean);
+        const orSupplier: any = [];
+        if (noSupply) orSupplier.push({ supplier: null });
+        if (suppliers.length)
+            orSupplier.push({
+                supplier: { in: suppliers }
+            });
+        if (orSupplier.length) {
+            if (!where.OR) where.OR = [];
+            where.OR?.push({
+                OR: orSupplier
+            });
+        }
     }
-  }
-  // if (query.salesOrderItemIds)
-  //   where.inboundOrderItemId = {
-  //     in: query.salesOrderItemIds,
-  //   };
-  switch (query._show) {
-    case "paid":
-      where.salesOrder = {
-        amountDue: 0,
-      };
-      break;
-  }
-  return where;
+    // if (query.salesOrderItemIds)
+    //   where.inboundOrderItemId = {
+    //     in: query.salesOrderItemIds,
+    //   };
+    switch (query._show) {
+        case "paid":
+            where.salesOrder = {
+                amountDue: 0
+            };
+            break;
+    }
+    return where;
 }
 export async function getOrderableItemsCount() {
-  const count = await prisma.salesOrderItems.count({
-    where: {
-      prodStartedAt: null,
-      swing: {
-        not: null,
-      },
-      prodStatus: {
-        not: "Completed",
-      },
-      salesOrder: {
-        amountDue: 0,
-      },
-      inboundOrderItem: {
-        none: {
-          id: {
-            gt: 0,
-          },
-        },
-      },
-    },
-  });
-  return count;
+    const count = await prisma.salesOrderItems.count({
+        where: {
+            prodStartedAt: null,
+            swing: {
+                not: null
+            },
+            prodStatus: {
+                not: "Completed"
+            },
+            salesOrder: {
+                amountDue: 0
+            },
+            inboundOrderItem: {
+                none: {
+                    id: {
+                        gt: 0
+                    }
+                }
+            }
+        }
+    });
+    return count;
 }

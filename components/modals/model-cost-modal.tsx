@@ -78,6 +78,7 @@ export default function ModelCostModal() {
     async function init(data: IHomeTemplate) {
         form.reset({
             costs: data.costs?.map(c => {
+                console.log(c);
                 if (c.startDate) c.startDate = new Date(c.startDate);
                 if (c.endDate) c.endDate = new Date(c.endDate);
                 return c;
