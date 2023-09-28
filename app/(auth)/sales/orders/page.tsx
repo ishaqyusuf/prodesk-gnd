@@ -11,29 +11,29 @@ import { BreadLink } from "@/components/breadcrumbs/links";
 import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
 
 export const metadata: Metadata = {
-  title: "Sales Orders",
+    title: "Sales Orders"
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
-  const response = await getSalesOrder(queryParams(searchParams));
-  console.log(response, searchParams);
-  return (
-    <SalesTabLayout query={searchParams}>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Sales" />
-        <BreadLink isLast title="Orders" />
-      </Breadcrumbs>
-      <PageHeader
-        title="Sales Orders"
-        newLink="/sales/order/new/form"
-        permissions={["editOrders"]}
-      />
-      <OrdersTableShell<ISalesOrder>
-        searchParams={searchParams}
-        {...response}
-      />
-      <OrderPrinter />
-      <SalesProductionModal />
-    </SalesTabLayout>
-  );
+    const response = await getSalesOrder(queryParams(searchParams));
+
+    return (
+        <SalesTabLayout query={searchParams}>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Sales" />
+                <BreadLink isLast title="Orders" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Sales Orders"
+                newLink="/sales/order/new/form"
+                permissions={["editOrders"]}
+            />
+            <OrdersTableShell<ISalesOrder>
+                searchParams={searchParams}
+                {...response}
+            />
+            <OrderPrinter />
+            <SalesProductionModal />
+        </SalesTabLayout>
+    );
 }

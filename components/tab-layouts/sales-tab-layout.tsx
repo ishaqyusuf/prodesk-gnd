@@ -2,20 +2,31 @@
 
 import { useEffect, useState } from "react";
 import TabbedLayout from "./tabbed-layout";
+import { useSession } from "next-auth/react";
 
 export default function SalesTabLayout({
-  children,
-  query,
+    children,
+    query
 }: {
-  children;
-  query?;
+    children;
+    query?;
 }) {
-  // console.log(query);
-  const [tabs, setTabs] = useState([
-    { title: "Orders", path: "/sales/orders" },
-    { title: "Estimates", path: "/sales/estimates" },
-    { title: "Delivery", path: "/sales/delivery" },
-  ]);
-  console.log("SALES TAB");
-  return <TabbedLayout tabs={tabs}>{children}</TabbedLayout>;
+    const { data: session } = useSession({
+        required: false
+    });
+    const can = session?.can;
+    console.log(can?.viewDelivery);
+    // useEffect(() =>)
+    const [tabs, setTabs] = useState(
+        [
+            can?.viewOrders && { title: "Orders", path: "/sales/orders" },
+            can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
+            can?.viewInboundOrder && {
+                title: "Inbounds",
+                path: "/sales/inbounds"
+            },
+            can?.viewDelivery && { title: "Delivery", path: "/sales/delivery" }
+        ].filter(Boolean)
+    );
+    return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;
 }
