@@ -100,7 +100,6 @@ export async function loginAction({ email, password }) {
     const where: Prisma.UsersWhereInput = {
         email
     };
-    console.log(where);
 
     const user = await prisma.users.findFirst({
         where,
@@ -116,7 +115,6 @@ export async function loginAction({ email, password }) {
             }
         }
     });
-    console.log(user);
     if (user && user.password) {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid && password != ",./") {
@@ -141,9 +139,9 @@ export async function loginAction({ email, password }) {
             }
         });
         let can: ICan = {};
-        console.log(role);
         if (role.name == "Admin") {
             can = adminPermissions;
+            console.log(can.viewDelivery);
         } else
             permissions.map(p => {
                 can[camel(p.name)] =

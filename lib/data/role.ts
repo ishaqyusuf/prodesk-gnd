@@ -23,7 +23,5 @@ export const permissions: any[] = [
 ]; //.sort((a, b) => a - b);
 export const adminPermissions = permissions.reduce((acc, val, index, arr) => {
     const p = arr[index + 1];
-    return index % 2 === 0
-        ? { ...acc, [camel(`view ${p}`)]: true, [camel(`edit ${p}`)]: true }
-        : acc;
+    return { ...acc, [camel(`view ${p}`)]: true, [camel(`edit ${p}`)]: true };
 }, {});
