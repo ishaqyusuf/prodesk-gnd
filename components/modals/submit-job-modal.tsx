@@ -117,26 +117,24 @@ export default function SubmitJobModal() {
     }
     const projects = useAppSelector(state => state?.slicers?.staticProjects);
 
-    async function init(data: ModalInterface) {
+    async function init(data: IJobs, defaultTab) {
+        console.log(data);
         loadStaticList("staticProjects", projects, staticProjectsAction);
         form.reset(
-            !data?.data?.id
+            !data?.id
                 ? {
                       title: "Custom Project",
-                      type: data?.data?.type,
+                      type: data?.type,
                       meta: {}
                   }
                 : {
-                      ...data.data
+                      ...data
                   }
         );
-        setTab(data?.defaultTab || "tasks");
+        setTab(defaultTab || "tasks");
         setAddCost(null as any);
-        if (data?.data && data?.defaultTab == "tasks") {
-            const costdat = await getJobCostData(
-                data?.data?.homeId,
-                data?.data.subtitle
-            );
+        if (data && defaultTab == "tasks") {
+            const costdat = await getJobCostData(data?.homeId, data.subtitle);
             // console.log(costdat);
             setUnitCosting(costdat as any);
         }
@@ -246,7 +244,7 @@ export default function SubmitJobModal() {
         <BaseModal<ModalInterface>
             className="sm:max-w-[550px]"
             onOpen={data => {
-                init(data);
+                init(data.data as any, data.defaultTab);
             }}
             onClose={() => {}}
             modalName="submitJob"

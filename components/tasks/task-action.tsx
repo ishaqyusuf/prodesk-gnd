@@ -28,7 +28,7 @@ export default function TaskAction({}) {
             <Button
                 onClick={() => {
                     openModal("submitJob", {
-                        type: actions?.[0]?.toLowerCase()
+                        data: { type: actions?.[0]?.toLowerCase() }
                     });
                 }}
                 size="sm"
@@ -52,7 +52,7 @@ export default function TaskAction({}) {
                         <DropdownMenuItem
                             onClick={() => {
                                 openModal("submitJob", {
-                                    type: a?.toLowerCase()
+                                    data: { type: a?.toLowerCase() }
                                 });
                             }}
                             className="capitalize"
