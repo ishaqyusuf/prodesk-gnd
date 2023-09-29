@@ -25,7 +25,7 @@ export default async function ModelCosts({ searchParams }) {
             <PageHeader title="Model Costs" newDialog="modelTemplate" />
             <ModelCostTableShell searchParams={searchParams} {...response} />
             <ModelCostModal />
-            <ModelTemplateModal />
+            {/* <ModelTemplateModal /> */}
             <ModelInstallCostModal />
         </CommunitySettingsLayoutComponent>
     );

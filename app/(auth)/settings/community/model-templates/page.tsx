@@ -10,21 +10,26 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { getBuildersAction } from "@/app/_actions/community/builders";
 import { getHomeTemplates } from "@/app/_actions/community/home-template";
 import HomeTemplatesTableShell from "@/components/shells/home-templates-table-shell";
+import ModelTemplateModal from "@/components/modals/model-template-modal";
 
 export const metadata: Metadata = {
-  title: "Builders",
+    title: "Builders"
 };
 export default async function ModelTemplatesPage({ searchParams }) {
-  const response = await getHomeTemplates(queryParams(searchParams));
-  return (
-    <CommunitySettingsLayoutComponent>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Settings" />
-        <BreadLink title="Community" />
-        <BreadLink isLast title="Model Templates" />
-      </Breadcrumbs>
-      <PageHeader title="Model Templates" newDialog="modelTemplate" />
-      <HomeTemplatesTableShell searchParams={searchParams} {...response} />
-    </CommunitySettingsLayoutComponent>
-  );
+    const response = await getHomeTemplates(queryParams(searchParams));
+    return (
+        <CommunitySettingsLayoutComponent>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Settings" />
+                <BreadLink title="Community" />
+                <BreadLink isLast title="Model Templates" />
+            </Breadcrumbs>
+            <PageHeader title="Model Templates" newDialog="modelTemplate" />
+            <HomeTemplatesTableShell
+                searchParams={searchParams}
+                {...response}
+            />
+            {/* <ModelTemplateModal /> */}
+        </CommunitySettingsLayoutComponent>
+    );
 }
