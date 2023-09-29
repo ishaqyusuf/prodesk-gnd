@@ -103,9 +103,11 @@ export default function EditInvoiceModal() {
             if (!tasks.find(ot => t.taskName == ot.taskName)) tasks.push(t);
             else deleteIds.push(t.id);
         });
-        console.log(tasks, deleteIds);
-        data.tasks = tasks;
-        await deleteInvoiceTasks(deleteIds);
+        if (deleteIds.length) {
+            console.log(tasks, deleteIds);
+            data.tasks = [...tasks];
+            await deleteInvoiceTasks(deleteIds);
+        }
 
         form.reset(data || { meta: {} });
     }
