@@ -53,15 +53,16 @@ export default function EditInvoiceModal() {
                     t.amountDue = Number(t.amountDue);
                     t.amountPaid = Number(t.amountPaid);
                     console.log(t);
-                    if (!t.id)
-                        payload.create.push({
-                            ...t,
-                            homeId: data.id,
-                            projectId: data.projectId,
-                            search: data.search,
-                            meta: {}
-                        } as any);
-                    else {
+                    if (!t.id) {
+                        if (!t.taskUid)
+                            payload.create.push({
+                                ...t,
+                                homeId: data.id,
+                                projectId: data.projectId,
+                                search: data.search,
+                                meta: {}
+                            } as any);
+                    } else {
                         const old = data.tasks.find(ot => ot.id == t.id);
                         const { amountDue, amountPaid, checkNo, checkDate } = t;
                         if (
