@@ -9,26 +9,34 @@ import { IBuilder } from "@/types/community";
 import { queryParams } from "@/app/_actions/action-utils";
 import { getBuildersAction } from "@/app/_actions/community/builders";
 import {
-  getCommunityTemplates,
-  getHomeTemplates,
+    getCommunityTemplates,
+    getHomeTemplates
 } from "@/app/_actions/community/home-template";
 import HomeTemplatesTableShell from "@/components/shells/home-templates-table-shell";
 import CommunityTemplateTableShell from "@/components/shells/community-templates-table-shell";
+import ModelTemplateModal from "@/components/modals/model-template-modal";
 
 export const metadata: Metadata = {
-  title: "Community Templates",
+    title: "Community Templates"
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
-  const response = await getCommunityTemplates(queryParams(searchParams));
-  return (
-    <CommunitySettingsLayoutComponent>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Settings" />
-        <BreadLink title="Community" />
-        <BreadLink isLast title="Community Templates" />
-      </Breadcrumbs>
-      <PageHeader title="Community Templates" newDialog="communityTemplate" />
-      <CommunityTemplateTableShell searchParams={searchParams} {...response} />
-    </CommunitySettingsLayoutComponent>
-  );
+    const response = await getCommunityTemplates(queryParams(searchParams));
+    return (
+        <CommunitySettingsLayoutComponent>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Settings" />
+                <BreadLink title="Community" />
+                <BreadLink isLast title="Community Templates" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Community Templates"
+                newDialog="communityTemplate"
+            />
+            <CommunityTemplateTableShell
+                searchParams={searchParams}
+                {...response}
+            />
+            <ModelTemplateModal formType="communityTemplate" />
+        </CommunitySettingsLayoutComponent>
+    );
 }

@@ -7,30 +7,31 @@ import { DataPageShell } from "@/components/shells/data-page-shell";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Edit Model Template",
+    title: "Edit Model Template"
 };
 
 export default async function ModelTemplatePage({ params }) {
-  const response = await getHomeTemplate(params.slug);
+    const response = await getHomeTemplate(params.slug);
+    console.log(response);
+    return (
+        <DataPageShell
+            data={{
+                community: false,
+                ...response
+            }}
+            className="space-y-4 px-8"
+        >
+            <Breadcrumbs>
+                <BreadLink isFirst title="Settings" />
+                <BreadLink title="Community" />
+                <BreadLink
+                    link="/settings/community/model-templates"
+                    title="Model Templates"
+                />
+                <BreadLink title={response.modelName} isLast />
+            </Breadcrumbs>
 
-  return (
-    <DataPageShell
-      data={{
-        community: false,
-      }}
-      className="space-y-4 px-8"
-    >
-      <Breadcrumbs>
-        <BreadLink isFirst title="Settings" />
-        <BreadLink title="Community" />
-        <BreadLink
-          link="/settings/community/model-templates"
-          title="Model Templates"
-        />
-        <BreadLink title={response.modelName} isLast />
-      </Breadcrumbs>
-
-      <ModelForm data={response as any} />
-    </DataPageShell>
-  );
+            <ModelForm data={response as any} />
+        </DataPageShell>
+    );
 }

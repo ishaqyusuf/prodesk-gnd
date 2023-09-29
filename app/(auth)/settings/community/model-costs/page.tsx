@@ -11,22 +11,22 @@ import ModelTemplateModal from "@/components/modals/model-template-modal";
 import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 
 export const metadata: Metadata = {
-  title: "Model Costs",
+    title: "Model Costs"
 };
-export default async function CommunityTemplatesPage({ searchParams }) {
-  const response = await getHomeTemplates(queryParams(searchParams));
-  return (
-    <CommunitySettingsLayoutComponent>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Settings" />
-        <BreadLink title="Community" />
-        <BreadLink isLast title="Model Costs" />
-      </Breadcrumbs>
-      <PageHeader title="Model Costs" newDialog="modelTemplate" />
-      <ModelCostTableShell searchParams={searchParams} {...response} />
-      <ModelCostModal />
-      <ModelTemplateModal />
-      <ModelInstallCostModal />
-    </CommunitySettingsLayoutComponent>
-  );
+export default async function ModelCosts({ searchParams }) {
+    const response = await getHomeTemplates(queryParams(searchParams));
+    return (
+        <CommunitySettingsLayoutComponent>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Settings" />
+                <BreadLink title="Community" />
+                <BreadLink isLast title="Model Costs" />
+            </Breadcrumbs>
+            <PageHeader title="Model Costs" newDialog="modelTemplate" />
+            <ModelCostTableShell searchParams={searchParams} {...response} />
+            <ModelCostModal />
+            <ModelTemplateModal />
+            <ModelInstallCostModal />
+        </CommunitySettingsLayoutComponent>
+    );
 }

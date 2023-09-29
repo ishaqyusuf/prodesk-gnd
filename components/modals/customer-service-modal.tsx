@@ -76,12 +76,7 @@ export default function CustomerServiceModal() {
     }, []);
     async function init(data) {
         // console.log(data);
-        let {
-            tech,
-            createdAt,
-
-            ...formData
-        }: IWorkOrder = deepCopy(
+        let { tech, createdAt, ...formData }: IWorkOrder = deepCopy(
             data
                 ? data
                 : {

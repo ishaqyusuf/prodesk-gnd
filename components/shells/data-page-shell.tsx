@@ -8,21 +8,24 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export function DataPageShell<T>({
-  data,
-  className,
-  children,
+    data,
+    className,
+    children
 }: {
-  data?: T;
-  children?;
+    data?: T;
+    children?;
 } & PrimitiveDivProps) {
-  const id = usePathname();
-  const dataP = useAppSelector((state) => state.slicers?.dataPage);
-  useEffect(() => {
-    dispatchSlice("dataPage", {
-      id,
-      data,
-    });
-  }, [data]);
-  if (id != dataP?.id) return null;
-  return <div className={cn(className)}>{children}</div>;
+    const id = usePathname();
+    const dataP = useAppSelector(state => state.slicers?.dataPage);
+    useEffect(() => {
+        dispatchSlice("dataPage", {
+            id,
+            data
+        });
+    }, [data, id]);
+    console.log(dataP?.id, id);
+    if (id != dataP?.id) {
+        return null;
+    }
+    return <div className={cn(className)}>{children}</div>;
 }
