@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -95,6 +95,16 @@ export default function EditInvoiceModal() {
             }
         });
     }
+    const [deleteIds, setDeleteIds] = useState<number[]>([]);
+    useEffect(() => {
+        if (deleteIds.length) {
+            (async () => {
+                await deleteInvoiceTasks(deleteIds);
+                console.log("DELETED");
+                setDeleteIds([]);
+            })();
+        }
+    }, [deleteIds]);
     async function init(data: ExtendedHome) {
         console.log(data);
         const tasks: any = [];
@@ -106,7 +116,8 @@ export default function EditInvoiceModal() {
         if (deleteIds.length) {
             console.log(tasks, deleteIds);
             data.tasks = [...tasks];
-            await deleteInvoiceTasks(deleteIds);
+            setDeleteIds(deleteIds);
+            // await deleteInvoiceTasks(deleteIds);
         }
 
         form.reset(data || { meta: {} });
