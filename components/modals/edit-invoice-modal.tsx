@@ -97,6 +97,7 @@ export default function EditInvoiceModal() {
     }
     const [deleteIds, setDeleteIds] = useState<number[]>([]);
     useEffect(() => {
+        console.log(deleteIds);
         if (deleteIds.length) {
             (async () => {
                 await deleteInvoiceTasks(deleteIds);
@@ -113,14 +114,12 @@ export default function EditInvoiceModal() {
             if (!tasks.find(ot => t.taskName == ot.taskName)) tasks.push(t);
             else deleteIds.push(t.id);
         });
-        if (deleteIds.length) {
-            console.log(tasks, deleteIds);
-            data.tasks = [...tasks];
-            setDeleteIds(deleteIds);
-            // await deleteInvoiceTasks(deleteIds);
-        }
+        setDeleteIds(deleteIds);
 
-        form.reset(data || { meta: {} });
+        form.reset({
+            ...data,
+            tasks
+        });
     }
     function register(i, key: keyof IHomeTask) {
         return form.register(`tasks.${i}.${key}` as any);
