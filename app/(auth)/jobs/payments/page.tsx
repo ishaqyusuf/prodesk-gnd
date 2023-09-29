@@ -12,24 +12,24 @@ import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 import PaymentOverviewSheet from "@/components/sheets/payment-overview-sheet";
 
 export const metadata: Metadata = {
-  title: "Employees",
+    title: "Payment Receipts"
 };
 export default async function EmployeesPage({ searchParams }) {
-  const response = await getJobPayments(queryParams(searchParams));
-  return (
-    <TabbedLayout tabKey="Job">
-      <Breadcrumbs>
-        <BreadLink isFirst title="Hrm" />
-        <BreadLink isLast title="Payments" />
-      </Breadcrumbs>
-      <PageHeader
-        title="Payment Receipts"
-        newLink={"/jobs/payments/pay"}
-        buttonText={"Make Payment"}
-        ButtonIcon={"dollar"}
-      />
-      <JobPaymentTableShell searchParams={searchParams} {...response} />
-      <PaymentOverviewSheet />
-    </TabbedLayout>
-  );
+    const response = await getJobPayments(queryParams(searchParams));
+    return (
+        <TabbedLayout tabKey="Job">
+            <Breadcrumbs>
+                <BreadLink isFirst title="Hrm" />
+                <BreadLink isLast title="Payments" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Payment Receipts"
+                newLink={"/jobs/payments/pay"}
+                buttonText={"Make Payment"}
+                ButtonIcon={"dollar"}
+            />
+            <JobPaymentTableShell searchParams={searchParams} {...response} />
+            <PaymentOverviewSheet />
+        </TabbedLayout>
+    );
 }
