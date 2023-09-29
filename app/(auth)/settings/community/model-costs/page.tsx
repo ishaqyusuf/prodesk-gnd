@@ -7,7 +7,6 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { getHomeTemplates } from "@/app/_actions/community/home-template";
 import ModelCostTableShell from "@/components/shells/model-costs-table-shell";
 import ModelCostModal from "@/components/modals/model-cost-modal";
-import ModelTemplateModal from "@/components/modals/model-template-modal";
 import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 
 export const metadata: Metadata = {

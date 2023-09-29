@@ -2,10 +2,12 @@
 
 import { prisma } from "@/db";
 
-export async function deleteInvoiceTask(id) {
-  await prisma.homeTasks.delete({
-    where: {
-      id,
-    },
-  });
+export async function deleteInvoiceTasks(ids) {
+    await prisma.homeTasks.deleteMany({
+        where: {
+            id: {
+                in: ids
+            }
+        }
+    });
 }
