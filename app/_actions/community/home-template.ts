@@ -152,7 +152,7 @@ export async function saveCommunityTemplateDesign(slug, meta) {
         },
         data: {
             ...transformData({}, true),
-            meta: meta as any
+            meta: removeEmptyValues(meta) as any
         }
     });
 }

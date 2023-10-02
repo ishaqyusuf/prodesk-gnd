@@ -532,8 +532,7 @@ export async function salesPrintAction({ ids,printMode }: { ids,printMode:IOrder
   )
   const where : Prisma.SalesOrdersWhereInput = {};
   if(isId)
-    where.id ={
-in:ids};
+    where.id ={in:ids};
 else where.slug = {
     in: ids as any
 }

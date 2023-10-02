@@ -58,7 +58,9 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
     }, []);
     async function save() {
         startTransition(async () => {
-            await timeout(1000);
+            // await timeout(1000);
+            // console.log(form.getValues());
+            // return;
             await (community
                 ? saveCommunityTemplateDesign
                 : saveHomeTemplateDesign)(data.slug, {
