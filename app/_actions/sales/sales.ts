@@ -522,19 +522,23 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     }) as any,
   });
 }
-export async function salesPrintAction({ ids,printMode }: { ids: number[],printMode:IOrderPrintMode }) {
-  if(printMode == 'order')
+export async function salesPrintAction({ ids,printMode }: { ids,printMode:IOrderPrintMode }) {
+    const isId = ids.every(id => typeof id === 'number');
+  if(printMode == 'order' && isId)
   await Promise.all(
     ids.map(async(id) => {
       await fixSalesPaymentAction(Number(id))
     })
   )
+  const where : Prisma.SalesOrdersWhereInput = {};
+  if(isId)
+    where.id ={
+in:ids};
+else where.slug = {
+    in: ids as any
+}
   const sales = prisma.salesOrders.findMany({
-    where: {
-      id: {
-        in: ids,
-      },
-    },
+    where,
     include: {
       items: {},
       salesRep: {},

@@ -1,21 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface Props {
-  children?;
-  id?;
+    children?;
+    id?;
+    preview?: Boolean;
 }
-export default function BasePrinter({ children, id }: Props) {
-  return (
-    <>
-      {createPortal(
-        <div id={id} className="hidden print:block">
-          {children}
-        </div>,
-        document.body
-      )}
-    </>
-  );
+export default function BasePrinter({ children, preview, id }: Props) {
+    const [TabElement, setTabElement] = useState(document?.body);
+    return (
+        <>
+            {TabElement &&
+                createPortal(
+                    <div
+                        id={id}
+                        className={cn(!preview && "hidden print:block")}
+                    >
+                        {children}
+                    </div>,
+                    TabElement
+                )}
+        </>
+    );
 }
