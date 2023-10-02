@@ -2,14 +2,14 @@
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
 import puppeteer from "puppeteer";
-export async function printSalesPdf(html?) {
+export async function printSalesPdf(mode, ids) {
     const browser = await puppeteer.launch({
         headless: "new"
     });
     const url =
         env.NODE_ENV !== "production"
-            ? `http://localhost:3000/print-sales?id=23-0808-0345,23-0801-0325&mode=order`
-            : ``;
+            ? `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`
+            : `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
     const page = await browser.newPage();
     // await page.goto(url);
     //   page.setContent(html);

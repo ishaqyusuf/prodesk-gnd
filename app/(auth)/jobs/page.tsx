@@ -14,27 +14,32 @@ import SubmitJobModal from "@/components/modals/submit-job-modal";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 
 export const metadata: Metadata = {
-  title: "Jobs",
+    title: "Jobs"
 };
 export default async function EmployeesPage({ searchParams }) {
-  const response = await getJobs(queryParams(searchParams));
-  return (
-    <TabbedLayout tabKey="Job">
-      <Breadcrumbs>
-        <BreadLink isFirst title="Hrm" />
-        <BreadLink isLast title="Jobs" />
-      </Breadcrumbs>
-      <PageHeader
-        title="Jobs"
-        newDialog="submitJob"
-        modalData={{
-          defaultTab: "user",
-        }}
-      />
-      <JobTableShell adminMode searchParams={searchParams} {...response} />
-      <JobOverviewSheet />
-      <EditJobModal />
-      <SubmitJobModal />
-    </TabbedLayout>
-  );
+    const response = await getJobs(queryParams(searchParams));
+    return (
+        <TabbedLayout tabKey="Job">
+            <Breadcrumbs>
+                <BreadLink isFirst title="Hrm" />
+                <BreadLink isLast title="Jobs" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Jobs"
+                newDialog="submitJob"
+                modalData={{
+                    defaultTab: "user",
+                    data: { type: "installation" }
+                }}
+            />
+            <JobTableShell
+                adminMode
+                searchParams={searchParams}
+                {...response}
+            />
+            <JobOverviewSheet />
+            <EditJobModal />
+            <SubmitJobModal />
+        </TabbedLayout>
+    );
 }

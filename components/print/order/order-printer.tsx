@@ -61,6 +61,21 @@ export default function OrderPrinter({
 
     async function print() {
         if (!printer) return;
+        if (printer.pdf) {
+            const dataUri = await printSalesPdf(
+                printer.mode,
+                printer.ids?.join(",")
+            );
+            console.log("DOWNLOAD PDF");
+            // console.log(durl);
+            const link = document.createElement("a");
+            link.href = dataUri;
+            link.download = "file.pdf";
+            // document.body.appendChild(link);
+            link.click();
+            // document.body.removeChild(link);
+            return;
+        }
         setSales(printer.ids.map(slug => ({ slug, loading: true })) as any);
         const _sales: ISalesOrder[] = (await salesPrintAction({
             ids: printer.ids,
@@ -103,16 +118,6 @@ export default function OrderPrinter({
         } else {
             //
             // const doc = document.documentElement.outerHTML;
-            const dataUri = await printSalesPdf();
-            console.log("DOWNLOAD PDF");
-            // console.log(durl);
-            const link = document.createElement("a");
-            link.href = dataUri;
-            link.download = "file.pdf";
-            // document.body.appendChild(link);
-            link.click();
-            // document.body.removeChild(link);
-            return;
             // console.log(doc);
             // console.log(durl);
             // return;
@@ -128,7 +133,6 @@ export default function OrderPrinter({
             //     }.pdf`;
             //     const options = {
             //         // margin: 20
-
             //         margin: 10, //[10, 10, 10, 10], //top, lef
             //         // margin: [15, 0, 15, 0],
             //         filename, //: 'document.pdf',
