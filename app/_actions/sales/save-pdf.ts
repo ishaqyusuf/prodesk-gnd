@@ -1,10 +1,16 @@
 "use server";
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
+import chromium from "chrome-aws-lambda";
 export async function printSalesPdf(mode, ids) {
-    const browser = await puppeteer.launch({
-        headless: "new"
+    const browser = await chromium.puppeteer.launch({
+        // headless: "new",
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true
     });
     const url =
         env.NODE_ENV !== "production"
@@ -22,7 +28,7 @@ export async function printSalesPdf(mode, ids) {
     await page.emulateMediaType("print");
 
     const pdf = await page.pdf({
-        format: "Letter",
+        format: "letter",
         margin: {
             left: "0.39in",
             top: "0.39in",
