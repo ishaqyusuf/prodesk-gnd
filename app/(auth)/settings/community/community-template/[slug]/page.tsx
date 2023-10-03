@@ -1,7 +1,4 @@
-import {
-    getCommunityTemplate,
-    getHomeTemplate
-} from "@/app/_actions/community/home-template";
+import { getCommunityTemplate } from "@/app/_actions/community/home-template";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import ModelForm from "@/components/forms/model-form/model-form";

@@ -17,43 +17,43 @@ import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
 
 export const metadata: Metadata = {
-  title: "GND-PRODESK",
-  description: "home page",
+    title: "GND-PRODESK",
+    description: "home page"
 };
 
 const inter = Inter({ subsets: ["latin"] });
 export default async function RootLayout({
-  children,
+    children
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const isProd = await isProduction();
-  const prodDB = env.DATABASE_URL?.includes("pscale");
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="print:hidden">
-          <AppProvider>{children}</AppProvider>
+    const isProd = await isProduction();
+    const prodDB = env.DATABASE_URL?.includes("pscale");
+    return (
+        <html lang="en">
+            <body className={inter.className}>
+                <div className="print:hidden">
+                    <AppProvider>{children}</AppProvider>
 
-          <div
-            className={cn(
-              isProd
-                ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
-                : "fixed bottom-0 right-0 m-4"
-            )}
-          >
-            <Upgrader />
-          </div>
-          <Toaster />
-        </div>
-        <Analytics />
-        <TailwindIndicator />
-        {prodDB && !isProd && (
-          <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
-            Production Database
-          </div>
-        )}
-      </body>
-    </html>
-  );
+                    <div
+                        className={cn(
+                            isProd
+                                ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
+                                : "fixed bottom-0 right-0 m-4"
+                        )}
+                    >
+                        <Upgrader />
+                    </div>
+                    <Toaster />
+                </div>
+                <Analytics />
+                <TailwindIndicator />
+                {prodDB && !isProd && (
+                    <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
+                        Production Database
+                    </div>
+                )}
+            </body>
+        </html>
+    );
 }

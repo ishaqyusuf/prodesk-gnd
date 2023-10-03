@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppSelector } from "@/store";
-import Image from "next/image";
 import { formatDate } from "@/lib/use-day";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
 
@@ -84,14 +83,21 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                                                         label="Rep."
                                                         value={order?.meta?.rep}
                                                     />
-                                                    <InfoLine
-                                                        label="Good Until."
-                                                        value={formatDate(
-                                                            order?.goodUntil
-                                                        )}
-                                                    />
                                                     {po?.showInvoice && (
                                                         <>
+                                                            {
+                                                                <InfoLine
+                                                                    label={
+                                                                        order?.type ==
+                                                                        "order"
+                                                                            ? "Due Date"
+                                                                            : "Good Until"
+                                                                    }
+                                                                    value={formatDate(
+                                                                        order?.goodUntil
+                                                                    )}
+                                                                />
+                                                            }
                                                             <InfoLine
                                                                 label="P.O No."
                                                                 value={

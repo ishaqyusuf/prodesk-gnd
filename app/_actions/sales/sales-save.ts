@@ -42,28 +42,13 @@ export async function saveOrderAction({
             now.format("MMDD"),
             await nextId(prisma.salesOrders)
         ].join("-");
+
+        // order.goodUntil
     }
-    console.log(slug);
     const metadata = {
         ...transformData<any>(_order, id != null),
         slug,
         orderId
-        // customer: customerId && {
-        //   connect: {
-        //     id: customerId as any,
-        //     // id: undefined,
-        //   },
-        // },
-        // shippingAddress: shippingAddressId && {
-        //   connect: {
-        //     id: shippingAddressId as any,
-        //   },
-        // },
-        // billingAddress: shippingAddressId && {
-        //   connect: {
-        //     id: billingAddressId as any,
-        //   },
-        // },
     };
     Object.entries({
         customer: customerId,
