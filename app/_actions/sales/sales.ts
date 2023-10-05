@@ -386,10 +386,17 @@ export async function saveOrderAction({
   return sale_order;
 }
 export async function deleteOrderAction(id) {
+    await prisma.orderProductionSubmissions.deleteMany({
+        where: {
+            salesOrderId: id
+        },
+       
+    })
+    
   await prisma.salesOrderItems.deleteMany({
     where: {
       salesOrderId: id
-    }
+    },
   })
   await prisma.salesOrders.delete({
     where: {id},

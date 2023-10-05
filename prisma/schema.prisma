@@ -50,26 +50,6 @@ model Builders {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model CacheManagers {
-    id           Int       @unique @default(autoincrement())
-    cacheKey     String    @db.Text
-    tags         Json?     @db.Json
-    data         Json?     @db.Json
-    rememberTill DateTime? @db.Timestamp(0)
-    createdAt    DateTime? @db.Timestamp(0)
-    updatedAt    DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model Categories {
-    id        Int       @unique @default(autoincrement())
-    name      String    @db.VarChar(255)
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CommunityModels {
     id        Int       @unique @default(autoincrement())
     projectId Int
@@ -454,16 +434,16 @@ model ModelHasRoles {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model OrderProductionSubmissions {
-    id               Int             @unique @default(autoincrement())
-    salesOrderId     Int
-    salesOrderItemId Int
+    id               Int              @unique @default(autoincrement())
+    salesOrderId     Int?
+    salesOrderItemId Int?
     qty              Int
-    deletedAt        DateTime?       @db.Timestamp(0)
-    createdAt        DateTime?       @db.Timestamp(0)
-    updatedAt        DateTime?       @db.Timestamp(0)
-    meta             Json?           @db.Json
-    order            SalesOrders     @relation(fields: [salesOrderId], references: [id])
-    item             SalesOrderItems @relation(fields: [salesOrderItemId], references: [id])
+    deletedAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @db.Timestamp(0)
+    updatedAt        DateTime?        @db.Timestamp(0)
+    meta             Json?            @db.Json
+    order            SalesOrders?     @relation(fields: [salesOrderId], references: [id])
+    item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
