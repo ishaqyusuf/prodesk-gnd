@@ -62,7 +62,26 @@ export async function saveBuilderTasks(data: IBuilder) {
             meta: data.meta as any
         }
     });
-    await Promise.all(data.meta.tasks.map(async p => {}));
+    await Promise.all(
+        data.meta.tasks.map(async p => {
+            await prisma.homeTasks.updateMany({
+                where: {
+                    home: {
+                        builderId: data.id
+                    },
+                    taskUid: p.uid
+                    // taskName: {
+                    //     not: p.name
+                    // }
+                },
+                data: {
+                    taskName: p.name,
+                    billable: p.billable,
+                    produceable: p.produceable
+                }
+            });
+        })
+    );
     revalidatePath("/settings/community/builders", "page");
 }
 export async function saveBuilderInstallations(data: IBuilder) {}

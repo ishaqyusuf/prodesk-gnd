@@ -30,10 +30,10 @@ export type IBuilder = OmitMeta<Builders> & {
     meta: {
         address;
         tasks: {
-            billable: Boolean;
+            billable: boolean;
             name: string;
-            produceable: Boolean;
-            installable: Boolean;
+            produceable: boolean;
+            installable: boolean;
             uid: string;
             invoice_search;
         }[];
@@ -52,7 +52,7 @@ export interface ExtendedHome extends IHome {
 }
 export type IHomeTask = OmitMeta<HomeTasks> & {
     meta: {
-        system_task: Boolean;
+        system_task: boolean;
         system_task_cost: number;
     };
 };
