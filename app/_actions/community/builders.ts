@@ -62,6 +62,7 @@ export async function saveBuilderTasks(data: IBuilder) {
             meta: data.meta as any
         }
     });
+    await Promise.all(data.meta.tasks.map(async p => {}));
     revalidatePath("/settings/community/builders", "page");
 }
 export async function saveBuilderInstallations(data: IBuilder) {}
