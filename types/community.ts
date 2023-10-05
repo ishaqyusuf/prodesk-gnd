@@ -29,19 +29,20 @@ export type IProjectMeta = {
 export type IBuilder = OmitMeta<Builders> & {
     meta: {
         address;
-        tasks: {
-            billable: boolean;
-            name: string;
-            produceable: boolean;
-            installable: boolean;
-            uid: string;
-            invoice_search;
-        }[];
+        tasks: IBuilderTasks[];
     };
     _count: {
         projects;
     };
 };
+export interface IBuilderTasks {
+    billable: boolean;
+    name: string;
+    produceable: boolean;
+    installable: boolean;
+    uid: string;
+    invoice_search;
+}
 export type IHome = OmitMeta<Homes> & {
     meta: {};
 };

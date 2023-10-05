@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -18,6 +18,8 @@ import { Button } from "../ui/button";
 import { Plus, Trash } from "lucide-react";
 import { generateRandomString } from "@/lib/utils";
 import {
+    addBuilderTasks,
+    deleteBuilderTasks,
     saveBuilder,
     saveBuilderInstallations,
     saveBuilderTasks
@@ -29,6 +31,7 @@ export default function BuilderModal() {
     const form = useForm<IBuilder>({
         defaultValues: {}
     });
+    const [taskIds, setTaskIds] = useState([]);
     const { fields, remove, append } = useFieldArray({
         control: form.control,
         name: "meta.tasks"
@@ -44,13 +47,43 @@ export default function BuilderModal() {
                 }
                 if (type == "tasks") {
                     let { tasks, ...meta } = data.meta;
-                    if (Array.isArray(tasks))
+                    const newTaskIds: any = [];
+                    let deleteIds: any = [...taskIds];
+                    if (Array.isArray(tasks)) {
                         data.meta.tasks = tasks.map(t => {
-                            if (!t.uid) t.uid = generateRandomString(4);
+                            if (!t.uid) {
+                                t.uid = generateRandomString(4);
+                                newTaskIds.push(t.uid);
+                            }
+                            deleteIds = deleteIds.filter(d => d != t.uid);
                             return t;
                         });
-
-                    await saveBuilderTasks(data);
+                    }
+                    const actions = [
+                        {
+                            toast: "Saving Tasks",
+                            action: saveBuilderTasks,
+                            arg: data
+                        },
+                        {
+                            toast: "Remove deleted tasks",
+                            action: deleteBuilderTasks,
+                            arg: deleteIds.length && {
+                                taskIds: deleteIds,
+                                builderId: data.id
+                            }
+                        },
+                        {
+                            toast: "Adding newly created tasks",
+                            action: addBuilderTasks,
+                            arg: newTaskIds.length && {
+                                builderId: data.id,
+                                taskIds: newTaskIds
+                            }
+                        }
+                    ];
+                    // console.log(deleteIds, newTaskIds);
+                    await saveBuilderTasks(data, deleteIds, newTaskIds);
                 }
                 if (type == "installations")
                     await saveBuilderInstallations(data);
@@ -67,6 +100,7 @@ export default function BuilderModal() {
     }
     async function init(data) {
         form.reset(data || { meta: {} });
+        setTaskIds(data?.meta?.tasks?.map(t => t.uid) || []);
     }
     return (
         <BaseModal<{
@@ -170,12 +204,12 @@ export default function BuilderModal() {
                                             <div className="flex justify-end">
                                                 <Button
                                                     onClick={() => {
-                                                        if (
-                                                            !form.getValues(
-                                                                `meta.tasks.${i}.uid` as any
-                                                            )
-                                                        )
-                                                            remove(i);
+                                                        // if (
+                                                        //     !form.getValues(
+                                                        //         `meta.tasks.${i}.uid` as any
+                                                        //     )
+                                                        // )
+                                                        remove(i);
                                                     }}
                                                     variant="ghost"
                                                     size="icon"

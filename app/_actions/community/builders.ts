@@ -4,8 +4,9 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
-import { IBuilder } from "@/types/community";
+import { IBuilder, IBuilderTasks, IHomeTask } from "@/types/community";
 import { revalidatePath } from "next/cache";
+import { transformData } from "@/lib/utils";
 export interface BuildersQueryParams extends BaseQuery {}
 export async function getBuildersAction(query: BuildersQueryParams) {
     const where = whereBuilder(query);
@@ -53,7 +54,7 @@ export async function deleteBuilderAction(id) {}
 export async function saveBuilder(data: IBuilder) {
     // data.createdAt = data.
 }
-export async function saveBuilderTasks(data: IBuilder) {
+export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
     await prisma.builders.update({
         where: {
             id: data.id
@@ -82,6 +83,83 @@ export async function saveBuilderTasks(data: IBuilder) {
             });
         })
     );
+    if (deleteIds?.length)
+        await prisma.homeTasks.deleteMany({
+            where: {
+                taskUid: {
+                    in: deleteIds
+                },
+                home: {
+                    installedAt: null
+                }
+                // prodStartedAt: null,
+            }
+        });
+
+    if (newTaskIds) {
+        // let tasks
+        let homes = await prisma.homes.findMany({
+            where: {
+                builderId: data.id
+            },
+            select: {
+                id: true,
+                projectId: true,
+                search: true,
+                jobs: {
+                    select: {
+                        id: true
+                    }
+                }
+            }
+        });
+        const taskData = homes
+            .map(
+                h =>
+                    !h.jobs.length && {
+                        projectId: h.projectId,
+                        homeId: h.id,
+                        search: h.search
+                    }
+            )
+            .filter(Boolean);
+        await createBuilderTasks(
+            data.meta.tasks.filter(t => newTaskIds.includes(t.uid)),
+            taskData as any
+        );
+    }
     revalidatePath("/settings/community/builders", "page");
 }
+export async function deleteBuilderTasks({ builderId, taskIds }) {}
+export async function addBuilderTasks({ builderId, tasksIds, tasks }) {}
 export async function saveBuilderInstallations(data: IBuilder) {}
+export async function createBuilderTasks(
+    builderTasks: IBuilderTasks[],
+    taskData: {
+        projectId;
+        homeId;
+        search;
+    }[],
+    homeCost?
+) {
+    const tasks: any[] = [];
+    taskData.map(td => {
+        builderTasks.map(builderTask => {
+            const _task: IHomeTask = {
+                meta: {},
+                ...td
+            } as any;
+            _task.billable = builderTask.billable as boolean;
+            _task.installable = builderTask.installable as boolean;
+            const uid = (_task.taskUid = builderTask.uid);
+            _task.taskName = builderTask.name;
+            _task.amountDue = _task.meta.system_task_cost =
+                Number(homeCost?.meta?.costs[uid]) || (null as any);
+            _task.status = "";
+            tasks.push(transformData(_task));
+        });
+    });
+    await prisma.homeTasks.createMany({
+        data: tasks
+    });
+}
