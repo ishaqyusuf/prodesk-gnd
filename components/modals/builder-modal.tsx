@@ -36,13 +36,24 @@ export default function BuilderModal() {
     async function submit(type) {
         startTransition(async () => {
             // if(!form.getValues)
+            const data = form.getValues();
+
             try {
                 if (type == "main" || !type) {
-                    await saveBuilder(form.getValues());
+                    await saveBuilder(data);
                 }
-                if (type == "tasks") await saveBuilderTasks(form.getValues());
+                if (type == "tasks") {
+                    let { tasks, ...meta } = data.meta;
+                    if (Array.isArray(tasks))
+                        data.meta.tasks = tasks.map(t => {
+                            if (!t.uid) t.uid = generateRandomString(4);
+                            return t;
+                        });
+
+                    await saveBuilderTasks(data);
+                }
                 if (type == "installations")
-                    await saveBuilderInstallations(form.getValues());
+                    await saveBuilderInstallations(data);
                 // const isValid = emailSchema.parse(form.getValues());
 
                 closeModal();
@@ -177,9 +188,7 @@ export default function BuilderModal() {
                                     ))}
                                     <Button
                                         onClick={() => {
-                                            append({
-                                                uid: generateRandomString(4)
-                                            } as any);
+                                            append({} as any);
                                         }}
                                         variant="secondary"
                                         className="w-full h-7 mt-1"

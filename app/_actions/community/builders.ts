@@ -5,6 +5,7 @@ import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { IBuilder } from "@/types/community";
+import { revalidatePath } from "next/cache";
 export interface BuildersQueryParams extends BaseQuery {}
 export async function getBuildersAction(query: BuildersQueryParams) {
     const where = whereBuilder(query);
@@ -61,5 +62,6 @@ export async function saveBuilderTasks(data: IBuilder) {
             meta: data.meta as any
         }
     });
+    revalidatePath("/settings/community/builders", "page");
 }
 export async function saveBuilderInstallations(data: IBuilder) {}
