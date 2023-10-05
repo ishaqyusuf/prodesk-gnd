@@ -57,7 +57,7 @@ export default function BuilderModal() {
                 // const isValid = emailSchema.parse(form.getValues());
 
                 closeModal();
-                toast.message("Customer Created!");
+                toast.message("Success!");
             } catch (error) {
                 console.log(error);
                 toast.message("Invalid Form");
