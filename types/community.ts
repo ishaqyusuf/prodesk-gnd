@@ -10,6 +10,7 @@ import {
     Projects
 } from "@prisma/client";
 import { OmitMeta } from "./type";
+import { IJobs } from "./hrm";
 
 export type IProject = OmitMeta<Projects> & {
     meta: IProjectMeta;
@@ -17,6 +18,7 @@ export type IProject = OmitMeta<Projects> & {
         homes;
     };
     builder: IBuilder;
+    communityModels: ICommunityTemplate[];
 };
 export type IProjectMeta = {
     supervisor: {

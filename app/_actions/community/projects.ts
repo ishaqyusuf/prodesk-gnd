@@ -60,7 +60,8 @@ export async function staticProjectsAction() {
         select: {
             id: true,
             title: true,
-            builderId: true
+            builderId: true,
+            meta: true
         },
         orderBy: {
             title: "asc"

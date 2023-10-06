@@ -17,7 +17,7 @@ import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
 import { INotification } from "@/app/_actions/notifications";
-import { ExtendedHome, IHome } from "@/types/community";
+import { ExtendedHome, IHome, IProject } from "@/types/community";
 import { ICustomer } from "@/types/customers";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
@@ -65,7 +65,7 @@ export interface ISlicer {
     // staticList: IStaticList;
     staticCustomerProfiles: CustomerTypes[];
     staticBuilders: Builders[];
-    staticProjects: Projects[];
+    staticProjects: IProject[];
     staticModels: HomeTemplates[];
     staticRoles: Roles[];
     staticEmployeeProfiles: EmployeeProfile[];

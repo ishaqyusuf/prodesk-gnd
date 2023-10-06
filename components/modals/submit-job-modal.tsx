@@ -55,10 +55,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "../ui/dropdown-menu";
-import {
-    loadStatic1099Contractors,
-    staticLoadTechEmployees
-} from "@/app/_actions/hrm/get-employess";
+import { loadStatic1099Contractors } from "@/app/_actions/hrm/get-employess";
 import {
     Select,
     SelectContent,
@@ -133,6 +130,7 @@ export default function SubmitJobModal() {
         );
         setTab(defaultTab || "tasks");
         setAddCost(null as any);
+        setUnitCosting({});
         if (data && defaultTab == "tasks") {
             const costdat = await getJobCostData(data?.homeId, data.subtitle);
             // console.log(costdat);
