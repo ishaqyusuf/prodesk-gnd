@@ -4,12 +4,12 @@ import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
 import {
-  CheckColumn,
-  ColumnHeader,
-  Cell,
-  PrimaryCellContent,
-  DateCellContent,
-  SecondaryCellContent,
+    CheckColumn,
+    ColumnHeader,
+    Cell,
+    PrimaryCellContent,
+    DateCellContent,
+    SecondaryCellContent
 } from "../columns/base-columns";
 import { DataTable2 } from "../data-table/data-table-2";
 import { BuilderFilter } from "../filters/builder-filter";
@@ -20,171 +20,145 @@ import { Button } from "../ui/button";
 import Money from "../money";
 import { cn } from "@/lib/utils";
 import {
-  DeleteRowAction,
-  RowActionCell,
-  RowActionMenuItem,
-  RowActionMoreMenu,
+    DeleteRowAction,
+    RowActionCell,
+    RowActionMenuItem,
+    RowActionMoreMenu
 } from "../data-table/data-table-row-actions";
 import { deleteHomeTemplateAction } from "@/app/_actions/community/home-template";
+import ModelCostCell from "../community/model-cost-cell";
+import InstallCostCell from "../community/install-cost-cell";
 
 export default function ModelCostTableShell<T>({
-  data,
-  pageInfo,
-  searchParams,
+    data,
+    pageInfo,
+    searchParams
 }: TableShellProps<IHomeTemplate>) {
-  const [isPending, startTransition] = useTransition();
-  const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-  const columns = useMemo<ColumnDef<IHomeTemplate, unknown>[]>(
-    () => [
-      CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-      {
-        maxSize: 10,
-        id: "id",
-        header: ColumnHeader("#/Date"),
-        cell: ({ row }) => (
-          <Cell>
-            <PrimaryCellContent>{row.original.id}</PrimaryCellContent>
-            <DateCellContent>{row.original.createdAt}</DateCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "title",
-        header: ColumnHeader("Model"),
-        cell: ({ row }) => (
-          <Cell
-            link={"/settings/community/model-template/slug"}
-            slug={row.original.slug}
-          >
-            {/* link={`/community/project/slug`} slug={row.original.slug} */}
-            <PrimaryCellContent>{row.original.modelName}</PrimaryCellContent>
-            <SecondaryCellContent>
-              {row.original.builder?.name}
-            </SecondaryCellContent>
-          </Cell>
-        ),
-      },
-
-      {
-        id: "units",
-        header: ColumnHeader("Total Units"),
-        cell: ({ row }) => (
-          <Cell>
-            <PrimaryCellContent>
-              {row.original._count?.homes || 0}
-            </PrimaryCellContent>
-          </Cell>
-        ),
-      },
-      {
-        id: "units",
-        header: ColumnHeader("Model Cost"),
-        cell: ({ row }) => {
-          const cost: ICostChart = row.original.costs?.find(
-            (c) => c.current
-          ) as any;
-
-          let money = cost?.meta?.totalCost;
-          return (
-            <Cell
-              className="cursor-pointer"
-              onClick={() => openModal("modelCost", row.original)}
-            >
-              {!cost ? (
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200">
-                  Set Cost
-                </Badge>
-              ) : (
-                <>
-                  <PrimaryCellContent>
-                    <Money value={money} />
-                  </PrimaryCellContent>
-                  <SecondaryCellContent>
-                    {row?.original?.costs?.length} cost history
-                  </SecondaryCellContent>
-                </>
-              )}
-            </Cell>
-          );
-        },
-      },
-      {
-        id: "install-costs",
-        header: ColumnHeader("Install Costs"),
-        cell: ({ row }) => (
-          <Cell
-            className="cursor-pointer"
-            onClick={() => openModal("installCost", row.original)}
-          >
-            <Badge
-              className={cn(
-                row.original.meta?.installCosts?.length > 0
-                  ? "bg-green-200 text-green-700 hover:bg-green-200"
-                  : "bg-slate-200 text-slate-700 hover:bg-slate-200"
-              )}
-            >
-              {row.original.meta?.installCosts?.length || 0} Costs
-            </Badge>
-          </Cell>
-        ),
-      },
-      {
-        accessorKey: "_q",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "actions",
-        header: ColumnHeader(""),
-        size: 15,
-        maxSize: 15,
-        enableSorting: false,
-        cell: ({ row }) => (
-          <RowActionCell>
-            <DeleteRowAction
-              action={deleteHomeTemplateAction}
-              row={row.original}
-            />
-            <RowActionMoreMenu>
-              <RowActionMenuItem
-                SubMenu={
-                  <>
-                    <RowActionMenuItem
-                      link={`/community/units?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
+    const [isPending, startTransition] = useTransition();
+    const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const columns = useMemo<ColumnDef<IHomeTemplate, unknown>[]>(
+        () => [
+            CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
+            {
+                maxSize: 10,
+                id: "id",
+                header: ColumnHeader("#/Date"),
+                cell: ({ row }) => (
+                    <Cell>
+                        <PrimaryCellContent>
+                            {row.original.id}
+                        </PrimaryCellContent>
+                        <DateCellContent>
+                            {row.original.createdAt}
+                        </DateCellContent>
+                    </Cell>
+                )
+            },
+            {
+                id: "title",
+                header: ColumnHeader("Model"),
+                cell: ({ row }) => (
+                    <Cell
+                        link={"/settings/community/model-template/slug"}
+                        slug={row.original.slug}
                     >
-                      Units
-                    </RowActionMenuItem>
-                    <RowActionMenuItem
-                      link={`/community/invoices?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
-                    >
-                      Invoices
-                    </RowActionMenuItem>
-                  </>
+                        {/* link={`/community/project/slug`} slug={row.original.slug} */}
+                        <PrimaryCellContent>
+                            {row.original.modelName}
+                        </PrimaryCellContent>
+                        <SecondaryCellContent>
+                            {row.original.builder?.name}
+                        </SecondaryCellContent>
+                    </Cell>
+                )
+            },
+
+            {
+                id: "units",
+                header: ColumnHeader("Total Units"),
+                cell: ({ row }) => (
+                    <Cell>
+                        <PrimaryCellContent>
+                            {row.original._count?.homes || 0}
+                        </PrimaryCellContent>
+                    </Cell>
+                )
+            },
+            {
+                id: "units",
+                header: ColumnHeader("Model Cost"),
+                cell: ({ row }) => (
+                    <ModelCostCell
+                        modal="modelCost"
+                        row={row.original}
+                        costs={row.original.costs}
+                    />
+                )
+            },
+            {
+                id: "install-costs",
+                header: ColumnHeader("Install Costs"),
+                cell: ({ row }) => (
+                    <InstallCostCell row={row.original} modal="installCost" />
+                )
+            },
+            {
+                accessorKey: "_q",
+                enableHiding: false
+            },
+            {
+                accessorKey: "actions",
+                header: ColumnHeader(""),
+                size: 15,
+                maxSize: 15,
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <RowActionCell>
+                        <DeleteRowAction
+                            action={deleteHomeTemplateAction}
+                            row={row.original}
+                        />
+                        <RowActionMoreMenu>
+                            <RowActionMenuItem
+                                SubMenu={
+                                    <>
+                                        <RowActionMenuItem
+                                            link={`/community/units?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
+                                        >
+                                            Units
+                                        </RowActionMenuItem>
+                                        <RowActionMenuItem
+                                            link={`/community/invoices?_q=${row.original.modelName}&_builderId=${row.original.builderId}`}
+                                        >
+                                            Invoices
+                                        </RowActionMenuItem>
+                                    </>
+                                }
+                            >
+                                View
+                            </RowActionMenuItem>
+                        </RowActionMoreMenu>
+                    </RowActionCell>
+                )
+            }
+        ], //.filter(Boolean) as any,
+        [data, isPending]
+    );
+    return (
+        <DataTable2
+            searchParams={searchParams}
+            columns={columns}
+            pageInfo={pageInfo}
+            data={data}
+            filterableColumns={[BuilderFilter]}
+            searchableColumns={[
+                {
+                    id: "_q" as any,
+                    title: ""
                 }
-              >
-                View
-              </RowActionMenuItem>
-            </RowActionMoreMenu>
-          </RowActionCell>
-        ),
-      },
-    ], //.filter(Boolean) as any,
-    [data, isPending]
-  );
-  return (
-    <DataTable2
-      searchParams={searchParams}
-      columns={columns}
-      pageInfo={pageInfo}
-      data={data}
-      filterableColumns={[BuilderFilter]}
-      searchableColumns={[
-        {
-          id: "_q" as any,
-          title: "",
-        },
-      ]}
+            ]}
 
-      //  deleteRowsAction={() => void deleteSelectedRows()}
-    />
-  );
+            //  deleteRowsAction={() => void deleteSelectedRows()}
+        />
+    );
 }

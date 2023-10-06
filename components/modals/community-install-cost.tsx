@@ -11,12 +11,12 @@ import { toast } from "sonner";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { IHomeTemplate, InstallCost } from "@/types/community";
+import { IHomeTemplate, IProject, InstallCost } from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { deepCopy } from "@/lib/deep-copy";
-import { InstallCostMeta, InstallCostSettings } from "@/types/settings";
+import { InstallCostSettings } from "@/types/settings";
 import { getSettingAction } from "@/app/_actions/settings";
 import {
     PrimaryCellContent,
@@ -33,9 +33,13 @@ import {
 } from "../ui/table";
 import { cn } from "@/lib/utils";
 import { updateModelInstallCost } from "@/app/_actions/community/install-costs";
-import { updateCommunityModelInstallCost } from "@/app/_actions/community/community-template";
+import {
+    updateCommunityCost,
+    updateProjectMeta
+} from "@/app/_actions/community/projects";
+import { closeModal } from "@/lib/modal";
 
-export default function ModelInstallCostModal({ community = false }) {
+export default function CommunityInstallCostModal() {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ costs: InstallCost[] }>({
@@ -54,26 +58,19 @@ export default function ModelInstallCostModal({ community = false }) {
         })();
     }, []);
 
-    async function submit(data) {
+    async function submit(data: IProject) {
         startTransition(async () => {
             // if(!form.getValues)
             try {
-                // const isValid = emailSchema.parse(form.getValues());
                 const costs = deepCopy<InstallCost[]>(form.getValues(`costs`));
                 const cost = costs[index];
                 if (!cost) return;
-                if (!community)
-                    await updateModelInstallCost(data.id, {
-                        ...data.meta,
-                        installCosts: costs
-                    });
-                else {
-                    await updateCommunityModelInstallCost(data.id, {
-                        ...data.meta,
-                        installCosts: costs
-                    });
-                }
+                await updateCommunityCost(data.id, {
+                    ...data.meta,
+                    installCosts: costs
+                });
                 toast.message("Saved!");
+                closeModal();
             } catch (error) {
                 console.log(error);
                 toast.message("Invalid Form");
@@ -81,34 +78,24 @@ export default function ModelInstallCostModal({ community = false }) {
             }
         });
     }
-    async function init(data: IHomeTemplate) {
+    async function init(data: IProject) {
         form.reset({
             costs: data.meta.installCosts || [{}]
         });
     }
     return (
-        <BaseModal<any>
+        <BaseModal<IProject>
             className="sm:max-w-[500px]"
             onOpen={data => {
                 init(data);
             }}
             onClose={() => {}}
-            modalName="installCost"
-            Title={({ data }) => <div>Installation Costs</div>}
+            modalName="communityInstallCost"
+            Title={({ data }) => <div>Default Community Install Costs</div>}
             Subtitle={({ data }) => (
-                <>
-                    {community ? (
-                        <div>
-                            {data?.project?.title}
-                            {" | "}
-                            {data?.modelName}
-                            {" | "}
-                            {data?.project?.builder?.name}
-                        </div>
-                    ) : (
-                        <div>{data?.modelName}</div>
-                    )}
-                </>
+                <div>
+                    {data?.title}: {data?.builder.name}
+                </div>
             )}
             Content={({ data }) => (
                 <div className="flex w-full divide-x">

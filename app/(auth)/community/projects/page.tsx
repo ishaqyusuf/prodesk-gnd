@@ -10,21 +10,23 @@ import ProjectModal from "@/components/modals/project-modal";
 import ProjectsTableShell from "@/components/shells/projects-table-shell";
 
 export const metadata: Metadata = {
-  title: "Projects",
+    title: "Projects"
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
-  console.log(searchParams);
-  const response = await getProjectsAction(queryParams(searchParams));
-  return (
-    <div className="space-y-4 px-8">
-      <Breadcrumbs>
-        <BreadLink isFirst title="Community" />
-        <BreadLink isLast title="Projects" />
-      </Breadcrumbs>
-      <PageHeader title="Projects" newDialog="project" />
-      <ProjectsTableShell<IProject> searchParams={searchParams} {...response} />
-      <ProjectModal />
-    </div>
-  );
+    const response = await getProjectsAction(queryParams(searchParams));
+    return (
+        <div className="space-y-4 px-8">
+            <Breadcrumbs>
+                <BreadLink isFirst title="Community" />
+                <BreadLink isLast title="Projects" />
+            </Breadcrumbs>
+            <PageHeader title="Projects" newDialog="project" />
+            <ProjectsTableShell<IProject>
+                searchParams={searchParams}
+                {...response}
+            />
+            <ProjectModal />
+        </div>
+    );
 }

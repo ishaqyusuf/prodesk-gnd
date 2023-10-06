@@ -25,6 +25,8 @@ export type IProjectMeta = {
     };
     media?: string[];
     addon?;
+    modelCost: ICostChart;
+    installCosts: InstallCost[];
 };
 export type IBuilder = OmitMeta<Builders> & {
     meta: {
@@ -89,6 +91,8 @@ export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
     meta: {
         design: CommunityTemplateDesign;
+        modelCost: ICostChart;
+        installCosts: InstallCost[];
     };
 };
 export interface HomeTemplateMeta {

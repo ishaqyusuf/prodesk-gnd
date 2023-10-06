@@ -1,44 +1,37 @@
 import CommunitySettingsLayoutComponent from "@/components/tab-layouts/community-settings-layout";
-import CommunitySettingsLayout from "../layout";
 import PageHeader from "@/components/page-header";
 import { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
-import BuildersTableShell from "@/components/shells/builders-table-shell";
-import { IBuilder } from "@/types/community";
 import { queryParams } from "@/app/_actions/action-utils";
-import { getBuildersAction } from "@/app/_actions/community/builders";
-import {
-    getCommunityTemplates,
-    getHomeTemplates
-} from "@/app/_actions/community/home-template";
-import HomeTemplatesTableShell from "@/components/shells/home-templates-table-shell";
+import { getCommunityTemplates } from "@/app/_actions/community/home-template";
+
 import CommunityTemplateTableShell from "@/components/shells/community-templates-table-shell";
 import ModelTemplateModal from "@/components/modals/model-template-modal";
-import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
+import ProjectsTableShell from "@/components/shells/projects-table-shell";
+import { getProjectsAction } from "@/app/_actions/community/projects";
+import CommunityInstallCostModal from "@/components/modals/community-install-cost";
 
 export const metadata: Metadata = {
     title: "Community Templates"
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
-    const response = await getCommunityTemplates(queryParams(searchParams));
+    const response = await getProjectsAction(queryParams(searchParams));
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>
                 <BreadLink isFirst title="Settings" />
                 <BreadLink title="Community" />
-                <BreadLink isLast title="Community Templates" />
+                <BreadLink isLast title="Community Cost" />
             </Breadcrumbs>
-            <PageHeader
-                title="Community Templates"
-                newDialog="communityTemplate"
-            />
-            <CommunityTemplateTableShell
+            <PageHeader title="Community Costs" />
+
+            <ProjectsTableShell
+                cost
                 searchParams={searchParams}
                 {...response}
             />
-            <ModelTemplateModal formType="communityTemplate" />
-            <ModelInstallCostModal community />
+            <CommunityInstallCostModal />
         </CommunitySettingsLayoutComponent>
     );
 }

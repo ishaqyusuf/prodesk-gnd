@@ -14,7 +14,6 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ICostChart, IHomeTemplate } from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
-import { PrimaryCellContent } from "../columns/base-columns";
 import { DatePicker } from "../date-range-picker";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";

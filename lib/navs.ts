@@ -233,6 +233,7 @@ export function nav(
         if (viewCost || viewPriceList) {
             setHref("Install Costs", "install-costs");
             setHref("Model Costs", "model-costs");
+            setHref("Community Cost", "community-costs");
         }
         if (editProject) {
             setHref("Model Templates", "model-templates");
@@ -242,10 +243,11 @@ export function nav(
         CommunitySettings.push(
             ...[
                 _rw.builders,
-                _rw["model-costs"],
-                _rw["model-templates"],
                 _rw["community-templates"],
-                _rw["install-costs"]
+                _rw["community-costs"],
+                _rw["install-costs"],
+                _rw["model-templates"],
+                _rw["model-costs"]
             ].filter(Boolean)
         );
         if (href)
