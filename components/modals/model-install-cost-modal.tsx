@@ -11,12 +11,16 @@ import { toast } from "sonner";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { IHomeTemplate, InstallCost } from "@/types/community";
+import { IHomeTemplate, IProject, InstallCost } from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { deepCopy } from "@/lib/deep-copy";
-import { InstallCostMeta, InstallCostSettings } from "@/types/settings";
+import {
+    InstallCostLine,
+    InstallCostMeta,
+    InstallCostSettings
+} from "@/types/settings";
 import { getSettingAction } from "@/app/_actions/settings";
 import {
     PrimaryCellContent,
@@ -34,6 +38,7 @@ import {
 import { cn } from "@/lib/utils";
 import { updateModelInstallCost } from "@/app/_actions/community/install-costs";
 import { updateCommunityModelInstallCost } from "@/app/_actions/community/community-template";
+import { Badge } from "../ui/badge";
 
 export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
@@ -161,6 +166,11 @@ export default function ModelInstallCostModal({ community = false }) {
                                         <TableHead className="px-1">
                                             Task
                                         </TableHead>
+                                        {community && (
+                                            <TableHead className="px-1">
+                                                Qty
+                                            </TableHead>
+                                        )}
                                         <TableHead className="px-1">
                                             Qty
                                         </TableHead>
@@ -190,6 +200,15 @@ export default function ModelInstallCostModal({ community = false }) {
                                                     {" per qty"}
                                                 </SecondaryCellContent>
                                             </TableCell>
+                                            {community && (
+                                                <TableCell>
+                                                    <CommunityDefaultQty
+                                                        form={form}
+                                                        project={data as any}
+                                                        costLine={l}
+                                                    />
+                                                </TableCell>
+                                            )}
                                             <TableCell>
                                                 <Input
                                                     className="h-7 w-20 px-2"
@@ -219,5 +238,32 @@ export default function ModelInstallCostModal({ community = false }) {
                 </div>
             )}
         />
+    );
+}
+function CommunityDefaultQty({
+    form,
+    project,
+    costLine
+}: {
+    form;
+    project: IProject;
+    costLine: InstallCostLine;
+}) {
+    // `costs.${index}.costings.${l.uid}`;
+    const qty = project?.meta?.installCosts?.[0]?.costings?.[costLine.uid] || 0;
+    return (
+        <Badge
+            onClick={() => {
+                if (qty) form.setValue(`costs.0.costings.${costLine.uid}`, "");
+            }}
+            className={cn(
+                !form.getValues(`costs.0.costings.${costLine.uid}`) &&
+                    Number(qty) > 0
+                    ? "bg-green-200 text-green-700 hover:bg-green-200"
+                    : "bg-slate-200 text-slate-700 hover:bg-slate-200"
+            )}
+        >
+            {qty ? qty : "Not set"}
+        </Badge>
     );
 }

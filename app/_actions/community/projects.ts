@@ -36,7 +36,7 @@ export async function getProjectsAction(
     };
 }
 
-export async function saveProject(project: Projects) {
+export async function saveProject(project: IProject) {
     project.slug = await slugModel(project.title, prisma.projects);
     await prisma.projects.create({
         data: transformData(project) as any
