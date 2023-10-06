@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
 import Btn from "../btn";
 import BaseModal from "./base-modal";
-import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
 import { useFieldArray, useForm } from "react-hook-form";
@@ -19,7 +18,6 @@ import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { saveModelCost } from "@/app/_actions/community/model-costs";
 import { deepCopy } from "@/lib/deep-copy";
-import dayjs from "dayjs";
 import { sum } from "@/lib/utils";
 
 export default function ModelCostModal() {
@@ -28,10 +26,14 @@ export default function ModelCostModal() {
     const form = useForm<{ costs: ICostChart[] }>({
         defaultValues: {}
     });
-    const { append, fields } = useFieldArray({
+    const { append, prepend, fields, replace } = useFieldArray({
         control: form.control,
         name: "costs"
     });
+    const [titleList, setTitleList] = useState<string[]>([]);
+    useEffect(() => {
+        setTitleList(fields.map(f => f.title));
+    }, fields);
     const [index, setIndex] = useState(0);
     async function submit(data: IHomeTemplate) {
         startTransition(async () => {
@@ -41,6 +43,7 @@ export default function ModelCostModal() {
                 const costs = deepCopy<ICostChart[]>(form.getValues(`costs`));
                 const cost = costs[index];
                 if (!cost) return;
+                console.log(cost);
                 if (!cost.startDate) {
                     toast.error("Add a valid starting date");
                     return;
@@ -65,7 +68,7 @@ export default function ModelCostModal() {
                 form.setValue(`tasks.${index}` as any, c as any);
                 //    form.setValue
                 // closeModal();
-                toast.message("Saved!");
+                toast.success("Saved!");
                 route.refresh();
             } catch (error) {
                 console.log(error);
@@ -75,18 +78,28 @@ export default function ModelCostModal() {
         });
     }
     async function init(data: IHomeTemplate) {
-        form.reset({
-            costs: data.costs?.map(c => {
-                console.log(c);
-                if (c.startDate) c.startDate = new Date(c.startDate);
-                if (c.endDate) c.endDate = new Date(c.endDate);
-                return c;
-            }) || [
+        let costs = deepCopy<ICostChart[]>(data.costs)?.map(c => {
+            if (c.startDate) c.startDate = new Date(c.startDate);
+            if (c.endDate) c.endDate = new Date(c.endDate);
+            return c;
+        });
+        if (!costs.length)
+            costs = [
                 {
                     meta: {}
                 }
-            ]
+            ] as any;
+        // console.log(costs);
+        // replace(deepCopy(costs));
+        form.reset({
+            costs
         });
+        setIndex(0);
+    }
+    async function changeIndex(to) {
+        setIndex(-1);
+        // await timeout(500);
+        setIndex(to);
     }
     return (
         <BaseModal<IHomeTemplate>
@@ -105,19 +118,16 @@ export default function ModelCostModal() {
                         </div>
                         <div className="">
                             <Button
-                                disabled={fields.find(f => !f.id) != null}
+                                disabled={fields.some(f => !f.createdAt)}
                                 onClick={() => {
-                                    if (
-                                        form
-                                            .getValues("costs")
-                                            ?.filter(c => !c.id)
-                                    ) {
+                                    if (fields?.some(c => !c.createdAt)) {
                                         toast.error("You have unsaved costs");
                                     } else
-                                        append({
+                                        prepend({
                                             type: "task-costs",
                                             model: data?.modelName
                                         } as any);
+                                    changeIndex(0);
                                 }}
                                 variant="outline"
                                 className="w-full h-7 mt-1"
@@ -126,86 +136,139 @@ export default function ModelCostModal() {
                                 <span>New Cost</span>
                             </Button>
                         </div>
-                        <ScrollArea className="max-h-[350px] divide-y w-full">
-                            {fields.map((f, i) => (
-                                <Button
-                                    variant={i == index ? "secondary" : "ghost"}
-                                    className="text-sm cursor-pointer hover:bg-slate-200 h-8 text-start tex-sm p-0.5 w-full"
-                                    key={i}
-                                    onClick={() => setIndex(i)}
-                                >
-                                    <div>{f.title}</div>
-                                </Button>
-                            ))}
+                        <ScrollArea className="max-h-[350px] w-full">
+                            <div className="divide-y">
+                                {/* {changing ? "CHANGING" : "CHANGE COMPLETE"} */}
+                                {fields.map((f, i) => (
+                                    <Button
+                                        variant={
+                                            i == index ? "secondary" : "ghost"
+                                        }
+                                        className="text-sm cursor-pointer hover:bg-slate-200 h-8 text-start tex-sm p-0.5 w-full"
+                                        key={i}
+                                        onClick={() => {
+                                            changeIndex(i);
+                                        }}
+                                    >
+                                        <div>{f.title || "New Cost"}</div>
+                                    </Button>
+                                ))}
+                            </div>
                         </ScrollArea>
                     </div>
                     <div className="grid flex-1 grid-cols-4  pl-2 gap-2">
-                        <div className="col-span-2 grid gap-2">
-                            <Label>From</Label>
-                            <DatePicker
-                                className="w-auto h-8"
-                                setValue={e =>
-                                    form.setValue(`costs.${index}.startDate`, e)
-                                }
-                                value={form.getValues(
-                                    `costs.${index}.startDate`
-                                )}
-                            />
-                        </div>
-                        <div className="col-span-2 grid gap-2">
-                            <Label>To</Label>
-                            <DatePicker
-                                className="w-auto h-8"
-                                setValue={e =>
-                                    form.setValue(`costs.${index}.endDate`, e)
-                                }
-                                value={form.getValues(`costs.${index}.endDate`)}
-                            />
-                        </div>
-                        <div className="col-span-4 grid-cols-4 grid bg-slate-100 py-2">
-                            <Label className="col-span-2 mx-2">Tasks</Label>
-                            <Label className="col-span-1">Cost ($)</Label>
-                            <Label className="col-span-1">Tax ($)</Label>
-                        </div>
-                        {data?.builder?.meta?.tasks?.map((t, _i) => (
-                            <div
-                                key={_i}
-                                className="col-span-4 gap-2 grid-cols-4 grid"
-                            >
-                                <div className="col-span-2">
-                                    <Label>{t.name}</Label>
-                                </div>
-                                <div className="">
-                                    <Input
-                                        type="number"
-                                        className="h-8"
-                                        {...form.register(
-                                            `costs.${index}.meta.costs.${t.uid}`
+                        {fields.map(
+                            (field, fIndex) =>
+                                fIndex == index && (
+                                    <>
+                                        <div className="col-span-2 grid gap-2">
+                                            <Label>From</Label>
+                                            <DatePicker
+                                                className="w-auto h-8"
+                                                setValue={e =>
+                                                    form.setValue(
+                                                        `costs.${fIndex}.startDate`,
+                                                        e
+                                                    )
+                                                }
+                                                value={form.getValues(
+                                                    `costs.${fIndex}.startDate`
+                                                )}
+                                            />
+                                        </div>
+
+                                        <div className="col-span-2 grid gap-2">
+                                            <Label>To</Label>
+                                            <DatePicker
+                                                className="w-auto h-8"
+                                                setValue={e =>
+                                                    form.setValue(
+                                                        `costs.${fIndex}.endDate`,
+                                                        e
+                                                    )
+                                                }
+                                                value={form.getValues(
+                                                    `costs.${fIndex}.endDate`
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="col-span-4 grid-cols-4 grid bg-slate-100 py-2">
+                                            <Label className="col-span-2 mx-2">
+                                                Tasks
+                                            </Label>
+                                            <Label className="col-span-1">
+                                                Cost ($)
+                                            </Label>
+                                            <Label className="col-span-1">
+                                                Tax ($)
+                                            </Label>
+                                        </div>
+                                        {data?.builder?.meta?.tasks?.map(
+                                            (t, _i) => (
+                                                <div
+                                                    key={_i}
+                                                    className="col-span-4 gap-2 grid-cols-4 grid"
+                                                >
+                                                    <div className="col-span-2">
+                                                        <Label>{t.name}</Label>
+                                                    </div>
+                                                    <div className="">
+                                                        <Input
+                                                            type="number"
+                                                            className="h-8"
+                                                            // {...form.register(
+                                                            //     `costs.${fIndex}.meta.costs.${t.uid}`
+                                                            // )}
+                                                            onChange={e =>
+                                                                form.setValue(
+                                                                    `costs.${fIndex}.meta.costs.${t.uid}`,
+                                                                    e.target
+                                                                        .value as any
+                                                                )
+                                                            }
+                                                            value={form.getValues(
+                                                                `costs.${fIndex}.meta.costs.${t.uid}`
+                                                            )}
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <Input
+                                                            type="number"
+                                                            className="h-8"
+                                                            // {...form.register(
+                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                                            // )}
+                                                            onChange={e =>
+                                                                form.setValue(
+                                                                    `costs.${fIndex}.meta.tax.${t.uid}`,
+                                                                    e.target
+                                                                        .value as any
+                                                                )
+                                                            }
+                                                            value={form.getValues(
+                                                                `costs.${fIndex}.meta.tax.${t.uid}`
+                                                            )}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )
                                         )}
-                                    />
-                                </div>
-                                <div className="">
-                                    <Input
-                                        type="number"
-                                        className="h-8"
-                                        {...form.register(
-                                            `costs.${index}.meta.tax.${t.uid}`
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                        <div className="col-span-4 flex justify-end">
-                            <Btn
-                                className="h-8"
-                                isLoading={isSaving}
-                                onClick={() => submit(data as any)}
-                                size="sm"
-                                type="submit"
-                            >
-                                Save
-                            </Btn>
-                        </div>
+                                        <div className="col-span-4 flex justify-end">
+                                            <Btn
+                                                className="h-8"
+                                                isLoading={isSaving}
+                                                onClick={() =>
+                                                    submit(data as any)
+                                                }
+                                                size="sm"
+                                                type="submit"
+                                            >
+                                                Save
+                                            </Btn>
+                                        </div>
+                                    </>
+                                )
+                        )}
                     </div>
                 </div>
             )}

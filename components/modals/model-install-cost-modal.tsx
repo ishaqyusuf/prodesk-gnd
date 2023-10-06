@@ -87,13 +87,14 @@ export default function ModelInstallCostModal({ community = false }) {
         });
     }
     async function init(data: IHomeTemplate) {
+        console.log(data);
         form.reset({
             costs: data.meta.installCosts || [{}]
         });
     }
     return (
         <BaseModal<any>
-            className="sm:max-w-[500px]"
+            className="sm:max-w-[550px]"
             onOpen={data => {
                 init(data);
             }}
@@ -168,7 +169,7 @@ export default function ModelInstallCostModal({ community = false }) {
                                         </TableHead>
                                         {community && (
                                             <TableHead className="px-1">
-                                                Qty
+                                                Def. Qty
                                             </TableHead>
                                         )}
                                         <TableHead className="px-1">
@@ -257,6 +258,7 @@ function CommunityDefaultQty({
                 if (qty) form.setValue(`costs.0.costings.${costLine.uid}`, "");
             }}
             className={cn(
+                "cursor-pointer whitespace-nowrap",
                 !form.getValues(`costs.0.costings.${costLine.uid}`) &&
                     Number(qty) > 0
                     ? "bg-green-200 text-green-700 hover:bg-green-200"

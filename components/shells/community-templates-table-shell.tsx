@@ -9,16 +9,17 @@ import {
     Cell,
     PrimaryCellContent,
     DateCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
+    _FilterColumn
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { BuilderFilter } from "../filters/builder-filter";
 
-import { ICommunityTemplate, IHomeTemplate } from "@/types/community";
-import ModelCostCell from "../community/model-cost-cell";
+import { ICommunityTemplate } from "@/types/community";
 import InstallCostCell from "../community/install-cost-cell";
+import { ProjectsFilter } from "../filters/projects-filter";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -93,10 +94,8 @@ export default function CommunityTemplateTableShell<T>({
                     <InstallCostCell row={row.original} modal="installCost" />
                 )
             },
-            {
-                accessorKey: "_q",
-                enableHiding: false
-            },
+            ..._FilterColumn("_q", "_builderId", "_projectId"),
+
             {
                 accessorKey: "actions",
                 header: ColumnHeader(""),
@@ -114,7 +113,7 @@ export default function CommunityTemplateTableShell<T>({
             columns={columns}
             pageInfo={pageInfo}
             data={data}
-            filterableColumns={[BuilderFilter]}
+            filterableColumns={[BuilderFilter, ProjectsFilter]}
             searchableColumns={[
                 {
                     id: "_q" as any,

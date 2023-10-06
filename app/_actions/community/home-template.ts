@@ -18,7 +18,8 @@ export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
             builder: true,
             costs: {
                 orderBy: {
-                    endDate: "desc"
+                    title: "desc"
+                    // createdAt: "desc"
                 }
             }
             // _count: {
@@ -43,6 +44,7 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
             project: {
                 select: {
                     title: true,
+                    meta: true,
                     builder: {
                         select: {
                             name: true
@@ -73,6 +75,7 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
     where.search({
         project: { title: where.q }
     });
+    where.orWhere("projectId", +query._projectId);
     return where.get();
     // const where: Prisma.CommunityModelsWhereInput = {
     //   modelName: q,
