@@ -1,10 +1,10 @@
 import { getOrderAction } from "@/app/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
-  BreadLink,
-  EstimatesCrumb,
-  OrderViewCrumb,
-  ProductionsCrumb,
+    BreadLink,
+    EstimatesCrumb,
+    OrderViewCrumb,
+    ProductionsCrumb
 } from "@/components/breadcrumbs/links";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/modals/sales-prod-submit-modal";
@@ -19,42 +19,42 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Sales Production",
-  description: "Order Overview",
+    title: "Sales Production",
+    description: "Order Overview"
 };
 export default async function SalesOrderPage({ params: { slug } }) {
-  const order: ISalesOrder = (await getOrderAction(slug)) as any;
+    const order: ISalesOrder = (await getOrderAction(slug)) as any;
+    // console.log(order);
+    order.ctx = {
+        prodPage: true
+    };
+    if (!order) return notFound();
+    metadata.description = order.orderId;
+    return (
+        <DataPageShell className="px-8" data={order}>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Sales" />
 
-  order.ctx = {
-    prodPage: true,
-  };
-  if (!order) return notFound();
-  metadata.description = order.orderId;
-  return (
-    <DataPageShell className="px-8" data={order}>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Sales" />
+                <ProductionsCrumb />
+                <OrderViewCrumb slug={order.orderId} isLast />
+            </Breadcrumbs>
 
-        <ProductionsCrumb />
-        <OrderViewCrumb slug={order.orderId} isLast />
-      </Breadcrumbs>
-
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2 flex flex-col space-y-4">
-          <OverviewDetailsSection />
-          <ItemDetailsSection />
-        </div>
-        <div className="space-y-4">
-          {/* <PaymentHistory /> */}
-          <Timeline />
-        </div>
-      </div>
-      {/* <ProductionAssignDialog />
-       */}
-      <SalesTimelineModal />
-      <SalesPaymentModal />
-      <OrderPrinter />
-      <SalesProdSubmitModal />
-    </DataPageShell>
-  );
+            <div className="grid lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-2 flex flex-col space-y-4">
+                    <OverviewDetailsSection />
+                    <ItemDetailsSection />
+                </div>
+                <div className="space-y-4">
+                    {/* <PaymentHistory /> */}
+                    <Timeline />
+                </div>
+            </div>
+            {/* <ProductionAssignDialog />
+             */}
+            <SalesTimelineModal />
+            <SalesPaymentModal />
+            <OrderPrinter />
+            <SalesProdSubmitModal />
+        </DataPageShell>
+    );
 }
