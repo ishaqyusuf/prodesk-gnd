@@ -15,7 +15,7 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
     if (!items) items = [];
     const _itemsByIndex: any = {};
     let rows = 20;
-    console.log(items);
+    // console.log(items);
     items.map(item => {
         const li = [
             item.meta?.line_index,
@@ -109,6 +109,7 @@ export function footerEstimate({
     Object.entries(footerInfo.rows).map(([k, row]) => {
         if (row.total > 0) {
             subTotal += +row.total;
+            // console.log([subTotal, row.rowIndex, row.total]);
             if (!row.notTaxxed) {
                 taxxableSubTotal += +row.total;
                 const lineTax = +row.total * (taxPercentage / 100);
@@ -116,7 +117,6 @@ export function footerEstimate({
             }
         }
     });
-
     const labourCost = convertToNumber(form.getValues("meta.labor_cost"), 0);
     let total = +toFixed(subTotal + tax + labourCost);
     if (
@@ -138,20 +138,6 @@ export function footerEstimate({
 export function openComponentModal(item: ISalesOrderItem, rowIndex) {
     let c = item?.meta?.components;
     const components = c || {};
-    // ([
-    //   {
-    //     type: "Door",
-    //   },
-    //   {
-    //     type: "Frame",
-    //   },
-    //   {
-    //     type: "Hinge",
-    //   },
-    //   {
-    //     type: "Casing",
-    //   },
-    // ] as any);
     openModal("salesComponent", {
         rowIndex,
         item,

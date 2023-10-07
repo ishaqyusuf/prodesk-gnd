@@ -39,7 +39,7 @@ export default async function RootLayout({
                         className={cn(
                             isProd
                                 ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
-                                : "fixed bottom-0 right-0 m-4"
+                                : "fixed bottom-0 right-0 mb-2"
                         )}
                     >
                         <Upgrader />

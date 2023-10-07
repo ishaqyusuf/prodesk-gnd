@@ -40,6 +40,7 @@ import {
 } from "@/app/_actions/upgrade/work-order";
 import { salesSuppliers } from "@/app/_actions/upgrade/fix-sales";
 import { insertJobs } from "@/app/_actions/hrm-jobs/restore-jobs";
+import { BringToFront } from "lucide-react";
 
 export default function Upgrader() {
     const [isPending, startTransaction] = useTransition();
@@ -126,12 +127,14 @@ export default function Upgrader() {
                     <Button
                         variant="destructive"
                         disabled={isPending}
+                        size="icon"
                         className="flex h-8  data-[state=open]:bg-muted"
                     >
                         {isPending && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        <span className="">Upgrade</span>
+                        {/* <span className="">Upgrade</span> */}
+                        <BringToFront className="h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[185px]">
