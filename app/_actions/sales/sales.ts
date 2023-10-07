@@ -25,6 +25,7 @@ import { getProgress, saveProgress } from "../progress";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { removeEmptyValues } from "@/lib/utils";
 import { user } from "../utils";
+import { revalidatePath } from "next/cache";
 
   function whereSales(query: SalesQueryParams) {
   const {
@@ -382,7 +383,8 @@ export async function saveOrderAction({
     }
   }
   await orderProdQtyUpdateAction(sale_order.id);
-  console.log(sale_order)
+//   console.log(sale_order)
+  revalidatePath(`/sales/${sale_order.type}/[slug]/form`,'page')
   return sale_order;
 }
 export async function deleteOrderAction(id) {
