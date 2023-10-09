@@ -1,4 +1,5 @@
 "use server";
+import { prisma } from "@/db";
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
 import puppeteer from "puppeteer";
@@ -45,7 +46,23 @@ export async function printSalesPdf(mode, ids) {
     });
     await browser.close();
     const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
-    return pdfDataUri;
+    const orders = await prisma.salesOrders.findMany({
+        where: {
+            id: {
+                in: ids
+                    .toString()
+                    .split(",")
+                    .map(i => Number(i))
+            }
+        },
+        select: {
+            orderId: true
+        }
+    });
+    return {
+        fileName: [orders.map(o => o.orderId).join("&"), ".pdf"].join(""),
+        uri: pdfDataUri
+    };
 }
 // "use server";
 // import { env } from "@/env.mjs";

@@ -64,15 +64,15 @@ export default function OrderPrinter({
     async function print(printer) {
         if (!printer) return;
         if (printer.pdf) {
-            const dataUri = await printSalesPdf(
+            const pdf = await printSalesPdf(
                 printer.mode,
                 printer.ids?.join(",")
             );
             console.log("DOWNLOAD PDF");
             // console.log(durl);
             const link = document.createElement("a");
-            link.href = dataUri;
-            link.download = "file.pdf";
+            link.href = pdf.uri;
+            link.download = pdf.fileName; // [printer.ids.join(","), ".pdf"].join("");
             // document.body.appendChild(link);
             link.click();
             // document.body.removeChild(link);
