@@ -3,7 +3,7 @@
 export function WaterMark() {
     return (
         <div
-            className="static  ml-56 hidden scale-110 text-center font-bold italic opacity-10"
+            className="absolute  ml-56 hidden scale-110 text-center font-bold italic opacity-10"
             id="waterMark"
         >
             <div className="relative border-b border-gray-500">
