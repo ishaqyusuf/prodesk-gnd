@@ -143,14 +143,14 @@ export function OrderRowAction(props: IOrderRowProps) {
                         </>
                     )}
                     <CopyOrderMenuAction row={row} />
-                    <PrintOrderMenuAction estimate={estimate} row={row} />
+                    <PrintOrderMenuAction link estimate={estimate} row={row} />
                     <PrintOrderMenuAction
                         mockup
                         estimate={estimate}
                         row={row}
                     />
                     <PrintOrderMenuAction pdf estimate={estimate} row={row} />
-                    <PrintOrderMenuAction link estimate={estimate} row={row} />
+
                     {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
                     {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
 
