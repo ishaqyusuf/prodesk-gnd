@@ -296,11 +296,11 @@ function OrderAddress({
                 <Label htmlFor="phone" className="">
                     Phone
                 </Label>
-                {/* <Input
-          id="phone"
-          {...register(`${type}.phoneNo`)}
-          className="col-span-3 h-8"
-        /> */}
+                <Input
+                    id="phone"
+                    {...register(`${type}.phoneNo`)}
+                    className="col-span-3 h-8"
+                />
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="email" className="">

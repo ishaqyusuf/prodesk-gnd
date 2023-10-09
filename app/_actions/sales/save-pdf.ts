@@ -2,6 +2,7 @@
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 export async function printSalesPdf(mode, ids) {
     const browser = await puppeteer.launch({
         headless: "new"
