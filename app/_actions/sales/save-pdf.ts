@@ -4,14 +4,24 @@ import { timeout } from "@/lib/timeout";
 import puppeteer from "puppeteer";
 import puppeteerCore from "puppeteer-core";
 export async function printSalesPdf(mode, ids) {
-    const browser = await puppeteer.launch({
-        headless: "new"
-    });
-    const url =
-        env.NODE_ENV !== "production"
-            ? `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`
-            : `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
-    const page = await browser.newPage();
+    let browser, page, url;
+    if (process.env.NODE_ENV == "production") {
+        browser = await puppeteer.connect({
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`
+        });
+        page = await browser.newPage();
+        url = `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
+    } else {
+        browser = await puppeteer.launch({
+            headless: "new"
+        });
+        page = await browser.newPage();
+        url = `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`;
+    }
+    // const url =
+    //     env.NODE_ENV !== "production"
+    //         ? `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`
+    //         : `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
     // await page.goto(url);
     //   page.setContent(html);
     await page.goto(url, {
