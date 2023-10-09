@@ -68,13 +68,14 @@ export default function OrderPrinter({
                 printer.mode,
                 printer.ids?.join(",")
             );
-            console.log("DOWNLOAD PDF");
+            // console.log("DOWNLOAD PDF");
             // console.log(durl);
             const link = document.createElement("a");
             link.href = pdf.uri;
             link.download = pdf.fileName; // [printer.ids.join(","), ".pdf"].join("");
             // document.body.appendChild(link);
             link.click();
+            dispatchSlice("printOrders", null);
             // document.body.removeChild(link);
             return;
         }
