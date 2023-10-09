@@ -41,6 +41,7 @@ export default function OrderPrinter({
     }, [_printer]);
     useEffect(() => {
         if (id) {
+            // console.log(id);
             dispatchSlice("printOrders", {
                 mode,
                 // pdf: props.pdf,

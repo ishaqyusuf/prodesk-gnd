@@ -5,7 +5,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuShortcut,
     DropdownMenuSub,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
@@ -183,7 +182,7 @@ export const PrintOrderMenuAction = typedMemo(
                 const prod = env.NEXT_PUBLIC_NODE_ENV == "production";
                 let base = prod
                     ? `https://gnd-prodesk.vercel.app`
-                    : "http://localhost:3001";
+                    : "http://localhost:3000";
                 link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true`;
                 link.target = "_blank";
                 // link.download = "file.pdf";
