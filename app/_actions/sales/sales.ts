@@ -46,6 +46,9 @@ import { revalidatePath } from "next/cache";
     OR: [
       { orderId: inputQ },
       {
+        grandTotal: inputQ
+      },
+      {
         customer: {
           OR: [
             {
@@ -497,7 +500,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     id,
     status,
     slug,
-    amountDue,
+    // amountDue,
     invoiceStatus,
     prodStatus,
     prodId,
@@ -509,6 +512,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     items: cItems,
     ...orderData
   } = _cloneData;
+orderData.amountDue = orderData.grandTotal;
   orderData.type = as;
   orderData.prodDueDate = null;
   return await saveOrderAction({

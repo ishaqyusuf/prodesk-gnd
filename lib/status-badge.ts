@@ -19,7 +19,8 @@ let StatusColorMap: { [key: string]: Colors } = {
     order_placed: "sky",
     arrived_warehouse: "emerald",
     item_not_available: "orange",
-    payment_cancelled: "orange"
+    payment_cancelled: "orange",
+    prod_queued: "orange"
 };
 
 export type Colors =

@@ -26,18 +26,19 @@ interface Props {
     mode?;
     mockup?;
     id?;
+    prints?;
 }
 export default function OrderPrinter({
     preview,
-
     id,
     mockup,
+    prints,
     mode
 }: Props) {
-    const printer = useAppSelector(state => state.slicers.printOrders);
+    const _printer = useAppSelector(state => state.slicers.printOrders);
     useEffect(() => {
-        print();
-    }, [printer]);
+        print(_printer);
+    }, [_printer]);
     useEffect(() => {
         if (id) {
             dispatchSlice("printOrders", {
@@ -59,7 +60,7 @@ export default function OrderPrinter({
         }
     }, [sales]);
 
-    async function print() {
+    async function print(printer) {
         if (!printer) return;
         if (printer.pdf) {
             const dataUri = await printSalesPdf(
@@ -76,7 +77,12 @@ export default function OrderPrinter({
             // document.body.removeChild(link);
             return;
         }
-        setSales(printer.ids.map(slug => ({ slug, loading: true })) as any);
+        setSales(
+            printer.ids.map(slug => ({
+                slug,
+                loading: true
+            })) as any
+        );
         const _sales: ISalesOrder[] = (await salesPrintAction({
             ids: printer.ids,
             printMode: printer.mode
@@ -114,7 +120,8 @@ export default function OrderPrinter({
 
         // await timeout(800);
         if (!printer.pdf) {
-            if (!id) window.print();
+            if (prints || !id) window.print();
+            if (prints) window.close();
         } else {
             //
             // const doc = document.documentElement.outerHTML;
