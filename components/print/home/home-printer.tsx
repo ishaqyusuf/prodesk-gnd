@@ -112,7 +112,7 @@ export default function HomePrinter({}: Props) {
         const actProd = _homes.filter(
             h => getHomeProductionStatus(h).productionStatus == "Idle"
         );
-        console.log(actProd);
+        // console.log(actProd);
         if (actProd.length) openModal("activateProduction", printer.homes);
         else {
             toast.success("Units are already in production.");

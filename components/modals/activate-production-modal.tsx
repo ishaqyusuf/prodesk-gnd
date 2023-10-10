@@ -29,6 +29,7 @@ import {
     PrimaryCellContent,
     SecondaryCellContent
 } from "../columns/base-columns";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function ActivateProductionModal() {
     const route = useRouter();
@@ -89,45 +90,50 @@ export default function ActivateProductionModal() {
                             />
                         </div>
                         <div className="col-span-2">
-                            <Table>
-                                <TableBody>
-                                    {data?.map(home => (
-                                        <TableRow key={home.id}>
-                                            <TableCell>
-                                                <Checkbox
-                                                    checked={
-                                                        checkedIds[home.id]
-                                                    }
-                                                    onCheckedChange={e =>
-                                                        checkHome(home.id, e)
-                                                    }
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <PrimaryCellContent>
-                                                    {home.project?.title}
-                                                </PrimaryCellContent>
-                                                <SecondaryCellContent>
-                                                    {
-                                                        home.project?.builder
-                                                            ?.name
-                                                    }
-                                                </SecondaryCellContent>
-                                            </TableCell>
-                                            <TableCell>
-                                                <PrimaryCellContent>
-                                                    {home.modelName}
-                                                </PrimaryCellContent>
-                                                <SecondaryCellContent>
-                                                    {home.lot}
-                                                    {"/"}
-                                                    {home.block}
-                                                </SecondaryCellContent>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                            <ScrollArea className="min-h-max max-h-[50vh]">
+                                <Table>
+                                    <TableBody>
+                                        {data?.map(home => (
+                                            <TableRow key={home.id}>
+                                                <TableCell>
+                                                    <Checkbox
+                                                        checked={
+                                                            checkedIds[home.id]
+                                                        }
+                                                        onCheckedChange={e =>
+                                                            checkHome(
+                                                                home.id,
+                                                                e
+                                                            )
+                                                        }
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <PrimaryCellContent>
+                                                        {home.project?.title}
+                                                    </PrimaryCellContent>
+                                                    <SecondaryCellContent>
+                                                        {
+                                                            home.project
+                                                                ?.builder?.name
+                                                        }
+                                                    </SecondaryCellContent>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <PrimaryCellContent>
+                                                        {home.modelName}
+                                                    </PrimaryCellContent>
+                                                    <SecondaryCellContent>
+                                                        {home.lot}
+                                                        {"/"}
+                                                        {home.block}
+                                                    </SecondaryCellContent>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </ScrollArea>
                         </div>
                     </div>
                 </div>
