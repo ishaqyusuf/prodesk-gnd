@@ -5,7 +5,9 @@ import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 
-export interface ProductionsQueryParams extends BaseQuery {}
+export interface ProductionsQueryParams extends BaseQuery {
+    _projectId?;
+}
 export async function getProductions(query: ProductionsQueryParams) {
     const where = whereProductionQuery(query);
     const _items = await prisma.homeTasks.findMany({
@@ -35,18 +37,7 @@ function whereProductionQuery(query: ProductionsQueryParams) {
                           OR: [
                               { modelName: q },
                               {
-                                  project: {
-                                      OR: [
-                                          {
-                                              title: q
-                                          },
-                                          {
-                                              builder: {
-                                                  name: q
-                                              }
-                                          }
-                                      ]
-                                  }
+                                  search: q
                               }
                           ]
                       }
@@ -54,5 +45,6 @@ function whereProductionQuery(query: ProductionsQueryParams) {
               ]
             : undefined
     };
+    if (query._projectId) where.projectId = +query._projectId;
     return where;
 }
