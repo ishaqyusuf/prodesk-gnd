@@ -63,17 +63,17 @@ export async function saveModelCost(cost: ICostChart, templateId) {
             const s = await prisma.homeTasks.updateMany({
                 where: {
                     home: {
-                        builderId: _c.template.builderId
+                        builderId: _c.template.builderId,
+                        createdAt: {
+                            gte: !from
+                                ? undefined
+                                : fixDbTime(dayjs(from)).toISOString(),
+                            lte: !to
+                                ? undefined
+                                : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
+                        }
                     },
-                    taskUid: k,
-                    createdAt: {
-                        gte: !from
-                            ? undefined
-                            : fixDbTime(dayjs(from)).toISOString(),
-                        lte: !to
-                            ? undefined
-                            : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
-                    }
+                    taskUid: k
                 },
                 data: {
                     amountDue: Number(v) || 0,
