@@ -216,19 +216,19 @@ export default function ModelCostModal() {
                                                         <Input
                                                             type="number"
                                                             className="h-8"
-                                                            // {...form.register(
-                                                            //     `costs.${fIndex}.meta.costs.${t.uid}`
-                                                            // )}
-                                                            onChange={e =>
-                                                                form.setValue(
-                                                                    `costs.${fIndex}.meta.costs.${t.uid}`,
-                                                                    e.target
-                                                                        .value as any
-                                                                )
-                                                            }
-                                                            value={form.getValues(
+                                                            {...form.register(
                                                                 `costs.${fIndex}.meta.costs.${t.uid}`
                                                             )}
+                                                            // onChange={e =>
+                                                            //     form.setValue(
+                                                            //         `costs.${fIndex}.meta.costs.${t.uid}`,
+                                                            //         e.target
+                                                            //             .value as any
+                                                            //     )
+                                                            // }
+                                                            // value={form.getValues(
+                                                            //     `costs.${fIndex}.meta.costs.${t.uid}`
+                                                            // )}
                                                         />
                                                     </div>
                                                     <div className="">
@@ -238,16 +238,19 @@ export default function ModelCostModal() {
                                                             // {...form.register(
                                                             //     `costs.${fIndex}.meta.tax.${t.uid}`
                                                             // )}
-                                                            onChange={e =>
-                                                                form.setValue(
-                                                                    `costs.${fIndex}.meta.tax.${t.uid}`,
-                                                                    e.target
-                                                                        .value as any
-                                                                )
-                                                            }
-                                                            value={form.getValues(
+                                                            {...form.register(
                                                                 `costs.${fIndex}.meta.tax.${t.uid}`
                                                             )}
+                                                            // onChange={e =>
+                                                            //     form.setValue(
+                                                            //         `costs.${fIndex}.meta.tax.${t.uid}`,
+                                                            //         e.target
+                                                            //             .value as any
+                                                            //     )
+                                                            // }
+                                                            // value={form.getValues(
+                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                                            // )}
                                                         />
                                                     </div>
                                                 </div>
