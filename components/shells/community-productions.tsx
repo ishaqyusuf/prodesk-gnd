@@ -139,7 +139,7 @@ export default function CommunityProductionsTableShell<T>({
                 cell: ({ row }) => (
                     <RowActionCell>
                         <RowActionMoreMenu>
-                            <RowActionMenuItem>
+                            {/* <RowActionMenuItem>
                                 Start Production
                             </RowActionMenuItem>
                             <RowActionMenuItem>
@@ -147,7 +147,7 @@ export default function CommunityProductionsTableShell<T>({
                             </RowActionMenuItem>
                             <RowActionMenuItem>
                                 Cancel Production
-                            </RowActionMenuItem>
+                            </RowActionMenuItem> */}
                         </RowActionMoreMenu>
                     </RowActionCell>
                 )
