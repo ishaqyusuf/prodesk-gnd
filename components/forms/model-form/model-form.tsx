@@ -23,13 +23,14 @@ import { toast } from "sonner";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import { getHomeTemplateSuggestions } from "@/app/_actions/community/home-template-suggestion";
-import { timeout } from "@/lib/timeout";
+import ImportModelTemplateSheet from "@/components/sheets/import-model-template-sheet";
 
 interface Props {
     data: IHomeTemplate;
     title?;
 }
 export interface ModelFormProps {
+    data?: IHomeTemplate;
     form: UseFormReturn<DesignTemplateForm, any, undefined>;
 }
 export interface DesignTemplateForm extends HomeTemplateDesign {
@@ -77,35 +78,51 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
                 subtitle={``}
                 Action={() => (
                     <>
+                        {/* <Btn
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                                openModal("importModelTemplate");
+                            }}
+                        >
+                            Import
+                        </Btn> */}
+                        <ImportModelTemplateSheet data={data} form={form} />
                         <Btn size="sm" isLoading={isSaving} onClick={save}>
                             Save
                         </Btn>
                     </>
                 )}
             />
-            <Tabs defaultValue="interior" className="space-y-4 ">
-                <TabsList>
-                    <TabsTrigger value="exterior">Exterior Frame</TabsTrigger>
-                    <TabsTrigger value="interior">Interior Trim</TabsTrigger>
-                    <TabsTrigger value="lock">Lock & Hardware</TabsTrigger>
-                    <TabsTrigger value="deco">Deco Shutters</TabsTrigger>
-                </TabsList>
-                <TabsContent value="exterior" className="space-y-4">
-                    <ExteriorFrame form={form} />
-                </TabsContent>
-                <TabsContent value="interior" className="space-y-4">
-                    <GarageDoorForm form={form} />
-                    <InteriorDoorForm form={form} />
-                    <DoubleDoorForm form={form} />
-                    <BifoldDoorForm form={form} />
-                </TabsContent>
-                <TabsContent value="lock">
-                    <LockHardwareForm form={form} />
-                </TabsContent>
-                <TabsContent value="deco">
-                    <DecoForm form={form} />
-                </TabsContent>
-            </Tabs>
+            <UnitTemplateTabs form={form} />
         </div>
+    );
+}
+
+export function UnitTemplateTabs({ form }) {
+    return (
+        <Tabs defaultValue="interior" className="space-y-4 ">
+            <TabsList>
+                <TabsTrigger value="exterior">Exterior Frame</TabsTrigger>
+                <TabsTrigger value="interior">Interior Trim</TabsTrigger>
+                <TabsTrigger value="lock">Lock & Hardware</TabsTrigger>
+                <TabsTrigger value="deco">Deco Shutters</TabsTrigger>
+            </TabsList>
+            <TabsContent value="exterior" className="space-y-4">
+                <ExteriorFrame form={form} />
+            </TabsContent>
+            <TabsContent value="interior" className="space-y-4">
+                <GarageDoorForm form={form} />
+                <InteriorDoorForm form={form} />
+                <DoubleDoorForm form={form} />
+                <BifoldDoorForm form={form} />
+            </TabsContent>
+            <TabsContent value="lock">
+                <LockHardwareForm form={form} />
+            </TabsContent>
+            <TabsContent value="deco">
+                <DecoForm form={form} />
+            </TabsContent>
+        </Tabs>
     );
 }

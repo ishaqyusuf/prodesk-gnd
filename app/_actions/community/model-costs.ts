@@ -3,14 +3,17 @@
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
 import { transformData } from "@/lib/utils";
-import { ICostChart } from "@/types/community";
+import { ICostChart, IHomeTemplate } from "@/types/community";
 import dayjs from "dayjs";
 import { revalidatePath } from "next/cache";
+import { fixDbTime } from "../action-utils";
 
 // export async function deleteModel
 export async function saveModelCost(cost: ICostChart, templateId) {
     const { id: _id, parentId, ..._cost } = cost;
-    let _c: any = null;
+    let _c: ICostChart & {
+        template: IHomeTemplate;
+    } = null as any;
     const title = [
         cost?.startDate ? formatDate(cost?.startDate, "MM/DD/YY") : null,
         cost?.endDate ? formatDate(cost?.endDate, "MM/DD/YY") : "To Date"
@@ -21,7 +24,7 @@ export async function saveModelCost(cost: ICostChart, templateId) {
         : true;
     // _cost.model =
     if (!_id) {
-        _c = await prisma.costCharts.create({
+        _c = (await prisma.costCharts.create({
             data: transformData({
                 ..._cost,
                 type: "task-costs",
@@ -30,18 +33,55 @@ export async function saveModelCost(cost: ICostChart, templateId) {
                         id: templateId
                     }
                 }
-            }) as any
-        });
+            }) as any,
+            include: {
+                template: true
+            }
+        })) as any;
     } else {
-        _c = await prisma.costCharts.update({
+        _c = (await prisma.costCharts.update({
             where: {
                 id: _id
             },
             data: {
                 ..._cost
+            },
+            include: {
+                template: true
             }
-        });
+        })) as any;
     }
+    console.log(_c);
+    await Promise.all(
+        Object.entries(_c.meta.costs).map(async ([k, v]) => {
+            // const createdAt = {
+            //     gte:  fixDbTime(dayjs(_c.startDate)).toISOString()
+            // }
+            // if(_c.endDate)
+            //     createdAt.lte  = fixDbTime(dayjs(_c.endDate), 23, 59, 59).toISOString(),
+            const { startDate: from, endDate: to } = _c;
+            await prisma.homeTasks.updateMany({
+                where: {
+                    home: {
+                        builderId: _c.template.builderId
+                    },
+                    taskUid: k,
+                    createdAt: {
+                        gte: !from
+                            ? undefined
+                            : fixDbTime(dayjs(from)).toISOString(),
+                        lte: !to
+                            ? undefined
+                            : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
+                    }
+                },
+                data: {
+                    amountDue: Number(v) || 0,
+                    updatedAt: new Date()
+                }
+            });
+        })
+    );
     revalidatePath("/settings/community/model-costs", "page");
     return _c;
 }

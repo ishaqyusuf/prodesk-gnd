@@ -100,6 +100,7 @@ export type ModalName =
     | "home"
     | "installCost"
     | "inboundModal"
+    | "importModelTemplate"
     | "jobOverview"
     | "modelTemplate"
     | "modelCost"
