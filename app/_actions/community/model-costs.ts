@@ -60,7 +60,7 @@ export async function saveModelCost(cost: ICostChart, templateId) {
             // if(_c.endDate)
             //     createdAt.lte  = fixDbTime(dayjs(_c.endDate), 23, 59, 59).toISOString(),
             const { startDate: from, endDate: to } = _c;
-            await prisma.homeTasks.updateMany({
+            const s = await prisma.homeTasks.updateMany({
                 where: {
                     home: {
                         builderId: _c.template.builderId
@@ -80,6 +80,7 @@ export async function saveModelCost(cost: ICostChart, templateId) {
                     updatedAt: new Date()
                 }
             });
+            console.log(s.count);
         })
     );
     revalidatePath("/settings/community/model-costs", "page");
