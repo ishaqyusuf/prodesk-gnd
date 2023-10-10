@@ -45,9 +45,9 @@ import { revalidatePath } from "next/cache";
   const where: Prisma.SalesOrdersWhereInput = {
     OR: [
       { orderId: inputQ },
-      {
-        grandTotal: inputQ
-      },
+    //   {
+    //     grandTotal: inputQ
+    //   },
       {
         customer: {
           OR: [
@@ -77,6 +77,14 @@ import { revalidatePath } from "next/cache";
     type,
     ...dateQuery({ from, to, _dateType, date }),
   };
+  if(_q && Number(_q) > 0) {
+    // console.log(_q)
+    where.OR?.push({
+        grandTotal: {
+            gte: Number(_q)
+        }
+    })
+  }
   if(query.deliveryOption)
     where.deliveryOption  = query.deliveryOption
   if (prodId) where.prodId = prodId;
