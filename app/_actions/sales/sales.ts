@@ -43,11 +43,8 @@ import { revalidatePath } from "next/cache";
   } = query;
   const inputQ = { contains: _q || undefined };
   const where: Prisma.SalesOrdersWhereInput = {
-    OR: [
+    OR: !_q ?  undefined :[
       { orderId: inputQ },
-    //   {
-    //     grandTotal: inputQ
-    //   },
       {
         customer: {
           OR: [

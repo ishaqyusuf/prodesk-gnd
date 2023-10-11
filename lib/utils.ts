@@ -5,6 +5,7 @@ import { env } from "@/env.mjs";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import Error from "next/error";
+import { convertToNumber } from "./use-number";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
@@ -89,6 +90,14 @@ export function sum<T>(array: T[], key: keyof T | undefined = undefined) {
         .map(v => (v ? Number(v) : null))
         .filter(v => (v as any) > 0 && !isNaN(v as any))
         .reduce((sum, val) => (sum || 0) + (val as number), 0);
+}
+export function sumKeyValues(arg) {
+    let total = 0;
+    if (arg && typeof arg === "object")
+        Object.entries(arg).map(([k, v]) => {
+            if (k) total += Number(v) || 0;
+        });
+    return total;
 }
 export const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",

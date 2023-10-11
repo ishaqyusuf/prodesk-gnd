@@ -91,12 +91,13 @@ export type IHomeTemplate = OmitMeta<HomeTemplates> & {
 };
 export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
-    meta: {
-        design: CommunityTemplateDesign;
-        modelCost: ICostChart;
-        installCosts: InstallCost[];
-    };
+    meta: ICommunityTemplateMeta;
 };
+export interface ICommunityTemplateMeta {
+    design: CommunityTemplateDesign;
+    modelCost: ICommunityModelCost;
+    installCosts: InstallCost[];
+}
 export interface HomeTemplateMeta {
     design: HomeTemplateDesign;
     task_costs: { [id in string]: number };
@@ -124,20 +125,24 @@ export type HomeTemplateDesign = TemplateDesign<string>;
 export type CommunityTemplateDesign = TemplateDesign<string>;
 
 export type ICostChart = OmitMeta<CostCharts> & {
-    meta: {
-        totalCost;
-        totalTax;
-        totalTask;
-        tax: { [uid in string]: number };
-        costs: { [uid in string]: number };
-        totalUnits: { [k in string]: number };
-        lastSync: {
-            date;
-            tasks: any;
-            units;
-        };
-    };
+    meta: ICostChartMeta;
 };
+export interface ICostChartMeta {
+    totalCost;
+    totalTax;
+    grandTotal;
+    totalTask;
+    tax: { [uid in string]: number };
+    costs: { [uid in string]: number };
+    sumCosts: { [k in string]: number };
+    totalUnits: { [k in string]: number };
+    lastSync: {
+        date;
+        tasks: any;
+        units;
+    };
+}
+export interface ICommunityModelCost extends ICostChartMeta {}
 export interface ProjectHeader<T> {
     projectName;
     builder;

@@ -22,6 +22,7 @@ export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
                     // createdAt: "desc"
                 }
             }
+
             // _count: {
             //   // homes: true,
             // },
@@ -47,7 +48,8 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                     meta: true,
                     builder: {
                         select: {
-                            name: true
+                            name: true,
+                            meta: true
                         }
                     }
                 }

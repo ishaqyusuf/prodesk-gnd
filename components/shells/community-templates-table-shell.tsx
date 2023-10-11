@@ -20,6 +20,9 @@ import { BuilderFilter } from "../filters/builder-filter";
 import { ICommunityTemplate } from "@/types/community";
 import InstallCostCell from "../community/install-cost-cell";
 import { ProjectsFilter } from "../filters/projects-filter";
+import ModelCostCell, {
+    CommunityModelCostCell
+} from "../community/model-cost-cell";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -69,24 +72,17 @@ export default function CommunityTemplateTableShell<T>({
                         link={"/settings/community/community-template/slug"}
                         slug={row.original.slug}
                     >
-                        {/* link={`/community/project/slug`} slug={row.original.slug} */}
                         <PrimaryCellContent>
                             {row.original.modelName}
                         </PrimaryCellContent>
                     </Cell>
                 )
             },
-            // {
-            //     id: "modelCost",
-            //     header: ColumnHeader("Model Cost"),
-            //     cell: ({ row }) => (
-            //         <ModelCostCell
-            //             modal="modelCost"
-            //             row={row.original}
-            //             costs={[row.original.meta.modelCost].filter(Boolean)}
-            //         />
-            //     )
-            // },
+            {
+                id: "modelCost",
+                header: ColumnHeader("Model Cost"),
+                cell: ({ row }) => <CommunityModelCostCell row={row.original} />
+            },
             {
                 id: "install-costs",
                 header: ColumnHeader("Install Cost"),

@@ -1,7 +1,7 @@
 "use client";
 
 import { ModalName } from "@/store/slicers";
-import { ICostChart } from "@/types/community";
+import { ICommunityTemplate, ICostChart } from "@/types/community";
 import {
     Cell,
     PrimaryCellContent,
@@ -39,6 +39,30 @@ export default function ModelCostCell({ costs, modal, row }: Props) {
                     <SecondaryCellContent>
                         {costs?.length} cost history
                     </SecondaryCellContent>
+                </>
+            )}
+        </Cell>
+    );
+}
+export function CommunityModelCostCell({ row }: { row: ICommunityTemplate }) {
+    const cost = row.meta?.modelCost;
+    let money = cost?.grandTotal;
+    return (
+        <Cell
+            className="cursor-pointer"
+            onClick={() => {
+                openModal("communityModelCost", row);
+            }}
+        >
+            {!cost ? (
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200">
+                    Set Cost
+                </Badge>
+            ) : (
+                <>
+                    <PrimaryCellContent>
+                        <Money value={money} />
+                    </PrimaryCellContent>
                 </>
             )}
         </Cell>
