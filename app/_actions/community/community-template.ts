@@ -1,7 +1,8 @@
 "use server";
 
+import { calculateCommunitModelCost } from "@/components/modals/model-cost-community-modal";
 import { prisma } from "@/db";
-import { ICommunityTemplateMeta } from "@/types/community";
+import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
 
 export async function updateCommunityModelInstallCost(id, meta) {
@@ -61,4 +62,48 @@ export async function _saveCommunityModelCost(
         })
     );
     revalidatePath("/settings/community/community-templates", "page");
+}
+export async function _importModelCost(
+    id,
+    modelName,
+    builderId,
+    meta,
+    builderTasks
+) {
+    const q = modelName
+        .toLowerCase()
+        .split(" ")
+        .filter(v => !["lh", "rl"].some(sp => v != sp))
+        .filter(Boolean)
+        .join(" ");
+
+    const cost: ICostChart = (await prisma.costCharts.findFirst({
+        where: {
+            template: {
+                builderId
+                // modelName: {
+                //     contains: q
+                // }
+            },
+            model: q
+        },
+        // include: {
+        //     template: {
+        //         include: {
+        //             builder: true
+        //         }
+        //     }
+        // },
+        orderBy: {
+            updatedAt: "desc"
+        }
+    })) as any;
+    if (cost) {
+        await _saveCommunityModelCost(id, {
+            ...(meta ?? {}),
+            modelCost: calculateCommunitModelCost(cost.meta, builderTasks)
+        });
+        return true;
+    }
+    return false;
 }

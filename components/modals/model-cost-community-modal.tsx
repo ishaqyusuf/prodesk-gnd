@@ -18,6 +18,20 @@ import { sumKeyValues } from "@/lib/utils";
 import { convertToNumber } from "@/lib/use-number";
 import { closeModal } from "@/lib/modal";
 
+export function calculateCommunitModelCost(cost, builderTasks) {
+    cost.totalCost = sumKeyValues(cost.costs);
+    cost.totalTax = sumKeyValues(cost.tax);
+
+    cost.sumCosts = {};
+    builderTasks?.map(task => {
+        const k = task.uid;
+        const tv = cost.tax[k];
+        const cv = cost.costs[k];
+        cost.sumCosts[k] = convertToNumber(cv, 0) + convertToNumber(tv, 0);
+    });
+    cost.grandTotal = sumKeyValues(cost.sumCosts);
+    return cost;
+}
 export default function ModelCostCommunityModal() {
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ cost: ICommunityModelCost }>({
@@ -27,21 +41,10 @@ export default function ModelCostCommunityModal() {
     async function submit(data: ICommunityTemplate) {
         startTransition(async () => {
             try {
-                const cost = deepCopy<ICommunityModelCost>(
-                    form.getValues(`cost`)
+                const cost = calculateCommunitModelCost(
+                    deepCopy<ICommunityModelCost>(form.getValues(`cost`)),
+                    data.project?.builder?.meta?.tasks
                 );
-                cost.totalCost = sumKeyValues(cost.costs);
-                cost.totalTax = sumKeyValues(cost.tax);
-
-                cost.sumCosts = {};
-                data.project?.builder?.meta?.tasks?.map(task => {
-                    const k = task.uid;
-                    const tv = cost.tax[k];
-                    const cv = cost.costs[k];
-                    cost.sumCosts[k] =
-                        convertToNumber(cv, 0) + convertToNumber(tv, 0);
-                });
-                cost.grandTotal = sumKeyValues(cost.sumCosts);
                 const c = await _saveCommunityModelCost(data.id, {
                     ...data.meta,
                     modelCost: cost

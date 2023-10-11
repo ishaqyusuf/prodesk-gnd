@@ -23,6 +23,13 @@ import { ProjectsFilter } from "../filters/projects-filter";
 import ModelCostCell, {
     CommunityModelCostCell
 } from "../community/model-cost-cell";
+import {
+    RowActionCell,
+    RowActionMenuItem,
+    RowActionMoreMenu
+} from "../data-table/data-table-row-actions";
+import { _importModelCost } from "@/app/_actions/community/community-template";
+import { toast } from "sonner";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -97,8 +104,40 @@ export default function CommunityTemplateTableShell<T>({
                 header: ColumnHeader(""),
                 size: 15,
                 maxSize: 15,
-                enableSorting: false
-                // cell: ({ row }) => <OrderRowAction row={row.original} />,
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <RowActionCell>
+                        <RowActionMoreMenu>
+                            <RowActionMenuItem
+                                onClick={async () => {
+                                    const _ = await _importModelCost(
+                                        row.original.id,
+                                        row.original.modelName,
+                                        row.original.project.builderId,
+                                        row.original.meta,
+                                        row.original.project.builder.meta.tasks
+                                    );
+                                    if (!_) toast.error("No Import found");
+                                    else
+                                        toast.success(
+                                            "Cost Import Successfully"
+                                        );
+                                }}
+                            >
+                                Import Model Cost
+                            </RowActionMenuItem>
+                            {/* <RowActionMenuItem>
+                                Start Production
+                            </RowActionMenuItem>
+                            <RowActionMenuItem>
+                                Submit Production
+                            </RowActionMenuItem>
+                            <RowActionMenuItem>
+                                Cancel Production
+                            </RowActionMenuItem> */}
+                        </RowActionMoreMenu>
+                    </RowActionCell>
+                )
             }
         ], //.filter(Boolean) as any,
         [data, isPending]

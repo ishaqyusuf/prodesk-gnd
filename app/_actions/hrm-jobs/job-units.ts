@@ -68,8 +68,9 @@ export async function getUnitJobs(projectId) {
         // }
         // console.log("...");
         const cost = communityTemplate?.meta?.installCosts?.[0];
+        cost?.costings;
         // console.log(cost);
-        if (cost) {
+        if (cost && Object.values(cost?.costings)?.filter(Boolean).length > 3) {
             ls.push(initJobData(unit as any, proj, cost));
             return;
         }
