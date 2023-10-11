@@ -48,7 +48,11 @@ export async function getUnitJobs(projectId) {
             homes: {
                 include: {
                     homeTemplate: true,
-                    jobs: true
+                    _count: {
+                        select: {
+                            jobs: true
+                        }
+                    }
                 }
             }
         }
@@ -57,7 +61,15 @@ export async function getUnitJobs(projectId) {
     const proj: IProject = project as any;
     // console.log(proj.meta);
     // console.log(project?.homes.length);
+    console.log(
+        project?.homes.filter(
+            r => r.modelName == "1687 LH" && r.lot == "05" && r.block == "01"
+        )
+    );
     project?.homes?.map(unit => {
+        if (unit._count.jobs > 0) {
+            return;
+        }
         let template: IHomeTemplate = unit.homeTemplate as any;
         let communityTemplate: ICommunityTemplate = project.communityModels.find(
             m => m.modelName == unit.modelName
@@ -124,12 +136,12 @@ function initJobData(unit: ExtendedHome, project: IProject, cost: InstallCost) {
     ]
         .filter(Boolean)
         .join(" ");
-    if (!unit.jobs.find(j => j.title?.toLowerCase() == name?.toLowerCase())) {
-        return {
-            id: unit.id,
-            name,
-            costing
-        } as any;
-    }
+    // if (!unit.jobs.find(j => j.title?.toLowerCase() == name?.toLowerCase())) {
+    return {
+        id: unit.id,
+        name,
+        costing
+    } as any;
+    // }
     return null as any;
 }
