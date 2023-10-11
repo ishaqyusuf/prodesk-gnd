@@ -296,10 +296,43 @@ function OrderAddress({
                 <Label htmlFor="phone" className="">
                     Phone
                 </Label>
-                <Input
+                {/* <Input
                     id="phone"
                     {...register(`${type}.phoneNo`)}
                     className="col-span-3 h-8"
+                /> */}
+                <AutoComplete2
+                    form={form}
+                    formKey={`${type}.phoneNo`}
+                    searchAction={findAddressAction}
+                    allowCreate
+                    itemValue="phoneNo"
+                    itemText="phoneNo"
+                    onChange={e => {
+                        const { data: address } = e || {};
+                        if (typeof address === "object") {
+                            const { customer, ..._address } = address;
+                            form.setValue(type, _address as any);
+                            if (customer?.profile && type == "billingAddress")
+                                form.setValue("profile", customer.profile);
+                        }
+                    }}
+                    Item={({ data: address }) => (
+                        <div
+                            key={address.id}
+                            className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
+                        >
+                            <div className="flex w-full items-center justify-between">
+                                <p>{address.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {address.phoneNo}
+                                </p>
+                            </div>
+                            <p className="text-sm text-muted-foreground ">
+                                {address.address1}
+                            </p>
+                        </div>
+                    )}
                 />
             </div>
             <div className="grid gap-2">
