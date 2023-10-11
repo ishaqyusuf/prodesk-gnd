@@ -26,28 +26,15 @@ import {
 import { useDebounce } from "@/hooks/use-debounce";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
-import { getSettingAction } from "@/app/_actions/settings";
-import { InstallCostLine, InstallCostSettings } from "@/types/settings";
 import { Button } from "../ui/button";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger
-} from "../ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Import } from "lucide-react";
+import { cn, labelValue } from "@/lib/utils";
 import {
     DesignTemplateForm,
     ModelFormProps,
     UnitTemplateTabs
 } from "../forms/model-form/model-form";
 import { openModal } from "@/lib/modal";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger
-} from "@/components/ui/accordion";
 import { searchImport } from "@/app/_actions/community/_template-import";
 import { useForm } from "react-hook-form";
 import {
@@ -56,6 +43,15 @@ import {
     CommandInput,
     CommandList
 } from "../ui/command";
+import Link from "next/link";
+import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "../ui/dropdown-menu";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 export default function ImportModelTemplateSheet({
     form,
     data
@@ -96,7 +92,7 @@ export default function ImportModelTemplateSheet({
                 Catalog
             </Button>
             <BaseSheet<IJobPayment>
-                className="w-full sm:max-w-[550px]"
+                className="w-full sm:max-w-[350px]"
                 onOpen={data => {
                     init(data);
                 }}
@@ -135,37 +131,44 @@ export default function ImportModelTemplateSheet({
                             </div>
                             <CommandList className=" ">
                                 <ScrollArea className="max-h-none h-[80vh]">
-                                    <CommandGroup
-                                        key={`prod-`}
-                                        className="capitalize  text-base text-primary"
-                                    >
-                                        <Accordion type="single" collapsible>
-                                            {result?.map(template => (
-                                                <AccordionItem
-                                                    key={template.id}
-                                                    value={template.id}
-                                                >
-                                                    <AccordionTrigger>
-                                                        <p>
-                                                            {" "}
-                                                            {template.modelName}
-                                                        </p>
-                                                        <p>
-                                                            {
-                                                                template.project
-                                                                    ?.title
-                                                            }
-                                                        </p>
-                                                    </AccordionTrigger>
-                                                    <AccordionContent>
-                                                        <TemplateOverview
-                                                            data={template}
+                                    <Table>
+                                        <TableBody>
+                                            {result?.map(t => (
+                                                <TableRow key={t.id}>
+                                                    <TableCell>
+                                                        <Link
+                                                            target="_blank"
+                                                            href="/"
+                                                            className="hover:underline cursor-pointer"
+                                                        >
+                                                            {/* <div className="inline-flex"> */}
+                                                            <span>
+                                                                {" "}
+                                                                <PrimaryCellContent>
+                                                                    {
+                                                                        t.modelName
+                                                                    }
+                                                                </PrimaryCellContent>
+                                                                <OpenInNewWindowIcon />
+                                                            </span>
+                                                            {/* </div> */}
+                                                            <SecondaryCellContent>
+                                                                {
+                                                                    t.project
+                                                                        ?.title
+                                                                }
+                                                            </SecondaryCellContent>
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <ImportButton
+                                                            data={t}
                                                         />
-                                                    </AccordionContent>
-                                                </AccordionItem>
+                                                    </TableCell>
+                                                </TableRow>
                                             ))}
-                                        </Accordion>
-                                    </CommandGroup>
+                                        </TableBody>
+                                    </Table>
                                 </ScrollArea>
                             </CommandList>
                         </Command>
@@ -205,14 +208,55 @@ export default function ImportModelTemplateSheet({
         </>
     );
 }
-function TemplateOverview({ data }) {
-    const form = useForm<DesignTemplateForm>({
-        defaultValues: {
-            ...(data?.meta?.design || {}),
-            ctx: {
-                print: true
-            }
-        }
-    });
-    return <UnitTemplateTabs form={form} />;
+function ImportButton({ data }) {
+    const ls = [
+        labelValue("Entry", "entry"),
+        labelValue("Garage Door", "garageDoor"),
+        labelValue("Interior Door", "interiorDoor"),
+        labelValue("Double Door", "doubleDoor"),
+        labelValue("Lock & Hardware", "lockHardware"),
+        labelValue("Deco & Shutters", "decoShutters")
+    ];
+    const [importForm, setImportForm] = useState({});
+    useEffect(() => {
+        let _ = {};
+        ls.map(l => {
+            _[l.value] = true;
+        });
+        setImportForm(_);
+    }, []);
+    const [show, setShow] = useState(false);
+    return (
+        <DropdownMenu open={show} onOpenChange={setShow}>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant="secondary"
+                    className="flex h-8  data-[state=open]:bg-muted"
+                >
+                    <Import className="h-4 w-4 mr-2" />
+                    <span className="">Import</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[185px] space-y-2">
+                {ls.map(l => (
+                    <div className="flex items-center space-x-2" key={l.label}>
+                        <Checkbox
+                            id={l.value}
+                            checked={importForm[l.value]}
+                            onCheckedChange={e => {
+                                setImportForm(frm => {
+                                    return {
+                                        ...frm,
+                                        [l.value]: e
+                                    };
+                                });
+                            }}
+                        />
+                        <Label htmlFor={l.value}>{l.label}</Label>
+                    </div>
+                ))}
+                <Button>Import</Button>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
 }

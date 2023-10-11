@@ -2,36 +2,19 @@
 
 import React, { useEffect, useState, useTransition } from "react";
 
-import { useRouter } from "next/navigation";
-
 import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { toast } from "sonner";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ICommunityModelCost, ICommunityTemplate } from "@/types/community";
 import { deepCopy } from "@/lib/deep-copy";
 import { _saveCommunityModelCost } from "@/app/_actions/community/community-template";
-import { sumKeyValues } from "@/lib/utils";
-import { convertToNumber } from "@/lib/use-number";
 import { closeModal } from "@/lib/modal";
+import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 
-export function calculateCommunitModelCost(cost, builderTasks) {
-    cost.totalCost = sumKeyValues(cost.costs);
-    cost.totalTax = sumKeyValues(cost.tax);
-
-    cost.sumCosts = {};
-    builderTasks?.map(task => {
-        const k = task.uid;
-        const tv = cost.tax[k];
-        const cv = cost.costs[k];
-        cost.sumCosts[k] = convertToNumber(cv, 0) + convertToNumber(tv, 0);
-    });
-    cost.grandTotal = sumKeyValues(cost.sumCosts);
-    return cost;
-}
 export default function ModelCostCommunityModal() {
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ cost: ICommunityModelCost }>({

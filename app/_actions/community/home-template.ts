@@ -46,6 +46,7 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                 select: {
                     title: true,
                     meta: true,
+                    builderId: true,
                     builder: {
                         select: {
                             name: true,
@@ -125,6 +126,7 @@ export async function printHomesAction(
             })
         }
     });
+    // console.log(communityPrints);
     return { prints, communityPrints };
 }
 export async function getHomeTemplate(slug) {

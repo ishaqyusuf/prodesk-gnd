@@ -73,7 +73,8 @@ export default function HomePrinter({}: Props) {
                 const communityDesign = communityPrints.find(
                     ct =>
                         ct.projectId == home.projectId &&
-                        ct.modelName == home.modelName
+                        ct.modelName?.toLowerCase() ==
+                            home.modelName?.toLowerCase()
                 )?.meta?.design;
                 let template = communityDesign
                     ? dotArray(transformCommunityTemplate(communityDesign))
@@ -81,7 +82,8 @@ export default function HomePrinter({}: Props) {
                           _templates.find(
                               t =>
                                   home.builderId == t.builderId &&
-                                  home.modelName == t.modelName
+                                  home.modelName?.toLowerCase() ==
+                                      t.modelName?.toLowerCase()
                           )?.meta?.design
                       );
                 // template?.bifoldDoor.bifoldOther1.
@@ -113,7 +115,10 @@ export default function HomePrinter({}: Props) {
             h => getHomeProductionStatus(h).productionStatus == "Idle"
         );
         // console.log(actProd);
-        if (actProd.length) openModal("activateProduction", printer.homes);
+        if (actProd.length)
+            setTimeout(() => {
+                openModal("activateProduction", printer.homes);
+            }, 3000);
         else {
             toast.success("Units are already in production.");
         }

@@ -1,6 +1,9 @@
-import { ExtendedHome, IHome } from "@/types/community";
+import { ExtendedHome, ICostChartMeta, IHome } from "@/types/community";
 import { getBadgeColor } from "../status-badge";
 import { Builders, Homes, Projects } from "@prisma/client";
+import { deepCopy } from "../deep-copy";
+import { sumKeyValues } from "../utils";
+import { convertToNumber } from "../use-number";
 
 export function getHomeProductionStatus(home: ExtendedHome) {
     const prod = home?.tasks?.filter(t => t.produceable);
@@ -67,4 +70,21 @@ export function calculateHomeInvoice(home: ExtendedHome) {
         } else data.chargeBack += paid;
     });
     return data;
+}
+export function calculateCommunitModelCost(_cost, builderTasks) {
+    let cost = deepCopy<ICostChartMeta>(_cost);
+
+    cost.totalCost = sumKeyValues(cost.costs);
+    cost.totalTax = sumKeyValues(cost.tax);
+
+    cost.sumCosts = {};
+    builderTasks?.map(task => {
+        const k = task.uid;
+        const tv = cost.tax[k];
+        const cv = cost.costs[k];
+        cost.sumCosts[k] = convertToNumber(cv, 0) + convertToNumber(tv, 0);
+    });
+    cost.grandTotal = sumKeyValues(cost.sumCosts);
+    console.log(cost);
+    return cost;
 }

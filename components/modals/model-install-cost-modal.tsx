@@ -228,34 +228,36 @@ export default function ModelInstallCostModal({ community = false }) {
                                 </TableBody>
                             </Table>
                         </ScrollArea>
-                        <div className="col-span-4 space-x-4 flex justify-end">
-                            {community && (
-                                <div className="inline-flex items-center space-x-2">
-                                    <Label>Override Model Cost</Label>
-                                    <FormField
-                                        control={form.control}
-                                        name="enable"
-                                        render={({ field }) => (
-                                            <Switch
-                                                checked={field.value as any}
-                                                onCheckedChange={field.onChange}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            )}
-                            <Btn
-                                className="h-8"
-                                isLoading={isSaving}
-                                onClick={() => submit(data as any)}
-                                size="sm"
-                                type="submit"
-                            >
-                                Save
-                            </Btn>
-                        </div>
                     </div>
                 </div>
+            )}
+            Footer={({ data }) => (
+                <>
+                    {community && (
+                        <div className="inline-flex items-center space-x-2">
+                            <Label>Override Model Cost</Label>
+                            <FormField
+                                control={form.control}
+                                name="enable"
+                                render={({ field }) => (
+                                    <Switch
+                                        checked={field.value as any}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                )}
+                            />
+                        </div>
+                    )}
+                    <Btn
+                        className="h-8"
+                        isLoading={isSaving}
+                        onClick={() => submit(data as any)}
+                        size="sm"
+                        type="submit"
+                    >
+                        Save
+                    </Btn>
+                </>
             )}
         />
     );

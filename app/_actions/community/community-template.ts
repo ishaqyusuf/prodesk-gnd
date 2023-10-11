@@ -1,7 +1,7 @@
 "use server";
 
-import { calculateCommunitModelCost } from "@/components/modals/model-cost-community-modal";
 import { prisma } from "@/db";
+import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
 
@@ -76,10 +76,10 @@ export async function _importModelCost(
     const q = modelName
         .toLowerCase()
         .split(" ")
-        .filter(v => !["lh", "rl"].some(sp => v != sp))
+        .filter(v => ["lh", "rh"].every(sp => v != sp))
         .filter(Boolean)
         .join(" ");
-
+    // console.log({ builderId, q, modelName });
     const cost: ICostChart = (await prisma.costCharts.findFirst({
         where: {
             template: {
@@ -101,6 +101,7 @@ export async function _importModelCost(
             updatedAt: "desc"
         }
     })) as any;
+    // console.log(cost);
     if (cost) {
         await _saveCommunityModelCost(id, {
             ...(meta ?? {}),
