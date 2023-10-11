@@ -7,19 +7,21 @@ import { CustomerTypes, Prisma } from "@prisma/client";
 
 export async function findAddressAction({ q }: { q: string }) {
     const _contains = {
-        contains: q || undefined
+        contains: q
     };
     console.log(q);
     // const builder = queryBuilder()
     const where: Prisma.AddressBooksWhereInput = {
-        // OR: [
-        //     {
-        //         name: _contains
-        //     },
-        //     {
-        //         phoneNo: _contains
-        //     }
-        // ],
+        OR: !q
+            ? undefined
+            : [
+                  {
+                      name: _contains
+                  },
+                  {
+                      phoneNo: _contains
+                  }
+              ],
         customerId: {
             not: null
         }
@@ -27,22 +29,21 @@ export async function findAddressAction({ q }: { q: string }) {
     if (q) {
         console.log(
             await prisma.addressBooks.findFirst({
+                distinct: ["name", "address1", "phoneNo"],
                 where: {
-                    phoneNo: {
-                        contains: q
-                    }
+                    OR: [{ phoneNo: _contains }, { name: _contains }]
                 }
             })
         );
-        console.log(q);
-        where.OR = [
-            // {
-            //     name: _contains
-            // },
-            {
-                phoneNo: _contains
-            }
-        ];
+        // console.log(q);
+        // where.OR = [
+        //     // {
+        //     //     name: _contains
+        //     // },
+        //     {
+        //         phoneNo: _contains
+        //     }
+        // ];
     }
     const items = await prisma.addressBooks.findMany({
         take: 5,
@@ -70,6 +71,7 @@ export async function findAddressAction({ q }: { q: string }) {
             }
         }
     });
+    // console.log(items);
     return { items };
 }
 export async function saveAddressAction({
