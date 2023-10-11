@@ -97,6 +97,7 @@ export interface ICommunityTemplateMeta {
     design: CommunityTemplateDesign;
     modelCost: ICommunityModelCost;
     installCosts: InstallCost[];
+    overrideModelCost: Boolean;
 }
 export interface HomeTemplateMeta {
     design: HomeTemplateDesign;

@@ -39,11 +39,13 @@ import { cn } from "@/lib/utils";
 import { updateModelInstallCost } from "@/app/_actions/community/install-costs";
 import { updateCommunityModelInstallCost } from "@/app/_actions/community/community-template";
 import { Badge } from "../ui/badge";
+import { Switch } from "../ui/switch";
+import { FormField } from "../ui/form";
 
 export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
-    const form = useForm<{ costs: InstallCost[] }>({
+    const form = useForm<{ costs: InstallCost[]; enable: Boolean }>({
         defaultValues: {}
     });
     const { append, fields } = useFieldArray({
@@ -75,6 +77,7 @@ export default function ModelInstallCostModal({ community = false }) {
                 else {
                     await updateCommunityModelInstallCost(data.id, {
                         ...data.meta,
+                        overrideModelCost: form.getValues("enable"),
                         installCosts: costs
                     });
                 }
@@ -87,9 +90,10 @@ export default function ModelInstallCostModal({ community = false }) {
         });
     }
     async function init(data: IHomeTemplate) {
-        console.log(data);
+        // console.log(data);
         form.reset({
-            costs: data.meta.installCosts || [{}]
+            costs: data.meta.installCosts || [{}],
+            enable: (data?.meta as any)?.overrideModelCost
         });
     }
     return (
@@ -224,7 +228,22 @@ export default function ModelInstallCostModal({ community = false }) {
                                 </TableBody>
                             </Table>
                         </ScrollArea>
-                        <div className="col-span-4 flex justify-end">
+                        <div className="col-span-4 space-x-4 flex justify-end">
+                            {community && (
+                                <div className="inline-flex items-center space-x-2">
+                                    <Label>Override Model Cost</Label>
+                                    <FormField
+                                        control={form.control}
+                                        name="enable"
+                                        render={({ field }) => (
+                                            <Switch
+                                                checked={field.value as any}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            )}
                             <Btn
                                 className="h-8"
                                 isLoading={isSaving}

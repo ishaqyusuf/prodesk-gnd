@@ -5,11 +5,14 @@ import { prisma } from "@/db";
 import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
 
-export async function updateCommunityModelInstallCost(id, meta) {
+export async function updateCommunityModelInstallCost(
+    id,
+    meta: ICommunityTemplateMeta
+) {
     await prisma.communityModels.update({
         where: { id },
         data: {
-            meta,
+            meta: meta as any,
             updatedAt: new Date()
         }
     });

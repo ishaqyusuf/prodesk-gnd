@@ -67,11 +67,17 @@ export async function getUnitJobs(projectId) {
         //     console.log(communityTemplate);
         // }
         // console.log("...");
-        const cost = communityTemplate?.meta?.installCosts?.[0];
-        cost?.costings;
-        // console.log(cost);
-        if (cost && Object.values(cost?.costings)?.filter(Boolean).length > 3) {
-            ls.push(initJobData(unit as any, proj, cost));
+        if (communityTemplate?.meta?.overrideModelCost) {
+            const cost = communityTemplate?.meta?.installCosts?.[0];
+            cost?.costings;
+            // console.log(cost);
+            if (
+                cost &&
+                Object.values(cost?.costings)?.filter(Boolean).length > 3
+            ) {
+                ls.push(initJobData(unit as any, proj, cost));
+                return;
+            }
             return;
         }
         if (!template) {
