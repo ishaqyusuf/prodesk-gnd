@@ -44,7 +44,7 @@ export async function saveModelCost(cost: ICostChart, templateId) {
                 id: _id
             },
             data: {
-                ..._cost
+                ...(_cost as any)
             },
             include: {
                 template: true
