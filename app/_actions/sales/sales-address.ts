@@ -9,7 +9,7 @@ export async function findAddressAction({ q }: { q: string }) {
     const _contains = {
         contains: q
     };
-    console.log(q);
+
     // const builder = queryBuilder()
     const where: Prisma.AddressBooksWhereInput = {
         OR: !q
@@ -26,25 +26,7 @@ export async function findAddressAction({ q }: { q: string }) {
             not: null
         }
     };
-    if (q) {
-        console.log(
-            await prisma.addressBooks.findFirst({
-                distinct: ["name", "address1", "phoneNo"],
-                where: {
-                    OR: [{ phoneNo: _contains }, { name: _contains }]
-                }
-            })
-        );
-        // console.log(q);
-        // where.OR = [
-        //     // {
-        //     //     name: _contains
-        //     // },
-        //     {
-        //         phoneNo: _contains
-        //     }
-        // ];
-    }
+
     const items = await prisma.addressBooks.findMany({
         take: 5,
         distinct: ["name", "address1", "phoneNo"],
@@ -72,7 +54,14 @@ export async function findAddressAction({ q }: { q: string }) {
         }
     });
     // console.log(items);
-    return { items };
+    return {
+        items: items.map(item => {
+            return {
+                ...item,
+                search: `${item.name} ${item.phoneNo} ${item.address1}`
+            };
+        })
+    };
 }
 export async function saveAddressAction({
     billingAddress,
