@@ -212,11 +212,13 @@ export function nav(
                 _route("Payments", CreditCard, "/sales/payments"),
                 _route("Catalogs", PackageOpen, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
-                _route("Productions", Workflow, `/sales/productions`),
-                _route("Inbounds", Package, `/sales/inbounds`)
+                _route("Productions", Workflow, `/sales/productions`)
+
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
             ]
         );
+    if (__can.viewPutaway)
+        routes.Sales.push(_route("Inbounds", Package, `/sales/inbounds`));
 
     const CommunitySettings: Route[] = [];
     let _communitySettings = (() => {
