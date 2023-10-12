@@ -783,6 +783,7 @@ model SalesOrders {
     instruction       String?                      @db.Text
     meta              Json?                        @db.Json
     status            String                       @db.VarChar(255)
+    inventoryStatus   String?                      @db.VarChar(255)
     deletedAt         DateTime?                    @db.Timestamp(0)
     createdAt         DateTime?                    @db.Timestamp(0)
     updatedAt         DateTime?                    @db.Timestamp(0)
@@ -800,7 +801,6 @@ model SalesOrders {
     grandTotal        Float?
     amountDue         Float?
     invoiceStatus     String?                      @db.VarChar(255)
-    paidAt            DateTime?                    @db.Timestamp(0)
     prodStatus        String?                      @db.VarChar(255)
     prodDueDate       DateTime?                    @db.Timestamp(0)
     deliveredAt       DateTime?

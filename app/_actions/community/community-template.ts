@@ -88,7 +88,16 @@ export async function _importModelCost(
                 //     contains: q
                 // }
             },
-            model: q
+            OR: [
+                {
+                    model: {
+                        contains: modelName
+                    }
+                },
+                {
+                    model: q
+                }
+            ]
         },
         // include: {
         //     template: {
