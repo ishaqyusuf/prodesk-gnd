@@ -264,6 +264,7 @@ export default function SubmitJobModal() {
                     <AutoComplete
                         form={form}
                         formKey={`homeId`}
+                        uppercase
                         options={[
                             {
                                 id: null,
@@ -653,6 +654,7 @@ export default function SubmitJobModal() {
     );
 }
 export function Row({ form, row, unitCosting }) {
+    const qty = form.watch(`meta.costData.${row.uid}.qty` as any);
     return (
         <TableRow>
             <TableCell className="px-1">
@@ -717,9 +719,7 @@ export function Row({ form, row, unitCosting }) {
                     <Input
                         max={unitCosting[row.uid]}
                         min={0}
-                        value={form.getValues(
-                            `meta.costData.${row.uid}.qty` as any
-                        )}
+                        value={qty}
                         onBlur={e => {
                             const maxQty = Number(unitCosting[row.uid]);
                             let val = form.getValues(
