@@ -23,13 +23,20 @@ export default function TaskAction({}) {
             can?.viewDecoShutterInstall && "Deco-Shutter"
         ].filter(Boolean)
     );
+    function open(_type) {
+        let type = _type?.toLowerCase();
+        let defaultTab = "tasks";
+        if (type == "punchout") defaultTab = "general";
+        openModal("submitJob", {
+            data: { type },
+            defaultTab
+        });
+    }
     if (actions.length == 1)
         return (
             <Button
                 onClick={() => {
-                    openModal("submitJob", {
-                        data: { type: actions?.[0]?.toLowerCase() }
-                    });
+                    open(actions?.[0]);
                 }}
                 size="sm"
                 className="h-8"
@@ -51,9 +58,7 @@ export default function TaskAction({}) {
                     {actions.map(a => (
                         <DropdownMenuItem
                             onClick={() => {
-                                openModal("submitJob", {
-                                    data: { type: a?.toLowerCase() }
-                                });
+                                open(a);
                             }}
                             className="capitalize"
                             key={a}
