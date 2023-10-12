@@ -93,7 +93,7 @@ export default function ImportModelTemplateSheet({
                 variant="outline"
                 onClick={() => openModal("importModelTemplate")}
             >
-                Catalog
+                Import
             </Button>
             <BaseSheet<IJobPayment>
                 className="w-full sm:max-w-[350px]"
