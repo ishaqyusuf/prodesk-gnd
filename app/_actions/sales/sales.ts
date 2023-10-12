@@ -78,7 +78,8 @@ import { revalidatePath } from "next/cache";
     // console.log(_q)
     where.OR?.push({
         grandTotal: {
-            gte: Number(_q)
+            gte: Number(_q),
+            lt: Number(_q) +2
         }
     })
   }
