@@ -48,7 +48,7 @@ export default function OrderPrinter({
                 mockup,
                 ids: Array.isArray(id) ? id : [id],
                 isClient: !["production", "packing list"].includes(mode),
-                showInvoipce: ["order", "quote", "invoice"].includes(mode),
+                showInvoice: ["order", "quote", "invoice"].includes(mode),
                 packingList: mode == "packing list",
                 isProd: mode == "production"
             });

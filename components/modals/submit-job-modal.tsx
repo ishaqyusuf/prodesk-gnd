@@ -117,17 +117,19 @@ export default function SubmitJobModal() {
 
     async function init(data: IJobs, defaultTab) {
         loadStaticList("staticProjects", projects, staticProjectsAction);
-        form.reset(
-            !data?.id
-                ? {
-                      title: "Custom Project",
-                      type: data?.type,
-                      meta: {}
-                  }
-                : {
-                      ...data
-                  }
-        );
+        const __ = !data?.id
+            ? {
+                  title: "Custom Project",
+                  type: data?.type,
+                  meta: {}
+              }
+            : {
+                  ...data
+              };
+        Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
+        // form.reset(
+
+        // );
 
         setTab(defaultTab || "tasks");
         setAddCost(null as any);
