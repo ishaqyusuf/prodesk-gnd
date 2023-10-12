@@ -225,10 +225,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
 
                         <DropdownMenuContent align="end" className="w-[160px]">
                             <PrintOrderMenuAction
+                                link
                                 row={{ id: form.getValues("id") } as any}
                             />
                             <PrintOrderMenuAction
                                 mockup
+                                link
                                 row={{ id: form.getValues("id") } as any}
                             />
                             {/* <DropdownMenuItem>

@@ -50,7 +50,7 @@ export function ProdActions(props: IOrderRowProps) {
                             View
                         </DropdownMenuItem>
                     </Link>
-                    <PrintOrderMenuAction myProd={myProd} row={row} />
+                    <PrintOrderMenuAction link myProd={myProd} row={row} />
                     <RowActionMenuItem
                         SubMenu={
                             <>

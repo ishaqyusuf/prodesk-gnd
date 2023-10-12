@@ -27,6 +27,7 @@ export function SalesSelectionAction({ items }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[150px]">
                     <PrintOrderMenuAction
+                        link
                         row={null as any}
                         ids={items?.map(i => i?.id)}
                     />
