@@ -217,7 +217,7 @@ export function nav(
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
             ]
         );
-    if (__can.viewPutaway)
+    if (__can.viewInboundOrder)
         routes.Sales.push(_route("Inbounds", Package, `/sales/inbounds`));
 
     const CommunitySettings: Route[] = [];
