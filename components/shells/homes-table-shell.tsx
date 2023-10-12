@@ -117,7 +117,7 @@ export default function HomesTableShell<T>({
                             {"/"}
                             {row.original.block}
                         </PrimaryCellContent>
-                        <SecondaryCellContent>
+                        <SecondaryCellContent className="uppercase">
                             {row.original?.modelName}
                         </SecondaryCellContent>
                     </Cell>

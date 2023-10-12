@@ -90,6 +90,13 @@ import { revalidatePath } from "next/cache";
     const statusIsArray = Array.isArray(status);
     if(status == 'Unassigned')
       where.prodId = null;
+    else if(status == 'Inbound') {
+
+        where.prodId = {
+            gt: 0
+        };
+        // where.prod
+        }
     else if(status == 'Late')
       {
         where.prodStatus = {
@@ -146,6 +153,12 @@ export async function getSalesOrder(
   query: SalesQueryParams
 ): TableApiResponse<ISalesOrder> {
   query.type = "order";
+return await getSales(query) 
+}
+export async function _getInboundOrders(
+  query: SalesQueryParams
+): TableApiResponse<ISalesOrder> {
+//   query.type = "order";
 return await getSales(query) 
 }
 export async function getOrderAction(orderId,isProd = false) {
@@ -515,6 +528,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     updatedAt,
     goodUntil,
     paymentTerm,
+    inventoryStatus,
     items: cItems,
     ...orderData
   } = _cloneData;

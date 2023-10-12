@@ -42,7 +42,7 @@ export async function saveOrderAction({
             now.format("MMDD"),
             await nextId(prisma.salesOrders)
         ].join("-");
-
+        order.invoiceStatus = "Pending Items";
         // order.goodUntil
     }
     const metadata = {

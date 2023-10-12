@@ -158,6 +158,7 @@ export default function HomeModal() {
                                                 form={form}
                                                 formKey={`units.${i}.homeTemplateId`}
                                                 options={models}
+                                                uppercase
                                                 itemText={"modelName"}
                                                 itemValue="id"
                                             />

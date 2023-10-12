@@ -79,7 +79,7 @@ export default function CommunityTemplateTableShell<T>({
                         link={"/settings/community/community-template/slug"}
                         slug={row.original.slug}
                     >
-                        <PrimaryCellContent>
+                        <PrimaryCellContent className="uppercase">
                             {row.original.modelName}
                         </PrimaryCellContent>
                     </Cell>

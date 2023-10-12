@@ -1,13 +1,13 @@
 import {
-  AddressBooks,
-  CustomerTypes,
-  OrderInventory,
-  OrderProductionSubmissions,
-  Progress,
-  SalesOrderItems,
-  SalesOrders,
-  SalesPayments,
-  Users,
+    AddressBooks,
+    CustomerTypes,
+    OrderInventory,
+    OrderProductionSubmissions,
+    Progress,
+    SalesOrderItems,
+    SalesOrders,
+    SalesPayments,
+    Users
 } from "@prisma/client";
 import { UseFormReturn } from "react-hook-form";
 import { ICustomer } from "./customers";
@@ -22,228 +22,229 @@ export type IOrderType = "order" | "estimate";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 
 export type ISalesOrder = OmitMeta<SalesOrders> & {
-  customer?: ICustomer;
-  billingAddress?: any;
-  shippingAddress?: any;
-  progress?: Progress[];
-  producer?: Users;
+    customer?: ICustomer;
+    billingAddress?: any;
+    shippingAddress?: any;
+    progress?: Progress[];
+    producer?: Users;
 
-  salesRep?: Users;
-  items: ISalesOrderItem[] | undefined;
-  payments: ISalesPayment[] | undefined;
-  prodStatus: ProdStatus;
-  productions: OrderProductionSubmissions[];
-  type: IOrderType;
-  meta: ISalesOrderMeta;
+    salesRep?: Users;
+    items: ISalesOrderItem[] | undefined;
+    payments: ISalesPayment[] | undefined;
+    prodStatus: ProdStatus;
+    productions: OrderProductionSubmissions[];
+    type: IOrderType;
+    meta: ISalesOrderMeta;
 
-  ctx: {
-    prodPage?: Boolean;
-  };
+    ctx: {
+        prodPage?: Boolean;
+    };
 };
 export type ISalesOrderMeta = {
-  manual_cost_price;
-  cost_price;
-  production_status;
-  pre_build_qty: any;
-  qb;
-  profileEstimate: Boolean;
+    manual_cost_price;
+    cost_price;
+    production_status;
+    pre_build_qty: any;
+    qb;
+    profileEstimate: Boolean;
 
-  ccc;
-  priority: IPriority;
-  ccc_percentage;
-  labor_cost;
-  sales_profile;
-  sales_percentage;
-  po;
-  manual_estimate: Boolean;
-  mockupPercentage: number;
-  rep;
-  job_address;
-  type: "estimate" | null;
-  production_event;
-  total_prod_qty;
-  prod_status;
-  payment_option: IPaymentOptions;
-  sales_job_id;
-  job: {
-    status;
-    estimated_cost;
-    job_assigned_to;
-    job_schedule;
-  };
+    ccc;
+    priority: IPriority;
+    ccc_percentage;
+    labor_cost;
+    sales_profile;
+    sales_percentage;
+    po;
+    manual_estimate: Boolean;
+    mockupPercentage: number;
+    rep;
+    job_address;
+    type: "estimate" | null;
+    production_event;
+    total_prod_qty;
+    prod_status;
+    payment_option: IPaymentOptions;
+    sales_job_id;
+    job: {
+        status;
+        estimated_cost;
+        job_assigned_to;
+        job_schedule;
+    };
 };
 export type ISalesOrderItem = SalesOrderItems & {
-  productions: OrderProductionSubmissions[];
-  meta: ISalesOrderItemMeta;
-  salesOrder: ISalesOrder;
-  inboundOrderItem: IInboundOrderItems[];
+    productions: OrderProductionSubmissions[];
+    meta: ISalesOrderItemMeta;
+    salesOrder: ISalesOrder;
+    inboundOrderItem: IInboundOrderItems[];
 };
 export interface ISalesOrderItemMeta {
-  supplier;
-  prehung_description;
-  prehung_information;
-  product_information;
-  product_description;
-  prehung_cost;
-  cost_price;
-  computed_rate;
-  sales_percentage;
-  tax: "Tax" | "Non" | undefined;
-  door_qty_selector;
-  frame;
-  product_cost;
-  produced_qty: number | undefined | null;
-  casing;
-  hinge;
-  line_index;
-  lineIndex;
-  uid;
-  sales_margin;
-  manual_cost_price;
-  manual_rate;
-  isComponent: Boolean;
-  components: WizardKvForm;
+    supplier;
+    prehung_description;
+    prehung_information;
+    product_information;
+    product_description;
+    prehung_cost;
+    cost_price;
+    computed_rate;
+    sales_percentage;
+    tax: "Tax" | "Non" | undefined;
+    door_qty_selector;
+    frame;
+    product_cost;
+    produced_qty: number | undefined | null;
+    casing;
+    hinge;
+    line_index;
+    lineIndex;
+    uid;
+    sales_margin;
+    manual_cost_price;
+    manual_rate;
+    isComponent: Boolean;
+    components: WizardKvForm;
 }
 export type IPaymentOptions =
-  | "Cash"
-  | "Credit Card"
-  | "Check"
-  | "COD"
-  | "Zelle";
+    | "Cash"
+    | "Credit Card"
+    | "Check"
+    | "COD"
+    | "Zelle";
 export type InventoryComponentCategory = "Door" | "Frame" | "Hinge" | "Casing";
 export type IOrderComponent = {
-  id;
-  uuid;
-  title;
-  productId;
-  type;
-  price;
-  qty;
-  total;
-  checked: Boolean;
-  category: InventoryComponentCategory;
-  // product: Products;
+    id;
+    uuid;
+    title;
+    productId;
+    type;
+    price;
+    qty;
+    total;
+    checked: Boolean;
+    category: InventoryComponentCategory;
+    // product: Products;
 };
 export interface WizardKvForm {
-  [id: string]: Partial<IOrderComponent> | undefined;
+    [id: string]: Partial<IOrderComponent> | undefined;
 }
 export interface IAddressBook extends AddressBooks {
-  meta: {
-    zip_code;
-  };
-  customer: ICustomer;
+    meta: {
+        zip_code;
+    };
+    customer: ICustomer;
 }
 
 export type AddressType = "shippingAddress" | "billingAddress";
 
 export type SalesStatus =
-  | "Queued"
-  | "Started"
-  | "Completed"
-  | "No Status"
-  | "Unassigned"
-  | "Late"
-  | undefined;
+    | "Queued"
+    | "Started"
+    | "Completed"
+    | "No Status"
+    | "Unassigned"
+    | "Inbound"
+    | "Late"
+    | undefined;
 export interface SalesQueryParams extends BaseQuery {
-  _q?;
-  skip?;
-  take?;
-  page?;
-  per_page?;
-  sort?: "customer" | "status" | "prodDueDate";
-  sort_order?: "asc" | "desc" | undefined;
-  date?;
-  from?;
-  to?;
-  _customerId?;
-  status?: SalesStatus;
-  _payment?: "Paid" | "Part" | "Pending";
-  prodId?;
-  _page?: "production" | undefined;
-  type?: IOrderType;
-  _dateType?: "createdAt" | "prodDueDate";
-  deliveryOption?: "delivery" | "pickup";
-  _deliveryStatus?:
-    | "pending production"
-    | "pending"
-    | "ready"
-    | "transit"
-    | "delivered";
+    _q?;
+    skip?;
+    take?;
+    page?;
+    per_page?;
+    sort?: "customer" | "status" | "prodDueDate";
+    sort_order?: "asc" | "desc" | undefined;
+    date?;
+    from?;
+    to?;
+    _customerId?;
+    status?: SalesStatus;
+    _payment?: "Paid" | "Part" | "Pending";
+    prodId?;
+    _page?: "production" | undefined;
+    type?: IOrderType;
+    _dateType?: "createdAt" | "prodDueDate";
+    deliveryOption?: "delivery" | "pickup";
+    _deliveryStatus?:
+        | "pending production"
+        | "pending"
+        | "ready"
+        | "transit"
+        | "delivered";
 }
 export interface UpdateOrderPriorityProps {
-  priority;
-  orderId;
+    priority;
+    orderId;
 }
 export interface CopyOrderActionProps {
-  orderId;
-  as: "estimate" | "order";
+    orderId;
+    as: "estimate" | "order";
 }
 export interface SaveOrderActionProps {
-  order: SalesOrders;
-  deleteIds?: Number[];
-  id?;
-  items: ISalesOrderItem[];
+    order: SalesOrders;
+    deleteIds?: Number[];
+    id?;
+    items: ISalesOrderItem[];
 }
 export interface ISaveOrder {
-  order: SalesOrders;
-  deleteIds?: Number[];
-  id?;
-  items: ISalesOrderItem[];
+    order: SalesOrders;
+    deleteIds?: Number[];
+    id?;
+    items: ISalesOrderItem[];
 }
 export interface ISalesAddressForm {
-  billingAddress: IAddressBook;
-  shippingAddress: IAddressBook;
-  sameAddress: Boolean;
-  profile: CustomerTypes;
+    billingAddress: IAddressBook;
+    shippingAddress: IAddressBook;
+    sameAddress: Boolean;
+    profile: CustomerTypes;
 }
 export interface IFooterInfo {
-  rows: {
-    [name in any]: FooterRowInfo;
-  };
+    rows: {
+        [name in any]: FooterRowInfo;
+    };
 }
 export interface FooterRowInfo {
-  rowIndex;
-  total?;
-  notTaxxed?;
+    rowIndex;
+    total?;
+    notTaxxed?;
 }
 export interface IOrderInventoryUpdate {
-  component: IOrderComponent;
-  parent?: IOrderComponent;
-  currentData?: OrderInventory;
-  checked?;
+    component: IOrderComponent;
+    parent?: IOrderComponent;
+    currentData?: OrderInventory;
+    checked?;
 }
 export interface ISaveOrderResponse {
-  components: IOrderComponent[];
-  updates: IOrderInventoryUpdate[];
+    components: IOrderComponent[];
+    updates: IOrderInventoryUpdate[];
 }
 export interface IOrderInventoryUpdate {
-  component: IOrderComponent;
-  parent?: IOrderComponent;
-  currentData?: OrderInventory;
-  checked?;
+    component: IOrderComponent;
+    parent?: IOrderComponent;
+    currentData?: OrderInventory;
+    checked?;
 }
 export type ProdActions = "Start" | "Cancel" | "Complete" | "Stop";
 export interface ProdActionProps {
-  action: ProdActions;
-  itemId;
-  qty?;
-  note?;
-  order: {
-    orderId;
-    slug;
-    id;
-  };
+    action: ProdActions;
+    itemId;
+    qty?;
+    note?;
+    order: {
+        orderId;
+        slug;
+        id;
+    };
 }
 export interface ISalesPayment extends OmitMeta<SalesPayments> {
-  customer: ICustomer;
-  order: ISalesOrder;
-  meta: {
-    ccc;
-    ccc_percentage;
-    sub_total;
-    total_due;
-    payment_option;
-    paymentOption;
-    checkNo;
-  };
+    customer: ICustomer;
+    order: ISalesOrder;
+    meta: {
+        ccc;
+        ccc_percentage;
+        sub_total;
+        total_due;
+        payment_option;
+        paymentOption;
+        checkNo;
+    };
 }

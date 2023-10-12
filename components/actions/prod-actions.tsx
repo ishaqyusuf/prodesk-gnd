@@ -12,6 +12,8 @@ import { MoreHorizontal, View } from "lucide-react";
 import Link from "next/link";
 import { PrintOrderMenuAction } from "./order-actions";
 import { RowActionMenuItem } from "../data-table/data-table-row-actions";
+import { _updateOrderInventoryStatus } from "@/app/_actions/sales/sales-inventory";
+import { toast } from "sonner";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -25,6 +27,10 @@ export function ProdActions(props: IOrderRowProps) {
     const _linkDir = myProd
         ? `/tasks/sales-production/${row.orderId}`
         : `/sales/production/${row.orderId}`;
+    async function setInventoryStatus(status) {
+        await _updateOrderInventoryStatus(row.id, status, "/sales/productions");
+        toast.success("Updated!");
+    }
     return (
         <div className="">
             <DropdownMenu>
@@ -48,7 +54,16 @@ export function ProdActions(props: IOrderRowProps) {
                     <RowActionMenuItem
                         SubMenu={
                             <>
-                                <RowActionMenuItem>Available</RowActionMenuItem>
+                                {["Available", "Pending Items"].map(status => (
+                                    <RowActionMenuItem
+                                        onClick={() =>
+                                            setInventoryStatus(status)
+                                        }
+                                        key={status}
+                                    >
+                                        {status}
+                                    </RowActionMenuItem>
+                                ))}
                             </>
                         }
                     >
