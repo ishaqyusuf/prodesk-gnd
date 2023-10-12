@@ -167,11 +167,20 @@ export async function deleteHomeTemplateAction(id) {}
 export async function _createCommunityTemplate(data, projectName) {
     const slug = slugify(`${projectName} ${data.modelName}`);
 
-    await prisma.communityModels.create({
+    const temp = await prisma.communityModels.create({
         data: {
             slug,
             ...data,
             ...transformData({})
+        }
+    });
+    await prisma.homes.updateMany({
+        where: {
+            projectId: temp.projectId,
+            modelName: temp.modelName
+        },
+        data: {
+            communityTemplateId: temp.id
         }
     });
     revalidatePath("/settings/community/community-templates", "page");

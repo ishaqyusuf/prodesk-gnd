@@ -1,14 +1,9 @@
 "use client";
-import html2pdf from "html2pdf.js";
 import { useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
 import { useEffect } from "react";
 import BasePrinter from "../base-printer";
 import { useState } from "react";
-
-import { adjustWatermark } from "@/lib/adjust-watermark";
-import { salesPrintAction } from "@/app/_actions/sales/sales";
-import { ISalesOrder } from "@/types/sales";
 
 import {
     cn,
@@ -21,9 +16,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
-import { jsPDF } from "jspdf";
 import {
-    CommunityTemplateDesign,
     ExtendedHome,
     HomeTemplateDesign,
     ICommunityTemplate,
@@ -31,14 +24,15 @@ import {
     IHomeTemplate
 } from "@/types/community";
 import { printHomesAction } from "@/app/_actions/community/home-template";
-import { HomeTemplates } from "@prisma/client";
 import HomePrintData from "./home-print-data";
 import { openModal } from "@/lib/modal";
 import { getHomeProductionStatus } from "@/lib/community/community-utils";
 import { toast } from "sonner";
 import { transformCommunityTemplate } from "@/lib/community/community-template";
-interface Props {}
-export default function HomePrinter({}: Props) {
+interface Props {
+    id?;
+}
+export default function HomePrinter({ id }: Props) {
     const printer = useAppSelector(state => state.slicers.printHomes);
     useEffect(() => {
         print();
@@ -46,6 +40,7 @@ export default function HomePrinter({}: Props) {
     const [homes, setHomes] = useState<
         { home: ExtendedHome; design: HomeTemplateDesign }[]
     >([]);
+
     //   useEffect(() => {
     //     if (sales?.length > 0) {
     //       adjustWatermark(sales?.map((s) => s.orderId));
