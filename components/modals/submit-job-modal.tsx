@@ -654,7 +654,7 @@ export default function SubmitJobModal() {
     );
 }
 export function Row({ form, row, unitCosting }) {
-    const qty = form.watch(`meta.costData.${row.uid}.qty` as any);
+    const qty = form.getValues(`meta.costData.${row.uid}.qty` as any);
     return (
         <TableRow>
             <TableCell className="px-1">

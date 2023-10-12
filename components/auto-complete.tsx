@@ -52,7 +52,7 @@ function AutoComplete2({
         name;
         data;
     }>();
-    const watch = form && formKey ? form.getValues(formKey) : value;
+    const watch = form && formKey ? form.getValues(formKey) || "" : value;
 
     const searchMode = searchFn || searchAction;
     const debouncedQuery = useDebounce(query, searchMode ? 800 : 50);
@@ -256,7 +256,7 @@ function AutoComplete2({
                                 "w-full border-none spy-2 h-full focus:outline-none p-1 text-sm leading-5 text-gray-900 focus:ring-0",
                                 uppercase && "uppercase"
                             )}
-                            displayValue={person => (person as any).name}
+                            displayValue={person => (person as any).name || ""}
                             onChange={event => setQuery(event.target.value)}
                         />
                         <div className="absolute top-0 w-0 h-0 cursor-text">
