@@ -24,7 +24,7 @@ import dayjs from "dayjs";
 import { getProgress, saveProgress } from "../progress";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { removeEmptyValues } from "@/lib/utils";
-import { user } from "../utils";
+import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 
   function whereSales(query: SalesQueryParams) {
@@ -523,6 +523,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     invoiceStatus,
     prodStatus,
     prodId,
+    // salesRepId,
     builtQty,
     createdAt,
     updatedAt,
@@ -532,6 +533,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     items: cItems,
     ...orderData
   } = _cloneData;
+orderData.salesRepId = await userId();
 orderData.amountDue = orderData.grandTotal;
   orderData.type = as;
   orderData.prodDueDate = null;
