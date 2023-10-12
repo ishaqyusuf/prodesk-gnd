@@ -30,7 +30,8 @@ import { staticProjectsAction } from "@/app/_actions/community/projects";
 import AutoComplete from "../auto-complete";
 import {
     _createCommunityTemplate,
-    _createModelTemplate
+    _createModelTemplate,
+    _updateCommunityModel
 } from "@/app/_actions/community/home-template";
 
 export default function ModelTemplateModal({
@@ -50,12 +51,16 @@ export default function ModelTemplateModal({
         loadStaticList("staticProjects", projects, staticProjectsAction);
         loadStaticList("staticBuilders", builders, staticBuildersAction);
     }, []);
-    async function submit() {
+    async function submit(_data) {
         startTransition(async () => {
             await _serverAction({
                 fn: async () => {
                     const data: any = form.getValues();
                     data.meta = {};
+                    if (_data.id) {
+                        await _updateCommunityModel(data, _data);
+                        return;
+                    }
                     formType == "communityTemplate"
                         ? await _createCommunityTemplate(
                               data,
@@ -103,6 +108,7 @@ export default function ModelTemplateModal({
                         {formType == "communityTemplate" ? (
                             <AutoComplete
                                 label="Project"
+                                disabled={data?.data?.id != null}
                                 form={form}
                                 formKey={"projectId"}
                                 options={projects}
@@ -125,7 +131,7 @@ export default function ModelTemplateModal({
             Footer={({ data }) => (
                 <Btn
                     isLoading={isSaving}
-                    onClick={submit}
+                    onClick={() => submit(data?.data)}
                     size="sm"
                     type="submit"
                 >

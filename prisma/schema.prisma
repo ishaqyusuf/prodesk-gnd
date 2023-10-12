@@ -51,15 +51,16 @@ model Builders {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CommunityModels {
-    id        Int       @unique @default(autoincrement())
-    projectId Int
-    modelName String    @db.VarChar(255)
-    meta      Json?     @db.Json
-    createdAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @db.Timestamp(0)
-    slug      String    @unique @db.VarChar(255)
-    project   Projects  @relation(fields: [projectId], references: [id])
-    homes     Homes[]
+    id                 Int                  @unique @default(autoincrement())
+    projectId          Int
+    modelName          String               @db.VarChar(255)
+    meta               Json?                @db.Json
+    createdAt          DateTime?            @db.Timestamp(0)
+    updatedAt          DateTime?            @db.Timestamp(0)
+    slug               String               @unique @db.VarChar(255)
+    project            Projects             @relation(fields: [projectId], references: [id])
+    homes              Homes[]
+    CommunityModelCost CommunityModelCost[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -77,6 +78,22 @@ model CostCharts {
     createdAt DateTime?      @db.Timestamp(0)
     updatedAt DateTime?      @db.Timestamp(0)
     template  HomeTemplates? @relation(fields: [parentId], references: [id])
+}
+
+model CommunityModelCost {
+    id               Int              @unique @default(autoincrement())
+    communityModelId Int?
+    current          Boolean?
+    title            String           @db.VarChar(255)
+    type             String           @db.VarChar(255)
+    model            String           @db.VarChar(255)
+    meta             Json?            @db.Json
+    startDate        DateTime         @default(now()) @db.Timestamp(0)
+    endDate          DateTime?        @db.Timestamp(0)
+    deletedAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @db.Timestamp(0)
+    updatedAt        DateTime?        @db.Timestamp(0)
+    community        CommunityModels? @relation(fields: [communityModelId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

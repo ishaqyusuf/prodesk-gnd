@@ -24,12 +24,14 @@ import ModelCostCell, {
     CommunityModelCostCell
 } from "../community/model-cost-cell";
 import {
+    EditRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu
 } from "../data-table/data-table-row-actions";
 import { _importModelCost } from "@/app/_actions/community/community-template";
 import { toast } from "sonner";
+import { openModal } from "@/lib/modal";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -107,6 +109,13 @@ export default function CommunityTemplateTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
+                        <EditRowAction
+                            onClick={e =>
+                                openModal("communityTemplate", {
+                                    data: row.original
+                                })
+                            }
+                        />
                         <RowActionMoreMenu>
                             <RowActionMenuItem
                                 onClick={async () => {

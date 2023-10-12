@@ -185,6 +185,29 @@ export async function _createCommunityTemplate(data, projectName) {
     });
     revalidatePath("/settings/community/community-templates", "page");
 }
+export async function _updateCommunityModel(newData, oldData) {
+    //
+
+    await prisma.homes.updateMany({
+        where: {
+            projectId: oldData.projectId,
+            modelName: oldData.modelName
+        },
+        data: {
+            communityTemplateId: newData.id,
+            modelName: newData.modelName
+        }
+    });
+    await prisma.communityModels.update({
+        where: {
+            id: oldData.id
+        },
+        data: {
+            modelName: newData.modelName
+        }
+    });
+    revalidatePath("/settings/community/community-templates", "page");
+}
 export async function _createModelTemplate(data, builderName) {
     const slug = slugify(`${builderName} ${data.modelName}`);
 
