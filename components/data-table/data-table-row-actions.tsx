@@ -23,7 +23,10 @@ import { Icons } from "../icons";
 import { toast } from "sonner";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import LinkableNode from "../link-node";
-import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
+import {
+    DropdownMenuItemProps,
+    PrimitiveButtonProps
+} from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
@@ -57,15 +60,17 @@ export function RowActionMenuItem({
     children,
     Icon,
     SubMenu,
-    onClick
+    onClick,
+    ...props
 }: {
     link?;
     Icon?;
     SubMenu?;
-} & PrimitiveDivProps) {
+} & PrimitiveDivProps &
+    DropdownMenuItemProps) {
     if (SubMenu)
         return (
-            <DropdownMenuSub>
+            <DropdownMenuSub {...props}>
                 <DropdownMenuSubTrigger>
                     {Icon && (
                         <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -77,7 +82,7 @@ export function RowActionMenuItem({
         );
     const Node = link ? Link : Fragment;
     const Frag = () => (
-        <DropdownMenuItem onClick={onClick}>
+        <DropdownMenuItem {...props} onClick={onClick}>
             {Icon && (
                 <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             )}

@@ -13,7 +13,11 @@ import {
     _FilterColumn
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
+import {
+    OrderRowAction,
+    PrintOrderMenuAction,
+    ProductionAction
+} from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import {
@@ -54,6 +58,7 @@ import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { ProjectsFilter } from "../filters/projects-filter";
 import StatusBadge from "../status-badge";
+import UnitTaskProductionAction from "../actions/unit-task-production-actions";
 
 export default function CommunityProductionsTableShell<T>({
     data,
@@ -123,7 +128,7 @@ export default function CommunityProductionsTableShell<T>({
                             status={row.original.productionStatus || "unknown"}
                         />
                         <DateCellContent>
-                            {row.original.producedAt}
+                            {row.original.productionStatusDate}
                         </DateCellContent>
                     </Cell>
                 )
@@ -137,17 +142,9 @@ export default function CommunityProductionsTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
-                        <RowActionMoreMenu>
-                            {/* <RowActionMenuItem>
-                                Start Production
-                            </RowActionMenuItem>
-                            <RowActionMenuItem>
-                                Submit Production
-                            </RowActionMenuItem>
-                            <RowActionMenuItem>
-                                Cancel Production
-                            </RowActionMenuItem> */}
-                        </RowActionMoreMenu>
+                        <UnitTaskProductionAction task={row.original} />
+                        {/* <RowActionMoreMenu>
+                        </RowActionMoreMenu> */}
                     </RowActionCell>
                 )
             }

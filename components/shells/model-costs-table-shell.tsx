@@ -63,7 +63,7 @@ export default function ModelCostTableShell<T>({
                         slug={row.original.slug}
                     >
                         {/* link={`/community/project/slug`} slug={row.original.slug} */}
-                        <PrimaryCellContent>
+                        <PrimaryCellContent className="uppercase">
                             {row.original.modelName}
                         </PrimaryCellContent>
                         <SecondaryCellContent>
