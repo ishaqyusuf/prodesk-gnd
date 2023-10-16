@@ -251,7 +251,6 @@ export default function HomesTableShell<T>({
                 data={data}
                 SelectionAction={HomeSelectionAction}
                 filterableColumns={[
-                    BuilderFilter,
                     ProjectsFilter,
                     {
                         id: "_production",
