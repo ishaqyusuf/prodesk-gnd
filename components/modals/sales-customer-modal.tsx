@@ -36,6 +36,7 @@ import {
     saveAddressAction
 } from "@/app/_actions/sales/sales-address";
 import AutoComplete2 from "../auto-complete";
+import { deepCopy } from "@/lib/deep-copy";
 
 export function SalesCustomerModal({
     form,
@@ -72,7 +73,7 @@ export function SalesCustomerModal({
                 billingAddress: { customerId, ...biad },
                 shippingAddress: { customerId: scid, ...siad },
                 ...formData
-            } = addressForm.getValues();
+            } = deepCopy(addressForm.getValues());
             const _form = {
                 ...formData,
                 shippingAddress: siad,
