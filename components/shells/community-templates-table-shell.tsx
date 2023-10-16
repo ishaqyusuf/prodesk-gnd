@@ -36,6 +36,7 @@ import {
     _importModelCostData,
     _synchronizeModelCost
 } from "@/app/_actions/community/community-model-cost";
+import { timeout } from "@/lib/timeout";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -141,6 +142,7 @@ export default function CommunityTemplateTableShell<T>({
                                                             _cost,
                                                             row.original.id
                                                         );
+                                                        await timeout(1000);
                                                         return true;
                                                     },
                                                     {
