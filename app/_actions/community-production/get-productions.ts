@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { whereQuery } from "@/lib/db-utils";
 
 export interface ProductionsQueryParams extends BaseQuery {
     _projectId?;
@@ -29,6 +30,17 @@ function whereProductionQuery(query: ProductionsQueryParams) {
     const q = {
         contains: query._q || undefined
     };
+    const builder = whereQuery<Prisma.HomeTasksWhereInput>(query);
+    builder.raw({
+        produceable: true
+    });
+    builder.search({
+        home: {
+            OR: [{ modelName: builder.q }, { search: builder.q }]
+        }
+    });
+    builder.orWhere("projectId", +query._projectId);
+    return builder.get();
     const where: Prisma.HomeTasksWhereInput = {
         produceable: true,
         OR: query?._q
