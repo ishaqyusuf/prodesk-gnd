@@ -94,6 +94,10 @@ export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
     meta: ICommunityTemplateMeta;
     costs: ICommunityCosts[];
+    _count: {
+        homes;
+        costs;
+    };
 };
 export interface ICommunityTemplateMeta {
     design: CommunityTemplateDesign;

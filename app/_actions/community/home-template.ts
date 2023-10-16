@@ -38,6 +38,36 @@ export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
     };
 }
 export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
+    await Promise.all(
+        (
+            await prisma.communityModels.findMany({
+                where: {},
+                select: {
+                    id: true,
+                    modelName: true,
+                    projectId: true,
+                    _count: {
+                        select: {
+                            homes: true
+                        }
+                    }
+                }
+            })
+        )
+            .filter(c => c._count.homes == 0)
+            .map(async community => {
+                await prisma.homes.updateMany({
+                    where: {
+                        projectId: community.projectId,
+                        modelName: community.modelName
+                    },
+                    data: {
+                        communityTemplateId: community.id
+                    }
+                });
+            })
+    );
+
     const where = whereCommunityTemplate(query);
     const _items = await prisma.communityModels.findMany({
         where,
@@ -55,11 +85,14 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                     }
                 }
             },
-            costs: true
+            costs: true,
             // builder: true,
-            // _count: {
-            //   // homes: true,
-            // },
+            _count: {
+                select: {
+                    homes: true,
+                    costs: true
+                }
+            }
         },
         ...(await queryFilter(query))
     });

@@ -61,11 +61,13 @@ export function RowActionMenuItem({
     Icon,
     SubMenu,
     onClick,
+    _blank,
     ...props
 }: {
     link?;
     Icon?;
     SubMenu?;
+    _blank?: Boolean;
 } & PrimitiveDivProps &
     DropdownMenuItemProps) {
     if (SubMenu)
@@ -91,7 +93,7 @@ export function RowActionMenuItem({
     );
     if (link)
         return (
-            <LinkableNode href={link}>
+            <LinkableNode _blank={_blank} href={link}>
                 <Frag />
             </LinkableNode>
         );

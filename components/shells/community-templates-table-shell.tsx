@@ -37,6 +37,7 @@ import {
     _synchronizeModelCost
 } from "@/app/_actions/community/community-model-cost";
 import { timeout } from "@/lib/timeout";
+import { ExternalLink, Import } from "lucide-react";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -93,6 +94,17 @@ export default function CommunityTemplateTableShell<T>({
                 )
             },
             {
+                id: "unitCount",
+                header: ColumnHeader("Units"),
+                cell: ({ row }) => (
+                    <>
+                        <PrimaryCellContent>
+                            {row.original._count.homes}
+                        </PrimaryCellContent>
+                    </>
+                ) //<CommunityModelCostCell row={row.original} />
+            },
+            {
                 id: "modelCost",
                 header: ColumnHeader("Model Cost"),
                 cell: ({ row }) => (
@@ -129,6 +141,14 @@ export default function CommunityTemplateTableShell<T>({
                         />
                         <RowActionMoreMenu>
                             <RowActionMenuItem
+                                _blank
+                                link={`/community/units?_projectId=${row.original.projectId}&_q=${row.original.modelName}`}
+                                Icon={ExternalLink}
+                            >
+                                Open Models
+                            </RowActionMenuItem>
+                            <RowActionMenuItem
+                                Icon={Import}
                                 onClick={async () => {
                                     async function __importCost() {
                                         async function updateCosts(index) {
@@ -193,6 +213,7 @@ export default function CommunityTemplateTableShell<T>({
                             >
                                 Import Model Cost
                             </RowActionMenuItem>
+
                             {/* <RowActionMenuItem>
                                 Start Production
                             </RowActionMenuItem>
