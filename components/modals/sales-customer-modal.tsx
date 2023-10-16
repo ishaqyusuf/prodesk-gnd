@@ -76,7 +76,8 @@ export function SalesCustomerModal({
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
             const { customerId, search, ...biad } = billingAddress || {};
-            const { customerId: scid, search, ...siad } = shippingAddress || {};
+            const { customerId: scid, search: ssea, ...siad } =
+                shippingAddress || {};
             const _form = {
                 ...formData,
                 shippingAddress: siad,
