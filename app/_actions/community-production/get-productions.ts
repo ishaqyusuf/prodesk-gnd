@@ -25,6 +25,7 @@ export async function getProductions(query: ProductionsQueryParams) {
     };
 }
 function whereProductionQuery(query: ProductionsQueryParams) {
+    console.log(query);
     const q = {
         contains: query._q || undefined
     };
