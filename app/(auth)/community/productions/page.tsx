@@ -25,6 +25,7 @@ export default async function InvoicesPage({ searchParams, params }) {
             </Breadcrumbs>
             <PageHeader title={"Unit Productions"} subtitle={``} />
             <CommunityProductionsTableShell
+                searchParams={searchParams}
                 data={response.data as any}
                 pageInfo={response.pageInfo}
             />
