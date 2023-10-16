@@ -69,11 +69,11 @@ export async function saveAddressAction({
     profile,
     sameAddress
 }: ISalesAddressForm) {
-    console.log({
-        sameAddress,
-        billingAddress,
-        shippingAddress
-    });
+    // console.log({
+    //     sameAddress,
+    //     billingAddress,
+    //     shippingAddress
+    // });
     let customerId: number | null;
     const response: {
         customerId?;
@@ -99,7 +99,7 @@ export async function saveAddressAction({
             // delete (address as any)?.["id"];
             if (sameAddress && index == 1) return;
             let { id, ...address } = _address;
-
+            // delete _address.customerId as any;
             let newId = null;
 
             const { phoneNo, name, address1 } = address as any;

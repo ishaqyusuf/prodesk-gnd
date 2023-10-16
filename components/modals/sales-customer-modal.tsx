@@ -68,12 +68,22 @@ export function SalesCustomerModal({
     const loader = useLoader();
     const submit = () => {
         loader.action(async () => {
+            const {
+                billingAddress: { customerId, ...biad },
+                shippingAddress: { customerId: scid, ...siad },
+                ...formData
+            } = addressForm.getValues();
             const _form = {
-                ...addressForm.getValues(),
+                ...formData,
+                shippingAddress: siad,
+                billingAddress: biad,
                 sameAddress: checked as any
             };
+
             console.log(_form);
-            const { profileUpdate, ...resp } = await saveAddressAction(_form);
+            const { profileUpdate, ...resp } = await saveAddressAction(
+                _form as any
+            );
 
             Object.entries(resp).map(([k, v]) => {
                 form.setValue(k as any, v);
