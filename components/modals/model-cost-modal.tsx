@@ -22,7 +22,7 @@ import { sum } from "@/lib/utils";
 import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 import { _saveCommunitModelCostData } from "@/app/_actions/community/community-model-cost";
 
-export default function ModelCostModal({ community }: { community: Boolean }) {
+export default function ModelCostModal({ community }: { community?: Boolean }) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ costs: ICostChart[] }>({
