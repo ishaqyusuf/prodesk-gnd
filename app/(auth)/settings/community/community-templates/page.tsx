@@ -39,7 +39,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
                 searchParams={searchParams}
                 {...response}
             />
-            <ModelTemplateModal formType="modelCost" />
+            <ModelTemplateModal formType="communityTemplate" />
             <ModelInstallCostModal community />
             <ModelCostModal community />
             {/* <ModelCostCommunityModal /> */}

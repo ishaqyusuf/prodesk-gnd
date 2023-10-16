@@ -57,7 +57,7 @@ export default function ModelTemplateModal({
                 fn: async () => {
                     const data: any = form.getValues();
                     data.meta = {};
-                    if (_data.id) {
+                    if (_data?.id) {
                         await _updateCommunityModel(data, _data);
                         return;
                     }
@@ -83,13 +83,10 @@ export default function ModelTemplateModal({
         form.reset(data || { meta: {} });
     }
     return (
-        <BaseModal<{
-            type: "main" | "tasks" | "installations";
-            data: any;
-        }>
+        <BaseModal<any>
             className="sm:max-w-[550px]"
             onOpen={data => {
-                init(data?.data);
+                init(data);
             }}
             onClose={() => {}}
             modalName={formType}
@@ -131,7 +128,7 @@ export default function ModelTemplateModal({
             Footer={({ data }) => (
                 <Btn
                     isLoading={isSaving}
-                    onClick={() => submit(data?.data)}
+                    onClick={() => submit(data)}
                     size="sm"
                     type="submit"
                 >
