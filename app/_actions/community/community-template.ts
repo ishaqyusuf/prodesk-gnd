@@ -18,7 +18,15 @@ export async function updateCommunityModelInstallCost(
     });
     revalidatePath("/settings/community/community-templates", "page");
 }
-
+export async function staticCommunity() {
+    return await prisma.communityModels.findMany({
+        select: {
+            id: true,
+            modelName: true,
+            projectId: true
+        }
+    });
+}
 export async function _saveCommunityModelCost(
     id,
     meta: ICommunityTemplateMeta

@@ -33,6 +33,7 @@ import AutoComplete2 from "../auto-complete";
 import { createHomesAction } from "@/app/_actions/community/create-homes";
 import { getModelNumber } from "@/lib/utils";
 import { homeSearchMeta } from "@/lib/community/community-utils";
+import { staticCommunity } from "@/app/_actions/community/community-template";
 
 interface FormProps {
     units: IHome[];
@@ -68,7 +69,13 @@ export default function HomeModal() {
                         u.builderId = Number(
                             projects.find(p => p.id == pid)?.builderId
                         );
-                        // u.search
+                        u.communityTemplateId = Number(
+                            communityTemplates.find(
+                                p =>
+                                    p.projectId == pid &&
+                                    p.modelName.toLowerCase() == u.modelName
+                            )?.id
+                        );
                         u.search = homeSearchMeta(u);
                         u.slug;
                         return u;
@@ -88,6 +95,9 @@ export default function HomeModal() {
         });
     }
     const projects = useAppSelector(state => state?.slicers?.staticProjects);
+    const communityTemplates = useAppSelector(
+        state => state?.slicers?.staticCommunity
+    );
     const models = useAppSelector(state => state?.slicers?.staticModels);
     function register(i, key: keyof IHome) {
         return form.register(`units.${i}.${key}` as any);
@@ -95,6 +105,7 @@ export default function HomeModal() {
     async function init(data) {
         loadStaticList("staticProjects", projects, staticProjectsAction);
         loadStaticList("staticModels", models, staticHomeModels);
+        loadStaticList("staticCommunity", models, staticCommunity);
         form.setValue("units", [{ meta: {} }] as any);
     }
     return (
