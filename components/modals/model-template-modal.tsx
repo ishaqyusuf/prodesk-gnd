@@ -28,11 +28,13 @@ import { CommunityModels } from "@prisma/client";
 import { useAppSelector } from "@/store";
 import { staticProjectsAction } from "@/app/_actions/community/projects";
 import AutoComplete from "../auto-complete";
+import { _createModelTemplate } from "@/app/_actions/community/home-template";
+import { toastArrayAction } from "@/lib/toast-util";
+import { _updateModelSearch } from "@/app/_actions/community/update-model-search";
 import {
     _createCommunityTemplate,
-    _createModelTemplate,
     _updateCommunityModel
-} from "@/app/_actions/community/home-template";
+} from "@/app/_actions/community/community-template";
 
 export default function ModelTemplateModal({
     formType = "modelTemplate"
@@ -58,8 +60,8 @@ export default function ModelTemplateModal({
                     const data: any = form.getValues();
                     data.meta = {};
                     if (_data?.id) {
-                        await _updateCommunityModel(data, _data);
-                        return;
+                        const models = await _updateCommunityModel(data, _data);
+                        return models;
                     }
                     formType == "communityTemplate"
                         ? await _createCommunityTemplate(
@@ -71,9 +73,21 @@ export default function ModelTemplateModal({
                               builders.find(b => b.id == data.builderId)?.name
                           );
                 },
-                onSuccess: data => {
-                    closeModal();
-                    toast.success("Created!");
+                onSuccess: async data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        closeModal();
+                        await toastArrayAction({
+                            items: data,
+                            serverAction: async item => {
+                                await _updateModelSearch(item);
+                            },
+                            loading: item => `Loading`,
+                            _error: item => `Item`
+                        });
+                    } else {
+                        closeModal();
+                        toast.success("Success!");
+                    }
                 }
             });
         });

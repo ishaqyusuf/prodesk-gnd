@@ -134,9 +134,7 @@ export default function CommunityTemplateTableShell<T>({
                     <RowActionCell>
                         <EditRowAction
                             onClick={e =>
-                                openModal("communityTemplate", {
-                                    data: row.original
-                                })
+                                openModal("communityTemplate", row.original)
                             }
                         />
                         <RowActionMoreMenu>

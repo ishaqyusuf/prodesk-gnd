@@ -243,7 +243,7 @@ export async function _serverAction(
 ) {
     try {
         const data = await fn();
-        onSuccess && onSuccess(data);
+        onSuccess && (await onSuccess(data));
     } catch (e) {
         let err: any = e;
         if (err.message) toast.error(err.message);

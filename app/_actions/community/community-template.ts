@@ -4,7 +4,8 @@ import { prisma } from "@/db";
 import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
-
+import slugify from "slugify";
+import { transformData } from "@/lib/utils";
 export async function updateCommunityModelInstallCost(
     id,
     meta: ICommunityTemplateMeta
@@ -75,7 +76,62 @@ export async function _saveCommunityModelCost(
     );
     revalidatePath("/settings/community/community-templates", "page");
 }
+export async function _createCommunityTemplate(data, projectName) {
+    const slug = slugify(`${projectName} ${data.modelName}`);
 
+    const temp = await prisma.communityModels.create({
+        data: {
+            slug,
+            ...data,
+            ...transformData({})
+        }
+    });
+    await prisma.homes.updateMany({
+        where: {
+            projectId: temp.projectId,
+            modelName: temp.modelName
+        },
+        data: {
+            communityTemplateId: temp.id
+        }
+    });
+    revalidatePath("/settings/community/community-templates", "page");
+}
+export async function _updateCommunityModel(newData, oldData) {
+    //
+    if (oldData.modelName != newData.modelName) {
+        const homes = await prisma.homes.updateMany({
+            where: {
+                projectId: oldData.projectId,
+                modelName: oldData.modelName
+            },
+            data: {
+                communityTemplateId: newData.id,
+                modelName: newData.modelName
+            }
+        });
+        await prisma.communityModels.update({
+            where: {
+                id: oldData.id
+            },
+            data: {
+                modelName: newData.modelName
+            }
+        });
+        revalidatePath("/settings/community/community-templates", "page");
+        // await prisma.$queryRaw`
+        //     UPDATE Homes SET search=REPLACE(search,${oldData.modelName},${newData.modelName})
+        //     WHERE projectId=${oldData.projectId} AND
+        //     modelName=${newData.modelName};
+        // `;
+        // return await prisma.homes.findMany({
+        //     where: {
+        //         projectId: oldData.projectId,
+        //         modelName: oldData.modelName
+        //     }
+        // });
+    }
+}
 export async function _importModelCost(
     id,
     modelName,
