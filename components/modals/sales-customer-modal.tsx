@@ -68,14 +68,15 @@ export function SalesCustomerModal({
     const [checked, setChecked] = React.useState<boolean>(true);
     const loader = useLoader();
     const submit = () => {
+        console.log(">>>>>>>");
         loader.action(async () => {
             const {
                 billingAddress, //: ,
                 shippingAddress, //: { customerId: scid, ...siad },
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
-            const { customerId, ...biad } = billingAddress || {};
-            const { customerId: scid, ...siad } = shippingAddress || {};
+            const { customerId, search, ...biad } = billingAddress || {};
+            const { customerId: scid, search, ...siad } = shippingAddress || {};
             const _form = {
                 ...formData,
                 shippingAddress: siad,
