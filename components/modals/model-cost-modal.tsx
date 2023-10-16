@@ -19,8 +19,10 @@ import { Plus } from "lucide-react";
 import { saveModelCost } from "@/app/_actions/community/model-costs";
 import { deepCopy } from "@/lib/deep-copy";
 import { sum } from "@/lib/utils";
+import { calculateCommunitModelCost } from "@/lib/community/community-utils";
+import { _saveCommunitModelCostData } from "@/app/_actions/community/community-model-cost";
 
-export default function ModelCostModal() {
+export default function ModelCostModal({ community }: { community: Boolean }) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ costs: ICostChart[] }>({
@@ -35,15 +37,15 @@ export default function ModelCostModal() {
         setTitleList(fields.map(f => f.title));
     }, fields);
     const [index, setIndex] = useState(0);
-    async function submit(data: IHomeTemplate) {
+    async function submit(data) {
         startTransition(async () => {
             // if(!form.getValues)
             try {
                 // const isValid = emailSchema.parse(form.getValues());
                 const costs = deepCopy<ICostChart[]>(form.getValues(`costs`));
-                const cost = costs[index];
+                let cost = costs[index];
                 if (!cost) return;
-                console.log(cost);
+                // console.log(cost);
                 if (!cost.startDate) {
                     toast.error("Add a valid starting date");
                     return;
@@ -55,21 +57,32 @@ export default function ModelCostModal() {
                         return;
                     }
                 }
-                // console.log(JSON.stringify(cost));
-                cost.model = data.modelNo as any;
-                cost.meta.totalCost = sum(Object.values(cost.meta.costs));
-                console.log(cost.meta.totalCost);
-                if (!cost) {
-                    return;
+                if (community) {
+                    cost.meta = calculateCommunitModelCost(
+                        cost,
+                        data.project?.builder?.meta?.tasks
+                    );
+                    cost.model = data.modelName;
+                    const c = await _saveCommunitModelCostData(
+                        cost as any,
+                        data.id
+                    );
+                    form.setValue(`costs.${index}` as any, c as any);
+                } else {
+                    cost.meta.totalCost = sum(Object.values(cost.meta.costs));
+                    console.log(cost.meta.totalCost);
+                    cost.model = data.modelNo as any;
+                    // console.log([data.id, cost.id, index]);
+                    const c = await saveModelCost(cost, data.id);
+                    form.setValue(`costs.${index}` as any, c as any);
+                    route.refresh();
                 }
-                console.log([data.id, cost.id, index]);
-                const c = await saveModelCost(cost, data.id);
-                console.log(c);
-                form.setValue(`tasks.${index}` as any, c as any);
+
+                // console.log(JSON.stringify(cost));
+
                 //    form.setValue
                 // closeModal();
                 toast.success("Saved!");
-                route.refresh();
             } catch (error) {
                 console.log(error);
                 toast.message("Invalid Form");
@@ -78,7 +91,7 @@ export default function ModelCostModal() {
         });
     }
     async function init(data: IHomeTemplate) {
-        let costs = deepCopy<ICostChart[]>(data.costs)?.map(c => {
+        let costs = deepCopy<ICostChart[]>(data.costs ?? [])?.map(c => {
             if (c.startDate) c.startDate = new Date(c.startDate);
             if (c.endDate) c.endDate = new Date(c.endDate);
             return c;
@@ -92,7 +105,12 @@ export default function ModelCostModal() {
         // console.log(costs);
         // replace(deepCopy(costs));
         form.reset({
-            costs
+            costs: [
+                ...costs.filter(entry => entry.endDate === null),
+                ...costs
+                    .filter(entry => entry.endDate !== null)
+                    .sort((a, b) => Number(b.startDate) - Number(a.startDate))
+            ]
         });
         setIndex(0);
     }
@@ -102,14 +120,15 @@ export default function ModelCostModal() {
         setIndex(to);
     }
     return (
-        <BaseModal<IHomeTemplate>
+        <BaseModal<any>
             className="sm:max-w-[700px]"
             onOpen={data => {
                 init(data);
             }}
             onClose={() => {}}
             modalName="modelCost"
-            Title={({ data }) => <div>Model Cost</div>}
+            Title={({ data }) => <div>Model Cost ({data?.modelName})</div>}
+            Subtitle={({ data }) => <>{data?.project?.title}</>}
             Content={({ data }) => (
                 <div className="flex w-full divide-x">
                     <div className="sm:w-1/3 space-y-2 pr-2">
@@ -203,59 +222,60 @@ export default function ModelCostModal() {
                                                 Tax ($)
                                             </Label>
                                         </div>
-                                        {data?.builder?.meta?.tasks?.map(
-                                            (t, _i) => (
-                                                <div
-                                                    key={_i}
-                                                    className="col-span-4 gap-2 grid-cols-4 grid"
-                                                >
-                                                    <div className="col-span-2">
-                                                        <Label>{t.name}</Label>
-                                                    </div>
-                                                    <div className="">
-                                                        <Input
-                                                            type="number"
-                                                            className="h-8"
-                                                            {...form.register(
-                                                                `costs.${fIndex}.meta.costs.${t.uid}`
-                                                            )}
-                                                            // onChange={e =>
-                                                            //     form.setValue(
-                                                            //         `costs.${fIndex}.meta.costs.${t.uid}`,
-                                                            //         e.target
-                                                            //             .value as any
-                                                            //     )
-                                                            // }
-                                                            // value={form.getValues(
-                                                            //     `costs.${fIndex}.meta.costs.${t.uid}`
-                                                            // )}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <Input
-                                                            type="number"
-                                                            className="h-8"
-                                                            // {...form.register(
-                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            // )}
-                                                            {...form.register(
-                                                                `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            )}
-                                                            // onChange={e =>
-                                                            //     form.setValue(
-                                                            //         `costs.${fIndex}.meta.tax.${t.uid}`,
-                                                            //         e.target
-                                                            //             .value as any
-                                                            //     )
-                                                            // }
-                                                            // value={form.getValues(
-                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            // )}
-                                                        />
-                                                    </div>
+                                        {(community
+                                            ? data?.project?.builder
+                                            : data?.builder
+                                        )?.meta?.tasks?.map((t, _i) => (
+                                            <div
+                                                key={_i}
+                                                className="col-span-4 gap-2 grid-cols-4 grid"
+                                            >
+                                                <div className="col-span-2">
+                                                    <Label>{t.name}</Label>
                                                 </div>
-                                            )
-                                        )}
+                                                <div className="">
+                                                    <Input
+                                                        type="number"
+                                                        className="h-8"
+                                                        {...form.register(
+                                                            `costs.${fIndex}.meta.costs.${t.uid}`
+                                                        )}
+                                                        // onChange={e =>
+                                                        //     form.setValue(
+                                                        //         `costs.${fIndex}.meta.costs.${t.uid}`,
+                                                        //         e.target
+                                                        //             .value as any
+                                                        //     )
+                                                        // }
+                                                        // value={form.getValues(
+                                                        //     `costs.${fIndex}.meta.costs.${t.uid}`
+                                                        // )}
+                                                    />
+                                                </div>
+                                                <div className="">
+                                                    <Input
+                                                        type="number"
+                                                        className="h-8"
+                                                        // {...form.register(
+                                                        //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                                        // )}
+                                                        {...form.register(
+                                                            `costs.${fIndex}.meta.tax.${t.uid}`
+                                                        )}
+                                                        // onChange={e =>
+                                                        //     form.setValue(
+                                                        //         `costs.${fIndex}.meta.tax.${t.uid}`,
+                                                        //         e.target
+                                                        //             .value as any
+                                                        //     )
+                                                        // }
+                                                        // value={form.getValues(
+                                                        //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                                        // )}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
                                         <div className="col-span-4 flex justify-end">
                                             <Btn
                                                 className="h-8"

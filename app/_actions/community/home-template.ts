@@ -54,7 +54,8 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                         }
                     }
                 }
-            }
+            },
+            costs: true
             // builder: true,
             // _count: {
             //   // homes: true,

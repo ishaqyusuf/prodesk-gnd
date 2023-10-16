@@ -1,5 +1,6 @@
 import {
     Builders,
+    CommunityModelCost,
     CommunityModels,
     CostCharts,
     HomeTasks,
@@ -92,10 +93,11 @@ export type IHomeTemplate = OmitMeta<HomeTemplates> & {
 export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
     meta: ICommunityTemplateMeta;
+    costs: ICommunityCosts[];
 };
 export interface ICommunityTemplateMeta {
     design: CommunityTemplateDesign;
-    modelCost: ICommunityModelCost;
+    modelCost: ICostChartMeta;
     installCosts: InstallCost[];
     overrideModelCost: Boolean;
 }
@@ -125,6 +127,9 @@ export interface TemplateDesign<T> {
 export type HomeTemplateDesign = TemplateDesign<string>;
 export type CommunityTemplateDesign = TemplateDesign<string>;
 
+export type ICommunityCosts = OmitMeta<CommunityModelCost> & {
+    meta: ICostChartMeta;
+};
 export type ICostChart = OmitMeta<CostCharts> & {
     meta: ICostChartMeta;
 };
@@ -143,7 +148,8 @@ export interface ICostChartMeta {
         units;
     };
 }
-export interface ICommunityModelCost extends ICostChartMeta {}
+// export interface ICommunityModelCost extends ICostChartMeta {}
+export interface ICommunityModelCost extends CommunityModelCost {}
 export interface ProjectHeader<T> {
     projectName;
     builder;

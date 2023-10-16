@@ -17,6 +17,7 @@ import CommunityTemplateTableShell from "@/components/shells/community-templates
 import ModelTemplateModal from "@/components/modals/model-template-modal";
 import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 import ModelCostCommunityModal from "@/components/modals/model-cost-community-modal";
+import ModelCostModal from "@/components/modals/model-cost-modal";
 
 export const metadata: Metadata = {
     title: "Community Templates"
@@ -38,9 +39,10 @@ export default async function CommunityTemplatesPage({ searchParams }) {
                 searchParams={searchParams}
                 {...response}
             />
-            <ModelTemplateModal formType="communityTemplate" />
+            <ModelTemplateModal formType="modelCost" />
             <ModelInstallCostModal community />
-            <ModelCostCommunityModal />
+            <ModelCostModal community />
+            {/* <ModelCostCommunityModal /> */}
         </CommunitySettingsLayoutComponent>
     );
 }

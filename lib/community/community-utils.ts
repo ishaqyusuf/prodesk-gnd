@@ -60,7 +60,6 @@ export function calculateHomeInvoice(home: ExtendedHome) {
         due: 0,
         chargeBack: 0
     };
-    if (home.modelName == "5122 RH") console.log(home.tasks);
     home.tasks?.map(task => {
         const due = task.amountDue || 0;
         const paid = task.amountPaid || 0;
@@ -72,19 +71,21 @@ export function calculateHomeInvoice(home: ExtendedHome) {
     return data;
 }
 export function calculateCommunitModelCost(_cost, builderTasks) {
+    // console.log(_cost);
     let cost = deepCopy<ICostChartMeta>(_cost);
-
+    if (!cost.tax) cost.tax = {};
+    if (!cost.costs) cost.costs = {};
     cost.totalCost = sumKeyValues(cost.costs);
     cost.totalTax = sumKeyValues(cost.tax);
 
     cost.sumCosts = {};
     builderTasks?.map(task => {
         const k = task.uid;
-        const tv = cost.tax[k];
-        const cv = cost.costs[k];
+        const tv = cost.tax?.[k] || 0;
+        const cv = cost.costs?.[k] || 0;
         cost.sumCosts[k] = convertToNumber(cv, 0) + convertToNumber(tv, 0);
     });
     cost.grandTotal = sumKeyValues(cost.sumCosts);
-    console.log(cost);
+
     return cost;
 }

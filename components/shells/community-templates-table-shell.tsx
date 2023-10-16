@@ -32,6 +32,10 @@ import {
 import { _importModelCost } from "@/app/_actions/community/community-template";
 import { toast } from "sonner";
 import { openModal } from "@/lib/modal";
+import {
+    _importModelCostData,
+    _synchronizeModelCost
+} from "@/app/_actions/community/community-model-cost";
 
 export default function CommunityTemplateTableShell<T>({
     data,
@@ -90,7 +94,13 @@ export default function CommunityTemplateTableShell<T>({
             {
                 id: "modelCost",
                 header: ColumnHeader("Model Cost"),
-                cell: ({ row }) => <CommunityModelCostCell row={row.original} />
+                cell: ({ row }) => (
+                    <ModelCostCell
+                        modal="modelCost"
+                        row={row.original}
+                        costs={row.original.costs as any}
+                    />
+                ) //<CommunityModelCostCell row={row.original} />
             },
             {
                 id: "install-costs",
@@ -119,18 +129,64 @@ export default function CommunityTemplateTableShell<T>({
                         <RowActionMoreMenu>
                             <RowActionMenuItem
                                 onClick={async () => {
-                                    const _ = await _importModelCost(
-                                        row.original.id,
-                                        row.original.modelName,
-                                        row.original.project.builderId,
-                                        row.original.meta,
-                                        row.original.project.builder.meta.tasks
-                                    );
-                                    if (!_) toast.error("No Import found");
-                                    else
-                                        toast.success(
-                                            "Cost Import Successfully"
+                                    async function __importCost() {
+                                        async function updateCosts(index) {
+                                            //
+                                            const _cost = _?.costs[index];
+                                            console.log(_cost);
+                                            if (_cost)
+                                                toast.promise(
+                                                    async () => {
+                                                        await _synchronizeModelCost(
+                                                            _cost,
+                                                            row.original.id
+                                                        );
+                                                        return true;
+                                                    },
+                                                    {
+                                                        error: `Cost Update Failed: ${_cost.title}`,
+                                                        loading: `Updating Costs: ${_cost.title}`,
+                                                        success: data => {
+                                                            updateCosts(
+                                                                index + 1
+                                                            );
+                                                            return `Updated`;
+                                                        }
+                                                    }
+                                                );
+                                        }
+                                        console.log(
+                                            row.original.project.builder.meta
+                                                .tasks
                                         );
+                                        const _ = await _importModelCostData(
+                                            row.original.id,
+                                            row.original.modelName,
+                                            row.original.project.builderId,
+                                            row.original.meta,
+                                            row.original.project.builder.meta
+                                                .tasks
+                                        );
+                                        if (!_) toast.error("No Import found");
+                                        else {
+                                            toast.success(
+                                                "Cost Import Successfully"
+                                            );
+                                            await updateCosts(0);
+                                        }
+                                    }
+                                    if (row.original.costs.length) {
+                                        toast(
+                                            "Model contains costs, this action will override existing costs. Proceed?",
+                                            {
+                                                action: {
+                                                    label: "Yes",
+                                                    onClick: async () =>
+                                                        await __importCost()
+                                                }
+                                            }
+                                        );
+                                    } else await __importCost();
                                 }}
                             >
                                 Import Model Cost

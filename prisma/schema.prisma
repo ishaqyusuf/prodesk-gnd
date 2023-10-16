@@ -51,16 +51,16 @@ model Builders {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CommunityModels {
-    id                 Int                  @unique @default(autoincrement())
-    projectId          Int
-    modelName          String               @db.VarChar(255)
-    meta               Json?                @db.Json
-    createdAt          DateTime?            @db.Timestamp(0)
-    updatedAt          DateTime?            @db.Timestamp(0)
-    slug               String               @unique @db.VarChar(255)
-    project            Projects             @relation(fields: [projectId], references: [id])
-    homes              Homes[]
-    CommunityModelCost CommunityModelCost[]
+    id        Int                  @unique @default(autoincrement())
+    projectId Int
+    modelName String               @db.VarChar(255)
+    meta      Json?                @db.Json
+    createdAt DateTime?            @db.Timestamp(0)
+    updatedAt DateTime?            @db.Timestamp(0)
+    slug      String               @unique @db.VarChar(255)
+    project   Projects             @relation(fields: [projectId], references: [id])
+    homes     Homes[]
+    costs     CommunityModelCost[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

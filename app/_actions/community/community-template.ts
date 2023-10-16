@@ -18,6 +18,7 @@ export async function updateCommunityModelInstallCost(
     });
     revalidatePath("/settings/community/community-templates", "page");
 }
+
 export async function _saveCommunityModelCost(
     id,
     meta: ICommunityTemplateMeta
@@ -66,6 +67,7 @@ export async function _saveCommunityModelCost(
     );
     revalidatePath("/settings/community/community-templates", "page");
 }
+
 export async function _importModelCost(
     id,
     modelName,

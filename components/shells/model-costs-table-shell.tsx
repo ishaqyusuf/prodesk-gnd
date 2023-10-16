@@ -85,7 +85,7 @@ export default function ModelCostTableShell<T>({
                 )
             },
             {
-                id: "units",
+                id: "cost",
                 header: ColumnHeader("Model Cost"),
                 cell: ({ row }) => (
                     <ModelCostCell

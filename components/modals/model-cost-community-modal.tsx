@@ -9,7 +9,11 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ICommunityModelCost, ICommunityTemplate } from "@/types/community";
+import {
+    ICommunityModelCost,
+    ICommunityTemplate,
+    ICostChartMeta
+} from "@/types/community";
 import { deepCopy } from "@/lib/deep-copy";
 import { _saveCommunityModelCost } from "@/app/_actions/community/community-template";
 import { closeModal } from "@/lib/modal";
@@ -17,7 +21,7 @@ import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 
 export default function ModelCostCommunityModal() {
     const [isSaving, startTransition] = useTransition();
-    const form = useForm<{ cost: ICommunityModelCost }>({
+    const form = useForm<{ cost: ICostChartMeta }>({
         defaultValues: {}
     });
 

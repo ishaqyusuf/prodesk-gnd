@@ -27,20 +27,26 @@ export default function ModelCostCell({ costs, modal, row }: Props) {
                 openModal(modal, row);
             }}
         >
-            {!cost ? (
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200">
-                    Set Cost
-                </Badge>
-            ) : (
+            {
                 <>
                     <PrimaryCellContent>
-                        <Money value={money} />
+                        {!cost ? (
+                            <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200">
+                                Set Cost
+                            </Badge>
+                        ) : (
+                            <Money value={money} />
+                        )}
                     </PrimaryCellContent>
-                    <SecondaryCellContent>
-                        {costs?.length} cost history
-                    </SecondaryCellContent>
+                    {costs?.length ? (
+                        <SecondaryCellContent>
+                            {costs?.length} cost history
+                        </SecondaryCellContent>
+                    ) : (
+                        <></>
+                    )}
                 </>
-            )}
+            }
         </Cell>
     );
 }
@@ -49,9 +55,9 @@ export function CommunityModelCostCell({ row }: { row: ICommunityTemplate }) {
     let money = cost?.grandTotal;
     return (
         <Cell
-            className="cursor-pointer"
+            className="cursor-pointer rtl"
             onClick={() => {
-                openModal("communityModelCost", row);
+                openModal("modelCost", row);
             }}
         >
             {!cost ? (
