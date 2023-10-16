@@ -70,10 +70,12 @@ export function SalesCustomerModal({
     const submit = () => {
         loader.action(async () => {
             const {
-                billingAddress: { customerId, ...biad },
-                shippingAddress: { customerId: scid, ...siad },
+                billingAddress, //: ,
+                shippingAddress, //: { customerId: scid, ...siad },
                 ...formData
-            } = deepCopy(addressForm.getValues());
+            } = deepCopy<any>(addressForm.getValues());
+            const { customerId, ...biad } = billingAddress || {};
+            const { customerId: scid, ...siad } = shippingAddress || {};
             const _form = {
                 ...formData,
                 shippingAddress: siad,
