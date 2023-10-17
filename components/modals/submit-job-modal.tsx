@@ -164,7 +164,7 @@ export default function SubmitJobModal() {
         if (!projectId) setUnits([]);
         else {
             const ls = await getUnitJobs(projectId);
-            form.setValue("meta.addon", ls.addon || 0);
+            if (isInstallation()) form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
         }
         // form.setValue('homeData',ls.homeList)
