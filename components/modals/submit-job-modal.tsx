@@ -163,7 +163,7 @@ export default function SubmitJobModal() {
         form.setValue("meta.addon", 0);
         if (!projectId) setUnits([]);
         else {
-            const ls = await getUnitJobs(projectId);
+            const ls = await getUnitJobs(projectId, type);
             if (isInstallation()) form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
         }
@@ -172,15 +172,16 @@ export default function SubmitJobModal() {
     async function selectUnit(unit: HomeJobList) {
         form.setValue("homeData", unit);
         form.setValue("homeId", unit.id);
-        setUnitCosting(unit.costing.costings);
-
-        const costData = {};
-        Object.entries(unit.costing.costings).map(([k, v]) => {
-            costData[k] = {
-                cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
-            };
-        });
-        form.setValue("meta.costData", costData);
+        if (unit.costing) {
+            setUnitCosting(unit.costing.costings);
+            const costData = {};
+            Object.entries(unit.costing.costings).map(([k, v]) => {
+                costData[k] = {
+                    cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
+                };
+            });
+            form.setValue("meta.costData", costData);
+        }
         form.setValue("subtitle", unit.name);
 
         // _setTab("tasks");

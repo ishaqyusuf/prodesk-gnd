@@ -105,7 +105,7 @@ export async function _saveCommunitModelCostData(
             data: transformData({
                 ..._cost,
                 type: "task-costs",
-                template: {
+                community: {
                     connect: {
                         id: templateId
                     }

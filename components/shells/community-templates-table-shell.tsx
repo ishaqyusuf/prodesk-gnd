@@ -24,12 +24,16 @@ import ModelCostCell, {
     CommunityModelCostCell
 } from "../community/model-cost-cell";
 import {
+    DeleteRowAction,
     EditRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu
 } from "../data-table/data-table-row-actions";
-import { _importModelCost } from "@/app/_actions/community/community-template";
+import {
+    _deleteCommunitModel,
+    _importModelCost
+} from "@/app/_actions/community/community-template";
 import { toast } from "sonner";
 import { openModal } from "@/lib/modal";
 import {
@@ -136,6 +140,12 @@ export default function CommunityTemplateTableShell<T>({
                             onClick={e =>
                                 openModal("communityTemplate", row.original)
                             }
+                        />
+                        <DeleteRowAction
+                            noRefresh
+                            row={row.original}
+                            action={_deleteCommunitModel}
+                            // action={async () => deleteOrderAction(row.id)}
                         />
                         <RowActionMoreMenu>
                             <RowActionMenuItem

@@ -58,10 +58,13 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
                     }
                 }
                 if (community) {
+                    console.log(data.project?.builder?.meta?.tasks);
                     cost.meta = calculateCommunitModelCost(
-                        cost,
+                        cost.meta,
                         data.project?.builder?.meta?.tasks
                     );
+                    console.log(cost.meta);
+                    // return;
                     cost.model = data.modelName;
                     const c = await _saveCommunitModelCostData(
                         cost as any,

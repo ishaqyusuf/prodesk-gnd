@@ -153,6 +153,15 @@ export default function BuilderModal() {
                                         <Label className="col-span-1">
                                             Prod
                                         </Label>
+                                        <Label className="col-span-1">
+                                            Interior
+                                        </Label>
+                                        <Label className="col-span-1">
+                                            Punchout
+                                        </Label>
+                                        <Label className="col-span-1">
+                                            Deco
+                                        </Label>
                                         <Label className="col-span-1"></Label>
                                     </div>
 
@@ -197,6 +206,39 @@ export default function BuilderModal() {
                                                 onCheckedChange={e => {
                                                     form.setValue(
                                                         `meta.tasks.${i}.produceable` as any,
+                                                        e
+                                                    );
+                                                }}
+                                            />
+                                            <Checkbox
+                                                checked={form.getValues(
+                                                    `meta.tasks.${i}.installable` as any
+                                                )}
+                                                onCheckedChange={e => {
+                                                    form.setValue(
+                                                        `meta.tasks.${i}.installable` as any,
+                                                        e
+                                                    );
+                                                }}
+                                            />
+                                            <Checkbox
+                                                checked={form.getValues(
+                                                    `meta.tasks.${i}.punchout` as any
+                                                )}
+                                                onCheckedChange={e => {
+                                                    form.setValue(
+                                                        `meta.tasks.${i}.punchout` as any,
+                                                        e
+                                                    );
+                                                }}
+                                            />
+                                            <Checkbox
+                                                checked={form.getValues(
+                                                    `meta.tasks.${i}.deco` as any
+                                                )}
+                                                onCheckedChange={e => {
+                                                    form.setValue(
+                                                        `meta.tasks.${i}.deco` as any,
                                                         e
                                                     );
                                                 }}

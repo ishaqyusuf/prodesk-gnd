@@ -16,14 +16,16 @@ export type IUser = Users & {
     roles: Roles[];
     employeeProfile: EmployeeProfile;
 };
-export type IJobs = OmitMeta<Jobs> & {
+export type IJobs = Omit<Jobs, "meta" | "type"> & {
     payment: IJobPayment;
+    type: IJobType;
     meta: IJobMeta;
     unit: Homes;
     homeData: HomeJobList;
     project: Projects;
     user: IUser;
 };
+export type IJobType = "punchout" | "installation" | "Deco-Shutter";
 export interface IJobMeta {
     additional_cost: number;
     taskCost: number;
@@ -43,7 +45,7 @@ export interface HomeJobList {
     name?;
     id?;
     disabled?;
-    costing: InstallCost;
+    costing?: InstallCost;
 }
 export interface IRole extends Roles {
     _count: {

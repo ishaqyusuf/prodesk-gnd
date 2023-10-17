@@ -11,7 +11,7 @@ import {
     IProject,
     InstallCost
 } from "@/types/community";
-import { HomeJobList } from "@/types/hrm";
+import { HomeJobList, IJobMeta, IJobType } from "@/types/hrm";
 
 export async function getJobCostData(id, title) {
     const home = await prisma.homes.findUnique({
@@ -38,7 +38,7 @@ export async function getJobCostData(id, title) {
     }
     return {};
 }
-export async function getUnitJobs(projectId) {
+export async function getUnitJobs(projectId, jobType: IJobType) {
     const project = await prisma.projects.findFirst({
         where: {
             id: projectId
@@ -46,11 +46,16 @@ export async function getUnitJobs(projectId) {
         include: {
             communityModels: true,
             homes: {
+                // where: {},
                 include: {
                     homeTemplate: true,
                     _count: {
                         select: {
-                            jobs: true
+                            jobs: {
+                                where: {
+                                    type: jobType
+                                }
+                            }
                         }
                     }
                 }
@@ -59,13 +64,7 @@ export async function getUnitJobs(projectId) {
     });
     const ls: HomeJobList[] = [];
     const proj: IProject = project as any;
-    // console.log(proj.meta);
-    // console.log(project?.homes.length);
-    console.log(
-        project?.homes.filter(
-            r => r.modelName == "1687 LH" && r.lot == "05" && r.block == "01"
-        )
-    );
+
     project?.homes?.map(unit => {
         if (unit._count.jobs > 0) {
             return;
@@ -74,11 +73,14 @@ export async function getUnitJobs(projectId) {
         let communityTemplate: ICommunityTemplate = project.communityModels.find(
             m => m.modelName == unit.modelName
         ) as any;
-        // console.log(unit.modelName);
-        // if (unit.modelName?.toLowerCase() == "1329 RH") {
-        //     console.log(communityTemplate);
-        // }
-        // console.log("...");
+        if (jobType) {
+            ls.push({
+                id: unit.id,
+                name: unitTaskName(unit),
+                disabled: unit._count.jobs > 0
+            });
+            return;
+        }
         if (communityTemplate?.meta?.overrideModelCost) {
             const cost = communityTemplate?.meta?.installCosts?.[0];
             cost?.costings;
@@ -130,18 +132,18 @@ function initJobData(unit: ExtendedHome, project: IProject, cost: InstallCost) {
             }
         });
     }
-    let name = [
-        `BLK${unit.block} LOT${unit.lot} (${unit.modelName})`,
-        cost.title == "Default" ? "" : cost.title
-    ]
-        .filter(Boolean)
-        .join(" ");
+    let name = unitTaskName(unit);
+
     // if (!unit.jobs.find(j => j.title?.toLowerCase() == name?.toLowerCase())) {
     return {
         id: unit.id,
         name,
-        costing
+        costing,
+        disabled: (unit as any)._count.jobs > 0
     } as any;
     // }
     return null as any;
+}
+function unitTaskName(unit) {
+    return `BLK${unit.block} LOT${unit.lot} (${unit.modelName})`;
 }

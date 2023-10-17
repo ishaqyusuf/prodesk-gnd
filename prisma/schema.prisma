@@ -228,6 +228,8 @@ model HomeTasks {
     billable             Boolean?
     produceable          Boolean?
     installable          Boolean?
+    punchout             Boolean?
+    deco                 Boolean?
     // extraInstallCost          Float?
     taxCost              Float?
     amountDue            Float?

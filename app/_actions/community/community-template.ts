@@ -186,3 +186,22 @@ export async function _importModelCost(
     }
     return false;
 }
+export async function _deleteCommunitModel(id) {
+    await prisma.homes.updateMany({
+        where: {
+            communityTemplateId: id
+        },
+        data: {
+            communityTemplateId: null
+        }
+    });
+    await prisma.communityModels.delete({
+        where: {
+            id
+        },
+        include: {
+            costs: true
+        }
+    });
+    revalidatePath("/settings/community/community-templates");
+}
