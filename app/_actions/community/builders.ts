@@ -78,7 +78,10 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
                 data: {
                     taskName: p.name,
                     billable: p.billable,
-                    produceable: p.produceable
+                    produceable: p.produceable,
+                    installable: p.installable,
+                    deco: p.deco,
+                    punchout: p.punchout
                 }
             });
         })

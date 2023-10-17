@@ -45,6 +45,8 @@ export interface IBuilderTasks {
     name: string;
     produceable: boolean;
     installable: boolean;
+    punchout: boolean;
+    deco: boolean;
     uid: string;
     invoice_search;
 }

@@ -107,7 +107,7 @@ export default function BuilderModal() {
             type: "main" | "tasks" | "installations";
             data: any;
         }>
-            className="sm:max-w-[550px]"
+            className="sm:max-w-[700px]"
             onOpen={data => {
                 init(data?.data);
             }}
@@ -141,25 +141,25 @@ export default function BuilderModal() {
                             <>
                                 <div className="col-span-2 grid gap-2">
                                     <div className="grid grid-cols-12 gap-2">
-                                        <Label className="col-span-5">
+                                        <Label className="col-span-4">
                                             Task Name
                                         </Label>
-                                        <Label className="col-span-4">
+                                        <Label className="col-span-2">
                                             Invoice Search
                                         </Label>
-                                        <Label className="col-span-1">
+                                        <Label className="col-span-1 text-center">
                                             Bill
                                         </Label>
-                                        <Label className="col-span-1">
+                                        <Label className="col-span-1 text-center">
                                             Prod
                                         </Label>
-                                        <Label className="col-span-1">
+                                        <Label className="col-span-1 text-center">
                                             Interior
                                         </Label>
-                                        <Label className="col-span-1">
-                                            Punchout
+                                        <Label className="col-span-1 text-center">
+                                            Punch
                                         </Label>
-                                        <Label className="col-span-1">
+                                        <Label className="col-span-1 text-center">
                                             Deco
                                         </Label>
                                         <Label className="col-span-1"></Label>
@@ -170,7 +170,7 @@ export default function BuilderModal() {
                                             className="grid grid-cols-12 gap-2 items-center group"
                                             key={i}
                                         >
-                                            <div className="col-span-5">
+                                            <div className="col-span-4">
                                                 <Input
                                                     className="h-7"
                                                     placeholder=""
@@ -179,7 +179,7 @@ export default function BuilderModal() {
                                                     )}
                                                 />
                                             </div>
-                                            <div className="col-span-4">
+                                            <div className="col-span-2">
                                                 <Input
                                                     className="h-7"
                                                     placeholder=""
@@ -188,61 +188,31 @@ export default function BuilderModal() {
                                                     )}
                                                 />
                                             </div>
-                                            <Checkbox
-                                                checked={form.getValues(
-                                                    `meta.tasks.${i}.billable` as any
-                                                )}
-                                                onCheckedChange={e => {
-                                                    form.setValue(
-                                                        `meta.tasks.${i}.billable` as any,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                            <Checkbox
-                                                checked={form.getValues(
-                                                    `meta.tasks.${i}.produceable` as any
-                                                )}
-                                                onCheckedChange={e => {
-                                                    form.setValue(
-                                                        `meta.tasks.${i}.produceable` as any,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                            <Checkbox
-                                                checked={form.getValues(
-                                                    `meta.tasks.${i}.installable` as any
-                                                )}
-                                                onCheckedChange={e => {
-                                                    form.setValue(
-                                                        `meta.tasks.${i}.installable` as any,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                            <Checkbox
-                                                checked={form.getValues(
-                                                    `meta.tasks.${i}.punchout` as any
-                                                )}
-                                                onCheckedChange={e => {
-                                                    form.setValue(
-                                                        `meta.tasks.${i}.punchout` as any,
-                                                        e
-                                                    );
-                                                }}
-                                            />
-                                            <Checkbox
-                                                checked={form.getValues(
-                                                    `meta.tasks.${i}.deco` as any
-                                                )}
-                                                onCheckedChange={e => {
-                                                    form.setValue(
-                                                        `meta.tasks.${i}.deco` as any,
-                                                        e
-                                                    );
-                                                }}
-                                            />
+                                            {[
+                                                "bill",
+                                                "produceable",
+                                                "installable",
+                                                "punchout",
+                                                "deco"
+                                            ].map(k => (
+                                                <div
+                                                    key={k}
+                                                    className="flex justify-center"
+                                                >
+                                                    <Checkbox
+                                                        checked={form.getValues(
+                                                            `meta.tasks.${i}.${k}` as any
+                                                        )}
+                                                        onCheckedChange={e => {
+                                                            form.setValue(
+                                                                `meta.tasks.${i}.${k}` as any,
+                                                                e
+                                                            );
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+
                                             <div className="flex justify-end">
                                                 <Button
                                                     onClick={() => {
