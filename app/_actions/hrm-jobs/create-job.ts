@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
 import { userId } from "../utils";
 import { _notifyAdminJobSubmitted } from "../notifications";
-import { Jobs } from "@prisma/client";
+import { Jobs, Prisma } from "@prisma/client";
 import { IJobType } from "@/types/hrm";
 
 export async function createJobAction(data: Jobs) {
@@ -43,6 +43,21 @@ export async function createJobAction(data: Jobs) {
         _notifyAdminJobSubmitted(job2 as any);
     }
     const type: IJobType = data.type as any;
+    if (data.homeId) {
+        const where: Prisma.HomeTasksWhereInput = {
+            homeId: data.homeId
+        };
+        if (type == "installation") where.installable = true;
+        if (type == "Deco-Shutter") where.deco = true;
+        if (type == "punchout") where.punchout = true;
+        await prisma.homeTasks.updateMany({
+            where,
+            data: {
+                status: "Completed",
+                statusDate: new Date()
+            }
+        });
+    }
 }
 export async function updateJobAction({ id, ...jdata }: Jobs) {
     let amount = jdata.amount;
