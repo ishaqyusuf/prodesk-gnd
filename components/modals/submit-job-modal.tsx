@@ -107,7 +107,7 @@ export default function SubmitJobModal() {
                 toast.message("Success!");
                 route.refresh();
             } catch (error) {
-                console.log(error);
+                // console.log(error);
                 toast.message("Invalid Form");
                 return;
             }
@@ -116,6 +116,7 @@ export default function SubmitJobModal() {
     const projects = useAppSelector(state => state?.slicers?.staticProjects);
 
     async function init(data: IJobs, defaultTab) {
+        form.reset();
         loadStaticList("staticProjects", projects, staticProjectsAction);
         const __ = !data?.id
             ? {
@@ -127,9 +128,6 @@ export default function SubmitJobModal() {
                   ...data
               };
         Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
-        // form.reset(
-
-        // );
 
         setTab(defaultTab || "tasks");
         setAddCost(null as any);
