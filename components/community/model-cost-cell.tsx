@@ -19,7 +19,7 @@ interface Props {
 export default function ModelCostCell({ costs, modal, row }: Props) {
     const cost: ICostChart = costs?.find(c => c.current) as any;
 
-    let money = cost?.meta?.totalCost;
+    let money = cost?.meta?.grandTotal;
     return (
         <Cell
             className="cursor-pointer"
