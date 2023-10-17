@@ -33,6 +33,7 @@ import { ProjectsFilter } from "../filters/projects-filter";
 import { PayableEmployees } from "../filters/employee-filter";
 import { deleteJobAction } from "@/app/_actions/hrm-jobs/delete-job";
 import { Badge } from "../ui/badge";
+import JobType from "../hrm/job-type";
 
 export default function JobTableShell<T>({
     data,
@@ -74,7 +75,8 @@ export default function JobTableShell<T>({
                         onClick={() => openModal("jobOverview", row.original)}
                     >
                         <PrimaryCellContent>
-                            {row.original.title || "-"}
+                            {row.original.title || "-"}{" "}
+                            <JobType job={row.original} />
                         </PrimaryCellContent>
                         <SecondaryCellContent>
                             {row.original.subtitle ||
