@@ -153,14 +153,14 @@ export default function CommunityTemplateTableShell<T>({
                                 link={`/community/units?_projectId=${row.original.projectId}&_q=${row.original.modelName}`}
                                 Icon={ExternalLink}
                             >
-                                Open Units
+                                View Units
                             </RowActionMenuItem>
                             <RowActionMenuItem
                                 _blank
                                 link={`/community/invoices?_projectId=${row.original.projectId}&_q=${row.original.modelName}`}
                                 Icon={ExternalLink}
                             >
-                                Open Invoices
+                                View Invoices
                             </RowActionMenuItem>
                             <RowActionMenuItem
                                 Icon={Import}
