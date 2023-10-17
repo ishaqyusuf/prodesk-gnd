@@ -1,6 +1,11 @@
-# OCT 16: 00.00 == 00.00
+
+# OCT 16: 03.25 == 03.25
+    08:55-10:20
     02:00-04:00
-# PAYMENT INVOICE OCT 09-13
+# $802.595 
+# Zelle marzuqisiaka@gmail.com
+# PAYMENT INVOICE OCT 09-13 $490
+# PAYMENT INVOICE SEP 28-29 $312.595
 # 14.00 @ 35/hr == $490.00
 # OCT 13: 01.15 == 14.00
     05:00-06:15

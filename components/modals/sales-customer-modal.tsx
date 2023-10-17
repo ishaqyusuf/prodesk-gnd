@@ -68,7 +68,6 @@ export function SalesCustomerModal({
     const [checked, setChecked] = React.useState<boolean>(true);
     const loader = useLoader();
     const submit = () => {
-        console.log(">>>>>>>");
         loader.action(async () => {
             const {
                 billingAddress, //: ,
