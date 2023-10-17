@@ -20,7 +20,7 @@ import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import { saveOrderAction } from "@/app/_actions/sales/sales";
 import { useRouter } from "next/navigation";
 
-import { SalesCustomerModal } from "@/components/modals/sales-customer-modal";
+import { SalesCustomerModal } from "@/components/modals/sales-address-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
 import {

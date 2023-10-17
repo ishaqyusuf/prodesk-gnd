@@ -263,11 +263,9 @@ function OrderAddress({
     return (
         <div className="grid grid-cols-2 gap-4 py-4">
             <div className="col-span-2 grid gap-2">
-                <Label htmlFor="name" className="">
-                    Search
-                </Label>
                 <div className="col-span-3 ">
                     <AutoComplete2
+                        placeholder={"Search"}
                         // form={form}
                         // formKey={`${type}.name`}
                         searchAction={findAddressAction}
