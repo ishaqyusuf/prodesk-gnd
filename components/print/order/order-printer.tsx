@@ -56,7 +56,7 @@ export default function OrderPrinter({
     }, [preview, id, mode]);
     const [sales, setSales] = useState<ISalesOrder[]>([]);
     useEffect(() => {
-        if (sales?.length > 0) {
+        if (sales?.length > 0 && !(sales?.[0] as any)?.loading) {
             adjustWatermark(sales?.map(s => s.orderId));
         }
     }, [sales]);
