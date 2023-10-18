@@ -119,14 +119,14 @@ export function footerEstimate({
     });
     const labourCost = convertToNumber(form.getValues("meta.labor_cost"), 0);
     let total = +toFixed(subTotal + tax + labourCost);
+    if (taxxableSubTotal > 0 && taxPercentage > 0)
+        tax = taxxableSubTotal * (taxPercentage / 100);
     if (
         form.getValues("meta.payment_option") == "Credit Card" &&
         cccPercentage > 0
     ) {
-        ccc = +toFixed((cccPercentage / 100) * total);
+        ccc = +toFixed((cccPercentage / 100) * (total + tax));
     }
-    if (taxxableSubTotal > 0 && taxPercentage > 0)
-        tax = taxxableSubTotal * (taxPercentage / 100);
 
     form.setValue("subTotal", toFixed(subTotal));
     form.setValue("tax", toFixed(tax));
