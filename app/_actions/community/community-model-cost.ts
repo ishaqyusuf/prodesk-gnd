@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { fixDbTime } from "../action-utils";
 import { revalidatePath } from "next/cache";
 import { calculateCommunitModelCost } from "@/lib/community/community-utils";
+import { Prisma } from "@prisma/client";
 
 export async function _importModelCostData(
     id,
@@ -85,7 +86,8 @@ export async function _importModelCostData(
 
 export async function _saveCommunitModelCostData(
     cost: ICommunityCosts,
-    templateId
+    templateId,
+    includeCompletedTasks = false
 ) {
     const { id: _id, communityModelId, ..._cost } = cost;
     let _c: ICostChart & {
@@ -130,27 +132,28 @@ export async function _saveCommunitModelCostData(
     }
     await Promise.all(
         Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
-            // const createdAt = {
-            //     gte:  fixDbTime(dayjs(_c.startDate)).toISOString()
-            // }
-            // if(_c.endDate)
-            //     createdAt.lte  = fixDbTime(dayjs(_c.endDate), 23, 59, 59).toISOString(),
             const { startDate: from, endDate: to } = _c;
-            const s = await prisma.homeTasks.updateMany({
-                where: {
-                    home: {
-                        communityTemplateId: templateId,
-                        createdAt: {
-                            gte: !from
-                                ? undefined
-                                : fixDbTime(dayjs(from)).toISOString(),
-                            lte: !to
-                                ? undefined
-                                : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
-                        }
-                    },
-                    taskUid: k
+
+            const whereHomTasks: Prisma.HomeTasksWhereInput = {
+                home: {
+                    communityTemplateId: templateId,
+                    createdAt: {
+                        gte: !from
+                            ? undefined
+                            : fixDbTime(dayjs(from)).toISOString(),
+                        lte: !to
+                            ? undefined
+                            : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
+                    }
                 },
+                taskUid: k
+            };
+            if (!includeCompletedTasks)
+                whereHomTasks.status = {
+                    not: "Completed"
+                };
+            const s = await prisma.homeTasks.updateMany({
+                where: whereHomTasks,
                 data: {
                     amountDue: Number(v) || 0,
                     updatedAt: new Date()
