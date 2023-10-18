@@ -141,6 +141,7 @@ export type ICostChart = OmitMeta<CostCharts> & {
 };
 export interface ICostChartMeta {
     totalCost;
+    completedTasks: Boolean;
     totalTax;
     grandTotal;
     totalTask;
