@@ -98,11 +98,13 @@ export function SalesCustomerModal({
     };
     function getAddressLine(type: AddressType) {
         const { getValues } = form;
-
+        const phone2 = getValues(`${type}.phoneNo2`);
         return {
             name: getValues(`${type}.name`),
-            phoneNo: getValues(`${type}.phoneNo`),
-            // phoneNo2: getValues(`${type}.phoneNo2`),
+            phoneNo: `${getValues(`${type}.phoneNo`)} ${
+                phone2 ? `(${phone2})` : ""
+            }`,
+            // phoneNo2: ,
             address: getValues([
                 `${type}.address1`,
                 `${type}.city`,
@@ -235,6 +237,7 @@ export function SalesCustomerModal({
                         )}
                         <div className="flex-1"></div>
                         <Btn
+                            size="sm"
                             isLoading={loader.isLoading}
                             onClick={submit}
                             type="submit"
@@ -263,8 +266,8 @@ function OrderAddress({
 
     const profile = form.watch("profile.title");
     return (
-        <ScrollArea className="h-[400px] px-4 -mx-4 -mr-6">
-            <div className="grid grid-cols-2 gap-4 py-4 ">
+        <ScrollArea className="h-[400px] px-4  -mx-4 -mr-6">
+            <div className="grid grid-cols-2 gap-4 py-4 pb-10 ">
                 <div className="col-span-2 grid gap-2">
                     <div className="col-span-3 ">
                         <AutoComplete2
@@ -322,22 +325,12 @@ function OrderAddress({
                     />
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="phone" className="">
+                    <Label htmlFor="phone" className="whitespace-nowrap">
                         Phone (primary)
                     </Label>
                     <Input
                         id="phone"
                         {...register(`${type}.phoneNo`)}
-                        className="col-span-3 h-8"
-                    />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="phone2" className="">
-                        Phone (secondary)
-                    </Label>
-                    <Input
-                        id="phone2"
-                        {...register(`${type}.phoneNo2`)}
                         className="col-span-3 h-8"
                     />
                 </div>
@@ -359,6 +352,16 @@ function OrderAddress({
                     <Input
                         id="address"
                         {...register(`${type}.address1`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="phone2" className="whitespace-nowrap">
+                        Phone (secondary)
+                    </Label>
+                    <Input
+                        id="phone2"
+                        {...register(`${type}.phoneNo2`)}
                         className="col-span-3 h-8"
                     />
                 </div>
@@ -393,7 +396,7 @@ function OrderAddress({
                     />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-2 hidden">
                     <Label htmlFor="profile" className="">
                         Profile
                     </Label>
