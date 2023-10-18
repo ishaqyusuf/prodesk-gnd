@@ -8,7 +8,7 @@ import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { toast } from "sonner";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { UseFormReturn, useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ICostChart, IHomeTemplate } from "@/types/community";
@@ -25,9 +25,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Checkbox } from "../ui/checkbox";
 
 export default function ModelCostModal({ community }: { community?: Boolean }) {
-    const route = useRouter();
-    const [isSaving, startTransition] = useTransition();
-    const form = useForm<{ costs: ICostChart[]; includeCompleted }>({
+    const form = useForm<FormProps>({
         defaultValues: {}
     });
     const { append, prepend, fields, replace } = useFieldArray({
@@ -39,6 +37,88 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
         setTitleList(fields.map(f => f.title));
     }, fields);
     const [index, setIndex] = useState(0);
+
+    async function init(data: IHomeTemplate) {
+        let costs = deepCopy<ICostChart[]>(data.costs ?? [])?.map(c => {
+            if (c.startDate) c.startDate = new Date(c.startDate);
+            if (c.endDate) c.endDate = new Date(c.endDate);
+            return c;
+        });
+        if (!costs.length)
+            costs = [
+                {
+                    meta: {}
+                }
+            ] as any;
+        // console.log(costs);
+        // replace(deepCopy(costs));
+        form.reset({
+            costs: [
+                ...costs.filter(entry => entry.endDate === null),
+                ...costs
+                    .filter(entry => entry.endDate !== null)
+                    .sort((a, b) => Number(b.startDate) - Number(a.startDate))
+            ]
+        });
+        setIndex(0);
+    }
+    async function changeIndex(to) {
+        setIndex(-1);
+        // await timeout(500);
+        setIndex(to);
+    }
+    return (
+        <BaseModal<any>
+            className="sm:max-w-[700px]"
+            onOpen={data => {
+                init(data);
+            }}
+            onClose={() => {}}
+            modalName="modelCost"
+            Title={({ data }) => <div>Model Cost ({data?.modelName})</div>}
+            Subtitle={({ data }) => <>{data?.project?.title}</>}
+            Content={({ data }) => (
+                <Form {...form}>
+                    <div className="flex w-full divide-x -mb-10">
+                        <CostHistory
+                            form={form}
+                            data={data}
+                            changeIndex={changeIndex}
+                            index={index}
+                        />
+                        <div className="grid flex-1 grid-cols-4  pl-2 gap-2">
+                            <CostForm
+                                form={form}
+                                data={data}
+                                community={community}
+                                changeIndex={changeIndex}
+                                index={index}
+                            />
+                        </div>
+                    </div>
+                </Form>
+            )}
+        />
+    );
+}
+interface FormProps {
+    costs: ICostChart[];
+    includeCompleted;
+}
+interface Props {
+    form: UseFormReturn<FormProps>;
+    data;
+    changeIndex;
+    index;
+    community?;
+}
+export function CostForm({ form, data, community, index }: Props) {
+    const { prepend, fields } = useFieldArray({
+        control: form.control,
+        name: "costs"
+    });
+    const route = useRouter();
+    const [isSaving, startTransition] = useTransition();
     async function submit(data) {
         startTransition(async () => {
             // if(!form.getValues)
@@ -96,241 +176,172 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
             }
         });
     }
-    async function init(data: IHomeTemplate) {
-        let costs = deepCopy<ICostChart[]>(data.costs ?? [])?.map(c => {
-            if (c.startDate) c.startDate = new Date(c.startDate);
-            if (c.endDate) c.endDate = new Date(c.endDate);
-            return c;
-        });
-        if (!costs.length)
-            costs = [
-                {
-                    meta: {}
-                }
-            ] as any;
-        // console.log(costs);
-        // replace(deepCopy(costs));
-        form.reset({
-            costs: [
-                ...costs.filter(entry => entry.endDate === null),
-                ...costs
-                    .filter(entry => entry.endDate !== null)
-                    .sort((a, b) => Number(b.startDate) - Number(a.startDate))
-            ]
-        });
-        setIndex(0);
-    }
-    async function changeIndex(to) {
-        setIndex(-1);
-        // await timeout(500);
-        setIndex(to);
-    }
-    return (
-        <BaseModal<any>
-            className="sm:max-w-[700px]"
-            onOpen={data => {
-                init(data);
-            }}
-            onClose={() => {}}
-            modalName="modelCost"
-            Title={({ data }) => <div>Model Cost ({data?.modelName})</div>}
-            Subtitle={({ data }) => <>{data?.project?.title}</>}
-            Content={({ data }) => (
-                <Form {...form}>
-                    <div className="flex w-full divide-x -mb-10">
-                        <div className="sm:w-1/3 space-y-2 pr-2">
-                            <div className="">
-                                <Label>Cost History</Label>
-                            </div>
-                            <div className="">
-                                <Button
-                                    disabled={fields.some(f => !f.createdAt)}
-                                    onClick={() => {
-                                        if (fields?.some(c => !c.createdAt)) {
-                                            toast.error(
-                                                "You have unsaved costs"
-                                            );
-                                        } else
-                                            prepend({
-                                                type: "task-costs",
-                                                model: data?.modelName
-                                            } as any);
-                                        changeIndex(0);
-                                    }}
-                                    variant="outline"
-                                    className="w-full h-7 mt-1"
-                                >
-                                    <Plus className="mr-2 w-4 h-4" />
-                                    <span>New Cost</span>
-                                </Button>
-                            </div>
-                            <ScrollArea className="max-h-[350px] w-full">
-                                <div className="divide-y">
-                                    {/* {changing ? "CHANGING" : "CHANGE COMPLETE"} */}
-                                    {fields.map((f, i) => (
-                                        <Button
-                                            variant={
-                                                i == index
-                                                    ? "secondary"
-                                                    : "ghost"
-                                            }
-                                            className="text-sm cursor-pointer hover:bg-slate-200 h-8 text-start tex-sm p-0.5 w-full"
-                                            key={i}
-                                            onClick={() => {
-                                                changeIndex(i);
-                                            }}
-                                        >
-                                            <div>{f.title || "New Cost"}</div>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </ScrollArea>
-                        </div>
-                        <div className="grid flex-1 grid-cols-4  pl-2 gap-2">
-                            {fields.map(
-                                (field, fIndex) =>
-                                    fIndex == index && (
-                                        <>
-                                            <div className="col-span-2 grid gap-2">
-                                                <Label>From</Label>
-                                                <DatePicker
-                                                    className="w-auto h-8"
-                                                    setValue={e =>
-                                                        form.setValue(
-                                                            `costs.${fIndex}.startDate`,
-                                                            e
-                                                        )
-                                                    }
-                                                    value={form.getValues(
-                                                        `costs.${fIndex}.startDate`
-                                                    )}
-                                                />
-                                            </div>
-
-                                            <div className="col-span-2 grid gap-2">
-                                                <Label>To</Label>
-                                                <DatePicker
-                                                    className="w-auto h-8"
-                                                    setValue={e =>
-                                                        form.setValue(
-                                                            `costs.${fIndex}.endDate`,
-                                                            e
-                                                        )
-                                                    }
-                                                    value={form.getValues(
-                                                        `costs.${fIndex}.endDate`
-                                                    )}
-                                                />
-                                            </div>
-                                            <div className="col-span-4 grid-cols-4 grid bg-slate-100 py-2">
-                                                <Label className="col-span-2 mx-2">
-                                                    Tasks
-                                                </Label>
-                                                <Label className="col-span-1">
-                                                    Cost ($)
-                                                </Label>
-                                                <Label className="col-span-1">
-                                                    Tax ($)
-                                                </Label>
-                                            </div>
-                                            {(community
-                                                ? data?.project?.builder
-                                                : data?.builder
-                                            )?.meta?.tasks?.map((t, _i) => (
-                                                <div
-                                                    key={_i}
-                                                    className="col-span-4 gap-2 grid-cols-4 grid"
-                                                >
-                                                    <div className="col-span-2">
-                                                        <Label>{t.name}</Label>
-                                                    </div>
-                                                    <div className="">
-                                                        <Input
-                                                            type="number"
-                                                            className="h-8"
-                                                            {...form.register(
-                                                                `costs.${fIndex}.meta.costs.${t.uid}`
-                                                            )}
-                                                            // onChange={e =>
-                                                            //     form.setValue(
-                                                            //         `costs.${fIndex}.meta.costs.${t.uid}`,
-                                                            //         e.target
-                                                            //             .value as any
-                                                            //     )
-                                                            // }
-                                                            // value={form.getValues(
-                                                            //     `costs.${fIndex}.meta.costs.${t.uid}`
-                                                            // )}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <Input
-                                                            type="number"
-                                                            className="h-8"
-                                                            // {...form.register(
-                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            // )}
-                                                            {...form.register(
-                                                                `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            )}
-                                                            // onChange={e =>
-                                                            //     form.setValue(
-                                                            //         `costs.${fIndex}.meta.tax.${t.uid}`,
-                                                            //         e.target
-                                                            //             .value as any
-                                                            //     )
-                                                            // }
-                                                            // value={form.getValues(
-                                                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                                                            // )}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <div className="col-span-4 border-t pt-2 my-3 flex space-x-4">
-                                                <FormField
-                                                    control={form.control}
-                                                    name={"includeCompleted"}
-                                                    render={({ field }) => (
-                                                        <FormItem className="space-x-2 space-y-0 flex items-center">
-                                                            <FormControl>
-                                                                <Checkbox
-                                                                    checked={
-                                                                        field.value as any
-                                                                    }
-                                                                    onCheckedChange={
-                                                                        field.onChange
-                                                                    }
-                                                                />
-                                                            </FormControl>
-                                                            <FormLabel>
-                                                                Update Completed
-                                                                Tasks
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                                <div className="flex-1"></div>
-
-                                                <Btn
-                                                    className="h-8"
-                                                    isLoading={isSaving}
-                                                    onClick={() =>
-                                                        submit(data as any)
-                                                    }
-                                                    size="sm"
-                                                    type="submit"
-                                                >
-                                                    Save
-                                                </Btn>
-                                            </div>
-                                        </>
-                                    )
-                            )}
-                        </div>
+    return fields.map(
+        (field, fIndex) =>
+            fIndex == index && (
+                <>
+                    <div className="col-span-2 grid gap-2">
+                        <Label>From</Label>
+                        <DatePicker
+                            className="w-auto h-8"
+                            setValue={e =>
+                                form.setValue(`costs.${fIndex}.startDate`, e)
+                            }
+                            value={form.getValues(`costs.${fIndex}.startDate`)}
+                        />
                     </div>
-                </Form>
-            )}
-        />
+
+                    <div className="col-span-2 grid gap-2">
+                        <Label>To</Label>
+                        <DatePicker
+                            className="w-auto h-8"
+                            setValue={e =>
+                                form.setValue(`costs.${fIndex}.endDate`, e)
+                            }
+                            value={form.getValues(`costs.${fIndex}.endDate`)}
+                        />
+                    </div>
+                    <div className="col-span-4 grid-cols-4 grid bg-slate-100 py-2">
+                        <Label className="col-span-2 mx-2">Tasks</Label>
+                        <Label className="col-span-1">Cost ($)</Label>
+                        <Label className="col-span-1">Tax ($)</Label>
+                    </div>
+                    {(community
+                        ? data?.project?.builder
+                        : data?.builder
+                    )?.meta?.tasks?.map((t, _i) => (
+                        <div
+                            key={_i}
+                            className="col-span-4 gap-2 grid-cols-4 grid"
+                        >
+                            <div className="col-span-2">
+                                <Label>{t.name}</Label>
+                            </div>
+                            <div className="">
+                                <Input
+                                    type="number"
+                                    className="h-8"
+                                    {...form.register(
+                                        `costs.${fIndex}.meta.costs.${t.uid}`
+                                    )}
+                                    // onChange={e =>
+                                    //     form.setValue(
+                                    //         `costs.${fIndex}.meta.costs.${t.uid}`,
+                                    //         e.target
+                                    //             .value as any
+                                    //     )
+                                    // }
+                                    // value={form.getValues(
+                                    //     `costs.${fIndex}.meta.costs.${t.uid}`
+                                    // )}
+                                />
+                            </div>
+                            <div className="">
+                                <Input
+                                    type="number"
+                                    className="h-8"
+                                    // {...form.register(
+                                    //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                    // )}
+                                    {...form.register(
+                                        `costs.${fIndex}.meta.tax.${t.uid}`
+                                    )}
+                                    // onChange={e =>
+                                    //     form.setValue(
+                                    //         `costs.${fIndex}.meta.tax.${t.uid}`,
+                                    //         e.target
+                                    //             .value as any
+                                    //     )
+                                    // }
+                                    // value={form.getValues(
+                                    //     `costs.${fIndex}.meta.tax.${t.uid}`
+                                    // )}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    <div className="col-span-4 border-t pt-2 my-3 flex space-x-4">
+                        <FormField
+                            control={form.control}
+                            name={"includeCompleted"}
+                            render={({ field }) => (
+                                <FormItem className="space-x-2 space-y-0 flex items-center">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value as any}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <FormLabel>
+                                        Update Completed Tasks
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex-1"></div>
+
+                        <Btn
+                            className="h-8"
+                            isLoading={isSaving}
+                            onClick={() => submit(data as any)}
+                            size="sm"
+                            type="submit"
+                        >
+                            Save
+                        </Btn>
+                    </div>
+                </>
+            )
+    );
+}
+export function CostHistory({ form, data, changeIndex, index }: Props) {
+    const { prepend, fields } = useFieldArray({
+        control: form.control,
+        name: "costs"
+    });
+
+    return (
+        <div className="sm:w-1/3 space-y-2 pr-2">
+            <div className="">
+                <Label>Cost History</Label>
+            </div>
+            <div className="">
+                <Button
+                    disabled={fields.some(f => !f.createdAt)}
+                    onClick={() => {
+                        if (fields?.some(c => !c.createdAt)) {
+                            toast.error("You have unsaved costs");
+                        } else
+                            prepend({
+                                type: "task-costs",
+                                model: data?.modelName
+                            } as any);
+                        changeIndex(0);
+                    }}
+                    variant="outline"
+                    className="w-full h-7 mt-1"
+                >
+                    <Plus className="mr-2 w-4 h-4" />
+                    <span>New Cost</span>
+                </Button>
+            </div>
+            <ScrollArea className="max-h-[350px] w-full">
+                <div className="divide-y">
+                    {/* {changing ? "CHANGING" : "CHANGE COMPLETE"} */}
+                    {fields.map((f, i) => (
+                        <Button
+                            variant={i == index ? "secondary" : "ghost"}
+                            className="text-sm cursor-pointer hover:bg-slate-200 h-8 text-start tex-sm p-0.5 w-full"
+                            key={i}
+                            onClick={() => {
+                                changeIndex(i);
+                            }}
+                        >
+                            <div>{f.title || "New Cost"}</div>
+                        </Button>
+                    ))}
+                </div>
+            </ScrollArea>
+        </div>
     );
 }
