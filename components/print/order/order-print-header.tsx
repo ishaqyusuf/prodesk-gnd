@@ -198,7 +198,9 @@ function Address({
 }) {
     const lines = [
         address?.name,
-        address?.phoneNo,
+        `${address?.phoneNo} ${
+            address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
+        }`,
         address?.email,
         address?.address1,
         [address?.city, address?.state, address?.meta?.zip_code]
