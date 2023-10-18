@@ -37,6 +37,7 @@ import {
 } from "@/app/_actions/sales/sales-address";
 import AutoComplete2 from "../auto-complete";
 import { deepCopy } from "@/lib/deep-copy";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function SalesCustomerModal({
     form,
@@ -101,6 +102,7 @@ export function SalesCustomerModal({
         return {
             name: getValues(`${type}.name`),
             phoneNo: getValues(`${type}.phoneNo`),
+            // phoneNo2: getValues(`${type}.phoneNo2`),
             address: getValues([
                 `${type}.address1`,
                 `${type}.city`,
@@ -261,222 +263,172 @@ function OrderAddress({
 
     const profile = form.watch("profile.title");
     return (
-        <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="col-span-2 grid gap-2">
-                <div className="col-span-3 ">
-                    <AutoComplete2
-                        placeholder={"Search"}
-                        // form={form}
-                        // formKey={`${type}.name`}
-                        searchAction={findAddressAction}
-                        allowCreate
-                        itemText="search"
-                        itemValue="search"
-                        onChange={e => {
-                            const { data: address } = e || {};
-                            if (typeof address === "object") {
-                                const { customer, ..._address } = address;
-                                form.setValue(type, _address as any);
-                                if (
-                                    customer?.profile &&
-                                    type == "billingAddress"
-                                )
-                                    form.setValue("profile", customer.profile);
-                            }
-                        }}
-                        Item={({ data: address }) => (
-                            <div
-                                key={address.id}
-                                className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
-                            >
-                                <div className="flex w-full items-center justify-between">
-                                    <p>{address.name}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {address.phoneNo}
+        <ScrollArea className="h-[400px] px-4 -mx-4 -mr-6">
+            <div className="grid grid-cols-2 gap-4 py-4 ">
+                <div className="col-span-2 grid gap-2">
+                    <div className="col-span-3 ">
+                        <AutoComplete2
+                            placeholder={"Search"}
+                            // form={form}
+                            // formKey={`${type}.name`}
+                            searchAction={findAddressAction}
+                            allowCreate
+                            itemText="search"
+                            itemValue="search"
+                            onChange={e => {
+                                const { data: address } = e || {};
+                                if (typeof address === "object") {
+                                    const { customer, ..._address } = address;
+                                    form.setValue(type, _address as any);
+                                    if (
+                                        customer?.profile &&
+                                        type == "billingAddress"
+                                    )
+                                        form.setValue(
+                                            "profile",
+                                            customer.profile
+                                        );
+                                }
+                            }}
+                            Item={({ data: address }) => (
+                                <div
+                                    key={address.id}
+                                    className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
+                                >
+                                    <div className="flex w-full items-center justify-between">
+                                        <p>{address.name}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {address.phoneNo}
+                                        </p>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground ">
+                                        {address.address1}
                                     </p>
                                 </div>
-                                <p className="text-sm text-muted-foreground ">
-                                    {address.address1}
-                                </p>
-                            </div>
-                        )}
+                            )}
+                        />
+                        {/* <Input id="name" {...register(`${type}.name`)} className="h-8" /> */}
+                        {/* <AddressSearchPop form={form} type={type} /> */}
+                    </div>
+                </div>
+                <div className="col-span-2 grid gap-2">
+                    <Label htmlFor="name" className="">
+                        Name
+                    </Label>
+                    <Input
+                        id="name"
+                        {...register(`${type}.name`)}
+                        className="col-span-3 h-8"
                     />
-                    {/* <Input id="name" {...register(`${type}.name`)} className="h-8" /> */}
-                    {/* <AddressSearchPop form={form} type={type} /> */}
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="phone" className="">
+                        Phone (primary)
+                    </Label>
+                    <Input
+                        id="phone"
+                        {...register(`${type}.phoneNo`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="phone2" className="">
+                        Phone (secondary)
+                    </Label>
+                    <Input
+                        id="phone2"
+                        {...register(`${type}.phoneNo2`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+
+                <div className="grid gap-2">
+                    <Label htmlFor="email" className="">
+                        Email
+                    </Label>
+                    <Input
+                        id="email"
+                        {...register(`${type}.email`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="col-span-2 grid gap-2">
+                    <Label htmlFor="address" className="">
+                        Address
+                    </Label>
+                    <Input
+                        id="address"
+                        {...register(`${type}.address1`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="city" className="">
+                        City
+                    </Label>
+                    <Input
+                        id="city"
+                        {...register(`${type}.city`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="state" className="">
+                        State
+                    </Label>
+                    <Input
+                        id="state"
+                        {...register(`${type}.state`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="zipCode" className="">
+                        Zip Code
+                    </Label>
+                    <Input
+                        id="zipCode"
+                        {...register(`${type}.meta.zip_code`)}
+                        className="col-span-3 h-8"
+                    />
+                </div>
+
+                <div className="grid gap-2">
+                    <Label htmlFor="profile" className="">
+                        Profile
+                    </Label>
+                    <Select
+                        value={profile}
+                        disabled={type != "billingAddress"}
+                        onValueChange={value => {
+                            const selection = profiles.find(
+                                profile => profile.title == value
+                            );
+                            if (selection) {
+                                form.setValue("profile.title", value);
+                                form.setValue(
+                                    "profile.coefficient",
+                                    selection.coefficient
+                                );
+                                form.setValue("profile.id", selection.id);
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="h-8">
+                            <SelectValue placeholder="Select Profile" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {profiles?.map((profile, _) => (
+                                    <SelectItem key={_} value={profile.title}>
+                                        {profile.title}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
-            <div className="col-span-2 grid gap-2">
-                <Label htmlFor="name" className="">
-                    Name
-                </Label>
-                <Input
-                    id="name"
-                    {...register(`${type}.name`)}
-                    className="col-span-3 h-8"
-                />
-                {/* <AutoComplete2
-                    form={form}
-                    formKey={`${type}.phoneNo`}
-                    searchAction={findAddressAction}
-                    allowCreate
-                    itemValue="phoneNo"
-                    itemText="phoneNo"
-                    onChange={e => {
-                        const { data: address } = e || {};
-                        if (typeof address === "object") {
-                            const { customer, ..._address } = address;
-                            form.setValue(type, _address as any);
-                            if (customer?.profile && type == "billingAddress")
-                                form.setValue("profile", customer.profile);
-                        }
-                    }}
-                    Item={({ data: address }) => (
-                        <div
-                            key={address.id}
-                            className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
-                        >
-                            <div className="flex w-full items-center justify-between">
-                                <p>{address.name}</p>
-                                <p className="text-xs text-muted-foreground">
-                                    {address.phoneNo}
-                                </p>
-                            </div>
-                            <p className="text-sm text-muted-foreground ">
-                                {address.address1}
-                            </p>
-                        </div>
-                    )}
-                /> */}
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="phone" className="">
-                    Phone
-                </Label>
-                <Input
-                    id="phone"
-                    {...register(`${type}.phoneNo`)}
-                    className="col-span-3 h-8"
-                />
-                {/* <AutoComplete2
-                    form={form}
-                    formKey={`${type}.phoneNo`}
-                    searchAction={findAddressAction}
-                    allowCreate
-                    itemValue="phoneNo"
-                    itemText="phoneNo"
-                    onChange={e => {
-                        const { data: address } = e || {};
-                        if (typeof address === "object") {
-                            const { customer, ..._address } = address;
-                            form.setValue(type, _address as any);
-                            if (customer?.profile && type == "billingAddress")
-                                form.setValue("profile", customer.profile);
-                        }
-                    }}
-                    Item={({ data: address }) => (
-                        <div
-                            key={address.id}
-                            className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-1 "
-                        >
-                            <div className="flex w-full items-center justify-between">
-                                <p>{address.name}</p>
-                                <p className="text-xs text-muted-foreground">
-                                    {address.phoneNo}
-                                </p>
-                            </div>
-                            <p className="text-sm text-muted-foreground ">
-                                {address.address1}
-                            </p>
-                        </div>
-                    )}
-                /> */}
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="email" className="">
-                    Email
-                </Label>
-                <Input
-                    id="email"
-                    {...register(`${type}.email`)}
-                    className="col-span-3 h-8"
-                />
-            </div>
-            <div className="col-span-2 grid gap-2">
-                <Label htmlFor="address" className="">
-                    Address
-                </Label>
-                <Input
-                    id="address"
-                    {...register(`${type}.address1`)}
-                    className="col-span-3 h-8"
-                />
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="city" className="">
-                    City
-                </Label>
-                <Input
-                    id="city"
-                    {...register(`${type}.city`)}
-                    className="col-span-3 h-8"
-                />
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="state" className="">
-                    State
-                </Label>
-                <Input
-                    id="state"
-                    {...register(`${type}.state`)}
-                    className="col-span-3 h-8"
-                />
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="zipCode" className="">
-                    Zip Code
-                </Label>
-                <Input
-                    id="zipCode"
-                    {...register(`${type}.meta.zip_code`)}
-                    className="col-span-3 h-8"
-                />
-            </div>
-
-            <div className="grid gap-2">
-                <Label htmlFor="profile" className="">
-                    Profile
-                </Label>
-                <Select
-                    value={profile}
-                    disabled={type != "billingAddress"}
-                    onValueChange={value => {
-                        const selection = profiles.find(
-                            profile => profile.title == value
-                        );
-                        if (selection) {
-                            form.setValue("profile.title", value);
-                            form.setValue(
-                                "profile.coefficient",
-                                selection.coefficient
-                            );
-                            form.setValue("profile.id", selection.id);
-                        }
-                    }}
-                >
-                    <SelectTrigger className="h-8">
-                        <SelectValue placeholder="Select Profile" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            {profiles?.map((profile, _) => (
-                                <SelectItem key={_} value={profile.title}>
-                                    {profile.title}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-        </div>
+        </ScrollArea>
     );
 }

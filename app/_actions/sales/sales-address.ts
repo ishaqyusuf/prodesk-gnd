@@ -102,7 +102,7 @@ export async function saveAddressAction({
             // delete _address.customerId as any;
             let newId = null;
 
-            const { phoneNo, name, address1 } = address as any;
+            const { phoneNo, phoneNo2, name, address1 } = address as any;
             const where: Prisma.AddressBooksWhereInput = {
                 name,
                 phoneNo,
@@ -174,7 +174,8 @@ export async function saveAddressAction({
                         customer = (await prisma.customers.findFirst({
                             where: {
                                 name: name,
-                                phoneNo
+                                phoneNo,
+                                phoneNo2
                             },
                             include: {
                                 profile: true
@@ -186,6 +187,7 @@ export async function saveAddressAction({
                                 data: {
                                     name,
                                     phoneNo,
+                                    phoneNo2,
                                     email: address?.email,
                                     profile: profile?.id
                                         ? {

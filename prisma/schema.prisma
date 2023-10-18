@@ -28,6 +28,7 @@ model AddressBooks {
     city           String?       @db.VarChar(255)
     email          String?       @db.VarChar(255)
     phoneNo        String?       @db.VarChar(255)
+    phoneNo2       String?       @db.VarChar(255)
     meta           Json?         @db.Json
     createdAt      DateTime?     @db.Timestamp(0)
     updatedAt      DateTime?     @db.Timestamp(0)
@@ -107,6 +108,7 @@ model Customers {
     businessName   String?         @db.VarChar(255)
     email          String?         @db.VarChar(255)
     phoneNo        String?         @db.VarChar(255)
+    phoneNo2       String?         @db.VarChar(255)
     address        String?         @db.Text
     meta           Json?           @db.Json
     deletedAt      DateTime?       @db.Timestamp(0)
