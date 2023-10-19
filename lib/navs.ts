@@ -202,7 +202,13 @@ export function nav(
                 _route("Customers", User, "/sales/customers")
             ]
         );
+    } else {
+        if (__can.viewOrderProduction)
+            routes.Sales.push(
+                _route("Productions", Workflow, `/sales/productions`)
+            );
     }
+
     if (viewDelivery || isAdmin)
         routes.Sales.push(_route("Order Delivery", Truck, "/sales/delivery"));
     if (editOrders)
@@ -272,7 +278,12 @@ export function nav(
         totalRoutes += len;
         if (!homeRoute) homeRoute = r?.[0]?.path;
         flatRoutes.push(...r);
-        const __routes = r.filter(Boolean) as Route[];
+        const __routes = r
+            .filter(
+                (route, index) =>
+                    r.findIndex(fr => fr.title == route.title) == index
+            )
+            .filter(Boolean) as Route[];
         routeGroup.push({
             title: len < 2 ? null : title,
             routes: __routes

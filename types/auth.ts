@@ -29,6 +29,12 @@ export type IPermissions =
     | "editCost"
     | "viewOrders"
     | "editOrders"
+    | "viewSalesCustomers"
+    | "editSalesCustomers"
+    | "viewEstimates"
+    | "editEstimates"
+    | "viewOrderProduction"
+    | "editOrderProduction"
     | "viewPriceList"
     | "editPriceList";
 export interface ICan {
@@ -60,8 +66,16 @@ export interface ICan {
     editBuilders?: Boolean;
     viewCost?: Boolean;
     editCost?: Boolean;
+
     viewOrders?: Boolean;
     editOrders?: Boolean;
+    viewSalesCustomers?: Boolean;
+    editSalesCustomers?: Boolean;
+    viewEstimates?: Boolean;
+    editEstimates?: Boolean;
+    viewOrderProduction?: Boolean;
+    editOrderProduction?: Boolean;
+
     viewPriceList?: Boolean;
     editPriceList?: Boolean;
 
