@@ -63,8 +63,8 @@ export function calculateHomeInvoice(home: ExtendedHome) {
     home.tasks?.map(task => {
         const due = task.amountDue || 0;
         const paid = task.amountPaid || 0;
+        data.due += due;
         if (paid => 0) {
-            data.due += due;
             data.paid += paid;
         } else data.chargeBack += paid;
     });

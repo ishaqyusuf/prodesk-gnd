@@ -51,20 +51,6 @@ model Builders {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model CommunityModels {
-    id        Int                  @unique @default(autoincrement())
-    projectId Int
-    modelName String               @db.VarChar(255)
-    meta      Json?                @db.Json
-    createdAt DateTime?            @db.Timestamp(0)
-    updatedAt DateTime?            @db.Timestamp(0)
-    slug      String               @unique @db.VarChar(255)
-    project   Projects             @relation(fields: [projectId], references: [id])
-    homes     Homes[]
-    costs     CommunityModelCost[]
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CostCharts {
     id        Int            @unique @default(autoincrement())
     parentId  Int?
@@ -81,20 +67,50 @@ model CostCharts {
     template  HomeTemplates? @relation(fields: [parentId], references: [id])
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model CommunityModels {
+    id        Int                  @unique @default(autoincrement())
+    projectId Int
+    pivotId   Int?
+    modelName String               @db.VarChar(255)
+    meta      Json?                @db.Json
+    createdAt DateTime?            @db.Timestamp(0)
+    updatedAt DateTime?            @db.Timestamp(0)
+    slug      String               @unique @db.VarChar(255)
+    project   Projects             @relation(fields: [projectId], references: [id])
+    homes     Homes[]
+    costs     CommunityModelCost[]
+    pivot     CommunityModelPivot? @relation(fields: [pivotId], references: [id])
+}
+
+model CommunityModelPivot {
+    id              Int                  @unique @default(autoincrement())
+    model           String               @db.VarChar(255)
+    projectId       Int
+    meta            Json?                @db.Json
+    createdAt       DateTime?            @db.Timestamp(0)
+    updatedAt       DateTime?            @db.Timestamp(0)
+    deletedAt       DateTime?            @db.Timestamp(0)
+    communityModels CommunityModels[]
+    modelCosts      CommunityModelCost[]
+}
+
 model CommunityModelCost {
-    id               Int              @unique @default(autoincrement())
+    id               Int                  @unique @default(autoincrement())
     communityModelId Int?
+    pivotId          Int?
     current          Boolean?
-    title            String           @db.VarChar(255)
-    type             String           @db.VarChar(255)
-    model            String           @db.VarChar(255)
-    meta             Json?            @db.Json
-    startDate        DateTime         @default(now()) @db.Timestamp(0)
-    endDate          DateTime?        @db.Timestamp(0)
-    deletedAt        DateTime?        @db.Timestamp(0)
-    createdAt        DateTime?        @db.Timestamp(0)
-    updatedAt        DateTime?        @db.Timestamp(0)
-    community        CommunityModels? @relation(fields: [communityModelId], references: [id])
+    title            String               @db.VarChar(255)
+    type             String               @db.VarChar(255)
+    model            String               @db.VarChar(255)
+    meta             Json?                @db.Json
+    startDate        DateTime             @default(now()) @db.Timestamp(0)
+    endDate          DateTime?            @db.Timestamp(0)
+    createdAt        DateTime?            @db.Timestamp(0)
+    updatedAt        DateTime?            @db.Timestamp(0)
+    deletedAt        DateTime?            @db.Timestamp(0)
+    community        CommunityModels?     @relation(fields: [communityModelId], references: [id])
+    pivot            CommunityModelPivot? @relation(fields: [pivotId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
