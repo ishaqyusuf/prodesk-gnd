@@ -1,5 +1,4 @@
 "use client";
-import html2pdf from "html2pdf.js";
 import { useAppSelector } from "@/store";
 import { dispatchSlice } from "@/store/slicers";
 import { useEffect } from "react";
@@ -18,7 +17,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
-import { jsPDF } from "jspdf";
 import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 import { createPortal } from "react-dom";
 interface Props {
@@ -120,64 +118,9 @@ export default function OrderPrinter({
         await timeout(900);
         adjustWatermark(sales?.map(s => s.orderId));
 
-        // await timeout(800);
-        if (!printer.pdf) {
-            if (prints || !id) window.print();
-            if (prints) window.close();
-        } else {
-            //
-            // const doc = document.documentElement.outerHTML;
-            // console.log(doc);
-            // console.log(durl);
-            // return;
-            // await timeout(5000);
-            // const mainDoc = document.getElementById("orderPrintSection");
-            // if (mainDoc) {
-            //     // const doc = document.getElementById("orderPrintSection")?.cloneNode();
-            //     const doc = document.createElement("div");
-            //     doc.innerHTML = mainDoc.innerHTML;
-            //     doc?.classList?.remove("hidden");
-            //     const filename = `${_sales.map(s => s.orderId).join("-")} ${
-            //         printer.mode
-            //     }.pdf`;
-            //     const options = {
-            //         // margin: 20
-            //         margin: 10, //[10, 10, 10, 10], //top, lef
-            //         // margin: [15, 0, 15, 0],
-            //         filename, //: 'document.pdf',
-            //         // pagebreak: { avoid: ["tr", "td"] },
-            //         pagebreak: {
-            //             mode: ["avoid-all", "css", "legacy"]
-            //         },
-            //         // jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' },
-            //         jsPDF: {
-            //             unit: "mm",
-            //             format: "a4",
-            //             orientation: "portrait"
-            //         },
-            //         image: { type: "jpeg", quality: 1 },
-            //         html2canvas: {
-            //             dpi: 192,
-            //             scale: 4,
-            //             letterRendering: true,
-            //             useCORS: true
-            //         }
-            //     };
-            // const pdf = await html2pdf()
-            //   .from(doc)
-            //   .set(options)
-            //   .outputPDF('');
-            // html2pdf()
-            //     .set(options)
-            //     .from(doc)
-            //     .toPdf()
-            //     .save(filename);
-            // doc?.classList?.add("hidden");
-            // }
-            // .output("blob");
-            // pdf.save();
-        }
-        // await timeout(200);
+        if (prints || !id) window.print();
+        if (prints) window.close();
+
         if (!id) dispatchSlice("printOrders", null);
     }
     const Logo = ({}) => (
