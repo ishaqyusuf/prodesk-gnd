@@ -42,7 +42,7 @@ import {
 } from "../ui/table";
 import Money from "../money";
 import { getSettingAction } from "@/app/_actions/settings";
-import { InstallCostSettings } from "@/types/settings";
+import { InstallCostLine, InstallCostSettings } from "@/types/settings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
 import {
@@ -117,6 +117,8 @@ export default function SubmitJobModal() {
 
     async function init(data: IJobs, defaultTab) {
         form.reset();
+        setTasks([]);
+
         loadStaticList("staticProjects", projects, staticProjectsAction);
         const __ = !data?.id
             ? {
@@ -158,18 +160,20 @@ export default function SubmitJobModal() {
         // } else setTab("general");
     }
     async function loadUnits(projectId) {
+        setTasks([]);
         form.setValue("meta.addon", 0);
         if (!projectId) setUnits([]);
         else {
             const ls = await getUnitJobs(projectId, type);
             if (isInstallation()) form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
-            console.log(ls);
+            console.log(ls.homeList);
         }
         // form.setValue('homeData',ls.homeList)
     }
     async function selectUnit(unit: HomeJobList) {
         form.setValue("homeData", unit);
+        setTasks([]);
         form.setValue("homeId", unit.id);
         if (unit.costing) {
             setUnitCosting(unit.costing.costings);
@@ -182,12 +186,24 @@ export default function SubmitJobModal() {
             form.setValue("meta.costData", costData);
         }
         form.setValue("subtitle", unit.name);
-
+        const _tasks = costSetting?.meta?.list
+            ?.filter(v => isDecoShutter() || unit?.costing?.costings?.[v.uid])
+            ?.filter(
+                v =>
+                    (isDecoShutter() &&
+                        v.title.toLowerCase() == "deco-shutters") ||
+                    (!isDecoShutter() &&
+                        v.title.toLowerCase() != "deco-shutters")
+            );
+        console.log(costSetting?.meta?.list?.length);
+        console.log(_tasks);
+        setTasks(_tasks);
         // _setTab("tasks");
     }
     const [units, setUnits] = useState<HomeJobList[]>([]);
     const [costChart, setCostChart] = useState<any>({});
     const [addCost, setAddCost] = useState(0);
+    const [tasks, setTasks] = useState<InstallCostLine[]>([]);
     const [costSetting, setCostSetting] = useState<InstallCostSettings>(
         {} as any
     );
@@ -470,33 +486,18 @@ export default function SubmitJobModal() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {costSetting?.meta?.list
-                                                ?.filter(
-                                                    v =>
-                                                        isDecoShutter() ||
-                                                        unitCosting[v.uid]
-                                                )
-                                                ?.filter(
-                                                    v =>
-                                                        (isDecoShutter() &&
-                                                            v.title.toLowerCase() ==
-                                                                "deco-shutters") ||
-                                                        (!isDecoShutter() &&
-                                                            v.title.toLowerCase() !=
-                                                                "deco-shutters")
-                                                )
-                                                .map((row, i) => {
-                                                    return (
-                                                        <Row
-                                                            key={i}
-                                                            form={form}
-                                                            row={row}
-                                                            unitCosting={
-                                                                unitCosting
-                                                            }
-                                                        />
-                                                    );
-                                                })}
+                                            {tasks.map((row, i) => {
+                                                return (
+                                                    <Row
+                                                        key={i}
+                                                        form={form}
+                                                        row={row}
+                                                        unitCosting={
+                                                            unitCosting
+                                                        }
+                                                    />
+                                                );
+                                            })}
                                         </TableBody>
                                     </Table>
                                 </div>
