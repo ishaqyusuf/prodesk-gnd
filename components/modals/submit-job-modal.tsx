@@ -195,9 +195,10 @@ export default function SubmitJobModal() {
                     (!isDecoShutter() &&
                         v.title.toLowerCase() != "deco-shutters")
             );
+        console.log(costSetting);
         console.log(costSetting?.meta?.list?.length);
         console.log(_tasks);
-        setTasks(_tasks);
+        setTasks(_tasks || []);
         // _setTab("tasks");
     }
     const [units, setUnits] = useState<HomeJobList[]>([]);
