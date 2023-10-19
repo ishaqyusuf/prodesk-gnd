@@ -73,7 +73,7 @@ export async function getUnitJobs(projectId, jobType: IJobType) {
         let communityTemplate: ICommunityTemplate = project.communityModels.find(
             m => m.modelName == unit.modelName
         ) as any;
-        if (jobType) {
+        if (jobType == "punchout") {
             ls.push({
                 id: unit.id,
                 name: unitTaskName(unit),

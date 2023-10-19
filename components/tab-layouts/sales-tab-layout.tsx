@@ -24,7 +24,8 @@ export default function SalesTabLayout({
                 title: "Inbounds",
                 path: "/sales/inbounds"
             },
-            can?.viewDelivery && { title: "Delivery", path: "/sales/delivery" }
+            can?.viewDelivery && { title: "Delivery", path: "/sales/delivery" },
+            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" }
         ].filter(Boolean)
     );
     return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;

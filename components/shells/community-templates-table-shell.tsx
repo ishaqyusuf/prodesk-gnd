@@ -115,7 +115,7 @@ export default function CommunityTemplateTableShell<T>({
                     <ModelCostCell
                         modal="modelCost"
                         row={row.original}
-                        costs={row.original.costs as any}
+                        costs={row.original?.pivot?.costs as any}
                     />
                 ) //<CommunityModelCostCell row={row.original} />
             },
@@ -213,7 +213,7 @@ export default function CommunityTemplateTableShell<T>({
                                             await updateCosts(0);
                                         }
                                     }
-                                    if (row.original.costs.length) {
+                                    if (row.original.pivot?.costs.length) {
                                         toast(
                                             "Model contains costs, this action will override existing costs. Proceed?",
                                             {

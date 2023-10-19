@@ -209,8 +209,10 @@ export function nav(
             );
     }
 
-    if (viewDelivery || isAdmin)
+    if (viewDelivery && !viewOrders)
         routes.Sales.push(_route("Order Delivery", Truck, "/sales/delivery"));
+    if (viewDelivery && !viewOrders)
+        routes.Sales.push(_route("Order Pickup", Truck, "/sales/pickup"));
     if (editOrders)
         routes.Sales.push(
             ...[

@@ -1,6 +1,7 @@
 import {
     Builders,
     CommunityModelCost,
+    CommunityModelPivot,
     CommunityModels,
     CostCharts,
     HomeTasks,
@@ -95,12 +96,16 @@ export type IHomeTemplate = OmitMeta<HomeTemplates> & {
 export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
     meta: ICommunityTemplateMeta;
-    costs: ICommunityCosts[];
+    // costs: ICommunityCosts[];
+    pivot: ICommunityPivot;
     _count: {
         homes;
         costs;
     };
 };
+export interface ICommunityPivot extends OmitMeta<CommunityModelPivot> {
+    costs: ICommunityCosts[];
+}
 export interface ICommunityTemplateMeta {
     design: CommunityTemplateDesign;
     modelCost: ICostChartMeta;
