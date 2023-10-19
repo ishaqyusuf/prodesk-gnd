@@ -130,10 +130,19 @@ export async function _saveCommunitModelCostData(
             }
         })) as any;
     }
+    await _synchronizeModelCost(_c, templateId, includeCompletedTasks);
+
+    revalidatePath("/settings/community/community-templates", "page");
+    return _c;
+}
+export async function _synchronizeModelCost(
+    _c,
+    templateId,
+    includeCompletedTasks
+) {
     await Promise.all(
         Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
             const { startDate: from, endDate: to } = _c;
-
             const whereHomTasks: Prisma.HomeTasksWhereInput = {
                 home: {
                     communityTemplateId: templateId,
@@ -159,42 +168,6 @@ export async function _saveCommunitModelCostData(
                     updatedAt: new Date()
                 }
             });
-            // console.log(s.count);
-        })
-    );
-    revalidatePath("/settings/community/community-templates", "page");
-    return _c;
-}
-export async function _synchronizeModelCost(_c, templateId) {
-    await Promise.all(
-        Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
-            // const createdAt = {
-            //     gte:  fixDbTime(dayjs(_c.startDate)).toISOString()
-            // }
-            // if(_c.endDate)
-            //     createdAt.lte  = fixDbTime(dayjs(_c.endDate), 23, 59, 59).toISOString(),
-            const { startDate: from, endDate: to } = _c;
-            const s = await prisma.homeTasks.updateMany({
-                where: {
-                    home: {
-                        communityTemplateId: templateId,
-                        createdAt: {
-                            gte: !from
-                                ? undefined
-                                : fixDbTime(dayjs(from)).toISOString(),
-                            lte: !to
-                                ? undefined
-                                : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
-                        }
-                    },
-                    taskUid: k
-                },
-                data: {
-                    amountDue: Number(v) || 0,
-                    updatedAt: new Date()
-                }
-            });
-            // console.log(s.count);
         })
     );
 }
