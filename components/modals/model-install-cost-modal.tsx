@@ -81,13 +81,17 @@ export default function ModelInstallCostModal({ community = false }) {
                     });
                 else {
                     let meta: any = null;
-                    let cd: ICommunityTemplate = data;
+                    let cd: ICommunityTemplate = deepCopy(data);
                     if (cd.meta?.installCosts) {
                         const { installCosts, ...mm } = cd.meta;
                         meta = mm;
                     }
+                    console.log(cd.pivot?.meta);
                     let pMeta = cd.pivot?.meta || {};
                     pMeta.installCost = cost?.costings;
+                    console.log(data);
+                    console.log(pMeta);
+
                     await updateCommunityModelInstallCost(
                         data.id,
                         data.pivotId,
