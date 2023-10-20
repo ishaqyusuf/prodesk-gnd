@@ -88,6 +88,7 @@ export async function getUnitJobs(projectId, jobType: IJobType) {
         }
         const pivotInstallCost = communityTemplate?.pivot?.meta?.installCost;
         if (pivotInstallCost) {
+            console.log(pivotInstallCost);
             _pushCost(initJobData(unit as any, proj, pivotInstallCost));
             return;
         }
@@ -123,7 +124,8 @@ function initJobData(
     project: IProject,
     cost: InstallCosting | undefined
 ) {
-    if (!cost || Object.values(cost)?.filter(Boolean).length > 3) {
+    if (!cost || Object.values(cost)?.filter(Boolean).length < 3) {
+        console.log(cost);
         return null;
     }
     const costing = deepCopy<InstallCosting>(cost);
