@@ -117,8 +117,8 @@ export default function ModelInstallCostModal({ community = false }) {
                 costs: [
                     {
                         costings:
-                            cd?.meta?.installCosts?.[0]?.costings ||
                             cd?.pivot?.meta?.installCost ||
+                            cd?.meta?.installCosts?.[0]?.costings ||
                             {}
                     }
                 ]
