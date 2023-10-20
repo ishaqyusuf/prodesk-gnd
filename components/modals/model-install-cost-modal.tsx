@@ -112,10 +112,14 @@ export default function ModelInstallCostModal({ community = false }) {
         if (community) {
             let cd = data as ICommunityTemplate;
             // cd.pivotId
+            // console.log(cd)
             form.reset({
                 costs: [
                     {
-                        costings: cd?.meta?.installCosts?.[0]?.costings || {}
+                        costings:
+                            cd?.meta?.installCosts?.[0]?.costings ||
+                            cd?.pivot?.meta?.installCost ||
+                            {}
                     }
                 ]
             });
