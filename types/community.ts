@@ -12,7 +12,6 @@ import {
     Projects
 } from "@prisma/client";
 import { OmitMeta } from "./type";
-import { IJobs } from "./hrm";
 
 export type IProject = OmitMeta<Projects> & {
     meta: IProjectMeta;

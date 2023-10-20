@@ -111,3 +111,41 @@ export async function _bootstrapPivot() {
         })
     );
 }
+export async function _createMissingPivots() {
+    await Promise.all(
+        (
+            await prisma.communityModels.findMany({
+                where: {
+                    pivot: {
+                        is: null
+                    }
+                }
+            })
+        ).map(async p => {
+            const pivotM = getPivotModel(p.modelName);
+            let pivot = await prisma.communityModelPivot.findFirst({
+                where: {
+                    model: pivotM,
+                    projectId: p.projectId
+                }
+            });
+            if (!pivot) {
+                pivot = await prisma.communityModelPivot.create({
+                    data: {
+                        model: pivotM,
+                        projectId: p.projectId,
+                        meta: {},
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    }
+                });
+            }
+            await prisma.communityModels.update({
+                where: { id: p.id },
+                data: {
+                    pivotId: pivot.id
+                }
+            });
+        })
+    );
+}
