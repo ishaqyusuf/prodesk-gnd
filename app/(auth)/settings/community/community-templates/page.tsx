@@ -11,14 +11,17 @@ import ModelTemplateModal from "@/components/modals/model-template-modal";
 import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 
 import ModelCostModal from "@/components/modals/model-cost-modal";
-import { _bootstrapPivot } from "@/app/_actions/community/_community-pivot";
+import {
+    _bootstrapPivot,
+    _createMissingPivots
+} from "@/app/_actions/community/_community-pivot";
 
 export const metadata: Metadata = {
     title: "Community Templates"
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
     const response = await getCommunityTemplates(queryParams(searchParams));
-    await _bootstrapPivot();
+    await _createMissingPivots();
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>
