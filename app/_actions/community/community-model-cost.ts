@@ -87,6 +87,7 @@ export async function _importModelCostData(
 export async function _saveCommunitModelCostData(
     cost: ICommunityCosts,
     templateId,
+    pivotId,
     includeCompletedTasks = false
 ) {
     const { id: _id, communityModelId, ..._cost } = cost;
@@ -130,14 +131,14 @@ export async function _saveCommunitModelCostData(
             }
         })) as any;
     }
-    await _synchronizeModelCost(_c, templateId, includeCompletedTasks);
+    await _synchronizeModelCost(_c, pivotId, includeCompletedTasks);
 
     revalidatePath("/settings/community/community-templates", "page");
     return _c;
 }
 export async function _synchronizeModelCost(
     _c,
-    templateId,
+    pivotId,
     includeCompletedTasks
 ) {
     await Promise.all(
@@ -145,7 +146,10 @@ export async function _synchronizeModelCost(
             const { startDate: from, endDate: to } = _c;
             const whereHomTasks: Prisma.HomeTasksWhereInput = {
                 home: {
-                    communityTemplateId: templateId,
+                    // communityTemplateId: templateId,
+                    communityTemplate: {
+                        pivotId
+                    },
                     createdAt: {
                         gte: !from
                             ? undefined
@@ -170,4 +174,10 @@ export async function _synchronizeModelCost(
             });
         })
     );
+}
+export async function _deleteCommunityModelCost(id) {
+    await prisma.communityModelCost.delete({
+        where: { id }
+    });
+    revalidatePath("/settings/community/community-templates", "page");
 }

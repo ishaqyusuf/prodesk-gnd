@@ -7,7 +7,11 @@ import {
     Roles,
     Users
 } from "@prisma/client";
-import { InstallCost, InstallCostingTemplate } from "./community";
+import {
+    InstallCost,
+    InstallCosting,
+    InstallCostingTemplate
+} from "./community";
 import { OmitMeta } from "./type";
 
 export type IUser = Users & {
@@ -45,7 +49,7 @@ export interface HomeJobList {
     name?;
     id?;
     disabled?;
-    costing?: InstallCost;
+    costing?: InstallCosting;
 }
 export interface IRole extends Roles {
     _count: {

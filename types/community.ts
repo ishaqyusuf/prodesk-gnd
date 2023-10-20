@@ -104,7 +104,14 @@ export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     };
 };
 export interface ICommunityPivot extends OmitMeta<CommunityModelPivot> {
-    costs: ICommunityCosts[];
+    modelCosts: ICommunityCosts[];
+    meta: ICommunityPivotMeta;
+    _count: {
+        modelCosts;
+    };
+}
+export interface ICommunityPivotMeta {
+    installCost: InstallCostingTemplate<number | string>;
 }
 export interface ICommunityTemplateMeta {
     design: CommunityTemplateDesign;
@@ -121,10 +128,11 @@ export type InstallCostingTemplate<T> = {
     [uid in string]: T;
 };
 export interface InstallCost {
-    costings: InstallCostingTemplate<number | string>;
+    costings: InstallCosting;
     title?;
     uid?;
 }
+export type InstallCosting = InstallCostingTemplate<number | string>;
 export interface TemplateDesign<T> {
     project: ProjectHeader<T>;
     entry: Entry<T>;

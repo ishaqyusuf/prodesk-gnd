@@ -11,20 +11,28 @@ import { toast } from "sonner";
 import { UseFormReturn, useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ICostChart, IHomeTemplate } from "@/types/community";
+import {
+    ICommunityTemplate,
+    ICostChart,
+    IHomeTemplate
+} from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
 import { DatePicker } from "../date-range-picker";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { saveModelCost } from "@/app/_actions/community/model-costs";
 import { deepCopy } from "@/lib/deep-copy";
-import { sum } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import { calculateCommunitModelCost } from "@/lib/community/community-utils";
-import { _saveCommunitModelCostData } from "@/app/_actions/community/community-model-cost";
+import {
+    _deleteCommunityModelCost,
+    _saveCommunitModelCostData
+} from "@/app/_actions/community/community-model-cost";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Checkbox } from "../ui/checkbox";
 import { _getModelCostStat } from "@/app/_actions/community/_model-cost-stat";
 import { Badge } from "../ui/badge";
+import ConfirmBtn from "../confirm-btn";
 
 export default function ModelCostModal({ community }: { community?: Boolean }) {
     const form = useForm<FormProps>({
@@ -41,7 +49,9 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
     const [index, setIndex] = useState(0);
 
     async function init(data: IHomeTemplate) {
-        let costs = deepCopy<ICostChart[]>(data.costs ?? [])?.map(c => {
+        let costs = deepCopy<ICostChart[]>(
+            (data as any)?.pivot?.modelCosts || data.costs || []
+        )?.map(c => {
             if (c.startDate) c.startDate = new Date(c.startDate);
             if (c.endDate) c.endDate = new Date(c.endDate);
             (c as any)._id = c.id;
@@ -89,6 +99,7 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
                         <CostHistory
                             form={form}
                             data={data}
+                            community={community}
                             changeIndex={changeIndex}
                             index={index}
                         />
@@ -136,11 +147,9 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
     });
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
-    async function submit(data) {
+    async function submit(data: ICommunityTemplate) {
         startTransition(async () => {
-            // if(!form.getValues)
             try {
-                // const isValid = emailSchema.parse(form.getValues());
                 const costs = deepCopy<ICostChart[]>(form.getValues(`costs`));
                 let cost = costs[index];
                 if (!cost) return;
@@ -157,18 +166,17 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     }
                 }
                 if (community) {
-                    // console.log(data.project?.builder?.meta?.tasks);
                     cost.meta = calculateCommunitModelCost(
                         cost.meta,
                         data.project?.builder?.meta?.tasks
                     );
-                    // console.log(cost.meta);
-                    // return;
+
                     cost.model = data.modelName;
                     const { _id, ..._cost } = cost as any;
                     const c = await _saveCommunitModelCostData(
                         _cost as any,
                         data.id,
+                        data.pivotId,
                         form.getValues("includeCompleted")
                     );
                     form.setValue(`costs.${index}` as any, {
@@ -178,17 +186,12 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                 } else {
                     cost.meta.totalCost = sum(Object.values(cost.meta.costs));
                     console.log(cost.meta.totalCost);
-                    cost.model = data.modelNo as any;
+                    cost.model = (data as any).modelNo as any;
                     // console.log([data.id, cost.id, index]);
                     const c = await saveModelCost(cost, data.id);
                     form.setValue(`costs.${index}` as any, c as any);
                     route.refresh();
                 }
-
-                // console.log(JSON.stringify(cost));
-
-                //    form.setValue
-                // closeModal();
                 toast.success("Saved!");
             } catch (error) {
                 console.log(error);
@@ -197,12 +200,6 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
             }
         });
     }
-    // useEffect(() => {
-    //     console.log("....");
-    // }, [fIndex]);
-    // return fields.map(
-    //     (field, fIndex) =>
-    //         fIndex == index && (
     return (
         <>
             <div className="col-span-2 grid gap-2">
@@ -224,58 +221,35 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     value={form.getValues(`costs.${fIndex}.endDate`)}
                 />
             </div>
-            <div className="col-span-4 grid-cols-4 grid bg-slate-100 py-2">
-                <Label className="col-span-2 mx-2">Tasks</Label>
-                <Label className="col-span-1">Cost ($)</Label>
-                <Label className="col-span-1">Tax ($)</Label>
+            <div className="col-span-5 grid-cols-7 grid bg-slate-100 py-2">
+                <Label className="col-span-3 mx-2">Tasks</Label>
+                <Label className="col-span-2">Cost ($)</Label>
+                <Label className="col-span-2">Tax ($)</Label>
             </div>
             {(community
                 ? data?.project?.builder
                 : data?.builder
             )?.meta?.tasks?.map((t, _i) => (
-                <div key={_i} className="col-span-4 gap-2 grid-cols-4 grid">
-                    <div className="col-span-2">
+                <div key={_i} className="col-span-4 gap-2 grid-cols-7 grid">
+                    <div className="col-span-3">
                         <Label>{t.name}</Label>
                     </div>
-                    <div className="">
+                    <div className="col-span-2">
                         <Input
                             type="number"
                             className="h-8"
                             {...form.register(
                                 `costs.${fIndex}.meta.costs.${t.uid}`
                             )}
-                            // onChange={e =>
-                            //     form.setValue(
-                            //         `costs.${fIndex}.meta.costs.${t.uid}`,
-                            //         e.target
-                            //             .value as any
-                            //     )
-                            // }
-                            // value={form.getValues(
-                            //     `costs.${fIndex}.meta.costs.${t.uid}`
-                            // )}
                         />
                     </div>
-                    <div className="">
+                    <div className="col-span-2">
                         <Input
                             type="number"
                             className="h-8"
-                            // {...form.register(
-                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                            // )}
                             {...form.register(
                                 `costs.${fIndex}.meta.tax.${t.uid}`
                             )}
-                            // onChange={e =>
-                            //     form.setValue(
-                            //         `costs.${fIndex}.meta.tax.${t.uid}`,
-                            //         e.target
-                            //             .value as any
-                            //     )
-                            // }
-                            // value={form.getValues(
-                            //     `costs.${fIndex}.meta.tax.${t.uid}`
-                            // )}
                         />
                     </div>
                 </div>
@@ -288,6 +262,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                         <FormItem className="space-x-2 space-y-0 flex items-center">
                             <FormControl>
                                 <Checkbox
+                                    disabled={!community}
                                     checked={field.value as any}
                                     onCheckedChange={field.onChange}
                                 />
@@ -297,8 +272,8 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     )}
                 />
                 <div className="flex-1"></div>
-
                 <Btn
+                    disabled={!community}
                     className="h-8"
                     isLoading={isSaving}
                     onClick={() => submit(data as any)}
@@ -313,30 +288,36 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
     // )
     // );
 }
-export function CostHistory({ form, data, changeIndex, index }: Props) {
-    const { prepend, fields } = useFieldArray({
+export function CostHistory({
+    form,
+    data,
+    changeIndex,
+    index,
+    community
+}: Props) {
+    const { prepend, remove, fields } = useFieldArray({
         control: form.control,
         name: "costs"
     });
-
+    function createCost() {
+        if (fields?.some(c => !c.createdAt)) {
+            toast.error("You have unsaved costs");
+        } else
+            prepend({
+                type: "task-costs",
+                model: data?.modelName
+            } as any);
+        changeIndex(0);
+    }
     return (
-        <div className="sm:w-1/3 space-y-2 pr-2">
+        <div className="sm:w-2/5 space-y-2 pr-2">
             <div className="">
                 <Label>Cost History</Label>
             </div>
             <div className="">
                 <Button
-                    disabled={fields.some(f => !f.createdAt)}
-                    onClick={() => {
-                        if (fields?.some(c => !c.createdAt)) {
-                            toast.error("You have unsaved costs");
-                        } else
-                            prepend({
-                                type: "task-costs",
-                                model: data?.modelName
-                            } as any);
-                        changeIndex(0);
-                    }}
+                    disabled={fields.some(f => !f.createdAt) || !community}
+                    onClick={createCost}
                     variant="outline"
                     className="w-full h-7 mt-1"
                 >
@@ -344,30 +325,59 @@ export function CostHistory({ form, data, changeIndex, index }: Props) {
                     <span>New Cost</span>
                 </Button>
             </div>
-            <ScrollArea className="max-h-[350px] w-full">
+            <ScrollArea className="max-h-[350px] h-[350px] w-full">
                 <div className="divide-y">
                     {/* {changing ? "CHANGING" : "CHANGE COMPLETE"} */}
                     {fields.map((f, i) => (
-                        <Button
-                            variant={i == index ? "secondary" : "ghost"}
-                            className="text-sm cursor-pointer hover:bg-slate-200 h-8 w-full flex  p-0.5 px-2  "
+                        <div
+                            className="flex items-center space-x-2 group mr-2"
                             key={i}
-                            onClick={() => {
-                                changeIndex(i);
-                            }}
                         >
-                            <div className="flex justify-between flex-1 space-x-4">
-                                <div className="text-start">
-                                    {f.title || "New Cost"}
+                            <Button
+                                variant={i == index ? "secondary" : "ghost"}
+                                className="text-sm cursor-pointer hover:bg-slate-200 h-8 w-full flex  p-0.5 px-2  "
+                                onClick={() => {
+                                    changeIndex(i);
+                                }}
+                            >
+                                <div className="flex justify-between flex-1 space-x-4">
+                                    <div className="text-start">
+                                        {f.title || "New Cost"}
+                                    </div>
+                                    <div>
+                                        <Badge className="" variant={"outline"}>
+                                            {form.getValues(
+                                                `costStats.${f._id}`
+                                            ) || 0}
+                                        </Badge>
+                                    </div>
                                 </div>
-                                <div>
-                                    <Badge className="" variant={"outline"}>
-                                        {form.getValues(`costStats.${f._id}`) ||
-                                            0}
-                                    </Badge>
-                                </div>
-                            </div>
-                        </Button>
+                            </Button>
+                            <ConfirmBtn
+                                disabled={!community}
+                                onClick={async () => {
+                                    if (index == i && fields.length > 1) {
+                                        if (
+                                            index > 0 &&
+                                            fields.length - 1 == index
+                                        )
+                                            changeIndex(i - 1);
+                                    }
+                                    if (fields.length == 1) createCost();
+                                    await _deleteCommunityModelCost(f._id);
+                                    remove(i);
+
+                                    // changeIndex()
+                                }}
+                                variant="ghost"
+                                size="icon"
+                                className={cn(
+                                    community &&
+                                        "group-hover:opacity-100 opacity-20"
+                                )}
+                                trash
+                            ></ConfirmBtn>
+                        </div>
                     ))}
                 </div>
             </ScrollArea>

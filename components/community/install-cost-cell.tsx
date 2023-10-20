@@ -1,7 +1,7 @@
 "use client";
 
 import { ModalName } from "@/store/slicers";
-import { ICostChart } from "@/types/community";
+import { ICommunityTemplate, ICostChart } from "@/types/community";
 import {
     Cell,
     PrimaryCellContent,
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 interface Props {
     modal: ModalName;
-    row;
+    row: ICommunityTemplate;
 }
 export default function InstallCostCell({ modal, row }: Props) {
     return (
@@ -26,7 +26,9 @@ export default function InstallCostCell({ modal, row }: Props) {
                         : "bg-slate-200 text-slate-700 hover:bg-slate-200"
                 )}
             >
-                {row.meta?.installCosts?.length ? "Edit Cost" : "Set Cost"}
+                {row.meta?.installCosts?.length || row?.pivot?.meta?.installCost
+                    ? "Edit Cost"
+                    : "Set Cost"}
             </Badge>
         </Cell>
     );

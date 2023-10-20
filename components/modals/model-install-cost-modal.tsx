@@ -11,7 +11,12 @@ import { toast } from "sonner";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { IHomeTemplate, IProject, InstallCost } from "@/types/community";
+import {
+    ICommunityTemplate,
+    IHomeTemplate,
+    IProject,
+    InstallCost
+} from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
@@ -75,11 +80,20 @@ export default function ModelInstallCostModal({ community = false }) {
                         installCosts: costs
                     });
                 else {
-                    await updateCommunityModelInstallCost(data.id, {
-                        ...data.meta,
-                        overrideModelCost: form.getValues("enable"),
-                        installCosts: costs
-                    });
+                    let meta: any = null;
+                    let cd: ICommunityTemplate = data;
+                    if (cd.meta?.installCosts) {
+                        const { installCosts, ...mm } = cd.meta;
+                        meta = mm;
+                    }
+                    let pMeta = cd.pivot?.meta || {};
+                    pMeta.installCost = cost?.costings;
+                    await updateCommunityModelInstallCost(
+                        data.id,
+                        data.pivotId,
+                        pMeta,
+                        meta
+                    );
                 }
                 toast.message("Saved!");
             } catch (error) {
@@ -89,16 +103,27 @@ export default function ModelInstallCostModal({ community = false }) {
             }
         });
     }
-    async function init(data: IHomeTemplate) {
+    async function init(data) {
         // console.log(data);
-        form.reset({
-            costs: data.meta.installCosts || [{}],
-            enable: (data?.meta as any)?.overrideModelCost
-        });
+        if (community) {
+            let cd = data as ICommunityTemplate;
+            // cd.pivotId
+            form.reset({
+                costs: [
+                    {
+                        costings: cd?.meta?.installCosts?.[0]?.costings || {}
+                    }
+                ]
+            });
+        } else
+            form.reset({
+                costs: data.meta.installCosts || [{}]
+                // enable: (data?.meta as any)?.overrideModelCost
+            });
     }
     return (
         <BaseModal<any>
-            className="sm:max-w-[550px]"
+            className="sm:max-w-[600px]"
             onOpen={data => {
                 init(data);
             }}

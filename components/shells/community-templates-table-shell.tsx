@@ -115,7 +115,8 @@ export default function CommunityTemplateTableShell<T>({
                     <ModelCostCell
                         modal="modelCost"
                         row={row.original}
-                        costs={row.original?.pivot?.costs as any}
+                        // costs={row.original?.costs as any}
+                        costs={row.original?.pivot?.modelCosts as any}
                     />
                 ) //<CommunityModelCostCell row={row.original} />
             },
@@ -166,6 +167,7 @@ export default function CommunityTemplateTableShell<T>({
                                 Icon={Import}
                                 onClick={async () => {
                                     async function __importCost() {
+                                        return;
                                         async function updateCosts(index) {
                                             //
                                             const _cost = _?.costs[index];
@@ -213,7 +215,7 @@ export default function CommunityTemplateTableShell<T>({
                                             await updateCosts(0);
                                         }
                                     }
-                                    if (row.original.pivot?.costs.length) {
+                                    if (row.original.pivot?._count.modelCosts) {
                                         toast(
                                             "Model contains costs, this action will override existing costs. Proceed?",
                                             {

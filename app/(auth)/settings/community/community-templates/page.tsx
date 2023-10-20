@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
     const response = await getCommunityTemplates(queryParams(searchParams));
-    await _bootstrapPivot();
+    // await _bootstrapPivot();
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>

@@ -68,13 +68,16 @@ export async function _bootstrapPivot() {
     });
     // console.log(data);
     // return;
+    let total = Object.keys(data).length;
+    console.log("total", total);
+    let _count = Object.keys(data).filter((d, i) => i < 10);
     await Promise.all(
         Object.entries(data).map(async ([k, v]) => {
+            if (!_count.includes(k)) return;
             let communityIds = v.costs.map(c => c.communityModelId);
             communityIds = communityIds.filter(
                 (_, i) => communityIds.findIndex(ci => ci == _) == i
             );
-            console.log(communityIds);
 
             const pivot = await prisma.communityModelPivot.create({
                 data: {

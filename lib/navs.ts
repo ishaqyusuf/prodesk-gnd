@@ -254,9 +254,9 @@ export function nav(
             ...[
                 _rw.builders,
                 _rw["community-templates"],
-                _rw["model-costs"],
-                _rw["community-costs"],
                 _rw["install-costs"],
+                _rw["community-costs"],
+                _rw["model-costs"],
                 _rw["model-templates"]
             ].filter(Boolean)
         );

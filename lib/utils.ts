@@ -252,3 +252,16 @@ export async function _serverAction(
         onError && onError(e);
     }
 }
+export function groupArray<T>(arr: T[], by: keyof T): { [k in string]: T[] } {
+    const grouped: any = {};
+
+    for (const item of arr) {
+        const title = item[by];
+
+        if (!grouped[title]) {
+            grouped[title] = [];
+        }
+        grouped[title].push(item);
+    }
+    return grouped;
+}

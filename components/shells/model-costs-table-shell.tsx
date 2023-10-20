@@ -99,7 +99,10 @@ export default function ModelCostTableShell<T>({
                 id: "install-costs",
                 header: ColumnHeader("Install Costs"),
                 cell: ({ row }) => (
-                    <InstallCostCell row={row.original} modal="installCost" />
+                    <InstallCostCell
+                        row={row.original as any}
+                        modal="installCost"
+                    />
                 )
             },
             {

@@ -55,12 +55,22 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                     }
                 }
             },
-            pivot: true,
+            pivot: {
+                include: {
+                    modelCosts: true,
+                    _count: {
+                        select: {
+                            modelCosts: true
+                        }
+                    }
+                }
+            },
+            costs: true,
             // builder: true,
             _count: {
                 select: {
-                    homes: true,
-                    costs: true
+                    homes: true
+                    // piv: true
                 }
             }
         },

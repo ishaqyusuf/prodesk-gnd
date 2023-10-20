@@ -176,9 +176,9 @@ export default function SubmitJobModal() {
         setTasks([]);
         form.setValue("homeId", unit.id);
         if (unit.costing) {
-            setUnitCosting(unit.costing.costings);
+            setUnitCosting(unit.costing);
             const costData = {};
-            Object.entries(unit.costing.costings).map(([k, v]) => {
+            Object.entries(unit.costing).map(([k, v]) => {
                 costData[k] = {
                     cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
                 };
@@ -187,7 +187,7 @@ export default function SubmitJobModal() {
         }
         form.setValue("subtitle", unit.name);
         const _tasks = costSetting?.meta?.list
-            ?.filter(v => isDecoShutter() || unit?.costing?.costings?.[v.uid])
+            ?.filter(v => isDecoShutter() || unit?.costing?.[v.uid])
             ?.filter(
                 v =>
                     (isDecoShutter() &&
@@ -195,9 +195,9 @@ export default function SubmitJobModal() {
                     (!isDecoShutter() &&
                         v.title.toLowerCase() != "deco-shutters")
             );
-        console.log(costSetting);
-        console.log(costSetting?.meta?.list?.length);
-        console.log(_tasks);
+        // console.log(costSetting);
+        // console.log(costSetting?.meta?.list?.length);
+        // console.log(_tasks);
         setTasks(_tasks || []);
         // _setTab("tasks");
     }

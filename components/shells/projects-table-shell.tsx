@@ -72,7 +72,7 @@ export default function ProjectsTableShell<T>({
                             <InstallCostCell
                                 key={1}
                                 modal="communityInstallCost"
-                                row={data}
+                                row={data as any}
                             />
                         ]
                     }))

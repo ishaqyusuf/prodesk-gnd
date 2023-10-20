@@ -1,22 +1,35 @@
 "use server";
 
 import { prisma } from "@/db";
-import { calculateCommunitModelCost } from "@/lib/community/community-utils";
+import {
+    calculateCommunitModelCost,
+    getPivotModel
+} from "@/lib/community/community-utils";
 import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 import { transformData } from "@/lib/utils";
 export async function updateCommunityModelInstallCost(
     id,
-    meta: ICommunityTemplateMeta
+    pivotId,
+    pivotMeta,
+    meta = null
 ) {
-    await prisma.communityModels.update({
-        where: { id },
+    await prisma.communityModelPivot.update({
+        where: { id: pivotId },
         data: {
-            meta: meta as any,
+            meta: pivotMeta as any,
             updatedAt: new Date()
         }
     });
+    if (meta)
+        await prisma.communityModels.update({
+            where: { id },
+            data: {
+                meta: meta as any,
+                updatedAt: new Date()
+            }
+        });
     revalidatePath("/settings/community/community-templates", "page");
 }
 export async function staticCommunity() {
@@ -78,14 +91,33 @@ export async function _saveCommunityModelCost(
 }
 export async function _createCommunityTemplate(data, projectName) {
     const slug = slugify(`${projectName} ${data.modelName}`);
-
+    const pivotM = getPivotModel(data.modelName);
+    let pivot = await prisma.communityModelPivot.findFirst({
+        where: {
+            model: pivotM,
+            projectId: data.projectId
+        }
+    });
+    if (!pivot) {
+        pivot = await prisma.communityModelPivot.create({
+            data: {
+                model: pivotM,
+                projectId: data.projectId,
+                meta: {},
+                createdAt: new Date(),
+                updatedAt: new Date()
+            }
+        });
+    }
     const temp = await prisma.communityModels.create({
         data: {
             slug,
             ...data,
+            pivotId: pivot.id,
             ...transformData({})
         }
     });
+
     await prisma.homes.updateMany({
         where: {
             projectId: temp.projectId,
