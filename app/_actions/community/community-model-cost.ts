@@ -90,7 +90,7 @@ export async function _saveCommunitModelCostData(
     pivotId,
     includeCompletedTasks = false
 ) {
-    const { id: _id, communityModelId, ..._cost } = cost;
+    const { id: _id, communityModelId, pivotId: _pivotId, ..._cost } = cost;
     let _c: ICostChart & {
         community: ICommunityModelCost;
     } = null as any;
@@ -141,6 +141,7 @@ export async function _synchronizeModelCost(
     pivotId,
     includeCompletedTasks
 ) {
+    console.log(_c.meta.sumCosts);
     await Promise.all(
         Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
             const { startDate: from, endDate: to } = _c;
@@ -151,9 +152,7 @@ export async function _synchronizeModelCost(
                         pivotId
                     },
                     createdAt: {
-                        gte: !from
-                            ? undefined
-                            : fixDbTime(dayjs(from)).toISOString(),
+                        gte: fixDbTime(dayjs(from)).toISOString(),
                         lte: !to
                             ? undefined
                             : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
@@ -172,6 +171,8 @@ export async function _synchronizeModelCost(
                     updatedAt: new Date()
                 }
             });
+
+            console.log(s.count, whereHomTasks);
         })
     );
 }

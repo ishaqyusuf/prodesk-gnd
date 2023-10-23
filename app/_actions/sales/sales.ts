@@ -281,6 +281,7 @@ export async function saveOrderAction({
     salesRepId,
     shippingAddressId,
     billingAddressId,
+    pickupId,
     ..._order
   } = order;
 

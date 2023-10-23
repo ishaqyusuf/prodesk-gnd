@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useRef, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -17,6 +17,7 @@ import { Label } from "../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { ICustomer } from "@/types/customers";
 import { CustomerTypes } from "@prisma/client";
+import SignaturePad from "react-signature-pad-wrapper";
 import { saveCustomer } from "@/app/_actions/sales/sales-customers";
 import {
     Select,
@@ -46,7 +47,9 @@ export default function PickupModal() {
     async function submit(order: ISalesOrder) {
         startTransition(async () => {
             try {
+                const sig = sigCanvas.current.toDataURL();
                 const data = form.getValues();
+                data.meta.signature = sig;
                 if (!data.pickupAt) data.pickupAt = new Date();
                 await _createPickup(order.id, data);
 
@@ -67,9 +70,10 @@ export default function PickupModal() {
             pickupBy: order.customer?.name
         });
     }
+    const sigCanvas = useRef<any>();
     return (
         <BaseModal<{ order: ISalesOrder; pickup?: ISalesPickup }>
-            className="sm:max-w-[450px]"
+            className="sm:max-w-[500px]"
             onOpen={data => {
                 init(data.order, data.pickup);
             }}
@@ -93,6 +97,16 @@ export default function PickupModal() {
                                 format={"YYYY-MM-DD"}
                                 className="flex-1 w-full h-8"
                                 {...form.register("pickupAt")}
+                            />
+                        </div>
+                        <div className="border col-span-2">
+                            <SignaturePad
+                                ref={sigCanvas}
+                                options={{
+                                    minWidth: 5,
+                                    maxWidth: 10,
+                                    penColor: "rgb(66, 133, 244)"
+                                }}
                             />
                         </div>
                     </div>

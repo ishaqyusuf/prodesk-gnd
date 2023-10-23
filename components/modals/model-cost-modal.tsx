@@ -173,6 +173,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
 
                     cost.model = data.modelName;
                     const { _id, ..._cost } = cost as any;
+                    // console.log(form.getValues("includeCompleted"));
                     const c = await _saveCommunitModelCostData(
                         _cost as any,
                         data.id,

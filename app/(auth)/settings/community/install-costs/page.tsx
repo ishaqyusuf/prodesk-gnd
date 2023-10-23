@@ -6,18 +6,18 @@ import CommunitySettingsLayoutComponent from "@/components/tab-layouts/community
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Install Costs",
+    title: "Install Costs"
 };
 export default async function InstallCostsPage({}) {
-  const data = await getSettingAction("install-price-chart");
-  return (
-    <CommunitySettingsLayoutComponent>
-      <Breadcrumbs>
-        <BreadLink isFirst title="Settings" />
-        <BreadLink title="Community" />
-        <BreadLink isLast title="Install Cost" />
-      </Breadcrumbs>
-      <InstallCostForm data={data as any} />;
-    </CommunitySettingsLayoutComponent>
-  );
+    const data = await getSettingAction("install-price-chart");
+    return (
+        <CommunitySettingsLayoutComponent>
+            <Breadcrumbs>
+                <BreadLink isFirst title="Settings" />
+                <BreadLink title="Community" />
+                <BreadLink isLast title="Install Cost" />
+            </Breadcrumbs>
+            <InstallCostForm data={data as any} />
+        </CommunitySettingsLayoutComponent>
+    );
 }

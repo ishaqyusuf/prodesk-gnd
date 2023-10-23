@@ -40,7 +40,9 @@ export async function createHomesAction(homes: Homes[]) {
             ) as any;
             builder.meta.tasks.map(builderTask => {
                 const _task: IHomeTask = {
-                    meta: {}
+                    meta: {},
+                    createdAt: new Date(),
+                    updatedAt: new Date()
                 } as any;
                 _task.projectId = home.projectId;
                 _task.homeId = home.id;

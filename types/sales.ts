@@ -41,7 +41,9 @@ export type ISalesOrder = OmitMeta<SalesOrders> & {
     };
 };
 export interface ISalesPickup extends OmitMeta<SalesPickup> {
-    meta: {};
+    meta: {
+        signature;
+    };
 }
 export type ISalesOrderMeta = {
     manual_cost_price;

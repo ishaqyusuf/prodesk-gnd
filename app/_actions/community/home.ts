@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { dateQuery, getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { _fixHomeTaskDates } from "../upgrade/fix-home-task-date";
 
 export interface HomeQueryParams extends BaseQuery {
     _builderId;
@@ -13,6 +14,7 @@ export interface HomeQueryParams extends BaseQuery {
     _installation?: "Submitted" | "No Submission";
 }
 export async function getHomesAction(query: HomeQueryParams) {
+    await _fixHomeTaskDates();
     const where = await whereHome(query);
     const homes = await prisma.homes.findMany({
         ...(await queryFilter(query)),
