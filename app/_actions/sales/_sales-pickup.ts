@@ -5,6 +5,7 @@ import { getSales, whereSales } from "./sales";
 import { prisma } from "@/db";
 import { _revalidate } from "../_revalidate";
 import { getPageInfo, queryFilter } from "../action-utils";
+import { userId } from "../utils";
 
 export async function _getSalesPickup(query: SalesQueryParams) {
     query.deliveryOption = "pickup";
@@ -43,6 +44,7 @@ export async function _createPickup(salesId, pickup) {
             pickup: {
                 create: {
                     ...pickup,
+                    pickupApprovedBy: await userId(),
                     createdAt: new Date(),
                     updatedAt: new Date()
                 }

@@ -856,13 +856,15 @@ model SalesOrders {
 }
 
 model SalesPickup {
-    id        Int           @unique @default(autoincrement())
-    pickupBy  String?
-    meta      Json?         @db.Json
-    pickupAt  DateTime?     @db.Timestamp(0)
-    createdAt DateTime?     @db.Timestamp(0)
-    updatedAt DateTime?     @db.Timestamp(0)
-    sales     SalesOrders[]
+    id               Int           @unique @default(autoincrement())
+    pickupBy         String?
+    pickupApprovedBy Int
+    meta             Json?         @db.Json
+    pickupAt         DateTime?     @db.Timestamp(0)
+    createdAt        DateTime?     @db.Timestamp(0)
+    updatedAt        DateTime?     @db.Timestamp(0)
+    sales            SalesOrders[]
+    approvedBy       Users         @relation(fields: [pickupApprovedBy], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1008,6 +1010,7 @@ model Users {
     myIssuedPayments  JobPayments[]    @relation(name: "payer")
     payments          JobPayments[]    @relation(name: "worker")
     employeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
+    SalesPickup       SalesPickup[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
