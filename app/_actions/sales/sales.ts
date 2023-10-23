@@ -27,7 +27,7 @@ import { removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 
-  function whereSales(query: SalesQueryParams) {
+ export async function whereSales(query: SalesQueryParams) {
   const {
     _q,
     _dateType = "createdAt",
@@ -226,7 +226,7 @@ return await getSales(query)
 }
 export async function getSales(query: SalesQueryParams) {
  
- const where = whereSales(query);
+ const where =await  whereSales(query);
 //  console.log
   const _items = await prisma.salesOrders.findMany({
     where,

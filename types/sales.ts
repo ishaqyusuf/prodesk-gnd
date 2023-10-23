@@ -7,6 +7,7 @@ import {
     SalesOrderItems,
     SalesOrders,
     SalesPayments,
+    SalesPickup,
     Users
 } from "@prisma/client";
 import { UseFormReturn } from "react-hook-form";
@@ -27,7 +28,6 @@ export type ISalesOrder = OmitMeta<SalesOrders> & {
     shippingAddress?: any;
     progress?: Progress[];
     producer?: Users;
-
     salesRep?: Users;
     items: ISalesOrderItem[] | undefined;
     payments: ISalesPayment[] | undefined;
@@ -35,11 +35,14 @@ export type ISalesOrder = OmitMeta<SalesOrders> & {
     productions: OrderProductionSubmissions[];
     type: IOrderType;
     meta: ISalesOrderMeta;
-
+    pickup: ISalesPickup;
     ctx: {
         prodPage?: Boolean;
     };
 };
+export interface ISalesPickup extends OmitMeta<SalesPickup> {
+    meta: {};
+}
 export type ISalesOrderMeta = {
     manual_cost_price;
     cost_price;
@@ -47,7 +50,6 @@ export type ISalesOrderMeta = {
     pre_build_qty: any;
     qb;
     profileEstimate: Boolean;
-
     ccc;
     priority: IPriority;
     ccc_percentage;

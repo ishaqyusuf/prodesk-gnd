@@ -815,6 +815,7 @@ model SalesOrders {
     billingAddressId  Int?
     shippingAddressId Int?
     salesRepId        Int
+    pickupId          Int?
     prodId            Int?
     summary           String?                      @db.Text
     instruction       String?                      @db.Text
@@ -851,6 +852,17 @@ model SalesOrders {
     payments          SalesPayments[]              @relation(name: "salesPayment")
     productions       OrderProductionSubmissions[]
     components        SalesOrderItemComponents[]
+    pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
+}
+
+model SalesPickup {
+    id        Int           @unique @default(autoincrement())
+    pickupBy  String?
+    meta      Json?         @db.Json
+    pickupAt  DateTime?     @db.Timestamp(0)
+    createdAt DateTime?     @db.Timestamp(0)
+    updatedAt DateTime?     @db.Timestamp(0)
+    sales     SalesOrders[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

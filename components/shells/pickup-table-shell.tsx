@@ -27,6 +27,8 @@ import { SalesSelectionAction } from "../sales/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
+import { PickupStatusCell } from "../sales/pickup-status-cell";
+import { PickupAction } from "../actions/pickup-action";
 
 export default function PickupTableShell<T>({
     data,
@@ -71,8 +73,8 @@ export default function PickupTableShell<T>({
             },
             {
                 accessorKey: "status",
-                header: ColumnHeader("Delivery"),
-                cell: ({ row }) => <DeliveryStatusCell order={row.original} />
+                header: ColumnHeader("Pickup"),
+                cell: ({ row }) => <PickupStatusCell order={row.original} />
             },
             ..._FilterColumn("_status", "_customerId", "_deliveryStatus"),
             {
@@ -81,7 +83,9 @@ export default function PickupTableShell<T>({
                 size: 15,
                 maxSize: 15,
                 enableSorting: false,
-                cell: ({ row }) => <></>
+                cell: ({ row }) => (
+                    <PickupAction item={row.original}></PickupAction>
+                )
             }
         ],
         [data, isPending]

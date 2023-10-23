@@ -125,7 +125,7 @@ function initJobData(
     cost: InstallCosting | undefined
 ) {
     if (!cost || Object.values(cost)?.filter(Boolean).length < 3) {
-        console.log(cost);
+        // console.log(cost);
         return null;
     }
     const costing = deepCopy<InstallCosting>(cost);

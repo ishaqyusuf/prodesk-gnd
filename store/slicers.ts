@@ -111,6 +111,7 @@ export type ModalName =
     | "modelTemplate"
     | "modelCost"
     | "paymentOverview"
+    | "pickup"
     | "prodItemUpdate"
     | "product"
     | "project"

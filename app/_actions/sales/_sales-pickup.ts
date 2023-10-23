@@ -1,12 +1,55 @@
 "use server";
 
 import { SalesQueryParams } from "@/types/sales";
-import { getSales } from "./sales";
+import { getSales, whereSales } from "./sales";
 import { prisma } from "@/db";
+import { _revalidate } from "../_revalidate";
+import { getPageInfo, queryFilter } from "../action-utils";
 
 export async function _getSalesPickup(query: SalesQueryParams) {
     query.deliveryOption = "pickup";
-    return await getSales(query);
+    query.type = "order";
+    const where = await whereSales(query);
+
+    const _items = await prisma.salesOrders.findMany({
+        where,
+        ...(await queryFilter(query)),
+        include: {
+            customer: true,
+            pickup: true
+        }
+    });
+    const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
+    return {
+        pageInfo,
+        data: _items as any
+    };
+}
+export async function _cancelSalesPickup(salesId) {
+    await prisma.salesOrders.update({
+        where: { id: salesId },
+        data: {
+            pickup: {
+                disconnect: true,
+                delete: true
+            }
+        }
+    });
+}
+export async function _createPickup(salesId, pickup) {
+    await prisma.salesOrders.update({
+        where: { id: salesId },
+        data: {
+            pickup: {
+                create: {
+                    ...pickup,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            }
+        }
+    });
+    await _revalidate("pickup");
 }
 export async function updateSalesDelivery(id, status) {
     const updateData: any = {
@@ -21,4 +64,5 @@ export async function updateSalesDelivery(id, status) {
             updatedAt: new Date()
         }
     });
+    await _revalidate("pickup");
 }

@@ -13,6 +13,7 @@ import { getSalesDelivery } from "@/app/_actions/sales/sales-delivery";
 import { Metadata } from "next";
 import PickupTableShell from "@/components/shells/pickup-table-shell";
 import { _getSalesPickup } from "@/app/_actions/sales/_sales-pickup";
+import PickupModal from "@/components/modals/pickup-modal";
 export const metadata: Metadata = {
     title: "Order Pickup"
 };
@@ -30,7 +31,7 @@ export default async function OrdersPage({ searchParams }) {
                 searchParams={searchParams}
                 {...response}
             />
-            <OrderPrinter />
+            <PickupModal />
         </SalesTabLayout>
     );
 }
