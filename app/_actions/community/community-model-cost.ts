@@ -3,11 +3,7 @@
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
 import { transformData } from "@/lib/utils";
-import {
-    ICommunityCosts,
-    ICommunityModelCost,
-    ICostChart
-} from "@/types/community";
+import { ICommunityCosts, ICostChart } from "@/types/community";
 import dayjs from "dayjs";
 import { fixDbTime } from "../action-utils";
 import { revalidatePath } from "next/cache";
@@ -92,7 +88,7 @@ export async function _saveCommunitModelCostData(
 ) {
     const { id: _id, communityModelId, pivotId: _pivotId, ..._cost } = cost;
     let _c: ICostChart & {
-        community: ICommunityModelCost;
+        community: ICommunityCosts;
     } = null as any;
     const title = [
         cost?.startDate ? formatDate(cost?.startDate, "MM/DD/YY") : null,

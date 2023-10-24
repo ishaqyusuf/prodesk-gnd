@@ -4,7 +4,6 @@ import { _getModelCostStat } from "@/app/_actions/community/_model-cost-stat";
 import { deepCopy } from "@/lib/deep-copy";
 import {
     ICommunityCosts,
-    ICommunityModelCost,
     ICommunityTemplate,
     ICostChartMeta,
     IHome
@@ -108,7 +107,7 @@ interface Props {
     watchIndex;
 }
 interface FormProps {
-    costs: (ICommunityModelCost & { _id })[];
+    costs: (ICommunityCosts & { _id })[];
     index;
     stats: {
         [k in any]: number;

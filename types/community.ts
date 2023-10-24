@@ -169,7 +169,7 @@ export interface ICostChartMeta {
     };
 }
 // export interface ICommunityModelCost extends ICostChartMeta {}
-export interface ICommunityModelCost extends CommunityModelCost {}
+// export interface ICommunityModelCost extends CommunityModelCost {}
 export interface ProjectHeader<T> {
     projectName;
     builder;
