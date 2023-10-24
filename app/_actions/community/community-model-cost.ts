@@ -108,12 +108,13 @@ export async function _saveCommunitModelCostData(
             data: transformData({
                 ..._cost,
                 type: "task-costs",
-                community: {
+                pivot: {
                     connect: {
-                        id: templateId
+                        id: pivotId
                     }
-                }
-            }) as any,
+                },
+                meta: _cost.meta as any
+            }),
             include: {
                 community: true
             }
