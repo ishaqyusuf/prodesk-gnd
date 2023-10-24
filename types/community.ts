@@ -96,6 +96,7 @@ export type ICommunityTemplate = OmitMeta<CommunityModels> & {
     project: IProject;
     meta: ICommunityTemplateMeta;
     // costs: ICommunityCosts[];
+    homes: ExtendedHome[];
     pivot: ICommunityPivot;
     _count: {
         homes;
@@ -153,7 +154,7 @@ export type ICostChart = OmitMeta<CostCharts> & {
 };
 export interface ICostChartMeta {
     totalCost;
-    completedTasks: Boolean;
+    syncCompletedTasks: Boolean;
     totalTax;
     grandTotal;
     totalTask;

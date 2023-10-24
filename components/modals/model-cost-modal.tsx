@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useTransition } from "react";
+import React, { memo, useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -107,8 +107,8 @@ export default function ModelCostModal({ community }: { community?: Boolean }) {
                             {fields.map(
                                 (field, fIndex) =>
                                     fIndex == index && (
-                                        <CostForm
-                                            key={1}
+                                        <MemoCostForm
+                                            key={fIndex}
                                             form={form}
                                             data={data}
                                             community={community}
@@ -238,6 +238,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     <div className="col-span-2">
                         <Input
                             type="number"
+                            key="cost"
                             className="h-8"
                             {...form.register(
                                 `costs.${fIndex}.meta.costs.${t.uid}`
@@ -289,6 +290,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
     // )
     // );
 }
+const MemoCostForm = memo(CostForm);
 export function CostHistory({
     form,
     data,

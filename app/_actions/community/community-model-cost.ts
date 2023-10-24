@@ -132,7 +132,7 @@ export async function _saveCommunitModelCostData(
             }
         })) as any;
     }
-    await _synchronizeModelCost(_c, pivotId, includeCompletedTasks);
+    await _synchronizeModelCost(_c, pivotId, cost.meta?.syncCompletedTasks);
 
     revalidatePath("/settings/community/community-templates", "page");
     return _c;

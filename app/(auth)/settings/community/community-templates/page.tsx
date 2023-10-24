@@ -16,6 +16,7 @@ import {
     _bootstrapPivot,
     _createMissingPivots
 } from "@/app/_actions/community/_community-pivot";
+import CommunityModelCostModal from "@/components/modals/community-model-cost/modal";
 
 export const metadata: Metadata = {
     title: "Community Templates"
@@ -41,7 +42,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
             />
             <ModelTemplateModal formType="communityTemplate" />
             <ModelInstallCostModal community />
-            <ModelCostModal community />
+            <CommunityModelCostModal />
             {/* <ModelCostCommunityModal /> */}
         </CommunitySettingsLayoutComponent>
     );
