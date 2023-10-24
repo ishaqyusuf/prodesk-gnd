@@ -52,7 +52,7 @@ export default function CommunityModelCostModal() {
     const watchIndex = form.watch("index");
     async function loadUnits(data: ICommunityTemplate) {
         form.setValue(
-            "units",
+            "template",
             await _getCommunityModelCostUnits({
                 pivotId: data.pivotId,
                 communityId: data.id
