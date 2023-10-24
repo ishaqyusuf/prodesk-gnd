@@ -85,7 +85,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     async function save(and: "close" | "new" | "default" = "default") {
         startTransition(async () => {
             const _formData = saveData();
-            const { salesRep, ...fd } = _formData;
+            const { salesRep, ...fd } = _formData as any;
             // console.log(formData);
             try {
                 const response = await saveOrderAction(fd);
