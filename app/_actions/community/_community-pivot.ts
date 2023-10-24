@@ -149,3 +149,42 @@ export async function _createMissingPivots() {
         })
     );
 }
+export async function _addMissingPivotToModelCosts() {
+    const p = await prisma.communityModelCost.findMany({
+        where: {
+            pivotId: null,
+            community: {
+                isNot: null
+            }
+        },
+        include: {
+            community: {
+                select: {
+                    pivotId: true
+                }
+            }
+        }
+    });
+    const __: any = {};
+    p.map(pp => {
+        const pid = pp.community?.pivotId;
+        if (pid) {
+            if (!__[pid?.toString()]) __[pid?.toString()] = [];
+            __[pid?.toString()].push(pp.id);
+        }
+    });
+    await Promise.all(
+        Object.entries(__).map(async ([k, v]) => {
+            await prisma.communityModelCost.updateMany({
+                where: {
+                    id: {
+                        in: v as any
+                    }
+                },
+                data: {
+                    pivotId: Number(k)
+                }
+            });
+        })
+    );
+}

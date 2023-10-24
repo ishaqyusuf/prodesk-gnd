@@ -12,6 +12,7 @@ import ModelInstallCostModal from "@/components/modals/model-install-cost-modal"
 
 import ModelCostModal from "@/components/modals/model-cost-modal";
 import {
+    _addMissingPivotToModelCosts,
     _bootstrapPivot,
     _createMissingPivots
 } from "@/app/_actions/community/_community-pivot";
@@ -21,7 +22,8 @@ export const metadata: Metadata = {
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
     const response = await getCommunityTemplates(queryParams(searchParams));
-    await _createMissingPivots();
+    // await _createMissingPivots();
+    await _addMissingPivotToModelCosts();
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>
