@@ -39,6 +39,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Btn from "@/components/btn";
 import { calculateCommunitModelCost } from "@/lib/community/community-utils";
 import Money from "@/components/money";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function CommunityModelCostModal() {
     const form = useForm<FormProps>({
@@ -280,82 +281,119 @@ function CostForm({ form, data, watchIndex }: Props) {
             }
         });
     }
-    if (refresh) return <></>;
+
     return (
         <Form {...costForm}>
-            <ReRender form={costForm}></ReRender>
-            <div className="grid flex-1 grid-cols-4  pl-2 gap-2">
-                <div className="col-span-2 grid gap-2">
-                    <Label>From</Label>
-                    <DatePicker
-                        className="w-auto h-8"
-                        setValue={e => costForm.setValue(`startDate`, e)}
-                        value={costForm.getValues(`startDate`)}
-                    />
-                </div>
-                <div className="col-span-2 grid gap-2">
-                    <Label>To</Label>
-                    <DatePicker
-                        className="w-auto h-8"
-                        setValue={e => costForm.setValue(`endDate`, e)}
-                        value={costForm.getValues(`endDate`)}
-                    />
-                </div>
-                <div className="col-span-5 grid-cols-7 grid bg-slate-100 py-2">
-                    <Label className="col-span-3 mx-2">Tasks</Label>
-                    <Label className="col-span-2">Cost ($)</Label>
-                    <Label className="col-span-2">Tax ($)</Label>
-                </div>
-                {data?.project?.builder?.meta?.tasks?.map((t, _i) => (
-                    <div key={_i} className="col-span-4 gap-2 grid-cols-7 grid">
-                        <div className="col-span-3">
-                            <Label>{t.name}</Label>
-                        </div>
-                        <div className="col-span-2">
-                            <Input
-                                type="number"
-                                key="cost"
-                                className="h-8"
-                                {...costForm.register(`meta.costs.${t.uid}`)}
-                            />
-                        </div>
-                        <div className="col-span-2">
-                            <Input
-                                type="number"
-                                className="h-8"
-                                {...costForm.register(`meta.tax.${t.uid}`)}
-                            />
-                        </div>
-                    </div>
-                ))}
-                <div className="col-span-4 border-t pt-2 my-3 flex space-x-4">
-                    <FormField
-                        control={costForm.control}
-                        name={"meta.syncCompletedTasks"}
-                        render={({ field }) => (
-                            <FormItem className="space-x-2 space-y-0 flex items-center">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value as any}
-                                        onCheckedChange={field.onChange}
+            <Tabs defaultValue="overview" className="space-y-4 flex-1">
+                <TabsList className="">
+                    <TabsTrigger value="overview">Task Costs</TabsTrigger>
+                    <TabsTrigger value="analytics">Units</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="space-y-4">
+                    {!refresh && (
+                        <>
+                            <ReRender form={costForm}></ReRender>
+                            <div className="grid flex-1 grid-cols-4  pl-2 gap-2">
+                                <div className="col-span-2 grid gap-2">
+                                    <Label>From</Label>
+                                    <DatePicker
+                                        className="w-auto h-8"
+                                        setValue={e =>
+                                            costForm.setValue(`startDate`, e)
+                                        }
+                                        value={costForm.getValues(`startDate`)}
                                     />
-                                </FormControl>
-                                <FormLabel>Update Completed Tasks</FormLabel>
-                            </FormItem>
-                        )}
-                    />
-                    <div className="flex-1"></div>
-                    <Btn
-                        className="h-8"
-                        isLoading={isSaving}
-                        onClick={() => submit()}
-                        size="sm"
-                        type="submit"
-                    >
-                        Save
-                    </Btn>
-                </div>
-            </div>
+                                </div>
+                                <div className="col-span-2 grid gap-2">
+                                    <Label>To</Label>
+                                    <DatePicker
+                                        className="w-auto h-8"
+                                        setValue={e =>
+                                            costForm.setValue(`endDate`, e)
+                                        }
+                                        value={costForm.getValues(`endDate`)}
+                                    />
+                                </div>
+                                <div className="col-span-5 grid-cols-7 grid bg-slate-100 py-2">
+                                    <Label className="col-span-3 mx-2">
+                                        Tasks
+                                    </Label>
+                                    <Label className="col-span-2">
+                                        Cost ($)
+                                    </Label>
+                                    <Label className="col-span-2">
+                                        Tax ($)
+                                    </Label>
+                                </div>
+                                {data?.project?.builder?.meta?.tasks?.map(
+                                    (t, _i) => (
+                                        <div
+                                            key={_i}
+                                            className="col-span-4 gap-2 grid-cols-7 grid"
+                                        >
+                                            <div className="col-span-3">
+                                                <Label>{t.name}</Label>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <Input
+                                                    type="number"
+                                                    key="cost"
+                                                    className="h-8"
+                                                    {...costForm.register(
+                                                        `meta.costs.${t.uid}`
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <Input
+                                                    type="number"
+                                                    className="h-8"
+                                                    {...costForm.register(
+                                                        `meta.tax.${t.uid}`
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
+                                )}
+                                <div className="col-span-4 border-t pt-2 my-3 flex space-x-4">
+                                    <FormField
+                                        control={costForm.control}
+                                        name={"meta.syncCompletedTasks"}
+                                        render={({ field }) => (
+                                            <FormItem className="space-x-2 space-y-0 flex items-center">
+                                                <FormControl>
+                                                    <Checkbox
+                                                        checked={
+                                                            field.value as any
+                                                        }
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
+                                                    />
+                                                </FormControl>
+                                                <FormLabel>
+                                                    Update Completed Tasks
+                                                </FormLabel>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className="flex-1"></div>
+                                    <Btn
+                                        className="h-8"
+                                        isLoading={isSaving}
+                                        onClick={() => submit()}
+                                        size="sm"
+                                        type="submit"
+                                    >
+                                        Save
+                                    </Btn>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </TabsContent>
+            </Tabs>
         </Form>
     );
 }
