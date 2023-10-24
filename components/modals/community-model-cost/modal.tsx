@@ -220,7 +220,7 @@ function CostForm({ form, data, watchIndex }: Props) {
     const costForm = useForm<ICommunityCosts>({});
     useEffect(() => {
         // console.log("CHANGED");
-        const { id, _id, ...c } = deepCopy(fields[watchIndex] || {});
+        const { id, _id, ...c } = deepCopy(fields[watchIndex] || {}) as any;
         // console.log(fieldData);
         if (c.startDate) c.startDate = new Date(c.startDate);
         if (c.endDate) c.endDate = new Date(c.endDate);
