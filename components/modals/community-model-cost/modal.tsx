@@ -248,7 +248,7 @@ function CostForm({ form, data, watchIndex }: Props) {
                 }
                 if (!cost.endDate) {
                     const cIndex = fields.findIndex(c => c._id && !c.endDate);
-                    if (cIndex > -1 && cIndex != index) {
+                    if (cIndex > -1 && cIndex != watchIndex) {
                         toast.error("Only one cost can have empty end date");
                         return;
                     }
