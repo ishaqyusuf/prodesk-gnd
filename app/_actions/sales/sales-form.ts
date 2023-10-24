@@ -7,145 +7,149 @@ import { IOrderType, ISalesOrder } from "@/types/sales";
 import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
+import { user } from "../utils";
 
 export interface ICreateOrderFormQuery {
-  customerId?;
-  addressId?;
-  type?: IOrderType;
-  salesRep?;
-  orderId?;
-  salesRepId?;
+    customerId?;
+    addressId?;
+    type?: IOrderType;
+    salesRep?;
+    orderId?;
+    salesRepId?;
 }
 export interface SalesFormResponse {
-  form: ISalesOrder;
-  ctx: SalesFormCtx;
-  paidAmount: number;
+    form: ISalesOrder;
+    ctx: SalesFormCtx;
+    paidAmount: number;
 }
 export interface SalesFormCtx {
-  settings: ISalesSettingMeta;
-  swings: (string | null)[];
-  suppliers: (string | null)[];
-  profiles: CustomerTypes[];
-  defaultProfile: CustomerTypes;
+    settings: ISalesSettingMeta;
+    swings: (string | null)[];
+    suppliers: (string | null)[];
+    profiles: CustomerTypes[];
+    defaultProfile: CustomerTypes;
 }
 export async function salesFormAction(
-  query: ICreateOrderFormQuery
+    query: ICreateOrderFormQuery
 ): Promise<SalesFormResponse> {
-  const order = await prisma.salesOrders.findFirst({
-    where: {
-      orderId: query.orderId,
-    },
-    include: {
-      customer: true,
-      items: true,
-      billingAddress: true,
-      shippingAddress: true,
-      payments: {
-        select: {
-          // id:true,
-          amount: true,
+    const order = await prisma.salesOrders.findFirst({
+        where: {
+            orderId: query.orderId
         },
-      },
-    },
-  });
-  if (!order) return await newSalesFormAction(query);
-  const { payments, ..._order } = order;
-  const ctx = await formCtx();
-  let paidAmount = sum(payments, "amount");
-  return {
-    form: _order as any,
-    ctx,
-    paidAmount: paidAmount as any,
-  };
+        include: {
+            customer: true,
+            items: true,
+            salesRep: true,
+            billingAddress: true,
+            shippingAddress: true,
+            payments: {
+                select: {
+                    // id:true,
+                    amount: true
+                }
+            }
+        }
+    });
+    if (!order) return await newSalesFormAction(query);
+    const { payments, ..._order } = order;
+    const ctx = await formCtx();
+    let paidAmount = sum(payments, "amount");
+    return {
+        form: _order as any,
+        ctx,
+        paidAmount: paidAmount as any
+    };
 }
 async function formCtx(): Promise<SalesFormCtx> {
-  const setting = await prisma.settings.findFirst({
-    where: {
-      type: PostTypes.SALES_SETTINGS,
-    },
-  });
-  const meta: ISalesSettingMeta = setting?.meta as any;
-  const extras = await prisma.posts.findMany({
-    where: {
-      type: {
-        in: [PostTypes.SUPPLIERS, PostTypes.SWINGS],
-      },
-    },
-    distinct: ["title"],
-    select: {
-      type: true,
-      title: true,
-    },
-  });
-  const profiles = await prisma.customerTypes.findMany({
-    select: {
-      id: true,
-      coefficient: true,
-      defaultProfile: true,
-      title: true,
-    },
-  });
-  return {
-    settings: meta,
-    profiles: profiles as any,
-    defaultProfile: profiles.find((p) => p.defaultProfile) as any,
-    swings: extras
-      .filter((e) => e.type == PostTypes.SWINGS)
-      .map((e) => e.title),
-    suppliers: extras
-      .filter((e) => e.type == PostTypes.SUPPLIERS)
-      .map((e) => e.title),
-  };
+    const setting = await prisma.settings.findFirst({
+        where: {
+            type: PostTypes.SALES_SETTINGS
+        }
+    });
+    const meta: ISalesSettingMeta = setting?.meta as any;
+    const extras = await prisma.posts.findMany({
+        where: {
+            type: {
+                in: [PostTypes.SUPPLIERS, PostTypes.SWINGS]
+            }
+        },
+        distinct: ["title"],
+        select: {
+            type: true,
+            title: true
+        }
+    });
+    const profiles = await prisma.customerTypes.findMany({
+        select: {
+            id: true,
+            coefficient: true,
+            defaultProfile: true,
+            title: true
+        }
+    });
+    return {
+        settings: meta,
+        profiles: profiles as any,
+        defaultProfile: profiles.find(p => p.defaultProfile) as any,
+        swings: extras
+            .filter(e => e.type == PostTypes.SWINGS)
+            .map(e => e.title),
+        suppliers: extras
+            .filter(e => e.type == PostTypes.SUPPLIERS)
+            .map(e => e.title)
+    };
 }
 async function newSalesFormAction(
-  query: ICreateOrderFormQuery
+    query: ICreateOrderFormQuery
 ): Promise<SalesFormResponse> {
-  const ctx = await formCtx();
+    const ctx = await formCtx();
 
-  const session = await getServerSession(authOptions);
-  const form = {
-    taxPercentage: ctx?.settings?.tax_percentage,
-    // salesRepId: query.salesRepId,
-    type: query.type,
-    status: "Active",
-    meta: {
-      sales_profile: ctx.defaultProfile?.title,
-      sales_percentage: ctx.defaultProfile?.coefficient,
-      rep: session?.user.name,
-    },
-    salesRepId: session?.user.id,
-  } as ISalesOrder;
-  console.log(query);
-  if (query.customerId) {
-    const customer = await prisma.customers.findFirst({
-      where: { id: { equals: +query.customerId } },
-      include: {
-        profile: true,
-        addressBooks: {
-          take: 1,
-          orderBy: {
-            id: "desc",
-          },
+    const session = await user();
+    const form = {
+        taxPercentage: ctx?.settings?.tax_percentage,
+        // salesRepId: query.salesRepId,
+        type: query.type,
+        status: "Active",
+        meta: {
+            sales_profile: ctx.defaultProfile?.title,
+            sales_percentage: ctx.defaultProfile?.coefficient
         },
-      },
-    });
-    if (customer) {
-      form.customerId = customer.id;
-      form.meta.sales_profile =
-        customer.profile?.title || ctx.settings?.sales_profile;
-      form.meta.sales_percentage =
-        customer.profile?.coefficient || ctx?.settings?.sales_margin;
-      const addr = {
-        ...(customer.addressBooks?.[0] || {}),
-      } as any;
-      form.billingAddressId = form.shippingAddressId = addr?.id;
-      form.billingAddress = form.shippingAddress = addr;
+        salesRepId: session?.id,
+        salesRep: {
+            name: session?.name
+        }
+    } as ISalesOrder;
+    console.log(query);
+    if (query.customerId) {
+        const customer = await prisma.customers.findFirst({
+            where: { id: { equals: +query.customerId } },
+            include: {
+                profile: true,
+                addressBooks: {
+                    take: 1,
+                    orderBy: {
+                        id: "desc"
+                    }
+                }
+            }
+        });
+        if (customer) {
+            form.customerId = customer.id;
+            form.meta.sales_profile =
+                customer.profile?.title || ctx.settings?.sales_profile;
+            form.meta.sales_percentage =
+                customer.profile?.coefficient || ctx?.settings?.sales_margin;
+            const addr = {
+                ...(customer.addressBooks?.[0] || {})
+            } as any;
+            form.billingAddressId = form.shippingAddressId = addr?.id;
+            form.billingAddress = form.shippingAddress = addr;
+        }
     }
-  }
-  console.log(form);
-  return {
-    form,
-    ctx,
-    paidAmount: 0,
-  };
+    console.log(form);
+    return {
+        form,
+        ctx,
+        paidAmount: 0
+    };
 }

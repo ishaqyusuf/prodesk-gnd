@@ -31,7 +31,7 @@ import {
 import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
 
-import InfoCard from "./info-card";
+import InfoCard from "./sales-form-card";
 import dayjs from "dayjs";
 import { Switch } from "@/components/ui/switch";
 import { toggleMockup } from "@/store/invoice-item-component-slice";

@@ -1,8 +1,12 @@
 # PAYMENT INVOICE OCT 23-
 # 00.00 @ 35/hr == $00.00
-
-# OCT 23: 00.00 == 00.00
-    02:25-
+# TODO
+    Unit and Tasks Browser in Model Cost Edit.
+    Model Cost View From Home Invoice Edit
+# OCT 24: 00.00 == 00.00
+    02:00-
+# OCT 23: 01.35 == 01.35
+    02:25-04:00
 ------------------------------
 # PAYMENT INVOICE OCT 16-20
 # 10.10 @ 35/hr == $355.835
