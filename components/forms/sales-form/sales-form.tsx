@@ -84,11 +84,11 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const router = useRouter();
     async function save(and: "close" | "new" | "default" = "default") {
         startTransition(async () => {
-            const formData = saveData();
-
+            const _formData = saveData();
+            const { salesRep, ...fd } = _formData;
             // console.log(formData);
             try {
-                const response = await saveOrderAction(formData);
+                const response = await saveOrderAction(fd);
                 if (response.orderId) {
                     const type = response.type;
                     if (and == "close") router.push(`/sales/${type}s`);

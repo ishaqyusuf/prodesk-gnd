@@ -279,6 +279,7 @@ export async function saveOrderAction({
     customerId,
     prodId,
     salesRepId,
+    // salesRep,
     shippingAddressId,
     billingAddressId,
     pickupId,
@@ -296,6 +297,7 @@ export async function saveOrderAction({
 
   const metadata = {
     createdAt: new Date(),
+    
     ...(_order as any),
     updatedAt: new Date(),
     slug,
