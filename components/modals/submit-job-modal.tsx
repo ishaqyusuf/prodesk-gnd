@@ -97,7 +97,6 @@ export default function SubmitJobModal() {
                     unit,
                     project,
                     user,
-                    userId,
                     ...job
                 } = form.getValues();
                 if (!isInstallation() || !job.homeId) job.meta.addon = 0;
