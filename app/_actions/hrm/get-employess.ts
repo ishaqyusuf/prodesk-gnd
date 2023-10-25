@@ -6,81 +6,82 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 
 export interface EmployeeQueryParamsProps extends BaseQuery {
-  _show?: "payroll" | undefined;
-  _roleId?;
-  role?;
+    _show?: "payroll" | undefined;
+    _roleId?;
+    role?;
 }
 export async function getEmployees(query: EmployeeQueryParamsProps) {
-  if (!query.sort) {
-    query.sort = "name";
-    query.sort_order = "asc";
-  }
-  const where = whereEmployee(query);
-  const items = await prisma.users.findMany({
-    where,
-    include: {
-      employeeProfile: true,
-      roles: {
+    if (!query.sort) {
+        query.sort = "name";
+        query.sort_order = "asc";
+    }
+    const where = whereEmployee(query);
+    const items = await prisma.users.findMany({
+        where,
         include: {
-          role: true,
+            employeeProfile: true,
+            roles: {
+                include: {
+                    role: true
+                }
+            }
         },
-      },
-    },
-    ...(await queryFilter(query)),
-  });
-  const pageInfo = await getPageInfo(query, where, prisma.users);
+        ...(await queryFilter(query))
+    });
+    const pageInfo = await getPageInfo(query, where, prisma.users);
 
-  return {
-    pageInfo,
-    data: items.map(({ roles, ...data }) => ({
-      ...data,
-      role: roles?.[0]?.role,
-    })) as any,
-  };
+    return {
+        pageInfo,
+        data: items.map(({ roles, ...data }) => ({
+            ...data,
+            role: roles?.[0]?.role
+        })) as any
+    };
 }
 function whereEmployee(query: EmployeeQueryParamsProps) {
-  const q = {
-    contains: query._q || undefined,
-  };
-  const where: Prisma.UsersWhereInput = {
-    name: q,
-  };
-  if (query._roleId) {
-    where.roles = {
-      some: {
-        roleId: +query._roleId,
-      },
+    const q = {
+        contains: query._q || undefined
     };
-  }
-  if (query.role)
-    where.roles = {
-      some: {
-        role: {
-          name: query.role,
-        },
-      },
+    const where: Prisma.UsersWhereInput = {
+        name: q,
+        deletedAt: null
     };
-  return where;
+    if (query._roleId) {
+        where.roles = {
+            some: {
+                roleId: +query._roleId
+            }
+        };
+    }
+    if (query.role)
+        where.roles = {
+            some: {
+                role: {
+                    name: query.role
+                }
+            }
+        };
+    return where;
 }
 export async function staticEmployees(
-  query: EmployeeQueryParamsProps = {} as any
+    query: EmployeeQueryParamsProps = {} as any
 ) {
-  const employees = await prisma.users.findMany({
-    where: whereEmployee(query),
-    orderBy: {
-      name: "asc",
-    },
-  });
+    const employees = await prisma.users.findMany({
+        where: whereEmployee(query),
+        orderBy: {
+            name: "asc"
+        }
+    });
 
-  return employees;
+    return employees;
 }
 export async function staticLoadTechEmployees() {
-  return await staticEmployees({
-    role: "Punchout",
-  });
+    return await staticEmployees({
+        role: "Punchout"
+    });
 }
 export async function loadStatic1099Contractors() {
-  return await staticEmployees({
-    role: "1099 Contractor",
-  });
+    return await staticEmployees({
+        role: "1099 Contractor"
+    });
 }
