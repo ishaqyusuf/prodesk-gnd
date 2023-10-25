@@ -246,8 +246,14 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         const tasks = form.getValues("meta.costData") || {};
         let total = 0;
         Object.entries(tasks).map(([k, v]) => {
-            if (v.qty > 0 && v.cost > 0)
+            if (v.qty > 0 && v.cost > 0) {
+                if (v.qty > unitCosting[k]) {
+                    toast.error("Some quantity has exceed default value.");
+                    throw Error();
+                    return;
+                }
                 total += Number(v.qty) * Number(v.cost);
+            }
         });
         form.setValue("meta.taskCost", total);
         // form.setValue("amount", total + addon);
