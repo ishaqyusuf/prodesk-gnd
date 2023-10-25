@@ -247,7 +247,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         let total = 0;
         Object.entries(tasks).map(([k, v]) => {
             if (v.qty > 0 && v.cost > 0) {
-                if (v.qty || 0 > (unitCosting[k] || 0)) {
+                if (Number(v.qty || 0) > Number(unitCosting?.[k] || 0)) {
                     toast.error("Some quantity has exceed default value.");
                     throw Error();
                     return;
