@@ -169,7 +169,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     cost.meta = calculateCommunitModelCost(
                         cost.meta,
                         data.project?.builder?.meta?.tasks
-                    );
+                    ) as any;
 
                     cost.model = data.modelName;
                     const { _id, ..._cost } = cost as any;

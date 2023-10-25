@@ -160,7 +160,6 @@ export default function SubmitJobModal() {
         form.setValue("title", project.title);
         form.setValue("project", project as any);
         setUnitCosting({});
-
         await loadUnits(projectId);
 
         // if (project?.id && type != "punchout") {
