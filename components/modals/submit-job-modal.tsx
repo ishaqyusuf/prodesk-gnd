@@ -247,7 +247,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         let total = 0;
         Object.entries(tasks).map(([k, v]) => {
             if (v.qty > 0 && v.cost > 0) {
-                if (v.qty > unitCosting[k]) {
+                if (v.qty || 0 > (unitCosting[k] || 0)) {
                     toast.error("Some quantity has exceed default value.");
                     throw Error();
                     return;
@@ -744,7 +744,7 @@ export function Row({ form, admin, row, unitCosting }) {
                         </DropdownMenu>
                     </div>
                     <Input
-                        max={unitCosting[row.uid]}
+                        // max={unitCosting[row.uid]}
                         min={0}
                         value={qty}
                         onBlur={e => {
