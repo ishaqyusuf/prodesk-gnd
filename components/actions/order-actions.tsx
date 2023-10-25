@@ -254,7 +254,7 @@ export const PrintOrderMenuAction = typedMemo(
                 }}
             >
                 <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Print {props.mockup && " Mockup"} {props.link && "(v2)"}
+                Print {props.mockup && " Mockup"}
             </DropdownMenuItem>
         ) : (
             <DropdownMenuSub>
@@ -262,8 +262,7 @@ export const PrintOrderMenuAction = typedMemo(
                     {!props.pdf ? (
                         <>
                             <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                            Print {props.mockup && " Mockup"}{" "}
-                            {props.link && "(v2)"}
+                            Print {props.mockup && " Mockup"}
                         </>
                     ) : (
                         <>

@@ -18,8 +18,9 @@ import ProductionDueDate from "../prod-due-date";
 interface Props {
     isProd?: Boolean;
     myProd?: Boolean;
+    estimate?: Boolean;
 }
-export default function DetailsSection({ myProd }: Props) {
+export default function DetailsSection({ myProd, estimate }: Props) {
     const order: ISalesOrder = useAppSelector(s => s.slicers.dataPage.data);
     const isProd = order?.ctx?.prodPage;
     return (
@@ -28,13 +29,19 @@ export default function DetailsSection({ myProd }: Props) {
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                         <div className="inline-flex items-center space-x-2">
-                            <span>Order Information</span>
+                            <span>
+                                {estimate ? "Estimate " : "Order "} Information
+                            </span>
                             <OrderFlag order={order} />
                             <StatusBadge
                                 status={order?.prodStatus || "no status"}
                             />
                         </div>
-                        {isProd ? <></> : <OrderOverviewActions />}
+                        {isProd ? (
+                            <></>
+                        ) : (
+                            <OrderOverviewActions estimate={estimate} />
+                        )}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="divide-y space-y-4 flex flex-col">
