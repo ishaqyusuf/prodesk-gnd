@@ -92,7 +92,15 @@ export default function SubmitJobModal() {
             // if(!form.getValues)
             try {
                 // const isValid = employeeSchema.parse(form.getValues());
-                const { homeData, unit, project, ...job } = form.getValues();
+                const {
+                    homeData,
+                    unit,
+                    project,
+                    user,
+                    userId,
+                    ...job
+                } = form.getValues();
+                if (!isInstallation() || !job.homeId) job.meta.addon = 0;
                 // job.type = form.getValues("type");
                 job.amount = 0;
                 [
@@ -146,6 +154,7 @@ export default function SubmitJobModal() {
         const projectId = project?.id;
         form.setValue("unit", null as any);
         form.setValue("homeId", null as any);
+        form.setValue("meta.addon", null as any);
         form.setValue("meta.costData", {});
         form.setValue("subtitle", null as any);
         form.setValue("title", project.title);
@@ -166,11 +175,13 @@ export default function SubmitJobModal() {
         else {
             const ls = await getUnitJobs(projectId, type);
             if (isInstallation()) form.setValue("meta.addon", ls.addon || 0);
+
             setUnits(ls.homeList);
             console.log(ls.homeList);
         }
         // form.setValue('homeData',ls.homeList)
     }
+
     async function selectUnit(unit: HomeJobList) {
         form.setValue("homeData", unit);
         setTasks([]);
@@ -247,6 +258,7 @@ export default function SubmitJobModal() {
     const amount = form.watch("amount");
     const taskCost = form.watch("meta.taskCost");
     const addon = form.watch("meta.addon");
+    const homeId = form.watch("homeId");
     // const addCost = form.watch("meta.additional_cost");
     function resetFields(k) {
         k.map(v => form.setValue(v, null));
@@ -632,9 +644,15 @@ export default function SubmitJobModal() {
                                     <div className="">
                                         <Label>Addon</Label>
                                         <SecondaryCellContent>
-                                            <Money value={addon} />
+                                            <Money
+                                                value={
+                                                    isInstallation() && homeId
+                                                        ? addon
+                                                        : 0
+                                                }
+                                            />
                                         </SecondaryCellContent>
-                                    </div>{" "}
+                                    </div>
                                 </>
                             )}
                             <Btn

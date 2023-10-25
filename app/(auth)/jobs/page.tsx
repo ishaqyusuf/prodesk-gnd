@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 export default async function EmployeesPage({ searchParams }) {
     const response = await getJobs(queryParams(searchParams));
+
     return (
         <TabbedLayout tabKey="Job">
             <Breadcrumbs>
