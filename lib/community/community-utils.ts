@@ -72,6 +72,7 @@ export function calculateHomeInvoice(home: ExtendedHome) {
 }
 export function calculateCommunitModelCost(_cost, builderTasks) {
     // console.log(_cost);
+    if (!_cost) return;
     let cost = deepCopy<ICostChartMeta>(_cost);
     if (!cost.tax) cost.tax = {};
     if (!cost.costs) cost.costs = {};

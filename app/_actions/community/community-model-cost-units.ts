@@ -10,7 +10,13 @@ export async function _getCommunityModelCostUnits({ pivotId, communityId }) {
         include: {
             homes: {
                 include: {
-                    tasks: true
+                    tasks: {
+                        where: {
+                            taskUid: {
+                                not: null
+                            }
+                        }
+                    }
                 }
             },
             project: true
