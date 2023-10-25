@@ -39,7 +39,7 @@ export default async function EmployeesPage({ searchParams }) {
             />
             <JobOverviewSheet />
             <EditJobModal />
-            <SubmitJobModal />
+            <SubmitJobModal admin />
         </TabbedLayout>
     );
 }

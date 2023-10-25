@@ -236,7 +236,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                             />
                             <PrintOrderMenuAction
                                 pdf
-                                link
                                 row={{ id: form.getValues("id") } as any}
                             />
                             {/* <DropdownMenuItem>

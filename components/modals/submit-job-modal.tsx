@@ -71,7 +71,7 @@ interface ModalInterface {
     data: IJobs | undefined;
     defaultTab?;
 }
-export default function SubmitJobModal() {
+export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const route = useRouter();
     // const isPunchout = type == "punchout";
     const [isSaving, startTransition] = useTransition();
@@ -500,6 +500,7 @@ export default function SubmitJobModal() {
                                             {tasks.map((row, i) => {
                                                 return (
                                                     <Row
+                                                        admin={admin}
                                                         key={i}
                                                         form={form}
                                                         row={row}
@@ -673,7 +674,7 @@ export default function SubmitJobModal() {
         />
     );
 }
-export function Row({ form, row, unitCosting }) {
+export function Row({ form, admin, row, unitCosting }) {
     const qty = form.getValues(`meta.costData.${row.uid}.qty` as any);
     return (
         <TableRow>
@@ -768,10 +769,12 @@ export function Row({ form, row, unitCosting }) {
                         type="number"
                         className="w-16 h-8 hiddens"
                     />
-                    <Label className="px-1">
-                        {" /"}
-                        {unitCosting[row.uid]}
-                    </Label>
+                    {admin && (
+                        <Label className="px-1">
+                            {" /"}
+                            {unitCosting[row.uid]}
+                        </Label>
+                    )}
                 </div>
             </TableCell>
             {/* <TableCell className="px-1 w-28" align="right">

@@ -28,6 +28,7 @@ export interface SalesFormCtx {
     suppliers: (string | null)[];
     profiles: CustomerTypes[];
     defaultProfile: CustomerTypes;
+    items: any[];
 }
 export async function salesFormAction(
     query: ICreateOrderFormQuery
@@ -87,6 +88,13 @@ async function formCtx(): Promise<SalesFormCtx> {
             title: true
         }
     });
+    const items = await prisma.salesOrderItems.findMany({
+        where: {},
+        distinct: "description",
+        select: {
+            description: true
+        }
+    });
     return {
         settings: meta,
         profiles: profiles as any,
@@ -96,7 +104,8 @@ async function formCtx(): Promise<SalesFormCtx> {
             .map(e => e.title),
         suppliers: extras
             .filter(e => e.type == PostTypes.SUPPLIERS)
-            .map(e => e.title)
+            .map(e => e.title),
+        items
     };
 }
 async function newSalesFormAction(

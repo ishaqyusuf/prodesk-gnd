@@ -128,16 +128,12 @@ export async function _saveCommunitModelCostData(
             }
         })) as any;
     }
-    await _synchronizeModelCost(_c, pivotId, cost.meta?.syncCompletedTasks);
+    await _synchronizeModelCost(_c, pivotId);
 
     revalidatePath("/settings/community/community-templates", "page");
     return _c;
 }
-export async function _synchronizeModelCost(
-    _c,
-    pivotId,
-    includeCompletedTasks
-) {
+export async function _synchronizeModelCost(_c, pivotId) {
     console.log(_c.meta.sumCosts);
     await Promise.all(
         Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
@@ -157,10 +153,10 @@ export async function _synchronizeModelCost(
                 },
                 taskUid: k
             };
-            if (!includeCompletedTasks)
-                whereHomTasks.status = {
-                    not: "Completed"
-                };
+            // if (!includeCompletedTasks)
+            //    whereHomTasks.status = {
+            //         not: "Completed"
+            //     };
             const s = await prisma.homeTasks.updateMany({
                 where: whereHomTasks,
                 data: {

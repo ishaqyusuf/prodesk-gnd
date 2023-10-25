@@ -100,6 +100,7 @@ export function CommunityCostForm({ form, data, watchIndex }: ModelCostProps) {
                     data.project?.builder?.meta?.tasks
                 ) as any;
                 cost.model = data.modelName;
+
                 const { _id, community, ..._cost } = cost as any;
 
                 const c = await _saveCommunitModelCostData(
@@ -225,7 +226,7 @@ export function CommunityCostForm({ form, data, watchIndex }: ModelCostProps) {
                                     </div>
                                 </div>
                                 <div className="col-span-4 border-t pt-2 my-3 flex space-x-4">
-                                    <FormField
+                                    {/* <FormField
                                         control={costForm.control}
                                         name={"meta.syncCompletedTasks"}
                                         render={({ field }) => (
@@ -245,7 +246,7 @@ export function CommunityCostForm({ form, data, watchIndex }: ModelCostProps) {
                                                 </FormLabel>
                                             </FormItem>
                                         )}
-                                    />
+                                    /> */}
                                     <div className="flex-1"></div>
                                     <Btn
                                         className="h-8"
