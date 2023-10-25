@@ -14,7 +14,7 @@ import PaymentOverviewSheet from "@/components/sheets/payment-overview-sheet";
 export const metadata: Metadata = {
     title: "Payment Receipts"
 };
-export default async function EmployeesPage({ searchParams }) {
+export default async function PayentReceipts({ searchParams }) {
     const response = await getJobPayments(queryParams(searchParams));
     return (
         <TabbedLayout tabKey="Job">

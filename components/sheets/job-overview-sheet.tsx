@@ -110,6 +110,7 @@ function Content({ data }: { data: IJobs }) {
     }, []);
     const [divider, setDivider] = useState(data?.coWorkerId ? 2 : 1);
     const [showAll, setShowAll] = useState(false);
+    if (!data) return <></>;
     return (
         <>
             <section
@@ -124,11 +125,11 @@ function Content({ data }: { data: IJobs }) {
                     <p>{data?.type}</p>
                 </Info>
                 <Info label="Additional Cost">
-                    <Money value={data?.meta.additional_cost / divider} />
+                    <Money value={data?.meta?.additional_cost / divider} />
                     <div className="">{data?.description}</div>
                 </Info>
                 <Info label="Addon Cost">
-                    <Money value={job?.meta.addon / divider} />
+                    <Money value={job?.meta?.addon / divider} />
                 </Info>
                 <Info label="Total Cost">
                     <Money value={job?.amount} />
@@ -149,7 +150,7 @@ function Content({ data }: { data: IJobs }) {
                     <div>{data?.note || "No Comment"}</div>
                 </Info>
             </section>
-            {job.meta.costData && (
+            {job.meta?.costData && (
                 <div className="col-span-2">
                     <Table className="">
                         <TableHeader>
@@ -163,7 +164,8 @@ function Content({ data }: { data: IJobs }) {
                             {costSetting?.meta?.list
                                 ?.filter(
                                     l =>
-                                        (job.meta.costData[l.uid]?.qty || 0) > 0
+                                        (job.meta?.costData[l.uid]?.qty || 0) >
+                                        0
                                 )
                                 .map((cd, i) => (
                                     <TaskRow
@@ -188,12 +190,12 @@ interface TaskRowProps {
     setJob;
 }
 function TaskRow({ row, index, job, setJob }: TaskRowProps) {
-    const { cost, qty: __qty } = job.meta.costData[row.uid] as any;
+    const { cost, qty: __qty } = job.meta?.costData[row.uid] as any;
     const [qty, setQty] = useState(__qty);
     const [dVal, setDVal] = useState(false);
     const [divider, setDivider] = useState(job?.coWorkerId ? 2 : 1);
     useEffect(() => {
-        if (qty != job.meta.costData[row.uid]?.qty) setDVal(qty);
+        if (qty != job.meta?.costData[row.uid]?.qty) setDVal(qty);
     }, [qty, job]);
     const deb = useDebounce(dVal, 800);
     useEffect(() => {
