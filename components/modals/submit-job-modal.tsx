@@ -66,10 +66,12 @@ import {
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 import AutoComplete from "../auto-complete";
+import { _changeWorker } from "@/app/_actions/hrm-jobs/job-actions";
 
 interface ModalInterface {
     data: IJobs | undefined;
     defaultTab?;
+    changeWorker?: Boolean;
 }
 export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const route = useRouter();
@@ -397,7 +399,19 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                     {search(techEmployees, "name")?.map(
                                         user => (
                                             <Button
-                                                onClick={() => {
+                                                onClick={async () => {
+                                                    if (data?.changeWorker) {
+                                                        await _changeWorker(
+                                                            data?.data?.id,
+                                                            data?.data?.userId,
+                                                            user?.id
+                                                        );
+                                                        toast.success(
+                                                            "Worker changed!"
+                                                        );
+                                                        closeModal();
+                                                        return;
+                                                    }
                                                     form.setValue(
                                                         "userId",
                                                         user.id

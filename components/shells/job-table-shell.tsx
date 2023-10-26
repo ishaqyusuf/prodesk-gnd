@@ -24,7 +24,7 @@ import {
 import { Icons } from "../icons";
 import { openModal } from "@/lib/modal";
 import { IJobs } from "@/types/hrm";
-import { CheckCheck, Unlink, X } from "lucide-react";
+import { Briefcase, CheckCheck, Unlink, X } from "lucide-react";
 import { toast } from "sonner";
 import Money from "../money";
 import { approveJob, rejectJob } from "@/app/_actions/hrm-jobs/job-actions";
@@ -171,6 +171,7 @@ export default function JobTableShell<T>({
                                 />
                                 <RowActionMoreMenu>
                                     <RowActionMenuItem
+                                        disabled={row.original.paymentId}
                                         onClick={() => {
                                             openModal("submitJob", {
                                                 data: row.original,
@@ -181,32 +182,42 @@ export default function JobTableShell<T>({
                                     >
                                         Edit
                                     </RowActionMenuItem>
-                                    {!row.original.approvedAt && adminMode && (
-                                        <RowActionMenuItem
-                                            onClick={async () => {
-                                                await approveJob(
-                                                    row.original?.id
-                                                );
-                                                toast.success("Job Approved");
-                                            }}
-                                            Icon={CheckCheck}
-                                        >
-                                            Approve Job
-                                        </RowActionMenuItem>
-                                    )}
-                                    {!row.original.rejectedAt && adminMode && (
-                                        <RowActionMenuItem
-                                            onClick={async () => {
-                                                await rejectJob(
-                                                    row.original?.id
-                                                );
-                                                toast.success("Job Rejected");
-                                            }}
-                                            Icon={X}
-                                        >
-                                            Reject Job
-                                        </RowActionMenuItem>
-                                    )}
+                                    <RowActionMenuItem
+                                        disabled={row.original.paymentId}
+                                        onClick={() => {
+                                            openModal("submitJob", {
+                                                data: row.original,
+                                                defaultTab: "user",
+                                                changeWorker: true
+                                            });
+                                        }}
+                                        Icon={Briefcase}
+                                    >
+                                        Change Worker
+                                    </RowActionMenuItem>
+
+                                    <RowActionMenuItem
+                                        disabled={row.original.paymentId}
+                                        onClick={async () => {
+                                            await approveJob(row.original?.id);
+                                            toast.success("Job Approved");
+                                        }}
+                                        Icon={CheckCheck}
+                                    >
+                                        Approve Job
+                                    </RowActionMenuItem>
+
+                                    <RowActionMenuItem
+                                        disabled={row.original.paymentId}
+                                        onClick={async () => {
+                                            await rejectJob(row.original?.id);
+                                            toast.success("Job Rejected");
+                                        }}
+                                        Icon={X}
+                                    >
+                                        Reject Job
+                                    </RowActionMenuItem>
+
                                     <DeleteRowAction
                                         menu
                                         disabled={row.original.paymentId > 0}
