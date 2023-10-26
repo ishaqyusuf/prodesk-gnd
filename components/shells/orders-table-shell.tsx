@@ -41,8 +41,9 @@ export default function OrdersTableShell<T>({
             table.checkColumn(),
             // CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
             {
+                id: "flag",
                 maxSize: 10,
-                id: "flags",
+                // accessorKey: "flags",
                 cell: ({ row }) => OrderPriorityFlagCell(row.original, true)
             },
             // table.simpleColumn("Order", data => ({
@@ -98,7 +99,8 @@ export default function OrdersTableShell<T>({
                 "_date"
             ),
             {
-                accessorKey: "actions",
+                // accessorKey: "actions",
+                id: "actions",
                 header: ColumnHeader(""),
                 size: 15,
                 maxSize: 15,

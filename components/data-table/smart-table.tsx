@@ -40,7 +40,7 @@ export function SmartTable<T>(data) {
             ...props,
             id,
             header: ColumnHeader(header),
-
+            assessorKey: header,
             cell: ({ row }) => {
                 if (!content) return <></>;
                 const _content = content(row.original);
