@@ -25,6 +25,7 @@ import { DataTable2 } from "../data-table/data-table-2";
 
 import { SalesSelectionAction } from "../sales/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SmartTable } from "../data-table/smart-table";
 
 export default function OrdersTableShell<T>({
     data,
@@ -33,15 +34,24 @@ export default function OrdersTableShell<T>({
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
-    const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    // const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const table = SmartTable<ISalesOrder>(data);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
         () => [
-            CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
+            table.checkColumn(),
+            // CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
             {
                 maxSize: 10,
                 id: "flags",
                 cell: ({ row }) => OrderPriorityFlagCell(row.original, true)
             },
+            // table.simpleColumn("Order", data => ({
+            //     link: `/sales/order/${data.slug}`,
+            //     story: [
+            //         table.primaryText(data.orderId),
+            //         table.secondary(data.createdAt)
+            //     ]
+            // })),
             {
                 accessorKey: "orderId",
                 cell: ({ row }) =>
@@ -62,6 +72,9 @@ export default function OrdersTableShell<T>({
                 header: ColumnHeader("Address"),
                 cell: ({ row }) => OrderMemoCell(row.original.shippingAddress)
             },
+            table.simpleColumn("Rep", data => ({
+                story: [table.secondary(data.salesRep?.name)]
+            })),
             {
                 accessorKey: "invoice",
                 header: ColumnHeader("Total/Due"),
