@@ -76,6 +76,7 @@ export default function ItemCell({
                     itemValue={"description"}
                     form={form}
                     uppercase
+                    hideEmpty
                     formKey={`items.${rowIndex}.description`}
                     allowCreate
                 />

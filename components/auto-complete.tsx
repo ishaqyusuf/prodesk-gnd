@@ -23,6 +23,7 @@ interface Props {
     allowCreate?;
     formKey?;
     uppercase?: Boolean;
+    hideEmpty?: Boolean;
     placeholder?;
     form?;
 }
@@ -38,6 +39,7 @@ function AutoComplete2({
     itemValue = "id",
     className,
     Item,
+    hideEmpty,
     searchFn,
     form,
     placeholder,
@@ -258,7 +260,7 @@ function AutoComplete2({
                                 `min-w-[]`
                             )}
                         >
-                            {results?.length === 0 && (
+                            {results?.length === 0 && !hideEmpty && (
                                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                     Nothing found.
                                 </div>
