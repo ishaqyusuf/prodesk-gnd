@@ -95,6 +95,7 @@ async function formCtx(): Promise<SalesFormCtx> {
             description: true
         }
     });
+    console.log(items.length);
     return {
         settings: meta,
         profiles: profiles as any,

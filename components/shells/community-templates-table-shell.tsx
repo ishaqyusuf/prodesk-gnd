@@ -177,8 +177,7 @@ export default function CommunityTemplateTableShell<T>({
                                                     async () => {
                                                         await _synchronizeModelCost(
                                                             _cost,
-                                                            row.original.id,
-                                                            false
+                                                            row.original.id
                                                         );
                                                         await timeout(1000);
                                                         return true;
