@@ -198,6 +198,7 @@ export interface ISaveOrder {
 export interface ISalesAddressForm {
     billingAddress: IAddressBook;
     shippingAddress: IAddressBook;
+    customer: ICustomer;
     sameAddress: Boolean;
     profile: CustomerTypes;
 }

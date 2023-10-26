@@ -38,6 +38,7 @@ import {
 import AutoComplete2 from "../auto-complete";
 import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "../ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 export function SalesCustomerModal({
     form,
@@ -58,10 +59,11 @@ export function SalesCustomerModal({
 
     const [open, setOpen] = React.useState(false);
     React.useEffect(() => {
-        const { billingAddress, shippingAddress } = form.getValues();
+        const { billingAddress, shippingAddress, customer } = form.getValues();
         // console.log(billingAddress, shippingAddress);
         addressForm.reset({
             billingAddress: billingAddress as any,
+            customer: customer as any,
             shippingAddress: shippingAddress as any
         });
         setChecked(shippingAddress?.id == billingAddress?.id);
@@ -73,6 +75,7 @@ export function SalesCustomerModal({
             const {
                 billingAddress, //: ,
                 shippingAddress, //: { customerId: scid, ...siad },
+                customer,
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
             const { customerId, search, ...biad } = billingAddress || {};
@@ -82,10 +85,11 @@ export function SalesCustomerModal({
                 ...formData,
                 shippingAddress: siad,
                 billingAddress: biad,
-                sameAddress: checked as any
+                sameAddress: checked as any,
+                customer
             };
 
-            console.log(_form);
+            // console.log(_form);
             const { profileUpdate, ...resp } = await saveAddressAction(
                 _form as any
             );
@@ -100,7 +104,8 @@ export function SalesCustomerModal({
         const { getValues } = form;
         const phone2 = getValues(`${type}.phoneNo2`);
         return {
-            name: getValues(`${type}.name`),
+            name:
+                getValues(`customer.businessName`) || getValues(`${type}.name`),
             phoneNo: `${getValues(`${type}.phoneNo`)} ${
                 phone2 ? `(${phone2})` : ""
             }`,
@@ -313,6 +318,21 @@ function OrderAddress({
                         {/* <Input id="name" {...register(`${type}.name`)} className="h-8" /> */}
                         {/* <AddressSearchPop form={form} type={type} /> */}
                     </div>
+                </div>
+                <div
+                    className={cn(
+                        "col-span-2 grid gap-2",
+                        type != "billingAddress" && "hidden"
+                    )}
+                >
+                    <Label htmlFor="name" className="">
+                        Business Name
+                    </Label>
+                    <Input
+                        id="businessName"
+                        {...register(`customer.businessName`)}
+                        className="col-span-3 h-8"
+                    />
                 </div>
                 <div className="col-span-2 grid gap-2">
                     <Label htmlFor="name" className="">

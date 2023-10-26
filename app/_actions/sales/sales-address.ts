@@ -58,6 +58,7 @@ export async function findAddressAction({ q }: { q: string }) {
         items: items.map(item => {
             return {
                 ...item,
+                bussinessName: item.customer?.businessName,
                 search: `${item.name} ${item.phoneNo} ${item.address1}`
             };
         })
@@ -67,7 +68,8 @@ export async function saveAddressAction({
     billingAddress,
     shippingAddress,
     profile,
-    sameAddress
+    sameAddress,
+    customer: _customer
 }: ISalesAddressForm) {
     // console.log({
     //     sameAddress,
@@ -77,6 +79,7 @@ export async function saveAddressAction({
     let customerId: number | null;
     const response: {
         customerId?;
+        customer?;
         billingAddressId?;
         shippingAddressId?;
         shippingAddress?;
@@ -119,7 +122,10 @@ export async function saveAddressAction({
                 // },
             };
             let eAddr = (await prisma.addressBooks.findFirst({
-                where
+                where,
+                include: {
+                    customer: true
+                }
             })) as IAddressBook | null;
             console.log(eAddr);
             if (eAddr) {
@@ -136,6 +142,7 @@ export async function saveAddressAction({
                     eAddr.address1 != address.address1
                 ) {
                     eAddr = null;
+                    console.log("NULL....");
                 } else {
                     columns.map(c => {
                         // let eac = eAddr[c];
@@ -163,6 +170,15 @@ export async function saveAddressAction({
                     newId = eAddr.id as any;
                     if (index == 0) {
                         customerId = eAddr.customerId;
+                        console.log("UPDATING....");
+                        const __customer = await prisma.customers.update({
+                            where: { id: eAddr.customerId as any },
+                            data: {
+                                businessName: _customer.businessName
+                            }
+                        });
+                        address.customerId = eAddr?.customerId;
+                        response.customer = __customer;
                     }
                 }
                 // return eAddr;
@@ -188,6 +204,7 @@ export async function saveAddressAction({
                                     name,
                                     phoneNo,
                                     phoneNo2,
+                                    businessName: _customer.businessName,
                                     email: address?.email,
                                     profile: profile?.id
                                         ? {
@@ -198,8 +215,19 @@ export async function saveAddressAction({
                                         : undefined
                                 }
                             })) as any;
-                        }
+                        } else
+                            customer = (await prisma.customers.update({
+                                where: { id: customer.id },
+                                data: {
+                                    businessName: _customer.businessName
+                                },
+                                include: {
+                                    profile: true
+                                }
+                            })) as any;
                         address.customerId = customer?.id as any;
+                        response.customer = customer;
+                        console.log(response);
                     } else {
                         if (!customer?.profile) {
                             await prisma.customers.update({
