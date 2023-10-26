@@ -2,7 +2,7 @@ import { Fragment, memo, useEffect, useRef, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
-import { cn } from "@/lib/utils";
+import { cn, uniqueBy } from "@/lib/utils";
 import { InputProps } from "./ui/input";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { Label } from "./ui/label";
@@ -69,7 +69,6 @@ function AutoComplete2({
         }
     }, [debouncedQuery, typing]);
     async function loadResult() {
-        // console.log("RELOAD RESULTS", dirty);
         const { items } = searchFn
             ? await searchFn(debouncedQuery)
             : await searchAction({ q: debouncedQuery });
@@ -95,20 +94,6 @@ function AutoComplete2({
             return { id: value, name: value, data: value };
         return item;
     }
-    function getItemText(value) {
-        return (getItem(value) as any)?.name;
-    }
-    // useEffect(() => {
-    //   console.log(getItem(watch));
-    //   setSelected(getItem(watch));
-    // }, [watch]);
-
-    // useEffect(() => {
-    //   const _items = transformItems(options || []);
-    //   setItems(_items);
-    //   console.log(label, "options changed");
-    //   // setSelected(getItem(watch));
-    // }, [options]);
     useEffect(() => {
         const _items = transformItems(options || []);
         setItems(_items);
@@ -123,20 +108,16 @@ function AutoComplete2({
                   ?.toString()
                   .replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
-        // Create a regex pattern to match the search string anywhere in the text
         const pattern = new RegExp(escapedText, "i");
-        const filteredOptions = items?.filter(option =>
+        let filteredOptions = items?.filter(option =>
             pattern.test(option.name)
         );
-        return filteredOptions;
-        // setFilters(filteredOptions);
-        // return __options(options).filter(
-        //   (option) => option.text.includes(data?.text) || !data?.text
-        //   );
+        // filteredOptions = uniqueBy(filteredOptions, "name").filter(
+        //     (a, i) => i < 25
+        // );
+        return uniqueBy(filteredOptions, "name").filter((a, i) => i < 25);
     };
-
     function valueChange(e) {
-        // console.log("val change", e);
         setSelect(true);
         setSelected(e);
         if (form && formKey) {
@@ -153,14 +134,10 @@ function AutoComplete2({
         setTyping(false);
         setSelect(false);
         setFocus(true);
-        // setSearchable(true);
-        // if (!select) buttonRef?.current?.click();
-        // else setSelect(false);
         if (searchMode && results.length == 0) loadResult();
     }
     useEffect(() => {
         if (typing && !select && !focus) {
-            // console.log("BLURRRED:::", query);
             if (allowCreate) {
                 setSelected({
                     id: query,
@@ -180,22 +157,12 @@ function AutoComplete2({
         }
     }, [typing, select, focus, query]);
     function onBlur(e) {
-        // setTimeout(() => {
-        // setTyping(false);
         setTimeout(() => {
             setFocus(false);
         }, 500);
-        // setDirty(true);
-        // if (!select) {
-        //   console.log("BLURR");
-        //   console.log(selected);
-        // }
-        // }, 100);
     }
     const buttonRef = useRef<HTMLButtonElement>();
     const inputRef = useRef<HTMLInputElement>();
-
-    const [isScrollBlocked, setIsScrollBlocked] = useState(false);
 
     const [position, setPosition] = useState<any>({ x: 0, y: 0 });
 
