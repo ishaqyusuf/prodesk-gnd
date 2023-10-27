@@ -25,17 +25,21 @@ import {
     updateInvoiceTasksAction
 } from "@/app/_actions/community-invoice/update-invoice-tasks";
 import { UpdateOrderPriorityProps } from "@/types/sales";
+import Money from "../money";
 
 export default function EditInvoiceModal() {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{
         tasks: IHomeTask[];
+        sumPaid;
+        sumDue;
     }>({
         defaultValues: {
             tasks: []
         }
     });
+    // const watchTasks = form.watch("tasks");
     const { fields, remove, append } = useFieldArray({
         control: form.control,
         name: "tasks"
@@ -128,6 +132,9 @@ export default function EditInvoiceModal() {
         if (task.id) await deleteInvoiceTasks([task.id]);
         remove(i);
     }
+    // useEffect(() => {
+    //     console.log(watchTasks);
+    // }, [watchTasks]);
     return (
         <BaseModal<ExtendedHome>
             className="sm:max-w-[750px]"
@@ -222,6 +229,16 @@ export default function EditInvoiceModal() {
                                     </div>
                                 </div>
                             ))}
+                            {/* <div className="grid grid-cols-7 gap-4 text-sm font-semibold bg-slate-50">
+                                <div className="col-span-1 col-start-3">
+                                    <Money
+                                        value={form.getValues("sumDue") || 0}
+                                    />
+                                </div>
+                                <div className="col-span-1">
+                                    <Money value={form.getValues("sumPaid")} />
+                                </div>
+                            </div> */}
                             <Button
                                 onClick={() => {
                                     append(({
