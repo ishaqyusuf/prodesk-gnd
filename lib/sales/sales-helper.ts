@@ -116,7 +116,7 @@ export const sales = {
                         Icons.orders
                     ),
                     mb.simple(
-                        "As Order",
+                        "As Estimate",
                         async () => {
                             await this.copy(row, "estimate");
                         },
