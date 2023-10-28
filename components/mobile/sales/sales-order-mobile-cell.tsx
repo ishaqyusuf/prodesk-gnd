@@ -30,7 +30,7 @@ export default function SalesOrderMobileCell({
                     </SecondaryCellContent>
                 </div>
                 <SecondaryCellContent>
-                    {order?.customer?.address}
+                    {order?.shippingAddress?.address1}
                 </SecondaryCellContent>
             </div>
             <div className="flex justify-end">
