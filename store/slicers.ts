@@ -120,6 +120,7 @@ export type ModalName =
     | "salesTimeline"
     | "submitJob"
     | "salesPaymentCustomer"
+    | "salesMobileOption"
     | "role"
     | undefined;
 const initialState: ISlicer = ({

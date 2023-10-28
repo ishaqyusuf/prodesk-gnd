@@ -36,6 +36,7 @@ import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
 import { formatDate } from "@/lib/use-day"
 import useQueryParams from "@/lib/use-query-params"
 import * as qs from "qs";
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
   searchParams?;
@@ -49,6 +50,7 @@ interface DataTableProps<TData, TValue> {
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
   hideHeader?: Boolean
   hideFooter?: Boolean
+  mobile?: Boolean
   SelectionAction?
 }
 
@@ -60,7 +62,7 @@ export function DataTable2<TData, TValue>({
   searchableColumns = [],
   dateFilterColumns = [],
   newRowLink, hideFooter,hideHeader,SelectionAction,
-  deleteRowsAction,
+  deleteRowsAction,mobile,
   searchParams: _searchParams
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({});
@@ -256,9 +258,9 @@ export function DataTable2<TData, TValue>({
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
       />}
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+      <div   className={cn(!mobile && "rounded-md border")}  >
+        <Table >
+          <TableHeader className={cn(mobile && 'hidden sm:table-header-group')}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -280,12 +282,12 @@ export function DataTable2<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
+                <TableRow className={cn(mobile && "border-0 sm:border")}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) =>  cell.id.includes("__") ? null : (
-                    <TableCell key={cell.id}>
+                    <TableCell className={cn(mobile && 'p-0 sm:p-2')} key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

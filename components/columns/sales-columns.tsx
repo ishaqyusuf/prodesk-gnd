@@ -154,14 +154,16 @@ interface OrderInvoiceCellProps {
     order: ISalesOrder | undefined;
     isEstimate?: Boolean;
     link?: string | undefined;
+    className?: string;
 }
 export function OrderInvoiceCell({
     order,
     isEstimate,
-    link
+    link,
+    className
 }: OrderInvoiceCellProps) {
     return (
-        <div>
+        <div className={cn(className)}>
             <div className="font-medium uppercase">
                 ${toFixed(order?.grandTotal)}
             </div>
@@ -173,13 +175,19 @@ export function OrderInvoiceCell({
                             : "text-muted-foreground"
                     )}
                 >
-                    ${toFixed(order?.amountDue) || "0.00"}
+                    (${toFixed(order?.amountDue) || "0.00"})
                 </span>
             )}
         </div>
     );
 }
-export function OrderStatus(order: ISalesOrder | undefined, delivery = false) {
+export function OrderStatus({
+    order,
+    delivery = false
+}: {
+    order: ISalesOrder | undefined;
+    delivery?;
+}) {
     let status: any = order?.prodStatus;
     if (["In Transit", "Return", "Delivered"].includes(order?.status as any))
         status = order?.status;

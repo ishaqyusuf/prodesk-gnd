@@ -37,16 +37,29 @@ export function RowActionCell({ children }: { children? }) {
         </div>
     );
 }
-export function RowActionMoreMenu({ children }: { children }) {
+export function RowActionMoreMenu({
+    children,
+    Icon = MoreHorizontal,
+    label,
+    variant = "outline"
+}: {
+    children;
+    label?;
+    Icon?;
+    variant?;
+}) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant="outline"
-                    className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                    variant={variant}
+                    className={cn(
+                        "flex h-8  data-[state=open]:bg-muted",
+                        !label && "w-8 p-0"
+                    )}
                 >
-                    <MoreHorizontal className="h-4 w-4" />
-                    <span className="sr-only">Open Menu</span>
+                    <Icon className="h-4 w-4" />
+                    {label && <span className="">{label}</span>}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[185px]">
@@ -55,8 +68,10 @@ export function RowActionMoreMenu({ children }: { children }) {
         </DropdownMenu>
     );
 }
+export const Menu = RowActionMoreMenu;
 export function RowActionMenuItem({
     link,
+    href,
     children,
     Icon,
     SubMenu,
@@ -65,6 +80,7 @@ export function RowActionMenuItem({
     ...props
 }: {
     link?;
+    href?;
     Icon?;
     SubMenu?;
     _blank?: Boolean;
@@ -82,7 +98,7 @@ export function RowActionMenuItem({
                 <DropdownMenuSubContent>{SubMenu}</DropdownMenuSubContent>
             </DropdownMenuSub>
         );
-    const Node = link ? Link : Fragment;
+    const Node = link || href ? Link : Fragment;
     const Frag = () => (
         <DropdownMenuItem {...props} onClick={onClick}>
             {Icon && (
@@ -93,12 +109,13 @@ export function RowActionMenuItem({
     );
     if (link)
         return (
-            <LinkableNode _blank={_blank} href={link}>
+            <LinkableNode _blank={_blank} href={link || href}>
                 <Frag />
             </LinkableNode>
         );
     return <Frag />;
 }
+export const MenuItem = RowActionMenuItem;
 export function ActionButton({
     Icon,
     label,

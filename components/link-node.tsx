@@ -9,7 +9,7 @@ export default function LinkableNode({
     children,
     _blank,
     ...props
-}: PrimitiveDivProps & { href?; As?; _blank?: Boolean }) {
+}: PrimitiveDivProps & { href?; className?; As?; _blank?: Boolean }) {
     if (href)
         return (
             <Link {...(props as any)} target={_blank && "_blank"} href={href}>

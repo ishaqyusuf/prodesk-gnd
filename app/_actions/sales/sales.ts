@@ -26,6 +26,7 @@ import { fixSalesPaymentAction } from "./sales-payment";
 import { removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
+import { _revalidate } from "../_revalidate";
 
  export async function whereSales(query: SalesQueryParams) {
   const {
@@ -604,4 +605,5 @@ export async function moveSales(id,type: "order" | "estimate") {
         headline: `${title} by ${(await user()).name}`
       }
     )
+    _revalidate(type =='order' ? 'orders': 'estimates')
 }

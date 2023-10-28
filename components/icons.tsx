@@ -32,6 +32,13 @@ import {
   Pencil,
   BadgeDollarSign,
   ClipboardEdit,
+  ShoppingBag,
+  Banknote,
+  Package,
+  Construction,
+  ArrowLeft,
+  BookOpen,
+  Printer,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -51,7 +58,13 @@ export const Icons = {
       <Image alt="" src={logo} width={48} height={48} />
     </Link>
   ), 
+  orders: ShoppingBag,
+  estimates: Banknote,
+  packingList: Package,
+  production: Construction,
+  open: BookOpen,
   close: X,
+  print: Printer,
   menu: Menu,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
@@ -68,6 +81,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
   twitter: Twitter,

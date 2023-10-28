@@ -9,6 +9,7 @@ import PageHeader from "@/components/page-header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
+import SalesOrderMobileMenuShell from "@/components/mobile/shell/sales-order-mobile-menu";
 
 export const metadata: Metadata = {
     title: "Sales Orders"
@@ -28,6 +29,7 @@ export default async function OrdersPage({ searchParams }) {
                 newLink="/sales/order/new/form"
                 permissions={["editOrders"]}
             />
+            <SalesOrderMobileMenuShell />
             <OrdersTableShell<ISalesOrder>
                 searchParams={searchParams}
                 {...response}

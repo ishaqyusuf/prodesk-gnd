@@ -54,11 +54,14 @@ import { openModal } from "@/lib/modal";
 import { EmailModalProps } from "@/types/email";
 import {
     DeleteRowAction,
-    RowActionMenuItem
+    MenuItem,
+    RowActionMenuItem,
+    RowActionMoreMenu
 } from "../data-table/data-table-row-actions";
 import AuthGuard from "../auth-guard";
 import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 import { env } from "@/env.mjs";
+import { sales } from "@/lib/sales/sales-helper";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -83,84 +86,45 @@ export function OrderRowAction(props: IOrderRowProps) {
     }
     return (
         <AuthGuard permissions={["editOrders"]} className="">
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="outline"
-                        className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-                    >
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Open Menu</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[185px]">
-                    <Link href={_linkDir}>
-                        <DropdownMenuItem>
-                            <View className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                            View
-                        </DropdownMenuItem>
-                    </Link>
-                    <Link href={`${_linkDir}/form`}>
-                        <DropdownMenuItem>
-                            <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                            Edit
-                        </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            console.log(row);
-                            openModal<EmailModalProps>("email", {
-                                type: "sales",
-                                parentId: row.id,
-                                toName: row.customer?.name,
-                                toEmail: row.customer?.email,
-                                from: "GND Millwork<sales@gndprodesk.com>",
-                                data: row
-                            });
-                        }}
-                    >
-                        <MessageSquarePlus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                        Email
-                    </DropdownMenuItem>
-                    {!estimate ? (
-                        <>
-                            <ProductionAction row={row} />
-                            <RowActionMenuItem
-                                Icon={ShoppingBag}
-                                onClick={moveToEstimate}
-                            >
-                                Move to Estimate
-                            </RowActionMenuItem>
-                        </>
-                    ) : (
-                        <>
-                            <RowActionMenuItem
-                                Icon={ShoppingBag}
-                                onClick={moveEstimateToOrder}
-                            >
-                                Move to Order
-                            </RowActionMenuItem>
-                        </>
-                    )}
-                    <CopyOrderMenuAction row={row} />
-                    <PrintOrderMenuAction link estimate={estimate} row={row} />
-                    <PrintOrderMenuAction
-                        mockup
-                        estimate={estimate}
-                        row={row}
-                    />
-                    <PrintOrderMenuAction pdf estimate={estimate} row={row} />
+            <RowActionMoreMenu>
+                <MenuItem Icon={View} link={_linkDir}>
+                    View
+                </MenuItem>
+                <MenuItem Icon={Pen} link={`${_linkDir}/form`}>
+                    Edit
+                </MenuItem>
+                {!estimate ? (
+                    <>
+                        <ProductionAction row={row} />
+                        <MenuItem
+                            Icon={Icons.estimates}
+                            onClick={moveToEstimate}
+                        >
+                            Move to Estimate
+                        </MenuItem>
+                    </>
+                ) : (
+                    <>
+                        <MenuItem
+                            Icon={Icons.orders}
+                            onClick={moveEstimateToOrder}
+                        >
+                            Move to Order
+                        </MenuItem>
+                    </>
+                )}
+                <CopyOrderMenuAction row={row} />
+                <PrintOrderMenuAction link estimate={estimate} row={row} />
+                <PrintOrderMenuAction
+                    mockup
+                    link
+                    estimate={estimate}
+                    row={row}
+                />
+                <PrintOrderMenuAction pdf estimate={estimate} row={row} />
 
-                    {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
-                    {/* <PrintOrderMenuAction pdf estimate={estimate} row={row} /> */}
-
-                    <DeleteRowAction
-                        menu
-                        row={row}
-                        action={deleteOrderAction}
-                    />
-                </DropdownMenuContent>
-            </DropdownMenu>
+                <DeleteRowAction menu row={row} action={deleteOrderAction} />
+            </RowActionMoreMenu>
         </AuthGuard>
     );
 }
@@ -183,7 +147,7 @@ export const PrintOrderMenuAction = typedMemo(
                 let base = prod
                     ? `https://gnd-prodesk.vercel.app`
                     : "http://localhost:3000";
-                link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true`;
+                link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true&mockup=${props.mockup}`;
                 link.target = "_blank";
                 // link.download = "file.pdf";
                 // document.body.appendChild(link);
@@ -203,41 +167,41 @@ export const PrintOrderMenuAction = typedMemo(
         function PrintOptions() {
             return (
                 <>
-                    <DropdownMenuItem
+                    <MenuItem
+                        Icon={Icons.estimates}
                         onClick={() => {
                             _print("quote");
                         }}
                     >
-                        <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Estimates
-                    </DropdownMenuItem>
+                    </MenuItem>
 
-                    <DropdownMenuItem
+                    <MenuItem
+                        Icon={Icons.orders}
                         onClick={() => {
                             _print("order");
                         }}
                     >
-                        <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Order
-                    </DropdownMenuItem>
+                    </MenuItem>
                     {!props.mockup && (
                         <>
-                            <DropdownMenuItem
+                            <MenuItem
+                                Icon={Icons.packingList}
                                 onClick={() => {
                                     _print("packing list");
                                 }}
                             >
-                                <Package className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                 Packing List
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
+                            </MenuItem>
+                            <MenuItem
+                                Icon={Icons.production}
                                 onClick={() => {
                                     _print("production");
                                 }}
                             >
-                                <Construction className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                 Production
-                            </DropdownMenuItem>
+                            </MenuItem>
                         </>
                     )}
                 </>
@@ -247,34 +211,22 @@ export const PrintOrderMenuAction = typedMemo(
             return <PrintOptions />;
         }
         return props.myProd || props.estimate ? (
-            <DropdownMenuItem
+            <MenuItem
+                Icon={Printer}
                 onClick={() => {
                     if (props.estimate) _print("quote");
                     else _print("production");
                 }}
             >
-                <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Print {props.mockup && " Mockup"}
-            </DropdownMenuItem>
+            </MenuItem>
         ) : (
-            <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                    {!props.pdf ? (
-                        <>
-                            <Printer className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                            Print {props.mockup && " Mockup"}
-                        </>
-                    ) : (
-                        <>
-                            <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                            Pdf
-                        </>
-                    )}
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                    <PrintOptions />
-                </DropdownMenuSubContent>
-            </DropdownMenuSub>
+            <MenuItem
+                Icon={!props.pdf ? Printer : FileText}
+                SubMenu={<PrintOptions />}
+            >
+                {!props.pdf ? <>Print {props.mockup && " Mockup"}</> : "Pdf"}
+            </MenuItem>
         );
     }
 );
@@ -302,101 +254,83 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
         [props.row]
     );
     return (
-        <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-                <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Copy As
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-                <DropdownMenuItem
-                    onClick={() => {
-                        _copyOrder("estimate");
-                    }}
-                >
-                    <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                    Estimates
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => {
-                        _copyOrder("order");
-                    }}
-                >
-                    <ShoppingBag className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                    Order
-                </DropdownMenuItem>
-            </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        <MenuItem
+            SubMenu={
+                <>
+                    <MenuItem
+                        Icon={Icons.estimates}
+                        onClick={() => {
+                            _copyOrder("estimate");
+                        }}
+                    >
+                        Estimates
+                    </MenuItem>
+                    <MenuItem
+                        Icon={Icons.orders}
+                        onClick={() => {
+                            _copyOrder("order");
+                        }}
+                    >
+                        Orders
+                    </MenuItem>
+                </>
+            }
+            Icon={Copy}
+        >
+            Copy As
+        </MenuItem>
     );
 });
 export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
-    const assignProduction = useCallback(() => {
-        const { id, orderId, prodDueDate, prodId } = row;
-        openModal("assignProduction", { id, orderId, prodDueDate, prodId });
-        // store.dispatch(
-        //   updateSlice({
-        //     key: "assignProduction",
-        //     data: { id, orderId, prodDueDate, prodId },
-        //   })
-        // );
-    }, [row]);
     const router = useRouter();
 
-    async function _clearAssignment() {
-        await cancelProductionAssignmentAction(row.id);
-        __refresh("Production Assignment Cancelled");
-    }
-    function __refresh(_toast: string = "") {
-        router.refresh();
-        if (_toast) toast.success(_toast);
-    }
-    async function markIncomplete() {
-        await markProductionIncompleteAction(row.id);
-        __refresh("Production Marked as Incomplete");
-    }
-    async function completeProduction() {
-        await adminCompleteProductionAction(row.id);
-        __refresh("Production Completed");
-    }
     return (
-        <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-                <ListOrderedIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Production
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-                <DropdownMenuItem className="" asChild>
-                    <Link
+        <MenuItem
+            Icon={Icons.production}
+            SubMenu={
+                <>
+                    <MenuItem
+                        className=""
+                        Icon={Icons.open}
                         href={`/sales/production/${row.orderId}`}
-                        className="flex w-full"
                     >
-                        <BookOpen className={`mr-2 h-4 w-4`} />
-                        <span>Open</span>
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={assignProduction}>
-                    <FlagIcon className={`mr-2 h-4 w-4`} />
-                    <span>{row.prodId ? "Update Assignment" : "Assign"}</span>
-                </DropdownMenuItem>
-                {row.prodStatus == "Completed" ? (
-                    <>
-                        <DropdownMenuItem onClick={markIncomplete}>
-                            <FlagIcon className={`mr-2 h-4 w-4`} />
+                        Open
+                    </MenuItem>
+                    <MenuItem
+                        Icon={Icons.flag}
+                        onClick={() => sales.productionModal(row)}
+                    >
+                        <span>
+                            {row.prodId ? "Update Assignment" : "Assign"}
+                        </span>
+                    </MenuItem>
+                    {row.prodStatus == "Completed" ? (
+                        <MenuItem
+                            Icon={Icons.flag}
+                            onClick={() => sales.markIncomplete(row)}
+                        >
                             <span>Incomplete</span>
-                        </DropdownMenuItem>
-                    </>
-                ) : (
-                    <>
-                        <DropdownMenuItem onClick={_clearAssignment}>
-                            <X className={`mr-2 h-4 w-4`} />
-                            <span>Clear Assign</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={completeProduction}>
-                            <Check className={`mr-2 h-4 w-4`} />
-                            <span>Mark as Completed</span>
-                        </DropdownMenuItem>
-                    </>
-                )}
-            </DropdownMenuSubContent>
-        </DropdownMenuSub>
+                        </MenuItem>
+                    ) : (
+                        <>
+                            <MenuItem
+                                Icon={Icons.close}
+                                onClick={() => sales._clearAssignment(row)}
+                            >
+                                <span>Clear Assign</span>
+                            </MenuItem>
+                            <MenuItem
+                                Icon={Icons.check}
+                                onClick={() => sales.completeProduction(row)}
+                            >
+                                <span>Mark as Completed</span>
+                            </MenuItem>
+                        </>
+                    )}
+                </>
+            }
+        >
+            Production
+        </MenuItem>
     );
 });
