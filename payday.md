@@ -2,9 +2,9 @@
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
 # PAYMENT INVOICE OCT 23-
-# 14.55 @ 35/hr == $522.92
-# OCT 27: 03.15 == 14.55
-    01:45-03:40
+# 15.00 @ 35/hr == $525
+# OCT 27: 03.20 == 15.00
+    01:45-03:45
     11:40-01:00
 # OCT 27: 02.30 == 11.40
     05:15-06:15
