@@ -258,9 +258,9 @@ export function DataTable2<TData, TValue>({
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
       />}
-      <div   className={cn(!mobile && "rounded-md border")}  >
+      <div   className={cn(!mobile && "")}  >
         <Table >
-          <TableHeader className={cn(mobile && 'hidden sm:table-header-group')}>
+          <TableHeader className={cn(mobile && 'max-sm:hidden')}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

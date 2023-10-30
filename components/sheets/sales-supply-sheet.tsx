@@ -55,7 +55,7 @@ export default function SalesSupplySheet() {
             )}
             Description={({ data }) => (
                 <div className="flex justify-between">
-                    <div>{data?.subtitle}</div>
+                    <div>{data?.orderId}</div>
                     <div className="relative">
                         <div className="">
                             <Button
@@ -231,3 +231,4 @@ function TaskRow({ row, index, job, setJob }: TaskRowProps) {
         </TableRow>
     );
 }
+
