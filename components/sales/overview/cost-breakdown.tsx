@@ -63,7 +63,7 @@ export default function CostBreakdown() {
                                     <TableCell className="text-muted-foreground font-bold p-1">
                                         {line.key}
                                     </TableCell>
-                                    <TableCell className="p-1.5">
+                                    <TableCell className="p-1.5 text-right">
                                         {line.value}
                                     </TableCell>
                                 </TableRow>

@@ -107,7 +107,7 @@ export function RowActionMenuItem({
             {children}
         </DropdownMenuItem>
     );
-    if (link)
+    if (link || href)
         return (
             <LinkableNode _blank={_blank} href={link || href}>
                 <Frag />

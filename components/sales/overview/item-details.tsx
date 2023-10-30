@@ -55,6 +55,33 @@ export default function ItemDetailsSection() {
                                         </div>
                                     )}
                                 </div>
+                                {item.swing && (
+                                    <div className="flex justify-between items-end space-x-2">
+                                        <div className="grid gap-1">
+                                            <div className="flex justify-end font-semibold text-sm">
+                                                {item.meta.produced_qty || 0} of{" "}
+                                                {item.qty} completed
+                                            </div>
+                                            <XProgress
+                                                completed={
+                                                    item.meta.produced_qty
+                                                }
+                                                total={item.qty}
+                                            />
+                                        </div>
+                                        {isProd && (
+                                            <div>
+                                                <div className="p-2 font-semibold text-muted-foreground">
+                                                    {item.swing && (
+                                                        <ProdItemActions
+                                                            item={item}
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

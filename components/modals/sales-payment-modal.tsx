@@ -252,7 +252,7 @@ export default function SalesPaymentModal() {
                             </TableBody>
                         </Table>
                     </ScrollArea>
-                    <div className="flex space-x-4 justify-end">
+                    <div className="sm:flex max-sm:grid max-sm:grid-cols-2 max-sm:gap-4 sm:space-x-4 justify-end">
                         <div className="grid gap-2">
                             <Label>Wallet</Label>
                             <Money value={customer?.wallet?.balance} />
