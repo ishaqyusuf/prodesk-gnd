@@ -1,5 +1,5 @@
 export const screens = {
-    xs: { query: "(max-width: 639px)" },
+    xs: { query: "(max-width: 768px)" },
     sm: { query: "(min-width: 640px)" },
     md: { query: "(min-width: 768px)" },
     lg: { query: "(min-width: 1024px)" },

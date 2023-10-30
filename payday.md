@@ -5,7 +5,7 @@
 # PAYMENT INVOICE OCT 30-
 # 00.00 @ 35/hr == $
 # OCT 30: 00.00 == 00.00
-    02:25-
+    02:25-03:50
     10:40-12:35
 
 # PAYMENT INVOICE OCT 23-27
