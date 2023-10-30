@@ -146,7 +146,7 @@ const headerNavSlice = createSlice({
             //   if (typeof v == "object") data[k] = transformObject(v);
             // });
             const d = transformObject(data);
-            state[key] = d;
+            state[key as any] = d;
         }
     }
 });
