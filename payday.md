@@ -1,7 +1,13 @@
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-# PAYMENT INVOICE OCT 23-
+
+# PAYMENT INVOICE OCT 30-
+# 00.00 @ 35/hr == $
+# OCT 30: 00.00 == 00.00
+    10:40-
+
+# PAYMENT INVOICE OCT 23-27
 # 15.00 @ 35/hr == $525
 # OCT 27: 03.20 == 15.00
     01:45-03:45

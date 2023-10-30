@@ -30,6 +30,16 @@ import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
+import { DatePicker } from "../date-range-picker";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "../ui/select";
+import { Label } from "../ui/label";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function SalesProductionModal() {
@@ -56,7 +66,7 @@ export default function SalesProductionModal() {
         startTransition(async () => {
             await assignProductionAction({
                 id: order.id,
-                userId,
+                userId: Number(userId),
                 prodDueDate
             });
             closeModal("assignProduction");
@@ -68,20 +78,22 @@ export default function SalesProductionModal() {
     const router = useRouter();
     async function __loadProds(props: UserProductionEventsProps) {
         const __prods = await getUserProductionEventsAction(props);
+        console.log(__prods);
         setProductionEvents(__prods as any);
     }
     useEffect(() => {
         // console.log([])
         if (selectedMonth && userId) {
             __loadProds({
-                userId,
+                userId: Number(userId),
                 date: selectedMonth
             });
         }
     }, [selectedMonth, userId]);
     const selectProducer = React.useCallback(
-        producer => {
-            setUserId(producer.id);
+        pid => {
+            // console.log(pid);
+            setUserId(pid);
         },
         [setUserId]
     );
@@ -108,11 +120,15 @@ export default function SalesProductionModal() {
             }}
             modalName="assignProduction"
             Title={({ data: order }) => (
-                <div>Assign Production ({order?.orderId})</div>
+                <div className="">Assign Production</div>
             )}
+            Subtitle={({ data }) => <div>({data?.orderId})</div>}
             Content={({ data }) => (
-                <div className="flex space-x-4 ">
-                    <ScrollArea className="max-h-[350px] sm:w-[200px]">
+                <div className="flex space-x-4 -mx-4 sm:mx-0">
+                    <ScrollArea
+                        id="employees"
+                        className="max-h-[350px] hidden sm:block sm:w-[200px]"
+                    >
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -129,7 +145,7 @@ export default function SalesProductionModal() {
                                                 ? "bg-accent"
                                                 : ""
                                         } cursor-pointer`}
-                                        onClick={() => selectProducer(field)}
+                                        onClick={() => selectProducer(field.id)}
                                         key={field.id}
                                     >
                                         <TableCell
@@ -152,7 +168,10 @@ export default function SalesProductionModal() {
                             </TableBody>
                         </Table>
                     </ScrollArea>
-                    <div className="min-h-[350px]">
+                    <div
+                        id="calendar"
+                        className="min-h-[350px] hidden sm:block"
+                    >
                         <Calendar
                             onMonthChange={monthChange}
                             month={selectedMonth}
@@ -167,7 +186,45 @@ export default function SalesProductionModal() {
                             initialFocus
                         />
                     </div>
-                    <ScrollArea className="max-h-[350px]  flex-1 sm:w-[200px]">
+                    <ScrollArea className="sm:max-h-[350px]   flex-1 sm:w-[200px]">
+                        <div className="sm:hidden mb-2">
+                            <div className="grid gap-2">
+                                <Label>Assign To</Label>
+                                <Select
+                                    onValueChange={v => selectProducer(v)}
+                                    defaultValue={userId}
+                                >
+                                    <SelectTrigger className="h-8">
+                                        <SelectValue placeholder="Assign To" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {productionUsers?.map((opt, _) => (
+                                                <SelectItem
+                                                    key={_}
+                                                    value={opt.id?.toString()}
+                                                >
+                                                    {opt.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="grid gap-2 mb-2">
+                                <Label>Date</Label>
+                                <DatePicker
+                                    className="w-auto h-7"
+                                    // onMonthChange={monthChange}
+                                    // month={selectedMonth}
+                                    value={prodDueDate}
+                                    setValue={v => {
+                                        setDueDate(v);
+                                        setSelectedMonth(v);
+                                    }}
+                                />
+                            </div>
+                        </div>
                         <Table>
                             <TableHeader>
                                 <TableRow>

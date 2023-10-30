@@ -25,7 +25,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
     const isProd = order?.ctx?.prodPage;
     return (
         <div className="">
-            <Card>
+            <Card className="max-sm:border-none">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                         <div className="inline-flex items-center space-x-2">

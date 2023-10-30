@@ -194,7 +194,7 @@ export function OrderStatus({
     if (!status) status = delivery ? "-" : order?.prodId ? "Prod Queued" : "";
     const color = getBadgeColor(order?.prodStatus || "");
     return (
-        <div className="w-16">
+        <div className="min-w-16">
             <Badge
                 variant={"secondary"}
                 className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}

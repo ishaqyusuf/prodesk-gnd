@@ -16,6 +16,8 @@ import { ProdItemActions } from "@/components/actions/prod-item-actions";
 import { Badge } from "@/components/ui/badge";
 import { IInboundOrderItems } from "@/types/sales-inbound";
 import StatusBadge from "@/components/status-badge";
+import { PrimaryCellContent } from "@/components/columns/base-columns";
+import Money from "@/components/money";
 
 export default function ItemDetailsSection() {
     const order: ISalesOrder = useAppSelector(s => s.slicers.dataPage.data);
@@ -23,12 +25,40 @@ export default function ItemDetailsSection() {
 
     return (
         <div className="">
-            <Card>
+            <Card className="max-sm:border-none">
                 <CardHeader>
                     <CardTitle>Items</CardTitle>
                 </CardHeader>
-                <CardContent className="">
-                    <Table>
+                <CardContent className="max-sm:-mt-4">
+                    <div className="grid divide-y sm:hidden">
+                        {order.items?.map((item, key) => (
+                            <div className="grid py-2 gap-2" key={key}>
+                                <PrimaryCellContent className="text-sm leading-relaxed">
+                                    {item.description}{" "}
+                                    <span className="mx-2">x{item.qty}</span>
+                                </PrimaryCellContent>
+                                <div className="flex items-centerspace-x-2">
+                                    <p className="whitespace-nowrap font-semibold text-muted-foreground text-sm">
+                                        {item.swing}
+                                    </p>
+                                    {item.supplier && (
+                                        <Badge className="leading-none bg-accent text-accent-foreground hover:bg-accent">
+                                            {item.supplier}
+                                        </Badge>
+                                    )}
+                                    <div className="flex-1"></div>
+                                    {!isProd && (
+                                        <div className="text-right font-semibold text-muted-foreground text-sm">
+                                            {item.total && (
+                                                <Money value={item.total} />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <Table className="max-sm:hidden">
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="px-1">Item</TableHead>

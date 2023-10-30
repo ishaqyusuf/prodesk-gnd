@@ -7,7 +7,7 @@ import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
     Popover,
     PopoverContent,
@@ -22,6 +22,7 @@ interface Props {
     value?: any;
     setValue?: any;
     format?: DateFormats;
+    placeholder?;
 }
 export function DatePicker({
     className,
@@ -30,8 +31,9 @@ export function DatePicker({
     setValue,
     hideIcon,
     format = "YYYY-MM-DD",
-    placeholder = "Pick a date"
-}: React.HTMLAttributes<HTMLDivElement> & Props) {
+    placeholder = "Pick a date",
+    ...calendarProps
+}: CalendarProps & Props) {
     const [date, setDate] = React.useState<DateRange | undefined | Date>(
         value ? value : range ? { form: null, to: null } : null
     );
@@ -102,6 +104,7 @@ export function DatePicker({
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="end">
                     <Calendar
+                        {...(calendarProps as any)}
                         initialFocus
                         mode={(range ? "range" : "single") as any}
                         defaultMonth={range ? from() : date}
