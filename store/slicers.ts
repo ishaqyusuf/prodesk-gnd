@@ -83,6 +83,7 @@ export interface ISlicer {
     salesPaymentCustomers: ICustomer[];
     staticProductCategories: string[];
     refreshToken: string | undefined;
+    href: null;
 }
 
 export type ModalName =
@@ -180,4 +181,12 @@ export async function loadStaticList(key: keyof ISlicer, list, _loader) {
 
         dispatchSlice(key, deepCopy(data));
     }
+}
+export function navigateTo(href) {
+    store.dispatch(
+        updateSlice({
+            key: "href",
+            data: href
+        })
+    );
 }

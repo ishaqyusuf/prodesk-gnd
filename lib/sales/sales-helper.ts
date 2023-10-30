@@ -18,7 +18,11 @@ import { dispatchSlice } from "@/store/slicers";
 export const sales = {
     async move(order, to: "estimate" | "order", router?) {
         await moveSales(order.id, to);
-        toast.message("Order moved to estimate");
+        toast.message(
+            to == "estimate"
+                ? "Order moved to estimate"
+                : "Estimate moved to order"
+        );
         router?.push(`/sales/${to}/${order.orderId}`);
         closeModal();
     },

@@ -51,7 +51,14 @@ export default function OrdersTableShell<T>({
                           cell: ({ row }) => (
                               <SalesOrderMobileCell order={row.original} />
                           )
-                      }
+                      },
+                      ..._FilterColumn(
+                          "_status",
+                          "_q",
+                          "_payment",
+                          "_customerId",
+                          "_date"
+                      )
                   ]
                 : [
                       table.checkColumn(),

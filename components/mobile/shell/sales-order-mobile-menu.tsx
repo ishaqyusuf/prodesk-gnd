@@ -9,11 +9,7 @@ import { useRouter } from "next/navigation";
 import { TabsContent } from "@/components/ui/tabs";
 import MobileMenuCtx from "../mobile-menu-ctx";
 
-export default function SalesOrderMobileMenuShell({
-    estimate
-}: {
-    estimate?: Boolean;
-}) {
+export default function SalesOrderMobileMenuShell() {
     const router = useRouter();
     const [currentTab, setCurrentTab] = useState("main");
     const [tab, setTab] = useState("main");

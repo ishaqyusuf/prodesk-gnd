@@ -282,12 +282,12 @@ export function DataTable2<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow className={cn(mobile && "border-0 sm:border")}
+                <TableRow className={cn(mobile && "max-sm:border-0")}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) =>  cell.id.includes("__") ? null : (
-                    <TableCell className={cn(mobile && 'p-0 sm:p-2')} key={cell.id}>
+                    <TableCell className={cn(mobile && 'max-sm:p-0')} key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
