@@ -119,6 +119,7 @@ export type ModalName =
     | "salesComponent"
     | "salesPayment"
     | "salesTimeline"
+    | "salesSupply"
     | "submitJob"
     | "salesPaymentCustomer"
     | "salesMobileOption"

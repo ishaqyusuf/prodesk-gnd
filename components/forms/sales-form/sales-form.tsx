@@ -36,6 +36,9 @@ import dayjs from "dayjs";
 import { Switch } from "@/components/ui/switch";
 import { toggleMockup } from "@/store/invoice-item-component-slice";
 import { Label } from "@/components/ui/label";
+import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
+import { Icons } from "@/components/icons";
+import { openModal } from "@/lib/modal";
 
 interface Props {
     data: SalesFormResponse;
@@ -191,63 +194,48 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                         </div>
                     )}
                     <CatalogModal form={form} ctx={data.ctx} />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button disabled={mockupMode} size="sm">
-                                Save
-                            </Button>
-                            {/* isLoading={loader.isLoading} */}
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[160px]">
-                            <DropdownMenuItem onClick={() => save()}>
-                                <Save className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                                Save
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => save("close")}>
-                                <FolderClosed className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                                Save & Close
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => save("new")}>
-                                <Plus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                                Save & New
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="flex data-[state=open]:bg-muted"
-                            >
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
 
-                        <DropdownMenuContent align="end" className="w-[160px]">
-                            <PrintOrderMenuAction
-                                link
-                                row={{ id: form.getValues("id") } as any}
-                            />
-                            <PrintOrderMenuAction
-                                mockup
-                                link
-                                row={{ id: form.getValues("id") } as any}
-                            />
-                            <PrintOrderMenuAction
-                                pdf
-                                row={{ id: form.getValues("id") } as any}
-                            />
-                            {/* <DropdownMenuItem>
-            <Carrot className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Catalog
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Banknote className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Apply Payment
-          </DropdownMenuItem> */}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Menu
+                        variant={"secondary"}
+                        disabled={mockupMode}
+                        label={"Save"}
+                        Icon={null}
+                    >
+                        <MenuItem onClick={() => save()} Icon={Icons.save}>
+                            Save
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => save("close")}
+                            Icon={Icons.saveAndClose}
+                        >
+                            Save & Close
+                        </MenuItem>
+                        <MenuItem onClick={() => save("new")} Icon={Icons.add}>
+                            Save & New
+                        </MenuItem>
+                    </Menu>
+                    <Menu Icon={Icons.more}>
+                        <MenuItem
+                            onClick={() => {
+                                openModal("salesSupply");
+                            }}
+                        >
+                            Supply
+                        </MenuItem>
+                        <PrintOrderMenuAction
+                            link
+                            row={{ id: form.getValues("id") } as any}
+                        />
+                        <PrintOrderMenuAction
+                            mockup
+                            link
+                            row={{ id: form.getValues("id") } as any}
+                        />
+                        <PrintOrderMenuAction
+                            pdf
+                            row={{ id: form.getValues("id") } as any}
+                        />
+                    </Menu>
                 </div>
             </section>
             <section

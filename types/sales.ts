@@ -4,6 +4,7 @@ import {
     OrderInventory,
     OrderProductionSubmissions,
     Progress,
+    SalesItemSupply,
     SalesOrderItems,
     SalesOrders,
     SalesPayments,
@@ -80,6 +81,7 @@ export type ISalesOrderItem = SalesOrderItems & {
     productions: OrderProductionSubmissions[];
     meta: ISalesOrderItemMeta;
     salesOrder: ISalesOrder;
+    supplies: SalesItemSupply[];
     inboundOrderItem: IInboundOrderItems[];
 };
 export interface ISalesOrderItemMeta {

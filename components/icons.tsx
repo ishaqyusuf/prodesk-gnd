@@ -39,6 +39,9 @@ import {
   ArrowLeft,
   BookOpen,
   Printer,
+  Save,
+  FolderClosed,
+  MoreVerticalIcon,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -59,6 +62,8 @@ export const Icons = {
     </Link>
   ), 
   orders: ShoppingBag,
+  save: Save,
+  saveAndClose: FolderClosed,
   estimates: Banknote,
   packingList: Package,
   production: Construction,
@@ -73,6 +78,7 @@ export const Icons = {
   post: FileText,
   page: File,
   media,
+  more: MoreVerticalIcon,
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,

@@ -16,7 +16,7 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
     const _itemsByIndex: any = {};
     let rows = 20;
     // console.log(items);
-    items.map(item => {
+    items.map(({ supplies, ...item }) => {
         const li = [
             item.meta?.line_index,
             item.meta?.uid,

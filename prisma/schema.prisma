@@ -219,45 +219,26 @@ model HomeTasks {
     status               String?   @db.VarChar(255)
     meta                 Json?     @db.Json
     producerName         String?   @db.VarChar(255)
-    // payrollCheckNo            String?   @db.VarChar(255)
-    // payrollApprovedByName     String?   @db.VarChar(255)
-    // installersName            String?   @db.VarChar(255)
     search               String?   @db.VarChar(255)
-    // installationStatus        String?   @db.VarChar(255)
     productionStatus     String?   @db.VarChar(255)
-    // installNote               String?   @db.VarChar(255)
-    // extraInstallReason        String?   @db.VarChar(255)
-    // installStatus             String?   @db.VarChar(255)
-    // extraInstallCostReason    String?   @db.VarChar(255)
     checkNo              String?   @db.VarChar(255)
     projectId            Int?
-    // payrollApprovedById       Int?
     billable             Boolean?
     produceable          Boolean?
     installable          Boolean?
     punchout             Boolean?
     deco                 Boolean?
-    // extraInstallCost          Float?
     taxCost              Float?
     amountDue            Float?
     amountPaid           Float?
-    // payableInstallerCost      Float?
-    // payableInstallerExtraCost Float?
-    // payableInstallerTotalCost Float?
     completedAt          DateTime?
-    // totalInstallCost          Float?
-    // installCost               Float?
     checkDate            DateTime? @db.Timestamp(0)
     statusDate           DateTime? @db.Timestamp(0)
-    // payrollCheckDate          DateTime? @db.Timestamp(0)
     sentToProductionAt   DateTime? @db.Timestamp(0)
     producedAt           DateTime? @db.Timestamp(0)
     prodStartedAt        DateTime? @db.Timestamp(0)
     productionStatusDate DateTime? @db.Timestamp(0)
     productionDueDate    DateTime? @db.Timestamp(0)
-    // installApprovedAt         DateTime? @db.Timestamp(0)
-    // installStatusDate         DateTime? @db.Timestamp(0)
-    // installedAt               DateTime? @db.Timestamp(0)
     deletedAt            DateTime? @db.Timestamp(0)
     createdAt            DateTime? @db.Timestamp(0)
     updatedAt            DateTime? @db.Timestamp(0)
@@ -282,10 +263,11 @@ model HomeTemplates {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model InboundOrderItems {
+
+model SalesItemSupply {
     id               Int              @unique @default(autoincrement())
     salesOrderItemId Int
-    inboundOrderId   Int
+    salesOrderId     Int
     qty              Int
     productId        Int?
     meta             Json?            @db.Json
@@ -299,25 +281,8 @@ model InboundOrderItems {
     updatedAt        DateTime?        @db.Timestamp(0)
     unitCost         Float?
     totalCost        Float?
-    salesOrderItems  SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
-    InboundOrder     InboundOrders?   @relation(fields: [inboundOrderId], references: [id])
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model InboundOrders {
-    id           Int                 @unique @default(autoincrement())
-    slug         String              @unique @db.VarChar(255)
-    orderId      String              @db.VarChar(255)
-    reference    String?
-    supplier     String?
-    supplierId   Int?
-    totalCost    Float?
-    status       String?             @db.VarChar(255)
-    meta         Json?               @db.Json
-    deletedAt    DateTime?           @db.Timestamp(0)
-    createdAt    DateTime?           @db.Timestamp(0)
-    updatedAt    DateTime?           @db.Timestamp(0)
-    inboundItems InboundOrderItems[]
+    order            SalesOrders      @relation(fields: [salesOrderId], references: [id])
+    item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -774,7 +739,7 @@ model SalesOrderItems {
     prodStartedAt      DateTime?                    @db.Timestamp(0)
     sentToProdAt       DateTime?                    @db.Timestamp(0)
     prodCompletedAt    DateTime?                    @db.Timestamp(0)
-    inboundOrderItem   InboundOrderItems[]
+    supplies           SalesItemSupply[]
     salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
     productions        OrderProductionSubmissions[]
     // components         SalesOrderItemComponents[]
@@ -842,6 +807,7 @@ model SalesOrders {
     productions       OrderProductionSubmissions[]
     // components        SalesOrderItemComponents[]
     pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
+    supplies          SalesItemSupply[]
 }
 
 model SalesPickup {
@@ -871,38 +837,6 @@ model SalesPayments {
     customer      Customers            @relation(fields: [customerId], references: [id])
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id])
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-// model SubCategories {
-//     id         Int       @unique @default(autoincrement())
-//     name       String    @db.VarChar(255)
-//     categoryId Int
-//     deletedAt  DateTime? @db.Timestamp(0)
-//     createdAt  DateTime? @db.Timestamp(0)
-//     updatedAt  DateTime? @db.Timestamp(0)
-// }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-// model Suppliers {
-//     id        Int       @unique @default(autoincrement())
-//     name      String    @db.VarChar(255)
-//     email     String?   @db.VarChar(255)
-//     phone     String?   @db.VarChar(255)
-//     address   String?   @db.Text
-//     meta      Json?     @db.Json
-//     deletedAt DateTime? @db.Timestamp(0)
-//     createdAt DateTime? @db.Timestamp(0)
-//     updatedAt DateTime? @db.Timestamp(0)
-// }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-// model Tags {
-//     id        Int       @unique @default(autoincrement())
-//     name      String    @db.VarChar(255)
-//     type      String?   @db.VarChar(255)
-//     createdAt DateTime? @db.Timestamp(0)
-//     updatedAt DateTime? @db.Timestamp(0)
-// }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Jobs {

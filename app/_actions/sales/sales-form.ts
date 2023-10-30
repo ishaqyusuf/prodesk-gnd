@@ -39,7 +39,11 @@ export async function salesFormAction(
         },
         include: {
             customer: true,
-            items: true,
+            items: {
+                include: {
+                    supplies: true
+                }
+            },
             salesRep: true,
             billingAddress: true,
             shippingAddress: true,

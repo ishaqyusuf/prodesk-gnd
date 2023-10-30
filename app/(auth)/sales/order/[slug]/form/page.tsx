@@ -9,6 +9,7 @@ import {
     OrdersCrumb
 } from "@/components/breadcrumbs/links";
 import SalesForm from "@/components/forms/sales-form/sales-form";
+import SalesSupplySheet from "@/components/sheets/sales-supply-sheet";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { Metadata } from "next";
 
@@ -35,6 +36,7 @@ export default async function OrderFormPage({
                 <BreadLink title={orderId ? "Edit" : "New"} isLast />
             </Breadcrumbs>
             <SalesForm newTitle="New Order" slug={slug} data={resp}></SalesForm>
+            <SalesSupplySheet />
         </DataPageShell>
     );
 }

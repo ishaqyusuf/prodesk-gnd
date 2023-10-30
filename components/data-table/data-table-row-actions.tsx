@@ -41,9 +41,11 @@ export function RowActionMoreMenu({
     children,
     Icon = MoreHorizontal,
     label,
+    disabled,
     variant = "outline"
 }: {
     children;
+    disabled?: boolean;
     label?;
     Icon?;
     variant?;
@@ -52,13 +54,14 @@ export function RowActionMoreMenu({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
+                    disabled={disabled}
                     variant={variant}
                     className={cn(
-                        "flex h-8  data-[state=open]:bg-muted",
+                        "flex h-8 space-x-4 data-[state=open]:bg-muted",
                         !label && "w-8 p-0"
                     )}
                 >
-                    <Icon className="h-4 w-4" />
+                    {Icon && <Icon className="h-4 w-4" />}
                     {label && <span className="">{label}</span>}
                 </Button>
             </DropdownMenuTrigger>
