@@ -244,13 +244,7 @@ export async function getSales(query: SalesQueryParams) {
           }
         },
         select: {
-        //   inboundOrderItem: {
-        //      select: {
-        //       qty: true,
-        //       status: true,
-        //       location: true
-        //     }
-        //   },
+        
           id:true,
           qty:true,
           prodCompletedAt: true,

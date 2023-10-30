@@ -1,18 +1,18 @@
-import { InboundOrderItems, InboundOrders } from "@prisma/client";
+import {} from "@prisma/client";
 import { OmitMeta } from "./type";
 import { ISalesOrder, ISalesOrderItem } from "./sales";
 
-export interface InboundOrder extends OmitMeta<InboundOrders> {
-  meta: {};
-  _count: {};
+export interface InboundOrder extends OmitMeta<any> {
+    meta: {};
+    _count: {};
 }
-export interface IInboundOrder extends OmitMeta<InboundOrders> {
-  meta: {};
-  inboundItems: IInboundOrderItems[];
-  _count: {};
+export interface IInboundOrder extends OmitMeta<any> {
+    meta: {};
+    inboundItems: IInboundOrderItems[];
+    _count: {};
 }
-export interface IInboundOrderItems extends OmitMeta<InboundOrderItems> {
-  meta: {};
-  salesOrderItems: ISalesOrderItem;
-  InboundOrder: InboundOrder;
+export interface IInboundOrderItems extends OmitMeta<any> {
+    meta: {};
+    salesOrderItems: ISalesOrderItem;
+    InboundOrder: InboundOrder;
 }

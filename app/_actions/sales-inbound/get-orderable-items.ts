@@ -40,14 +40,7 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
         supplier: {
             not: null
         },
-        prodCompletedAt: null,
-        inboundOrderItem: {
-            none: {
-                id: {
-                    gt: 0
-                }
-            }
-        }
+        prodCompletedAt: null
     };
     if (q.contains) {
         where.OR = [
@@ -98,9 +91,7 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
         // }
     }
     // if (query.salesOrderItemIds)
-    //   where.inboundOrderItemId = {
-    //     in: query.salesOrderItemIds,
-    //   };
+
     switch (query._show) {
         case "paid":
             where.salesOrder = {
@@ -117,27 +108,15 @@ export async function getOrderableItemsCount() {
             supplier: {
                 not: null
             },
-            prodCompletedAt: null,
-            inboundOrderItem: {
-                none: {
-                    id: {
-                        gt: 0
-                    }
-                }
-            }
+            prodCompletedAt: null
+
             // prodStatus: {
             //     not: {
             //         contains: "Completed"
-            //     }
-            // }
-            // inboundOrderItem: {
-            //     none: {
-            //         id: {
-            //             gt: 0
-            //         }
             //     }
             // }
         }
     });
     return count;
 }
+
