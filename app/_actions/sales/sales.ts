@@ -179,7 +179,7 @@ export async function getOrderAction(orderId,isProd = false) {
       }, 
       items: {
         include: {
-          inboundOrderItem: true
+           
         }
         // orderBy: {
         //   swing: "desc",
@@ -244,13 +244,13 @@ export async function getSales(query: SalesQueryParams) {
           }
         },
         select: {
-          inboundOrderItem: {
-             select: {
-              qty: true,
-              status: true,
-              location: true
-            }
-          },
+        //   inboundOrderItem: {
+        //      select: {
+        //       qty: true,
+        //       status: true,
+        //       location: true
+        //     }
+        //   },
           id:true,
           qty:true,
           prodCompletedAt: true,
