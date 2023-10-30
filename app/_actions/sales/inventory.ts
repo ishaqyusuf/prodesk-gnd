@@ -7,94 +7,95 @@ import { InventoryComponentCategory } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 
 export interface ISearchQuery {
-  category?: InventoryComponentCategory;
-  q?;
-  productId?;
+    category?: InventoryComponentCategory;
+    q?;
+    productId?;
 }
 export async function searchOrderInventoryAction(query: ISearchQuery) {
-  const { q, category } = query;
-  const where: Prisma.OrderInventoryWhereInput = {
-    category,
-  };
+    const { q, category } = query;
+    const where: Prisma.OrderInventoryWhereInput = {
+        category
+    };
 
-  if (q) {
-    where.OR = [
-      {
-        description: {
-          contains: q || undefined,
+    if (q) {
+        where.OR = [
+            {
+                description: {
+                    contains: q || undefined
+                }
+            },
+            {
+                name: {
+                    contains: q || undefined
+                }
+            }
+        ];
+    }
+    // const products = await prisma.orderInventory.findMany({
+    //   take: 10,
+    //   where,
+    //   distinct: "name",
+    // });
+    const prods = await prisma.orderInventory.groupBy({
+        by: ["name"],
+        orderBy: {
+            name: "asc"
         },
-      },
-      {
-        name: {
-          contains: q || undefined,
-        },
-      },
-    ];
-  }
-  // const products = await prisma.orderInventory.findMany({
-  //   take: 10,
-  //   where,
-  //   distinct: "name",
-  // });
-  const prods = await prisma.orderInventory.groupBy({
-    by: ["name"],
-    orderBy: {
-      name: "asc",
-    },
-    take: 10,
-    where,
-  });
-  // console.log(prods);
-  return prods;
+        take: 10,
+        where
+    });
+    // console.log(prods);
+    return prods;
 }
 interface getComponentCostHistoryQuery {
-  title;
-  category: InventoryComponentCategory;
+    title;
+    category: InventoryComponentCategory;
 }
 export async function getComponentCostHistoryAction(
-  query: getComponentCostHistoryQuery
+    query: getComponentCostHistoryQuery
 ) {
-  const { title, category } = query;
-  const where: Prisma.OrderInventoryWhereInput = {
-    category,
-    name: title,
-    price: {
-      gt: 0,
-    },
-  };
-  const products = await prisma.orderInventory.findMany({
-    // take: 5,
-    where,
-    // select: {
-    //     id:true,
-    //     name: true,
-    //     price: true
-    // },
-    distinct: ["price"],
-    include: {
-      product: true,
-    },
-  });
-  console.log(products);
-  return products;
+    const { title, category } = query;
+    const where: Prisma.OrderInventoryWhereInput = {
+        category,
+        name: title,
+        price: {
+            gt: 0
+        }
+    };
+    const products = await prisma.orderInventory.findMany({
+        // take: 5,
+        where,
+        // select: {
+        //     id:true,
+        //     name: true,
+        //     price: true
+        // },
+        distinct: ["price"],
+        include: {
+            product: true
+        }
+    });
+    console.log(products);
+    return products;
 }
 export interface InvCompTitleProps {
-  title;
-  oldTitle?;
-  variantId;
-  meta: IProductVariantMeta;
+    title;
+    oldTitle?;
+    variantId;
+    meta: IProductVariantMeta;
 }
 export async function updateInventoryComponentTitleAction({
-  title,
-  oldTitle,
-  variantId,
-  meta,
+    title,
+    oldTitle,
+    variantId,
+    meta
 }: InvCompTitleProps) {
-  meta.componentTitle = title;
-  await prisma.productVariants.update({
-    where: { id: variantId },
-    data: {
-      meta: removeEmptyValues(meta),
-    },
-  });
+    meta.componentTitle = title;
+    await prisma.productVariants.update({
+        where: { id: variantId },
+        data: {
+            meta: removeEmptyValues(meta)
+        }
+    });
 }
+

@@ -154,3 +154,4 @@ export async function updatePaymentTerm(id, paymentTerm, goodUntil) {
     // const meta: ISalesOrderMeta = d.meta as any;
     // meta.pa
 }
+

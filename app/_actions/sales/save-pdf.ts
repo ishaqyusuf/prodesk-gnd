@@ -108,3 +108,4 @@ export async function printSalesPdf(mode, ids) {
 //     const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
 //     return pdfDataUri;
 // }
+
