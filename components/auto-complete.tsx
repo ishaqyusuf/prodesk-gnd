@@ -69,6 +69,7 @@ function AutoComplete2({
                 loadResult();
             }
         }
+        // debounceQuery?.loading
     }, [debouncedQuery, typing]);
     async function loadResult() {
         const { items } = searchFn
@@ -83,6 +84,8 @@ function AutoComplete2({
     function transformItems(items) {
         return items?.map(o => {
             if (typeof o === "string") return { id: o, name: o, data: o };
+            // if(typeof o == 'string')
+
             return {
                 id: o?.[itemValue],
                 name: o?.[itemText],
@@ -99,7 +102,7 @@ function AutoComplete2({
     useEffect(() => {
         const _items = transformItems(options || []);
         setItems(_items);
-        setSelected(getItem(watch));
+        // setSelected(getItem(watch));
         // setResults(filteredOptions());
         setQuery(watch);
     }, []);
@@ -131,6 +134,7 @@ function AutoComplete2({
     const [select, setSelect] = useState(false);
     useEffect(() => {
         // console.log(label, selected);
+        setQuery(selected?.name);
     }, [selected]);
     function onFocus(e) {
         setTyping(false);
@@ -141,6 +145,7 @@ function AutoComplete2({
     useEffect(() => {
         if (typing && !select && !focus) {
             if (allowCreate) {
+                console.log(query);
                 setSelected({
                     id: query,
                     name: query,
@@ -160,7 +165,9 @@ function AutoComplete2({
     }, [typing, select, focus, query]);
     function onBlur(e) {
         setTimeout(() => {
-            setFocus(false);
+            if (focus) {
+                setFocus(false);
+            }
         }, 500);
     }
     const buttonRef = useRef<HTMLButtonElement>();

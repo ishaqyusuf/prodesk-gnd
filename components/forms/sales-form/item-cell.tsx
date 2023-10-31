@@ -57,29 +57,29 @@ export default function ItemCell({
                     </div>
                 </button>
             ) : (
-                // <Input
-                //     // ref={input}
-                //     className="h-8 w-full p-1 font-medium uppercase"
-                //     // {...register(`${baseKey}.description`)}
-                //     value={cellValue}
-                //     onChange={e => {
-                //         setCellValue(e.target.value);
-                //         form.setValue(
-                //             `items.${rowIndex}.description`,
-                //             e.target.value
-                //         );
-                //     }}
-                // />
-                <AutoComplete
-                    options={ctx?.items}
-                    itemText={"description"}
-                    itemValue={"description"}
-                    form={form}
-                    uppercase
-                    hideEmpty
-                    formKey={`items.${rowIndex}.description`}
-                    allowCreate
+                <Input
+                    // ref={input}
+                    className="h-8 w-full p-1 font-medium uppercase"
+                    // {...register(`${baseKey}.description`)}
+                    value={cellValue}
+                    onChange={e => {
+                        setCellValue(e.target.value);
+                        form.setValue(
+                            `items.${rowIndex}.description`,
+                            e.target.value
+                        );
+                    }}
                 />
+                // <AutoComplete
+                //     options={ctx?.items}
+                //     itemText={"description"}
+                //     itemValue={"description"}
+                //     form={form}
+                //     uppercase
+                //     hideEmpty
+                //     formKey={`items.${rowIndex}.description`}
+                //     allowCreate
+                // />
             )}
         </TableCell>
     );
