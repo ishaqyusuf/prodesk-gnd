@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
     const response = await getCommunityTemplates(queryParams(searchParams));
-    // await _createMissingPivots();
+    await _createMissingPivots();
     await _addMissingPivotToModelCosts();
     return (
         <CommunitySettingsLayoutComponent>
@@ -47,3 +47,4 @@ export default async function CommunityTemplatesPage({ searchParams }) {
         </CommunitySettingsLayoutComponent>
     );
 }
+

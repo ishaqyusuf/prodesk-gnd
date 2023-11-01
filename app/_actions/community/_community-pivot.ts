@@ -111,6 +111,16 @@ export async function _bootstrapPivot() {
         })
     );
 }
+export async function _attachUnitsToCommunity() {
+    const templates = await prisma.communityModels.findMany({
+        select: {
+            projectId: true,
+            modelName: true,
+            id: true
+        }
+    });
+    console.log();
+}
 export async function _createMissingPivots() {
     await Promise.all(
         (

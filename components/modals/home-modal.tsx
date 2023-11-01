@@ -65,7 +65,6 @@ export default function HomeModal() {
                         u.modelName = models.find(f => f.id == u.homeTemplateId)
                             ?.modelName as any;
                         u.modelNo = getModelNumber(u.modelName);
-
                         u.builderId = Number(
                             projects.find(p => p.id == pid)?.builderId
                         );
@@ -253,3 +252,4 @@ export default function HomeModal() {
         />
     );
 }
+

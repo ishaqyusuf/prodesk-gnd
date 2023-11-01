@@ -7,8 +7,13 @@ import { ICommunityCosts, ICostChart } from "@/types/community";
 import dayjs from "dayjs";
 import { fixDbTime } from "../action-utils";
 import { revalidatePath } from "next/cache";
-import { calculateCommunitModelCost } from "@/lib/community/community-utils";
+import {
+    calculateCommunitModelCost,
+    getPivotModel,
+    getTwinModelName
+} from "@/lib/community/community-utils";
 import { Prisma } from "@prisma/client";
+import { _revalidate } from "../_revalidate";
 
 export async function _importModelCostData(
     id,
@@ -86,7 +91,9 @@ export async function _saveCommunitModelCostData(
     pivotId,
     includeCompletedTasks = false
 ) {
-    const { id: _id, communityModelId, pivotId: _pivotId, ..._cost } = cost;
+    let { id: _id, communityModelId, pivotId: _pivotId, ..._cost } = cost;
+    if (!_pivotId)
+        _pivotId = await _findOrGeneratePivotForCommunity(communityModelId);
     let _c: ICostChart & {
         community: ICommunityCosts;
     } = null as any;
@@ -128,13 +135,65 @@ export async function _saveCommunitModelCostData(
             }
         })) as any;
     }
+    await _attachedUnitsToCommunity(pivotId);
     await _synchronizeModelCost(_c, pivotId);
-
-    revalidatePath("/settings/community/community-templates", "page");
+    _revalidate("communityTemplates");
     return _c;
 }
+export async function _attachedUnitsToCommunity(pivotId) {
+    const pivot = await prisma.communityModelPivot.findUnique({
+        where: {
+            id: pivotId
+        },
+        include: {
+            communityModels: true
+        }
+    });
+    if (pivot) {
+        await Promise.all(
+            pivot.communityModels.map(async model => {
+                await prisma.homes.updateMany({
+                    where: {
+                        projectId: model.projectId,
+                        modelName: model.modelName
+                    },
+                    data: {
+                        communityTemplateId: model.id
+                    }
+                });
+            })
+        );
+    }
+}
+export async function _findOrGeneratePivotForCommunity(id) {
+    const c = await prisma.communityModels.findUnique({ where: { id } });
+    if (!c) return null;
+    if (c?.pivotId) return c.pivotId;
+    const pivotM = getPivotModel(c?.modelName);
+
+    const pivot = await prisma.communityModelPivot.findFirst({
+        where: {
+            model: pivotM,
+            projectId: c.id
+        }
+    });
+    if (pivot) {
+        await prisma.communityModels.update({
+            where: { id },
+            data: {
+                pivot: {
+                    connect: {
+                        id: pivot.id
+                    }
+                }
+            }
+        });
+        return pivot.id;
+    }
+    return null;
+}
 export async function _synchronizeModelCost(_c, pivotId) {
-    console.log(_c.meta.sumCosts);
+    // console.log(_c.meta.sumCosts);
     await Promise.all(
         Object.entries(_c.meta.sumCosts).map(async ([k, v]) => {
             const { startDate: from, endDate: to } = _c;
@@ -173,5 +232,5 @@ export async function _deleteCommunityModelCost(id) {
     await prisma.communityModelCost.delete({
         where: { id }
     });
-    revalidatePath("/settings/community/community-templates", "page");
+    _revalidate("communityTemplates");
 }

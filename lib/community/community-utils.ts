@@ -101,3 +101,19 @@ export function getPivotModel(model) {
         .join(" ");
     return pivotM;
 }
+export function getTwinModelName(modelName) {
+    const replacements = {
+        "/l": "/r",
+        "/r": "/l",
+        rh: "lh",
+        lh: "rh"
+    };
+    let lm = modelName.toLowerCase();
+    for (const pattern in replacements) {
+        const regex = new RegExp(`${pattern}$`);
+        if (regex.test(lm)) {
+            return lm.replace(regex, replacements[pattern]);
+            break; // Exit the loop after the first match
+        }
+    }
+}
