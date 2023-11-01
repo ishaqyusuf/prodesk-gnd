@@ -120,7 +120,7 @@ function AutoComplete2({
         // filteredOptions = uniqueBy(filteredOptions, "name").filter(
         //     (a, i) => i < 25
         // );
-        return uniqueBy(filteredOptions, "name").filter((a, i) => i < 25);
+        return uniqueBy(filteredOptions, "name"); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
         setSelect(true);
