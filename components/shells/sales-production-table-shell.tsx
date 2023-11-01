@@ -71,16 +71,24 @@ export default function SalesProductionTableShell<T>({
                     );
                 }
             },
+
             {
                 enableSorting: !simple,
                 accessorKey: "dueDate",
                 header: ColumnHeader("Due Date"),
                 cell: ({ row }) => (
-                    <ProductionDueDate
-                        hideIcon
-                        data={row.original}
-                        editable={!myProd}
-                    />
+                    <>
+                        {!myProd && (
+                            <p className="font-semibold">
+                                {row.original?.producer?.name}
+                            </p>
+                        )}
+                        <ProductionDueDate
+                            hideIcon
+                            data={row.original}
+                            editable={!myProd}
+                        />
+                    </>
                 )
             },
             // table.simpleColumn("Inventory", data => {
@@ -187,3 +195,4 @@ export default function SalesProductionTableShell<T>({
         />
     );
 }
+
