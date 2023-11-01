@@ -102,7 +102,7 @@ function AutoComplete2({
     useEffect(() => {
         const _items = transformItems(options || []);
         setItems(_items);
-        // setSelected(getItem(watch));
+        setSelected(getItem(watch));
         // setResults(filteredOptions());
         setQuery(watch);
     }, []);
