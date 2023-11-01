@@ -181,6 +181,7 @@ export const sales = {
                 pdf: type == "pdf",
                 prints: true
             });
+            console.log("PRINT:", mode);
         }
         return optionBuilder.more(
             title,
