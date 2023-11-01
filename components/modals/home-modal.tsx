@@ -51,6 +51,7 @@ export default function HomeModal() {
         control: form.control,
         name: "units"
     });
+    const projectId = form.watch("projectId");
     async function submit() {
         startTransition(async () => {
             // if(!form.getValues)
@@ -68,13 +69,13 @@ export default function HomeModal() {
                         u.builderId = Number(
                             projects.find(p => p.id == pid)?.builderId
                         );
-                        u.communityTemplateId = Number(
-                            communityTemplates.find(
-                                p =>
-                                    p.projectId == pid &&
-                                    p.modelName.toLowerCase() == u.modelName
-                            )?.id
-                        );
+                        // u.communityTemplateId = Number(
+                        //     communityTemplates.find(
+                        //         p =>
+                        //             p.projectId == pid &&
+                        //             p.modelName.toLowerCase() == u.modelName
+                        //     )?.id
+                        // );
                         u.search = homeSearchMeta(u);
                         u.slug;
                         return u;
@@ -166,8 +167,11 @@ export default function HomeModal() {
                       /> */}
                                             <AutoComplete2
                                                 form={form}
-                                                formKey={`units.${i}.homeTemplateId`}
-                                                options={models}
+                                                formKey={`units.${i}.communityTemplateId`}
+                                                options={communityTemplates.filter(
+                                                    m =>
+                                                        m.projectId == projectId
+                                                )}
                                                 uppercase
                                                 itemText={"modelName"}
                                                 itemValue="id"
@@ -252,4 +256,3 @@ export default function HomeModal() {
         />
     );
 }
-
