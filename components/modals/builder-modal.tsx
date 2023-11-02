@@ -154,7 +154,7 @@ export default function BuilderModal() {
                                             Prod
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Interior
+                                            Contractor
                                         </Label>
                                         <Label className="col-span-1 text-center">
                                             Punch

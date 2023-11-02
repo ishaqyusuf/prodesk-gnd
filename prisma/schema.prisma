@@ -188,6 +188,7 @@ model Homes {
     slug                String?          @unique @db.VarChar(255)
     modelName           String?          @db.VarChar(255)
     modelNo             String?          @db.VarChar(255)
+    lotBlock            String?          @db.VarChar(255)
     lot                 String?          @db.VarChar(255)
     block               String?          @db.VarChar(255)
     status              String?          @db.VarChar(255)

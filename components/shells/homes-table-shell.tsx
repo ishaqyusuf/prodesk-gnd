@@ -113,9 +113,10 @@ export default function HomesTableShell<T>({
                         slug={row.original?.slug}
                     >
                         <PrimaryCellContent>
-                            {row.original.lot}
+                            {/* {row.original.lot}
                             {"/"}
-                            {row.original.block}
+                            {row.original.block} */}
+                            {row.original.lotBlock}
                         </PrimaryCellContent>
                         <SecondaryCellContent className="uppercase">
                             {row.original?.modelName}

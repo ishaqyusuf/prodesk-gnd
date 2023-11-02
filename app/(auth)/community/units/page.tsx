@@ -9,6 +9,7 @@ import { getHomesAction } from "@/app/_actions/community/home";
 import HomesTableShell from "@/components/shells/homes-table-shell";
 import HomeModal from "@/components/modals/home-modal";
 import ActivateProductionModal from "@/components/modals/activate-production-modal";
+import { _addLotBlocks } from "@/app/_actions/community/units/_add-lotblocks";
 
 export const metadata: Metadata = {
     title: "All Units"
@@ -18,6 +19,7 @@ export default async function HomesPage({ searchParams, params }) {
     const response = await getHomesAction(
         queryParams({ ...searchParams, _projectSlug: params.slug })
     );
+    await _addLotBlocks();
     // console.log(response.data[0]?.search);
     // metadata.title = `${project.title} | Homes`;
 

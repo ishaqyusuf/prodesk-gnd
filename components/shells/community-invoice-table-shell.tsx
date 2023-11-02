@@ -97,7 +97,7 @@ export default function HomesTableShell<T>({
                   ] as ColumnDef<ExtendedHome, unknown>[])
                 : []),
             {
-                accessorKey: "unit",
+                accessorKey: "lotBlock",
                 header: ColumnHeader("Unit"),
                 cell: ({ row }) => (
                     <Cell

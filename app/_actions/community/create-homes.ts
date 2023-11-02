@@ -31,6 +31,10 @@ export async function createHomesAction(homes: Homes[]) {
 
     await Promise.all(
         homes.map(async homeData => {
+            const lblck = [homeData.lot || "-", homeData.block || "-"].join(
+                "/"
+            );
+            homeData.lotBlock = lblck;
             const home = await prisma.homes.create({
                 data: transformData(homeData) as any
             });
@@ -46,6 +50,7 @@ export async function createHomesAction(homes: Homes[]) {
                 } as any;
                 _task.projectId = home.projectId;
                 _task.homeId = home.id;
+
                 _task.search = home.search;
                 _task.billable = builderTask.billable as boolean;
                 _task.installable = builderTask.installable as boolean;
