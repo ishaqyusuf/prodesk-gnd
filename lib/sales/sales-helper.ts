@@ -137,19 +137,19 @@ export const sales = {
     },
     //    ids, mode: IOrderPrintMode, mockup, print = true
     print(props: {
-        id;
+        ids;
         mode: IOrderPrintMode;
         mockup?: boolean;
         prints?: boolean;
         pdf?: boolean;
     }) {
         if (props.pdf) {
-            const { mode, id } = props;
+            const { mode, ids } = props;
             dispatchSlice("printOrders", {
                 mode,
                 pdf: props.pdf,
                 mockup: props.mockup,
-                ids: id,
+                ids,
                 isClient: !["production", "packing list"].includes(mode),
                 showInvoice: ["order", "quote", "invoice"].includes(mode),
                 packingList: mode == "packing list",
@@ -175,13 +175,14 @@ export const sales = {
         const mb = optionBuilder;
         function _print(mode: IOrderPrintMode) {
             printOrder({
-                id: [row.id].join(","),
+                ids: [row.id],
                 mode,
                 mockup,
                 pdf: type == "pdf",
                 prints: true
             });
             console.log("PRINT:", mode);
+            closeModal();
         }
         return optionBuilder.more(
             title,

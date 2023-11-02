@@ -19,6 +19,7 @@ import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
 import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 import { createPortal } from "react-dom";
+import { toast } from "sonner";
 interface Props {
     preview?;
     mode?;
@@ -62,6 +63,7 @@ export default function OrderPrinter({
     async function print(printer) {
         if (!printer) return;
         if (printer.pdf) {
+            // console.log(printer);
             const pdf = await printSalesPdf(
                 printer.mode,
                 printer.ids?.join(",")
@@ -74,6 +76,7 @@ export default function OrderPrinter({
             // document.body.appendChild(link);
             link.click();
             dispatchSlice("printOrders", null);
+            toast.success("Pdf Exported!.");
             // document.body.removeChild(link);
             return;
         }
