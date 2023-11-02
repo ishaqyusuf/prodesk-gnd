@@ -215,15 +215,16 @@ export function nav(
         routes.Sales.push(_route("Order Pickup", Truck, "/sales/pickup"));
     if (editOrders)
         routes.Sales.push(
-            ...[
+            ...([
                 // _route("Sales Jobs", Briefcase, "/sales/jobs"),
-                _route("Payments", CreditCard, "/sales/payments"),
+                __can.viewOrderPayment &&
+                    _route("Payments", CreditCard, "/sales/payments"),
                 _route("Catalogs", PackageOpen, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
                 _route("Productions", Workflow, `/sales/productions`)
 
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
-            ]
+            ].filter(Boolean) as any)
         );
     if (__can.viewInboundOrder)
         routes.Sales.push(_route("Inbounds", Package, `/sales/inbounds`));

@@ -19,6 +19,7 @@ export const permissions: any[] = [
     // "sales invoice",
     "estimates",
     "order production",
+    "order payment",
     "price list",
     "email template",
     "home key",

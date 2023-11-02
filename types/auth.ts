@@ -75,6 +75,8 @@ export interface ICan {
     editEstimates?: Boolean;
     viewOrderProduction?: Boolean;
     editOrderProduction?: Boolean;
+    viewOrderPayment?: Boolean;
+    editOrderPayment?: Boolean;
 
     viewPriceList?: Boolean;
     editPriceList?: Boolean;
