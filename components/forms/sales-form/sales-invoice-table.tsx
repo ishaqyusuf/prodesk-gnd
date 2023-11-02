@@ -60,53 +60,59 @@ export default function SalesInvoiceTable({
     const [isPending, startTransition] = React.useTransition();
 
     return (
-        <div className="relative">
-            <Table className="">
-                <TableHeader>
-                    <TableRow>
-                        {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
-                        <TableHead className="w-[25px] px-1">#</TableHead>
-                        <TableHead className="w-5 px-1">
-                            <Layers className="h-3.5 w-3.5" />
-                        </TableHead>
-                        <TableHead className="px-1 ">Item</TableHead>
-                        <TableHead className="w-20  px-1">Swing</TableHead>
-                        <TableHead className="w-20 px-1">Supplier</TableHead>
-                        <TableHead className="w-14 px-1 text-center">
-                            Qty
-                        </TableHead>
-                        <TableHead className="w-20 px-1">Cost</TableHead>
-                        {watchProfileEstimate ? (
-                            <>
-                                <TableHead className="w-8 px-1">Rate</TableHead>
-                            </>
-                        ) : (
-                            <></>
-                        )}
-                        <TableHead className="w-8 px-1 text-right">
-                            Total
-                        </TableHead>
-                        <TableHead className="w-8 px-1 text-center">
-                            Tax
-                        </TableHead>
-                        <TableHead className="w-10 px-1"></TableHead>
-                    </TableRow>
-                </TableHeader>
+        <div className="relative max-sm:overflow-x-auto">
+            <div className="max-sm:w-[900px]">
+                <Table className="">
+                    <TableHeader>
+                        <TableRow>
+                            {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
+                            <TableHead className="w-[25px] px-1">#</TableHead>
+                            <TableHead className="w-5 px-1">
+                                <Layers className="h-3.5 w-3.5" />
+                            </TableHead>
+                            <TableHead className="px-1">Item</TableHead>
+                            <TableHead className="w-20  px-1">Swing</TableHead>
+                            <TableHead className="w-20 px-1">
+                                Supplier
+                            </TableHead>
+                            <TableHead className="w-14 px-1 text-center">
+                                Qty
+                            </TableHead>
+                            <TableHead className="w-20 px-1">Cost</TableHead>
+                            {watchProfileEstimate ? (
+                                <>
+                                    <TableHead className="w-8 px-1">
+                                        Rate
+                                    </TableHead>
+                                </>
+                            ) : (
+                                <></>
+                            )}
+                            <TableHead className="w-8 px-1 text-right">
+                                Total
+                            </TableHead>
+                            <TableHead className="w-8 px-1 text-center">
+                                Tax
+                            </TableHead>
+                            <TableHead className="w-10 px-1"></TableHead>
+                        </TableRow>
+                    </TableHeader>
 
-                <TableBody>
-                    {fields.map((field, i) => (
-                        <SalesInvoiceTr
-                            ctx={data.ctx}
-                            rowIndex={i}
-                            startTransition2={startTransition}
-                            isPending={isPending}
-                            field={field}
-                            form={form}
-                            key={field.id}
-                        />
-                    ))}
-                </TableBody>
-            </Table>
+                    <TableBody>
+                        {fields.map((field, i) => (
+                            <SalesInvoiceTr
+                                ctx={data.ctx}
+                                rowIndex={i}
+                                startTransition2={startTransition}
+                                isPending={isPending}
+                                field={field}
+                                form={form}
+                                key={field.id}
+                            />
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
             <div className="flex">
                 <Button
                     className="w-full"
