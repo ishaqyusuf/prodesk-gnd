@@ -13,20 +13,20 @@ export async function createHomesAction(homes: Homes[]) {
             }
         }
     });
-    const homeTemplate: IHomeTemplate = (await prisma.homeTemplates.findFirst({
-        where: {
-            builderId: homes[0]?.builderId,
-            modelName: homes[0]?.modelName
-        },
-        include: {
-            costs: {
-                where: {
-                    current: true
-                }
-            }
-        }
-    })) as any;
-    const homeCost = homeTemplate?.costs?.[0];
+    // const homeTemplate: IHomeTemplate = (await prisma.homeTemplates.findFirst({
+    //     where: {
+    //         builderId: homes[0]?.builderId,
+    //         modelName: homes[0]?.modelName
+    //     },
+    //     include: {
+    //         costs: {
+    //             where: {
+    //                 current: true
+    //             }
+    //         }
+    //     }
+    // })) as any;
+    // const homeCost = homeTemplate?.costs?.[0];
     const tasks: any[] = [];
 
     await Promise.all(
@@ -51,8 +51,8 @@ export async function createHomesAction(homes: Homes[]) {
                 _task.installable = builderTask.installable as boolean;
                 const uid = (_task.taskUid = builderTask.uid);
                 _task.taskName = builderTask.name;
-                _task.amountDue = _task.meta.system_task_cost =
-                    Number(homeCost?.meta?.costs[uid]) || (null as any);
+                // _task.amountDue = _task.meta.system_task_cost =
+                //     Number(homeCost?.meta?.costs[uid]) || (null as any);
 
                 // homeTemplate.meta
                 //   .task_costs[uid] as any;

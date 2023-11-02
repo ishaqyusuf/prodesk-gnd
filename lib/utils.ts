@@ -58,10 +58,12 @@ export function transformData<T>(data: T, update = false) {
     Object.entries({
         createdAt: date,
         updatedAt: date
-    }).map(
-        ([k, v]) =>
-            (!update || (update && k != "createdAt")) && (data[k] = date)
-    );
+    }).map(([k, v]) => {
+        if (!update || (update && k != "createdAt")) {
+            if (k == "createdAt" && data[k]) return;
+            data[k] = date;
+        }
+    });
     let _data = data as any;
     let meta = _data?.meta;
     Object.entries(_data).map(([k, v]) => {
