@@ -16,6 +16,9 @@ import InvoiceTableFooter from "./invoice-table-footer";
 import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import SalesComponentModal from "@/components/modals/sales-component-modal";
+import { useMediaQuery } from "react-responsive";
+import { screens } from "@/lib/responsive";
+import { cn } from "@/lib/utils";
 export default function SalesInvoiceTable({
     form,
     data
@@ -59,14 +62,15 @@ export default function SalesInvoiceTable({
     }, [hideFooter.isLoading]);
     const [isPending, startTransition] = React.useTransition();
 
+    const isMobile = useMediaQuery(screens.xs);
     return (
-        <div className="relative max-sm:overflow-x-auto">
-            <div className="max-sm:w-[900px]">
+        <div className={cn("relative", isMobile && "max-md:overflow-x-auto")}>
+            <div className={cn(isMobile && "max-md:w-[900px]")}>
                 <Table className="">
                     <TableHeader>
                         <TableRow>
                             {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
-                            <TableHead className="w-[25px] px-1">#</TableHead>
+                            <TableHead className="w-[25px]  px-1">#</TableHead>
                             <TableHead className="w-5 px-1">
                                 <Layers className="h-3.5 w-3.5" />
                             </TableHead>
