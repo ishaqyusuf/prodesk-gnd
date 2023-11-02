@@ -87,13 +87,13 @@ export async function _importModelCostData(
 
 export async function _saveCommunitModelCostData(
     cost: ICommunityCosts,
-    templateId,
+    _communityModelId,
     pivotId,
     includeCompletedTasks = false
 ) {
     let { id: _id, communityModelId, pivotId: _pivotId, ..._cost } = cost;
     if (!_pivotId)
-        _pivotId = await _findOrGeneratePivotForCommunity(communityModelId);
+        _pivotId = await _findOrGeneratePivotForCommunity(_communityModelId);
     let _c: ICostChart & {
         community: ICommunityCosts;
     } = null as any;
@@ -114,6 +114,11 @@ export async function _saveCommunitModelCostData(
                 pivot: {
                     connect: {
                         id: pivotId
+                    }
+                },
+                community: {
+                    connect: {
+                        id: _communityModelId
                     }
                 },
                 meta: _cost.meta as any

@@ -3,6 +3,8 @@
     Model Cost View From Home Invoice Edit
 
 # PAYMENT INVOICE OCT 30-
+# NOV 02: 00.00 == 00.00
+    04:35-
 # 00.00 @ 35/hr == $
 # NOV 01: 00.00 == 00.00
     01:45-04:00
