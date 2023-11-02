@@ -8,7 +8,9 @@ import { convertToNumber } from "../use-number";
 export function getHomeProductionStatus(home: ExtendedHome) {
     const prod = home?.tasks?.filter(t => t.produceable);
     const produceables = prod?.length;
-    const produced = prod?.filter(p => p.producedAt).length;
+    let produced = prod?.filter(p => p.producedAt).length;
+    const hasJob = home?.jobs?.length;
+    if (hasJob) produced = prod.length;
     const pending = produceables - produced;
     let productionStatus = "Idle";
     const sent = prod?.filter(p => p.sentToProductionAt)?.length;
@@ -18,7 +20,7 @@ export function getHomeProductionStatus(home: ExtendedHome) {
         productionStatus = "Started";
         if (produced == produceables) productionStatus = "Completed";
     }
-
+    if (hasJob) productionStatus = "Completed";
     return {
         produceables,
         produced,
