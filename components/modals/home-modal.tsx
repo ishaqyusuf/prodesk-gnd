@@ -168,7 +168,7 @@ export default function HomeModal() {
                                             <AutoComplete2
                                                 form={form}
                                                 formKey={`units.${i}.communityTemplateId`}
-                                                options={communityTemplates.filter(
+                                                options={communityTemplates?.filter(
                                                     m =>
                                                         m.projectId == projectId
                                                 )}
