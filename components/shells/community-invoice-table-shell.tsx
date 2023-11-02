@@ -100,7 +100,10 @@ export default function HomesTableShell<T>({
                 accessorKey: "unit",
                 header: ColumnHeader("Unit"),
                 cell: ({ row }) => (
-                    <Cell>
+                    <Cell
+                        link={"/settings/community/model-template/slug"}
+                        slug={row.original?.slug}
+                    >
                         <PrimaryCellContent>
                             {row.original.lot}
                             {"/"}
