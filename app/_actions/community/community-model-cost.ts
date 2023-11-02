@@ -234,6 +234,7 @@ export async function _synchronizeModelCost(_c, pivotId) {
     );
 }
 export async function _deleteCommunityModelCost(id) {
+    if (!id) return;
     await prisma.communityModelCost.delete({
         where: { id }
     });

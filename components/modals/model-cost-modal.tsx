@@ -181,7 +181,7 @@ export function CostForm({ form, data, fIndex, community, index }: Props) {
                     );
                     form.setValue(`costs.${index}` as any, {
                         ...c,
-                        _id
+                        _id: c.id
                     });
                 } else {
                     cost.meta.totalCost = sum(Object.values(cost.meta.costs));
