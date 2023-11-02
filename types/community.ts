@@ -52,6 +52,9 @@ export interface IBuilderTasks {
 }
 export type IHome = OmitMeta<Homes> & {
     meta: {};
+    _count: {
+        jobs;
+    };
 };
 export interface ExtendedHome extends IHome {
     project: IProject;

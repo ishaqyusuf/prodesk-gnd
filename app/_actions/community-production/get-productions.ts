@@ -15,7 +15,15 @@ export async function getProductions(query: ProductionsQueryParams) {
         ...(await queryFilter(query)),
         where,
         include: {
-            home: true,
+            home: {
+                include: {
+                    _count: {
+                        select: {
+                            jobs: true
+                        }
+                    }
+                }
+            },
             project: true
         }
     });

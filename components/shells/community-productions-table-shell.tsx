@@ -125,7 +125,11 @@ export default function CommunityProductionsTableShell<T>({
                 cell: ({ row }) => (
                     <Cell>
                         <StatusBadge
-                            status={row.original.productionStatus || "unknown"}
+                            status={
+                                row.original.home?._count?.jobs
+                                    ? "Completed"
+                                    : row.original.productionStatus || "unknown"
+                            }
                         />
                         <DateCellContent>
                             {row.original.productionStatusDate}
