@@ -63,8 +63,9 @@ export default function HomeModal() {
                 await createHomesAction(
                     formData.units.map(u => {
                         const pid = (u.projectId = Number(formData.projectId));
-                        u.modelName = models.find(f => f.id == u.homeTemplateId)
-                            ?.modelName as any;
+                        u.modelName = communityTemplates.find(
+                            f => f.id == u.communityTemplateId
+                        )?.modelName as any;
                         u.modelNo = getModelNumber(u.modelName);
                         u.builderId = Number(
                             projects.find(p => p.id == pid)?.builderId
@@ -98,14 +99,14 @@ export default function HomeModal() {
     const communityTemplates = useAppSelector(
         state => state?.slicers?.staticCommunity
     );
-    const models = useAppSelector(state => state?.slicers?.staticModels);
+    // const models = useAppSelector(state => state?.slicers?.staticModels);
     function register(i, key: keyof IHome) {
         return form.register(`units.${i}.${key}` as any);
     }
     async function init(data) {
         loadStaticList("staticProjects", projects, staticProjectsAction);
-        loadStaticList("staticModels", models, staticHomeModels);
-        loadStaticList("staticCommunity", models, staticCommunity);
+        // loadStaticList("staticModels", models, staticHomeModels);
+        loadStaticList("staticCommunity", communityTemplates, staticCommunity);
         form.setValue("units", [{ meta: {} }] as any);
     }
     return (
@@ -172,6 +173,9 @@ export default function HomeModal() {
                                                     m =>
                                                         m.projectId == projectId
                                                 )}
+                                                onSelect={e => {
+                                                    console.log(e);
+                                                }}
                                                 uppercase
                                                 itemText={"modelName"}
                                                 itemValue="id"
