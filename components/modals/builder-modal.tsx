@@ -24,6 +24,8 @@ import {
     saveBuilderInstallations,
     saveBuilderTasks
 } from "@/app/_actions/community/builders";
+import { Form, FormField } from "../ui/form";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 export default function BuilderModal() {
     const route = useRouter();
@@ -115,7 +117,7 @@ export default function BuilderModal() {
             modalName="builder"
             Title={({ data }) => <div>Builder Form</div>}
             Content={({ data }) => (
-                <div>
+                <Form {...form}>
                     <div className="grid md:grid-cols-2 gap-4">
                         {(data?.type == "main" || !data?.type) && (
                             <>
@@ -148,19 +150,19 @@ export default function BuilderModal() {
                                             Invoice Search
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Bill
+                                            Bill.
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Prod
+                                            Prod.
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Contractor
+                                            Contr.
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Punch
+                                            Punch.
                                         </Label>
                                         <Label className="col-span-1 text-center">
-                                            Deco
+                                            Deco.
                                         </Label>
                                         <Label className="col-span-1"></Label>
                                     </div>
@@ -199,7 +201,24 @@ export default function BuilderModal() {
                                                     key={k}
                                                     className="flex justify-center"
                                                 >
-                                                    <Checkbox
+                                                    <FormField
+                                                        name={
+                                                            `meta.tasks.${i}.${k}` as any
+                                                        }
+                                                        control={form.control}
+                                                        render={({ field }) => (
+                                                            <Checkbox
+                                                                id="component"
+                                                                checked={
+                                                                    field.value as CheckedState
+                                                                }
+                                                                onCheckedChange={
+                                                                    field.onChange
+                                                                }
+                                                            />
+                                                        )}
+                                                    />
+                                                    {/* <Checkbox
                                                         checked={form.getValues(
                                                             `meta.tasks.${i}.${k}` as any
                                                         )}
@@ -209,7 +228,7 @@ export default function BuilderModal() {
                                                                 e
                                                             );
                                                         }}
-                                                    />
+                                                    /> */}
                                                 </div>
                                             ))}
 
@@ -246,7 +265,7 @@ export default function BuilderModal() {
                             </>
                         )}
                     </div>
-                </div>
+                </Form>
             )}
             Footer={({ data }) => (
                 <Btn
