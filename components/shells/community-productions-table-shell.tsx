@@ -59,6 +59,7 @@ import { openModal } from "@/lib/modal";
 import { ProjectsFilter } from "../filters/projects-filter";
 import StatusBadge from "../status-badge";
 import UnitTaskProductionAction from "../actions/unit-task-production-actions";
+import { TaskFilters } from "../filters/task-filters";
 
 export default function CommunityProductionsTableShell<T>({
     data,
@@ -137,7 +138,13 @@ export default function CommunityProductionsTableShell<T>({
                     </Cell>
                 )
             },
-            ..._FilterColumn("_status", "_q", "_projectId", "_builderId"),
+            ..._FilterColumn(
+                "_status",
+                "_q",
+                "_task",
+                "_projectId",
+                "_builderId"
+            ),
             {
                 accessorKey: "actions",
                 header: ColumnHeader(""),
@@ -163,7 +170,16 @@ export default function CommunityProductionsTableShell<T>({
                 pageInfo={pageInfo}
                 data={data}
                 SelectionAction={HomesSelectionAction}
-                filterableColumns={[ProjectsFilter]}
+                filterableColumns={[
+                    ProjectsFilter,
+                    props => (
+                        <TaskFilters
+                            {...props}
+                            listKey="productionTasks"
+                            query={{ produceable: true }}
+                        />
+                    )
+                ]}
                 searchableColumns={[
                     {
                         id: "_q" as any,

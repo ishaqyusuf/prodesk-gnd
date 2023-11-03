@@ -67,6 +67,7 @@ export interface ISlicer {
         data;
     };
     products: IProduct[];
+    productionTasks: string[];
     // staticList: IStaticList;
     staticCustomerProfiles: CustomerTypes[];
     staticBuilders: Builders[];

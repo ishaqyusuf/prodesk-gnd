@@ -136,7 +136,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
                 const isSelected = _selectedValues.has(option[valueKey]);
 
                 return (
-                  <CommandItem
+                  <CommandItem className="max-w-[250px]"
                     key={option[valueKey]?.toString()}
                     onSelect={() => {
                       let _value = option[valueKey]?.toString();
@@ -174,7 +174,7 @@ export function DataTableFacetedFilter2<TData, TValue>({
                     {!single && (
                       <div
                         className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          "mr-2  flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                           isSelected
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible"

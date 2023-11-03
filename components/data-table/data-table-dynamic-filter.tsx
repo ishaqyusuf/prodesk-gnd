@@ -8,36 +8,38 @@ import { useEffect } from "react";
 import { DataTableFacetedFilter2 } from "../data-table/data-table-faceted-filter-2";
 
 interface Props {
-  table;
-  listKey: keyof ISlicer;
-  labelKey?;
-  valueKey?;
-  single?: Boolean;
-  title;
-  loader?;
-  columnId;
+    table;
+    listKey: keyof ISlicer;
+    labelKey?;
+    valueKey?;
+    single?: Boolean;
+    title;
+    loader?;
+    columnId;
 }
 export function DynamicFilter({
-  table,
-  columnId,
-  loader,
-  listKey,
-  ...props
+    table,
+    columnId,
+    loader,
+    listKey,
+    ...props
 }: Props) {
-  const list = useAppSelector((state) => state.slicers?.[listKey]);
+    const list = useAppSelector(state => state.slicers?.[listKey]);
 
-  useEffect(() => {
-    // init();
-    loadStaticList(listKey, list, loader);
-  }, [list, listKey, loader]);
-  if (!list) return null;
-  return (
-    <div>
-      <DataTableFacetedFilter2
-        column={table.getColumn(columnId)}
-        {...props}
-        options={list as any}
-      />
-    </div>
-  );
+    useEffect(() => {
+        // init();
+        loadStaticList(listKey, list, loader);
+    }, [list, listKey, loader]);
+    if (!list) return null;
+    return (
+        <div>
+            <DataTableFacetedFilter2
+                column={table.getColumn(columnId)}
+                {...props}
+                options={(list as any)?.map(l => {
+                    return typeof l === "object" ? l : { label: l, value: l };
+                })}
+            />
+        </div>
+    );
 }

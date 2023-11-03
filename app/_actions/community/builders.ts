@@ -63,6 +63,8 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
             meta: data.meta as any
         }
     });
+
+    const taskNames: any = [];
     await Promise.all(
         data.meta.tasks.map(async p => {
             await prisma.homeTasks.updateMany({

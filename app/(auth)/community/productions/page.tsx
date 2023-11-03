@@ -7,13 +7,20 @@ import { BreadLink } from "@/components/breadcrumbs/links";
 
 import CommunityProductionsTableShell from "@/components/shells/community-productions-table-shell";
 import { getProductions } from "@/app/_actions/community-production/get-productions";
+import { _taskNames } from "@/app/_actions/community/_task-names";
 
 export const metadata: Metadata = {
     title: "Unit Productions"
 };
 interface Props {}
 export default async function InvoicesPage({ searchParams, params }) {
-    const response = await getProductions(queryParams({ ...searchParams }));
+    const taskNames = await _taskNames({
+        produceable: true
+    } as any);
+    // console.log(taskNames);
+    const response = await getProductions(
+        queryParams({ _task: taskNames, ...searchParams })
+    );
     // metadata.title = `${project.title} | Homes`;
 
     return (

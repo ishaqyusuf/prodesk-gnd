@@ -8,6 +8,7 @@ import { whereQuery } from "@/lib/db-utils";
 
 export interface ProductionsQueryParams extends BaseQuery {
     _projectId?;
+    _task;
 }
 export async function getProductions(query: ProductionsQueryParams) {
     const where = whereProductionQuery(query);
@@ -35,6 +36,7 @@ export async function getProductions(query: ProductionsQueryParams) {
 }
 function whereProductionQuery(query: ProductionsQueryParams) {
     console.log(query);
+
     const q = {
         contains: query._q || undefined
     };
@@ -48,24 +50,15 @@ function whereProductionQuery(query: ProductionsQueryParams) {
         }
     });
     builder.orWhere("projectId", +query._projectId);
+    if (query._task) {
+        builder.raw({
+            taskName: {
+                in: Array.isArray(query._task) ? query._task : [query._task]
+            }
+        });
+        // builder.where("taskName", {
+        //     in: Array.isArray(query._task) ? query._task : [query._task]
+        // });
+    }
     return builder.get();
-    const where: Prisma.HomeTasksWhereInput = {
-        produceable: true,
-        OR: query?._q
-            ? [
-                  {
-                      home: {
-                          OR: [
-                              { modelName: q },
-                              {
-                                  search: q
-                              }
-                          ]
-                      }
-                  }
-              ]
-            : undefined
-    };
-    if (query._projectId) where.projectId = +query._projectId;
-    return where;
 }

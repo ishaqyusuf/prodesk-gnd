@@ -61,29 +61,7 @@ export default function BuilderModal() {
                             return t;
                         });
                     }
-                    const actions = [
-                        {
-                            toast: "Saving Tasks",
-                            action: saveBuilderTasks,
-                            arg: data
-                        },
-                        {
-                            toast: "Remove deleted tasks",
-                            action: deleteBuilderTasks,
-                            arg: deleteIds.length && {
-                                taskIds: deleteIds,
-                                builderId: data.id
-                            }
-                        },
-                        {
-                            toast: "Adding newly created tasks",
-                            action: addBuilderTasks,
-                            arg: newTaskIds.length && {
-                                builderId: data.id,
-                                taskIds: newTaskIds
-                            }
-                        }
-                    ];
+
                     // console.log(deleteIds, newTaskIds);
                     await saveBuilderTasks(data, deleteIds, newTaskIds);
                 }
