@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ExtendedHome, IHomeTask } from "@/types/community";
+import { ExtendedHome, IHomeTask, IHomeTaskList } from "@/types/community";
 
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
@@ -125,11 +125,13 @@ export default function EditInvoiceModal() {
             tasks
         });
     }
-    function register(i, key: keyof IHomeTask) {
+    function register(i, key: keyof IHomeTaskList) {
         return form.register(`tasks.${i}.${key}` as any);
     }
-    async function deleteTask(i, task: IHomeTask) {
-        if (task.id) await deleteInvoiceTasks([task.id]);
+    async function deleteTask(i, task: IHomeTaskList) {
+        const tid = form.getValues(`tasks.${i}.id`);
+        console.log(tid);
+        if (tid) await deleteInvoiceTasks([tid]);
         remove(i);
     }
     // useEffect(() => {

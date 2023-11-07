@@ -14,6 +14,7 @@ import {
 } from "@prisma/client";
 import { OmitMeta } from "./type";
 import { IJobs } from "./hrm";
+import { extend } from "dayjs";
 
 export type IProject = OmitMeta<Projects> & {
     meta: IProjectMeta;
@@ -69,6 +70,9 @@ export type IHomeTask = OmitMeta<HomeTasks> & {
         system_task_cost: number;
     };
 };
+export interface IHomeTaskList extends IHomeTask {
+    _id?;
+}
 export interface ExtendedHomeTasks extends IHomeTask {
     __taskSubtitle;
     project: IProject;
