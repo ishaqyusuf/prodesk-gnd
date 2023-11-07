@@ -15,7 +15,8 @@ const _path = {
     estimates: "/sales/estimates",
     jobs: "/contractor/jobs",
     communityTasks: "/contractor/assign-tasks",
-    communityTemplates: "/settings/community/community-templates"
+    communityTemplates: "/settings/community/community-templates",
+    homes: "/community/units"
 };
 type revalidatePaths = keyof typeof _path;
 export async function _revalidate(pathName: revalidatePaths) {

@@ -30,7 +30,10 @@ import { Input } from "../ui/input";
 import { DatePicker } from "../date-range-picker";
 import ConfirmBtn from "../confirm-btn";
 import AutoComplete2 from "../auto-complete";
-import { createHomesAction } from "@/app/_actions/community/create-homes";
+import {
+    _updateCommunityHome,
+    createHomesAction
+} from "@/app/_actions/community/create-homes";
 import { getModelNumber } from "@/lib/utils";
 import { homeSearchMeta } from "@/lib/community/community-utils";
 import { staticCommunity } from "@/app/_actions/community/community-template";
@@ -52,42 +55,52 @@ export default function HomeModal() {
         name: "units"
     });
     const projectId = form.watch("projectId");
-    async function submit() {
+    async function submit(data) {
         startTransition(async () => {
             // if(!form.getValues)
+            let msg = "Units Created!";
             try {
                 const formData = form.getValues();
-                console.log(formData);
-
-                const isValid = homeSchema.parse(form.getValues());
-                await createHomesAction(
-                    formData.units.map(u => {
-                        const pid = (u.projectId = Number(formData.projectId));
-                        u.modelName = communityTemplates.find(
-                            f => f.id == u.communityTemplateId
-                        )?.modelName as any;
-                        u.modelNo = getModelNumber(u.modelName);
-                        u.builderId = Number(
-                            projects.find(p => p.id == pid)?.builderId
-                        );
-                        // u.communityTemplateId = Number(
-                        //     communityTemplates.find(
-                        //         p =>
-                        //             p.projectId == pid &&
-                        //             p.modelName.toLowerCase() == u.modelName
-                        //     )?.id
-                        // );
-                        u.search = homeSearchMeta(u);
-                        u.slug;
-                        return u;
-                    }) as any
-                );
+                if (data?.id) {
+                    const unit = formData.units[0] as any;
+                    unit.modelName = communityTemplates.find(
+                        f => f.id == unit.communityTemplateId
+                    )?.modelName as any;
+                    await _updateCommunityHome(formData.units[0] as any);
+                    msg = "Unit updated!";
+                } else {
+                    const isValid = homeSchema.parse(form.getValues());
+                    await createHomesAction(
+                        formData.units.map(u => {
+                            const pid = (u.projectId = Number(
+                                formData.projectId
+                            ));
+                            u.modelName = communityTemplates.find(
+                                f => f.id == u.communityTemplateId
+                            )?.modelName as any;
+                            u.modelNo = getModelNumber(u.modelName);
+                            u.builderId = Number(
+                                projects.find(p => p.id == pid)?.builderId
+                            );
+                            // u.communityTemplateId = Number(
+                            //     communityTemplates.find(
+                            //         p =>
+                            //             p.projectId == pid &&
+                            //             p.modelName.toLowerCase() == u.modelName
+                            //     )?.id
+                            // );
+                            u.search = homeSearchMeta(u);
+                            u.slug;
+                            return u;
+                        }) as any
+                    );
+                }
                 // await saveProject({
                 //   ...form.getValues(),
                 // });
+
                 closeModal();
-                toast.message("Units Created!");
-                route.refresh();
+                toast.message(msg);
             } catch (error) {
                 console.log(error);
                 toast.message("Invalid Form");
@@ -110,6 +123,7 @@ export default function HomeModal() {
     }, []);
     async function init(data) {
         form.setValue("units", data ? [data] : ([{ meta: {} }] as any));
+        if (data?.projectId) form.setValue("projectId", data.projectId);
     }
     return (
         <BaseModal<IProject | undefined>
@@ -125,6 +139,7 @@ export default function HomeModal() {
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="col-span-2">
                             <AutoComplete2
+                                disabled={data?.id}
                                 label="Project"
                                 form={form}
                                 formKey={"projectId"}
@@ -219,31 +234,35 @@ export default function HomeModal() {
                                                 {...register(i, "homeKey")}
                                             />
                                             <div className="flex justify-end">
-                                                <ConfirmBtn
-                                                    onClick={() => {
-                                                        remove(i);
-                                                    }}
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className=""
-                                                    trash
-                                                ></ConfirmBtn>
+                                                {!data?.id && (
+                                                    <ConfirmBtn
+                                                        onClick={() => {
+                                                            remove(i);
+                                                        }}
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className=""
+                                                        trash
+                                                    ></ConfirmBtn>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
                                 ))}
-                                <Button
-                                    onClick={() => {
-                                        append(({
-                                            meta: {}
-                                        } as Partial<IHome>) as any);
-                                    }}
-                                    variant="secondary"
-                                    className="w-full h-7 mt-1"
-                                >
-                                    <Plus className="mr-2 w-4 h-4" />
-                                    <span>Add Task</span>
-                                </Button>
+                                {!data?.id && (
+                                    <Button
+                                        onClick={() => {
+                                            append(({
+                                                meta: {}
+                                            } as Partial<IHome>) as any);
+                                        }}
+                                        variant="secondary"
+                                        className="w-full h-7 mt-1"
+                                    >
+                                        <Plus className="mr-2 w-4 h-4" />
+                                        <span>Add Task</span>
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -252,7 +271,7 @@ export default function HomeModal() {
             Footer={({ data }) => (
                 <Btn
                     isLoading={isSaving}
-                    onClick={() => submit()}
+                    onClick={() => submit(data)}
                     size="sm"
                     type="submit"
                 >

@@ -2,9 +2,27 @@
 
 import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
-import { IBuilder, IHomeTask, IHomeTemplate } from "@/types/community";
+import { IBuilder, IHome, IHomeTask, IHomeTemplate } from "@/types/community";
 import { Homes } from "@prisma/client";
+import { _revalidate } from "../_revalidate";
 
+export async function _updateCommunityHome(home: IHome) {
+    home.lotBlock = [home.lot || "-", home.block || "-"].join("/");
+    await prisma.homes.update({
+        where: {
+            id: home.id
+        },
+        data: {
+            communityTemplateId: Number(home.communityTemplateId),
+            modelName: home.modelName,
+            lot: home.lot,
+            block: home.block,
+            lotBlock: home.lotBlock,
+            updatedAt: new Date()
+        }
+    });
+    _revalidate("homes");
+}
 export async function createHomesAction(homes: Homes[]) {
     const builders = await prisma.builders.findMany({
         where: {
@@ -69,4 +87,5 @@ export async function createHomesAction(homes: Homes[]) {
             });
         })
     );
+    _revalidate("homes");
 }
