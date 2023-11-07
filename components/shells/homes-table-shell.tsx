@@ -43,6 +43,7 @@ import { getUnitTemplateLink } from "@/app/_actions/community/get-unit-template"
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { HomeSelectionAction } from "../community/home-selection-action";
+import { openModal } from "@/lib/modal";
 
 export default function HomesTableShell<T>({
     data,
@@ -203,6 +204,7 @@ export default function HomesTableShell<T>({
                             {/* <Link
                 href={`/community/unit-model/${row.original.homeTemplateId}`}
               > */}
+
                             <DropdownMenuItem
                                 onClick={async e => {
                                     const edit = await getUnitTemplateLink(
@@ -213,6 +215,14 @@ export default function HomesTableShell<T>({
                                     if (edit) route.push(edit);
                                     else
                                         toast.error("Model Template Not Found");
+                                }}
+                            >
+                                <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                                Edit Template
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={e => {
+                                    openModal("home", row.original);
                                 }}
                             >
                                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />

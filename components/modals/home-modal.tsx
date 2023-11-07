@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -103,11 +103,13 @@ export default function HomeModal() {
     function register(i, key: keyof IHome) {
         return form.register(`units.${i}.${key}` as any);
     }
-    async function init(data) {
+    useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
         // loadStaticList("staticModels", models, staticHomeModels);
         loadStaticList("staticCommunity", communityTemplates, staticCommunity);
-        form.setValue("units", [{ meta: {} }] as any);
+    }, []);
+    async function init(data) {
+        form.setValue("units", data ? [data] : ([{ meta: {} }] as any));
     }
     return (
         <BaseModal<IProject | undefined>
