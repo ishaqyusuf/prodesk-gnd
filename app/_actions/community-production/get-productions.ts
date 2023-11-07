@@ -6,12 +6,12 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
 import { whereQuery } from "@/lib/db-utils";
 
-export interface ProductionsQueryParams extends BaseQuery {
+export interface CommunityTaskQuery extends BaseQuery {
     _projectId?;
     _task;
 }
-export async function getProductions(query: ProductionsQueryParams) {
-    const where = whereProductionQuery(query);
+export async function getProductions(query: CommunityTaskQuery) {
+    const where = await whereProductionQuery(query);
     const _items = await prisma.homeTasks.findMany({
         ...(await queryFilter(query)),
         where,
@@ -34,7 +34,7 @@ export async function getProductions(query: ProductionsQueryParams) {
         data: _items as any
     };
 }
-function whereProductionQuery(query: ProductionsQueryParams) {
+export async function whereProductionQuery(query: CommunityTaskQuery) {
     console.log(query);
 
     const q = {

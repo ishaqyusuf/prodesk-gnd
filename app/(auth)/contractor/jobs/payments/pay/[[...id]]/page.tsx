@@ -27,7 +27,7 @@ export default async function PaymentPage({ params }) {
     const { payables, jobs } = await getPayableUsers(userId);
     const user = payables?.find(u => u.id == userId);
     if (user) metadata.title = user.name;
-    console.log(user);
+
     return (
         <TabbedLayout tabKey="Job">
             <Breadcrumbs>

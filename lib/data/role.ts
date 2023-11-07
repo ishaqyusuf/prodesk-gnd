@@ -1,31 +1,39 @@
 import { camel } from "../utils";
 
 export const permissions: any[] = [
-    "project",
     "dashboard",
-    "invoice",
-    "role",
-    "employee",
-    "production",
-    "delivery",
-    "customer service",
-    "tech",
-    "installation",
-    // "assign installer",
+    //community
+    "project",
     "builders",
-    "cost",
-    "sales customers",
+    "invoice",
+    "installation",
+    "production",
+    "home key",
+    "deco shutter install",
+    //contractor
+    "assign tasks",
+    "documents",
+    "jobs",
+    "job payment",
+    //sales
     "orders",
-    // "sales invoice",
+    "sales customers",
     "estimates",
+    "delivery",
     "order production",
     "order payment",
-    "price list",
-    "email template",
-    "home key",
-    "inbound order",
     "putaway",
-    "deco shutter install"
+    "inbound order",
+    //hrm
+    "role",
+    "employee",
+    "customer service",
+    "tech"
+    // "assign installer",
+    // "cost",
+    // "sales invoice",
+    // "price list",
+    // "email template",
 ]; //.sort((a, b) => a - b);
 export const adminPermissions = permissions.reduce((acc, val, index, arr) => {
     const p = arr[index];

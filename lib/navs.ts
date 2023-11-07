@@ -1,32 +1,7 @@
+import { Icons } from "@/components/icons";
 import { env } from "@/env.mjs";
 import { ICan } from "@/types/auth";
 
-import {
-    Banknote,
-    Briefcase,
-    Building,
-    CircleDot,
-    ClipboardList,
-    Cog,
-    Construction,
-    Cpu,
-    CreditCard,
-    FolderGit2,
-    Home,
-    LayoutDashboard,
-    LayoutTemplate,
-    NewspaperIcon,
-    Package,
-    PackageOpen,
-    Pin,
-    School,
-    Settings2,
-    ShoppingBag,
-    Truck,
-    User,
-    UsersIcon,
-    Workflow
-} from "lucide-react";
 import { Session } from "next-auth";
 
 function _route(title, icon, path) {
@@ -88,73 +63,95 @@ export function nav(
             | "Services"
             | "Hrm"
             | "Job"
+            | "Contractor"
             | "Settings"]: Route[];
     } = {
         Dashboard: [],
         Hrm: [],
         Job: [],
         Services: [],
+        Contractor: [],
         Community: [],
         Sales: [],
-        Settings: [_route("Profile Settings", Settings2, "/settings/profile")]
+        Settings: [
+            _route("Profile Settings", Icons.settings2, "/settings/profile")
+        ]
     };
     const isAdmin = session.role?.name == "Admin";
     if (isAdmin) {
         routes.Dashboard.push(
-            _route("Dashboard", LayoutDashboard, "/dashboard")
+            _route("Dashboard", Icons.dashboard, "/dashboard")
         );
-        routes.Settings.push(_route("Sales", Cog, "/settings/sales"));
+        routes.Settings.push(
+            _route("Sales", Icons.salesSettings, "/settings/sales")
+        );
     }
     if (viewProject) {
         routes.Community.push(
             ...[
-                _route("Projects", FolderGit2, "/community/projects"),
-                _route("Units", Home, "/community/units")
+                _route("Projects", Icons.project, "/community/projects"),
+                _route("Units", Icons.units, "/community/units")
             ]
         );
     }
     viewProduction &&
         role != "Production" &&
         routes.Community.push(
-            _route("Productions", Construction, "/community/productions")
+            _route("Productions", Icons.production, "/community/productions")
         );
     viewInvoice &&
         routes.Community.push(
-            _route("Invoices", NewspaperIcon, "/community/invoices")
+            _route("Invoices", Icons.communityInvoice, "/community/invoices")
         );
 
     if (role == "Production") {
         routes.Services.push(
             _route(
                 "Sales Production",
-                Construction,
+                Icons.production,
                 `/tasks/sales-productions`
                 // `/tasks/sales-productions${prodQuery}`
             ),
-            _route("Unit Production", Construction, "/tasks/unit-productions")
+            _route(
+                "Unit Production",
+                Icons.production,
+                "/tasks/unit-productions"
+            )
         );
     }
     if (!isAdmin) {
         if (viewInstallation) {
             routes.Services.push(
-                _route("Installations", Pin, "/tasks/installations")
+                _route("Installations", Icons.tasks, "/tasks/installations")
             );
-            routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
+            routes.Services.push(
+                _route("Payments", Icons.payment, "/tasks/payments")
+            );
         }
         if (__can.viewTech) {
-            routes.Services.push(_route("Punchout", Cpu, "/tasks/punchouts"));
-            routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
+            routes.Services.push(
+                _route("Punchout", Icons.punchout, "/tasks/punchouts")
+            );
+            routes.Services.push(
+                _route("Payments", Icons.payment, "/tasks/payments")
+            );
         }
         if (__can.viewDecoShutterInstall) {
             routes.Services.push(
-                _route("Installations", Cpu, "/tasks/installations")
+                _route("Installations", Icons.tasks, "/tasks/installations")
             );
-            routes.Services.push(_route("Payments", Pin, "/tasks/payments"));
+            routes.Services.push(
+                _route("Payments", Icons.payment, "/tasks/payments")
+            );
         }
     }
     if (viewCustomerService)
         routes.Services.push(
-            _route("Customer Service", ClipboardList, "/customer-services")
+            _route(
+                "Customer Service",
+                Icons.customerService,
+                "/customer-services"
+            )
         );
     const Hrm: Route[] = [];
 
@@ -163,7 +160,7 @@ export function nav(
         let href: any = null;
         function setHref(title, _href) {
             if (!href) href = _href;
-            _rw[_href] = _route(title, LayoutTemplate, `/hrm/${_href}`);
+            _rw[_href] = _route(title, Icons.hrm, `/hrm/${_href}`);
         }
         if (viewHrm || viewEmployee) {
             setHref("Employees", "employees");
@@ -171,64 +168,92 @@ export function nav(
             setHref("Roles", "roles");
         }
         Hrm.push(...(Object.values(_rw) as any));
-        if (href) return _route("Hrm", Building, `/hrm/${href}`);
+        if (href) return _route("Hrm", Icons.hrm, `/hrm/${href}`);
         return null;
     })();
 
     if (_hrm) routes.Hrm.push(_hrm);
-    const Job: Route[] = [];
-    let _job = (() => {
-        const _rw: any = {};
-        let href: any = null;
-        function setHref(title, _href) {
-            if (!href) href = _href;
-            _rw[_href] = _route(title, LayoutTemplate, `${_href}`);
-        }
+    const { rl: Job, route: jRoute } = groupedNavs({
+        action(setHref) {
+            if (viewProject && viewInvoice) {
+                setHref("Jobs", "");
+                setHref("Payment Receipts", "payments");
+                setHref("Pending Payments", "payments/pay");
+            }
+        },
+        basePath: "/contractor/jobs",
+        Icon: Icons.jobs,
+        // Group: routes.Job,
+        // single: true,
+        groupName: "Jobs"
+    });
+    // const Job: Route[] = [];
+    // let _job = (() => {
+    //     const _rw: any = {};
+    //     let href: any = null;
+    //     function setHref(title, _href) {
+    //         if (!href) href = _href;
+    //         _rw[_href] = _route(title, Icons.communitySettings, `${_href}`);
+    //     }
 
-        if (viewProject && viewInvoice) setHref("Jobs", "/jobs");
-        if (viewProject && viewInvoice)
-            setHref("Payment Receipts", "/jobs/payments");
-        if (viewProject && viewInvoice)
-            setHref("Pending Payments", "/jobs/payments/pay");
-        Job.push(...(Object.values(_rw) as any));
-        if (href) return _route("Jobs", Briefcase, `${href}`);
-    })();
-    if (_job) routes.Job.push(_job);
+    //     if (viewProject && viewInvoice) setHref("Jobs", "/jobs");
+    //     if (viewProject && viewInvoice)
+    //         setHref("Payment Receipts", "/jobs/payments");
+    //     if (viewProject && viewInvoice)
+    //         setHref("Pending Payments", "/jobs/payments/pay");
+    //     Job.push(...(Object.values(_rw) as any));
+    //     if (href) return _route("Jobs", Icons.jobs, `${href}`);
+    // })();
+    // if (_job) routes.Job.push(_job);
     if (viewOrders || isAdmin) {
         routes.Sales.push(
             ...[
-                _route("Estimates", Banknote, "/sales/estimates"), //employees,roles
-                _route("Orders", ShoppingBag, "/sales/orders"), //employees,roles
-                _route("Customers", User, "/sales/customers")
+                _route("Estimates", Icons.estimates, "/sales/estimates"), //employees,roles
+                _route("Orders", Icons.orders, "/sales/orders"), //employees,roles
+                _route("Customers", Icons.user, "/sales/customers")
             ]
         );
     } else {
         if (__can.viewOrderProduction)
             routes.Sales.push(
-                _route("Productions", Workflow, `/sales/productions`)
+                _route("Productions", Icons.production, `/sales/productions`)
             );
     }
 
     if (viewDelivery && !viewOrders)
-        routes.Sales.push(_route("Order Delivery", Truck, "/sales/delivery"));
+        routes.Sales.push(
+            _route("Order Delivery", Icons.delivery, "/sales/delivery")
+        );
     if (viewDelivery && !viewOrders)
-        routes.Sales.push(_route("Order Pickup", Truck, "/sales/pickup"));
+        routes.Sales.push(
+            _route("Order Pickup", Icons.delivery, "/sales/pickup")
+        );
     if (editOrders)
         routes.Sales.push(
             ...([
                 // _route("Sales Jobs", Briefcase, "/sales/jobs"),
                 __can.viewOrderPayment &&
-                    _route("Payments", CreditCard, "/sales/payments"),
-                _route("Catalogs", PackageOpen, "/sales/catalogs"),
+                    _route("Payments", Icons.payment, "/sales/payments"),
+                _route("Catalogs", Icons.products, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
-                _route("Productions", Workflow, `/sales/productions`)
+                _route("Productions", Icons.production, `/sales/productions`)
 
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
             ].filter(Boolean) as any)
         );
     if (__can.viewInboundOrder)
-        routes.Sales.push(_route("Inbounds", Package, `/sales/inbounds`));
-
+        routes.Sales.push(_route("Inbounds", Icons.inbound, `/sales/inbounds`));
+    const { rl: ContractorNavs } = groupedNavs({
+        action(setHref) {
+            __can.viewJobs && setHref("Jobs", "jobs");
+            __can.viewAssignTasks && setHref("Assign Tasks", "assign-tasks");
+            __can.viewDocuments && setHref("Contractors", "contractors");
+        },
+        basePath: "/contractor",
+        Icon: Icons.jobs,
+        Group: routes.Contractor,
+        groupName: "Contractors"
+    });
     const CommunitySettings: Route[] = [];
     let _communitySettings = (() => {
         const _rw: any = {};
@@ -237,11 +262,11 @@ export function nav(
             href = _href;
             _rw[_href] = _route(
                 title,
-                LayoutTemplate,
+                Icons.communitySettings,
                 `/settings/community/${_href}`
             );
         }
-        if (viewCost || viewPriceList) {
+        if (editProject) {
             setHref("Install Costs", "install-costs");
             setHref("Model Costs", "model-costs");
             setHref("Community Cost", "community-costs");
@@ -264,7 +289,7 @@ export function nav(
         if (href)
             return _route(
                 "Community",
-                LayoutTemplate,
+                Icons.communitySettings,
                 `/settings/community/${href}`
             );
         return null;
@@ -307,7 +332,44 @@ export function nav(
         Job
     };
 }
+function groupedNavs({
+    action,
+    basePath,
+    Icon,
+    Group,
+    single,
+    groupName
+}: {
+    action;
+    basePath;
+    Icon;
+    Group?;
+    single?: Boolean;
+    groupName;
+}) {
+    const _rw: any = {};
+    let href: any = null;
 
+    const rl: Route[] = [];
+    function setHref(title, _href, _Icon?, permission = true) {
+        if (!permission) return;
+        if (!href) href = `${basePath}/${_href}`;
+        const r = (_rw[_href] = _route(
+            title,
+            _Icon || Icon,
+            `${basePath}/${_href}`
+        ));
+        if (Group && !single) Group.push(r);
+    }
+    action(setHref);
+    rl.push(...(Object.values(_rw) as any));
+    let route: any = null;
+    if (href) {
+        route = _route(groupName, Icon, href);
+        if (single && Group) Group.push(route);
+    }
+    return { rl, route };
+}
 const isProd = env.NEXT_PUBLIC_NODE_ENV == "production";
 export const upRoutes = [
     "Dashboard",

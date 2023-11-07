@@ -31,13 +31,11 @@ import { InstallCostLine, InstallCostSettings } from "@/types/settings";
 import { Button } from "../ui/button";
 import { openModal } from "@/lib/modal";
 
-export default function JobOverviewSheet() {
+export default function JobOverviewSheet({ admin = false }) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
 
-    async function init(data) {
-        console.log(data);
-    }
+    async function init(data) {}
 
     return (
         <BaseSheet<IJobs>
@@ -57,19 +55,21 @@ export default function JobOverviewSheet() {
                     <div>{data?.subtitle}</div>
                     <div className="relative">
                         <div className="">
-                            <Button
-                                onClick={() => {
-                                    openModal("submitJob", {
-                                        data: data,
-                                        defaultTab: "tasks"
-                                    });
-                                }}
-                                variant={"default"}
-                                className="px-2 h-6"
-                                size={"sm"}
-                            >
-                                <span>Edit</span>
-                            </Button>
+                            {admin && (
+                                <Button
+                                    onClick={() => {
+                                        openModal("submitJob", {
+                                            data: data,
+                                            defaultTab: "tasks"
+                                        });
+                                    }}
+                                    variant={"default"}
+                                    className="px-2 h-6"
+                                    size={"sm"}
+                                >
+                                    <span>Edit</span>
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>

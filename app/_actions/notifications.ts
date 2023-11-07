@@ -7,6 +7,7 @@ import { transformData } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IJobs } from "@/types/hrm";
+import { ExtendedHomeTasks } from "@/types/community";
 
 export type INotification = Notifications & {
     archived: Boolean;
@@ -71,8 +72,9 @@ export async function archiveAction(id, seenAt) {
 export type NotificationType =
     | "sales production"
     | "installation"
+    | "community task"
     | "punchount";
-async function _notify(_userId, type: NotificationType, message, link) {
+async function _notify(_userId, type: NotificationType, message, link?) {
     await prisma.notifications.create({
         data: transformData({
             fromUser: {
@@ -137,7 +139,21 @@ export async function _notifyAdminJobSubmitted(job: IJobs) {
         `/jobs?id=${job.id}`
     );
 }
+export async function _notifyTaskAssigned(task: ExtendedHomeTasks) {}
 export async function _notifyWorkerPaymentPaid(
     payment: JobPayments,
     jobCount
 ) {}
+export async function _alert() {
+    return {
+        async taskAssigned(task: ExtendedHomeTasks, __taskSubtitle) {
+            await _notify(
+                task.assignedToId,
+                "community task",
+                `Task (${task.taskName} -
+                ${__taskSubtitle}) has been assigned to you for installation.`
+                // `/tasks/sales-production/${order.orderId}`
+            );
+        }
+    };
+}

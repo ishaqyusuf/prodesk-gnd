@@ -89,6 +89,7 @@ export interface ISlicer {
 
 export type ModalName =
     | "assignProduction"
+    | "assignTask"
     | "activateProduction"
     | "builder"
     | "customerServices"
@@ -124,6 +125,7 @@ export type ModalName =
     | "submitJob"
     | "salesPaymentCustomer"
     | "salesMobileOption"
+    | "verifyTaskJobs"
     | "role"
     | undefined;
 const initialState: ISlicer = ({

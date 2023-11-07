@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import { sum, transformData } from "@/lib/utils";
-import { EmployeeProfile, JobPayments, Jobs } from "@prisma/client";
+import { JobPayments, Jobs } from "@prisma/client";
 import { userId } from "../utils";
 import { _notifyProdStarted, _notifyWorkerPaymentPaid } from "../notifications";
 
@@ -14,6 +14,9 @@ export async function getPayableUsers(userId) {
             jobs: {
                 where: {
                     deletedAt: null,
+                    status: {
+                        not: "assigned"
+                    },
                     paymentId: {
                         equals: null
                     }

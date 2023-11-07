@@ -3,66 +3,20 @@
 import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import {
-    CheckColumn,
-    ColumnHeader,
-    Cell,
-    PrimaryCellContent,
-    DateCellContent,
-    SecondaryCellContent,
-    _FilterColumn
-} from "../columns/base-columns";
+import { ColumnHeader, _FilterColumn } from "../columns/base-columns";
 
-import {
-    OrderRowAction,
-    PrintOrderMenuAction,
-    ProductionAction
-} from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import {
-    IHome,
-    IInvoice,
-    IProject,
-    IHomeTask,
-    ExtendedHomeTasks
-} from "@/types/community";
-import { BuilderFilter } from "../filters/builder-filter";
-import {
-    HomeInstallationStatus,
-    HomeProductionStatus
-} from "../columns/community-columns";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "../ui/dropdown-menu";
+import { ExtendedHomeTasks } from "@/types/community";
 import { Button } from "../ui/button";
-import { MoreHorizontal, Printer, View } from "lucide-react";
-import Link from "next/link";
-import { deleteHome } from "@/app/_actions/community/home";
-import { dispatchSlice } from "@/store/slicers";
 import { HomesSelectionAction } from "../community/homes-selection-action";
-import HomePrinter from "../print/home/home-printer";
-import { deepCopy } from "@/lib/deep-copy";
-import {
-    ActionButton,
-    DeleteRowAction,
-    RowActionCell,
-    RowActionMoreMenu
-} from "../data-table/data-table-row-actions";
-import Money from "../money";
-import { sum } from "@/lib/utils";
-import { Icons } from "../icons";
+import { RowActionCell } from "../data-table/data-table-row-actions";
 import { openModal } from "@/lib/modal";
 import { ProjectsFilter } from "../filters/projects-filter";
-import StatusBadge from "../status-badge";
-import UnitTaskProductionAction from "../actions/unit-task-production-actions";
 import { TaskFilters } from "../filters/task-filters";
 import { SmartTable } from "../data-table/smart-table";
 
-export default function CommunityProductionsTableShell<T>({
+export default function CommunityTaskTableShell({
     data,
     pageInfo,
     searchParams
@@ -78,7 +32,7 @@ export default function CommunityProductionsTableShell<T>({
     );
     const columns = useMemo<ColumnDef<ExtendedHomeTasks, unknown>[]>(
         () => [
-            CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
+            // CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
             table.simpleColumn("#", data => ({
                 story: [
                     table.primaryText(data.id),
@@ -91,17 +45,27 @@ export default function CommunityProductionsTableShell<T>({
                     table.secondary(data.__taskSubtitle)
                 ]
             })),
-            table.simpleColumn("Due Date", data => ({
-                story: [table.primaryText(data.productionDueDate)]
+            table.simpleColumn("Assigned To", data => ({
+                story: [
+                    <Button
+                        disabled={
+                            (data?.job?.status &&
+                                data?.job?.status != "assigned") as boolean
+                        }
+                        onClick={() => {
+                            openModal("assignTask", data);
+                        }}
+                        key={1}
+                        size="sm"
+                        className="p-1 h-7 px-2"
+                        variant={data?.assignedToId ? "secondary" : "outline"}
+                    >
+                        {data?.assignedTo?.name || "Not Assigned"}
+                    </Button>
+                ]
             })),
             table.simpleColumn("Status", data => ({
-                story: [
-                    table.status(
-                        data?.home?._count?.jobs
-                            ? "Completed"
-                            : data.productionStatus || "unknown"
-                    )
-                ]
+                story: [table.status(data?.job?.status || "Pending")]
             })),
             ..._FilterColumn(
                 "_status",
@@ -118,7 +82,7 @@ export default function CommunityProductionsTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
-                        <UnitTaskProductionAction task={row.original} />
+                        {/* <UnitTaskProductionAction task={row.original} /> */}
                         {/* <RowActionMoreMenu>
                         </RowActionMoreMenu> */}
                     </RowActionCell>
@@ -148,7 +112,7 @@ export default function CommunityProductionsTableShell<T>({
                 searchableColumns={[
                     {
                         id: "_q" as any,
-                        title: "search invoice"
+                        title: ""
                     }
                 ]}
                 dateFilterColumns={[

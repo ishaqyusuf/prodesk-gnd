@@ -16,6 +16,7 @@ let StatusColorMap: { [key: string]: Colors } = {
     unknown: "orange",
     late: "red",
     in_transit: "fuchsia",
+    assigned: "fuchsia",
     order_placed: "sky",
     arrived_warehouse: "emerald",
     item_not_available: "orange",

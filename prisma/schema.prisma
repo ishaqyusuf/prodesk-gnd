@@ -69,18 +69,30 @@ model CostCharts {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CommunityModels {
-    id        Int                  @unique @default(autoincrement())
+    id        Int                        @unique @default(autoincrement())
     projectId Int
     pivotId   Int?
-    modelName String               @db.VarChar(255)
-    meta      Json?                @db.Json
-    createdAt DateTime?            @db.Timestamp(0)
-    updatedAt DateTime?            @db.Timestamp(0)
-    slug      String               @unique @db.VarChar(255)
-    project   Projects             @relation(fields: [projectId], references: [id])
+    modelName String                     @db.VarChar(255)
+    meta      Json?                      @db.Json
+    createdAt DateTime?                  @db.Timestamp(0)
+    updatedAt DateTime?                  @db.Timestamp(0)
+    slug      String                     @unique @db.VarChar(255)
+    project   Projects                   @relation(fields: [projectId], references: [id])
     homes     Homes[]
+    history   CommunityTemplateHistory[]
     costs     CommunityModelCost[]
-    pivot     CommunityModelPivot? @relation(fields: [pivotId], references: [id])
+    pivot     CommunityModelPivot?       @relation(fields: [pivotId], references: [id])
+}
+
+model CommunityTemplateHistory {
+    id                Int              @unique @default(autoincrement())
+    userId            Int
+    meta              Json?            @db.Json
+    createdAt         DateTime?        @db.Timestamp(0)
+    updatedAt         DateTime?        @db.Timestamp(0)
+    model             CommunityModels? @relation(fields: [communityModelsId], references: [id])
+    communityModelsId Int?
+    Users             Users            @relation(fields: [userId], references: [id])
 }
 
 model CommunityModelPivot {
@@ -224,15 +236,18 @@ model HomeTasks {
     productionStatus     String?   @db.VarChar(255)
     checkNo              String?   @db.VarChar(255)
     projectId            Int?
+    assignedToId         Int?
     billable             Boolean?
     produceable          Boolean?
     installable          Boolean?
     punchout             Boolean?
     deco                 Boolean?
+    addon                Boolean?
     taxCost              Float?
     amountDue            Float?
     amountPaid           Float?
     completedAt          DateTime?
+    jobId                Int?
     checkDate            DateTime? @db.Timestamp(0)
     statusDate           DateTime? @db.Timestamp(0)
     sentToProductionAt   DateTime? @db.Timestamp(0)
@@ -245,6 +260,8 @@ model HomeTasks {
     updatedAt            DateTime? @db.Timestamp(0)
     home                 Homes?    @relation(fields: [homeId], references: [id])
     project              Projects? @relation(fields: [projectId], references: [id])
+    job                  Jobs?     @relation(fields: [jobId], references: [id])
+    assignedTo           Users?    @relation(fields: [assignedToId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -841,39 +858,41 @@ model SalesPayments {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Jobs {
-    id          Int          @unique @default(autoincrement())
+    id          Int       @unique @default(autoincrement())
     userId      Int
     coWorkerId  Int?
-    type        String       @db.VarChar(255)
+    type        String    @db.VarChar(255)
     homeId      Int?
     // unitId      Int?
     projectId   Int?
     // taskId      Int?
     amount      Float
-    title       String?      @db.VarChar(255)
-    subtitle    String?      @db.VarChar(255)
-    description String?      @db.LongText
-    note        String?      @db.Text
+    title       String?   @db.VarChar(255)
+    subtitle    String?   @db.VarChar(255)
+    description String?   @db.LongText
+    note        String?   @db.Text
     // doneBy      String?      @db.VarChar(255)
-    status      String       @db.VarChar(255)
-    meta        Json?        @db.Json
-    adminNote   String?      @db.Text
-    statusDate  DateTime?    @db.Timestamp(0)
-    rejectedAt  DateTime?    @db.Timestamp(0)
-    approvedAt  DateTime?    @db.Timestamp(0)
+    status      String    @db.VarChar(255)
+    meta        Json?     @db.Json
+    adminNote   String?   @db.Text
+    statusDate  DateTime? @db.Timestamp(0)
+    rejectedAt  DateTime? @db.Timestamp(0)
+    approvedAt  DateTime? @db.Timestamp(0)
     // paidAt      DateTime?    @db.Timestamp(0)
     approvedBy  Int?
     // paidBy      Int?
     paymentId   Int?
+
     // checkNo     String?      @db.VarChar(255)
-    deletedAt   DateTime?    @db.Timestamp(0)
-    createdAt   DateTime?    @db.Timestamp(0)
-    updatedAt   DateTime?    @db.Timestamp(0)
-    payment     JobPayments? @relation(fields: [paymentId], references: [id])
-    home        Homes?       @relation(fields: [homeId], references: [id])
-    user        Users?       @relation(name: "installer", fields: [userId], references: [id])
-    coWorker    Users?       @relation(name: "co-worker", fields: [coWorkerId], references: [id])
-    project     Projects?    @relation(fields: [projectId], references: [id])
+    deletedAt DateTime?    @db.Timestamp(0)
+    createdAt DateTime?    @db.Timestamp(0)
+    updatedAt DateTime?    @db.Timestamp(0)
+    payment   JobPayments? @relation(fields: [paymentId], references: [id])
+    home      Homes?       @relation(fields: [homeId], references: [id])
+    user      Users?       @relation(name: "installer", fields: [userId], references: [id])
+    coWorker  Users?       @relation(name: "co-worker", fields: [coWorkerId], references: [id])
+    project   Projects?    @relation(fields: [projectId], references: [id])
+    homeTasks HomeTasks[]
 }
 
 model JobPayments {
@@ -905,36 +924,36 @@ model EmployeeProfile {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Users {
-    id              Int       @unique @default(autoincrement())
-    name            String?   @db.VarChar(255)
-    username        String?   @db.VarChar(255)
-    email           String    @db.VarChar(255)
-    phoneNo         String?   @db.VarChar(255)
-    phoneCode       String?   @db.VarChar(255)
-    country         String?   @db.VarChar(255)
-    emailVerifiedAt DateTime? @db.Timestamp(0)
-    password        String?   @db.VarChar(255)
-    rememberToken   String?   @db.VarChar(100)
-    meta            Json?     @db.Json
-    deletedAt       DateTime? @db.Timestamp(0)
-    createdAt       DateTime? @db.Timestamp(0)
-    updatedAt       DateTime? @db.Timestamp(0)
-
+    id                Int                        @unique @default(autoincrement())
+    name              String?                    @db.VarChar(255)
+    username          String?                    @db.VarChar(255)
+    email             String                     @db.VarChar(255)
+    phoneNo           String?                    @db.VarChar(255)
+    phoneCode         String?                    @db.VarChar(255)
+    country           String?                    @db.VarChar(255)
+    emailVerifiedAt   DateTime?                  @db.Timestamp(0)
+    password          String?                    @db.VarChar(255)
+    rememberToken     String?                    @db.VarChar(100)
+    meta              Json?                      @db.Json
+    deletedAt         DateTime?                  @db.Timestamp(0)
+    createdAt         DateTime?                  @db.Timestamp(0)
+    updatedAt         DateTime?                  @db.Timestamp(0)
     employeeProfileId Int?
-
     workOrders        WorkOrders[]
-    salesProductions  SalesOrders[]    @relation(name: "producer")
-    reppedProductions SalesOrders[]    @relation(name: "salesRep")
+    salesProductions  SalesOrders[]              @relation(name: "producer")
+    reppedProductions SalesOrders[]              @relation(name: "salesRep")
     roles             ModelHasRoles[]
-    notifications     Notifications[]  @relation(name: "notifications")
-    sentNotifications Notifications[]  @relation(name: "fromUser")
+    notifications     Notifications[]            @relation(name: "notifications")
+    sentNotifications Notifications[]            @relation(name: "fromUser")
     inbox             Inbox[]
-    jobs              Jobs[]           @relation(name: "installer")
-    coWorkerJobs      Jobs[]           @relation(name: "co-worker")
-    myIssuedPayments  JobPayments[]    @relation(name: "payer")
-    payments          JobPayments[]    @relation(name: "worker")
-    employeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
+    jobs              Jobs[]                     @relation(name: "installer")
+    coWorkerJobs      Jobs[]                     @relation(name: "co-worker")
+    myIssuedPayments  JobPayments[]              @relation(name: "payer")
+    payments          JobPayments[]              @relation(name: "worker")
+    templateHistory   CommunityTemplateHistory[]
+    employeeProfile   EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
     SalesPickup       SalesPickup[]
+    assignedTasks     HomeTasks[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

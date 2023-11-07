@@ -76,7 +76,7 @@ export default function CustomerServiceTableShell<T>({
                     table.secondary(data.description)
                 ]
             })),
-            table.simpleColumn("Description", data => ({
+            table.simpleColumn("Assigned To", data => ({
                 story: [
                     <WorkOrderTechCell
                         key={1}

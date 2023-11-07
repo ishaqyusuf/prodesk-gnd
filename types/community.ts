@@ -9,9 +9,11 @@ import {
     Homes,
     Invoices,
     Jobs,
-    Projects
+    Projects,
+    Users
 } from "@prisma/client";
 import { OmitMeta } from "./type";
+import { IJobs } from "./hrm";
 
 export type IProject = OmitMeta<Projects> & {
     meta: IProjectMeta;
@@ -68,8 +70,11 @@ export type IHomeTask = OmitMeta<HomeTasks> & {
     };
 };
 export interface ExtendedHomeTasks extends IHomeTask {
+    __taskSubtitle;
     project: IProject;
     home: IHome;
+    job: IJobs;
+    assignedTo: Users;
 }
 export interface IHomeStatus {
     produceables: number;

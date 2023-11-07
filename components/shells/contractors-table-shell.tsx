@@ -49,7 +49,7 @@ import { RolesFilter } from "../filters/roles-filter";
 import { _deleteEmployee } from "@/app/_actions/hrm/employees.crud";
 import { SmartTable } from "../data-table/smart-table";
 
-export default function EmployeesTableShell<T>({
+export default function ContractorsTableShell({
     data,
     pageInfo,
     searchParams
@@ -83,6 +83,7 @@ export default function EmployeesTableShell<T>({
                 ]
             })),
             table.simpleColumn("Name", data => ({
+                link: `/contractor/overview/${data.id}`,
                 story: [
                     table.primaryText(data.name),
                     table.secondary(data.username)
