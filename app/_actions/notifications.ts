@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/use-day";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IJobs } from "@/types/hrm";
 import { ExtendedHomeTasks } from "@/types/community";
+import dayjs from "dayjs";
 
 export type INotification = Notifications & {
     archived: Boolean;
@@ -19,7 +20,7 @@ export async function loadNotificationsAction() {
         where: {
             userId: id
         },
-        take: 50,
+        take: 20,
         orderBy: {
             createdAt: "desc"
         }
@@ -42,7 +43,12 @@ export async function getNotificationCountAction() {
                         equals: null
                     }
                 }
-            ]
+            ],
+            createdAt: {
+                gte: dayjs()
+                    .subtract(7, "days")
+                    .toISOString()
+            }
         }
     });
     return count;

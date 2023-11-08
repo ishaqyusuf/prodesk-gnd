@@ -15,8 +15,7 @@ import {
 
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { ExtendedHome, IHome } from "@/types/community";
-import { BuilderFilter } from "../filters/builder-filter";
+import { ExtendedHome } from "@/types/community";
 import {
     HomeInstallationStatus,
     HomeProductionStatus
@@ -166,7 +165,7 @@ export default function HomesTableShell<T>({
                         slug="jobs"
                         link={
                             row.original.jobs?.length > 0
-                                ? `/slug?_homeId=${row.original.id}`
+                                ? `/contractor/slug?_homeId=${row.original.id}&page=1`
                                 : null
                         }
                     >
