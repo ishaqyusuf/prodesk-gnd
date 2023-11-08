@@ -119,13 +119,13 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
             }
         });
         const taskData = homes
-            .map(
-                h =>
-                    !h.jobs.length && {
-                        projectId: h.projectId,
-                        homeId: h.id,
-                        search: h.search
-                    }
+            .map(h =>
+                // !h.jobs.length &&
+                ({
+                    projectId: h.projectId,
+                    homeId: h.id,
+                    search: h.search
+                })
             )
             .filter(Boolean);
         await createBuilderTasks(
@@ -133,12 +133,50 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
             taskData as any
         );
     }
+    const homes = await prisma.homes.findMany({
+        where: {
+            builderId: data.id
+        },
+        select: {
+            id: true,
+            projectId: true,
+            search: true,
+            tasks: {
+                select: {
+                    id: true,
+                    taskUid: true
+                }
+            }
+        }
+    });
+    console.log(homes.length);
+    let tasks: any[] = [];
+    homes.map(home => {
+        let bTasks = data.meta.tasks.filter(
+            t => !home.tasks.some(s => s.taskUid == t.uid)
+        );
+        if (bTasks.length) {
+            tasks.push(
+                ...createBuilderTasks(bTasks, [
+                    {
+                        projectId: home.projectId,
+                        homeId: home.id,
+                        search: home.search
+                    }
+                ])
+            );
+        }
+    });
+    console.log(tasks.length);
+    await prisma.homeTasks.createMany({
+        data: tasks
+    });
     revalidatePath("/settings/community/builders", "page");
 }
 export async function deleteBuilderTasks({ builderId, taskIds }) {}
 export async function addBuilderTasks({ builderId, tasksIds, tasks }) {}
 export async function saveBuilderInstallations(data: IBuilder) {}
-export async function createBuilderTasks(
+function createBuilderTasks(
     builderTasks: IBuilderTasks[],
     taskData: {
         projectId;
@@ -164,7 +202,5 @@ export async function createBuilderTasks(
             tasks.push(transformData(_task));
         });
     });
-    await prisma.homeTasks.createMany({
-        data: tasks
-    });
+    return tasks;
 }

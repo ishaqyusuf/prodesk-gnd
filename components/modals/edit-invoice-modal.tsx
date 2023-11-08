@@ -26,6 +26,7 @@ import {
 } from "@/app/_actions/community-invoice/update-invoice-tasks";
 import { UpdateOrderPriorityProps } from "@/types/sales";
 import Money from "../money";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function EditInvoiceModal() {
     const route = useRouter();
@@ -147,13 +148,12 @@ export default function EditInvoiceModal() {
             modalName="editInvoice"
             Title={({ data }) => (
                 <div>
-                    {data?.project.title} {data?.modelName} {data?.block}
-                    {"/"}
-                    {data?.lot}
+                    {data?.project.title} {data?.modelName} {data?.lot} {"/"}
+                    {data?.block}
                 </div>
             )}
             Content={({ data }) => (
-                <div>
+                <ScrollArea className="min-h-max max-h-[50vh]">
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="col-span-2 grid gap-2">
                             <div className="grid grid-cols-7 gap-2">
@@ -255,7 +255,7 @@ export default function EditInvoiceModal() {
                             </Button>
                         </div>
                     </div>
-                </div>
+                </ScrollArea>
             )}
             Footer={({ data }) => (
                 <Btn
