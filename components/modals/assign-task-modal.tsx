@@ -18,7 +18,8 @@ import { ExtendedHomeTasks } from "@/types/community";
 import { Button } from "../ui/button";
 import {
     AssignJobProps,
-    _assignJob
+    _assignJob,
+    _unassignTask
 } from "@/app/_actions/community-job/_assign-jobs";
 import { closeModal, openModal } from "@/lib/modal";
 
@@ -31,6 +32,13 @@ export default function AssignTaskModal() {
             loadStatic1099Contractors
         );
     }, []);
+    async function unassign(data) {
+        await _unassignTask({
+            taskId: data?.id
+        });
+        closeModal();
+        toast.success("Task unassigned succesfully!");
+    }
     async function submit(user, data: ExtendedHomeTasks) {
         const payload: AssignJobProps = {
             taskId: data.id,
@@ -71,6 +79,15 @@ export default function AssignTaskModal() {
                 <div>
                     <ScrollArea className="h-[350px] pr-4">
                         <div className="flex flex-col divide-y">
+                            {data?.id && (
+                                <Button
+                                    onClick={() => unassign(data as any)}
+                                    variant={"destructive"}
+                                    className=""
+                                >
+                                    <p className="flex w-full">Unassign</p>
+                                </Button>
+                            )}
                             {techEmployees?.map(user => (
                                 <Button
                                     onClick={() => submit(user, data as any)}

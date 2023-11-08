@@ -34,6 +34,7 @@ import { PayableEmployees } from "../filters/employee-filter";
 import { deleteJobAction } from "@/app/_actions/hrm-jobs/delete-job";
 import { Badge } from "../ui/badge";
 import JobType from "../hrm/job-type";
+import { Button } from "../ui/button";
 
 export default function JobTableShell<T>({
     data,
@@ -164,14 +165,28 @@ export default function JobTableShell<T>({
                         enableSorting: false,
                         cell: ({ row }) => (
                             <RowActionCell>
+                                {row.original.status?.toLowerCase() ==
+                                    "assigned" && (
+                                    <>
+                                        <Button className="bg-green-600 h-8">
+                                            Submit
+                                        </Button>
+                                    </>
+                                )}
                                 <DeleteRowAction
                                     row={row.original}
                                     action={deleteJobAction}
-                                    disabled={row.original.paymentId > 0}
+                                    disabled={
+                                        row.original.paymentId > 0 ||
+                                        row.original.homeTasks?.length
+                                    }
                                 />
                                 <RowActionMoreMenu>
                                     <RowActionMenuItem
-                                        disabled={row.original.paymentId}
+                                        disabled={
+                                            row.original.paymentId ||
+                                            row.original.homeTasks?.length
+                                        }
                                         onClick={() => {
                                             openModal("submitJob", {
                                                 data: row.original,
@@ -220,7 +235,10 @@ export default function JobTableShell<T>({
 
                                     <DeleteRowAction
                                         menu
-                                        disabled={row.original.paymentId > 0}
+                                        disabled={
+                                            row.original.paymentId > 0 ||
+                                            row.original.homeTasks?.length
+                                        }
                                         row={row.original}
                                         action={deleteJobAction}
                                     />

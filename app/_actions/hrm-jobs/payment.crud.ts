@@ -20,5 +20,5 @@ export async function _deleteJobPayment(paymentId) {
             id: paymentId
         }
     });
-    revalidatePath("/jobs/payments", "page");
+    revalidatePath("/contractor/jobs/payments", "page");
 }

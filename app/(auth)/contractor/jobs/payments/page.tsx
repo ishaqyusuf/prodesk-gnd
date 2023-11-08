@@ -23,7 +23,7 @@ export default async function PayentReceipts({ searchParams }) {
             </Breadcrumbs>
             <PageHeader
                 title="Payment Receipts"
-                newLink={"/jobs/payments/pay"}
+                newLink={"/contractor/jobs/payments/pay"}
                 buttonText={"Make Payment"}
                 ButtonIcon={"dollar"}
             />

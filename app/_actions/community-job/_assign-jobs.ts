@@ -75,6 +75,17 @@ export type AssignJobActions =
     | "ignoreAssignAndComplete"
     | "ignoreInstallCost"
     | undefined;
+export async function _unassignTask({ taskId }) {
+    await prisma.homeTasks.update({
+        where: {
+            id: taskId
+        },
+        data: {
+            assignedToId: null,
+            jobId: null
+        }
+    });
+}
 export async function _assignJob({
     taskId,
     userId,

@@ -48,7 +48,7 @@ export default async function PaymentPage({ params }) {
                     {payables.map(user => (
                         <Link
                             key={user.id}
-                            href={`/jobs/payments/pay/${user.id}`}
+                            href={`/contractor/jobs/payments/pay/${user.id}`}
                             className={cn(
                                 "p-2 text-sm pr-4",
                                 userId == user.id
