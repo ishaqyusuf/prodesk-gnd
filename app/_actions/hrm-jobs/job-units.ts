@@ -39,7 +39,20 @@ export async function getJobCostData(id, title) {
     }
     return {};
 }
-export async function getUnitJobs(projectId, jobType: IJobType) {
+// export async function getUnitTaskInfo(projectId,unitId)
+// {
+//     const project = await prisma.projects.findFirst({
+//         where: {
+//             id: projectId,
+
+//         }
+//     })
+// }
+export async function getUnitJobs(
+    projectId,
+    jobType: IJobType,
+    byAvailability = true
+) {
     const project = await prisma.projects.findFirst({
         where: {
             id: projectId
@@ -71,7 +84,7 @@ export async function getUnitJobs(projectId, jobType: IJobType) {
     const proj: IProject = project as any;
 
     project?.homes?.map(unit => {
-        if (unit._count.jobs > 0) {
+        if (unit._count.jobs > 0 && byAvailability) {
             return;
         }
         let template: IHomeTemplate = unit.homeTemplate as any;
@@ -119,6 +132,7 @@ export async function getUnitJobs(projectId, jobType: IJobType) {
         addon: proj?.meta?.addon
     };
 }
+
 function initJobData(
     unit: ExtendedHome,
     project: IProject,

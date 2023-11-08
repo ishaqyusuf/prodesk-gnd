@@ -82,6 +82,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             meta: {}
         }
     });
+    const id = form.watch("id");
+    useEffect(() => {
+        loadStaticList("staticProjects", projects, staticProjectsAction);
+    }, []);
     const type = form.watch("type");
     function is(_type: "punchout" | "deco-shutter" | "installation") {
         return type == _type;
@@ -99,6 +103,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     unit,
                     project,
                     user,
+
+                    createdAt,
                     ...job
                 } = form.getValues();
                 if (!isInstallation() || !job.homeId) job.meta.addon = 0;
@@ -125,10 +131,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const projects = useAppSelector(state => state?.slicers?.staticProjects);
 
     async function init(data: IJobs, defaultTab) {
+        // console.log(data);
         form.reset();
         setTasks([]);
-
-        loadStaticList("staticProjects", projects, staticProjectsAction);
         const __ = !data?.id
             ? {
                   title: "Custom Project",
@@ -138,7 +143,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             : {
                   ...data
               };
-        Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
+        const { homeTasks, ...d } = __ as any;
+        // Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
+        form.reset(d);
 
         setTab(defaultTab || "tasks");
         setAddCost(null as any);
@@ -148,10 +155,19 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             // console.log(costdat);
             setUnitCosting(costdat as any);
         }
+        if (data?.projectId) {
+            let project = projects.find(p => data.projectId == p.id);
+            const _units = await loadUnits(data.projectId);
+            const unit = _units.find(u => (u.id = data?.homeId));
+            console.log(unit, _units);
+            if (!unit && defaultTab == "tasks") setTab("general");
+            if (unit) selectUnit(unit as any);
+        }
     }
     async function selectProject(project) {
         // console.log(project);
         // return;
+
         const projectId = project?.id;
         form.setValue("unit", null as any);
         form.setValue("homeId", null as any);
@@ -170,15 +186,16 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     }
     async function loadUnits(projectId) {
         setTasks([]);
-        form.setValue("meta.addon", 0);
+        if (!id) form.setValue("meta.addon", 0);
         if (!projectId) setUnits([]);
         else {
-            const ls = await getUnitJobs(projectId, type);
-            if (isInstallation()) form.setValue("meta.addon", ls.addon || 0);
-
+            const ls = await getUnitJobs(projectId, type, id == null);
+            if (isInstallation() && !id)
+                form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
-            console.log(ls.homeList);
+            return ls.homeList;
         }
+        return [];
         // form.setValue('homeData',ls.homeList)
     }
 
@@ -194,7 +211,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
                 };
             });
-            form.setValue("meta.costData", costData);
+            if (!id) form.setValue("meta.costData", costData);
         }
         form.setValue("subtitle", unit.name);
         const _tasks = costSetting?.meta?.list
@@ -432,73 +449,14 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 </div>
                             </ScrollArea>
                         </TabsContent>
-                        <TabsContent value="project">
-                            <ScrollArea className="h-[350px] pr-4">
-                                <div className="flex flex-col divide-y">
-                                    <Button
-                                        onClick={() => _setTab("general")}
-                                        variant={"ghost"}
-                                        className=""
-                                    >
-                                        <p className="flex w-full">
-                                            Custom Task
-                                        </p>
-                                    </Button>
-                                    {projects?.map(project => (
-                                        <Button
-                                            onClick={() =>
-                                                selectProject(project)
-                                            }
-                                            variant={"ghost"}
-                                            key={project.id}
-                                            className=""
-                                        >
-                                            <p className="flex w-full">
-                                                {project.title}
-                                            </p>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </ScrollArea>
-                        </TabsContent>
-                        <TabsContent value="unit">
-                            <ScrollArea className="h-[350px] pr-4">
-                                <div className="flex flex-col divide-y">
-                                    <Button
-                                        onClick={() => {
-                                            form.setValue(
-                                                "meta.addon",
-                                                null as any
-                                            );
-                                            _setTab("general");
-                                        }}
-                                        variant={"ghost"}
-                                        className=""
-                                    >
-                                        <p className="flex w-full">
-                                            Custom Task
-                                        </p>
-                                    </Button>
-                                    {units?.map(unit => (
-                                        <Button
-                                            onClick={() => selectUnit(unit)}
-                                            variant={"ghost"}
-                                            key={unit.id}
-                                            className=""
-                                        >
-                                            <p className="flex w-full">
-                                                {unit.name}
-                                            </p>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </ScrollArea>
-                        </TabsContent>
+
                         <TabsContent value="tasks">
                             <ScrollArea className="h-[350px] pr-4">
-                                <div className="grid grid-cols-2 gap-2">
-                                    <UnitForm />
-                                </div>
+                                {!data?.data?.id && (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <UnitForm />
+                                    </div>
+                                )}
                                 <div
                                     className={cn(
                                         "col-span-2",
@@ -695,7 +653,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     );
 }
 export function Row({ form, admin, row, unitCosting }) {
-    const qty = form.getValues(`meta.costData.${row.uid}.qty` as any);
+    // const qty = form.watch(`meta.costData.${row.uid}.qty` as any);
     return (
         <TableRow>
             <TableCell className="px-1">
@@ -707,85 +665,38 @@ export function Row({ form, admin, row, unitCosting }) {
             </TableCell>
             <TableCell className="px-1">
                 <div className="flex items-center space-x-0.5">
-                    <div className="hidden">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    className="flex h-8"
-                                >
-                                    <span className="">
-                                        {form.getValues(
-                                            `meta.costData.${row.uid}
-                                          .qty` as any
-                                        ) || "-"}
-                                    </span>
-                                    {" /"}
-                                    {unitCosting[row.uid]}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align="end"
-                                className="w-[185px]"
-                            >
-                                <DropdownMenuItem
-                                    onClick={e => {
-                                        form.setValue(
-                                            `meta.costData.${row.uid}.qty`,
-                                            null as any
-                                        );
-                                    }}
-                                >
-                                    -
-                                </DropdownMenuItem>
-                                {Array(unitCosting[row.uid])
-                                    .fill(null as any)
-                                    .map((_, i) => (
-                                        <DropdownMenuItem
-                                            onClick={e => {
-                                                form.setValue(
-                                                    `meta.costData.${row.uid}.qty`,
-                                                    i + 1
-                                                );
-                                            }}
-                                            key={i}
-                                        >
-                                            {i + 1}
-                                        </DropdownMenuItem>
-                                    ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
                     <Input
                         // max={unitCosting[row.uid]}
                         min={0}
-                        value={qty}
-                        onBlur={e => {
-                            const maxQty = Number(unitCosting[row.uid]);
-                            let val = form.getValues(
-                                `meta.costData.${row.uid}.qty` as any
-                            );
-                            if (val > maxQty) {
-                                toast.error("max qty exceeded");
+                        // value={qty}
+                        // onBlur={e => {
+                        //     const maxQty = Number(unitCosting[row.uid]);
+                        //     let val = form.getValues(
+                        //         `meta.costData.${row.uid}.qty` as any
+                        //     );
+                        //     if (val > maxQty) {
+                        //         toast.error("max qty exceeded");
 
-                                form.setValue(
-                                    `meta.costData.${row.uid}.qty`,
-                                    maxQty
-                                );
-                            }
-                            if (val < 0) {
-                                toast.error("min qty exceeded");
-                                form.setValue(
-                                    `meta.costData.${row.uid}.qty`,
-                                    0
-                                );
-                            }
-                        }}
-                        onChange={e => {
-                            let v = +e.target.value;
-                            form.setValue(`meta.costData.${row.uid}.qty`, v);
-                        }}
+                        //         form.setValue(
+                        //             `meta.costData.${row.uid}.qty`,
+                        //             maxQty
+                        //         );
+                        //     }
+                        //     if (val < 0) {
+                        //         toast.error("min qty exceeded");
+                        //         form.setValue(
+                        //             `meta.costData.${row.uid}.qty`,
+                        //             0
+                        //         );
+                        //     }
+                        // }}
+                        // onChange={e => {
+                        //     let v = +e.target.value;
+                        //     form.setValue(`meta.costData.${row.uid}.qty`, v);
+                        // }}
+                        {...form.register(
+                            `meta.costData.${row.uid}.qty` as any
+                        )}
                         type="number"
                         className="w-16 h-8 hiddens"
                     />

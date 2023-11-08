@@ -11,19 +11,11 @@ import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
 import { Label } from "../ui/label";
-import { CustomerTypes } from "@prisma/client";
 
 import { ExtendedHome, IHome } from "@/types/community";
 import { DatePicker } from "../date-range-picker";
 import { activateHomeProductionAction } from "@/app/_actions/community/activate-production";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { Checkbox } from "../ui/checkbox";
 import {
     PrimaryCellContent,
