@@ -156,10 +156,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             setUnitCosting(costdat as any);
         }
         if (data?.projectId) {
-            let project = projects.find(p => data.projectId == p.id);
+            // let project = projects.find(p => data.projectId == p.id);
             const _units = await loadUnits(data.projectId);
             const unit = _units.find(u => (u.id = data?.homeId));
-            console.log(unit, _units);
+            // console.log(unit, _units);
             if (!unit && defaultTab == "tasks") setTab("general");
             if (unit) selectUnit(unit as any);
         }
@@ -193,6 +193,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             if (isInstallation() && !id)
                 form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
+            console.log(ls.homeList);
             return ls.homeList;
         }
         return [];
