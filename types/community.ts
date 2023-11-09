@@ -47,6 +47,7 @@ export interface IBuilderTasks {
     billable: boolean;
     name: string;
     produceable: boolean;
+    addon: boolean;
     installable: boolean;
     punchout: boolean;
     deco: boolean;

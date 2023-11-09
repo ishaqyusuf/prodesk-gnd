@@ -47,11 +47,15 @@ export default function AssignTaskModal() {
             userId: user.id,
             projectId: data.projectId,
             homeId: data.homeId,
-            addon: data.addon,
+            addon: 0,
             jobType: "install",
             oldUserId: data.assignedToId,
             jobId: data.jobId
         };
+        if (data.addon) {
+            const taskAddon = data.project?.meta?.addon || 0;
+            payload.addon = taskAddon;
+        }
         const resp = await _assignJob(payload);
         if (resp?.jobs) {
             closeModal();

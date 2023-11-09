@@ -168,7 +168,14 @@ export default function JobTableShell<T>({
                                 {row.original.status?.toLowerCase() ==
                                     "assigned" && (
                                     <>
-                                        <Button className="bg-green-600 h-8">
+                                        <Button
+                                            onClick={() => {
+                                                openModal("submitJob", {
+                                                    data: row.original
+                                                });
+                                            }}
+                                            className="bg-green-600 h-8"
+                                        >
                                             Submit
                                         </Button>
                                     </>

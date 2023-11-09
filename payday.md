@@ -3,6 +3,8 @@
     Model Cost View From Home Invoice Edit
 
 # NOV : 00.00 == 00.00
+# NOV 09: 00.00 == 00.00
+    05:00-
 # NOV 08: 00.00 == 00.00
     02:45-04:10
     11:00-11:30

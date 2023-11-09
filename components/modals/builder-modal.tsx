@@ -131,6 +131,9 @@ export default function BuilderModal() {
                                             Bill.
                                         </Label>
                                         <Label className="col-span-1 text-center">
+                                            Addon.
+                                        </Label>
+                                        <Label className="col-span-1 text-center">
                                             Prod.
                                         </Label>
                                         <Label className="col-span-1 text-center">
@@ -170,6 +173,7 @@ export default function BuilderModal() {
                                             </div>
                                             {[
                                                 "bill",
+                                                "addon",
                                                 "produceable",
                                                 "installable",
                                                 "punchout",

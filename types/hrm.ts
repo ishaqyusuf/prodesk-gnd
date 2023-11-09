@@ -7,12 +7,7 @@ import {
     Roles,
     Users
 } from "@prisma/client";
-import {
-    InstallCost,
-    InstallCosting,
-    InstallCostingTemplate
-} from "./community";
-import { OmitMeta } from "./type";
+import { InstallCosting, InstallCostingTemplate } from "./community";
 
 export type IUser = Users & {
     meta: {};
@@ -20,7 +15,8 @@ export type IUser = Users & {
     roles: Roles[];
     employeeProfile: EmployeeProfile;
 };
-export type IJobs = Omit<Jobs, "meta" | "type"> & {
+export type IJobStatus = "Submitted" | "Assigned";
+export type IJobs = Omit<Jobs, "meta" | "type" | "status"> & {
     payment: IJobPayment;
     type: IJobType;
     meta: IJobMeta;
@@ -28,6 +24,7 @@ export type IJobs = Omit<Jobs, "meta" | "type"> & {
     homeData: HomeJobList;
     project: Projects;
     user: IUser;
+    status: IJobStatus;
 };
 export type IJobType = "punchout" | "installation" | "Deco-Shutter";
 export interface IJobMeta {

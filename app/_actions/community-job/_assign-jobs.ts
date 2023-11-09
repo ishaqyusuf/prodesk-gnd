@@ -182,7 +182,7 @@ export async function _assignJob({
                           type: jobType,
                           createdAt: new Date(),
                           updatedAt: new Date(),
-                          status: "assigned",
+                          status: "Assigned",
                           amount: 0,
                           userId: userId,
                           meta: {

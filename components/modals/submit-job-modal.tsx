@@ -115,7 +115,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     job.meta.taskCost,
                     job.meta.additional_cost
                 ].map(n => n > 0 && (job.amount += Number(n)));
-
+                if (job.coWorkerId) job.amount /= 2;
                 if (!job.id) await createJobAction(job as any);
                 else await updateJobAction(job as any);
                 closeModal();
@@ -346,6 +346,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             }}
             onClose={() => {}}
             modalName="submitJob"
+            Subtitle={({ data }) =>
+                data?.data?.id && <>{data.data?.subtitle}</>
+            }
             Title={({ data }) =>
                 isPunchout() ? (
                     <>Punchout Detail</>
@@ -381,7 +384,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 <ArrowLeft className="h-4 w-4" />
                             </Button>
                         )}
-                        {
+                        {data?.data?.id ? (
+                            <>{data?.data?.title}</>
+                        ) : (
                             {
                                 user: "Select Employee",
                                 project: "Select Project",
@@ -389,7 +394,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 tasks: "Task Information",
                                 general: "Other Information"
                             }[tab]
-                        }
+                        )}
                     </div>
                 )
             }

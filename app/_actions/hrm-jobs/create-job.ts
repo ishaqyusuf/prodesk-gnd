@@ -5,20 +5,20 @@ import { transformData } from "@/lib/utils";
 import { userId } from "../utils";
 import { _notifyAdminJobSubmitted } from "../notifications";
 import { Jobs, Prisma } from "@prisma/client";
-import { IJobType } from "@/types/hrm";
+import { IJobType, IJobs } from "@/types/hrm";
 
-export async function createJobAction(data: Jobs) {
-    data.status = "Submited";
+export async function createJobAction(data: IJobs) {
+    data.status = "Submitted";
     data.statusDate = new Date();
     if (!data.userId) data.userId = await userId();
-    let amount = data.amount;
-    if (data.coWorkerId) amount /= 2;
+    // let amount = data.amount;
+    // if (data.coWorkerId) amount /= 2;
 
     const job = await prisma.jobs.create({
         data: {
             ...data,
-            ...(transformData({ meta: data.meta }) as any),
-            amount
+            ...(transformData({ meta: data.meta }) as any)
+            // amount
         },
         include: {
             user: true,
@@ -31,7 +31,7 @@ export async function createJobAction(data: Jobs) {
             data: {
                 ...data,
                 ...(transformData({ meta: data.meta }) as any),
-                amount,
+                // amount,
                 userId: data.coWorkerId,
                 coWorkerId: data.userId
             },
@@ -59,15 +59,20 @@ export async function createJobAction(data: Jobs) {
         });
     }
 }
-export async function updateJobAction({ id, ...jdata }: Jobs) {
-    let amount = jdata.amount;
-    if (jdata.coWorkerId) amount /= 2;
+export async function updateJobAction({ id, ...jdata }: IJobs) {
+    // let amount = jdata.amount;
+    // if (jdata.coWorkerId) amount /= 2;
+    // const status = jdata.status;
+    // if()
+    if (jdata.status == "Assigned") {
+        jdata.status = "Submitted";
+    }
     const job = await prisma.jobs.update({
         where: { id },
         data: {
             ...jdata,
-            ...transformData({}, true),
-            amount
+            ...transformData({}, true)
+            // amount
         } as any
     });
     if (job.coWorkerId) {
@@ -86,7 +91,7 @@ export async function updateJobAction({ id, ...jdata }: Jobs) {
                 data: {
                     ...jdata,
                     ...(transformData({ meta: jdata.meta }, true) as any),
-                    amount,
+                    // amount,
                     userId: jdata.coWorkerId,
                     coWorkerId: jdata.userId
                 },
@@ -100,7 +105,7 @@ export async function updateJobAction({ id, ...jdata }: Jobs) {
                 data: {
                     ...jdata,
                     ...(transformData({ meta: jdata.meta }) as any),
-                    amount,
+                    // amount,
                     userId: jdata.coWorkerId,
                     coWorkerId: jdata.userId
                 },

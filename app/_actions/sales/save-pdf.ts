@@ -3,9 +3,11 @@ import { prisma } from "@/db";
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
 // import puppeteer from "puppeteer";
-import puppeteer from "puppeteer-core";
+// import puppeteer from "puppeteer-core";
 export async function printSalesPdf(mode, ids) {
     let browser, page, url;
+    const puppeteer = require("puppeteer-core");
+    console.log("printing......");
     browser = await puppeteer.connect({
         browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`
     });
