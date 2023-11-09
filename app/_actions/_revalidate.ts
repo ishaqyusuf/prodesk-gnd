@@ -10,13 +10,14 @@ import { revalidatePath } from "next/cache";
 //     | "communityTasks"
 //     | "communityTemplates";
 const _path = {
-    pickup: "/sales/pickup",
-    orders: "/sales/orders",
-    estimates: "/sales/estimates",
-    jobs: "/contractor/jobs",
     communityTasks: "/contractor/assign-tasks",
     communityTemplates: "/settings/community/community-templates",
-    homes: "/community/units"
+    estimates: "/sales/estimates",
+    homes: "/community/units",
+    jobs: "/contractor/jobs",
+    orders: "/sales/orders",
+    pickup: "/sales/pickup",
+    projects: "/community/projects"
 };
 type revalidatePaths = keyof typeof _path;
 export async function _revalidate(pathName: revalidatePaths) {

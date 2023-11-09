@@ -2,21 +2,22 @@
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
-import puppeteer from "puppeteer";
-import puppeteerCore from "puppeteer-core";
+// import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 export async function printSalesPdf(mode, ids) {
     let browser, page, url;
+    browser = await puppeteer.connect({
+        browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`
+    });
+    console.log(">>>>>>");
+    page = await browser.newPage();
     if (process.env.NODE_ENV == "production") {
-        browser = await puppeteer.connect({
-            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`
-        });
-        page = await browser.newPage();
         url = `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
     } else {
-        browser = await puppeteer.launch({
-            headless: "new"
-        });
-        page = await browser.newPage();
+        //     browser = await puppeteer.launch({
+        //         headless: "new"
+        //     });
+        //     page = await browser.newPage();
         url = `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`;
     }
     // const url =
@@ -108,4 +109,3 @@ export async function printSalesPdf(mode, ids) {
 //     const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
 //     return pdfDataUri;
 // }
-

@@ -19,12 +19,12 @@ import { ICustomer } from "@/types/customers";
 import { CustomerTypes } from "@prisma/client";
 import { saveCustomer } from "@/app/_actions/sales/sales-customers";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -36,128 +36,137 @@ import { projectSchema } from "@/lib/validations/community-validations";
 import { saveProject } from "@/app/_actions/community/projects";
 
 export default function ProjectModal() {
-  const route = useRouter();
-  const [isSaving, startTransition] = useTransition();
-  const form = useForm<IProject>({
-    defaultValues: {},
-  });
-  const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
-  async function submit() {
-    startTransition(async () => {
-      // if(!form.getValues)
-      try {
-        const isValid = projectSchema.parse(form.getValues());
-
-        await saveProject({
-          ...form.getValues(),
-        });
-        closeModal();
-        toast.message("Customer Created!");
-        route.refresh();
-      } catch (error) {
-        console.log(error);
-        toast.message("Invalid Form");
-        return;
-      }
+    const route = useRouter();
+    const [isSaving, startTransition] = useTransition();
+    const form = useForm<IProject>({
+        defaultValues: {}
     });
-  }
-  const builders = useAppSelector((state) => state?.slicers?.staticBuilders);
+    const [profiles, setProfiles] = useState<CustomerTypes[]>([]);
+    async function submit() {
+        startTransition(async () => {
+            // if(!form.getValues)
+            try {
+                const isValid = projectSchema.parse(form.getValues());
 
-  async function init(data) {
-    loadStaticList("staticBuilders", builders, staticBuildersAction);
+                await saveProject({
+                    ...form.getValues()
+                });
+                // resp.
+                closeModal();
+                toast.message("Project Created!");
+            } catch (error) {
+                console.log(error);
+                toast.message("Invalid Form");
+                return;
+            }
+        });
+    }
+    const builders = useAppSelector(state => state?.slicers?.staticBuilders);
 
-    form.reset(
-      !data
-        ? {
-            meta: {},
-          }
-        : {
-            ...data,
-          }
+    async function init(data) {
+        loadStaticList("staticBuilders", builders, staticBuildersAction);
+
+        form.reset(
+            !data
+                ? {
+                      meta: {}
+                  }
+                : {
+                      ...data
+                  }
+        );
+    }
+    const watchBuilderId = form.watch("builderId");
+    return (
+        <BaseModal<IProject | undefined>
+            className="sm:max-w-[550px]"
+            onOpen={data => {
+                init(data);
+            }}
+            onClose={() => {}}
+            modalName="project"
+            Title={({ data }) => <div>Create Project</div>}
+            Content={({ data }) => (
+                <div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid gap-2 col-span-2">
+                            <Label>Name</Label>
+                            <Input
+                                placeholder=""
+                                className="h-8"
+                                {...form.register("title")}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Ref No.</Label>
+                            <Input
+                                className="h-8"
+                                {...form.register("refNo")}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Builder</Label>
+                            <Select
+                                onValueChange={value => {
+                                    form.setValue("builderId", Number(value));
+                                }}
+                                value={`${watchBuilderId}`}
+                            >
+                                <SelectTrigger className="h-8">
+                                    <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {builders?.map((builder, _) => (
+                                            <SelectItem
+                                                key={_}
+                                                value={`${builder.id}`}
+                                            >
+                                                {builder.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="grid gap-2 col-span-2">
+                            <Label>Address</Label>
+                            <Input
+                                className="h-8"
+                                {...form.register("address")}
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label>Supervisor</Label>
+                            <Input
+                                placeholder=""
+                                className="h-8"
+                                {...form.register("meta.supervisor.name")}
+                            />
+                        </div>
+                        <div className="grid gap-2 ">
+                            <Label>Supervisor Email</Label>
+                            <Input
+                                placeholder=""
+                                className="h-8"
+                                {...form.register("meta.supervisor.email")}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+            Footer={({ data }) => (
+                <Btn
+                    isLoading={isSaving}
+                    onClick={() => submit()}
+                    size="sm"
+                    type="submit"
+                >
+                    Save
+                </Btn>
+            )}
+        />
     );
-  }
-  const watchBuilderId = form.watch("builderId");
-  return (
-    <BaseModal<IProject | undefined>
-      className="sm:max-w-[550px]"
-      onOpen={(data) => {
-        init(data);
-      }}
-      onClose={() => {}}
-      modalName="project"
-      Title={({ data }) => <div>Create Project</div>}
-      Content={({ data }) => (
-        <div>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="grid gap-2 col-span-2">
-              <Label>Name</Label>
-              <Input
-                placeholder=""
-                className="h-8"
-                {...form.register("title")}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label>Ref No.</Label>
-              <Input className="h-8" {...form.register("refNo")} />
-            </div>
-            <div className="grid gap-2">
-              <Label>Builder</Label>
-              <Select
-                onValueChange={(value) => {
-                  form.setValue("builderId", Number(value));
-                }}
-                value={`${watchBuilderId}`}
-              >
-                <SelectTrigger className="h-8">
-                  <SelectValue placeholder="" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {builders?.map((builder, _) => (
-                      <SelectItem key={_} value={`${builder.id}`}>
-                        {builder.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid gap-2 col-span-2">
-              <Label>Address</Label>
-              <Input className="h-8" {...form.register("address")} />
-            </div>
-
-            <div className="grid gap-2">
-              <Label>Supervisor</Label>
-              <Input
-                placeholder=""
-                className="h-8"
-                {...form.register("meta.supervisor.name")}
-              />
-            </div>
-            <div className="grid gap-2 ">
-              <Label>Supervisor Email</Label>
-              <Input
-                placeholder=""
-                className="h-8"
-                {...form.register("meta.supervisor.email")}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      Footer={({ data }) => (
-        <Btn
-          isLoading={isSaving}
-          onClick={() => submit()}
-          size="sm"
-          type="submit"
-        >
-          Save
-        </Btn>
-      )}
-    />
-  );
 }

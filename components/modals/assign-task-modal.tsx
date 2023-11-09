@@ -79,7 +79,7 @@ export default function AssignTaskModal() {
                 <div>
                     <ScrollArea className="h-[350px] pr-4">
                         <div className="flex flex-col divide-y">
-                            {data?.id && (
+                            {data?.jobId && (
                                 <Button
                                     onClick={() => unassign(data as any)}
                                     variant={"destructive"}

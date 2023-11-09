@@ -63,7 +63,7 @@ export default function OrderPrinter({
     async function print(printer) {
         if (!printer) return;
         if (printer.pdf) {
-            // console.log(printer);
+            console.log(printer);
             const pdf = await printSalesPdf(
                 printer.mode,
                 printer.ids?.join(",")

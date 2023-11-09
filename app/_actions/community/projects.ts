@@ -7,6 +7,7 @@ import { Prisma, Projects } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { slugModel, transformData } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { _revalidate } from "../_revalidate";
 
 export interface ProjectsQueryParams extends BaseQuery {
     _builderId;
@@ -38,9 +39,10 @@ export async function getProjectsAction(
 
 export async function saveProject(project: IProject) {
     project.slug = await slugModel(project.title, prisma.projects);
-    await prisma.projects.create({
+    const _project = await prisma.projects.create({
         data: transformData(project) as any
     });
+    _revalidate("projects");
 }
 function whereProject(query: ProjectsQueryParams) {
     const q = {
