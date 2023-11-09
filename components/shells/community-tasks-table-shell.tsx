@@ -41,8 +41,8 @@ export default function CommunityTaskTableShell({
             })),
             table.simpleColumn("Job", data => ({
                 story: [
-                    table.primaryText(data.taskName),
-                    table.secondary(data.__taskSubtitle)
+                    table.secondary(data.__taskSubtitle),
+                    table.primaryText(data.taskName)
                 ]
             })),
             table.simpleColumn("Assigned To", data => ({
