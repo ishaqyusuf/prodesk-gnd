@@ -120,13 +120,13 @@ export default function BuilderModal() {
                         {data?.type == "tasks" && (
                             <>
                                 <div className="col-span-2 grid gap-2">
-                                    <div className="grid grid-cols-12 gap-2">
+                                    <div className="grid grid-cols-10 gap-2">
                                         <Label className="col-span-4">
                                             Task Name
                                         </Label>
-                                        <Label className="col-span-2">
+                                        {/* <Label className="col-span-2">
                                             Invoice Search
-                                        </Label>
+                                        </Label> */}
                                         <Label className="col-span-1 text-center">
                                             Bill.
                                         </Label>
@@ -162,7 +162,7 @@ export default function BuilderModal() {
                                                     )}
                                                 />
                                             </div>
-                                            <div className="col-span-2">
+                                            {/* <div className="col-span-2">
                                                 <Input
                                                     className="h-7"
                                                     placeholder=""
@@ -170,7 +170,7 @@ export default function BuilderModal() {
                                                         `meta.tasks.${i}.invoice_search` as any
                                                     )}
                                                 />
-                                            </div>
+                                            </div> */}
                                             {[
                                                 "bill",
                                                 "addon",
