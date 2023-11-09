@@ -13,10 +13,10 @@ import { IJobs } from "@/types/hrm";
 import { ICommunityPivot } from "@/types/community";
 
 export async function _getCommunityJobTasks(query: CommunityTaskQuery) {
-    // if (!query._task)
-    //     query._task = await _taskNames({
-    //         installable: true
-    //     } as any);
+    if (!query._task)
+        query._task = await _taskNames({
+            installable: true
+        } as any);
     const where = await whereProductionQuery(query);
     const _items = await prisma.homeTasks.findMany({
         ...(await queryFilter(query)),

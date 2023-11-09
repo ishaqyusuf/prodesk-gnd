@@ -85,7 +85,7 @@ export default function BuilderModal() {
     return (
         <BaseModal<{
             type: "main" | "tasks" | "installations";
-            data: any;
+            data: IBuilder;
         }>
             className="sm:max-w-[700px]"
             onOpen={data => {
@@ -93,7 +93,9 @@ export default function BuilderModal() {
             }}
             onClose={() => {}}
             modalName="builder"
-            Title={({ data }) => <div>Builder Form</div>}
+            Title={({ data }) => (
+                <div>{data?.data?.id ? data.data?.name : "Builder Form"}</div>
+            )}
             Content={({ data }) => (
                 <Form {...form}>
                     <div className="grid md:grid-cols-2 gap-4">
