@@ -64,7 +64,7 @@ export async function updateJobAction({ id, ...jdata }: IJobs) {
     // if (jdata.coWorkerId) amount /= 2;
     // const status = jdata.status;
     // if()
-    if (jdata.status == "Assigned") {
+    if (jdata.status?.toLowerCase() == "assigned") {
         jdata.status = "Submitted";
     }
     const job = await prisma.jobs.update({

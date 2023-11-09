@@ -50,7 +50,8 @@ export default function CommunityTaskTableShell({
                     <Button
                         disabled={
                             (data?.job?.status &&
-                                data?.job?.status != "Assigned") as boolean
+                                data?.job?.status?.toLowerCase() !=
+                                    "assigned") as boolean
                         }
                         onClick={() => {
                             openModal("assignTask", data);

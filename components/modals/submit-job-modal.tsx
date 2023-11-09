@@ -161,7 +161,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             const unit = _units.find(u => (u.id = data?.homeId));
             // console.log(unit, _units);
             if (!unit && defaultTab == "tasks") setTab("general");
-            if (unit) selectUnit(unit as any);
+            if (unit) {
+                // console.log(unit);
+                selectUnit(unit as any);
+            }
         }
     }
     async function selectProject(project) {
@@ -193,7 +196,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             if (isInstallation() && !id)
                 form.setValue("meta.addon", ls.addon || 0);
             setUnits(ls.homeList);
-            console.log(ls.homeList);
+            // console.log(ls.homeList);
             return ls.homeList;
         }
         return [];
@@ -207,12 +210,16 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         if (unit.costing) {
             setUnitCosting(unit.costing);
             const costData = {};
+            const cd = form.getValues("meta.costData") ?? {};
+            // console.log(Object.keys(cd).length == 0);
             Object.entries(unit.costing).map(([k, v]) => {
                 costData[k] = {
                     cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
+                    // qty: cd[k]?.qty || null
                 };
             });
-            if (!id) form.setValue("meta.costData", costData);
+            if (Object.keys(cd).length == 0)
+                form.setValue("meta.costData", costData);
         }
         form.setValue("subtitle", unit.name);
         const _tasks = costSetting?.meta?.list
@@ -266,6 +273,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         const tasks = form.getValues("meta.costData") || {};
         let total = 0;
         Object.entries(tasks).map(([k, v]) => {
+            console.log(tasks);
             if (v.qty > 0 && v.cost > 0) {
                 if (Number(v.qty || 0) > Number(unitCosting?.[k] || 0)) {
                     toast.error("Some quantity has exceed default value.");
