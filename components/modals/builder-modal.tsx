@@ -120,7 +120,7 @@ export default function BuilderModal() {
                         {data?.type == "tasks" && (
                             <>
                                 <div className="col-span-2 grid gap-2">
-                                    <div className="grid grid-cols-10 gap-2">
+                                    <div className="grid grid-cols-11 gap-2">
                                         <Label className="col-span-4">
                                             Task Name
                                         </Label>
@@ -150,7 +150,7 @@ export default function BuilderModal() {
 
                                     {fields?.map((f, i) => (
                                         <div
-                                            className="grid grid-cols-12 gap-2 items-center group"
+                                            className="grid grid-cols-11 gap-2 items-center group"
                                             key={i}
                                         >
                                             <div className="col-span-4">
