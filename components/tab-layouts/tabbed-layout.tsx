@@ -27,7 +27,7 @@ export default function TabbedLayout({
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
-            redirect("/signin");
+            redirect("/login");
         }
     });
     const _nav = nav(session);

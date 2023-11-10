@@ -35,8 +35,8 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/signin",
-    error: '/signin?error=login+failed',
+    signIn: "/login",
+    error: '/login?error=login+failed',
     
   },
   jwt: {

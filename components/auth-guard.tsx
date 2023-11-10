@@ -7,20 +7,20 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  permissions: (keyof ICan)[];
-  children?;
-  className?;
+    permissions: (keyof ICan)[];
+    children?;
+    className?;
 }
 export default function AuthGuard({ permissions, className, children }: Props) {
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/signin");
-    },
-  });
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/login");
+        }
+    });
 
-  const [visible, setVisible] = useState(
-    permissions.every((v) => session?.can?.[v])
-  );
-  return <div className={cn(className)}>{visible && children}</div>;
+    const [visible, setVisible] = useState(
+        permissions.every(v => session?.can?.[v])
+    );
+    return <div className={cn(className)}>{visible && children}</div>;
 }

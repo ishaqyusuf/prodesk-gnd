@@ -12,7 +12,7 @@ export default function AccountLayout({ children }: any) {
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
-            redirect("/signin");
+            redirect("/login");
         }
     });
 

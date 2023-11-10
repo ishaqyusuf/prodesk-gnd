@@ -45,7 +45,7 @@ export function ResetPasswordStep2Form() {
       try {
         const resp = await resetPassword(data)
         toast.success("Password reset successfully.")
-        router.push('/signin')
+        router.push('/login')
         // const attemptFirstFactor = await signIn.attemptFirstFactor({
         //   strategy: "reset_password_email_code",
         //   code: data.code,
