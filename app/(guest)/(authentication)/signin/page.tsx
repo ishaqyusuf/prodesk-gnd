@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: ""
 };
 
-export default async function LoginPage() {
+export default async function SigninPage() {
     const isProd = await isProduction();
     return (
         <Shell className="sm:max-w-lg">
