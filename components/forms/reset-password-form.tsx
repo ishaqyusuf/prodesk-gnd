@@ -40,7 +40,7 @@ export function ResetPasswordForm() {
             const resp = await resetPasswordRequest(data);
             if (!resp) toast.error("User with email not found");
             else {
-                router.push("/login/password-reset/step2");
+                router.push("/login/password-reset/next");
                 toast.error("Check your email", {
                     description: "We sent you a 6-digit verification code."
                 });
