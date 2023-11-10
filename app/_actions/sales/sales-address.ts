@@ -189,9 +189,9 @@ export async function saveAddressAction({
                     if (name && phoneNo) {
                         customer = (await prisma.customers.findFirst({
                             where: {
-                                name: name,
-                                phoneNo,
-                                phoneNo2
+                                name: name
+                                // phoneNo,
+                                // phoneNo2
                             },
                             include: {
                                 profile: true
@@ -269,4 +269,3 @@ export async function saveAddressAction({
     // });
     return response;
 }
-

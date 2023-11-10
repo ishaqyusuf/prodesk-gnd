@@ -12,6 +12,8 @@ import { revalidatePath } from "next/cache";
 const _path = {
     communityTasks: "/contractor/assign-tasks",
     communityTemplates: "/settings/community/community-templates",
+    customers: "/sales/customers",
+    delivery: "/sales/delivery",
     estimates: "/sales/estimates",
     homes: "/community/units",
     jobs: "/contractor/jobs",

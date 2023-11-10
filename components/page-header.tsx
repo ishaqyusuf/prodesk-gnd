@@ -35,7 +35,6 @@ export default function PageHeader({
     ButtonIcon = "add",
     modalData
 }: Props) {
-    const Node = newLink ? Link : Fragment;
     const BtnIcon = Icons[ButtonIcon];
     return (
         <div className="flex items-center justify-between space-y-2">

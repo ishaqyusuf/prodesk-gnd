@@ -1,15 +1,7 @@
 "use client";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import { ISalesOrder, ISaveOrder } from "@/types/sales";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { FolderClosed, MoreVertical, Plus, Save } from "lucide-react";
 import { PrintOrderMenuAction } from "@/components/actions/order-actions";
 import OrderPrinter from "@/components/print/order/order-printer";
 import { useEffect, useState, useTransition } from "react";
@@ -39,6 +31,7 @@ import { Label } from "@/components/ui/label";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
 import { openModal } from "@/lib/modal";
+import { Router } from "next/router";
 
 interface Props {
     data: SalesFormResponse;
@@ -57,6 +50,21 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const form = useForm<ISalesOrder>({
         defaultValues
     });
+    const router = useRouter();
+
+    // const router = useRouter();
+    // const handleClick = e => {
+    //     console.log("REQ");
+    //     e.preventDefault();
+    // };
+    // useEffect(() => {
+    //     document.addEventListener("click", handleClick, { capture: true });
+
+    //     return () =>
+    //         document.removeEventListener("click", handleClick, {
+    //             capture: true
+    //         });
+    // }, [, /* ... deps from Redux */ handleClick]);
     useEffect(() => {
         let resp = data;
 
@@ -81,9 +89,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         //    )
         //  );
     }, [data]);
+
     const watchOrderId = form.watch("orderId");
     const [isSaving, startTransition] = useTransition();
-    const router = useRouter();
     async function save(and: "close" | "new" | "default" = "default") {
         startTransition(async () => {
             const formData = saveData();

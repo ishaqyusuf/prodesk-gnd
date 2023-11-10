@@ -10,6 +10,7 @@ const server = z.object({
     BLESS_TOKEN: z.string(),
     TWILIO_ACCOUNT_SID: z.string(),
     TWILIO_ACCOUNT_TOKEN: z.string(),
+    TWILIO_PHONE: z.string(),
     EMAIL_FROM_ADDRESS: z.string().email(),
     NODE_ENV: z.enum(["development", "test", "production"]),
     NEXTAUTH_SECRET:
@@ -58,7 +59,8 @@ const processEnv = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     BLESS_TOKEN: process.env.BLESS_TOKEN,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
-    TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN
+    TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
+    TWILIO_PHONE: process.env.TWILIO_PHONE
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,

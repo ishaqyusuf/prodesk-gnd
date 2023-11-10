@@ -39,6 +39,8 @@ import {
 import { openModal } from "@/lib/modal";
 import AuthGuard from "../auth-guard";
 import { SmartTable } from "../data-table/smart-table";
+import { Icons } from "../icons";
+import CustomersSelectionAction from "../sales/customers/customers-selection-action";
 
 export default function CustomersTableShell<T>({
     data,
@@ -171,9 +173,9 @@ export default function CustomersTableShell<T>({
             columns={columns}
             pageInfo={pageInfo}
             data={data}
-            SelectionAction={({ items }) => {
-                return <></>;
-            }}
+            SelectionAction={({ items }) => (
+                <CustomersSelectionAction items={items} />
+            )}
             filterableColumns={[]}
             searchableColumns={[
                 {

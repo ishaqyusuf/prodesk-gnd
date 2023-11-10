@@ -5,9 +5,9 @@ import twilio from "twilio";
 export async function sendMsg(to, body) {
     const client = twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_ACCOUNT_TOKEN);
 
-    client.messages.create({
+    await client.messages.create({
         body,
         to,
-        from: ""
+        from: env.TWILIO_PHONE
     });
 }

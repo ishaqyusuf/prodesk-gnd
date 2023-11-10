@@ -154,7 +154,7 @@ model CustomerWallet {
     id           Int                   @unique @default(autoincrement())
     balance      Float
     meta         Json?                 @db.Json
-    customer     Customers             @relation(fields: [id], references: [walletId])
+    customer     Customers             @relation(fields: [id], references: [walletId], onDelete: Cascade)
     transactions CustomerTransaction[]
     createdAt    DateTime?             @db.Timestamp(0)
     updatedAt    DateTime?             @db.Timestamp(0)
@@ -454,8 +454,8 @@ model OrderProductionSubmissions {
     createdAt        DateTime?        @db.Timestamp(0)
     updatedAt        DateTime?        @db.Timestamp(0)
     meta             Json?            @db.Json
-    order            SalesOrders?     @relation(fields: [salesOrderId], references: [id])
-    item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
+    order            SalesOrders?     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -758,7 +758,7 @@ model SalesOrderItems {
     sentToProdAt       DateTime?                    @db.Timestamp(0)
     prodCompletedAt    DateTime?                    @db.Timestamp(0)
     supplies           SalesItemSupply[]
-    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id])
+    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     productions        OrderProductionSubmissions[]
     // components         SalesOrderItemComponents[]
 }
@@ -851,7 +851,7 @@ model SalesPayments {
     deletedAt     DateTime?            @db.Timestamp(0)
     createdAt     DateTime?            @db.Timestamp(0)
     updatedAt     DateTime?            @db.Timestamp(0)
-    order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id])
+    order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
     customer      Customers            @relation(fields: [customerId], references: [id])
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id])
 }

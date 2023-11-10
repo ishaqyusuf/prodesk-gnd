@@ -31,8 +31,9 @@ export async function queryBuilder<T>(query, table) {
         }
     };
 }
-export function whereQuery<T>(query) {
+export function whereQuery<T>(query, soft = true) {
     let where: any = {} as any;
+    if (soft) where.deletedAt = null;
     const q = {
         contains: query._q || undefined
     };

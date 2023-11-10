@@ -15,6 +15,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
+import { sendMsg } from "./_actions/sms/twilio";
 
 export const metadata: Metadata = {
     title: "GND-PRODESK",
@@ -29,6 +30,7 @@ export default async function RootLayout({
 }) {
     const isProd = await isProduction();
     const prodDB = env.DATABASE_URL?.includes("pscale");
+    // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
             <body className={inter.className}>

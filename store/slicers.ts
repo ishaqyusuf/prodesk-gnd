@@ -91,6 +91,7 @@ export type ModalName =
     | "assignProduction"
     | "assignTask"
     | "activateProduction"
+    | "backOrder"
     | "builder"
     | "customerServices"
     | "catalog"

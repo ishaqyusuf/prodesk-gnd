@@ -10,14 +10,17 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
 import SalesOrderMobileMenuShell from "@/components/mobile/shell/sales-order-mobile-menu";
+import { _restoreSalesOrder } from "@/app/_actions/fix/restore-sales-order";
+import { _mergeConflictCustomers } from "@/app/_actions/fix/merge-conflict-customer";
+import BackOrderModal from "@/components/modals/sales/back-order-modal";
 
 export const metadata: Metadata = {
     title: "Sales Orders"
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
+    // await _restoreSalesOrder();
     const response = await getSalesOrder(queryParams(searchParams));
-
     return (
         <SalesTabLayout query={searchParams}>
             <Breadcrumbs>
@@ -35,7 +38,7 @@ export default async function OrdersPage({ searchParams }) {
                 {...response}
             />
             <OrderPrinter />
-            <SalesProductionModal />
+            {/* <BackOrderModal /> */}
         </SalesTabLayout>
     );
 }

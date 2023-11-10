@@ -55,11 +55,13 @@ import {
   Briefcase,
   Truck,
   PackageOpen,
+  Merge,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
 import logo2 from "@/public/logo.png";
 import Link from "next/link";
+import { LineChart } from "recharts";
 
 export type Icon = LucideIcon;
 
@@ -74,6 +76,7 @@ export const Icons = {
       <Image alt="" src={logo} width={48} height={48} />
     </Link>
   ), 
+  Merge: Merge,
   orders: ShoppingBag,
   project: FolderGit2,
   units: Home,
@@ -127,7 +130,8 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
-    hide: EyeOff,
+  lineChart: LineChart,
+  hide: EyeOff,
     view: Eye,
     flag: (props:LucideProps) => (<svg viewBox="0 0 24 24" {...props}  ><path fill="currentColor" d="M5 21V4h9l.4 2H20v10h-7l-.4-2H7v7H5Z"></path></svg>),
     edit: ClipboardEdit,

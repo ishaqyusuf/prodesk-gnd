@@ -11,26 +11,7 @@ import {
     DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import {
-    Banknote,
-    BookOpen,
-    Check,
-    Construction,
-    Copy,
-    FileText,
-    FlagIcon,
-    Info,
-    ListOrderedIcon,
-    MessageSquarePlus,
-    MoreHorizontal,
-    Package,
-    Pen,
-    Printer,
-    ShoppingBag,
-    Trash,
-    View,
-    X
-} from "lucide-react";
+import { Copy, FileText, Pen, Printer, View } from "lucide-react";
 import Link from "next/link";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
@@ -92,6 +73,14 @@ export function OrderRowAction(props: IOrderRowProps) {
                 </MenuItem>
                 <MenuItem Icon={Pen} link={`${_linkDir}/form`}>
                     Edit
+                </MenuItem>
+                <MenuItem
+                    Icon={Icons.Merge}
+                    onClick={() => {
+                        openModal("backOrder", row);
+                    }}
+                >
+                    Back Order
                 </MenuItem>
                 {!estimate ? (
                     <>

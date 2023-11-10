@@ -12,6 +12,7 @@ import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { OrderStatus } from "../columns/sales-columns";
+import { updateSalesDelivery } from "@/app/_actions/sales/_sales-pickup";
 
 export function DeliveryStatusCell({ order }: { order }) {
     const [isPending, startTransition] = useTransition();
@@ -19,6 +20,7 @@ export function DeliveryStatusCell({ order }: { order }) {
     async function submit(status) {
         startTransition(async () => {
             //   await updateWorkOrderStatus(workOrder.id, status);
+            await updateSalesDelivery(order.id, status);
             setIsOpen(false);
             toast.success("Status Updated!");
             // route.refresh();

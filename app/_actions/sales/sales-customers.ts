@@ -23,7 +23,8 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
             {
                 address: q
             }
-        ]
+        ],
+        deletedAt: null
     };
     const _items = await prisma.customers.findMany({
         where: qb.get(),
@@ -170,4 +171,3 @@ export async function getStaticCustomers() {
     });
     return customers;
 }
-

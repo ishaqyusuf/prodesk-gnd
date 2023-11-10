@@ -244,7 +244,8 @@ export async function getSales(query: SalesQueryParams) {
           }
         },
         select: {
-        
+            description: true,
+            prebuiltQty: true,
           id:true,
           qty:true,
           prodCompletedAt: true,
@@ -414,17 +415,18 @@ export async function deleteOrderAction(id) {
         },
        
     })
-    
+    await prisma.salesPayments.deleteMany({
+        where: {
+            orderId: id
+        }
+    })
   await prisma.salesOrderItems.deleteMany({
     where: {
       salesOrderId: id
     },
   })
-  await prisma.salesOrders.delete({
+  await prisma.salesOrders.deleteMany({
     where: {id},
-    include: {
-      items: true
-    }
   })
   
 }

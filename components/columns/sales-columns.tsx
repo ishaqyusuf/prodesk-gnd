@@ -189,9 +189,11 @@ export function OrderStatus({
     delivery?;
 }) {
     let status: any = order?.prodStatus;
+    console.log(order);
     if (["In Transit", "Return", "Delivered"].includes(order?.status as any))
         status = order?.status;
     if (!status) status = delivery ? "-" : order?.prodId ? "Prod Queued" : "";
+    if (status == "Completed" && delivery) status = "Ready";
     const color = getBadgeColor(order?.prodStatus || "");
     return (
         <div className="min-w-16">

@@ -3,6 +3,7 @@
 import { SalesQueryParams } from "@/types/sales";
 import { getSales } from "./sales";
 import { prisma } from "@/db";
+import { _revalidate } from "../_revalidate";
 
 export async function getSalesDelivery(query: SalesQueryParams) {
     query.deliveryOption = "delivery";
@@ -13,6 +14,7 @@ export async function updateSalesDelivery(id, status) {
         status
     };
     if (status == "Delivered") updateData.deliveredAt = new Date();
+
     await prisma.salesOrders.update({
         where: { id },
         data: {
@@ -21,5 +23,5 @@ export async function updateSalesDelivery(id, status) {
             updatedAt: new Date()
         }
     });
+    _revalidate("delivery");
 }
-
