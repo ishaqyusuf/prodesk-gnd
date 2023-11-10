@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { env } from "@/env.mjs";
-import { ResetPasswordForm } from "@/components/forms/reset-password-form";
+import { ResetPasswordForm } from "@/components/forms/password-reset-form";
 import { ArrowLeft } from "lucide-react";
 export const metadata: Metadata = {
     metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

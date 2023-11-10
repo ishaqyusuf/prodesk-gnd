@@ -1,7 +1,7 @@
 "use server";
 
-import { ResetPasswordRequestInputs } from "@/components/forms/reset-password-form";
-import { ResetPasswordFormInputs } from "@/components/forms/reset-password-form-step2";
+import { ResetPasswordRequestInputs } from "@/components/forms/password-reset-form";
+import { ResetPasswordFormInputs } from "@/components/forms/password-reset-form-step2";
 import { prisma } from "@/db";
 import { randomInt } from "crypto";
 import dayjs from "dayjs";

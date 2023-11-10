@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ResetPasswordStep2Form } from "@/components/forms/reset-password-form-step2"
+import { ResetPasswordStep2Form } from "@/components/forms/password-reset-form-step2"
 import { Shell } from "@/components/shells/shell"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
