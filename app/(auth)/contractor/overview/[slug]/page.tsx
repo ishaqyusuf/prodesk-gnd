@@ -63,7 +63,7 @@ export default async function CustomerPage({ searchParams, params }) {
                     />
                     <StartCard
                         label="Total Orders"
-                        icon="line"
+                        icon="lineChart"
                         value={salesOrders}
                         info={`${completedOrders || 0} completed`}
                     />
