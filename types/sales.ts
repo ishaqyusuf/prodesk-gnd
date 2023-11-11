@@ -164,6 +164,7 @@ export interface SalesQueryParams extends BaseQuery {
     to?;
     _customerId?;
     status?: SalesStatus;
+    statusNot?;
     _payment?: "Paid" | "Part" | "Pending";
     prodId?;
     _page?: "production" | undefined;

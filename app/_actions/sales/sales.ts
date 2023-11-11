@@ -113,6 +113,10 @@ import { _revalidate } from "../_revalidate";
       in: statusIsArray ? status : undefined,
     };
   }
+  if(query.statusNot)
+    where.status = {
+        not: query.statusNot
+    }
   if(_payment == 'Paid')
     where.amountDue = 0;
     else if (_payment == 'Pending')

@@ -7,6 +7,7 @@ import { _revalidate } from "../_revalidate";
 
 export async function getSalesDelivery(query: SalesQueryParams) {
     query.deliveryOption = "delivery";
+    if (!query.status) query.statusNot = "delivered";
     return await getSales(query);
 }
 export async function updateSalesDelivery(id, status) {
