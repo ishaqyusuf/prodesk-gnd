@@ -15,8 +15,8 @@ export function searchQuery<T>(query, ...columns: (keyof T)[]) {
         OR
     };
 }
-export async function queryBuilder<T>(query, table) {
-    const where = whereQuery<T>(query);
+export async function queryBuilder<T>(query, table, soft = true) {
+    const where = whereQuery<T>(query, soft);
     const queryFilters = await queryFilter(query);
     return {
         ...where,
