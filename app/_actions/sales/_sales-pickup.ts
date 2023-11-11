@@ -6,6 +6,7 @@ import { prisma } from "@/db";
 import { _revalidate } from "../_revalidate";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { userId } from "../utils";
+import { saveProgress } from "../progress";
 
 export async function _getSalesPickup(query: SalesQueryParams) {
     query.deliveryOption = "pickup";
@@ -36,21 +37,35 @@ export async function _cancelSalesPickup(salesId) {
             }
         }
     });
+    await saveProgress("SalesOrder", salesId, {
+        type: "delivery",
+        status: "Pickup Cancelled",
+        userId: await userId()
+    });
     _revalidate("pickup");
 }
-export async function _createPickup(salesId, pickup) {
-    await prisma.salesOrders.update({
+export async function _createPickup(salesId, pickupData) {
+    const order = await prisma.salesOrders.update({
         where: { id: salesId },
         data: {
             pickup: {
                 create: {
-                    ...pickup,
+                    ...pickupData,
                     pickupApprovedBy: await userId(),
                     createdAt: new Date(),
                     updatedAt: new Date()
                 }
             }
+        },
+        include: {
+            pickup: true
         }
+    });
+    await saveProgress("SalesOrder", salesId, {
+        type: "delivery",
+        status: "Order Pickup",
+        userId: await userId(),
+        description: `Order pickup by ${order.pickup?.pickupBy}`
     });
     await _revalidate("pickup");
 }
