@@ -26,7 +26,7 @@ export default function ResetPasswordPage() {
                     <div className="">
                         <Link
                             aria-label="Reset password"
-                            href="/signin"
+                            href="/login"
                             className="text-sm text-primary underline-offset-4 transition-colors hover:underline inline-flex items-center"
                         >
                             <ArrowLeft className="inline-flex w-4 mr-2" /> Sign

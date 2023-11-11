@@ -36,6 +36,7 @@ export async function _cancelSalesPickup(salesId) {
             }
         }
     });
+    _revalidate("pickup");
 }
 export async function _createPickup(salesId, pickup) {
     await prisma.salesOrders.update({

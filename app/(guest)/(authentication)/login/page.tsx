@@ -36,7 +36,7 @@ export default async function SigninPage() {
                     <div className="text-sm text-muted-foreground"></div>
                     <Link
                         aria-label="Reset password"
-                        href="/signin/password-reset"
+                        href="/login/password-reset"
                         className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
                     >
                         Reset password

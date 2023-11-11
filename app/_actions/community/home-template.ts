@@ -8,6 +8,8 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { whereQuery } from "@/lib/db-utils";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
+import { ICommunityTemplateMeta } from "@/types/community";
+import { userId } from "../utils";
 
 export interface HomeTemplatesQueryParams extends BaseQuery {}
 export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
@@ -166,14 +168,27 @@ export async function saveHomeTemplateDesign(slug, meta) {
         }
     });
 }
-export async function saveCommunityTemplateDesign(slug, meta) {
+export async function saveCommunityTemplateDesign(slug, _meta) {
+    let meta = removeEmptyValues(_meta) as ICommunityTemplateMeta;
+    // meta.design
+
     await prisma.communityModels.update({
         where: {
             slug
         },
         data: {
             ...transformData({}, true),
-            meta: removeEmptyValues(meta) as any
+            meta: meta as any,
+            history: {
+                create: {
+                    createdAt: new Date(),
+                    meta: {
+                        design: meta.design
+                    } as any,
+                    updatedAt: new Date(),
+                    userId: await userId()
+                }
+            }
         }
     });
 }

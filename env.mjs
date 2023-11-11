@@ -8,6 +8,9 @@ const server = z.object({
     DATABASE_URL: z.string().url(),
     RESEND_API_KEY: z.string(),
     BLESS_TOKEN: z.string(),
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string(),
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
+    NEXT_PUBLIC_CLOUDINARY_API_SECRET: z.string(),
     TWILIO_ACCOUNT_SID: z.string(),
     TWILIO_ACCOUNT_TOKEN: z.string(),
     TWILIO_PHONE: z.string(),
@@ -58,6 +61,11 @@ const processEnv = {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     BLESS_TOKEN: process.env.BLESS_TOKEN,
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
+        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    NEXT_PUBLIC_CLOUDINARY_API_SECRET:
+        process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
     TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
     TWILIO_PHONE: process.env.TWILIO_PHONE

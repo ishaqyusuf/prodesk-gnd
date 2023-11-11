@@ -78,7 +78,9 @@ export default function InboundOrdersTableShell<T>({
                 accessorKey: "status",
                 header: ColumnHeader("Inventory"),
                 cell: ({ row }) => (
-                    <StatusBadge status={row.original.inventoryStatus} />
+                    <StatusBadge
+                        status={row.original.inventoryStatus || "Pending"}
+                    />
                 )
             },
             ..._FilterColumn(
@@ -100,7 +102,7 @@ export default function InboundOrdersTableShell<T>({
                             <RowActionMenuItem
                                 SubMenu={
                                     <>
-                                        {["Available", "Pending Items"].map(
+                                        {["Ordered", "Available"].map(
                                             status => (
                                                 <RowActionMenuItem
                                                     onClick={() =>

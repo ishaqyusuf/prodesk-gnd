@@ -14,24 +14,7 @@ import { useForm } from "react-hook-form";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { emailSchema } from "@/lib/validations/email";
-import { ICustomer } from "@/types/customers";
-import { CustomerTypes } from "@prisma/client";
 import SignaturePad from "react-signature-pad-wrapper";
-import { saveCustomer } from "@/app/_actions/sales/sales-customers";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "../ui/select";
-import { Button } from "../ui/button";
-import { ArrowLeft } from "lucide-react";
-
-import { updateCustomerAction } from "@/app/_actions/sales/customer.crud";
-import { staticCustomerProfilesAction } from "@/app/_actions/sales/sales-customer-profiles";
 import refresh from "@/lib/refresh";
 import { ISalesOrder, ISalesPickup } from "@/types/sales";
 import { _createPickup } from "@/app/_actions/sales/_sales-pickup";
@@ -47,8 +30,11 @@ export default function PickupModal() {
     async function submit(order: ISalesOrder) {
         startTransition(async () => {
             try {
-                const sig = sigCanvas.current.toDataURL();
+                const sig = sigCanvas.current.toSVG();
+                // console.log(sig);
+                console.log(typeof sig);
                 const data = form.getValues();
+                console.log(data);
                 data.meta.signature = sig;
                 if (!data.pickupAt) data.pickupAt = new Date();
                 await _createPickup(order.id, data);
@@ -66,8 +52,9 @@ export default function PickupModal() {
 
     async function init(order: ISalesOrder, pickup?: ISalesPickup) {
         form.reset({
-            pickupAt: new Date(),
-            pickupBy: order.customer?.name
+            pickupAt: new Date().toISOString() as any,
+            pickupBy: order.customer?.name,
+            meta: {}
         });
     }
     const sigCanvas = useRef<any>();
@@ -79,7 +66,7 @@ export default function PickupModal() {
             }}
             onClose={() => {}}
             modalName="pickup"
-            Title={({ data: order }) => <div>Customer Form</div>}
+            Title={({ data: order }) => <div>Pickup Form</div>}
             Content={({ data: order }) => (
                 <div>
                     <div className="grid md:grid-cols-2 gap-4">
