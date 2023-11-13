@@ -26,7 +26,10 @@ import { removeEmptyValues } from "@/lib/utils";
 import InfoCard from "./sales-form-card";
 import dayjs from "dayjs";
 import { Switch } from "@/components/ui/switch";
-import { toggleMockup } from "@/store/invoice-item-component-slice";
+import {
+    resetFooterInfo,
+    toggleMockup
+} from "@/store/invoice-item-component-slice";
 import { Label } from "@/components/ui/label";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
@@ -69,10 +72,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         let resp = data;
 
         const _formData: any = resp?.form || { meta: {} };
+        const { _items, footer } = initInvoiceItems(resp?.form?.items);
 
+        store.dispatch(resetFooterInfo(footer));
         form.reset({
             ..._formData,
-            items: initInvoiceItems(resp?.form?.items)
+            items: _items
         });
         //  const _baseLink = estimate ? "/sales/estimates" : "/sales/orders";
         //  store.dispatch(

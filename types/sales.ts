@@ -23,6 +23,16 @@ export type ProdStatus = "In Production" | "Completed" | "Queued";
 export type IOrderType = "order" | "estimate";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 
+export interface IBackOrderForm {
+    backOrder: {
+        [k in any]: {
+            qty;
+            backQty;
+            prodQty;
+            checked;
+        };
+    };
+}
 export type ISalesOrder = OmitMeta<SalesOrders> & {
     customer?: ICustomer;
     billingAddress?: any;
@@ -213,7 +223,7 @@ export interface IFooterInfo {
 export interface FooterRowInfo {
     rowIndex;
     total?;
-    notTaxxed?;
+    taxxable?;
 }
 export interface IOrderInventoryUpdate {
     component: IOrderComponent;

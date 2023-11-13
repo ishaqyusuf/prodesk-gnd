@@ -78,6 +78,10 @@ const orderItemComponentSlice = createSlice({
     itemQuoteUpdated(state, action) {
       state.itemPriceData = action.payload;
     },
+    resetFooterInfo(state,action)
+    {
+        state.footerInfo.rows = action.payload
+    },
     updateFooterInfo(state, action: PayloadAction<FooterRowInfo>) {
       let { rowIndex } = action.payload;
 
@@ -97,6 +101,7 @@ export const {
   open: openItemComponent,
   close: closeItemComponent,
   updateFooterInfo,
+  resetFooterInfo,
   itemQuoteUpdated,
   closeCostUpdater,
   toggleMockup

@@ -1,6 +1,7 @@
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import { ISalesSettingMeta, ISalesWizard } from "@/types/post";
 import {
+    FooterRowInfo,
     IFooterInfo,
     ISalesOrderForm,
     ISalesOrderItem,
@@ -27,13 +28,22 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
             if (li > rows) rows = li;
         }
     });
+    const footer: IFooterInfo = {
+        rows: {}
+    };
     const _items = Array(rows + 1)
         .fill(null)
         .map((c, uid) => {
             const _ = generateItem(uid, _itemsByIndex[uid]);
+            footer.rows[uid] = {
+                rowIndex: uid,
+                taxxable: _.meta?.tax == "Tax",
+                total: 0
+            };
             return _;
         });
-    return _items;
+
+    return { _items, footer: footer.rows };
 }
 export function generateItem(uid, baseItem: any = null) {
     if (!baseItem) baseItem = { meta: {} };
@@ -106,11 +116,12 @@ export function footerEstimate({
     // const b = form.getValues("");
     const taxPercentage = convertToNumber(form.getValues("taxPercentage"), 0);
     const cccPercentage = settings?.ccc;
+    console.log(footerInfo.rows);
     Object.entries(footerInfo.rows).map(([k, row]) => {
         if (row.total > 0) {
             subTotal += +row.total;
             // console.log([subTotal, row.rowIndex, row.total]);
-            if (!row.notTaxxed) {
+            if (row.taxxable) {
                 taxxableSubTotal += +row.total;
                 const lineTax = +row.total * (taxPercentage / 100);
                 form.setValue(`items.${row.rowIndex}.tax`, +lineTax || 0);

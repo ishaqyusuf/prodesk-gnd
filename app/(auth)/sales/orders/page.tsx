@@ -38,6 +38,7 @@ export default async function OrdersPage({ searchParams }) {
                 {...response}
             />
             <OrderPrinter />
+            <SalesProductionModal />
             <BackOrderModal />
         </SalesTabLayout>
     );

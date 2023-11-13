@@ -189,7 +189,6 @@ export function OrderStatus({
     delivery?;
 }) {
     let status: any = order?.prodStatus;
-    console.log(order);
     if (["In Transit", "Return", "Delivered"].includes(order?.status as any))
         status = order?.status;
     if (!status) status = delivery ? "-" : order?.prodId ? "Prod Queued" : "";
@@ -249,7 +248,6 @@ export function ProdStatusCell({ order }: { order: ISalesOrder }) {
                 : false
         );
     }, [order]);
-    console.log([order.inventoryStatus, order.orderId]);
     if (order.inventoryStatus == "Pending Items")
         return <StatusBadge status={order.inventoryStatus} />;
     if (progress.score > 0)

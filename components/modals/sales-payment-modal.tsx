@@ -79,7 +79,7 @@ export default function SalesPaymentModal() {
     async function submit(data: ICustomer) {
         startTransition(async () => {
             let credit = +form.getValues("pay");
-            let balance = +form.getValues("pay") + (data.wallet?.balance || 0);
+            let balance = +form.getValues("pay"); // + (data.wallet?.balance || 0);
             let debit = 0;
 
             // if (_total > total) {

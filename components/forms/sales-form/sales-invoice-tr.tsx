@@ -140,7 +140,7 @@ function TaxSwitchCell({
                 store.dispatch(
                     updateFooterInfo({
                         rowIndex,
-                        notTaxxed: !e
+                        taxxable: e == true
                     })
                 );
             }}

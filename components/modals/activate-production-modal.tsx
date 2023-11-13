@@ -81,7 +81,7 @@ export default function ActivateProductionModal() {
                                 value={dueDate}
                             />
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-2 flex flex-col">
                             <ScrollArea className="min-h-max max-h-[50vh]">
                                 <Table>
                                     <TableBody>
