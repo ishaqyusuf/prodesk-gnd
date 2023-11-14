@@ -12,7 +12,9 @@ export default function LoadDelivery() {
         s => s.slicers.dataPage
     );
     const form = useForm({
-        defaultValues: {}
+        defaultValues: {
+            loader: {}
+        }
     });
     const [currentTab, setCurrentTab] = useState<string>();
     useEffect(() => {
