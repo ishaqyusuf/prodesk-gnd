@@ -26,7 +26,7 @@ export default async function CustomerPage({ searchParams, params }) {
     } = customer._count;
     //   console.log(customer._count);
     return (
-        <DataPageShell<ICustomer> data={customer} className="space-y-4 px-8">
+        <DataPageShell<ICustomer> data={customer} className="space-y-4 sm:px-8">
             <Breadcrumbs>
                 <BreadLink isFirst title="Sales" />
                 <BreadLink link="/sales/customers" title="Customers" />

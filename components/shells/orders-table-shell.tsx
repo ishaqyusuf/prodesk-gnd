@@ -26,7 +26,7 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { SalesSelectionAction } from "../sales/sales-selection-action";
+import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import { SmartTable } from "../data-table/smart-table";
 import { useMediaQuery } from "react-responsive";
@@ -192,4 +192,3 @@ export default function OrdersTableShell<T>({
         />
     );
 }
-

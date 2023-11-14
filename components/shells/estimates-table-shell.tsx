@@ -19,7 +19,7 @@ import {
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
-import { SalesSelectionAction } from "../sales/sales-selection-action";
+import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
@@ -120,4 +120,3 @@ export default function EstimatesTableShell<T>({
         />
     );
 }
-

@@ -35,8 +35,8 @@ export interface IBackOrderForm {
 }
 export type ISalesOrder = OmitMeta<SalesOrders> & {
     customer?: ICustomer;
-    billingAddress?: any;
-    shippingAddress?: any;
+    billingAddress?: IAddressBook;
+    shippingAddress?: IAddressBook;
     progress?: Progress[];
     producer?: Users;
     salesRep?: Users;
