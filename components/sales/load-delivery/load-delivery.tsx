@@ -26,19 +26,21 @@ export default function LoadDelivery() {
                 className="grid w-full grid-cols-12 gap-2"
                 defaultValue={currentTab}
             >
-                <TabsList className="col-span-3 justify-start h-auto grid max-sm:hidden w-full">
-                    {dataPage?.data?.map(order => (
-                        <TabsTrigger
-                            key={order.slug}
-                            className="flex flex-col"
-                            value={order.slug}
-                        >
-                            <div className="">
-                                <p>{order.orderId}</p>
-                            </div>
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+                <div className="col-span-3">
+                    <TabsList className=" justify-start h-auto grid max-sm:hidden w-full">
+                        {dataPage?.data?.map(order => (
+                            <TabsTrigger
+                                key={order.slug}
+                                className="flex flex-col"
+                                value={order.slug}
+                            >
+                                <div className="">
+                                    <p>{order.orderId}</p>
+                                </div>
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                </div>
                 {dataPage?.data?.map(order => (
                     <TabsContent
                         key={order.slug}

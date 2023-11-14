@@ -52,7 +52,7 @@ export default function OrderInspection({ form, order }: Props) {
                         </TableHead>
                         <TableHead className="px-2">Items</TableHead>
                         <TableHead className="px-2">Qty</TableHead>
-                        <TableHead className="px-2">Back Qty</TableHead>
+                        <TableHead className="px-2">Load Qty</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

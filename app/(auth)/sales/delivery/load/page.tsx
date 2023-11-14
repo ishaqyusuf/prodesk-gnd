@@ -35,7 +35,7 @@ export default async function LoadDeliveryPage({ searchParams }) {
     });
 
     return (
-        <DataPageShell data={orders} className="sm:px-8">
+        <DataPageShell data={orders} className="sm:px-8 space-y-4">
             <Breadcrumbs>
                 <BreadLink isFirst title="Sales" />
                 <BreadLink isLast title="Delivery" />
