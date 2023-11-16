@@ -2,16 +2,13 @@
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
     
-
-
-
-
-
-# NOV 14: 00.00 == 00.00
-# NOV 14: 00.00 == 00.00
-    02:50-
+ 
+# NOV 16: 00.00 == 00.00
+    02:40-
+# NOV 14: 01.20 == 05.10
+    02:50-04:00
     02:30-02:40
-# NOV 13: 00.00 == 00.00
+# NOV 13: 02.20 == 03.50
     01:40-04:00
 # NOV 11: 00.30 == 00.30
     03:30-04:00

@@ -16,9 +16,24 @@ export default function LoadDelivery() {
             loader: {}
         }
     });
+    // useEffect(() => {},)
+
     const [currentTab, setCurrentTab] = useState<string>();
     useEffect(() => {
         setCurrentTab(dataPage.data?.[0]?.slug);
+        let loader: any = {};
+        dataPage?.data?.map(order => {
+            loader[order.slug] = {};
+            order?.items?.map(f => {
+                if (f.qty)
+                    loader[order.slug][f.meta.uid] = {
+                        loadQty: f.qty
+                    };
+            });
+        });
+        form.reset({
+            loader
+        });
     }, [dataPage]);
     return (
         <div className="">

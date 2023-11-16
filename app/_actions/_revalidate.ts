@@ -19,7 +19,11 @@ const _path = {
     jobs: "/contractor/jobs",
     orders: "/sales/orders",
     pickup: "/sales/pickup",
-    projects: "/community/projects"
+    projects: "/community/projects",
+    "overview-order": "/sales/order/[slug]",
+    "invoice-order": "/sales/order/[slug]/form",
+    "overview-estimate": "/sales/estimate/[slug]",
+    "invoice-estimate": "/sales/estimate/[slug]/form"
 };
 type revalidatePaths = keyof typeof _path;
 export async function _revalidate(pathName: revalidatePaths) {
