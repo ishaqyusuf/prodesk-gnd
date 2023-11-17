@@ -58,7 +58,7 @@ export async function findAddressAction({ q }: { q: string }) {
         items: items.map(item => {
             return {
                 ...item,
-                bussinessName: item.customer?.businessName,
+                businessName: item.customer?.businessName,
                 search: `${item.name} ${item.phoneNo} ${item.address1}`
             };
         })

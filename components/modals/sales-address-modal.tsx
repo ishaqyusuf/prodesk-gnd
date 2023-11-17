@@ -286,7 +286,12 @@ function OrderAddress({
                             onChange={e => {
                                 const { data: address } = e || {};
                                 if (typeof address === "object") {
-                                    const { customer, ..._address } = address;
+                                    const {
+                                        customer,
+                                        businessName,
+                                        search,
+                                        ..._address
+                                    } = address;
                                     form.setValue(type, _address as any);
                                     if (
                                         customer?.profile &&
