@@ -63,6 +63,7 @@ export default function HomePrinter({ id }: Props) {
                 builderId: builderId as any
             }))
         )) as any;
+        console.log(printer.homes);
         setHomes(
             printer.homes.map(home => {
                 const communityDesign = communityPrints.find(
@@ -118,6 +119,7 @@ export default function HomePrinter({ id }: Props) {
             toast.success("Units are already in production.");
         }
         dispatchSlice("printHomes", null);
+        setHomes([]);
     }
     const Logo = ({}) => (
         <Link href="/">
