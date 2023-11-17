@@ -16,7 +16,6 @@ export function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
     if (!items) items = [];
     const _itemsByIndex: any = {};
     let rows = 20;
-    // console.log(items);
     items.map(({ supplies, ...item }) => {
         const li = [
             item.meta?.line_index,
@@ -116,11 +115,9 @@ export function footerEstimate({
     // const b = form.getValues("");
     const taxPercentage = convertToNumber(form.getValues("taxPercentage"), 0);
     const cccPercentage = settings?.ccc;
-    console.log(footerInfo.rows);
     Object.entries(footerInfo.rows).map(([k, row]) => {
         if (row.total > 0) {
             subTotal += +row.total;
-            // console.log([subTotal, row.rowIndex, row.total]);
             if (row.taxxable) {
                 taxxableSubTotal += +row.total;
                 const lineTax = +row.total * (taxPercentage / 100);

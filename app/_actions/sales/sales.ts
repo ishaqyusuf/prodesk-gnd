@@ -282,6 +282,7 @@ export async function saveOrderAction({
     // salesRep,
     shippingAddressId,
     billingAddressId,
+    createdAt,
     pickupId,
     ..._order
   } = order;
@@ -296,8 +297,7 @@ export async function saveOrderAction({
   }
 
   const metadata = {
-    createdAt: new Date(),
-    
+    createdAt: createdAt ? new Date(createdAt) : new Date(), 
     ...(_order as any),
     updatedAt: new Date(),
     slug,
@@ -367,8 +367,7 @@ export async function saveOrderAction({
       })
     : await prisma.salesOrders.create({
         data: {
-          ...metadata,
-          createdAt: new Date(),
+          ...metadata, 
           items: {
             createMany,
           },

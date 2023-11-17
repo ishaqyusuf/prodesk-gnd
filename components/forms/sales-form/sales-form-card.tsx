@@ -39,6 +39,7 @@ export default function InfoCard({
     const watchPaymentTerm = form.getValues("paymentTerm");
     const watchType = form.getValues("type");
     const watchGoodUntil = form.getValues("goodUntil");
+    const watchCreatedAt = form.getValues("createdAt");
     const watchDelivery = form.getValues("deliveryOption");
 
     const [resetting, startTransition] = useTransition();
@@ -65,6 +66,20 @@ export default function InfoCard({
             } else toast.error("set a valid payment terms");
         });
     }, [watchGoodUntil, watchPaymentTerm]);
+    useEffect(() => {
+        console.log(watchPaymentTerm);
+        const ts = watchPaymentTerm?.replace("Net", "");
+        const term = Number(ts);
+        const goodUntil = !term
+            ? null
+            : new Date(
+                  dayjs(watchCreatedAt)
+                      .add(term, "days")
+                      .toISOString()
+              );
+        console.log(term);
+        form.setValue("goodUntil", goodUntil);
+    }, [watchPaymentTerm, watchCreatedAt]);
     // function resetTerm() {
     //   startTransition(async () => {
     //     const ts = watchPaymentTerm?.replace("Net", "");
@@ -122,15 +137,69 @@ export default function InfoCard({
         </InfoLine> */}
                 {watchType == "order" && (
                     <>
-                        <InfoLine label="Payment Terms">
+                        <InfoLine label="Delivery Option">
                             <div className="flex">
+                                <FormField
+                                    control={form.control}
+                                    name="deliveryOption"
+                                    render={({ field }) => (
+                                        <Select
+                                            value={`${field.value}`}
+                                            onValueChange={field.onChange}
+                                        >
+                                            <SelectTrigger className="h-6   w-auto min-w-[100px]">
+                                                <SelectValue placeholder="Delivery" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectItem value="pickup">
+                                                        Pickup
+                                                    </SelectItem>
+                                                    <SelectItem value="delivery">
+                                                        Delivery
+                                                    </SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+                        </InfoLine>
+                    </>
+                )}
+
+                <InfoLine label="Mockup %">
+                    <Input
+                        disabled={mockupMode}
+                        className="h-6 w-[100px] uppercase"
+                        {...form.register("meta.mockupPercentage")}
+                    />
+                </InfoLine>
+                <InfoLine label="Profile Estimate">
+                    <FormField
+                        control={form.control}
+                        name="meta.profileEstimate"
+                        render={({ field }) => (
+                            <Switch
+                                checked={field.value as any}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    />
+                </InfoLine>
+                {watchType == "order" && (
+                    <>
+                        <InfoLine label="Payment Terms">
+                            <div className="flex flex-col">
                                 <FormField
                                     control={form.control}
                                     name="paymentTerm"
                                     render={({ field }) => (
                                         <Select
                                             value={`${field.value}`}
-                                            onValueChange={field.onChange}
+                                            onValueChange={v => {
+                                                field.onChange(v);
+                                            }}
                                         >
                                             <SelectTrigger className="h-6   w-auto min-w-[100px]">
                                                 <SelectValue placeholder="Select Term" />
@@ -178,34 +247,6 @@ export default function InfoCard({
                                 </div>
                             </div>
                         </InfoLine>
-                        <InfoLine label="Delivery Option">
-                            <div className="flex">
-                                <FormField
-                                    control={form.control}
-                                    name="deliveryOption"
-                                    render={({ field }) => (
-                                        <Select
-                                            value={`${field.value}`}
-                                            onValueChange={field.onChange}
-                                        >
-                                            <SelectTrigger className="h-6   w-auto min-w-[100px]">
-                                                <SelectValue placeholder="Delivery" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectItem value="pickup">
-                                                        Pickup
-                                                    </SelectItem>
-                                                    <SelectItem value="delivery">
-                                                        Delivery
-                                                    </SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    )}
-                                />
-                            </div>
-                        </InfoLine>
                     </>
                 )}
                 {watchType == "estimate" && (
@@ -232,25 +273,6 @@ export default function InfoCard({
             </Select> */}
                     </InfoLine>
                 )}
-                <InfoLine label="Mockup %">
-                    <Input
-                        disabled={mockupMode}
-                        className="h-6 w-[100px] uppercase"
-                        {...form.register("meta.mockupPercentage")}
-                    />
-                </InfoLine>
-                <InfoLine label="Profile Estimate">
-                    <FormField
-                        control={form.control}
-                        name="meta.profileEstimate"
-                        render={({ field }) => (
-                            <Switch
-                                checked={field.value as any}
-                                onCheckedChange={field.onChange}
-                            />
-                        )}
-                    />
-                </InfoLine>
             </div>
         </div>
     );

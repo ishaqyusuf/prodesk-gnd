@@ -34,7 +34,7 @@ import { Label } from "@/components/ui/label";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
 import { openModal } from "@/lib/modal";
-import { Router } from "next/router";
+import UpdateSalesDate from "@/components/sales/update-sales-date";
 
 interface Props {
     data: SalesFormResponse;
@@ -242,6 +242,17 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                             />
                         </div>
                     )}
+                    <UpdateSalesDate
+                        sales={
+                            data?.form || {
+                                createdAt: new Date()
+                            }
+                        }
+                        page="invoice"
+                        onUpdate={date => {
+                            form.setValue("createdAt", date);
+                        }}
+                    />
                     <CatalogModal form={form} ctx={data.ctx} />
 
                     <Menu
