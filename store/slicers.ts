@@ -185,7 +185,7 @@ export async function loadStaticList(key: keyof ISlicer, list, _loader) {
         console.log("LOADING INSTALLERS");
         console.log(list);
     }
-    if (!list) {
+    if (!list || list == undefined) {
         const data = await _loader();
         if (key == "staticInstallers") console.log(data);
         dispatchSlice(key, deepCopy(data));
