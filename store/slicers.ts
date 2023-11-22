@@ -183,7 +183,7 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
 export async function loadStaticList(key: keyof ISlicer, list, _loader) {
     if (!list) {
         const data = await _loader();
-        if (key == "staticProjects") console.log(data);
+        if (key == "staticInstallers") console.log(data);
         dispatchSlice(key, deepCopy(data));
     }
 }
