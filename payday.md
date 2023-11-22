@@ -1,10 +1,12 @@
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-    
- 
-# NOV 17: 00.00 == 00.00
-
+# NOV 20: 00.00 == 00.00
+    09
+$308.33
+Zelle marzuqisiaka@gmail.com
+# NOV 17: 01.05 == 08.35
+    04:35-05:30
 # NOV 16: 01.20 == 07.30
     02:40-04:00
 # NOV 14: 01.20 == 05.10
@@ -15,8 +17,7 @@
 # NOV 11: 00.30 == 00.30
     03:30-04:00
 -------------------------------
-$1,227.92
-Zelle marzuqisiaka@gmail.com
+ $385 
 # PAYMENT INVOICE OCT 06 - NOV 10
 # NOV 10: 02.10 == 11.00
     04:40-06:00

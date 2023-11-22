@@ -1,9 +1,12 @@
 "use server";
 import { prisma } from "@/db";
-import { queryBuilder } from "@/lib/db-utils";
+import { createSafeAction } from "@/lib/create-safe-action";
 import { ICustomer } from "@/types/customers";
 import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
+import { _email } from "../_email";
+import { env } from "@/env.mjs";
+import ErrorMail from "@/components/emails/error-mail";
 
 export async function findAddressAction({ q }: { q: string }) {
     const _contains = {
@@ -64,13 +67,21 @@ export async function findAddressAction({ q }: { q: string }) {
         })
     };
 }
-export async function saveAddressAction({
+async function saveAddressActionHandler({
     billingAddress,
     shippingAddress,
     profile,
     sameAddress,
     customer: _customer
 }: ISalesAddressForm) {
+    // await _email({
+    //     from: env.EMAIL_FROM_ADDRESS,
+    //     user: { email: "ishaqyusuf024@gmail.com" },
+    //     subject: "Server error",
+    //     react: ErrorMail({
+    //         body: "lorem" // e as any
+    //     })
+    // });
     // console.log({
     //     sameAddress,
     //     billingAddress,
@@ -127,7 +138,7 @@ export async function saveAddressAction({
                     customer: true
                 }
             })) as IAddressBook | null;
-            console.log(eAddr);
+
             if (eAddr) {
                 let _update: any = null;
                 const columns: (keyof IAddressBook)[] = [
@@ -250,6 +261,7 @@ export async function saveAddressAction({
                     customerId = address?.customerId;
                 } else address.customerId = customerId;
 
+                // address.customerId = "1" as any;
                 const addr = await prisma.addressBooks.create({
                     data: address as any
                 });
@@ -269,3 +281,4 @@ export async function saveAddressAction({
     // });
     return response;
 }
+export const saveAddressAction = createSafeAction(saveAddressActionHandler);

@@ -39,6 +39,8 @@ import AutoComplete2 from "../auto-complete";
 import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { OkImpl } from "ts-results";
+import { toast } from "sonner";
 
 export function SalesCustomerModal({
     form,
@@ -78,6 +80,10 @@ export function SalesCustomerModal({
                 customer,
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
+            if (!billingAddress?.name || !billingAddress.phoneNo) {
+                toast.error("Name and Phone is required");
+                return;
+            }
             const { customerId, search, ...biad } = billingAddress || {};
             const { customerId: scid, search: ssea, ...siad } =
                 shippingAddress || {};
@@ -89,15 +95,21 @@ export function SalesCustomerModal({
                 customer
             };
 
-            // console.log(_form);
-            const { profileUpdate, ...resp } = await saveAddressAction(
-                _form as any
-            );
+            const resp = await saveAddressAction(_form as any);
 
-            Object.entries(resp).map(([k, v]) => {
-                form.setValue(k as any, v);
-            });
-            setOpen(false);
+            console.log(resp);
+
+            if (resp.ok) {
+                // console.log(_form);
+                const { profileUpdate, ...ext } = resp.val;
+
+                Object.entries(ext).map(([k, v]) => {
+                    form.setValue(k as any, v);
+                });
+                setOpen(false);
+            } else {
+                console.log(resp);
+            }
         });
     };
     function getAddressLine(type: AddressType) {

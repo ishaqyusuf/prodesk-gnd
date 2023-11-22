@@ -37,6 +37,32 @@ model AddressBooks {
     shippingOrders SalesOrders[] @relation(name: "shippingAddress")
 }
 
+model ErrorLog {
+    id        Int            @unique @default(autoincrement())
+    userId    Int
+    meta      Json           @db.Json
+    status    String
+    deletedAt DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @db.Timestamp(0)
+    updatedAt DateTime?      @db.Timestamp(0)
+    Users     Users          @relation(fields: [userId], references: [id])
+    tags      ErrorLogTags[]
+}
+
+model ErrorLogTags {
+    id         Int       @unique @default(autoincrement())
+    errorLogId Int
+    errorTagId Int
+    errorLog   ErrorLog  @relation(fields: [errorLogId], references: [id])
+    errorTags  ErrorTags @relation(fields: [errorTagId], references: [id])
+}
+
+model ErrorTags {
+    id           Int            @unique @default(autoincrement())
+    name         String
+    errorLogTags ErrorLogTags[]
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Builders {
     id            Int             @unique @default(autoincrement())
@@ -955,6 +981,7 @@ model Users {
     employeeProfile   EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
     SalesPickup       SalesPickup[]
     assignedTasks     HomeTasks[]
+    errors            ErrorLog[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

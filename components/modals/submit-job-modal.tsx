@@ -249,15 +249,16 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     >({} as any);
     const techEmployees = useAppSelector(s => s.slicers.staticInstallers);
     useEffect(() => {
-        getSettingAction<InstallCostSettings>("install-price-chart").then(
-            res => {
-                setCostSetting(res);
-            }
-        );
         loadStaticList(
             "staticInstallers",
             techEmployees,
             loadStatic1099Contractors
+        );
+
+        getSettingAction<InstallCostSettings>("install-price-chart").then(
+            res => {
+                setCostSetting(res);
+            }
         );
     }, []);
 
