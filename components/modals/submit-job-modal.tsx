@@ -85,6 +85,17 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const id = form.watch("id");
     useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
+        loadStaticList(
+            "staticInstallers",
+            techEmployees,
+            loadStatic1099Contractors
+        );
+
+        getSettingAction<InstallCostSettings>("install-price-chart").then(
+            res => {
+                setCostSetting(res);
+            }
+        );
     }, []);
     const type = form.watch("type");
     function is(_type: "punchout" | "deco-shutter" | "installation") {
@@ -248,19 +259,6 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         InstallCostingTemplate<number | string>
     >({} as any);
     const techEmployees = useAppSelector(s => s.slicers.staticInstallers);
-    useEffect(() => {
-        loadStaticList(
-            "staticInstallers",
-            techEmployees,
-            loadStatic1099Contractors
-        );
-
-        getSettingAction<InstallCostSettings>("install-price-chart").then(
-            res => {
-                setCostSetting(res);
-            }
-        );
-    }, []);
 
     const [tab, setTab] = useState("project");
     const [prevTab, setPrevTab] = useState<any>([]);
