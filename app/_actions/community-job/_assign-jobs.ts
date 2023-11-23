@@ -75,7 +75,7 @@ export type AssignJobActions =
     | "ignoreAssignAndComplete"
     | "ignoreInstallCost"
     | undefined;
-export async function _unassignTask({ taskId }) {
+export async function _unassignTask({ taskId, jobId }) {
     await prisma.homeTasks.update({
         where: {
             id: taskId
@@ -85,6 +85,12 @@ export async function _unassignTask({ taskId }) {
             jobId: null
         }
     });
+    await prisma.jobs.delete({
+        where: {
+            id: jobId
+        }
+    });
+    await _revalidate("communityTasks");
 }
 export async function _assignJob({
     taskId,
@@ -103,19 +109,22 @@ export async function _assignJob({
         const jobs = await prisma.jobs.findMany({
             where: {
                 projectId,
-                homeId,
-                homeTasks: {
-                    none: {
-                        id: taskId
-                    }
-                }
+                homeId
+                // homeTasks: {
+                //     none: {
+                //         id: taskId
+                //     }
+                // }
             },
             include: {
                 user: true
             }
         });
         // console.log(jobs);
-        if (jobs.length > 0) return { jobs };
+        if (jobs.length > 0) {
+            // console.log(jobs);
+            return { jobs };
+        }
     }
     if (action == "ignoreAssign") {
         return;

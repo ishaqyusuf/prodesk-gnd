@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -34,10 +34,10 @@ export function DatePicker({
     placeholder = "Pick a date",
     ...calendarProps
 }: CalendarProps & Props) {
-    const [date, setDate] = React.useState<DateRange | undefined | Date>(
+    const [date, setDate] = useState<DateRange | undefined | Date>(
         value ? value : range ? { form: null, to: null } : null
     );
-    React.useEffect(() => {
+    useEffect(() => {
         setDate(value ? value : range ? { form: null, to: null } : null);
     }, [value, range]);
     // const [date, setDate] = React.useState<DateRange | undefined>({
@@ -63,7 +63,7 @@ export function DatePicker({
     // React.useEffect(() => {
     //   console.log(value);
     // }, []);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     return (
         <div className={cn("grid gap-2")}>
             <Popover open={open} onOpenChange={setOpen}>

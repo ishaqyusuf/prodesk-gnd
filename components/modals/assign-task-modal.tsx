@@ -32,9 +32,10 @@ export default function AssignTaskModal() {
             loadStatic1099Contractors
         );
     }, []);
-    async function unassign(data) {
+    async function unassign(data: ExtendedHomeTasks) {
         await _unassignTask({
-            taskId: data?.id
+            taskId: data?.id,
+            jobId: data.jobId
         });
         closeModal();
         toast.success("Task unassigned succesfully!");
@@ -47,15 +48,12 @@ export default function AssignTaskModal() {
             userId: user.id,
             projectId: data.projectId,
             homeId: data.homeId,
-            addon: 0,
+            addon: data.addon ? data?.project?.meta?.addon || 0 : 0,
             jobType: "install",
             oldUserId: data.assignedToId,
             jobId: data.jobId
         };
-        if (data.addon) {
-            const taskAddon = data.project?.meta?.addon || 0;
-            payload.addon = taskAddon;
-        }
+
         const resp = await _assignJob(payload);
         if (resp?.jobs) {
             closeModal();
@@ -74,7 +72,9 @@ export default function AssignTaskModal() {
     return (
         <BaseModal<ExtendedHomeTasks>
             className="sm:max-w-[550px]"
-            onOpen={data => {}}
+            onOpen={data => {
+                console.log(data);
+            }}
             onClose={() => {}}
             modalName="assignTask"
             Title={({ data }) => <>{data?.taskName}</>}

@@ -1,8 +1,9 @@
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-# NOV 20: 00.00 == 00.00
-    09
+# NOV 22: 00.00 == 00.00
+    03:20-04:00
+------------------------------
 $308.33
 Zelle marzuqisiaka@gmail.com
 # NOV 17: 01.05 == 08.35

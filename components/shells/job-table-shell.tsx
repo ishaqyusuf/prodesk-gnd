@@ -190,10 +190,7 @@ export default function JobTableShell<T>({
                                 />
                                 <RowActionMoreMenu>
                                     <RowActionMenuItem
-                                        disabled={
-                                            row.original.paymentId ||
-                                            row.original.homeTasks?.length
-                                        }
+                                        disabled={row.original.paymentId}
                                         onClick={() => {
                                             openModal("submitJob", {
                                                 data: row.original,

@@ -17,7 +17,11 @@ import { Label } from "../ui/label";
 
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
-import { InstallCostingTemplate } from "@/types/community";
+import {
+    ExtendedHome,
+    ExtendedHomeTasks,
+    InstallCostingTemplate
+} from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import {
@@ -93,6 +97,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
 
         getSettingAction<InstallCostSettings>("install-price-chart").then(
             res => {
+                console.log("res", res);
                 setCostSetting(res);
             }
         );
@@ -104,7 +109,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const isPunchout = () => is("punchout");
     const isDecoShutter = () => is("deco-shutter");
     const isInstallation = () => is("installation");
-    async function submit(data) {
+    async function submit(data: ExtendedHomeTasks) {
         startTransition(async () => {
             // if(!form.getValues)
             try {
@@ -114,11 +119,12 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     unit,
                     project,
                     user,
-
                     createdAt,
                     ...job
                 } = form.getValues();
-                if (!isInstallation() || !job.homeId) job.meta.addon = 0;
+                if (!job.id) {
+                    if (!isInstallation() || !job.homeId) job.meta.addon = 0;
+                }
                 // job.type = form.getValues("type");
                 job.amount = 0;
                 [
@@ -142,9 +148,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const projects = useAppSelector(state => state?.slicers?.staticProjects);
 
     async function init(data: IJobs, defaultTab) {
-        // console.log(data);
         form.reset();
+        setPrevTab([]);
         setTasks([]);
+        // if(data)
         const __ = !data?.id
             ? {
                   title: "Custom Project",
@@ -157,13 +164,13 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         const { homeTasks, ...d } = __ as any;
         // Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
         form.reset(d);
-
-        setTab(defaultTab || "tasks");
+        if (!defaultTab) defaultTab = "tasks";
+        setTab(defaultTab);
         setAddCost(null as any);
         setUnitCosting({});
         if (data && defaultTab == "tasks") {
             const costdat = await getJobCostData(data?.homeId, data.subtitle);
-            // console.log(costdat);
+            console.log(costdat);
             setUnitCosting(costdat as any);
         }
         if (data?.projectId) {
@@ -171,6 +178,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             const _units = await loadUnits(data.projectId);
             const unit = _units.find(u => (u.id = data?.homeId));
             // console.log(unit, _units);
+            console.log(unit);
             if (!unit && defaultTab == "tasks") setTab("general");
             if (unit) {
                 // console.log(unit);
@@ -213,7 +221,6 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         return [];
         // form.setValue('homeData',ls.homeList)
     }
-
     async function selectUnit(unit: HomeJobList) {
         form.setValue("homeData", unit);
         setTasks([]);
@@ -233,6 +240,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                 form.setValue("meta.costData", costData);
         }
         form.setValue("subtitle", unit.name);
+        console.log(costSetting, unit.costing);
         const _tasks = costSetting?.meta?.list
             ?.filter(v => isDecoShutter() || unit?.costing?.[v.uid])
             ?.filter(
@@ -290,6 +298,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const taskCost = form.watch("meta.taskCost");
     const addon = form.watch("meta.addon");
     const homeId = form.watch("homeId");
+    const jobId = form.watch("id");
     // const addCost = form.watch("meta.additional_cost");
     function resetFields(k) {
         k.map(v => form.setValue(v, null));
@@ -632,11 +641,13 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                         </SecondaryCellContent>
                                     </div>
                                     <div className="">
-                                        <Label>Addon</Label>
+                                        <Label>Addon </Label>
                                         <SecondaryCellContent>
                                             <Money
                                                 value={
-                                                    isInstallation() && homeId
+                                                    (isInstallation() &&
+                                                        homeId) ||
+                                                    jobId
                                                         ? addon
                                                         : 0
                                                 }

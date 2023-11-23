@@ -47,7 +47,7 @@ function AutoComplete2({
     uppercase
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
-    const [items, setItems] = useState<any[]>(transformItems(options || []));
+    const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
     const [results, setResults] = useState<any[]>([]);
     const [selected, setSelected] = useState<{
         id;
@@ -71,6 +71,7 @@ function AutoComplete2({
         }
         // debounceQuery?.loading
     }, [debouncedQuery, typing]);
+
     async function loadResult() {
         const { items } = searchFn
             ? await searchFn(debouncedQuery)
