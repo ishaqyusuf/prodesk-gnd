@@ -949,6 +949,18 @@ model EmployeeProfile {
     employees Users[]
 }
 
+model UserDocuments {
+    id          Int       @unique @default(autoincrement())
+    title       String?
+    description String?
+    url         String
+    userId      Int
+    meta        Json?     @db.Json
+    createdAt   DateTime? @db.Timestamp(0)
+    updatedAt   DateTime? @db.Timestamp(0)
+    user        Users?    @relation(fields: [userId], references: [id])
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Users {
     id                Int                        @unique @default(autoincrement())
@@ -982,6 +994,7 @@ model Users {
     SalesPickup       SalesPickup[]
     assignedTasks     HomeTasks[]
     errors            ErrorLog[]
+    documents         UserDocuments[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

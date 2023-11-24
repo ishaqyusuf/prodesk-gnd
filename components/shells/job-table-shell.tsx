@@ -182,7 +182,12 @@ export default function JobTableShell<T>({
                                 )}
                                 <DeleteRowAction
                                     row={row.original}
-                                    action={deleteJobAction}
+                                    action={async () =>
+                                        await deleteJobAction({
+                                            id: row.original.id,
+                                            taskId: row.original.taskId
+                                        })
+                                    }
                                     disabled={
                                         row.original.paymentId > 0 ||
                                         row.original.homeTasks?.length

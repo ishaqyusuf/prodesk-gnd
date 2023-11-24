@@ -7,7 +7,7 @@ import {
 } from "../community-production/get-productions";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { _taskNames } from "../community/_task-names";
-import { _revalidate } from "../_revalidate";
+import { _revalidate, revalidatePaths } from "../_revalidate";
 import { _alert, _notifyTaskAssigned } from "../notifications";
 import { IJobs } from "@/types/hrm";
 import { ICommunityPivot } from "@/types/community";
@@ -75,7 +75,15 @@ export type AssignJobActions =
     | "ignoreAssignAndComplete"
     | "ignoreInstallCost"
     | undefined;
-export async function _unassignTask({ taskId, jobId }) {
+export async function _unassignTask({
+    taskId,
+    jobId,
+    path = "communityTasks"
+}: {
+    taskId;
+    jobId;
+    path?: revalidatePaths;
+}) {
     await prisma.homeTasks.update({
         where: {
             id: taskId
@@ -90,7 +98,7 @@ export async function _unassignTask({ taskId, jobId }) {
             id: jobId
         }
     });
-    await _revalidate("communityTasks");
+    await _revalidate(path);
 }
 export async function _assignJob({
     taskId,

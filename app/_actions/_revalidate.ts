@@ -25,7 +25,7 @@ const _path = {
     "overview-estimate": "/sales/estimate/[slug]",
     "invoice-estimate": "/sales/estimate/[slug]/form"
 };
-type revalidatePaths = keyof typeof _path;
+export type revalidatePaths = keyof typeof _path;
 export async function _revalidate(pathName: revalidatePaths) {
     const path = _path[pathName];
     await revalidatePath(path, "page");
