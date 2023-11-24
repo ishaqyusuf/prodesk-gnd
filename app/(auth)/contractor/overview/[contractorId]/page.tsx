@@ -16,8 +16,20 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
     const data = await _getContractor(userId);
     const { payables, jobs } = await getPayableUsers(userId);
     const payable = payables[0];
-    console.log(payable);
+    // console.log(payable);
     if (!data || !payable) redirect("/contractor/contractors");
+    const _jobs = await prisma.jobs.findMany({
+        where: {
+            userId
+        },
+        select: {
+            id: true,
+            paymentId: true,
+            status: true
+        }
+    });
+    const pendingTasks = _jobs.filter(j => j.status == "Assigned").length;
+    const completedTasks = _jobs.length - pendingTasks;
     return (
         <DataPageShell data={data} className="space-y-4 sm:px-8">
             <Breadcrumbs>
@@ -43,10 +55,10 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
                         money
                     />
                     <StartCard
-                        icon="dollar"
-                        value={0}
-                        label="Total Sales"
-                        money
+                        icon="inbound"
+                        value={_jobs.length}
+                        label="Jobs"
+                        info={`${completedTasks} Completed.`}
                     />
                     <StartCard
                         icon="dollar"

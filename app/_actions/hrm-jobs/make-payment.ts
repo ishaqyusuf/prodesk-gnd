@@ -15,7 +15,7 @@ export async function getPayableUsers(userId) {
                 where: {
                     deletedAt: null,
                     status: {
-                        not: "assigned"
+                        not: "Assigned"
                     },
                     paymentId: {
                         equals: null
