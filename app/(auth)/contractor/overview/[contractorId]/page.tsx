@@ -1,5 +1,6 @@
 import { _getContractor } from "@/app/_actions/contractors/contractor-overview";
 import { getPayableUsers } from "@/app/_actions/hrm-jobs/make-payment";
+import ContractorOverviewDocs from "@/components/_v2/contractor/sections/contractor-overview-docs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import { DataPageShell } from "@/components/shells/data-page-shell";
@@ -58,6 +59,7 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
             <div className="space-y-4">
                 <StatCardContainer>
                     <StartCard
+                        href={`/contractor/jobs/payments/pay/${userId}`}
                         label="Pending Payment"
                         icon="dollar"
                         value={payable.total}
@@ -81,13 +83,11 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
                         value={pendingTasks}
                         // info={`${0 || 0} completed`}
                     />
-                    {/* <StartCard
-            icon="line"
-            label="Doors Ordered"
-            value={totalDoors}
-            info={`${completedDoors || 0} completed`}
-          /> */}
                 </StatCardContainer>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                    <div className="col-span-4" />
+                    <ContractorOverviewDocs className="col-span-3" />
+                </div>
             </div>
         </DataPageShell>
     );
