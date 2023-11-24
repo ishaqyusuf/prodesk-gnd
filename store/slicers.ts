@@ -189,6 +189,7 @@ export async function loadStaticList(key: keyof ISlicer, list, _loader) {
             console.log("LOADING INSTALLERS");
             console.log(list);
         }
+        console.log("loading....", key);
         const data = await _loader();
         // if (key == "staticInstallers")
         console.log({ key, data });

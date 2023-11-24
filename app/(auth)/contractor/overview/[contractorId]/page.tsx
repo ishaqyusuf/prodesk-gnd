@@ -30,6 +30,15 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
     });
     const pendingTasks = _jobs.filter(j => j.status == "Assigned").length;
     const completedTasks = _jobs.length - pendingTasks;
+    const payments = await prisma.jobPayments.aggregate({
+        _sum: {
+            amount: true
+        },
+        where: {
+            userId
+        }
+    });
+
     return (
         <DataPageShell data={data} className="space-y-4 sm:px-8">
             <Breadcrumbs>
@@ -49,28 +58,28 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
             <div className="space-y-4">
                 <StatCardContainer>
                     <StartCard
+                        label="Pending Payment"
                         icon="dollar"
                         value={payable.total}
-                        label="Pending Payment"
                         money
                     />
                     <StartCard
+                        label="Jobs"
                         icon="inbound"
                         value={_jobs.length}
-                        label="Jobs"
                         info={`${completedTasks} Completed.`}
                     />
                     <StartCard
                         icon="dollar"
-                        value={0}
-                        label="Amount Due"
+                        value={payments._sum.amount || 0}
+                        label="Total Paid"
                         money
                     />
                     <StartCard
-                        label="Total Orders"
+                        label="Pending Jobs"
                         icon="lineChart"
-                        value={0}
-                        info={`${0 || 0} completed`}
+                        value={pendingTasks}
+                        // info={`${0 || 0} completed`}
                     />
                     {/* <StartCard
             icon="line"
