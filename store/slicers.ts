@@ -132,6 +132,7 @@ export type ModalName =
     | "role"
     | undefined;
 const initialState: ISlicer = ({
+    installCostSetting: null as any,
     modal: {
         name: undefined,
         data: null,
