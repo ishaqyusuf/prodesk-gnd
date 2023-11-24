@@ -62,7 +62,9 @@ export default function ModelInstallCostModal({ community = false }) {
     const [costList, setCostList] = useState<InstallCostSettings>({} as any);
     useEffect(() => {
         (async () => {
-            setCostList(await getSettingAction("install-price-chart"));
+            const _costList = await getSettingAction("install-price-chart");
+            console.log(_costList);
+            setCostList(_costList as any);
         })();
     }, []);
 
