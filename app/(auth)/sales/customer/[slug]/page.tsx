@@ -18,11 +18,9 @@ export default async function CustomerPage({ searchParams, params }) {
     metadata.title = `${customer?.name} | Overview`;
     const {
         salesOrders,
-        totalDoors,
         totalSales,
         amountDue,
-        completedOrders,
-        completedDoors
+        completedOrders
     } = customer._count;
     //   console.log(customer._count);
     return (

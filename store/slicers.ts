@@ -183,7 +183,8 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
 }
 
 export async function loadStaticList(key: keyof ISlicer, list, _loader) {
-    if (!list) {
+    console.log({ key, list });
+    if (!list || list == undefined) {
         if (key == "staticInstallers") {
             console.log("LOADING INSTALLERS");
             console.log(list);
