@@ -46,6 +46,8 @@ import { updateCommunityModelInstallCost } from "@/app/_actions/community/commun
 import { Badge } from "../ui/badge";
 import { Switch } from "../ui/switch";
 import { FormField } from "../ui/form";
+import { loadStaticList } from "@/store/slicers";
+import { useAppSelector } from "@/store";
 
 export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
@@ -58,14 +60,16 @@ export default function ModelInstallCostModal({ community = false }) {
         name: "costs"
     });
 
+    const installCostSetting = useAppSelector(
+        s => s.slicers.installCostSetting
+    );
     const [index, setIndex] = useState(0);
-    const [costList, setCostList] = useState<InstallCostSettings>({} as any);
     useEffect(() => {
-        (async () => {
-            const _costList = await getSettingAction("install-price-chart");
-            console.log(_costList);
-            setCostList(_costList as any);
-        })();
+        loadStaticList(
+            "installCostSetting",
+            installCostSetting,
+            async () => await getSettingAction("install-price-chart")
+        );
     }, []);
 
     async function submit(data) {
@@ -220,46 +224,50 @@ export default function ModelInstallCostModal({ community = false }) {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {costList?.meta?.list?.map((l, i) => (
-                                        <TableRow
-                                            className={cn(
-                                                form.getValues(
-                                                    `costs.${index}.costings.${l.uid}`
-                                                ) > 0
-                                                    ? "bg-teal-50"
-                                                    : ""
-                                            )}
-                                            key={i}
-                                        >
-                                            <TableCell className="px-1">
-                                                <PrimaryCellContent>
-                                                    {l.title}
-                                                </PrimaryCellContent>
-                                                <SecondaryCellContent>
-                                                    <Money value={l.cost} />
-                                                    {" per qty"}
-                                                </SecondaryCellContent>
-                                            </TableCell>
-                                            {community && (
+                                    {installCostSetting?.meta?.list?.map(
+                                        (l, i) => (
+                                            <TableRow
+                                                className={cn(
+                                                    form.getValues(
+                                                        `costs.${index}.costings.${l.uid}`
+                                                    ) > 0
+                                                        ? "bg-teal-50"
+                                                        : ""
+                                                )}
+                                                key={i}
+                                            >
+                                                <TableCell className="px-1">
+                                                    <PrimaryCellContent>
+                                                        {l.title}
+                                                    </PrimaryCellContent>
+                                                    <SecondaryCellContent>
+                                                        <Money value={l.cost} />
+                                                        {" per qty"}
+                                                    </SecondaryCellContent>
+                                                </TableCell>
+                                                {community && (
+                                                    <TableCell>
+                                                        <CommunityDefaultQty
+                                                            form={form}
+                                                            project={
+                                                                data as any
+                                                            }
+                                                            costLine={l}
+                                                        />
+                                                    </TableCell>
+                                                )}
                                                 <TableCell>
-                                                    <CommunityDefaultQty
-                                                        form={form}
-                                                        project={data as any}
-                                                        costLine={l}
+                                                    <Input
+                                                        className="h-7 w-20 px-2"
+                                                        type={"number"}
+                                                        {...form.register(
+                                                            `costs.${index}.costings.${l.uid}`
+                                                        )}
                                                     />
                                                 </TableCell>
-                                            )}
-                                            <TableCell>
-                                                <Input
-                                                    className="h-7 w-20 px-2"
-                                                    type={"number"}
-                                                    {...form.register(
-                                                        `costs.${index}.costings.${l.uid}`
-                                                    )}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                            </TableRow>
+                                        )
+                                    )}
                                 </TableBody>
                             </Table>
                         </ScrollArea>
