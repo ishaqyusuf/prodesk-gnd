@@ -24,9 +24,11 @@ import {
     IProject
 } from "@/types/community";
 import { ICustomer } from "@/types/customers";
+import { InstallCostSettings } from "@/types/settings";
 // import { IOrderPrintMode } from "@/app/(auth)/sales/orders/components/row-action/print-order-menu";
 
 export interface ISlicer {
+    installCostSetting: InstallCostSettings;
     order: ISalesOrder;
     productionUsers: Users[];
     assignProduction: ISalesOrder;
@@ -181,13 +183,14 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
 }
 
 export async function loadStaticList(key: keyof ISlicer, list, _loader) {
-    if (!list?.length) {
+    if (!list) {
         if (key == "staticInstallers") {
             console.log("LOADING INSTALLERS");
             console.log(list);
         }
         const data = await _loader();
-        if (key == "staticInstallers") console.log(data);
+        // if (key == "staticInstallers")
+        console.log({ key, data });
         dispatchSlice(key, deepCopy(data));
     }
 }

@@ -38,6 +38,8 @@ import {
     updateProjectMeta
 } from "@/app/_actions/community/projects";
 import { closeModal } from "@/lib/modal";
+import { useAppSelector } from "@/store";
+import { loadStaticList } from "@/store/slicers";
 
 export default function CommunityInstallCostModal() {
     const route = useRouter();
@@ -51,11 +53,21 @@ export default function CommunityInstallCostModal() {
     });
 
     const [index, setIndex] = useState(0);
-    const [costList, setCostList] = useState<InstallCostSettings>({} as any);
+
+    const installCostSetting = useAppSelector(
+        s => s.slicers.installCostSetting
+    );
     useEffect(() => {
-        (async () => {
-            setCostList(await getSettingAction("install-price-chart"));
-        })();
+        loadStaticList(
+            "installCostSetting",
+            installCostSetting,
+            async () => await getSettingAction("install-price-chart")
+        );
+        // (async () => {
+        //     const _costList = await getSettingAction("install-price-chart");
+        //     console.log(_costList);
+        //     setCostList(_costList as any);
+        // })();
     }, []);
 
     async function submit(data: IProject) {
@@ -157,37 +169,39 @@ export default function CommunityInstallCostModal() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {costList?.meta?.list?.map((l, i) => (
-                                        <TableRow
-                                            className={cn(
-                                                form.getValues(
-                                                    `costs.${index}.costings.${l.uid}`
-                                                ) > 0
-                                                    ? "bg-teal-50"
-                                                    : ""
-                                            )}
-                                            key={i}
-                                        >
-                                            <TableCell className="px-1">
-                                                <PrimaryCellContent>
-                                                    {l.title}
-                                                </PrimaryCellContent>
-                                                <SecondaryCellContent>
-                                                    <Money value={l.cost} />
-                                                    {" per qty"}
-                                                </SecondaryCellContent>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    className="h-7 w-20 px-2"
-                                                    type={"number"}
-                                                    {...form.register(
+                                    {installCostSetting?.meta?.list?.map(
+                                        (l, i) => (
+                                            <TableRow
+                                                className={cn(
+                                                    form.getValues(
                                                         `costs.${index}.costings.${l.uid}`
-                                                    )}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                                    ) > 0
+                                                        ? "bg-teal-50"
+                                                        : ""
+                                                )}
+                                                key={i}
+                                            >
+                                                <TableCell className="px-1">
+                                                    <PrimaryCellContent>
+                                                        {l.title}
+                                                    </PrimaryCellContent>
+                                                    <SecondaryCellContent>
+                                                        <Money value={l.cost} />
+                                                        {" per qty"}
+                                                    </SecondaryCellContent>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        className="h-7 w-20 px-2"
+                                                        type={"number"}
+                                                        {...form.register(
+                                                            `costs.${index}.costings.${l.uid}`
+                                                        )}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    )}
                                 </TableBody>
                             </Table>
                         </ScrollArea>
