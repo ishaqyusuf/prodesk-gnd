@@ -23,10 +23,12 @@ export default function ContractorOverviewDocs(props) {
                 </Button>
                 <Table>
                     <TableBody>
-                        {data.docs.map(doc => (
+                        {data.documents?.map(doc => (
                             <TableRow key={doc.id}>
                                 <TableCell>
                                     <Image
+                                        width={200}
+                                        height={200}
                                         src={doc.meta.url}
                                         alt={doc.description as any}
                                     />

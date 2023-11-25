@@ -15,7 +15,7 @@ export type IUser = Users & {
     role: Roles;
     roles: Roles[];
     employeeProfile: EmployeeProfile;
-    docs: IUserDoc[];
+    documents: IUserDoc[];
 };
 export interface IUserDoc extends Omit<UserDocuments, "meta"> {
     meta: {
