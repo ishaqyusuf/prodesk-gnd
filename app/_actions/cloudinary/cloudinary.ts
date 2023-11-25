@@ -9,26 +9,14 @@ const cloudinaryConfig = cloudinary.config({
     api_secret: env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
     secure: true
 });
-export async function _uploadDoc({ buffer }) {
-    // console.log(file);
-    const upload = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-            .upload_stream({}, function(error, result) {
-                if (error) reject(error);
-                else resolve(result);
-            })
-            .end(buffer);
-        resolve(true);
-    });
-    console.log(upload);
-}
+
 export async function getSignature() {
     //  const timestamp = Math.round(new Date() / 1000);
     const timestamp = Math.round(new Date().getTime() / 1000);
 
     const signature = cloudinary.utils.api_sign_request(
         { timestamp, folder: "next" },
-        cloudinaryConfig.api_secret
+        cloudinaryConfig.api_secret as any
     );
 
     return { timestamp, signature };

@@ -1,4 +1,4 @@
-import { getSignature } from "@/app/_actions/contractors/upload-doc";
+import { getSignature } from "@/app/_actions/cloudinary/cloudinary";
 import { env } from "@/env.mjs";
 
 export async function uploadFile(file, folder) {

@@ -1,35 +1,55 @@
 "use client";
 
-import { _uploadDoc } from "@/app/_actions/contractors/upload-doc";
+import { _saveDocUpload } from "@/app/_actions/contractors/upload-contractor-doc";
 import BaseModal from "@/components/modals/base-modal";
-import { uploadFile } from "@/lib/cloudinary";
+import { closeModal } from "@/lib/modal";
+import { uploadFile } from "@/lib/upload-file";
+import { IUser } from "@/types/hrm";
 // import cloudinary from "@/lib/cloudinary";
 import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function UploadDocumentModal({}) {
     const fileInputRef = useRef(null);
+    const form = useForm({
+        defaultValues: {
+            file: null,
+            description: null,
+            url: null,
+            userId: null,
+            meta: {}
+        }
+    });
+    async function uploadImage() {
+        const { file, ...formData } = form.getValues();
+        if (!file) {
+            toast.error("Upload a valid image");
+        } else {
+            const data = await uploadFile(file, "contractor-document");
+            formData.url = data.public_url;
+            await _saveDocUpload(formData);
+            toast.success("upload successful");
+            closeModal();
+        }
+    }
     const handleFileUpload = async () => {
         // 'use server'
         const fileInput = fileInputRef.current as any;
         const file = fileInput?.files?.[0];
         if (file) {
-            const data = await uploadFile(file, "sample");
-            console.log(data);
-            // const arrayBuffer = await file.arrayBuffer();
-            // const buffer = new Uint8Array(arrayBuffer);
-
-            // await _uploadDoc({ buffer, file });
-            // Handle file upload logic here
-            // const result = await cloudinary.uploader.upload(file.path, {
-            //     folder: "contractor-documents" // optional folder in Cloudinary
-            // });
-            console.log("File selected:", file);
+            form.setValue("file", file);
         }
     };
     return (
-        <BaseModal
+        <BaseModal<IUser>
             className="sm:max-w-[500px]"
-            onOpen={data => {}}
+            onOpen={data => {
+                form.reset({
+                    userId: data?.id,
+                    meta: {}
+                } as any);
+            }}
             modalName="uploadDoc"
             Title={({ data }) => (
                 <div className="flex space-x-2 items-center">
