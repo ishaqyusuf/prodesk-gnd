@@ -2,7 +2,7 @@ import { getSignature } from "@/app/_actions/cloudinary/cloudinary";
 import { env } from "@/env.mjs";
 
 export async function uploadFile(file, folder) {
-    const { timestamp, signature } = await getSignature();
+    const { timestamp, signature } = await getSignature(folder);
 
     const formData = new FormData();
 

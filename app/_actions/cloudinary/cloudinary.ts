@@ -10,12 +10,12 @@ const cloudinaryConfig = cloudinary.config({
     secure: true
 });
 
-export async function getSignature() {
+export async function getSignature(folder) {
     //  const timestamp = Math.round(new Date() / 1000);
     const timestamp = Math.round(new Date().getTime() / 1000);
 
     const signature = cloudinary.utils.api_sign_request(
-        { timestamp, folder: "next" },
+        { timestamp, folder },
         cloudinaryConfig.api_secret as any
     );
 

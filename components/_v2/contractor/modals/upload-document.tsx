@@ -36,7 +36,11 @@ export default function UploadDocumentModal({}) {
                 if (data.error) {
                     toast.error(data.error.message);
                 } else {
-                    formData.url = data.public_url;
+                    formData.url = data.public_id;
+                    formData.meta = {
+                        url: data.secure_url,
+                        assetId: data.asset_id
+                    };
                     await _saveDocUpload(formData);
                     toast.success("upload successful");
                 }
