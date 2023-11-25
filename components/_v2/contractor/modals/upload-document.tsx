@@ -1,6 +1,8 @@
 "use client";
 
+import { _uploadDoc } from "@/app/_actions/contractors/upload-doc";
 import BaseModal from "@/components/modals/base-modal";
+import { uploadFile } from "@/lib/cloudinary";
 // import cloudinary from "@/lib/cloudinary";
 import { useRef } from "react";
 
@@ -11,6 +13,12 @@ export default function UploadDocumentModal({}) {
         const fileInput = fileInputRef.current as any;
         const file = fileInput?.files?.[0];
         if (file) {
+            const data = await uploadFile(file, "sample");
+            console.log(data);
+            // const arrayBuffer = await file.arrayBuffer();
+            // const buffer = new Uint8Array(arrayBuffer);
+
+            // await _uploadDoc({ buffer, file });
             // Handle file upload logic here
             // const result = await cloudinary.uploader.upload(file.path, {
             //     folder: "contractor-documents" // optional folder in Cloudinary
@@ -41,6 +49,7 @@ export default function UploadDocumentModal({}) {
                                         Select a file
                                     </label>
                                     <input
+                                        accept="image/*"
                                         type="file"
                                         ref={fileInputRef}
                                         className="w-full p-2"

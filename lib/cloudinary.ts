@@ -1,11 +1,23 @@
-"use server";
+import { getSignature } from "@/app/_actions/contractors/upload-doc";
 import { env } from "@/env.mjs";
-// import cloudinary from "@cloudinary/react";
-import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-    cloud_name: env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-    api_secret: env.NEXT_PUBLIC_CLOUDINARY_API_SECRET
-});
-export default cloudinary;
+export async function uploadFile(file, folder) {
+    console.log(">>");
+    const { timestamp, signature } = await getSignature();
+    console.log(">>");
+    const formData = new FormData();
+    console.log(">>");
+    formData.append("file", file);
+    formData.append("api_key", env.NEXT_PUBLIC_CLOUDINARY_API_KEY);
+    formData.append("signature", signature);
+    formData.append("timestamp", timestamp as any);
+    formData.append("folder", folder);
+    const endpoint = env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
+    console.log({ endpoint, timestamp, signature });
+    const data = await fetch(endpoint, {
+        method: "POST",
+        body: formData
+    }).then(res => res.json());
+    console.log(">>S");
+    return data;
+}
