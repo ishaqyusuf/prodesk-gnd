@@ -5,6 +5,7 @@ import {
     Jobs,
     Projects,
     Roles,
+    UserDocuments,
     Users
 } from "@prisma/client";
 import { InstallCosting, InstallCostingTemplate } from "./community";
@@ -14,7 +15,14 @@ export type IUser = Users & {
     role: Roles;
     roles: Roles[];
     employeeProfile: EmployeeProfile;
+    docs: IUserDoc[];
 };
+export interface IUserDoc extends Omit<UserDocuments, "meta"> {
+    meta: {
+        url;
+        assetId;
+    };
+}
 export type IJobStatus = "Submitted" | "Assigned";
 export type IJobs = Omit<Jobs, "meta" | "type" | "status"> & {
     payment: IJobPayment;
