@@ -1,5 +1,6 @@
 import { _getContractor } from "@/app/_actions/contractors/contractor-overview";
 import { getPayableUsers } from "@/app/_actions/hrm-jobs/make-payment";
+import UploadDocumentModal from "@/components/_v2/contractor/modals/upload-document";
 import ContractorOverviewDocs from "@/components/_v2/contractor/sections/contractor-overview-docs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
@@ -89,6 +90,7 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
                     <ContractorOverviewDocs className="col-span-3" />
                 </div>
             </div>
+            <UploadDocumentModal />
         </DataPageShell>
     );
 }
