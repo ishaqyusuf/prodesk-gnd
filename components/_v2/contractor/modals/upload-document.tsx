@@ -33,9 +33,13 @@ export default function UploadDocumentModal({}) {
             } else {
                 const data = await uploadFile(file, "contractor-document");
                 console.log(data);
-                formData.url = data.public_url;
-                await _saveDocUpload(formData);
-                toast.success("upload successful");
+                if (data.error) {
+                    toast.error(data.error.message);
+                } else {
+                    formData.url = data.public_url;
+                    await _saveDocUpload(formData);
+                    toast.success("upload successful");
+                }
                 closeModal();
             }
         });
@@ -63,6 +67,7 @@ export default function UploadDocumentModal({}) {
                     Upload Document
                 </div>
             )}
+            Subtitle={({ data }) => <>{data?.name}</>}
             Footer={({ data }) => (
                 <>
                     <Btn isLoading={loading} onClick={uploadImage}>
@@ -73,7 +78,7 @@ export default function UploadDocumentModal({}) {
             Content={({ data }) => (
                 <div>
                     <div className="">
-                        <div className="container mx-auto mt-8">
+                        <div className="">
                             <div className="">
                                 <div className="border-dashed border-2 border-gray-400 p-4 mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2">
