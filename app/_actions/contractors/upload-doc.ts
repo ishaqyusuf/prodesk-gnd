@@ -23,6 +23,7 @@ export async function _uploadDoc({ buffer }) {
     console.log(upload);
 }
 export async function getSignature() {
+    //  const timestamp = Math.round(new Date() / 1000);
     const timestamp = Math.round(new Date().getTime() / 1000);
 
     const signature = cloudinary.utils.api_sign_request(
@@ -36,7 +37,7 @@ export async function saveToDatabase({ public_id, version, signature }) {
     // verify the data
     const expectedSignature = cloudinary.utils.api_sign_request(
         { public_id, version },
-        cloudinaryConfig.api_secret
+        cloudinaryConfig.api_secret as any
     );
 
     if (expectedSignature === signature) {
