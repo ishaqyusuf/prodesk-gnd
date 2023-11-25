@@ -1,12 +1,15 @@
 "use client";
 
 import { _saveDocUpload } from "@/app/_actions/contractors/upload-contractor-doc";
+import Btn from "@/components/btn";
 import BaseModal from "@/components/modals/base-modal";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { closeModal } from "@/lib/modal";
 import { uploadFile } from "@/lib/upload-file";
 import { IUser } from "@/types/hrm";
 // import cloudinary from "@/lib/cloudinary";
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -21,17 +24,21 @@ export default function UploadDocumentModal({}) {
             meta: {}
         }
     });
+    const [loading, startTransition] = useTransition();
     async function uploadImage() {
-        const { file, ...formData } = form.getValues();
-        if (!file) {
-            toast.error("Upload a valid image");
-        } else {
-            const data = await uploadFile(file, "contractor-document");
-            formData.url = data.public_url;
-            await _saveDocUpload(formData);
-            toast.success("upload successful");
-            closeModal();
-        }
+        startTransition(async () => {
+            const { file, ...formData } = form.getValues();
+            if (!file) {
+                toast.error("Upload a valid image");
+            } else {
+                const data = await uploadFile(file, "contractor-document");
+                console.log(data);
+                formData.url = data.public_url;
+                await _saveDocUpload(formData);
+                toast.success("upload successful");
+                closeModal();
+            }
+        });
     }
     const handleFileUpload = async () => {
         // 'use server'
@@ -56,14 +63,18 @@ export default function UploadDocumentModal({}) {
                     Upload Document
                 </div>
             )}
+            Footer={({ data }) => (
+                <>
+                    <Btn isLoading={loading} onClick={uploadImage}>
+                        Upload
+                    </Btn>
+                </>
+            )}
             Content={({ data }) => (
                 <div>
                     <div className="">
                         <div className="container mx-auto mt-8">
-                            <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
-                                <h1 className="text-2xl font-semibold mb-4">
-                                    Upload Files
-                                </h1>
+                            <div className="">
                                 <div className="border-dashed border-2 border-gray-400 p-4 mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2">
                                         Select a file
@@ -76,13 +87,14 @@ export default function UploadDocumentModal({}) {
                                         onChange={handleFileUpload}
                                     />
                                 </div>
-                                <button
-                                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-                                    onClick={handleFileUpload}
-                                >
-                                    Upload
-                                </button>
                             </div>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Document Info</Label>
+                            <Input
+                                className=""
+                                {...form.register("description")}
+                            />
                         </div>
                     </div>
                 </div>
