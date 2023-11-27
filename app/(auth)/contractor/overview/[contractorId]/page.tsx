@@ -19,8 +19,9 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
     const data = await _getContractor(userId);
     const { payables, jobs } = await getPayableUsers(userId, true);
     const payable = payables[0];
-    // console.log(payable);
-    if (!data || !payable) redirect("/contractor/contractors");
+    console.log(payable);
+    if (!data || !payable) return <></>;
+    //  redirect("/contractor/contractors");
     const _jobs = await prisma.jobs.findMany({
         where: {
             userId
