@@ -6,9 +6,13 @@ import { JobPayments, Jobs } from "@prisma/client";
 import { userId } from "../utils";
 import { _notifyProdStarted, _notifyWorkerPaymentPaid } from "../notifications";
 
-export async function getPayableUsers(userId) {
+export async function getPayableUsers(userId, single = false) {
     const users = await prisma.users.findMany({
-        where: {},
+        where: {
+            id: {
+                in: userId && single ? [userId] : undefined
+            }
+        },
         include: {
             employeeProfile: true,
             jobs: {

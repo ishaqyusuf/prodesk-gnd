@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 export default async function ContractorOverviewPage({ searchParams, params }) {
     const userId = +params.contractorId;
     const data = await _getContractor(userId);
-    const { payables, jobs } = await getPayableUsers(userId);
+    const { payables, jobs } = await getPayableUsers(userId, true);
     const payable = payables[0];
-    // console.log(payable);
+    console.log(payable);
     if (!data || !payable) redirect("/contractor/contractors");
     const _jobs = await prisma.jobs.findMany({
         where: {
@@ -92,7 +92,7 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
                 </div>
             </div>
             <UploadDocumentModal />
-            <ImgModal/>
+            <ImgModal />
         </DataPageShell>
     );
 }
