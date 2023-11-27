@@ -4,6 +4,7 @@ import UploadDocumentModal from "@/components/_v2/contractor/modals/upload-docum
 import ContractorOverviewDocs from "@/components/_v2/contractor/sections/contractor-overview-docs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
+import ImgModal from "@/components/modals/img-modal";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/stat-card";
 import { prisma } from "@/db";
@@ -91,6 +92,7 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
                 </div>
             </div>
             <UploadDocumentModal />
+            <ImgModal/>
         </DataPageShell>
     );
 }

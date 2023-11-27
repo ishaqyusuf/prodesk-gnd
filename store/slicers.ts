@@ -110,6 +110,7 @@ export type ModalName =
     | "editJob"
     | "email"
     | "home"
+    | "img"
     | "installCost"
     | "inboundModal"
     | "importModelTemplate"

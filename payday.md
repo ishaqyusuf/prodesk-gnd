@@ -1,9 +1,11 @@
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-# NOV 25: 00.00 == 00.00
-    04:40-
-# NOV 22: 00.00 == 00.00
+# NOV 27: 00.00 == 00.00
+    02:00-
+# NOV 25: 01.30 == 02.10
+    04:40-06:10
+# NOV 22: 00.40 == 00.40
     03:20-04:00
 ------------------------------
 $308.33

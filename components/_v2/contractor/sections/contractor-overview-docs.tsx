@@ -1,15 +1,20 @@
 "use client";
 
+import { _deleteContractorDoc } from "@/app/_actions/contractors/delete-contractor-doc";
+import ConfirmBtn from "@/components/confirm-btn";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { openModal } from "@/lib/modal";
 import { useAppSelector } from "@/store";
-import { IUser } from "@/types/hrm";
+import { IUser, IUserDoc } from "@/types/hrm";
 import Image from "next/image";
 
 export default function ContractorOverviewDocs(props) {
     const data: IUser = useAppSelector(s => s.slicers.dataPage)?.data;
+    async function deleteImg(img: IUserDoc) {
+        await _deleteContractorDoc(img);
+    }
     return (
         <Card {...props}>
             <CardHeader>
@@ -27,14 +32,23 @@ export default function ContractorOverviewDocs(props) {
                             <TableRow key={doc.id}>
                                 <TableCell>
                                     <Image
-                                        width={200}
-                                        height={200}
+                                        className="border-2 rounded cursor-pointer"
+                                        onClick={() =>
+                                            openModal("img", {
+                                                src: doc.meta.url
+                                            })
+                                        }
+                                        width={70}
+                                        height={50}
                                         src={doc.meta.url}
                                         alt={doc.description as any}
                                     />
                                 </TableCell>
                                 <TableCell>
                                     <p>{doc.description}</p>
+                                    <ConfirmBtn onClick={() => deleteImg(doc)}>
+                                        Delete
+                                    </ConfirmBtn>
                                 </TableCell>
                             </TableRow>
                         ))}

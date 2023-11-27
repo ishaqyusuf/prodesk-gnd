@@ -2,6 +2,16 @@
 const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
 const nextConfig = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "res.cloudinary.com",
+                port: ""
+                // pathname: "/account123/**"
+            }
+        ]
+    },
     experimental: {
         serverComponentsExternalPackages: ["puppeteer-core"]
     },
