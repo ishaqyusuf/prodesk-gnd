@@ -109,7 +109,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const isPunchout = () => is("punchout");
     const isDecoShutter = () => is("deco-shutter");
     const isInstallation = () => is("installation");
-    async function submit(data: ExtendedHomeTasks) {
+    async function submit() {
         startTransition(async () => {
             // if(!form.getValues)
             try {
