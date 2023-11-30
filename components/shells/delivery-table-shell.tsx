@@ -20,7 +20,6 @@ import {
     OrderStatus
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";

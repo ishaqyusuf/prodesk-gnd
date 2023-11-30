@@ -193,7 +193,11 @@ export async function getOrderAction(orderId,isProd = false) {
       producer: true,
       salesRep: true,
       shippingAddress: true,
-      payments: !isProd,
+      payments: !isProd ?  {
+                        orderBy: {
+                            createdAt: "desc"
+                        }
+                    }: false,
       productions: isProd,
       
     },
@@ -531,6 +535,7 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     createdAt,
     updatedAt,
     goodUntil,
+    deliveredAt,
     paymentTerm,
     inventoryStatus,
     items: cItems,
@@ -549,7 +554,7 @@ orderData.amountDue = orderData.grandTotal;
         createdAt,
         updatedAt,
         meta, //: { produced_qty, ..._meta },
-
+truckLoadQty,
         ...item
       } = i;
       const { produced_qty, ..._meta } = meta as ISalesOrderItemMeta;

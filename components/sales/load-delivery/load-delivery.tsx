@@ -2,41 +2,118 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppSelector } from "@/store";
-import { ISalesOrder } from "@/types/sales";
-import { useEffect, useState } from "react";
+import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import OrderInspection from "./order-inspection";
+import PageHeader from "@/components/page-header";
+import Btn from "@/components/btn";
+import { truckBackOrder } from "@/lib/sales/truck-backorder";
+import { openModal } from "@/lib/modal";
+import { _startSalesDelivery } from "@/app/_actions/sales/start-sales-delivery";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
+export interface TruckLoaderForm {
+    loader: {
+        [orderSlug in string]: {
+            items: ISalesOrderItem[];
+            loadedItems: {
+                [itemUid in string]: {
+                    loadQty: string | number;
+                    qty: number;
+                    checked: boolean;
+                };
+            };
+            truckLoadLocation: string;
+            backOrders: {
+                [itemUid in string]: {
+                    backQty: number;
+                    qty: number;
+                    checked: boolean;
+                    // loadQty: number;
+                };
+            };
+            hasBackOrder?: Boolean;
+        };
+    };
+    hasBackOrder?: Boolean;
+}
 export default function LoadDelivery() {
+    const [loadingTruck, startLoadingTruck] = useTransition();
+
     const dataPage = useAppSelector<{ id; data: ISalesOrder[] }>(
         s => s.slicers.dataPage
     );
-    const form = useForm({
+    const form = useForm<TruckLoaderForm>({
         defaultValues: {
             loader: {}
         }
     });
+    const router = useRouter();
     // useEffect(() => {},)
-
+    function load() {
+        startLoadingTruck(async () => {
+            try {
+                const data = truckBackOrder(form.getValues());
+                if (data.hasBackOrder) openModal("inspectBackOrder", data);
+                else {
+                    await _startSalesDelivery(data);
+                    toast.success("Delivery Truck Loaded!");
+                    // router.replace("/sales/delivery");
+                }
+            } catch (error) {
+                toast.error((error as Error).message);
+            }
+        });
+    }
     const [currentTab, setCurrentTab] = useState<string>();
     useEffect(() => {
-        setCurrentTab(dataPage.data?.[0]?.slug);
         let loader: any = {};
         dataPage?.data?.map(order => {
-            loader[order.slug] = {};
+            // loader[order.slug] = {};
+            let orderLoader = {
+                loadedItems: {},
+                truckLoadLocation: "",
+                items: []
+            };
+
             order?.items?.map(f => {
-                if (f.qty)
-                    loader[order.slug][f.meta.uid] = {
-                        loadQty: f.qty
+                if (f.qty) {
+                    orderLoader.loadedItems[f.meta.uid] = {
+                        loadQty: f.qty,
+                        qty: f.qty,
+                        checked: true
                     };
+                }
             });
+            orderLoader.items = order.items as any;
+            loader[order.slug] = orderLoader;
         });
         form.reset({
             loader
         });
+        console.log(dataPage.data?.[0]?.slug);
+        setCurrentTab(dataPage.data?.[0]?.slug);
     }, [dataPage]);
+    function Tips({ color, info }) {
+        return (
+            <div className="inline-flex space-x-2 items-center">
+                <div className={cn(`w-6 h-3 rounded shadow `)}></div>
+            </div>
+        );
+    }
     return (
-        <div className="">
+        <div className="space-y-4">
+            <div className="flex justify-between items-end">
+                <PageHeader title="Load Orders" />
+                <div className="flex-1 flex justify-end space-x-2">
+                    <Btn onClick={load} className="" isLoading={loadingTruck}>
+                        Load Truck
+                    </Btn>
+                </div>
+            </div>
             <Tabs
                 className="grid w-full grid-cols-12 gap-2"
                 defaultValue={currentTab}

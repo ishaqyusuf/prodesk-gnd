@@ -12,12 +12,7 @@ import { saveProgress } from "../progress";
 import { user } from "../utils";
 import { revalidatePath } from "next/cache";
 
-export async function saveOrderAction({
-    id,
-    order,
-    items,
-    deleteIds
-}: ISaveOrder) {
+export async function saveOrderAction({ id, order, items }: ISaveOrder) {
     // const id= order.id
     // delete order?.id;
     // numeric<SalesOrders>()
@@ -134,4 +129,3 @@ export async function saveOrderAction({
     revalidatePath(`/(auth)/sales/${order.type}/${order.slug}/form`);
     return sale_order;
 }
-

@@ -775,6 +775,7 @@ model SalesOrderItems {
     updatedAt          DateTime?                    @db.Timestamp(0)
     qty                Float?
     prebuiltQty        Float?
+    truckLoadQty       Float?
     salesOrderId       Int
     profitMargin       Float?
     rate               Float?

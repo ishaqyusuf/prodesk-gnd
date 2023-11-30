@@ -1,6 +1,6 @@
 import PageHeader from "@/components/page-header";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Table,
     TableBody,
@@ -12,13 +12,16 @@ import {
 import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
 import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { TruckLoaderForm } from "./load-delivery";
 
 interface Props {
-    form;
+    form: UseFormReturn<TruckLoaderForm>;
     order: ISalesOrder;
 }
 export default function OrderInspection({ form, order }: Props) {
     const [checkAll, setCheckAll] = useState(false);
+    const [currentTab, setCurrentTab] = useState<string>();
     return (
         <div className="space-y-4">
             <PageHeader
@@ -31,6 +34,12 @@ export default function OrderInspection({ form, order }: Props) {
                     </div>
                 }
             />
+            <div className="grid gap-2">
+                <Label>Truck Load Location</Label>
+                <Input
+                    {...form.register(`loader.${order.slug}.truckLoadLocation`)}
+                />
+            </div>
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -53,19 +62,23 @@ export default function OrderInspection({ form, order }: Props) {
         </div>
     );
 }
-function BackOrderLine({ form, order, item }) {
-    const checked = form.watch(`backOrders.${item.meta.uid}.checked`);
+export function BackOrderLine({ form, order, item }) {
+    const baseKey = `loader.${order.slug}.loadedItems.${item.meta.uid}`;
+    const checked = form.watch(`${baseKey}.checked`);
+    const qty = form.watch(`${baseKey}.qty`);
+    const loadQty = form.watch(`${baseKey}.loadQty`);
     return (
         <TableRow
-            className={cn(checked && "bg-green-100 hover:bg-green-100")}
+            className={cn(
+                loadQty > 0 && "bg-green-100 hover:bg-green-100",
+                loadQty > qty && "bg-red-100 hover:bg-red-100",
+                loadQty < qty && "bg-orange-100 hover:bg-orange-100"
+            )}
             key={item.id}
         >
             <TableCell
                 onClick={e => {
-                    form.setValue(
-                        `loader.${order?.slug}.${item.meta.uid}.checked`,
-                        !checked
-                    );
+                    form.setValue(`${baseKey}.checked`, !checked);
                 }}
                 className={cn("p-2 uppercase cursor-pointer")}
             >
@@ -78,9 +91,7 @@ function BackOrderLine({ form, order, item }) {
                 {item.qty && (
                     <Input
                         type="number"
-                        {...form.register(
-                            `loader.${order?.slug}.${item.meta.uid}.loadQty` as any
-                        )}
+                        {...form.register(`${baseKey}.loadQty` as any)}
                         className="w-16 h-7"
                     />
                 )}

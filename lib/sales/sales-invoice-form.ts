@@ -126,7 +126,7 @@ export function footerEstimate({
         }
     });
     const labourCost = convertToNumber(form.getValues("meta.labor_cost"), 0);
-    let total = +toFixed(subTotal + tax + labourCost);
+    let total = +toFixed(subTotal + labourCost);
     if (taxxableSubTotal > 0 && taxPercentage > 0)
         tax = taxxableSubTotal * (taxPercentage / 100);
     if (

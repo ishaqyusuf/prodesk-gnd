@@ -80,6 +80,7 @@ export type ISalesOrderMeta = {
     prod_status;
     payment_option: IPaymentOptions;
     sales_job_id;
+    truckLoadLocation;
     job: {
         status;
         estimated_cost;

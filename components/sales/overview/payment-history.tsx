@@ -50,22 +50,22 @@ export default function PaymentHistory() {
                                     </TableCell>
 
                                     <TableCell align="right" className="p-1">
-                                        <div className="flex space-x-1">
-                                            <div>
-                                                <Money
-                                                    value={item.amount}
-                                                    className="font-medium"
-                                                />
-                                                <p>{item.meta?.checkNo}</p>
-                                                <p className="text-muted-foreground">
-                                                    {item?.meta
-                                                        ?.paymentOption ||
-                                                        item?.meta
-                                                            ?.payment_option ||
-                                                        order?.meta
-                                                            ?.payment_option}
-                                                </p>
-                                            </div>
+                                        <div>
+                                            <Money
+                                                value={item.amount}
+                                                className="font-medium"
+                                            />
+                                        </div>
+                                        <div className="inline-flex space-x-2">
+                                            <p className="text-muted-foreground">
+                                                {item?.meta?.paymentOption ||
+                                                    item?.meta
+                                                        ?.payment_option ||
+                                                    order?.meta?.payment_option}
+                                            </p>
+                                            {item.meta?.checkNo && (
+                                                <p>({item.meta?.checkNo})</p>
+                                            )}
                                         </div>
                                     </TableCell>
                                     <TableCell className="p-1" align="right">

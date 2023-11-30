@@ -34,11 +34,25 @@ export function DatePicker({
     placeholder = "Pick a date",
     ...calendarProps
 }: CalendarProps & Props) {
-    const [date, setDate] = useState<DateRange | undefined | Date>(
-        value ? value : range ? { form: null, to: null } : null
-    );
+    const [date, setDate] = useState<DateRange | undefined | Date>();
+
+    // value
+    //     ? typeof value == "string"
+    //         ? new Date(value)
+    //         : value
+    //     : range
+    //     ? { form: null, to: null }
+    //     : null
     useEffect(() => {
-        setDate(value ? value : range ? { form: null, to: null } : null);
+        setDate(
+            value
+                ? typeof value == "string"
+                    ? new Date(value)
+                    : value
+                : range
+                ? { form: null, to: null }
+                : null
+        );
     }, [value, range]);
     // const [date, setDate] = React.useState<DateRange | undefined>({
     //   from: new Date(2023, 0, 20),
@@ -102,7 +116,7 @@ export function DatePicker({
                             ))}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="end">
+                <PopoverContent className="w-auto z-10 p-0" align="end">
                     <Calendar
                         {...(calendarProps as any)}
                         initialFocus

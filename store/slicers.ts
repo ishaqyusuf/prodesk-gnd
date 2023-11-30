@@ -112,6 +112,7 @@ export type ModalName =
     | "home"
     | "img"
     | "installCost"
+    | "inspectBackOrder"
     | "inboundModal"
     | "importModelTemplate"
     | "jobOverview"

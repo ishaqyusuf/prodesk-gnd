@@ -44,6 +44,7 @@ import {
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
 import { openModal } from "@/lib/modal";
+import { DatePicker } from "../date-range-picker";
 
 export default function HomesTableShell<T>({
     data,
@@ -183,6 +184,7 @@ export default function HomesTableShell<T>({
     );
     return (
         <>
+            <DatePicker />
             <HomePrinter />
             <DataTable2
                 searchParams={searchParams}
