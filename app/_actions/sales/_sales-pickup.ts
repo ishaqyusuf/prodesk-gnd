@@ -1,7 +1,7 @@
 "use server";
 
 import { SalesQueryParams } from "@/types/sales";
-import { getSales, whereSales } from "./sales";
+import { whereSales } from "./sales";
 import { prisma } from "@/db";
 import { _revalidate } from "../_revalidate";
 import { getPageInfo, queryFilter } from "../action-utils";

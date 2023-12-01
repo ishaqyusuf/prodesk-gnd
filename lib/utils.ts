@@ -86,7 +86,8 @@ export async function slugModel(value, model, c = 0) {
 
     return slug;
 }
-export function sum<T>(array: T[], key: keyof T | undefined = undefined) {
+export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
+    if (!array) return 0;
     return array
         .map(v => (!key ? v : v?.[key]))
         .map(v => (v ? Number(v) : null))

@@ -70,7 +70,7 @@ export default function SalesProductionModal() {
                 prodDueDate
             });
             closeModal("assignProduction");
-            router.refresh();
+            // router.refresh();
             toast.success("Production Assigned!");
         });
     }

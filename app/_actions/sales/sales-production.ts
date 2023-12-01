@@ -20,6 +20,7 @@ import {
 } from "../notifications";
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
+import { _revalidate } from "../_revalidate";
 
 export async function getSalesProductionsAction(
     query: SalesQueryParams,
@@ -130,6 +131,7 @@ export async function assignProductionAction({
         }
     });
     await _notifyProductionAssigned(order);
+    _revalidate("orders");
 }
 export interface UserProductionEventsProps {
     userId;

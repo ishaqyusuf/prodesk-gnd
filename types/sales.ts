@@ -88,7 +88,7 @@ export type ISalesOrderMeta = {
         job_schedule;
     };
 };
-export type ISalesOrderItem = SalesOrderItems & {
+export type ISalesOrderItem = Omit<SalesOrderItems, "meta"> & {
     productions: OrderProductionSubmissions[];
     meta: ISalesOrderItemMeta;
     salesOrder: ISalesOrder;

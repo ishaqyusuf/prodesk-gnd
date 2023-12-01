@@ -27,6 +27,7 @@ import { removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
+import { _saveSalesAction } from "./_save-sales";
 
  export async function whereSales(query: SalesQueryParams) {
   const {
@@ -275,145 +276,12 @@ export async function saveOrderAction({
   order,
   items,
 }: SaveOrderActionProps) {
-  let orderId = order.orderId;
-  let slug = order.slug;
-  if (!order.type) order.type = "order";
-  order.status = "Active";
-  const {
-    customerId,
-    prodId,
-    salesRepId,
-    // salesRep,
-    shippingAddressId,
-    billingAddressId,
-    createdAt,
-    pickupId,
-    ..._order
-  } = order;
+ const _order = await _saveSalesAction({id,order:order as any,items})
 
-  if (!id) {
-    const now = dayjs();
-    slug = orderId = [
-      now.format("YY"),
-      now.format("MMDD"),
-      await nextId(prisma.salesOrders),
-    ].join("-");
-  }
-
-  const metadata = {
-    createdAt: createdAt ? new Date(createdAt) : new Date(), 
-    ...(_order as any),
-    updatedAt: new Date(),
-    slug,
-    orderId,
-    customer: customerId && {
-      connect: {
-        id: customerId as any,
-        // id: undefined,
-      },
-    },
-    shippingAddress: shippingAddressId && {
-      connect: {
-        id: shippingAddressId as any,
-      },
-    },
-    billingAddress: shippingAddressId && {
-      connect: {
-        id: billingAddressId as any,
-      },
-    },
-  };
-  if (!id && salesRepId)
-    metadata.salesRep = {
-      connect: {
-        id: salesRepId,
-      },
-    };
-  let lastItemId: number | undefined = undefined;
-  let updatedIds: any[] = [];
-  if (id) {
-    lastItemId = await lastId(prisma.salesOrderItems);
-  }
-  const updateMany = items
-    .map((item) => {
-      if (!item.id) return null;
-      item.updatedAt = new Date();
-      const { id, salesOrderId, ...data } = item;
-      updatedIds.push(id);
-      return {
-        where: {
-          id,
-        },
-        data,
-      };
-      // return item;
-    })
-    .filter(Boolean) as any;
-  const createMany = {
-    data: items
-      .map((item) => {
-        if (item.id) return null;
-        item.createdAt = item.updatedAt = new Date();
-        return item;
-      })
-      .filter(Boolean) as any,
-  };
-  const sale_order = id
-    ? await prisma.salesOrders.update({
-        where: { id },
-        data: {
-          ...metadata,
-          items: {
-            updateMany,
-            createMany,
-          },
-        },
-      })
-    : await prisma.salesOrders.create({
-        data: {
-          ...metadata, 
-          items: {
-            createMany,
-          },
-        },
-      });
-  if (id) {
-    const ids = 
-    await prisma.salesOrderItems.findMany({
-      where: {
-        id: {
-          lte: lastItemId,
-          notIn: updatedIds,
-        },
-        salesOrderId: sale_order.id,
-      },
-      select: {
-        id: true
-      }
-    });
-    if(ids.length > 0 )
-    {
-      const _ids = ids.map( i=> i.id)
-      await prisma.orderProductionSubmissions.deleteMany({
-        where: {
-          salesOrderItemId: {
-            in: _ids
-          }
-        }
-      })
-      await prisma.salesOrderItems.deleteMany({
-        where: {
-          id: {
-            in: _ids
-          }
-        }
-      })
-    }
-  }
-  await orderProdQtyUpdateAction(sale_order.id);
+  await orderProdQtyUpdateAction(_order.id);
 //   console.log(sale_order)
-  revalidatePath(`/sales/${sale_order.type}/[slug]/form`,'page')
-  return sale_order;
+  revalidatePath(`/sales/${_order.type}/[slug]/form`,'page')
+  return _order;
 }
 export async function deleteOrderAction(id) {
     await prisma.orderProductionSubmissions.deleteMany({
@@ -454,7 +322,7 @@ export default async function orderProdQtyUpdateAction(salesOrderId) {
       },
     },
   });
-  const _startedItems = (order?.items as ISalesOrderItem[])?.filter(
+  const _startedItems = (order?.items as any as ISalesOrderItem[])?.filter(
     (i) => i.swing && typeof i.meta.produced_qty === "number"
   );
     const started = _startedItems?.length > 0;
@@ -464,7 +332,7 @@ export default async function orderProdQtyUpdateAction(salesOrderId) {
         qty,
         swing,
         meta: { produced_qty },
-      } = item as ISalesOrderItem;
+      } = item as any as ISalesOrderItem;
       qty ||= 0;
       produced_qty ||= 0;
       if (swing && qty > 0) {

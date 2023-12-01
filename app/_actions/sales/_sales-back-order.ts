@@ -2,9 +2,14 @@
 
 import { TruckLoaderForm } from "@/components/sales/load-delivery/load-delivery";
 import { deepCopy } from "@/lib/deep-copy";
+import { cloneOrder, cloneOrderItem } from "@/lib/sales/copy-order";
 import { convertToNumber, toFixed } from "@/lib/use-number";
-import { IBackOrderForm, ISalesOrder, ISalesOrderItem } from "@/types/sales";
+import { sum } from "@/lib/utils";
+import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { SalesPayments } from "@prisma/client";
+import { _saveSalesAction } from "./_save-sales";
+import { prisma } from "@/db";
+import { applyPaymentAction } from "./sales-payment";
 
 interface BackOrderData {
     newOrder: {
@@ -23,288 +28,302 @@ export async function _createSalesBackOrder(
     order: ISalesOrder,
     backOrderForm: TruckLoaderForm
 ) {
-    const form = backOrderForm.loader[order.slug];
-    let data: BackOrderData = ({
-        newOrder: {
-            items: []
-        },
-        oldOrder: {}
-    } as any) as BackOrderData;
-    const oldOrder = { ...order };
-    const {
-        orderId: oldOrderId,
-        id,
-        //    status,
-        slug,
-        // amountDue,
-        invoiceStatus,
-        //    prodStatus,
-        //    prodId,
-        // salesRepId,
-        builtQty,
-        createdAt,
-        updatedAt,
-        //    goodUntil,
-        //    deliveredAt,
-        //    paymentTerm,
-        //    inventoryStatus,
-        items,
-        payments,
-        ...newOrderData
-    } = order;
-
+    const loader = backOrderForm.loader[order.slug];
     let {
-        sales_percentage: profitRate,
-        profileEstimate,
-        mockupPercentage: mockPercentage
-    } = order.meta;
-    let orderUpdate = ({
-        subTotal: 0,
-        tax: 0,
+        newOrder,
+        slug,
+        orderId,
+        amountDue,
+        prodStatus,
+        goodUntil,
+        salesRepId,
+        prodId,
+        payments,
+        paymentTerm,
+        items
+    } = cloneOrder(order);
+    if (!amountDue) amountDue = 0;
+    newOrder.prodStatus = prodStatus;
+    newOrder.prodId = prodId;
+    newOrder.salesRepId = salesRepId;
+    newOrder.goodUntil = goodUntil;
+    newOrder.paymentTerm = paymentTerm;
+    newOrder.builtQty = newOrder.prodQty = 0;
+    newOrder.slug = newOrder.orderId = [orderId, "BO"].join("-");
+    newOrder.grandTotal = newOrder.subTotal = newOrder.tax = newOrder.meta.ccc = newOrder.meta.labor_cost = 0;
+    const orderUpdate = {
         grandTotal: 0,
+        subTotal: 0,
+        builtQty: 0,
+        prodQty: 0,
+        status: "In Transit",
+        tax: 0,
         meta: {
-            ...(order.meta as any),
-            ccc: 0
+            ...order.meta,
+            truckLoadLocation: loader?.truckLoadLocation,
+            ccc: 0,
+            labor_cost: 0
         }
-    } as any) as ISalesOrder;
-    newOrderData.grandTotal = newOrderData.subTotal = newOrderData.tax = newOrderData.meta.ccc = 0;
+    } as ISalesOrder;
+    let taxPercent = newOrder.taxPercentage || 0;
 
-    let taxPercentage = order.taxPercentage || 0;
-    let cccPercentage = orderUpdate.meta.ccc_percentage;
-    data.newOrder.data = newOrderData;
-    data.oldOrder.update = orderUpdate;
-    // let taxxables = 0;
-    let d = {
-        new: {
-            taxxable: 0
-        },
-        old: {
-            taxxable: 0,
+    let taxRatio = taxPercent ? taxPercent / 100 : 1;
+    let oldTaxxable = 0;
+    let newTaxxable = 0;
+    const itemUpdates: { id: number; data: ISalesOrderItem }[] = [];
+    let newOrderItems = items
+        ?.map(_item => {
+            let {
+                id,
+                produced_qty,
+                prodStatus,
+                // prebuiltQty,
+                sentToProdAt,
+                prodStartedAt,
+                prodCompletedAt,
+                item
+            } = cloneOrderItem(_item);
+            item.prodCompletedAt = prodCompletedAt;
+            item.prodStatus = prodStatus;
+            item.sentToProdAt = sentToProdAt;
+            item.prodStartedAt = prodStartedAt;
+            let itemTotal = item.total || 0;
+            let itemQty = item.qty || 0;
+            let itemRate = item.rate || 0;
+            let loadQty = loader?.loadedItems[item.meta.uid]?.loadQty || 0;
+            let backOrder = loader?.backOrders[item.meta.uid];
+            let hasTax = item.meta.tax == "Tax";
+            if (!produced_qty) produced_qty = 0;
 
-            prod: {
-                produced: 0,
-                total: 0
-            },
-            itemUpdates: {}
-        }
-    };
-    let __: any = {};
-    let newItems = deepCopy<ISalesOrderItem[]>(items)
-        ?.map(({ id, salesOrderId, prebuiltQty, truckLoadQty, ...newItem }) => {
-            let oldTotal = newItem.total;
-            let loadQty =
-                form?.loadedItems[newItem.meta.uid]?.loadQty || (0 as any);
-            const bo = form?.backOrders[newItem.meta.uid];
-            if (!bo?.backQty) {
-                if (newItem.meta.tax == "Tax" && taxPercentage)
-                    d.old.taxxable += newItem.total || 0;
-                (orderUpdate.subTotal as any) += newItem.total || 0;
-                console.log({
-                    sub: orderUpdate.subTotal,
-                    taxxable: d.old.taxxable
-                });
-                if (!bo?.checked) return null;
-            }
-            if (!newItem.total && bo.checked) {
-                // no price update
-                console.log(newItem);
-                return newItem;
-            }
-            if (bo.backQty || bo.checked) {
-                // if (!newItem.total || (newItem.total && bo.backQty)) {
-                if (!bo.backQty) bo.backQty = 0;
-                newItem.qty = bo.backQty;
-
-                newItem.total = +toFixed(newItem.qty * (newItem.rate || 0));
-                let _qty = loadQty - bo.backQty;
-
-                let itemUpdate: ISalesOrderItem = {
-                    meta: {
-                        ...(newItem.meta as any)
-                    }
-                } as any;
-
-                itemUpdate.total = +toFixed(_qty * (newItem.rate || 0));
-                if (bo.backQty == 0) {
-                    console.log({
-                        ...bo,
-                        _qty,
-                        total: itemUpdate.total,
-                        newTotal: newItem.total,
-                        oldTotal,
-                        loadQty
-                    });
+            let itemUpdate = {
+                meta: { ..._item.meta }
+            } as ISalesOrderItem;
+            if (!backOrder?.backQty) {
+                // item is fully loaded
+                if (hasTax && taxPercent) {
+                    oldTaxxable += itemTotal;
+                    // itemUpdate.tax = itemTotal * (taxPercent / 100);
+                    // itemUpdate.updatedAt = new Date();
                 }
-                itemUpdate.qty = loadQty as any;
+                (orderUpdate.subTotal as any) += itemTotal;
+            }
+            if (!backOrder?.backQty && backOrder?.checked) {
+                //register 0 qty item
+                item.qty = 0;
+                item.total = 0;
+                return item;
+            }
+            if (backOrder?.backQty) {
+                itemUpdate.qty = itemQty - backOrder?.backQty;
+                item.qty = backOrder.backQty;
+                item.total = +toFixed(item.qty * itemRate);
+                itemUpdate.total = +toFixed(itemUpdate.qty * itemRate);
                 itemUpdate.updatedAt = new Date();
-                const pq = newItem.meta.produced_qty || 0;
-                __[id] = {
-                    old: oldTotal,
-                    update: itemUpdate.total,
-                    new: newItem.total
-                    // ...bo
-                };
-                if (newItem.swing) {
-                    if (pq == bo.qty) {
-                        itemUpdate.meta.produced_qty = _qty;
-                        newItem.meta.produced_qty = bo.backQty;
-                    } else if (pq > 0 && pq != bo.qty) {
-                        let npq = (itemUpdate.meta.produced_qty = Math.min(
-                            pq,
-                            _qty
-                        ));
-                        newItem.meta.produced_qty = pq - npq;
-                    }
-                    // d.old.prod.produced += itemUpdate.meta.produced_qty || 0;
-                    // d.old.prod.total += _qty || 0;
+                if (item.swing && produced_qty) {
+                    let oldProduced = Math.min(
+                        itemUpdate.meta.produced_qty || 0,
+                        itemUpdate.qty
+                    );
+                    itemUpdate.meta.produced_qty = oldProduced;
+                    (orderUpdate.builtQty as any) += oldProduced;
+                    let newProduced = produced_qty - oldProduced;
+                    item.meta.produced_qty = newProduced;
+                    (newOrder.builtQty as any) += newProduced;
                 }
-                // if (!orderUpdate.subTotal)orderUpdate.subTotal = 0;
-                (orderUpdate.subTotal as any) += itemUpdate.total || 0;
-
-                (newOrderData.subTotal as any) += newItem.total;
-                if (newItem.meta.tax == "Tax" && taxPercentage) {
-                    d.old.taxxable += itemUpdate.total;
-                    d.new.taxxable += newItem.total;
-                    itemUpdate.tax = itemUpdate.total * (taxPercentage / 100);
-                    newItem.tax = newItem.total * (taxPercentage / 100);
-                    if (bo.backQty == 0) {
-                    }
+                if (item.swing) {
+                    (newOrder.prodQty as any) += item.qty;
+                    (orderUpdate.prodQty as any) += itemUpdate.qty;
                 }
-                d.old.itemUpdates[id] = itemUpdate;
-                return newItem;
+                (orderUpdate.subTotal as any) += itemUpdate.total;
+                (newOrder.subTotal as any) += item.total;
+                if (hasTax && taxPercent) {
+                    oldTaxxable += itemUpdate.total;
+                    newTaxxable += item.total;
+                    itemUpdate.tax = +toFixed(
+                        itemUpdate.total * (taxPercent / 100)
+                    );
+                    item.tax = +toFixed(item.total * (taxPercent / 100));
+                }
+                itemUpdates.push({ id, data: itemUpdate });
+                return item;
             }
             return null;
         })
         .filter(Boolean);
-    // __ = {
-    //     d,
-    //     orderUpdate,
-    //     newOrderData
-    // };
-    let laborCost = convertToNumber(order.meta.labor_cost, 0);
-    let { labor1, labor2 } = calculateLaborCosts(
-        newOrderData.subTotal,
+    let [labor1, labor2] = calculateLaborCosts(
+        newOrder.subTotal,
         orderUpdate.subTotal,
-        laborCost
+        convertToNumber(order.meta.labor_cost, 0)
     );
-    newOrderData.meta.labor_cost = labor1;
+    newOrder.meta.labor_cost = labor1;
     orderUpdate.meta.labor_cost = labor2;
-    let newSubTotal = +toFixed(newOrderData.subTotal + labor1);
-    let oldSubTotal = +toFixed(orderUpdate.subTotal + labor2);
-    if (order.meta.ccc > 0) {
-        let { labor1, labor2 } = calculateLaborCosts(
-            newOrderData.subTotal,
-            orderUpdate.subTotal,
-            order.meta.ccc
-        );
-        newOrderData.meta.ccc = labor1;
-        orderUpdate.meta.ccc = labor2;
-    }
-    if (taxPercentage > 0) {
-        if (d.new.taxxable > 0) {
-            newOrderData.tax = +toFixed(d.new.taxxable * (taxPercentage / 100));
-        }
-        if (d.old.taxxable) {
-            orderUpdate.tax = +toFixed(d.old.taxxable * (taxPercentage / 100));
-        }
-    }
-    orderUpdate.grandTotal = +toFixed(
-        orderUpdate.meta.ccc + orderUpdate.tax + oldSubTotal
+    let newTotal = +toFixed(newOrder.subTotal + labor1);
+    let updateTotal = +toFixed(orderUpdate.subTotal + labor2);
+    if (newTaxxable) newOrder.tax = +toFixed(newTaxxable * taxRatio);
+    if (oldTaxxable) orderUpdate.tax = +toFixed(oldTaxxable * taxRatio);
+    let [ccc1, ccc2] = calculateLaborCosts(
+        newOrder.subTotal,
+        orderUpdate.subTotal,
+        order.meta.ccc || 0
     );
-    newOrderData.grandTotal = +toFixed(
-        newOrderData.meta.ccc + newOrderData.tax + newSubTotal
-    );
+    ccc1 = +toFixed(ccc1);
+    ccc2 = +toFixed(ccc2);
+    newOrder.meta.ccc = ccc1;
+    orderUpdate.meta.ccc = ccc2;
+    let newGrandTotal = (newOrder.grandTotal = ccc1 + newOrder.tax + newTotal);
+    let updateGrandTotal = (orderUpdate.grandTotal =
+        ccc2 + orderUpdate.tax + updateTotal);
 
-    let amountDue = newOrderData.amountDue || 0;
-    let updatePayment = {
-        transfer: [] as any,
-        update: {},
-        create: {},
-        newPaid: 0
+    function _getData(o, p?, multiplier = 1) {
+        return {
+            grandTotal: o.grandTotal + multiplier * (p?.grandTotal || 0),
+            tax: o.tax + multiplier * (p?.tax || 0),
+            subTotal: o.subTotal + multiplier * (p?.subTotal || 0),
+            amountDue: o.amountDue + multiplier * (p?.amountDue || 0),
+            ccc: o.meta.ccc + multiplier * (p?.meta?.ccc || 0),
+            labor: o.meta.labor_cost + multiplier * (p?.meta?.labor_cost || 0)
+        };
+    }
+    let paymentUpdate = {
+        transfers: [] as { id: number; amount: number }[],
+        updates: {},
+        newPaymentAmount: 0,
+        amountDue,
+        oldSumPayment: sum(payments, "amount") || 0,
+        newSumPayment: 0,
+        sumDiff: 0,
+        payments: payments?.length
     };
+
     if (amountDue > 0) {
-        let boTotal = newOrderData.grandTotal;
-        let oldTotal = orderUpdate.grandTotal;
-        if (amountDue >= boTotal) {
-            newOrderData.amountDue = boTotal;
-            orderUpdate.amountDue = amountDue - boTotal;
-            __ = { newOrderData, orderUpdate };
+        if (amountDue >= newGrandTotal) {
+            newOrder.amountDue = newGrandTotal;
+            orderUpdate.amountDue = amountDue - newGrandTotal;
         } else {
-            newOrderData.amountDue = amountDue;
+            newOrder.amountDue = amountDue;
             orderUpdate.amountDue = 0;
-            let backPayment = newOrderData.grandTotal - amountDue;
 
-            let bal = backPayment;
-            order.payments?.map(p => {
-                if (bal == 0) return;
-                let nP = p.amount - bal;
-
-                if (nP < 0) {
-                    updatePayment.transfer.push({
+            let backPayment = (newOrder.grandTotal || 0) - amountDue;
+            let rem = backPayment;
+            payments?.map(p => {
+                if (rem == 0) {
+                    paymentUpdate.newSumPayment += p.amount;
+                    return;
+                }
+                if (p.amount >= rem) {
+                    let _p = (paymentUpdate.updates[p.id] = +toFixed(
+                        p.amount - rem
+                    ));
+                    paymentUpdate.newPaymentAmount += rem;
+                    paymentUpdate.newSumPayment += rem + _p;
+                    rem = 0;
+                } else {
+                    paymentUpdate.transfers.push({
                         id: p.id,
                         amount: p.amount
                     });
-                    bal -= p.amount;
-                } else {
-                    updatePayment.update[p.id] = { amount: nP };
-                    updatePayment.create = {
-                        amount: bal
-                    };
-                    bal = 0;
+                    paymentUpdate.newSumPayment += p.amount;
+                    rem -= +toFixed(p.amount);
                 }
             });
-            updatePayment.newPaid = backPayment - bal;
         }
     }
-    let resp = {
-        item: __,
-        grandTotal: oldOrder.grandTotal,
-        due: oldOrder.amountDue,
-        tax: oldOrder.tax,
-        subTotal: oldOrder.subTotal,
-        ccc: oldOrder.meta?.ccc,
-        update: {
-            grandTotal: orderUpdate.grandTotal,
-            due: orderUpdate.amountDue,
-            tax: orderUpdate.tax,
-            subTotal: orderUpdate.subTotal,
-            ccc: orderUpdate.meta?.ccc
-        },
-        new: {
-            grandTotal: newOrderData.grandTotal,
-            due: newOrderData.amountDue,
-            tax: newOrderData.tax,
-            subTotal: newOrderData.subTotal,
-            ccc: newOrderData.meta?.ccc
-        }
-    } as any;
-    resp = {
-        ...resp,
-        sum: {
-            due: resp.new.due + resp.update.due,
-            tax: resp.new.tax + resp.update.tax,
-            ccc: resp.new.ccc + resp.update.ccc,
-            subTotal: resp.new.subTotal + resp.update.subTotal,
-            grandTotal: resp.new.grandTotal + resp.update.grandTotal
-        }
+    let resp: any = {
+        original: _getData(order),
+        update: _getData(orderUpdate),
+        new: _getData(newOrder)
+        // subTotal: order.subTotal,
+        // _subTotal: (orderUpdate.subTotal || 0) + newOrder.subTotal,
+        // subTotalUpdate: orderUpdate.subTotal,
+        // subTotalNew: newOrder.subTotal,
+        // newOrderItems,
+        // itemUpdates
     };
+    resp.sum = _getData(orderUpdate, newOrder);
     resp.diff = {
-        due: resp.sum.due - resp.due,
-        tax: resp.sum.tax - resp.tax,
-        ccc: resp.sum.ccc - resp.ccc,
-        subTotal: resp.sum.subTotal - resp.subTotal,
-        grandTotal: resp.sum.grandTotal - resp.grandTotal
+        grandTotal: resp.sum.grandTotal - resp.original.grandTotal,
+        tax: resp.sum.tax - resp.original.tax,
+        subTotal: resp.sum.subTotal - resp.original.subTotal,
+        ccc: resp.sum.ccc - resp.original.ccc,
+        labor: resp.sum.labor - resp.original.labor
     };
+    if (Math.abs(resp.diff.grandTotal) > 1)
+        throw new Error("Error generate back order (800)");
+    // console.log(paymentUpdate.oldSumPayment - paymentUpdate.newSumPayment);
+    paymentUpdate.sumDiff =
+        paymentUpdate.oldSumPayment - paymentUpdate.newSumPayment;
+    if (Math.abs(paymentUpdate.sumDiff) > 1)
+        throw new Error("Erorr generating back order (801)");
+
+    resp.payment = paymentUpdate;
+    console.log(paymentUpdate);
+    return;
+    try {
+        const _newOrder = await _saveSalesAction({
+            order: newOrder as any,
+            items: newOrderItems as any
+        });
+        await Promise.all(
+            itemUpdates.map(async ({ id, data }) => {
+                await prisma.salesOrderItems.update({
+                    where: { id },
+                    data: data as any
+                });
+            })
+        );
+        await prisma.salesOrders.update({
+            where: { id: order.id },
+            data: orderUpdate as any
+        });
+        if (paymentUpdate.newPaymentAmount > 0)
+            await applyPaymentAction({
+                orders: [
+                    {
+                        id: _newOrder.id,
+                        amountDue: _newOrder.amountDue,
+                        amountPaid: paymentUpdate.newPaymentAmount,
+                        customerId: _newOrder.customerId,
+                        orderId: _newOrder.orderId,
+                        checkNo: "",
+                        paymentOption: ""
+                    }
+                ],
+                debit: paymentUpdate.newPaymentAmount,
+                credit: 0,
+                balance: 0
+            });
+        // if(paymentUpdate.updates)
+        await Promise.all(
+            Object.entries(paymentUpdate.updates).map(async ([k, v]) => {
+                await prisma.salesPayments.update({
+                    where: { id: k as any },
+                    data: {
+                        amount: v as any
+                    }
+                });
+            })
+        );
+        if (paymentUpdate.transfers.length)
+            await prisma.salesPayments.updateMany({
+                where: {
+                    id: {
+                        in: paymentUpdate.transfers.map(t => t.id)
+                    }
+                },
+                data: {
+                    orderId: _newOrder.id
+                }
+            });
+    } catch (e) {}
     return resp;
-    // return __;
-    // return { newOrderData, orderUpdate, d, newItems, order };
 }
+
 function calculateLaborCosts(subTotal1, subTotal2, labelCost) {
     // Validate that subTotal2 is not zero to avoid division by zero
     if (subTotal2 === 0) {
-        return { labor1: labelCost, labor2: 0 };
+        return [labelCost, 0];
     }
-    if (subTotal1 == 0) return { labor2: labelCost, labor1: 0 };
+    if (subTotal1 == 0) return [labelCost, 0];
 
     // Calculate the ratio
     const ratio = subTotal1 / subTotal2;
@@ -314,5 +333,5 @@ function calculateLaborCosts(subTotal1, subTotal2, labelCost) {
     const labor2 = labelCost * ratio * (2 / 3); // Adjusted ratio for labor2
 
     // Return the result as an object
-    return { labor1, labor2 };
+    return [labor1, labor2];
 }

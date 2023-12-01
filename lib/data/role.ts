@@ -24,6 +24,7 @@ export const permissions: any[] = [
     "order payment",
     "putaway",
     "inbound order",
+    "customer phone",
     //hrm
     "role",
     "employee",
