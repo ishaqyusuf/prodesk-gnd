@@ -2,7 +2,7 @@
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
 # DEC 01: 00.00 == 00.00
-    05:20-
+    05:20-06:20
     10:45-11:45
 # NOV 30: 02.35 == 13.25
     04:35-06:00

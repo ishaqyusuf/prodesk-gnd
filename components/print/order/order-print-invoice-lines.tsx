@@ -161,11 +161,11 @@ function LineDescription({
                         <div
                             className={`-m-1 min-h-[20px] bg-gray-300 text-center text-primary uppercase`}
                         >
-                            {line?.description}
+                            {line?.description?.trim()}
                         </div>
                     ) : (
                         <div className="uppercase  min-h-[20px]">
-                            {line.description}
+                            {line.description?.trim()}
                         </div>
                     )}
                 </div>
