@@ -32,6 +32,8 @@ import { SmartTable } from "../data-table/smart-table";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import SalesOrderMobileCell from "../mobile/sales/sales-order-mobile-cell";
+import { openModal } from "@/lib/modal";
+import { Button } from "../ui/button";
 export default function OrdersTableShell<T>({
     data,
     pageInfo,
@@ -143,52 +145,57 @@ export default function OrdersTableShell<T>({
         [data, isPending]
     );
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={columns}
-            pageInfo={pageInfo}
-            mobile
-            data={data}
-            SelectionAction={SalesSelectionAction}
-            filterableColumns={[
-                {
-                    id: "status",
-                    title: "Status",
-                    single: true,
-                    options: [
-                        { label: "Production Started", value: "Started" },
-                        { label: "Production Assigned", value: "Queued" },
-                        { label: "Production Completed", value: "Completed" },
-                        {
-                            label: "Production Not Assigned",
-                            value: "Unassigned"
-                        }
-                    ]
-                },
-                {
-                    id: "_payment" as any,
-                    title: "Invoice",
-                    single: true,
-                    options: [
-                        { label: "Paid", value: "Paid" },
-                        // { label: "Part Paid", value: "Part" },
-                        { label: "Pending", value: "Pending" }
-                    ]
-                },
-                SalesCustomerFilter
-            ]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "orderId, customer"
-                }
-            ]}
-            dateFilterColumns={[
-                {
-                    id: "_date" as any,
-                    title: "Date"
-                }
-            ]}
-        />
+        <>
+            <DataTable2
+                searchParams={searchParams}
+                columns={columns}
+                pageInfo={pageInfo}
+                mobile
+                data={data}
+                SelectionAction={SalesSelectionAction}
+                filterableColumns={[
+                    {
+                        id: "status",
+                        title: "Status",
+                        single: true,
+                        options: [
+                            { label: "Production Started", value: "Started" },
+                            { label: "Production Assigned", value: "Queued" },
+                            {
+                                label: "Production Completed",
+                                value: "Completed"
+                            },
+                            {
+                                label: "Production Not Assigned",
+                                value: "Unassigned"
+                            }
+                        ]
+                    },
+                    {
+                        id: "_payment" as any,
+                        title: "Invoice",
+                        single: true,
+                        options: [
+                            { label: "Paid", value: "Paid" },
+                            // { label: "Part Paid", value: "Part" },
+                            { label: "Pending", value: "Pending" }
+                        ]
+                    },
+                    SalesCustomerFilter
+                ]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "orderId, customer"
+                    }
+                ]}
+                dateFilterColumns={[
+                    {
+                        id: "_date" as any,
+                        title: "Date"
+                    }
+                ]}
+            />
+        </>
     );
 }

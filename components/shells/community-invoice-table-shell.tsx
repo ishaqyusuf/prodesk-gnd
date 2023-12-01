@@ -184,8 +184,8 @@ export default function HomesTableShell<T>({
     );
     return (
         <>
-            <DatePicker />
-            <HomePrinter />
+            {/* <DatePicker /> */}
+            {/* <HomePrinter /> */}
             <DataTable2
                 searchParams={searchParams}
                 columns={columns}
