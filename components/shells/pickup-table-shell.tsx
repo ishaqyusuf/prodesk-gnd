@@ -48,18 +48,13 @@ export default function PickupTableShell<T>({
             },
             {
                 accessorKey: "orderId",
-                cell: ({ row }) =>
-                    OrderIdCell(row.original, "/sales/order/slug"),
+                cell: ({ row }) => OrderIdCell(row.original),
                 header: ColumnHeader("Order")
             },
             {
                 accessorKey: "customer",
                 header: ColumnHeader("Customer"),
-                cell: ({ row }) =>
-                    OrderCustomerCell(
-                        row.original.customer,
-                        "/sales/customer/slug"
-                    )
+                cell: ({ row }) => OrderCustomerCell(row.original.customer)
             },
             {
                 accessorKey: "memo",

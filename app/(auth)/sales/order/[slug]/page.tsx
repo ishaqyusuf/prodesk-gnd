@@ -12,6 +12,7 @@ import PaymentHistory from "@/components/sales/overview/payment-history";
 import TabbedItemEmailOverview from "@/components/sales/overview/tabbed-item-email-overview";
 import Timeline from "@/components/sales/overview/timeline";
 import { DataPageShell } from "@/components/shells/data-page-shell";
+import { prisma } from "@/db";
 import { ISalesOrder } from "@/types/sales";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";

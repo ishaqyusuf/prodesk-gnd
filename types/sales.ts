@@ -164,6 +164,7 @@ export type SalesStatus =
     | undefined;
 export interface SalesQueryParams extends BaseQuery {
     _q?;
+    _backOrder?: boolean;
     skip?;
     take?;
     page?;

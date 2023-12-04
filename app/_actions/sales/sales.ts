@@ -85,6 +85,16 @@ import { _saveSalesAction } from "./_save-sales";
         }
     })
   }
+  if(query._backOrder)
+  where.orderId = {
+    endsWith: '-bo'
+  } 
+  else 
+  where.orderId = {
+    not: {
+        endsWith: '-bo'
+    }
+  }
   if(query.deliveryOption)
     where.deliveryOption  = query.deliveryOption
   if (prodId) where.prodId = prodId;
@@ -135,9 +145,12 @@ import { _saveSalesAction } from "./_save-sales";
     where.customerId = +query._customerId
     switch(_deliveryStatus) {
       case "delivered":
-        where.deliveredAt = {not: null}  
-      break;
-
+        where.OR?.push({
+            OR: [
+                {deliveredAt: {not: ''}}, 
+            ]
+        }) 
+      break; 
       case "pending production":
         where.prodStatus = {
           not: "Completed"

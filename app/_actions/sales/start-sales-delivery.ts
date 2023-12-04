@@ -46,6 +46,6 @@ export async function _startSalesDelivery(data: TruckLoaderForm) {
             // return { slug, msg: "no back-order" };
         })
     );
-    // redirect("/sales/delivery");
+    redirect("/sales/delivery");
     return resp;
 }

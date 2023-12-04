@@ -1,7 +1,6 @@
 "use server";
 
 import { TruckLoaderForm } from "@/components/sales/load-delivery/load-delivery";
-import { deepCopy } from "@/lib/deep-copy";
 import { cloneOrder, cloneOrderItem } from "@/lib/sales/copy-order";
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import { sum } from "@/lib/utils";
@@ -195,43 +194,46 @@ export async function _createSalesBackOrder(
         payments: payments?.length
     };
 
-    if (amountDue > 0) {
-        if (amountDue >= newGrandTotal) {
-            newOrder.amountDue = newGrandTotal;
-            orderUpdate.amountDue = amountDue - newGrandTotal;
-        } else {
-            newOrder.amountDue = amountDue;
-            orderUpdate.amountDue = 0;
+    if (amountDue >= newGrandTotal) {
+        newOrder.amountDue = newGrandTotal;
+        orderUpdate.amountDue = amountDue - newGrandTotal;
+    } else {
+        newOrder.amountDue = amountDue;
+        orderUpdate.amountDue = 0;
 
-            let backPayment = (newOrder.grandTotal || 0) - amountDue;
-            let rem = backPayment;
-            payments?.map(p => {
-                if (rem == 0) {
-                    paymentUpdate.newSumPayment += p.amount;
-                    return;
-                }
-                if (p.amount >= rem) {
-                    let _p = (paymentUpdate.updates[p.id] = +toFixed(
-                        p.amount - rem
-                    ));
-                    paymentUpdate.newPaymentAmount += rem;
-                    paymentUpdate.newSumPayment += rem + _p;
-                    rem = 0;
-                } else {
-                    paymentUpdate.transfers.push({
-                        id: p.id,
-                        amount: p.amount
-                    });
-                    paymentUpdate.newSumPayment += p.amount;
-                    rem -= +toFixed(p.amount);
-                }
-            });
-        }
+        let backPayment = (newOrder.grandTotal || 0) - amountDue;
+        let rem = backPayment;
+        payments?.map(p => {
+            if (rem == 0) {
+                paymentUpdate.newSumPayment += p.amount;
+                return;
+            }
+            if (p.amount >= rem) {
+                let _p = (paymentUpdate.updates[p.id] = +toFixed(
+                    p.amount - rem
+                ));
+                paymentUpdate.newPaymentAmount += rem;
+                paymentUpdate.newSumPayment += rem + _p;
+                rem = 0;
+            } else {
+                paymentUpdate.transfers.push({
+                    id: p.id,
+                    amount: p.amount
+                });
+                paymentUpdate.newSumPayment += p.amount;
+                rem -= +toFixed(p.amount);
+            }
+        });
     }
+
     let resp: any = {
         original: _getData(order),
         update: _getData(orderUpdate),
-        new: _getData(newOrder)
+        new: _getData(newOrder),
+        newOrder,
+        newOrderItems,
+        orderUpdate,
+        itemUpdates
         // subTotal: order.subTotal,
         // _subTotal: (orderUpdate.subTotal || 0) + newOrder.subTotal,
         // subTotalUpdate: orderUpdate.subTotal,
@@ -247,74 +249,79 @@ export async function _createSalesBackOrder(
         ccc: resp.sum.ccc - resp.original.ccc,
         labor: resp.sum.labor - resp.original.labor
     };
-    if (Math.abs(resp.diff.grandTotal) > 1)
-        throw new Error("Error generate back order (800)");
+    // if (Math.abs(resp.diff.grandTotal) > 1)
+    //     throw new Error("Error generate back order (800)");
     // console.log(paymentUpdate.oldSumPayment - paymentUpdate.newSumPayment);
     paymentUpdate.sumDiff =
         paymentUpdate.oldSumPayment - paymentUpdate.newSumPayment;
-    if (Math.abs(paymentUpdate.sumDiff) > 1)
-        throw new Error("Erorr generating back order (801)");
+    console.log(resp);
+    console.log(paymentUpdate);
+    // if (Math.abs(paymentUpdate.sumDiff) > 1)
+    //     throw new Error("Erorr generating back order (801)");
 
     resp.payment = paymentUpdate;
-    console.log(paymentUpdate);
-    return;
-    try {
-        const _newOrder = await _saveSalesAction({
-            order: newOrder as any,
-            items: newOrderItems as any
-        });
-        await Promise.all(
-            itemUpdates.map(async ({ id, data }) => {
-                await prisma.salesOrderItems.update({
-                    where: { id },
-                    data: data as any
-                });
-            })
-        );
-        await prisma.salesOrders.update({
-            where: { id: order.id },
-            data: orderUpdate as any
-        });
-        if (paymentUpdate.newPaymentAmount > 0)
-            await applyPaymentAction({
-                orders: [
-                    {
-                        id: _newOrder.id,
-                        amountDue: _newOrder.amountDue,
-                        amountPaid: paymentUpdate.newPaymentAmount,
-                        customerId: _newOrder.customerId,
-                        orderId: _newOrder.orderId,
-                        checkNo: "",
-                        paymentOption: ""
-                    }
-                ],
-                debit: paymentUpdate.newPaymentAmount,
-                credit: 0,
-                balance: 0
+    // return resp;
+    // return;
+    // try {
+    const _newOrder = await _saveSalesAction({
+        order: newOrder as any,
+        items: newOrderItems as any
+    });
+    await Promise.all(
+        itemUpdates.map(async ({ id, data }) => {
+            await prisma.salesOrderItems.update({
+                where: { id },
+                data: data as any
             });
-        // if(paymentUpdate.updates)
-        await Promise.all(
-            Object.entries(paymentUpdate.updates).map(async ([k, v]) => {
-                await prisma.salesPayments.update({
-                    where: { id: k as any },
-                    data: {
-                        amount: v as any
-                    }
-                });
-            })
-        );
-        if (paymentUpdate.transfers.length)
-            await prisma.salesPayments.updateMany({
-                where: {
-                    id: {
-                        in: paymentUpdate.transfers.map(t => t.id)
-                    }
-                },
+        })
+    );
+    await prisma.salesOrders.update({
+        where: { id: order.id },
+        data: orderUpdate as any
+    });
+    if (paymentUpdate.newPaymentAmount > 0)
+        await applyPaymentAction({
+            orders: [
+                {
+                    id: _newOrder.id,
+                    amountDue: _newOrder.amountDue,
+                    amountPaid: paymentUpdate.newPaymentAmount,
+                    customerId: _newOrder.customerId,
+                    orderId: _newOrder.orderId,
+                    checkNo: "",
+                    paymentOption: ""
+                }
+            ],
+            debit: paymentUpdate.newPaymentAmount,
+            credit: 0,
+            balance: 0
+        });
+    // if(paymentUpdate.updates)
+    await Promise.all(
+        Object.entries(paymentUpdate.updates).map(async ([k, v]) => {
+            await prisma.salesPayments.update({
+                where: { id: +k as any },
                 data: {
-                    orderId: _newOrder.id
+                    amount: v as any
                 }
             });
-    } catch (e) {}
+        })
+    );
+    if (paymentUpdate.transfers.length)
+        await prisma.salesPayments.updateMany({
+            where: {
+                id: {
+                    in: paymentUpdate.transfers.map(t => t.id)
+                }
+            },
+            data: {
+                orderId: _newOrder.id
+            }
+        });
+    // } catch (e) {
+    // console.log(e);
+    resp.error = true;
+    // }
     return resp;
 }
 

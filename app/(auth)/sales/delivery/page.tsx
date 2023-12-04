@@ -56,7 +56,7 @@ export default async function OrdersPage({ searchParams }) {
         {
             label: "Delivered",
             link: "/sales/delivery?page=1&_deliveryStatus=delivered",
-            value: _orders.filter(o => o.deliveredAt != null).length,
+            value: _orders.filter(o => o.deliveredAt).length,
             color: "green"
         }
     ];

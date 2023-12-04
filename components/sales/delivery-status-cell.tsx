@@ -40,7 +40,7 @@ export function DeliveryStatusCell({ order }: { order }) {
                         align="end"
                         className="w-[185px] p-4 grid gap-2 text-sm"
                     >
-                        {["Ready", "In Transit", "Returned", "Delivered"]?.map(
+                        {/* {["Ready", "In Transit", "Returned", "Delivered"]?.map(
                             e => (
                                 <DropdownMenuItem
                                     onClick={_e => submit(e)}
@@ -50,7 +50,7 @@ export function DeliveryStatusCell({ order }: { order }) {
                                     {e}
                                 </DropdownMenuItem>
                             )
-                        )}
+                        )} */}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
