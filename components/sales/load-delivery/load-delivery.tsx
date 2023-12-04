@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { _readyForDelivery } from "@/app/_actions/sales/delivery/ready-for-delivery";
 import { IDataPage } from "@/types/type";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export interface TruckLoaderForm {
     loader: {
@@ -42,6 +44,7 @@ export interface TruckLoaderForm {
     };
     hasBackOrder?: Boolean;
     action: SalesInspectPageAction;
+    truck;
 }
 export type SalesInspectPageAction = "ready" | "load" | undefined;
 export interface SalesDataPage
@@ -61,6 +64,9 @@ export default function LoadDelivery({ title }) {
             loader: {}
         }
     });
+    useEffect(() => {
+        setCurrentTab(dataPage?.data?.orders?.[0]?.slug);
+    }, []);
     const router = useRouter();
     // useEffect(() => {},)
     function load() {
@@ -70,7 +76,7 @@ export default function LoadDelivery({ title }) {
                 data.action = dataPage?.data?.action;
                 if (data.hasBackOrder) openModal("inspectBackOrder", data);
                 else {
-                    if (dataPage?.data?.action == "ready") {
+                    if (dataPage?.data?.action == "load") {
                         await _startSalesDelivery(data);
                         toast.success("Delivery Truck Loaded!");
                     } else {
@@ -129,6 +135,12 @@ export default function LoadDelivery({ title }) {
                     </Btn>
                 </div>
             </div>
+            {dataPage?.data?.action == "ready" && (
+                <div className="grid gap-2">
+                    <Label>Truck Detail</Label>
+                    <Input {...form.register(`truck`)} />
+                </div>
+            )}
             <Tabs
                 className="grid w-full grid-cols-12 gap-2"
                 defaultValue={currentTab}

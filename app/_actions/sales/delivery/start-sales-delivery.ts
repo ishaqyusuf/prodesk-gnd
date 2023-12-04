@@ -25,7 +25,11 @@ export async function _startSalesDelivery(data: TruckLoaderForm) {
             if (order.hasBackOrder) {
                 //handle back-order
                 if (_order) {
-                    return await _createSalesBackOrder(_order as any, data);
+                    return await _createSalesBackOrder(
+                        _order as any,
+                        data,
+                        "In Transit"
+                    );
                 }
             } else {
                 await prisma.salesOrders.updateMany({

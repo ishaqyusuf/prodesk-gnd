@@ -40,7 +40,8 @@ export async function _readyForDelivery(data: TruckLoaderForm) {
                         status: "Ready",
                         meta: ({
                             ...((_order?.meta || {}) as any),
-                            truckLoadLocation: order.truckLoadLocation
+                            // truckLoadLocation: order.truckLoadLocation,
+                            truck: data.truck
                         } as ISalesOrderMeta) as any,
                         updatedAt: new Date()
                     }

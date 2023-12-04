@@ -5,8 +5,10 @@ import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
 import {
+    Cell,
     CheckColumn,
     ColumnHeader,
+    PrimaryCellContent,
     _FilterColumn
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
@@ -16,15 +18,13 @@ import {
     OrderInvoiceCell,
     OrderMemoCell,
     OrderPriorityFlagCell,
-    OrderProductionStatusCell,
-    OrderStatus
+    OrderProductionStatusCell
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "../filters/sales-customer-filter";
-import { labelValue } from "@/lib/utils";
+import { labelValue, truthy } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 import { DeliverySelectionAction } from "../list-selection-action/delivery-selection-action";
 import {
@@ -32,6 +32,7 @@ import {
     RowActionMenuItem,
     RowActionMoreMenu
 } from "../data-table/data-table-row-actions";
+import useQueryParams from "@/lib/use-query-params";
 
 export default function DeliveryTableShell<T>({
     data,
@@ -40,6 +41,7 @@ export default function DeliveryTableShell<T>({
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
+    const { queryParams, setQueryParams } = useQueryParams<any>();
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
         () => [
@@ -64,11 +66,31 @@ export default function DeliveryTableShell<T>({
                 header: ColumnHeader("Memo"),
                 cell: ({ row }) => OrderMemoCell(row.original.shippingAddress)
             },
-            {
-                accessorKey: "production",
-                header: ColumnHeader("Production"),
-                cell: ({ row }) => OrderProductionStatusCell(row.original)
-            },
+            ...truthy<any>(
+                queryParams.get("_deliveryStatus") == "ready",
+                [
+                    {
+                        accessorKey: "details",
+                        header: ColumnHeader("Truck Details"),
+                        cell: ({ row }) => (
+                            <Cell>
+                                <PrimaryCellContent>
+                                    {row?.original?.meta?.truck}
+                                </PrimaryCellContent>
+                            </Cell>
+                        )
+                    }
+                ],
+                [
+                    {
+                        accessorKey: "production",
+                        header: ColumnHeader("Production"),
+                        cell: ({ row }) =>
+                            OrderProductionStatusCell(row.original)
+                    }
+                ]
+            ),
+
             {
                 accessorKey: "status",
                 header: ColumnHeader("Delivery"),
