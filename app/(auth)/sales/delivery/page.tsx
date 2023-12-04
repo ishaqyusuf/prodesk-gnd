@@ -15,7 +15,10 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
-    const response = await getSalesDelivery(queryParams(searchParams));
+    const response = await getSalesDelivery({
+        _deliveryStatus: "queued",
+        ...queryParams(searchParams)
+    });
     const _orders = await prisma.salesOrders.findMany({
         where: {
             deliveryOption: "delivery"

@@ -35,7 +35,7 @@ export default function InspectBackOrderModal() {
         startTransition(async () => {
             // console.log(order);
             const _o = form.getValues();
-            if (_o.action == "ready-for-delivery") {
+            if (_o.action == "ready") {
                 await _readyForDelivery(_o);
                 toast.success("Ready For Delivery!");
             } else {

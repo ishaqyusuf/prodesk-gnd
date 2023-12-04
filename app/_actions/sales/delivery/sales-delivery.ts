@@ -17,7 +17,7 @@ export async function updateSalesDelivery(id, status) {
     if (status == "Delivered") updateData.deliveredAt = new Date();
 
     const ids = Array.isArray(id) ? id : [id];
-    console.log(ids);
+    // console.log(ids);
     await prisma.salesOrders.updateMany({
         where: {
             id: {
