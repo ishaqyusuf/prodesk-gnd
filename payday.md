@@ -4,6 +4,9 @@
 # DEC 04: 00.00 == 00.00
     01:40-
 ----------------------------
+PAYMENT INVOICE NOV 22 - DEC 01
+$533.75
+Zelle marzuqisiaka@gmail.com
 # DEC 01: 02.00 == 15.25
     05:20-06:20
     10:45-11:45

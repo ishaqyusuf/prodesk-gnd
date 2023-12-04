@@ -40,12 +40,13 @@ export interface TruckLoaderForm {
     };
     hasBackOrder?: Boolean;
 }
-export default function LoadDelivery() {
+export default function LoadDelivery({ title }) {
     const [loadingTruck, startLoadingTruck] = useTransition();
 
-    const dataPage = useAppSelector<{ id; data: ISalesOrder[] }>(
-        s => s.slicers.dataPage
-    );
+    const dataPage = useAppSelector<{
+        id;
+        data: { orders: ISalesOrder[]; action };
+    }>(s => s.slicers.dataPage);
     const form = useForm<TruckLoaderForm>({
         defaultValues: {
             loader: {}
@@ -71,7 +72,7 @@ export default function LoadDelivery() {
     const [currentTab, setCurrentTab] = useState<string>();
     useEffect(() => {
         let loader: any = {};
-        dataPage?.data?.map(order => {
+        dataPage?.data?.orders?.map(order => {
             // loader[order.slug] = {};
             let orderLoader = {
                 loadedItems: {},
@@ -94,8 +95,7 @@ export default function LoadDelivery() {
         form.reset({
             loader
         });
-        console.log(dataPage.data?.[0]?.slug);
-        setCurrentTab(dataPage.data?.[0]?.slug);
+        setCurrentTab(dataPage.data?.orders?.[0]?.slug);
     }, [dataPage]);
     function Tips({ color, info }) {
         return (
@@ -110,7 +110,7 @@ export default function LoadDelivery() {
                 <PageHeader title="Load Orders" />
                 <div className="flex-1 flex justify-end space-x-2">
                     <Btn onClick={load} className="" isLoading={loadingTruck}>
-                        Load Truck
+                        {title}
                     </Btn>
                 </div>
             </div>
@@ -120,7 +120,7 @@ export default function LoadDelivery() {
             >
                 <div className="col-span-3">
                     <TabsList className=" justify-start h-auto grid max-sm:hidden w-full">
-                        {dataPage?.data?.map(order => (
+                        {dataPage?.data?.orders?.map(order => (
                             <TabsTrigger
                                 key={order.slug}
                                 className="flex flex-col"
@@ -133,7 +133,7 @@ export default function LoadDelivery() {
                         ))}
                     </TabsList>
                 </div>
-                {dataPage?.data?.map(order => (
+                {dataPage?.data?.orders?.map(order => (
                     <TabsContent
                         key={order.slug}
                         className="col-span-9"

@@ -16,7 +16,7 @@ import { DataPageShell } from "@/components/shells/data-page-shell";
 import LoadDelivery from "@/components/sales/load-delivery/load-delivery";
 import InspectBackOrderModal from "@/components/modals/sales/inspect-back-order-modal";
 export const metadata: Metadata = {
-    title: "Truck Loading"
+    title: "Ready for Delivery"
 };
 interface Props {}
 export default async function LoadDeliveryPage({ searchParams }) {
@@ -34,7 +34,6 @@ export default async function LoadDeliveryPage({ searchParams }) {
             shippingAddress: true
         }
     });
-
     const data = { orders, action: "ready-for-delivery" };
     return (
         <DataPageShell data={data} className="sm:px-8 space-y-4">
@@ -44,7 +43,7 @@ export default async function LoadDeliveryPage({ searchParams }) {
                 <BreadLink isLast title="Loading" />
             </Breadcrumbs>
 
-            <LoadDelivery title={"Load Orders"} />
+            <LoadDelivery title={"Preprare for delivery"} />
             <InspectBackOrderModal />
         </DataPageShell>
     );

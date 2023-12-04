@@ -14,14 +14,14 @@ import { ISalesOrder } from "@/types/sales";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { TruckLoaderForm } from "./load-delivery";
+import { useAppSelector } from "@/store";
 
 interface Props {
     form: UseFormReturn<TruckLoaderForm>;
     order: ISalesOrder;
 }
 export default function OrderInspection({ form, order }: Props) {
-    const [checkAll, setCheckAll] = useState(false);
-    const [currentTab, setCurrentTab] = useState<string>();
+    const dataP = useAppSelector(s => s.slicers.dataPage);
     return (
         <div className="space-y-4">
             <PageHeader
@@ -34,12 +34,16 @@ export default function OrderInspection({ form, order }: Props) {
                     </div>
                 }
             />
-            <div className="grid gap-2">
-                <Label>Truck Load Location</Label>
-                <Input
-                    {...form.register(`loader.${order.slug}.truckLoadLocation`)}
-                />
-            </div>
+            {dataP?.data?.action != "ready-for-delivery" && (
+                <div className="grid gap-2">
+                    <Label>Truck Load Location</Label>
+                    <Input
+                        {...form.register(
+                            `loader.${order.slug}.truckLoadLocation`
+                        )}
+                    />
+                </div>
+            )}
             <Table>
                 <TableHeader>
                     <TableRow>

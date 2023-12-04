@@ -165,6 +165,7 @@ export type SalesStatus =
 export interface SalesQueryParams extends BaseQuery {
     _q?;
     _backOrder?: boolean;
+    _noBackOrder?: boolean;
     skip?;
     take?;
     page?;
@@ -188,6 +189,7 @@ export interface SalesQueryParams extends BaseQuery {
         | "pending"
         | "ready"
         | "transit"
+        | "queued"
         | "delivered";
 }
 export interface UpdateOrderPriorityProps {

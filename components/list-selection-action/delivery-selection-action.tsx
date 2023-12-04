@@ -10,14 +10,14 @@ export function DeliverySelectionAction({ items }) {
 
     return (
         <>
-            {queryParams?.get("_deliveryStatus") == "ready" && (
+            {queryParams?.get("_deliveryStatus") == "queued" && (
                 <Button asChild size={"sm"} className="h-8">
                     <Link
-                        href={`/sales/delivery/load?orderIds=${items.map(
+                        href={`/sales/delivery/get-ready?orderIds=${items.map(
                             ({ slug }) => slug
                         )}`}
                     >
-                        <span>Load Orders</span>
+                        <span>Ready</span>
                     </Link>
                 </Button>
             )}

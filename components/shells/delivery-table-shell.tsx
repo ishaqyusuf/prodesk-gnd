@@ -27,6 +27,11 @@ import { SalesCustomerFilter } from "../filters/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 import { DeliverySelectionAction } from "../list-selection-action/delivery-selection-action";
+import {
+    RowActionCell,
+    RowActionMenuItem,
+    RowActionMoreMenu
+} from "../data-table/data-table-row-actions";
 
 export default function DeliveryTableShell<T>({
     data,
@@ -76,7 +81,17 @@ export default function DeliveryTableShell<T>({
                 size: 15,
                 maxSize: 15,
                 enableSorting: false,
-                cell: ({ row }) => <></>
+                cell: ({ row }) => (
+                    <>
+                        <RowActionCell>
+                            <RowActionMoreMenu>
+                                <RowActionMenuItem>
+                                    Ready For Delivery
+                                </RowActionMenuItem>
+                            </RowActionMoreMenu>
+                        </RowActionCell>
+                    </>
+                )
             }
         ],
         [data, isPending]
@@ -95,6 +110,7 @@ export default function DeliveryTableShell<T>({
                     single: true,
                     options: [
                         labelValue("Pending Production", "pending production"),
+                        labelValue("Queued for Delivery", "delivery"),
                         labelValue("Ready For Delivery", "ready"),
                         labelValue("In Transit", "transit"),
                         labelValue("Delivered", "delivered")

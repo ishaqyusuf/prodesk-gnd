@@ -89,7 +89,7 @@ import { _saveSalesAction } from "./_save-sales";
   where.orderId = {
     endsWith: '-bo'
   } 
-  else 
+  if(query._noBackOrder)
   where.orderId = {
     not: {
         endsWith: '-bo'
@@ -145,22 +145,29 @@ import { _saveSalesAction } from "./_save-sales";
     where.customerId = +query._customerId
     switch(_deliveryStatus) {
       case "delivered":
-        where.OR?.push({
-            OR: [
-                {deliveredAt: {not: ''}}, 
-            ]
-        }) 
+        // where.OR?.push({
+        //     OR: [
+        //         {deliveredAt: {not: ''}}, 
+        //     ]
+        // }) 
+        where.status ='Delivered'
       break; 
+      case "queued":
+        where.prodStatus = 'Completed'
+         where.status = {
+          notIn: ['In Transit','Return','Delivered','Ready']
+        }
+      break;
       case "pending production":
         where.prodStatus = {
           not: "Completed"
         }  
       break;
       case "ready": 
-        where.prodStatus = 'Completed'
-        where.status = {
-          notIn: ['In Transit','Return','Delivered']
-        }
+        where.status = 'Ready'
+        // where.status = {
+        //   notIn: ['In Transit','Return','Delivered']
+        // }
       break;
       case "transit":
         where.status = "In Transit";  

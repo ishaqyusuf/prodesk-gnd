@@ -8,9 +8,8 @@ import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
 import DeliveryTableShell from "@/components/shells/delivery-table-shell";
 import { getSalesDelivery } from "@/app/_actions/sales/sales-delivery";
 import { Metadata } from "next";
-import { StartCard, StatCardContainer } from "@/components/stat-card";
+import { StartCard } from "@/components/stat-card";
 import { prisma } from "@/db";
-import { labelValue } from "@/lib/utils";
 export const metadata: Metadata = {
     title: "Order Delivery"
 };
@@ -30,20 +29,34 @@ export default async function OrdersPage({ searchParams }) {
             deliveredAt: true
         }
     });
+    // console.log(_orders.map(o => ({ s: o.status,bo: o. })));
     const stats = [
         {
-            label: "Pending",
+            label: "Pending Production",
             color: "orange",
             link: "/sales/delivery?page=1&_deliveryStatus=pending production",
             value: _orders.filter(d => d.prodStatus != "Completed").length
         },
         {
-            label: "Ready",
-            link: "/sales/delivery?page=1&_deliveryStatus=ready",
+            label: "Queued",
+            color: "blue",
+            link: "/sales/delivery?page=1&_deliveryStatus=queued",
             value: _orders.filter(
                 d =>
                     d.prodStatus == "Completed" &&
-                    !["In Transit", "Return", "Delivered"].includes(d.status)
+                    (!d.status ||
+                        !["ready", "delivered", "in transit", null, ""].every(
+                            s => s != d.status?.toLowerCase()
+                        ))
+            ).length
+        },
+        {
+            label: "Ready",
+            link: "/sales/delivery?page=1&_deliveryStatus=ready",
+            value: _orders.filter(
+                d => d.status == "ready"
+                // d.prodStatus == "Completed" &&
+                // !["In Transit", "Return", "Delivered"].includes(d.status)
             ).length,
             color: "teal"
         },

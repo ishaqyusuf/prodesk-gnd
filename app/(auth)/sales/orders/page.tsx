@@ -20,7 +20,10 @@ export const metadata: Metadata = {
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
     // await _restoreSalesOrder();
-    const response = await getSalesOrder(queryParams(searchParams));
+    const response = await getSalesOrder({
+        ...queryParams(searchParams),
+        _noBackOrder: true
+    });
     return (
         <SalesTabLayout query={searchParams}>
             <Breadcrumbs>
