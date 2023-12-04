@@ -15,18 +15,19 @@ export async function _saveSalesAction({ id, order, items }: Props) {
     let slug = order.slug;
     if (!order.type) order.type = "order";
     order.status = "Active";
+
     const {
         customerId,
         prodId,
         salesRepId,
-        // salesRep,
+        salesRep,
         shippingAddressId,
         billingAddressId,
         createdAt,
         pickupId,
         ..._order
     } = order;
-
+    console.log(_order);
     if (!slug && !orderId) {
         const now = dayjs();
         slug = orderId = [
@@ -59,12 +60,12 @@ export async function _saveSalesAction({ id, order, items }: Props) {
             }
         }
     };
-    if (!salesRepId)
-        metadata.salesRep = {
-            connect: {
-                id: salesRepId
-            }
-        };
+    // if (!salesRepId)
+    metadata.salesRep = {
+        connect: {
+            id: salesRepId
+        }
+    };
     let lastItemId: number | undefined = undefined;
     let updatedIds: any[] = [];
     if (id) {
@@ -94,6 +95,7 @@ export async function _saveSalesAction({ id, order, items }: Props) {
             })
             .filter(Boolean) as any
     };
+    console.log(id);
     const sale_order = id
         ? await prisma.salesOrders.update({
               where: { id },

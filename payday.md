@@ -2,7 +2,7 @@
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
 # DEC 04: 00.00 == 00.00
-    01:40-
+    01:40-02:30
 ----------------------------
 PAYMENT INVOICE NOV 22 - DEC 01
 $533.75

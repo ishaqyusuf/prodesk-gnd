@@ -135,11 +135,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const watchOrderId = form.watch("orderId");
     const [isSaving, startTransition] = useTransition();
     async function save(and: "close" | "new" | "default" = "default") {
-        startTransition(async () => {
-            const formData = saveData();
+        try {
+            startTransition(async () => {
+                const formData = saveData();
 
-            // console.log(formData);
-            try {
+                // console.log(formData);
+                // try {
                 const response = await saveOrderAction(formData);
                 if (response.orderId) {
                     const type = response.type;
@@ -156,10 +157,13 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                     }
                 }
                 toast.success("Saved", {});
-            } catch (error) {
-                console.log(error);
-            }
-        });
+                // } catch (error) {
+                //     console.log(error);
+                // }
+            });
+        } catch (error) {
+            console.log(error);
+        }
         //  loader.action(async () => {
         //  });
     }
