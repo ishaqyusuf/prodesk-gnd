@@ -20,6 +20,7 @@ export const permissions: any[] = [
     "sales customers",
     "estimates",
     "delivery",
+    "pickup",
     "order production",
     "order payment",
     "putaway",

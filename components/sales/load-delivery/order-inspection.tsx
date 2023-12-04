@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
-import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { TruckLoaderForm } from "./load-delivery";
+import { SalesDataPage, TruckLoaderForm } from "./load-delivery";
 import { useAppSelector } from "@/store";
 
 interface Props {
@@ -21,7 +20,9 @@ interface Props {
     order: ISalesOrder;
 }
 export default function OrderInspection({ form, order }: Props) {
-    const dataP = useAppSelector(s => s.slicers.dataPage);
+    const dataP: SalesDataPage = useAppSelector(s => s.slicers.dataPage);
+    const action = dataP?.data?.action; // != "ready-for-delivery";
+
     return (
         <div className="space-y-4">
             <PageHeader
@@ -34,7 +35,7 @@ export default function OrderInspection({ form, order }: Props) {
                     </div>
                 }
             />
-            {dataP?.data?.action != "ready-for-delivery" && (
+            {dataP?.data?.action == "load" && (
                 <div className="grid gap-2">
                     <Label>Truck Load Location</Label>
                     <Input
@@ -49,12 +50,15 @@ export default function OrderInspection({ form, order }: Props) {
                     <TableRow>
                         <TableHead className="px-2">Items</TableHead>
                         <TableHead className="px-2">Qty</TableHead>
-                        <TableHead className="px-2">Load Qty</TableHead>
+                        {action != "load" && (
+                            <TableHead className="px-2">Load Qty</TableHead>
+                        )}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {order?.items?.map((item, i) => (
                         <BackOrderLine
+                            action={action}
                             order={order}
                             key={i}
                             form={form}
@@ -66,7 +70,7 @@ export default function OrderInspection({ form, order }: Props) {
         </div>
     );
 }
-export function BackOrderLine({ form, order, item }) {
+export function BackOrderLine({ form, order, item, action }) {
     const baseKey = `loader.${order.slug}.loadedItems.${item.meta.uid}`;
     const checked = form.watch(`${baseKey}.checked`);
     const qty = form.watch(`${baseKey}.qty`);
@@ -91,15 +95,17 @@ export function BackOrderLine({ form, order, item }) {
             <TableCell className={"p-2"}>
                 <p className="text-primary">{item.qty}</p>
             </TableCell>
-            <TableCell className={"p-2"}>
-                {item.qty && (
-                    <Input
-                        type="number"
-                        {...form.register(`${baseKey}.loadQty` as any)}
-                        className="w-16 h-7"
-                    />
-                )}
-            </TableCell>
+            {action != "load" && (
+                <TableCell className={"p-2"}>
+                    {item.qty && (
+                        <Input
+                            type="number"
+                            {...form.register(`${baseKey}.loadQty` as any)}
+                            className="w-16 h-7"
+                        />
+                    )}
+                </TableCell>
+            )}
         </TableRow>
     );
 }

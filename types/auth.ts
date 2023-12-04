@@ -25,6 +25,8 @@ export interface ICan {
     editPrehungProduction?: boolean;
     viewDelivery?: boolean;
     editDelivery?: boolean;
+    viewPickup?: boolean;
+    editPickup?: boolean;
     viewCustomerService?: boolean;
     editCustomerService?: boolean;
     viewTech?: boolean;

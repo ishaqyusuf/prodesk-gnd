@@ -81,6 +81,7 @@ export type ISalesOrderMeta = {
     payment_option: IPaymentOptions;
     sales_job_id;
     truckLoadLocation;
+    truck;
     job: {
         status;
         estimated_cost;

@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { _readyForDelivery } from "@/app/_actions/sales/delivery/ready-for-delivery";
+import { IDataPage } from "@/types/type";
 
 export interface TruckLoaderForm {
     loader: {
@@ -40,12 +41,18 @@ export interface TruckLoaderForm {
         };
     };
     hasBackOrder?: Boolean;
-    action: "ready-for-delivery" | "load-delivery" | undefined;
+    action: SalesInspectPageAction;
 }
+export type SalesInspectPageAction = "ready" | "load" | undefined;
+export interface SalesDataPage
+    extends IDataPage<{
+        orders: ISalesOrder[];
+        action: SalesInspectPageAction;
+    }> {}
 export default function LoadDelivery({ title }) {
     const [loadingTruck, startLoadingTruck] = useTransition();
 
-    const dataPage = useAppSelector<{
+    const dataPage: SalesDataPage = useAppSelector<{
         id;
         data: { orders: ISalesOrder[]; action };
     }>(s => s.slicers.dataPage);
@@ -63,7 +70,7 @@ export default function LoadDelivery({ title }) {
                 data.action = dataPage?.data?.action;
                 if (data.hasBackOrder) openModal("inspectBackOrder", data);
                 else {
-                    if (dataPage?.data?.action == "ready-for-delivery") {
+                    if (dataPage?.data?.action == "ready") {
                         await _startSalesDelivery(data);
                         toast.success("Delivery Truck Loaded!");
                     } else {

@@ -1,9 +1,9 @@
 "use server";
 
 import { SalesQueryParams } from "@/types/sales";
-import { getSales } from "./sales";
+import { getSales } from "../sales";
 import { prisma } from "@/db";
-import { _revalidate } from "../_revalidate";
+import { _revalidate } from "../../_revalidate";
 
 export async function getSalesDelivery(query: SalesQueryParams) {
     query.deliveryOption = "delivery";
@@ -16,8 +16,14 @@ export async function updateSalesDelivery(id, status) {
     };
     if (status == "Delivered") updateData.deliveredAt = new Date();
 
-    await prisma.salesOrders.update({
-        where: { id },
+    const ids = Array.isArray(id) ? id : [id];
+    console.log(ids);
+    await prisma.salesOrders.updateMany({
+        where: {
+            id: {
+                in: ids
+            }
+        },
         data: {
             status,
             deliveredAt: status == "Delivered" ? new Date() : null,

@@ -51,6 +51,7 @@ export function nav(
         viewHrm,
         viewEmployee,
         viewDelivery,
+        viewPickup,
         viewPriceList,
         viewCustomerService,
         viewInstallation
@@ -224,7 +225,7 @@ export function nav(
         routes.Sales.push(
             _route("Order Delivery", Icons.delivery, "/sales/delivery")
         );
-    if (viewDelivery && !viewOrders)
+    if (viewPickup && !viewOrders)
         routes.Sales.push(
             _route("Order Pickup", Icons.delivery, "/sales/pickup")
         );

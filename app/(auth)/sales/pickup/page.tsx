@@ -9,7 +9,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import SalesTabLayout from "@/components/tab-layouts/sales-tab-layout";
 import DeliveryTableShell from "@/components/shells/delivery-table-shell";
-import { getSalesDelivery } from "@/app/_actions/sales/sales-delivery";
+import { getSalesDelivery } from "@/app/_actions/sales/delivery/sales-delivery";
 import { Metadata } from "next";
 import PickupTableShell from "@/components/shells/pickup-table-shell";
 import { _getSalesPickup } from "@/app/_actions/sales/_sales-pickup";
@@ -35,3 +35,4 @@ export default async function OrdersPage({ searchParams }) {
         </SalesTabLayout>
     );
 }
+
