@@ -23,7 +23,8 @@ import {
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Btn from "@/components/btn";
-import { _startSalesDelivery } from "@/app/_actions/sales/start-sales-delivery";
+import { _startSalesDelivery } from "@/app/_actions/sales/delivery/start-sales-delivery";
+import { _readyForDelivery } from "@/app/_actions/sales/delivery/ready-for-delivery";
 
 export default function InspectBackOrderModal() {
     const [pending, startTransition] = useTransition();
@@ -34,9 +35,14 @@ export default function InspectBackOrderModal() {
         startTransition(async () => {
             // console.log(order);
             const _o = form.getValues();
-            console.log(await _startSalesDelivery(_o));
-            // closeModal();
-            toast.success("Backorder created!");
+            if (_o.action == "ready-for-delivery") {
+                await _readyForDelivery(_o);
+                toast.success("Ready For Delivery!");
+            } else {
+                console.log(await _startSalesDelivery(_o));
+                // closeModal();
+                toast.success("Backorder created!");
+            }
         });
     }
     const [currentTab, setCurrentTab] = useState<string>();

@@ -10,10 +10,11 @@ import PageHeader from "@/components/page-header";
 import Btn from "@/components/btn";
 import { truckBackOrder } from "@/lib/sales/truck-backorder";
 import { openModal } from "@/lib/modal";
-import { _startSalesDelivery } from "@/app/_actions/sales/start-sales-delivery";
+import { _startSalesDelivery } from "@/app/_actions/sales/delivery/start-sales-delivery";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { _readyForDelivery } from "@/app/_actions/sales/delivery/ready-for-delivery";
 
 export interface TruckLoaderForm {
     loader: {
@@ -39,6 +40,7 @@ export interface TruckLoaderForm {
         };
     };
     hasBackOrder?: Boolean;
+    action: "ready-for-delivery" | "load-delivery" | undefined;
 }
 export default function LoadDelivery({ title }) {
     const [loadingTruck, startLoadingTruck] = useTransition();
@@ -58,10 +60,16 @@ export default function LoadDelivery({ title }) {
         startLoadingTruck(async () => {
             try {
                 const data = truckBackOrder(form.getValues());
+                data.action = dataPage?.data?.action;
                 if (data.hasBackOrder) openModal("inspectBackOrder", data);
                 else {
-                    await _startSalesDelivery(data);
-                    toast.success("Delivery Truck Loaded!");
+                    if (dataPage?.data?.action == "ready-for-delivery") {
+                        await _startSalesDelivery(data);
+                        toast.success("Delivery Truck Loaded!");
+                    } else {
+                        await _readyForDelivery(data);
+                        toast.success("Ready For Delivery!");
+                    }
                     // router.replace("/sales/delivery");
                 }
             } catch (error) {

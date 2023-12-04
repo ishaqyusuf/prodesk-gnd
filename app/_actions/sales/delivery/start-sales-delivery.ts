@@ -2,7 +2,7 @@
 
 import { TruckLoaderForm } from "@/components/sales/load-delivery/load-delivery";
 import { prisma } from "@/db";
-import { _createSalesBackOrder } from "./_sales-back-order";
+import { _createSalesBackOrder } from "../_sales-back-order";
 import { ISalesOrderMeta } from "@/types/sales";
 import { redirect } from "next/navigation";
 

@@ -296,9 +296,10 @@ export async function saveOrderAction({
   order,
   items,
 }: SaveOrderActionProps) {
+    
  const _order = await _saveSalesAction({id,order:order as any,items})
    await orderProdQtyUpdateAction(_order.id);
- console.log(_order)
+//  console.log(_order)
 //   console.log(sale_order)
   revalidatePath(`/sales/${_order.type}/[slug]/form`,'page')
   return _order;
@@ -307,8 +308,7 @@ export async function deleteOrderAction(id) {
     await prisma.orderProductionSubmissions.deleteMany({
         where: {
             salesOrderId: id
-        },
-       
+        }, 
     })
     await prisma.salesPayments.deleteMany({
         where: {

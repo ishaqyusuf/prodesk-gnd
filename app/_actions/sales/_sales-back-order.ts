@@ -25,7 +25,8 @@ interface BackOrderData {
 }
 export async function _createSalesBackOrder(
     order: ISalesOrder,
-    backOrderForm: TruckLoaderForm
+    backOrderForm: TruckLoaderForm,
+    _status = "In Transit"
 ) {
     const loader = backOrderForm.loader[order.slug];
     let {
@@ -55,7 +56,7 @@ export async function _createSalesBackOrder(
         subTotal: 0,
         builtQty: 0,
         prodQty: 0,
-        status: "In Transit",
+        status: _status,
         tax: 0,
         meta: {
             ...order.meta,
