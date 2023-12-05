@@ -69,10 +69,8 @@ export function OrderRowAction(props: IOrderRowProps) {
                     </MenuItem>
                 ) : (
                     <MenuItem
+                        href={`/sales/back-orders/create?orderIds=${row.slug}`}
                         Icon={Icons.Merge}
-                        onClick={() => {
-                            openModal("backOrder", row);
-                        }}
                     >
                         Back Order
                     </MenuItem>

@@ -46,7 +46,7 @@ export interface TruckLoaderForm {
     action: SalesInspectPageAction;
     truck;
 }
-export type SalesInspectPageAction = "ready" | "load" | undefined;
+export type SalesInspectPageAction = "ready" | "load" | "create";
 export interface SalesDataPage
     extends IDataPage<{
         orders: ISalesOrder[];
@@ -54,7 +54,6 @@ export interface SalesDataPage
     }> {}
 export default function LoadDelivery({ title }) {
     const [loadingTruck, startLoadingTruck] = useTransition();
-
     const dataPage: SalesDataPage = useAppSelector<{
         id;
         data: { orders: ISalesOrder[]; action };
@@ -74,6 +73,10 @@ export default function LoadDelivery({ title }) {
             try {
                 const data = truckBackOrder(form.getValues());
                 data.action = dataPage?.data?.action;
+                if (!data.hasBackOrder && dataPage.data?.action == "create") {
+                    toast.error("No back order set");
+                    return;
+                }
                 if (data.hasBackOrder) openModal("inspectBackOrder", data);
                 else {
                     if (dataPage?.data?.action == "load") {

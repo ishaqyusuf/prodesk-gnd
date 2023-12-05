@@ -25,6 +25,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Btn from "@/components/btn";
 import { _startSalesDelivery } from "@/app/_actions/sales/delivery/start-sales-delivery";
 import { _readyForDelivery } from "@/app/_actions/sales/delivery/ready-for-delivery";
+import { _createBackorder } from "@/app/(v2)/(loggedIn)/sales/_actions/create-back-order";
 
 export default function InspectBackOrderModal() {
     const [pending, startTransition] = useTransition();
@@ -38,8 +39,12 @@ export default function InspectBackOrderModal() {
             if (_o.action == "ready") {
                 await _readyForDelivery(_o);
                 toast.success("Ready For Delivery!");
-            } else {
+            } else if (_o.action == "load") {
                 console.log(await _startSalesDelivery(_o));
+                // closeModal();
+                toast.success("Backorder created!");
+            } else {
+                console.log(await _createBackorder(_o));
                 // closeModal();
                 toast.success("Backorder created!");
             }
