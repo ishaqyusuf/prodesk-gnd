@@ -2,6 +2,9 @@ export interface ICan {
     viewProject?: boolean;
     editProject?: boolean;
 
+    viewCommission?: boolean;
+    editCommission?: boolean;
+
     viewAssignTasks?: boolean;
     editAssignTasks?: boolean;
     viewDocuments?: boolean;

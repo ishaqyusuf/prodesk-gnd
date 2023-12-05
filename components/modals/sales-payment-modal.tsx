@@ -117,11 +117,13 @@ export default function SalesPaymentModal() {
                 orders.push({
                     amountPaid,
                     id,
+                    grandTotal: s.grandTotal || 0,
                     amountDue,
                     customerId,
                     orderId,
                     checkNo: form.getValues("checkNo"),
-                    paymentOption: form.getValues("paymentOption")
+                    paymentOption: form.getValues("paymentOption"),
+                    salesRepId: s.salesRepId
                 });
             });
 

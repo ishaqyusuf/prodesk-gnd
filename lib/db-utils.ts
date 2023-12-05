@@ -22,6 +22,12 @@ export async function queryBuilder<T>(query, table, soft = true) {
         ...where,
         getWhere: where.get,
         queryFilters,
+        _prismaArgs() {
+            return {
+                where: where.get(),
+                ...queryFilters
+            };
+        },
         async response(data) {
             const pageInfo = await getPageInfo(query, where.get(), table);
             return {

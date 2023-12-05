@@ -56,6 +56,7 @@ import {
   Truck,
   PackageOpen,
   Merge,
+  Percent,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -106,6 +107,7 @@ export const Icons = {
   trash: Trash,
   post: FileText,
   page: File,
+  percent: Percent,
   media,
   more: MoreVerticalIcon,
   settings: Settings,

@@ -64,6 +64,7 @@ export function nav(
             | "Services"
             | "Hrm"
             | "Job"
+            | "Singles"
             | "Contractor"
             | "Settings"]: Route[];
     } = {
@@ -71,6 +72,7 @@ export function nav(
         Hrm: [],
         Job: [],
         Services: [],
+        Singles: [],
         Contractor: [],
         Community: [],
         Sales: [],
@@ -153,6 +155,10 @@ export function nav(
                 Icons.customerService,
                 "/customer-services"
             )
+        );
+    if (__can.viewCommission)
+        routes.Singles.push(
+            _route("Sales Commission", Icons.percent, "/sales/commissions")
         );
     const Hrm: Route[] = [];
 

@@ -2,6 +2,7 @@ import { camel } from "../utils";
 
 export const permissions: any[] = [
     "dashboard",
+    "commission",
     //community
     "project",
     "builders",

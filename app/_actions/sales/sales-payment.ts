@@ -9,15 +9,19 @@ import {
     debitTransaction
 } from "../customer-wallet/transaction";
 import { sum } from "@/lib/utils";
+import { getSettingAction } from "../settings";
+import { ISalesSetting } from "@/types/post";
 
 export interface PaymentOrderProps {
     id;
     amountDue;
     amountPaid;
+    grandTotal;
     customerId;
     orderId;
     paymentOption;
     checkNo;
+    salesRepId;
 }
 export interface ApplyPaymentProps {
     orders: PaymentOrderProps[];
@@ -31,6 +35,8 @@ export async function applyPaymentAction({
     debit,
     balance
 }: ApplyPaymentProps) {
+    const settings: ISalesSetting = await getSettingAction("sales-settings");
+
     const wallet = await getCustomerWallet(orders[0]?.customerId);
     await creditTransaction(wallet.id, credit, "credit");
 
@@ -39,10 +45,16 @@ export async function applyPaymentAction({
         debit,
         `Payment for order: ${orders.map(o => o.orderId)}`
     );
-    await prisma.salesPayments.createMany({
-        data: orders.map(
-            o =>
-                ({
+    let commissionPercentage = settings?.meta?.commission?.percentage || 0;
+    await Promise.all(
+        orders.map(async o => {
+            let commission =
+                commissionPercentage > 0
+                    ? (commissionPercentage / 100) * o.grandTotal
+                    : null;
+
+            const payments = await prisma.salesPayments.create({
+                data: {
                     transactionId: transaction.id,
                     amount: +o.amountPaid,
                     createdAt: new Date(),
@@ -55,10 +67,29 @@ export async function applyPaymentAction({
                     meta: {
                         paymentOption: o.paymentOption,
                         checkNo: o.checkNo
-                    }
-                } as ISalesPayment)
-        )
-    });
+                    },
+                    commissions: commission
+                        ? {
+                              create: {
+                                  amount: commission,
+                                  createdAt: new Date(),
+                                  updatedAt: new Date(),
+                                  status: "",
+                                  user: {
+                                      connect: {
+                                          id: o.salesRepId
+                                      }
+                                  },
+                                  order: {
+                                      connect: { id: o.id }
+                                  }
+                              }
+                          }
+                        : undefined
+                }
+            });
+        })
+    );
     await Promise.all(
         orders.map(async ({ id, amountDue }) => {
             await prisma.salesOrders.update({
@@ -154,4 +185,3 @@ export async function updatePaymentTerm(id, paymentTerm, goodUntil) {
     // const meta: ISalesOrderMeta = d.meta as any;
     // meta.pa
 }
-

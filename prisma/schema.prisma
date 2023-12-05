@@ -507,21 +507,6 @@ model Permissions {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-// model PersonalAccessTokens {
-//     id            Int?
-//     tokenableType String    @db.VarChar(255)
-//     tokenableId   Int       @unique @default(autoincrement())
-//     name          String    @db.VarChar(255)
-//     token         String    @db.VarChar(64)
-//     abilities     String?   @db.Text
-//     meta          Json?     @db.Json
-//     lastUsedAt    DateTime? @db.Timestamp(0)
-//     expiresAt     DateTime? @db.Timestamp(0)
-//     createdAt     DateTime? @db.Timestamp(0)
-//     updatedAt     DateTime? @db.Timestamp(0)
-// }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Posts {
     id        Int       @unique @default(autoincrement())
     title     String?   @db.VarChar(255)
@@ -544,24 +529,6 @@ model Settings {
     createdAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @db.Timestamp(0)
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-// model PriceLists {
-//     id           Int       @unique @default(autoincrement())
-//     userId       Int?
-//     slug         String?   @db.Text
-//     category     String?   @db.VarChar(255)
-//     item         String?   @db.Text
-//     price        Float?
-//     sellingPrice Float?
-//     size         String?   @db.VarChar(255)
-//     supplier     String?   @db.VarChar(255)
-//     status       String?   @db.VarChar(255)
-//     meta         Json?     @db.Json
-//     deletedAt    DateTime? @db.Timestamp(0)
-//     createdAt    DateTime? @db.Timestamp(0)
-//     updatedAt    DateTime? @db.Timestamp(0)
-// }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model ProductCategories {
@@ -807,6 +774,40 @@ model SalesOrderProducts {
     updatedAt        DateTime? @db.Timestamp(0)
 }
 
+model SalesCommision {
+    id                  Int                @unique @default(autoincrement())
+    amount              Float
+    userId              Int
+    orderId             Int
+    orderPaymentId      Int
+    commissionPaymentId Int?
+    status              String             @db.VarChar(255)
+    deletedAt           DateTime?          @db.Timestamp(0)
+    createdAt           DateTime?          @db.Timestamp(0)
+    updatedAt           DateTime?          @db.Timestamp(0)
+    order               SalesOrders        @relation(fields: [orderId], references: [id])
+    user                Users              @relation(fields: [userId], references: [id])
+    orderPayment        SalesPayments      @relation(fields: [orderPaymentId], references: [id])
+    commissionPayment   CommissionPayment? @relation(fields: [commissionPaymentId], references: [id])
+}
+
+model CommissionPayment {
+    id            Int              @unique @default(autoincrement())
+    amount        Float
+    userId        Int
+    paidBy        Int
+    checkNo       String?
+    paymentMethod String?
+    meta          Json?            @db.Json
+    createdAt     DateTime?        @db.Timestamp(0)
+    updatedAt     DateTime?        @db.Timestamp(0)
+    commissions   SalesCommision[]
+    user          Users?           @relation(name: "worker", fields: [userId], references: [id])
+    payer         Users?           @relation(name: "payer", fields: [paidBy], references: [id])
+    Users         Users?           @relation(fields: [usersId], references: [id])
+    usersId       Int?
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesOrders {
     id                Int                          @unique @default(autoincrement())
@@ -854,6 +855,7 @@ model SalesOrders {
     // components        SalesOrderItemComponents[]
     pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
     supplies          SalesItemSupply[]
+    commisions        SalesCommision[]
 }
 
 model SalesPickup {
@@ -882,6 +884,7 @@ model SalesPayments {
     order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
     customer      Customers            @relation(fields: [customerId], references: [id])
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id])
+    commissions   SalesCommision[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -964,38 +967,42 @@ model UserDocuments {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Users {
-    id                Int                        @unique @default(autoincrement())
-    name              String?                    @db.VarChar(255)
-    username          String?                    @db.VarChar(255)
-    email             String                     @db.VarChar(255)
-    phoneNo           String?                    @db.VarChar(255)
-    phoneCode         String?                    @db.VarChar(255)
-    country           String?                    @db.VarChar(255)
-    emailVerifiedAt   DateTime?                  @db.Timestamp(0)
-    password          String?                    @db.VarChar(255)
-    rememberToken     String?                    @db.VarChar(100)
-    meta              Json?                      @db.Json
-    deletedAt         DateTime?                  @db.Timestamp(0)
-    createdAt         DateTime?                  @db.Timestamp(0)
-    updatedAt         DateTime?                  @db.Timestamp(0)
-    employeeProfileId Int?
-    workOrders        WorkOrders[]
-    salesProductions  SalesOrders[]              @relation(name: "producer")
-    reppedProductions SalesOrders[]              @relation(name: "salesRep")
-    roles             ModelHasRoles[]
-    notifications     Notifications[]            @relation(name: "notifications")
-    sentNotifications Notifications[]            @relation(name: "fromUser")
-    inbox             Inbox[]
-    jobs              Jobs[]                     @relation(name: "installer")
-    coWorkerJobs      Jobs[]                     @relation(name: "co-worker")
-    myIssuedPayments  JobPayments[]              @relation(name: "payer")
-    payments          JobPayments[]              @relation(name: "worker")
-    templateHistory   CommunityTemplateHistory[]
-    employeeProfile   EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
-    SalesPickup       SalesPickup[]
-    assignedTasks     HomeTasks[]
-    errors            ErrorLog[]
-    documents         UserDocuments[]
+    id                         Int                        @unique @default(autoincrement())
+    name                       String?                    @db.VarChar(255)
+    username                   String?                    @db.VarChar(255)
+    email                      String                     @db.VarChar(255)
+    phoneNo                    String?                    @db.VarChar(255)
+    phoneCode                  String?                    @db.VarChar(255)
+    country                    String?                    @db.VarChar(255)
+    emailVerifiedAt            DateTime?                  @db.Timestamp(0)
+    password                   String?                    @db.VarChar(255)
+    rememberToken              String?                    @db.VarChar(100)
+    meta                       Json?                      @db.Json
+    deletedAt                  DateTime?                  @db.Timestamp(0)
+    createdAt                  DateTime?                  @db.Timestamp(0)
+    updatedAt                  DateTime?                  @db.Timestamp(0)
+    employeeProfileId          Int?
+    workOrders                 WorkOrders[]
+    salesProductions           SalesOrders[]              @relation(name: "producer")
+    reppedProductions          SalesOrders[]              @relation(name: "salesRep")
+    roles                      ModelHasRoles[]
+    notifications              Notifications[]            @relation(name: "notifications")
+    sentNotifications          Notifications[]            @relation(name: "fromUser")
+    inbox                      Inbox[]
+    jobs                       Jobs[]                     @relation(name: "installer")
+    coWorkerJobs               Jobs[]                     @relation(name: "co-worker")
+    myIssuedPayments           JobPayments[]              @relation(name: "payer")
+    payments                   JobPayments[]              @relation(name: "worker")
+    templateHistory            CommunityTemplateHistory[]
+    employeeProfile            EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
+    SalesPickup                SalesPickup[]
+    assignedTasks              HomeTasks[]
+    errors                     ErrorLog[]
+    documents                  UserDocuments[]
+    commissions                SalesCommision[]
+    commissionPayments         CommissionPayment[]        @relation(name: "payer")
+    myIssuedCommissionPayments CommissionPayment[]        @relation(name: "worker")
+    CommissionPayment          CommissionPayment[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
