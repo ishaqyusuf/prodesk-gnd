@@ -266,7 +266,10 @@ export async function _createSalesBackOrder(
     // try {
     const _newOrder = await _saveSalesAction({
         order: newOrder as any,
-        items: newOrderItems as any
+        items: newOrderItems?.map((item, index) => {
+            if (item?.meta) item.meta.uid = index;
+            return item;
+        }) as any
     });
     await Promise.all(
         itemUpdates.map(async ({ id, data }) => {

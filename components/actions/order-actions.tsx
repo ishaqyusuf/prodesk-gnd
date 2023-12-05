@@ -1,18 +1,8 @@
 "use client";
 
 import { IOrderPrintMode, IOrderType, ISalesOrder } from "@/types/sales";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+
 import { Copy, FileText, Pen, Printer, View } from "lucide-react";
-import Link from "next/link";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -23,16 +13,8 @@ import {
 } from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { dispatchSlice } from "@/store/slicers";
-import { useBool } from "@/lib/use-loader";
 import { Icons } from "../icons";
-import { store } from "@/store";
-import {
-    adminCompleteProductionAction,
-    cancelProductionAssignmentAction,
-    markProductionIncompleteAction
-} from "@/app/_actions/sales/sales-production";
 import { openModal } from "@/lib/modal";
-import { EmailModalProps } from "@/types/email";
 import {
     DeleteRowAction,
     MenuItem,
@@ -43,6 +25,7 @@ import AuthGuard from "../auth-guard";
 import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
 import { env } from "@/env.mjs";
 import { sales } from "@/lib/sales/sales-helper";
+import { _cancelBackOrder } from "@/app/(v2)/(loggedIn)/sales/_actions/cancel-back-order";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -74,14 +57,26 @@ export function OrderRowAction(props: IOrderRowProps) {
                 <MenuItem Icon={Pen} link={`${_linkDir}/form`}>
                     Edit
                 </MenuItem>
-                <MenuItem
-                    Icon={Icons.Merge}
-                    onClick={() => {
-                        openModal("backOrder", row);
-                    }}
-                >
-                    Back Order
-                </MenuItem>
+                {row.slug?.toLowerCase().endsWith("-bo") ? (
+                    <MenuItem
+                        Icon={Icons.close}
+                        onClick={async () => {
+                            await _cancelBackOrder(row.slug);
+                            toast.success("Backorder Cancelled");
+                        }}
+                    >
+                        Cancel Back Order
+                    </MenuItem>
+                ) : (
+                    <MenuItem
+                        Icon={Icons.Merge}
+                        onClick={() => {
+                            openModal("backOrder", row);
+                        }}
+                    >
+                        Back Order
+                    </MenuItem>
+                )}
                 {!estimate ? (
                     <>
                         <ProductionAction row={row} />
