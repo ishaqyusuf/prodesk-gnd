@@ -799,6 +799,7 @@ model CommissionPayment {
     checkNo       String?
     paymentMethod String?
     meta          Json?            @db.Json
+    deletedAt     DateTime?        @db.Timestamp(0)
     createdAt     DateTime?        @db.Timestamp(0)
     updatedAt     DateTime?        @db.Timestamp(0)
     commissions   SalesCommision[]
