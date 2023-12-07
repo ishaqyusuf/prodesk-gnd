@@ -22,7 +22,7 @@ import ConfirmBtn from "../confirm-btn";
 import { deleteInvoiceTasks } from "@/app/_actions/community-invoice/delete-invoice-task";
 import {
     UpdateIvoiceTasksActionProps,
-    updateInvoiceTasksAction
+    updateInvoiceTasksAction,
 } from "@/app/_actions/community-invoice/update-invoice-tasks";
 import { UpdateOrderPriorityProps } from "@/types/sales";
 import Money from "../money";
@@ -37,13 +37,13 @@ export default function EditInvoiceModal() {
         sumDue;
     }>({
         defaultValues: {
-            tasks: []
-        }
+            tasks: [],
+        },
     });
     // const watchTasks = form.watch("tasks");
     const { fields, remove, append } = useFieldArray({
         control: form.control,
-        name: "tasks"
+        name: "tasks",
     });
     async function submit(data?: ExtendedHome) {
         if (!data) return;
@@ -52,9 +52,9 @@ export default function EditInvoiceModal() {
                 const tasks = form.getValues("tasks");
                 const payload: UpdateIvoiceTasksActionProps = {
                     create: [],
-                    update: []
+                    update: [],
                 };
-                tasks.map(t => {
+                tasks.map((t) => {
                     t.amountDue = Number(t.amountDue);
                     t.amountPaid = Number(t.amountPaid);
                     console.log(t);
@@ -65,26 +65,28 @@ export default function EditInvoiceModal() {
                                 homeId: data.id,
                                 projectId: data.projectId,
                                 search: data.search,
-                                meta: {}
+                                meta: {},
                             } as any);
                     } else {
-                        const old = data.tasks.find(ot => ot.id == t.id);
+                        const old = data.tasks.find((ot) => ot.id == t.id);
                         const { amountDue, amountPaid, checkNo, checkDate } = t;
                         if (
                             old?.amountDue != t.amountDue ||
                             old?.amountPaid != t.amountPaid ||
                             old?.checkNo != t.checkNo ||
-                            old?.checkDate != t.checkDate
+                            old?.checkDate != t.checkDate ||
+                            old?.taskName != t.taskName
                         ) {
                             payload.update.push({
                                 id: t.id,
                                 data: {
+                                    taskName: t.taskName,
                                     amountDue,
                                     amountPaid,
                                     checkNo,
                                     checkDate,
-                                    createdAt: t.createdAt
-                                } as any
+                                    createdAt: t.createdAt,
+                                } as any,
                             });
                         }
                     }
@@ -115,15 +117,15 @@ export default function EditInvoiceModal() {
         console.log(data);
         const tasks: any = [];
         const deleteIds: number[] = [];
-        data.tasks.map(t => {
-            if (!tasks.find(ot => t.taskName == ot.taskName)) tasks.push(t);
+        data.tasks.map((t) => {
+            if (!tasks.find((ot) => t.taskName == ot.taskName)) tasks.push(t);
             else deleteIds.push(t.id);
         });
         setDeleteIds(deleteIds);
 
         form.reset({
             ...data,
-            tasks
+            tasks,
         });
     }
     function register(i, key: keyof IHomeTaskList) {
@@ -141,7 +143,7 @@ export default function EditInvoiceModal() {
     return (
         <BaseModal<ExtendedHome>
             className="sm:max-w-[750px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data);
             }}
             onClose={() => {}}
@@ -205,7 +207,7 @@ export default function EditInvoiceModal() {
                                             <DatePicker
                                                 format={"YYYY-MM-DD"}
                                                 className="flex-1 w-full h-7"
-                                                setValue={e =>
+                                                setValue={(e) =>
                                                     form.setValue(
                                                         `tasks.${i}.checkDate`,
                                                         e
@@ -243,9 +245,9 @@ export default function EditInvoiceModal() {
                             </div> */}
                             <Button
                                 onClick={() => {
-                                    append(({
-                                        meta: {}
-                                    } as Partial<IHomeTask>) as any);
+                                    append({
+                                        meta: {},
+                                    } as Partial<IHomeTask> as any);
                                 }}
                                 variant="secondary"
                                 className="w-full h-7 mt-1"

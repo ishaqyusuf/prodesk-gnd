@@ -75,7 +75,7 @@ export default function BuilderModal() {
                         homeIds.map(({ id }) => id),
                         500
                     );
-                    console.log(a[0]);
+                    // console.log(a[0]);
                     await toastArrayAction({
                         items: a,
                         serverAction: async (units) =>
