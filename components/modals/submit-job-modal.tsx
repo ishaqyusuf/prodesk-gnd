@@ -20,19 +20,19 @@ import { ArrowLeft } from "lucide-react";
 import {
     ExtendedHome,
     ExtendedHomeTasks,
-    InstallCostingTemplate
+    InstallCostingTemplate,
 } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import {
     saveProject,
-    staticProjectsAction
+    staticProjectsAction,
 } from "@/app/_actions/community/projects";
 import { HomeJobList, IJobs, IUser } from "@/types/hrm";
 
 import {
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "../columns/base-columns";
 import { ScrollArea } from "../ui/scroll-area";
 import { getJobCostData, getUnitJobs } from "@/app/_actions/hrm-jobs/job-units";
@@ -42,7 +42,7 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
+    TableRow,
 } from "../ui/table";
 import Money from "../money";
 import { getSettingAction } from "@/app/_actions/settings";
@@ -51,13 +51,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
 import {
     createJobAction,
-    updateJobAction
+    updateJobAction,
 } from "@/app/_actions/hrm-jobs/create-job";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { loadStatic1099Contractors } from "@/app/_actions/hrm/get-employess";
 import {
@@ -66,11 +66,12 @@ import {
     SelectGroup,
     SelectItem,
     SelectTrigger,
-    SelectValue
+    SelectValue,
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 import AutoComplete from "../auto-complete";
 import { _changeWorker } from "@/app/_actions/hrm-jobs/job-actions";
+import { User } from "next-auth";
 
 interface ModalInterface {
     data: IJobs | undefined;
@@ -83,20 +84,23 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IJobs>({
         defaultValues: {
-            meta: {}
-        }
+            meta: {},
+        },
     });
     const id = form.watch("id");
     useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
-        loadStaticList(
-            "staticInstallers",
-            techEmployees,
-            loadStatic1099Contractors
-        );
+        (async () => {
+            setEmployees((await loadStatic1099Contractors()) as any);
+        })();
+        // loadStaticList(
+        //     "staticInstallers",
+        //     techEmployees,
+        //     loadStatic1099Contractors
+        // );
 
         getSettingAction<InstallCostSettings>("install-price-chart").then(
-            res => {
+            (res) => {
                 console.log("res", res);
                 setCostSetting(res);
             }
@@ -114,14 +118,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             // if(!form.getValues)
             try {
                 // const isValid = employeeSchema.parse(form.getValues());
-                const {
-                    homeData,
-                    unit,
-                    project,
-                    user,
-                    createdAt,
-                    ...job
-                } = form.getValues();
+                const { homeData, unit, project, user, createdAt, ...job } =
+                    form.getValues();
                 if (!job.id) {
                     if (!isInstallation() || !job.homeId) job.meta.addon = 0;
                 }
@@ -130,8 +128,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                 [
                     job.meta.addon,
                     job.meta.taskCost,
-                    job.meta.additional_cost
-                ].map(n => n > 0 && (job.amount += Number(n)));
+                    job.meta.additional_cost,
+                ].map((n) => n > 0 && (job.amount += Number(n)));
                 if (job.coWorkerId) job.amount /= 2;
                 if (!job.id) await createJobAction(job as any);
                 else await updateJobAction(job as any);
@@ -145,7 +143,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             }
         });
     }
-    const projects = useAppSelector(state => state?.slicers?.staticProjects);
+    const projects = useAppSelector((state) => state?.slicers?.staticProjects);
 
     async function init(data: IJobs, defaultTab) {
         form.reset();
@@ -156,10 +154,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             ? {
                   title: "Custom Project",
                   type: data?.type,
-                  meta: {}
+                  meta: {},
               }
             : {
-                  ...data
+                  ...data,
               };
         const { homeTasks, ...d } = __ as any;
         // Object.entries(__).map(([k, v]) => form.setValue(k as any, v));
@@ -176,7 +174,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         if (data?.projectId) {
             // let project = projects.find(p => data.projectId == p.id);
             const _units = await loadUnits(data.projectId);
-            const unit = _units.find(u => (u.id = data?.homeId));
+            const unit = _units.find((u) => (u.id = data?.homeId));
             // console.log(unit, _units);
             console.log(unit);
             if (!unit && defaultTab == "tasks") setTab("general");
@@ -232,7 +230,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             // console.log(Object.keys(cd).length == 0);
             Object.entries(unit.costing).map(([k, v]) => {
                 costData[k] = {
-                    cost: costSetting?.meta?.list?.find(d => d.uid == k)?.cost
+                    cost: costSetting?.meta?.list?.find((d) => d.uid == k)
+                        ?.cost,
                     // qty: cd[k]?.qty || null
                 };
             });
@@ -242,9 +241,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         form.setValue("subtitle", unit.name);
         console.log(costSetting, unit.costing);
         const _tasks = costSetting?.meta?.list
-            ?.filter(v => isDecoShutter() || unit?.costing?.[v.uid])
+            ?.filter((v) => isDecoShutter() || unit?.costing?.[v.uid])
             ?.filter(
-                v =>
+                (v) =>
                     (isDecoShutter() &&
                         v.title.toLowerCase() == "deco-shutters") ||
                     (!isDecoShutter() &&
@@ -266,7 +265,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const [unitCosting, setUnitCosting] = useState<
         InstallCostingTemplate<number | string>
     >({} as any);
-    const techEmployees = useAppSelector(s => s.slicers.staticInstallers);
+    // const techEmployees = useAppSelector(s => s.slicers.staticInstallers);
+    const [techEmployees, setEmployees] = useState<User[]>([]);
 
     const [tab, setTab] = useState("project");
     const [prevTab, setPrevTab] = useState<any>([]);
@@ -301,12 +301,12 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const jobId = form.watch("id");
     // const addCost = form.watch("meta.additional_cost");
     function resetFields(k) {
-        k.map(v => form.setValue(v, null));
+        k.map((v) => form.setValue(v, null));
     }
     const [q, setQ] = useState("");
     function search<T>(list: T[], key: keyof T) {
         return list;
-        return list.filter(l =>
+        return list.filter((l) =>
             (l?.[key] as any)?.toLowerCase()?.includes(q?.toString())
         );
     }
@@ -321,11 +321,11 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                         options={[
                             {
                                 id: null,
-                                title: "Custom Project"
+                                title: "Custom Project",
                             },
-                            ...(projects || [])
+                            ...(projects || []),
                         ]}
-                        onChange={item => selectProject(item.data)}
+                        onChange={(item) => selectProject(item.data)}
                         itemText={"title"}
                         itemValue="id"
                     />
@@ -341,12 +341,12 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 id: null,
                                 name: "Custom",
                                 costing: {
-                                    costings: {}
-                                }
+                                    costings: {},
+                                },
                             },
-                            ...units
+                            ...units,
                         ]}
-                        onChange={item => selectUnit(item.data)}
+                        onChange={(item) => selectUnit(item.data)}
                         itemText={"name"}
                         itemValue="id"
                     />
@@ -357,7 +357,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     return (
         <BaseModal<ModalInterface>
             className="sm:max-w-[550px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data?.data as any, data.defaultTab);
             }}
             onClose={() => {}}
@@ -381,7 +381,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                         "meta.taskCosts",
                                         "meta.costData",
                                         "homeId",
-                                        "subtitle"
+                                        "subtitle",
                                     ];
                                     if (tab1 == "unit") resetFields(unitFields);
                                     if (tab1 == "project")
@@ -391,7 +391,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                             "title",
                                             "unit",
                                             "project",
-                                            ...unitFields
+                                            ...unitFields,
                                         ]);
                                 }}
                                 className="h-8 w-8 p-0"
@@ -408,7 +408,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 project: "Select Project",
                                 unit: "Select Unit",
                                 tasks: "Task Information",
-                                general: "Other Information"
+                                general: "Other Information",
                             }[tab]
                         )}
                     </div>
@@ -436,7 +436,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                             <ScrollArea className="h-[350px] pr-4">
                                 <div className="flex flex-col divide-y">
                                     {search(techEmployees, "name")?.map(
-                                        user => (
+                                        (user) => (
                                             <Button
                                                 onClick={async () => {
                                                     if (data?.changeWorker) {
@@ -453,7 +453,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                                     }
                                                     form.setValue(
                                                         "userId",
-                                                        user.id
+                                                        user.id as any
                                                     );
 
                                                     _setTab("tasks");
@@ -589,7 +589,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                         >
                                             <Label>Co-Worker</Label>
                                             <Select
-                                                onValueChange={e =>
+                                                onValueChange={(e) =>
                                                     form.setValue(
                                                         "coWorkerId",
                                                         +e
