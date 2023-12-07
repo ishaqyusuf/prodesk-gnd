@@ -14,18 +14,21 @@ import ModelCostModal from "@/components/modals/model-cost-modal";
 import {
     _addMissingPivotToModelCosts,
     _bootstrapPivot,
-    _createMissingPivots
+    _createMissingPivots,
 } from "@/app/_actions/community/_community-pivot";
 import CommunityModelCostModal from "@/components/modals/community-model-cost/modal";
 import CommunityInstallCostModal from "@/components/modals/community-install-cost";
+import { _synchronizePivot } from "@/app/(v2)/(loggedIn)/community-settings/community-templates/_actions/synchronize-pivots";
 
 export const metadata: Metadata = {
-    title: "Community Templates"
+    title: "Community Templates",
 };
 export default async function CommunityTemplatesPage({ searchParams }) {
     const response = await getCommunityTemplates(queryParams(searchParams));
+
     await _createMissingPivots();
     await _addMissingPivotToModelCosts();
+    await _synchronizePivot();
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>

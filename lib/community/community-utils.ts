@@ -6,14 +6,16 @@ import { sumKeyValues } from "../utils";
 import { convertToNumber } from "../use-number";
 
 export function getHomeProductionStatus(home: ExtendedHome) {
-    const prod = home?.tasks?.filter(t => t.produceable);
+    const prod = home?.tasks?.filter((t) => t.produceable);
+    if (home.builderId == 14)
+        console.log(home.modelName, prod.length, home.tasks);
     const produceables = prod?.length;
-    let produced = prod?.filter(p => p.producedAt).length;
+    let produced = prod?.filter((p) => p.producedAt).length;
     const hasJob = home?.jobs?.length;
     if (hasJob) produced = prod.length;
     const pending = produceables - produced;
     let productionStatus = "Idle";
-    const sent = prod?.filter(p => p.sentToProductionAt)?.length;
+    const sent = prod?.filter((p) => p.sentToProductionAt)?.length;
 
     if (sent > 0) productionStatus = "Queued";
     if (produced > 0) {
@@ -26,7 +28,7 @@ export function getHomeProductionStatus(home: ExtendedHome) {
         produced,
         pendingProduction: pending,
         productionStatus,
-        badgeColor: getBadgeColor(productionStatus)
+        badgeColor: getBadgeColor(productionStatus),
     };
 }
 export function homeSearchMeta(
@@ -60,13 +62,13 @@ export function calculateHomeInvoice(home: ExtendedHome) {
     const data = {
         paid: 0,
         due: 0,
-        chargeBack: 0
+        chargeBack: 0,
     };
-    home.tasks?.map(task => {
+    home.tasks?.map((task) => {
         const due = task.amountDue || 0;
         const paid = task.amountPaid || 0;
         data.due += due;
-        if (paid => 0) {
+        if ((paid) => 0) {
             data.paid += paid;
         } else data.chargeBack += paid;
     });
@@ -82,7 +84,7 @@ export function calculateCommunitModelCost(_cost, builderTasks) {
     cost.totalTax = sumKeyValues(cost.tax);
 
     cost.sumCosts = {};
-    builderTasks?.map(task => {
+    builderTasks?.map((task) => {
         const k = task.uid;
         const tv = cost.tax?.[k] || 0;
         const cv = cost.costs?.[k] || 0;
@@ -97,9 +99,9 @@ export function getPivotModel(model) {
     const pivotM = model
         .toLowerCase()
         .split(" ")
-        .flatMap(part => part.split("/"))
+        .flatMap((part) => part.split("/"))
         .filter(Boolean)
-        .filter(v => !["lh", "rh", "l", "r"].includes(v))
+        .filter((v) => !["lh", "rh", "l", "r"].includes(v))
         .join(" ");
     return pivotM;
 }
@@ -108,7 +110,7 @@ export function getTwinModelName(modelName) {
         "/l": "/r",
         "/r": "/l",
         rh: "lh",
-        lh: "rh"
+        lh: "rh",
     };
     let lm = modelName.toLowerCase();
     for (const pattern in replacements) {

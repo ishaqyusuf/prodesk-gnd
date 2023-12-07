@@ -5,7 +5,7 @@ import { ICommunityTemplate, ICostChart } from "@/types/community";
 import {
     Cell,
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "../columns/base-columns";
 import Money from "../money";
 import { openModal } from "@/lib/modal";
@@ -21,9 +21,10 @@ export default function InstallCostCell({ modal, row }: Props) {
         <Cell className="cursor-pointer" onClick={() => openModal(modal, row)}>
             <Badge
                 className={cn(
-                    row.meta?.installCosts?.length > 0 ||
-                        row?.pivot?.meta?.installCost
+                    row?.pivot?.meta?.installCost
                         ? "bg-green-200 text-green-700 hover:bg-green-200"
+                        : row.meta?.installCosts?.length > 0
+                        ? "bg-orange-200 text-orange-700 hover:bg-purple-200"
                         : "bg-slate-200 text-slate-700 hover:bg-slate-200"
                 )}
             >

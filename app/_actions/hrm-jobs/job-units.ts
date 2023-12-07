@@ -12,7 +12,7 @@ import {
     IHomeTemplate,
     IProject,
     InstallCost,
-    InstallCosting
+    InstallCosting,
 } from "@/types/community";
 import { HomeJobList, IJobMeta, IJobType } from "@/types/hrm";
 
@@ -23,10 +23,10 @@ export async function getJobCostData(id, title) {
             // homeTemplate: true
             communityTemplate: {
                 include: {
-                    pivot: true
-                }
-            }
-        }
+                    pivot: true,
+                },
+            },
+        },
     });
     const template: ICommunityTemplateMeta = home?.communityTemplate
         ?.meta as any;
@@ -38,7 +38,7 @@ export async function getJobCostData(id, title) {
         // return template.installCosts;
         return (
             template.installCosts
-                ?.map(i => {
+                ?.map((i) => {
                     if (!i.title) i.title = "Default";
                     if (i.title == spl) return i.costings;
                     return null;
@@ -65,13 +65,13 @@ export async function getUnitJobs(
 ) {
     const project = await prisma.projects.findFirst({
         where: {
-            id: projectId
+            id: projectId,
         },
         include: {
             communityModels: {
                 include: {
-                    pivot: true
-                }
+                    pivot: true,
+                },
             },
             homes: {
                 // where: {},
@@ -81,31 +81,36 @@ export async function getUnitJobs(
                         select: {
                             jobs: {
                                 where: {
-                                    type: jobType
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                                    type: jobType,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     });
     const ls: HomeJobList[] = [];
     const proj: IProject = project as any;
 
-    project?.homes?.map(unit => {
+    project?.homes?.map((unit) => {
+        const isTestUnit = unit.lot == "1118";
+
         if (unit._count.jobs > 0 && byAvailability) {
             return;
         }
+        // if (isTestUnit) console.log(unit);
         let template: IHomeTemplate = unit.homeTemplate as any;
-        let communityTemplate: ICommunityTemplate = project.communityModels.find(
-            m => m.modelName == unit.modelName
-        ) as any;
+        let communityTemplate: ICommunityTemplate =
+            project.communityModels.find(
+                (m) => m.modelName == unit.modelName
+            ) as any;
+        if (isTestUnit) console.log(communityTemplate);
         if (jobType == "punchout") {
             ls.push({
                 id: unit.id,
                 name: unitTaskName(unit),
-                disabled: unit._count.jobs > 0
+                disabled: unit._count.jobs > 0,
             });
             return;
         }
@@ -125,7 +130,7 @@ export async function getUnitJobs(
             _pushCost(initJobData(unit as any, proj, costings));
             return;
         }
-        template.meta.installCosts?.map(cost => {
+        template.meta.installCosts?.map((cost) => {
             _pushCost(initJobData(unit as any, proj, cost?.costings));
         });
     }); //.filter(Boolean)
@@ -139,7 +144,7 @@ export async function getUnitJobs(
             .sort(
                 (a, b) => a?.name?.localeCompare(b.name) as any
             ) as HomeJobList[],
-        addon: proj?.meta?.addon
+        addon: proj?.meta?.addon,
     };
 }
 
@@ -175,7 +180,7 @@ function initJobData(
         id: unit.id,
         name,
         costing,
-        disabled: (unit as any)._count.jobs > 0
+        disabled: (unit as any)._count.jobs > 0,
     } as any;
     // }
     return null as any;

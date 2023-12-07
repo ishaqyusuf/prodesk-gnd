@@ -16,25 +16,28 @@ import { IBuilder } from "@/types/community";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { Plus, Trash } from "lucide-react";
-import { generateRandomString } from "@/lib/utils";
+import { chunkArray, generateRandomString } from "@/lib/utils";
 import {
     saveBuilder,
     saveBuilderInstallations,
-    saveBuilderTasks
+    saveBuilderTasks,
 } from "@/app/_actions/community/builders";
 import { Form, FormField } from "../ui/form";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { _updateBuilderMetaAction } from "@/app/(v2)/(loggedIn)/community-settings/builders/_actions/update-builder-action";
+import { _getBuilderHomeIds } from "@/app/(v2)/(loggedIn)/community-settings/builders/_actions/save-builder-task-action";
+import { toastArrayAction } from "@/lib/toast-util";
 
 export default function BuilderModal() {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IBuilder>({
-        defaultValues: {}
+        defaultValues: {},
     });
     const [taskIds, setTaskIds] = useState([]);
     const { fields, remove, append } = useFieldArray({
         control: form.control,
-        name: "meta.tasks"
+        name: "meta.tasks",
     });
     async function submit(type) {
         startTransition(async () => {
@@ -50,16 +53,24 @@ export default function BuilderModal() {
                     const newTaskIds: any = [];
                     let deleteIds: any = [...taskIds];
                     if (Array.isArray(tasks)) {
-                        data.meta.tasks = tasks.map(t => {
+                        data.meta.tasks = tasks.map((t) => {
                             if (!t.uid) {
                                 t.uid = generateRandomString(4);
                                 newTaskIds.push(t.uid);
                             }
-                            deleteIds = deleteIds.filter(d => d != t.uid);
+                            deleteIds = deleteIds.filter((d) => d != t.uid);
                             return t;
                         });
                     }
-
+                    const b = await _updateBuilderMetaAction(
+                        data.meta,
+                        data.id
+                    );
+                    const homeIds = await _getBuilderHomeIds(data.id);
+                    console.log(homeIds.length);
+                    const a = await chunkArray(homeIds, 50);
+                    // await toastArrayAction()
+                    return;
                     // console.log(deleteIds, newTaskIds);
                     await saveBuilderTasks(data, deleteIds, newTaskIds);
                 }
@@ -78,7 +89,7 @@ export default function BuilderModal() {
     }
     async function init(data) {
         form.reset(data || { meta: {} });
-        setTaskIds(data?.meta?.tasks?.map(t => t.uid) || []);
+        setTaskIds(data?.meta?.tasks?.map((t) => t.uid) || []);
     }
     return (
         <BaseModal<{
@@ -86,7 +97,7 @@ export default function BuilderModal() {
             data: IBuilder;
         }>
             className="sm:max-w-[700px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data?.data);
             }}
             onClose={() => {}}
@@ -177,8 +188,8 @@ export default function BuilderModal() {
                                                 "produceable",
                                                 "installable",
                                                 "punchout",
-                                                "deco"
-                                            ].map(k => (
+                                                "deco",
+                                            ].map((k) => (
                                                 <div
                                                     key={k}
                                                     className="flex justify-center"

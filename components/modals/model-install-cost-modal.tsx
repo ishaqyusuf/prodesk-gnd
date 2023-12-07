@@ -15,7 +15,7 @@ import {
     ICommunityTemplate,
     IHomeTemplate,
     IProject,
-    InstallCost
+    InstallCost,
 } from "@/types/community";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
@@ -24,12 +24,12 @@ import { deepCopy } from "@/lib/deep-copy";
 import {
     InstallCostLine,
     InstallCostMeta,
-    InstallCostSettings
+    InstallCostSettings,
 } from "@/types/settings";
 import { getSettingAction } from "@/app/_actions/settings";
 import {
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "../columns/base-columns";
 import Money from "../money";
 import {
@@ -38,7 +38,7 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
+    TableRow,
 } from "../ui/table";
 import { cn } from "@/lib/utils";
 import { updateModelInstallCost } from "@/app/_actions/community/install-costs";
@@ -53,15 +53,15 @@ export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<{ costs: InstallCost[]; enable: Boolean }>({
-        defaultValues: {}
+        defaultValues: {},
     });
     const { append, fields } = useFieldArray({
         control: form.control,
-        name: "costs"
+        name: "costs",
     });
 
     const installCostSetting = useAppSelector(
-        s => s.slicers.installCostSetting
+        (s) => s.slicers.installCostSetting
     );
     const [index, setIndex] = useState(0);
     useEffect(() => {
@@ -83,7 +83,7 @@ export default function ModelInstallCostModal({ community = false }) {
                 if (!community)
                     await updateModelInstallCost(data.id, {
                         ...data.meta,
-                        installCosts: costs
+                        installCosts: costs,
                     });
                 else {
                     let meta: any = null;
@@ -114,7 +114,7 @@ export default function ModelInstallCostModal({ community = false }) {
         });
     }
     async function init(data) {
-        // console.log(data);
+        console.log(data);
         if (community) {
             let cd = data as ICommunityTemplate;
             // cd.pivotId
@@ -125,20 +125,20 @@ export default function ModelInstallCostModal({ community = false }) {
                         costings:
                             cd?.pivot?.meta?.installCost ||
                             cd?.meta?.installCosts?.[0]?.costings ||
-                            {}
-                    }
-                ]
+                            {},
+                    },
+                ],
             });
         } else
             form.reset({
-                costs: data.meta.installCosts || [{}]
+                costs: data.meta.installCosts || [{}],
                 // enable: (data?.meta as any)?.overrideModelCost
             });
     }
     return (
         <BaseModal<any>
             className="sm:max-w-[600px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data);
             }}
             onClose={() => {}}
@@ -167,11 +167,11 @@ export default function ModelInstallCostModal({ community = false }) {
                         </div>
                         <div className="">
                             <Button
-                                disabled={fields.find(f => !f.id) != null}
+                                disabled={fields.find((f) => !f.id) != null}
                                 onClick={() => {
                                     append({
                                         title: "",
-                                        costings: {}
+                                        costings: {},
                                     });
                                 }}
                                 variant="outline"
@@ -308,7 +308,7 @@ export default function ModelInstallCostModal({ community = false }) {
 function CommunityDefaultQty({
     form,
     project,
-    costLine
+    costLine,
 }: {
     form;
     project: IProject;

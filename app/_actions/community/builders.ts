@@ -15,23 +15,23 @@ export async function getBuildersAction(query: BuildersQueryParams) {
         include: {
             _count: {
                 select: {
-                    projects: true
-                }
-            }
+                    projects: true,
+                },
+            },
             //  builder: true,
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.builders);
 
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 function whereBuilder(query: BuildersQueryParams) {
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     const where: Prisma.BuildersWhereInput = {
         // builderId: {
@@ -45,8 +45,8 @@ export async function staticBuildersAction() {
     const _data = await prisma.builders.findMany({
         select: {
             id: true,
-            name: true
-        }
+            name: true,
+        },
     });
     return _data;
 }
@@ -57,26 +57,27 @@ export async function saveBuilder(data: IBuilder) {
 export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
     await prisma.builders.update({
         where: {
-            id: data.id
+            id: data.id,
         },
         data: {
-            meta: data.meta as any
-        }
+            meta: data.meta as any,
+        },
     });
 
     const taskNames: any = [];
     await Promise.all(
-        data.meta.tasks.map(async p => {
+        data.meta.tasks.map(async (p) => {
             await prisma.homeTasks.updateMany({
                 where: {
                     home: {
-                        builderId: data.id
+                        builderId: data.id,
                     },
-                    taskUid: p.uid
+                    taskUid: p.uid,
                     // taskName: {
                     //     not: p.name
                     // }
                 },
+
                 data: {
                     taskName: p.name,
                     billable: p.billable,
@@ -84,8 +85,8 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
                     addon: p.addon,
                     installable: p.installable,
                     deco: p.deco,
-                    punchout: p.punchout
-                }
+                    punchout: p.punchout,
+                },
             });
         })
     );
@@ -93,20 +94,20 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
         await prisma.homeTasks.deleteMany({
             where: {
                 taskUid: {
-                    in: deleteIds
+                    in: deleteIds,
                 },
                 home: {
-                    installedAt: null
-                }
+                    installedAt: null,
+                },
                 // prodStartedAt: null,
-            }
+            },
         });
 
     if (newTaskIds) {
         // let tasks
         let homes = await prisma.homes.findMany({
             where: {
-                builderId: data.id
+                builderId: data.id,
             },
             select: {
                 id: true,
@@ -114,29 +115,29 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
                 search: true,
                 jobs: {
                     select: {
-                        id: true
-                    }
-                }
-            }
+                        id: true,
+                    },
+                },
+            },
         });
         const taskData = homes
-            .map(h =>
+            .map((h) =>
                 // !h.jobs.length &&
                 ({
                     projectId: h.projectId,
                     homeId: h.id,
-                    search: h.search
+                    search: h.search,
                 })
             )
             .filter(Boolean);
         await createBuilderTasks(
-            data.meta.tasks.filter(t => newTaskIds.includes(t.uid)),
+            data.meta.tasks.filter((t) => newTaskIds.includes(t.uid)),
             taskData as any
         );
     }
     const homes = await prisma.homes.findMany({
         where: {
-            builderId: data.id
+            builderId: data.id,
         },
         select: {
             id: true,
@@ -145,16 +146,16 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
             tasks: {
                 select: {
                     id: true,
-                    taskUid: true
-                }
-            }
-        }
+                    taskUid: true,
+                },
+            },
+        },
     });
     // console.log(homes.length);
     let tasks: any[] = [];
-    homes.map(home => {
+    homes.map((home) => {
         let bTasks = data.meta.tasks.filter(
-            t => !home.tasks.some(s => s.taskUid == t.uid)
+            (t) => !home.tasks.some((s) => s.taskUid == t.uid)
         );
         if (bTasks.length) {
             tasks.push(
@@ -162,8 +163,8 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
                     {
                         projectId: home.projectId,
                         homeId: home.id,
-                        search: home.search
-                    }
+                        search: home.search,
+                    },
                 ])
             );
         }
@@ -171,7 +172,7 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
     // console.log(tasks.length);
     // await Promise.all
     await prisma.homeTasks.createMany({
-        data: tasks
+        data: tasks,
     });
     revalidatePath("/settings/community/builders", "page");
 }
@@ -188,11 +189,11 @@ function createBuilderTasks(
     homeCost?
 ) {
     const tasks: any[] = [];
-    taskData.map(td => {
-        builderTasks.map(builderTask => {
+    taskData.map((td) => {
+        builderTasks.map((builderTask) => {
             const _task: IHomeTask = {
                 meta: {},
-                ...td
+                ...td,
             } as any;
             _task.billable = builderTask.billable as boolean;
             _task.installable = builderTask.installable as boolean;

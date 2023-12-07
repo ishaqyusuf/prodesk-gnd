@@ -57,7 +57,7 @@ export function transformData<T>(data: T, update = false) {
     let date = new Date();
     Object.entries({
         createdAt: date,
-        updatedAt: date
+        updatedAt: date,
     }).map(([k, v]) => {
         if (!update || (update && k != "createdAt")) {
             if (k == "createdAt" && data[k]) return;
@@ -79,8 +79,8 @@ export async function slugModel(value, model, c = 0) {
 
     let count = await model.count({
         where: {
-            slug
-        }
+            slug,
+        },
     });
     if (count > 0) return await slugModel(value, model, c + 1);
 
@@ -89,9 +89,9 @@ export async function slugModel(value, model, c = 0) {
 export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
     if (!array) return 0;
     return array
-        .map(v => (!key ? v : v?.[key]))
-        .map(v => (v ? Number(v) : null))
-        .filter(v => (v as any) > 0 && !isNaN(v as any))
+        .map((v) => (!key ? v : v?.[key]))
+        .map((v) => (v ? Number(v) : null))
+        .filter((v) => (v as any) > 0 && !isNaN(v as any))
         .reduce((sum, val) => (sum || 0) + (val as number), 0);
 }
 export function sumKeyValues(arg) {
@@ -104,13 +104,13 @@ export function sumKeyValues(arg) {
 }
 export const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD" // Replace with your desired currency code
+    currency: "USD", // Replace with your desired currency code
 });
 export function toSingular(plural) {
     const rules = [
         { suffix: "s", replace: "" },
         { suffix: "es", replace: "" },
-        { suffix: "ies", replace: "y" }
+        { suffix: "ies", replace: "y" },
         // Add more rules as needed
     ];
 
@@ -147,18 +147,16 @@ export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
 
     return result;
 }
-const camelCaseKey = key =>
+const camelCaseKey = (key) =>
     key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
 export function camel(str: string) {
-    return str.replace(/^([A-Z])|\s(\w)/g, function(
-        match: any,
-        p1: any,
-        p2: any,
-        offset: any
-    ) {
-        if (p2) return p2.toUpperCase();
-        return p1.toLowerCase();
-    });
+    return str.replace(
+        /^([A-Z])|\s(\w)/g,
+        function (match: any, p1: any, p2: any, offset: any) {
+            if (p2) return p2.toUpperCase();
+            return p1.toLowerCase();
+        }
+    );
 }
 export function designDotToObject(object) {
     // return toDotNotation(object);
@@ -209,16 +207,18 @@ export function addPercentage(value, percentage) {
 export function getModelNumber(modelName) {
     return modelName
         ?.split(" ")
-        .filter(f => !["lh", "rh", "unkn", "unkwn"].includes(f?.toLowerCase()))
+        .filter(
+            (f) => !["lh", "rh", "unkn", "unkwn"].includes(f?.toLowerCase())
+        )
         .join(" ");
 }
 export const uniqueBy = (data, key) => {
-    const unique = [...new Set(data.map(item => item[key]?.toLowerCase()))];
+    const unique = [...new Set(data.map((item) => item[key]?.toLowerCase()))];
     // console.log(unique);
-    return unique.map(s => {
-        const d = data.find(h => h[key]?.toLowerCase() == s);
+    return unique.map((s) => {
+        const d = data.find((h) => h[key]?.toLowerCase() == s);
         return {
-            ...d
+            ...d,
         };
     });
 };
@@ -237,7 +237,7 @@ export async function _serverAction(
     {
         fn,
         onSuccess,
-        onError
+        onError,
     }: {
         fn;
         onSuccess?(data?);
@@ -267,4 +267,13 @@ export function groupArray<T>(arr: T[], by: keyof T): { [k in string]: T[] } {
         grouped[title].push(item);
     }
     return grouped;
+}
+export function chunkArray(array, chunkSize) {
+    const result: any[] = [];
+    const arr = [...array];
+    while (arr.length > 0) result.push(arr.splice(0, chunkSize));
+    return result;
+    // for (let i =0; i <array.length; i += chunkSize)
+    //     result.push(array.slice(i, i + chunkSize))
+    // return result;
 }

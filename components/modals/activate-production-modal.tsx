@@ -12,14 +12,14 @@ import { toast } from "sonner";
 
 import { Label } from "../ui/label";
 
-import { ExtendedHome, IHome } from "@/types/community";
+import { ExtendedHome } from "@/types/community";
 import { DatePicker } from "../date-range-picker";
 import { activateHomeProductionAction } from "@/app/_actions/community/activate-production";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { Checkbox } from "../ui/checkbox";
 import {
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "../columns/base-columns";
 import { ScrollArea } from "../ui/scroll-area";
 
@@ -56,16 +56,16 @@ export default function ActivateProductionModal() {
     function checkHome(id, state) {
         setCheckedIds({
             ...checkedIds,
-            [id]: state
+            [id]: state,
         });
     }
     return (
         <BaseModal<ExtendedHome[] | undefined>
             className="sm:max-w-[450px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 setDueDate(null);
                 setCheckedIds({});
-                data?.map(h => checkHome(h.id, true));
+                data?.map((h) => checkHome(h.id, true));
             }}
             onClose={() => {}}
             modalName="activateProduction"
@@ -77,7 +77,7 @@ export default function ActivateProductionModal() {
                             <Label>Due Date</Label>
                             <DatePicker
                                 className="w-auto h-7"
-                                setValue={e => setDueDate(e)}
+                                setValue={(e) => setDueDate(e)}
                                 value={dueDate}
                             />
                         </div>
@@ -85,14 +85,14 @@ export default function ActivateProductionModal() {
                             <ScrollArea className="min-h-max max-h-[50vh]">
                                 <Table>
                                     <TableBody>
-                                        {data?.map(home => (
+                                        {data?.map((home) => (
                                             <TableRow key={home.id}>
                                                 <TableCell>
                                                     <Checkbox
                                                         checked={
                                                             checkedIds[home.id]
                                                         }
-                                                        onCheckedChange={e =>
+                                                        onCheckedChange={(e) =>
                                                             checkHome(
                                                                 home.id,
                                                                 e
