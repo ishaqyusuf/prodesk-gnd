@@ -10,7 +10,7 @@ interface Props {
     Logo;
 }
 export function OrderPrintHeader({ order, Logo }: Props) {
-    const po = useAppSelector(state => state.slicers.printOrders);
+    const po = useAppSelector((state) => state.slicers.printOrders);
 
     return (
         <thead id="topHeader">
@@ -138,11 +138,17 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                             {order?.id && (
                                 <tr>
                                     <Address
+                                        businessName={
+                                            order.customer?.businessName
+                                        }
                                         address={order.billingAddress}
                                         title="Sold To"
                                     />
                                     <td colSpan={1} />
                                     <Address
+                                        businessName={
+                                            order.customer?.businessName
+                                        }
                                         address={order.shippingAddress}
                                         title="Ship To"
                                     />
@@ -191,13 +197,15 @@ function Info1Line({ label, value }) {
 }
 function Address({
     address,
-    title
+    title,
+    businessName,
 }: {
     address: IAddressBook | undefined;
     title;
+    businessName;
 }) {
     const lines = [
-        address?.name,
+        businessName || address?.name,
         `${address?.phoneNo} ${
             address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
         }`,
@@ -205,7 +213,7 @@ function Address({
         address?.address1,
         [address?.city, address?.state, address?.meta?.zip_code]
             ?.filter(Boolean)
-            ?.join(" ")
+            ?.join(" "),
     ]?.filter(Boolean);
 
     return (
