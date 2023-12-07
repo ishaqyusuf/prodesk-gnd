@@ -10,7 +10,6 @@ import CommunityTemplateTableShell from "@/components/shells/community-templates
 import ModelTemplateModal from "@/components/modals/model-template-modal";
 import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
 
-import ModelCostModal from "@/components/modals/model-cost-modal";
 import {
     _addMissingPivotToModelCosts,
     _bootstrapPivot,
@@ -28,7 +27,7 @@ export default async function CommunityTemplatesPage({ searchParams }) {
 
     // await _createMissingPivots();
     // await _addMissingPivotToModelCosts();
-    await _synchronizePivot();
+    // await _synchronizePivot();
     return (
         <CommunitySettingsLayoutComponent>
             <Breadcrumbs>
