@@ -40,7 +40,7 @@ export async function _createSalesBackOrder(
         prodId,
         payments,
         paymentTerm,
-        items
+        items,
     } = cloneOrder(order);
     if (!amountDue) amountDue = 0;
     newOrder.prodStatus = prodStatus;
@@ -50,7 +50,12 @@ export async function _createSalesBackOrder(
     newOrder.paymentTerm = paymentTerm;
     newOrder.builtQty = newOrder.prodQty = 0;
     newOrder.slug = newOrder.orderId = [orderId, "BO"].join("-");
-    newOrder.grandTotal = newOrder.subTotal = newOrder.tax = newOrder.meta.ccc = newOrder.meta.labor_cost = 0;
+    newOrder.grandTotal =
+        newOrder.subTotal =
+        newOrder.tax =
+        newOrder.meta.ccc =
+        newOrder.meta.labor_cost =
+            0;
     const orderUpdate = {
         grandTotal: 0,
         subTotal: 0,
@@ -62,8 +67,8 @@ export async function _createSalesBackOrder(
             ...order.meta,
             truckLoadLocation: loader?.truckLoadLocation,
             ccc: 0,
-            labor_cost: 0
-        }
+            labor_cost: 0,
+        },
     } as ISalesOrder;
     let taxPercent = newOrder.taxPercentage || 0;
 
@@ -72,7 +77,7 @@ export async function _createSalesBackOrder(
     let newTaxxable = 0;
     const itemUpdates: { id: number; data: ISalesOrderItem }[] = [];
     let newOrderItems = items
-        ?.map(_item => {
+        ?.map((_item) => {
             let {
                 id,
                 produced_qty,
@@ -81,7 +86,7 @@ export async function _createSalesBackOrder(
                 sentToProdAt,
                 prodStartedAt,
                 prodCompletedAt,
-                item
+                item,
             } = cloneOrderItem(_item);
             item.prodCompletedAt = prodCompletedAt;
             item.prodStatus = prodStatus;
@@ -96,7 +101,7 @@ export async function _createSalesBackOrder(
             if (!produced_qty) produced_qty = 0;
 
             let itemUpdate = {
-                meta: { ..._item.meta }
+                meta: { ..._item.meta },
             } as ISalesOrderItem;
             if (!backOrder?.backQty) {
                 // item is fully loaded
@@ -181,7 +186,7 @@ export async function _createSalesBackOrder(
             subTotal: o.subTotal + multiplier * (p?.subTotal || 0),
             amountDue: o.amountDue + multiplier * (p?.amountDue || 0),
             ccc: o.meta.ccc + multiplier * (p?.meta?.ccc || 0),
-            labor: o.meta.labor_cost + multiplier * (p?.meta?.labor_cost || 0)
+            labor: o.meta.labor_cost + multiplier * (p?.meta?.labor_cost || 0),
         };
     }
     let paymentUpdate = {
@@ -192,7 +197,7 @@ export async function _createSalesBackOrder(
         oldSumPayment: sum(payments, "amount") || 0,
         newSumPayment: 0,
         sumDiff: 0,
-        payments: payments?.length
+        payments: payments?.length,
     };
 
     if (amountDue >= newGrandTotal) {
@@ -204,7 +209,7 @@ export async function _createSalesBackOrder(
 
         let backPayment = (newOrder.grandTotal || 0) - amountDue;
         let rem = backPayment;
-        payments?.map(p => {
+        payments?.map((p) => {
             if (rem == 0) {
                 paymentUpdate.newSumPayment += p.amount;
                 return;
@@ -219,7 +224,7 @@ export async function _createSalesBackOrder(
             } else {
                 paymentUpdate.transfers.push({
                     id: p.id,
-                    amount: p.amount
+                    amount: p.amount,
                 });
                 paymentUpdate.newSumPayment += p.amount;
                 rem -= +toFixed(p.amount);
@@ -234,7 +239,7 @@ export async function _createSalesBackOrder(
         newOrder,
         newOrderItems,
         orderUpdate,
-        itemUpdates
+        itemUpdates,
         // subTotal: order.subTotal,
         // _subTotal: (orderUpdate.subTotal || 0) + newOrder.subTotal,
         // subTotalUpdate: orderUpdate.subTotal,
@@ -248,7 +253,7 @@ export async function _createSalesBackOrder(
         tax: resp.sum.tax - resp.original.tax,
         subTotal: resp.sum.subTotal - resp.original.subTotal,
         ccc: resp.sum.ccc - resp.original.ccc,
-        labor: resp.sum.labor - resp.original.labor
+        labor: resp.sum.labor - resp.original.labor,
     };
     // if (Math.abs(resp.diff.grandTotal) > 1)
     //     throw new Error("Error generate back order (800)");
@@ -269,19 +274,19 @@ export async function _createSalesBackOrder(
         items: newOrderItems?.map((item, index) => {
             if (item?.meta) item.meta.uid = index;
             return item;
-        }) as any
+        }) as any,
     });
     await Promise.all(
         itemUpdates.map(async ({ id, data }) => {
             await prisma.salesOrderItems.update({
                 where: { id },
-                data: data as any
+                data: data as any,
             });
         })
     );
     await prisma.salesOrders.update({
         where: { id: order.id },
-        data: orderUpdate as any
+        data: orderUpdate as any,
     });
     if (paymentUpdate.newPaymentAmount > 0)
         await applyPaymentAction({
@@ -293,12 +298,14 @@ export async function _createSalesBackOrder(
                     customerId: _newOrder.customerId,
                     orderId: _newOrder.orderId,
                     checkNo: "",
-                    paymentOption: ""
-                }
+                    paymentOption: "",
+                    grandTotal: _newOrder.grandTotal,
+                    salesRepId: _newOrder.salesRepId,
+                },
             ],
             debit: paymentUpdate.newPaymentAmount,
             credit: 0,
-            balance: 0
+            balance: 0,
         });
     // if(paymentUpdate.updates)
     await Promise.all(
@@ -306,8 +313,8 @@ export async function _createSalesBackOrder(
             await prisma.salesPayments.update({
                 where: { id: +k as any },
                 data: {
-                    amount: v as any
-                }
+                    amount: v as any,
+                },
             });
         })
     );
@@ -315,12 +322,12 @@ export async function _createSalesBackOrder(
         await prisma.salesPayments.updateMany({
             where: {
                 id: {
-                    in: paymentUpdate.transfers.map(t => t.id)
-                }
+                    in: paymentUpdate.transfers.map((t) => t.id),
+                },
             },
             data: {
-                orderId: _newOrder.id
-            }
+                orderId: _newOrder.id,
+            },
         });
     // } catch (e) {
     // console.log(e);
