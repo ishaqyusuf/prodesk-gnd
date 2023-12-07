@@ -89,9 +89,9 @@ export default function BuilderModal() {
                             return "Synchronizing....";
                         },
                     });
-                    return;
-                    // console.log(deleteIds, newTaskIds);
-                    await saveBuilderTasks(data, deleteIds, newTaskIds);
+                    // return;
+                    // // console.log(deleteIds, newTaskIds);
+                    // await saveBuilderTasks(data, deleteIds, newTaskIds);
                 }
                 if (type == "installations")
                     await saveBuilderInstallations(data);
