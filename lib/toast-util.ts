@@ -5,7 +5,7 @@ export async function toastArrayAction<T>({
     items,
     serverAction,
     _error,
-    loading
+    loading,
 }: {
     items: T[];
     serverAction;
@@ -16,7 +16,7 @@ export async function toastArrayAction<T>({
     async function updateCosts(index) {
         //
         const item = items[index];
-        // console.log(_cost);
+        console.log(item);
         if (item)
             toast.promise(
                 async () => {
@@ -27,10 +27,10 @@ export async function toastArrayAction<T>({
                 {
                     error: _error?.(item) || "Error",
                     loading: loading?.(item) || "Loading",
-                    success: data => {
+                    success: (data) => {
                         updateCosts(index + 1);
                         return `Updated`;
-                    }
+                    },
                 }
             );
     }

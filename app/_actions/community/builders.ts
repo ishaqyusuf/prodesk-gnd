@@ -7,6 +7,7 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { IBuilder, IBuilderTasks, IHomeTask } from "@/types/community";
 import { revalidatePath } from "next/cache";
 import { transformData } from "@/lib/utils";
+import { composeBuilderTasks } from "@/app/(v2)/(loggedIn)/community-settings/builders/compose-builder-tasks";
 export interface BuildersQueryParams extends BaseQuery {}
 export async function getBuildersAction(query: BuildersQueryParams) {
     const where = whereBuilder(query);
@@ -130,7 +131,7 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
                 })
             )
             .filter(Boolean);
-        await createBuilderTasks(
+        await composeBuilderTasks(
             data.meta.tasks.filter((t) => newTaskIds.includes(t.uid)),
             taskData as any
         );
@@ -159,7 +160,7 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
         );
         if (bTasks.length) {
             tasks.push(
-                ...createBuilderTasks(bTasks, [
+                ...composeBuilderTasks(bTasks, [
                     {
                         projectId: home.projectId,
                         homeId: home.id,
@@ -179,31 +180,3 @@ export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
 export async function deleteBuilderTasks({ builderId, taskIds }) {}
 export async function addBuilderTasks({ builderId, tasksIds, tasks }) {}
 export async function saveBuilderInstallations(data: IBuilder) {}
-function createBuilderTasks(
-    builderTasks: IBuilderTasks[],
-    taskData: {
-        projectId;
-        homeId;
-        search;
-    }[],
-    homeCost?
-) {
-    const tasks: any[] = [];
-    taskData.map((td) => {
-        builderTasks.map((builderTask) => {
-            const _task: IHomeTask = {
-                meta: {},
-                ...td,
-            } as any;
-            _task.billable = builderTask.billable as boolean;
-            _task.installable = builderTask.installable as boolean;
-            const uid = (_task.taskUid = builderTask.uid);
-            _task.taskName = builderTask.name;
-            _task.amountDue = _task.meta.system_task_cost =
-                Number(homeCost?.meta?.costs[uid]) || (null as any);
-            _task.status = "";
-            tasks.push(transformData(_task));
-        });
-    });
-    return tasks;
-}

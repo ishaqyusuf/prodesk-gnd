@@ -25,7 +25,10 @@ import {
 import { Form, FormField } from "../ui/form";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { _updateBuilderMetaAction } from "@/app/(v2)/(loggedIn)/community-settings/builders/_actions/update-builder-action";
-import { _getBuilderHomeIds } from "@/app/(v2)/(loggedIn)/community-settings/builders/_actions/save-builder-task-action";
+import {
+    _getBuilderHomeIds,
+    _syncBuilderTasks,
+} from "@/app/(v2)/(loggedIn)/community-settings/builders/_actions/save-builder-task-action";
 import { toastArrayAction } from "@/lib/toast-util";
 
 export default function BuilderModal() {
@@ -68,8 +71,24 @@ export default function BuilderModal() {
                     );
                     const homeIds = await _getBuilderHomeIds(data.id);
                     console.log(homeIds.length);
-                    const a = await chunkArray(homeIds, 50);
-                    // await toastArrayAction()
+                    const a = await chunkArray(
+                        homeIds.map(({ id }) => id),
+                        500
+                    );
+                    console.log(a[0]);
+                    await toastArrayAction({
+                        items: a,
+                        serverAction: async (units) =>
+                            await _syncBuilderTasks(
+                                data,
+                                deleteIds,
+                                newTaskIds,
+                                units
+                            ),
+                        loading(item) {
+                            return "Synchronizing....";
+                        },
+                    });
                     return;
                     // console.log(deleteIds, newTaskIds);
                     await saveBuilderTasks(data, deleteIds, newTaskIds);
