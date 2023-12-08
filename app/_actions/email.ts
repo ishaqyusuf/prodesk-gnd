@@ -16,9 +16,10 @@ export async function sendMessage(data: EmailProps) {
     // const pdf = await _generateSalesPdf("invoice", [data.data.id]);
 
     const _data = await resend.emails.send({
-        from: "Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
+        reply_to: data.reply_to,
+        from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
-        to: ["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
+        to: [data.to], //["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
         subject: trs.subject,
         html: trs.body?.split("\n").join("<br/>"),
         attachments: [

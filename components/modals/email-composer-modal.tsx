@@ -2,7 +2,7 @@
 
 import React, { useTransition } from "react";
 
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { ISalesOrder } from "@/types/sales";
 
 import { _useAsync } from "@/lib/use-async";
@@ -26,6 +26,7 @@ import { sendMessage } from "@/app/_actions/email";
 import { Label } from "../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { transformEmail } from "@/lib/email-transform";
+import { useSession } from "next-auth/react";
 
 interface Props {
     isProd?: Boolean;
@@ -36,7 +37,12 @@ export default function EmailComposerModal({ isProd }: Props) {
     const form = useForm<EmailProps>({
         defaultValues: {},
     });
-
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/login");
+        },
+    });
     async function submit() {
         startTransition(async () => {
             // if(!form.getValues)
@@ -58,10 +64,15 @@ export default function EmailComposerModal({ isProd }: Props) {
     return (
         <BaseModal<EmailModalProps>
             className="sm:max-w-[550px]"
-            onOpen={(data) => {
+            onOpen={async (data) => {
+                let from = ` From Gnd Millwork<${
+                    session?.user?.email?.split("@")?.[0]
+                }@gndprodesk.com>`;
+                from = session?.user?.name?.split(" ")?.[0] + from;
                 form.reset({
-                    to: "ishaqyusuf024@gmail.com",
-                    from: "pablo from gndprodesk<pcruz321@gmail.com>",
+                    reply_to: session?.user?.email,
+                    to: data.data?.customer?.email,
+                    from,
                     subject: "Hello @customer.name",
                     body: "Your order id is @orderId",
                     data: {
@@ -82,6 +93,11 @@ export default function EmailComposerModal({ isProd }: Props) {
             onClose={() => {}}
             modalName="email"
             Title={({ data: order }) => <div>Email Composer</div>}
+            Subtitle={({ data: order }) => (
+                <div>
+                    {order?.data?.orderId} {" | "} {order?.data?.customer?.name}
+                </div>
+            )}
             Content={({ data: order }) => (
                 <div>
                     <div className="grid md:grid-cols-2 gap-4">
