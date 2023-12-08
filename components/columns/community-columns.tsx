@@ -5,9 +5,9 @@ import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import {
     calculateHomeInvoice,
-    getHomeProductionStatus
+    getHomeProductionStatus,
 } from "@/lib/community/community-utils";
-import { Cell } from "./base-columns";
+import { Cell, DateCellContent } from "./base-columns";
 import Money from "../money";
 interface Props {
     home: ExtendedHome;
@@ -19,12 +19,14 @@ export function HomeProductionStatus({ home }: Props) {
     }, [home]);
     return (
         <div className="w-16">
+            {/* {home.} */}
             <Badge
                 variant={"secondary"}
                 className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${status.badgeColor}`}
             >
                 {status.productionStatus}
             </Badge>
+            <p>{status.prodDate}</p>
         </div>
     );
 }
@@ -35,13 +37,13 @@ export function HomeStatus({ home }: Props) {
         if (home.jobs?.length > 0)
             setStatus({
                 status: "Installed",
-                badgeColor: "bg-green-600 hover:bg-green-600"
+                badgeColor: "bg-green-600 hover:bg-green-600",
             });
         else {
             const _hs = getHomeProductionStatus(home);
             setStatus({
                 status: `Prod. ${_hs.productionStatus}`,
-                badgeColor: _hs.badgeColor
+                badgeColor: _hs.badgeColor,
             });
         }
         // setStatus(getHomeProductionStatus(home));

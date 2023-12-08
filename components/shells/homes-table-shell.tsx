@@ -10,7 +10,7 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
@@ -18,13 +18,13 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { ExtendedHome } from "@/types/community";
 import {
     HomeInstallationStatus,
-    HomeProductionStatus
+    HomeProductionStatus,
 } from "../columns/community-columns";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { MoreHorizontal, Printer, View } from "lucide-react";
@@ -34,7 +34,13 @@ import { dispatchSlice } from "@/store/slicers";
 import { HomesSelectionAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
-import { DeleteRowAction } from "../data-table/data-table-row-actions";
+import {
+    DeleteRowAction,
+    Menu,
+    MenuItem,
+    RowActionCell,
+    RowActionMoreMenu,
+} from "../data-table/data-table-row-actions";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
 import { Icons } from "../icons";
@@ -48,7 +54,7 @@ export default function HomesTableShell<T>({
     data,
     pageInfo,
     searchParams,
-    projectView
+    projectView,
 }: TableShellProps<ExtendedHome> & {
     projectView: Boolean;
 }) {
@@ -71,7 +77,7 @@ export default function HomesTableShell<T>({
                             {row.original.createdAt}
                         </DateCellContent>
                     </Cell>
-                )
+                ),
             },
             ...(!projectView
                 ? ([
@@ -91,8 +97,8 @@ export default function HomesTableShell<T>({
                                       {row.original?.project?.builder?.name}
                                   </SecondaryCellContent>
                               </Cell>
-                          )
-                      }
+                          ),
+                      },
                   ] as ColumnDef<ExtendedHome, unknown>[])
                 : []),
             {
@@ -101,7 +107,7 @@ export default function HomesTableShell<T>({
                 cell: ({ row }) => (
                     <Cell
                         className={"hover:underline cursor-pointer"}
-                        onClick={async e => {
+                        onClick={async (e) => {
                             const edit = await getUnitTemplateLink(
                                 row.original.projectId,
                                 row.original.homeTemplateId,
@@ -122,7 +128,7 @@ export default function HomesTableShell<T>({
                             {row.original?.modelName}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             // {
             //   accessorKey: "model",
@@ -155,7 +161,7 @@ export default function HomesTableShell<T>({
                     <Cell>
                         <HomeProductionStatus home={row.original} />
                     </Cell>
-                )
+                ),
             },
             {
                 accessorKey: "inst",
@@ -171,7 +177,7 @@ export default function HomesTableShell<T>({
                     >
                         <HomeInstallationStatus home={row.original} />
                     </Cell>
-                )
+                ),
             },
             ..._FilterColumn(
                 "_status",
@@ -205,7 +211,7 @@ export default function HomesTableShell<T>({
               > */}
 
                             <DropdownMenuItem
-                                onClick={async e => {
+                                onClick={async (e) => {
                                     const edit = await getUnitTemplateLink(
                                         row.original.projectId,
                                         row.original.homeTemplateId,
@@ -219,19 +225,30 @@ export default function HomesTableShell<T>({
                                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                 Edit Template
                             </DropdownMenuItem>
+
                             <DropdownMenuItem
-                                onClick={e => {
+                                onClick={(e) => {
                                     openModal("home", row.original);
                                 }}
                             >
                                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                 Edit Model
                             </DropdownMenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    openModal("activateProduction", [
+                                        row.original,
+                                    ]);
+                                }}
+                                Icon={Icons.production}
+                            >
+                                Send to Production
+                            </MenuItem>
                             {/* </Link> */}
                             <DropdownMenuItem
                                 onClick={() => {
                                     dispatchSlice("printHomes", {
-                                        homes: [deepCopy(row.original)]
+                                        homes: [deepCopy(row.original)],
                                     });
                                 }}
                             >
@@ -246,8 +263,8 @@ export default function HomesTableShell<T>({
                             />
                         </DropdownMenuContent>
                     </DropdownMenu>
-                )
-            }
+                ),
+            },
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
@@ -270,8 +287,8 @@ export default function HomesTableShell<T>({
                             labelValue("Completed", "completed"),
                             labelValue("Not In Production", "idle"),
                             labelValue("Started", "started"),
-                            labelValue("Queued", "queued")
-                        ]
+                            labelValue("Queued", "queued"),
+                        ],
                     },
                     {
                         id: "_installation",
@@ -279,17 +296,17 @@ export default function HomesTableShell<T>({
                         single: true,
                         options: [
                             labelValue("Submitted", "submitted"),
-                            labelValue("No Submission", "no-submission")
-                        ]
-                    }
+                            labelValue("No Submission", "no-submission"),
+                        ],
+                    },
                 ]}
                 searchableColumns={[
                     {
                         id: "_q" as any,
                         title: projectView
                             ? "project Name,model,lot/block"
-                            : "model, lot/block"
-                    }
+                            : "model, lot/block",
+                    },
                 ]}
 
                 //  deleteRowsAction={() => void deleteSelectedRows()}

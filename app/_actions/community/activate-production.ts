@@ -6,7 +6,7 @@ import { serverDate } from "../action-utils";
 
 export async function activateHomeProductionAction(ids: number[], dueDate) {
     // console.log(ids, dueDate);
-    await prisma.homeTasks.updateMany({
+    const u = await prisma.homeTasks.updateMany({
         where: {
             homeId: {
                 in: ids,
@@ -18,4 +18,5 @@ export async function activateHomeProductionAction(ids: number[], dueDate) {
             sentToProductionAt: new Date(),
         },
     });
+    console.log(u, dueDate);
 }

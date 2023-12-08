@@ -4,9 +4,11 @@ import { Builders, Homes, Projects } from "@prisma/client";
 import { deepCopy } from "../deep-copy";
 import { sumKeyValues } from "../utils";
 import { convertToNumber } from "../use-number";
+import { formatDate } from "../use-day";
 
 export function getHomeProductionStatus(home: ExtendedHome) {
     const prod = home?.tasks?.filter((t) => t.produceable);
+    let prodDate: any = null;
     if (home.builderId == 14)
         console.log(home.modelName, prod.length, home.tasks);
     const produceables = prod?.length;
@@ -16,14 +18,22 @@ export function getHomeProductionStatus(home: ExtendedHome) {
     const pending = produceables - produced;
     let productionStatus = "Idle";
     const sent = prod?.filter((p) => p.sentToProductionAt)?.length;
-
+    prodDate = prod.filter((p) => p.productionDueDate)?.[0]?.productionDueDate;
     if (sent > 0) productionStatus = "Queued";
     if (produced > 0) {
         productionStatus = "Started";
-        if (produced == produceables) productionStatus = "Completed";
+        if (produced == produceables) {
+            productionStatus = "Completed";
+            prodDate = prod.filter((p) => p.producedAt)?.[0]?.producedAt;
+        }
     }
-    if (hasJob) productionStatus = "Completed";
+    if (hasJob) {
+        productionStatus = "Completed";
+        prodDate = prod.filter((p) => p.producedAt)?.[0]?.producedAt;
+    }
+    if (prodDate) prodDate = formatDate(prodDate);
     return {
+        prodDate,
         produceables,
         produced,
         pendingProduction: pending,

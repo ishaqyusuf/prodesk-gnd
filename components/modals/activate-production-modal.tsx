@@ -38,6 +38,7 @@ export default function ActivateProductionModal() {
                 Object.entries(checkedIds).map(
                     ([k, v]) => v && ids.push(Number(k))
                 );
+                console.log(ids);
                 await activateHomeProductionAction(ids, dueDate);
 
                 // await saveProject({
@@ -64,8 +65,10 @@ export default function ActivateProductionModal() {
             className="sm:max-w-[450px]"
             onOpen={(data) => {
                 setDueDate(null);
-                setCheckedIds({});
-                data?.map((h) => checkHome(h.id, true));
+                // setCheckedIds({});
+                let checkedIDs = {};
+                data?.map((h) => (checkedIDs[h.id] = true));
+                setCheckedIds(checkedIDs);
             }}
             onClose={() => {}}
             modalName="activateProduction"

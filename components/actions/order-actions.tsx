@@ -2,14 +2,21 @@
 
 import { IOrderPrintMode, IOrderType, ISalesOrder } from "@/types/sales";
 
-import { Copy, FileText, Pen, Printer, View } from "lucide-react";
+import {
+    Copy,
+    FileText,
+    MessageCircle,
+    Pen,
+    Printer,
+    View,
+} from "lucide-react";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
     copyOrderAction,
     deleteOrderAction,
-    moveSales
+    moveSales,
 } from "@/app/_actions/sales/sales";
 import { toast } from "sonner";
 import { dispatchSlice } from "@/store/slicers";
@@ -19,7 +26,7 @@ import {
     DeleteRowAction,
     MenuItem,
     RowActionMenuItem,
-    RowActionMoreMenu
+    RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
 import AuthGuard from "../auth-guard";
 import { printSalesPdf } from "@/app/_actions/sales/save-pdf";
@@ -56,6 +63,12 @@ export function OrderRowAction(props: IOrderRowProps) {
                 </MenuItem>
                 <MenuItem Icon={Pen} link={`${_linkDir}/form`}>
                     Edit
+                </MenuItem>
+                <MenuItem
+                    Icon={MessageCircle}
+                    onClick={() => openModal("email", { data: row })}
+                >
+                    Email
                 </MenuItem>
                 {row.slug?.toLowerCase().endsWith("-bo") ? (
                     <MenuItem
@@ -143,7 +156,7 @@ export const PrintOrderMenuAction = typedMemo(
                     isClient: !["production", "packing list"].includes(mode),
                     showInvoice: ["order", "quote", "invoice"].includes(mode),
                     packingList: mode == "packing list",
-                    isProd: mode == "production"
+                    isProd: mode == "production",
                 });
         }
         function PrintOptions() {
@@ -222,14 +235,14 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
             startTransition(async () => {
                 const _ = await copyOrderAction({
                     orderId: props.row.orderId,
-                    as
+                    as,
                 });
                 toast.success(`${as} copied successfully`, {
                     action: {
                         label: "Open",
                         onClick: () =>
-                            router.push(`/sales/${as}/${_.orderId}/form`)
-                    }
+                            router.push(`/sales/${as}/${_.orderId}/form`),
+                    },
                 });
             });
         },

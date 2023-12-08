@@ -4,12 +4,39 @@ import { env } from "@/env.mjs";
 import { timeout } from "@/lib/timeout";
 // import puppeteer from "puppeteer";
 // import puppeteer from "puppeteer-core";
-export async function printSalesPdf(mode, ids) {
+type SalesPrintModes =
+    | "production"
+    | "packing list"
+    | "order"
+    | "quote"
+    | "invoice";
+export async function printSalesPdf(mode: SalesPrintModes, ids) {
+    const pdf = await _generateSalesPdf(mode, ids);
+    const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
+    const orders = await prisma.salesOrders.findMany({
+        where: {
+            id: {
+                in: ids
+                    .toString()
+                    .split(",")
+                    .map((i) => Number(i)),
+            },
+        },
+        select: {
+            orderId: true,
+        },
+    });
+    return {
+        fileName: [orders.map((o) => o.orderId).join("&"), ".pdf"].join(""),
+        uri: pdfDataUri,
+    };
+}
+export async function _generateSalesPdf(mode: SalesPrintModes, ids) {
     let browser, page, url;
     const puppeteer = require("puppeteer-core");
     console.log("printing......");
     browser = await puppeteer.connect({
-        browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`
+        browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`,
     });
     console.log(">>>>>>");
     page = await browser.newPage();
@@ -29,7 +56,7 @@ export async function printSalesPdf(mode, ids) {
     // await page.goto(url);
     //   page.setContent(html);
     await page.goto(url, {
-        waitUntil: "networkidle0"
+        waitUntil: "networkidle0",
     });
 
     // await page.waifo(5000);
@@ -42,30 +69,14 @@ export async function printSalesPdf(mode, ids) {
             left: "0.39in",
             top: "0.39in",
             right: "0.39in",
-            bottom: "0.39in"
+            bottom: "0.39in",
         },
         // scale: 0.75,
-        printBackground: true
+        printBackground: true,
     });
+
     await browser.close();
-    const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
-    const orders = await prisma.salesOrders.findMany({
-        where: {
-            id: {
-                in: ids
-                    .toString()
-                    .split(",")
-                    .map(i => Number(i))
-            }
-        },
-        select: {
-            orderId: true
-        }
-    });
-    return {
-        fileName: [orders.map(o => o.orderId).join("&"), ".pdf"].join(""),
-        uri: pdfDataUri
-    };
+    return pdf;
 }
 // "use server";
 // import { env } from "@/env.mjs";

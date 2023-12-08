@@ -10,7 +10,7 @@ import {
     Invoices,
     Jobs,
     Projects,
-    Users
+    Users,
 } from "@prisma/client";
 import { OmitMeta } from "./type";
 import { IJobs } from "./hrm";
@@ -86,6 +86,7 @@ export interface IHomeStatus {
     produced: number;
     pendingProduction: number;
     productionStatus;
+    prodDate;
     badgeColor;
 }
 export type IInvoice = OmitMeta<Invoices> & {
