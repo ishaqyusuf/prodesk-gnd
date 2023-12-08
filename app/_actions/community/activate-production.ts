@@ -18,5 +18,5 @@ export async function activateHomeProductionAction(ids: number[], dueDate) {
             sentToProductionAt: new Date(),
         },
     });
-    console.log(u, dueDate);
+    // console.log(u, dueDate);
 }

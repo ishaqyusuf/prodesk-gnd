@@ -10,7 +10,7 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
@@ -21,13 +21,13 @@ import {
     HomeInstallationStatus,
     HomeInvoiceColumn,
     HomeProductionStatus,
-    HomeStatus
+    HomeStatus,
 } from "../columns/community-columns";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { MoreHorizontal, Printer, View } from "lucide-react";
@@ -39,7 +39,7 @@ import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import {
     DeleteRowAction,
-    EditRowAction
+    EditRowAction,
 } from "../data-table/data-table-row-actions";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
@@ -50,7 +50,7 @@ export default function HomesTableShell<T>({
     data,
     pageInfo,
     searchParams,
-    projectView
+    projectView,
 }: TableShellProps<ExtendedHome> & {
     projectView: Boolean;
 }) {
@@ -73,7 +73,7 @@ export default function HomesTableShell<T>({
                             {row.original.createdAt}
                         </DateCellContent>
                     </Cell>
-                )
+                ),
             },
             ...(!projectView
                 ? ([
@@ -93,8 +93,8 @@ export default function HomesTableShell<T>({
                                       {row.original?.project?.builder?.name}
                                   </SecondaryCellContent>
                               </Cell>
-                          )
-                      }
+                          ),
+                      },
                   ] as ColumnDef<ExtendedHome, unknown>[])
                 : []),
             {
@@ -114,7 +114,7 @@ export default function HomesTableShell<T>({
                             {row.original?.modelName}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             // {
             //   accessorKey: "model",
@@ -148,18 +148,20 @@ export default function HomesTableShell<T>({
                     <Cell>
                         <HomeStatus home={row.original} />
                     </Cell>
-                )
+                ),
             },
             {
                 accessorKey: "invoice",
                 header: ColumnHeader("Invoice"),
-                cell: ({ row }) => <HomeInvoiceColumn home={row.original} />
+                cell: ({ row }) => <HomeInvoiceColumn home={row.original} />,
             },
             ..._FilterColumn(
                 "_status",
                 "_q",
                 "_builderId",
-                "_projectId"
+                "_date",
+                "_projectId",
+                "_dateType"
                 // "_installation",
                 // "_production"
             ),
@@ -172,13 +174,13 @@ export default function HomesTableShell<T>({
                 cell: ({ row }) => (
                     <div className="">
                         <EditRowAction
-                            onClick={e => {
+                            onClick={(e) => {
                                 openModal("editInvoice", row.original);
                             }}
                         />
                     </div>
-                )
-            }
+                ),
+            },
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
@@ -203,8 +205,8 @@ export default function HomesTableShell<T>({
                             labelValue("Completed", "completed"),
                             labelValue("Not In Production", "idle"),
                             labelValue("Started", "started"),
-                            labelValue("Queued", "queued")
-                        ]
+                            labelValue("Queued", "queued"),
+                        ],
                     },
                     {
                         id: "_installation",
@@ -212,19 +214,42 @@ export default function HomesTableShell<T>({
                         single: true,
                         options: [
                             labelValue("Submitted", "submitted"),
-                            labelValue("No Submission", "no-submission")
-                        ]
-                    }
+                            labelValue("No Submission", "no-submission"),
+                        ],
+                    },
                 ]}
                 searchableColumns={[
                     {
                         id: "_q" as any,
                         title: projectView
                             ? "project Name,model,lot/block"
-                            : "model, lot/block"
-                    }
+                            : "model, lot/block",
+                    },
                 ]}
-
+                dateFilterColumns={[
+                    {
+                        id: "_date" as any,
+                        title: "Due Date",
+                        // rangeSwitch: true,
+                        filter: {
+                            single: true,
+                            title: "Filter By",
+                            id: "_dateType" as any,
+                            defaultValue: "Due Date",
+                            options: [
+                                {
+                                    label: "Due Date",
+                                    value: "productionDueDate",
+                                },
+                                { label: "Unit Date", value: "createdAt" },
+                                {
+                                    label: "Sent to Prod at",
+                                    value: "sentToProductionAt",
+                                },
+                            ],
+                        },
+                    },
+                ]}
                 //  deleteRowsAction={() => void deleteSelectedRows()}
             />
         </>

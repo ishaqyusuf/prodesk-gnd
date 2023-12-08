@@ -38,7 +38,7 @@ export default function ActivateProductionModal() {
                 Object.entries(checkedIds).map(
                     ([k, v]) => v && ids.push(Number(k))
                 );
-                console.log(ids);
+                // console.log(ids);
                 await activateHomeProductionAction(ids, dueDate);
 
                 // await saveProject({

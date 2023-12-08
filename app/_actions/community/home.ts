@@ -10,6 +10,7 @@ export interface HomeQueryParams extends BaseQuery {
     _builderId;
     _projectSlug;
     _projectId?;
+
     _production?: "Started" | "Queued" | "Idle" | "Completed";
     _installation?: "Submitted" | "No Submission";
 }
@@ -22,8 +23,8 @@ export async function getHomesAction(query: HomeQueryParams) {
         include: {
             project: {
                 include: {
-                    builder: true
-                }
+                    builder: true,
+                },
             },
             tasks: {
                 select: {
@@ -33,28 +34,28 @@ export async function getHomesAction(query: HomeQueryParams) {
                     installable: true,
                     sentToProductionAt: true,
                     amountDue: true,
-                    amountPaid: true
-                }
+                    amountPaid: true,
+                },
             },
             jobs: {
                 select: {
                     id: true,
-                    createdAt: true
-                }
-            }
-        }
+                    createdAt: true,
+                },
+            },
+        },
     });
     const pageInfo = await getPageInfo(query, where, prisma.homes);
     return {
         pageInfo,
-        data: homes
+        data: homes,
     };
 }
 export async function getProjectHomesAction(query: HomeQueryParams) {
     const where = await whereHome(query, true);
     const project = await prisma.projects.findUnique({
         where: {
-            slug: query._projectSlug
+            slug: query._projectSlug,
         },
         include: {
             builder: true,
@@ -65,8 +66,8 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
                     jobs: {
                         select: {
                             id: true,
-                            createdAt: true
-                        }
+                            createdAt: true,
+                        },
                     },
                     tasks: {
                         select: {
@@ -74,12 +75,12 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
                             produceable: true,
                             installable: true,
                             producedAt: true,
-                            sentToProductionAt: true
-                        }
-                    }
-                }
-            }
-        }
+                            sentToProductionAt: true,
+                        },
+                    },
+                },
+            },
+        },
     });
     if (!project) throw new Error("Project Not found");
     const pageInfo = await getPageInfo(
@@ -90,57 +91,57 @@ export async function getProjectHomesAction(query: HomeQueryParams) {
     const { homes, ...pdata } = project as any;
     return {
         pageInfo,
-        data: homes.map(home => {
+        data: homes.map((home) => {
             return {
                 ...home,
-                project: pdata
+                project: pdata,
             };
         }),
-        project: pdata
+        project: pdata,
     };
 }
 export async function deleteHome(id) {
     //delete home along with accessories
     await prisma.homes.delete({
         where: {
-            id
+            id,
         },
         include: {
             jobs: true,
-            tasks: true
-        }
+            tasks: true,
+        },
     });
 }
 export async function whereHome(query: HomeQueryParams, asInclude = false) {
     const q: any = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     // if (query._q) q.contains = query._q;
 
     const where: Prisma.HomesWhereInput = {
         builderId: {
-            equals: Number(query._builderId) || undefined
+            equals: Number(query._builderId) || undefined,
         },
         // project: {
         //     id: {
         //         gt: 0
         //     }
         // },
-        ...dateQuery(query)
+        // ...dateQuery(query),
     };
     if (q.contains)
         where.OR = [
             {
-                search: q
+                search: q,
             },
             {
-                modelName: q
-            }
+                modelName: q,
+            },
         ];
     if (!asInclude) {
         if (query._projectSlug) {
             where.project = {
-                slug: query._projectSlug
+                slug: query._projectSlug,
             };
         }
     }
@@ -154,6 +155,26 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
             break;
         case "Started":
             break;
+    }
+    if ((query.from && query.to) || query._date) {
+        const dq = dateQuery({
+            date: query._date,
+            ...query,
+        })[query._dateType];
+        let dateType = query._dateType;
+        switch (dateType) {
+            case "createdAt":
+                where[query._dateType] = dq;
+                break;
+            default:
+                where.tasks = {
+                    some: {
+                        produceable: true,
+                        [query._dateType]: dq,
+                    },
+                };
+                break;
+        }
     }
     switch (query._installation) {
         case "No Submission":
