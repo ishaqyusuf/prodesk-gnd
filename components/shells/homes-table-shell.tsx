@@ -49,6 +49,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { HomeSelectionAction } from "../community/home-selection-action";
 import { openModal } from "@/lib/modal";
+import { deactivateProduction } from "@/app/_actions/community/activate-production";
 
 export default function HomesTableShell<T>({
     data,
@@ -234,16 +235,32 @@ export default function HomesTableShell<T>({
                                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                 Edit Model
                             </DropdownMenuItem>
-                            <MenuItem
-                                onClick={() => {
-                                    openModal("activateProduction", [
-                                        row.original,
-                                    ]);
-                                }}
-                                Icon={Icons.production}
-                            >
-                                Send to Production
-                            </MenuItem>
+                            {!row.original?.tasks.some(
+                                (t) => t.sentToProductionAt
+                            ) ? (
+                                <MenuItem
+                                    onClick={() => {
+                                        openModal("activateProduction", [
+                                            row.original,
+                                        ]);
+                                    }}
+                                    Icon={Icons.production}
+                                >
+                                    Send to Production
+                                </MenuItem>
+                            ) : (
+                                <MenuItem
+                                    onClick={async () => {
+                                        await deactivateProduction([
+                                            row.original.id,
+                                        ]);
+                                        toast.success("Removed");
+                                    }}
+                                    Icon={Icons.production}
+                                >
+                                    Remove from Production
+                                </MenuItem>
+                            )}
                             {/* </Link> */}
                             <DropdownMenuItem
                                 onClick={() => {
