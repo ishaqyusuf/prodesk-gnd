@@ -31,7 +31,7 @@ export async function sendMessage(data: EmailProps) {
         ],
         //  react: MailComposer({ firstName: "John" }),
     });
-    return;
+    // return;
     //   await _email({
     //     from: data.from,
     //     user: { email: data.to as any },
@@ -44,15 +44,16 @@ export async function sendMessage(data: EmailProps) {
         data: {
             from: data.from,
             type: data.type,
-            body: data.body,
+            body: trs.body,
             senderId: (await userId()) as number,
             to: data.to,
-            subject: data?.subject,
+            sentAt: new Date(),
+            subject: trs?.subject,
             parentId: data.parentId,
             createdAt: new Date(),
         },
     });
-    va.track("new email", {
-        type: data.type,
-    });
+    // va.track("new email", {
+    //     type: data.type,
+    // });
 }

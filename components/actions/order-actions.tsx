@@ -21,7 +21,7 @@ import {
 import { toast } from "sonner";
 import { dispatchSlice } from "@/store/slicers";
 import { Icons } from "../icons";
-import { openModal } from "@/lib/modal";
+import { openEmailComposer, openModal } from "@/lib/modal";
 import {
     DeleteRowAction,
     MenuItem,
@@ -66,7 +66,12 @@ export function OrderRowAction(props: IOrderRowProps) {
                 </MenuItem>
                 <MenuItem
                     Icon={MessageCircle}
-                    onClick={() => openModal("email", { data: row })}
+                    onClick={() => {
+                        openEmailComposer(row, {
+                            type: "sales",
+                            parentId: row.id,
+                        });
+                    }}
                 >
                     Email
                 </MenuItem>

@@ -71,10 +71,12 @@ export default function EmailComposerModal({ isProd }: Props) {
                 from = session?.user?.name?.split(" ")?.[0] + from;
                 form.reset({
                     reply_to: session?.user?.email,
-                    to: data.data?.customer?.email,
+                    // to: data.data?.customer?.email,
+                    to: "ishaqyusuf024@gmail.com",
                     from,
                     subject: "Hello @customer.name",
                     body: "Your order id is @orderId",
+                    ...data,
                     data: {
                         ...data?.data,
                     },
@@ -101,15 +103,15 @@ export default function EmailComposerModal({ isProd }: Props) {
             Content={({ data: order }) => (
                 <div>
                     <div className="grid md:grid-cols-2 gap-4">
-                        <div className="grid gap-2">
+                        {/* <div className="grid gap-2">
                             <Label>From</Label>
-                            <Input
+                            <Input 
                                 placeholder="Pablo Cruz<pcruz321@gmail.com>"
                                 className="h-8"
                                 {...form.register("from")}
                             />
-                        </div>
-                        <div className="grid gap-2">
+                        </div> */}
+                        <div className="grid col-span-2 gap-2">
                             <Label>To Email</Label>
                             <Input className="h-8" {...form.register("to")} />
                         </div>
