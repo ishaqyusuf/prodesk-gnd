@@ -54,7 +54,7 @@ export function nav(
         viewPickup,
         viewPriceList,
         viewCustomerService,
-        viewInstallation
+        viewInstallation,
     }: ICan = __can;
     const routes: {
         [key in
@@ -77,8 +77,8 @@ export function nav(
         Community: [],
         Sales: [],
         Settings: [
-            _route("Profile Settings", Icons.settings2, "/settings/profile")
-        ]
+            _route("Profile Settings", Icons.settings2, "/settings/profile"),
+        ],
     };
     const isAdmin = session.role?.name == "Admin";
     if (isAdmin) {
@@ -89,11 +89,14 @@ export function nav(
             _route("Sales", Icons.salesSettings, "/settings/sales")
         );
     }
+    if (editOrders) {
+        routes.Settings.push(_route("Email", Icons.Email, "/settings/email"));
+    }
     if (viewProject) {
         routes.Community.push(
             ...[
                 _route("Projects", Icons.project, "/community/projects"),
-                _route("Units", Icons.units, "/community/units")
+                _route("Units", Icons.units, "/community/units"),
             ]
         );
     }
@@ -192,7 +195,7 @@ export function nav(
         Icon: Icons.jobs,
         // Group: routes.Job,
         // single: true,
-        groupName: "Jobs"
+        groupName: "Jobs",
     });
     // const Job: Route[] = [];
     // let _job = (() => {
@@ -217,7 +220,7 @@ export function nav(
             ...[
                 _route("Estimates", Icons.estimates, "/sales/estimates"), //employees,roles
                 _route("Orders", Icons.orders, "/sales/orders"), //employees,roles
-                _route("Customers", Icons.user, "/sales/customers")
+                _route("Customers", Icons.user, "/sales/customers"),
             ]
         );
     } else {
@@ -243,7 +246,7 @@ export function nav(
                     _route("Payments", Icons.payment, "/sales/payments"),
                 _route("Catalogs", Icons.products, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
-                _route("Productions", Icons.production, `/sales/productions`)
+                _route("Productions", Icons.production, `/sales/productions`),
 
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
             ].filter(Boolean) as any)
@@ -259,7 +262,7 @@ export function nav(
         basePath: "/contractor",
         Icon: Icons.jobs,
         Group: routes.Contractor,
-        groupName: "Contractors"
+        groupName: "Contractors",
     });
     const CommunitySettings: Route[] = [];
     let _communitySettings = (() => {
@@ -290,7 +293,7 @@ export function nav(
                 _rw["install-costs"],
                 _rw["community-costs"],
                 _rw["model-costs"],
-                _rw["model-templates"]
+                _rw["model-templates"],
             ].filter(Boolean)
         );
         if (href)
@@ -316,16 +319,16 @@ export function nav(
         const __routes = r
             .filter(
                 (route, index) =>
-                    r.findIndex(fr => fr.title == route.title) == index
+                    r.findIndex((fr) => fr.title == route.title) == index
             )
             .filter(Boolean) as Route[];
         routeGroup.push({
             title: len < 2 ? null : title,
-            routes: __routes
+            routes: __routes,
         });
     });
     routeGroup = routeGroup?.filter(
-        sec => (sec.routes as any)?.length > 0
+        (sec) => (sec.routes as any)?.length > 0
     ) as any;
     return {
         flatRoutes,
@@ -336,7 +339,7 @@ export function nav(
         noSideBar: totalRoutes < 6,
         CommunitySettings,
         Hrm,
-        Job
+        Job,
     };
 }
 function groupedNavs({
@@ -345,7 +348,7 @@ function groupedNavs({
     Icon,
     Group,
     single,
-    groupName
+    groupName,
 }: {
     action;
     basePath;
@@ -392,5 +395,5 @@ export const upRoutes = [
     "Sales/Productions",
     "Services/Sales Production",
     "Settings/Sales",
-    "Settings/Profile"
+    "Settings/Profile",
 ];

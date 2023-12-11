@@ -27,6 +27,7 @@ import { Label } from "../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { transformEmail } from "@/lib/email-transform";
 import { useSession } from "next-auth/react";
+import { _dbUser } from "@/app/_actions/utils";
 
 interface Props {
     isProd?: Boolean;
@@ -65,15 +66,21 @@ export default function EmailComposerModal({ isProd }: Props) {
         <BaseModal<EmailModalProps>
             className="sm:max-w-[550px]"
             onOpen={async (data) => {
-                let from = ` From Gnd Millwork<${
-                    session?.user?.email?.split("@")?.[0]
-                }@gndprodesk.com>`;
-                from = session?.user?.name?.split(" ")?.[0] + from;
+                const u = await _dbUser();
+                const mail =
+                    u?.meta?.email ||
+                    `${session?.user?.email?.split("@")?.[0]}@gndprodesk.com`;
+
+                let title =
+                    u?.meta?.emailTitle ||
+                    session?.user?.name?.split(" ")?.[0] + ` From Gnd Millwork`;
+
+                // if(u.meta?.)
                 form.reset({
-                    reply_to: session?.user?.email,
+                    reply_to: u?.meta?.emailRespondTo || u?.meta?.email,
                     // to: data.data?.customer?.email,
-                    to: "ishaqyusuf024@gmail.com",
-                    from,
+                    // to: "ishaqyusuf024@gmail.com",
+                    from: `${title}<${mail}>`,
                     subject: "Hello @customer.name",
                     body: "Your order id is @orderId",
                     ...data,

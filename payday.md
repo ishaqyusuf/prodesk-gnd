@@ -1,9 +1,12 @@
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-# DEC 09: 00.00 == 00.00
-    04:40-
-# DEC 08: 00.00 == 00.00
+# DEC 10: 00.00 == 00.00
+    10:10-
+    09:30-09:40
+# DEC 09: 01.20 == 11.05
+    04:40-06:00
+# DEC 08: 02.20 == 09.45
     04:30-06:00
     11:20-12:00
 # DEC 07: 01.30 == 07.25

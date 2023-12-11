@@ -5,7 +5,7 @@ import { _email } from "./_email";
 import MailComposer from "@/components/emails/mail-composer";
 import { prisma } from "@/db";
 import dayjs from "dayjs";
-import { userId } from "./utils";
+import { _dbUser, user, userId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
 import va from "@/lib/va";
 import { resend } from "@/lib/resend";
@@ -14,14 +14,16 @@ import { _generateSalesPdf } from "./sales/save-pdf";
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
     // const pdf = await _generateSalesPdf("invoice", [data.data.id]);
+    const u = await _dbUser();
 
     const _data = await resend.emails.send({
-        reply_to: data.reply_to,
+        reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
         to: [data.to], //["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
         subject: trs.subject,
         html: trs.body?.split("\n").join("<br/>"),
+
         attachments: [
             // {
             //     // content: pdf,

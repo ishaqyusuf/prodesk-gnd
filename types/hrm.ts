@@ -6,12 +6,17 @@ import {
     Projects,
     Roles,
     UserDocuments,
-    Users
+    Users,
 } from "@prisma/client";
 import { InstallCosting, InstallCostingTemplate } from "./community";
 
-export type IUser = Users & {
-    meta: {};
+export type IUser = Omit<Users, "meta"> & {
+    meta: {
+        emailRespondTo;
+        fromEmail;
+        emailTitle;
+        email;
+    };
     role: Roles;
     roles: Roles[];
     employeeProfile: EmployeeProfile;
