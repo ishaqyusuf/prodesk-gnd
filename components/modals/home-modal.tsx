@@ -14,12 +14,12 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 import { Label } from "../ui/label";
 
-import { IHome, IProject } from "@/types/community";
+import { ICommunityTemplate, IHome, IProject } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import {
     homeSchema,
-    projectSchema
+    projectSchema,
 } from "@/lib/validations/community-validations";
 import { staticProjectsAction } from "@/app/_actions/community/projects";
 import { staticHomeModels } from "@/app/_actions/community/static-home-models";
@@ -32,7 +32,7 @@ import ConfirmBtn from "../confirm-btn";
 import AutoComplete2 from "../auto-complete";
 import {
     _updateCommunityHome,
-    createHomesAction
+    createHomesAction,
 } from "@/app/_actions/community/create-homes";
 import { getModelNumber } from "@/lib/utils";
 import { homeSearchMeta } from "@/lib/community/community-utils";
@@ -47,12 +47,12 @@ export default function HomeModal() {
     const [isSaving, startTransition] = useTransition();
     const form = useForm<FormProps>({
         defaultValues: {
-            units: [{ meta: {} }]
-        }
+            units: [{ meta: {} }],
+        },
     });
     const { fields, remove, append } = useFieldArray({
         control: form.control,
-        name: "units"
+        name: "units",
     });
     const projectId = form.watch("projectId");
     async function submit(data) {
@@ -64,23 +64,23 @@ export default function HomeModal() {
                 if (data?.id) {
                     const unit = formData.units[0] as any;
                     unit.modelName = communityTemplates.find(
-                        f => f.id == unit.communityTemplateId
+                        (f) => f.id == unit.communityTemplateId
                     )?.modelName as any;
                     await _updateCommunityHome(formData.units[0] as any);
                     msg = "Unit updated!";
                 } else {
                     const isValid = homeSchema.parse(form.getValues());
                     await createHomesAction(
-                        formData.units.map(u => {
+                        formData.units.map((u) => {
                             const pid = (u.projectId = Number(
                                 formData.projectId
                             ));
                             u.modelName = communityTemplates.find(
-                                f => f.id == u.communityTemplateId
+                                (f) => f.id == u.communityTemplateId
                             )?.modelName as any;
                             u.modelNo = getModelNumber(u.modelName);
                             u.builderId = Number(
-                                projects.find(p => p.id == pid)?.builderId
+                                projects.find((p) => p.id == pid)?.builderId
                             );
                             // u.communityTemplateId = Number(
                             //     communityTemplates.find(
@@ -108,18 +108,28 @@ export default function HomeModal() {
             }
         });
     }
-    const projects = useAppSelector(state => state?.slicers?.staticProjects);
-    const communityTemplates = useAppSelector(
-        state => state?.slicers?.staticCommunity
-    );
+    // const projects = useAppSelector(state => state?.slicers?.staticProjects);
+    // const communityTemplates = useAppSelector(
+    //     state => state?.slicers?.staticCommunity
+    // );
     // const models = useAppSelector(state => state?.slicers?.staticModels);
     function register(i, key: keyof IHome) {
         return form.register(`units.${i}.${key}` as any);
     }
+    const [projects, setProjects] = useState<IProject[]>([]);
+    const [communityTemplates, setCommunityTemplates] = useState<
+        ICommunityTemplate[]
+    >([]);
     useEffect(() => {
-        loadStaticList("staticProjects", projects, staticProjectsAction);
+        async function loadStatics() {
+            setProjects((await staticProjectsAction()) as any);
+            setCommunityTemplates((await staticCommunity()) as any);
+        }
+
+        loadStatics();
+        // loadStaticList("staticProjects", projects, staticProjectsAction);
         // loadStaticList("staticModels", models, staticHomeModels);
-        loadStaticList("staticCommunity", communityTemplates, staticCommunity);
+        // loadStaticList("staticCommunity", communityTemplates, staticCommunity);
     }, []);
     async function init(data) {
         form.setValue("units", data ? [data] : ([{ meta: {} }] as any));
@@ -128,7 +138,7 @@ export default function HomeModal() {
     return (
         <BaseModal<IProject | undefined>
             className="sm:max-w-[750px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data);
             }}
             onClose={() => {}}
@@ -187,10 +197,10 @@ export default function HomeModal() {
                                                 form={form}
                                                 formKey={`units.${i}.communityTemplateId`}
                                                 options={communityTemplates?.filter(
-                                                    m =>
+                                                    (m) =>
                                                         m.projectId == projectId
                                                 )}
-                                                onSelect={e => {
+                                                onSelect={(e) => {
                                                     console.log(e);
                                                 }}
                                                 uppercase
@@ -216,7 +226,7 @@ export default function HomeModal() {
                                         <div className="col-span-2">
                                             <DatePicker
                                                 className="w-auto h-7"
-                                                setValue={e =>
+                                                setValue={(e) =>
                                                     form.setValue(
                                                         `units.${i}.createdAt`,
                                                         e
@@ -252,9 +262,9 @@ export default function HomeModal() {
                                 {!data?.id && (
                                     <Button
                                         onClick={() => {
-                                            append(({
-                                                meta: {}
-                                            } as Partial<IHome>) as any);
+                                            append({
+                                                meta: {},
+                                            } as Partial<IHome> as any);
                                         }}
                                         variant="secondary"
                                         className="w-full h-7 mt-1"
