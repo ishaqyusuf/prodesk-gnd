@@ -3,6 +3,7 @@ import { Inbox } from "@prisma/client";
 export interface EmailProps extends Inbox {
     meta: {};
     reply_to?;
+    attachOrder;
     data: any;
 }
 export interface EmailModalProps {

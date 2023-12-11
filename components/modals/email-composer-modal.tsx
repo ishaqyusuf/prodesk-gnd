@@ -28,6 +28,7 @@ import { emailSchema } from "@/lib/validations/email";
 import { transformEmail } from "@/lib/email-transform";
 import { useSession } from "next-auth/react";
 import { _dbUser } from "@/app/_actions/utils";
+import { Switch } from "../ui/switch";
 
 interface Props {
     isProd?: Boolean;
@@ -38,6 +39,7 @@ export default function EmailComposerModal({ isProd }: Props) {
     const form = useForm<EmailProps>({
         defaultValues: {},
     });
+    const attachOrder = form.watch("attachOrder");
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
@@ -91,6 +93,7 @@ export default function EmailComposerModal({ isProd }: Props) {
                 setTimeout(() => {
                     // submit();
                 }, 2000);
+                4;
                 // form.reset({
                 //     to: data?.email?.toEmail, //`${data.to.name}<${data.to.email}>`,
                 //     type: data?.email?.type,
@@ -139,6 +142,7 @@ export default function EmailComposerModal({ isProd }: Props) {
                             />
                         </div>
                     </div>
+
                     <div className="mt-2">
                         <p className="text-primary">Short Codes</p>
                         <div className="">
@@ -155,14 +159,26 @@ export default function EmailComposerModal({ isProd }: Props) {
                 </div>
             )}
             Footer={({ data }) => (
-                <Btn
-                    isLoading={isSaving}
-                    onClick={() => submit()}
-                    size="sm"
-                    type="submit"
-                >
-                    Send
-                </Btn>
+                <>
+                    <div className="inline-flex items-center space-x-2">
+                        <Label>Attach Order Pdf</Label>
+                        <Switch
+                            checked={attachOrder as any}
+                            onCheckedChange={(e) => {
+                                form.setValue("attachOrder", e);
+                                // store.dispatch(toggleMockup(e));
+                            }}
+                        />
+                    </div>
+                    <Btn
+                        isLoading={isSaving}
+                        onClick={() => submit()}
+                        size="sm"
+                        type="submit"
+                    >
+                        Send
+                    </Btn>
+                </>
             )}
         />
     );

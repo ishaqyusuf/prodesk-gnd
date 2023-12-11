@@ -13,9 +13,15 @@ import { _generateSalesPdf } from "./sales/save-pdf";
 
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
-    const pdf = await _generateSalesPdf("invoice", [data.data.id]);
     const u = await _dbUser();
-
+    const attachments: any = [];
+    if (data.attachOrder) {
+        const pdf = await _generateSalesPdf("invoice", [data.data.id]);
+        attachments.push({
+            content: pdf,
+            filename: `${data.data.orderId}.pdf`,
+        });
+    }
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
@@ -25,13 +31,7 @@ export async function sendMessage(data: EmailProps) {
         subject: trs.subject,
         html: trs.body?.split("\n").join("<br/>"),
 
-        attachments: [
-            {
-                content: pdf,
-                // path: "https://res.cloudinary.com/dsuwvkg3d/image/upload/v1699009376/cld-sample-5.jpg",
-                filename: `${data.data.orderId}.pdf`,
-            },
-        ],
+        attachments,
         //  react: MailComposer({ firstName: "John" }),
     });
     // return;

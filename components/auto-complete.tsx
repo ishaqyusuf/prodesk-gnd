@@ -44,7 +44,7 @@ function AutoComplete2({
     form,
     placeholder,
     formKey,
-    uppercase
+    uppercase,
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
@@ -83,19 +83,19 @@ function AutoComplete2({
         setResults(filteredOptions());
     }, [items]);
     function transformItems(items) {
-        return items?.map(o => {
+        return items?.map((o) => {
             if (typeof o === "string") return { id: o, name: o, data: o };
             // if(typeof o == 'string')
 
             return {
                 id: o?.[itemValue],
                 name: o?.[itemText],
-                data: o
+                data: o,
             };
         });
     }
     function getItem(value, by: "id" | "name" = "id") {
-        let item = items?.find(o => o?.[by] == value) as any;
+        let item = items?.find((o) => o?.[by] == value) as any;
         if (allowCreate && !item)
             return { id: value, name: value, data: value };
         return item;
@@ -115,7 +115,7 @@ function AutoComplete2({
                   .replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
         const pattern = new RegExp(escapedText, "i");
-        let filteredOptions = items?.filter(option =>
+        let filteredOptions = items?.filter((option) =>
             pattern.test(option.name)
         );
         // filteredOptions = uniqueBy(filteredOptions, "name").filter(
@@ -150,7 +150,7 @@ function AutoComplete2({
                 setSelected({
                     id: query,
                     name: query,
-                    data: query
+                    data: query,
                 });
                 if (form && formKey) {
                     form.setValue(formKey, query);
@@ -159,7 +159,7 @@ function AutoComplete2({
                     onChange({
                         id: query,
                         name: query,
-                        data: query
+                        data: query,
                     });
             }
         }
@@ -183,7 +183,7 @@ function AutoComplete2({
                 x: rect.left,
                 y: rect.top,
                 bottom: rect.bottom,
-                top: rect.top
+                top: rect.top,
             });
         }
     };
@@ -200,7 +200,7 @@ function AutoComplete2({
         };
     }, []);
     return (
-        <div className="grid gap-2">
+        <div className="grid relative gap-2">
             {label && <Label>{label}</Label>}
             <Combobox
                 disabled={disabled}
@@ -220,7 +220,7 @@ function AutoComplete2({
                             onClick={() => {
                                 if (!select) buttonRef?.current?.click();
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={(e) => {
                                 setTyping(true);
                             }}
                             ref={inputRef as any}
@@ -231,8 +231,10 @@ function AutoComplete2({
                                 "w-full border-none spy-2 h-full focus:outline-none p-1 text-sm leading-5 text-gray-900 focus:ring-0",
                                 uppercase && "uppercase"
                             )}
-                            displayValue={person => (person as any).name || ""}
-                            onChange={event => setQuery(event.target.value)}
+                            displayValue={(person) =>
+                                (person as any).name || ""
+                            }
+                            onChange={(event) => setQuery(event.target.value)}
                         />
                         <div className="absolute top-0 w-0 h-0 cursor-text">
                             <Combobox.Button
@@ -259,7 +261,7 @@ function AutoComplete2({
                         <Combobox.Options
                             style={{
                                 minWidth: `${inputRef.current?.clientWidth}px`,
-                                top: `${position.bottom}px`
+                                top: `${position.bottom}px`,
                             }}
                             className={cn(
                                 "fixed mt-1 max-h-60  overflow-auto rounded-md bg-white py-1 text-base shadow-lg   ring-opacity-5 border-input focus:outline-none min-w-au  sm:text-sm z-[9999]",
@@ -283,7 +285,7 @@ function AutoComplete2({
               px-2 py-1.5 text-sm outline-none aria-selected:bg-accent
               aria-selected:text-accent-foreground
               data-[disabled]:pointer-events-none data-[disabled]:opacity-50 */}
-                            {results?.map(person => (
+                            {results?.map((person) => (
                                 <Combobox.Option
                                     key={person.id}
                                     className={({ active }) =>
