@@ -16,7 +16,10 @@ export async function sendMessage(data: EmailProps) {
     const u = await _dbUser();
     const attachments: any = [];
     if (data.attachOrder) {
-        const pdf = await _generateSalesPdf("invoice", [data.data.id]);
+        const pdf = await _generateSalesPdf(
+            data.data?.type == "order" ? "invoice" : "quote",
+            [data.data.id]
+        );
         attachments.push({
             content: pdf,
             filename: `${data.data.orderId}.pdf`,
