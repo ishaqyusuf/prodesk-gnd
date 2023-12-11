@@ -12,7 +12,7 @@ export default function SalesFormComponent({}: Props) {
             items: {
                 "0": {
                     meta: {
-                        configIndex: "Door Type",
+                        configIndex: 0,
                     },
                 },
             },

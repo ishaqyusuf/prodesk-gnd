@@ -19,14 +19,15 @@ interface Props {
 export function SalesItemForm({ rowIndex, form, openIndex, setOpen }: Props) {
     const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
 
-    const [openBlock, setOpenBlock] = useState<any>("Door Type");
+    const [openBlock, setOpenBlock] = useState<any>(0);
+
     return (
         <Collapsible
             open={rowIndex == openIndex}
             onOpenChange={setOpen}
-            className="w-[350px] space-y-2"
+            className=""
         >
-            <div className="flex justify-between">
+            <div className="flex bg-accent p-2 px-4 justify-between">
                 <CollapsibleTrigger>Item {rowIndex}</CollapsibleTrigger>
                 <div className="flex items-center justify-between space-x-2">
                     <Button className="p-0 h-6 w-6" variant={"destructive"}>
@@ -35,15 +36,23 @@ export function SalesItemForm({ rowIndex, form, openIndex, setOpen }: Props) {
                 </div>
             </div>
             <CollapsibleContent className="">
-                {itemFormBlocks.map((block) => (
-                    <ItemConfigBlock
-                        block={block}
-                        openBlock={openBlock}
-                        setOpenBlock={(e) => {}}
-                        key={block.title}
-                        configIndex={configIndex}
-                    />
-                ))}
+                <div className="grid sm:grid-cols-3">
+                    <div className="sm:col-span-2">
+                        {itemFormBlocks.map((block, bIndex) => (
+                            <ItemConfigBlock
+                                form={form}
+                                block={block}
+                                itemIndex={rowIndex}
+                                blockIndex={bIndex}
+                                openBlock={openBlock}
+                                setOpenBlock={setOpenBlock}
+                                key={bIndex}
+                                configIndex={configIndex}
+                            />
+                        ))}
+                    </div>
+                    <div></div>
+                </div>
             </CollapsibleContent>
         </Collapsible>
     );

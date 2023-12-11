@@ -1,43 +1,64 @@
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { UseFormReturn } from "react-hook-form";
-import { Block, itemFormBlocks } from "../item-form-blocks";
+import { Block } from "../item-form-blocks";
+import { cn } from "@/lib/utils";
+import HousePackageTool from "./house-package-tool";
 interface Props {
     configIndex;
     block: Block;
     openBlock;
     setOpenBlock;
+    blockIndex;
+    itemIndex;
+    form;
 }
 export function ItemConfigBlock({
     configIndex,
     block,
     openBlock,
+    itemIndex,
     setOpenBlock,
+    blockIndex,
+    form,
 }: Props) {
+    const configky = `items.${itemIndex}.meta.config.${block.title}`;
+    const blockValue = form.watch(configky);
+
     return (
         <Collapsible
-            open={configIndex == openBlock}
+            open={blockIndex == openBlock}
             onOpenChange={setOpenBlock}
-            className="w-[350px] space-y-2"
+            className={cn(!blockValue && blockIndex != openBlock && "hidden")}
         >
-            <div className="flex justify-between">
-                <CollapsibleTrigger>{block.title} </CollapsibleTrigger>
-                <div className="flex items-center justify-between space-x-2">
-                    {/* <Button className="p-0 h-6 w-6" variant={"destructive"}>
-                        <Icons.Delete className="w-4 h-4" />
-                    </Button> */}
-                </div>
-            </div>
-            <CollapsibleContent className="">
-                ads
+            <CollapsibleTrigger asChild>
+                <button
+                    className="flex bg-accent w-full p-2 px-4 border space-x-2"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        // console.log(blockIndex, openBlock);
+                        // if (openBlock != blockIndex)
+                        setOpenBlock(blockIndex);
+                    }}
+                >
+                    <span className="font-semibold">{block.title}:</span>
+                    <span>{blockValue}</span>
+                </button>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent className="p-8 border">
+                {block.title == "House Package Tool" && <HousePackageTool />}
                 <div className="grid gap-4 grid-cols-4">
                     {block.options?.map((b, i) => (
-                        <button key={i}>
+                        <button
+                            onClick={() => {
+                                form.setValue(configky, b.title);
+                                setOpenBlock(openBlock + 1);
+                            }}
+                            key={i}
+                        >
                             <div className="">{b.title}</div>
                         </button>
                     ))}

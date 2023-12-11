@@ -13,23 +13,24 @@ import { _generateSalesPdf } from "./sales/save-pdf";
 
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
-    // const pdf = await _generateSalesPdf("invoice", [data.data.id]);
+    const pdf = await _generateSalesPdf("invoice", [data.data.id]);
     const u = await _dbUser();
 
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
-        to: [data.to], //["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
+        to: data.to?.split(","),
+        // to:["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
         subject: trs.subject,
         html: trs.body?.split("\n").join("<br/>"),
 
         attachments: [
-            // {
-            //     // content: pdf,
-            //     path: "https://res.cloudinary.com/dsuwvkg3d/image/upload/v1699009376/cld-sample-5.jpg",
-            //     // filename: `${data.data.orderId}.pdf`,
-            // },
+            {
+                content: pdf,
+                // path: "https://res.cloudinary.com/dsuwvkg3d/image/upload/v1699009376/cld-sample-5.jpg",
+                filename: `${data.data.orderId}.pdf`,
+            },
         ],
         //  react: MailComposer({ firstName: "John" }),
     });

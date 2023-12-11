@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 export default async function SalesForm({ searchParams, params }) {
     return (
-        <div>
+        <div className="sm:p-8 px-4">
             <SalesFormComponent />
         </div>
     );
