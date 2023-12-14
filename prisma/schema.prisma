@@ -1059,3 +1059,28 @@ model Notifications {
     createdAt  DateTime? @db.Timestamp(0)
     updatedAt  DateTime? @db.Timestamp(0)
 }
+
+// Dyke Edge Db
+model DykeShelfCategories {
+    id              Int                 @unique @default(autoincrement())
+    name            String
+    type            String //parent/child
+    categoryId      Int?
+    products        DykeShelfProducts[] @relation(name: "childCategory")
+    groupedProducts DykeShelfProducts[] @relation(name: "parentCategory")
+}
+
+model DykeShelfProducts {
+    id               Int                  @unique @default(autoincrement())
+    title            String
+    unitPrice        Float
+    categoryId       Int?
+    parentCategoryId Int?
+    img              String?
+    meta             Json?                @db.Json
+    createdAt        DateTime?            @db.Timestamp(0)
+    updatedAt        DateTime?            @db.Timestamp(0)
+    deletedAt        DateTime?            @db.Timestamp(0)
+    category         DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
+    parentCategory   DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
+}

@@ -9,7 +9,7 @@ import {
     SalesOrders,
     SalesPayments,
     SalesPickup,
-    Users
+    Users,
 } from "@prisma/client";
 import { UseFormReturn } from "react-hook-form";
 import { ICustomer } from "./customers";
@@ -67,6 +67,7 @@ export type ISalesOrderMeta = {
     priority: IPriority;
     ccc_percentage;
     labor_cost;
+    discount;
     sales_profile;
     sales_percentage;
     po;

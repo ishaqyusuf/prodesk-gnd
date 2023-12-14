@@ -15,26 +15,23 @@ import { useRouter } from "next/navigation";
 import { SalesCustomerModal } from "@/components/modals/sales-address-modal";
 import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
-import {
-    calibrateLines,
-    initInvoiceItems
-} from "@/lib/sales/sales-invoice-form";
 
 import CatalogModal from "@/components/modals/catalog-modal";
 import { removeEmptyValues } from "@/lib/utils";
 
-import InfoCard from "./sales-form-card";
+import InfoCard from "./sales-info-address-form";
 import dayjs from "dayjs";
 import { Switch } from "@/components/ui/switch";
 import {
     resetFooterInfo,
-    toggleMockup
+    toggleMockup,
 } from "@/store/invoice-item-component-slice";
 import { Label } from "@/components/ui/label";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
 import { openModal } from "@/lib/modal";
 import UpdateSalesDate from "@/components/sales/update-sales-date";
+import salesUtils from "./sales-utils";
 
 interface Props {
     data: SalesFormResponse;
@@ -43,27 +40,27 @@ interface Props {
 }
 export default function SalesForm({ data, newTitle, slug }: Props) {
     const pageData: SalesFormResponse = useAppSelector(
-        s => s.slicers.dataPage.data
+        (s) => s.slicers.dataPage.data
     );
     const defaultValues: ISalesOrder = {
-        ...data?.form
+        ...data?.form,
     };
     //old payment term
     const opTerm = data?.form?.paymentTerm;
     const form = useForm<ISalesOrder>({
-        defaultValues
+        defaultValues,
     });
     const router = useRouter();
 
     useEffect(() => {
         const confirmationMessage = "Are you sure you want to leave this page?";
 
-        const handleBeforeUnload = e => {
+        const handleBeforeUnload = (e) => {
             e.preventDefault();
             e.returnValue = confirmationMessage;
             return confirmationMessage;
         };
-        const handleClick = e => {
+        const handleClick = (e) => {
             console.log(">>>>>");
             e.preventDefault();
             const alert = confirm(
@@ -79,14 +76,14 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
 
         const links = document.querySelectorAll("a");
 
-        links.forEach(link => {
+        links.forEach((link) => {
             link.addEventListener("click", handleClick);
         });
 
         window.addEventListener("beforeunload", handleBeforeUnload);
 
         return () => {
-            links.forEach(link => {
+            links.forEach((link) => {
                 link.removeEventListener("click", handleClick);
             });
             window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -109,12 +106,14 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         let resp = data;
 
         const _formData: any = resp?.form || { meta: {} };
-        const { _items, footer } = initInvoiceItems(resp?.form?.items);
+        const { _items, footer } = salesUtils.initInvoiceItems(
+            resp?.form?.items
+        );
 
         store.dispatch(resetFooterInfo(footer));
         form.reset({
             ..._formData,
-            items: _items
+            items: _items,
         });
         //  const _baseLink = estimate ? "/sales/estimates" : "/sales/orders";
         //  store.dispatch(
@@ -137,8 +136,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     async function save(and: "close" | "new" | "default" = "default") {
         try {
             startTransition(async () => {
-                const formData = saveData();
-                console.log(formData);
+                const formData = salesUtils.formData(form, pageData.paidAmount);
+                // console.log(formData);
+                const { paymentTerm, goodUntil } = formData.order;
+                // if (formData.order.type == "order") {
+                // }
+                // return;
                 // try {
                 const response = await saveOrderAction(formData);
                 if (response.orderId) {
@@ -166,61 +169,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         //  loader.action(async () => {
         //  });
     }
-    function saveData(): ISaveOrder {
-        let {
-            id,
-            items: _items,
-            shippingAddress,
-            billingAddress,
-            customer,
-            salesRep,
-            ...formValues
-        }: ISalesOrder = deepCopy(form.getValues());
 
-        formValues.amountDue =
-            Number(formValues.grandTotal || 0) - pageData.paidAmount;
-        formValues.meta = removeEmptyValues(formValues.meta);
-        const deleteIds: number[] = [];
-        if (formValues.type == "order") {
-            if (!id || formValues.paymentTerm != opTerm) {
-                const ts = formValues.paymentTerm?.replace("Net", "");
-                const term = Number(ts);
-                if (term)
-                    formValues.goodUntil = new Date(
-                        dayjs()
-                            .add(term, "D")
-                            .toISOString()
-                    );
-            }
-        }
-        let items = calibrateLines(_items)
-            ?.map(({ salesOrderId, ...item }, index) => {
-                // delete (item as any)?.salesOrderId;
-                if (!item.description && !item?.total) {
-                    if (item.id) deleteIds.push(item.id);
-
-                    return null;
-                }
-
-                return numeric<SalesOrderItems>(
-                    ["qty", "price", "rate", "tax", "taxPercenatage", "total"],
-                    item
-                );
-            })
-            .filter(Boolean);
-
-        return {
-            id,
-            order: numeric<SalesOrders>(
-                ["grandTotal", "amountDue", "tax", "taxPercentage", "subTotal"],
-                formValues
-            ) as any,
-            deleteIds,
-            items: items as any
-        };
-    }
     const mockupMode = useAppSelector(
-        state => state.orderItemComponent?.showMockup
+        (state) => state.orderItemComponent?.showMockup
     );
     const mockPercent = form.watch("meta.mockupPercentage");
     return (
@@ -239,23 +190,13 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                             <Label>Mockup Mode</Label>
                             <Switch
                                 checked={mockupMode as any}
-                                onCheckedChange={e => {
+                                onCheckedChange={(e) => {
                                     store.dispatch(toggleMockup(e));
                                 }}
                             />
                         </div>
                     )}
-                    <UpdateSalesDate
-                        sales={
-                            data?.form || {
-                                createdAt: new Date()
-                            }
-                        }
-                        page="invoice"
-                        onUpdate={date => {
-                            form.setValue("createdAt", date);
-                        }}
-                    />
+                    <UpdateSalesDate form={form} />
                     <CatalogModal form={form} ctx={data.ctx} />
 
                     <Menu
@@ -343,7 +284,7 @@ function AutoExpandInput() {
             textarea.removeEventListener("input", adjustHeight);
         };
     }, []);
-    const handleTextChange = event => {
+    const handleTextChange = (event) => {
         const newText = event.target.value;
         setText(newText);
         const newLineCount = newText.split("\n").length;

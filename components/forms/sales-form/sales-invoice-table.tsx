@@ -3,7 +3,7 @@ import {
     TableBody,
     TableHead,
     TableHeader,
-    TableRow
+    TableRow,
 } from "@/components/ui/table";
 import { useFieldArray } from "react-hook-form";
 import * as React from "react";
@@ -13,15 +13,15 @@ import { useLoader } from "@/lib/use-loader";
 import { ISalesOrderForm } from "@/types/sales";
 import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
-import { moreInvoiceLines } from "@/lib/sales/sales-invoice-form";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import SalesComponentModal from "@/components/modals/sales-component-modal";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import { cn } from "@/lib/utils";
+import salesUtils from "./sales-utils";
 export default function SalesInvoiceTable({
     form,
-    data
+    data,
 }: {
     form: ISalesOrderForm;
     data: SalesFormResponse;
@@ -32,7 +32,7 @@ export default function SalesInvoiceTable({
     const profileChange = watch("meta.sales_percentage");
     const { fields, replace } = useFieldArray({
         control,
-        name: "items"
+        name: "items",
     });
     React.useEffect(() => {
         startTransition(() => {});
@@ -42,7 +42,7 @@ export default function SalesInvoiceTable({
 
     const hideFooter = useLoader();
     React.useEffect(() => {
-        const handleIntersection = entries => {
+        const handleIntersection = (entries) => {
             const [entry] = entries;
             setFloatingFooter(entry.isIntersecting == false);
         };
@@ -122,7 +122,9 @@ export default function SalesInvoiceTable({
                     className="w-full"
                     onClick={() => {
                         hideFooter.action(() => {
-                            replace(moreInvoiceLines(watchItems as any));
+                            replace(
+                                salesUtils.moreInvoiceLines(watchItems as any)
+                            );
                         });
                     }}
                     variant="ghost"

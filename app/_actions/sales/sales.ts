@@ -1,23 +1,23 @@
 "use server";
 
 import {
-  dateQuery,
-  getPageInfo,
-  queryFilter,
+    dateQuery,
+    getPageInfo,
+    queryFilter,
 } from "@/app/_actions/action-utils";
 import { prisma } from "@/db";
 import { lastId, nextId } from "@/lib/nextId";
 import { convertToNumber } from "@/lib/use-number";
 import { TableApiResponse } from "@/types/action";
 import {
-  CopyOrderActionProps,
-  IOrderPrintMode,
-  ISalesOrder,
-  ISalesOrderItem,
-  ISalesOrderItemMeta,
-  SalesQueryParams,
-  SaveOrderActionProps,
-  UpdateOrderPriorityProps,
+    CopyOrderActionProps,
+    IOrderPrintMode,
+    ISalesOrder,
+    ISalesOrderItem,
+    ISalesOrderItemMeta,
+    SalesQueryParams,
+    SaveOrderActionProps,
+    UpdateOrderPriorityProps,
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
@@ -29,473 +29,470 @@ import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
 import { _saveSalesAction } from "./_save-sales";
 
- export async function whereSales(query: SalesQueryParams) {
-  const {
-    _q,
-    _dateType = "createdAt",
-    status,
-    date,
-    from,
-    to,
-    prodId,
-    _payment,
-    _deliveryStatus,
-    deliveryOption,
-    type = "order",
-  } = query;
-  const inputQ = { contains: _q || undefined };
-  const where: Prisma.SalesOrdersWhereInput = {
-    OR: !_q ?  undefined :[
-      { orderId: inputQ },
-      {
-        customer: {
-          OR: [
-            {
-              name: inputQ,
-            },
-            {
-              email: inputQ,
-            },
-            {
-              phoneNo: inputQ,
-            } 
-          ]
-        },
-      },
-      {
-         shippingAddress: {
-          address1: inputQ
-        }
-      },
-      {
-        producer: {
-          name: inputQ
-        }
-      }
-    ],
-    type,
-    ...dateQuery({ from, to, _dateType, date }),
-  };
-  if(_q && Number(_q) > 0) {
-    // console.log(_q)
-    where.OR?.push({
-        grandTotal: {
-            gte: Number(_q),
-            lt: Number(_q) +2
-        }
-    })
-  }
-  if(query._backOrder)
-  where.orderId = {
-    endsWith: '-bo'
-  } 
-  if(query._noBackOrder)
-  where.orderId = {
-    not: {
-        endsWith: '-bo'
-    }
-  }
-  if(query.deliveryOption)
-    where.deliveryOption  = query.deliveryOption
-  if (prodId) where.prodId = prodId;
-  if (status) {
-    const statusIsArray = Array.isArray(status);
-    if(status == 'Unassigned')
-      where.prodId = null;
-    else if(status == 'Inbound') {
-
-        where.prodId = {
-            gt: 0
-        };
-        // where.prod
-        }
-    else if(status == 'Late')
-      {
-        where.prodStatus = {
-          notIn: ['Completed']
-        }
-        where.prodDueDate = {
-          lt: dayjs().subtract(1).toISOString()
-        }
-      }
-    else
-    where.prodStatus = {
-      equals: statusIsArray ? undefined : status,
-      in: statusIsArray ? status : undefined,
+export async function whereSales(query: SalesQueryParams) {
+    const {
+        _q,
+        _dateType = "createdAt",
+        status,
+        date,
+        from,
+        to,
+        prodId,
+        _payment,
+        _deliveryStatus,
+        deliveryOption,
+        type = "order",
+    } = query;
+    const inputQ = { contains: _q || undefined };
+    const where: Prisma.SalesOrdersWhereInput = {
+        OR: !_q
+            ? undefined
+            : [
+                  { orderId: inputQ },
+                  {
+                      customer: {
+                          OR: [
+                              {
+                                  name: inputQ,
+                              },
+                              {
+                                  email: inputQ,
+                              },
+                              {
+                                  phoneNo: inputQ,
+                              },
+                          ],
+                      },
+                  },
+                  {
+                      shippingAddress: {
+                          address1: inputQ,
+                      },
+                  },
+                  {
+                      producer: {
+                          name: inputQ,
+                      },
+                  },
+                  {
+                      items: {
+                          some: {
+                              description: inputQ,
+                          },
+                      },
+                  },
+              ],
+        type,
+        ...dateQuery({ from, to, _dateType, date }),
     };
-  }
-  if(query.statusNot)
-    where.status = {
-        not: query.statusNot
+    if (_q && Number(_q) > 0) {
+        // console.log(_q)
+        where.OR?.push({
+            grandTotal: {
+                gte: Number(_q),
+                lt: Number(_q) + 2,
+            },
+        });
     }
-  if(_payment == 'Paid')
-    where.amountDue = 0;
-    else if (_payment == 'Pending')
-      where.amountDue = {
-        gt: 0
-      }
-  if (query._page == "production") {
-    if (!prodId) { 
-      where.prodId = {
-        gt: 1,
-      };
+    if (query._backOrder)
+        where.orderId = {
+            endsWith: "-bo",
+        };
+    if (query._noBackOrder)
+        where.orderId = {
+            not: {
+                endsWith: "-bo",
+            },
+        };
+    if (query.deliveryOption) where.deliveryOption = query.deliveryOption;
+    if (prodId) where.prodId = prodId;
+    if (status) {
+        const statusIsArray = Array.isArray(status);
+        if (status == "Unassigned") where.prodId = null;
+        else if (status == "Inbound") {
+            where.prodId = {
+                gt: 0,
+            };
+            // where.prod
+        } else if (status == "Late") {
+            where.prodStatus = {
+                notIn: ["Completed"],
+            };
+            where.prodDueDate = {
+                lt: dayjs().subtract(1).toISOString(),
+            };
+        } else
+            where.prodStatus = {
+                equals: statusIsArray ? undefined : status,
+                in: statusIsArray ? status : undefined,
+            };
     }
-  } 
-  if(query._customerId)
-    where.customerId = +query._customerId
-    switch(_deliveryStatus) {
-      case "delivered":
-        // where.OR?.push({
-        //     OR: [
-        //         {deliveredAt: {not: ''}}, 
-        //     ]
-        // }) 
-        where.status ='Delivered'
-      break; 
-      case "queued":
-        where.prodStatus = 'Completed'
-         where.status = {
-          notIn: ['In Transit','Return','Delivered','Ready']
+    if (query.statusNot)
+        where.status = {
+            not: query.statusNot,
+        };
+    if (_payment == "Paid") where.amountDue = 0;
+    else if (_payment == "Pending")
+        where.amountDue = {
+            gt: 0,
+        };
+    if (query._page == "production") {
+        if (!prodId) {
+            where.prodId = {
+                gt: 1,
+            };
         }
-      break;
-      case "pending production":
-        where.prodStatus = {
-          not: "Completed"
-        }  
-      break;
-      case "ready": 
-        where.status = 'Ready'
-        // where.status = {
-        //   notIn: ['In Transit','Return','Delivered']
-        // }
-      break;
-      case "transit":
-        where.status = "In Transit";  
-      break;
     }
-  return where;
+    if (query._customerId) where.customerId = +query._customerId;
+    switch (_deliveryStatus) {
+        case "delivered":
+            // where.OR?.push({
+            //     OR: [
+            //         {deliveredAt: {not: ''}},
+            //     ]
+            // })
+            where.status = "Delivered";
+            break;
+        case "queued":
+            where.prodStatus = "Completed";
+            where.status = {
+                notIn: ["In Transit", "Return", "Delivered", "Ready"],
+            };
+            break;
+        case "pending production":
+            where.prodStatus = {
+                not: "Completed",
+            };
+            break;
+        case "ready":
+            where.status = "Ready";
+            // where.status = {
+            //   notIn: ['In Transit','Return','Delivered']
+            // }
+            break;
+        case "transit":
+            where.status = "In Transit";
+            break;
+    }
+    return where;
 }
 export async function getSalesOrder(
-  query: SalesQueryParams
+    query: SalesQueryParams
 ): TableApiResponse<ISalesOrder> {
-  query.type = "order";
-return await getSales(query) 
+    query.type = "order";
+    return await getSales(query);
 }
 export async function _getInboundOrders(
-  query: SalesQueryParams
+    query: SalesQueryParams
 ): TableApiResponse<ISalesOrder> {
-//   query.type = "order";
-return await getSales(query) 
+    //   query.type = "order";
+    return await getSales(query);
 }
-export async function getOrderAction(orderId,isProd = false) {
+export async function getOrderAction(orderId, isProd = false) {
     const order = await prisma.salesOrders.findFirst({
-    where: {
-      orderId,
-      // type: {
-      //   notIn: ["estimate"],
-      // },
-    },
-    include: {
-      customer: {
+        where: {
+            orderId,
+            // type: {
+            //   notIn: ["estimate"],
+            // },
+        },
         include: {
-          wallet:true
-        }
-        // wallet: true
-      }, 
-      items: {
-        include: {
-           
-        }
-        // orderBy: {
-        //   swing: "desc",
-        // },
-      },
-      billingAddress: true,
-      producer: true,
-      salesRep: true,
-      shippingAddress: true,
-      payments: !isProd ?  {
-                        orderBy: {
-                            createdAt: "desc"
-                        }
-                    }: false,
-      productions: isProd,
-      
-    },
-  });
-  if (!order) return null;
-   const progress = await getProgress({
-    where: [
-      {
-        progressableId: order.id,
-        progressableType: "SalesOrder",
-        type: "production",
-      },
-      {
-        parentId: order.id,
-        progressableType: "SalesOrderItem",
-        type: isProd ? "production" : undefined,
-      },
-    ],
-  }); 
-  function lineIndex(line)
-  {
-    return Number(line?.meta?.line_index || line?.meta?.uid || 0); 
-  }
-  return {
-    ...order,
-    items: order.items.sort((a,b) => lineIndex(a) - lineIndex(b)),
-    progress,
-  };
+            customer: {
+                include: {
+                    wallet: true,
+                },
+                // wallet: true
+            },
+            items: {
+                include: {},
+                // orderBy: {
+                //   swing: "desc",
+                // },
+            },
+            billingAddress: true,
+            producer: true,
+            salesRep: true,
+            shippingAddress: true,
+            payments: !isProd
+                ? {
+                      orderBy: {
+                          createdAt: "desc",
+                      },
+                  }
+                : false,
+            productions: isProd,
+        },
+    });
+    if (!order) return null;
+    const progress = await getProgress({
+        where: [
+            {
+                progressableId: order.id,
+                progressableType: "SalesOrder",
+                type: "production",
+            },
+            {
+                parentId: order.id,
+                progressableType: "SalesOrderItem",
+                type: isProd ? "production" : undefined,
+            },
+        ],
+    });
+    function lineIndex(line) {
+        return Number(line?.meta?.line_index || line?.meta?.uid || 0);
+    }
+    return {
+        ...order,
+        items: order.items.sort((a, b) => lineIndex(a) - lineIndex(b)),
+        progress,
+    };
 }
 export async function getSalesEstimates(
-  query: SalesQueryParams
+    query: SalesQueryParams
 ): TableApiResponse<ISalesOrder> {
-  query.type = "estimate";
-return await getSales(query) 
+    query.type = "estimate";
+    return await getSales(query);
 }
 export async function getSales(query: SalesQueryParams) {
- 
- const where =await  whereSales(query);
-//  console.log
-  const _items = await prisma.salesOrders.findMany({
-    where,
-    ...(await queryFilter(query)),
-    include: {
-      customer: true,
-      shippingAddress: true,
-      producer: true,
-      salesRep: true,
-      items: {
-        where: {
-          swing: {
-            not: null
-          }
+    const where = await whereSales(query);
+    //  console.log
+    const _items = await prisma.salesOrders.findMany({
+        where,
+        ...(await queryFilter(query)),
+        include: {
+            customer: true,
+            shippingAddress: true,
+            producer: true,
+            salesRep: true,
+            items: {
+                where: {
+                    swing: {
+                        not: null,
+                    },
+                },
+                select: {
+                    description: true,
+                    prebuiltQty: true,
+                    id: true,
+                    qty: true,
+                    prodCompletedAt: true,
+                    meta: true,
+                },
+            },
         },
-        select: {
-            description: true,
-            prebuiltQty: true,
-          id:true,
-          qty:true,
-          prodCompletedAt: true,
-          meta: true,
-          
-        },
-         
-      }
-    },
-  }); 
-  const pageInfo = await getPageInfo(query, where, prisma.salesOrders); 
-  return {
-    pageInfo,
-    data: _items as any,
-  };
+    });
+    const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
+    return {
+        pageInfo,
+        data: _items as any,
+    };
 }
 export async function saveOrderAction({
-  id,
-  order,
-  items,
+    id,
+    order,
+    items,
 }: SaveOrderActionProps) {
-    
- const _order = await _saveSalesAction({id,order:order as any,items})
-   await orderProdQtyUpdateAction(_order.id);
-//  console.log(_order)
-//   console.log(sale_order)
-  revalidatePath(`/sales/${_order.type}/[slug]/form`,'page')
-  return _order;
+    const _order = await _saveSalesAction({ id, order: order as any, items });
+    await orderProdQtyUpdateAction(_order.id);
+    //  console.log(_order)
+    //   console.log(sale_order)
+    revalidatePath(`/sales/${_order.type}/[slug]/form`, "page");
+    return _order;
 }
 export async function deleteOrderAction(id) {
     await prisma.orderProductionSubmissions.deleteMany({
         where: {
-            salesOrderId: id
-        }, 
-    })
+            salesOrderId: id,
+        },
+    });
     await prisma.salesPayments.deleteMany({
         where: {
-            orderId: id
-        }
-    })
-  await prisma.salesOrderItems.deleteMany({
-    where: {
-      salesOrderId: id
-    },
-  })
-  await prisma.salesOrders.deleteMany({
-    where: {id},
-  })
-  
+            orderId: id,
+        },
+    });
+    await prisma.salesOrderItems.deleteMany({
+        where: {
+            salesOrderId: id,
+        },
+    });
+    await prisma.salesOrders.deleteMany({
+        where: { id },
+    });
 }
 export default async function orderProdQtyUpdateAction(salesOrderId) {
-  let prodQty = 0;
-  let builtQty = 0;
-  let order = await prisma.salesOrders.findUnique({
-    where: {
-      id: salesOrderId,
-    },
-    include: {
-      items: {
-        select: {
-          swing: true,
-          qty: true,
-          meta: true,
+    let prodQty = 0;
+    let builtQty = 0;
+    let order = await prisma.salesOrders.findUnique({
+        where: {
+            id: salesOrderId,
         },
-      },
-    },
-  });
-  const _startedItems = (order?.items as any as ISalesOrderItem[])?.filter(
-    (i) => i.swing && typeof i.meta.produced_qty === "number"
-  );
+        include: {
+            items: {
+                select: {
+                    swing: true,
+                    qty: true,
+                    meta: true,
+                },
+            },
+        },
+    });
+    const _startedItems = (order?.items as any as ISalesOrderItem[])?.filter(
+        (i) => i.swing && typeof i.meta.produced_qty === "number"
+    );
     const started = _startedItems?.length > 0;
     if (order != null)
-    order.items.map((item) => {
-      let {
-        qty,
-        swing,
-        meta: { produced_qty },
-      } = item as any as ISalesOrderItem;
-      qty ||= 0;
-      produced_qty ||= 0;
-      if (swing && qty > 0) {
-        prodQty += convertToNumber(qty);
-        builtQty += convertToNumber(produced_qty);
-      }
-    });
-  let prodStatus = order?.prodStatus;
-  if (order?.prodId) {
-    prodStatus = "Queued";
-  }
+        order.items.map((item) => {
+            let {
+                qty,
+                swing,
+                meta: { produced_qty },
+            } = item as any as ISalesOrderItem;
+            qty ||= 0;
+            produced_qty ||= 0;
+            if (swing && qty > 0) {
+                prodQty += convertToNumber(qty);
+                builtQty += convertToNumber(produced_qty);
+            }
+        });
+    let prodStatus = order?.prodStatus;
+    if (order?.prodId) {
+        prodStatus = "Queued";
+    }
     if (started) prodStatus = "Started";
-    if (prodQty == builtQty && (builtQty > 0)) prodStatus = "Completed";
-  await prisma.salesOrders.update({
-    where: {
-      id: salesOrderId,
-    },
-    data: {
-      builtQty,
-      prodQty,
-      prodStatus,
-    },
-  });
+    if (prodQty == builtQty && builtQty > 0) prodStatus = "Completed";
+    await prisma.salesOrders.update({
+        where: {
+            id: salesOrderId,
+        },
+        data: {
+            builtQty,
+            prodQty,
+            prodStatus,
+        },
+    });
 }
 export async function updateOrderPriorityActon({
-  priority,
-  orderId,
+    priority,
+    orderId,
 }: UpdateOrderPriorityProps) {
-  const { id, meta } = (
-    await prisma.salesOrders.findMany({
-      where: {
-        orderId,
-      },
-    })
-  )[0] as any as ISalesOrder;
-  meta.priority = priority;
-  await prisma.salesOrders.update({
-    where: {
-      id,
-    },
-    data: {
-      meta: meta as any,
-    },
-  });
+    const { id, meta } = (
+        await prisma.salesOrders.findMany({
+            where: {
+                orderId,
+            },
+        })
+    )[0] as any as ISalesOrder;
+    meta.priority = priority;
+    await prisma.salesOrders.update({
+        where: {
+            id,
+        },
+        data: {
+            meta: meta as any,
+        },
+    });
 }
 
 export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
-  const items = [];
-  const _cloneData: ISalesOrder = (await prisma.salesOrders.findFirst({
-    where: {
-      orderId,
-    },
-    include: {
-      items: true,
-    },
-  })) as any;
-  const {
-    orderId: oldOrderId,
-    id,
-    status,
-    slug,
-    // amountDue,
-    invoiceStatus,
-    prodStatus,
-    prodId,
-    // salesRepId,
-    builtQty,
-    createdAt,
-    updatedAt,
-    goodUntil,
-    deliveredAt,
-    paymentTerm,
-    inventoryStatus,
-    items: cItems,
-    ...orderData
-  } = _cloneData;
-orderData.salesRepId = await userId();
-orderData.amountDue = orderData.grandTotal;
-  orderData.type = as;
-  orderData.prodDueDate = null;
-  return await saveOrderAction({
-    order: orderData as any,
-    items: cItems?.map((i) => {
-      const {
+    const items = [];
+    const _cloneData: ISalesOrder = (await prisma.salesOrders.findFirst({
+        where: {
+            orderId,
+        },
+        include: {
+            items: true,
+        },
+    })) as any;
+    const {
+        orderId: oldOrderId,
         id,
-        salesOrderId,
+        status,
+        slug,
+        // amountDue,
+        invoiceStatus,
+        prodStatus,
+        prodId,
+        // salesRepId,
+        builtQty,
         createdAt,
         updatedAt,
-        meta, //: { produced_qty, ..._meta },
-truckLoadQty,
-        ...item
-      } = i;
-      const { produced_qty, ..._meta } = meta as ISalesOrderItemMeta;
-      return {
-        ...item,
-        meta: removeEmptyValues(_meta),
-      };
-    }) as any,
-  });
+        goodUntil,
+        deliveredAt,
+        paymentTerm,
+        inventoryStatus,
+        items: cItems,
+        ...orderData
+    } = _cloneData;
+    orderData.salesRepId = await userId();
+    orderData.amountDue = orderData.grandTotal;
+    orderData.type = as;
+    orderData.prodDueDate = null;
+    return await saveOrderAction({
+        order: orderData as any,
+        items: cItems?.map((i) => {
+            const {
+                id,
+                salesOrderId,
+                createdAt,
+                updatedAt,
+                meta, //: { produced_qty, ..._meta },
+                truckLoadQty,
+                ...item
+            } = i;
+            const { produced_qty, ..._meta } = meta as ISalesOrderItemMeta;
+            return {
+                ...item,
+                meta: removeEmptyValues(_meta),
+            };
+        }) as any,
+    });
 }
-export async function salesPrintAction({ ids,printMode }: { ids,printMode:IOrderPrintMode }) {
-    const isId = ids.every(id => typeof id === 'number');
-  if(printMode == 'order' && isId)
-  await Promise.all(
-    ids.map(async(id) => {
-      await fixSalesPaymentAction(Number(id))
-    })
-  )
-  const where : Prisma.SalesOrdersWhereInput = {};
-  if(isId)
-    where.id ={in:ids};
-else where.slug = {
-    in: ids as any
+export async function salesPrintAction({
+    ids,
+    printMode,
+}: {
+    ids;
+    printMode: IOrderPrintMode;
+}) {
+    const isId = ids.every((id) => typeof id === "number");
+    if (printMode == "order" && isId)
+        await Promise.all(
+            ids.map(async (id) => {
+                await fixSalesPaymentAction(Number(id));
+            })
+        );
+    const where: Prisma.SalesOrdersWhereInput = {};
+    if (isId) where.id = { in: ids };
+    else
+        where.slug = {
+            in: ids as any,
+        };
+    const sales = prisma.salesOrders.findMany({
+        where,
+        include: {
+            items: {},
+            salesRep: {},
+            billingAddress: {},
+            shippingAddress: {},
+            payments: true,
+        },
+    });
+    return sales;
 }
-  const sales = prisma.salesOrders.findMany({
-    where,
-    include: {
-      items: {},
-      salesRep: {},
-      billingAddress: {},
-      shippingAddress: {},
-      payments:true
-    },
-  });
-  return sales;
-}
-export async function moveSales(id,type: "order" | "estimate") {
-
-  const order =  await prisma.salesOrders.update({
-      where:{
-        id
-      },
-      data: {
-        type
-      }
-    })
-    let title = `Moved to ${type}`
-    await saveProgress(
-      'SalesOrder',id,{
-        type: 'sales',
+export async function moveSales(id, type: "order" | "estimate") {
+    const order = await prisma.salesOrders.update({
+        where: {
+            id,
+        },
+        data: {
+            type,
+        },
+    });
+    let title = `Moved to ${type}`;
+    await saveProgress("SalesOrder", id, {
+        type: "sales",
         status: title,
-        headline: `${title} by ${(await user()).name}`
-      }
-    )
-    _revalidate(type =='order' ? 'orders': 'estimates')
+        headline: `${title} by ${(await user()).name}`,
+    });
+    _revalidate(type == "order" ? "orders" : "estimates");
 }

@@ -1,42 +1,26 @@
 "use client";
 
-import { ISalesOrder } from "@/types/sales";
+import { ISalesOrder, ISalesOrderForm } from "@/types/sales";
 import { DatePicker } from "../date-range-picker";
 import { toast } from "sonner";
 import { _updateSalesDate } from "@/app/(auth)/sales/update-sales-date";
 import { useEffect, useState } from "react";
+import { Label } from "../ui/label";
 
 interface Props {
-    sales: ISalesOrder;
-    onUpdate?;
-    page?: "invoice" | "overview";
+    form: ISalesOrderForm;
 }
 
-export default function UpdateSalesDate({
-    sales,
-    onUpdate,
-    page = "overview"
-}: Props) {
-    const [date, setDate] = useState(new Date(sales.createdAt as any));
-    useEffect(() => {
-        setDate(sales.createdAt as any);
-    }, []);
-    async function updateInvoiceDate(date) {
-        // console.log(date);
-        setDate(date);
-        onUpdate && onUpdate(date);
-        if (sales.id && page == "overview") {
-            await _updateSalesDate(sales.id, date, sales.orderId, page);
-            toast.success("Sales date updated!");
-        }
-    }
+export default function UpdateSalesDate({ form }: Props) {
+    const date = form.watch("createdAt");
     return (
-        <>
+        <div className="inline-flex items-center space-x-2">
+            <Label>Date Created:</Label>
             <DatePicker
-                setValue={updateInvoiceDate}
+                setValue={(e) => form.setValue("createdAt", e)}
                 className="w-auto h-8"
-                value={new Date(date)}
+                value={date}
             />
-        </>
+        </div>
     );
 }

@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import { user } from "../utils";
+import dayjs from "dayjs";
 
 export interface ICreateOrderFormQuery {
     customerId?;
@@ -35,14 +36,14 @@ export async function salesFormAction(
 ): Promise<SalesFormResponse> {
     const order = await prisma.salesOrders.findFirst({
         where: {
-            orderId: query.orderId
+            orderId: query.orderId,
         },
         include: {
             customer: true,
             items: {
                 include: {
-                    supplies: true
-                }
+                    supplies: true,
+                },
             },
             salesRep: true,
             billingAddress: true,
@@ -50,10 +51,10 @@ export async function salesFormAction(
             payments: {
                 select: {
                     // id:true,
-                    amount: true
-                }
-            }
-        }
+                    amount: true,
+                },
+            },
+        },
     });
     if (!order) return await newSalesFormAction(query);
     const { payments, ..._order } = order;
@@ -62,55 +63,55 @@ export async function salesFormAction(
     return {
         form: _order as any,
         ctx,
-        paidAmount: paidAmount as any
+        paidAmount: paidAmount as any,
     };
 }
 async function formCtx(): Promise<SalesFormCtx> {
     const setting = await prisma.settings.findFirst({
         where: {
-            type: PostTypes.SALES_SETTINGS
-        }
+            type: PostTypes.SALES_SETTINGS,
+        },
     });
     const meta: ISalesSettingMeta = setting?.meta as any;
     const extras = await prisma.posts.findMany({
         where: {
             type: {
-                in: [PostTypes.SUPPLIERS, PostTypes.SWINGS]
-            }
+                in: [PostTypes.SUPPLIERS, PostTypes.SWINGS],
+            },
         },
         distinct: ["title"],
         select: {
             type: true,
-            title: true
-        }
+            title: true,
+        },
     });
     const profiles = await prisma.customerTypes.findMany({
         select: {
             id: true,
             coefficient: true,
             defaultProfile: true,
-            title: true
-        }
+            title: true,
+        },
     });
     const items = await prisma.salesOrderItems.findMany({
         where: {},
         distinct: "description",
         select: {
-            description: true
-        }
+            description: true,
+        },
     });
     console.log(items.length);
     return {
         settings: meta,
         profiles: profiles as any,
-        defaultProfile: profiles.find(p => p.defaultProfile) as any,
+        defaultProfile: profiles.find((p) => p.defaultProfile) as any,
         swings: extras
-            .filter(e => e.type == PostTypes.SWINGS)
-            .map(e => e.title),
+            .filter((e) => e.type == PostTypes.SWINGS)
+            .map((e) => e.title),
         suppliers: extras
-            .filter(e => e.type == PostTypes.SUPPLIERS)
-            .map(e => e.title),
-        items
+            .filter((e) => e.type == PostTypes.SUPPLIERS)
+            .map((e) => e.title),
+        items,
     };
 }
 async function newSalesFormAction(
@@ -126,12 +127,13 @@ async function newSalesFormAction(
         status: "Active",
         meta: {
             sales_profile: ctx.defaultProfile?.title,
-            sales_percentage: ctx.defaultProfile?.coefficient
+            sales_percentage: ctx.defaultProfile?.coefficient,
         },
         salesRepId: session?.id,
         salesRep: {
-            name: session?.name
-        }
+            name: session?.name,
+        },
+        createdAt: dayjs().toISOString() as any,
     } as ISalesOrder;
     console.log(query);
     if (query.customerId) {
@@ -142,10 +144,10 @@ async function newSalesFormAction(
                 addressBooks: {
                     take: 1,
                     orderBy: {
-                        id: "desc"
-                    }
-                }
-            }
+                        id: "desc",
+                    },
+                },
+            },
         });
         if (customer) {
             form.customerId = customer.id;
@@ -154,7 +156,7 @@ async function newSalesFormAction(
             form.meta.sales_percentage =
                 customer.profile?.coefficient || ctx?.settings?.sales_margin;
             const addr = {
-                ...(customer.addressBooks?.[0] || {})
+                ...(customer.addressBooks?.[0] || {}),
             } as any;
             form.billingAddressId = form.shippingAddressId = addr?.id;
             form.billingAddress = form.shippingAddress = addr;
@@ -164,7 +166,6 @@ async function newSalesFormAction(
     return {
         form,
         ctx,
-        paidAmount: 0
+        paidAmount: 0,
     };
 }
-

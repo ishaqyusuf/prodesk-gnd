@@ -45,9 +45,13 @@ function AutoComplete2({
     placeholder,
     formKey,
     uppercase,
+    ...props
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
+    useEffect(() => {
+        setItems(transformItems(options || []));
+    }, [options]);
     const [results, setResults] = useState<any[]>([]);
     const [selected, setSelected] = useState<{
         id;
@@ -121,7 +125,7 @@ function AutoComplete2({
         // filteredOptions = uniqueBy(filteredOptions, "name").filter(
         //     (a, i) => i < 25
         // );
-        return uniqueBy(filteredOptions, "name"); //.filter((a, i) => i < 25);
+        return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
         setSelect(true);
@@ -142,6 +146,7 @@ function AutoComplete2({
         setSelect(false);
         setFocus(true);
         if (searchMode && results.length == 0) loadResult();
+        props?.onFocus?.(e);
     }
     useEffect(() => {
         if (typing && !select && !focus) {
@@ -168,6 +173,7 @@ function AutoComplete2({
         setTimeout(() => {
             if (focus) {
                 setFocus(false);
+                props?.onBlur?.(e);
             }
         }, 500);
     }
@@ -273,7 +279,8 @@ function AutoComplete2({
                                     Nothing found.
                                 </div>
                             )}
-                            {query?.length > 0 && allowCreate && (
+                            {(query?.length == 0 ||
+                                (query?.length > 0 && allowCreate)) && (
                                 <Combobox.Option
                                     className="w-0 h-0 opacity-0"
                                     value={{ id: query, name: query }}

@@ -19,13 +19,13 @@ import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Order Overview",
-    description: "Order Overview"
+    description: "Order Overview",
 };
 export default async function SalesOrderPage({ params: { slug } }) {
     const order: ISalesOrder = (await getOrderAction(slug)) as any;
     if (!order) return notFound();
     metadata.description = order.orderId;
-    // console.log(order.items?.[4]);
+    // console.log(order.i);
     return (
         <DataPageShell className="sm:px-8" data={order}>
             <Breadcrumbs>

@@ -1,12 +1,12 @@
 import {
     SalesFormResponse,
-    salesFormAction
+    salesFormAction,
 } from "@/app/_actions/sales/sales-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
     BreadLink,
     OrderViewCrumb,
-    OrdersCrumb
+    OrdersCrumb,
 } from "@/components/breadcrumbs/links";
 import SalesForm from "@/components/forms/sales-form/sales-form";
 import SalesSupplySheet from "@/components/sheets/sales-supply-sheet";
@@ -15,17 +15,18 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Edit Invoice",
-    description: ""
+    description: "",
 };
 
 export default async function OrderFormPage({
     searchParams,
-    params: { slug }
+    params: { slug },
 }) {
     const resp: SalesFormResponse = await salesFormAction({
         orderId: slug,
-        type: "order"
+        type: "order",
     });
+    // console.log(resp.ctx?.items?.length);
     if (!resp.form.deliveryOption) resp.form.deliveryOption = "pickup";
     const orderId = resp?.form?.orderId;
     return (

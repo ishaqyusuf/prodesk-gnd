@@ -147,3 +147,13 @@ export const housePackageToolTable = [
     hpt("2-10", '35-3/4" x 81-3/4"'),
     hpt("2-30", '37-3/4" x 81-3/4"'),
 ];
+export const imgs = {
+    doorTypes: {
+        interior:
+            "https://s3.us-east-2.amazonaws.com/dyke-site-assets/resources/doorparts/069ae0256235001595354987.jpg",
+        exterior:
+            "https://s3.us-east-2.amazonaws.com/dyke-site-assets/resources/doorparts/770d00022008001680008173.jpg",
+        shelfItems:
+            "https://s3.us-east-2.amazonaws.com/dyke-site-assets/resources/doorparts/900aa0675330001688671392.jpg",
+    },
+};

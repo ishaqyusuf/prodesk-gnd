@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 export default function ItemCell({
     rowIndex,
     form,
-    ctx
+    ctx,
 }: {
     rowIndex;
     form;
@@ -27,6 +27,7 @@ export default function ItemCell({
     const getCellValue = () => form.getValues(`items.${rowIndex}.description`);
     const [cellValue, setCellValue] = useState(getCellValue() || undefined);
     // const input = useRef();
+    const [focused, setFocused] = useState(false);
     useEffect(() => {
         setCellValue(getCellValue() || undefined);
     }, [rowIndex]);
@@ -57,29 +58,34 @@ export default function ItemCell({
                     </div>
                 </button>
             ) : (
-                <Input
-                    // ref={input}
-                    className="h-8 w-full p-1 font-medium uppercase"
-                    // {...register(`${baseKey}.description`)}
-                    value={cellValue}
-                    onChange={e => {
-                        setCellValue(e.target.value);
-                        form.setValue(
-                            `items.${rowIndex}.description`,
-                            e.target.value
-                        );
-                    }}
-                />
-                // <AutoComplete
-                //     options={ctx?.items}
-                //     itemText={"description"}
-                //     itemValue={"description"}
-                //     form={form}
-                //     uppercase
-                //     hideEmpty
-                //     formKey={`items.${rowIndex}.description`}
-                //     allowCreate
+                // <Input
+                //     // ref={input}
+                //     className="h-8 w-full p-1 font-medium uppercase"
+                //     // {...register(`${baseKey}.description`)}
+                //     value={cellValue}
+                //     onChange={e => {
+                //         setCellValue(e.target.value);
+                //         form.setValue(
+                //             `items.${rowIndex}.description`,
+                //             e.target.value
+                //         );
+                //     }}
                 // />
+                <AutoComplete
+                    onFocus={(e) => {
+                        // console.log(e);
+                        setFocused(true);
+                    }}
+                    onBlur={(e) => setFocused(false)}
+                    options={focused ? ctx?.items : []}
+                    itemText={"description"}
+                    itemValue={"description"}
+                    form={form}
+                    uppercase
+                    hideEmpty
+                    formKey={`items.${rowIndex}.description`}
+                    allowCreate
+                />
             )}
         </TableCell>
     );
