@@ -33,12 +33,12 @@ export function CheckColumn({ setSelectedRowIds, data }: CheckColumnProps) {
         header: ({ table }) => (
             <Checkbox
                 checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={value => {
+                onCheckedChange={(value) => {
                     table.toggleAllPageRowsSelected(!!value);
-                    setSelectedRowIds(prev =>
+                    setSelectedRowIds((prev) =>
                         prev.length === data.length
                             ? []
-                            : data.map(row => row.id)
+                            : data.map((row) => row.id)
                     );
                 }}
                 aria-label="Select all"
@@ -48,12 +48,12 @@ export function CheckColumn({ setSelectedRowIds, data }: CheckColumnProps) {
         cell: ({ row }) => (
             <Checkbox
                 checked={row.getIsSelected()}
-                onCheckedChange={value => {
+                onCheckedChange={(value) => {
                     row.toggleSelected(!!value);
-                    setSelectedRowIds(prev =>
+                    setSelectedRowIds((prev) =>
                         value
                             ? [...prev, row.original.id]
-                            : prev.filter(id => id !== row.original.id)
+                            : prev.filter((id) => id !== row.original.id)
                     );
                 }}
                 aria-label="Select row"
@@ -61,10 +61,10 @@ export function CheckColumn({ setSelectedRowIds, data }: CheckColumnProps) {
             />
         ),
         enableSorting: false,
-        enableHiding: false
+        enableHiding: false,
     };
 }
-export const ColumnHeader = title => {
+export const ColumnHeader = (title) => {
     let c = ({ column }) => (
         <DataTableColumnHeader column={column} title={title} />
     );
@@ -126,7 +126,7 @@ export function SecondaryCellContent({
 }
 export function DateCellContent({
     children,
-    primary
+    primary,
 }: {
     children?;
     primary?: Boolean;
@@ -153,11 +153,12 @@ type FilterKeys =
     | "_dateType"
     | "_deliveryStatus"
     | "_task"
+    | "_showInvoiceType"
     | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
-    const filters = assessorKeys.map(accessorKey => ({
+    const filters = assessorKeys.map((accessorKey) => ({
         accessorKey,
-        enableHiding: false
+        enableHiding: false,
     }));
 
     return filters;
@@ -179,7 +180,7 @@ export function StatusCell({ status }) {
 export function ProgressStatusCell({
     score,
     total,
-    status
+    status,
 }: {
     status?;
     score;

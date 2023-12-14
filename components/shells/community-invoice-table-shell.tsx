@@ -17,34 +17,12 @@ import { DataTable2 } from "../data-table/data-table-2";
 
 import { ExtendedHome, IHome } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
-import {
-    HomeInstallationStatus,
-    HomeInvoiceColumn,
-    HomeProductionStatus,
-    HomeStatus,
-} from "../columns/community-columns";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreHorizontal, Printer, View } from "lucide-react";
-import Link from "next/link";
-import { deleteHome } from "@/app/_actions/community/home";
-import { dispatchSlice } from "@/store/slicers";
+import { HomeInvoiceColumn, HomeStatus } from "../columns/community-columns";
 import { HomesSelectionAction } from "../community/homes-selection-action";
-import HomePrinter from "../print/home/home-printer";
-import { deepCopy } from "@/lib/deep-copy";
-import {
-    DeleteRowAction,
-    EditRowAction,
-} from "../data-table/data-table-row-actions";
+import { EditRowAction } from "../data-table/data-table-row-actions";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
 import { openModal } from "@/lib/modal";
-import { DatePicker } from "../date-range-picker";
 
 export default function HomesTableShell<T>({
     data,
@@ -161,9 +139,10 @@ export default function HomesTableShell<T>({
                 "_builderId",
                 "_date",
                 "_projectId",
-                "_dateType"
+                "_dateType",
+                "_production",
+                "_showInvoiceType"
                 // "_installation",
-                // "_production"
             ),
             {
                 accessorKey: "actions",
@@ -198,14 +177,26 @@ export default function HomesTableShell<T>({
                     BuilderFilter,
                     ProjectsFilter,
                     {
+                        id: "_showInvoiceType",
+                        title: "Task",
+                        single: true,
+                        options: [
+                            labelValue("Has Payment", "has payment"),
+                            // labelValue("Full Paid", "full paid"),
+                            labelValue("Has no payment", "no payment"),
+                        ],
+                    },
+                    {
                         id: "_production",
                         title: "Production",
                         single: true,
                         options: [
-                            labelValue("Completed", "completed"),
-                            labelValue("Not In Production", "idle"),
-                            labelValue("Started", "started"),
-                            labelValue("Queued", "queued"),
+                            // labelValue("Completed", "completed"),
+                            // labelValue("Not In Production", "idle"),
+                            // labelValue("Started", "started"),
+                            // labelValue("Queued", "queued"),
+                            labelValue("by recently queued", "sort"),
+                            // labelValue("Recently sent", "queued"),
                         ],
                     },
                     {

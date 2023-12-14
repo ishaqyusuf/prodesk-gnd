@@ -10,8 +10,8 @@ export interface HomeQueryParams extends BaseQuery {
     _builderId;
     _projectSlug;
     _projectId?;
-
-    _production?: "Started" | "Queued" | "Idle" | "Completed";
+    _showInvoiceType?: "part paid" | "full paid" | "no payment" | "has payment";
+    _production?: "started" | "queued" | "idle" | "completed" | "sort";
     _installation?: "Submitted" | "No Submission";
 }
 export async function getHomesAction(query: HomeQueryParams) {
@@ -147,13 +147,51 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
     }
     if (query._projectId) where.projectId = Number(query._projectId);
     switch (query._production) {
-        case "Completed":
+        case "completed":
             break;
-        case "Idle":
+        case "idle":
             break;
-        case "Queued":
+        case "queued":
             break;
-        case "Started":
+        case "started":
+            break;
+        case "sort":
+            break;
+    }
+    switch (query._showInvoiceType) {
+        case "has payment":
+            where.tasks = {
+                some: {
+                    taskUid: {
+                        not: null,
+                    },
+                    amountPaid: {
+                        gt: 0,
+                    },
+                },
+            };
+            break;
+        case "no payment":
+            where.tasks = {
+                every: {
+                    taskUid: {
+                        not: null,
+                    },
+                    OR: [
+                        {
+                            amountPaid: {
+                                equals: 0,
+                            },
+                        },
+                        {
+                            amountPaid: null,
+                        },
+                        {
+                            amountPaid: undefined,
+                        },
+                    ],
+                },
+            };
             break;
     }
     if ((query.from && query.to) || query._date) {
@@ -176,6 +214,15 @@ export async function whereHome(query: HomeQueryParams, asInclude = false) {
                 break;
         }
     }
+    // where.tasks = {
+    //     some: {
+    //         OR: [
+    //             {
+    //                 taskName: '',
+    //             }
+    //         ]
+    //     }
+    // }
     switch (query._installation) {
         case "No Submission":
             break;

@@ -233,6 +233,7 @@ model Homes {
     status              String?          @db.VarChar(255)
     address             String?          @db.VarChar(255)
     meta                Json?            @db.Json
+    sentToProdAt        DateTime?        @db.Timestamp(0)
     installedAt         DateTime?        @db.Timestamp(0)
     deletedAt           DateTime?        @db.Timestamp(0)
     createdAt           DateTime?        @db.Timestamp(0)
