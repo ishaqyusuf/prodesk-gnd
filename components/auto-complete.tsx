@@ -1,4 +1,11 @@
-import { Fragment, memo, useEffect, useRef, useState } from "react";
+import {
+    Fragment,
+    memo,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -50,6 +57,7 @@ function AutoComplete2({
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
     useEffect(() => {
+        console.log("..");
         setItems(transformItems(options || []));
     }, [options]);
     const [results, setResults] = useState<any[]>([]);
@@ -67,6 +75,7 @@ function AutoComplete2({
     const [typing, setTyping] = useState(false);
 
     useEffect(() => {
+        console.log("..");
         if (!searchMode && typing) setResults(filteredOptions());
         else {
             if (typing) {
@@ -84,6 +93,7 @@ function AutoComplete2({
         setItems(transformItems(items));
     }
     useEffect(() => {
+        console.log("..");
         setResults(filteredOptions());
     }, [items]);
     function transformItems(items) {
@@ -105,6 +115,7 @@ function AutoComplete2({
         return item;
     }
     useEffect(() => {
+        console.log("..");
         const _items = transformItems(options || []);
         setItems(_items);
         setSelected(getItem(watch));
@@ -128,6 +139,7 @@ function AutoComplete2({
         return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
+        console.log("...");
         setSelect(true);
         setSelected(e);
         if (form && formKey) {
@@ -138,6 +150,7 @@ function AutoComplete2({
     const [focus, setFocus] = useState(false);
     const [select, setSelect] = useState(false);
     useEffect(() => {
+        console.log("..");
         // console.log(label, selected);
         setQuery(selected?.name);
     }, [selected]);
@@ -149,6 +162,7 @@ function AutoComplete2({
         props?.onFocus?.(e);
     }
     useEffect(() => {
+        console.log("..");
         if (typing && !select && !focus) {
             if (allowCreate) {
                 console.log(query);
@@ -197,6 +211,7 @@ function AutoComplete2({
         return getItem(watch);
     }
     useEffect(() => {
+        console.log("..");
         window.addEventListener("scroll", updatePosition);
         window.addEventListener("resize", updatePosition);
         updatePosition();
@@ -205,6 +220,13 @@ function AutoComplete2({
             window.removeEventListener("resize", updatePosition);
         };
     }, []);
+    const onKeyDown = useCallback(
+        (e) => {
+            // console.log([typing]);
+            if (!typing) setTyping(true);
+        },
+        [setTyping, typing]
+    );
     return (
         <div className="grid relative gap-2">
             {label && <Label>{label}</Label>}
@@ -226,9 +248,7 @@ function AutoComplete2({
                             onClick={() => {
                                 if (!select) buttonRef?.current?.click();
                             }}
-                            onKeyDown={(e) => {
-                                setTyping(true);
-                            }}
+                            onKeyDown={onKeyDown}
                             ref={inputRef as any}
                             onFocus={onFocus}
                             onBlur={onBlur}

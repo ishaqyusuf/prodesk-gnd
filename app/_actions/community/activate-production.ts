@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/db";
-import { formatDate } from "@/lib/use-day";
 import { serverDate } from "../action-utils";
 import { _revalidate } from "../_revalidate";
 
@@ -17,6 +16,20 @@ export async function activateHomeProductionAction(ids: number[], dueDate) {
         data: {
             productionDueDate: serverDate(dueDate),
             sentToProductionAt: new Date(),
+        },
+    });
+    await prisma.homes.updateMany({
+        where: {
+            tasks: {
+                some: {
+                    id: {
+                        in: ids,
+                    },
+                },
+            },
+        },
+        data: {
+            sentToProdAt: new Date(),
         },
     });
     // console.log(u, dueDate);

@@ -277,3 +277,19 @@ export function chunkArray(array, chunkSize) {
     //     result.push(array.slice(i, i + chunkSize))
     // return result;
 }
+export const filteredOptions = (q, items, labelKey = "label") => {
+    console.log(items.length);
+    console.log(q);
+    const escapedText = !q
+        ? ""
+        : q?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+
+    const pattern = new RegExp(escapedText, "i");
+    let filteredOptions = items?.filter((option) =>
+        pattern.test(option[labelKey])
+    );
+    // filteredOptions = uniqueBy(filteredOptions, "name").filter(
+    //     (a, i) => i < 25
+    // );
+    return uniqueBy(filteredOptions, labelKey)?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
+};

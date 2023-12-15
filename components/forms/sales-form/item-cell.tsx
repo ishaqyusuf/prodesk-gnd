@@ -28,11 +28,14 @@ export default function ItemCell({
     const [cellValue, setCellValue] = useState(getCellValue() || undefined);
     // const input = useRef();
     const [focused, setFocused] = useState(false);
+    const [hover, setHover] = useState(false);
     useEffect(() => {
         setCellValue(getCellValue() || undefined);
     }, [rowIndex]);
     return (
         <TableCell
+            onMouseEnter={(e) => setHover(true)}
+            onMouseLeave={(e) => setHover(false)}
             onClick={() => {
                 if (isComponent) openComponentModal(deepCopy(item), rowIndex);
                 else {
