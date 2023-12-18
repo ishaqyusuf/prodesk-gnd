@@ -39,8 +39,8 @@ function catType(index) {
 }
 function create(name, categoryId, type: "parent" | "child") {
     let cat = findCatWithCatId(name, type, categoryId);
-    if (cat) return cat;
-    else {
+    // if (cat) return cat;
+    if (!cat) {
         cat = {
             id: categories.length + 1,
             type,
