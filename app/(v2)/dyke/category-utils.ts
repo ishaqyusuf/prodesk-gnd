@@ -22,7 +22,12 @@ function generate(cats: string[]) {
     cats.map((title, index) => {
         const nCategoryId = index > 0 ? __cats[index - 1]?.id : null;
         // console.log([title, index, nCategoryId]);
-        const newCat = create(title, nCategoryId, catType(index));
+        const newCat = create(
+            title,
+            nCategoryId,
+            parentCategoryId,
+            catType(index)
+        );
         if (!newCat) return;
         if (index == 0) parentCategoryId = newCat?.id;
         if (index == cats.length - 1) categoryId = newCat?.id;
@@ -38,7 +43,7 @@ function generate(cats: string[]) {
 function catType(index) {
     return index == 0 ? "parent" : "child";
 }
-function create(name, categoryId, type: "parent" | "child") {
+function create(name, categoryId, parentCategoryId, type: "parent" | "child") {
     let cat = findCatWithCatId(name, type, categoryId);
     // if (cat) return cat;
     if (!cat) {
@@ -47,6 +52,7 @@ function create(name, categoryId, type: "parent" | "child") {
             type,
             name,
             categoryId,
+            parentCategoryId,
         };
         categories.push(cat);
     }

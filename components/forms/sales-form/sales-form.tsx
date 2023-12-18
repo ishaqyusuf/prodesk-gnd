@@ -1,10 +1,10 @@
 "use client";
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
 import { ISalesOrder, ISaveOrder } from "@/types/sales";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { PrintOrderMenuAction } from "@/components/actions/order-actions";
 import OrderPrinter from "@/components/print/order/order-printer";
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deepCopy } from "@/lib/deep-copy";
 import { numeric } from "@/lib/use-number";
@@ -32,6 +32,8 @@ import { Icons } from "@/components/icons";
 import { openModal } from "@/lib/modal";
 import UpdateSalesDate from "@/components/sales/update-sales-date";
 import salesUtils from "./sales-utils";
+import debounce from "debounce";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 interface Props {
     data: SalesFormResponse;
@@ -50,6 +52,23 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const form = useForm<ISalesOrder>({
         defaultValues,
     });
+    const watchForm = useWatch({
+        control: form.control,
+        defaultValue: defaultValues,
+    });
+    const debouncedSave = useCallback(
+        debounce(() => {
+            console.log("Saving");
+            // methods.handleSubmit(onSubmit)();
+        }, 1000),
+        []
+    );
+    useDeepCompareEffect(() => {
+        console.log(form.formState.touchedFields);
+        if (form.formState.isDirty) {
+            debouncedSave();
+        }
+    }, [watchForm]);
     const router = useRouter();
 
     useEffect(() => {
