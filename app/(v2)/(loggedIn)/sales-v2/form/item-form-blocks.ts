@@ -8,6 +8,27 @@ export interface Block {
     title;
     options: { title; img }[];
 }
+export function getNextBlock({
+    setBlocks,
+    // blocks,
+    openBlock = 0,
+    setOpenBlock,
+    label = null,
+    value = null,
+}) {
+    if (openBlock == -1) {
+        setBlocks((blocks) => {
+            console.log(itemFormBlocks[0]);
+            return [itemFormBlocks[0]];
+        });
+        setOpenBlock((b) => 0);
+    } else {
+        //
+        if (value == "Shelf Items") {
+            createBlock("Shelf Items", []);
+        }
+    }
+}
 export const itemFormBlocks: Block[] = [
     createBlock("Door Type", [
         createBlockItem("Interior"),

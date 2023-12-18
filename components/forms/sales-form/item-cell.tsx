@@ -83,6 +83,15 @@ export default function ItemCell({
                     options={focused ? ctx?.items : []}
                     itemText={"description"}
                     itemValue={"description"}
+                    onSelect={(e) => {
+                        // console.log((e as any)?.data?.price);
+                        form.setValue(
+                            `items.${rowIndex}.price`,
+                            (e as any)?.data?.price
+                        );
+                        if (!form.getValues(`items.${rowIndex}.qty`))
+                            form.setValue(`items.${rowIndex}.qty`, 1);
+                    }}
                     form={form}
                     uppercase
                     hideEmpty

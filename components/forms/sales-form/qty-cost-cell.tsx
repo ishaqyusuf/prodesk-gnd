@@ -3,13 +3,14 @@ import { TableCell } from "@/components/ui/table";
 import { store, useAppSelector } from "@/store";
 
 import { convertToNumber, toFixed } from "@/lib/use-number";
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
 import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 import Money from "@/components/money";
 import { Label } from "@/components/ui/label";
 import { addPercentage } from "@/lib/utils";
+import { InvoiceItemRowContext } from "./invoice-item-row-context";
 
 function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     const { register } = form;
@@ -20,27 +21,27 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     const profileEstimate = form.watch("meta.profileEstimate");
     const mockPercent = form.watch("meta.mockupPercentage");
 
-    const slice = useAppSelector(state => state.orderItemComponent);
+    const slice = useAppSelector((state) => state.orderItemComponent);
     const toggleMockup = useAppSelector(
-        state => state.orderItemComponent?.showMockup
+        (state) => state.orderItemComponent?.showMockup
     );
-
-    const [qty, setQty] = React.useState(
-        form.getValues(`${baseKey}.qty` as any)
-    );
-    const [price, setPrice] = React.useState(
-        form.getValues(`${baseKey}.price` as any)
-    );
-    const [rate, setRate] = React.useState(
-        form.getValues(`${baseKey}.rate` as any)
-    );
-    React.useEffect(() => {
-        if (rowIndex == slice.itemPriceData?.rowIndex) {
-            const { price: _price, qty: _qty } = slice.itemPriceData;
-            setQty(_qty);
-            setPrice(_price);
-        }
-    }, [slice.itemPriceData]);
+    const { qty, price, rate } = useContext(InvoiceItemRowContext);
+    // const [qty, setQty] = React.useState(
+    //     form.getValues(`${baseKey}.qty` as any)
+    // );
+    // const [price, setPrice] = React.useState(
+    //     form.getValues(`${baseKey}.price` as any)
+    // );
+    // const [rate, setRate] = React.useState(
+    //     form.getValues(`${baseKey}.rate` as any)
+    // );
+    // React.useEffect(() => {
+    //     if (rowIndex == slice.itemPriceData?.rowIndex) {
+    //         const { price: _price, qty: _qty } = slice.itemPriceData;
+    //         setQty(_qty);
+    //         setPrice(_price);
+    //     }
+    // }, [slice.itemPriceData]);
 
     // if (rowIndex == 0)   }, [slice.itemPriceData]);
     // React.useEffect(() => {
@@ -55,7 +56,7 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
                 : price;
         if (toggleMockup) _rate = addPercentage(_rate, mockPercent);
         form.setValue(`items.${rowIndex}.rate`, _rate);
-        setRate(_rate);
+        // setRate(_rate);
         const total = toFixed(convertToNumber(qty * _rate, 0));
         // if(form.getValue(``))
         form.setValue(`items.${rowIndex}.total`, +total);
@@ -67,21 +68,8 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
         profitRate,
         profileEstimate,
         toggleMockup,
-        mockPercent
+        mockPercent,
     ]);
-    const [wPrice, wQty, wRate] = form.watch([
-        `${baseKey}.price`,
-        `${baseKey}.qty`,
-        `${baseKey}.rate`
-    ] as any);
-    function _setQty(e) {
-        setQty(+e.target?.value);
-        form.setValue(`items.${rowIndex}.qty`, +e.target?.value);
-    }
-    function _setPrice(e) {
-        setPrice(+e.target?.value);
-        form.setValue(`items.${rowIndex}.price`, +e.target?.value);
-    }
     return (
         <>
             <TableCell id="qty" className="p-0 px-1">
@@ -89,7 +77,9 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
                     type="number"
                     className="h-8 w-full p-1 text-center font-medium"
                     value={qty || ""}
-                    onChange={_setQty}
+                    onChange={(e) =>
+                        form.setValue(`items.${rowIndex}.qty`, +e.target?.value)
+                    }
                     //   {...register(`items.${rowIndex}.qty`)}
                 />
             </TableCell>
@@ -99,7 +89,12 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
                     className="h-8 w-full p-1 text-right font-medium"
                     value={price || ""}
                     disabled={toggleMockup}
-                    onChange={_setPrice}
+                    onChange={(e) =>
+                        form.setValue(
+                            `items.${rowIndex}.price`,
+                            +e.target?.value
+                        )
+                    }
                 />
             </TableCell>
             {profileEstimate && (

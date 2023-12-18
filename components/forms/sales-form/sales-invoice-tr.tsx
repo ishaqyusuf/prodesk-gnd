@@ -7,7 +7,7 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
+    TableRow,
 } from "@/components/ui/table";
 import { store } from "@/store";
 import * as React from "react";
@@ -27,6 +27,7 @@ import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
 import AutoComplete2 from "@/components/auto-complete";
 import Money from "@/components/money";
+import { InvoiceItemRowContext } from "./invoice-item-row-context";
 
 interface IProps {
     rowIndex;
@@ -47,59 +48,82 @@ export const SalesInvoiceTr = ({
     isPending,
     form,
     ctx,
-    rowIndex: i
+    rowIndex: i,
 }: IProps) => {
     //   const orderFormSlice = useAppSelector((state) => state.orderForm);
     // const watchItems = form.watch("items");
     // const [isPending, startTransition] = React.useTransition();
+    const baseKey = `items.${i}`;
+
+    //   const itemTotal = form.watch([`${baseKey}.qty`, `${baseKey}.price`] as any);
+    const profitRate = form.watch("meta.sales_percentage");
+    const profileEstimate = form.watch("meta.profileEstimate");
+    const mockPercent = form.watch("meta.mockupPercentage");
+    const [qty, price, rate] = form.watch([
+        `${baseKey}.qty`,
+        `${baseKey}.price`,
+        `${baseKey}.rate`,
+    ]);
+    //  const qty = form.watchValues(`${baseKey}.price`)
+    const rowContext = {
+        baseKey,
+        profitRate,
+        profileEstimate,
+        mockPercent,
+        qty,
+        rate,
+        price,
+    };
 
     return (
-        <TableRow className="border-b-0 hover:bg-none">
-            {isPending ? (
-                <TableCell colSpan={9} />
-            ) : (
-                <>
-                    <TableCell className="p-0 px-1 font-medium">
-                        {i + 1}
-                    </TableCell>
-                    <TableCell id="component" className="p-0 px-1">
-                        <FormField<ISalesOrder>
-                            name={`items.${i}.meta.isComponent`}
-                            control={form.control}
-                            render={({ field }) => (
-                                <Checkbox
-                                    id="component"
-                                    checked={field.value as CheckedState}
-                                    onCheckedChange={field.onChange}
-                                />
-                            )}
-                        />
-                    </TableCell>
-                    <ItemCell ctx={ctx} rowIndex={i} form={form} />
-                    <SwingCell rowIndex={i} form={form} ctx={ctx} />
-                    <TableCell id="supplier" className="p-0 px-1">
-                        <AutoComplete2
-                            formKey={`items.${i}.supplier`}
-                            allowCreate
-                            form={form}
-                            options={ctx.suppliers}
-                        />
-                    </TableCell>
-                    <QtyCostCell form={form} rowIndex={i} />
+        <InvoiceItemRowContext.Provider value={rowContext as any}>
+            <TableRow className="border-b-0 hover:bg-none">
+                {isPending ? (
+                    <TableCell colSpan={9} />
+                ) : (
+                    <>
+                        <TableCell className="p-0 px-1 font-medium">
+                            {i + 1}
+                        </TableCell>
+                        <TableCell id="component" className="p-0 px-1">
+                            <FormField<ISalesOrder>
+                                name={`items.${i}.meta.isComponent`}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        id="component"
+                                        checked={field.value as CheckedState}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                )}
+                            />
+                        </TableCell>
+                        <ItemCell ctx={ctx} rowIndex={i} form={form} />
+                        <SwingCell rowIndex={i} form={form} ctx={ctx} />
+                        <TableCell id="supplier" className="p-0 px-1">
+                            <AutoComplete2
+                                formKey={`items.${i}.supplier`}
+                                allowCreate
+                                form={form}
+                                options={ctx.suppliers}
+                            />
+                        </TableCell>
+                        <QtyCostCell form={form} rowIndex={i} />
 
-                    <TotalCell form={form} rowIndex={i} />
+                        <TotalCell form={form} rowIndex={i} />
 
-                    <TableCell id="tax" align="center" className="p-0 px-1">
-                        <TaxSwitchCell form={form} rowIndex={i} />
-                    </TableCell>
-                </>
-            )}
-            <InvoiceTableRowAction
-                startTransition={startTransition2}
-                form={form}
-                rowIndex={i}
-            />
-        </TableRow>
+                        <TableCell id="tax" align="center" className="p-0 px-1">
+                            <TaxSwitchCell form={form} rowIndex={i} />
+                        </TableCell>
+                    </>
+                )}
+                <InvoiceTableRowAction
+                    startTransition={startTransition2}
+                    form={form}
+                    rowIndex={i}
+                />
+            </TableRow>
+        </InvoiceItemRowContext.Provider>
     );
 };
 function TotalCell({ rowIndex, form }) {
@@ -116,7 +140,7 @@ function TotalCell({ rowIndex, form }) {
 }
 function TaxSwitchCell({
     form,
-    rowIndex
+    rowIndex,
 }: {
     form: ISalesOrderForm;
     rowIndex;
@@ -134,13 +158,13 @@ function TaxSwitchCell({
             className=""
             id="tax"
             checked={checked}
-            onCheckedChange={e => {
+            onCheckedChange={(e) => {
                 setChecked(e);
                 form.setValue(keyName, e ? "Tax" : "Non");
                 store.dispatch(
                     updateFooterInfo({
                         rowIndex,
-                        taxxable: e == true
+                        taxxable: e == true,
                     })
                 );
             }}

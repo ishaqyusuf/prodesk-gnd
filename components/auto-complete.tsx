@@ -52,12 +52,13 @@ function AutoComplete2({
     placeholder,
     formKey,
     uppercase,
+    onSelect,
     ...props
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         setItems(transformItems(options || []));
     }, [options]);
     const [results, setResults] = useState<any[]>([]);
@@ -75,7 +76,7 @@ function AutoComplete2({
     const [typing, setTyping] = useState(false);
 
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         if (!searchMode && typing) setResults(filteredOptions());
         else {
             if (typing) {
@@ -93,7 +94,7 @@ function AutoComplete2({
         setItems(transformItems(items));
     }
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         setResults(filteredOptions());
     }, [items]);
     function transformItems(items) {
@@ -115,7 +116,7 @@ function AutoComplete2({
         return item;
     }
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         const _items = transformItems(options || []);
         setItems(_items);
         setSelected(getItem(watch));
@@ -139,7 +140,7 @@ function AutoComplete2({
         return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
-        console.log("...");
+        // console.log("...");
         setSelect(true);
         setSelected(e);
         if (form && formKey) {
@@ -150,7 +151,7 @@ function AutoComplete2({
     const [focus, setFocus] = useState(false);
     const [select, setSelect] = useState(false);
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         // console.log(label, selected);
         setQuery(selected?.name);
     }, [selected]);
@@ -162,10 +163,10 @@ function AutoComplete2({
         props?.onFocus?.(e);
     }
     useEffect(() => {
-        console.log("..");
+        // console.log("..");/
         if (typing && !select && !focus) {
             if (allowCreate) {
-                console.log(query);
+                // console.log(query);
                 setSelected({
                     id: query,
                     name: query,
@@ -211,7 +212,7 @@ function AutoComplete2({
         return getItem(watch);
     }
     useEffect(() => {
-        console.log("..");
+        // console.log("..");
         window.addEventListener("scroll", updatePosition);
         window.addEventListener("resize", updatePosition);
         updatePosition();
@@ -314,6 +315,10 @@ function AutoComplete2({
               data-[disabled]:pointer-events-none data-[disabled]:opacity-50 */}
                             {results?.map((person) => (
                                 <Combobox.Option
+                                    onClick={(e) => {
+                                        // console.log(e);
+                                        onSelect && onSelect(person);
+                                    }}
                                     key={person.id}
                                     className={({ active }) =>
                                         `flex cursor-default select-none items-center rounded-sm

@@ -3,29 +3,32 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Block } from "../item-form-blocks";
+import { Block, getNextBlock } from "../item-form-blocks";
 import { cn } from "@/lib/utils";
 import HousePackageTool from "./house-package-tool";
+import { useContext } from "react";
+import { SalesFormContext } from "../sales-form-context";
 interface Props {
-    configIndex;
+    // configIndex;
     block: Block;
-    openBlock;
-    setOpenBlock;
+    // openBlock;
+    // setOpenBlock;
     blockIndex;
-    itemIndex;
-    form;
+    // itemIndex;
+    // nextBlock;
+    // form;
 }
-export function ItemConfigBlock({
-    configIndex,
-    block,
-    openBlock,
-    itemIndex,
-    setOpenBlock,
-    blockIndex,
-    form,
-}: Props) {
+export function ItemConfigBlock({ block, blockIndex }: Props) {
+    const {
+        configIndex,
+        openBlock,
+        rowIndex: itemIndex,
+        setOpenBlock,
+        nextBlock,
+        form,
+    } = useContext(SalesFormContext);
     const configky = `items.${itemIndex}.meta.config.${block.title}`;
-    const blockValue = form.watch(configky);
+    const blockValue = form.watch(configky as any);
 
     return (
         <Collapsible
@@ -50,12 +53,16 @@ export function ItemConfigBlock({
 
             <CollapsibleContent className="p-8 border">
                 {block.title == "House Package Tool" && <HousePackageTool />}
+                {
+                    // block.
+                }
                 <div className="grid gap-4 grid-cols-4">
                     {block.options?.map((b, i) => (
                         <button
                             onClick={() => {
-                                form.setValue(configky, b.title);
-                                setOpenBlock(openBlock + 1);
+                                form.setValue(configky as any, b.title);
+                                // setOpenBlock(openBlock + 1);
+                                nextBlock(configky, b.title);
                             }}
                             key={i}
                         >

@@ -1,8 +1,15 @@
+# DEC 18: 00.00 == 00.00
+    02:00-
+## -------------------------
 # TODO
     Unit and Tasks Browser in Model Cost Edit.
     Model Cost View From Home Invoice Edit
-# DEC 14: 00.00 == 00.00
-    11:00-
+PAYMENT INVOICE DEC 04 - DEC 22
+$841.75
+Zelle marzuqisiaka@gmail.com
+# DEC 14: 01.30 == 24.05
+    05:30-06:00
+    11:00-12:00
 # DEC 13: 04.05 == 22.35
     05:10-06:00
     04:30-05:00

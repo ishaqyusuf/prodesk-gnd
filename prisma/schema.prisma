@@ -1063,12 +1063,13 @@ model Notifications {
 
 // Dyke Edge Db
 model DykeShelfCategories {
-    id              Int                 @unique @default(autoincrement())
-    name            String
-    type            String //parent/child
-    categoryId      Int?
-    products        DykeShelfProducts[] @relation(name: "childCategory")
-    groupedProducts DykeShelfProducts[] @relation(name: "parentCategory")
+    id               Int                 @unique @default(autoincrement())
+    name             String
+    type             String //parent/child
+    categoryId       Int?
+    parentCategoryId Int?
+    products         DykeShelfProducts[] @relation(name: "childCategory")
+    groupedProducts  DykeShelfProducts[] @relation(name: "parentCategory")
 }
 
 model DykeShelfProducts {
