@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const projectSchema = z.object({
     title: z.string(),
-    model: z.string(),
+    // model: z.string(),
     refNo: z.string().optional(),
     builderId: z.number(),
     address: z.string().optional(),
@@ -11,11 +11,11 @@ export const projectSchema = z.object({
             supervisor: z
                 .object({
                     name: z.string().optional(),
-                    email: z.string().optional()
+                    email: z.string().optional(),
                 })
-                .optional()
+                .optional(),
         })
-        .optional()
+        .optional(),
 });
 export const homeSchema = z.object({
     projectId: z.number(),
@@ -26,7 +26,7 @@ export const homeSchema = z.object({
             block: z.string().optional(),
             createdAt: z.date().optional(),
             homeKey: z.string().optional(),
-            meta: z.object({})
+            meta: z.object({}),
         })
-        .array()
+        .array(),
 });
