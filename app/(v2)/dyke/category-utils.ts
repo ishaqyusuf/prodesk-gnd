@@ -23,8 +23,9 @@ function generate(cats: string[]) {
         const nCategoryId = index > 0 ? __cats[index - 1]?.id : null;
         // console.log([title, index, nCategoryId]);
         const newCat = create(title, nCategoryId, catType(index));
-        if (index == 0) parentCategoryId = newCat.id;
-        if (index == cats.length - 1) categoryId = newCat.id;
+        if (!newCat) return;
+        if (index == 0) parentCategoryId = newCat?.id;
+        if (index == cats.length - 1) categoryId = newCat?.id;
         __cats.push(newCat);
     });
     // console.log(categories);
