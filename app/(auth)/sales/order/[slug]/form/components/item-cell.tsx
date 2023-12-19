@@ -10,6 +10,7 @@ import { InvoiceItemRowContext } from "../invoice-item-row-context";
 import { useFormContext } from "react-hook-form";
 import { ISalesOrder, ISalesOrderForm } from "@/types/sales";
 import { FormField } from "@/components/ui/form";
+import { _getSalesItemPriceByProfile } from "../_actions/get-item-price";
 
 export default function ItemCell({
     rowIndex,
@@ -94,14 +95,26 @@ export default function ItemCell({
                             itemText={"description"}
                             itemValue={"description"}
                             fluid
-                            onSelect={(e) => {
-                                // console.log((e as any)?.data?.price);
-                                form.setValue(
-                                    `items.${rowIndex}.price`,
-                                    (e as any)?.data?.price
+                            onSelect={async (e) => {
+                                // console.log(e as any);
+                                let data = (e as any)?.data as any;
+                                const price = await _getSalesItemPriceByProfile(
+                                    data?.description
                                 );
-                                if (!form.getValues(`items.${rowIndex}.qty`))
-                                    form.setValue(`items.${rowIndex}.qty`, 1);
+                                console.log(price);
+                                if (price) {
+                                    form.setValue(
+                                        `items.${rowIndex}.price`,
+                                        data?.price
+                                    );
+                                    if (
+                                        !form.getValues(`items.${rowIndex}.qty`)
+                                    )
+                                        form.setValue(
+                                            `items.${rowIndex}.qty`,
+                                            1
+                                        );
+                                }
                             }}
                             // form={form}
                             uppercase
