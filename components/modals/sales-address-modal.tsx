@@ -300,7 +300,8 @@ function OrderAddress({
                             itemText="search"
                             itemValue="search"
                             onSelect={(e) => {
-                                const { data: address } = e || {};
+                                const { data: address } =
+                                    (e as any) || ({} as any);
                                 console.log(address);
                                 if (typeof address === "object") {
                                     const {
