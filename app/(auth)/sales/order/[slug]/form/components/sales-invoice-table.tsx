@@ -18,7 +18,7 @@ import SalesComponentModal from "@/components/modals/sales-component-modal";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import { cn } from "@/lib/utils";
-import salesUtils from "./sales-utils";
+import salesUtils from "../sales-utils";
 export default function SalesInvoiceTable({
     form,
     data,

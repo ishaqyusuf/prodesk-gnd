@@ -10,7 +10,7 @@ import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 import Money from "@/components/money";
 import { Label } from "@/components/ui/label";
 import { addPercentage } from "@/lib/utils";
-import { InvoiceItemRowContext } from "./invoice-item-row-context";
+import { InvoiceItemRowContext } from "../invoice-item-row-context";
 
 function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     const { register } = form;

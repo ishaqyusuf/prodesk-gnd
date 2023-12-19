@@ -1,29 +1,29 @@
 import {
     SalesFormResponse,
-    salesFormAction
+    salesFormAction,
 } from "@/app/_actions/sales/sales-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
     BreadLink,
     EstimatesCrumb,
-    OrdersCrumb
+    OrdersCrumb,
 } from "@/components/breadcrumbs/links";
-import SalesForm from "@/components/forms/sales-form/sales-form";
+import SalesForm from "@/app/(auth)/sales/order/[slug]/form/components/sales-form";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Edit Invoice",
-    description: ""
+    description: "",
 };
 
 export default async function OrderFormPage({
     searchParams,
-    params: { slug }
+    params: { slug },
 }) {
     const resp: SalesFormResponse = await salesFormAction({
         orderId: slug,
-        type: "estimate"
+        type: "estimate",
     });
     const orderId = resp?.form?.orderId;
     return (

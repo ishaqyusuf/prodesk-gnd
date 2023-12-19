@@ -28,7 +28,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { FormField } from "@/components/ui/form";
 import { useAppSelector } from "@/store";
-import salesUtils from "./sales-utils";
+import salesUtils from "../sales-utils";
 
 export default function InfoCard({
     form,

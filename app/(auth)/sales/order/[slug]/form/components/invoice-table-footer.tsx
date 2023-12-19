@@ -20,7 +20,7 @@ import { IPaymentOptions, ISalesOrderForm } from "@/types/sales";
 import { SalesFormCtx } from "@/app/_actions/sales/sales-form";
 import Money from "@/components/money";
 import { cn } from "@/lib/utils";
-import { calculateSalesInvoice } from "./sales-invoice-calculator";
+import { calculateSalesInvoice } from "../sales-invoice-calculator";
 export default function InvoiceTableFooter({
     form,
     floatingFooter,

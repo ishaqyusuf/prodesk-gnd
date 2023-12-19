@@ -27,7 +27,7 @@ import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
 import AutoComplete2 from "@/components/auto-complete";
 import Money from "@/components/money";
-import { InvoiceItemRowContext } from "./invoice-item-row-context";
+import { InvoiceItemRowContext } from "../invoice-item-row-context";
 
 interface IProps {
     rowIndex;

@@ -8,7 +8,7 @@ import {
     OrderViewCrumb,
     OrdersCrumb,
 } from "@/components/breadcrumbs/links";
-import SalesForm from "@/components/forms/sales-form/sales-form";
+import SalesForm from "@/app/(auth)/sales/order/[slug]/form/components/sales-form";
 import SalesSupplySheet from "@/components/sheets/sales-supply-sheet";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { Metadata } from "next";

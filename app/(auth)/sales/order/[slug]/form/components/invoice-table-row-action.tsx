@@ -32,7 +32,7 @@ import {
     Trash,
 } from "lucide-react";
 import { useFieldArray } from "react-hook-form";
-import salesUtils from "./sales-utils";
+import salesUtils from "../sales-utils";
 
 export default function InvoiceTableRowAction({
     form,

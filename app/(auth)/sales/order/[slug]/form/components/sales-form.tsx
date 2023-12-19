@@ -31,7 +31,7 @@ import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
 import { openModal } from "@/lib/modal";
 import UpdateSalesDate from "@/components/sales/update-sales-date";
-import salesUtils from "./sales-utils";
+import salesUtils from "../sales-utils";
 import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
