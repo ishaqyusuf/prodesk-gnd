@@ -29,7 +29,7 @@ import {
     SelectGroup,
     SelectItem,
     SelectTrigger,
-    SelectValue
+    SelectValue,
 } from "../ui/select";
 import { DatePicker } from "../date-range-picker";
 import AutoComplete2 from "../auto-complete";
@@ -37,7 +37,7 @@ import AutoComplete2 from "../auto-complete";
 import { customerServiceSchema } from "@/lib/validations/customer-service";
 import {
     createCustomerService,
-    updateCustomerService
+    updateCustomerService,
 } from "@/app/_actions/customer-services/save-customer-service";
 import { findHomeOwnerAction } from "@/app/_actions/customer-services/find-home-owner";
 import { deepCopy } from "@/lib/deep-copy";
@@ -48,8 +48,8 @@ export default function CustomerServiceModal() {
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IWorkOrder>({
         defaultValues: {
-            meta: {}
-        }
+            meta: {},
+        },
     });
 
     async function submit(data) {
@@ -70,7 +70,7 @@ export default function CustomerServiceModal() {
             }
         });
     }
-    const projects = useAppSelector(state => state?.slicers?.staticProjects);
+    const projects = useAppSelector((state) => state?.slicers?.staticProjects);
     useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
     }, []);
@@ -83,8 +83,8 @@ export default function CustomerServiceModal() {
                       requestDate: null, //new Date(),
                       status: "Pending",
                       meta: {
-                          lotBlock: ""
-                      }
+                          lotBlock: "",
+                      },
                   }
         );
         if (formData.id) {
@@ -96,7 +96,7 @@ export default function CustomerServiceModal() {
         if (!formData.meta) formData.meta = {} as any;
         const { meta } = formData;
 
-        const pid = projects?.find(p => p.title == formData.projectName)?.id;
+        const pid = projects?.find((p) => p.title == formData.projectName)?.id;
 
         if (!meta.lotBlock) {
             const { lot, block } = formData;
@@ -112,7 +112,7 @@ export default function CustomerServiceModal() {
         // console.log(formData);
         form.reset({
             ...formData,
-            meta
+            meta,
         });
 
         if (pid) loadUnits(pid);
@@ -120,7 +120,7 @@ export default function CustomerServiceModal() {
 
     async function loadUnits(projectId) {
         const ls = await getProjectUnitList(projectId);
-        setUnits(ls.filter(u => u.lot && u.block));
+        setUnits(ls.filter((u) => u.lot && u.block));
     }
 
     const [units, setUnits] = useState<{ id; lotBlock; lot; block }[]>([]);
@@ -135,7 +135,7 @@ export default function CustomerServiceModal() {
     return (
         <BaseModal<IWorkOrder | undefined>
             className="sm:max-w-[550px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 init(data);
             }}
             onClose={() => {}}
@@ -155,7 +155,7 @@ export default function CustomerServiceModal() {
                                     options={projects}
                                     itemText={"title"}
                                     itemValue={"title"}
-                                    onChange={(e: any) => {
+                                    onSelect={(e: any) => {
                                         loadUnits(e.data.id);
                                         form.setValue("lot", e.data.lot);
                                         form.setValue("block", e.data.block);
@@ -170,7 +170,7 @@ export default function CustomerServiceModal() {
                                     options={units}
                                     itemText={"lotBlock"}
                                     itemValue={"lotBlock"}
-                                    onChange={(e: any) => {
+                                    onSelect={(e: any) => {
                                         form.setValue("lot", e.data.lot);
                                         form.setValue("block", e.data.block);
                                         findHomeOwner(e.data);
@@ -190,7 +190,7 @@ export default function CustomerServiceModal() {
                                 <DatePicker
                                     format={"YYYY-MM-DD"}
                                     className="flex-1 w-full h-8"
-                                    setValue={e =>
+                                    setValue={(e) =>
                                         form.setValue("requestDate", e)
                                     }
                                     value={form.getValues("requestDate")}
@@ -199,7 +199,7 @@ export default function CustomerServiceModal() {
                             <div className="grid gap-2">
                                 <Label>Status</Label>
                                 <Select
-                                    onValueChange={v =>
+                                    onValueChange={(v) =>
                                         form.setValue("status", v)
                                     }
                                     defaultValue={
@@ -215,7 +215,7 @@ export default function CustomerServiceModal() {
                                                 "Pending",
                                                 "Scheduled",
                                                 "Incomplete",
-                                                "Completed"
+                                                "Completed",
                                             ].map((opt, _) => (
                                                 <SelectItem key={_} value={opt}>
                                                     {opt}
@@ -253,7 +253,7 @@ export default function CustomerServiceModal() {
                                 <DatePicker
                                     format={"YYYY-MM-DD"}
                                     className="flex-1 w-full h-8"
-                                    setValue={e =>
+                                    setValue={(e) =>
                                         form.setValue("scheduleDate", e)
                                     }
                                     value={form.getValues("scheduleDate")}
@@ -262,7 +262,7 @@ export default function CustomerServiceModal() {
                             <div className="grid gap-2">
                                 <Label>Schedule Time</Label>
                                 <Select
-                                    onValueChange={v =>
+                                    onValueChange={(v) =>
                                         form.setValue("scheduleTime", v)
                                     }
                                     defaultValue={

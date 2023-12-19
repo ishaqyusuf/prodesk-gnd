@@ -325,7 +325,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                             },
                             ...(projects || []),
                         ]}
-                        onChange={(item) => selectProject(item.data)}
+                        onSelect={(item: any) => selectProject(item.data)}
                         itemText={"title"}
                         itemValue="id"
                     />
@@ -346,7 +346,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                             },
                             ...units,
                         ]}
-                        onChange={(item) => selectUnit(item.data)}
+                        onSelect={(item: any) => selectUnit(item.data)}
                         itemText={"name"}
                         itemValue="id"
                     />
