@@ -26,6 +26,9 @@ export async function _getSalesItemPriceByProfile(description, profile = null) {
                     },
                 },
             },
+            orderBy: {
+                createdAt: "desc",
+            },
         })
     ).filter((item) => item.price);
     console.log(items[0]);
