@@ -9,11 +9,11 @@ import { getJobs } from "@/app/_actions/hrm-jobs/get-jobs";
 import JobTableShell from "@/components/shells/job-table-shell";
 import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 import EditJobModal from "@/components/modals/edit-job";
-import SubmitJobModal from "@/components/modals/submit-job-modal";
+import SubmitJobModal from "@/app/(auth)/tasks/submit-job/submit-job-modal";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 
 export const metadata: Metadata = {
-    title: "Jobs"
+    title: "Jobs",
 };
 export default async function EmployeesPage({ searchParams }) {
     const response = await getJobs(queryParams(searchParams));
@@ -29,7 +29,7 @@ export default async function EmployeesPage({ searchParams }) {
                 newDialog="submitJob"
                 modalData={{
                     defaultTab: "user",
-                    data: { type: "installation" }
+                    data: { type: "installation" },
                 }}
             />
             <JobTableShell

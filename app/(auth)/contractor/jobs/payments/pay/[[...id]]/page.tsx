@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadLink } from "@/components/breadcrumbs/links";
 import {
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "@/components/columns/base-columns";
 import JobPaymentForm from "@/components/forms/job-payment-form";
 import HrmLayout from "@/components/tab-layouts/hrm-layout";
@@ -18,14 +18,14 @@ import Link from "next/link";
 import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/sheets/job-overview-sheet";
 import EditJobModal from "@/components/modals/edit-job";
-import SubmitJobModal from "@/components/modals/submit-job-modal";
+import SubmitJobModal from "@/app/(auth)/tasks/submit-job/submit-job-modal";
 export const metadata: Metadata = {
-    title: "Payment Portal"
+    title: "Payment Portal",
 };
 export default async function PaymentPage({ params }) {
     const userId = params?.id?.[0];
     const { payables, jobs } = await getPayableUsers(userId);
-    const user = payables?.find(u => u.id == userId);
+    const user = payables?.find((u) => u.id == userId);
     if (user) metadata.title = user.name;
 
     return (
@@ -45,7 +45,7 @@ export default async function PaymentPage({ params }) {
             />
             <div className="flex gap-4">
                 <div className="flex flex-col divide-y">
-                    {payables.map(user => (
+                    {payables.map((user) => (
                         <Link
                             key={user.id}
                             href={`/contractor/jobs/payments/pay/${user.id}`}
