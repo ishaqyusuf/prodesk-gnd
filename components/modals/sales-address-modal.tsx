@@ -6,7 +6,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,7 @@ import {
     SelectGroup,
     SelectItem,
     SelectTrigger,
-    SelectValue
+    SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoader } from "@/lib/use-loader";
@@ -27,13 +27,13 @@ import {
     AddressType,
     IAddressBook,
     ISalesAddressForm,
-    ISalesOrderForm
+    ISalesOrderForm,
 } from "@/types/sales";
 import Btn from "../btn";
 import AddressSearchPop from "../sales/address-search-pop";
 import {
     findAddressAction,
-    saveAddressAction
+    saveAddressAction,
 } from "@/app/_actions/sales/sales-address";
 import AutoComplete2 from "../auto-complete";
 import { deepCopy } from "@/lib/deep-copy";
@@ -44,7 +44,7 @@ import { toast } from "sonner";
 
 export function SalesCustomerModal({
     form,
-    profiles
+    profiles,
 }: {
     profiles;
     form: ISalesOrderForm;
@@ -52,10 +52,10 @@ export function SalesCustomerModal({
     const [tab, setTab] = React.useState<AddressType>("billingAddress");
     const defaultValues: any = {
         sameAddress: false,
-        profile: {}
+        profile: {},
     };
     const addressForm = useForm<ISalesAddressForm>({
-        defaultValues
+        defaultValues,
     });
     // const watch
 
@@ -66,7 +66,7 @@ export function SalesCustomerModal({
         addressForm.reset({
             billingAddress: billingAddress as any,
             customer: customer as any,
-            shippingAddress: shippingAddress as any
+            shippingAddress: shippingAddress as any,
         });
         setChecked(shippingAddress?.id == billingAddress?.id);
     }, [open]);
@@ -85,14 +85,17 @@ export function SalesCustomerModal({
                 return;
             }
             const { customerId, search, ...biad } = billingAddress || {};
-            const { customerId: scid, search: ssea, ...siad } =
-                shippingAddress || {};
+            const {
+                customerId: scid,
+                search: ssea,
+                ...siad
+            } = shippingAddress || {};
             const _form = {
                 ...formData,
                 shippingAddress: siad,
                 billingAddress: biad,
                 sameAddress: checked as any,
-                customer
+                customer,
             };
 
             const resp = await saveAddressAction(_form as any);
@@ -126,24 +129,24 @@ export function SalesCustomerModal({
                 `${type}.address1`,
                 `${type}.city`,
                 `${type}.state`,
-                `${type}.meta.zip_code`
+                `${type}.meta.zip_code`,
             ])
                 .filter(Boolean)
-                .join(",")
+                .join(","),
         }; //.filter(Boolean);
     }
     return (
         <Dialog
-            onOpenChange={e => {
+            onOpenChange={(e) => {
                 if (!e) setOpen(e);
                 else {
                     const [title, coefficient] = form.getValues([
                         "meta.sales_profile",
-                        "meta.sales_percentage"
+                        "meta.sales_percentage",
                     ]);
                     addressForm.setValue("profile", {
                         coefficient,
-                        title
+                        title,
                     } as any);
                     setTab("billingAddress");
                 }
@@ -163,7 +166,7 @@ export function SalesCustomerModal({
                     </div>
                     {[
                         getAddressLine("billingAddress"),
-                        getAddressLine("shippingAddress")
+                        getAddressLine("shippingAddress"),
                     ].map((v, i) => (
                         <div key={i} className="space-y-2">
                             <Label className="text-muted-foreground">
@@ -176,15 +179,17 @@ export function SalesCustomerModal({
                                     return (
                                         <div
                                             key={i}
-                                            className={`flex  space-x-2 ${i ==
-                                                0 && "uppercase"}`}
+                                            className={`flex  space-x-2 ${
+                                                i == 0 && "uppercase"
+                                            }`}
                                         >
                                             <div>
                                                 <Icon className="h-4 w-4" />
                                             </div>
                                             <span
-                                                className={`leading-tight ${i ==
-                                                    2 && "line-clamp-2"}`}
+                                                className={`leading-tight ${
+                                                    i == 2 && "line-clamp-2"
+                                                }`}
                                             >
                                                 {v[k] ?? "-"}
                                             </span>
@@ -216,10 +221,9 @@ export function SalesCustomerModal({
                             Shipping
                         </TabsTrigger>
                     </TabsList>
-                    {([
-                        "billingAddress",
-                        "shippingAddress"
-                    ] as AddressType[]).map((t, i) => (
+                    {(
+                        ["billingAddress", "shippingAddress"] as AddressType[]
+                    ).map((t, i) => (
                         <TabsContent value={t} key={i}>
                             <OrderAddress
                                 profiles={profiles}
@@ -239,7 +243,7 @@ export function SalesCustomerModal({
                                     <Checkbox
                                         id="sameAddress"
                                         checked={checked}
-                                        onCheckedChange={e => {
+                                        onCheckedChange={(e) => {
                                             setChecked(e as any);
                                         }}
                                     />
@@ -270,7 +274,7 @@ export function SalesCustomerModal({
 function OrderAddress({
     type,
     form,
-    profiles
+    profiles,
 }: {
     checked?;
     setChecked?;
@@ -295,8 +299,9 @@ function OrderAddress({
                             allowCreate
                             itemText="search"
                             itemValue="search"
-                            onChange={e => {
+                            onSelect={(e) => {
                                 const { data: address } = e || {};
+                                console.log(address);
                                 if (typeof address === "object") {
                                     const {
                                         customer,
@@ -305,6 +310,9 @@ function OrderAddress({
                                         ..._address
                                     } = address;
                                     form.setValue(type, _address as any);
+                                    // Object.entries(_address).map(([k, v]) => {
+                                    //     form.setValue(`${type}.${k}`, v);
+                                    // });
                                     if (
                                         customer?.profile &&
                                         type == "billingAddress"
@@ -440,9 +448,9 @@ function OrderAddress({
                     <Select
                         value={profile}
                         disabled={type != "billingAddress"}
-                        onValueChange={value => {
+                        onValueChange={(value) => {
                             const selection = profiles.find(
-                                profile => profile.title == value
+                                (profile) => profile.title == value
                             );
                             if (selection) {
                                 form.setValue("profile.title", value);
