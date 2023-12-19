@@ -10,6 +10,7 @@ import ProjectModal from "@/components/modals/project-modal";
 import { getProjectHomesAction } from "@/app/_actions/community/home";
 import HomesTableShell from "@/components/shells/homes-table-shell";
 import HomeModal from "@/components/modals/home-modal";
+import { openModal } from "@/lib/modal";
 
 export const metadata: Metadata = {
     title: "Projects",
@@ -33,6 +34,7 @@ export default async function ProjectHomesPage({ searchParams, params }) {
                 title={project.title}
                 subtitle={project?.builder?.name}
                 newDialog="home"
+                modalData={{ projectId: project.id }}
             />
             <HomesTableShell<ExtendedHome>
                 projectView

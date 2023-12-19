@@ -33,6 +33,7 @@ interface Props {
     hideEmpty?: Boolean;
     placeholder?;
     form?;
+    fluid?: Boolean;
 }
 function AutoComplete2({
     options,
@@ -53,6 +54,7 @@ function AutoComplete2({
     formKey,
     uppercase,
     onSelect,
+    fluid,
     ...props
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
@@ -288,7 +290,7 @@ function AutoComplete2({
                         <Combobox.Options
                             style={{
                                 minWidth: `${inputRef.current?.clientWidth}px`,
-                                // top: `${position.bottom}px`,
+                                top: fluid && `${position.bottom}px`,
                             }}
                             className={cn(
                                 "fixed mt-1 max-h-60  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-opacity-5 border-input focus:outline-none min-w-au  sm:text-sm z-[9999]",

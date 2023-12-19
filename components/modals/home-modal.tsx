@@ -123,7 +123,9 @@ export default function HomeModal() {
     useEffect(() => {
         async function loadStatics() {
             setProjects((await staticProjectsAction()) as any);
-            setCommunityTemplates((await staticCommunity()) as any);
+            const cTemplates = (await staticCommunity()) as any;
+            // console.log(cTemplates);
+            setCommunityTemplates(cTemplates);
         }
 
         loadStatics();
@@ -133,6 +135,7 @@ export default function HomeModal() {
     }, []);
     async function init(data) {
         form.setValue("units", data ? [data] : ([{ meta: {} }] as any));
+        console.log(data);
         if (data?.projectId) form.setValue("projectId", data.projectId);
     }
     return (

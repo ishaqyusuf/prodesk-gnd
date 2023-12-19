@@ -93,6 +93,7 @@ export default function ItemCell({
                             options={focused ? ctx?.items : []}
                             itemText={"description"}
                             itemValue={"description"}
+                            fluid
                             onSelect={(e) => {
                                 // console.log((e as any)?.data?.price);
                                 form.setValue(
