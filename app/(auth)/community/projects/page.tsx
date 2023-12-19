@@ -10,7 +10,7 @@ import ProjectModal from "@/components/modals/project-modal";
 import ProjectsTableShell from "@/components/shells/projects-table-shell";
 
 export const metadata: Metadata = {
-    title: "Projects"
+    title: "Projects",
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {

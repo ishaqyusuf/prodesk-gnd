@@ -10,12 +10,12 @@ import { getProductions } from "@/app/_actions/community-production/get-producti
 import { _taskNames } from "@/app/_actions/community/_task-names";
 
 export const metadata: Metadata = {
-    title: "Unit Productions"
+    title: "Unit Productions",
 };
 interface Props {}
 export default async function InvoicesPage({ searchParams, params }) {
     const taskNames = await _taskNames({
-        produceable: true
+        produceable: true,
     } as any);
     // console.log(taskNames);
     const response = await getProductions(

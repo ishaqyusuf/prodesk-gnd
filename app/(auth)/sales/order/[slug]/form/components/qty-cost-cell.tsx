@@ -49,7 +49,7 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     //   setPrice(form.getValues(`${baseKey}.price` as any));
     // }, [rowIndex, form]);
     React.useEffect(() => {
-        form.setValue(`items.${rowIndex}.qty`, qty);
+        // form.setValue(`items.${rowIndex}.qty`, qty);
         let _rate =
             profileEstimate && profitRate
                 ? toFixed(Number(price) / Number(profitRate || 1))
@@ -76,25 +76,26 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
                 <Input
                     type="number"
                     className="h-8 w-full p-1 text-center font-medium"
-                    value={qty || ""}
-                    onChange={(e) =>
-                        form.setValue(`items.${rowIndex}.qty`, +e.target?.value)
-                    }
-                    //   {...register(`items.${rowIndex}.qty`)}
+                    // value={qty || ""}
+                    // onChange={(e) =>
+                    //     form.setValue(`items.${rowIndex}.qty`, +e.target?.value)
+                    // }
+                    {...register(`items.${rowIndex}.qty`)}
                 />
             </TableCell>
             <TableCell id="price" className="p-0 px-1">
                 <Input
                     type="number"
                     className="h-8 w-full p-1 text-right font-medium"
-                    value={price || ""}
+                    // value={price || ""}
                     disabled={toggleMockup}
-                    onChange={(e) =>
-                        form.setValue(
-                            `items.${rowIndex}.price`,
-                            +e.target?.value
-                        )
-                    }
+                    {...register(`items.${rowIndex}.price`)}
+                    // onChange={(e) =>
+                    //     form.setValue(
+                    //         `items.${rowIndex}.price`,
+                    //         +e.target?.value
+                    //     )
+                    // }
                 />
             </TableCell>
             {profileEstimate && (

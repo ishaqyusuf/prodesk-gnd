@@ -140,13 +140,13 @@ function AutoComplete2({
         return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
-        // console.log("...");
+        console.log(e);
         setSelect(true);
         setSelected(e);
         if (form && formKey) {
             form.setValue(formKey, e?.id);
         }
-        onChange && onChange(e);
+        onChange?.(e?.id);
     }
     const [focus, setFocus] = useState(false);
     const [select, setSelect] = useState(false);

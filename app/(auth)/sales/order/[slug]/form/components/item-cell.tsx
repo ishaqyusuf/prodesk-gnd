@@ -5,7 +5,11 @@ import { TableCell } from "@/components/ui/table";
 import { deepCopy } from "@/lib/deep-copy";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { InvoiceItemRowContext } from "../invoice-item-row-context";
+import { useFormContext } from "react-hook-form";
+import { ISalesOrder, ISalesOrderForm } from "@/types/sales";
+import { FormField } from "@/components/ui/form";
 
 export default function ItemCell({
     rowIndex,
@@ -20,8 +24,9 @@ export default function ItemCell({
     // const orderItemComponentSlice = useAppSelector(
     //   (state) => state.orderItemComponent
     // );
-
-    const baseKey = `items.${rowIndex}`;
+    const { baseKey } = useContext(InvoiceItemRowContext);
+    const _form = useFormContext<ISalesOrderForm>();
+    // const baseKey = `items.${rowIndex}`;
     const isComponent = form.watch(`${baseKey}.meta.isComponent`);
     const item = form.watch(baseKey);
     const getCellValue = () => form.getValues(`items.${rowIndex}.description`);
@@ -74,29 +79,36 @@ export default function ItemCell({
                 //         );
                 //     }}
                 // />
-                <AutoComplete
-                    onFocus={(e) => {
-                        // console.log(e);
-                        setFocused(true);
-                    }}
-                    onBlur={(e) => setFocused(false)}
-                    options={focused ? ctx?.items : []}
-                    itemText={"description"}
-                    itemValue={"description"}
-                    onSelect={(e) => {
-                        // console.log((e as any)?.data?.price);
-                        form.setValue(
-                            `items.${rowIndex}.price`,
-                            (e as any)?.data?.price
-                        );
-                        if (!form.getValues(`items.${rowIndex}.qty`))
-                            form.setValue(`items.${rowIndex}.qty`, 1);
-                    }}
-                    form={form}
-                    uppercase
-                    hideEmpty
-                    formKey={`items.${rowIndex}.description`}
-                    allowCreate
+                <FormField<ISalesOrder>
+                    name={`items.${rowIndex}.description`}
+                    control={form.control}
+                    render={({ field }) => (
+                        <AutoComplete
+                            {...field}
+                            onFocus={(e) => {
+                                // console.log(e);
+                                setFocused(true);
+                            }}
+                            onBlur={(e) => setFocused(false)}
+                            options={focused ? ctx?.items : []}
+                            itemText={"description"}
+                            itemValue={"description"}
+                            onSelect={(e) => {
+                                // console.log((e as any)?.data?.price);
+                                form.setValue(
+                                    `items.${rowIndex}.price`,
+                                    (e as any)?.data?.price
+                                );
+                                if (!form.getValues(`items.${rowIndex}.qty`))
+                                    form.setValue(`items.${rowIndex}.qty`, 1);
+                            }}
+                            // form={form}
+                            uppercase
+                            hideEmpty
+                            // formKey={`items.${rowIndex}.description`}
+                            allowCreate
+                        />
+                    )}
                 />
             )}
         </TableCell>
