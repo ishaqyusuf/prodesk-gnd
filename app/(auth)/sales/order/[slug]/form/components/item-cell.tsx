@@ -67,63 +67,63 @@ export default function ItemCell({
                     </div>
                 </button>
             ) : (
-                // <Input
-                //     // ref={input}
-                //     className="h-8 w-full p-1 font-medium uppercase"
-                //     // {...register(`${baseKey}.description`)}
-                //     value={cellValue}
-                //     onChange={e => {
-                //         setCellValue(e.target.value);
-                //         form.setValue(
-                //             `items.${rowIndex}.description`,
-                //             e.target.value
-                //         );
-                //     }}
-                // />
-                <FormField<ISalesOrder>
-                    name={`items.${rowIndex}.description`}
-                    control={form.control}
-                    render={({ field }) => (
-                        <AutoComplete
-                            {...field}
-                            onFocus={(e) => {
-                                // console.log(e);
-                                setFocused(true);
-                            }}
-                            onBlur={(e) => setFocused(false)}
-                            options={focused ? ctx?.items : []}
-                            itemText={"description"}
-                            itemValue={"description"}
-                            fluid
-                            onSelect={async (e) => {
-                                // console.log(e as any);
-                                let data = (e as any)?.data as any;
-                                const price = await _getSalesItemPriceByProfile(
-                                    data?.description
-                                );
-                                console.log(price);
-                                if (price) {
-                                    form.setValue(
-                                        `items.${rowIndex}.price`,
-                                        data?.price
-                                    );
-                                    if (
-                                        !form.getValues(`items.${rowIndex}.qty`)
-                                    )
-                                        form.setValue(
-                                            `items.${rowIndex}.qty`,
-                                            1
-                                        );
-                                }
-                            }}
-                            // form={form}
-                            uppercase
-                            hideEmpty
-                            // formKey={`items.${rowIndex}.description`}
-                            allowCreate
-                        />
-                    )}
+                <Input
+                    // ref={input}
+                    className="h-8 w-full p-1 font-medium uppercase"
+                    // {...register(`${baseKey}.description`)}
+                    value={cellValue}
+                    onChange={(e) => {
+                        setCellValue(e.target.value);
+                        form.setValue(
+                            `items.${rowIndex}.description`,
+                            e.target.value
+                        );
+                    }}
                 />
+                // <FormField<ISalesOrder>
+                //     name={`items.${rowIndex}.description`}
+                //     control={form.control}
+                //     render={({ field }) => (
+                //         <AutoComplete
+                //             {...field}
+                //             onFocus={(e) => {
+                //                 // console.log(e);
+                //                 setFocused(true);
+                //             }}
+                //             onBlur={(e) => setFocused(false)}
+                //             options={focused ? ctx?.items : []}
+                //             itemText={"description"}
+                //             itemValue={"description"}
+                //             fluid
+                //             onSelect={async (e) => {
+                //                 // console.log(e as any);
+                //                 let data = (e as any)?.data as any;
+                //                 const price = await _getSalesItemPriceByProfile(
+                //                     data?.description
+                //                 );
+                //                 console.log(price);
+                //                 if (price) {
+                //                     form.setValue(
+                //                         `items.${rowIndex}.price`,
+                //                         data?.price
+                //                     );
+                //                     if (
+                //                         !form.getValues(`items.${rowIndex}.qty`)
+                //                     )
+                //                         form.setValue(
+                //                             `items.${rowIndex}.qty`,
+                //                             1
+                //                         );
+                //                 }
+                //             }}
+                //             // form={form}
+                //             uppercase
+                //             hideEmpty
+                //             // formKey={`items.${rowIndex}.description`}
+                //             allowCreate
+                //         />
+                //     )}
+                // />
             )}
         </TableCell>
     );
