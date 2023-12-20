@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useContext, useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -10,7 +10,7 @@ import BaseModal from "../../../../components/modals/base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
@@ -72,8 +72,11 @@ import { _changeWorker } from "@/app/_actions/hrm-jobs/job-actions";
 import { User } from "next-auth";
 import PunchoutCost from "./punchout-cost";
 import { SubmitModalContext } from "./context";
-import { Form } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { _punchoutCosts } from "../_actions/punchout-costs";
+import SubmitJobTitle from "./submit-job-title";
+import SelectEmployee from "./select-employee";
+import { validateTaskQty } from "./validation";
 
 interface ModalInterface {
     data: IJobs | undefined;
@@ -123,6 +126,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                 const { homeData, unit, project, user, createdAt, ...job } =
                     form.getValues();
                 if (isPunchout()) {
+                    validateCosts();
                     Object.keys(job.meta.costData || {}).map((k) => {
                         (job.meta.costData[k] as any).cost =
                             costList.find((c) => c.uid == k)?.cost || 0;
@@ -156,7 +160,15 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     }
     useEffect(() => {
         (async () => {
-            setCostList(await _punchoutCosts());
+            if (isPunchout()) {
+                const c = await _punchoutCosts();
+                setCostList(c);
+                let cq = {};
+                c.map((a) => {
+                    cq[a.uid] = Number(a.defaultQty) || 0;
+                });
+                setUnitCosting(cq);
+            }
         })();
     }, []);
     const projects = useAppSelector((state) => state?.slicers?.staticProjects);
@@ -305,18 +317,34 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     return;
                 }
                 if (Number(v.qty || 0) > Number(unitCosting?.[k] || 0)) {
-                    toast.error("Some quantity has exceed default value.");
-                    throw Error();
-                    return;
+                    // toast.error("Some quantity has exceed default value.");
+                    // throw Error();
+                    // return;
                 }
                 total += Number(v.qty) * Number(v.cost);
             }
         });
         return total;
     }
+    function validateCosts() {
+        const validation = validateTaskQty(unitCosting, form);
+        if (!validation) {
+            toast.error("Some quantity has exceed default value.");
+            throw new Error();
+            return;
+        }
+    }
     function calculateTasks(nextTab = true) {
         // form.setValue('amount')
         const tasks = form.getValues("meta.costData") || {};
+        console.log(tasks);
+        validateCosts();
+        // console.log(validation);
+        // return;
+        // form.setError("meta.costData.anc", {
+        //     message: "error",
+        // });
+        // return;
         const total = totalTaskCost(tasks);
 
         form.setValue("meta.taskCost", total);
@@ -388,9 +416,25 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const [costList, setCostList] = useState<InstallCostLine[]>([]);
     return (
         <Form {...form}>
-            {" "}
             <SubmitModalContext.Provider
-                value={{ form, calculateTasks, setCostList, costList }}
+                value={{
+                    form,
+                    calculateTasks,
+                    setCostList,
+                    costList,
+                    isPunchout,
+                    prevTab,
+                    resetFields,
+                    setTab,
+                    setPrevTab,
+                    tab,
+                    search,
+                    _changeWorker,
+                    _setTab,
+                    techEmployees,
+                    admin,
+                    unitCosting,
+                }}
             >
                 <BaseModal<ModalInterface>
                     className="sm:max-w-[550px]"
@@ -402,56 +446,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                     Subtitle={({ data }) =>
                         data?.data?.id && <>{data.data?.subtitle}</>
                     }
-                    Title={({ data }) =>
-                        isPunchout() ? (
-                            <>Punchout Detail</>
-                        ) : (
-                            <div className="flex space-x-2 items-center">
-                                {prevTab?.length > 0 && (
-                                    <Button
-                                        onClick={() => {
-                                            const [tab1, ...tabs] = prevTab;
-                                            setTab(tab1);
-                                            setPrevTab(tabs);
-                                            const unitFields = [
-                                                "homeData",
-                                                "meta.taskCosts",
-                                                "meta.costData",
-                                                "homeId",
-                                                "subtitle",
-                                            ];
-                                            if (tab1 == "unit")
-                                                resetFields(unitFields);
-                                            if (tab1 == "project")
-                                                resetFields([
-                                                    "projectId",
-                                                    "meta.addon",
-                                                    "title",
-                                                    "unit",
-                                                    "project",
-                                                    ...unitFields,
-                                                ]);
-                                        }}
-                                        className="h-8 w-8 p-0"
-                                        variant="ghost"
-                                    >
-                                        <ArrowLeft className="h-4 w-4" />
-                                    </Button>
-                                )}
-                                {data?.data?.id ? (
-                                    <>{data?.data?.title}</>
-                                ) : (
-                                    {
-                                        user: "Select Employee",
-                                        project: "Select Project",
-                                        unit: "Select Unit",
-                                        tasks: "Task Information",
-                                        general: "Other Information",
-                                    }[tab]
-                                )}
-                            </div>
-                        )
-                    }
+                    Title={SubmitJobTitle}
                     Content={({ data }) => (
                         <div>
                             <Tabs defaultValue={tab} className="">
@@ -463,55 +458,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                     <TabsTrigger value="general" />
                                 </TabsList>
                                 <TabsContent value="user">
-                                    {/* <div className="">
-                <Input
-                  placeholder="Search"
-                  className="h-8"
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                />
-              </div> */}
-                                    <ScrollArea className="h-[350px] pr-4">
-                                        <div className="flex flex-col divide-y">
-                                            {search(techEmployees, "name")?.map(
-                                                (user) => (
-                                                    <Button
-                                                        onClick={async () => {
-                                                            if (
-                                                                data?.changeWorker
-                                                            ) {
-                                                                await _changeWorker(
-                                                                    data?.data
-                                                                        ?.id,
-                                                                    data?.data
-                                                                        ?.userId,
-                                                                    user?.id
-                                                                );
-                                                                toast.success(
-                                                                    "Worker changed!"
-                                                                );
-                                                                closeModal();
-                                                                return;
-                                                            }
-                                                            form.setValue(
-                                                                "userId",
-                                                                user.id as any
-                                                            );
-
-                                                            _setTab("tasks");
-                                                        }}
-                                                        variant={"ghost"}
-                                                        key={user.id}
-                                                        className=""
-                                                    >
-                                                        <p className="flex w-full">
-                                                            {user.name}
-                                                        </p>
-                                                    </Button>
-                                                )
-                                            )}
-                                        </div>
-                                    </ScrollArea>
+                                    <SelectEmployee data={data} />
                                 </TabsContent>
 
                                 <TabsContent value="tasks">
@@ -541,14 +488,9 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                                 <TableBody>
                                                     {tasks.map((row, i) => {
                                                         return (
-                                                            <Row
-                                                                admin={admin}
+                                                            <CostRow
                                                                 key={i}
-                                                                form={form}
                                                                 row={row}
-                                                                unitCosting={
-                                                                    unitCosting
-                                                                }
                                                             />
                                                         );
                                                     })}
@@ -735,35 +677,51 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         </Form>
     );
 }
-export function Row({ form, admin, row, unitCosting }) {
+export function CostRow({ row }) {
     // const qty = form.watch(`meta.costData.${row.uid}.qty` as any);
+
+    const { form, admin, unitCosting } = useContext(SubmitModalContext);
+    // const {error} = form;
+    // const fc = useFormContext();
+    const {
+        formState: { errors },
+    } = form;
+
+    const formKey = `meta.costData.${row.uid}.qty` as any;
     return (
-        <TableRow>
-            <TableCell className="px-1">
-                <PrimaryCellContent>{row.title}</PrimaryCellContent>
-                <SecondaryCellContent>
-                    <Money value={row.cost} />
-                    {" per qty"}
-                </SecondaryCellContent>
-            </TableCell>
-            <TableCell className="px-1">
-                <div className="flex items-center space-x-0.5">
-                    <Input
-                        min={0}
-                        {...form.register(
-                            `meta.costData.${row.uid}.qty` as any
-                        )}
-                        type="number"
-                        className="w-16 h-8 hiddens"
-                    />
-                    {admin && (
-                        <Label className="px-1">
-                            {" /"}
-                            {unitCosting[row.uid]}
-                        </Label>
-                    )}
-                </div>
-            </TableCell>
-        </TableRow>
+        <FormField
+            control={form.control}
+            name={formKey}
+            render={({ field, fieldState }) => (
+                <TableRow>
+                    <TableCell className="px-1">
+                        <PrimaryCellContent>{row.title}</PrimaryCellContent>
+                        <SecondaryCellContent>
+                            <Money value={row.cost} />
+                            {" per qty"}
+                        </SecondaryCellContent>
+                    </TableCell>
+                    <TableCell className="px-1">
+                        <div className="flex items-center space-x-0.5">
+                            <Input
+                                min={0}
+                                {...form.register(formKey)}
+                                type="number"
+                                className={cn(
+                                    "w-16 h-8 hiddens",
+                                    fieldState.error && "border-red-400"
+                                )}
+                            />
+                            {admin && (
+                                <Label className="px-1">
+                                    {" /"}
+                                    {unitCosting[row.uid]}
+                                </Label>
+                            )}
+                        </div>
+                    </TableCell>
+                </TableRow>
+            )}
+        />
     );
 }

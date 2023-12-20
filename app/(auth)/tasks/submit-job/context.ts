@@ -7,6 +7,18 @@ interface IContext {
     form: UseFormReturn<IJobs>;
     calculateTasks;
     setCostList;
+    prevTab;
+    setTab;
+    setPrevTab;
+    tab;
+    search;
+    techEmployees;
+    resetFields;
+    _changeWorker;
+    _setTab;
+    admin;
+    unitCosting;
+    isPunchout(): boolean;
     costList: InstallCostLine[];
 }
 export const SubmitModalContext = createContext<IContext>({} as any);
