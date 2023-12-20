@@ -10,7 +10,7 @@ import {
     InventoryProducts,
     Projects,
     Roles,
-    Users
+    Users,
 } from "@prisma/client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
@@ -21,7 +21,7 @@ import {
     ExtendedHome,
     ICommunityTemplate,
     IHome,
-    IProject
+    IProject,
 } from "@/types/community";
 import { ICustomer } from "@/types/customers";
 import { InstallCostSettings } from "@/types/settings";
@@ -134,14 +134,14 @@ export type ModalName =
     | "role"
     | "uploadDoc"
     | undefined;
-const initialState: ISlicer = ({
+const initialState: ISlicer = {
     installCostSetting: null as any,
     modal: {
         name: undefined,
         data: null,
-        staticList: {}
-    }
-} as Partial<ISlicer>) as any;
+        staticList: {},
+    },
+} as Partial<ISlicer> as any;
 const headerNavSlice = createSlice({
     name: "slicers",
     initialState,
@@ -157,8 +157,8 @@ const headerNavSlice = createSlice({
             // });
             const d = transformObject(data);
             state[key as any] = d;
-        }
-    }
+        },
+    },
 });
 function transformObject(data) {
     if (!data) return;
@@ -181,22 +181,22 @@ export function dispatchSlice(key: keyof ISlicer, data: any = null) {
     store.dispatch(
         updateSlice({
             key,
-            data: deepCopy(data)
+            data: deepCopy(data),
         })
     );
 }
 
 export async function loadStaticList(key: keyof ISlicer, list, _loader) {
-    console.log({ key, list });
+    // console.log({ key, list });
     if (!list) {
         if (key == "staticInstallers") {
             console.log("LOADING INSTALLERS");
-            console.log(list);
+            // console.log(list);
         }
-        console.log("loading....", key);
+        // console.log("loading....", key);
         const data = await _loader();
         // if (key == "staticInstallers")
-        console.log({ key, data });
+        // console.log({ key, data });
         dispatchSlice(key, deepCopy(data));
     }
 }
@@ -204,7 +204,8 @@ export function navigateTo(href) {
     store.dispatch(
         updateSlice({
             key: "href",
-            data: href
+            data: href,
         })
     );
 }
+

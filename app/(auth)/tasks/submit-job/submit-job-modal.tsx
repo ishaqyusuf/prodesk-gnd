@@ -165,6 +165,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                 c.map((a) => {
                     cq[a.uid] = Number(a.defaultQty) || 0;
                 });
+                console.log("is punchout");
                 setUnitCosting(cq);
             }
         })();
@@ -173,7 +174,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
 
     async function init(data: IJobs, defaultTab) {
         const employees = (await loadStatic1099Contractors()) as any;
-        console.log(employees);
+        // console.log(employees);
         setEmployees(employees);
 
         form.reset();
@@ -199,11 +200,16 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         setAddCost(null as any);
         setUnitCosting({});
         if (data && defaultTab == "tasks") {
+            if (!data?.homeId) {
+                setTab("general");
+                return;
+            }
+            // console.log(data);
             const costdat = await getJobCostData(data?.homeId, data.subtitle);
             // console.log(costdat);
             setUnitCosting(costdat as any);
         }
-        if (data?.projectId) {
+        if (data?.projectId && data?.homeId) {
             // let project = projects.find(p => data.projectId == p.id);
             const _units = await loadUnits(data.projectId);
             const unit = _units.find((u) => (u.id = data?.homeId));
@@ -211,7 +217,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             console.log(unit);
             if (!unit && defaultTab == "tasks") setTab("general");
             if (unit) {
-                // console.log(unit);
+                console.log("unit=>", unit);
                 selectUnit(unit as any);
             }
         }
