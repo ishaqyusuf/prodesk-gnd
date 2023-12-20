@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
+import { fetchCache, saveCache } from "../_cache/load-data";
 
 export interface EmployeeQueryParamsProps extends BaseQuery {
     _show?: "payroll" | undefined;
@@ -22,11 +23,11 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
             employeeProfile: true,
             roles: {
                 include: {
-                    role: true
-                }
-            }
+                    role: true,
+                },
+            },
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.users);
 
@@ -34,32 +35,32 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
         pageInfo,
         data: items.map(({ roles, ...data }) => ({
             ...data,
-            role: roles?.[0]?.role
-        })) as any
+            role: roles?.[0]?.role,
+        })) as any,
     };
 }
 function whereEmployee(query: EmployeeQueryParamsProps) {
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     const where: Prisma.UsersWhereInput = {
         name: q,
-        deletedAt: null
+        deletedAt: null,
     };
     if (query._roleId) {
         where.roles = {
             some: {
-                roleId: +query._roleId
-            }
+                roleId: +query._roleId,
+            },
         };
     }
     if (query.role)
         where.roles = {
             some: {
                 role: {
-                    name: query.role
-                }
-            }
+                    name: query.role,
+                },
+            },
         };
     return where;
 }
@@ -69,19 +70,25 @@ export async function staticEmployees(
     const employees = await prisma.users.findMany({
         where: whereEmployee(query),
         orderBy: {
-            name: "asc"
-        }
+            name: "asc",
+        },
     });
 
     return employees;
 }
 export async function staticLoadTechEmployees() {
     return await staticEmployees({
-        role: "Punchout"
+        role: "Punchout",
     });
 }
 export async function loadStatic1099Contractors() {
-    return await staticEmployees({
-        role: "1099 Contractor"
+    const cdata = await fetchCache("1099-contractors");
+    if (cdata) return cdata;
+
+    const c = await staticEmployees({
+        role: "1099 Contractor",
     });
+    await saveCache("1099-contractors", c);
+    return c;
 }
+
