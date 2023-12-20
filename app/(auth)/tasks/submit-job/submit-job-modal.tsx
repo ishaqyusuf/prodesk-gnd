@@ -95,11 +95,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const id = form.watch("id");
     useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
-        (async () => {
-            const employees = (await loadStatic1099Contractors()) as any;
-            console.log(employees);
-            setEmployees(employees);
-        })();
+
         // loadStaticList(
         //     "staticInstallers",
         //     techEmployees,
@@ -176,6 +172,10 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     const projects = useAppSelector((state) => state?.slicers?.staticProjects);
 
     async function init(data: IJobs, defaultTab) {
+        const employees = (await loadStatic1099Contractors()) as any;
+        console.log(employees);
+        setEmployees(employees);
+
         form.reset();
         setPrevTab([]);
         setTasks([]);
