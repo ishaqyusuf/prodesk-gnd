@@ -1,8 +1,7 @@
 "use client";
 
 import { SubmitModalContext } from "./context";
-import { useContext, useEffect, useState } from "react";
-import { InstallCostLine } from "@/types/settings";
+import { useContext } from "react";
 import { _punchoutCosts } from "../_actions/punchout-costs";
 import {
     Table,
@@ -12,14 +11,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import {
-    PrimaryCellContent,
-    SecondaryCellContent,
-} from "@/components/columns/base-columns";
-import Money from "@/components/money";
-import { cn } from "@/lib/utils";
-import { CheckCheck, Square } from "lucide-react";
-import { FormControl, FormField } from "@/components/ui/form";
 import { CostRow } from "./submit-job-modal";
 
 export default function PunchoutCost({}) {

@@ -7,10 +7,10 @@ import { queryParams } from "@/app/_actions/action-utils";
 import { getHomeTemplates } from "@/app/_actions/community/home-template";
 import ModelCostTableShell from "@/components/shells/model-costs-table-shell";
 import ModelCostModal from "@/components/modals/model-cost-modal";
-import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
+import ModelInstallCostModal from "@/app/(auth)/settings/community/community-templates/install-cost-modal/model-install-cost-modal";
 
 export const metadata: Metadata = {
-    title: "Model Costs"
+    title: "Model Costs",
 };
 export default async function ModelCosts({ searchParams }) {
     const response = await getHomeTemplates(queryParams(searchParams));

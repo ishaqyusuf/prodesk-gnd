@@ -4,21 +4,21 @@ import React, { useEffect, useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import Btn from "../btn";
-import BaseModal from "./base-modal";
+import Btn from "../../../../../../components/btn";
+import BaseModal from "../../../../../../components/modals/base-modal";
 import { toast } from "sonner";
 
 import { useFieldArray, useForm } from "react-hook-form";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../../../../../components/ui/label";
+import { Input } from "../../../../../../components/ui/input";
 import {
     ICommunityTemplate,
     IHomeTemplate,
     IProject,
     InstallCost,
 } from "@/types/community";
-import { ScrollArea } from "../ui/scroll-area";
-import { Button } from "../ui/button";
+import { ScrollArea } from "../../../../../../components/ui/scroll-area";
+import { Button } from "../../../../../../components/ui/button";
 import { Plus } from "lucide-react";
 import { deepCopy } from "@/lib/deep-copy";
 import {
@@ -30,8 +30,8 @@ import { getSettingAction } from "@/app/_actions/settings";
 import {
     PrimaryCellContent,
     SecondaryCellContent,
-} from "../columns/base-columns";
-import Money from "../money";
+} from "../../../../../../components/columns/base-columns";
+import Money from "../../../../../../components/money";
 import {
     Table,
     TableBody,
@@ -39,15 +39,16 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "../ui/table";
+} from "../../../../../../components/ui/table";
 import { cn } from "@/lib/utils";
 import { updateModelInstallCost } from "@/app/_actions/community/install-costs";
 import { updateCommunityModelInstallCost } from "@/app/_actions/community/community-template";
-import { Badge } from "../ui/badge";
-import { Switch } from "../ui/switch";
-import { FormField } from "../ui/form";
+import { Badge } from "../../../../../../components/ui/badge";
+import { Switch } from "../../../../../../components/ui/switch";
+import { FormField } from "../../../../../../components/ui/form";
 import { loadStaticList } from "@/store/slicers";
 import { useAppSelector } from "@/store";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
@@ -139,6 +140,13 @@ export default function ModelInstallCostModal({ community = false }) {
                 // enable: (data?.meta as any)?.overrideModelCost
             });
     }
+    function costList(type) {
+        return costSetting?.meta?.list?.filter(
+            (t) =>
+                (type == "punchout" && t.punchout) ||
+                (!t.punchout && type == "contractor")
+        );
+    }
     return (
         <BaseModal<any>
             className="sm:max-w-[600px]"
@@ -199,78 +207,90 @@ export default function ModelInstallCostModal({ community = false }) {
                         </ScrollArea>
                     </div>
                     <div className="flex-1 flex flex-col  pl-2 gap-2">
-                        {/* <div className="grid gap-2">
-                            <Label>Title</Label>
-                            <Input
-                                type="number"
-                                className="h-8"
-                                {...form.register(`costs.${index}.title`)}
-                            />
-                        </div> */}
-                        <ScrollArea className="max-h-[350px] divide-y w-full">
-                            <Table className="">
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="px-1">
-                                            Task
-                                        </TableHead>
-                                        {community && (
-                                            <TableHead className="px-1">
-                                                Def. Qty
-                                            </TableHead>
-                                        )}
-                                        <TableHead className="px-1">
-                                            Qty
-                                        </TableHead>
-                                        {/* <TableHead className="px-1 text-right" align="right">
+                        <Tabs defaultValue="contractor" className="">
+                            <TabsList>
+                                <TabsTrigger value="contractor">
+                                    Contractor
+                                </TabsTrigger>
+                                <TabsTrigger value="punchout">
+                                    Punchout
+                                </TabsTrigger>
+                            </TabsList>
+                            <ScrollArea className="max-h-[350px] divide-y w-full">
+                                {["contractor", "punchout"].map((type) => (
+                                    <TabsContent key={type} value={type}>
+                                        <Table className="">
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead className="px-1">
+                                                        Task
+                                                    </TableHead>
+                                                    {community && (
+                                                        <TableHead className="px-1">
+                                                            Def. Qty
+                                                        </TableHead>
+                                                    )}
+                                                    <TableHead className="px-1">
+                                                        Qty
+                                                    </TableHead>
+                                                    {/* <TableHead className="px-1 text-right" align="right">
                           Total
                         </TableHead> */}
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {costSetting?.meta?.list?.map((l, i) => (
-                                        <TableRow
-                                            className={cn(
-                                                form.getValues(
-                                                    `costs.${index}.costings.${l.uid}`
-                                                ) > 0
-                                                    ? "bg-teal-50"
-                                                    : ""
-                                            )}
-                                            key={i}
-                                        >
-                                            <TableCell className="px-1">
-                                                <PrimaryCellContent>
-                                                    {l.title}
-                                                </PrimaryCellContent>
-                                                <SecondaryCellContent>
-                                                    <Money value={l.cost} />
-                                                    {" per qty"}
-                                                </SecondaryCellContent>
-                                            </TableCell>
-                                            {community && (
-                                                <TableCell>
-                                                    <CommunityDefaultQty
-                                                        form={form}
-                                                        project={data as any}
-                                                        costLine={l}
-                                                    />
-                                                </TableCell>
-                                            )}
-                                            <TableCell>
-                                                <Input
-                                                    className="h-7 w-20 px-2"
-                                                    type={"number"}
-                                                    {...form.register(
-                                                        `costs.${index}.costings.${l.uid}`
-                                                    )}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </ScrollArea>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {costList(type)?.map((l, i) => (
+                                                    <TableRow
+                                                        className={cn(
+                                                            form.getValues(
+                                                                `costs.${index}.costings.${l.uid}`
+                                                            ) > 0
+                                                                ? "bg-teal-50"
+                                                                : ""
+                                                        )}
+                                                        key={i}
+                                                    >
+                                                        <TableCell className="px-1">
+                                                            <PrimaryCellContent>
+                                                                {l.title}
+                                                            </PrimaryCellContent>
+                                                            <SecondaryCellContent>
+                                                                <Money
+                                                                    value={
+                                                                        l.cost
+                                                                    }
+                                                                />
+                                                                {" per qty"}
+                                                            </SecondaryCellContent>
+                                                        </TableCell>
+                                                        {community && (
+                                                            <TableCell>
+                                                                <CommunityDefaultQty
+                                                                    form={form}
+                                                                    project={
+                                                                        data as any
+                                                                    }
+                                                                    costLine={l}
+                                                                />
+                                                            </TableCell>
+                                                        )}
+                                                        <TableCell>
+                                                            <Input
+                                                                className="h-7 w-20 px-2"
+                                                                type={"number"}
+                                                                {...form.register(
+                                                                    `costs.${index}.costings.${l.uid}`
+                                                                )}
+                                                            />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TabsContent>
+                                ))}
+                            </ScrollArea>
+                        </Tabs>
                     </div>
                 </div>
             )}

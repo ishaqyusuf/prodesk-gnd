@@ -105,9 +105,9 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                                             <div className="col-span-1 p-0.5 border bg-slate-200 px-2">
                                                 <Label>Max Qty</Label>
                                             </div>
-                                            <div className="col-span-1 p-0.5 border bg-slate-200 px-2">
+                                            {/* <div className="col-span-1 p-0.5 border bg-slate-200 px-2">
                                                 <Label>Contractor</Label>
-                                            </div>
+                                            </div> */}
                                             <div className="col-span-1 p-0.5 border bg-slate-200 px-2">
                                                 <Label>Punchout</Label>
                                             </div>
@@ -151,7 +151,7 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                                                                 />
                                                             </div>
                                                             {[
-                                                                "contractor",
+                                                                // "contractor",
                                                                 "punchout",
                                                             ].map((k) => (
                                                                 <div

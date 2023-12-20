@@ -8,7 +8,7 @@ import { getCommunityTemplates } from "@/app/_actions/community/home-template";
 
 import CommunityTemplateTableShell from "@/components/shells/community-templates-table-shell";
 import ModelTemplateModal from "@/components/modals/model-template-modal";
-import ModelInstallCostModal from "@/components/modals/model-install-cost-modal";
+import ModelInstallCostModal from "@/app/(auth)/settings/community/community-templates/install-cost-modal/model-install-cost-modal";
 
 import {
     _addMissingPivotToModelCosts,
