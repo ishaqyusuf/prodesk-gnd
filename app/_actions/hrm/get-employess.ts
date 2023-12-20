@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { Prisma } from "@prisma/client";
-import { fetchCache, saveCache } from "../_cache/load-data";
+import { _cache, fetchCache, saveCache } from "../_cache/load-data";
 
 export interface EmployeeQueryParamsProps extends BaseQuery {
     _show?: "payroll" | undefined;
@@ -67,28 +67,32 @@ function whereEmployee(query: EmployeeQueryParamsProps) {
 export async function staticEmployees(
     query: EmployeeQueryParamsProps = {} as any
 ) {
-    const employees = await prisma.users.findMany({
-        where: whereEmployee(query),
-        orderBy: {
-            name: "asc",
-        },
-    });
-
-    return employees;
+    return await _cache(
+        "employees",
+        async () =>
+            await prisma.users.findMany({
+                where: whereEmployee(query),
+                orderBy: {
+                    name: "asc",
+                },
+            })
+    );
 }
 export async function staticLoadTechEmployees() {
-    return await staticEmployees({
-        role: "Punchout",
-    });
+    return await _cache(
+        "punchouts",
+        async () =>
+            await staticEmployees({
+                role: "Punchout",
+            })
+    );
 }
 export async function loadStatic1099Contractors() {
-    const cdata = await fetchCache("1099-contractors");
-    if (cdata) return cdata;
-
-    const c = await staticEmployees({
-        role: "1099 Contractor",
-    });
-    await saveCache("1099-contractors", c);
-    return c;
+    return await _cache(
+        "1099-contractors",
+        async () =>
+            await staticEmployees({
+                role: "1099 Contractor",
+            })
+    );
 }
-

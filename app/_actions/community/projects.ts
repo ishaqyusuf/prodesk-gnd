@@ -8,6 +8,7 @@ import { getPageInfo, queryFilter } from "../action-utils";
 import { slugModel, transformData } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
+import { _cache } from "../_cache/load-data";
 
 export interface ProjectsQueryParams extends BaseQuery {
     _builderId;
@@ -22,54 +23,56 @@ export async function getProjectsAction(
         include: {
             _count: {
                 select: {
-                    homes: true
-                }
+                    homes: true,
+                },
             },
-            builder: true
+            builder: true,
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.projects);
 
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 
 export async function saveProject(project: IProject) {
     project.slug = await slugModel(project.title, prisma.projects);
     const _project = await prisma.projects.create({
-        data: transformData(project) as any
+        data: transformData(project) as any,
     });
     _revalidate("projects");
 }
 function whereProject(query: ProjectsQueryParams) {
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     const where: Prisma.ProjectsWhereInput = {
         builderId: {
-            equals: Number(query._builderId) || undefined
+            equals: Number(query._builderId) || undefined,
         },
-        title: q
+        title: q,
     };
 
     return where;
 }
 export async function staticProjectsAction() {
-    const _data = await prisma.projects.findMany({
-        select: {
-            id: true,
-            title: true,
-            builderId: true,
-            meta: true
-        },
-        orderBy: {
-            title: "asc"
-        }
+    return await _cache("projects", async () => {
+        const _data = await prisma.projects.findMany({
+            select: {
+                id: true,
+                title: true,
+                builderId: true,
+                meta: true,
+            },
+            orderBy: {
+                title: "asc",
+            },
+        });
+        return _data;
     });
-    return _data;
 }
 export async function updateCommunityCost(id, meta: IProjectMeta) {
     await updateProjectMeta(id, meta);
@@ -78,12 +81,13 @@ export async function updateCommunityCost(id, meta: IProjectMeta) {
 export async function updateProjectMeta(id, meta: IProjectMeta) {
     await prisma.projects.update({
         where: {
-            id
+            id,
         },
         data: {
             meta: meta as any,
-            updatedAt: new Date()
-        }
+            updatedAt: new Date(),
+        },
     });
     // revalidatePath('')
 }
+
