@@ -277,7 +277,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                 form.setValue("meta.costData", costData);
         }
         form.setValue("subtitle", unit.name);
-        console.log(costSetting, unit.costing);
+        // console.log(costSetting, unit.costing);
         const _tasks = costSetting?.meta?.list
             ?.filter((v) => isDecoShutter() || unit?.costing?.[v.uid])
             ?.filter(
@@ -286,7 +286,13 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                         v.title.toLowerCase() == "deco-shutters") ||
                     (!isDecoShutter() &&
                         v.title.toLowerCase() != "deco-shutters")
+            )
+            .filter(
+                (l) =>
+                    (isPunchout() && l.punchout) ||
+                    (isInstallation() && !l.punchout)
             );
+        // console.log(costSetting?.meta?.list.filter((task) => task.punchout));
         // console.log(costSetting);
         // console.log(costSetting?.meta?.list?.length);
         // console.log(_tasks);
@@ -478,8 +484,8 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                         )}
                                         <div
                                             className={cn(
-                                                "col-span-2",
-                                                isPunchout() && "hidden"
+                                                "col-span-2"
+                                                // isPunchout() && "hidden"
                                             )}
                                         >
                                             <Table className="">

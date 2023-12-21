@@ -106,14 +106,14 @@ export async function getUnitJobs(
                 (m) => m.modelName == unit.modelName
             ) as any;
         if (isTestUnit) console.log(communityTemplate);
-        if (jobType == "punchout") {
-            ls.push({
-                id: unit.id,
-                name: unitTaskName(unit),
-                disabled: unit._count.jobs > 0,
-            });
-            return;
-        }
+        // if (jobType == "punchout") {
+        //     ls.push({
+        //         id: unit.id,
+        //         name: unitTaskName(unit),
+        //         disabled: unit._count.jobs > 0,
+        //     });
+        //     return;
+        // }
         const pivotInstallCost = communityTemplate?.pivot?.meta?.installCost;
         if (pivotInstallCost) {
             console.log(pivotInstallCost);

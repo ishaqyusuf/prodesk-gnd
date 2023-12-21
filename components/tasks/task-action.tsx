@@ -7,29 +7,29 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { openModal } from "@/lib/modal";
 
 export default function TaskAction({}) {
     const { data: session } = useSession({
-        required: false
+        required: false,
     });
     const can = session?.can;
     const [actions, setTabs] = useState(
         [
             can?.viewTech && "punchout",
             can?.viewInstallation && "installation",
-            can?.viewDecoShutterInstall && "Deco-Shutter"
+            can?.viewDecoShutterInstall && "Deco-Shutter",
         ].filter(Boolean)
     );
     function open(_type) {
         let type = _type?.toLowerCase();
         let defaultTab = "tasks";
-        if (type == "punchout") defaultTab = "general";
+        // if (type == "punchout") defaultTab = "tasks";
         openModal("submitJob", {
             data: { type },
-            defaultTab
+            defaultTab,
         });
     }
     if (actions.length == 1)
@@ -55,7 +55,7 @@ export default function TaskAction({}) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    {actions.map(a => (
+                    {actions.map((a) => (
                         <DropdownMenuItem
                             onClick={() => {
                                 open(a);
