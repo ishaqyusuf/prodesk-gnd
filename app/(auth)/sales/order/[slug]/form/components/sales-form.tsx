@@ -60,15 +60,16 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     });
     const debouncedSave = useCallback(
         debounce(() => {
-            console.log("Saving");
-            form.handleSubmit((d) => onSubmit(d, "anc"))();
+            // console.log("Saving");
+
+            form.handleSubmit((d) => onSubmit(d, "default"))();
             // methods.handleSubmit(onSubmit)();
         }, 1000),
-        []
+        [form]
     );
     useDeepCompareEffect(() => {
-        console.log(form.formState.dirtyFields);
-        console.log(watchForm.items?.[2]?.description);
+        // console.log(form.formState.dirtyFields);
+        // console.log(watchForm.items?.[2]?.description);
         if (form.formState.isDirty) {
             debouncedSave();
         }
@@ -76,7 +77,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const router = useRouter();
     //wake up
     useEffect(() => {
-        console.log("...");
+        // console.log("...");
     }, []);
     useEffect(() => {
         return routeLeaveHandler.link(router);
@@ -95,7 +96,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     //         });
     // }, [, /* ... deps from Redux */ handleClick]);
     useEffect(() => {
-        console.log("chnaged");
+        // console.log("chnaged");
         let resp = data;
 
         const _formData: any = resp?.form || { meta: {} };
@@ -126,13 +127,20 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
 
     const watchOrderId = form.watch("orderId");
     const [isSaving, startTransition] = useTransition();
-    async function onSubmit(data, abc) {
-        console.log(abc);
-    }
+
     async function save(and: "close" | "new" | "default" = "default") {
+        // form.handleSubmit
+        form.handleSubmit((data) => onSubmit(data, and))();
+    }
+    async function onSubmit(
+        data,
+        and: "close" | "new" | "default" = "default"
+    ) {
+        console.log("SAVING....");
+        return;
         try {
             startTransition(async () => {
-                const formData = salesUtils.formData(form, pageData.paidAmount);
+                const formData = salesUtils.formData(data, pageData.paidAmount);
                 // console.log(formData);
                 const { paymentTerm, goodUntil } = formData.order;
                 // if (formData.order.type == "order") {
@@ -190,7 +198,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     return (
         <FormProvider {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => onSubmit(data, "abc"))}
+                // onSubmit={form.handleSubmit((data) => onSubmit(data, "abc"))}
                 className="px-8"
             >
                 <OrderPrinter />
@@ -300,7 +308,7 @@ function AutoExpandInput() {
             if (textarea.scrollHeight > 50) {
                 textarea.style.height = `${textarea.scrollHeight}px`;
             }
-            console.log(textarea.scrollHeight);
+            // console.log(textarea.scrollHeight);
         };
 
         textarea.addEventListener("input", adjustHeight);

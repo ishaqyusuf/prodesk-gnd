@@ -177,12 +177,7 @@ function AutoComplete2({
                 if (form && formKey) {
                     form.setValue(formKey, query);
                 }
-                onChange &&
-                    onChange({
-                        id: query,
-                        name: query,
-                        data: query,
-                    });
+                onChange && onChange(query);
             }
         }
     }, [typing, select, focus, query]);

@@ -15,7 +15,7 @@ export default {
     moreInvoiceLines,
     newInvoiceLine,
 };
-function formData(form: ISalesOrderForm, paidAmount) {
+function formData(data, paidAmount) {
     let {
         id,
         items: _items,
@@ -24,7 +24,7 @@ function formData(form: ISalesOrderForm, paidAmount) {
         customer,
         salesRep,
         ...formValues
-    }: ISalesOrder = deepCopy(form.getValues());
+    }: ISalesOrder = deepCopy(data);
 
     formValues.amountDue = Number(formValues.grandTotal || 0) - paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
