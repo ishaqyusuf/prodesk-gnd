@@ -1,4 +1,9 @@
-import { ISalesOrder, ISalesOrderForm, ISaveOrder } from "@/types/sales";
+import {
+    ISalesOrder,
+    ISalesOrderForm,
+    ISaveOrder,
+    SaveOrderActionProps,
+} from "@/types/sales";
 import dayjs from "dayjs";
 import { IFooterInfo, ISalesOrderItem } from "@/types/sales";
 import { removeEmptyValues } from "@/lib/utils";
@@ -15,7 +20,7 @@ export default {
     moreInvoiceLines,
     newInvoiceLine,
 };
-function formData(data, paidAmount) {
+function formData(data, paidAmount): SaveOrderActionProps {
     let {
         id,
         items: _items,

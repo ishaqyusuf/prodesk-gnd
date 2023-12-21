@@ -206,6 +206,7 @@ export interface SaveOrderActionProps {
     order: SalesOrders;
     deleteIds?: Number[];
     id?;
+    autoSave?: boolean;
     items: ISalesOrderItem[];
 }
 export interface ISaveOrder {

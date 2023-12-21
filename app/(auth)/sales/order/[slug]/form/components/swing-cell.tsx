@@ -30,6 +30,7 @@ export default function SwingCell({
                     <AutoComplete2
                         // formKey={`items.${rowIndex}.swing`}
                         allowCreate
+                        fluid
                         {...field}
                         // {field.}
                         // form={form}

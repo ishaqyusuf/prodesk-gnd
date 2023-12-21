@@ -63,17 +63,25 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             form.handleSubmit((d) => {
                 if (d.customerId) {
                     console.log("Saving");
-                    onSubmit(d, "default");
-                } else console.log("no customer id.... not saving");
+                    onSubmit(d, "default", true);
+                } else {
+                    console.log("no customer id.... not saving");
+                    toast.error(
+                        "Autosave paused, requires customer information."
+                    );
+                }
             })();
             // methods.handleSubmit(onSubmit)();
         }, 1000),
         [form]
     );
     useDeepCompareEffect(() => {
-        // console.log(form.formState.dirtyFields);
         // console.log(watchForm.items?.[2]?.description);
-        if (form.formState.isDirty) {
+        if (
+            form.formState.isDirty &&
+            Object.keys(form.formState.dirtyFields).length
+        ) {
+            console.log(form.formState.dirtyFields);
             debouncedSave();
         }
     }, [watchForm, form]);
@@ -137,13 +145,15 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     }
     async function onSubmit(
         data,
-        and: "close" | "new" | "default" = "default"
+        and: "close" | "new" | "default" = "default",
+        autoSave = false
     ) {
         // console.log("SAVING....");
         // return;
         try {
             startTransition(async () => {
                 const formData = salesUtils.formData(data, pageData.paidAmount);
+                formData.autoSave = autoSave;
                 // console.log(formData);
                 const { paymentTerm, goodUntil } = formData.order;
                 // if (formData.order.type == "order") {
@@ -151,6 +161,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                 // return;
                 // try {
                 const response = await saveOrderAction(formData);
+                // return;
                 if (response.orderId) {
                     const type = response.type;
                     if (and == "close") router.push(`/sales/${type}s`);
@@ -162,6 +173,10 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                                 router.push(
                                     `/sales/${type}/${response.orderId}/form`
                                 );
+                            else {
+                                // form.reset(data);
+                                // form.clearErrors()
+                            }
                         }
                     }
                 }
