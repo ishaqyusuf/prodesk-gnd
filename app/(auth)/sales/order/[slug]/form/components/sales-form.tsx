@@ -72,7 +72,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                 }
             })();
             // methods.handleSubmit(onSubmit)();
-        }, 1000),
+        }, 5000),
         [form]
     );
     useDeepCompareEffect(() => {
