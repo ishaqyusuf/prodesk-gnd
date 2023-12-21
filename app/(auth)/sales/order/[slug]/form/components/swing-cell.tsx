@@ -27,12 +27,13 @@ export default function SwingCell({
                 name={`items.${rowIndex}.swing`}
                 control={form.control}
                 render={({ field }) => (
-                    <AutoComplete2
-                        allowCreate
-                        fluid
-                        {...field}
-                        options={ctx?.swings}
-                    />
+                    <Input className="h-8 w-16  p-1  font-medium" {...field} />
+                    // <AutoComplete2
+                    //     allowCreate
+                    //     fluid
+                    //     {...field}
+                    //     options={ctx?.swings}
+                    // />
                 )}
             />
 

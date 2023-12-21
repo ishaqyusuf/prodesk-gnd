@@ -11,6 +11,8 @@ import Money from "@/components/money";
 import { Label } from "@/components/ui/label";
 import { addPercentage } from "@/lib/utils";
 import { InvoiceItemRowContext } from "../invoice-item-row-context";
+import { FormField } from "@/components/ui/form";
+import { ISalesOrder } from "@/types/sales";
 
 function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     const { register } = form;
@@ -73,29 +75,30 @@ function QtyCostCell({ rowIndex, form }: SalesInvoiceCellProps) {
     return (
         <>
             <TableCell id="qty" className="p-0 px-1">
-                <Input
-                    type="number"
-                    className="h-8 w-full p-1 text-center font-medium"
-                    // value={qty || ""}
-                    // onChange={(e) =>
-                    //     form.setValue(`items.${rowIndex}.qty`, +e.target?.value)
-                    // }
-                    {...register(`items.${rowIndex}.qty`)}
+                <FormField<ISalesOrder>
+                    name={`items.${rowIndex}.qty`}
+                    control={form.control}
+                    render={({ field }) => (
+                        <Input
+                            type="number"
+                            className="h-8 w-full p-1 text-center font-medium"
+                            {...field}
+                        />
+                    )}
                 />
             </TableCell>
             <TableCell id="price" className="p-0 px-1">
-                <Input
-                    type="number"
-                    className="h-8 w-full p-1 text-right font-medium"
-                    // value={price || ""}
-                    disabled={toggleMockup}
-                    {...register(`items.${rowIndex}.price`)}
-                    // onChange={(e) =>
-                    //     form.setValue(
-                    //         `items.${rowIndex}.price`,
-                    //         +e.target?.value
-                    //     )
-                    // }
+                <FormField<ISalesOrder>
+                    name={`items.${rowIndex}.price`}
+                    control={form.control}
+                    render={({ field }) => (
+                        <Input
+                            type="number"
+                            className="h-8 w-full p-1 text-center font-medium"
+                            {...field}
+                            disabled={toggleMockup}
+                        />
+                    )}
                 />
             </TableCell>
             {profileEstimate && (
