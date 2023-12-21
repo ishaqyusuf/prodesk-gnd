@@ -78,6 +78,23 @@ export async function staticEmployees(
             })
     );
 }
+export async function staticJobEmployees() {
+    return await _cache(
+        "job-employees",
+        async () =>
+            await prisma.users.findMany({
+                where: {
+                    jobs: {
+                        some: {
+                            id: {
+                                gt: 0,
+                            },
+                        },
+                    },
+                },
+            })
+    );
+}
 export async function staticLoadTechEmployees() {
     return await _cache(
         "punchouts",

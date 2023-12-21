@@ -101,11 +101,17 @@ export const SalesInvoiceTr = ({
                         <ItemCell ctx={ctx} rowIndex={i} form={form} />
                         <SwingCell rowIndex={i} form={form} ctx={ctx} />
                         <TableCell id="supplier" className="p-0 px-1">
-                            <AutoComplete2
-                                formKey={`items.${i}.supplier`}
-                                allowCreate
-                                form={form}
-                                options={ctx.suppliers}
+                            <FormField<ISalesOrder>
+                                name={`items.${i}.supplier`}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <AutoComplete2
+                                        allowCreate
+                                        fluid
+                                        {...field}
+                                        options={ctx?.suppliers}
+                                    />
+                                )}
                             />
                         </TableCell>
                         <QtyCostCell form={form} rowIndex={i} />

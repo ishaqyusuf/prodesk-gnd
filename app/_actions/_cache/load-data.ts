@@ -7,6 +7,7 @@ type CacheNames =
     | "punchouts"
     | "employees"
     | "projects"
+    | "job-employees"
     | "install-price-chart";
 export async function fetchCache(name: CacheNames) {
     const c = await prisma.posts.findFirst({
