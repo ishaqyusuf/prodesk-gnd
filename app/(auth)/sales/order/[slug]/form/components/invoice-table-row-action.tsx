@@ -108,13 +108,13 @@ export default function InvoiceTableRowAction({
                         Clear
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem onClick={copyLine}>
+                    <DropdownMenuItem disabled onClick={copyLine}>
                         <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Copy
                     </DropdownMenuItem>
 
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>
+                        <DropdownMenuSubTrigger disabled>
                             <Plus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                             Add Line
                         </DropdownMenuSubTrigger>
