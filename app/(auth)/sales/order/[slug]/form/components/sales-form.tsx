@@ -60,9 +60,12 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     });
     const debouncedSave = useCallback(
         debounce(() => {
-            // console.log("Saving");
-
-            form.handleSubmit((d) => onSubmit(d, "default"))();
+            form.handleSubmit((d) => {
+                if (d.customerId) {
+                    console.log("Saving");
+                    onSubmit(d, "default");
+                } else console.log("no customer id.... not saving");
+            })();
             // methods.handleSubmit(onSubmit)();
         }, 1000),
         [form]
@@ -136,8 +139,8 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         data,
         and: "close" | "new" | "default" = "default"
     ) {
-        console.log("SAVING....");
-        return;
+        // console.log("SAVING....");
+        // return;
         try {
             startTransition(async () => {
                 const formData = salesUtils.formData(data, pageData.paidAmount);
