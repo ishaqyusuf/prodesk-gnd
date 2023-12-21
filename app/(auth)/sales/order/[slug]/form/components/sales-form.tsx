@@ -6,8 +6,6 @@ import { PrintOrderMenuAction } from "@/components/actions/order-actions";
 import OrderPrinter from "@/components/print/order/order-printer";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { deepCopy } from "@/lib/deep-copy";
-import { numeric } from "@/lib/use-number";
 import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import { saveOrderAction } from "@/app/_actions/sales/sales";
 import { useRouter } from "next/navigation";

@@ -49,6 +49,7 @@ import { FormField } from "../../../../../../components/ui/form";
 import { loadStaticList } from "@/store/slicers";
 import { useAppSelector } from "@/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getInstallCostsAction } from "@/app/_actions/community/install-costs/get-install-costs.action";
 
 export default function ModelInstallCostModal({ community = false }) {
     const route = useRouter();
@@ -66,16 +67,6 @@ export default function ModelInstallCostModal({ community = false }) {
     // );
     const [costSetting, setCostSetting] = useState<InstallCostSettings>();
     const [index, setIndex] = useState(0);
-    useEffect(() => {
-        (async () => {
-            setCostSetting(await getSettingAction("install-price-chart"));
-        })();
-        // loadStaticList(
-        //     "installCostSetting",
-        //     installCostSetting,
-        //     async () => await getSettingAction("install-price-chart")
-        // );
-    }, []);
 
     async function submit(data) {
         startTransition(async () => {
@@ -120,6 +111,9 @@ export default function ModelInstallCostModal({ community = false }) {
     }
     async function init(data) {
         console.log(data);
+        const installs = await getInstallCostsAction();
+        setCostSetting(installs);
+        console.log(installs);
         if (community) {
             let cd = data as ICommunityTemplate;
             // cd.pivotId
@@ -144,7 +138,7 @@ export default function ModelInstallCostModal({ community = false }) {
         return costSetting?.meta?.list?.filter(
             (t) =>
                 (type == "punchout" && t.punchout) ||
-                (!t.punchout && type == "contractor")
+                (!t.punchout && type != "punchout")
         );
     }
     return (

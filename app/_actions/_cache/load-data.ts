@@ -2,7 +2,12 @@
 
 import { prisma } from "@/db";
 
-type CacheNames = "1099-contractors" | "punchouts" | "employees" | "projects";
+type CacheNames =
+    | "1099-contractors"
+    | "punchouts"
+    | "employees"
+    | "projects"
+    | "install-price-chart";
 export async function fetchCache(name: CacheNames) {
     const c = await prisma.posts.findFirst({
         where: {
