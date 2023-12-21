@@ -25,7 +25,11 @@ export function getNextBlock({
     } else {
         //
         if (value == "Shelf Items") {
-            createBlock("Shelf Items", []);
+            console.log("...");
+            setBlocks((blocks) => {
+                return [...blocks, createBlock("Shelf Items", [])];
+            });
+            setOpenBlock((o) => o + 1);
         }
     }
 }

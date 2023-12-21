@@ -61,7 +61,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             form.handleSubmit((d) => {
                 if (d.customerId) {
                     console.log("Saving");
-                    onSubmit(d, "default", true);
+                    // onSubmit(d, "default", true);
                 } else {
                     console.log("no customer id.... not saving");
                     toast.error(

@@ -121,6 +121,7 @@ function generateInvoiceItem(uid, baseItem: any = null) {
             line_index: null,
         },
     } as any;
+    console.log("generating...", _);
     // if (_.id) _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
     return _;
 }

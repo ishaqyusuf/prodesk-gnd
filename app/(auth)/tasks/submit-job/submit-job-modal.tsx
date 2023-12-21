@@ -343,6 +343,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
     function validateCosts() {
         const validation = validateTaskQty(unitCosting, form);
         if (!validation) {
+            // console.log(valid)
             toast.error("Some quantity has exceed default value.");
             throw new Error();
             return;

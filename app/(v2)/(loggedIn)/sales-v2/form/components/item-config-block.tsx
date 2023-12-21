@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import HousePackageTool from "./house-package-tool";
 import { useContext } from "react";
 import { SalesFormContext } from "../sales-form-context";
+import ShelfItemsBlock from "./shelf-items-block";
 interface Props {
     // configIndex;
     block: Block;
@@ -53,9 +54,11 @@ export function ItemConfigBlock({ block, blockIndex }: Props) {
 
             <CollapsibleContent className="p-8 border">
                 {block.title == "House Package Tool" && <HousePackageTool />}
-                {
-                    // block.
-                }
+                {block.title == "Shelf Items" && (
+                    <>
+                        <ShelfItemsBlock />
+                    </>
+                )}
                 <div className="grid gap-4 grid-cols-4">
                     {block.options?.map((b, i) => (
                         <button

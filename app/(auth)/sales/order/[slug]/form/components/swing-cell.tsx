@@ -28,13 +28,9 @@ export default function SwingCell({
                 control={form.control}
                 render={({ field }) => (
                     <AutoComplete2
-                        // formKey={`items.${rowIndex}.swing`}
                         allowCreate
                         fluid
                         {...field}
-                        // {field.}
-                        // form={form}
-                        // {field.}
                         options={ctx?.swings}
                     />
                 )}

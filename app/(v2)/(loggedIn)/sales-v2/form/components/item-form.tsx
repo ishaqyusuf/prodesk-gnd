@@ -53,7 +53,9 @@ export function SalesItemForm({ rowIndex, form, openIndex, setOpen }: Props) {
                 className=""
             >
                 <div className="flex bg-accent p-2 px-4 justify-between">
-                    <CollapsibleTrigger>Item {rowIndex}</CollapsibleTrigger>
+                    <CollapsibleTrigger>
+                        Item {Number(rowIndex) + 1}
+                    </CollapsibleTrigger>
                     <div className="flex items-center justify-between space-x-2">
                         <Button className="p-0 h-6 w-6" variant={"destructive"}>
                             <Icons.Delete className="w-4 h-4" />
