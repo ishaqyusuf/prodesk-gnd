@@ -200,7 +200,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         setAddCost(null as any);
         setUnitCosting({});
         if (data && defaultTab == "tasks") {
-            if (!data?.homeId) {
+            if (!data?.homeId && data.id) {
                 setTab("general");
                 return;
             }
