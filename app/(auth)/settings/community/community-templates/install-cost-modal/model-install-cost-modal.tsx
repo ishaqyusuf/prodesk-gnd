@@ -210,9 +210,13 @@ export default function ModelInstallCostModal({ community = false }) {
                                     Punchout
                                 </TabsTrigger>
                             </TabsList>
-                            <ScrollArea className="max-h-[350px] divide-y w-full">
-                                {["contractor", "punchout"].map((type) => (
-                                    <TabsContent key={type} value={type}>
+                            {["contractor", "punchout"].map((type) => (
+                                <TabsContent
+                                    key={type}
+                                    className="flex flex-col"
+                                    value={type}
+                                >
+                                    <ScrollArea className="h-[350px] divide-y w-full">
                                         <Table className="">
                                             <TableHeader>
                                                 <TableRow>
@@ -281,9 +285,9 @@ export default function ModelInstallCostModal({ community = false }) {
                                                 ))}
                                             </TableBody>
                                         </Table>
-                                    </TabsContent>
-                                ))}
-                            </ScrollArea>
+                                    </ScrollArea>
+                                </TabsContent>
+                            ))}
                         </Tabs>
                     </div>
                 </div>
