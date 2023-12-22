@@ -107,7 +107,7 @@ export interface ISalesOrderItemMeta {
     cost_price;
     computed_rate;
     sales_percentage;
-    tax: "Tax" | "Non" | undefined;
+    tax: "Tax" | "Non" | boolean | undefined;
     door_qty_selector;
     frame;
     product_cost;

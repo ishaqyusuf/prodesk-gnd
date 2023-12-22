@@ -99,6 +99,7 @@ function initInvoiceItems(items: ISalesOrderItem[] | undefined) {
                 taxxable: _.meta?.tax == "Tax",
                 total: 0,
             };
+            if (_.meta) _.meta.tax = _.meta.tax == "Tax";
             return _;
         });
 
@@ -121,7 +122,7 @@ function generateInvoiceItem(uid, baseItem: any = null) {
             line_index: null,
         },
     } as any;
-    console.log("generating...", _);
+    // console.log("generating...", _);
     // if (_.id) _.meta.tax = (_.tax || 0) > 0 ? "Tax" : "Non";
     return _;
 }

@@ -68,6 +68,7 @@ export default function AutoComplete({
         onSelectedItemChange(c) {
             console.log(c);
             onSelect && onSelect(c.selectedItem as any);
+            onChange && onChange((c.selectedItem as any)?.value);
         },
         onInputValueChange({ inputValue }) {
             setItems(
@@ -76,6 +77,7 @@ export default function AutoComplete({
                     inputValue
                 )
             );
+            onChange && onChange(inputValue);
         },
         itemToString(item) {
             return item ? (item as any).title : "";
@@ -97,7 +99,7 @@ export default function AutoComplete({
 
                 <div className="flex">
                     <Input
-                        className={cn(uppercase && "uppercase")}
+                        className={cn(uppercase && "uppercase", className)}
                         {...getInputProps({ ref: inputRef as any })}
                     />
                 </div>
@@ -110,7 +112,8 @@ export default function AutoComplete({
                 }}
                 className={cn(
                     "absolute border w-full bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10",
-                    !(isOpen && items.length) && "hidden"
+                    !(isOpen && items.length) && "hidden",
+                    "min-w-[150px]"
                 )}
                 {...getMenuProps({ ref: listRef as any })}
             >
@@ -156,7 +159,8 @@ export default function AutoComplete({
                                     highlightedIndex === index && "bg-blue-300",
                                     selectedItem === items[vi.index] &&
                                         "font-bold",
-                                    "py-2 px-3 shadow-sm flex flex-col cursor-default"
+                                    "py-2 px-3 shadow-sm flex flex-col cursor-default",
+                                    uppercase && "uppercase"
                                 )}
                                 key={vi.key}
                                 {...getItemProps({

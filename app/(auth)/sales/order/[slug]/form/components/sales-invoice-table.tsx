@@ -144,6 +144,23 @@ export default function SalesInvoiceTable({
                 form={form}
                 ctx={data.ctx}
             />
+            <div className="hidden fixed h-[40vh] border shadow p-2 rounded overflow-auto top-0 left-0 bg-white w-1/5 z-[999] m-4">
+                {fields.map((field, index) => (
+                    <p key={field.id}>
+                        {index + 1}
+                        {":"}
+                        {field.description}
+                        {","}
+                        {field.swing}
+                        {","}
+                        {field.supplier}
+                        {","}
+                        {field.qty}
+                        {","}
+                        {field.price}
+                    </p>
+                ))}
+            </div>
         </div>
     );
 }

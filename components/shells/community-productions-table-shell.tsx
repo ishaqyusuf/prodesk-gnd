@@ -10,13 +10,13 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 
 import {
     OrderRowAction,
     PrintOrderMenuAction,
-    ProductionAction
+    ProductionAction,
 } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
@@ -25,18 +25,18 @@ import {
     IInvoice,
     IProject,
     IHomeTask,
-    ExtendedHomeTasks
+    ExtendedHomeTasks,
 } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
 import {
     HomeInstallationStatus,
-    HomeProductionStatus
+    HomeProductionStatus,
 } from "../columns/community-columns";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { MoreHorizontal, Printer, View } from "lucide-react";
@@ -50,7 +50,7 @@ import {
     ActionButton,
     DeleteRowAction,
     RowActionCell,
-    RowActionMoreMenu
+    RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
 import Money from "../money";
 import { sum } from "@/lib/utils";
@@ -65,13 +65,13 @@ import { SmartTable } from "../data-table/smart-table";
 export default function CommunityProductionsTableShell<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ExtendedHomeTasks>) {
     const [isPending, startTransition] = useTransition();
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const table = SmartTable<ExtendedHomeTasks>(
-        data.map(task => {
+        data.map((task) => {
             task.__taskSubtitle = `${task.project.title} ${task.home.modelName} ${task.home.lot}/${task.home.block}`;
             return task;
         })
@@ -79,29 +79,29 @@ export default function CommunityProductionsTableShell<T>({
     const columns = useMemo<ColumnDef<ExtendedHomeTasks, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-            table.simpleColumn("#", data => ({
+            table.simpleColumn("#", (data) => ({
                 story: [
                     table.primaryText(data.id),
-                    table.secondary(data.createdAt)
-                ]
+                    table.secondary(data.createdAt),
+                ],
             })),
-            table.simpleColumn("Job", data => ({
+            table.simpleColumn("Job", (data) => ({
                 story: [
-                    table.primaryText(data.taskName),
-                    table.secondary(data.__taskSubtitle)
-                ]
+                    table.primaryText(data.__taskSubtitle),
+                    table.secondary(data.taskName),
+                ],
             })),
-            table.simpleColumn("Due Date", data => ({
-                story: [table.primaryText(data.productionDueDate)]
+            table.simpleColumn("Due Date", (data) => ({
+                story: [table.primaryText(data.productionDueDate)],
             })),
-            table.simpleColumn("Status", data => ({
+            table.simpleColumn("Status", (data) => ({
                 story: [
                     table.status(
                         data?.home?._count?.jobs
                             ? "Completed"
                             : data.productionStatus || "unknown"
-                    )
-                ]
+                    ),
+                ],
             })),
             ..._FilterColumn(
                 "_status",
@@ -122,8 +122,8 @@ export default function CommunityProductionsTableShell<T>({
                         {/* <RowActionMoreMenu>
                         </RowActionMoreMenu> */}
                     </RowActionCell>
-                )
-            }
+                ),
+            },
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
@@ -137,25 +137,25 @@ export default function CommunityProductionsTableShell<T>({
                 SelectionAction={HomesSelectionAction}
                 filterableColumns={[
                     ProjectsFilter,
-                    props => (
+                    (props) => (
                         <TaskFilters
                             {...props}
                             listKey="productionTasks"
                             query={{ produceable: true }}
                         />
-                    )
+                    ),
                 ]}
                 searchableColumns={[
                     {
                         id: "_q" as any,
-                        title: "search invoice"
-                    }
+                        title: "search invoice",
+                    },
                 ]}
                 dateFilterColumns={[
                     {
                         id: "_date" as any,
-                        title: "Date"
-                    }
+                        title: "Date",
+                    },
                 ]}
                 //  deleteRowsAction={() => void deleteSelectedRows()}
             />

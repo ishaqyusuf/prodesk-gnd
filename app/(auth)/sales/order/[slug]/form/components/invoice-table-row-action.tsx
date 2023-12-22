@@ -54,9 +54,10 @@ export default function InvoiceTableRowAction({
         name: "items",
     });
     function _addLine(toIndex) {
-        startTransition(() => {
-            replace(salesUtils.newInvoiceLine(toIndex, watchItems as any));
-        });
+        // startTransition(() => {
+        insert(toIndex, salesUtils.generateInvoiceItem(-1));
+        // replace(salesUtils.newInvoiceLine(toIndex, watchItems as any));
+        // });
         // insert(toIndex, generateItem(toIndex));
     }
     function _removeLine() {
@@ -108,13 +109,13 @@ export default function InvoiceTableRowAction({
                         Clear
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem disabled onClick={copyLine}>
+                    <DropdownMenuItem onClick={copyLine}>
                         <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                         Copy
                     </DropdownMenuItem>
 
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger disabled>
+                        <DropdownMenuSubTrigger>
                             <Plus className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                             Add Line
                         </DropdownMenuSubTrigger>

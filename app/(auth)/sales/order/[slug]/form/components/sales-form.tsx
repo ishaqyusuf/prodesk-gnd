@@ -15,10 +15,8 @@ import SalesInvoiceTable from "./sales-invoice-table";
 import { store, useAppSelector } from "@/store";
 
 import CatalogModal from "@/components/modals/catalog-modal";
-import { removeEmptyValues } from "@/lib/utils";
 
 import InfoCard from "./sales-info-address-form";
-import dayjs from "dayjs";
 import { Switch } from "@/components/ui/switch";
 import {
     resetFooterInfo,
@@ -32,7 +30,6 @@ import UpdateSalesDate from "@/components/sales/update-sales-date";
 import salesUtils from "../sales-utils";
 import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import AutoComplete from "@/components/common/auto-complete";
 import routeLeaveHandler from "../route-leave-handler";
 
 interface Props {
@@ -61,7 +58,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             form.handleSubmit((d) => {
                 if (d.customerId) {
                     console.log("Saving");
-                    // onSubmit(d, "default", true);
+                    onSubmit(d, "default", true);
                 } else {
                     console.log("no customer id.... not saving");
                     toast.error(

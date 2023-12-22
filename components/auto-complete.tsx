@@ -33,6 +33,7 @@ interface Props {
     hideEmpty?: Boolean;
     placeholder?;
     form?;
+    perPage?;
     fluid?: Boolean;
 }
 function AutoComplete2({
@@ -55,6 +56,7 @@ function AutoComplete2({
     uppercase,
     onSelect,
     fluid,
+    perPage = 9999,
     ...props
 }: Props & PrimitiveDivProps) {
     const [query, setQuery] = useState("");
@@ -139,7 +141,7 @@ function AutoComplete2({
         // filteredOptions = uniqueBy(filteredOptions, "name").filter(
         //     (a, i) => i < 25
         // );
-        return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
+        return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < perPage); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
         console.log(e);

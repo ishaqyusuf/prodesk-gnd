@@ -10,7 +10,7 @@ export async function _updateCommunityHome(home: IHome) {
     home.lotBlock = [home.lot || "-", home.block || "-"].join("/");
     await prisma.homes.update({
         where: {
-            id: home.id
+            id: home.id,
         },
         data: {
             communityTemplateId: Number(home.communityTemplateId),
@@ -18,8 +18,8 @@ export async function _updateCommunityHome(home: IHome) {
             lot: home.lot,
             block: home.block,
             lotBlock: home.lotBlock,
-            updatedAt: new Date()
-        }
+            updatedAt: new Date(),
+        },
     });
     _revalidate("homes");
 }
@@ -27,9 +27,9 @@ export async function createHomesAction(homes: Homes[]) {
     const builders = await prisma.builders.findMany({
         where: {
             id: {
-                in: homes.map(h => h.builderId).filter(Boolean) as number[]
-            }
-        }
+                in: homes.map((h) => h.builderId).filter(Boolean) as number[],
+            },
+        },
     });
     // const homeTemplate: IHomeTemplate = (await prisma.homeTemplates.findFirst({
     //     where: {
@@ -48,23 +48,24 @@ export async function createHomesAction(homes: Homes[]) {
     const tasks: any[] = [];
 
     await Promise.all(
-        homes.map(async homeData => {
+        homes.map(async (homeData) => {
             const lblck = [homeData.lot || "-", homeData.block || "-"].join(
                 "/"
             );
             homeData.lotBlock = lblck;
             const home = await prisma.homes.create({
-                data: transformData(homeData) as any
+                data: transformData(homeData) as any,
             });
 
             const builder: IBuilder = builders.find(
-                b => b.id == home.builderId
+                (b) => b.id == home.builderId
             ) as any;
-            builder.meta.tasks.map(builderTask => {
+            console.log(builder);
+            builder.meta.tasks.map((builderTask) => {
                 const _task: IHomeTask = {
                     meta: {},
                     createdAt: new Date(),
-                    updatedAt: new Date()
+                    updatedAt: new Date(),
                 } as any;
                 _task.projectId = home.projectId;
                 _task.homeId = home.id;
@@ -72,6 +73,10 @@ export async function createHomesAction(homes: Homes[]) {
                 _task.search = home.search;
                 _task.billable = builderTask.billable as boolean;
                 _task.installable = builderTask.installable as boolean;
+                _task.produceable = builderTask.produceable as boolean;
+                _task.deco = builderTask.deco;
+                _task.punchout = builderTask.punchout;
+
                 const uid = (_task.taskUid = builderTask.uid);
                 _task.taskName = builderTask.name;
                 // _task.amountDue = _task.meta.system_task_cost =
@@ -83,7 +88,7 @@ export async function createHomesAction(homes: Homes[]) {
                 tasks.push(transformData(_task));
             });
             await prisma.homeTasks.createMany({
-                data: tasks
+                data: tasks,
             });
         })
     );

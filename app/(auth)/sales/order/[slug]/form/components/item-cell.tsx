@@ -90,6 +90,7 @@ export default function ItemCell({
                                 // console.log(e);
                                 setFocused(true);
                             }}
+                            perPage={25}
                             onBlur={(e) => setFocused(false)}
                             options={focused ? ctx?.items : []}
                             itemText={"description"}

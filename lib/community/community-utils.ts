@@ -9,14 +9,17 @@ import { formatDate } from "../use-day";
 export function getHomeProductionStatus(home: ExtendedHome) {
     const prod = home?.tasks?.filter((t) => t.produceable);
     let prodDate: any = null;
-    if (home.builderId == 14)
-        console.log(home.modelName, prod.length, home.tasks);
+    // if (home.builderId == 14)
+    // console.log(home.modelName, prod.length, home.tasks);
     const produceables = prod?.length;
     let produced = prod?.filter((p) => p.producedAt).length;
     const hasJob = home?.jobs?.length;
     if (hasJob) produced = prod.length;
     const pending = produceables - produced;
     let productionStatus = "Idle";
+    if (home.id == 10217) {
+        // console.log(home);
+    }
     const sent = prod?.filter((p) => p.sentToProductionAt)?.length;
     prodDate = prod.filter((p) => p.productionDueDate)?.[0]?.productionDueDate;
     if (sent > 0) productionStatus = "Queued";

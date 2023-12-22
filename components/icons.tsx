@@ -58,6 +58,7 @@ import {
     Percent,
     Delete,
     Mail,
+    Layers,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -88,6 +89,7 @@ export const Icons = {
     punchout: Cpu,
     hrm: LayoutTemplate,
     communitySettings: LayoutTemplate,
+    component: Layers,
     Email: Mail,
     jobs: Briefcase,
     customerService: ClipboardList,
