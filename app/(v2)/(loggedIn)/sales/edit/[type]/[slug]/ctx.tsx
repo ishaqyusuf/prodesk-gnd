@@ -6,5 +6,18 @@ export interface SalesFormContext {
     profileEstimate;
     profitRate;
     mockupPercentage;
+    toggleMockup;
+    taxPercentage;
+    setSummary;
+    summary;
+    discount;
+    paymentOption;
+    labourCost;
+    grandTotal;
+    cccPayment;
+    cccPercentage;
+    tax;
+    subTotal;
+    ccc;
 }
 export const SalesFormContext = createContext<SalesFormContext>({} as any);

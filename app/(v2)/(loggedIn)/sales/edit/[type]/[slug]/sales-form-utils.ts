@@ -31,15 +31,16 @@ function formData(data, paidAmount): SaveOrderActionProps {
         billingAddress,
         customer,
         salesRep,
+        _lineSummary,
         ...formValues
-    }: ISalesOrder = deepCopy(data);
+    }: ISalesForm = deepCopy(data);
 
     formValues.amountDue = Number(formValues.grandTotal || 0) - paidAmount;
     formValues.meta = removeEmptyValues(formValues.meta);
     const deleteIds: number[] = [];
 
     let items = calibrateLines(_items)
-        ?.map(({ salesOrderId, ...item }, index) => {
+        ?.map(({ salesOrderId, _ctx, ...item }, index) => {
             // delete (item as any)?.salesOrderId;
             if (!item.description && !item?.total) {
                 if (item.id) deleteIds.push(item.id);
@@ -96,7 +97,7 @@ function initInvoiceItems(items: ISalesFormItem[] | undefined) {
     const _items = Array(rows + 1)
         .fill(null)
         .map((c, uid) => {
-            const _ = generateInvoiceItem(uid, _itemsByIndex[uid]);
+            const _ = generateInvoiceItem(_itemsByIndex[uid]);
             footer.rows[uid] = {
                 rowIndex: uid,
                 taxxable: _.meta?.tax == "Tax",
@@ -108,7 +109,7 @@ function initInvoiceItems(items: ISalesFormItem[] | undefined) {
 
     return { _items, footer: footer.rows };
 }
-function generateInvoiceItem(uid, baseItem: any = null) {
+function generateInvoiceItem(baseItem: any = null) {
     if (!baseItem) baseItem = { meta: {} };
     let price = baseItem?.rate || baseItem?.price;
 
@@ -117,12 +118,9 @@ function generateInvoiceItem(uid, baseItem: any = null) {
         rate: null,
         price,
         meta: {
-            tax: "Tax",
+            tax: true, // "Tax",
             sales_margin: "Default",
             ...(baseItem?.meta ?? {}),
-            uid,
-            lineIndex: null,
-            line_index: null,
         },
         _ctx: {
             id: generateRandomString(4),
@@ -133,23 +131,23 @@ function generateInvoiceItem(uid, baseItem: any = null) {
     return _;
 }
 function newInvoiceLine(toIndex, fields: ISalesFormItem[]) {
-    if (toIndex == -1) fields.unshift(generateInvoiceItem(0));
-    else if (toIndex == fields.length - 1)
-        fields.push(generateInvoiceItem(toIndex));
+    if (toIndex == -1) fields.unshift(generateInvoiceItem());
+    else if (toIndex == fields.length - 1) fields.push(generateInvoiceItem());
     else
         fields = [
             ...fields.slice(0, toIndex),
-            generateInvoiceItem(toIndex),
+            generateInvoiceItem(),
             ...fields.slice(toIndex),
         ];
     return calibrateLines(fields);
 }
-export function moreInvoiceLines(fields: ISalesFormItem[]) {
-    const baseUID = fields.length;
+export function moreInvoiceLines() {
+    // const baseUID = fields.length;
+    const fields: any[] = [];
     Array(5)
         .fill(null)
         .map((c, uid) => {
-            fields.push(generateInvoiceItem(uid + baseUID));
+            fields.push(generateInvoiceItem());
         });
     return fields;
 }

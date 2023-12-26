@@ -37,6 +37,7 @@ interface Props {
     newTitle;
     slug;
 }
+let renderCount = 0;
 export default function SalesForm({ data, newTitle, slug }: Props) {
     const pageData: SalesFormResponse = useAppSelector(
         (s) => s.slicers.dataPage.data
@@ -53,6 +54,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         control: form.control,
         defaultValue: defaultValues,
     });
+    renderCount++;
     const debouncedSave = useCallback(
         debounce(() => {
             form.handleSubmit((d) => {
@@ -214,6 +216,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                 // onSubmit={form.handleSubmit((data) => onSubmit(data, "abc"))}
                 className="px-8"
             >
+                <div className="">{renderCount}</div>
                 <OrderPrinter />
                 {/* <AutoExpandInput /> */}
                 <section
