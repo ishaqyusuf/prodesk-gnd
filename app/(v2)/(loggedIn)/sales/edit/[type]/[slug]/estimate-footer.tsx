@@ -107,8 +107,8 @@ function Footer({
                                     value={paymentOption}
                                     onValueChange={(value) => {
                                         form.setValue(
-                                            "meta.payment_option",
-                                            value as IPaymentOptions
+                                            "meta.payment_option" as any,
+                                            value as any
                                         );
                                     }}
                                 >
