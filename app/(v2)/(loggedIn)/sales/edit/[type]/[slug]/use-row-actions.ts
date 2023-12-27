@@ -26,7 +26,7 @@ export default function useSalesInvoiceRowActions(index, id, field) {
         copy() {
             // const {id, ...rest} = field;
             const newData = salesFormUtils.copySalesItem(field);
-            insert(index + 1, newData);
+            insert(index + 1, newData as any);
         },
     };
 }
