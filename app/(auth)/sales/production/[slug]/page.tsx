@@ -4,15 +4,15 @@ import {
     BreadLink,
     EstimatesCrumb,
     OrderViewCrumb,
-    ProductionsCrumb
+    ProductionsCrumb,
 } from "@/components/breadcrumbs/links";
 import SalesPaymentModal from "@/components/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/modals/sales-prod-submit-modal";
 import SalesTimelineModal from "@/components/modals/sales-timeline-modal";
 import OrderPrinter from "@/components/print/order/order-printer";
-import OverviewDetailsSection from "@/components/sales/overview/details-section";
-import ItemDetailsSection from "@/components/sales/overview/item-details";
-import Timeline from "@/components/sales/overview/timeline";
+import OverviewDetailsSection from "@/app/(auth)/sales/order/[slug]/overview/details-section";
+import ItemDetailsSection from "@/app/(auth)/sales/order/[slug]/overview/item-details";
+import Timeline from "@/app/(auth)/sales/order/[slug]/overview/timeline";
 import { DataPageShell } from "@/components/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
 import { Metadata } from "next";
@@ -20,13 +20,13 @@ import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Sales Production",
-    description: "Order Overview"
+    description: "Order Overview",
 };
 export default async function SalesOrderPage({ params: { slug } }) {
     const order: ISalesOrder = (await getOrderAction(slug)) as any;
     // console.log(order);
     order.ctx = {
-        prodPage: true
+        prodPage: true,
     };
     if (!order) return notFound();
     metadata.description = order.orderId;
