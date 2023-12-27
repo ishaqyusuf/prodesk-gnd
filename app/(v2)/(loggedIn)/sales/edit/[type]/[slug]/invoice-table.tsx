@@ -80,6 +80,7 @@ export default function InvoiceTable() {
                                         {fields.map((field, index) => (
                                             <InvoiceTableRow
                                                 key={index}
+                                                length={fields.length}
                                                 field={field}
                                                 index={index}
                                             />
@@ -108,27 +109,8 @@ export default function InvoiceTable() {
         </div>
     );
 }
-function InvoiceTableRowActions({ index, cid, field }) {
-    const actions = useSalesInvoiceRowActions(index, cid, field);
-    return (
-        <TableCell className="p-0 px-1">
-            <Menu variant={"ghost"}>
-                {/* <MenuItem Icon={Icons.component}>Component</MenuItem> */}
 
-                <MenuItem onClick={actions.copy} Icon={Icons.copy}>
-                    Copy
-                </MenuItem>
-                <MenuItem onClick={actions.clear} Icon={Icons.clear}>
-                    Clear
-                </MenuItem>
-                <MenuItem onClick={actions.remove} Icon={Icons.trash}>
-                    Delete
-                </MenuItem>
-            </Menu>
-        </TableCell>
-    );
-}
-function InvoiceTableRow({ index, field }) {
+function InvoiceTableRow({ index, field, length }) {
     const { data, profileEstimate } = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
     const [qty, rate, total, taxxable, tax, lid] = form.watch([
@@ -229,12 +211,75 @@ function InvoiceTableRow({ index, field }) {
                         <InvoiceTableRowActions
                             field={field}
                             cid={lid}
+                            length={length}
                             index={index}
                         />
                     </TableRow>
                 );
             }}
         </Draggable>
+    );
+}
+function InvoiceTableRowActions({ index, cid, field, length }) {
+    const actions = useSalesInvoiceRowActions(index, cid, field);
+    return (
+        <TableCell className="p-0 px-1">
+            <Menu variant={"ghost"}>
+                {/* <MenuItem Icon={Icons.component}>Component</MenuItem> */}
+                <MenuItem onClick={actions.clear} Icon={Icons.clear}>
+                    Clear
+                </MenuItem>
+                <MenuItem onClick={actions.copy} Icon={Icons.copy}>
+                    Copy
+                </MenuItem>
+                <MenuItem
+                    disabled
+                    SubMenu={
+                        <div className="grid grid-cols-5 gap-1">
+                            {Array(length)
+                                .fill(null)
+                                .map((_, pos) => (
+                                    <MenuItem
+                                        key={pos}
+                                        className="w-10 inline-flex justify-center"
+                                        disabled={pos == index}
+                                        onClick={() => actions.move(pos)}
+                                    >
+                                        <span className="">{pos + 1}</span>
+                                    </MenuItem>
+                                ))}
+                        </div>
+                    }
+                    Icon={Icons.move2}
+                >
+                    Move To
+                </MenuItem>
+                <MenuItem
+                    SubMenu={
+                        <>
+                            <MenuItem
+                                onClick={() => actions.addLine("before")}
+                                Icon={Icons.arrowUp}
+                            >
+                                Before
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => actions.addLine("after")}
+                                Icon={Icons.arrowDown}
+                            >
+                                After
+                            </MenuItem>
+                        </>
+                    }
+                    Icon={Icons.add}
+                >
+                    Add Line
+                </MenuItem>
+                <MenuItem onClick={actions.remove} Icon={Icons.trash}>
+                    Delete
+                </MenuItem>
+            </Menu>
+        </TableCell>
     );
 }
 function InvoiceTableHeader({ watchProfileEstimate }) {

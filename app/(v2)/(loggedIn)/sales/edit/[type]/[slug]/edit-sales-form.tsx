@@ -10,6 +10,10 @@ import { SalesFormContext } from "./ctx";
 import { ISalesForm } from "./type";
 import { useState } from "react";
 import salesFormUtils from "./sales-form-utils";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import InvoiceItemsSelection from "./selection-action";
+import useItemSelection from "./use-item-selection";
 
 interface Props {
     data: SalesFormResponse;
@@ -30,6 +34,8 @@ export default function EditSalesForm({ data }: Props) {
     const form = useForm<ISalesForm>({
         defaultValues,
     });
+    const itemSelector = useItemSelection();
+
     const [
         profileEstimate,
         profitRate,
@@ -81,6 +87,7 @@ export default function EditSalesForm({ data }: Props) {
                     cccPercentage,
                     ccc,
                     subTotal,
+                    itemSelector,
                 }}
             >
                 <Form {...form}>
@@ -91,6 +98,7 @@ export default function EditSalesForm({ data }: Props) {
                         </section>
                     </div>
                 </Form>
+                <InvoiceItemsSelection />
             </SalesFormContext.Provider>
         </FormProvider>
     );

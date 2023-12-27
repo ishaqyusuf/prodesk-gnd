@@ -221,13 +221,10 @@ export function nav(
                 _route(
                     "Estimates",
                     Icons.estimates,
-                    `/sales/estimates?_salesRepId=${session.user.id}`
+                    `/sales/estimates`
+                    // `/sales/estimates?_salesRepId=${session.user.id}`
                 ), //employees,roles
-                _route(
-                    "Orders",
-                    Icons.orders,
-                    `/sales/orders?_salesRepId=${session.user.id}`
-                ), //employees,roles
+                _route("Orders", Icons.orders, `/sales/orders`), //employees,roles
                 _route("Customers", Icons.user, "/sales/customers"),
             ]
         );

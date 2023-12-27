@@ -60,6 +60,9 @@ import {
     Mail,
     Layers,
     Eraser,
+    ArrowUp,
+    ArrowDown,
+    Move,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -128,6 +131,9 @@ export const Icons = {
     user: User,
     arrowRight: ArrowRight,
     arrowLeft: ArrowLeft,
+    arrowUp: ArrowUp,
+    arrowDown: ArrowDown,
+    move2: Move,
     help: HelpCircle,
     pizza: Pizza,
     delivery: Truck,
