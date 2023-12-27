@@ -17,10 +17,10 @@ import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Layers } from "lucide-react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
-import { SalesFormContext } from "./ctx";
+import { SalesFormContext, SalesRowContext } from "./ctx";
 import AutoComplete from "@/components/common/auto-complete";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/money";
@@ -35,106 +35,97 @@ import EstimateFooter from "./estimate-footer";
 import { Button } from "@/components/ui/button";
 import salesUtils from "@/app/(auth)/sales/order/[slug]/form/sales-utils";
 import salesFormUtils from "./sales-form-utils";
+import useSalesInvoiceRowActions from "./use-row-actions";
+import { toast } from "sonner";
 
 export default function InvoiceTable() {
     const form = useFormContext<ISalesForm>();
-    const { fields, append, replace } = useFieldArray({
+    const fieldArray = useFieldArray({
         control: form.control,
         name: "items",
     });
+    const { fields, append, insert, remove } = fieldArray;
 
     useInvoiceTotalEstimate();
+
     const watchProfileEstimate = form.watch("meta.profileEstimate");
     const isMobile = useMediaQuery(screens.xs);
     const handleOndragEnd = (result) => {
-        if (!result.destination) return;
-        const items = Array.from(fields);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem as any);
-        replace(items);
+        // if (!result.destination) return;
+        // const items = Array.from(fields);
+        // const [reorderedItem] = items.splice(result.source.index, 1);
+        // items.splice(result.destination.index, 0, reorderedItem as any);
+        // replace(items);
     };
+    const [line, setLine] = useState("");
     return (
         <div className={cn("relative", isMobile && "max-md:overflow-x-auto")}>
-            <div className={cn(isMobile && "max-md:w-[900px]")}>
-                <DragDropContext onDragEnd={handleOndragEnd}>
-                    <Droppable droppableId="dropper1">
-                        {(provided) => (
-                            <Table
-                                role="list"
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className=""
-                            >
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[25px]  px-1">
-                                            #
-                                        </TableHead>
-                                        <TableHead className="w-5 px-1">
-                                            <Layers className="h-3.5 w-3.5" />
-                                        </TableHead>
-                                        <TableHead className="px-1">
-                                            Item
-                                        </TableHead>
-                                        <TableHead className="w-20  px-1">
-                                            Swing
-                                        </TableHead>
-                                        <TableHead className="w-20 px-1">
-                                            Supplier
-                                        </TableHead>
-                                        <TableHead className="w-14 px-1 text-center">
-                                            Qty
-                                        </TableHead>
-                                        <TableHead className="w-20 px-1">
-                                            Cost
-                                        </TableHead>
-                                        {watchProfileEstimate ? (
-                                            <>
-                                                <TableHead className="w-8 px-1">
-                                                    Rate
-                                                </TableHead>
-                                            </>
-                                        ) : (
-                                            <></>
-                                        )}
-                                        <TableHead className="w-8 px-1 text-right">
-                                            Total
-                                        </TableHead>
-                                        <TableHead className="w-8 px-1 text-center">
-                                            Tax
-                                        </TableHead>
-                                        <TableHead className="w-10 px-1"></TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {fields.map((field, index) => (
-                                        <InvoiceTableRow
-                                            key={index}
-                                            field={field}
-                                            index={index}
-                                        />
-                                    ))}
+            <SalesRowContext.Provider value={fieldArray}>
+                <div className={cn(isMobile && "max-md:w-[900px]")}>
+                    <DragDropContext onDragEnd={handleOndragEnd}>
+                        <Droppable droppableId="dropper1">
+                            {(provided) => (
+                                <Table
+                                    role="list"
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                    className=""
+                                >
+                                    <InvoiceTableHeader
+                                        watchProfileEstimate={
+                                            watchProfileEstimate
+                                        }
+                                    />
+                                    <TableBody>
+                                        {fields.map((field, index) => (
+                                            <InvoiceTableRow
+                                                key={index}
+                                                field={field}
+                                                index={index}
+                                            />
+                                        ))}
 
-                                    {provided.placeholder}
-                                </TableBody>
-                            </Table>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                <div className="flex">
-                    <Button
-                        className="w-full"
-                        onClick={() => {
-                            append(salesFormUtils.moreInvoiceLines());
-                        }}
-                        variant="ghost"
-                    >
-                        More Lines
-                    </Button>
+                                        {provided.placeholder}
+                                    </TableBody>
+                                </Table>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                    <div className="flex">
+                        <Button
+                            className="w-full"
+                            onClick={() => {
+                                append(salesFormUtils.moreInvoiceLines());
+                            }}
+                            variant="ghost"
+                        >
+                            More Lines
+                        </Button>
+                    </div>
+                    <EstimateFooter />
                 </div>
-                <EstimateFooter />
-            </div>
+            </SalesRowContext.Provider>
         </div>
+    );
+}
+function InvoiceTableRowActions({ index, cid, field }) {
+    const actions = useSalesInvoiceRowActions(index, cid, field);
+    return (
+        <TableCell className="p-0 px-1">
+            <Menu variant={"ghost"}>
+                {/* <MenuItem Icon={Icons.component}>Component</MenuItem> */}
+
+                <MenuItem onClick={actions.copy} Icon={Icons.copy}>
+                    Copy
+                </MenuItem>
+                <MenuItem onClick={actions.clear} Icon={Icons.clear}>
+                    Clear
+                </MenuItem>
+                <MenuItem onClick={actions.remove} Icon={Icons.trash}>
+                    Delete
+                </MenuItem>
+            </Menu>
+        </TableCell>
     );
 }
 function InvoiceTableRow({ index, field }) {
@@ -148,6 +139,7 @@ function InvoiceTableRow({ index, field }) {
         `items.${index}.tax`,
         `items.${index}._ctx.id`,
     ] as any);
+
     useInvoiceLineEstimate(index, qty, rate, taxxable, lid);
     return (
         <Draggable key={index} draggableId={field.id} index={index}>
@@ -194,10 +186,18 @@ function InvoiceTableRow({ index, field }) {
                             />
                         </TableCell>
                         <TableCell className="p-0 px-1">
-                            <InputHelper index={index} formKey={"qty"} />
+                            <InputHelper
+                                index={index}
+                                type="number"
+                                formKey={"qty"}
+                            />
                         </TableCell>
                         <TableCell className="p-0 px-1">
-                            <InputHelper index={index} formKey={"price"} />
+                            <InputHelper
+                                index={index}
+                                type="number"
+                                formKey={"price"}
+                            />
                         </TableCell>
                         {profileEstimate && (
                             <TableCell
@@ -226,17 +226,42 @@ function InvoiceTableRow({ index, field }) {
                                 checkbox
                             />
                         </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <Menu>
-                                <MenuItem Icon={Icons.component}>
-                                    Components
-                                </MenuItem>
-                            </Menu>
-                        </TableCell>
+                        <InvoiceTableRowActions
+                            field={field}
+                            cid={lid}
+                            index={index}
+                        />
                     </TableRow>
                 );
             }}
         </Draggable>
+    );
+}
+function InvoiceTableHeader({ watchProfileEstimate }) {
+    return (
+        <TableHeader>
+            <TableRow>
+                <TableHead className="w-[25px]  px-1">#</TableHead>
+                <TableHead className="w-5 px-1">
+                    <Layers className="h-3.5 w-3.5" />
+                </TableHead>
+                <TableHead className="px-1">Item</TableHead>
+                <TableHead className="w-20  px-1">Swing</TableHead>
+                <TableHead className="w-20 px-1">Supplier</TableHead>
+                <TableHead className="w-14 px-1 text-center">Qty</TableHead>
+                <TableHead className="w-20 px-1">Cost</TableHead>
+                {watchProfileEstimate ? (
+                    <>
+                        <TableHead className="w-8 px-1">Rate</TableHead>
+                    </>
+                ) : (
+                    <></>
+                )}
+                <TableHead className="w-8 px-1 text-right">Total</TableHead>
+                <TableHead className="w-8 px-1 text-center">Tax</TableHead>
+                <TableHead className="w-10 px-1"></TableHead>
+            </TableRow>
+        </TableHeader>
     );
 }
 interface InputHelperProps {
@@ -273,6 +298,7 @@ function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
                     <Input
                         className="h-8 p-1 uppercase font-medium"
                         {...field}
+                        {...props}
                     />
                 )
             }

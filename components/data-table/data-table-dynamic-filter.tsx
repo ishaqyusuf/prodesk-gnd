@@ -24,8 +24,7 @@ export function DynamicFilter({
     listKey,
     ...props
 }: Props) {
-    const list = useAppSelector(state => state.slicers?.[listKey]);
-
+    const list = useAppSelector((state) => state.slicers?.[listKey]);
     useEffect(() => {
         // init();
         loadStaticList(listKey, list, loader);
@@ -36,7 +35,7 @@ export function DynamicFilter({
             <DataTableFacetedFilter2
                 column={table.getColumn(columnId)}
                 {...props}
-                options={(list as any)?.map(l => {
+                options={(list as any)?.map((l) => {
                     return typeof l === "object" ? l : { label: l, value: l };
                 })}
             />

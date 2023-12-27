@@ -84,7 +84,7 @@ function Footer({
         subTotal,
         tax,
         ccc,
-        cccPayment,
+        cccPercentage,
     } = useContext(SalesFormContext);
 
     const X = !floatingFooter ? TableRow : ({ children }) => children;
@@ -165,11 +165,11 @@ function Footer({
                                 <Money value={tax || 0} />
                             </TableCell>
                         </X>
-                        {cccPayment ? (
+                        {ccc ? (
                             <X>
                                 <TableHead>C.C.C ({cccPercentage}%)</TableHead>
                                 <TableCell className="whitespace-nowrap p-1">
-                                    <Money value={cccPayment || 0} />
+                                    <Money value={ccc || 0} />
                                 </TableCell>
                             </X>
                         ) : null}

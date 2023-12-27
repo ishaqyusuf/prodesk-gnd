@@ -1,5 +1,5 @@
 import { getSalesEstimates, getSalesOrder } from "@/app/_actions/sales/sales";
-import OrdersTableShell from "@/components/shells/orders-table-shell";
+import OrdersTableShell from "@/app/(auth)/sales/orders/components/orders-table-shell";
 import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";

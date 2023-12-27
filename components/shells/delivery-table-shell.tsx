@@ -9,7 +9,7 @@ import {
     CheckColumn,
     ColumnHeader,
     PrimaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
@@ -18,26 +18,26 @@ import {
     OrderInvoiceCell,
     OrderMemoCell,
     OrderPriorityFlagCell,
-    OrderProductionStatusCell
+    OrderProductionStatusCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import { labelValue, truthy } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 import { DeliverySelectionAction } from "../list-selection-action/delivery-selection-action";
 import {
     RowActionCell,
     RowActionMenuItem,
-    RowActionMoreMenu
+    RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
 import useQueryParams from "@/lib/use-query-params";
 
 export default function DeliveryTableShell<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
@@ -49,22 +49,22 @@ export default function DeliveryTableShell<T>({
             {
                 maxSize: 10,
                 id: "flags",
-                cell: ({ row }) => OrderPriorityFlagCell(row.original, true)
+                cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
             },
             {
                 accessorKey: "orderId",
                 cell: ({ row }) => OrderIdCell(row.original),
-                header: ColumnHeader("Order")
+                header: ColumnHeader("Order"),
             },
             {
                 accessorKey: "customer",
                 header: ColumnHeader("Customer"),
-                cell: ({ row }) => OrderCustomerCell(row.original.customer)
+                cell: ({ row }) => OrderCustomerCell(row.original.customer),
             },
             {
                 accessorKey: "memo",
                 header: ColumnHeader("Memo"),
-                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress)
+                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
             },
             ...truthy<any>(
                 queryParams.get("_deliveryStatus") == "ready",
@@ -78,23 +78,23 @@ export default function DeliveryTableShell<T>({
                                     {row?.original?.meta?.truck}
                                 </PrimaryCellContent>
                             </Cell>
-                        )
-                    }
+                        ),
+                    },
                 ],
                 [
                     {
                         accessorKey: "production",
                         header: ColumnHeader("Production"),
                         cell: ({ row }) =>
-                            OrderProductionStatusCell(row.original)
-                    }
+                            OrderProductionStatusCell(row.original),
+                    },
                 ]
             ),
 
             {
                 accessorKey: "status",
                 header: ColumnHeader("Delivery"),
-                cell: ({ row }) => <DeliveryStatusCell order={row.original} />
+                cell: ({ row }) => <DeliveryStatusCell order={row.original} />,
             },
             ..._FilterColumn("_status", "_customerId", "_deliveryStatus"),
             {
@@ -113,8 +113,8 @@ export default function DeliveryTableShell<T>({
                             </RowActionMoreMenu>
                         </RowActionCell>
                     </>
-                )
-            }
+                ),
+            },
         ],
         [data, isPending]
     );
@@ -135,8 +135,8 @@ export default function DeliveryTableShell<T>({
                         labelValue("Queued for Delivery", "delivery"),
                         labelValue("Ready For Delivery", "ready"),
                         labelValue("In Transit", "transit"),
-                        labelValue("Delivered", "delivered")
-                    ]
+                        labelValue("Delivered", "delivered"),
+                    ],
                 },
                 {
                     id: "_payment" as any,
@@ -145,22 +145,22 @@ export default function DeliveryTableShell<T>({
                     options: [
                         { label: "Paid", value: "Paid" },
                         // { label: "Part Paid", value: "Part" },
-                        { label: "Pending", value: "Pending" }
-                    ]
+                        { label: "Pending", value: "Pending" },
+                    ],
                 },
-                SalesCustomerFilter
+                SalesCustomerFilter,
             ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: "orderId, customer"
-                }
+                    title: "orderId, customer",
+                },
             ]}
             dateFilterColumns={[
                 {
                     id: "_date" as any,
-                    title: "Date"
-                }
+                    title: "Date",
+                },
             ]}
         />
     );

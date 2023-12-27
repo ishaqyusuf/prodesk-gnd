@@ -59,6 +59,7 @@ import {
     Delete,
     Mail,
     Layers,
+    Eraser,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -90,6 +91,7 @@ export const Icons = {
     hrm: LayoutTemplate,
     communitySettings: LayoutTemplate,
     component: Layers,
+    clear: Eraser,
     Email: Mail,
     jobs: Briefcase,
     customerService: ClipboardList,

@@ -121,11 +121,6 @@ function generateInvoiceItem(uid, baseItem: any = null) {
             sales_margin: "Default",
             ...(baseItem?.meta ?? {}),
             uid,
-            lineIndex: null,
-            line_index: null,
-        },
-        _ctx: {
-            id: generateRandomString(4),
         },
     } as any;
     // console.log("generating...", _);

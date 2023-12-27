@@ -7,20 +7,20 @@ import { useMemo, useState, useTransition } from "react";
 import {
     CheckColumn,
     ColumnHeader,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
     OrderCustomerCell,
     OrderIdCell,
     OrderInvoiceCell,
-    OrderMemoCell
+    OrderMemoCell,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import SalesEstimateMobileCell from "../mobile/sales/sales-estimate-mobile-cell";
@@ -28,7 +28,7 @@ import SalesEstimateMobileCell from "../mobile/sales/sales-estimate-mobile-cell"
 export default function EstimatesTableShell<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
@@ -43,9 +43,9 @@ export default function EstimatesTableShell<T>({
                           id: "order",
                           cell: ({ row }) => (
                               <SalesEstimateMobileCell order={row.original} />
-                          )
+                          ),
                       },
-                      ..._FilterColumn("_q", "_status", "_date", "_customerId")
+                      ..._FilterColumn("_q", "_status", "_date", "_customerId"),
                   ]
                 : [
                       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
@@ -54,7 +54,7 @@ export default function EstimatesTableShell<T>({
                           accessorKey: "orderId",
                           cell: ({ row }) =>
                               OrderIdCell(row.original, "/sales/estimate/slug"),
-                          header: ColumnHeader("Estimate #")
+                          header: ColumnHeader("Estimate #"),
                       },
                       {
                           accessorKey: "customer",
@@ -63,13 +63,13 @@ export default function EstimatesTableShell<T>({
                               OrderCustomerCell(
                                   row.original.customer,
                                   "/sales/customer/slug"
-                              )
+                              ),
                       },
                       {
                           accessorKey: "memo",
                           header: ColumnHeader("Address"),
                           cell: ({ row }) =>
-                              OrderMemoCell(row.original.shippingAddress)
+                              OrderMemoCell(row.original.shippingAddress),
                       },
                       {
                           accessorKey: "invoice",
@@ -79,7 +79,7 @@ export default function EstimatesTableShell<T>({
                                   order={row.original}
                                   isEstimate
                               />
-                          )
+                          ),
                       },
 
                       ..._FilterColumn("_q", "_status", "_date", "_customerId"),
@@ -91,8 +91,8 @@ export default function EstimatesTableShell<T>({
                           enableSorting: false,
                           cell: ({ row }) => (
                               <OrderRowAction estimate row={row.original} />
-                          )
-                      }
+                          ),
+                      },
                   ],
         [data, isPending]
     );
@@ -108,14 +108,14 @@ export default function EstimatesTableShell<T>({
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: "estimate id, customer..."
-                }
+                    title: "estimate id, customer...",
+                },
             ]}
             dateFilterColumns={[
                 {
                     id: "_date" as any,
-                    title: "Date"
-                }
+                    title: "Date",
+                },
             ]}
         />
     );

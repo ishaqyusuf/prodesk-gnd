@@ -218,8 +218,16 @@ export function nav(
     if (viewOrders || isAdmin) {
         routes.Sales.push(
             ...[
-                _route("Estimates", Icons.estimates, "/sales/estimates"), //employees,roles
-                _route("Orders", Icons.orders, "/sales/orders"), //employees,roles
+                _route(
+                    "Estimates",
+                    Icons.estimates,
+                    `/sales/estimates?_salesRepId=${session.user.id}`
+                ), //employees,roles
+                _route(
+                    "Orders",
+                    Icons.orders,
+                    `/sales/orders?_salesRepId=${session.user.id}`
+                ), //employees,roles
                 _route("Customers", Icons.user, "/sales/customers"),
             ]
         );

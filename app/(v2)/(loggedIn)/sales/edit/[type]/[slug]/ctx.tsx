@@ -1,5 +1,7 @@
 import { SalesFormResponse } from "@/app/(auth)/sales/_actions/get-sales-form";
 import { createContext } from "react";
+import { UseFieldArrayReturn } from "react-hook-form";
+import { ISalesFormItem } from "./type";
 
 export interface SalesFormContext {
     data: SalesFormResponse;
@@ -14,10 +16,13 @@ export interface SalesFormContext {
     paymentOption;
     labourCost;
     grandTotal;
-    cccPayment;
     cccPercentage;
     tax;
     subTotal;
     ccc;
 }
 export const SalesFormContext = createContext<SalesFormContext>({} as any);
+
+export const SalesRowContext = createContext<
+    UseFieldArrayReturn<ISalesForm, "items", "id">
+>({} as const);

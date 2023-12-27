@@ -1,6 +1,7 @@
 import {
     ISalesOrder,
     ISalesOrderForm,
+    ISalesOrderItemMeta,
     SaveOrderActionProps,
 } from "@/types/sales";
 import dayjs from "dayjs";
@@ -22,7 +23,23 @@ export default {
     initInvoiceItems,
     moreInvoiceLines,
     newInvoiceLine,
+    copySalesItem,
 };
+function copySalesItem(item) {
+    const { id, meta, createdAt, updatedAt, _ctx, ...itemData } = deepCopy(
+        item || {
+            meta: {},
+        }
+    ) as ISalesFormItem;
+    const { produced_qty, uid, ..._meta } = meta as ISalesOrderItemMeta;
+    return {
+        ...itemData,
+        _ctx: {
+            id: generateRandomString(4),
+        },
+        meta: _meta,
+    };
+}
 function formData(data, paidAmount): SaveOrderActionProps {
     let {
         id,
@@ -111,12 +128,17 @@ function initInvoiceItems(items: ISalesFormItem[] | undefined) {
 }
 function generateInvoiceItem(baseItem: any = null) {
     if (!baseItem) baseItem = { meta: {} };
-    let price = baseItem?.rate || baseItem?.price;
+    // let price = baseItem?.rate || baseItem?.price || null;
 
     const _: ISalesFormItem = {
-        ...baseItem,
+        description: null,
+        swing: null,
+        supplier: null,
+        qty: null,
         rate: null,
-        price,
+        tax: null,
+        price: null,
+        ...baseItem,
         meta: {
             tax: true, // "Tax",
             sales_margin: "Default",
@@ -124,6 +146,7 @@ function generateInvoiceItem(baseItem: any = null) {
         },
         _ctx: {
             id: generateRandomString(4),
+            ...(baseItem?._ctx ?? {}),
         },
     } as any;
     // console.log("generating...", _);

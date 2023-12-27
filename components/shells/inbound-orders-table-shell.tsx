@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import {
     CheckColumn,
     ColumnHeader,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
@@ -17,19 +17,19 @@ import {
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-    OrderStatus
+    OrderStatus,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import StatusBadge from "../status-badge";
 import {
     RowActionCell,
     RowActionMenuItem,
-    RowActionMoreMenu
+    RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
 import { _updateOrderInventoryStatus } from "@/app/_actions/sales/sales-inventory";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ import { toast } from "sonner";
 export default function InboundOrdersTableShell<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
     async function setInventoryStatus(item, status) {
@@ -51,13 +51,13 @@ export default function InboundOrdersTableShell<T>({
             {
                 maxSize: 10,
                 id: "flags",
-                cell: ({ row }) => OrderPriorityFlagCell(row.original, true)
+                cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
             },
             {
                 accessorKey: "orderId",
                 cell: ({ row }) =>
                     OrderIdCell(row.original, "/sales/order/slug"),
-                header: ColumnHeader("Order")
+                header: ColumnHeader("Order"),
             },
             {
                 accessorKey: "customer",
@@ -66,12 +66,12 @@ export default function InboundOrdersTableShell<T>({
                     OrderCustomerCell(
                         row.original.customer,
                         "/sales/customer/slug"
-                    )
+                    ),
             },
             {
                 accessorKey: "memo",
                 header: ColumnHeader("Memo"),
-                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress)
+                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
             },
 
             {
@@ -81,7 +81,7 @@ export default function InboundOrdersTableShell<T>({
                     <StatusBadge
                         status={row.original.inventoryStatus || "Pending"}
                     />
-                )
+                ),
             },
             ..._FilterColumn(
                 "_status",
@@ -103,7 +103,7 @@ export default function InboundOrdersTableShell<T>({
                                 SubMenu={
                                     <>
                                         {["Ordered", "Available"].map(
-                                            status => (
+                                            (status) => (
                                                 <RowActionMenuItem
                                                     onClick={() =>
                                                         setInventoryStatus(
@@ -124,8 +124,8 @@ export default function InboundOrdersTableShell<T>({
                             </RowActionMenuItem>
                         </RowActionMoreMenu>
                     </RowActionCell>
-                )
-            }
+                ),
+            },
         ],
         [data, isPending]
     );
@@ -147,9 +147,9 @@ export default function InboundOrdersTableShell<T>({
                         { label: "Production Completed", value: "Completed" },
                         {
                             label: "Production Not Assigned",
-                            value: "Unassigned"
-                        }
-                    ]
+                            value: "Unassigned",
+                        },
+                    ],
                 },
                 {
                     id: "_payment" as any,
@@ -158,22 +158,22 @@ export default function InboundOrdersTableShell<T>({
                     options: [
                         { label: "Paid", value: "Paid" },
                         // { label: "Part Paid", value: "Part" },
-                        { label: "Pending", value: "Pending" }
-                    ]
+                        { label: "Pending", value: "Pending" },
+                    ],
                 },
-                SalesCustomerFilter
+                SalesCustomerFilter,
             ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: "orderId, customer"
-                }
+                    title: "orderId, customer",
+                },
             ]}
             dateFilterColumns={[
                 {
                     id: "_date" as any,
-                    title: "Date"
-                }
+                    title: "Date",
+                },
             ]}
         />
     );

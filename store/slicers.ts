@@ -85,6 +85,7 @@ export interface ISlicer {
     staticProducts: InventoryProducts[];
     salesPaymentCustomers: ICustomer[];
     staticProductCategories: string[];
+    staticList: any[];
     refreshToken: string | undefined;
     href: null;
 }
@@ -208,4 +209,3 @@ export function navigateTo(href) {
         })
     );
 }
-

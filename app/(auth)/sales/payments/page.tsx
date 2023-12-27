@@ -1,5 +1,5 @@
 import { getSalesEstimates, getSalesOrder } from "@/app/_actions/sales/sales";
-import OrdersTableShell from "@/components/shells/orders-table-shell";
+import OrdersTableShell from "@/app/(auth)/sales/orders/components/orders-table-shell";
 import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder, ISalesPayment } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
@@ -15,26 +15,26 @@ import DeletePaymentPrompt from "@/components/modals/delete-payment-prompt";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sales Payment",
+    title: "Sales Payment",
 };
 interface Props {}
 export default async function SalesPaymentPage({ searchParams }) {
-  const response = await getsalesPayments(queryParams(searchParams));
-  return (
-    <div className="space-y-4 px-8">
-      <Breadcrumbs>
-        <BreadLink isFirst title="Sales" />
-        <BreadLink isLast title="Payments" />
-      </Breadcrumbs>
-      <PageHeader
-        title="Sales Payments"
-        permissions={["editOrders"]}
-        newDialog="salesPaymentCustomer"
-      />
-      <SalesPaymentTableShell searchParams={searchParams} {...response} />
-      <SelectSalesPaymentCustomerModal />
-      <SalesPaymentModal />
-      <DeletePaymentPrompt />
-    </div>
-  );
+    const response = await getsalesPayments(queryParams(searchParams));
+    return (
+        <div className="space-y-4 px-8">
+            <Breadcrumbs>
+                <BreadLink isFirst title="Sales" />
+                <BreadLink isLast title="Payments" />
+            </Breadcrumbs>
+            <PageHeader
+                title="Sales Payments"
+                permissions={["editOrders"]}
+                newDialog="salesPaymentCustomer"
+            />
+            <SalesPaymentTableShell searchParams={searchParams} {...response} />
+            <SelectSalesPaymentCustomerModal />
+            <SalesPaymentModal />
+            <DeletePaymentPrompt />
+        </div>
+    );
 }

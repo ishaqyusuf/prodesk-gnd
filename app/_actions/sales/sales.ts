@@ -174,6 +174,7 @@ export async function whereSales(query: SalesQueryParams) {
             where.status = "In Transit";
             break;
     }
+    if (query._salesRepId) where.salesRepId = +query._salesRepId;
     return where;
 }
 export async function getSalesOrder(

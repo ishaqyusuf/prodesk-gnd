@@ -10,39 +10,39 @@ import {
     DateCellContent,
     PrimaryCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import Money from "../money";
 import { IProductVariant } from "@/types/product";
 import {
     DeleteRowAction,
     EditRowAction,
-    RowActionCell
+    RowActionCell,
 } from "../data-table/data-table-row-actions";
 import { deleteLegacyProductAction } from "@/app/_actions/sales-products/crud";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import {
     getStaticCategories,
-    getStaticProducts
+    getStaticProducts,
 } from "@/app/_actions/sales-products/statics";
 import { DynamicFilter } from "../data-table/data-table-dynamic-filter";
 
 export default function ProductsTableShell({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<IProductVariant>) {
     const [isPending, startTransition] = useTransition();
 
     const prodCategories = useAppSelector(
-        s => s.slicers.staticProductCategories
+        (s) => s.slicers.staticProductCategories
     );
-    const staticProducts = useAppSelector(s => s.slicers.staticProducts);
+    const staticProducts = useAppSelector((s) => s.slicers.staticProducts);
     useEffect(() => {
         loadStaticList("staticProducts", staticProducts, getStaticProducts);
     }, []);
@@ -62,7 +62,7 @@ export default function ProductsTableShell({
                         </DateCellContent>
                     </Cell>
                 ),
-                header: ColumnHeader("#")
+                header: ColumnHeader("#"),
             },
             {
                 accessorKey: "product",
@@ -78,7 +78,7 @@ export default function ProductsTableShell({
                             {row.original.title}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             {
                 accessorKey: "category",
@@ -89,7 +89,7 @@ export default function ProductsTableShell({
                             {row.original.product?.category}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             {
                 accessorKey: "price",
@@ -100,7 +100,7 @@ export default function ProductsTableShell({
                             <Money value={row.original.price} />
                         </PrimaryCellContent>
                     </Cell>
-                )
+                ),
             },
 
             ..._FilterColumn("_q", "_category"),
@@ -118,8 +118,8 @@ export default function ProductsTableShell({
                             action={deleteLegacyProductAction}
                         />
                     </RowActionCell>
-                )
-            }
+                ),
+            },
         ],
         [data, isPending]
     );
@@ -140,13 +140,13 @@ export default function ProductsTableShell({
                         columnId="_category"
                         loader={getStaticCategories}
                     />
-                )
+                ),
             ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: ""
-                }
+                    title: "",
+                },
             ]}
         />
     );

@@ -186,6 +186,7 @@ export interface SalesQueryParams extends BaseQuery {
     type?: IOrderType;
     _dateType?: "createdAt" | "prodDueDate";
     deliveryOption?: "delivery" | "pickup";
+    _salesRepId?;
     _deliveryStatus?:
         | "pending production"
         | "pending"

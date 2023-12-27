@@ -1,5 +1,5 @@
 import { getSalesOrder } from "@/app/_actions/sales/sales";
-import OrdersTableShell from "@/components/shells/orders-table-shell";
+import OrdersTableShell from "@/app/(auth)/sales/orders/components/orders-table-shell";
 import { queryParams } from "@/app/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/print/order/order-printer";
@@ -15,14 +15,14 @@ import BackOrderModal from "@/components/modals/sales/back-order-modal";
 import AssignProdModal from "@/components/modals/assign-prod-modal";
 
 export const metadata: Metadata = {
-    title: "Back Orders"
+    title: "Back Orders",
 };
 interface Props {}
 export default async function OrdersPage({ searchParams }) {
     // await _restoreSalesOrder();
     const response = await getSalesOrder({
         ...queryParams(searchParams),
-        _backOrder: true
+        _backOrder: true,
     });
     return (
         <SalesTabLayout query={searchParams}>

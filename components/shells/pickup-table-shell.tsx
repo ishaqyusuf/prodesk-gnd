@@ -7,7 +7,7 @@ import { useMemo, useState, useTransition } from "react";
 import {
     CheckColumn,
     ColumnHeader,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
@@ -17,14 +17,14 @@ import {
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-    OrderStatus
+    OrderStatus,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
 import { PickupStatusCell } from "../sales/pickup-status-cell";
@@ -33,7 +33,7 @@ import { PickupAction } from "../actions/pickup-action";
 export default function PickupTableShell<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
@@ -44,32 +44,32 @@ export default function PickupTableShell<T>({
             {
                 maxSize: 10,
                 id: "flags",
-                cell: ({ row }) => OrderPriorityFlagCell(row.original, true)
+                cell: ({ row }) => OrderPriorityFlagCell(row.original, true),
             },
             {
                 accessorKey: "orderId",
                 cell: ({ row }) => OrderIdCell(row.original),
-                header: ColumnHeader("Order")
+                header: ColumnHeader("Order"),
             },
             {
                 accessorKey: "customer",
                 header: ColumnHeader("Customer"),
-                cell: ({ row }) => OrderCustomerCell(row.original.customer)
+                cell: ({ row }) => OrderCustomerCell(row.original.customer),
             },
             {
                 accessorKey: "memo",
                 header: ColumnHeader("Memo"),
-                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress)
+                cell: ({ row }) => OrderMemoCell(row.original.shippingAddress),
             },
             {
                 accessorKey: "production",
                 header: ColumnHeader("Production"),
-                cell: ({ row }) => OrderProductionStatusCell(row.original)
+                cell: ({ row }) => OrderProductionStatusCell(row.original),
             },
             {
                 accessorKey: "status",
                 header: ColumnHeader("Pickup"),
-                cell: ({ row }) => <PickupStatusCell order={row.original} />
+                cell: ({ row }) => <PickupStatusCell order={row.original} />,
             },
             ..._FilterColumn("_status", "_customerId", "_deliveryStatus"),
             {
@@ -80,8 +80,8 @@ export default function PickupTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <PickupAction item={row.original}></PickupAction>
-                )
-            }
+                ),
+            },
         ],
         [data, isPending]
     );
@@ -101,8 +101,8 @@ export default function PickupTableShell<T>({
                         labelValue("Pending Production", "pending production"),
                         labelValue("Ready For Delivery", "ready"),
                         labelValue("In Transit", "transit"),
-                        labelValue("Delivered", "delivered")
-                    ]
+                        labelValue("Delivered", "delivered"),
+                    ],
                 },
                 {
                     id: "_payment" as any,
@@ -111,22 +111,22 @@ export default function PickupTableShell<T>({
                     options: [
                         { label: "Paid", value: "Paid" },
                         // { label: "Part Paid", value: "Part" },
-                        { label: "Pending", value: "Pending" }
-                    ]
+                        { label: "Pending", value: "Pending" },
+                    ],
                 },
-                SalesCustomerFilter
+                SalesCustomerFilter,
             ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: "orderId, customer"
-                }
+                    title: "orderId, customer",
+                },
             ]}
             dateFilterColumns={[
                 {
                     id: "_date" as any,
-                    title: "Date"
-                }
+                    title: "Date",
+                },
             ]}
         />
     );

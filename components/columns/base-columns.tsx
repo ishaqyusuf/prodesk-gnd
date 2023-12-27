@@ -154,6 +154,7 @@ type FilterKeys =
     | "_deliveryStatus"
     | "_task"
     | "_showInvoiceType"
+    | "_salesRepId"
     | "_show";
 export function _FilterColumn(...assessorKeys: FilterKeys[]) {
     const filters = assessorKeys.map((accessorKey) => ({

@@ -11,19 +11,19 @@ import {
     DateCellContent,
     PrimaryCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 import { DataTable } from "../data-table/data-table";
 import {
     OrderCustomerCell,
     OrderIdCell,
-    OrderInvoiceCell
+    OrderInvoiceCell,
 } from "../columns/sales-columns";
 import { ISalesOrder, ISalesPayment } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../filters/sales-customer-filter";
+import { SalesCustomerFilter } from "../../app/(auth)/sales/orders/components/sales-customer-filter";
 import Money from "../money";
 import { DeleteRowAction } from "../data-table/data-table-row-actions";
 import { deleteSalesPayment } from "@/app/_actions/sales/sales-payment";
@@ -32,7 +32,7 @@ import { openModal } from "@/lib/modal";
 export default function SalesPaymentTableShell({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ISalesPayment>) {
     const [isPending, startTransition] = useTransition();
 
@@ -52,7 +52,7 @@ export default function SalesPaymentTableShell({
                         </DateCellContent>
                     </Cell>
                 ),
-                header: ColumnHeader("#")
+                header: ColumnHeader("#"),
             },
             {
                 accessorKey: "customer",
@@ -61,7 +61,7 @@ export default function SalesPaymentTableShell({
                     OrderCustomerCell(
                         row.original.customer as any,
                         "/sales/customer/slug"
-                    )
+                    ),
             },
             {
                 accessorKey: "order",
@@ -75,7 +75,7 @@ export default function SalesPaymentTableShell({
                             {row.original.order.orderId}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             {
                 accessorKey: "invoice",
@@ -89,7 +89,7 @@ export default function SalesPaymentTableShell({
                             {row.original.meta.checkNo}
                         </SecondaryCellContent>
                     </Cell>
-                )
+                ),
             },
             ..._FilterColumn("_q", "_status", "_date", "_customerId"),
             {
@@ -104,13 +104,13 @@ export default function SalesPaymentTableShell({
                             row={row}
                             noRefresh
                             noToast
-                            action={async id => {
+                            action={async (id) => {
                                 openModal("deletePaymentPrompt", row.original);
                             }}
                         />
                     </>
-                )
-            }
+                ),
+            },
         ],
         [data, isPending]
     );
@@ -124,14 +124,14 @@ export default function SalesPaymentTableShell({
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: ""
-                }
+                    title: "",
+                },
             ]}
             dateFilterColumns={[
                 {
                     id: "_date" as any,
-                    title: "Date"
-                }
+                    title: "Date",
+                },
             ]}
         />
     );
