@@ -5,6 +5,7 @@ import { SalesFormContext } from "../ctx";
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import { addPercentage } from "@/lib/utils";
 import { ISalesForm } from "../type";
+import { _getSalesItemPriceByProfile } from "../../_data-access/get-sales-item-price.dac";
 
 export function useInvoiceItem(index) {
     const form = useFormContext<ISalesOrder>();
@@ -73,7 +74,16 @@ export function useInvoiceItem(index) {
         qty,
         rate,
         total,
-        async itemSelected(selection) {},
+        async itemSelected(e) {
+            let data = (e as any)?.data as any;
+            const price = await _getSalesItemPriceByProfile(data?.description);
+            console.log(price);
+            if (price) {
+                form.setValue(`items.${index}.price`, price);
+                if (!form.getValues(`items.${index}.qty`))
+                    form.setValue(`items.${index}.qty`, 1);
+            }
+        },
     };
 }
 

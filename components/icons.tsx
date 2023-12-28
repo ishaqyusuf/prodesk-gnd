@@ -63,6 +63,7 @@ import {
     ArrowUp,
     ArrowDown,
     Move,
+    Rocket,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -84,6 +85,7 @@ export const Icons = {
         </Link>
     ),
     Merge: Merge,
+    Rocket: Rocket,
     Delete: Delete,
     orders: ShoppingBag,
     project: FolderGit2,

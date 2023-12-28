@@ -8,6 +8,8 @@ import { DatePicker } from "@/components/date-range-picker";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
 import useSaveSalesHook from "../hooks/use-save-sales";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
@@ -25,6 +27,16 @@ export default function SalesFormAction() {
                         : "#EST"}{" "}
                     {ctx.data?.form?.orderId || "New Sales"}
                 </h2>
+            </div>
+            <div className="flex-1 px-4">
+                <Button asChild size="sm">
+                    <Link
+                        href={`/sales/${ctx.data.form.type}/${ctx.data.form.slug}/form`}
+                    >
+                        {/* <Icons.Rocket /> */}
+                        <span>V1 Mode</span>
+                    </Link>
+                </Button>
             </div>
             <div className="flex space-x-2">
                 {(ctx.mockupPercentage || 0) > 0 && (

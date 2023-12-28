@@ -31,6 +31,8 @@ import salesUtils from "../sales-utils";
 import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import routeLeaveHandler from "../route-leave-handler";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Props {
     data: SalesFormResponse;
@@ -227,6 +229,16 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                         <h2 className="text-2xl font-bold tracking-tight">
                             {watchOrderId || newTitle}
                         </h2>
+                    </div>
+                    <div className="flex-1 px-4">
+                        <Button asChild variant={"destructive"} size="sm">
+                            <Link
+                                href={`/sales/edit/${data.form.type}/${data.form.slug}`}
+                            >
+                                {/* <Icons.Rocket /> */}
+                                <span>V2 Mode</span>
+                            </Link>
+                        </Button>
                     </div>
                     <div className="sitems-center flex space-x-2">
                         {(mockPercent || 0) > 0 && (
