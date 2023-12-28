@@ -115,12 +115,15 @@ function initInvoiceItems(items: ISalesFormItem[] | undefined) {
         .fill(null)
         .map((c, uid) => {
             const _ = generateInvoiceItem(_itemsByIndex[uid]);
+
+            let taxxable: any = _.meta?.tax || false;
+            if (typeof taxxable == "string") taxxable = taxxable == "Tax";
+            if (_.meta) _.meta.tax = taxxable;
             footer.rows[uid] = {
                 rowIndex: uid,
-                taxxable: _.meta?.tax == "Tax",
+                taxxable,
                 total: 0,
             };
-            if (_.meta) _.meta.tax = _.meta.tax == "Tax";
             return _;
         });
 
