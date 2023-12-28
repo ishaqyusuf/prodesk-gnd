@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { FieldPath, useFormContext } from "react-hook-form";
 
 interface Props<T> extends InputProps {
-    name: FieldPath<T>; // @ts-ignore
+    // @ts-ignore
+    name: FieldPath<T>;
     placeholder?;
     switchInput?: Boolean;
 }

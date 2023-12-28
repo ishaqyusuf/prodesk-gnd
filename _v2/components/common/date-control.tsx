@@ -14,7 +14,8 @@ import { useState } from "react";
 import { FieldPath, useFormContext } from "react-hook-form";
 
 interface Props<T> {
-    name: FieldPath<T>; // @ts-ignore
+    // @ts-ignore
+    name: FieldPath<T>;
     placeholder?;
     className?;
     format?;
