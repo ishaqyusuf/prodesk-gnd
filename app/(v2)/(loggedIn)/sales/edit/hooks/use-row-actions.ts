@@ -1,6 +1,6 @@
-import salesFormUtils from "./sales-form-utils";
+import salesFormUtils from "../sales-form-utils";
 import { useContext } from "react";
-import { SalesFormContext, SalesRowContext } from "./ctx";
+import { SalesFormContext, SalesRowContext } from "../ctx";
 import { deepCopy } from "@/lib/deep-copy";
 
 export default function useSalesInvoiceRowActions(index, id, field) {

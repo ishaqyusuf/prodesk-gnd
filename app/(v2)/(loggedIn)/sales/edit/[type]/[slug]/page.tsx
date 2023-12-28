@@ -1,5 +1,5 @@
 import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
-import EditSalesForm from "./edit-sales-form";
+
 import { _getSalesFormAction } from "@/app/(auth)/sales/_actions/get-sales-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
@@ -7,6 +7,7 @@ import {
     OrderViewCrumb,
     OrdersCrumb,
 } from "@/components/breadcrumbs/links";
+import EditSalesForm from "../../components/form";
 
 export default async function EditSalesPage({ searchParams, params }) {
     const { type, slug } = params;

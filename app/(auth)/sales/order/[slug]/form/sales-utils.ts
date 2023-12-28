@@ -12,7 +12,7 @@ import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import {
     ISalesForm,
     ISalesFormItem,
-} from "@/app/(v2)/(loggedIn)/sales/edit/[type]/[slug]/type";
+} from "@/app/(v2)/(loggedIn)/sales/edit/type";
 // type form =
 export default {
     calculatePaymentTerm,
@@ -97,12 +97,12 @@ function initInvoiceItems(items: ISalesFormItem[] | undefined) {
         .fill(null)
         .map((c, uid) => {
             const _ = generateInvoiceItem(uid, _itemsByIndex[uid]);
+            if (_.meta) _.meta.tax = _.meta.tax == true || _.meta.tax == "Tax";
             footer.rows[uid] = {
                 rowIndex: uid,
-                taxxable: _.meta?.tax == "Tax",
+                taxxable: _.meta?.tax,
                 total: 0,
             };
-            if (_.meta) _.meta.tax = _.meta.tax == "Tax";
             return _;
         });
 
@@ -117,7 +117,7 @@ function generateInvoiceItem(uid, baseItem: any = null) {
         rate: null,
         price,
         meta: {
-            tax: "Tax",
+            tax: true,
             sales_margin: "Default",
             ...(baseItem?.meta ?? {}),
             uid,

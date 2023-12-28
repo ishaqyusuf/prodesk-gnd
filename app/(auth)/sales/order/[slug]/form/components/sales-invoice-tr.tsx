@@ -156,8 +156,9 @@ function TaxSwitchCell({
         true
     );
     React.useEffect(() => {
-        const v = form.getValues(keyName) == "Non";
-        if (v) setChecked(false);
+        const v = form.getValues(keyName);
+        // if (v)
+        setChecked(v);
     }, []);
     return (
         <Checkbox
@@ -166,7 +167,7 @@ function TaxSwitchCell({
             checked={checked}
             onCheckedChange={(e) => {
                 setChecked(e);
-                form.setValue(keyName, e ? "Tax" : "Non");
+                form.setValue(keyName, e);
                 store.dispatch(
                     updateFooterInfo({
                         rowIndex,

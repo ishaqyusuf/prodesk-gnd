@@ -2,7 +2,7 @@ import Money from "@/components/money";
 import { useLoader } from "@/lib/use-loader";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { ISalesForm } from "./type";
+import { ISalesForm } from "../type";
 import {
     Table,
     TableBody,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { SalesFormContext } from "./ctx";
+import { SalesFormContext } from "../ctx";
 import { IPaymentOptions } from "@/types/sales";
 
 export default function EstimateFooter({}) {

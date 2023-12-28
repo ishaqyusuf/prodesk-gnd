@@ -13,7 +13,7 @@ import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import {
     ISalesForm,
     ISalesFormItem,
-} from "@/app/(v2)/(loggedIn)/sales/edit/[type]/[slug]/type";
+} from "@/app/(v2)/(loggedIn)/sales/edit/type";
 // type form =
 export default {
     calculatePaymentTerm,

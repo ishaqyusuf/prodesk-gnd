@@ -1,19 +1,15 @@
 "use client";
 
 import { SalesFormResponse } from "@/app/(auth)/sales/_actions/get-sales-form";
-import salesUtils from "@/app/(auth)/sales/order/[slug]/form/sales-utils";
 import { Form } from "@/components/ui/form";
-import { ISalesOrder } from "@/types/sales";
 import { FormProvider, useForm } from "react-hook-form";
 import InvoiceTable from "./invoice-table";
-import { SalesFormContext } from "./ctx";
-import { ISalesForm } from "./type";
+import { SalesFormContext } from "../ctx";
+import { ISalesForm } from "../type";
 import { useState } from "react";
-import salesFormUtils from "./sales-form-utils";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import salesFormUtils from "../sales-form-utils";
 import InvoiceItemsSelection from "./selection-action";
-import useItemSelection from "./use-item-selection";
+import useItemSelection from "../hooks/use-item-selection";
 
 interface Props {
     data: SalesFormResponse;

@@ -1,13 +1,28 @@
 import { ISalesOrder } from "@/types/sales";
 import { useContext, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { SalesFormContext } from "./ctx";
+import { SalesFormContext } from "../ctx";
 import { convertToNumber, toFixed } from "@/lib/use-number";
 import { addPercentage } from "@/lib/utils";
-import { ISalesForm } from "./type";
+import { ISalesForm } from "../type";
 
-export function useInvoiceLineEstimate(index, qty, unitPrice, taxxable, lid) {
+export function useInvoiceItem(index) {
     const form = useFormContext<ISalesOrder>();
+    const [
+        qty,
+        rate,
+        total,
+        taxxable,
+        // tax,
+        lid,
+    ] = form.watch([
+        `items.${index}.qty`,
+        `items.${index}.price`,
+        `items.${index}.total`,
+        `items.${index}.meta.tax`,
+        // `items.${index}.tax`,
+        `items.${index}._ctx.id`,
+    ] as any);
     const {
         data,
         profileEstimate,
@@ -19,11 +34,11 @@ export function useInvoiceLineEstimate(index, qty, unitPrice, taxxable, lid) {
     } = useContext(SalesFormContext);
 
     useEffect(() => {
-        console.log([qty, unitPrice]);
+        console.log([qty, rate]);
         let _rate =
             (profitRate && profileEstimate
-                ? +toFixed(Number(unitPrice) / Number(profitRate || 1))
-                : unitPrice) || 0;
+                ? +toFixed(Number(rate) / Number(profitRate || 1))
+                : rate) || 0;
         if (toggleMockup) _rate = addPercentage(_rate, mockupPercentage);
         form.setValue(`items.${index}.rate`, _rate);
         const total = +toFixed(convertToNumber(qty * _rate, 0)) || 0;
@@ -42,15 +57,10 @@ export function useInvoiceLineEstimate(index, qty, unitPrice, taxxable, lid) {
             ...old,
             [lid]: ls,
         }));
-
-        // Object.entries(ls).map(([k, v]) =>
-        //     form.setValue(`_lineSummary.${lid}.${k}` as any, v)
-        // );
-        // console.log(ls);
     }, [
         qty,
         lid,
-        unitPrice,
+        rate,
         taxxable,
         profileEstimate,
         profitRate,
@@ -58,6 +68,13 @@ export function useInvoiceLineEstimate(index, qty, unitPrice, taxxable, lid) {
         toggleMockup,
         index,
     ]);
+    return {
+        lid,
+        qty,
+        rate,
+        total,
+        async itemSelected(selection) {},
+    };
 }
 
 export function useInvoiceTotalEstimate() {

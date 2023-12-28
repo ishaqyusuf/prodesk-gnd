@@ -20,22 +20,22 @@ import { Layers } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
-import { SalesFormContext, SalesRowContext } from "./ctx";
+import { SalesFormContext, SalesRowContext } from "../ctx";
 import AutoComplete from "@/components/common/auto-complete";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/money";
 import {
-    useInvoiceLineEstimate,
+    useInvoiceItem,
     useInvoiceTotalEstimate,
-} from "./use-invoice-estimate";
+} from "../hooks/use-invoice-estimate";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
 import { Icons } from "@/components/icons";
-import { ISalesForm } from "./type";
+import { ISalesForm } from "../type";
 import EstimateFooter from "./estimate-footer";
 import { Button } from "@/components/ui/button";
 import salesUtils from "@/app/(auth)/sales/order/[slug]/form/sales-utils";
-import salesFormUtils from "./sales-form-utils";
-import useSalesInvoiceRowActions from "./use-row-actions";
+import salesFormUtils from "../sales-form-utils";
+import useSalesInvoiceRowActions from "../hooks/use-row-actions";
 import { toast } from "sonner";
 
 export default function InvoiceTable() {
@@ -113,16 +113,8 @@ export default function InvoiceTable() {
 function InvoiceTableRow({ index, field, length }) {
     const { data, profileEstimate } = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
-    const [qty, rate, total, taxxable, tax, lid] = form.watch([
-        `items.${index}.qty`,
-        `items.${index}.price`,
-        `items.${index}.total`,
-        `items.${index}.meta.tax`,
-        `items.${index}.tax`,
-        `items.${index}._ctx.id`,
-    ] as any);
+    const item = useInvoiceItem(index);
 
-    useInvoiceLineEstimate(index, qty, rate, taxxable, lid);
     return (
         <Draggable key={index} draggableId={field.id} index={index}>
             {(provided) => {
@@ -147,6 +139,7 @@ function InvoiceTableRow({ index, field, length }) {
                         <TableCell className="p-0 px-1 py-0.5">
                             <InputHelper
                                 index={index}
+                                onSelect={item.itemSelected}
                                 formKey={"description"}
                                 itemText={"description"}
                                 itemValue={"description"}
@@ -188,7 +181,7 @@ function InvoiceTableRow({ index, field, length }) {
                                 className="p-0 px-1"
                             >
                                 <Label className="whitespace-nowrap">
-                                    <Money value={rate} />
+                                    <Money value={item.rate} />
                                 </Label>
                             </TableCell>
                         )}
@@ -198,7 +191,7 @@ function InvoiceTableRow({ index, field, length }) {
                             className="p-0 px-1"
                         >
                             <Label className="whitespace-nowrap">
-                                <Money value={total} />
+                                <Money value={item.total} />
                             </Label>
                         </TableCell>
                         <TableCell className="p-0 px-1">
@@ -210,7 +203,7 @@ function InvoiceTableRow({ index, field, length }) {
                         </TableCell>
                         <InvoiceTableRowActions
                             field={field}
-                            cid={lid}
+                            cid={item.lid}
                             length={length}
                             index={index}
                         />

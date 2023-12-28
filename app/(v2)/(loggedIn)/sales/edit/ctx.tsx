@@ -2,7 +2,7 @@ import { SalesFormResponse } from "@/app/(auth)/sales/_actions/get-sales-form";
 import { createContext } from "react";
 import { UseFieldArrayReturn } from "react-hook-form";
 import { ISalesForm, ISalesFormItem } from "./type";
-import { ItemSelectionReturnType } from "./use-item-selection";
+import { ItemSelectionReturnType } from "./hooks/use-item-selection";
 
 export interface SalesFormContext {
     data: SalesFormResponse;
