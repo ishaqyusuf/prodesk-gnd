@@ -54,9 +54,21 @@ export default function SalesFormAction() {
                     label="Save"
                     Icon={null}
                 >
-                    <MenuItem Icon={Icons.save}>Save</MenuItem>
-                    <MenuItem Icon={Icons.saveAndClose}>Save & Close</MenuItem>
-                    <MenuItem Icon={Icons.add}>Save & New</MenuItem>
+                    <MenuItem Icon={Icons.save} onClick={() => saveHook.save()}>
+                        Save
+                    </MenuItem>
+                    <MenuItem
+                        Icon={Icons.saveAndClose}
+                        onClick={() => saveHook.save("close")}
+                    >
+                        Save & Close
+                    </MenuItem>
+                    <MenuItem
+                        Icon={Icons.add}
+                        onClick={() => saveHook.save("new")}
+                    >
+                        Save & New
+                    </MenuItem>
                 </Menu>
             </div>
         </div>
