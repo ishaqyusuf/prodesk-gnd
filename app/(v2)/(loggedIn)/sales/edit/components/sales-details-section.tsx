@@ -5,6 +5,7 @@ import SelectControl from "@/_v2/components/common/select-control";
 import transformOptions from "@/_v2/lib/transform-option";
 import { ISalesForm } from "../type";
 import { FieldPath, FieldValues } from "react-hook-form";
+import InputControl from "@/_v2/components/common/input-control";
 
 export default function SalesDetailsSection() {
     const ctx = useContext(SalesFormContext);
@@ -22,8 +23,29 @@ export default function SalesDetailsSection() {
                             "title",
                             "title"
                         )}
-                        className="h-8 min-w-[100px]"
+                        className="h-8 min-w-[150px]"
                         placeholder="Profile"
+                    />
+                </InfoLine>
+                <InfoLine label="Q.B Order #">
+                    <InputControl<ISalesForm>
+                        className="h-8 w-[150px] uppercase"
+                        name="meta.qb"
+                    />
+                </InfoLine>
+                <InfoLine label="Delivery Option">
+                    <SelectControl<ISalesForm>
+                        name="deliveryOption"
+                        options={["pickup", "delivery"]}
+                        className="h-8 min-w-[150px]"
+                        placeholder="Profile"
+                    />
+                </InfoLine>
+                <InfoLine label="Mockup %">
+                    <InputControl<ISalesForm>
+                        className="h-8 w-[150px] uppercase"
+                        type="number"
+                        name="meta.mockupPercentage"
                     />
                 </InfoLine>
             </div>

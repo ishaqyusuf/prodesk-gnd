@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { FieldPath, UseFormProps, useFormContext } from "react-hook-form";
 
 interface Props<T> {
-    name: FieldPath<T>;
+    name: FieldPath<T>; // @ts-ignore
     placeholder?;
     options?: any[];
     className?;
