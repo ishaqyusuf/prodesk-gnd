@@ -124,6 +124,7 @@ export type ModalName =
     | "prodItemUpdate"
     | "product"
     | "project"
+    | "salesAddressForm"
     | "salesComponent"
     | "salesPayment"
     | "salesTimeline"

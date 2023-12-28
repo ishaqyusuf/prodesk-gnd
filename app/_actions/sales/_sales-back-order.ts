@@ -9,7 +9,7 @@ import { SalesPayments } from "@prisma/client";
 
 import { prisma } from "@/db";
 import { applyPaymentAction } from "./sales-payment";
-import { _saveSales } from "@/data-access/sales/save-sales.persistence";
+import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.persistence";
 import salesFormUtils from "@/app/(v2)/(loggedIn)/sales/edit/sales-form-utils";
 
 interface BackOrderData {

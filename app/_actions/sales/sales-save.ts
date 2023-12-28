@@ -10,7 +10,7 @@ import { transformData } from "@/lib/utils";
 import { saveProgress } from "../progress";
 import { user } from "../utils";
 import { revalidatePath } from "next/cache";
-import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
+import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 
 export async function saveOrderAction({ id, order, items }: ISaveOrder) {
     // const id= order.id

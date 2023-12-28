@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCombobox } from "downshift";
 import { Label } from "../ui/label";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
-import { Combobox } from "@headlessui/react";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { useDebounce } from "@/hooks/use-debounce";
 interface Props {
     options?: any[];
     value?: any;
@@ -59,7 +59,6 @@ export default function AutoComplete({
         highlightedIndex,
         getInputProps,
         getMenuProps,
-        getToggleButtonProps,
         getItemProps,
         selectedItem,
     } = useCombobox({
@@ -83,6 +82,12 @@ export default function AutoComplete({
             return item ? (item as any).title : "";
         },
     });
+
+    const [query, setQuery] = useState("");
+    const debouncedQuery = useDebounce(query, 1000);
+    useEffect(() => {
+        // if(searchFn &&)
+    }, [debouncedQuery]);
     const listRef = useRef<HTMLDivElement>();
     const rowVirtualizer = useVirtualizer({
         count: items.length,

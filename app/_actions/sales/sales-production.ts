@@ -21,7 +21,7 @@ import {
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
 import { _revalidate } from "../_revalidate";
-import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
+import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 
 export async function getSalesProductionsAction(
     query: SalesQueryParams,

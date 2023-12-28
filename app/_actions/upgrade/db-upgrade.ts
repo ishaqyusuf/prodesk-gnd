@@ -13,7 +13,7 @@ import { randomUUID } from "crypto";
 import { ISalesSetting, ISalesSettingMeta, PostTypes } from "@/types/post";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { getSettingAction } from "../settings";
-import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
+import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 export async function dbUpgradeAction() {
     // const _ = await prisma.posts.groupBy({
     //   by: ["type"],

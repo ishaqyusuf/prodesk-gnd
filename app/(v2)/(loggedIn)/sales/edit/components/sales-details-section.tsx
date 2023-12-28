@@ -12,75 +12,72 @@ import DateControl from "@/_v2/components/common/date-control";
 export default function SalesDetailsSection() {
     const ctx = useContext(SalesFormContext);
     return (
-        <div className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8">
-            <div className="xl:col-span-3 grid gap-2 xl:grid-cols-2 xl:gap-x-4">
-                <InfoLine label="Sales Rep:">
-                    <span>{ctx?.data?.form?.salesRep?.name}</span>
-                </InfoLine>
-                <InfoLine label="Profile">
+        <div className="xl:col-span-3 grid gap-2 xl:grid-cols-2 xl:gap-x-4">
+            <InfoLine label="Sales Rep:">
+                <span>{ctx?.data?.form?.salesRep?.name}</span>
+            </InfoLine>
+            <InfoLine label="Profile">
+                <SelectControl<ISalesForm>
+                    name="meta.sales_profile"
+                    options={transformOptions(
+                        ctx.data.ctx.profiles,
+                        "title",
+                        "title"
+                    )}
+                    className="h-8 min-w-[150px]"
+                    placeholder="Profile"
+                />
+            </InfoLine>
+            <InfoLine label="Q.B Order #">
+                <InputControl<ISalesForm>
+                    className="h-8 w-[150px] uppercase"
+                    name="meta.qb"
+                />
+            </InfoLine>
+            {/* // Delivery Option */}
+            {ctx.isOrder && (
+                <InfoLine label="Delivery Option">
                     <SelectControl<ISalesForm>
-                        name="meta.sales_profile"
-                        options={transformOptions(
-                            ctx.data.ctx.profiles,
-                            "title",
-                            "title"
-                        )}
+                        name="deliveryOption"
+                        options={salesData.delivery}
                         className="h-8 min-w-[150px]"
                         placeholder="Profile"
                     />
                 </InfoLine>
-                <InfoLine label="Q.B Order #">
-                    <InputControl<ISalesForm>
-                        className="h-8 w-[150px] uppercase"
-                        name="meta.qb"
-                    />
-                </InfoLine>
-                {/* // Delivery Option */}
-                {ctx.isOrder && (
+            )}
+            <InfoLine label="Mockup %">
+                <InputControl<ISalesForm>
+                    className="h-8 w-[150px] uppercase"
+                    type="number"
+                    name="meta.mockupPercentage"
+                />
+            </InfoLine>
+            <InfoLine label="Profile Estimate">
+                <InputControl<ISalesForm>
+                    switchInput
+                    name="meta.profileEstimate"
+                />
+            </InfoLine>
+            {ctx.isOrder && (
+                <>
                     <InfoLine label="Delivery Option">
                         <SelectControl<ISalesForm>
-                            name="deliveryOption"
-                            options={salesData.delivery}
-                            className="h-8 min-w-[150px]"
-                            placeholder="Profile"
+                            className="min-w-[150px] h-8"
+                            name="paymentTerm"
+                            options={salesData.paymentTerms}
                         />
                     </InfoLine>
-                )}
-                <InfoLine label="Mockup %">
-                    <InputControl<ISalesForm>
-                        className="h-8 w-[150px] uppercase"
-                        type="number"
-                        name="meta.mockupPercentage"
+                </>
+            )}
+            {/* Good Until */}
+            {!ctx.isOrder && (
+                <InfoLine label="Good Until">
+                    <DateControl
+                        className="h-8 min-w-[150px]"
+                        name="goodUntil"
                     />
                 </InfoLine>
-                <InfoLine label="Profile Estimate">
-                    <InputControl<ISalesForm>
-                        switchInput
-                        name="meta.profileEstimate"
-                    />
-                </InfoLine>
-                {ctx.isOrder && (
-                    <>
-                        <InfoLine label="Delivery Option">
-                            <SelectControl<ISalesForm>
-                                className="min-w-[150px] h-8"
-                                name="paymentTerm"
-                                options={salesData.paymentTerms}
-                            />
-                        </InfoLine>
-                    </>
-                )}
-                {/* Good Until */}
-                {!ctx.isOrder && (
-                    <InfoLine label="Good Until">
-                        <DateControl
-                            className="h-8 min-w-[150px]"
-                            name="goodUntil"
-                        />
-                    </InfoLine>
-                )}
-            </div>
-            <div className="xl:col-span-2"></div>
+            )}
         </div>
     );
 }

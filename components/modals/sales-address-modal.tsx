@@ -97,7 +97,7 @@ export function SalesCustomerModal({
                 sameAddress: checked as any,
                 customer,
             };
-
+            console.log(_form);
             const resp = await saveAddressAction(_form as any);
 
             console.log(resp);

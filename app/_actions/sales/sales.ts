@@ -27,8 +27,8 @@ import { removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
-import { _saveSales } from "@/data-access/sales/save-sales.persistence";
-import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
+import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.persistence";
+import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 
 export async function whereSales(query: SalesQueryParams) {
     const {
