@@ -34,7 +34,7 @@ export default function SalesFormAction() {
                         href={`/sales/${ctx.data.form.type}/${ctx.data.form.slug}/form`}
                     >
                         {/* <Icons.Rocket /> */}
-                        <span>V1 Mode</span>
+                        V1 Mode
                     </Link>
                 </Button>
             </div>

@@ -12,7 +12,7 @@ export default {
             const alert = confirm(
                 "You may have some unsaved changes, Are you sure you want to proceed?"
             );
-            console.log(alert);
+            console.log(e.target);
             if (alert) router.push(e.target.getAttribute("href"));
 
             // window.removeEventListener("beforeunload", handleBeforeUnload);
