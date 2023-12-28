@@ -12,8 +12,9 @@ import { toast } from "sonner";
 import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
-export default function useSaveSalesHook(watchForm) {
+export default function useSaveSalesHook() {
     const form = useFormContext<ISalesForm>();
+    const watchForm = form.watch();
     const [saving, startTransaction] = useTransition();
     const ctx = useContext(SalesFormContext);
 
