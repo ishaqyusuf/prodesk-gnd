@@ -4,13 +4,13 @@ import { prisma } from "@/db";
 import { lastId, nextId } from "@/lib/nextId";
 import { ISaveOrder } from "@/types/sales";
 import dayjs from "dayjs";
-import orderProdQtyUpdateAction from "./sales";
 import va from "@/lib/va";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { transformData } from "@/lib/utils";
 import { saveProgress } from "../progress";
 import { user } from "../utils";
 import { revalidatePath } from "next/cache";
+import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
 
 export async function saveOrderAction({ id, order, items }: ISaveOrder) {
     // const id= order.id
@@ -35,7 +35,7 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
         slug = orderId = [
             now.format("YY"),
             now.format("MMDD"),
-            await nextId(prisma.salesOrders)
+            await nextId(prisma.salesOrders),
         ].join("-");
         order.invoiceStatus = "Pending Items";
         // order.goodUntil
@@ -43,20 +43,20 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
     const metadata = {
         ...transformData<any>(_order, id != null),
         slug,
-        orderId
+        orderId,
     };
     Object.entries({
         customer: customerId,
         shippingAddress: shippingAddressId,
-        billingAddress: billingAddressId
+        billingAddress: billingAddressId,
     }).map(([k, v]) => {
         v && (metadata[k] = { connect: { id: v } });
     });
     if (!id && salesRepId)
         metadata.salesRep = {
             connect: {
-                id: salesRepId
-            }
+                id: salesRepId,
+            },
         };
     let lastItemId: number | undefined = undefined;
     let updatedIds: any[] = [];
@@ -64,27 +64,27 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
         lastItemId = await lastId(prisma.salesOrderItems);
     }
     const updateMany = items
-        .map(item => {
+        .map((item) => {
             if (!item.id) return null;
             item.updatedAt = new Date();
             const { id, salesOrderId, ...data } = item;
             updatedIds.push(id);
             return {
                 where: {
-                    id
+                    id,
                 },
-                data
+                data,
             };
             // return item;
         })
         .filter(Boolean) as any;
     const createMany = {
         data: items
-            .map(item => {
+            .map((item) => {
                 if (item.id) return null;
                 return transformData(item, true);
             })
-            .filter(Boolean) as any
+            .filter(Boolean) as any,
     };
     const sale_order = id
         ? await prisma.salesOrders.update({
@@ -93,30 +93,30 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
                   ...metadata,
                   items: {
                       updateMany,
-                      createMany
-                  }
-              }
+                      createMany,
+                  },
+              },
           })
         : await prisma.salesOrders.create({
               data: {
                   ...metadata,
                   items: {
-                      createMany
-                  }
-              }
+                      createMany,
+                  },
+              },
           });
     if (id) {
         await prisma.salesOrderItems.deleteMany({
             where: {
                 id: {
                     lte: lastItemId,
-                    notIn: updatedIds
+                    notIn: updatedIds,
                 },
-                salesOrderId: sale_order.id
-            }
+                salesOrderId: sale_order.id,
+            },
         });
     }
-    await orderProdQtyUpdateAction(sale_order.id);
+    await _updateProdQty(sale_order.id);
     if (id) va.track("sales updated", { type: sale_order.type });
     else va.track("sales created", { type: sale_order.type });
     if (id && order.type == "order") await fixSalesPaymentAction(id);
@@ -124,7 +124,7 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
         await saveProgress("SalesOrder", id, {
             type: "sales",
             status: `${order.type} created`,
-            headline: `${order.type} created by ${(await user()).name}`
+            headline: `${order.type} created by ${(await user()).name}`,
         });
     revalidatePath(`/(auth)/sales/${order.type}/${order.slug}/form`);
     return sale_order;

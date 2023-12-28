@@ -6,14 +6,14 @@ import {
     ISalesOrderItem,
     ISalesOrderItemMeta,
     ISalesOrderMeta,
-    WizardKvForm
+    WizardKvForm,
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
-import orderProdQtyUpdateAction from "../sales/sales";
 import { ISalesSetting, ISalesSettingMeta, PostTypes } from "@/types/post";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { getSettingAction } from "../settings";
+import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
 export async function dbUpgradeAction() {
     // const _ = await prisma.posts.groupBy({
     //   by: ["type"],
@@ -33,15 +33,15 @@ export async function dbUpgradeAction() {
 async function transformSettings() {
     const s = await prisma.posts.findFirst({
         where: {
-            type: PostTypes.SALES_SETTINGS
-        }
+            type: PostTypes.SALES_SETTINGS,
+        },
     });
 
     await prisma.settings.create({
         data: {
             type: PostTypes.SALES_SETTINGS,
-            meta: s?.meta || {}
-        }
+            meta: s?.meta || {},
+        },
     });
 }
 async function updateProgressTypes() {
@@ -50,10 +50,10 @@ async function updateProgressTypes() {
         await prisma.progress.findMany({
             select: {
                 id: true,
-                progressableType: true
-            }
+                progressableType: true,
+            },
         })
-    ).map(p => {
+    ).map((p) => {
         let type: string = p.progressableType?.split("\\")?.pop() as any;
 
         if (!updates[type]) updates[type] = [p.id];
@@ -64,29 +64,29 @@ async function updateProgressTypes() {
         await prisma.progress.updateMany({
             where: {
                 id: {
-                    in: ids as any
-                }
+                    in: ids as any,
+                },
             },
             data: {
-                progressableType: k
-            }
+                progressableType: k,
+            },
         });
     });
 }
 async function addTypeToSalesOrder() {
     const updates: any = {
         order: [],
-        estimate: []
+        estimate: [],
     };
     (
         await prisma.salesOrders.findMany({
             select: {
                 id: true,
                 prodId: true,
-                meta: true
-            }
+                meta: true,
+            },
         })
-    ).map(e => {
+    ).map((e) => {
         let meta: ISalesOrderMeta = e?.meta as any;
         if (meta?.type == "estimate") updates.estimate.push(e.id);
         else updates.order.push(e.id);
@@ -94,16 +94,16 @@ async function addTypeToSalesOrder() {
     await Promise.all(
         Object.entries(updates).map(async ([type, ids]) => {
             let data: any = {
-                type
+                type,
             };
             if (type == "estimate") data.prodId = null;
             await prisma.salesOrders.updateMany({
                 where: {
                     id: {
-                        in: ids as number[]
-                    }
+                        in: ids as number[],
+                    },
                 },
-                data
+                data,
             });
         })
     );
@@ -112,11 +112,11 @@ async function upgradeOrderQty() {
     const orders = await prisma.salesOrders.findMany({
         where: {},
         select: {
-            id: true
-        }
+            id: true,
+        },
     });
-    orders.map(async o => {
-        await orderProdQtyUpdateAction(o.id);
+    orders.map(async (o) => {
+        await _updateProdQty(o.id);
     });
 }
 interface oldComponentCost {
@@ -130,16 +130,14 @@ async function transformItemComponent() {
     let { id, meta, ...salesSetting } = (await getSettingAction<ISalesSetting>(
         "sales-settings"
     )) as ISalesSetting;
-    let {
-        wizard: { titleMarkdown } = {},
-        ...salesMeta
-    } = meta as ISalesSettingMeta;
+    let { wizard: { titleMarkdown } = {}, ...salesMeta } =
+        meta as ISalesSettingMeta;
     const doorUUID = randomUUID();
     const labelUUIDMAP = {
         Door: doorUUID,
         Frame: randomUUID(),
         Casing: randomUUID(),
-        Hinge: randomUUID()
+        Hinge: randomUUID(),
     };
     let form: any = [
         {
@@ -148,8 +146,8 @@ async function transformItemComponent() {
             inputType: "Text",
             hasQty: true,
             hasCost: true,
-            label: "Door"
-        }
+            label: "Door",
+        },
     ];
     Object.entries(labelUUIDMAP).map(
         ([k, v]) =>
@@ -162,32 +160,32 @@ async function transformItemComponent() {
                 inputType: "Text",
                 depId: doorUUID,
                 hasCost: true,
-                defaultQty: 1
+                defaultQty: 1,
             })
     );
     titleMarkdown = "@Door | Frame: @Frame | Hinge: @Hinge | Casing: @Casing";
     await prisma.settings.update({
         where: {
-            id
+            id,
         },
         data: {
             meta: {
                 ...salesMeta,
                 wizard: {
                     form,
-                    titleMarkdown
-                }
-            } as any
-        }
+                    titleMarkdown,
+                },
+            } as any,
+        },
     });
     const items = await prisma.salesOrderItems.findMany({
         where: {
             // productVariantId: {
             //   gt: 0,
             // },
-        }
+        },
     });
-    ((items as any) as ISalesOrderItem[]).map(async item => {
+    (items as any as ISalesOrderItem[]).map(async (item) => {
         let { meta } = item;
         let {
             components,
@@ -204,8 +202,8 @@ async function transformItemComponent() {
                     where: {
                         category: "Door",
                         name: product_description,
-                        price: product_cost
-                    }
+                        price: product_cost,
+                    },
                 })) ||
                 (await prisma.orderInventory.create({
                     data: {
@@ -213,8 +211,8 @@ async function transformItemComponent() {
                         category: "Door",
                         name: product_description,
                         createdAt: new Date(),
-                        meta: {}
-                    }
+                        meta: {},
+                    },
                 }));
             oc.map(async ({ cost, qty, title, type }, i) => {
                 if (i == 1) return;
@@ -227,8 +225,8 @@ async function transformItemComponent() {
                                 category: type,
                                 parentId: eDoor?.id,
                                 price: cost,
-                                name: title
-                            }
+                                name: title,
+                            },
                         })) ||
                         (await prisma.orderInventory.create({
                             data: {
@@ -237,8 +235,8 @@ async function transformItemComponent() {
                                 name: title,
                                 createdAt: new Date(),
                                 parentId: eDoor?.id,
-                                meta: {}
-                            }
+                                meta: {},
+                            },
                         }));
                     wiz[cuid] = {
                         price: cost,
@@ -248,7 +246,7 @@ async function transformItemComponent() {
                         qty,
                         checked: qty > 0 && cost > 0,
                         category: type,
-                        total: (cost + 0) * (qty + 0)
+                        total: (cost + 0) * (qty + 0),
                     };
                 }
             });
@@ -258,13 +256,13 @@ async function transformItemComponent() {
                 data: {
                     description: composeItemDescription({
                         wizard: { form, titleMarkdown },
-                        kvForm: wiz
+                        kvForm: wiz,
                     }),
                     meta: {
                         ...(_meta as any),
-                        components: wiz
-                    }
-                }
+                        components: wiz,
+                    },
+                },
             });
         }
     });

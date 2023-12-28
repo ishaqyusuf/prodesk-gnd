@@ -7,20 +7,21 @@ import {
     ISalesOrderItem,
     ISalesOrderItemMeta,
     ProdActionProps,
-    SalesQueryParams
+    SalesQueryParams,
 } from "@/types/sales";
 import dayjs from "dayjs";
-import orderProdQtyUpdateAction, { getSales } from "./sales";
+import { getSales } from "./sales";
 import { saveProgress } from "../progress";
 import { userId, user } from "../utils";
 import {
     _notifyProdStarted,
     _notifyProductionAssigned,
-    _notifyProductionDateUpdate
+    _notifyProductionDateUpdate,
 } from "../notifications";
 import { formatDate } from "@/lib/use-day";
 import { deepCopy } from "@/lib/deep-copy";
 import { _revalidate } from "../_revalidate";
+import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
 
 export async function getSalesProductionsAction(
     query: SalesQueryParams,
@@ -40,7 +41,7 @@ export async function prodsDueToday(admin: Boolean = false) {
     const q: SalesQueryParams = {
         _page: "production",
         date: formatDate(dayjs(), "YYYY-MM-DD"),
-        _dateType: "prodDueDate"
+        _dateType: "prodDueDate",
     };
     const sessionId = await userId();
     if (!admin) q.prodId = sessionId || -1;
@@ -58,15 +59,15 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     let prevProducedQty: number = 0;
     const order = await prisma.salesOrders.findFirst({
         where: {
-            id
+            id,
         },
         include: {
-            items: true
-        }
+            items: true,
+        },
     });
     if (!order) throw Error("Order not found");
 
-    order.items.map(async item => {
+    order.items.map(async (item) => {
         console.log(item.swing, item.qty, ">>>>");
         if (!item.swing || !item?.qty || !item) return;
         const meta: ISalesOrderItemMeta = item.meta as any;
@@ -78,11 +79,11 @@ export async function markProduction(id, as: "completed" | "incomplete") {
         console.log([meta.produced_qty]);
         await prisma.salesOrderItems.update({
             where: {
-                id: item.id
+                id: item.id,
             },
             data: {
-                meta: meta as any
-            }
+                meta: meta as any,
+            },
         });
     });
     if (prevProducedQty > 0) {
@@ -94,21 +95,21 @@ export async function markProduction(id, as: "completed" | "incomplete") {
             headline: completed
                 ? `Production Completed by ${me.name}`
                 : `Production Reset by ${me.name}`,
-            userId: me.id
+            userId: me.id,
         });
     }
-    await orderProdQtyUpdateAction(id);
+    await _updateProdQty(id);
     if (order?.prodId && !completed) await _notifyProductionAssigned(order);
 }
 export async function cancelProductionAssignmentAction(id) {
     await prisma.salesOrders.update({
         where: {
-            id
+            id,
         },
         data: {
             prodDueDate: null,
-            prodId: null
-        }
+            prodId: null,
+        },
     });
 }
 export interface AssignProductionActionProps {
@@ -119,16 +120,16 @@ export interface AssignProductionActionProps {
 export async function assignProductionAction({
     id,
     userId,
-    prodDueDate
+    prodDueDate,
 }: AssignProductionActionProps) {
     const order = await prisma.salesOrders.update({
         where: {
-            id
+            id,
         },
         data: {
             prodDueDate,
-            prodId: userId
-        }
+            prodId: userId,
+        },
     });
     await _notifyProductionAssigned(order);
     _revalidate("orders");
@@ -139,36 +140,32 @@ export interface UserProductionEventsProps {
 }
 export async function getUserProductionEventsAction({
     userId,
-    date
+    date,
 }: UserProductionEventsProps) {
     const [gte, lte] = [
-        dayjs(date)
-            .startOf("month")
-            .toISOString(),
-        dayjs(date)
-            .endOf("month")
-            .toISOString()
+        dayjs(date).startOf("month").toISOString(),
+        dayjs(date).endOf("month").toISOString(),
     ];
     const prods = await prisma.salesOrders.findMany({
         where: {
             prodId: userId,
             prodDueDate: {
                 gte,
-                lte
+                lte,
             },
             prodStatus: {
-                notIn: ["Completed"]
-            }
+                notIn: ["Completed"],
+            },
         },
         orderBy: {
-            prodDueDate: "asc"
+            prodDueDate: "asc",
         },
         select: {
             prodDueDate: true,
             orderId: true,
             prodStatus: true,
-            id: true
-        }
+            id: true,
+        },
     });
     //   console.log(prods);
     return prods;
@@ -178,12 +175,12 @@ export async function orderItemProductionAction({
     note,
     qty,
     action,
-    order
+    order,
 }: ProdActionProps) {
     const item: ISalesOrderItem = (await prisma.salesOrderItems.findFirst({
         where: {
-            id: itemId
-        }
+            id: itemId,
+        },
         // include: {
         //   // salesOrder: {
         //   //   include: {
@@ -196,8 +193,8 @@ export async function orderItemProductionAction({
 
     const _update: ISalesOrderItem = {
         meta: {
-            ...((item.meta ?? {}) as any)
-        }
+            ...((item.meta ?? {}) as any),
+        },
     } as any;
     // if (!_update.salesOrder?.prodQty) {
     //   await updateOrderProdQty(_update.salesOrder);
@@ -220,13 +217,13 @@ export async function orderItemProductionAction({
                 data: {
                     qty,
                     meta: {
-                        note
+                        note,
                     },
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     salesOrderId: item.salesOrderId,
-                    salesOrderItemId: item.id
-                }
+                    salesOrderItemId: item.id,
+                },
             });
             await updateProgress(item, qty, "Production Submitted");
 
@@ -239,21 +236,21 @@ export async function orderItemProductionAction({
     }
     await prisma.salesOrderItems.update({
         where: {
-            id: itemId as any
+            id: itemId as any,
         },
         data: {
-            ..._update
-        } as any
+            ..._update,
+        } as any,
     });
     // if (action == "Cancel")
-    await orderProdQtyUpdateAction(item.salesOrderId);
+    await _updateProdQty(item.salesOrderId);
 }
 export async function updateProductionDate(orderId, newDate) {
     const order = await prisma.salesOrders.update({
         where: { id: orderId },
         data: {
-            prodDueDate: newDate
-        }
+            prodDueDate: newDate,
+        },
     });
     await _notifyProductionDateUpdate(order);
 }
@@ -265,6 +262,6 @@ async function updateProgress(item, qty, status) {
         parentId: item.salesOrderId,
         status,
         headline,
-        userId: item.salesOrder?.prodId
+        userId: item.salesOrder?.prodId,
     });
 }

@@ -1,30 +1,79 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { ISalesForm } from "../type";
-import { useContext, useTransition } from "react";
-import { deepCopy } from "@/lib/deep-copy";
+import { useCallback, useContext, useTransition } from "react";
 import { SalesFormContext } from "../ctx";
 import { numeric, toFixed } from "@/lib/use-number";
 import { removeEmptyValues } from "@/lib/utils";
 import { SalesOrderItems, SalesOrders } from "@prisma/client";
 import { SaveOrderActionProps } from "@/types/sales";
 import { saveSaleAction } from "../../_actions/save-sales.action";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import debounce from "debounce";
 
 export default function useSaveSalesHook() {
     const form = useFormContext<ISalesForm>();
     const [saving, startTransaction] = useTransition();
     const ctx = useContext(SalesFormContext);
+    const watchForm = useWatch({
+        control: form.control,
+        defaultValue: defaultValues,
+    });
+    async function save(
+        and: "close" | "new" | "default" = "default",
+        autoSave = false,
+        data = null
+    ) {
+        startTransaction(async () => {
+            data = formData(
+                !data ? form.getValues() : data,
+                ctx.data.paidAmount
+            );
+            data.autoSave = autoSave;
+            const order = await saveSaleAction(data.id, data.order, data.items);
+            switch (and) {
+                case "close":
+                    router.push(`/sales/${order.type}s`);
+                    break;
+                case "new":
+                    router.push(`/sales/edit/${order.type}/new`);
+                    break;
+                case "default":
+                    if (!ctx.data.form.id)
+                        router.push(`/sales/edit/${order.type}/${order.slug}`);
+                    break;
+            }
+            toast.success("Saved");
+        });
+    }
+    const debouncedSave = useCallback(
+        debounce(() => {
+            form.handleSubmit((d) => {
+                if (d.customerId) {
+                    save("default", true, d);
+                } else {
+                    toast.error(
+                        "Autosave paused, requires customer information."
+                    );
+                }
+            })();
+            // methods.handleSubmit(onSubmit)();
+        }, 5000),
+        [form]
+    );
+    useDeepCompareEffect(() => {
+        // console.log(watchForm.items?.[2]?.description);
+        if (
+            form.formState.isDirty &&
+            Object.keys(form.formState.dirtyFields).length
+        ) {
+            // console.log(form.formState.dirtyFields);
+            debouncedSave();
+        }
+    }, [watchForm, form]);
+    const router = useRouter();
     return {
         saving,
-        async save(
-            and: "close" | "new" | "default" = "default",
-            autoSave = false
-        ) {
-            startTransaction(async () => {
-                const data = formData(form.getValues(), ctx.data.paidAmount);
-                data.autoSave = autoSave;
-                await saveSaleAction(data.id, data.order, data.items);
-            });
-        },
     };
 }
 function formData(data: ISalesForm, paidAmount): SaveOrderActionProps {

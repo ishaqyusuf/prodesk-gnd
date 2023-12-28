@@ -28,6 +28,7 @@ import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
 import { _saveSales } from "@/data-access/sales/save-sales.persistence";
+import { _updateProdQty } from "@/data-access/sales/update-prod-qty.dac";
 
 export async function whereSales(query: SalesQueryParams) {
     const {
@@ -295,7 +296,7 @@ export async function saveOrderAction({
     autoSave,
 }: SaveOrderActionProps) {
     const _order = await _saveSales(id, order as any, items);
-    await orderProdQtyUpdateAction(_order.id);
+    await _updateProdQty(_order.id);
     //  console.log(_order)
     //   console.log(sale_order)
     // if (!autoSave || !id)
@@ -322,58 +323,7 @@ export async function deleteOrderAction(id) {
         where: { id },
     });
 }
-export default async function orderProdQtyUpdateAction(salesOrderId) {
-    let prodQty = 0;
-    let builtQty = 0;
-    let order = await prisma.salesOrders.findUnique({
-        where: {
-            id: salesOrderId,
-        },
-        include: {
-            items: {
-                select: {
-                    swing: true,
-                    qty: true,
-                    meta: true,
-                },
-            },
-        },
-    });
-    const _startedItems = (order?.items as any as ISalesOrderItem[])?.filter(
-        (i) => i.swing && typeof i.meta.produced_qty === "number"
-    );
-    const started = _startedItems?.length > 0;
-    if (order != null)
-        order.items.map((item) => {
-            let {
-                qty,
-                swing,
-                meta: { produced_qty },
-            } = item as any as ISalesOrderItem;
-            qty ||= 0;
-            produced_qty ||= 0;
-            if (swing && qty > 0) {
-                prodQty += convertToNumber(qty);
-                builtQty += convertToNumber(produced_qty);
-            }
-        });
-    let prodStatus = order?.prodStatus;
-    if (order?.prodId) {
-        prodStatus = "Queued";
-    }
-    if (started) prodStatus = "Started";
-    if (prodQty == builtQty && builtQty > 0) prodStatus = "Completed";
-    await prisma.salesOrders.update({
-        where: {
-            id: salesOrderId,
-        },
-        data: {
-            builtQty,
-            prodQty,
-            prodStatus,
-        },
-    });
-}
+
 export async function updateOrderPriorityActon({
     priority,
     orderId,
