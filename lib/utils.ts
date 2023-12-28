@@ -29,6 +29,9 @@ export function capitalizeFirstLetter(string) {
 export function labelValue(label, value, extras: any = {}) {
     return { label, value, ...extras };
 }
+export function textValue(text, value?, extras: any = {}) {
+    return { text, value: value || text, ...extras };
+}
 export function keyValue(key, value) {
     return { key, value };
 }

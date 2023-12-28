@@ -6,6 +6,8 @@ import transformOptions from "@/_v2/lib/transform-option";
 import { ISalesForm } from "../type";
 import { FieldPath, FieldValues } from "react-hook-form";
 import InputControl from "@/_v2/components/common/input-control";
+import salesData from "../../sales-data";
+import DateControl from "@/_v2/components/common/date-control";
 
 export default function SalesDetailsSection() {
     const ctx = useContext(SalesFormContext);
@@ -33,14 +35,17 @@ export default function SalesDetailsSection() {
                         name="meta.qb"
                     />
                 </InfoLine>
-                <InfoLine label="Delivery Option">
-                    <SelectControl<ISalesForm>
-                        name="deliveryOption"
-                        options={["pickup", "delivery"]}
-                        className="h-8 min-w-[150px]"
-                        placeholder="Profile"
-                    />
-                </InfoLine>
+                {/* // Delivery Option */}
+                {ctx.isOrder && (
+                    <InfoLine label="Delivery Option">
+                        <SelectControl<ISalesForm>
+                            name="deliveryOption"
+                            options={salesData.delivery}
+                            className="h-8 min-w-[150px]"
+                            placeholder="Profile"
+                        />
+                    </InfoLine>
+                )}
                 <InfoLine label="Mockup %">
                     <InputControl<ISalesForm>
                         className="h-8 w-[150px] uppercase"
@@ -48,6 +53,32 @@ export default function SalesDetailsSection() {
                         name="meta.mockupPercentage"
                     />
                 </InfoLine>
+                <InfoLine label="Profile Estimate">
+                    <InputControl<ISalesForm>
+                        switchInput
+                        name="meta.profileEstimate"
+                    />
+                </InfoLine>
+                {ctx.isOrder && (
+                    <>
+                        <InfoLine label="Delivery Option">
+                            <SelectControl<ISalesForm>
+                                className="min-w-[150px] h-8"
+                                name="paymentTerm"
+                                options={salesData.paymentTerms}
+                            />
+                        </InfoLine>
+                    </>
+                )}
+                {/* Good Until */}
+                {!ctx.isOrder && (
+                    <InfoLine label="Good Until">
+                        <DateControl
+                            className="h-8 min-w-[150px]"
+                            name="goodUntil"
+                        />
+                    </InfoLine>
+                )}
             </div>
             <div className="xl:col-span-2"></div>
         </div>

@@ -22,6 +22,7 @@ export interface SalesFormContext {
     tax;
     subTotal;
     ccc;
+    isOrder: boolean;
     itemSelector: ItemSelectionReturnType;
 }
 export const SalesFormContext = createContext<SalesFormContext>({} as any);

@@ -47,6 +47,7 @@ export default function EditSalesForm({ data }: Props) {
         cccPercentage,
         ccc,
         subTotal,
+        type,
     ] = form.watch([
         "meta.profileEstimate",
         "meta.sales_percentage",
@@ -60,6 +61,7 @@ export default function EditSalesForm({ data }: Props) {
         "meta.ccc_percentage",
         "meta.ccc",
         "subTotal",
+        "type",
     ]);
     const [summary, setSummary] = useState({});
     const [toggleMockup, setToggleMockup] = useState(false);
@@ -87,6 +89,7 @@ export default function EditSalesForm({ data }: Props) {
                     subTotal,
                     itemSelector,
                     setToggleMockup,
+                    isOrder: type == "order",
                 }}
             >
                 <Form {...form}>

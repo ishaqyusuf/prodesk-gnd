@@ -5,7 +5,7 @@ import {
     SaveOrderActionProps,
 } from "@/types/sales";
 import dayjs from "dayjs";
-import { IFooterInfo, ISalesOrderItem } from "@/types/sales";
+import { IFooterInfo } from "@/types/sales";
 import { generateRandomString, removeEmptyValues } from "@/lib/utils";
 import { deepCopy } from "@/lib/deep-copy";
 import { numeric } from "@/lib/use-number";

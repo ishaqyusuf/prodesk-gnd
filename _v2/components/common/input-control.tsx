@@ -1,16 +1,19 @@
 import { FormField, FormItem } from "@/components/ui/form";
 import { Input, InputProps } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { FieldPath, useFormContext } from "react-hook-form";
 
 interface Props<T> extends InputProps {
     name: FieldPath<T>; // @ts-ignore
     placeholder?;
+    switchInput?: Boolean;
 }
 export default function InputControl<T>({
     name,
     placeholder,
     className,
+    switchInput,
     ...props
 }: Props<T>) {
     const form = useFormContext();
@@ -22,11 +25,18 @@ export default function InputControl<T>({
                 control={form.control}
                 render={({ field }) => (
                     <FormItem>
-                        <Input
-                            {...props}
-                            className={cn(className)}
-                            {...field}
-                        />
+                        {switchInput ? (
+                            <Switch
+                                checked={field.value as any}
+                                onCheckedChange={field.onChange}
+                            />
+                        ) : (
+                            <Input
+                                {...props}
+                                className={cn(className)}
+                                {...field}
+                            />
+                        )}
                     </FormItem>
                 )}
             />
