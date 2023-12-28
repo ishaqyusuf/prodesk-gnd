@@ -10,19 +10,17 @@ import { saveSaleAction } from "../../_actions/save-sales.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import debounce from "debounce";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
-export default function useSaveSalesHook() {
+export default function useSaveSalesHook(watchForm) {
     const form = useFormContext<ISalesForm>();
     const [saving, startTransaction] = useTransition();
     const ctx = useContext(SalesFormContext);
-    const watchForm = useWatch({
-        control: form.control,
-        defaultValue: defaultValues,
-    });
+
     async function save(
         and: "close" | "new" | "default" = "default",
         autoSave = false,
-        data = null
+        data: any = null
     ) {
         startTransaction(async () => {
             data = formData(

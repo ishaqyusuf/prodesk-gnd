@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { SalesFormContext } from "../ctx";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { ISalesForm } from "../type";
 import { DatePicker } from "@/components/date-range-picker";
 import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
@@ -12,8 +12,12 @@ import useSaveSalesHook from "../hooks/use-save-sales";
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
+    const watchForm = useWatch({
+        control: form.control,
+        defaultValue: defaultValues,
+    });
     const date = form.watch("createdAt");
-    const saveHook = useSaveSalesHook();
+    const saveHook = useSaveSalesHook(watchForm);
 
     return (
         <div className="flex justify-between items-center">
