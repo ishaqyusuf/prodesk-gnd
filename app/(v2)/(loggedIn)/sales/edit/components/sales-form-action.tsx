@@ -12,10 +12,8 @@ import useSaveSalesHook from "../hooks/use-save-sales";
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
-    // const watchForm = form.watch();
     const date = form.watch("createdAt");
     const saveHook = useSaveSalesHook();
-
     return (
         <div className="flex justify-between items-center">
             <div className="">

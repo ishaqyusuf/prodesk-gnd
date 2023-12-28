@@ -11,6 +11,7 @@ import salesFormUtils from "../sales-form-utils";
 import InvoiceItemsSelection from "./selection-action";
 import useItemSelection from "../hooks/use-item-selection";
 import SalesFormAction from "./sales-form-action";
+import SalesDetailsSection from "./sales-details-section";
 
 interface Props {
     data: SalesFormResponse;
@@ -93,7 +94,9 @@ export default function EditSalesForm({ data }: Props) {
                         <section id="action">
                             <SalesFormAction />
                         </section>
-                        <section id="detailsSection" className=""></section>
+                        <section id="detailsSection" className="">
+                            <SalesDetailsSection />
+                        </section>
                         <section id="invoiceForm">
                             <InvoiceTable />
                         </section>
