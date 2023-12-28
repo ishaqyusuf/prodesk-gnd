@@ -6,9 +6,11 @@ import { convertToNumber, toFixed } from "@/lib/use-number";
 import { sum } from "@/lib/utils";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { SalesPayments } from "@prisma/client";
-import { _saveSalesAction } from "./_save-sales";
+
 import { prisma } from "@/db";
 import { applyPaymentAction } from "./sales-payment";
+import { _saveSales } from "@/data-access/sales/save-sales.persistence";
+import salesFormUtils from "@/app/(v2)/(loggedIn)/sales/edit/sales-form-utils";
 
 interface BackOrderData {
     newOrder: {
@@ -97,7 +99,8 @@ export async function _createSalesBackOrder(
             let itemRate = item.rate || 0;
             let loadQty = loader?.loadedItems[item.meta.uid]?.loadQty || 0;
             let backOrder = loader?.backOrders[item.meta.uid];
-            let hasTax = item.meta.tax == "Tax";
+            let hasTax =
+                item.meta.tax == salesFormUtils.taxxable(item.meta.tax);
             if (!produced_qty) produced_qty = 0;
 
             let itemUpdate = {
@@ -269,13 +272,11 @@ export async function _createSalesBackOrder(
     // return resp;
     // return;
     // try {
-    const _newOrder = await _saveSalesAction({
-        order: newOrder as any,
-        items: newOrderItems?.map((item, index) => {
-            if (item?.meta) item.meta.uid = index;
-            return item;
-        }) as any,
+    const _items = newOrderItems?.map((item, index) => {
+        if (item?.meta) item.meta.uid = index;
+        return item;
     });
+    const _newOrder = await _saveSales(null, newOrder as any, _items as any);
     await Promise.all(
         itemUpdates.map(async ({ id, data }) => {
             await prisma.salesOrderItems.update({

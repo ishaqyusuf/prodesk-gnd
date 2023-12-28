@@ -10,6 +10,7 @@ export interface SalesFormContext {
     profitRate;
     mockupPercentage;
     toggleMockup;
+    setToggleMockup;
     taxPercentage;
     setSummary;
     summary;

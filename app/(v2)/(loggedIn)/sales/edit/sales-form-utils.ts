@@ -24,6 +24,11 @@ export default {
     moreInvoiceLines,
     newInvoiceLine,
     copySalesItem,
+    taxxable(taxxable): boolean {
+        taxxable = taxxable || false;
+        if (typeof taxxable == "string") taxxable = taxxable == "Tax";
+        return taxxable;
+    },
 };
 function copySalesItem(item) {
     const { id, meta, createdAt, updatedAt, _ctx, ...itemData } = deepCopy(

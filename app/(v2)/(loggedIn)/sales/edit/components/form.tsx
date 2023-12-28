@@ -10,6 +10,7 @@ import { useState } from "react";
 import salesFormUtils from "../sales-form-utils";
 import InvoiceItemsSelection from "./selection-action";
 import useItemSelection from "../hooks/use-item-selection";
+import SalesFormAction from "./sales-form-action";
 
 interface Props {
     data: SalesFormResponse;
@@ -84,10 +85,14 @@ export default function EditSalesForm({ data }: Props) {
                     ccc,
                     subTotal,
                     itemSelector,
+                    setToggleMockup,
                 }}
             >
                 <Form {...form}>
                     <div className="px-8">
+                        <section id="action">
+                            <SalesFormAction />
+                        </section>
                         <section id="detailsSection" className=""></section>
                         <section id="invoiceForm">
                             <InvoiceTable />

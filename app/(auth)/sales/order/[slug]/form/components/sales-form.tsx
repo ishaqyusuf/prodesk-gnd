@@ -78,7 +78,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             form.formState.isDirty &&
             Object.keys(form.formState.dirtyFields).length
         ) {
-            console.log(form.formState.dirtyFields);
+            // console.log(form.formState.dirtyFields);
             debouncedSave();
         }
     }, [watchForm, form]);
@@ -242,7 +242,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                         )}
                         <UpdateSalesDate form={form} />
                         <CatalogModal form={form} ctx={data.ctx} />
-
                         <Menu
                             variant={"secondary"}
                             disabled={mockupMode}

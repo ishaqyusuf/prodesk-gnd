@@ -27,7 +27,7 @@ import { removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
-import { _saveSalesAction } from "./_save-sales";
+import { _saveSales } from "@/data-access/sales/save-sales.persistence";
 
 export async function whereSales(query: SalesQueryParams) {
     const {
@@ -294,7 +294,7 @@ export async function saveOrderAction({
     items,
     autoSave,
 }: SaveOrderActionProps) {
-    const _order = await _saveSalesAction({ id, order: order as any, items });
+    const _order = await _saveSales(id, order as any, items);
     await orderProdQtyUpdateAction(_order.id);
     //  console.log(_order)
     //   console.log(sale_order)
