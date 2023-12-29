@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import { isProdClient } from "@/lib/is-prod";
+import usePersistDirtyForm from "@/_v2/hooks/use-persist-dirty-form";
 
 export default function useSaveSalesHook() {
     const form = useFormContext<ISalesForm>();
@@ -18,7 +20,9 @@ export default function useSaveSalesHook() {
     const [saving, startTransaction] = useTransition();
     const ctx = useContext(SalesFormContext);
 
-    async function save(
+    usePersistDirtyForm();
+
+    async function submit(
         and: "close" | "new" | "default" = "default",
         autoSave = false,
         data: any = null
@@ -42,14 +46,32 @@ export default function useSaveSalesHook() {
                         router.push(`/sales/edit/${order.type}/${order.slug}`);
                     break;
             }
-            toast.success("Saved");
+            if (!autoSave || (autoSave && !isProdClient)) {
+                toast.success("Saved");
+            }
+            form.reset(
+                {},
+                {
+                    keepValues: true,
+                    keepDirty: false,
+                    keepSubmitCount: true,
+                }
+            );
+            // form.formState.
         });
+    }
+    async function save(
+        and: "close" | "new" | "default" = "default",
+        autoSave = false,
+        data: any = null
+    ) {
+        form.handleSubmit(() => submit(and, autoSave, data))();
     }
     const debouncedSave = useCallback(
         debounce(() => {
             form.handleSubmit((d) => {
                 if (d.customerId) {
-                    save("default", true, d);
+                    submit("default", true, d);
                 } else {
                     toast.error(
                         "Autosave paused, requires customer information."
@@ -61,12 +83,10 @@ export default function useSaveSalesHook() {
         [form]
     );
     useDeepCompareEffect(() => {
-        // console.log(watchForm.items?.[2]?.description);
         if (
             form.formState.isDirty &&
             Object.keys(form.formState.dirtyFields).length
         ) {
-            // console.log(form.formState.dirtyFields);
             debouncedSave();
         }
     }, [watchForm, form]);

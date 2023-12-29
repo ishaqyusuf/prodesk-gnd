@@ -13,6 +13,7 @@ import useItemSelection from "../hooks/use-item-selection";
 import SalesFormAction from "./sales-form-action";
 import SalesDetailsSection from "./sales-details-section";
 import SalesAddressSection from "./sales-address-section";
+import RenderForm from "@/_v2/components/common/render-form";
 
 interface Props {
     data: SalesFormResponse;
@@ -93,7 +94,8 @@ export default function EditSalesForm({ data }: Props) {
                     isOrder: type == "order",
                 }}
             >
-                <Form {...form}>
+                <RenderForm {...form}>
+                    <p></p>
                     <div className="px-8">
                         <section id="action">
                             <SalesFormAction />
@@ -111,7 +113,7 @@ export default function EditSalesForm({ data }: Props) {
                             <InvoiceTable />
                         </section>
                     </div>
-                </Form>
+                </RenderForm>
                 <InvoiceItemsSelection />
             </SalesFormContext.Provider>
         </FormProvider>

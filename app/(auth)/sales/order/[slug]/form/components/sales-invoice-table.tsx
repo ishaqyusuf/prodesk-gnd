@@ -19,6 +19,7 @@ import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import { cn } from "@/lib/utils";
 import salesUtils from "../sales-utils";
+import usePersistDirtyForm from "@/_v2/hooks/use-persist-dirty-form";
 export default function SalesInvoiceTable({
     form,
     data,
@@ -40,6 +41,7 @@ export default function SalesInvoiceTable({
     const tableRef = React.useRef(null);
     const [floatingFooter, setFloatingFooter] = React.useState(false);
 
+    usePersistDirtyForm();
     const hideFooter = useLoader();
     React.useEffect(() => {
         const handleIntersection = (entries) => {

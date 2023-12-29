@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Layers } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
 import { SalesFormContext, SalesRowContext } from "../ctx";

@@ -33,6 +33,7 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import routeLeaveHandler from "../route-leave-handler";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { isProdClient } from "@/lib/is-prod";
 
 interface Props {
     data: SalesFormResponse;
@@ -89,9 +90,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     useEffect(() => {
         // console.log("...");
     }, []);
-    useEffect(() => {
-        return routeLeaveHandler.link(router);
-    }, []);
+    // useEffect(() => {
+    //     return routeLeaveHandler.link(router);
+    // }, []);
     // const router = useRouter();
     // const handleClick = e => {
     //     console.log("REQ");
@@ -179,7 +180,9 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                         }
                     }
                 }
-                toast.success("Saved", {});
+                if (!autoSave || (autoSave && !isProdClient)) {
+                    toast.success("Saved");
+                }
                 // } catch (error) {
                 //     console.log(error);
                 // }

@@ -30,7 +30,7 @@ export default function useSalesInvoiceRowActions(index, id, field) {
             insert(index + 1, newData as any);
         },
         addLine(where: "before" | "after") {
-            let pos = where == "before" ? -1 : 1;
+            let pos = where == "before" ? 0 : 1;
             const newData = salesFormUtils.generateInvoiceItem();
             insert(index + pos, newData as any);
         },

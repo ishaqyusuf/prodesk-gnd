@@ -35,7 +35,7 @@ export function useInvoiceItem(index) {
     } = useContext(SalesFormContext);
 
     useEffect(() => {
-        console.log([qty, rate]);
+        // console.log([qty, rate]);
         let _rate =
             (profitRate && profileEstimate
                 ? +toFixed(Number(rate) / Number(profitRate || 1))
