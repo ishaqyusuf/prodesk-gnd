@@ -236,7 +236,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                                 href={`/sales/edit/${data.form.type}/${data.form.slug}`}
                             >
                                 {/* <Icons.Rocket /> */}
-                                V2 Mode
+                                Switch to V2
                             </Link>
                         </Button>
                     </div>

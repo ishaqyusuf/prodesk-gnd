@@ -63,9 +63,10 @@ export default function AutoComplete({
         selectedItem,
     } = useCombobox({
         items,
-        inputValue: value,
+        // inputValue: "lorem",
+        initialInputValue: value,
         onSelectedItemChange(c) {
-            console.log(c);
+            // console.log(c);
             onSelect && onSelect(c.selectedItem as any);
             onChange && onChange((c.selectedItem as any)?.value);
         },
@@ -78,16 +79,25 @@ export default function AutoComplete({
             );
             onChange && onChange(inputValue);
         },
+        stateReducer: (state, actionAndChanges) => {
+            const { changes, type } = actionAndChanges;
+            switch (type) {
+                // case useCombobox.stateChangeTypes.
+                case useCombobox.stateChangeTypes.InputBlur:
+                    // console.log(changes.inputValue);
+                    // onChange && onChange(changes.inputValue);
+                    return {
+                        ...changes,
+                    };
+            }
+            return {
+                ...changes,
+            };
+        },
         itemToString(item) {
             return item ? (item as any).title : "";
         },
     });
-
-    const [query, setQuery] = useState("");
-    const debouncedQuery = useDebounce(query, 1000);
-    useEffect(() => {
-        // if(searchFn &&)
-    }, [debouncedQuery]);
     const listRef = useRef<HTMLDivElement>();
     const rowVirtualizer = useVirtualizer({
         count: items.length,

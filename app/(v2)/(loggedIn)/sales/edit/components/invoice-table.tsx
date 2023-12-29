@@ -328,6 +328,8 @@ function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
                         uppercase
                         className="h-8 p-1 font-medium uppercase"
                         {...props}
+                        // value={field.value}
+                        // onChange={field.onChange}
                         {...field}
                     />
                 ) : (

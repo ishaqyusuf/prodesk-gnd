@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SalesFormContext } from "../ctx";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -10,12 +10,15 @@ import { Icons } from "@/components/icons";
 import useSaveSalesHook from "../hooks/use-save-sales";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import AutoComplete from "@/components/common/auto-complete";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
     const date = form.watch("createdAt");
     const saveHook = useSaveSalesHook();
+
+    const [value, setValue] = useState("");
     return (
         <div className="flex justify-between items-center">
             <div className="">
@@ -28,13 +31,14 @@ export default function SalesFormAction() {
                     {ctx.data?.form?.orderId || "New Sales"}
                 </h2>
             </div>
+
             <div className="flex-1 px-4">
                 <Button asChild size="sm">
                     <Link
                         href={`/sales/${ctx.data.form.type}/${ctx.data.form.slug}/form`}
                     >
                         {/* <Icons.Rocket /> */}
-                        V1 Mode
+                        Switch to V1
                     </Link>
                 </Button>
             </div>
