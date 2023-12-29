@@ -41,6 +41,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { OkImpl } from "ts-results";
 import { toast } from "sonner";
+import { saveSalesAddressAction } from "@/app/(v2)/(loggedIn)/sales/_actions/save-sales-address";
 
 export function SalesCustomerModal({
     form,
@@ -98,7 +99,7 @@ export function SalesCustomerModal({
                 customer,
             };
             console.log(_form);
-            const resp = await saveAddressAction(_form as any);
+            const resp = await saveSalesAddressAction(_form as any);
 
             console.log(resp);
 
@@ -109,7 +110,7 @@ export function SalesCustomerModal({
                 Object.entries(ext).map(([k, v]) => {
                     form.setValue(k as any, v);
                 });
-                setOpen(false);
+                // setOpen(false);
             } else {
                 console.log(resp);
             }

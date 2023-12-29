@@ -37,6 +37,7 @@ export async function _saveSalesAddress({
         [billingAddress, shippingAddress].map(async (_address, index) => {
             // delete (address as any)?.["id"];
             if (sameAddress && index == 1) return;
+            console.log(index);
             let { id, ...address } = _address;
             // delete _address.customerId as any;
             let newId = null;
@@ -53,6 +54,9 @@ export async function _saveSalesAddress({
                         address1: null,
                     },
                 ],
+                customerId: {
+                    gt: 0,
+                },
                 // address1: {
                 //   in: [address1, ""],
                 // },
@@ -65,6 +69,7 @@ export async function _saveSalesAddress({
             })) as IAddressBook | null;
 
             if (eAddr) {
+                console.log(eAddr);
                 let _update: any = null;
                 const columns: (keyof IAddressBook)[] = [
                     "email",
@@ -72,14 +77,17 @@ export async function _saveSalesAddress({
                     "state",
                     "address1",
                 ];
+                console.log(index);
                 if (
                     eAddr.address1 &&
                     address.address1 &&
                     eAddr.address1 != address.address1
                 ) {
+                    console.log(index);
                     eAddr = null;
                     console.log("NULL....");
                 } else {
+                    console.log(index);
                     columns.map((c) => {
                         // let eac = eAddr[c];
                         let nac = address?.[c];
@@ -93,30 +101,38 @@ export async function _saveSalesAddress({
                             ...(eAddr.meta ?? {}),
                             zip_code: address?.meta?.zip_code,
                         };
+                    console.log(index);
                     setAddress(index, eAddr);
                     if (_update) {
+                        console.log(index);
                         const _adr = await prisma.addressBooks.update({
                             where: {
                                 id: eAddr.id,
                             },
                             data: _update,
                         });
+                        console.log(index);
                         setAddress(index, _adr);
                     }
                     newId = eAddr.id as any;
-                    if (index == 0) {
+                    if (index == 0 && eAddr.customerId) {
+                        console.log(index);
+                        console.log(index);
                         customerId = eAddr.customerId;
-                        console.log("UPDATING....");
+                        console.log(eAddr.customerId);
+
                         const __customer = await prisma.customers.update({
                             where: { id: eAddr.customerId as any },
                             data: {
                                 businessName: _customer.businessName,
                             },
                         });
+                        console.log(index);
                         address.customerId = eAddr?.customerId;
                         response.customer = __customer;
                     }
                 }
+                console.log(index);
                 // return eAddr;
             }
             if (eAddr == null) {

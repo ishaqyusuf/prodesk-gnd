@@ -40,6 +40,7 @@ export default function SalesAddressModal() {
                 billingAddress, //: ,
                 shippingAddress, //: { customerId: scid, ...siad },
                 customer,
+                profile,
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
             if (!billingAddress?.name || !billingAddress.phoneNo) {
@@ -50,6 +51,7 @@ export default function SalesAddressModal() {
             const {
                 customerId: scid,
                 search: ssea,
+
                 ...siad
             } = shippingAddress || {};
             const _form = {
@@ -60,7 +62,7 @@ export default function SalesAddressModal() {
                 customer,
             };
             console.log(_form);
-            const resp = await saveSalesAddressAction(_form as any);
+            const resp = await saveSalesAddressAction({ ..._form } as any);
             console.log(resp);
             if (resp.ok) {
                 const {
