@@ -70,16 +70,31 @@ export default function SalesAddressModal() {
                     customerId,
                     billingAddressId,
                     shippingAddressId,
+                    billingAddress,
+                    shippingAddress,
+                    customer,
                     ...ext
                 } = resp.val;
-
-                Object.entries({
+                const respData = {
                     customerId,
                     billingAddressId,
                     shippingAddressId,
-                }).map(([k, v]) => {
-                    mainForm.setValue(k as any, v);
+                    billingAddress,
+                    shippingAddress,
+                    customer,
+                };
+                console.log(respData);
+                console.log(mainForm.getValues("customerId"));
+                mainForm.reset(respData, {
+                    keepValues: true,
                 });
+                // Object.entries({
+                //     customerId,
+                //     billingAddressId,
+                //     shippingAddressId,
+                // }).map(([k, v]) => {
+                //     mainForm.setValue(k as any, v);
+                // });
                 closeModal();
             }
         });

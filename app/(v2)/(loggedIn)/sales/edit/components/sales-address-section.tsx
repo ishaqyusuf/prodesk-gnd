@@ -11,14 +11,16 @@ import AddressDispaly from "../../components/address-display";
 export default function SalesAddressSection() {
     const ctx = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
-    const [shipping, billing, customer] = form.watch([
+    const [shipping, billing, customer, customerId] = form.watch([
         "shippingAddress",
         "billingAddress",
         "customer",
+        "customerId",
     ]);
 
     return (
         <>
+            {customerId}
             <SalesAddressModal />
             <div
                 onClick={() => openModal("salesAddressForm")}

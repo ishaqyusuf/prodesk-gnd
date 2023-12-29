@@ -106,11 +106,11 @@ export function SalesCustomerModal({
             if (resp.ok) {
                 // console.log(_form);
                 const { profileUpdate, ...ext } = resp.val;
-
+                // console.log(ext);
                 Object.entries(ext).map(([k, v]) => {
                     form.setValue(k as any, v);
                 });
-                // setOpen(false);
+                setOpen(false);
             } else {
                 console.log(resp);
             }
