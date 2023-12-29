@@ -104,9 +104,7 @@ export default function EditSalesForm({ data }: Props) {
                             className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
                         >
                             <SalesDetailsSection />
-                            <div className="xl:col-span-2">
-                                <SalesAddressSection />
-                            </div>
+                            <SalesAddressSection />
                         </section>
                         <section id="invoiceForm">
                             <InvoiceTable />

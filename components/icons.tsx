@@ -64,6 +64,8 @@ import {
     ArrowDown,
     Move,
     Rocket,
+    Phone,
+    MapPin,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -89,6 +91,8 @@ export const Icons = {
     Delete: Delete,
     orders: ShoppingBag,
     project: FolderGit2,
+    phone: Phone,
+    address: MapPin,
     units: Home,
     tasks: Pin,
     payment: Pin,
