@@ -70,7 +70,6 @@ export default function EditSalesForm({ data }: Props) {
     renderCount++;
     return (
         <FormProvider {...form}>
-            <span className="counter">Render Count: {renderCount}</span>
             <SalesFormContext.Provider
                 value={{
                     data,

@@ -34,6 +34,7 @@ import routeLeaveHandler from "../route-leave-handler";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { isProdClient } from "@/lib/is-prod";
+import RenderForm from "@/_v2/components/common/render-form";
 
 interface Props {
     data: SalesFormResponse;
@@ -57,7 +58,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         control: form.control,
         defaultValue: defaultValues,
     });
-    renderCount++;
     const debouncedSave = useCallback(
         debounce(() => {
             form.handleSubmit((d) => {
@@ -183,9 +183,14 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                 if (!autoSave || (autoSave && !isProdClient)) {
                     toast.success("Saved");
                 }
-                // } catch (error) {
-                //     console.log(error);
-                // }
+                form.reset(
+                    {},
+                    {
+                        keepValues: true,
+                        keepDirty: false,
+                        keepSubmitCount: true,
+                    }
+                );
             });
         } catch (error) {
             console.log(error);
@@ -217,110 +222,114 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     // );
     return (
         <FormProvider {...form}>
-            <form
-                // onSubmit={form.handleSubmit((data) => onSubmit(data, "abc"))}
-                className="px-8"
-            >
-                <div className="">{renderCount}</div>
-                <OrderPrinter />
-                {/* <AutoExpandInput /> */}
-                <section
-                    id="header"
-                    className="flex items-center justify-between"
+            <RenderForm {...form}>
+                <form
+                    // onSubmit={form.handleSubmit((data) => onSubmit(data, "abc"))}
+                    className="px-8"
                 >
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight">
-                            {watchOrderId || newTitle}
-                        </h2>
-                    </div>
-                    <div className="flex-1 px-4">
-                        <Button asChild variant={"destructive"} size="sm">
-                            <Link
-                                href={`/sales/edit/${data.form.type}/${data.form.slug}`}
+                    <OrderPrinter />
+                    {/* <AutoExpandInput /> */}
+                    <section
+                        id="header"
+                        className="flex items-center justify-between"
+                    >
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-tight">
+                                {watchOrderId || newTitle}
+                            </h2>
+                        </div>
+                        <div className="flex-1 px-4">
+                            <Button asChild variant={"destructive"} size="sm">
+                                <Link
+                                    href={`/sales/edit/${data.form.type}/${data.form.slug}`}
+                                >
+                                    {/* <Icons.Rocket /> */}
+                                    Switch to V2
+                                </Link>
+                            </Button>
+                        </div>
+                        <div className="sitems-center flex space-x-2">
+                            {(mockPercent || 0) > 0 && (
+                                <div className="inline-flex items-center space-x-2">
+                                    <Label>Mockup Mode</Label>
+                                    <Switch
+                                        checked={mockupMode as any}
+                                        onCheckedChange={(e) => {
+                                            store.dispatch(toggleMockup(e));
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            <UpdateSalesDate form={form} />
+                            <CatalogModal form={form} ctx={data.ctx} />
+                            <Menu
+                                variant={"secondary"}
+                                disabled={mockupMode}
+                                label={"Save"}
+                                Icon={null}
                             >
-                                {/* <Icons.Rocket /> */}
-                                Switch to V2
-                            </Link>
-                        </Button>
-                    </div>
-                    <div className="sitems-center flex space-x-2">
-                        {(mockPercent || 0) > 0 && (
-                            <div className="inline-flex items-center space-x-2">
-                                <Label>Mockup Mode</Label>
-                                <Switch
-                                    checked={mockupMode as any}
-                                    onCheckedChange={(e) => {
-                                        store.dispatch(toggleMockup(e));
+                                <MenuItem
+                                    onClick={() => save()}
+                                    Icon={Icons.save}
+                                >
+                                    Save
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => save("close")}
+                                    Icon={Icons.saveAndClose}
+                                >
+                                    Save & Close
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => save("new")}
+                                    Icon={Icons.add}
+                                >
+                                    Save & New
+                                </MenuItem>
+                            </Menu>
+                            <Menu Icon={Icons.more}>
+                                <MenuItem
+                                    onClick={() => {
+                                        openModal("salesSupply");
                                     }}
+                                >
+                                    Supply
+                                </MenuItem>
+                                <PrintOrderMenuAction
+                                    link
+                                    row={{ id: form.getValues("id") } as any}
                                 />
-                            </div>
-                        )}
-                        <UpdateSalesDate form={form} />
-                        <CatalogModal form={form} ctx={data.ctx} />
-                        <Menu
-                            variant={"secondary"}
-                            disabled={mockupMode}
-                            label={"Save"}
-                            Icon={null}
-                        >
-                            <MenuItem onClick={() => save()} Icon={Icons.save}>
-                                Save
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => save("close")}
-                                Icon={Icons.saveAndClose}
-                            >
-                                Save & Close
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => save("new")}
-                                Icon={Icons.add}
-                            >
-                                Save & New
-                            </MenuItem>
-                        </Menu>
-                        <Menu Icon={Icons.more}>
-                            <MenuItem
-                                onClick={() => {
-                                    openModal("salesSupply");
-                                }}
-                            >
-                                Supply
-                            </MenuItem>
-                            <PrintOrderMenuAction
-                                link
-                                row={{ id: form.getValues("id") } as any}
+                                <PrintOrderMenuAction
+                                    mockup
+                                    link
+                                    row={{ id: form.getValues("id") } as any}
+                                />
+                                <PrintOrderMenuAction
+                                    pdf
+                                    row={{ id: form.getValues("id") } as any}
+                                />
+                            </Menu>
+                        </div>
+                    </section>
+                    <section
+                        id="topForm"
+                        className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
+                    >
+                        <div className="xl:col-span-3">
+                            <InfoCard data={data} form={form} />
+                        </div>
+                        <div className="xl:col-span-2">
+                            <SalesCustomerModal
+                                form={form}
+                                profiles={data.ctx?.profiles}
                             />
-                            <PrintOrderMenuAction
-                                mockup
-                                link
-                                row={{ id: form.getValues("id") } as any}
-                            />
-                            <PrintOrderMenuAction
-                                pdf
-                                row={{ id: form.getValues("id") } as any}
-                            />
-                        </Menu>
-                    </div>
-                </section>
-                <section
-                    id="topForm"
-                    className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
-                >
-                    <div className="xl:col-span-3">
-                        <InfoCard data={data} form={form} />
-                    </div>
-                    <div className="xl:col-span-2">
-                        <SalesCustomerModal
-                            form={form}
-                            profiles={data.ctx?.profiles}
-                        />
-                    </div>
-                </section>
-                <section id="invoiceForm">
-                    <SalesInvoiceTable form={form} data={data} />
-                </section>
-            </form>
+                        </div>
+                    </section>
+                    <section id="invoiceForm">
+                        <SalesInvoiceTable form={form} data={data} />
+                    </section>
+                </form>
+            </RenderForm>
         </FormProvider>
     );
 }

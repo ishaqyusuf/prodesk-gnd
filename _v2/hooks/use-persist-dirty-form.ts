@@ -5,9 +5,9 @@ import { useFormContext } from "react-hook-form";
 export default function usePersistDirtyForm() {
     const form = useFormContext();
 
-    const dirtyFields = form.formState.dirtyFields;
     const router = useRouter();
     useEffect(() => {
+        const dirtyFields = form.formState.dirtyFields;
         const confirmationMessage = "Are you sure you want to leave this page?";
         const dirtyCount = Object.keys(dirtyFields).length;
         const links = document.querySelectorAll("a");
@@ -43,5 +43,5 @@ export default function usePersistDirtyForm() {
             });
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
-    }, [dirtyFields]);
+    }, [form]);
 }
