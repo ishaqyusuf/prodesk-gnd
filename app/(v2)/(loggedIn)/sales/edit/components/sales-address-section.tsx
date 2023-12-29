@@ -20,7 +20,6 @@ export default function SalesAddressSection() {
 
     return (
         <>
-            {customerId}
             <SalesAddressModal />
             <div
                 onClick={() => openModal("salesAddressForm")}

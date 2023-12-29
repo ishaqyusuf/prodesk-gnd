@@ -108,7 +108,7 @@ export function SalesCustomerModal({
                 const { profileUpdate, ...ext } = resp.val;
                 // console.log(ext);
                 Object.entries(ext).map(([k, v]) => {
-                    form.setValue(k as any, v);
+                    form.setValue(k as any, v, { shouldDirty: true });
                 });
                 setOpen(false);
             } else {

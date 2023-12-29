@@ -85,16 +85,15 @@ export default function SalesAddressModal() {
                 };
                 console.log(respData);
                 console.log(mainForm.getValues("customerId"));
-                mainForm.reset(respData, {
-                    keepValues: true,
-                });
-                // Object.entries({
-                //     customerId,
-                //     billingAddressId,
-                //     shippingAddressId,
-                // }).map(([k, v]) => {
-                //     mainForm.setValue(k as any, v);
+                // mainForm.reset(respData, {
+                //     keepValues: true,
+
                 // });
+                Object.entries(respData).map(([k, v]) => {
+                    mainForm.setValue(k as any, v, {
+                        shouldDirty: true,
+                    });
+                });
                 closeModal();
             }
         });
