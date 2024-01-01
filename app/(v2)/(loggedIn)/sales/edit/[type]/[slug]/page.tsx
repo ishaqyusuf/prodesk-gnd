@@ -1,12 +1,12 @@
-import { SalesFormResponse } from "@/app/_actions/sales/sales-form";
+import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
 
-import { _getSalesFormAction } from "@/app/(auth)/sales/_actions/get-sales-form";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { _getSalesFormAction } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import {
     BreadLink,
     OrderViewCrumb,
     OrdersCrumb,
-} from "@/components/breadcrumbs/links";
+} from "@/components/_v1/breadcrumbs/links";
 import EditSalesForm from "../../components/form";
 
 export default async function EditSalesPage({ searchParams, params }) {

@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import TabbedLayout from "@/components/tab-layouts/tabbed-layout";
+import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 
 export default function CommissionsLayout({
     children,
-    query
+    query,
 }: {
     children;
     query?;
 }) {
     const { data: session } = useSession({
-        required: false
+        required: false,
     });
     const can = session?.can;
     // useEffect(() =>)
@@ -21,15 +21,15 @@ export default function CommissionsLayout({
             can?.viewOrders && { title: "Orders", path: "/sales/orders" },
             can?.viewOrders && {
                 title: "Back Orders",
-                path: "/sales/back-orders"
+                path: "/sales/back-orders",
             },
             can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
             can?.viewInboundOrder && {
                 title: "Inbounds",
-                path: "/sales/inbounds"
+                path: "/sales/inbounds",
             },
             can?.viewDelivery && { title: "Delivery", path: "/sales/delivery" },
-            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" }
+            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" },
         ].filter(Boolean)
     );
     return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;

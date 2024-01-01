@@ -1,7 +1,7 @@
 "use client";
 
-import { _deleteContractorDoc } from "@/app/_actions/contractors/delete-contractor-doc";
-import ConfirmBtn from "@/components/confirm-btn";
+import { _deleteContractorDoc } from "@/app/(v1)/_actions/contractors/delete-contractor-doc";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -11,7 +11,7 @@ import { IUser, IUserDoc } from "@/types/hrm";
 import Image from "next/image";
 
 export default function ContractorOverviewDocs(props) {
-    const data: IUser = useAppSelector(s => s.slicers.dataPage)?.data;
+    const data: IUser = useAppSelector((s) => s.slicers.dataPage)?.data;
     async function deleteImg(img: IUserDoc) {
         await _deleteContractorDoc(img);
     }
@@ -28,14 +28,14 @@ export default function ContractorOverviewDocs(props) {
                 </Button>
                 <Table>
                     <TableBody>
-                        {data.documents?.map(doc => (
+                        {data.documents?.map((doc) => (
                             <TableRow key={doc.id}>
                                 <TableCell>
                                     <Image
                                         className="border-2 rounded cursor-pointer"
                                         onClick={() =>
                                             openModal("img", {
-                                                src: doc.meta.url
+                                                src: doc.meta.url,
                                             })
                                         }
                                         width={70}

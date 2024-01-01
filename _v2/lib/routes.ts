@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/_v1/icons";
 import { ICan } from "@/types/auth";
 
 function routeGroup(groupName, navs) {

@@ -5,26 +5,26 @@ import { Inter } from "next/font/google";
 // import { siteConfig } from "@/config/site";
 // import { fontSans } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/toaster";
-import AppProvider from "@/components/app-provider";
+import AppProvider from "@/components/_v1/app-provider";
 import { env } from "@/env.mjs";
-import Upgrader from "@/components/upgrader";
+import Upgrader from "@/components/_v1/upgrader";
 // import { SiteHeader } from "@/components/site-header";
 // import { TailwindIndicator } from "@/components/tailwind-indicator";
 // import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
-import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
-import { sendMsg } from "./_actions/sms/twilio";
+import { sendMsg } from "./(v1)/_actions/sms/twilio";
 
 export const metadata: Metadata = {
     title: "GND-PRODESK",
-    description: "home page"
+    description: "home page",
 };
 
 const inter = Inter({ subsets: ["latin"] });
 export default async function RootLayout({
-    children
+    children,
 }: {
     children: React.ReactNode;
 }) {

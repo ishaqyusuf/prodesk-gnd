@@ -17,26 +17,29 @@ import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Layers } from "lucide-react";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
 import { SalesFormContext, SalesRowContext } from "../ctx";
-import AutoComplete from "@/components/common/auto-complete";
+import AutoComplete from "@/components/_v1/common/auto-complete";
 import { Label } from "@/components/ui/label";
-import Money from "@/components/money";
+import Money from "@/components/_v1/money";
 import {
     useInvoiceItem,
     useInvoiceTotalEstimate,
 } from "../hooks/use-invoice-estimate";
-import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
-import { Icons } from "@/components/icons";
+import {
+    Menu,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
+import { Icons } from "@/components/_v1/icons";
 import { ISalesForm } from "../type";
 import EstimateFooter from "./estimate-footer";
 import { Button } from "@/components/ui/button";
 import salesFormUtils from "../sales-form-utils";
 import useSalesInvoiceRowActions from "../hooks/use-row-actions";
 
-export default function InvoiceTable() {
+export function InvoiceTable() {
     const form = useFormContext<ISalesForm>();
     const fieldArray = useFieldArray({
         control: form.control,
@@ -55,7 +58,6 @@ export default function InvoiceTable() {
         // items.splice(result.destination.index, 0, reorderedItem as any);
         // replace(items);
     };
-    const [line, setLine] = useState("");
     return (
         <div className={cn("relative", isMobile && "max-md:overflow-x-auto")}>
             <SalesRowContext.Provider value={fieldArray}>
@@ -107,7 +109,6 @@ export default function InvoiceTable() {
         </div>
     );
 }
-
 function InvoiceTableRow({ index, field, length }) {
     const { data, profileEstimate } = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
@@ -312,34 +313,87 @@ interface InputHelperProps {
 }
 function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
     const form = useFormContext<ISalesOrder>();
-    return (
-        <FormField<ISalesOrder>
-            name={`items.${index}.${formKey}` as any}
-            control={form.control}
-            render={({ field }) =>
-                checkbox ? (
-                    <Checkbox
-                        id="component"
-                        checked={field.value as CheckedState}
-                        onCheckedChange={field.onChange}
-                    />
-                ) : props.options ? (
-                    <AutoComplete
-                        uppercase
-                        className="h-8 p-1 font-medium uppercase"
-                        {...props}
-                        // value={field.value}
-                        // onChange={field.onChange}
-                        {...field}
-                    />
-                ) : (
-                    <Input
-                        className="h-8 p-1 uppercase font-medium"
-                        {...field}
-                        {...props}
-                    />
-                )
+    const ctx = useContext(SalesRowContext);
+    const valueKey: any = `items.${index}.${formKey}`;
+    const [wValue] = form.watch([valueKey]);
+    // useEffect(() => {},[formKey])
+
+    const [expression, setExpression] = useState("");
+    const keyDown = useCallback(
+        (e) => {
+            let k = e.key;
+            if (props.type == "number" && !(+k > -1) && k?.length == 1) {
+                e.preventDefault();
             }
-        />
+            if (props.type == "number") {
+                console.log(k);
+                //
+                if (["+", "-", "/", "*", "%"].includes(k)) {
+                    // console.log([k, qty]);
+                    setExpression((ex) => {
+                        return [ex, wValue, ` ${k} `].join("");
+                    });
+                    form.setValue(valueKey, "");
+                }
+                if (k == "=" || k == "Enter") {
+                    setExpression((ex) => {
+                        const exp = `${ex}${wValue}`;
+                        // console.log(exp);
+                        const res = eval(exp) as any;
+                        // console.log(res);
+                        form.setValue(valueKey, res);
+                        return "";
+                    });
+                }
+                if (k == "Escape") {
+                    setExpression("");
+                }
+            }
+        },
+        [wValue, valueKey, index, form, props, setExpression]
+    );
+    // ctx.
+    return (
+        <div className="relative">
+            {expression && (
+                <div className="absolute -top-[60px] z-10 bg-white w-full shadow-xl border rounded-xl p-2">
+                    {expression
+                        ?.split(" ")
+                        .filter(Boolean)
+                        .map((e, i) => (
+                            <p key={i}>{e}</p>
+                        ))}
+                </div>
+            )}
+            <FormField<ISalesOrder>
+                name={`items.${index}.${formKey}` as any}
+                control={form.control}
+                render={({ field }) =>
+                    checkbox ? (
+                        <Checkbox
+                            id="component"
+                            checked={field.value as CheckedState}
+                            onCheckedChange={field.onChange}
+                        />
+                    ) : props.options ? (
+                        <AutoComplete
+                            uppercase
+                            className="h-8 p-1 font-medium uppercase"
+                            {...props}
+                            // value={field.value}
+                            // onChange={field.onChange}
+                            {...field}
+                        />
+                    ) : (
+                        <Input
+                            className="h-8 p-1 uppercase font-medium"
+                            {...field}
+                            {...props}
+                            onKeyDown={keyDown}
+                        />
+                    )
+                }
+            />
+        </div>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { _saveCommunitModelCostData } from "@/app/_actions/community/community-model-cost";
+import { _saveCommunitModelCostData } from "@/app/(v1)/_actions/community/community-model-cost";
 import {
     Form,
     FormControl,
@@ -14,7 +14,7 @@ import { IUser } from "@/types/hrm";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { _saveEmailPersonalizeForm } from "./_save-email-personalize-form";
-import Btn from "@/components/btn";
+import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 
 export default function EmailPersolizeForm({ user }: { user: IUser }) {

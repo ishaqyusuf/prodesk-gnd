@@ -1,8 +1,8 @@
-import { _dbUser, user } from "@/app/_actions/utils";
+import { _dbUser, user } from "@/app/(v1)/_actions/utils";
 import { Metadata } from "next";
 import EmailPersolizeForm from "./email-personalize-form";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { BreadLink } from "@/components/breadcrumbs/links";
+import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
+import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { IUser } from "@/types/hrm";
 
 export const metadata: Metadata = {

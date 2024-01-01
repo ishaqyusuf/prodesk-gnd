@@ -1,4 +1,4 @@
-import { TruckLoaderForm } from "@/components/sales/load-delivery/load-delivery";
+import { TruckLoaderForm } from "@/components/_v1/sales/load-delivery/load-delivery";
 
 export function truckBackOrder(data: TruckLoaderForm) {
     Object.entries(data.loader).map(([orderId, v]) => {
@@ -10,7 +10,7 @@ export function truckBackOrder(data: TruckLoaderForm) {
             v.backOrders[itemUID] = {
                 qty: load.qty,
                 checked: false,
-                backQty: 0
+                backQty: 0,
             };
             if (load.qty > load.loadQty) {
                 data.hasBackOrder = true;
@@ -19,7 +19,7 @@ export function truckBackOrder(data: TruckLoaderForm) {
                 v.backOrders[itemUID] = {
                     backQty: load.qty - load.loadQty,
                     qty: load.qty,
-                    checked: false
+                    checked: false,
                     // loadQty: load.loadQty
                 };
             } else if (load.loadQty > load.qty) throw Error("Overload error");

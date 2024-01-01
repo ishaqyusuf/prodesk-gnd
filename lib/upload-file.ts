@@ -1,4 +1,4 @@
-import { getSignature } from "@/app/_actions/cloudinary/cloudinary";
+import { getSignature } from "@/app/(v1)/_actions/cloudinary/cloudinary";
 import { env } from "@/env.mjs";
 
 export async function uploadFile(file, folder) {
@@ -15,7 +15,7 @@ export async function uploadFile(file, folder) {
     console.log({ endpoint, timestamp, signature });
     const data = await fetch(endpoint, {
         method: "POST",
-        body: formData
-    }).then(res => res.json());
+        body: formData,
+    }).then((res) => res.json());
     return data;
 }

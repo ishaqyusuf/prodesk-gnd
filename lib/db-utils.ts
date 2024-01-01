@@ -1,18 +1,18 @@
-import { getPageInfo, queryFilter } from "@/app/_actions/action-utils";
+import { getPageInfo, queryFilter } from "@/app/(v1)/_actions/action-utils";
 
 export function searchQuery<T>(query, ...columns: (keyof T)[]) {
     if (!query._q) return {};
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     const OR: any = [];
-    columns.map(c => {
+    columns.map((c) => {
         OR.push({
-            [c]: q
+            [c]: q,
         });
     });
     return {
-        OR
+        OR,
     };
 }
 export async function queryBuilder<T>(query, table, soft = true) {
@@ -25,23 +25,23 @@ export async function queryBuilder<T>(query, table, soft = true) {
         _prismaArgs() {
             return {
                 where: where.get(),
-                ...queryFilters
+                ...queryFilters,
             };
         },
         async response(data) {
             const pageInfo = await getPageInfo(query, where.get(), table);
             return {
                 pageInfo,
-                data
+                data,
             };
-        }
+        },
     };
 }
 export function whereQuery<T>(query, soft = true) {
     let where: any = {} as any;
     if (soft) where.deletedAt = null;
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
     };
     return {
         where,
@@ -61,7 +61,7 @@ export function whereQuery<T>(query, soft = true) {
         raw(rq: T) {
             where = {
                 ...where,
-                ...rq
+                ...rq,
             };
             // Object.entries(rq as any).map(([k, v]) => (where[k] = v));
         },
@@ -70,7 +70,7 @@ export function whereQuery<T>(query, soft = true) {
                 if (!where.OR) where.OR = [];
                 Object.entries(_search as any).map(([k, v]) => {
                     where.OR.push({
-                        [k]: v
+                        [k]: v,
                     });
                 });
             }
@@ -79,6 +79,6 @@ export function whereQuery<T>(query, soft = true) {
             Object.entries(searchQuery<T>(query, ...columns)).map(
                 ([k, v]) => (where[k] = v)
             );
-        }
+        },
     };
 }

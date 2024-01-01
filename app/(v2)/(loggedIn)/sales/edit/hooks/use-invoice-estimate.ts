@@ -69,6 +69,7 @@ export function useInvoiceItem(index) {
         toggleMockup,
         index,
     ]);
+
     return {
         lid,
         qty,
@@ -86,7 +87,6 @@ export function useInvoiceItem(index) {
         },
     };
 }
-
 export function useInvoiceTotalEstimate() {
     const {
         summary,

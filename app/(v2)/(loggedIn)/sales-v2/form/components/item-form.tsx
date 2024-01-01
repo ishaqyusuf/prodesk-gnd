@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
 import {
     Collapsible,

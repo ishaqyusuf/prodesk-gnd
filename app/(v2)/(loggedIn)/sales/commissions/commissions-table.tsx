@@ -1,18 +1,18 @@
 "use client";
 
-import { DataTable2 } from "@/components/data-table/data-table-2";
-import { SmartTable } from "@/components/data-table/smart-table";
+import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
+import { SmartTable } from "@/components/_v1/data-table/smart-table";
 import { useMemo, useState, useTransition } from "react";
 import { ICommissions } from "./commissions";
 import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { _FilterColumn } from "@/components/columns/base-columns";
-import Money from "@/components/money";
+import { _FilterColumn } from "@/components/_v1/columns/base-columns";
+import Money from "@/components/_v1/money";
 
 export default function CommissionsTable<T>({
     data,
     pageInfo,
-    searchParams
+    searchParams,
 }: TableShellProps<ICommissions>) {
     const [isPending, startTransition] = useTransition();
 
@@ -37,22 +37,22 @@ export default function CommissionsTable<T>({
                     return {
                         story: [
                             table.primaryText(data.id),
-                            table.secondary(data.createdAt)
-                        ]
+                            table.secondary(data.createdAt),
+                        ],
                     };
-                }
+                },
             }),
-            table.simpleColumn("Order", data => ({
+            table.simpleColumn("Order", (data) => ({
                 link: `/sales/order/${data.order?.slug}`,
-                story: [table.primaryText(data.order.orderId)]
+                story: [table.primaryText(data.order.orderId)],
             })),
-            table.simpleColumn("Sales Rep", data => ({
+            table.simpleColumn("Sales Rep", (data) => ({
                 // link: `/sales/order/${data.order?.slug}`,
-                story: [table.primaryText(data.user?.name)]
+                story: [table.primaryText(data.user?.name)],
             })),
 
-            table.simpleColumn("Amount", data => ({
-                story: [<Money value={data.amount} key={0} />]
+            table.simpleColumn("Amount", (data) => ({
+                story: [<Money value={data.amount} key={0} />],
             })),
             table.simpleStatus("status"),
 
@@ -63,8 +63,8 @@ export default function CommissionsTable<T>({
                 size: 15,
                 maxSize: 15,
                 enableSorting: false,
-                cell: ({ row }) => <></>
-            }
+                cell: ({ row }) => <></>,
+            },
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
@@ -83,21 +83,21 @@ export default function CommissionsTable<T>({
                         { label: "All", value: "All" },
                         {
                             label: "Pending Putaway",
-                            value: "Pending"
+                            value: "Pending",
                         },
                         { label: "Stored", value: "Stored" },
                         {
                             label: "Pending Arrival",
-                            value: "Pending Arrival"
-                        }
-                    ]
-                }
+                            value: "Pending Arrival",
+                        },
+                    ],
+                },
             ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: ""
-                }
+                    title: "",
+                },
             ]}
 
             //  deleteRowsAction={() => void deleteSelectedRows()}

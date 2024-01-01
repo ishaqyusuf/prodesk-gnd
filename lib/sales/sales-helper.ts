@@ -1,16 +1,16 @@
 "use client";
 
-import { copyOrderAction, moveSales } from "@/app/_actions/sales/sales";
+import { copyOrderAction, moveSales } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
 import { closeModal, openModal } from "../modal";
 import { ISalesOrder, IOrderType, IOrderPrintMode } from "@/types/sales";
 import {
     adminCompleteProductionAction,
     cancelProductionAssignmentAction,
-    markProductionIncompleteAction
-} from "@/app/_actions/sales/sales-production";
+    markProductionIncompleteAction,
+} from "@/app/(v1)/_actions/sales/sales-production";
 import optionBuilder from "../option-builder";
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
 import { dispatchSlice } from "@/store/slicers";
@@ -29,7 +29,7 @@ export const sales = {
     async copy(order, as: IOrderType = "order") {
         const _ = await copyOrderAction({
             orderId: order.orderId,
-            as
+            as,
         });
         toast.success(`${as} copied successfully`, {
             // action: {
@@ -46,7 +46,7 @@ export const sales = {
             id,
             orderId,
             prodDueDate,
-            prodId
+            prodId,
         });
     },
     async markIncomplete(row) {
@@ -97,9 +97,9 @@ export const sales = {
                                       "Mark as Completed",
                                       () => this.completeProduction(row),
                                       Icons.check
-                                  )
+                                  ),
                               ]
-                            : [])
+                            : []),
                     ],
                     Icons.production
                 ),
@@ -125,13 +125,13 @@ export const sales = {
                             await this.copy(row, "estimate");
                         },
                         Icons.estimates
-                    )
+                    ),
                 ],
                 Icons.copy
             ),
             this.printMenu(row, "Print", false, "main"),
             this.printMenu(row, "Print Mockup", true, "main"),
-            this.printMenu(row, "Pdf", false, "pdf")
+            this.printMenu(row, "Pdf", false, "pdf"),
             // {delete: true,action: _delete}
         ].filter(Boolean);
     },
@@ -153,7 +153,7 @@ export const sales = {
                 isClient: !["production", "packing list"].includes(mode),
                 showInvoice: ["order", "quote", "invoice"].includes(mode),
                 packingList: mode == "packing list",
-                isProd: mode == "production"
+                isProd: mode == "production",
             });
 
             return;
@@ -179,7 +179,7 @@ export const sales = {
                 mode,
                 mockup,
                 pdf: type == "pdf",
-                prints: true
+                prints: true,
             });
             console.log("PRINT:", mode);
             closeModal();
@@ -198,10 +198,10 @@ export const sales = {
                     "Production",
                     () => _print("production"),
                     Icons.production
-                )
+                ),
             ],
             type == "pdf" ? Icons.edit : Icons.print
         );
-    }
+    },
 };
 const printOrder = sales.print;

@@ -1,8 +1,8 @@
 "use client";
 
-import { _saveDocUpload } from "@/app/_actions/contractors/upload-contractor-doc";
-import Btn from "@/components/btn";
-import BaseModal from "@/components/modals/base-modal";
+import { _saveDocUpload } from "@/app/(v1)/_actions/contractors/upload-contractor-doc";
+import Btn from "@/components/_v1/btn";
+import BaseModal from "@/components/_v1/modals/base-modal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { closeModal } from "@/lib/modal";
@@ -21,8 +21,8 @@ export default function UploadDocumentModal({}) {
             description: null,
             url: null,
             userId: null,
-            meta: {}
-        }
+            meta: {},
+        },
     });
     const [loading, startTransition] = useTransition();
     async function uploadImage() {
@@ -39,7 +39,7 @@ export default function UploadDocumentModal({}) {
                     formData.url = data.public_id;
                     formData.meta = {
                         url: data.secure_url,
-                        assetId: data.asset_id
+                        assetId: data.asset_id,
                     };
                     await _saveDocUpload(formData);
                     toast.success("upload successful");
@@ -59,10 +59,10 @@ export default function UploadDocumentModal({}) {
     return (
         <BaseModal<IUser>
             className="sm:max-w-[500px]"
-            onOpen={data => {
+            onOpen={(data) => {
                 form.reset({
                     userId: data?.id,
-                    meta: {}
+                    meta: {},
                 } as any);
             }}
             modalName="uploadDoc"

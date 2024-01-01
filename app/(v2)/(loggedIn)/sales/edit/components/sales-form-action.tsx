@@ -4,13 +4,16 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ISalesForm } from "../type";
-import { DatePicker } from "@/components/date-range-picker";
-import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
-import { Icons } from "@/components/icons";
+import { DatePicker } from "@/components/_v1/date-range-picker";
+import {
+    Menu,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
+import { Icons } from "@/components/_v1/icons";
 import useSaveSalesHook from "../hooks/use-save-sales";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import AutoComplete from "@/components/common/auto-complete";
+import AutoComplete from "@/components/_v1/common/auto-complete";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);

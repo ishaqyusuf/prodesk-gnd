@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import { ICan } from "@/types/auth";
 

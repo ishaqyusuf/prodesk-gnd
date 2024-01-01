@@ -3,9 +3,12 @@
 import {
     SalesFormResponse,
     _getSalesFormAction,
-} from "@/app/(auth)/sales/_actions/get-sales-form";
-import AutoComplete from "@/components/common/auto-complete";
-import { Menu, MenuItem } from "@/components/data-table/data-table-row-actions";
+} from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+import AutoComplete from "@/components/_v1/common/auto-complete";
+import {
+    Menu,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {

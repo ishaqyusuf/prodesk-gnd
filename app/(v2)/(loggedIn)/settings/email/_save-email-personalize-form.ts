@@ -1,6 +1,6 @@
 "use server";
 
-import { userId } from "@/app/_actions/utils";
+import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { revalidatePath } from "next/cache";
 

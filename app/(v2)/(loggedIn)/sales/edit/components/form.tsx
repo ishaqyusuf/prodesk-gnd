@@ -1,9 +1,8 @@
 "use client";
 
-import { SalesFormResponse } from "@/app/(auth)/sales/_actions/get-sales-form";
-import { Form } from "@/components/ui/form";
+import { SalesFormResponse } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
 import { FormProvider, useForm } from "react-hook-form";
-import InvoiceTable from "./invoice-table";
+import { InvoiceTable } from "./invoice-table";
 import { SalesFormContext } from "../ctx";
 import { ISalesForm } from "../type";
 import { useState } from "react";
@@ -14,6 +13,8 @@ import SalesFormAction from "./sales-form-action";
 import SalesDetailsSection from "./sales-details-section";
 import SalesAddressSection from "./sales-address-section";
 import RenderForm from "@/_v2/components/common/render-form";
+import { cn } from "@/lib/utils";
+import { Dot } from "lucide-react";
 
 interface Props {
     data: SalesFormResponse;
@@ -94,7 +95,24 @@ export default function EditSalesForm({ data }: Props) {
                 }}
             >
                 <RenderForm {...form}>
-                    <p></p>
+                    <div className="fixed top-0 right-[40vw] mt-2">
+                        <div
+                            className={cn(
+                                Object.keys(form.formState.dirtyFields)
+                                    .length == 0
+                                    ? "text-green-700 bg-green-200"
+                                    : "text-pink-700 bg-pink-200",
+                                "inline-flex items-center h-6 leading-none rounded-full px-4  py-0.5"
+                            )}
+                        >
+                            <Dot className="" />
+                            <span className="text-xs">
+                                {Object.keys(form.formState.dirtyFields).length
+                                    ? "unsaved"
+                                    : "saved"}
+                            </span>
+                        </div>
+                    </div>
                     <div className="px-8">
                         <section id="action">
                             <SalesFormAction />

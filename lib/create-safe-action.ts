@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { Ok, Err, Result } from "ts-results";
-import { _email } from "@/app/_actions/_email";
+import { _email } from "@/app/(v1)/_actions/_email";
 import { prisma } from "@/db";
-import { userId } from "@/app/_actions/utils";
+import { userId } from "@/app/(v1)/_actions/utils";
 export type FieldErrors<T> = {
     [K in keyof T]?: string[];
 };
@@ -24,7 +24,7 @@ export const createSafeAction = <TInput = any, TOutput = any>(
         if (!validationResult.success) {
             return Err({
                 fields: validationResult.error.flatten()
-                    .fieldErrors as FieldErrors<TInput>
+                    .fieldErrors as FieldErrors<TInput>,
             });
         }
 
@@ -45,18 +45,18 @@ export const createSafeAction = <TInput = any, TOutput = any>(
                 await prisma.errorLog.create({
                     data: {
                         meta: {
-                            error: e.message
+                            error: e.message,
                         } as any,
                         status: "new",
                         userId: await userId(),
                         createdAt: new Date(),
-                        updatedAt: new Date()
-                    }
+                        updatedAt: new Date(),
+                    },
                 });
                 console.log(e.message);
             }
             const err = Err({
-                message: "Fatal Error"
+                message: "Fatal Error",
             });
             return { ...(err as any) };
         }

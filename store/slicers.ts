@@ -16,7 +16,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { store } from ".";
 import { IOrderPrintMode, ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import { IProduct } from "@/types/product";
-import { INotification } from "@/app/_actions/notifications";
+import { INotification } from "@/app/(v1)/_actions/notifications";
 import {
     ExtendedHome,
     ICommunityTemplate,

@@ -1,4 +1,4 @@
-import Money from "@/components/money";
+import Money from "@/components/_v1/money";
 import { useLoader } from "@/lib/use-loader";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";

@@ -1,4 +1,4 @@
-import { SalesFormResponse } from "@/app/(auth)/sales/_actions/get-sales-form";
+import { SalesFormResponse } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
 import { createContext } from "react";
 import { UseFieldArrayReturn } from "react-hook-form";
 import { ISalesForm, ISalesFormItem } from "./type";
