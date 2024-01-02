@@ -756,7 +756,23 @@ model SalesOrderItems {
     supplies           SalesItemSupply[]
     salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     productions        OrderProductionSubmissions[]
+    shelfItems         DykeSalesShelfItem[]
     // components         SalesOrderItemComponents[]
+}
+
+model DykeSalesShelfItem {
+    id               Int                @unique @default(autoincrement())
+    salesOrderItemId Int?
+    productId        Int?
+    qty              Int?
+    unitPrice        Int?
+    totalPrice       Int?
+    meta             Json?              @db.Json
+    createdAt        DateTime?          @db.Timestamp(0)
+    updatedAt        DateTime?          @db.Timestamp(0)
+    deletedAt        DateTime?          @db.Timestamp(0)
+    salesOrderItem   SalesOrderItems?   @relation(fields: [salesOrderItemId], references: [id])
+    shelfProduct     DykeShelfProducts? @relation(fields: [productId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1085,4 +1101,5 @@ model DykeShelfProducts {
     deletedAt        DateTime?            @db.Timestamp(0)
     category         DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
     parentCategory   DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
+    orderItems       DykeSalesShelfItem[]
 }

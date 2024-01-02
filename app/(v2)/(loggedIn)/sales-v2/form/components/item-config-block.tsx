@@ -3,39 +3,28 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Block, getNextBlock } from "../item-form-blocks";
 import { cn } from "@/lib/utils";
 import HousePackageTool from "./house-package-tool";
 import { useContext } from "react";
-import { SalesFormContext } from "../sales-form-context";
-import ShelfItemsBlock from "./shelf-items-block";
+import ShelfItemsBlock from "./shelf-item/shelf-items-block";
+import { DykeItemFormContext, useDykeForm } from "../../form-context";
+import { DykeBlock } from "../../type";
+import ShelfItemIndex from "./shelf-item";
 interface Props {
-    // configIndex;
-    block: Block;
-    // openBlock;
-    // setOpenBlock;
-    blockIndex;
-    // itemIndex;
-    // nextBlock;
-    // form;
+    block: DykeBlock;
+    blockIndex: number;
 }
 export function ItemConfigBlock({ block, blockIndex }: Props) {
-    const {
-        configIndex,
-        openBlock,
-        rowIndex: itemIndex,
-        setOpenBlock,
-        nextBlock,
-        form,
-    } = useContext(SalesFormContext);
-    const configky = `items.${itemIndex}.meta.config.${block.title}`;
-    const blockValue = form.watch(configky as any);
-
+    const form = useDykeForm();
+    const item = useContext(DykeItemFormContext);
+    const blockValue = form.watch(item.configValueKey(block.title));
     return (
         <Collapsible
-            open={blockIndex == openBlock}
-            onOpenChange={setOpenBlock}
-            className={cn(!blockValue && blockIndex != openBlock && "hidden")}
+            open={blockIndex == item.openedBlockIndex}
+            onOpenChange={() => item.openBlock(blockIndex)}
+            className={cn(
+                !blockValue && blockIndex != item.openedBlockIndex && "hidden"
+            )}
         >
             <CollapsibleTrigger asChild>
                 <button
@@ -44,7 +33,8 @@ export function ItemConfigBlock({ block, blockIndex }: Props) {
                         e.preventDefault();
                         // console.log(blockIndex, openBlock);
                         // if (openBlock != blockIndex)
-                        setOpenBlock(blockIndex);
+                        // setOpenBlock(blockIndex);
+                        item.openBlock(blockIndex);
                     }}
                 >
                     <span className="font-semibold">{block.title}:</span>
@@ -56,16 +46,14 @@ export function ItemConfigBlock({ block, blockIndex }: Props) {
                 {block.title == "House Package Tool" && <HousePackageTool />}
                 {block.title == "Shelf Items" && (
                     <>
-                        <ShelfItemsBlock />
+                        <ShelfItemIndex />
                     </>
                 )}
                 <div className="grid gap-4 grid-cols-4">
                     {block.options?.map((b, i) => (
                         <button
                             onClick={() => {
-                                form.setValue(configky as any, b.title);
-                                // setOpenBlock(openBlock + 1);
-                                nextBlock(configky, b.title);
+                                item.selectBlockValue(block.title, b.title);
                             }}
                             key={i}
                         >

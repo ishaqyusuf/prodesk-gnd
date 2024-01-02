@@ -5,7 +5,7 @@ import { prisma } from "@/db";
 export async function getShelfProducts(parentCategoryId, categoryId) {
     const subCategoriesCount = await prisma.dykeShelfCategories.count({
         where: {
-            parentCategoryId,
+            // parentCategoryId,
             categoryId,
         },
     });
@@ -15,7 +15,7 @@ export async function getShelfProducts(parentCategoryId, categoryId) {
         : await prisma.dykeShelfProducts.findMany({
               where: {
                   categoryId,
-                  parentCategoryId,
+                  //   parentCategoryId,
               },
           });
     return { subCategoriesCount, products };

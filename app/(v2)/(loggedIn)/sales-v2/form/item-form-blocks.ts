@@ -1,39 +1,26 @@
-function createBlock(title, options?) {
+import { DykeBlock } from "../type";
+
+export function createBlock(title, options?) {
     return { title, options };
 }
-function createBlockItem(title, img?) {
+export function createBlockItem(title, img?) {
     return { title, img };
 }
-export interface Block {
-    title;
-    options: { title; img }[];
-}
-export function getNextBlock({
-    setBlocks,
-    // blocks,
-    openBlock = 0,
-    setOpenBlock,
-    label = null,
-    value = null,
-}) {
+
+export function getNextBlock({ openBlock = 0, value = null }) {
+    let resp: any = { blockIndex: null, block: null };
     if (openBlock == -1) {
-        setBlocks((blocks) => {
-            console.log(itemFormBlocks[0]);
-            return [itemFormBlocks[0]];
-        });
-        setOpenBlock((b) => 0);
+        resp.block = itemFormBlocks[0];
+        resp.blockIndex = 0;
     } else {
-        //
         if (value == "Shelf Items") {
-            console.log("...");
-            setBlocks((blocks) => {
-                return [...blocks, createBlock("Shelf Items", [])];
-            });
-            setOpenBlock((o) => o + 1);
+            resp.block = createBlock("Shelf Items", []);
+            resp.blockIndex = openBlock + 1;
         }
     }
+    return resp;
 }
-export const itemFormBlocks: Block[] = [
+export const itemFormBlocks: DykeBlock[] = [
     createBlock("Door Type", [
         createBlockItem("Interior"),
         createBlockItem("Exterior"),

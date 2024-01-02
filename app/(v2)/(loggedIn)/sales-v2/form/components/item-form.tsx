@@ -6,10 +6,14 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { UseFormReturn } from "react-hook-form";
-import { getNextBlock, itemFormBlocks } from "../item-form-blocks";
 import { ItemConfigBlock } from "./item-config-block";
-import { useEffect, useState } from "react";
-import { SalesFormContext } from "../sales-form-context";
+import { useContext, useEffect, useState } from "react";
+import {
+    DykeFormContext,
+    DykeItemFormContext,
+    useDykeForm,
+} from "../../form-context";
+import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
 
 interface Props {
     rowIndex;
@@ -17,57 +21,37 @@ interface Props {
     setOpen;
     form: UseFormReturn<any>;
 }
-export function SalesItemForm({ rowIndex, form, openIndex, setOpen }: Props) {
-    const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
+export function SalesItemForm({ rowIndex }: Props) {
+    const form = useDykeForm();
+    // const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
 
-    const [openBlock, setOpenBlock] = useState<any>(-1);
-    const [blocks, setBlocks] = useState([]);
+    const item = useDykeItem(rowIndex);
+    const dykeCtx = useContext(DykeFormContext);
     const ctx = {
-        openBlock,
-        setOpenBlock,
-        blocks,
-        setBlocks,
-        rowIndex,
-        openIndex,
-        setOpen,
-        configIndex,
-        form,
-        nextBlock: (label, value) => {
-            getNextBlock({
-                setBlocks,
-                openBlock,
-                setOpenBlock,
-                label,
-                value,
-            });
-        },
-    };
-    useEffect(() => {
-        getNextBlock({ setBlocks, openBlock, setOpenBlock });
-    }, []);
+        ...item,
+    } as IDykeItemFormContext;
     return (
-        <SalesFormContext.Provider value={ctx}>
+        <DykeItemFormContext.Provider value={ctx}>
             <Collapsible
-                open={rowIndex == openIndex}
-                onOpenChange={setOpen}
+                open={rowIndex == dykeCtx.currentItemIndex}
+                onOpenChange={() => dykeCtx.setOpened(rowIndex)}
                 className=""
             >
                 <div className="flex bg-accent p-2 px-4 justify-between">
                     <CollapsibleTrigger>
-                        Item {Number(rowIndex) + 1}
+                        <p>Item {Number(rowIndex) + 1}</p>
                     </CollapsibleTrigger>
                     <div className="flex items-center justify-between space-x-2">
                         <Button className="p-0 h-6 w-6" variant={"destructive"}>
-                            <Icons.Delete className="w-4 h-4" />
+                            <Icons.trash className="w-4 h-4" />
                         </Button>
                     </div>
                 </div>
                 <CollapsibleContent className="">
                     <div className="grid sm:grid-cols-3">
                         <div className="sm:col-span-2">
-                            {blocks.map((block, bIndex) => (
+                            {item.blocks.map((block, bIndex) => (
                                 <ItemConfigBlock
-                                    // form={form}
                                     block={block}
                                     blockIndex={bIndex}
                                     key={bIndex}
@@ -78,6 +62,6 @@ export function SalesItemForm({ rowIndex, form, openIndex, setOpen }: Props) {
                     </div>
                 </CollapsibleContent>
             </Collapsible>
-        </SalesFormContext.Provider>
+        </DykeItemFormContext.Provider>
     );
 }
