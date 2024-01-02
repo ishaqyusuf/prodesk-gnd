@@ -30,7 +30,7 @@ export interface DykeItemForm {
     shelfItems: CategorizedShelfItem[];
 }
 export interface CategorizedShelfItem {
-    categoryId: number;
+    categoryId: number | undefined;
     categoryIds: number[];
     products: { data: DykeShelfItemForm }[];
 }

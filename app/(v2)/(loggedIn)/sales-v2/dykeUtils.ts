@@ -16,17 +16,29 @@ export default {
                     shelfItems: [
                         {
                             categoryIds: [],
-                            categoryId: null,
+                            categoryId: undefined,
                             products: [
                                 {
                                     data: {
                                         meta: {
                                             categoryIds: [],
                                         },
-                                    },
+                                    } as any,
                                 },
                             ],
                         },
+                        // {
+                        //     categoryIds: [],
+                        //     products: [
+                        //         {
+                        //             data: {
+                        //                 meta: {
+                        //                     categoryIds: [],
+                        //                 },
+                        //             },
+                        //         },
+                        //     ],
+                        // },
                     ],
                 } as DykeItemForm as any,
             },
