@@ -1103,3 +1103,12 @@ model DykeShelfProducts {
     parentCategory   DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
     orderItems       DykeSalesShelfItem[]
 }
+
+model Cache {
+    id        Int       @unique @default(autoincrement())
+    path      String?
+    name      String
+    group     String?
+    meta      Json?     @db.Json
+    createdAt DateTime? @db.Timestamp(0)
+}

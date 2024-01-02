@@ -18,7 +18,7 @@ import Link from "next/link";
 import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
-import SubmitJobModal from "@/app/(v1)/(auth)/tasks/submit-job/submit-job-modal";
+import SubmitJobModal from "@/app/(v1)/(auth)/tasks/submit-job-modal";
 export const metadata: Metadata = {
     title: "Payment Portal",
 };

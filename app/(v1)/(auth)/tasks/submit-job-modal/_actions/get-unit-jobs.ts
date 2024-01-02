@@ -16,48 +16,6 @@ import {
 } from "@/types/community";
 import { HomeJobList, IJobMeta, IJobType } from "@/types/hrm";
 
-export async function getJobCostData(id, title) {
-    const home = await prisma.homes.findUnique({
-        where: { id },
-        include: {
-            // homeTemplate: true
-            communityTemplate: {
-                include: {
-                    pivot: true,
-                },
-            },
-        },
-    });
-    const template: ICommunityTemplateMeta = home?.communityTemplate
-        ?.meta as any;
-    let p: ICommunityPivotMeta = home?.communityTemplate?.pivot?.meta as any;
-    if (p) {
-        return p.installCost || {};
-        let spl = title?.split(")")[1]?.trim();
-        if (!spl) spl = "Default";
-        // return template.installCosts;
-        return (
-            template.installCosts
-                ?.map((i) => {
-                    if (!i.title) i.title = "Default";
-                    if (i.title == spl) return i.costings;
-                    return null;
-                })
-                .filter(Boolean)[0] || {}
-        );
-        // return template.installCosts[0];
-    }
-    return {};
-}
-// export async function getUnitTaskInfo(projectId,unitId)
-// {
-//     const project = await prisma.projects.findFirst({
-//         where: {
-//             id: projectId,
-
-//         }
-//     })
-// }
 export async function getUnitJobs(
     projectId,
     jobType: IJobType,
@@ -105,7 +63,7 @@ export async function getUnitJobs(
             project.communityModels.find(
                 (m) => m.modelName == unit.modelName
             ) as any;
-        if (isTestUnit) console.log(communityTemplate);
+        // if (isTestUnit) console.log(communityTemplate);
         // if (jobType == "punchout") {
         //     ls.push({
         //         id: unit.id,

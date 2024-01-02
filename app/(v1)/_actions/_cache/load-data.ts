@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 
-type CacheNames =
+export type CacheNames =
     | "1099-contractors"
     | "punchouts"
     | "employees"

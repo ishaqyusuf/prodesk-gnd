@@ -10,7 +10,7 @@ import BaseModal from "../../../../../components/_v1/modals/base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
-import { useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 
 import { Input } from "../../../../../components/ui/input";
 import { Label } from "../../../../../components/ui/label";
@@ -28,10 +28,7 @@ import {
     SecondaryCellContent,
 } from "../../../../../components/_v1/columns/base-columns";
 import { ScrollArea } from "../../../../../components/ui/scroll-area";
-import {
-    getJobCostData,
-    getUnitJobs,
-} from "@/app/(v1)/_actions/hrm-jobs/job-units";
+
 import {
     Table,
     TableBody,
@@ -54,12 +51,6 @@ import {
     createJobAction,
     updateJobAction,
 } from "@/app/(v1)/_actions/hrm-jobs/create-job";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../../../../../components/ui/dropdown-menu";
 import { loadStatic1099Contractors } from "@/app/(v1)/_actions/hrm/get-employess";
 import {
     Select,
@@ -80,6 +71,8 @@ import { _punchoutCosts } from "../_actions/punchout-costs";
 import SubmitJobTitle from "./submit-job-title";
 import SelectEmployee from "./select-employee";
 import { validateTaskQty } from "./validation";
+import { getJobCostData } from "./_actions/get-job-cost-data";
+import { getUnitJobs } from "./_actions/get-unit-jobs";
 
 interface ModalInterface {
     data: IJobs | undefined;
@@ -107,7 +100,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
 
         getSettingAction<InstallCostSettings>("install-price-chart").then(
             (res) => {
-                console.log("res", res);
+                // console.log("res", res);
                 setCostSetting(res);
             }
         );
@@ -264,6 +257,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         form.setValue("homeData", unit);
         setTasks([]);
         form.setValue("homeId", unit.id);
+        console.log(unit.costing);
         if (unit.costing) {
             setUnitCosting(unit.costing);
             const costData = {};
@@ -433,268 +427,282 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
 
     const [costList, setCostList] = useState<InstallCostLine[]>([]);
     return (
-        <Form {...form}>
-            <SubmitModalContext.Provider
-                value={{
-                    form,
-                    calculateTasks,
-                    setCostList,
-                    costList,
-                    isPunchout,
-                    prevTab,
-                    resetFields,
-                    setTab,
-                    setPrevTab,
-                    tab,
-                    search,
-                    _changeWorker,
-                    _setTab,
-                    techEmployees,
-                    admin,
-                    unitCosting,
-                }}
-            >
-                <BaseModal<ModalInterface>
-                    className="sm:max-w-[550px]"
-                    onOpen={(data) => {
-                        init(data?.data as any, data.defaultTab);
+        <FormProvider {...form}>
+            <Form {...form}>
+                <SubmitModalContext.Provider
+                    value={{
+                        form,
+                        calculateTasks,
+                        setCostList,
+                        costList,
+                        isPunchout,
+                        prevTab,
+                        resetFields,
+                        setTab,
+                        setPrevTab,
+                        tab,
+                        search,
+                        _changeWorker,
+                        _setTab,
+                        techEmployees,
+                        admin,
+                        unitCosting,
                     }}
-                    onClose={() => {}}
-                    modalName="submitJob"
-                    Subtitle={({ data }) =>
-                        data?.data?.id && <>{data.data?.subtitle}</>
-                    }
-                    Title={SubmitJobTitle}
-                    Content={({ data }) => (
-                        <div>
-                            <Tabs defaultValue={tab} className="">
-                                <TabsList className="hidden">
-                                    <TabsTrigger value="user" />
-                                    <TabsTrigger value="project" />
-                                    <TabsTrigger value="unit" />
-                                    <TabsTrigger value="tasks" />
-                                    <TabsTrigger value="general" />
-                                </TabsList>
-                                <TabsContent value="user">
-                                    <SelectEmployee data={data} />
-                                </TabsContent>
+                >
+                    <BaseModal<ModalInterface>
+                        className="sm:max-w-[550px]"
+                        onOpen={(data) => {
+                            init(data?.data as any, data.defaultTab);
+                        }}
+                        onClose={() => {}}
+                        modalName="submitJob"
+                        Subtitle={({ data }) =>
+                            data?.data?.id && <>{data.data?.subtitle}</>
+                        }
+                        Title={SubmitJobTitle}
+                        Content={({ data }) => (
+                            <div>
+                                <Tabs defaultValue={tab} className="">
+                                    <TabsList className="hidden">
+                                        <TabsTrigger value="user" />
+                                        <TabsTrigger value="project" />
+                                        <TabsTrigger value="unit" />
+                                        <TabsTrigger value="tasks" />
+                                        <TabsTrigger value="general" />
+                                    </TabsList>
+                                    <TabsContent value="user">
+                                        <SelectEmployee data={data} />
+                                    </TabsContent>
 
-                                <TabsContent value="tasks">
-                                    <ScrollArea className="h-[350px] pr-4">
-                                        {!data?.data?.id && (
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <UnitForm />
-                                            </div>
-                                        )}
-                                        <div
-                                            className={cn(
-                                                "col-span-2"
-                                                // isPunchout() && "hidden"
+                                    <TabsContent value="tasks">
+                                        <ScrollArea className="h-[350px] pr-4">
+                                            {!data?.data?.id && (
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <UnitForm />
+                                                </div>
                                             )}
-                                        >
-                                            <Table className="">
-                                                <TableHeader>
-                                                    <TableRow>
-                                                        <TableHead className="px-1">
-                                                            Task
-                                                        </TableHead>
-                                                        <TableHead className="px-1">
-                                                            Qty
-                                                        </TableHead>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                    {tasks.map((row, i) => {
-                                                        return (
-                                                            <CostRow
-                                                                key={i}
-                                                                row={row}
-                                                            />
-                                                        );
-                                                    })}
-                                                </TableBody>
-                                            </Table>
-                                        </div>
-                                    </ScrollArea>
-                                </TabsContent>
-                                <TabsContent value="general">
-                                    <ScrollArea className="h-[350px] pr-4">
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            {isPunchout() && <UnitForm />}
-                                            <div className="grid gap-2 col-span-2">
-                                                <Label>Job Title</Label>
-                                                <Input
-                                                    placeholder=""
-                                                    disabled={
-                                                        form.getValues(
-                                                            "projectId"
-                                                        ) != null
-                                                    }
-                                                    className="h-8"
-                                                    {...form.register("title")}
-                                                />
+                                            <div
+                                                className={cn(
+                                                    "col-span-2"
+                                                    // isPunchout() && "hidden"
+                                                )}
+                                            >
+                                                <Table className="">
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead className="px-1">
+                                                                Task
+                                                            </TableHead>
+                                                            <TableHead className="px-1">
+                                                                Qty
+                                                            </TableHead>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {tasks.map((row, i) => {
+                                                            return (
+                                                                <CostRow
+                                                                    key={i}
+                                                                    row={row}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </TableBody>
+                                                </Table>
                                             </div>
-                                            <div className="grid gap-2 col-span-2">
-                                                <Label>Description</Label>
-                                                <Input
-                                                    placeholder=""
-                                                    disabled={
-                                                        form.getValues(
-                                                            "homeId"
-                                                        ) != null
-                                                    }
-                                                    className="h-8"
-                                                    {...form.register(
-                                                        "subtitle"
-                                                    )}
-                                                />
-                                            </div>
-                                            {isPunchout() && <PunchoutCost />}
-                                            <div className="grid gap-2">
-                                                <Label>
-                                                    {isInstallation() ||
-                                                    isPunchout()
-                                                        ? "Additional Cost ($)"
-                                                        : "Cost ($)"}
-                                                </Label>
-                                                <Input
-                                                    className="h-8"
-                                                    type="number"
-                                                    // value={addCost}
-                                                    // onChange={(e) => setAddCost(+e.target.value)}
-                                                    {...form.register(
-                                                        "meta.additional_cost"
-                                                    )}
-                                                />
-                                            </div>
-                                            {!isPunchout() && (
-                                                <div className="grid gap-2">
-                                                    <Label>Reason</Label>
+                                        </ScrollArea>
+                                    </TabsContent>
+                                    <TabsContent value="general">
+                                        <ScrollArea className="h-[350px] pr-4">
+                                            <div className="grid md:grid-cols-2 gap-4">
+                                                {isPunchout() && <UnitForm />}
+                                                <div className="grid gap-2 col-span-2">
+                                                    <Label>Job Title</Label>
                                                     <Input
+                                                        placeholder=""
+                                                        disabled={
+                                                            form.getValues(
+                                                                "projectId"
+                                                            ) != null
+                                                        }
                                                         className="h-8"
                                                         {...form.register(
-                                                            "description"
+                                                            "title"
                                                         )}
                                                     />
                                                 </div>
-                                            )}
-                                            <div className="grid gap-2 col-span-2">
-                                                <Label>Report</Label>
-                                                <Textarea
-                                                    className="h-8"
-                                                    {...form.register(
-                                                        !isInstallation()
-                                                            ? "description"
-                                                            : "note"
-                                                    )}
-                                                />
-                                            </div>
-                                            {!isDecoShutter() && (
-                                                <div
-                                                    className={cn(
-                                                        "grid gap-2",
-                                                        !isPunchout() &&
-                                                            "col-span-2"
-                                                    )}
-                                                >
-                                                    <Label>Co-Worker</Label>
-                                                    <Select
-                                                        onValueChange={(e) =>
-                                                            form.setValue(
-                                                                "coWorkerId",
-                                                                +e
-                                                            )
+                                                <div className="grid gap-2 col-span-2">
+                                                    <Label>Description</Label>
+                                                    <Input
+                                                        placeholder=""
+                                                        disabled={
+                                                            form.getValues(
+                                                                "homeId"
+                                                            ) != null
                                                         }
-                                                        defaultValue={form
-                                                            .getValues(
-                                                                "coWorkerId"
-                                                            )
-                                                            ?.toString()}
-                                                    >
-                                                        <SelectTrigger className="h-8">
-                                                            <SelectValue placeholder="" />
-                                                        </SelectTrigger>
-
-                                                        <SelectContent>
-                                                            <SelectGroup>
-                                                                {techEmployees?.map(
-                                                                    (
-                                                                        profile,
-                                                                        _
-                                                                    ) => (
-                                                                        <SelectItem
-                                                                            key={
-                                                                                _
-                                                                            }
-                                                                            value={profile.id?.toString()}
-                                                                        >
-                                                                            {
-                                                                                profile.name
-                                                                            }
-                                                                        </SelectItem>
-                                                                    )
-                                                                )}
-                                                            </SelectGroup>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </ScrollArea>
-                                </TabsContent>
-                            </Tabs>
-                        </div>
-                    )}
-                    Footer={({ data }) => {
-                        if (tab == "general")
-                            return (
-                                <div className="space-x-4 items-center flex">
-                                    {!isPunchout() && (
-                                        <>
-                                            <div className="">
-                                                <Label>Task Costs</Label>
-                                                <SecondaryCellContent>
-                                                    <Money value={taskCost} />
-                                                </SecondaryCellContent>
-                                            </div>
-                                            <div className="">
-                                                <Label>Addon </Label>
-                                                <SecondaryCellContent>
-                                                    <Money
-                                                        value={
-                                                            (isInstallation() &&
-                                                                homeId) ||
-                                                            jobId
-                                                                ? addon
-                                                                : 0
-                                                        }
+                                                        className="h-8"
+                                                        {...form.register(
+                                                            "subtitle"
+                                                        )}
                                                     />
-                                                </SecondaryCellContent>
+                                                </div>
+                                                {isPunchout() && (
+                                                    <PunchoutCost />
+                                                )}
+                                                <div className="grid gap-2">
+                                                    <Label>
+                                                        {isInstallation() ||
+                                                        isPunchout()
+                                                            ? "Additional Cost ($)"
+                                                            : "Cost ($)"}
+                                                    </Label>
+                                                    <Input
+                                                        className="h-8"
+                                                        type="number"
+                                                        // value={addCost}
+                                                        // onChange={(e) => setAddCost(+e.target.value)}
+                                                        {...form.register(
+                                                            "meta.additional_cost"
+                                                        )}
+                                                    />
+                                                </div>
+                                                {!isPunchout() && (
+                                                    <div className="grid gap-2">
+                                                        <Label>Reason</Label>
+                                                        <Input
+                                                            className="h-8"
+                                                            {...form.register(
+                                                                "description"
+                                                            )}
+                                                        />
+                                                    </div>
+                                                )}
+                                                <div className="grid gap-2 col-span-2">
+                                                    <Label>Report</Label>
+                                                    <Textarea
+                                                        className="h-8"
+                                                        {...form.register(
+                                                            !isInstallation()
+                                                                ? "description"
+                                                                : "note"
+                                                        )}
+                                                    />
+                                                </div>
+                                                {!isDecoShutter() && (
+                                                    <div
+                                                        className={cn(
+                                                            "grid gap-2",
+                                                            !isPunchout() &&
+                                                                "col-span-2"
+                                                        )}
+                                                    >
+                                                        <Label>Co-Worker</Label>
+                                                        <Select
+                                                            onValueChange={(
+                                                                e
+                                                            ) =>
+                                                                form.setValue(
+                                                                    "coWorkerId",
+                                                                    +e
+                                                                )
+                                                            }
+                                                            defaultValue={form
+                                                                .getValues(
+                                                                    "coWorkerId"
+                                                                )
+                                                                ?.toString()}
+                                                        >
+                                                            <SelectTrigger className="h-8">
+                                                                <SelectValue placeholder="" />
+                                                            </SelectTrigger>
+
+                                                            <SelectContent>
+                                                                <SelectGroup>
+                                                                    {techEmployees?.map(
+                                                                        (
+                                                                            profile,
+                                                                            _
+                                                                        ) => (
+                                                                            <SelectItem
+                                                                                key={
+                                                                                    _
+                                                                                }
+                                                                                value={profile.id?.toString()}
+                                                                            >
+                                                                                {
+                                                                                    profile.name
+                                                                                }
+                                                                            </SelectItem>
+                                                                        )
+                                                                    )}
+                                                                </SelectGroup>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </>
-                                    )}
+                                        </ScrollArea>
+                                    </TabsContent>
+                                </Tabs>
+                            </div>
+                        )}
+                        Footer={({ data }) => {
+                            if (tab == "general")
+                                return (
+                                    <div className="space-x-4 items-center flex">
+                                        {!isPunchout() && (
+                                            <>
+                                                <div className="">
+                                                    <Label>Task Costs</Label>
+                                                    <SecondaryCellContent>
+                                                        <Money
+                                                            value={taskCost}
+                                                        />
+                                                    </SecondaryCellContent>
+                                                </div>
+                                                <div className="">
+                                                    <Label>Addon </Label>
+                                                    <SecondaryCellContent>
+                                                        <Money
+                                                            value={
+                                                                (isInstallation() &&
+                                                                    homeId) ||
+                                                                jobId
+                                                                    ? addon
+                                                                    : 0
+                                                            }
+                                                        />
+                                                    </SecondaryCellContent>
+                                                </div>
+                                            </>
+                                        )}
+                                        <Btn
+                                            isLoading={isSaving}
+                                            onClick={submit}
+                                            size="sm"
+                                            type="submit"
+                                        >
+                                            Submit
+                                        </Btn>
+                                    </div>
+                                );
+                            if (tab == "tasks")
+                                return (
                                     <Btn
-                                        isLoading={isSaving}
-                                        onClick={submit}
+                                        onClick={() => calculateTasks()}
                                         size="sm"
-                                        type="submit"
                                     >
-                                        Submit
+                                        Proceed
                                     </Btn>
-                                </div>
-                            );
-                        if (tab == "tasks")
-                            return (
-                                <Btn onClick={() => calculateTasks()} size="sm">
-                                    Proceed
-                                </Btn>
-                            );
-                    }}
-                />
-            </SubmitModalContext.Provider>
-        </Form>
+                                );
+                        }}
+                    />
+                </SubmitModalContext.Provider>
+            </Form>
+        </FormProvider>
     );
 }
+function SubmitModalForm() {}
 export function CostRow({ row }) {
     // const qty = form.watch(`meta.costData.${row.uid}.qty` as any);
 

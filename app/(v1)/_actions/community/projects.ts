@@ -9,6 +9,7 @@ import { slugModel, transformData } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
 import { _cache } from "../_cache/load-data";
+import { clearCacheAction } from "../_cache/clear-cache";
 
 export interface ProjectsQueryParams extends BaseQuery {
     _builderId;
@@ -43,6 +44,7 @@ export async function saveProject(project: IProject) {
     const _project = await prisma.projects.create({
         data: transformData(project) as any,
     });
+    await clearCacheAction("projects");
     _revalidate("projects");
 }
 function whereProject(query: ProjectsQueryParams) {
@@ -90,4 +92,3 @@ export async function updateProjectMeta(id, meta: IProjectMeta) {
     });
     // revalidatePath('')
 }
-

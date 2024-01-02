@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
 import { IUser } from "@/types/hrm";
 import { hashPassword } from "../utils";
+import { clearCacheAction } from "../_cache/clear-cache";
 
 export async function createEmployeeAction(data: IUser) {
     const { name, username, email, meta, phoneNo, role } = data;
@@ -14,18 +15,24 @@ export async function createEmployeeAction(data: IUser) {
             phoneNo,
             password: await hashPassword("Millwork"),
             email,
-            meta
-        })
+            meta,
+        }),
     });
     if (role?.id) {
         const mhr = await prisma.modelHasRoles.create({
             data: {
                 roleId: role.id,
                 modelId: user.id,
-                modelType: "User"
-            }
+                modelType: "User",
+            },
         });
     }
+    await clearCacheAction(
+        "1099-contractors",
+        "employees",
+        "job-employees",
+        "punchouts"
+    );
 }
 export async function saveEmployeeAction(data: IUser) {
     const { id, name, createdAt, phoneNo, username, email, meta, role } = data;
@@ -37,32 +44,32 @@ export async function saveEmployeeAction(data: IUser) {
             username,
             phoneNo,
             email,
-            meta
+            meta,
         }),
         include: {
             roles: {
                 include: {
-                    role: true
-                }
-            }
-        }
+                    role: true,
+                },
+            },
+        },
     });
     const roleId = user?.roles[0]?.role?.id;
     if (roleId && role?.id != roleId)
         await prisma.modelHasRoles.updateMany({
             where: {
-                modelId: user.id
+                modelId: user.id,
             },
             data: {
-                roleId: role?.id
-            }
+                roleId: role?.id,
+            },
         });
 }
 export async function resetEmployeePassword(id) {
     await prisma.users.update({
         where: { id },
         data: {
-            password: await hashPassword("Millwork")
-        }
+            password: await hashPassword("Millwork"),
+        },
     });
 }

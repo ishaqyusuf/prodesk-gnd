@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { CostRow } from "./submit-job-modal";
+import { CostRow } from ".";
 
 export default function PunchoutCost({}) {
     const ctx = useContext(SubmitModalContext);
