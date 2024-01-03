@@ -20,14 +20,13 @@ export default function SelectUserField() {
             const oldUserId = ctx.getValues("job.userId");
             if (oldUserId != contractor.id)
                 await changeJobWorkerAction(ctx.id, oldUserId, contractor.id);
-
-            ctx.setValue("job.userId", contractor.id);
-            if (ctx.action == "change-worker") {
-                await _revalidate("jobs");
-                closeModal();
-            } else {
-                ctx.nextTab();
-            }
+        }
+        ctx.setValue("job.userId", contractor.id);
+        if (ctx.action == "change-worker") {
+            await _revalidate("jobs");
+            closeModal();
+        } else {
+            ctx.nextTab();
         }
     }
     return (

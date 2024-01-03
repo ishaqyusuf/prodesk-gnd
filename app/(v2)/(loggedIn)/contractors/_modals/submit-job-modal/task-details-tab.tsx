@@ -1,3 +1,9 @@
+import ProjectFormSection from "./project-form-section";
+
 export default function TaskDetailsTab() {
-    return <div></div>;
+    return (
+        <div>
+            <ProjectFormSection />
+        </div>
+    );
 }
