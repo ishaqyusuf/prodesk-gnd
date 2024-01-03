@@ -15,13 +15,11 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Input } from "../../../../../components/ui/input";
 import { Label } from "../../../../../components/ui/label";
 
-import { Button } from "../../../../../components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import { InstallCostingTemplate } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
-import { HomeJobList, IJobs, IUser } from "@/types/hrm";
+import { HomeJobList, IJobs } from "@/types/hrm";
 
 import {
     PrimaryCellContent,

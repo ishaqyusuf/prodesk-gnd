@@ -11,6 +11,8 @@ import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
 import SubmitJobModal from "@/app/(v1)/(auth)/tasks/submit-job-modal";
 import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
+import TaskAction from "@/components/_v1/tasks/task-action";
+import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 
 export const metadata: Metadata = {
     title: "Jobs",
@@ -26,11 +28,13 @@ export default async function EmployeesPage({ searchParams }) {
             </Breadcrumbs>
             <PageHeader
                 title="Jobs"
-                newDialog="submitJob"
-                modalData={{
-                    defaultTab: "user",
-                    data: { type: "installation" },
-                }}
+                // newDialog="submitJob"
+                // modalData={{
+                //     defaultTab: "user",
+                //     data: { type: "installation" },
+                // }}
+                Action={SubmitJobBtn}
+                // Action={TaskAction}
             />
             <JobTableShell
                 adminMode

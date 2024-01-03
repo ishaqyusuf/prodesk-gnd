@@ -42,7 +42,7 @@ import {
     createEmployeeAction,
     saveEmployeeAction,
 } from "@/app/(v1)/_actions/hrm/save-employee";
-import useStaticData, { staticData } from "@/_v2/hooks/use-static-data";
+import { useStaticRoles } from "@/_v2/hooks/use-static-data";
 
 export default function EmployeeModal() {
     const route = useRouter();
@@ -74,7 +74,7 @@ export default function EmployeeModal() {
         });
     }
     // const roles = useAppSelector((state) => state?.slicers?.staticRoles);
-    const role = staticData.roles(); //useStaticData('staticRoles',staticRolesAction);
+    const role = useStaticRoles(); //useStaticData('staticRoles',staticRolesAction);
 
     async function init(data) {
         // loadStaticList("staticRoles", roles, staticRolesAction);

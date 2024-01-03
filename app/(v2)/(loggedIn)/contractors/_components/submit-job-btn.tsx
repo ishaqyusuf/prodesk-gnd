@@ -1,18 +1,19 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { Button } from "../../ui/button";
 import { Plus } from "lucide-react";
+
+import { openModal } from "@/lib/modal";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { openModal } from "@/lib/modal";
-import { usePathname } from "next/navigation";
+} from "@/components/ui/dropdown-menu";
 
-export default function TaskAction({}) {
+export default function SubmitJobBtn({}) {
     const { data: session } = useSession({
         required: false,
     });
@@ -27,12 +28,9 @@ export default function TaskAction({}) {
     );
     function open(_type) {
         let type = _type?.toLowerCase();
-        let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
+        // let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
         // if (type == "punchout") defaultTab = "tasks";
-        openModal("submitJob", {
-            data: { type },
-            defaultTab,
-        });
+        openModal("submitJobModal", { type });
     }
     if (actions.length == 1)
         return (
@@ -53,7 +51,7 @@ export default function TaskAction({}) {
                 <DropdownMenuTrigger asChild>
                     <Button size="sm" className="h-8">
                         <Plus className="h-4 w-4 mr-2" />
-                        <span>Task</span>
+                        <span>Job</span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

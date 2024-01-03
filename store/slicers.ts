@@ -157,12 +157,12 @@ const headerNavSlice = createSlice({
             //         //   if (v instanceof Date) data[k] = formatDate(v);
             //   if (typeof v == "object") data[k] = transformObject(v);
             // });
-            const d = transformObject(data);
+            const d = transformReduxObject(data);
             state[key as any] = d;
         },
     },
 });
-function transformObject(data) {
+export function transformReduxObject(data) {
     if (!data) return;
 
     try {
@@ -170,7 +170,7 @@ function transformObject(data) {
             Object.entries(data).map(([k, v]) => {
                 if (v instanceof Date) data[k] = formatDate(v);
                 else if (typeof v == "object" && v != null) {
-                    data[k] = transformObject(v);
+                    data[k] = transformReduxObject(v);
                 }
             });
     } catch (error) {}

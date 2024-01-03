@@ -2,7 +2,7 @@
 
 import { ModalName, dispatchSlice } from "@/store/slicers";
 
-export function openModal<T>(name: ModalName, data?: T) {
+export function openModal<T>(name: ModalName | string, data?: T) {
     setTimeout(() => {
         dispatchSlice("modal", {
             name,
@@ -10,7 +10,7 @@ export function openModal<T>(name: ModalName, data?: T) {
         });
     }, 1000);
 }
-export function closeModal(name?: ModalName) {
+export function closeModal(name?: ModalName | string) {
     dispatchSlice("modal", {
         name: null,
         data: null,

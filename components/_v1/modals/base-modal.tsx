@@ -18,7 +18,7 @@ import { closeModal } from "@/lib/modal";
 export interface BaseModalProps<T> {
     onOpen?(data: T);
     onClose?();
-    modalName: ModalName;
+    modalName: ModalName | string;
     Title?({ data }: { data?: T });
     Subtitle?({ data }: { data?: T });
     Content?({ data }: { data?: T });

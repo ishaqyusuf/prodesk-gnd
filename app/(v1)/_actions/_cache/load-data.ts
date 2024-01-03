@@ -38,11 +38,11 @@ export async function saveCache(name: CacheNames, data) {
         },
     });
 }
-export async function _cache(name: CacheNames, fn) {
-    const cdata = await fetchCache(name);
+export async function _cache(name: CacheNames | string, fn) {
+    const cdata = await fetchCache(name as any);
     if (cdata) return cdata;
 
     const c = await fn();
-    await saveCache(name, c);
+    await saveCache(name as any, c);
     return c;
 }
