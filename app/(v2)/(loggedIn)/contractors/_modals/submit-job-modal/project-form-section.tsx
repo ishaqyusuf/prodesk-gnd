@@ -6,8 +6,8 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { SubmitJobForm } from ".";
-import useSubmitJob from "@/app/(v1)/(auth)/tasks/submit-job-modal/use-submit-job";
 import AutoComplete from "@/components/_v1/common/auto-complete";
+import useSubmitJob from "./use-submit-job";
 export default function ProjectFormSection() {
     const ctx = useSubmitJob();
     const projects = useStaticProjects();
@@ -23,6 +23,24 @@ export default function ProjectFormSection() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Project</FormLabel>
+                            <FormControl>
+                                <AutoComplete
+                                    {...field}
+                                    itemText={"title"}
+                                    itemValue={"id"}
+                                    options={projects.data}
+                                    onSelect={projectSelected}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    name="job.homeId"
+                    control={ctx.form.control}
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Unit</FormLabel>
                             <FormControl>
                                 <AutoComplete
                                     {...field}
