@@ -11,10 +11,13 @@ import AutoComplete from "@/components/_v1/common/auto-complete";
 export default function ProjectFormSection() {
     const ctx = useSubmitJob();
     const projects = useStaticProjects();
+    async function projectSelected(e) {
+        console.log(e);
+    }
     return (
         <div className="grid grid-cols-2 gap-2">
             <div className="">
-                <FormField<SubmitJobForm>
+                <FormField
                     name="job.projectId"
                     control={ctx.form.control}
                     render={({ field }) => (
@@ -26,6 +29,7 @@ export default function ProjectFormSection() {
                                     itemText={"title"}
                                     itemValue={"id"}
                                     options={projects.data}
+                                    onSelect={projectSelected}
                                 />
                             </FormControl>
                         </FormItem>
