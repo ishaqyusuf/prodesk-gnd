@@ -54,6 +54,12 @@ export default function AutoComplete({
     const [items, setItems] = useState(
         transformItems(options || [], itemText, itemValue)
     );
+    const [modelValue, setValue] = useState(value);
+    // useEffect(() => {
+    //     console.log("...");
+
+    //     setItems(transformItems(options || [], itemText, itemValue));
+    // }, [options]);
     const {
         isOpen,
         highlightedIndex,
@@ -64,9 +70,9 @@ export default function AutoComplete({
     } = useCombobox({
         items,
         // inputValue: "lorem",
-        initialInputValue: value,
+        initialInputValue: modelValue,
         onSelectedItemChange(c) {
-            // console.log(c);
+            console.log(c);
             onSelect && onSelect(c.selectedItem as any);
             onChange && onChange((c.selectedItem as any)?.value);
         },
@@ -77,7 +83,9 @@ export default function AutoComplete({
                     inputValue
                 )
             );
-            onChange && onChange(inputValue);
+            let value = items.find((item) => item.title == inputValue);
+            console.log(value);
+            onChange && onChange(value ? value.id : inputValue);
         },
         stateReducer: (state, actionAndChanges) => {
             const { changes, type } = actionAndChanges;
@@ -97,7 +105,19 @@ export default function AutoComplete({
         itemToString(item) {
             return item ? (item as any).title : "";
         },
+        onIsOpenChange(changes) {
+            if (changes.isOpen) {
+                setItems(
+                    filter(
+                        transformItems(options || [], itemText, itemValue),
+                        changes.inputValue
+                    )
+                );
+            } else {
+            }
+        },
     });
+    useEffect(() => {}, [isOpen]);
     const listRef = useRef<HTMLDivElement>();
     const rowVirtualizer = useVirtualizer({
         count: items.length,
@@ -223,7 +243,7 @@ function transformItems(items, itemText, itemValue) {
                 ? { title: item, value: item, data: item }
                 : {
                       title: item?.[itemText],
-                      value: item?.[itemText],
+                      value: item?.[itemValue],
                       data: item,
                   };
         })

@@ -8,6 +8,7 @@ import {
 } from ".";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
+import { getUnitJobs } from "../../_actions/get-unit-jobs";
 
 export default function useSubmitJob() {
     const form = useSubmitJobForm();
@@ -17,6 +18,11 @@ export default function useSubmitJob() {
         "data",
         "tab",
         "action",
+    ]);
+    const [projectId, homeId, homes] = form.watch([
+        "job.projectId",
+        "job.homeId",
+        "homes",
     ]);
     const path = usePathname();
     const isAdmin = path.includes("contractor/jobs");
@@ -34,6 +40,7 @@ export default function useSubmitJob() {
         data: data || {},
         getValues: form.getValues,
         setValue: form.setValue,
+        homes,
         initialize: (_data: SubmitJobModalDataProps) =>
             initialize(_data, form, isAdmin),
         nextTab() {
@@ -52,6 +59,17 @@ export default function useSubmitJob() {
                 form.setValue("tab", nextTab);
             }
         },
+        async projectChanged() {
+            console.log(projectId);
+            form.setValue("job.homeId", null as any);
+            const unitJobs = await getUnitJobs(projectId, type);
+            console.log(unitJobs);
+
+            if (type == "installation" && !id)
+                form.setValue("job.meta.addon", (unitJobs?.addon || 0) as any);
+            form.setValue("homes", unitJobs.homeList);
+        },
+        homeChanged() {},
     };
 }
 function initialize(

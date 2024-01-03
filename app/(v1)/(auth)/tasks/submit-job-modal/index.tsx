@@ -70,7 +70,7 @@ import SubmitJobTitle from "./submit-job-title";
 import SelectEmployee from "./select-employee";
 import { validateTaskQty } from "./validation";
 import { getJobCostData } from "./_actions/get-job-cost-data";
-import { getUnitJobs } from "./_actions/get-unit-jobs";
+import { getUnitJobs } from "../../../../(v2)/(loggedIn)/contractors/_actions/get-unit-jobs";
 
 interface ModalInterface {
     data: IJobs | undefined;

@@ -1,7 +1,7 @@
 "use client";
 
 import BaseModal from "@/components/_v1/modals/base-modal";
-import { IJobs } from "@/types/hrm";
+import { HomeJobList, IJobs } from "@/types/hrm";
 import { useEffect } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Subtitle, Title } from "./heading";
@@ -19,6 +19,7 @@ export interface SubmitJobForm {
     tab: SubmitJobTabs;
     action: JobFormAction;
     tabHistory: { title }[];
+    homes: HomeJobList[];
 }
 export const useSubmitJobForm = () => useFormContext<SubmitJobForm>();
 export default function SubmitJobModal({}) {

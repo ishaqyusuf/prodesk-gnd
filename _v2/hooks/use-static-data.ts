@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 export default function useStaticData<T>(key, loader) {
     const data = useAppSelector((store) => store.staticData?.[key]);
+    // console.log(key);
 
     async function load() {
         const _data = await loader();
