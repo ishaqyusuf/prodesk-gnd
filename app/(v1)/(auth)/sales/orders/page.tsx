@@ -32,7 +32,7 @@ export default async function OrdersPage({ searchParams }) {
             </Breadcrumbs>
             <PageHeader
                 title="Sales Orders"
-                newLink="/sales/order/new/form"
+                newLink="/sales/edit/order/new"
                 permissions={["editOrders"]}
             />
             <SalesOrderMobileMenuShell />

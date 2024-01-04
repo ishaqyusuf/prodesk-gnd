@@ -61,7 +61,10 @@ export function OrderRowAction(props: IOrderRowProps) {
                 <MenuItem Icon={View} link={_linkDir}>
                     View
                 </MenuItem>
-                <MenuItem Icon={Pen} link={`${_linkDir}/form`}>
+                <MenuItem
+                    Icon={Pen}
+                    link={`/sales/edit/${row.type}/${row.slug}`}
+                >
                     Edit
                 </MenuItem>
                 <MenuItem

@@ -296,10 +296,10 @@ function filter(items, query, fuzzy) {
                 fuzzy: 0.2,
             },
         });
-        search.addAll(items);
-        let results = search.search(query);
-        console.log(results.length);
-        console.log(items[0]);
+        search.addAll(items || []);
+        let results = search.search(query || "");
+        // console.log(results.length);
+        // console.log(items[0]);
         return results;
     }
     const escapedText = !query
