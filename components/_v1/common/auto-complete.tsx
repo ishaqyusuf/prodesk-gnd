@@ -144,7 +144,8 @@ export default function AutoComplete({
                 setItems(
                     filter(
                         transformItems(options || [], itemText, itemValue),
-                        changes.inputValue
+                        // changes.inputValue
+                        ""
                     )
                 );
             } else {

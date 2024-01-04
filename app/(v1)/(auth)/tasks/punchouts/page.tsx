@@ -11,6 +11,7 @@ import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
 import SubmitJobModal from "@/app/(v1)/(auth)/tasks/submit-job-modal";
 import TaskAction from "@/components/_v1/tasks/task-action";
+import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 
 export const metadata: Metadata = {
     title: "Installations",
@@ -24,7 +25,7 @@ export default async function PunchoutPage({ searchParams }) {
             <Breadcrumbs>
                 <BreadLink isLast title="Jobs" />
             </Breadcrumbs>
-            <PageHeader title="Jobs" Action={TaskAction} />
+            <PageHeader title="Jobs" Action={SubmitJobBtn} />
             <JobTableShell searchParams={searchParams} {...response} />
             <JobOverviewSheet />
             <EditJobModal />

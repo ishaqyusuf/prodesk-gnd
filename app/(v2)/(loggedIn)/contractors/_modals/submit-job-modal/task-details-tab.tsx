@@ -9,7 +9,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
@@ -20,19 +19,19 @@ import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 
-export default function TaskDetailsTab() {
+export default function TaskDetailsTab({}) {
     const ctx = useSubmitJob();
     const [homeCosting, type] = ctx.form.watch(["home.costing", "job.type"]);
-    const { costList } = ctx;
     const cost = useJobCostList(ctx.type);
-
+    // const form = useFormContext();
     // useEffect(() => {},[])
     return (
         <ScrollArea className="h-[350px] pr-4 grid gap-2">
-            <ProjectFormSection />
-            {ctx.costList.fields.length}
-            <div className={cn(!costList?.fields?.length && "hidden")}>
+            <ProjectFormSection ctx={ctx} />
+            {/* {ctx.costList?.fields?.length} */}
+            <div className={cn(!ctx.costList?.fields?.length && "hidden")}>
                 <Table className="">
                     <TableHeader>
                         <TableRow>
@@ -41,7 +40,7 @@ export default function TaskDetailsTab() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {costList?.fields?.map((row, index) => (
+                        {ctx.costList?.fields?.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>
                                     <PrimaryCellContent>

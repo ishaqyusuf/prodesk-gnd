@@ -12,8 +12,10 @@ import { Projects } from "@prisma/client";
 import { useEffect } from "react";
 import { HomeJobList } from "@/types/hrm";
 import AutoCompleteTw from "@/components/_v1/auto-complete-tw";
-export default function ProjectFormSection() {
-    const ctx = useSubmitJob();
+import { deepCopy } from "@/lib/deep-copy";
+import { InstallCostLine } from "@/types/settings";
+export default function ProjectFormSection({ ctx }) {
+    // const ctx = useSubmitJob();
     const cost = useJobCostList(ctx.type);
     const projects = useStaticProjects();
     const [projectId, homeId, homeList] = ctx.form.watch([
@@ -25,13 +27,15 @@ export default function ProjectFormSection() {
     async function projectSelected(e) {
         // console.log(e);
         let project: Projects = e.data as any;
-        console.log("REMOVE COST LISTS");
+        // console.log("REMOVE COST LISTS");
         ctx.costList.remove();
+        ctx.setCostList2([]);
         Object.entries({
             homeId: null,
             "meta.addon": 0,
             "meta.costData": {},
             title: project.title,
+            subtitle: "",
             // costList: [],
         }).map(([k, v]) => {
             ctx.setValue(`job.${k}` as any, v as any);
@@ -41,18 +45,24 @@ export default function ProjectFormSection() {
     async function homeSelected(e) {
         const home: HomeJobList = e.data as any;
         // console.log(home);
-        let cl =
+        const cData = {};
+        let cl = deepCopy<InstallCostLine[]>(
             cost.data
                 ?.map((c) => {
-                    if (ctx.type == "punchout" || home.costing?.[c.uid])
+                    if (ctx.type == "punchout" || home.costing?.[c.uid]) {
+                        cData[c.uid] = {
+                            cost: c.cost,
+                        };
                         return c;
+                    }
                     return null;
                 })
-                .filter(Boolean) || [];
+                .filter(Boolean) || []
+        );
         ctx.setValue("home", home);
-        ctx.setValue("job.meta.costData", {} as any);
+        ctx.setValue("job.meta.costData", cData as any);
+        ctx.setValue("job.subtitle", home.name);
         // console.log(costList, cost.data?.length);
-        console.log(cl.length);
         ctx.costList.append(cl as any);
         // ctx.setValue("costList", (costList || []) as any);
     }

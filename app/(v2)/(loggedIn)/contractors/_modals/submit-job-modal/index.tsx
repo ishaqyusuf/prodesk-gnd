@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SelectUserField from "./select-user-field";
 import TaskDetailsTab from "./task-details-tab";
 import { InstallCostLine } from "@/types/settings";
+import Btn from "@/components/_v1/btn";
+import GeneralInfoTab from "./general-info-tab";
 
 export type SubmitJobTabs = "project" | "user" | "unit" | "tasks" | "general";
 export type JobFormAction = "edit" | "change-worker";
@@ -75,8 +77,18 @@ function ModalContent({ data }: SubmitJobModalProps) {
                 <TabsContent value="tasks">
                     <TaskDetailsTab />
                 </TabsContent>
+                <TabsContent value="general">
+                    <GeneralInfoTab />
+                </TabsContent>
             </Tabs>
         </div>
     );
 }
-function ModalFooter({ data }: SubmitJobModalProps) {}
+function ModalFooter({ data }: SubmitJobModalProps) {
+    const ctx = useSubmitJob();
+    return (
+        <div className="space-x-4 items-center flex">
+            <Btn onClick={ctx.nextTab}>Submit</Btn>
+        </div>
+    );
+}

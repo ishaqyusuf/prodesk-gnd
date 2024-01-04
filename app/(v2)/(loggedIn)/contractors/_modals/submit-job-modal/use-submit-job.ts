@@ -9,6 +9,17 @@ import {
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import { getUnitJobs } from "../../_actions/get-unit-jobs";
+import { useState } from "react";
+import { InstallCostLine } from "@/types/settings";
+import { useValidateTaskQty } from "./use-validate-task-qty";
+import submitJobUtils from "@/app/(v1)/(auth)/tasks/submit-job-modal/submit-job-utils";
+import {
+    createJobAction,
+    updateJobAction,
+} from "@/app/(v1)/_actions/hrm-jobs/create-job";
+import { toast } from "sonner";
+import { closeModal } from "@/lib/modal";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export default function useSubmitJob() {
     const form = useSubmitJobForm();
@@ -24,6 +35,7 @@ export default function useSubmitJob() {
         "job.homeId",
         "homes",
     ]);
+    const taskValidation = useValidateTaskQty();
     const path = usePathname();
     const isAdmin = path.includes("contractor/jobs");
     const tabHistory = useFieldArray({
@@ -34,9 +46,29 @@ export default function useSubmitJob() {
         control: form.control,
         name: "costList",
     });
+    const [costList2, setCostList2] = useState<InstallCostLine[]>([]);
+
+    async function submit() {
+        const { job } = form.getValues();
+        job.meta.taskCost = submitJobUtils.totalTaskCost(job.meta.costData);
+        // console.log(job.meta.taskCost);
+        // if(!job.id)
+        job.amount = 0;
+        [job.meta.addon, job.meta.taskCost, job.meta.additional_cost].map(
+            (n) => n > 0 && (job.amount += Number(n))
+        );
+        if (job.coWorkerId) job.amount /= 2;
+        if (!job.id) await createJobAction(job as any);
+        else await updateJobAction(job as any);
+        toast.message("Success!");
+        closeModal();
+        await _revalidate(isAdmin ? "jobs" : "my-jobs");
+    }
     return {
         id,
         form,
+        costList2,
+        setCostList2,
         tab,
         isAdmin,
         costList,
@@ -57,8 +89,10 @@ export default function useSubmitJob() {
                     else nextTab = "tasks";
                     break;
                 case "tasks":
-                    nextTab = "general";
+                    if (taskValidation.validate()) nextTab = "general";
                     break;
+                case "general":
+                    submit();
             }
             if (nextTab) {
                 tabHistory.prepend({ title: tab });
@@ -66,10 +100,10 @@ export default function useSubmitJob() {
             }
         },
         async projectChanged() {
-            console.log(projectId);
+            // console.log(projectId);
             form.setValue("job.homeId", null as any);
             const unitJobs = await getUnitJobs(projectId, type);
-            console.log(unitJobs);
+            // console.log(unitJobs);
 
             if (type == "installation" && !id)
                 form.setValue("job.meta.addon", (unitJobs?.addon || 0) as any);

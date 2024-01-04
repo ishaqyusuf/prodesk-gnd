@@ -1,4 +1,10 @@
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectContent,
@@ -7,20 +13,22 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { FieldPath, UseFormProps, useFormContext } from "react-hook-form";
+import { FieldPath, useFormContext } from "react-hook-form";
 
 interface Props<T> {
     // @ts-ignore
     name: FieldPath<T>;
     placeholder?;
-    options?: any[];
+    options?: ({ text; value } | any)[];
     className?;
+    label?;
 }
 export default function SelectControl<T>({
     name,
     placeholder,
     className,
     options,
+    label,
 }: Props<T>) {
     const form = useFormContext();
     function itemText(option) {
@@ -42,6 +50,11 @@ export default function SelectControl<T>({
                 control={form.control}
                 render={({ field }) => (
                     <FormItem>
+                        {label && (
+                            <FormLabel>
+                                <Label>{label}</Label>
+                            </FormLabel>
+                        )}
                         <Select
                             defaultValue={field.value}
                             onValueChange={(e) => {
