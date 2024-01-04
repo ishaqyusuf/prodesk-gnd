@@ -7,7 +7,7 @@ import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import JsonSearch from "search-array";
+// import JsonSearch from "search-array";
 interface Props {
     options?: any[];
     value?: any;
@@ -288,6 +288,7 @@ export default function AutoComplete({
 }
 function filter(items, query, fuzzy) {
     if (fuzzy) {
+        const JsonSearch = require("search-array");
         const s = new JsonSearch(items || [], {
             sort: true,
         });
