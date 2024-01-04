@@ -287,14 +287,14 @@ export default function AutoComplete({
     );
 }
 function filter(items, query, fuzzy) {
-    if (fuzzy) {
-        const JsonSearch = require("search-array");
-        const s = new JsonSearch(items || [], {
-            sort: true,
-        });
-        let res = s.query(query || "");
-        return res;
-    }
+    // if (fuzzy) {
+    //     const JsonSearch = require("search-array");
+    //     const s = new JsonSearch(items || [], {
+    //         sort: true,
+    //     });
+    //     let res = s.query(query || "");
+    //     return res;
+    // }
     const escapedText = !query
         ? ""
         : query?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
