@@ -9,6 +9,7 @@ import useSubmitJob from "./use-submit-job";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SelectUserField from "./select-user-field";
 import TaskDetailsTab from "./task-details-tab";
+import { InstallCostLine } from "@/types/settings";
 
 export type SubmitJobTabs = "project" | "user" | "unit" | "tasks" | "general";
 export type JobFormAction = "edit" | "change-worker";
@@ -20,6 +21,8 @@ export interface SubmitJobForm {
     action: JobFormAction;
     tabHistory: { title }[];
     homes: HomeJobList[];
+    home: HomeJobList;
+    costList: InstallCostLine[];
 }
 export const useSubmitJobForm = () => useFormContext<SubmitJobForm>();
 export default function SubmitJobModal({}) {

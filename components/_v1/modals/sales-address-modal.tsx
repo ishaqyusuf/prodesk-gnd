@@ -35,7 +35,7 @@ import {
     findAddressAction,
     saveAddressAction,
 } from "@/app/(v1)/_actions/sales/sales-address";
-import AutoComplete2 from "../auto-complete";
+import AutoComplete2 from "../auto-complete-tw";
 import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "../../ui/scroll-area";
 import { cn } from "@/lib/utils";

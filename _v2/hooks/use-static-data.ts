@@ -1,10 +1,13 @@
 import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";
 import { getContractorsAction } from "@/app/(v2)/(loggedIn)/contractors/_actions/get-job-employees";
+import { getJobCostList } from "@/app/(v2)/(loggedIn)/contractors/_actions/job-cost-list";
 import { deepCopy } from "@/lib/deep-copy";
 import { store, useAppSelector } from "@/store";
 import { ISlicer, dispatchSlice } from "@/store/slicers";
 import { updateStaticData } from "@/store/static-data-slice";
+import { IJobType } from "@/types/hrm";
+import { InstallCostLine } from "@/types/settings";
 import { Projects, Roles, Users } from "@prisma/client";
 import { useEffect } from "react";
 
@@ -37,3 +40,5 @@ export const useStaticContractors = () =>
 
 export const useStaticProjects = () =>
     useStaticData<Projects[]>("staticProjects", staticProjectsAction);
+export const useJobCostList = (type: IJobType) =>
+    useStaticData<InstallCostLine[]>("staticJobCostList", getJobCostList);

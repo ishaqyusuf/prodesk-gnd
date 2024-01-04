@@ -33,8 +33,8 @@ export default async function EmployeesPage({ searchParams }) {
                 //     defaultTab: "user",
                 //     data: { type: "installation" },
                 // }}
-                // Action={SubmitJobBtn}
-                Action={TaskAction}
+                Action={SubmitJobBtn}
+                // Action={TaskAction}
             />
             <JobTableShell
                 adminMode

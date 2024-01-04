@@ -51,15 +51,45 @@ export default function AutoComplete({
     onSelect,
     ...props
 }: Props & PrimitiveDivProps) {
-    const [items, setItems] = useState(
-        transformItems(options || [], itemText, itemValue)
+    const transformedOptions = transformItems(
+        options || [],
+        itemText,
+        itemValue
     );
-    const [modelValue, setValue] = useState(value);
-    // useEffect(() => {
-    //     console.log("...");
-
-    //     setItems(transformItems(options || [], itemText, itemValue));
-    // }, [options]);
+    useEffect(() => {
+        const transformedOptions = transformItems(
+            options || [],
+            itemText,
+            itemValue
+        );
+        setItems(transformedOptions);
+        setAllItems(transformedOptions);
+    }, [options]);
+    const [allItems, setAllItems] = useState(transformedOptions);
+    const [items, setItems] = useState(transformedOptions);
+    const [modelValue, setModelValue] = useState("");
+    useEffect(() => {
+        if (props.id == "unit") {
+            // console.log([allItems.length, value]);
+            if (!allowCreate && itemText != itemValue) {
+                let v = allItems.find((item) => item.value == value);
+                // selectItem(v);
+                // console.log([props.id, v]);
+                // setInputValue(v?.title);
+                // selectItem(null);
+            }
+        }
+    }, [options]);
+    useEffect(() => {
+        let text = value;
+        if (itemText != itemValue) {
+            let v = allItems.find((item) => item.value == text);
+            if (!v && !allowCreate) text = "";
+            else text = v.title;
+            // if (props.id == "unit") console.log([v, text]);
+        }
+        setInputValue(text);
+    }, [value]);
     const {
         isOpen,
         highlightedIndex,
@@ -67,12 +97,15 @@ export default function AutoComplete({
         getMenuProps,
         getItemProps,
         selectedItem,
+        setInputValue,
+        selectItem,
     } = useCombobox({
         items,
         // inputValue: "lorem",
         initialInputValue: modelValue,
+
         onSelectedItemChange(c) {
-            console.log(c);
+            // console.log(c);
             onSelect && onSelect(c.selectedItem as any);
             onChange && onChange((c.selectedItem as any)?.value);
         },
@@ -84,8 +117,9 @@ export default function AutoComplete({
                 )
             );
             let value = items.find((item) => item.title == inputValue);
-            console.log(value);
-            onChange && onChange(value ? value.id : inputValue);
+            // console.log(value);
+            if (allowCreate)
+                onChange && onChange(value ? value.value : inputValue);
         },
         stateReducer: (state, actionAndChanges) => {
             const { changes, type } = actionAndChanges;
@@ -114,6 +148,21 @@ export default function AutoComplete({
                     )
                 );
             } else {
+                // changes.
+                // console.log(changes.selectedItem);
+                let value = items.find(
+                    (item) => item.title == changes.inputValue
+                );
+                // console.log([value, changes.selectedItem]);
+                const opt: any = value?.value ? value : changes.selectedItem;
+                if (!allowCreate) {
+                    const id = opt?.value;
+                    onChange && onChange(id);
+                    // setValue(id);
+                    if (changes.inputValue != opt?.title) {
+                        setInputValue(opt?.title);
+                    }
+                }
             }
         },
     });
@@ -134,7 +183,11 @@ export default function AutoComplete({
 
                 <div className="flex">
                     <Input
-                        className={cn(uppercase && "uppercase", className)}
+                        className={cn(
+                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-white text-left  sm:text-sm border border-input h-8",
+                            uppercase && "uppercase",
+                            className
+                        )}
                         {...getInputProps({ ref: inputRef as any })}
                     />
                 </div>
@@ -161,8 +214,9 @@ export default function AutoComplete({
                                     className={cn(
                                         highlightedIndex === index &&
                                             "bg-blue-300",
-                                        selectedItem === item && "font-bold",
-                                        "py-2 px-3 shadow-sm flex flex-col cursor-default"
+                                        selectedItem === item &&
+                                            "bg-accent text-accent-foreground",
+                                        "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none"
                                     )}
                                     key={index}
                                     {...getItemProps({

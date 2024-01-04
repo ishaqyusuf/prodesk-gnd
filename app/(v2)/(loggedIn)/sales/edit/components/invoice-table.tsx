@@ -378,6 +378,7 @@ function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
                     ) : props.options ? (
                         <AutoComplete
                             uppercase
+                            allowCreate
                             className="h-8 p-1 font-medium uppercase"
                             {...props}
                             // value={field.value}

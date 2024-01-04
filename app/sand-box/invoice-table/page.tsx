@@ -82,6 +82,7 @@ export default function InvoiceTable() {
                                                 k == "description" ? (
                                                     <AutoComplete
                                                         {...field}
+                                                        allowCreate
                                                         options={items}
                                                         itemText={"description"}
                                                         itemValue={

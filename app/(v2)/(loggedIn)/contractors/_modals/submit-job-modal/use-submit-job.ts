@@ -41,6 +41,7 @@ export default function useSubmitJob() {
         getValues: form.getValues,
         setValue: form.setValue,
         homes,
+        type,
         initialize: (_data: SubmitJobModalDataProps) =>
             initialize(_data, form, isAdmin),
         nextTab() {
@@ -77,7 +78,10 @@ function initialize(
     form: UseFormReturn<SubmitJobForm>,
     isAdmin
 ) {
-    let job: IJobs = {} as any;
+    let job: IJobs = {
+        projectId: 26,
+        homeId: 2250,
+    } as any;
     let tab: SubmitJobTabs = "general";
     if ((isAdmin && !data?.data?.id) || data.action == "change-worker")
         tab = "user";

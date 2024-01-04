@@ -11,7 +11,7 @@ import {
 import Money from "../money";
 import { useForm } from "react-hook-form";
 import { IJobPayment, IJobs } from "@/types/hrm";
-import AutoComplete2 from "../auto-complete";
+import AutoComplete2 from "../auto-complete-tw";
 import { Input } from "../../ui/input";
 import { useTransition } from "react";
 import { makePayment } from "@/app/(v1)/_actions/hrm-jobs/make-payment";

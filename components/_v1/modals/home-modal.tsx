@@ -29,7 +29,7 @@ import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { DatePicker } from "../date-range-picker";
 import ConfirmBtn from "../confirm-btn";
-import AutoComplete2 from "../auto-complete";
+import AutoComplete2 from "../auto-complete-tw";
 import {
     _updateCommunityHome,
     createHomesAction,

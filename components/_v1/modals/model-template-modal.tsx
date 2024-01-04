@@ -27,7 +27,7 @@ import { ModalName, loadStaticList } from "@/store/slicers";
 import { CommunityModels } from "@prisma/client";
 import { useAppSelector } from "@/store";
 import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
-import AutoComplete from "../auto-complete";
+import AutoComplete from "../auto-complete-tw";
 import { _createModelTemplate } from "@/app/(v1)/_actions/community/home-template";
 import { toastArrayAction } from "@/lib/toast-util";
 import { _updateModelSearch } from "@/app/(v1)/_actions/community/update-model-search";

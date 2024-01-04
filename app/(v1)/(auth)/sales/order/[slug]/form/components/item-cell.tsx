@@ -1,5 +1,5 @@
 import { SalesFormCtx } from "@/app/(v1)/_actions/sales/sales-form";
-import AutoComplete from "@/components/_v1/auto-complete";
+import AutoComplete from "@/components/_v1/auto-complete-tw";
 import { Input } from "@/components/ui/input";
 import { TableCell } from "@/components/ui/table";
 import { deepCopy } from "@/lib/deep-copy";

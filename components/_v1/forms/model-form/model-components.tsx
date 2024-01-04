@@ -9,7 +9,7 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAppSelector } from "@/store";
-import AutoComplete from "@/components/_v1/auto-complete";
+import AutoComplete from "@/components/_v1/auto-complete-tw";
 
 interface ModelFormSectionProps<T> {
     section?;

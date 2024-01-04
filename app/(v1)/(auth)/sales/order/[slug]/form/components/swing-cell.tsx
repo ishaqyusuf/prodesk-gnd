@@ -5,7 +5,7 @@ import { SalesInvoiceCellProps } from "./sales-invoice-tr";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 
-import AutoComplete2 from "@/components/_v1/auto-complete";
+import AutoComplete2 from "@/components/_v1/auto-complete-tw";
 import { FormField } from "@/components/ui/form";
 import { ISalesOrder } from "@/types/sales";
 

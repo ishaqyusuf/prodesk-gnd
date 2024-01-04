@@ -176,6 +176,7 @@ function AddressForm({
                 <div className="grid gap-2">
                     <Label>Search</Label>
                     <AutoComplete
+                        allowCreate
                         options={customers}
                         itemText={"search"}
                         itemValue={"search"}

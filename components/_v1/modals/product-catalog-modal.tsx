@@ -17,7 +17,7 @@ import { Label } from "../../ui/label";
 
 import { useAppSelector } from "@/store";
 import { IUser } from "@/types/hrm";
-import AutoComplete2 from "../auto-complete";
+import AutoComplete2 from "../auto-complete-tw";
 import { employeeSchema } from "@/lib/validations/hrm";
 
 import { IProduct, IProductVariant } from "@/types/product";
