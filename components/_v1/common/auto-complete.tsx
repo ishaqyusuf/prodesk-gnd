@@ -7,7 +7,7 @@ import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import MiniSearch from "minisearch";
+import JsonSearch from "search-array";
 interface Props {
     options?: any[];
     value?: any;
@@ -288,19 +288,11 @@ export default function AutoComplete({
 }
 function filter(items, query, fuzzy) {
     if (fuzzy) {
-        const search = new MiniSearch({
-            fields: ["title"],
-            storeFields: ["title", "value", "data"],
-            idField: "title",
-            searchOptions: {
-                fuzzy: 0.2,
-            },
+        const s = new JsonSearch(items || [], {
+            sort: true,
         });
-        search.addAll(items || []);
-        let results = search.search(query || "");
-        // console.log(results.length);
-        // console.log(items[0]);
-        return results;
+        let res = s.query(query || "");
+        return res;
     }
     const escapedText = !query
         ? ""
