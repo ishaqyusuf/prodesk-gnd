@@ -59,39 +59,37 @@ export function InvoiceTable() {
         // replace(items);
     };
     return (
-        <div className={cn("relative", isMobile && "max-md:overflow-x-auto")}>
+        <div className={cn("relative", isMobile && "smax-md:overflow-x-auto")}>
             <SalesRowContext.Provider value={fieldArray}>
-                <div className={cn(isMobile && "max-md:w-[900px]")}>
-                    <DragDropContext onDragEnd={handleOndragEnd}>
+                <div className={cn("", isMobile && "max-md:w-[900px]")}>
+                    {/* <DragDropContext onDragEnd={handleOndragEnd}>
                         <Droppable droppableId="dropper1">
-                            {(provided) => (
-                                <Table
-                                    role="list"
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                    className=""
-                                >
-                                    <InvoiceTableHeader
-                                        watchProfileEstimate={
-                                            watchProfileEstimate
-                                        }
-                                    />
-                                    <TableBody>
-                                        {fields.map((field, index) => (
-                                            <InvoiceTableRow
-                                                key={index}
-                                                length={fields.length}
-                                                field={field}
-                                                index={index}
-                                            />
-                                        ))}
+                            {(provided) => ( */}
+                    <Table
+                        // role="list"
+                        // ref={provided.innerRef}
+                        // {...provided.droppableProps}
+                        className=""
+                    >
+                        <InvoiceTableHeader
+                            watchProfileEstimate={watchProfileEstimate}
+                        />
+                        <TableBody>
+                            {fields.map((field, index) => (
+                                <InvoiceTableRow
+                                    key={index}
+                                    length={fields.length}
+                                    field={field}
+                                    index={index}
+                                />
+                            ))}
 
-                                        {provided.placeholder}
-                                    </TableBody>
-                                </Table>
-                            )}
+                            {/* {provided.placeholder} */}
+                        </TableBody>
+                    </Table>
+                    {/* )}
                         </Droppable>
-                    </DragDropContext>
+                    </DragDropContext> */}
                     <div className="flex">
                         <Button
                             className="w-full"
@@ -115,101 +113,79 @@ function InvoiceTableRow({ index, field, length }) {
     const item = useInvoiceItem(index);
 
     return (
-        <Draggable key={index} draggableId={field.id} index={index}>
-            {(provided) => {
-                return (
-                    <TableRow
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        key={field.id}
-                        className="border-b-0 hover:bg-none"
-                    >
-                        <TableCell className="p-0 px-1 font-medium">
-                            {index + 1}
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                formKey={"meta.isComponent"}
-                                checkbox
-                            />
-                        </TableCell>
-                        <TableCell className="p-0 px-1 py-0.5">
-                            <InputHelper
-                                index={index}
-                                onSelect={item.itemSelected}
-                                formKey={"description"}
-                                itemText={"description"}
-                                itemValue={"description"}
-                                options={data.ctx.items}
-                            />
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                formKey={"swing"}
-                                options={data.ctx.swings}
-                            />
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                formKey={"supplier"}
-                                options={data.ctx.suppliers}
-                            />
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                type="number"
-                                formKey={"qty"}
-                            />
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                type="number"
-                                formKey={"price"}
-                            />
-                        </TableCell>
-                        {profileEstimate && (
-                            <TableCell
-                                align="right"
-                                id="rate"
-                                className="p-0 px-1"
-                            >
-                                <Label className="whitespace-nowrap">
-                                    <Money value={item.rate} />
-                                </Label>
-                            </TableCell>
-                        )}
-                        <TableCell
-                            align="right"
-                            id="total"
-                            className="p-0 px-1"
-                        >
-                            <Label className="whitespace-nowrap">
-                                <Money value={item.total} />
-                            </Label>
-                        </TableCell>
-                        <TableCell className="p-0 px-1">
-                            <InputHelper
-                                index={index}
-                                formKey={"meta.tax"}
-                                checkbox
-                            />
-                        </TableCell>
-                        <InvoiceTableRowActions
-                            field={field}
-                            cid={item.lid}
-                            length={length}
-                            index={index}
-                        />
-                    </TableRow>
-                );
-            }}
-        </Draggable>
+        // <Draggable key={index} draggableId={field.id} index={index}>
+        //     {(provided) => {
+        //         return (
+        <TableRow
+            // {...provided.draggableProps}
+            // {...provided.dragHandleProps}
+            // ref={provided.innerRef}
+            key={field.id}
+            className="border-b-0 hover:bg-none"
+        >
+            <TableCell className="p-0 px-1 font-medium">{index + 1}</TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper
+                    index={index}
+                    formKey={"meta.isComponent"}
+                    checkbox
+                />
+            </TableCell>
+            <TableCell className="p-0 px-1 py-0.5">
+                <InputHelper
+                    index={index}
+                    onSelect={item.itemSelected}
+                    formKey={"description"}
+                    itemText={"description"}
+                    itemValue={"description"}
+                    options={data.ctx.items}
+                />
+            </TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper
+                    index={index}
+                    formKey={"swing"}
+                    options={data.ctx.swings}
+                />
+            </TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper
+                    index={index}
+                    formKey={"supplier"}
+                    options={data.ctx.suppliers}
+                />
+            </TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper index={index} type="number" formKey={"qty"} />
+            </TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper index={index} type="number" formKey={"price"} />
+            </TableCell>
+            {profileEstimate && (
+                <TableCell align="right" id="rate" className="p-0 px-1">
+                    <Label className="whitespace-nowrap">
+                        <Money value={item.rate} />
+                    </Label>
+                </TableCell>
+            )}
+            <TableCell align="right" id="total" className="p-0 px-1">
+                <Label className="whitespace-nowrap">
+                    <Money value={item.total} />
+                </Label>
+            </TableCell>
+            <TableCell className="p-0 px-1">
+                <InputHelper index={index} formKey={"meta.tax"} checkbox />
+            </TableCell>
+            <InvoiceTableRowActions
+                field={field}
+                cid={item.lid}
+                length={length}
+                index={index}
+            />
+        </TableRow>
+        //         );
+        //     }}
+        // </Draggable>
     );
 }
 function InvoiceTableRowActions({ index, cid, field, length }) {

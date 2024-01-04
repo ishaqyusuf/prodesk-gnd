@@ -7,7 +7,7 @@ import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useDebounce } from "@/hooks/use-debounce";
+import MiniSearch from "minisearch";
 interface Props {
     options?: any[];
     value?: any;
@@ -85,7 +85,7 @@ export default function AutoComplete({
         if (itemText != itemValue) {
             let v = allItems.find((item) => item.value == text);
             if (!v && !allowCreate) text = "";
-            else text = v.title;
+            else text = v?.title;
             // if (props.id == "unit") console.log([v, text]);
         }
         setInputValue(text);
@@ -200,7 +200,7 @@ export default function AutoComplete({
                     width: `${inputRef.current?.clientWidth}px`,
                 }}
                 className={cn(
-                    "absolute border w-full bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10",
+                    "absolute border w-full bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-[999]",
                     !(isOpen && items.length) && "hidden",
                     "min-w-[150px]"
                 )}
