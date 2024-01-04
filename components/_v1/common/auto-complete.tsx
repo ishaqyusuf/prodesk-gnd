@@ -23,9 +23,10 @@ interface Props {
     searchFn?;
     allowCreate?;
     formKey?;
-    uppercase?: Boolean;
-    hideEmpty?: Boolean;
-    virt?: Boolean;
+    uppercase?: boolean;
+    hideEmpty?: boolean;
+    virt?: boolean;
+    fuzzy?: boolean;
     placeholder?;
     form?;
 }
@@ -49,6 +50,7 @@ export default function AutoComplete({
     formKey,
     uppercase,
     onSelect,
+    fuzzy,
     ...props
 }: Props & PrimitiveDivProps) {
     const transformedOptions = transformItems(
@@ -113,7 +115,8 @@ export default function AutoComplete({
             setItems(
                 filter(
                     transformItems(options || [], itemText, itemValue),
-                    inputValue
+                    inputValue,
+                    fuzzy
                 )
             );
             let value = items.find((item) => item.title == inputValue);
@@ -145,7 +148,8 @@ export default function AutoComplete({
                     filter(
                         transformItems(options || [], itemText, itemValue),
                         // changes.inputValue
-                        ""
+                        "",
+                        fuzzy
                     )
                 );
             } else {
@@ -282,7 +286,22 @@ export default function AutoComplete({
         </div>
     );
 }
-function filter(items, query) {
+function filter(items, query, fuzzy) {
+    if (fuzzy) {
+        const search = new MiniSearch({
+            fields: ["title"],
+            storeFields: ["title", "value", "data"],
+            idField: "title",
+            searchOptions: {
+                fuzzy: 0.2,
+            },
+        });
+        search.addAll(items);
+        let results = search.search(query);
+        console.log(results.length);
+        console.log(items[0]);
+        return results;
+    }
     const escapedText = !query
         ? ""
         : query?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
