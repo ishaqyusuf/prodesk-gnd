@@ -41,4 +41,7 @@ export const useStaticContractors = () =>
 export const useStaticProjects = () =>
     useStaticData<Projects[]>("staticProjects", staticProjectsAction);
 export const useJobCostList = (type: IJobType) =>
-    useStaticData<InstallCostLine[]>("staticJobCostList", getJobCostList);
+    useStaticData<InstallCostLine[]>(
+        "staticJobCostList",
+        async () => await getJobCostList(type)
+    );

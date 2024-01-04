@@ -5,6 +5,7 @@ import { IJobType } from "@/types/hrm";
 import { InstallCostSettings } from "@/types/settings";
 
 export async function getJobCostList(type: IJobType) {
+    // console.log(type);
     const s: InstallCostSettings = (await prisma.settings.findFirst({
         where: {
             type: "install-price-chart",
@@ -20,5 +21,7 @@ export async function getJobCostList(type: IJobType) {
             return null;
         })
         .filter(Boolean);
+    // console.log(s.meta.list?.filter((l) => l.punchout).length, type);
+    // console.log(list.length);
     return list;
 }

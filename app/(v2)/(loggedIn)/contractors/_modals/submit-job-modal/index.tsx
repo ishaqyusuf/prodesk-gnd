@@ -23,10 +23,13 @@ export interface SubmitJobForm {
     homes: HomeJobList[];
     home: HomeJobList;
     costList: InstallCostLine[];
+    initialized: boolean;
 }
 export const useSubmitJobForm = () => useFormContext<SubmitJobForm>();
 export default function SubmitJobModal({}) {
-    const defaultValues = {};
+    const defaultValues = {
+        initialized: false,
+    };
     const form = useForm<SubmitJobForm>({
         defaultValues,
     });
@@ -55,7 +58,7 @@ function ModalContent({ data }: SubmitJobModalProps) {
     useEffect(() => {
         ctx.initialize(data);
     }, []);
-
+    if (!ctx.initialized) return <></>;
     return (
         <div>
             <Tabs value={ctx.tab}>

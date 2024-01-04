@@ -47,6 +47,7 @@ export default function ProjectFormSection() {
             .filter(Boolean);
         ctx.setValue("home", home);
         ctx.setValue("job.meta.costData", {} as any);
+        console.log(costList, cost.data?.length);
         ctx.setValue("costList", (costList || []) as any);
     }
     useEffect(() => {

@@ -19,10 +19,11 @@ export default function useSubmitJob() {
         "tab",
         "action",
     ]);
-    const [projectId, homeId, homes] = form.watch([
+    const [projectId, homeId, homes, initialized] = form.watch([
         "job.projectId",
         "job.homeId",
         "homes",
+        "initialized",
     ]);
     const path = usePathname();
     const isAdmin = path.includes("contractor/jobs");
@@ -32,6 +33,7 @@ export default function useSubmitJob() {
     });
     return {
         id,
+        initialized,
         form,
         tab,
         isAdmin,
@@ -81,6 +83,7 @@ function initialize(
     let job: IJobs = {
         projectId: 26,
         homeId: 2250,
+        ...data.data,
     } as any;
     let tab: SubmitJobTabs = "general";
     if ((isAdmin && !data?.data?.id) || data.action == "change-worker")
@@ -91,5 +94,6 @@ function initialize(
         ...data,
         job: job,
         tab,
+        initialized: true,
     });
 }

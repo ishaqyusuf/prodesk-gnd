@@ -30,7 +30,7 @@ export default function SubmitJobBtn({}) {
         let type = _type?.toLowerCase();
         // let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
         // if (type == "punchout") defaultTab = "tasks";
-        openModal("submitJobModal", { type });
+        openModal("submitJobModal", { data: { type } });
     }
     if (actions.length == 1)
         return (
