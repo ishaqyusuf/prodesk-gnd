@@ -123,7 +123,9 @@ function initialize(
     let tab: SubmitJobTabs = "general";
     if ((isAdmin && !data?.data?.id) || data.action == "change-worker")
         tab = "user";
-
+    else {
+        if (!data?.data?.id) tab = "tasks";
+    }
     form.reset({
         tabHistory: [],
         // costList: [],
