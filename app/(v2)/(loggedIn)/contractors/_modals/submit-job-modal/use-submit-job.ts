@@ -19,11 +19,10 @@ export default function useSubmitJob() {
         "tab",
         "action",
     ]);
-    const [projectId, homeId, homes, initialized] = form.watch([
+    const [projectId, homeId, homes] = form.watch([
         "job.projectId",
         "job.homeId",
         "homes",
-        "initialized",
     ]);
     const path = usePathname();
     const isAdmin = path.includes("contractor/jobs");
@@ -31,12 +30,16 @@ export default function useSubmitJob() {
         control: form.control,
         name: "tabHistory",
     });
+    const costList = useFieldArray({
+        control: form.control,
+        name: "costList",
+    });
     return {
         id,
-        initialized,
         form,
         tab,
         isAdmin,
+        costList,
         tabHistory,
         action,
         data: data || {},
@@ -81,8 +84,6 @@ function initialize(
     isAdmin
 ) {
     let job: IJobs = {
-        projectId: 26,
-        homeId: 2250,
         ...data.data,
     } as any;
     let tab: SubmitJobTabs = "general";
@@ -91,9 +92,10 @@ function initialize(
 
     form.reset({
         tabHistory: [],
+        // costList: [],
         ...data,
         job: job,
         tab,
-        initialized: true,
+        // initialized: true,
     });
 }

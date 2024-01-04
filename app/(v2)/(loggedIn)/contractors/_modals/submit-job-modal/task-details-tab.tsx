@@ -23,18 +23,16 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 
 export default function TaskDetailsTab() {
     const ctx = useSubmitJob();
-    const [homeCosting, costList, type] = ctx.form.watch([
-        "home.costing",
-        "costList",
-        "type",
-    ]);
+    const [homeCosting, type] = ctx.form.watch(["home.costing", "job.type"]);
+    const { costList } = ctx;
     const cost = useJobCostList(ctx.type);
 
     // useEffect(() => {},[])
     return (
         <ScrollArea className="h-[350px] pr-4 grid gap-2">
             <ProjectFormSection />
-            <div className={cn(!costList?.length && "hidden")}>
+            {ctx.costList.fields.length}
+            <div className={cn(!costList?.fields?.length && "hidden")}>
                 <Table className="">
                     <TableHeader>
                         <TableRow>
@@ -43,7 +41,7 @@ export default function TaskDetailsTab() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {costList?.map((row, index) => (
+                        {costList?.fields?.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>
                                     <PrimaryCellContent>
