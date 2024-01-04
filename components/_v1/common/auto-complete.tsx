@@ -7,6 +7,7 @@ import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import JsonSearch from "@/_v2/lib/json-search";
 // import JsonSearch from "search-array";
 interface Props {
     options?: any[];
@@ -287,14 +288,14 @@ export default function AutoComplete({
     );
 }
 function filter(items, query, fuzzy) {
-    // if (fuzzy) {
-    //     const JsonSearch = require("search-array");
-    //     const s = new JsonSearch(items || [], {
-    //         sort: true,
-    //     });
-    //     let res = s.query(query || "");
-    //     return res;
-    // }
+    if (fuzzy) {
+        // const jsEarch = require("search-array");
+        const s = new JsonSearch(items || [], {
+            sort: true,
+        });
+        let res = s.query(query || "");
+        return res;
+    }
     const escapedText = !query
         ? ""
         : query?.toString().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
