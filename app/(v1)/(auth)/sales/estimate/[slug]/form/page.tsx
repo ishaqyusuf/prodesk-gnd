@@ -11,6 +11,7 @@ import {
 import SalesForm from "@/app/(v1)/(auth)/sales/order/[slug]/form/components/sales-form";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Edit Invoice",
@@ -21,6 +22,7 @@ export default async function OrderFormPage({
     searchParams,
     params: { slug },
 }) {
+    redirect(`/sales/edit/estimate/${slug}`);
     const resp: SalesFormResponse = await salesFormAction({
         orderId: slug,
         type: "estimate",

@@ -15,7 +15,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
-import { sendMsg } from "./(v1)/_actions/sms/twilio";
 
 export const metadata: Metadata = {
     title: "GND-PRODESK",

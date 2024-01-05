@@ -1,5 +1,4 @@
 import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
-
 import { _getSalesFormAction } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import {
