@@ -2,7 +2,7 @@
 
 import { ContractorOverview } from "./type";
 
-import { _deleteContractorDoc } from "@/app/(v1)/_actions/contractors/delete-contractor-doc";
+import { _deleteContractorDoc } from "@/app/(v2)/(loggedIn)/contractors/overview/_actions/delete-contractor-doc";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

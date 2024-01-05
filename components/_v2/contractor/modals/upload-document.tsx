@@ -1,6 +1,6 @@
 "use client";
 
-import { _saveDocUpload } from "@/app/(v1)/_actions/contractors/upload-contractor-doc";
+import { _saveDocUpload } from "@/app/(v2)/(loggedIn)/contractors/overview/_actions/upload-contractor-doc";
 import { ContractorOverview } from "@/app/(v2)/(loggedIn)/contractors/overview/type";
 import Btn from "@/components/_v1/btn";
 import BaseModal from "@/components/_v1/modals/base-modal";
@@ -33,7 +33,7 @@ export default function UploadDocumentModal({}) {
                 toast.error("Upload a valid image");
             } else {
                 const data = await uploadFile(file, "contractor-document");
-                console.log(data);
+
                 if (data.error) {
                     toast.error(data.error.message);
                 } else {
