@@ -83,7 +83,7 @@ export default function ContractorsTableShell({
                 ],
             })),
             table.simpleColumn("Name", (data) => ({
-                link: `/contractor/overview/${data.id}`,
+                link: `/contractors/overview/${data.id}`,
                 story: [
                     table.primaryText(data.name),
                     table.secondary(data.username),

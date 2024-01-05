@@ -60,7 +60,7 @@ export default function SalesDetailsSection() {
             </InfoLine>
             {ctx.isOrder && (
                 <>
-                    <InfoLine label="Delivery Option">
+                    <InfoLine label="Payment Term">
                         <SelectControl<ISalesForm>
                             className="min-w-[150px] h-8"
                             name="paymentTerm"
