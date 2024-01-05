@@ -23,10 +23,11 @@ export type IUser = Omit<Users, "meta"> & {
     documents: IUserDoc[];
 };
 export interface IUserDoc extends Omit<UserDocuments, "meta"> {
-    meta: {
-        url;
-        assetId;
-    };
+    meta: IUserDocMeta;
+}
+export interface IUserDocMeta {
+    url;
+    assetId;
 }
 export type IJobStatus = "Submitted" | "Assigned";
 export type IJobs = Omit<Jobs, "meta" | "type" | "status"> & {

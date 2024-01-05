@@ -13,7 +13,7 @@ const _path = {
     communityTasks: "/contractor/assign-tasks",
     communityTemplates: "/settings/community/community-templates",
     customers: "/sales/customers",
-    "contractor-overview": "/contractor/overview/[contractorId]",
+    "contractor-overview": "/contractors/overview/[contractorId]",
     delivery: "/sales/delivery",
     estimates: "/sales/estimates",
     homes: "/community/units",

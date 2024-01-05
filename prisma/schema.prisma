@@ -1112,3 +1112,20 @@ model Cache {
     meta      Json?     @db.Json
     createdAt DateTime? @db.Timestamp(0)
 }
+
+model Payday {
+    id        Int            @unique @default(autoincrement())
+    invoiceId Int?
+    startedAt DateTime?      @db.Timestamp(0)
+    endTime   DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @db.Timestamp(0)
+    updatedAt DateTime?      @db.Timestamp(0)
+    invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
+}
+
+model PaydayInvoice {
+    id        Int       @unique @default(autoincrement())
+    payments  Payday[]
+    createdAt DateTime? @db.Timestamp(0)
+    updatedAt DateTime? @db.Timestamp(0)
+}

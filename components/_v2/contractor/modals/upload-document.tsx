@@ -1,6 +1,7 @@
 "use client";
 
 import { _saveDocUpload } from "@/app/(v1)/_actions/contractors/upload-contractor-doc";
+import { ContractorOverview } from "@/app/(v2)/(loggedIn)/contractors/overview/type";
 import Btn from "@/components/_v1/btn";
 import BaseModal from "@/components/_v1/modals/base-modal";
 import { Input } from "@/components/ui/input";
@@ -57,11 +58,11 @@ export default function UploadDocumentModal({}) {
         }
     };
     return (
-        <BaseModal<IUser>
+        <BaseModal<ContractorOverview>
             className="sm:max-w-[500px]"
             onOpen={(data) => {
                 form.reset({
-                    userId: data?.id,
+                    userId: data?.user.id,
                     meta: {},
                 } as any);
             }}
@@ -71,7 +72,7 @@ export default function UploadDocumentModal({}) {
                     Upload Document
                 </div>
             )}
-            Subtitle={({ data }) => <>{data?.name}</>}
+            Subtitle={({ data }) => <>{data?.user.name}</>}
             Footer={({ data }) => (
                 <>
                     <Btn isLoading={loading} onClick={uploadImage}>
