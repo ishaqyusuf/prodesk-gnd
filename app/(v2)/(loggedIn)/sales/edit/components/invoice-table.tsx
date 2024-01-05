@@ -300,11 +300,15 @@ function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
     const keyDown = useCallback(
         (e) => {
             let k = e.key;
-            if (props.type == "number" && !(+k > -1) && k?.length == 1) {
+            if (
+                props.type == "number" &&
+                !(+k > -1) &&
+                k?.length == 1 &&
+                k != "."
+            ) {
                 e.preventDefault();
             }
             if (props.type == "number") {
-                console.log(k);
                 //
                 if (["+", "-", "/", "*", "%"].includes(k)) {
                     // console.log([k, qty]);
