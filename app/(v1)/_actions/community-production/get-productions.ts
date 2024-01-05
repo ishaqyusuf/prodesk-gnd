@@ -59,6 +59,13 @@ export async function whereProductionQuery(query: CommunityTaskQuery) {
                 in: Array.isArray(query._task) ? query._task : [query._task],
             },
         });
+        builder.raw({
+            home: {
+                id: {
+                    gt: 1,
+                },
+            },
+        });
         // builder.where("taskName", {
         //     in: Array.isArray(query._task) ? query._task : [query._task]
         // });
