@@ -112,6 +112,7 @@ export function OrderIdCell(
 export function OrderCustomerCell(
     customer: ICustomer | undefined,
     link: string | undefined = undefined
+    // address1 = null
 ) {
     if (!customer) return <></>;
     link = link?.replace("slug", customer.id?.toString());
@@ -126,6 +127,7 @@ export function OrderCustomerCell(
                 <span className="text-muted-foreground">
                     {customer?.phoneNo}
                 </span>
+                {/* <p className="text-muted-foreground line-clamp-2">{address1}</p> */}
             </LinkableNode>
         </div>
     );

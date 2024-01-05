@@ -13,6 +13,7 @@ import { Icons } from "@/components/_v1/icons";
 import useSaveSalesHook from "../hooks/use-save-sales";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PrintOrderMenuAction } from "@/components/_v1/actions/order-actions";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);
@@ -85,6 +86,28 @@ export default function SalesFormAction() {
                     >
                         Save & New
                     </MenuItem>
+                </Menu>
+                <Menu Icon={Icons.more}>
+                    {/* <MenuItem
+                        onClick={() => {
+                            // openModal("salesSupply");
+                        }}
+                    >
+                        Supply
+                    </MenuItem> */}
+                    <PrintOrderMenuAction
+                        link
+                        row={{ id: form.getValues("id") } as any}
+                    />
+                    <PrintOrderMenuAction
+                        mockup
+                        link
+                        row={{ id: form.getValues("id") } as any}
+                    />
+                    <PrintOrderMenuAction
+                        pdf
+                        row={{ id: form.getValues("id") } as any}
+                    />
                 </Menu>
             </div>
         </div>

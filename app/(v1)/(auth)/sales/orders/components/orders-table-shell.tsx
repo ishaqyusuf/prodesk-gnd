@@ -94,6 +94,7 @@ export default function OrdersTableShell<T>({
                               OrderCustomerCell(
                                   row.original.customer,
                                   "/sales/customer/slug"
+                                  //   row.original.shippingAddress?.address1
                               ),
                       },
                       {
