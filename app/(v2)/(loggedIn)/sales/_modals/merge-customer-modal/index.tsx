@@ -25,6 +25,13 @@ export default function MergeCustomersModal({}) {
             Subtitle={({}) => <>Select Primary Customer</>}
             Content={MergeCustomerModalContent}
             Footer={MergeCustomerModalFooter}
+            onOpen={(data, form) => {
+                form &&
+                    form.reset({
+                        primaryId: null as any,
+                    } as any);
+            }}
+            useForm
         />
     );
 }
@@ -39,11 +46,11 @@ function MergeCustomerModalContent({ data }: MergeCustomerModalProps) {
     // const [primaryId, setPrimaryId] = useState(data.customers[0]?.id);
     const form = useMergeCustomerFormContext();
     const primaryId = form.watch("primaryId");
-    useEffect(() => {
-        form.reset({
-            primaryId: null as any,
-        });
-    }, []);
+    // useEffect(() => {
+    //     form.reset({
+    //         primaryId: null as any,
+    //     });
+    // }, []);
     return (
         <Table>
             <TableBody>

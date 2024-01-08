@@ -20,7 +20,8 @@ import { FormProvider, UseFormReturn, useForm } from "react-hook-form";
 type Comp<T, FormType> = { data?: T; form?: UseFormReturn<FormType> };
 
 export interface BaseModalProps<T, FormType> {
-    onOpen?(data: T);
+    //@ts-ignore
+    onOpen?(data: T, form?: UseFormReturn<FormType>);
     onClose?();
     modalName: ModalName | string;
     Title?(props: Comp<T, FormType>);

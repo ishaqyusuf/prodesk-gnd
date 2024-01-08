@@ -12,48 +12,52 @@ export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
     const qb = whereQuery<Prisma.CustomersWhereInput>(query);
     qb.searchQuery("name", "address");
-
+    // qb.raw({})
     const q = { contains: query._q || undefined };
 
-    const where: Prisma.CustomersWhereInput = {
-        OR: [
-            {
-                name: q
-            },
-            {
-                address: q
-            }
-        ],
-        deletedAt: null
-    };
+    // const where: Prisma.CustomersWhereInput = {
+    //     OR: [
+    //         {
+    //             name: q,
+    //         },
+    //         {
+    //             address: q,
+    //         },
+    //     ],
+    //     deletedAt: null,
+    // };
     const _items = await prisma.customers.findMany({
         where: qb.get(),
         ...(await queryFilter(query)),
+        orderBy: {
+            // businessName: "asc",
+            name: "asc",
+        },
         include: {
             profile: true,
             addressBooks: true,
             _count: {
                 select: {
-                    salesOrders: true
-                }
-            }
-        }
+                    salesOrders: true,
+                },
+            },
+        },
     });
 
-    const pageInfo = await getPageInfo(query, where, prisma.customers);
+    const pageInfo = await getPageInfo(query, qb.get(), prisma.customers);
     return {
         pageInfo,
-        data: _items.map(customer => {
+        data: _items.map((customer) => {
             let primaryAddress = customer.addressBooks.find(
-                a => a.id == customer.addressId
+                (a) => a.id == customer.addressId
             );
             if (!primaryAddress && customer.addressBooks.length > 0)
                 primaryAddress = customer.addressBooks[0];
             return {
                 ...customer,
-                primaryAddress
+                primaryAddress,
             };
-        }) as any
+        }) as any,
     };
 }
 export interface ICustomerOverview {
@@ -62,26 +66,26 @@ export interface ICustomerOverview {
 export async function getCustomerAction(id) {
     const _customer = await prisma.customers.findUnique({
         where: {
-            id
+            id,
         },
         include: {
             profile: true,
             salesOrders: {
                 where: {
-                    type: "order"
-                }
+                    type: "order",
+                },
             },
             wallet: true,
             _count: {
                 select: {
                     salesOrders: {
                         where: {
-                            type: "order"
-                        }
-                    }
-                }
-            }
-        }
+                            type: "order",
+                        },
+                    },
+                },
+            },
+        },
     });
     if (!_customer) throw new Error("Customer not Found");
     let customer: ICustomer = _customer as any;
@@ -98,11 +102,11 @@ export async function getCustomerAction(id) {
     ));
     customer._count.completedDoors = (td || 0) - (pd || 0);
     let pendingCompletion = _customer.salesOrders?.filter(
-        s => s.prodStatus != "Completed"
+        (s) => s.prodStatus != "Completed"
     ).length;
     customer._count.pendingOrders = pendingCompletion;
     customer._count.completedOrders = _customer.salesOrders?.filter(
-        s => s.prodStatus == "Completed"
+        (s) => s.prodStatus == "Completed"
     ).length;
     customer.salesOrders = customer.salesOrders;
     // .slice(
@@ -124,24 +128,24 @@ export async function saveCustomer(customer: ICustomer) {
                     businessName,
                     meta,
                     address: customer.primaryAddress.address1,
-                    phoneNo
+                    phoneNo,
                 }),
                 profile: customerTypeId
                     ? {
                           connect: {
-                              id: Number(customerTypeId)
-                          }
+                              id: Number(customerTypeId),
+                          },
                       }
-                    : null
-            } as any
+                    : null,
+            } as any,
         });
         const _address = await prisma.addressBooks.create({
             data: {
                 customerId: _customer.id,
                 name: businessName || name,
                 ...(transformData(customer.primaryAddress) as any),
-                phoneNo
-            }
+                phoneNo,
+            },
         });
     }
 }
@@ -153,10 +157,10 @@ export async function getCustomerProfileId(customer: ICustomer) {
             data: transformData(
                 {
                     title,
-                    coefficient: Number(coefficient)
+                    coefficient: Number(coefficient),
                 },
                 true
-            ) as any
+            ) as any,
         });
         return profile.id;
     }
@@ -166,8 +170,8 @@ export async function getCustomerProfileId(customer: ICustomer) {
 export async function getStaticCustomers() {
     const customers = await prisma.customers.findMany({
         orderBy: {
-            name: "asc"
-        }
+            name: "asc",
+        },
     });
     return customers;
 }

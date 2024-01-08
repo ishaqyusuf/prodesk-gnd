@@ -24,7 +24,6 @@ import {
     assignProductionAction,
     getUserProductionEventsAction,
 } from "@/app/(v1)/_actions/sales/sales-production";
-import { getProductionUsersAction } from "@/app/(v1)/_actions/hrm";
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
 import BaseModal from "./base-modal";
@@ -40,6 +39,7 @@ import {
     SelectValue,
 } from "../../ui/select";
 import { Label } from "../../ui/label";
+import { useStaticProducers } from "@/_v2/hooks/use-static-data";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function AssignProductionModal() {
@@ -52,16 +52,8 @@ export default function AssignProductionModal() {
         []
     );
     const modal = useAppSelector((state) => state.slicers?.modal);
-    const productionUsers = useAppSelector(
-        (state) => state.slicers?.productionUsers
-    );
-    //   useEffect(() => {
-    //     if (!productionUsers) {
-    //       _useAsync(async () => {
-    //         dispatchSlice("productionUsers", await getProductionUsersAction());
-    //       });
-    //     }
-    //   }, [productionUsers]);
+    const prodUsers = useStaticProducers();
+
     async function save(order) {
         startTransition(async () => {
             await assignProductionAction({
@@ -77,9 +69,9 @@ export default function AssignProductionModal() {
 
     const router = useRouter();
     async function __loadProds(props: UserProductionEventsProps) {
-        const __prods = await getUserProductionEventsAction(props);
-        console.log(__prods);
-        setProductionEvents(__prods as any);
+        // const __prods = await getUserProductionEventsAction(props);
+        // console.log(__prods);
+        // setProductionEvents(__prods as any);
     }
     useEffect(() => {
         // console.log([])
@@ -104,11 +96,6 @@ export default function AssignProductionModal() {
         <BaseModal<ISalesOrder>
             className="sm:max-w-[850px]"
             onOpen={(order) => {
-                if (!productionUsers) {
-                    getProductionUsersAction().then((result) => {
-                        dispatchSlice("productionUsers", result);
-                    });
-                }
                 setUserId(order.id);
                 setDueDate(order.prodDueDate);
             }}
@@ -138,7 +125,7 @@ export default function AssignProductionModal() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {productionUsers?.map((field, i) => (
+                                {prodUsers.data?.map((field, i) => (
                                     <TableRow
                                         className={`${
                                             field.id == userId
@@ -199,7 +186,7 @@ export default function AssignProductionModal() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            {productionUsers?.map((opt, _) => (
+                                            {prodUsers.data?.map((opt, _) => (
                                                 <SelectItem
                                                     key={_}
                                                     value={opt.id?.toString()}

@@ -108,6 +108,9 @@ export default function SalesFormAction() {
                         pdf
                         row={{ id: form.getValues("id") } as any}
                     />
+                    <MenuItem Icon={Icons.production} onClick={() => {}}>
+                        Production
+                    </MenuItem>
                 </Menu>
             </div>
         </div>

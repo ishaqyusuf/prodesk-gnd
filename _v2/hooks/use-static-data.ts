@@ -2,6 +2,7 @@ import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";
 import { getContractorsAction } from "@/app/(v2)/(loggedIn)/contractors/_actions/get-job-employees";
 import { getJobCostList } from "@/app/(v2)/(loggedIn)/contractors/_actions/job-cost-list";
+import { getStaticProductionUsersAction } from "@/app/(v2)/(loggedIn)/sales/_actions/static/get-static-production-users-action";
 import { deepCopy } from "@/lib/deep-copy";
 import { store, useAppSelector } from "@/store";
 import { ISlicer, dispatchSlice } from "@/store/slicers";
@@ -16,7 +17,7 @@ export default function useStaticData<T>(key, loader) {
     // console.log(key);
 
     async function load() {
-        const _data = await loader();
+        const _data: T = await loader();
         store.dispatch(
             updateStaticData({
                 key,
@@ -27,6 +28,7 @@ export default function useStaticData<T>(key, loader) {
     }
     useEffect(() => {
         load();
+        console.log("LOADING.");
     }, []);
     return {
         data: data as T, //: data as ISlicer[typeof key],
@@ -37,6 +39,11 @@ export const useStaticRoles = () =>
     useStaticData<Roles[]>("staticRoles", staticRolesAction);
 export const useStaticContractors = () =>
     useStaticData<Users[]>("staticUsers", getContractorsAction);
+export const useStaticProducers = () =>
+    useStaticData<Awaited<ReturnType<typeof getStaticProductionUsersAction>>>(
+        "staticProductionUsers",
+        getStaticProductionUsersAction
+    );
 
 export const useStaticProjects = () =>
     useStaticData<Projects[]>("staticProjects", staticProjectsAction);

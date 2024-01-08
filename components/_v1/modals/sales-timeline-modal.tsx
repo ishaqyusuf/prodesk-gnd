@@ -5,18 +5,12 @@ import React, { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ISalesOrder } from "@/types/sales";
 
-import { getProductionUsersAction } from "@/app/(v1)/_actions/hrm";
 import { _useAsync } from "@/lib/use-async";
 import Btn from "../btn";
 import BaseModal from "./base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
-import {
-    PaymentOrderProps,
-    applyPaymentAction,
-} from "@/app/(v1)/_actions/sales/sales-payment";
-import { Checkbox } from "../../ui/checkbox";
-import { deepCopy } from "@/lib/deep-copy";
+
 import { Info } from "../info";
 import {
     Select,
