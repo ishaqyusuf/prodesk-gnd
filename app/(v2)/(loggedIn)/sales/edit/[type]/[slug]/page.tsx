@@ -7,13 +7,23 @@ import {
     OrdersCrumb,
 } from "@/components/_v1/breadcrumbs/links";
 import EditSalesForm from "../../components/form";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+    title: "Edit Sales",
+};
 export default async function EditSalesPage({ searchParams, params }) {
     const { type, slug } = params;
     const resp: SalesFormResponse = await _getSalesFormAction({
         orderId: slug,
         type,
     });
+    let title = [
+        `${resp.form.id ? "Edit" : "New"} ${type}`,
+        resp.form.id && slug,
+    ]
+        .filter(Boolean)
+        .join(": ");
+    metadata.title = title;
     if (!resp.form.deliveryOption) resp.form.deliveryOption = "pickup";
     const orderId = resp?.form?.orderId;
     return (

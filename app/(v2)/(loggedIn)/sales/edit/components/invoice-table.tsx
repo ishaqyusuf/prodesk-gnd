@@ -372,7 +372,7 @@ function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
                             className="h-8 p-1 uppercase font-medium"
                             {...field}
                             {...props}
-                            onKeyDown={keyDown}
+                            // onKeyDown={keyDown}
                         />
                     )
                 }

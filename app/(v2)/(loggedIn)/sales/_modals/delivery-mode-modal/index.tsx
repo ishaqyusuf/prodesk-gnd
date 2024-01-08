@@ -9,7 +9,7 @@ import BaseModal from "@/components/_v1/modals/base-modal";
 export function DeliveryModeModal({}) {
     return (
         <>
-            <span>abc.xyz abcb</span>
+            <span></span>
         </>
     );
 }

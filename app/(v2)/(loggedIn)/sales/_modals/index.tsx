@@ -16,6 +16,7 @@ export default function SalesModals({ legacy }: { legacy?: boolean }) {
                     <InspectBackOrderModal />
                 </>
             )}
+
             <DeliveryModeModal />
             <MergeCustomersModal />
         </>
