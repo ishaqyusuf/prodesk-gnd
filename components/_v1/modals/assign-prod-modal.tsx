@@ -42,7 +42,7 @@ import {
 import { Label } from "../../ui/label";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
-export default function SalesProductionModal() {
+export default function AssignProductionModal() {
     const [isPending, startTransition] = useTransition();
     const [userId, setUserId] = React.useState<any>();
     const [prodDueDate, setDueDate] = React.useState<any>();

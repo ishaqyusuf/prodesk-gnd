@@ -1,17 +1,21 @@
 "use client";
 
-import { _mergeDuplicationAction } from "@/app/(v1)/_actions/customers/merge-duplicate-action";
+import { openMergeDuplicatesModal } from "@/app/(v2)/(loggedIn)/sales/_modals/merge-customer-modal/open";
+import Btn from "../../btn";
+import { Icons } from "../../icons";
 
 export default function CustomersSelectionAction({ items }: { items }) {
     async function mergeDuplicates() {
-        await _mergeDuplicationAction(items.map((item) => item.id));
+        openMergeDuplicatesModal(items);
     }
     return (
         <>
-            {/* <Btn onClick={mergeDuplicates} className="h-8">
-                <Icons.Merge className="w-4 h-4 mr-2" />
-                Merge
-            </Btn> */}
+            {items.length > 1 && (
+                <Btn onClick={mergeDuplicates} className="h-8">
+                    <Icons.Merge className="w-4 h-4 mr-2" />
+                    Merge
+                </Btn>
+            )}
         </>
     );
 }

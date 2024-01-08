@@ -14,19 +14,24 @@ import { ModalName } from "@/store/slicers";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import { closeModal } from "@/lib/modal";
+import { FormProvider, UseFormReturn, useForm } from "react-hook-form";
 
-export interface BaseModalProps<T> {
+//@ts-ignore
+type Comp<T, FormType> = { data?: T; form?: UseFormReturn<FormType> };
+
+export interface BaseModalProps<T, FormType> {
     onOpen?(data: T);
     onClose?();
     modalName: ModalName | string;
-    Title?({ data }: { data?: T });
-    Subtitle?({ data }: { data?: T });
-    Content?({ data }: { data?: T });
-    Footer?({ data }: { data?: T });
+    Title?(props: Comp<T, FormType>);
+    Subtitle?(props: Comp<T, FormType>);
+    Content?(props: Comp<T, FormType>);
+    Footer?(props: Comp<T, FormType>);
     className?;
+    defaultValues?;
     noFooter?: Boolean;
 }
-export default function BaseModal<T>({
+function BaseModal<T, FormType = undefined>({
     onOpen,
     onClose,
     modalName,
@@ -36,7 +41,8 @@ export default function BaseModal<T>({
     Footer,
     className,
     noFooter,
-}: BaseModalProps<T>) {
+    defaultValues,
+}: BaseModalProps<T, FormType>) {
     const modal = useAppSelector((state) => state.slicers?.modal);
     //   const open =
     useEffect(() => {
@@ -44,6 +50,9 @@ export default function BaseModal<T>({
             onOpen && onOpen(modal?.data);
         }
     }, [modal, modalName]);
+    const form = useForm({
+        defaultValues,
+    });
     return (
         <Dialog
             onOpenChange={(e) => {
@@ -55,22 +64,29 @@ export default function BaseModal<T>({
             }}
             open={modal?.name == modalName}
         >
-            <DialogContent className={cn(className)}>
-                <DialogHeader>
-                    <DialogTitle>
-                        {Title && <Title data={modal?.data} />}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {Subtitle && <Subtitle data={modal?.data} />}
-                    </DialogDescription>
-                </DialogHeader>
-                {Content && <Content data={modal?.data} />}
-                {!noFooter && (
-                    <DialogFooter>
-                        {Footer && <Footer data={modal?.data} />}
-                    </DialogFooter>
-                )}
-            </DialogContent>
+            <FormProvider {...form}>
+                <DialogContent className={cn(className)}>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {Title && <Title data={modal?.data} />}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {Subtitle && <Subtitle data={modal?.data} />}
+                        </DialogDescription>
+                    </DialogHeader>
+                    {Content && <Content data={modal?.data} />}
+                    {!noFooter && (
+                        <DialogFooter>
+                            {Footer && <Footer data={modal?.data} />}
+                        </DialogFooter>
+                    )}
+                </DialogContent>
+            </FormProvider>
         </Dialog>
     );
 }
+
+// BaseModal.Btn = ({}) => {
+//     return <></>
+// }
+export default BaseModal;

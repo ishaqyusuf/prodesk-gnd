@@ -80,7 +80,7 @@ export default function CustomerModal() {
         ] as any);
     }
     return (
-        <BaseModal<ICustomer | undefined>
+        <BaseModal<ICustomer | undefined, any>
             className="sm:max-w-[550px]"
             onOpen={(data) => {
                 init(data);

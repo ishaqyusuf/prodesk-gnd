@@ -1,11 +1,11 @@
-import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
-import { BreadLink } from "@/components/_v1/breadcrumbs/links";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { BreadLink } from "@/components/breadcrumbs/links";
 import { Metadata } from "next";
 import { prisma } from "@/db";
 import { redirect } from "next/navigation";
-import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
-import LoadDelivery from "@/components/_v1/sales/load-delivery/load-delivery";
-import InspectBackOrderModal from "@/components/_v1/modals/sales/inspect-back-order-modal";
+import { DataPageShell } from "@/components/shells/data-page-shell";
+import LoadDelivery from "@/components/sales/load-delivery/load-delivery";
+import InspectBackOrderModal from "@/components/modals/sales/inspect-back-order-modal";
 export const metadata: Metadata = {
     title: "Create Back Order",
 };

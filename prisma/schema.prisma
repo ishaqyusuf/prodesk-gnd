@@ -32,7 +32,7 @@ model AddressBooks {
     meta           Json?         @db.Json
     createdAt      DateTime?     @db.Timestamp(0)
     updatedAt      DateTime?     @db.Timestamp(0)
-    customer       Customers?    @relation(fields: [customerId], references: [id], name: "addressBooks")
+    customer       Customers?    @relation(fields: [customerId], references: [id], name: "addressBooks", onDelete: Cascade)
     billingOrders  SalesOrders[] @relation(name: "billingAddress")
     shippingOrders SalesOrders[] @relation(name: "shippingAddress")
 }
@@ -196,7 +196,7 @@ model CustomerTransaction {
     meta          Json?           @db.Json
     createdAt     DateTime?       @db.Timestamp(0)
     updatedAt     DateTime?       @db.Timestamp(0)
-    wallet        CustomerWallet  @relation(fields: [walletId], references: [id])
+    wallet        CustomerWallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
     salesPayments SalesPayments[]
 }
 
@@ -900,8 +900,8 @@ model SalesPayments {
     createdAt     DateTime?            @db.Timestamp(0)
     updatedAt     DateTime?            @db.Timestamp(0)
     order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
-    customer      Customers            @relation(fields: [customerId], references: [id])
-    transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id])
+    customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
     commissions   SalesCommision[]
 }
 
