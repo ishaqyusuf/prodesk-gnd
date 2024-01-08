@@ -79,7 +79,7 @@ export default function useSaveSalesHook() {
                 }
             })();
             // methods.handleSubmit(onSubmit)();
-        }, 5000),
+        }, 2000),
         [form]
     );
     useDeepCompareEffect(() => {

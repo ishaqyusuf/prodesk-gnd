@@ -29,7 +29,8 @@ export interface BaseModalProps<T, FormType> {
     Footer?(props: Comp<T, FormType>);
     className?;
     defaultValues?;
-    noFooter?: Boolean;
+    useForm?: boolean;
+    noFooter?: boolean;
 }
 function BaseModal<T, FormType = undefined>({
     onOpen,
@@ -39,6 +40,7 @@ function BaseModal<T, FormType = undefined>({
     Subtitle,
     Content,
     Footer,
+    useForm: _useForm,
     className,
     noFooter,
     defaultValues,
@@ -53,6 +55,12 @@ function BaseModal<T, FormType = undefined>({
     const form = useForm({
         defaultValues,
     });
+    let Container = ({ children, ...props }: any) =>
+        _useForm ? (
+            <FormProvider {...(props as any)}>{children}</FormProvider>
+        ) : (
+            <>{children}</>
+        );
     return (
         <Dialog
             onOpenChange={(e) => {
@@ -64,7 +72,7 @@ function BaseModal<T, FormType = undefined>({
             }}
             open={modal?.name == modalName}
         >
-            <FormProvider {...form}>
+            <Container {...form}>
                 <DialogContent className={cn(className)}>
                     <DialogHeader>
                         <DialogTitle>
@@ -81,7 +89,7 @@ function BaseModal<T, FormType = undefined>({
                         </DialogFooter>
                     )}
                 </DialogContent>
-            </FormProvider>
+            </Container>
         </Dialog>
     );
 }
