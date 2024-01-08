@@ -108,11 +108,6 @@ export default function HomeModal() {
             }
         });
     }
-    // const projects = useAppSelector(state => state?.slicers?.staticProjects);
-    // const communityTemplates = useAppSelector(
-    //     state => state?.slicers?.staticCommunity
-    // );
-    // const models = useAppSelector(state => state?.slicers?.staticModels);
     function register(i, key: keyof IHome) {
         return form.register(`units.${i}.${key}` as any);
     }

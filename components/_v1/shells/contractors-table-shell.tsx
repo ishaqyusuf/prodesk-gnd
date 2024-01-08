@@ -48,6 +48,7 @@ import { useRouter } from "next/navigation";
 import { RolesFilter } from "../filters/roles-filter";
 import { _deleteEmployee } from "@/app/(v1)/_actions/hrm/employees.crud";
 import { SmartTable } from "../data-table/smart-table";
+import { useEmployeeProfiles } from "@/_v2/hooks/use-static-data";
 
 export default function ContractorsTableShell({
     data,
@@ -55,9 +56,7 @@ export default function ContractorsTableShell({
     searchParams,
 }: TableShellProps<IUser>) {
     const [isPending, startTransition] = useTransition();
-    const profiles = useAppSelector(
-        (state) => state?.slicers?.staticEmployeeProfiles
-    );
+    const profiles = useEmployeeProfiles();
     useEffect(() => {
         loadStaticList(
             "staticEmployeeProfiles",
@@ -107,7 +106,7 @@ export default function ContractorsTableShell({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[185px]">
-                            {profiles?.map((profile) => (
+                            {profiles.data?.map((profile) => (
                                 <DropdownMenuItem
                                     onClick={() =>
                                         setEmployeeProfile(data.id, profile)

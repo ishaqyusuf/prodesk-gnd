@@ -22,6 +22,10 @@ import { employeeSchema } from "@/lib/validations/hrm";
 
 import { IProduct, IProductVariant } from "@/types/product";
 import { createProductAction } from "@/app/(v1)/_actions/sales-products/crud";
+import {
+    useStaticProductCategories,
+    useStaticProducts,
+} from "@/_v2/hooks/use-static-data";
 
 export default function ProductCatalogModal() {
     const route = useRouter();
@@ -38,7 +42,7 @@ export default function ProductCatalogModal() {
             try {
                 // const isValid = employeeSchema.parse(form.getValues());
                 const fd = form.getValues();
-                const pid = products.find(
+                const pid = products.data?.find(
                     (p) =>
                         p.title?.toLowerCase() ===
                         fd.product.title?.toLowerCase()
@@ -64,10 +68,8 @@ export default function ProductCatalogModal() {
             }
         });
     }
-    const categories = useAppSelector(
-        (state) => state?.slicers?.staticProductCategories
-    );
-    const products = useAppSelector((s) => s.slicers.staticProducts);
+    const categories = useStaticProductCategories();
+    const products = useStaticProducts();
     async function init(data) {
         form.reset(
             !data
@@ -99,7 +101,7 @@ export default function ProductCatalogModal() {
                             <AutoComplete2
                                 form={form}
                                 allowCreate
-                                options={products}
+                                options={products?.data || []}
                                 itemText={"title"}
                                 itemValue={"title"}
                                 formKey={"product.title"}
@@ -131,7 +133,7 @@ export default function ProductCatalogModal() {
                                 itemValue={"category"}
                                 formKey={"product.category"}
                                 className="h-8"
-                                options={categories}
+                                options={categories?.data || []}
                                 uppercase
                                 allowCreate
                             />

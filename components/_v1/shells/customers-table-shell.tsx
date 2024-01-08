@@ -41,6 +41,7 @@ import AuthGuard from "../auth-guard";
 import { SmartTable } from "../data-table/smart-table";
 import { Icons } from "../icons";
 import CustomersSelectionAction from "../sales/customers/customers-selection-action";
+import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
 
 export default function CustomersTableShell<T>({
     data,
@@ -48,19 +49,10 @@ export default function CustomersTableShell<T>({
     searchParams,
 }: TableShellProps<ICustomer>) {
     const [isPending, startTransition] = useTransition();
-    const profiles = useAppSelector(
-        (state) => state?.slicers?.staticCustomerProfiles
-    );
+    const profiles = useCustomerProfiles();
     useEffect(() => {
-        loadStaticList(
-            "staticCustomerProfiles",
-            profiles,
-            staticCustomerProfilesAction
-        );
-    }, []);
-    useEffect(() => {
-        setDefaultProfile(profiles?.find((p) => p.defaultProfile) as any);
-    }, [profiles]);
+        setDefaultProfile(profiles.data?.find((p) => p.defaultProfile) as any);
+    }, [profiles.data]);
     const [defaultProfile, setDefaultProfile] = useState<CustomerTypes>(
         {} as any
     );
@@ -110,7 +102,7 @@ export default function CustomersTableShell<T>({
                                 align="end"
                                 className="w-[185px]"
                             >
-                                {profiles?.map((profile) => (
+                                {profiles?.data?.map((profile) => (
                                     <DropdownMenuItem
                                         onClick={() =>
                                             setCustomerProfile(

@@ -71,6 +71,7 @@ import SelectEmployee from "./select-employee";
 import { validateTaskQty } from "./validation";
 import { getJobCostData } from "./_actions/get-job-cost-data";
 import { getUnitJobs } from "../../../../(v2)/(loggedIn)/contractors/_actions/get-unit-jobs";
+import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 
 interface ModalInterface {
     data: IJobs | undefined;
@@ -164,7 +165,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
             }
         })();
     }, []);
-    const projects = useAppSelector((state) => state?.slicers?.staticProjects);
+    const projects = useStaticProjects();
 
     async function init(data: IJobs, defaultTab) {
         const employees = (await loadStatic1099Contractors()) as any;
@@ -391,7 +392,7 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
                                 id: null,
                                 title: "Custom Project",
                             },
-                            ...(projects || []),
+                            ...(projects?.data || []),
                         ]}
                         onSelect={(item: any) => selectProject(item.data)}
                         itemText={"title"}

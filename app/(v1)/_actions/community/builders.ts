@@ -8,6 +8,7 @@ import { IBuilder, IBuilderTasks, IHomeTask } from "@/types/community";
 import { revalidatePath } from "next/cache";
 import { transformData } from "@/lib/utils";
 import { composeBuilderTasks } from "@/app/(v2)/(loggedIn)/community-settings/builders/compose-builder-tasks";
+import { _cache } from "../_cache/load-data";
 export interface BuildersQueryParams extends BaseQuery {}
 export async function getBuildersAction(query: BuildersQueryParams) {
     const where = whereBuilder(query);
@@ -43,13 +44,15 @@ function whereBuilder(query: BuildersQueryParams) {
     return where;
 }
 export async function staticBuildersAction() {
-    const _data = await prisma.builders.findMany({
-        select: {
-            id: true,
-            name: true,
-        },
+    return await _cache("builders", async () => {
+        const _data = await prisma.builders.findMany({
+            select: {
+                id: true,
+                name: true,
+            },
+        });
+        return _data;
     });
-    return _data;
 }
 export async function deleteBuilderAction(id) {}
 export async function saveBuilder(data: IBuilder) {

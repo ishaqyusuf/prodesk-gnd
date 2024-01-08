@@ -42,6 +42,7 @@ import {
 import { findHomeOwnerAction } from "@/app/(v1)/_actions/customer-services/find-home-owner";
 import { deepCopy } from "@/lib/deep-copy";
 import dayjs from "dayjs";
+import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 
 export default function CustomerServiceModal() {
     const route = useRouter();
@@ -70,10 +71,8 @@ export default function CustomerServiceModal() {
             }
         });
     }
-    const projects = useAppSelector((state) => state?.slicers?.staticProjects);
-    useEffect(() => {
-        loadStaticList("staticProjects", projects, staticProjectsAction);
-    }, []);
+    const projects = useStaticProjects();
+
     async function init(data) {
         // console.log(data);
         let { tech, createdAt, ...formData }: IWorkOrder = deepCopy(
@@ -96,7 +95,9 @@ export default function CustomerServiceModal() {
         if (!formData.meta) formData.meta = {} as any;
         const { meta } = formData;
 
-        const pid = projects?.find((p) => p.title == formData.projectName)?.id;
+        const pid = projects.data?.find(
+            (p) => p.title == formData.projectName
+        )?.id;
 
         if (!meta.lotBlock) {
             const { lot, block } = formData;
@@ -152,7 +153,7 @@ export default function CustomerServiceModal() {
                                     label="Project"
                                     form={form}
                                     formKey={"projectName"}
-                                    options={projects}
+                                    options={projects.data || []}
                                     itemText={"title"}
                                     itemValue={"title"}
                                     onSelect={(e: any) => {

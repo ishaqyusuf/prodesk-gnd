@@ -48,6 +48,7 @@ import { useRouter } from "next/navigation";
 import { RolesFilter } from "../filters/roles-filter";
 import { _deleteEmployee } from "@/app/(v1)/_actions/hrm/employees.crud";
 import { SmartTable } from "../data-table/smart-table";
+import { useEmployeeProfiles } from "@/_v2/hooks/use-static-data";
 
 export default function EmployeesTableShell<T>({
     data,
@@ -55,16 +56,7 @@ export default function EmployeesTableShell<T>({
     searchParams,
 }: TableShellProps<IUser>) {
     const [isPending, startTransition] = useTransition();
-    const profiles = useAppSelector(
-        (state) => state?.slicers?.staticEmployeeProfiles
-    );
-    useEffect(() => {
-        loadStaticList(
-            "staticEmployeeProfiles",
-            profiles,
-            getStaticEmployeeProfiles
-        );
-    }, []);
+    const profiles = useEmployeeProfiles();
     const route = useRouter();
     async function setEmployeeProfile(employeeId, profile) {
         await setEmployeeProfileAction(employeeId, profile.id);
@@ -106,7 +98,7 @@ export default function EmployeesTableShell<T>({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[185px]">
-                            {profiles?.map((profile) => (
+                            {profiles.data?.map((profile) => (
                                 <DropdownMenuItem
                                     onClick={() =>
                                         setEmployeeProfile(data.id, profile)

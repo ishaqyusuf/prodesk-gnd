@@ -42,6 +42,7 @@ import {
     createEmployeeAction,
     saveEmployeeAction,
 } from "@/app/(v1)/_actions/hrm/save-employee";
+import { useStaticRoles } from "@/_v2/hooks/use-static-data";
 
 export default function EditJobModal() {
     const route = useRouter();
@@ -72,11 +73,9 @@ export default function EditJobModal() {
             }
         });
     }
-    const roles = useAppSelector((state) => state?.slicers?.staticRoles);
+    const roles = useStaticRoles();
 
     async function init(data) {
-        loadStaticList("staticRoles", roles, staticRolesAction);
-
         form.reset(
             !data
                 ? {}
@@ -128,7 +127,7 @@ export default function EditJobModal() {
                             <Label>Role</Label>
                             <AutoComplete2
                                 form={form}
-                                options={roles}
+                                options={roles.data || []}
                                 formKey={"role.id"}
                             />
                         </div>

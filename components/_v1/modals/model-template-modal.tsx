@@ -35,6 +35,7 @@ import {
     _createCommunityTemplate,
     _updateCommunityModel,
 } from "@/app/(v1)/_actions/community/community-template";
+import { useBuilders, useStaticProjects } from "@/_v2/hooks/use-static-data";
 
 export default function ModelTemplateModal({
     formType = "modelTemplate",
@@ -47,8 +48,8 @@ export default function ModelTemplateModal({
         defaultValues: {},
     });
 
-    const projects = useAppSelector((state) => state?.slicers?.staticProjects);
-    const builders = useAppSelector((state) => state?.slicers?.staticBuilders);
+    const projects = useStaticProjects();
+    const builders = useBuilders();
     useEffect(() => {
         loadStaticList("staticProjects", projects, staticProjectsAction);
         loadStaticList("staticBuilders", builders, staticBuildersAction);
@@ -66,12 +67,13 @@ export default function ModelTemplateModal({
                     formType == "communityTemplate"
                         ? await _createCommunityTemplate(
                               data,
-                              projects.find((p) => p.id == data.projectId)
+                              projects.data?.find((p) => p.id == data.projectId)
                                   ?.title
                           )
                         : await _createModelTemplate(
                               data,
-                              builders.find((b) => b.id == data.builderId)?.name
+                              builders.data?.find((b) => b.id == data.builderId)
+                                  ?.name
                           );
                 },
                 onSuccess: async (data) => {
@@ -123,7 +125,7 @@ export default function ModelTemplateModal({
                                 disabled={data?.data?.id != null}
                                 form={form}
                                 formKey={"projectId"}
-                                options={projects}
+                                options={projects.data || []}
                                 itemText={"title"}
                                 itemValue={"id"}
                             />
@@ -132,7 +134,7 @@ export default function ModelTemplateModal({
                                 label="Builder"
                                 form={form}
                                 formKey={"builderId"}
-                                options={builders}
+                                options={builders.data || []}
                                 itemText={"name"}
                                 itemValue={"id"}
                             />

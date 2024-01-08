@@ -73,7 +73,6 @@ export default function EmployeeModal() {
             }
         });
     }
-    // const roles = useAppSelector((state) => state?.slicers?.staticRoles);
     const role = useStaticRoles(); //useStaticData('staticRoles',staticRolesAction);
 
     async function init(data) {

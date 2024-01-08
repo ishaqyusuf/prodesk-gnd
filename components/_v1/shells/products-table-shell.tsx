@@ -39,13 +39,6 @@ export default function ProductsTableShell({
 }: TableShellProps<IProductVariant>) {
     const [isPending, startTransition] = useTransition();
 
-    const prodCategories = useAppSelector(
-        (s) => s.slicers.staticProductCategories
-    );
-    const staticProducts = useAppSelector((s) => s.slicers.staticProducts);
-    useEffect(() => {
-        loadStaticList("staticProducts", staticProducts, getStaticProducts);
-    }, []);
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const columns = useMemo<ColumnDef<IProductVariant, unknown>[]>(
         () => [

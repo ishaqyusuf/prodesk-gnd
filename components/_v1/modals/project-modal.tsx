@@ -34,6 +34,7 @@ import { loadStaticList } from "@/store/slicers";
 import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
 import { projectSchema } from "@/lib/validations/community-validations";
 import { saveProject } from "@/app/(v1)/_actions/community/projects";
+import { useBuilders } from "@/_v2/hooks/use-static-data";
 
 export default function ProjectModal() {
     const route = useRouter();
@@ -61,11 +62,9 @@ export default function ProjectModal() {
             }
         });
     }
-    const builders = useAppSelector((state) => state?.slicers?.staticBuilders);
+    const builders = useBuilders();
 
     async function init(data) {
-        loadStaticList("staticBuilders", builders, staticBuildersAction);
-
         form.reset(
             !data
                 ? {
@@ -117,7 +116,7 @@ export default function ProjectModal() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        {builders?.map((builder, _) => (
+                                        {builders.data?.map((builder, _) => (
                                             <SelectItem
                                                 key={_}
                                                 value={`${builder.id}`}

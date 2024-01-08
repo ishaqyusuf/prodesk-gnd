@@ -1,5 +1,12 @@
+import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
 import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
+import { getStaticEmployeeProfiles } from "@/app/(v1)/_actions/hrm/employee-profiles";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";
+import {
+    getStaticCategories,
+    getStaticProducts,
+} from "@/app/(v1)/_actions/sales-products/statics";
+import { staticCustomerProfilesAction } from "@/app/(v1)/_actions/sales/sales-customer-profiles";
 import { getContractorsAction } from "@/app/(v2)/(loggedIn)/contractors/_actions/get-job-employees";
 import { getJobCostList } from "@/app/(v2)/(loggedIn)/contractors/_actions/job-cost-list";
 import { getStaticProductionUsersAction } from "@/app/(v2)/(loggedIn)/sales/_actions/static/get-static-production-users-action";
@@ -9,7 +16,14 @@ import { ISlicer, dispatchSlice } from "@/store/slicers";
 import { updateStaticData } from "@/store/static-data-slice";
 import { IJobType } from "@/types/hrm";
 import { InstallCostLine } from "@/types/settings";
-import { Projects, Roles, Users } from "@prisma/client";
+import {
+    Builders,
+    CustomerTypes,
+    EmployeeProfile,
+    Projects,
+    Roles,
+    Users,
+} from "@prisma/client";
 import { useEffect } from "react";
 
 export default function useStaticData<T>(key, loader) {
@@ -44,6 +58,8 @@ export const useStaticProducers = () =>
         "staticProductionUsers",
         getStaticProductionUsersAction
     );
+export const useBuilders = () =>
+    useStaticData<Builders[]>("staticBuilders", staticBuildersAction);
 
 export const useStaticProjects = () =>
     useStaticData<Projects[]>("staticProjects", staticProjectsAction);
@@ -52,3 +68,18 @@ export const useJobCostList = (type: IJobType) =>
         "staticJobCostList",
         async () => await getJobCostList(type)
     );
+export const useEmployeeProfiles = () =>
+    useStaticData<EmployeeProfile[]>(
+        "employeeProfiles",
+        getStaticEmployeeProfiles
+    );
+export const useCustomerProfiles = () =>
+    useStaticData<CustomerTypes[]>(
+        "customerProfiles",
+        staticCustomerProfilesAction
+    );
+
+export const useStaticProductCategories = () =>
+    useStaticData<any>("prodCats", getStaticCategories);
+export const useStaticProducts = () =>
+    useStaticData<any>("prodCats", getStaticProducts);
