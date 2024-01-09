@@ -1,6 +1,6 @@
 import { useJobCostList } from "@/_v2/hooks/use-static-data";
 import ProjectFormSection from "./project-form-section";
-import useSubmitJob from "./use-submit-job";
+import useSubmitJob, { useJobSubmitCtx } from "./use-submit-job";
 import {
     Table,
     TableBody,
@@ -22,14 +22,14 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
 
 export default function TaskDetailsTab({}) {
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
     const [homeCosting, type] = ctx.form.watch(["home.costing", "job.type"]);
-    const cost = useJobCostList(ctx.type);
+    // const cost = useJobCostList(ctx.type);
     // const form = useFormContext();
     // useEffect(() => {},[])
     return (
         <ScrollArea className="h-[350px] pr-4 grid gap-2">
-            <ProjectFormSection ctx={ctx} />
+            <ProjectFormSection />
             {/* {ctx.costList?.fields?.length} */}
             <div className={cn(!ctx.costList?.fields?.length && "hidden")}>
                 <Table className="">

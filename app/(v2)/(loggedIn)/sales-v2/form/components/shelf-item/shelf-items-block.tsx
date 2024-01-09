@@ -23,6 +23,9 @@ import { _getShelfCategories } from "../../_action/get-shelf-categories";
 import { DykeShelfCategories } from "@prisma/client";
 import useShelfItem, { IUseShelfItem } from "../../../use-shelf-item";
 import { Input } from "@/components/ui/input";
+import Money from "@/components/_v1/money";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
 
 interface Props {
     shelfIndex;
@@ -55,12 +58,24 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Item</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Qty</TableHead>
-                        <TableHead>Unit Price</TableHead>
-                        <TableHead>Line Total</TableHead>
+                        <TableHead className="w-10">Item</TableHead>
+                        <TableHead className="">Category</TableHead>
+                        <TableHead className="grid w-2/3 grid-cols-12 gap-x-4">
+                            <div className="col-span-6">Product</div>
+                            <div className="col-span-1">Qty</div>
+                            <div className="col-span-2 text-right">
+                                Unit Price
+                            </div>
+                            <div className="col-span-2 text-right">
+                                Line Total
+                            </div>
+                            <div className="col-span-1"></div>
+                        </TableHead>
+                        {/* <TableHead>Product</TableHead> */}
+
+                        {/* <TableHead>Qty</TableHead> */}
+                        {/* <TableHead>Unit Price</TableHead> */}
+                        {/* <TableHead>Line Total</TableHead> */}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -77,19 +92,21 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
                                 />
                             ))}
                         </TableCell>
-                        {shelf.products && (
-                            <>
-                                {shelf.prodArray.fields.map(
-                                    (prodField, prodIndex) => (
-                                        <ShellProductCells
-                                            key={prodIndex}
-                                            index={prodIndex}
-                                            shelf={shelf}
-                                        />
-                                    )
-                                )}
-                            </>
-                        )}
+                        <TableCell className="w-full space-y-2">
+                            {shelf.products && (
+                                <>
+                                    {shelf.prodArray.fields.map(
+                                        (prodField, prodIndex) => (
+                                            <ShellProductCells
+                                                key={prodIndex}
+                                                index={prodIndex}
+                                                shelf={shelf}
+                                            />
+                                        )
+                                    )}
+                                </>
+                            )}
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
@@ -101,9 +118,10 @@ interface ShellProductCells {
     index;
 }
 function ShellProductCells({ shelf, index }: ShellProductCells) {
+    const [unitPrice, totalPrice] = shelf.watchProductEstimate(index);
     return (
-        <>
-            <TableCell>
+        <div className="grid grid-cols-12 w-full gap-x-4">
+            <div className="col-span-6">
                 <ShelfSelect
                     control={shelf.categoryForm.control}
                     keyName={`${shelf.shelfItemKey}.products.${index}.data.productId`}
@@ -120,10 +138,25 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                         })
                     )}
                 />
-            </TableCell>
-            <TableCell>
+                {index == shelf.prodArray.fields.length - 1 && (
+                    <Button
+                        onClick={() => {
+                            shelf.prodArray.append({});
+                        }}
+                        className="w-full"
+                        size="sm"
+                    >
+                        <Icons.add className="w-4 h-4 mr-4" />
+                        Add Product
+                    </Button>
+                )}
+            </div>
+            <div className="">
                 <FormField
                     control={shelf.categoryForm.control}
+                    // name={
+                    //     `${shelf.shelfItemKey}.products.${index}.data.qty` as any
+                    // }
                     name={`${shelf.getProdFormKey(index, "qty")}` as any}
                     render={({ field }) => (
                         <Input
@@ -131,13 +164,26 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                             {...field}
                             value={field.value?.toString()}
                             onChange={(e) => {
-                                field.onChange(+e);
+                                // console.log(e.target.value);
+                                field.onChange(+e.target.value);
+                                shelf.updateProductPrice(
+                                    index,
+                                    null,
+                                    +e.target.value
+                                );
                             }}
                         />
                     )}
                 />
-            </TableCell>
-        </>
+            </div>
+            <div className="col-span-2 text-right">
+                <Money value={unitPrice} />
+            </div>
+            <div className="col-span-2 text-right">
+                <Money value={totalPrice} />
+            </div>
+            <div className=""></div>
+        </div>
     );
 }
 interface ShelfCategoryProps {
@@ -150,7 +196,7 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
     useEffect(() => {
         (async () => {
             const cids = shelf.shelfCategoryIds(index);
-            console.log({ index, cids });
+            // console.log({ index, cids });
             const c = await _getShelfCategories(cids);
             setCategories(c);
         })();
@@ -229,7 +275,7 @@ function ShelfSelect({
                     value={`${field.value}`}
                     onValueChange={(value) => onValueChange(field, value)}
                 >
-                    <SelectTrigger className="h-6 w-auto min-w-[200px]">
+                    <SelectTrigger className="h-10">
                         <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                     <SelectContent>

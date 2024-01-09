@@ -1,23 +1,19 @@
-import { useJobCostList, useStaticProjects } from "@/_v2/hooks/use-static-data";
 import {
     FormControl,
     FormField,
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
-import { SubmitJobForm } from ".";
 import AutoComplete from "@/components/_v1/common/auto-complete";
-import useSubmitJob from "./use-submit-job";
 import { Projects } from "@prisma/client";
 import { useEffect } from "react";
 import { HomeJobList } from "@/types/hrm";
-import AutoCompleteTw from "@/components/_v1/auto-complete-tw";
 import { deepCopy } from "@/lib/deep-copy";
 import { InstallCostLine } from "@/types/settings";
-export default function ProjectFormSection({ ctx }) {
-    // const ctx = useSubmitJob();
-    const cost = useJobCostList(ctx.type);
-    const projects = useStaticProjects();
+import { useJobSubmitCtx } from "./use-submit-job";
+export default function ProjectFormSection({}) {
+    const ctx = useJobSubmitCtx();
+
     const [projectId, homeId, homeList] = ctx.form.watch([
         "job.projectId",
         "job.homeId",
@@ -47,7 +43,7 @@ export default function ProjectFormSection({ ctx }) {
         // console.log(home);
         const cData = {};
         let cl = deepCopy<InstallCostLine[]>(
-            cost.data
+            ctx?.cost
                 ?.map((c) => {
                     if (ctx.type == "punchout" || home.costing?.[c.uid]) {
                         cData[c.uid] = {
@@ -97,7 +93,7 @@ export default function ProjectFormSection({ ctx }) {
                                 itemValue={"id"}
                                 options={[
                                     { title: "Custom", id: null },
-                                    ...(projects.data || []),
+                                    ...(ctx?.projects?.data || []),
                                 ]}
                                 onSelect={projectSelected}
                             />

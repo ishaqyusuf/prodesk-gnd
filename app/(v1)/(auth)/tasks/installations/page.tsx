@@ -12,6 +12,7 @@ import EditJobModal from "@/components/_v1/modals/edit-job";
 import SubmitJobModal from "@/app/(v1)/(auth)/tasks/submit-job-modal";
 import TaskAction from "@/components/_v1/tasks/task-action";
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
+import ContractorModals from "@/app/(v2)/(loggedIn)/contractors/_modals";
 
 export const metadata: Metadata = {
     title: "Installations",
@@ -26,8 +27,8 @@ export default async function TaskInstallationPage({ searchParams }) {
             <PageHeader
                 title="Jobs"
                 // newDialog="submitJob"
-                // Action={TaskAction}
-                Action={SubmitJobBtn}
+                Action={TaskAction}
+                // Action={SubmitJobBtn}
             />
             <JobTableShell searchParams={searchParams} {...response} />
             <JobOverviewSheet />

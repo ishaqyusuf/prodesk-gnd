@@ -11,7 +11,7 @@ import { IDykeItemFormContext } from "./use-dyke-item";
 import { DykeShelfProducts } from "@prisma/client";
 import { getShelfProducts } from "./form/_action/get-shelf-products.actions";
 
-export default function useShelfItem(shelfIndex): IUseShelfItem {
+export default function useShelfItem(shelfIndex) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const configky = `items.${item.rowIndex}.shelfItems.${shelfIndex}`;
@@ -29,6 +29,7 @@ export default function useShelfItem(shelfIndex): IUseShelfItem {
         control: form.control,
         name: categoryProdsKey as any,
     });
+    // prodArray.
     useEffect(() => {
         const oldf: CategorizedShelfItem = form.getValues(configky as any);
         categoryForm.setValue(
@@ -54,10 +55,14 @@ export default function useShelfItem(shelfIndex): IUseShelfItem {
         productSelected(productId, prodIndex) {
             let prod = products?.find((p) => p.id == productId);
             if (prod) {
-                console.log(prod);
+                // console.log(prod);
+
                 const prodKey: any = `${configky}.products.${prodIndex}.data`;
                 form.setValue(`${prodKey}.productId` as any, prod.id);
                 form.setValue(`${prodKey}.unitPrice` as any, prod?.unitPrice);
+                // const qty = form.getValues(`${prodKey}.qty` as any);
+                // if(!qty)
+                // form.setValue
                 // form.setValue()
                 this.updateProductPrice(prodIndex, prod?.unitPrice);
             }
@@ -69,21 +74,29 @@ export default function useShelfItem(shelfIndex): IUseShelfItem {
             if (path.length == 1) return paths[0];
             return paths;
         },
-        updateProductPrice(prodIndex, unitPrice?) {
+        updateProductPrice(prodIndex, unitPrice?, qty?) {
             const [qtyPath, unitPricePath, totalPath] = this.getProdFormKey(
                 prodIndex,
                 "qty",
                 "unitPrice",
                 "totalPrice"
             );
-            let qty = +form.getValues(qtyPath);
+            if (!qty) qty = +form.getValues(qtyPath);
             if (!unitPrice) unitPrice = form.getValues(unitPricePath);
             if (!qty) {
                 qty = 1;
                 form.setValue(qtyPath, 1);
             }
             let totalPrice = (qty || 0) * (unitPrice || 0);
+            console.log(totalPrice);
+
+            form.setValue(unitPricePath, unitPrice);
             form.setValue(totalPath, totalPrice);
+        },
+        watchProductEstimate(index) {
+            return form.watch(
+                this.getProdFormKey(index, "unitPrice", "totalPrice")
+            );
         },
         getParentCategoryId(index) {
             return index == 0 ? null : catArray.fields[0]?.cid;
@@ -96,6 +109,9 @@ export default function useShelfItem(shelfIndex): IUseShelfItem {
                 categoryId: this.getCategoryId(index),
                 parentCategoryId: this.getParentCategoryId(index),
             };
+        },
+        getProdValue(index, key) {
+            return form.getValues(this.getProdFormKey(index, key));
         },
         products,
         async categorySelected(index, categoryId) {
@@ -122,22 +138,23 @@ export default function useShelfItem(shelfIndex): IUseShelfItem {
 interface CategoryForm {
     ids: { cid: number }[];
 }
-export interface IUseShelfItem {
-    products: DykeShelfProducts[] | undefined | null;
-    getProdFormKey(prodIndex, ...path: (keyof DykeShelfItemForm)[]): any;
-    updateProductPrice(prodIndex, unitPrice);
-    categorySelected(index, categoryId): Promise<any>;
-    getParentCategoryId(index): number | null | undefined;
-    getCategoryId(index): number | null | undefined;
-    shelfCategoryIds(index): {
-        categoryId: number | null | undefined;
-        parentCategoryId: number | null | undefined;
-    };
-    categoryForm: UseFormReturn<CategoryForm>;
-    catArray: UseFieldArrayReturn<CategoryForm>;
-    prodArray: UseFieldArrayReturn<DykeShelfItemForm>;
-    item: IDykeItemFormContext;
-    form: UseFormReturn<DykeForm>;
-    shelfItemKey: string;
-    productSelected(productId: number | undefined | null, prodIndex);
-}
+export type IUseShelfItem = ReturnType<typeof useShelfItem>;
+// export interface IUseShelfItem {
+//     products: DykeShelfProducts[] | undefined | null;
+//     getProdFormKey(prodIndex, ...path: (keyof DykeShelfItemForm)[]): any;
+//     updateProductPrice(prodIndex, unitPrice);
+//     categorySelected(index, categoryId): Promise<any>;
+//     getParentCategoryId(index): number | null | undefined;
+//     getCategoryId(index): number | null | undefined;
+//     shelfCategoryIds(index): {
+//         categoryId: number | null | undefined;
+//         parentCategoryId: number | null | undefined;
+//     };
+//     categoryForm: UseFormReturn<CategoryForm>;
+//     catArray: UseFieldArrayReturn<CategoryForm>;
+//     prodArray: UseFieldArrayReturn<DykeShelfItemForm>;
+//     item: IDykeItemFormContext;
+//     form: UseFormReturn<DykeForm>;
+//     shelfItemKey: string;
+//     productSelected(productId: number | undefined | null, prodIndex);
+// }

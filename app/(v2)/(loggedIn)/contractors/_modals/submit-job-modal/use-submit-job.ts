@@ -9,8 +9,6 @@ import {
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import { getUnitJobs } from "../../_actions/get-unit-jobs";
-import { useState } from "react";
-import { InstallCostLine } from "@/types/settings";
 import { useValidateTaskQty } from "./use-validate-task-qty";
 import submitJobUtils from "@/app/(v1)/(auth)/tasks/submit-job-modal/submit-job-utils";
 import {
@@ -20,9 +18,14 @@ import {
 import { toast } from "sonner";
 import { closeModal } from "@/lib/modal";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import { useStaticProjects } from "@/_v2/hooks/use-static-data";
+import { createContext, useContext, useState } from "react";
+import { getJobCostList } from "../../_actions/job-cost-list";
 
-export default function useSubmitJob() {
-    const form = useSubmitJobForm();
+export const JobSubmitContext = createContext<any>({});
+export const useJobSubmitCtx = () => useContext(JobSubmitContext);
+export default function useSubmitJob(form) {
+    // const form = useSubmitJobForm();
     const [id, type, data, tab, action] = form.watch([
         "job.id",
         "job.type",
@@ -46,7 +49,6 @@ export default function useSubmitJob() {
         control: form.control,
         name: "costList",
     });
-    const [costList2, setCostList2] = useState<InstallCostLine[]>([]);
 
     async function submit() {
         const { job } = form.getValues();
@@ -64,14 +66,16 @@ export default function useSubmitJob() {
         closeModal();
         await _revalidate(isAdmin ? "jobs" : "my-jobs");
     }
+    const [cost, setCosts] = useState([]);
     return {
         id,
         form,
-        costList2,
-        setCostList2,
+        // costList2,
+        // setCostList2,
         tab,
         isAdmin,
         costList,
+        cost,
         tabHistory,
         action,
         data: data || {},
@@ -79,8 +83,12 @@ export default function useSubmitJob() {
         setValue: form.setValue,
         homes,
         type,
-        initialize: (_data: SubmitJobModalDataProps) =>
-            initialize(_data, form, isAdmin),
+        async initialize(_data: SubmitJobModalDataProps, _form: any = null) {
+            initialize(_data, _form || form, isAdmin);
+            const _costs = await getJobCostList(_data?.data?.type);
+            // console.log(_data);
+            setCosts(_costs as any);
+        },
         nextTab() {
             let nextTab: SubmitJobTabs = null as any;
             switch (tab) {

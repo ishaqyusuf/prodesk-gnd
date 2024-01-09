@@ -2,19 +2,18 @@ import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { closeModal } from "@/lib/modal";
-import { toast } from "sonner";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useStaticContractors } from "@/_v2/hooks/use-static-data";
+
 import { Users } from "@prisma/client";
-import { getContractorsAction } from "../../_actions/get-job-employees";
-import useSubmitJob from "./use-submit-job";
+
+import { useJobSubmitCtx } from "./use-submit-job";
 import { changeJobWorkerAction } from "./_actions/change-job-worker";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export default function SelectUserField() {
     // const {resetFields} = form;
-    const contractors = useStaticContractors();
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
     async function selectContractor(contractor: Users) {
         if (ctx.id) {
             const oldUserId = ctx.getValues("job.userId");
@@ -33,7 +32,7 @@ export default function SelectUserField() {
         <div className="">
             <ScrollArea className="h-[350px] pr-4">
                 <div className="flex flex-col divide-y">
-                    {contractors.data?.map((user) => (
+                    {ctx?.contractors.data?.map((user) => (
                         <Button
                             onClick={() => selectContractor(user)}
                             // onClick={async () => {

@@ -15,10 +15,8 @@ import { useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 
-import { useAppSelector } from "@/store";
 import { IUser } from "@/types/hrm";
 import AutoComplete2 from "../auto-complete-tw";
-import { employeeSchema } from "@/lib/validations/hrm";
 
 import { IProduct, IProductVariant } from "@/types/product";
 import { createProductAction } from "@/app/(v1)/_actions/sales-products/crud";

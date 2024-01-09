@@ -26,7 +26,7 @@ import {
 } from "@prisma/client";
 import { useEffect } from "react";
 
-export default function useStaticData<T>(key, loader) {
+export default function useStaticData<T>(key, loader, __load = true) {
     const data = useAppSelector((store) => store.staticData?.[key]);
     // console.log(key);
 
@@ -41,8 +41,12 @@ export default function useStaticData<T>(key, loader) {
         // dispatchSlice(key, deepCopy(_data));
     }
     useEffect(() => {
+        // if (__load) {
         load();
-        console.log("LOADING.");
+        console.log(key);
+        // } else {
+        // console.log("NOT LOADING...");
+        // }
     }, []);
     return {
         data: data as T, //: data as ISlicer[typeof key],
@@ -61,8 +65,8 @@ export const useStaticProducers = () =>
 export const useBuilders = () =>
     useStaticData<Builders[]>("staticBuilders", staticBuildersAction);
 
-export const useStaticProjects = () =>
-    useStaticData<Projects[]>("staticProjects", staticProjectsAction);
+export const useStaticProjects = (load = true) =>
+    useStaticData<Projects[]>("staticProjects", staticProjectsAction, load);
 export const useJobCostList = (type: IJobType) =>
     useStaticData<InstallCostLine[]>(
         "staticJobCostList",

@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { SubmitJobModalProps, useSubmitJobForm } from ".";
-import useSubmitJob from "./use-submit-job";
+import useSubmitJob, { useJobSubmitCtx } from "./use-submit-job";
 import { Icons } from "@/components/_v1/icons";
 
 export function Title({ data }: SubmitJobModalProps) {
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
     function goBack() {
         const [tab1, ...tabs] = ctx.tabHistory.fields;
         ctx.tabHistory.remove(0);
@@ -30,7 +30,7 @@ export function Title({ data }: SubmitJobModalProps) {
     );
 }
 export function Subtitle({ data }: SubmitJobModalProps) {
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
 
     if (ctx.id && data?.data?.subtitle)
         return <div>{data?.data?.subtitle}</div>;

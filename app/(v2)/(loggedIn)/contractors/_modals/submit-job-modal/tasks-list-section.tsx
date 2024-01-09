@@ -1,7 +1,7 @@
-import useSubmitJob from "@/app/(v1)/(auth)/tasks/submit-job-modal/use-submit-job";
+import { useJobSubmitCtx } from "./use-submit-job";
 
 export default function TaskListSection() {
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
 
     return <div></div>;
 }

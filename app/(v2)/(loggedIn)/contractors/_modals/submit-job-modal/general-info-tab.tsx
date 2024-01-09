@@ -1,4 +1,4 @@
-import useSubmitJob from "./use-submit-job";
+import useSubmitJob, { useJobSubmitCtx } from "./use-submit-job";
 import {
     FormControl,
     FormField,
@@ -10,11 +10,9 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import SelectControl from "@/_v2/components/common/select-control";
-import { useStaticContractors } from "@/_v2/hooks/use-static-data";
 
 export default function GeneralInfoTab() {
-    const ctx = useSubmitJob();
-    const contractors = useStaticContractors();
+    const ctx = useJobSubmitCtx();
     return (
         <div className="grid md:grid-cols-2 gap-4">
             <CustomInput
@@ -57,7 +55,7 @@ interface Props {
     type?;
 }
 function CustomInput({ label, name, disabled, type, textarea }: Props) {
-    const ctx = useSubmitJob();
+    const ctx = useJobSubmitCtx();
     return (
         <FormField
             name={name as any}

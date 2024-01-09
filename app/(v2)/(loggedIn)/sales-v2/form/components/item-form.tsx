@@ -49,7 +49,7 @@ export function SalesItemForm({ rowIndex }: Props) {
                 </div>
                 <CollapsibleContent className="">
                     <div className="grid sm:grid-cols-3">
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-3">
                             {item.blocks.map((block, bIndex) => (
                                 <ItemConfigBlock
                                     block={block}
@@ -58,7 +58,7 @@ export function SalesItemForm({ rowIndex }: Props) {
                                 />
                             ))}
                         </div>
-                        <div></div>
+                        {/* <div></div> */}
                     </div>
                 </CollapsibleContent>
             </Collapsible>

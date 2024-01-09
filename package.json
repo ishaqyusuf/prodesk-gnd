@@ -9,8 +9,7 @@
         "postinstall": "prisma generate",
         "primapush": "prisma push",
         "migrate": "prisma migrate dev",
-        "lint": "next lint",
-        "prisma migrate": "brew services start mysql && prisma migrate dev && brew services stop mysql"
+        "lint": "next lint"
     },
     "dependencies": {
         "@cloudinary/react": "^1.11.2",
