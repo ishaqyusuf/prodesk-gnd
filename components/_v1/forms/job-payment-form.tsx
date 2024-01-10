@@ -36,7 +36,7 @@ interface Props {
 export default function JobPaymentForm({ user }: Props) {
     const form = useForm<IJobPayment>({
         defaultValues: {
-            // paymentMethod
+            paymentMethod: "CHECK",
         },
     });
     const [loading, startTransition] = useTransition();
