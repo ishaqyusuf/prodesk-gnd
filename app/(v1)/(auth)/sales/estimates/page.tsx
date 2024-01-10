@@ -25,7 +25,7 @@ export default async function DeliveryPage({ searchParams }) {
             <PageHeader
                 title="Sales Estimates"
                 permissions={["editOrders"]}
-                newLink="/sales/edit/order/new"
+                newLink="/sales/edit/estimate/new"
             />
             <EstimatesTableShell<ISalesOrder>
                 searchParams={searchParams}
