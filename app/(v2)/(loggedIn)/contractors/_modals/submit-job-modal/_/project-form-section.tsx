@@ -6,11 +6,11 @@ import {
 } from "@/components/ui/form";
 import AutoComplete from "@/components/_v1/common/auto-complete";
 import { Projects } from "@prisma/client";
-import { useEffect } from "react";
 import { HomeJobList } from "@/types/hrm";
 import { deepCopy } from "@/lib/deep-copy";
 import { InstallCostLine } from "@/types/settings";
 import { useJobSubmitCtx } from "./use-submit-job";
+import { useEffect } from "react";
 export default function ProjectFormSection({}) {
     const ctx = useJobSubmitCtx();
 
@@ -25,7 +25,6 @@ export default function ProjectFormSection({}) {
         let project: Projects = e.data as any;
         // console.log("REMOVE COST LISTS");
         ctx.costList.remove();
-        ctx.setCostList2([]);
         Object.entries({
             homeId: null,
             "meta.addon": 0,

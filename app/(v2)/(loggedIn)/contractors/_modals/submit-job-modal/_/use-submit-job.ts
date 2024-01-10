@@ -8,7 +8,7 @@ import {
 } from ".";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
-import { getUnitJobs } from "../../_actions/get-unit-jobs";
+import { getUnitJobs } from "../../../_actions/get-unit-jobs";
 import { useValidateTaskQty } from "./use-validate-task-qty";
 import submitJobUtils from "@/app/(v1)/(auth)/tasks/submit-job-modal/submit-job-utils";
 import {
@@ -20,11 +20,13 @@ import { closeModal } from "@/lib/modal";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 import { createContext, useContext, useState } from "react";
-import { getJobCostList } from "../../_actions/job-cost-list";
+import { getJobCostList } from "../../../_actions/job-cost-list";
+import { useModal } from "@/_v2/components/common/modal/provider";
 
 export const JobSubmitContext = createContext<any>({});
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);
 export default function useSubmitJob(form) {
+    const modal = useModal();
     // const form = useSubmitJobForm();
     const [id, type, data, tab, action] = form.watch([
         "job.id",
@@ -38,7 +40,7 @@ export default function useSubmitJob(form) {
         "job.homeId",
         "homes",
     ]);
-    const taskValidation = useValidateTaskQty();
+    const taskValidation = useValidateTaskQty(form);
     const path = usePathname();
     const isAdmin = path.includes("contractor/jobs");
     const tabHistory = useFieldArray({
@@ -63,7 +65,8 @@ export default function useSubmitJob(form) {
         if (!job.id) await createJobAction(job as any);
         else await updateJobAction(job as any);
         toast.message("Success!");
-        closeModal();
+        // closeModal();
+        modal?.hide();
         await _revalidate(isAdmin ? "jobs" : "my-jobs");
     }
     const [cost, setCosts] = useState([]);

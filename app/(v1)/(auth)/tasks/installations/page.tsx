@@ -27,8 +27,8 @@ export default async function TaskInstallationPage({ searchParams }) {
             <PageHeader
                 title="Jobs"
                 // newDialog="submitJob"
-                Action={TaskAction}
-                // Action={SubmitJobBtn}
+                // Action={TaskAction}
+                Action={SubmitJobBtn}
             />
             <JobTableShell searchParams={searchParams} {...response} />
             <JobOverviewSheet />

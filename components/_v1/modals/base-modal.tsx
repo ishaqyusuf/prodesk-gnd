@@ -50,12 +50,10 @@ function BaseModal<T, FormType = undefined>({
     //   const open =
     useEffect(() => {
         if (modal?.name == modalName) {
-            onOpen && onOpen(modal?.data);
+            onOpen && onOpen(modal?.data, form);
         }
     }, [modal, modalName]);
-    const form = useForm({
-        defaultValues,
-    });
+    const form: any = null;
     let Container = ({ children, ...props }: any) =>
         _useForm ? (
             <FormProvider {...(props as any)}>{children}</FormProvider>

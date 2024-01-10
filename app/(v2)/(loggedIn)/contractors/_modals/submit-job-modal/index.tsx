@@ -1,43 +1,38 @@
-"use client";
-
+import { useModal } from "@/_v2/components/common/modal/provider";
 import BaseModal from "@/components/_v1/modals/base-modal";
-import { HomeJobList, IJobs } from "@/types/hrm";
-import { useContext, useEffect } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { Subtitle, Title } from "./heading";
-import useSubmitJob, {
-    JobSubmitContext,
-    useJobSubmitCtx,
-} from "./use-submit-job";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SelectUserField from "./select-user-field";
-import TaskDetailsTab from "./task-details-tab";
-import { InstallCostLine } from "@/types/settings";
-import Btn from "@/components/_v1/btn";
-import GeneralInfoTab from "./general-info-tab";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { useEffect } from "react";
+import { useForm, useFormContext } from "react-hook-form";
+import {
+    SubmitJobForm,
+    SubmitJobModalContent,
+    SubmitJobModalFooter,
+} from "./_";
 import {
     useStaticContractors,
     useStaticProjects,
 } from "@/_v2/hooks/use-static-data";
-import { useAppSelector } from "@/store";
-import { usePathname } from "next/navigation";
+import useSubmitJob, { JobSubmitContext } from "./_/use-submit-job";
+import { SubmitJobModalSubtitle, SubmitJobModalTitle } from "./_/heading";
+import { Form } from "@/components/ui/form";
 
-export type SubmitJobTabs = "project" | "user" | "unit" | "tasks" | "general";
-export type JobFormAction = "edit" | "change-worker";
-
-export interface SubmitJobForm {
-    job: IJobs;
-    data: IJobs;
-    tab: SubmitJobTabs;
-    action: JobFormAction;
-    tabHistory: { title }[];
-    homes: HomeJobList[];
-    home: HomeJobList;
-    costList: InstallCostLine[];
-    // initialized: boolean;
-}
-export const useSubmitJobForm = () => useFormContext<SubmitJobForm>();
-export default function SubmitJobModal({}) {
+export default function SubmitJobModal() {
+    const modal = useModal();
     const defaultValues = {
         // initialized: false,
         costList: [],
@@ -47,71 +42,34 @@ export default function SubmitJobModal({}) {
     });
     const contractors = useStaticContractors();
     const projects = useStaticProjects();
+
     const ctx = {
         ...useSubmitJob(form),
         contractors,
         projects,
     };
-
+    useEffect(() => {
+        ctx.initialize(modal?.data);
+    }, []);
     return (
-        <JobSubmitContext.Provider value={ctx}>
-            <FormProvider {...form}>
-                <BaseModal
-                    className="sm:max-w-[550px]"
-                    modalName="submitJobModal"
-                    Content={ModalContent}
-                    Footer={ModalFooter}
-                    Title={Title}
-                    Subtitle={Subtitle}
-                    onOpen={(e) => {
-                        ctx.initialize(e);
-                    }}
-                />
-            </FormProvider>
-        </JobSubmitContext.Provider>
-    );
-}
-export interface SubmitJobModalDataProps {
-    data: IJobs;
-    action: JobFormAction;
-}
-export interface SubmitJobModalProps {
-    data: SubmitJobModalDataProps;
-}
-function ModalContent({ data }: SubmitJobModalProps) {
-    const ctx = useJobSubmitCtx();
-    // useEffect(() => {
-    // console.log(">...");
-    // ctx.initialize(data);
-    // }, []);
-    return (
-        <div>
-            <Tabs value={ctx.tab}>
-                <TabsList className="hidden">
-                    <TabsTrigger value="user" />
-                    <TabsTrigger value="project" />
-                    <TabsTrigger value="unit" />
-                    <TabsTrigger value="tasks" />
-                    <TabsTrigger value="general" />
-                </TabsList>
-                <TabsContent value="user">
-                    <SelectUserField />
-                </TabsContent>
-                <TabsContent value="tasks">
-                    <TaskDetailsTab />
-                </TabsContent>
-                <TabsContent value="general">
-                    <GeneralInfoTab />
-                </TabsContent>
-            </Tabs>
-        </div>
-    );
-}
-function ModalFooter({ data }: SubmitJobModalProps) {
-    const ctx = useJobSubmitCtx();
-    return (
-        <div className="space-x-4 items-center flex">
-            <Btn onClick={ctx.nextTab}>Submit</Btn>
-        </div>
+        // <Dialog open={modal?.opened} onOpenChange={modal?.setShowModal}>
+        <Form {...form}>
+            <JobSubmitContext.Provider value={ctx}>
+                <DialogHeader>
+                    <DialogTitle>
+                        {/* <span>as</span> */}
+                        <SubmitJobModalTitle />
+                    </DialogTitle>
+                    <DialogDescription>
+                        <SubmitJobModalSubtitle data={modal?.data} />
+                    </DialogDescription>
+                </DialogHeader>
+                <SubmitJobModalContent />
+                <DialogFooter>
+                    <SubmitJobModalFooter />{" "}
+                </DialogFooter>
+            </JobSubmitContext.Provider>
+        </Form>
+        // </Dialog>
     );
 }

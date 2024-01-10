@@ -3,7 +3,7 @@ import { SubmitJobModalProps, useSubmitJobForm } from ".";
 import useSubmitJob, { useJobSubmitCtx } from "./use-submit-job";
 import { Icons } from "@/components/_v1/icons";
 
-export function Title({ data }: SubmitJobModalProps) {
+export function SubmitJobModalTitle({ data }: SubmitJobModalProps) {
     const ctx = useJobSubmitCtx();
     function goBack() {
         const [tab1, ...tabs] = ctx.tabHistory.fields;
@@ -29,7 +29,7 @@ export function Title({ data }: SubmitJobModalProps) {
         </div>
     );
 }
-export function Subtitle({ data }: SubmitJobModalProps) {
+export function SubmitJobModalSubtitle({ data }: SubmitJobModalProps) {
     const ctx = useJobSubmitCtx();
 
     if (ctx.id && data?.data?.subtitle)

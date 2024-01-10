@@ -62,6 +62,8 @@
         "downshift": "^8.2.3",
         "eslint": "8.45.0",
         "eslint-config-next": "^14.0.1",
+        "focus-trap-react": "^10.2.3",
+        "framer-motion": "^10.17.12",
         "i": "^0.3.7",
         "inter-ui": "^3.19.3",
         "lucide-react": "^0.263.1",

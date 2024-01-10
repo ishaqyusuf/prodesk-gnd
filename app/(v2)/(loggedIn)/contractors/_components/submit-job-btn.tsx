@@ -12,6 +12,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useModal } from "@/_v2/components/common/modal/provider";
+import SubmitJobModal from "../_modals/submit-job-modal";
 
 export default function SubmitJobBtn({}) {
     const { data: session } = useSession({
@@ -26,11 +28,13 @@ export default function SubmitJobBtn({}) {
             can?.viewDecoShutterInstall && "Deco-Shutter",
         ].filter(Boolean)
     );
+    const modal = useModal();
     function open(_type) {
         let type = _type?.toLowerCase();
         // let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
         // if (type == "punchout") defaultTab = "tasks";
-        openModal("submitJobModal", { data: { type } });
+        // openModal("submitJobModal", { data: { type } });
+        modal?.show(<SubmitJobModal />, { data: { type } });
     }
     if (actions.length == 1)
         return (

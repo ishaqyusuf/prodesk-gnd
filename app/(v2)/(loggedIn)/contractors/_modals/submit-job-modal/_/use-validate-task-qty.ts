@@ -2,8 +2,8 @@ import { z } from "zod";
 import { useSubmitJobForm } from ".";
 import { toast } from "sonner";
 
-export function useValidateTaskQty() {
-    const form = useSubmitJobForm();
+export function useValidateTaskQty(form) {
+    // const form = useSubmitJobForm();
     return {
         validate() {
             if (form.getValues("job.type") == "installation") {
