@@ -27,6 +27,7 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { generateRandomString } from "@/lib/utils";
 
 export type ResetPasswordFormInputs = z.infer<typeof resetPasswordSchema>;
 
@@ -52,7 +53,10 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                 const resp = await saveSettingAction(data.id, {
                     meta: {
                         ...((data?.meta || {}) as any),
-                        list: form.getValues("list"),
+                        list: form.getValues("list")?.map((list) => {
+                            list.uid = list.uid || generateRandomString(5);
+                            return list;
+                        }),
                     },
                 });
                 toast.success("Saved.");
