@@ -45,7 +45,10 @@ export default function Modal({
             {showModal && (
                 <>
                     {isMobile && (
-                        <Leaflet setShow={setShowModal}>{children}</Leaflet>
+                        // <Leaflet setShow={setShowModal}>{children}</Leaflet>
+                        <Dialog open={showModal} onOpenChange={setShowModal}>
+                            <DialogContent> {children}</DialogContent>
+                        </Dialog>
                     )}
                     {isDesktop && (
                         <>

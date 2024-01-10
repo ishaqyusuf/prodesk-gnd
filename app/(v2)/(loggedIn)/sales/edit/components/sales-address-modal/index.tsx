@@ -16,10 +16,12 @@ import { deepCopy } from "@/lib/deep-copy";
 import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { closeModal } from "@/lib/modal";
+import { DialogFooter } from "@/components/ui/dialog";
+import { useModal } from "@/_v2/components/common/modal/provider";
 
-export default function SalesAddressModal() {
-    const mainForm = useFormContext();
-    const ctx = useContext(SalesFormContext);
+export default function SalesAddressModal({ form: mainForm, ctx }) {
+    // const mainForm = useFormContext();
+    // const ctx = useContext(SalesFormContext);
     const { billingAddress, shippingAddress, customer } = ctx.data.form;
     const addressForm = useForm<ISalesAddressForm>({
         defaultValues: {
@@ -30,7 +32,7 @@ export default function SalesAddressModal() {
             customer,
         },
     });
-
+    const modal = useModal();
     const [tab, setTab] = useState("billingAddress");
     const checked = addressForm.watch("sameAddress");
     const [saving, startTransition] = useTransition();
@@ -63,7 +65,7 @@ export default function SalesAddressModal() {
             };
             console.log(_form);
             const resp = await saveSalesAddressAction({ ..._form } as any);
-            console.log(resp);
+            // console.log(resp);
             if (resp.ok) {
                 const {
                     profileUpdate,
@@ -94,7 +96,8 @@ export default function SalesAddressModal() {
                         shouldDirty: true,
                     });
                 });
-                closeModal();
+                // closeModal();
+                modal?.hide();
             }
         });
     }
@@ -108,7 +111,41 @@ export default function SalesAddressModal() {
     }, []);
     return (
         <Form {...addressForm}>
-            <BaseModal
+            <Tabs defaultValue={tab} className="">
+                <TabsList className="grid w-full grid-cols-2">
+                    {tabs.map((t) => (
+                        <TabsTrigger
+                            key={t.name}
+                            onClick={() => setTab("billingAddress")}
+                            value={t.value}
+                            disabled={checked && t.value == "shippingAddress"}
+                        >
+                            {t.name}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+                {tabs.map((t) => (
+                    <TabsContent value={t.value} key={t.name}>
+                        <AddressForm
+                            customers={customers}
+                            formKey={t.value as any}
+                        />
+                    </TabsContent>
+                ))}
+            </Tabs>
+            <DialogFooter className="flex justify-end">
+                <div className="flex-1 flex items-center justify-between">
+                    <InputControl
+                        label="Same as Shipping"
+                        check
+                        name="sameAddress"
+                    />
+                    <Btn onClick={save} isLoading={saving} size="sm">
+                        Save
+                    </Btn>
+                </div>
+            </DialogFooter>
+            {/* <BaseModal
                 className="sm:max-w-[550px]"
                 modalName="salesAddressForm"
                 Title={({ data }) => <div></div>}
@@ -151,7 +188,7 @@ export default function SalesAddressModal() {
                         </Btn>
                     </div>
                 )}
-            />
+            /> */}
         </Form>
     );
 }
