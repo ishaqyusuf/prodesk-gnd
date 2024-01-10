@@ -16,16 +16,9 @@ import PageHeader from "@/components/_v1/page-header";
 import { Input } from "@/components/ui/input";
 import { Delete, Move, Plus, Trash } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useDebounce } from "@/hooks/use-debounce";
 import Btn from "@/components/_v1/btn";
 import { saveSettingAction } from "@/app/(v1)/_actions/settings";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { generateRandomString } from "@/lib/utils";
 

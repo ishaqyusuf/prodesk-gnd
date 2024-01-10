@@ -134,7 +134,7 @@ function InvoiceTableRow({ index, field, length }) {
             <TableCell className="p-0 px-1 py-0.5">
                 <InputHelper
                     index={index}
-                    onSelect={item.itemSelected}
+                    // onSelect={item.itemSelected}
                     formKey={"description"}
                     itemText={"description"}
                     itemValue={"description"}
