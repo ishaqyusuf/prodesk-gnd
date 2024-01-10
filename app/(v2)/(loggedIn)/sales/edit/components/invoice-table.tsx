@@ -139,7 +139,7 @@ function InvoiceTableRow({ index, field, length }) {
                     itemText={"description"}
                     itemValue={"description"}
                     fuzzy
-                    options={data.ctx.items}
+                    // options={data.ctx.items}
                 />
             </TableCell>
             <TableCell className="p-0 px-1">

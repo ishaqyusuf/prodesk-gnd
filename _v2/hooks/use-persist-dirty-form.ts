@@ -4,7 +4,6 @@ import { useFormContext } from "react-hook-form";
 
 export default function usePersistDirtyForm() {
     const form = useFormContext();
-
     const router = useRouter();
     useEffect(() => {
         const dirtyFields = form.formState.dirtyFields;

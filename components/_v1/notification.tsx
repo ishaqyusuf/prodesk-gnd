@@ -38,7 +38,7 @@ export default function Notification({}) {
             setNotificationCount(count as any);
         };
         fetchNotificationCount();
-        const intervalId = setInterval(fetchNotificationCount, 60000);
+        const intervalId = setInterval(fetchNotificationCount, 120000);
 
         return () => {
             clearInterval(intervalId);
