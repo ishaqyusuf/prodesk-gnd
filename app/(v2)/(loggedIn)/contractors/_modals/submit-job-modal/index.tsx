@@ -1,16 +1,6 @@
 import { useModal } from "@/_v2/components/common/modal/provider";
-import BaseModal from "@/components/_v1/modals/base-modal";
-import { Button } from "@/components/ui/button";
+
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Dialog,
-    DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,

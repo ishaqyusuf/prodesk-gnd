@@ -24,6 +24,7 @@ interface Props {
     searchFn?;
     allowCreate?;
     formKey?;
+    perPage?;
     uppercase?: boolean;
     hideEmpty?: boolean;
     virt?: boolean;
@@ -52,6 +53,7 @@ export default function AutoComplete({
     uppercase,
     onSelect,
     fuzzy,
+    perPage = 100,
     ...props
 }: Props & PrimitiveDivProps) {
     const transformedOptions = transformItems(
@@ -214,7 +216,7 @@ export default function AutoComplete({
                 {isOpen && (
                     <>
                         {items
-                            .filter((item, index) => index < 25)
+                            .filter((item, index) => index < perPage)
                             .map((item, index) => (
                                 <li
                                     className={cn(

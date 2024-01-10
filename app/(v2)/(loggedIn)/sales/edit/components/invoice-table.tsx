@@ -138,6 +138,7 @@ function InvoiceTableRow({ index, field, length }) {
                     formKey={"description"}
                     itemText={"description"}
                     itemValue={"description"}
+                    perPage={25}
                     fuzzy
                     // options={data.ctx.items}
                 />
@@ -287,6 +288,7 @@ interface InputHelperProps {
     checkbox?: boolean;
     fuzzy?: boolean;
     onSelect?;
+    perPage?;
     type?;
 }
 function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {

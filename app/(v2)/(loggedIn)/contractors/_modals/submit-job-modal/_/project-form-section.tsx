@@ -54,6 +54,8 @@ export default function ProjectFormSection({}) {
                 })
                 .filter(Boolean) || []
         );
+        console.log(cl);
+
         ctx.setValue("home", home);
         ctx.setValue("job.meta.costData", cData as any);
         ctx.setValue("job.subtitle", home.name);
