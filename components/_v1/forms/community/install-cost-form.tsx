@@ -54,7 +54,7 @@ export function InstallCostForm({ data }: { data: InstallCostSettings }) {
                     meta: {
                         ...((data?.meta || {}) as any),
                         list: form.getValues("list")?.map((list) => {
-                            list.uid = list.uid || generateRandomString(5);
+                            list.uid = list.uid || generateRandomString(4);
                             return list;
                         }),
                     },
