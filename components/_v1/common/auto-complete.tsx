@@ -295,7 +295,7 @@ function filter(items, query, fuzzy) {
         const s = new JsonSearch(items || [], {
             sort: true,
         });
-        let res = s.query(query || "");
+        let res = s.queryWithScore(query || "");
         return res;
     }
     const escapedText = !query
