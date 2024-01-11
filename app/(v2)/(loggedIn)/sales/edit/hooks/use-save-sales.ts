@@ -32,10 +32,11 @@ export default function useSaveSalesHook() {
                 ctx.data.paidAmount
             );
             // console.log(_data.items);
+            if (!_data.id) return;
+            // if (autoSave && _data.items?.length < 2) {
 
-            if (autoSave && _data.items?.length < 2) {
-                return;
-            }
+            //     return;
+            // }
             _data.autoSave = autoSave;
             const order = await saveSaleAction(
                 _data.id,
