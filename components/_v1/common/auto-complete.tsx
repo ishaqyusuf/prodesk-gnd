@@ -88,7 +88,9 @@ export default function AutoComplete({
     useEffect(() => {
         let text = value;
         if (itemText != itemValue) {
-            let v = allItems.find((item) => item.value == text);
+            let v = allItems.find(
+                (item) => item.value?.toLowerCase() == text?.toLowerCase()
+            );
             if (!v && !allowCreate) text = "";
             else text = v?.title;
             // if (props.id == "unit") console.log([v, text]);
