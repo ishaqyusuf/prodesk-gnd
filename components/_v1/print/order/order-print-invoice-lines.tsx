@@ -117,11 +117,13 @@ export function OrderPrintInvoiceLines({ order }: Props) {
                                     )}
                                 </td>
                                 <td colSpan={2} valign="middle" align="right">
-                                    <Money
-                                        validOnly
-                                        className="pr-2 font-medium"
-                                        value={line?.total}
-                                    />
+                                    {line?.total > 0 && (
+                                        <Money
+                                            validOnly
+                                            className="pr-2 font-medium"
+                                            value={line?.total}
+                                        />
+                                    )}
                                 </td>
                             </>
                         )}

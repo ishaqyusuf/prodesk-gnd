@@ -25,11 +25,7 @@ let renderCount = 0;
 export default function EditSalesForm({ data }: Props) {
     const _formData: any = data?.form || { meta: {} };
     const { _items, footer } = salesFormUtils.initInvoiceItems(
-        data?.form?.items?.map((item) => {
-            // item.swing = "lh".toUpperCase();
-            // "".toLowerCase;
-            return item;
-        })
+        data?.form?.items
     );
     const defaultValues: ISalesForm = {
         ..._formData,

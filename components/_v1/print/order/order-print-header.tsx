@@ -81,7 +81,10 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                                                 <tbody>
                                                     <InfoLine
                                                         label="Rep."
-                                                        value={order?.meta?.rep}
+                                                        value={
+                                                            order?.salesRep
+                                                                ?.name
+                                                        }
                                                     />
                                                     {po?.showInvoice && (
                                                         <>
