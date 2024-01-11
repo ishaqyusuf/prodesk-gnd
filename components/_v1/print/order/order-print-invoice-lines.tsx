@@ -110,20 +110,20 @@ export function OrderPrintInvoiceLines({ order }: Props) {
                         {po?.showInvoice && (
                             <>
                                 <td colSpan={2} valign="middle" align="right">
-                                    {line?.rate && (
-                                        <p className="pr-2 font-medium">
-                                            ${line?.rate}
-                                        </p>
-                                    )}
+                                    <Money
+                                        validOnly
+                                        className="pr-2 font-medium"
+                                        value={line?.rate}
+                                    />
                                 </td>
                                 <td colSpan={2} valign="middle" align="right">
-                                    {line?.total > 0 && (
+                                    {
                                         <Money
                                             validOnly
                                             className="pr-2 font-medium"
                                             value={line?.total}
                                         />
-                                    )}
+                                    }
                                 </td>
                             </>
                         )}

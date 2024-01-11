@@ -142,9 +142,10 @@ export default function ItemDetailsSection() {
                                     </TableCell>
                                     {!isProd && (
                                         <TableCell className="p-2 text-right font-semibold text-muted-foreground">
-                                            {item.total && (
-                                                <span>${item.total}</span>
-                                            )}
+                                            <Money
+                                                value={item.total}
+                                                validOnly
+                                            />
                                         </TableCell>
                                     )}
                                     <TableCell className="p-2 text-muted-foreground">
