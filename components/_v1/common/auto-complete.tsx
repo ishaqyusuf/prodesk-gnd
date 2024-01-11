@@ -73,18 +73,18 @@ export default function AutoComplete({
     const [allItems, setAllItems] = useState(transformedOptions);
     const [items, setItems] = useState(transformedOptions);
     const [modelValue, setModelValue] = useState("");
-    useEffect(() => {
-        if (props.id == "unit") {
-            // console.log([allItems.length, value]);
-            if (!allowCreate && itemText != itemValue) {
-                let v = allItems.find((item) => item.value == value);
-                // selectItem(v);
-                // console.log([props.id, v]);
-                // setInputValue(v?.title);
-                // selectItem(null);
-            }
-        }
-    }, [options]);
+    // useEffect(() => {
+    //     if (props.id == "unit") {
+    //         // console.log([allItems.length, value]);
+    //         if (!allowCreate && itemText != itemValue) {
+    //             let v = allItems.find((item) => item.value == value);
+    //             // selectItem(v);
+    //             // console.log([props.id, v]);
+    //             // setInputValue(v?.title);
+    //             // selectItem(null);
+    //         }
+    //     }
+    // }, [options]);
     useEffect(() => {
         let text = value;
         if (itemText != itemValue) {
@@ -94,7 +94,7 @@ export default function AutoComplete({
             // if (props.id == "unit") console.log([v, text]);
         }
         setInputValue(text);
-    }, [value]);
+    }, []);
     const {
         isOpen,
         highlightedIndex,

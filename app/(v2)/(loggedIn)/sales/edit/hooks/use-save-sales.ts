@@ -21,19 +21,27 @@ export default function useSaveSalesHook() {
     const ctx = useContext(SalesFormContext);
 
     usePersistDirtyForm();
-
     async function submit(
         and: "close" | "new" | "default" = "default",
         autoSave = false,
         data: any = null
     ) {
         startTransaction(async () => {
-            data = formData(
+            let _data = formData(
                 !data ? form.getValues() : data,
                 ctx.data.paidAmount
             );
-            data.autoSave = autoSave;
-            const order = await saveSaleAction(data.id, data.order, data.items);
+            // console.log(_data.items);
+
+            if (autoSave && _data.items?.length < 2) {
+                return;
+            }
+            _data.autoSave = autoSave;
+            const order = await saveSaleAction(
+                _data.id,
+                _data.order,
+                _data.items
+            );
             switch (and) {
                 case "close":
                     router.push(`/sales/${order.type}s`);
@@ -43,7 +51,9 @@ export default function useSaveSalesHook() {
                     break;
                 case "default":
                     if (!ctx.data.form.id)
-                        router.push(`/sales/edit/${order.type}/${order.slug}`);
+                        router.push(`/sales/edit/${order.type}/${order.slug}`, {
+                            shallow: true,
+                        });
                     break;
             }
             if (!autoSave || (autoSave && !isProdClient)) {

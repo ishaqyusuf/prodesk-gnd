@@ -8,8 +8,9 @@ export default function AuthPage({}) {
         required: true,
         onUnauthenticated() {
             redirect("/login");
-        }
+        },
     });
+    // console.log(session)
     let sb = nav(session);
     if (!sb) return;
     redirect(sb.homeRoute);
