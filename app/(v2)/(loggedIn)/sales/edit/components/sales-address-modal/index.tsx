@@ -22,7 +22,7 @@ import { useModal } from "@/_v2/components/common/modal/provider";
 export default function SalesAddressModal({ form: mainForm, ctx }) {
     // const mainForm = useFormContext();
     // const ctx = useContext(SalesFormContext);
-    const { billingAddress, shippingAddress, customer } = ctx.data.form;
+    const { billingAddress, shippingAddress, customer } = mainForm.getValues();
     const addressForm = useForm<ISalesAddressForm>({
         defaultValues: {
             sameAddress: billingAddress?.id == shippingAddress?.id,
@@ -63,7 +63,7 @@ export default function SalesAddressModal({ form: mainForm, ctx }) {
                 // sameAddress: checked as any,
                 customer,
             };
-            console.log(_form);
+            // console.log(_form);
             const resp = await saveSalesAddressAction({ ..._form } as any);
             // console.log(resp);
             if (resp.ok) {

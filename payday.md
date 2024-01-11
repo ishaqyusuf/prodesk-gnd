@@ -6,7 +6,7 @@
     -EXPORT PDF IN ESTIMATE
     -
 # JAN 11: 00.00 == 00.00
-    05:00-
+    05:00-05:40
     FIX BUGS
 # JAN 10: 00.00 == 00.00
     FIX BUGS

@@ -53,7 +53,7 @@ export default function useSaveSalesHook() {
                 case "default":
                     if (!ctx.data.form.id)
                         router.push(`/sales/edit/${order.type}/${order.slug}`, {
-                            shallow: true,
+                            // shallow: true,
                         });
                     break;
             }
