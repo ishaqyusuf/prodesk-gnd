@@ -33,7 +33,6 @@ import { CheckIcon, ChevronsUpDown } from "lucide-react";
 interface Props<T> {
     className?: string;
     suffix?: string;
-    country?;
     label?;
     placeholder?;
     options?: T[];
@@ -53,7 +52,7 @@ export default function ControlledPlaceInput<
     className,
     onSelect,
     suffix,
-    country,
+    options,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -96,8 +95,8 @@ export default function ControlledPlaceInput<
                                     className="h-9"
                                 />
                                 <CommandEmpty>No framework found.</CommandEmpty>
-                                <CommandGroup>
-                                    {options.map((language, index) => (
+                                {/* <CommandGroup>
+                                    {options?.map((language, index) => (
                                         <CommandItem
                                             value={language.description}
                                             key={index}
@@ -121,7 +120,7 @@ export default function ControlledPlaceInput<
                                             />
                                         </CommandItem>
                                     ))}
-                                </CommandGroup>
+                                </CommandGroup> */}
                             </Command>
                         </PopoverContent>
                     </Popover>
