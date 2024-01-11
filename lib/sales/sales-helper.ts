@@ -2,7 +2,7 @@
 
 import { copyOrderAction, moveSales } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
-import { closeModal, openModal } from "../modal";
+import { closeModal, openEmailComposer, openModal } from "../modal";
 import { ISalesOrder, IOrderType, IOrderPrintMode } from "@/types/sales";
 import {
     adminCompleteProductionAction,
@@ -72,6 +72,16 @@ export const sales = {
         return [
             mb.href("View", _linkDir, Icons.view),
             mb.href("Edit", `${_linkDir}/form`, Icons.edit),
+            mb.simple(
+                "Email",
+                () => {
+                    openEmailComposer(row, {
+                        type: "sales",
+                        parentId: row.id,
+                    });
+                },
+                Icons.Email
+            ),
             !estimate &&
                 mb.more(
                     "Production",

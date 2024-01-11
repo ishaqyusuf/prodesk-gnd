@@ -74,6 +74,7 @@ export default function EmailComposerModal({ isProd }: Props) {
         <BaseModal<EmailModalProps>
             className="sm:max-w-[550px]"
             onOpen={async (data) => {
+                // console.log(data);
                 const u = await _dbUser();
                 const mail =
                     u?.meta?.email ||
@@ -86,7 +87,7 @@ export default function EmailComposerModal({ isProd }: Props) {
                 // if(u.meta?.)
                 form.reset({
                     reply_to: u?.meta?.emailRespondTo || u?.meta?.email,
-                    // to: data.data?.customer?.email,
+                    to: data.data?.customer?.email,
                     // to: "ishaqyusuf024@gmail.com",
                     from: `${title}<${mail}>`,
                     subject: "Hello @customer.name",
@@ -149,7 +150,7 @@ export default function EmailComposerModal({ isProd }: Props) {
                         </div>
                     </div>
 
-                    <div className="mt-2">
+                    <div className="mt-2 max-sm:hidden">
                         <p className="text-primary">Short Codes</p>
                         <div className="">
                             {salesShortCodes.map((s, index) => (

@@ -68,7 +68,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                     Edit
                 </MenuItem>
                 <MenuItem
-                    Icon={MessageCircle}
+                    Icon={Icons.Email}
                     onClick={() => {
                         openEmailComposer(row, {
                             type: "sales",

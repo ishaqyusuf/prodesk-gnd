@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { ArrowDown } from "lucide-react";
 
 interface Props {
     shelfIndex;
@@ -59,17 +60,13 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-10">Item</TableHead>
-                        <TableHead className="">Category</TableHead>
-                        <TableHead className="grid w-2/3 grid-cols-12 gap-x-4">
-                            <div className="col-span-6">Product</div>
-                            <div className="col-span-1">Qty</div>
-                            <div className="col-span-2 text-right">
-                                Unit Price
-                            </div>
-                            <div className="col-span-2 text-right">
-                                Line Total
-                            </div>
-                            <div className="col-span-1"></div>
+                        <TableHead className="w-1/4">Category</TableHead>
+                        <TableHead className="flex  w-full  space-x-4 items-center">
+                            <div className="flex-1">Product</div>
+                            <div className="w-20">Qty</div>
+                            <div className="w-24 text-right">Unit Price</div>
+                            <div className="w-24 text-right">Line Total</div>
+                            <div className="w-12"></div>
                         </TableHead>
                         {/* <TableHead>Product</TableHead> */}
 
@@ -81,18 +78,26 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
                 <TableBody>
                     <TableRow>
                         <TableCell></TableCell>
-                        <TableCell>
-                            {/* {JSON.stringify(fields)} */}
-                            {categories.map((field, index) => (
-                                <ShelfCategory
-                                    field={field as any}
-                                    index={index}
-                                    key={field.id}
-                                    shelf={shelf}
-                                />
-                            ))}
+                        <TableCell className="" valign="top">
+                            <div className="">
+                                {/* {JSON.stringify(fields)} */}
+                                {categories.map((field, index) => (
+                                    <div className="" key={index}>
+                                        <ShelfCategory
+                                            field={field as any}
+                                            index={index}
+                                            shelf={shelf}
+                                        />
+                                        {categories.length - 1 > index && (
+                                            <div className="flex justify-center">
+                                                <ArrowDown className="w-4 h-4" />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </TableCell>
-                        <TableCell className="w-full space-y-2">
+                        <TableCell className="w-full space-y-2 items-start  flex flex-col">
                             {shelf.products && (
                                 <>
                                     {shelf.prodArray.fields.map(
@@ -104,6 +109,18 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
                                             />
                                         )
                                     )}
+                                    <div>
+                                        <Button
+                                            onClick={() => {
+                                                shelf.prodArray.append({});
+                                            }}
+                                            className="w-full mt-2"
+                                            size="sm"
+                                        >
+                                            <Icons.add className="w-4 h-4 mr-4" />
+                                            Add Product
+                                        </Button>
+                                    </div>
                                 </>
                             )}
                         </TableCell>
@@ -120,8 +137,8 @@ interface ShellProductCells {
 function ShellProductCells({ shelf, index }: ShellProductCells) {
     const [unitPrice, totalPrice] = shelf.watchProductEstimate(index);
     return (
-        <div className="grid grid-cols-12 w-full gap-x-4">
-            <div className="col-span-6">
+        <div className="w-full flex items-center space-x-4">
+            <div className="flex-1">
                 <ShelfSelect
                     control={shelf.categoryForm.control}
                     keyName={`${shelf.shelfItemKey}.products.${index}.data.productId`}
@@ -138,20 +155,20 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                         })
                     )}
                 />
-                {index == shelf.prodArray.fields.length - 1 && (
+                {/* {index == shelf.prodArray.fields.length - 1 && (
                     <Button
                         onClick={() => {
                             shelf.prodArray.append({});
                         }}
-                        className="w-full"
+                        className="w-full mt-2"
                         size="sm"
                     >
                         <Icons.add className="w-4 h-4 mr-4" />
                         Add Product
                     </Button>
-                )}
+                )} */}
             </div>
-            <div className="">
+            <div className="w-20">
                 <FormField
                     control={shelf.categoryForm.control}
                     // name={
@@ -160,6 +177,7 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                     name={`${shelf.getProdFormKey(index, "qty")}` as any}
                     render={({ field }) => (
                         <Input
+                            className="w-full"
                             type="number"
                             {...field}
                             value={field.value?.toString()}
@@ -176,13 +194,13 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                     )}
                 />
             </div>
-            <div className="col-span-2 text-right">
+            <div className="w-24 text-right">
                 <Money value={unitPrice} />
             </div>
-            <div className="col-span-2 text-right">
+            <div className="w-24 text-right">
                 <Money value={totalPrice} />
             </div>
-            <div className=""></div>
+            <div className="w-12"></div>
         </div>
     );
 }
