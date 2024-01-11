@@ -38,7 +38,7 @@ export default function ItemDetailsSection() {
                                     <span className="mx-2">x{item.qty}</span>
                                 </PrimaryCellContent>
                                 <div className="flex items-centerspace-x-2">
-                                    <p className="whitespace-nowrap font-semibold text-muted-foreground text-sm">
+                                    <p className="whitespace-nowrap font-semibold text-muted-foreground text-sm uppercase">
                                         {item.swing}
                                     </p>
                                     {item.supplier && (
