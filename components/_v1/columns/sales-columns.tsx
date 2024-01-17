@@ -113,7 +113,7 @@ export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
     let address: IAddressBook = (order?.shippingAddress ||
         order?.billingAddress) as any;
     if (!order?.shippingAddress) return <></>;
-    const link = "/sales/customers/" + order.customer?.id;
+    const link = "/sales/customer/" + order.customer?.id;
     return (
         <div className="w-full">
             <LinkableNode href={link} className={cn("hover:underline")}>

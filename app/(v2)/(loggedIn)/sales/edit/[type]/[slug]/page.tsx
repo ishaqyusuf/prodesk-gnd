@@ -27,7 +27,7 @@ export default async function EditSalesPage({ searchParams, params }) {
     if (!resp.form.deliveryOption) resp.form.deliveryOption = "pickup";
     const orderId = resp?.form?.orderId;
     return (
-        <div>
+        <div id="salesEditPage">
             <Breadcrumbs>
                 <OrdersCrumb isFirst />
                 {orderId && <OrderViewCrumb slug={orderId} />}

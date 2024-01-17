@@ -5,12 +5,18 @@
     -MAKE DYKE SHELF TYPABLE
     -EXPORT PDF IN ESTIMATE
     -
+# JAN 17: 00.00 == 00.00
+MIA 07:45-
+MIA 04:00-07:05
 # JAN 16: 00.00 == 00.00
     02:05-04:15
     10:00-01:10
 # JAN 15: 00.00 == 00.00
     03:30-04:00
 # ----------------------
+PAYMENT INVOICE JAN 01-11
+$668.33
+Zelle marzuqisiaka@gmail.com
 # JAN 11: 01.40 == 19.10
     10:20-11:20
     05:00-05:40
