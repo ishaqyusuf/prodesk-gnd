@@ -26,13 +26,14 @@ import { Input } from "@/components/ui/input";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
-import { ArrowDown } from "lucide-react";
+// import { ArrowDown } from "lucide-react";
 
 interface Props {
     shelfIndex;
+    deleteItem;
 }
 
-export default function ShelfItemsBlock({ shelfIndex }: Props) {
+export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
     const shelf = useShelfItem(shelfIndex);
     const {
         form,
@@ -56,8 +57,8 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
 
     return (
         <Form {...categoryForm}>
-            <Table>
-                <TableHeader>
+            {/* <Table>
+                <TableHeader className="">
                     <TableRow>
                         <TableHead className="w-10">Item</TableHead>
                         <TableHead className="w-1/4">Category</TableHead>
@@ -67,75 +68,93 @@ export default function ShelfItemsBlock({ shelfIndex }: Props) {
                             <div className="w-24 text-right">Unit Price</div>
                             <div className="w-24 text-right">Line Total</div>
                             <div className="w-12"></div>
-                        </TableHead>
-                        {/* <TableHead>Product</TableHead> */}
-
-                        {/* <TableHead>Qty</TableHead> */}
-                        {/* <TableHead>Unit Price</TableHead> */}
-                        {/* <TableHead>Line Total</TableHead> */}
+                        </TableHead> 
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell className="" valign="top">
-                            <div className="">
-                                {/* {JSON.stringify(fields)} */}
-                                {categories.map((field, index) => (
-                                    <div className="" key={index}>
-                                        <ShelfCategory
-                                            field={field as any}
-                                            index={index}
-                                            shelf={shelf}
-                                        />
-                                        {categories.length - 1 > index && (
-                                            <div className="flex justify-center">
-                                                <ArrowDown className="w-4 h-4" />
-                                            </div>
-                                        )}
+                <TableBody> */}
+            <TableRow>
+                <TableCell className="flex" valign="top">
+                    {shelfIndex + 1}
+                </TableCell>
+                <TableCell className="" valign="top">
+                    <div className="">
+                        {/* {JSON.stringify(fields)} */}
+                        {categories.map((field, index) => (
+                            <div className="" key={index}>
+                                <ShelfCategory
+                                    field={field as any}
+                                    index={index}
+                                    shelf={shelf}
+                                />
+                                {categories.length - 1 > index && (
+                                    <div className="flex justify-center">
+                                        {/* <ArrowDown className="w-4 h-4" /> */}
+                                        {"|"}
                                     </div>
-                                ))}
+                                )}
                             </div>
-                        </TableCell>
-                        <TableCell className="w-full space-y-2 items-start  flex flex-col">
-                            {shelf.products && (
-                                <>
-                                    {shelf.prodArray.fields.map(
-                                        (prodField, prodIndex) => (
-                                            <ShellProductCells
-                                                key={prodIndex}
-                                                index={prodIndex}
-                                                shelf={shelf}
-                                            />
-                                        )
-                                    )}
-                                    <div>
-                                        <Button
-                                            onClick={() => {
-                                                shelf.prodArray.append({});
-                                            }}
-                                            className="w-full mt-2"
-                                            size="sm"
-                                        >
-                                            <Icons.add className="w-4 h-4 mr-4" />
-                                            Add Product
-                                        </Button>
-                                    </div>
-                                </>
+                        ))}
+                    </div>
+                </TableCell>
+                <TableCell className="w-full space-y-2 items-start  flex flex-col">
+                    {shelf.products && (
+                        <>
+                            {shelf.prodArray.fields.map(
+                                (prodField, prodIndex) => (
+                                    <ShellProductCells
+                                        key={prodField.id}
+                                        index={prodIndex}
+                                        field={prodField}
+                                        shelf={shelf}
+                                    />
+                                )
                             )}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+                            <div>
+                                <Button
+                                    onClick={() => {
+                                        shelf.prodArray.append({
+                                            data: {
+                                                qty: null,
+                                                unitPrice: null,
+                                                totalPrice: null,
+                                            },
+                                        });
+                                    }}
+                                    className="w-full mt-2"
+                                    size="sm"
+                                >
+                                    <Icons.add className="w-4 h-4 mr-4" />
+                                    Add Product
+                                </Button>
+                            </div>
+                        </>
+                    )}
+                </TableCell>
+                <TableCell className="">
+                    <Button
+                        onClick={deleteItem}
+                        size="icon"
+                        variant={"destructive"}
+                    >
+                        <Icons.trash className="w-4 h-4" />
+                    </Button>
+                </TableCell>
+            </TableRow>
+            {/* </TableBody>
+            </Table> */}
         </Form>
     );
 }
 interface ShellProductCells {
     shelf: IUseShelfItem;
     index;
+    field?;
 }
-function ShellProductCells({ shelf, index }: ShellProductCells) {
+function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
     const [unitPrice, totalPrice] = shelf.watchProductEstimate(index);
+    // useEffect(() => {
+    //     shelf.prodArray.update(index, {});
+    // }, []);
     return (
         <div className="w-full flex items-center space-x-4">
             <div className="flex-1">
@@ -147,7 +166,8 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
                         field.onChange(productId);
                         shelf.productSelected(productId, index);
                     }}
-                    placeholder={"Category"}
+                    defaultValue={f.data?.productId}
+                    placeholder={"Select Product"}
                     items={shelf.products?.map(
                         ({ title: label, id: value }) => ({
                             label,
@@ -171,16 +191,16 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
             <div className="w-20">
                 <FormField
                     control={shelf.categoryForm.control}
-                    // name={
-                    //     `${shelf.shelfItemKey}.products.${index}.data.qty` as any
-                    // }
-                    name={`${shelf.getProdFormKey(index, "qty")}` as any}
+                    name={
+                        `${shelf.shelfItemKey}.products.${index}.data.qty` as any
+                    }
+                    // name={`${shelf.getProdFormKey(index, "qty")}` as any}
                     render={({ field }) => (
                         <Input
                             className="w-full"
                             type="number"
-                            {...field}
-                            value={field.value?.toString()}
+                            // {...field}
+                            defaultValue={f.data?.qty?.toString()}
                             onChange={(e) => {
                                 // console.log(e.target.value);
                                 field.onChange(+e.target.value);
@@ -200,7 +220,21 @@ function ShellProductCells({ shelf, index }: ShellProductCells) {
             <div className="w-24 text-right">
                 <Money value={totalPrice} />
             </div>
-            <div className="w-12"></div>
+            <div className="w-12">
+                <Button
+                    onClick={() => {
+                        console.log(f);
+                        shelf.prodArray.remove(index);
+                        // shelf.prodArray.
+                        // shelf.form.reset({});
+                    }}
+                    className="w-8 h-8"
+                    size="icon"
+                    variant="ghost"
+                >
+                    <Icons.trash className="w-4 h-4" />
+                </Button>
+            </div>
         </div>
     );
 }
@@ -276,6 +310,7 @@ interface ShelfSelectProps {
     onValueChange;
     placeholder;
     items;
+    defaultValue?;
 }
 function ShelfSelect({
     control,
@@ -283,6 +318,7 @@ function ShelfSelect({
     onValueChange,
     placeholder,
     items,
+    defaultValue,
 }: ShelfSelectProps) {
     return (
         <FormField
@@ -290,7 +326,8 @@ function ShelfSelect({
             name={keyName}
             render={({ field }) => (
                 <Select
-                    value={`${field.value}`}
+                    // value={`${field.value}`}
+                    defaultValue={defaultValue}
                     onValueChange={(value) => onValueChange(field, value)}
                 >
                     <SelectTrigger className="h-10">

@@ -14,6 +14,7 @@ import {
     useDykeForm,
 } from "../../form-context";
 import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     rowIndex;
@@ -39,7 +40,9 @@ export function SalesItemForm({ rowIndex }: Props) {
             >
                 <div className="flex bg-accent p-2 px-4 justify-between">
                     <CollapsibleTrigger>
-                        <p>Item {Number(rowIndex) + 1}</p>
+                        <Label className="text-base">
+                            Item {Number(rowIndex) + 1}
+                        </Label>
                     </CollapsibleTrigger>
                     <div className="flex items-center justify-between space-x-2">
                         <Button className="p-0 h-6 w-6" variant={"destructive"}>

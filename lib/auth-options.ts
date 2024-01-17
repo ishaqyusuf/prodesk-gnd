@@ -45,8 +45,8 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.SECRET,
     callbacks: {
         jwt: async ({ token, user: cred }) => {
-            console.log("CRED");
-            console.log(token?.jti);
+            // console.log("CRED");
+            // console.log(token?.jti);
             // console.log(cred)
             if (cred) {
                 const { role, can, user } = cred;

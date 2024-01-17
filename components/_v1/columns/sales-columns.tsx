@@ -109,10 +109,28 @@ export function OrderIdCell(
         </div>
     );
 }
+export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
+    let address: IAddressBook = (order?.shippingAddress ||
+        order?.billingAddress) as any;
+    if (!order?.shippingAddress) return <></>;
+    const link = "/sales/customers/" + order.customer?.id;
+    return (
+        <div className="w-full">
+            <LinkableNode href={link} className={cn("hover:underline")}>
+                <div className="font-medium uppercase">
+                    {order?.customer?.businessName || order?.customer?.name}
+                </div>
+                <span className="text-muted-foreground">
+                    {address?.phoneNo}
+                </span>
+            </LinkableNode>
+        </div>
+    );
+}
 export function OrderCustomerCell(
     customer: ICustomer | undefined,
-    link: string | undefined = undefined
-    // address1 = null
+    link: string | undefined = undefined,
+    phone = null
 ) {
     if (!customer) return <></>;
     link = link?.replace("slug", customer.id?.toString());
@@ -125,7 +143,7 @@ export function OrderCustomerCell(
             >
                 <div className="font-medium uppercase">{customer?.name}</div>
                 <span className="text-muted-foreground">
-                    {customer?.phoneNo}
+                    {phone || customer?.phoneNo}
                 </span>
                 {/* <p className="text-muted-foreground line-clamp-2">{address1}</p> */}
             </LinkableNode>

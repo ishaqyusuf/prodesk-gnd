@@ -52,8 +52,11 @@ export function ItemConfigBlock({ block, blockIndex }: Props) {
                 <div className="grid gap-4 grid-cols-4">
                     {block.options?.map((b, i) => (
                         <button
-                            onClick={() => {
-                                item.selectBlockValue(block.title, b.title);
+                            onClick={async () => {
+                                await item.selectBlockValue(
+                                    block.title,
+                                    b.title
+                                );
                             }}
                             key={i}
                         >

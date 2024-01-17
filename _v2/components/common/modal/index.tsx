@@ -7,9 +7,6 @@ import {
     useEffect,
     useRef,
 } from "react";
-import FocusTrap from "focus-trap-react";
-import { AnimatePresence, motion } from "framer-motion";
-import Leaflet from "./leaflet";
 import useWindowSize from "@/_v2/hooks/use-window-resize";
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 
@@ -41,16 +38,16 @@ export default function Modal({
     const { isMobile, isDesktop } = useWindowSize();
 
     return (
-        <AnimatePresence>
+        <>
             {showModal && (
                 <>
-                    {isMobile && (
+                    {/* {isMobile && (
                         // <Leaflet setShow={setShowModal}>{children}</Leaflet>
                         <Dialog open={showModal} onOpenChange={setShowModal}>
                             <DialogContent> {children}</DialogContent>
                         </Dialog>
-                    )}
-                    {isDesktop && (
+                    )} */}
+                    {
                         <>
                             {/* {children} */}
                             <Dialog
@@ -89,9 +86,9 @@ export default function Modal({
                                 onClick={() => setShowModal(false)}
                             /> */}
                         </>
-                    )}
+                    }
                 </>
             )}
-        </AnimatePresence>
+        </>
     );
 }

@@ -4,19 +4,20 @@ import { useFieldArray } from "react-hook-form";
 import { createBlock } from "./form/item-form-blocks";
 import { DykeBlock } from "./type";
 
-export interface IDykeItemFormContext {
-    blocks: DykeBlock[];
-    openedBlockIndex: number;
-    nextBlock(value);
-    selectBlockValue(label, value);
-    openBlock(blockIndex);
-    configValueKey(title);
-    blocksKey: string;
-    rowIndex: string;
-    itemKey: string;
-}
+// export interface IDykeItemFormContext {
+//     blocks: DykeBlock[];
+//     openedBlockIndex: number;
+//     nextBlock(value);
+//     selectBlockValue(label, value);
+//     openBlock(blockIndex);
+//     configValueKey(title);
+//     blocksKey: string;
+//     rowIndex: string;
+//     itemKey: string;
+// }
 
-export default function useDykeItem(rowIndex: string): IDykeItemFormContext {
+export type IDykeItemFormContext = ReturnType<typeof useDykeItem>;
+export default function useDykeItem(rowIndex: string) {
     const form = useDykeForm();
     const blockIndexKey = `itemBlocks.${rowIndex}.openedBlockIndex` as any;
     const blocksKey = `itemBlocks.${rowIndex}.blocks` as any;
@@ -34,12 +35,14 @@ export default function useDykeItem(rowIndex: string): IDykeItemFormContext {
         blocksKey,
         itemKey,
         configValueKey(blockName) {
-            return `items.${rowIndex}.meta.config.${blockName}`;
+            return `items.${rowIndex}.meta.config.${blockName}` as any;
         },
         openBlock(blockIndex) {
             form.setValue(blockIndexKey, blockIndex);
         },
-        nextBlock(value) {
+        async nextBlock(value) {
+            console.log(value);
+
             let block: any = null;
             let blockIndex = openedBlockIndex + 1;
             if (value == "Shelf Items") {
@@ -47,12 +50,14 @@ export default function useDykeItem(rowIndex: string): IDykeItemFormContext {
             } else {
                 // next block
             }
+            console.log(block);
+            if (!block) return;
             form.setValue(blockIndexKey, blockIndex);
             append(block);
         },
-        selectBlockValue(label, value) {
+        async selectBlockValue(label, value) {
             form.setValue(this.configValueKey(label), value);
-            this.nextBlock(value);
+            await this.nextBlock(value);
         },
     };
 }

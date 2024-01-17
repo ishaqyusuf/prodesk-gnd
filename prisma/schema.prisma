@@ -1129,3 +1129,43 @@ model PaydayInvoice {
     createdAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @db.Timestamp(0)
 }
+
+model DykeStepNode {
+    id             Int                      @unique @default(autoincrement())
+    value          String?
+    stepTitle      String?
+    createdAt      DateTime?                @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?                @db.Timestamp(0)
+    nodeComponents DykeStepNodeComponents[]
+}
+
+model DykeStepNodeComponents {
+    id          Int             @unique @default(autoincrement())
+    stepNodeId  Int?
+    componentId Int?
+    createdAt   DateTime?       @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?       @db.Timestamp(0)
+    stepNode    DykeStepNode?   @relation(fields: [stepNodeId], references: [id])
+    components  DykeComponents? @relation(fields: [componentId], references: [id])
+}
+
+// model DykeStepComponents {
+//     id              Int             @unique @default(autoincrement())
+//     stepId          Int
+//     dykeComponentId Int
+//     nextStepId      Int?
+//     prevStepId      Int?
+//     price           Float? //override price
+//     step            DykeSteps?      @relation(fields: [stepId], references: [id])
+//     DykeComponents  DykeComponents? @relation(fields: [dykeComponentId], references: [id])
+// }
+
+model DykeComponents {
+    id                 Int                      @unique @default(autoincrement())
+    title              String
+    img                String?
+    price              Float? //default price
+    createdAt          DateTime?                @default(now()) @db.Timestamp(0)
+    updatedAt          DateTime?                @db.Timestamp(0)
+    stepNodeComponents DykeStepNodeComponents[]
+}

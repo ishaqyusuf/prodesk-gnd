@@ -7,6 +7,7 @@ import { Form } from "@/components/ui/form";
 import { DykeForm, IDykeFormContext } from "../../type";
 import { DykeFormContext } from "../../form-context";
 import dykeUtils from "../../dykeUtils";
+import RenderForm from "@/_v2/components/common/render-form";
 
 interface Props {}
 export default function SalesFormComponent({}: Props) {
@@ -36,27 +37,22 @@ export default function SalesFormComponent({}: Props) {
     } as IDykeFormContext;
     return (
         <DykeFormContext.Provider value={ctxValue}>
-            <FormProvider {...form}>
-                <Form {...form}>
-                    {itemsIndex.map((i) => (
-                        <SalesItemForm
-                            key={i}
-                            form={form}
-                            rowIndex={i.toString()}
-                            openIndex={open}
-                            setOpen={(e) => {
-                                if (e)
-                                    form.setValue(
-                                        "currentItemIndex",
-                                        i.toString()
-                                    );
-                                else if (!e && currentItemIndex == i.toString())
-                                    form.setValue("currentItemIndex", null);
-                            }}
-                        />
-                    ))}
-                </Form>
-            </FormProvider>
+            <RenderForm {...form}>
+                {itemsIndex.map((i) => (
+                    <SalesItemForm
+                        key={i}
+                        form={form}
+                        rowIndex={i.toString()}
+                        openIndex={open}
+                        setOpen={(e) => {
+                            if (e)
+                                form.setValue("currentItemIndex", i.toString());
+                            else if (!e && currentItemIndex == i.toString())
+                                form.setValue("currentItemIndex", null);
+                        }}
+                    />
+                ))}
+            </RenderForm>
         </DykeFormContext.Provider>
     );
 }

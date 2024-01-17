@@ -47,7 +47,7 @@ export default function useShelfItem(shelfIndex) {
     return {
         categoryForm,
         catArray,
-        prodArray: prodArray as any,
+        prodArray,
         form,
         item,
         shelfItemKey: configky,
@@ -138,6 +138,12 @@ interface CategoryForm {
     ids: { cid: number }[];
 }
 export type IUseShelfItem = ReturnType<typeof useShelfItem>;
+// export type IUseShelfItem = Omit<
+//     ReturnType<typeof useShelfItem>,
+//     "prodArray"
+// > & {
+//     prodArray: UseFieldArrayReturn<DykeShelfItemForm>;
+// };
 // export interface IUseShelfItem {
 //     products: DykeShelfProducts[] | undefined | null;
 //     getProdFormKey(prodIndex, ...path: (keyof DykeShelfItemForm)[]): any;
@@ -151,7 +157,6 @@ export type IUseShelfItem = ReturnType<typeof useShelfItem>;
 //     };
 //     categoryForm: UseFormReturn<CategoryForm>;
 //     catArray: UseFieldArrayReturn<CategoryForm>;
-//     prodArray: UseFieldArrayReturn<DykeShelfItemForm>;
 //     item: IDykeItemFormContext;
 //     form: UseFormReturn<DykeForm>;
 //     shelfItemKey: string;

@@ -3,13 +3,9 @@
 import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useTransition } from "react";
 import {
-    CheckColumn,
     ColumnHeader,
-    DateCellContent,
-    PrimaryCellContent,
-    SecondaryCellContent,
     _FilterColumn,
 } from "../../../../../../components/_v1/columns/base-columns";
 import { DataTable } from "../../../../../../components/_v1/data-table/data-table";
@@ -21,6 +17,7 @@ import {
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
     OrderStatus,
+    SalesCustomerCell,
 } from "../../../../../../components/_v1/columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../../../../../../components/_v1/actions/order-actions";
@@ -90,12 +87,14 @@ export default function OrdersTableShell<T>({
                       {
                           accessorKey: "customer",
                           header: ColumnHeader("Customer"),
-                          cell: ({ row }) =>
-                              OrderCustomerCell(
-                                  row.original.customer,
-                                  "/sales/customer/slug"
-                                  //   row.original.shippingAddress?.address1
-                              ),
+                          cell: ({ row }) => (
+                              <SalesCustomerCell order={row.original} />
+                          ),
+                          //   OrderCustomerCell(
+                          //       row.original.customer,
+                          //       "/sales/customer/slug",
+                          //       row.original.shippingAddress?.phoneNo
+                          //   ),
                       },
                       {
                           accessorKey: "memo",
