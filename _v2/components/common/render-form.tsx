@@ -14,7 +14,7 @@ export default function RenderForm({
     const form = useFormContext();
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     if (!isProd) reRender++;
-    else return <>{children}</>;
+    // else return <>{children}</>;
     if (!form)
         return <ContextRenderForm {...props}>{children}</ContextRenderForm>;
     // form.formState.isDirty
