@@ -23,9 +23,9 @@ export default async function EditSalesPage({ searchParams, params }) {
     ]
         .filter(Boolean)
         .join(": ");
-    metadata.title = title;
     if (!resp.form.deliveryOption) resp.form.deliveryOption = "pickup";
     const orderId = resp?.form?.orderId;
+    metadata.title = title;
     return (
         <div id="salesEditPage">
             <Breadcrumbs>
