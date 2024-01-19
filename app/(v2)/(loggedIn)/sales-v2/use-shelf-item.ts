@@ -1,19 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { DykeItemFormContext, useDykeForm } from "./form-context";
-import {
-    UseFieldArrayReturn,
-    UseFormReturn,
-    useFieldArray,
-    useForm,
-} from "react-hook-form";
-import { CategorizedShelfItem, DykeForm, DykeShelfItemForm } from "./type";
+import { useFieldArray, useForm } from "react-hook-form";
+import { CategorizedShelfItem } from "./type";
 import { DykeShelfProducts } from "@prisma/client";
 import { getShelfProducts } from "./form/_action/get-shelf-products.actions";
 
 export default function useShelfItem(shelfIndex) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
-    const configky = `items.${item.rowIndex}.shelfItems.${shelfIndex}`;
+    const configky = `itemArray.${item.rowIndex}.item.shelfItemArray.${shelfIndex}`;
     const categoryForm = useForm({
         defaultValues: {
             ids: [
@@ -23,7 +18,7 @@ export default function useShelfItem(shelfIndex) {
             ],
         },
     });
-    const categoryProdsKey = `${configky}.products`;
+    const categoryProdsKey = `${configky}.productArray`;
     const prodArray = useFieldArray({
         control: form.control,
         name: categoryProdsKey as any,
@@ -31,6 +26,7 @@ export default function useShelfItem(shelfIndex) {
     // prodArray.
     useEffect(() => {
         const oldf: CategorizedShelfItem = form.getValues(configky as any);
+
         categoryForm.setValue(
             "ids",
             (oldf?.categoryIds || [-1])?.map((cid) => ({ cid }))
@@ -56,7 +52,7 @@ export default function useShelfItem(shelfIndex) {
             if (prod) {
                 // console.log(prod);
 
-                const prodKey: any = `${configky}.products.${prodIndex}.data`;
+                const prodKey: any = `${configky}.productArray.${prodIndex}.item`;
                 form.setValue(`${prodKey}.productId` as any, prod.id);
                 form.setValue(`${prodKey}.unitPrice` as any, prod?.unitPrice);
                 // const qty = form.getValues(`${prodKey}.qty` as any);
@@ -68,7 +64,7 @@ export default function useShelfItem(shelfIndex) {
         },
         getProdFormKey(prodIndex, ...path) {
             let paths = path.map(
-                (p) => `${configky}.products.${prodIndex}.data.${p}` as any
+                (p) => `${configky}.productArray.${prodIndex}.item.${p}` as any
             );
             if (path.length == 1) return paths[0];
             return paths;

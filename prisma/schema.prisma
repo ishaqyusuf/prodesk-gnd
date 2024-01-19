@@ -730,6 +730,7 @@ model SalesJobs {
 model SalesOrderItems {
     id                 Int                          @unique @default(autoincrement())
     description        String?                      @db.Text
+    dykeDescription    String?                      @db.Text
     productId          Int?
     supplier           String?
     swing              String?                      @db.VarChar(255)
@@ -757,22 +758,25 @@ model SalesOrderItems {
     salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     productions        OrderProductionSubmissions[]
     shelfItems         DykeSalesShelfItem[]
+    formSteps          DykeStepForm[]
     // components         SalesOrderItemComponents[]
 }
 
 model DykeSalesShelfItem {
-    id               Int                @unique @default(autoincrement())
+    id               Int                  @unique @default(autoincrement())
     salesOrderItemId Int?
     productId        Int?
+    categoryId       Int
     qty              Int?
     unitPrice        Int?
     totalPrice       Int?
-    meta             Json?              @db.Json
-    createdAt        DateTime?          @db.Timestamp(0)
-    updatedAt        DateTime?          @db.Timestamp(0)
-    deletedAt        DateTime?          @db.Timestamp(0)
-    salesOrderItem   SalesOrderItems?   @relation(fields: [salesOrderItemId], references: [id])
-    shelfProduct     DykeShelfProducts? @relation(fields: [productId], references: [id])
+    meta             Json?                @db.Json
+    createdAt        DateTime?            @db.Timestamp(0)
+    updatedAt        DateTime?            @db.Timestamp(0)
+    deletedAt        DateTime?            @db.Timestamp(0)
+    salesOrderItem   SalesOrderItems?     @relation(fields: [salesOrderItemId], references: [id])
+    shelfProduct     DykeShelfProducts?   @relation(fields: [productId], references: [id])
+    category         DykeShelfCategories? @relation(fields: [categoryId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -874,6 +878,7 @@ model SalesOrders {
     pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
     supplies          SalesItemSupply[]
     commisions        SalesCommision[]
+    formSteps         DykeStepForm[]
 }
 
 model SalesPickup {
@@ -1079,13 +1084,14 @@ model Notifications {
 
 // Dyke Edge Db
 model DykeShelfCategories {
-    id               Int                 @unique @default(autoincrement())
+    id               Int                  @unique @default(autoincrement())
     name             String
     type             String //parent/child
     categoryId       Int?
     parentCategoryId Int?
-    products         DykeShelfProducts[] @relation(name: "childCategory")
-    groupedProducts  DykeShelfProducts[] @relation(name: "parentCategory")
+    products         DykeShelfProducts[]  @relation(name: "childCategory")
+    groupedProducts  DykeShelfProducts[]  @relation(name: "parentCategory")
+    shelfItems       DykeSalesShelfItem[]
 }
 
 model DykeShelfProducts {
@@ -1130,42 +1136,80 @@ model PaydayInvoice {
     updatedAt DateTime? @db.Timestamp(0)
 }
 
-model DykeStepNode {
-    id             Int                      @unique @default(autoincrement())
-    value          String?
-    stepTitle      String?
-    createdAt      DateTime?                @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?                @db.Timestamp(0)
-    nodeComponents DykeStepNodeComponents[]
+model DykeStepForm {
+    id          Int              @unique @default(autoincrement())
+    value       String
+    qty         Int?             @default(0)
+    price       Float?           @default(0)
+    salesId     Int?
+    salesItemId Int?
+    stepId      Int
+    meta        Json?            @db.Json
+    createdAt   DateTime?        @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?        @db.Timestamp(0)
+    sales       SalesOrders?     @relation(fields: [salesId], references: [id])
+    salesItem   SalesOrderItems? @relation(fields: [salesItemId], references: [id])
+    step        DykeSteps        @relation(fields: [stepId], references: [id])
 }
 
-model DykeStepNodeComponents {
-    id          Int             @unique @default(autoincrement())
-    stepNodeId  Int?
-    componentId Int?
-    createdAt   DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt   DateTime?       @db.Timestamp(0)
-    stepNode    DykeStepNode?   @relation(fields: [stepNodeId], references: [id])
-    components  DykeComponents? @relation(fields: [componentId], references: [id])
+model DykeSteps {
+    id              Int                @unique @default(autoincrement())
+    title           String?
+    value           String?            @db.Text
+    createdAt       DateTime?          @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?          @db.Timestamp(0)
+    stepProducts    DykeStepProducts[]
+    stepValueId     Int?
+    rootStepValueId Int?
+    prevStepValueId Int?
+    stepForms       DykeStepForm[]
+    rootStepValue   DykeStepValues?    @relation(fields: [rootStepValueId], references: [id], name: "rootValue")
+    stepValue       DykeStepValues?    @relation(fields: [stepValueId], references: [id], name: "stepValue")
+    prevStepValue   DykeStepValues?    @relation(fields: [prevStepValueId], references: [id], name: "prevStepValue")
 }
 
-// model DykeStepComponents {
-//     id              Int             @unique @default(autoincrement())
-//     stepId          Int
-//     dykeComponentId Int
-//     nextStepId      Int?
-//     prevStepId      Int?
-//     price           Float? //override price
-//     step            DykeSteps?      @relation(fields: [stepId], references: [id])
-//     DykeComponents  DykeComponents? @relation(fields: [dykeComponentId], references: [id])
-// }
+model DykeStepValues {
+    id        Int         @unique @default(autoincrement())
+    title     String?
+    createdAt DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt DateTime?   @db.Timestamp(0)
+    rootSteps DykeSteps[] @relation(name: "rootValue")
+    steps     DykeSteps[] @relation(name: "stepValue")
+    prevStep  DykeSteps[] @relation(name: "prevStepValue")
+}
 
-model DykeComponents {
-    id                 Int                      @unique @default(autoincrement())
-    title              String
-    img                String?
-    price              Float? //default price
-    createdAt          DateTime?                @default(now()) @db.Timestamp(0)
-    updatedAt          DateTime?                @db.Timestamp(0)
-    stepNodeComponents DykeStepNodeComponents[]
+model DykeCategories {
+    id        Int            @unique @default(autoincrement())
+    title     String         @unique
+    createdAt DateTime?      @default(now()) @db.Timestamp(0)
+    updatedAt DateTime?      @db.Timestamp(0)
+    products  DykeProducts[]
+}
+
+model DykeStepProducts {
+    id            Int          @unique @default(autoincrement())
+    dykeProductId Int
+    dykeStepId    Int
+    createdAt     DateTime?    @default(now()) @db.Timestamp(0)
+    updatedAt     DateTime?    @db.Timestamp(0)
+    product       DykeProducts @relation(fields: [dykeProductId], references: [id])
+    step          DykeSteps    @relation(fields: [dykeStepId], references: [id])
+}
+
+model DykeProducts {
+    id           Int                @unique @default(autoincrement())
+    img          String?
+    description  String?
+    noteRequired Boolean?           @default(false)
+    title        String?
+    price        Float?
+    categoryId   Int?
+    productCode  String?
+    qty          Int?               @default(0)
+    meta         Json?              @db.Json
+    value        String
+    createdAt    DateTime?          @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?          @db.Timestamp(0)
+    stepProducts DykeStepProducts[]
+    category     DykeCategories?    @relation(fields: [categoryId], references: [id])
 }

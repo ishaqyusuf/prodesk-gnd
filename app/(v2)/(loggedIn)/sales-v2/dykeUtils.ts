@@ -2,7 +2,10 @@ import { itemFormBlocks } from "./form/item-form-blocks";
 import { DykeItemForm } from "./type";
 
 export default {
-    newItem(index): {
+    newItem(
+        index,
+        rootBlock
+    ): {
         item: { [id in string]: DykeItemForm };
         block: { [id in string]: any };
     } {
@@ -13,39 +16,27 @@ export default {
                         configIndex: 0,
                         config: {},
                     },
-                    shelfItems: [
-                        {
-                            categoryIds: [],
-                            categoryId: undefined,
-                            products: [
-                                {
-                                    data: {
-                                        meta: {
-                                            categoryIds: [],
-                                        },
-                                    } as any,
-                                },
-                            ],
-                        },
-                        // {
-                        //     categoryIds: [],
-                        //     products: [
-                        //         {
-                        //             data: {
-                        //                 meta: {
-                        //                     categoryIds: [],
-                        //                 },
-                        //             },
-                        //         },
-                        //     ],
-                        // },
-                    ],
+                    // shelfItems: [
+                    //     // {
+                    //     //     categoryIds: [],
+                    //     //     categoryId: undefined,
+                    //     //     products: [
+                    //     //         {
+                    //     //             data: {
+                    //     //                 meta: {
+                    //     //                     categoryIds: [],
+                    //     //                 },
+                    //     //             } as any,
+                    //     //         },
+                    //     //     ],
+                    //     // },
+                    // ],
                 } as DykeItemForm as any,
             },
             block: {
                 [index]: {
-                    blocks: [itemFormBlocks[0]],
-                    openedBlockIndex: 0,
+                    blocks: [rootBlock],
+                    openedStepIndex: 0,
                 },
             },
         };

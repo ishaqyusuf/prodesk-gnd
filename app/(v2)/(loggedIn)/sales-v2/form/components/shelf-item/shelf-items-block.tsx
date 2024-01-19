@@ -57,28 +57,12 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
 
     return (
         <Form {...categoryForm}>
-            {/* <Table>
-                <TableHeader className="">
-                    <TableRow>
-                        <TableHead className="w-10">Item</TableHead>
-                        <TableHead className="w-1/4">Category</TableHead>
-                        <TableHead className="flex  w-full  space-x-4 items-center">
-                            <div className="flex-1">Product</div>
-                            <div className="w-20">Qty</div>
-                            <div className="w-24 text-right">Unit Price</div>
-                            <div className="w-24 text-right">Line Total</div>
-                            <div className="w-12"></div>
-                        </TableHead> 
-                    </TableRow>
-                </TableHeader>
-                <TableBody> */}
             <TableRow>
                 <TableCell className="flex" valign="top">
                     {shelfIndex + 1}
                 </TableCell>
                 <TableCell className="" valign="top">
                     <div className="">
-                        {/* {JSON.stringify(fields)} */}
                         {categories.map((field, index) => (
                             <div className="" key={index}>
                                 <ShelfCategory
@@ -88,7 +72,6 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                 />
                                 {categories.length - 1 > index && (
                                     <div className="flex justify-center">
-                                        {/* <ArrowDown className="w-4 h-4" /> */}
                                         {"|"}
                                     </div>
                                 )}

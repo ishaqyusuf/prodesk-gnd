@@ -6,7 +6,7 @@ import { DykeBlock } from "./type";
 
 // export interface IDykeItemFormContext {
 //     blocks: DykeBlock[];
-//     openedBlockIndex: number;
+//     openedStepIndex: number;
 //     nextBlock(value);
 //     selectBlockValue(label, value);
 //     openBlock(blockIndex);
@@ -17,47 +17,55 @@ import { DykeBlock } from "./type";
 // }
 
 export type IDykeItemFormContext = ReturnType<typeof useDykeItem>;
-export default function useDykeItem(rowIndex: string) {
+export default function useDykeItem(rowIndex: number) {
     const form = useDykeForm();
-    const blockIndexKey = `itemBlocks.${rowIndex}.openedBlockIndex` as any;
-    const blocksKey = `itemBlocks.${rowIndex}.blocks` as any;
+    const stepArrayName = `itemArray.${rowIndex}.item.formStepArray` as const;
     const itemKey = `items.${rowIndex}` as any;
-    const [openedBlockIndex] = form.watch([blockIndexKey]);
-    const { fields, append } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: blocksKey,
+        name: stepArrayName,
     });
-
+    const [opened, openedStepIndex] = form.watch([
+        `itemArray.${rowIndex}.opened`,
+        `itemArray.${rowIndex}.stepIndex`,
+    ]);
     return {
-        blocks: fields as any,
+        opened,
+        openedStepIndex,
+        toggleStep(stepIndex) {
+            form.setValue(
+                `itemArray.${rowIndex}.stepIndex`,
+                stepIndex == openedStepIndex ? null : stepIndex
+            );
+        },
+        openChange(val) {
+            form.setValue(`itemArray.${rowIndex}.opened`, val);
+        },
+        formStepArray: fields,
+        appendStep: append,
+        removeStep: remove,
         rowIndex,
-        openedBlockIndex,
-        blocksKey,
         itemKey,
         configValueKey(blockName) {
             return `items.${rowIndex}.meta.config.${blockName}` as any;
         },
-        openBlock(blockIndex) {
-            form.setValue(blockIndexKey, blockIndex);
-        },
         async nextBlock(value) {
-            console.log(value);
-
-            let block: any = null;
-            let blockIndex = openedBlockIndex + 1;
-            if (value == "Shelf Items") {
-                block = createBlock("Shelf Items", []);
-            } else {
-                // next block
-            }
-            console.log(block);
-            if (!block) return;
-            form.setValue(blockIndexKey, blockIndex);
-            append(block);
+            // console.log(value);
+            // let block: any = null;
+            // let blockIndex = openedStepIndex + 1;
+            // if (value == "Shelf Items") {
+            //     block = createBlock("Shelf Items", []);
+            // } else {
+            //     // next block
+            // }
+            // console.log(block);
+            // if (!block) return;
+            // form.setValue(blockIndexKey, blockIndex);
+            // append(block);
         },
-        async selectBlockValue(label, value) {
-            form.setValue(this.configValueKey(label), value);
-            await this.nextBlock(value);
+        async selectBlockValue(label, product) {
+            // form.setValue(this.configValueKey(label), value);
+            // await this.nextBlock(value);
         },
     };
 }

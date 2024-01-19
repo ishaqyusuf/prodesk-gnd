@@ -6,11 +6,12 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { UseFormReturn } from "react-hook-form";
-import { ItemConfigBlock } from "./item-config-block";
+import { DykeItemStepSection } from "./dyke-item-step-section";
 import { useContext, useEffect, useState } from "react";
 import {
     DykeFormContext,
     DykeItemFormContext,
+    useDykeCtx,
     useDykeForm,
 } from "../../form-context";
 import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
@@ -18,24 +19,22 @@ import { Label } from "@/components/ui/label";
 
 interface Props {
     rowIndex;
-    openIndex;
-    setOpen;
-    form: UseFormReturn<any>;
 }
-export function SalesItemForm({ rowIndex }: Props) {
+export function DykeItemFormSection({ rowIndex }: Props) {
     const form = useDykeForm();
     // const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
 
     const item = useDykeItem(rowIndex);
-    const dykeCtx = useContext(DykeFormContext);
+    const dykeCtx = useDykeCtx();
+    // dykeCtx.
     const ctx = {
         ...item,
     } as IDykeItemFormContext;
     return (
         <DykeItemFormContext.Provider value={ctx}>
             <Collapsible
-                open={rowIndex == dykeCtx.currentItemIndex}
-                onOpenChange={() => dykeCtx.setOpened(rowIndex)}
+                open={item.opened}
+                onOpenChange={item.openChange}
                 className=""
             >
                 <div className="flex bg-accent p-2 px-4 justify-between">
@@ -45,7 +44,13 @@ export function SalesItemForm({ rowIndex }: Props) {
                         </Label>
                     </CollapsibleTrigger>
                     <div className="flex items-center justify-between space-x-2">
-                        <Button className="p-0 h-6 w-6" variant={"destructive"}>
+                        <Button
+                            onClick={() => {
+                                dykeCtx.itemArray.remove(rowIndex);
+                            }}
+                            className="p-0 h-6 w-6"
+                            variant={"destructive"}
+                        >
                             <Icons.trash className="w-4 h-4" />
                         </Button>
                     </div>
@@ -53,10 +58,10 @@ export function SalesItemForm({ rowIndex }: Props) {
                 <CollapsibleContent className="">
                     <div className="grid sm:grid-cols-3">
                         <div className="sm:col-span-3">
-                            {item.blocks.map((block, bIndex) => (
-                                <ItemConfigBlock
-                                    block={block}
-                                    blockIndex={bIndex}
+                            {item.formStepArray.map((formStep, bIndex) => (
+                                <DykeItemStepSection
+                                    stepForm={formStep as any}
+                                    stepIndex={bIndex}
                                     key={bIndex}
                                 />
                             ))}

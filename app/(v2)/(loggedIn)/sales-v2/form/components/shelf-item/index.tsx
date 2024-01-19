@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DykeItemFormContext, useDykeForm } from "../../../form-context";
 import { useFieldArray } from "react-hook-form";
 import ShelfItemsBlock from "./shelf-items-block";
@@ -18,9 +18,22 @@ export default function ShelfItemIndex() {
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: `items.${item.rowIndex}.shelfItems`,
+        name: `itemArray.${item.rowIndex}.item.shelfItemArray`,
     });
-
+    // useEffect(() => {
+    //     if (!fields.length)
+    //         append({
+    //             item: {
+    //                 productArray: [
+    //                     {
+    //                         item: {},
+    //                     },
+    //                 ],
+    //                 categoryIds: [-1],
+    //                 categoryId: null,
+    //             },
+    //         });
+    // }, [fields]);
     return (
         <Table>
             <TableHeader className="">
@@ -58,7 +71,7 @@ export default function ShelfItemIndex() {
                                 onClick={() => {
                                     append({
                                         categoryIds: [],
-                                        products: [],
+                                        productArray: [],
                                         categoryId: null as any,
                                     });
                                 }}

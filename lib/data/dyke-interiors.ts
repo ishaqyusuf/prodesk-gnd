@@ -1,6 +1,6 @@
 export const dykeInteriors = {
     stepProductIdsByValue: {
-        "": [1, 2, 2],
+        "": [1, 2, 3],
         Interior: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         "Interior_Interior Door Unit - Single": [
             13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
@@ -318,11 +318,6 @@ export const dykeInteriors = {
             id: 2,
         },
         {
-            productId: 2,
-            stepId: 1,
-            id: 3,
-        },
-        {
             productId: 3,
             stepId: 2,
             id: 4,
@@ -611,76 +606,6 @@ export const dykeInteriors = {
             productId: 60,
             stepId: 6,
             id: 61,
-        },
-        {
-            productId: 47,
-            stepId: 6,
-            id: 62,
-        },
-        {
-            productId: 48,
-            stepId: 6,
-            id: 63,
-        },
-        {
-            productId: 49,
-            stepId: 6,
-            id: 64,
-        },
-        {
-            productId: 50,
-            stepId: 6,
-            id: 65,
-        },
-        {
-            productId: 51,
-            stepId: 6,
-            id: 66,
-        },
-        {
-            productId: 52,
-            stepId: 6,
-            id: 67,
-        },
-        {
-            productId: 53,
-            stepId: 6,
-            id: 68,
-        },
-        {
-            productId: 54,
-            stepId: 6,
-            id: 69,
-        },
-        {
-            productId: 55,
-            stepId: 6,
-            id: 70,
-        },
-        {
-            productId: 56,
-            stepId: 6,
-            id: 71,
-        },
-        {
-            productId: 57,
-            stepId: 6,
-            id: 72,
-        },
-        {
-            productId: 58,
-            stepId: 6,
-            id: 73,
-        },
-        {
-            productId: 59,
-            stepId: 6,
-            id: 74,
-        },
-        {
-            productId: 60,
-            stepId: 6,
-            id: 75,
         },
         {
             productId: 61,
@@ -1053,136 +978,6 @@ export const dykeInteriors = {
             id: 149,
         },
         {
-            productId: 132,
-            stepId: 13,
-            id: 150,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 151,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 152,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 153,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 154,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 155,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 156,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 157,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 158,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 159,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 160,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 161,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 162,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 163,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 164,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 165,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 166,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 167,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 168,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 169,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 170,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 171,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 172,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 173,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 174,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 175,
-        },
-        {
             productId: 134,
             stepId: 14,
             id: 176,
@@ -1301,36 +1096,6 @@ export const dykeInteriors = {
             productId: 133,
             stepId: 21,
             id: 199,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 200,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 201,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 202,
-        },
-        {
-            productId: 134,
-            stepId: 13,
-            id: 203,
-        },
-        {
-            productId: 132,
-            stepId: 13,
-            id: 204,
-        },
-        {
-            productId: 133,
-            stepId: 13,
-            id: 205,
         },
         {
             productId: 135,
@@ -1491,46 +1256,6 @@ export const dykeInteriors = {
             productId: 142,
             stepId: 22,
             id: 237,
-        },
-        {
-            productId: 136,
-            stepId: 22,
-            id: 238,
-        },
-        {
-            productId: 137,
-            stepId: 22,
-            id: 239,
-        },
-        {
-            productId: 142,
-            stepId: 22,
-            id: 240,
-        },
-        {
-            productId: 136,
-            stepId: 22,
-            id: 241,
-        },
-        {
-            productId: 137,
-            stepId: 22,
-            id: 242,
-        },
-        {
-            productId: 142,
-            stepId: 22,
-            id: 243,
-        },
-        {
-            productId: 136,
-            stepId: 22,
-            id: 244,
-        },
-        {
-            productId: 137,
-            stepId: 22,
-            id: 245,
         },
         {
             productId: 143,
@@ -2533,39 +2258,9 @@ export const dykeInteriors = {
             id: 445,
         },
         {
-            productId: 163,
-            stepId: 72,
-            id: 446,
-        },
-        {
             productId: 164,
             stepId: 61,
             id: 447,
-        },
-        {
-            productId: 155,
-            stepId: 61,
-            id: 448,
-        },
-        {
-            productId: 156,
-            stepId: 61,
-            id: 449,
-        },
-        {
-            productId: 157,
-            stepId: 61,
-            id: 450,
-        },
-        {
-            productId: 158,
-            stepId: 61,
-            id: 451,
-        },
-        {
-            productId: 159,
-            stepId: 61,
-            id: 452,
         },
         {
             productId: 162,
@@ -2781,11 +2476,6 @@ export const dykeInteriors = {
             productId: 167,
             stepId: 93,
             id: 495,
-        },
-        {
-            productId: 166,
-            stepId: 93,
-            id: 496,
         },
         {
             productId: 168,
@@ -3628,31 +3318,6 @@ export const dykeInteriors = {
             id: 664,
         },
         {
-            productId: 193,
-            stepId: 142,
-            id: 665,
-        },
-        {
-            productId: 194,
-            stepId: 142,
-            id: 666,
-        },
-        {
-            productId: 195,
-            stepId: 142,
-            id: 667,
-        },
-        {
-            productId: 193,
-            stepId: 142,
-            id: 668,
-        },
-        {
-            productId: 194,
-            stepId: 142,
-            id: 669,
-        },
-        {
             productId: 196,
             stepId: 143,
             id: 670,
@@ -3717,736 +3382,1176 @@ export const dykeInteriors = {
             stepId: 145,
             id: 682,
         },
+        {
+            productId: 209,
+            stepId: 1,
+            id: 683,
+        },
     ],
     steps: [
         {
             id: 1,
             title: "Door Type",
             value: "",
+            rootStepValueId: null,
+            prevStepValueId: null,
+            stepValueId: null,
         },
         {
             id: 2,
             title: "Door Configuration",
             value: "Interior",
+            prevStepValueId: null,
+            stepValueId: null,
+            rootStepValueId: 1,
         },
         {
             id: 3,
             title: "Width",
             value: "Interior_Interior Door Unit - Single",
+            prevStepValueId: null,
+            stepValueId: 2,
+            rootStepValueId: 1,
         },
         {
             id: 4,
             title: "Width",
             value: "Interior_Interior Door Unit - Double",
+            prevStepValueId: null,
+            stepValueId: 3,
+            rootStepValueId: 1,
         },
         {
             id: 5,
             title: "Width",
             value: 'Interior_Interior Door Unit - Single 1-3/4"',
+            prevStepValueId: null,
+            stepValueId: 4,
+            rootStepValueId: 1,
         },
         {
             id: 6,
             title: "Width",
             value: "Interior_Interior Door Slab (Prepped)",
+            prevStepValueId: null,
+            stepValueId: 5,
+            rootStepValueId: 1,
         },
         {
             id: 7,
             title: "Width",
             value: "Interior_Interior Attic Access",
+            prevStepValueId: null,
+            stepValueId: 6,
+            rootStepValueId: 1,
         },
         {
             id: 8,
             title: "Width",
             value: "Interior_Interior Cased Opening",
+            prevStepValueId: null,
+            stepValueId: 7,
+            rootStepValueId: 1,
         },
         {
             id: 9,
             title: "Width",
             value: "Interior_Interior Frame Only - Single",
+            prevStepValueId: null,
+            stepValueId: 8,
+            rootStepValueId: 1,
         },
         {
             id: 10,
             title: "Width",
             value: "Interior_Interior Frame Only - Double",
+            prevStepValueId: null,
+            stepValueId: 9,
+            rootStepValueId: 1,
         },
         {
             id: 11,
             title: "Width",
             value: 'Interior_Interior Door Unit - Double 1-3/4"',
+            prevStepValueId: null,
+            stepValueId: 10,
+            rootStepValueId: 1,
         },
         {
             id: 12,
             title: "Configuration",
             value: "Interior_Interior Pocket Door Frame",
+            prevStepValueId: null,
+            stepValueId: 11,
+            rootStepValueId: 1,
         },
         {
             id: 13,
             title: "Height",
             value: "Interior_Interior Door Unit - Single_width",
+            prevStepValueId: 2,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 14,
             title: "Height",
             value: "Interior_Interior Door Unit - Double_width",
+            prevStepValueId: 3,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 15,
             title: "Height",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width',
+            prevStepValueId: 4,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 16,
             title: "Height",
             value: "Interior_Interior Door Slab (Prepped)_width",
+            prevStepValueId: 5,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 17,
             title: "Height",
             value: "Interior_Interior Attic Access_width",
+            prevStepValueId: 6,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 18,
             title: "Height",
             value: "Interior_Interior Cased Opening_width",
+            prevStepValueId: 7,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 19,
             title: "Height",
             value: "Interior_Interior Frame Only - Single_width",
+            prevStepValueId: 8,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 20,
             title: "Height",
             value: "Interior_Interior Frame Only - Double_width",
+            prevStepValueId: 9,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 21,
             title: "Height",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width',
+            prevStepValueId: 10,
+            stepValueId: 12,
+            rootStepValueId: 1,
         },
         {
             id: 22,
             title: "Hand",
             value: "Interior_Interior Door Unit - Single_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 23,
             title: "Hand",
             value: "Interior_Interior Door Unit - Double_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 24,
             title: "Hand",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height',
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 25,
             title: "Hand",
             value: "Interior_Interior Door Slab (Prepped)_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 26,
             title: "Hand",
             value: "Interior_Interior Attic Access_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 27,
             title: "Hand",
             value: "Interior_Interior Cased Opening_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 28,
             title: "Hand",
             value: "Interior_Interior Frame Only - Single_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 29,
             title: "Hand",
             value: "Interior_Interior Frame Only - Double_width_height",
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 30,
             title: "Hand",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height',
+            prevStepValueId: 12,
+            stepValueId: 13,
+            rootStepValueId: 1,
         },
         {
             id: 31,
             title: "Bore",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand",
+            prevStepValueId: 13,
+            stepValueId: 14,
+            rootStepValueId: 1,
         },
         {
             id: 32,
             title: "Bore",
             value: "Interior_Interior Door Unit - Single_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 33,
             title: "Bore",
             value: "Interior_Interior Door Unit - Double_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 34,
             title: "Bore",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand',
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 35,
             title: "Bore",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 36,
             title: "Bore",
             value: "Interior_Interior Attic Access_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 37,
             title: "Bore",
             value: "Interior_Interior Cased Opening_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 38,
             title: "Bore",
             value: "Interior_Interior Frame Only - Single_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 39,
             title: "Bore",
             value: "Interior_Interior Frame Only - Double_width_height_hand",
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 40,
             title: "Bore",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand',
+            prevStepValueId: 13,
+            stepValueId: 15,
+            rootStepValueId: 1,
         },
         {
             id: 41,
             title: "Door Type",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 42,
             title: "Door Type",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore",
+            prevStepValueId: 14,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 43,
             title: "Door Type",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 44,
             title: "Door Type",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore',
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 45,
             title: "Door Type",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 46,
             title: "Door Type",
             value: "Interior_Interior Attic Access_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 47,
             title: "Door Type",
             value: "Interior_Interior Cased Opening_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 48,
             title: "Door Type",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 49,
             title: "Door Type",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore",
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 50,
             title: "Door Type",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore',
+            prevStepValueId: 15,
+            stepValueId: 16,
+            rootStepValueId: 1,
         },
         {
             id: 51,
             title: "Door",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 52,
             title: "Door",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 53,
             title: "Door",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 54,
             title: "Door",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type',
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 55,
             title: "Door",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 56,
             title: "Door",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 57,
             title: "Door",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 58,
             title: "Door",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 59,
             title: "Door",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type",
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 60,
             title: "Door",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type',
+            prevStepValueId: 16,
+            stepValueId: 17,
+            rootStepValueId: 1,
         },
         {
             id: 61,
             title: "Jamb Size",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 62,
             title: "Jamb Size",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 63,
             title: "Jamb Size",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 64,
             title: "Jamb Size",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door',
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 65,
             title: "Jamb Size",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 66,
             title: "Jamb Size",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 67,
             title: "Jamb Size",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 68,
             title: "Jamb Size",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 69,
             title: "Jamb Size",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door",
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 70,
             title: "Jamb Size",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door',
+            prevStepValueId: 17,
+            stepValueId: 18,
+            rootStepValueId: 1,
         },
         {
             id: 71,
             title: "Jamb Species",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"',
+            prevStepValueId: 18,
+            stepValueId: 19,
+            rootStepValueId: 1,
         },
         {
             id: 72,
             title: "Jamb Type",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"_jamb species',
+            prevStepValueId: 19,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 73,
             title: "Jamb Species",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 74,
             title: "Jamb Species",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 75,
             title: "Jamb Species",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 76,
             title: "Jamb Species",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size',
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 77,
             title: "Jamb Species",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 78,
             title: "Jamb Species",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 79,
             title: "Jamb Species",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 80,
             title: "Jamb Species",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 81,
             title: "Jamb Species",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size",
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 82,
             title: "Jamb Species",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size',
+            prevStepValueId: 18,
+            stepValueId: 21,
+            rootStepValueId: 1,
         },
         {
             id: 83,
             title: "Jamb Type",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 84,
             title: "Jamb Type",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 85,
             title: "Jamb Type",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 86,
             title: "Jamb Type",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species',
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 87,
             title: "Jamb Type",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 88,
             title: "Jamb Type",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 89,
             title: "Jamb Type",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 90,
             title: "Jamb Type",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 91,
             title: "Jamb Type",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size_jamb species",
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 92,
             title: "Jamb Type",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species',
+            prevStepValueId: 21,
+            stepValueId: 20,
+            rootStepValueId: 1,
         },
         {
             id: 93,
             title: "--Jamb Stop",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 94,
             title: "--Jamb Stop",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"_jamb species_jamb type',
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 95,
             title: "--Jamb Stop",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 96,
             title: "--Jamb Stop",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 97,
             title: "--Jamb Stop",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type',
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 98,
             title: "--Jamb Stop",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 99,
             title: "--Jamb Stop",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 100,
             title: "--Jamb Stop",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 101,
             title: "--Jamb Stop",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 102,
             title: "--Jamb Stop",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type",
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 103,
             title: "--Jamb Stop",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type',
+            prevStepValueId: 20,
+            stepValueId: 22,
+            rootStepValueId: 1,
         },
         {
             id: 104,
             title: "Rip Jamb",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 105,
             title: "Rip Jamb",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"_jamb species_jamb type_--jamb stop',
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 106,
             title: "Rip Jamb",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 107,
             title: "Rip Jamb",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 108,
             title: "Rip Jamb",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop',
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 109,
             title: "Rip Jamb",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 110,
             title: "Rip Jamb",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 111,
             title: "Rip Jamb",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 112,
             title: "Rip Jamb",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 113,
             title: "Rip Jamb",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop",
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 114,
             title: "Rip Jamb",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop',
+            prevStepValueId: 22,
+            stepValueId: 23,
+            rootStepValueId: 1,
         },
         {
             id: 115,
             title: "Hinge Finish",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 116,
             title: "Hinge Finish",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"_jamb species_jamb type_--jamb stop_rip jamb',
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 117,
             title: "Hinge Finish",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 118,
             title: "Hinge Finish",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 119,
             title: "Hinge Finish",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb',
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 120,
             title: "Hinge Finish",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 121,
             title: "Hinge Finish",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 122,
             title: "Hinge Finish",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 123,
             title: "Hinge Finish",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 124,
             title: "Hinge Finish",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb",
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 125,
             title: "Hinge Finish",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb',
+            prevStepValueId: 23,
+            stepValueId: 24,
+            rootStepValueId: 1,
         },
         {
             id: 126,
             title: "Casing Y/N",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 127,
             title: "Casing Y/N",
             value: 'Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_4-5/8"_jamb species_jamb type_--jamb stop_rip jamb_hinge finish',
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 128,
             title: "Casing Y/N",
             value: "Interior_Interior Door Unit - Single_width_height_[LH] Left Hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 129,
             title: "Casing Y/N",
             value: "Interior_Interior Door Unit - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 130,
             title: "Casing Y/N",
             value: 'Interior_Interior Door Unit - Single 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish',
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 131,
             title: "Casing Y/N",
             value: "Interior_Interior Door Slab (Prepped)_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 132,
             title: "Casing Y/N",
             value: "Interior_Interior Attic Access_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 133,
             title: "Casing Y/N",
             value: "Interior_Interior Cased Opening_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 134,
             title: "Casing Y/N",
             value: "Interior_Interior Frame Only - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 135,
             title: "Casing Y/N",
             value: "Interior_Interior Frame Only - Double_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish",
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 136,
             title: "Casing Y/N",
             value: 'Interior_Interior Door Unit - Double 1-3/4"_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish',
+            prevStepValueId: 24,
+            stepValueId: 25,
+            rootStepValueId: 1,
         },
         {
             id: 137,
             title: "Cutdown Height",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_No Casing",
+            prevStepValueId: 25,
+            stepValueId: 26,
+            rootStepValueId: 1,
         },
         {
             id: 138,
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_No Casing_cutdown height",
+            prevStepValueId: 26,
+            stepValueId: 27,
+            rootStepValueId: 1,
         },
         {
             id: 139,
             title: "Casing Side Choice",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_Casing Same Both Sides",
+            prevStepValueId: 25,
+            stepValueId: 28,
+            rootStepValueId: 1,
         },
         {
             id: 140,
             title: "Casing Species",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_Casing Same Both Sides_casing side choice",
+            prevStepValueId: 28,
+            stepValueId: 29,
+            rootStepValueId: 1,
         },
         {
             id: 141,
             title: "Casing",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_Casing Same Both Sides_casing side choice_casing species",
+            prevStepValueId: 29,
+            stepValueId: 30,
+            rootStepValueId: 1,
         },
         {
             id: 142,
             title: "Casing 1x4 Setup",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_Casing Same Both Sides_casing side choice_casing species_casing",
+            prevStepValueId: 30,
+            stepValueId: 31,
+            rootStepValueId: 1,
         },
         {
             id: 143,
             title: "Cutdown Height",
             value: "Interior_Interior Door Unit - Single_width_height_hand_bore_door type_door_jamb size_jamb species_jamb type_--jamb stop_rip jamb_hinge finish_Casing Same Both Sides_casing side choice_casing species_casing_casing 1x4 setup",
+            prevStepValueId: 31,
+            stepValueId: 32,
+            rootStepValueId: 1,
         },
         {
             id: 144,
             title: "Width",
             value: "Interior_Interior Pocket Door Frame_Single Pocket Door Frame",
+            prevStepValueId: 11,
+            stepValueId: 33,
+            rootStepValueId: 1,
         },
         {
             id: 145,
             title: "Width",
             value: "Interior_Interior Pocket Door Frame_Double Pocket Door Frame",
+            prevStepValueId: 11,
+            stepValueId: 34,
+            rootStepValueId: 1,
         },
     ],
     products: [
         {
-            img: "res/069ae0256235001595354987.jpg",
+            img: "ueyqcokwvbjt9k2j2ava.jpg",
             noteRequired: false,
             description: null,
             title: "Interior",
@@ -4458,7 +4563,7 @@ export const dykeInteriors = {
             id: 1,
         },
         {
-            img: "res/770d00022008001680008173.jpg",
+            img: "clilgjokg2usfui4h6o3.jpg",
             noteRequired: false,
             description: null,
             title: "Exterior",
@@ -4471,7 +4576,20 @@ export const dykeInteriors = {
             id: 2,
         },
         {
-            img: "res/666650165957001677163694.jpg",
+            img: "ypvzkjyhschawollexuk.jpg",
+            noteRequired: false,
+            description: null,
+            title: "Shelf Items",
+            price: null,
+            value: "Shelf Items",
+            productCode: null,
+            qty: 0,
+            meta: {},
+            categoryId: 1,
+            id: 209,
+        },
+        {
+            img: "q1rdx5ybh6ivmciijhcc.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Door Unit - Single",
@@ -4483,7 +4601,7 @@ export const dykeInteriors = {
             id: 3,
         },
         {
-            img: "res/985d40724654001690313660.jpg",
+            img: "g4pjb6suozizadzwpgm9.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Door Unit - Double",
@@ -4496,7 +4614,7 @@ export const dykeInteriors = {
             id: 4,
         },
         {
-            img: "res/4a57b0543723001677163979.jpg",
+            img: "mqchxbxi2nnrou7zxdtk.jpg",
             noteRequired: false,
             description: null,
             title: 'Interior Door Unit - Single 1-3/4"',
@@ -4509,7 +4627,7 @@ export const dykeInteriors = {
             id: 5,
         },
         {
-            img: "res/df1330955200001681920408.jpeg",
+            img: "p2srlxdzip8wuzfrsbrm.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Door Slab (Prepped)",
@@ -4522,7 +4640,7 @@ export const dykeInteriors = {
             id: 6,
         },
         {
-            img: "res/f2d590977647001673636130.jpg",
+            img: "swyubdi0c66fw6tf9gy9.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Attic Access",
@@ -4535,7 +4653,7 @@ export const dykeInteriors = {
             id: 7,
         },
         {
-            img: "res/f19d10176787001681920409.jpg",
+            img: "v9svutg5xuf9afiphp6t.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Cased Opening",
@@ -4548,7 +4666,7 @@ export const dykeInteriors = {
             id: 8,
         },
         {
-            img: "res/630540044610001681920409.jpeg",
+            img: "szbmvazc9pzvdsv49ihu.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Frame Only - Single",
@@ -4561,7 +4679,7 @@ export const dykeInteriors = {
             id: 9,
         },
         {
-            img: "res/3f5f60105375001681920409.jpeg",
+            img: "fme884xx4tky9sodd3gm.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Frame Only - Double",
@@ -4574,7 +4692,7 @@ export const dykeInteriors = {
             id: 10,
         },
         {
-            img: "res/e396c0760679001688671499.jpg",
+            img: "htdql6tvbz1s2ryxkh2r.jpg",
             noteRequired: false,
             description: null,
             title: 'Interior Door Unit - Double 1-3/4"',
@@ -4587,7 +4705,7 @@ export const dykeInteriors = {
             id: 11,
         },
         {
-            img: "res/981280540157001702655903.jpg",
+            img: "plj8i7c621uwobzvahie.jpg",
             noteRequired: false,
             description: null,
             title: "Interior Pocket Door Frame",
@@ -4600,7 +4718,7 @@ export const dykeInteriors = {
             id: 12,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -4612,7 +4730,7 @@ export const dykeInteriors = {
             id: 13,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -4625,7 +4743,7 @@ export const dykeInteriors = {
             id: 14,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -4638,7 +4756,7 @@ export const dykeInteriors = {
             id: 15,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -4651,7 +4769,7 @@ export const dykeInteriors = {
             id: 16,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -4664,7 +4782,7 @@ export const dykeInteriors = {
             id: 17,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -4677,7 +4795,7 @@ export const dykeInteriors = {
             id: 18,
         },
         {
-            img: "res/7fc300666564001701714826.jpg",
+            img: "yejobfjgigelyp6yy2q2.jpg",
             noteRequired: false,
             description: "1-8",
             title: "1-8",
@@ -4690,7 +4808,7 @@ export const dykeInteriors = {
             id: 19,
         },
         {
-            img: "res/70e930299713001701269766.jpg",
+            img: "oahsvghazia6xtnixznm.jpg",
             noteRequired: false,
             description: "1-6",
             title: "1-6",
@@ -4703,7 +4821,7 @@ export const dykeInteriors = {
             id: 20,
         },
         {
-            img: "res/31c660703953001677696304.jpg",
+            img: "iisjkdqdpmgmq4tw2uwr.jpg",
             noteRequired: false,
             description: "2-10",
             title: '2-10 "Special Order Only"',
@@ -4716,7 +4834,7 @@ export const dykeInteriors = {
             id: 21,
         },
         {
-            img: "res/38cef0013381001677696305.jpg",
+            img: "wwg6mgzwvnfftjjtro1j.jpg",
             noteRequired: false,
             description: "2-3",
             title: '2-3 "Special Order Only"',
@@ -4729,7 +4847,7 @@ export const dykeInteriors = {
             id: 22,
         },
         {
-            img: "res/2259e0191969001677696305.jpg",
+            img: "yts1kl6c31xu5wuwk9iw.jpg",
             noteRequired: false,
             description: "1-10",
             title: '1-10 "Special Order Only"',
@@ -4742,7 +4860,7 @@ export const dykeInteriors = {
             id: 23,
         },
         {
-            img: "res/9f6660253554001687536547.jpg",
+            img: "mvbzb2jyzp6kcalawycy.jpg",
             noteRequired: false,
             description: "1-4",
             title: '1-4 "Special Order Only"',
@@ -4755,7 +4873,7 @@ export const dykeInteriors = {
             id: 24,
         },
         {
-            img: "res/eaf4d0476030001687536547.jpg",
+            img: "nnjdgmrn8zc5fkflqpzn.jpg",
             noteRequired: false,
             description: "1-2",
             title: '1-2 "Special Order Only"',
@@ -4768,7 +4886,7 @@ export const dykeInteriors = {
             id: 25,
         },
         {
-            img: "res/16d910610092001677696305.jpg",
+            img: "tw5iypglaipi34rrr0lz.jpg",
             noteRequired: false,
             description: "1-0",
             title: '1-0 "Special Order Only"',
@@ -4781,7 +4899,7 @@ export const dykeInteriors = {
             id: 26,
         },
         {
-            img: "res/319310262353001677770470.jpg",
+            img: "nwydmndnmcssh8sdpmhu.jpg",
             noteRequired: false,
             description: "6-0 (PR 3-0)",
             title: "6-0 (PR 3-0)",
@@ -4794,7 +4912,7 @@ export const dykeInteriors = {
             id: 27,
         },
         {
-            img: "res/7d7d20307884001705416367.jpg",
+            img: "a8gnnvjqzilmzxwndbpz.jpg",
             noteRequired: false,
             description: "5-8 (PR 2-10)",
             title: "5-8 (PR 2-10)",
@@ -4807,7 +4925,7 @@ export const dykeInteriors = {
             id: 28,
         },
         {
-            img: "res/2715b0621017001705416366.jpg",
+            img: "puwfjdnzkuyehrh5cd4r.jpg",
             noteRequired: false,
             description: "5-4 (PR 2-8)",
             title: "5-4 (PR 2-8)",
@@ -4820,7 +4938,7 @@ export const dykeInteriors = {
             id: 29,
         },
         {
-            img: "res/33a260922911001705416366.jpg",
+            img: "w78cjmxgokb4mngqhkqg.jpg",
             noteRequired: false,
             description: "5-0 (PR 2-6)",
             title: "5-0 (PR 2-6)",
@@ -4833,7 +4951,7 @@ export const dykeInteriors = {
             id: 30,
         },
         {
-            img: "res/2885a0568941001705416602.jpg",
+            img: "il4919krtf3hfynrbdvt.jpg",
             noteRequired: false,
             description: "4-8 (PR 2-4)",
             title: "4-8 (PR 2-4)",
@@ -4846,7 +4964,7 @@ export const dykeInteriors = {
             id: 31,
         },
         {
-            img: "res/3dde30194913001701891824.jpg",
+            img: "j46eq3o15w8doiibjaqn.jpg",
             noteRequired: false,
             description: "4-0 (PR 2-0)",
             title: "4-0 (PR 2-0)",
@@ -4859,7 +4977,7 @@ export const dykeInteriors = {
             id: 32,
         },
         {
-            img: "res/296da0981119001677769924.jpg",
+            img: "ab8cmj6mozoiedozlnzm.jpg",
             noteRequired: false,
             description: "3-4 (PR 1-8)",
             title: "3-4 (PR 1-8)",
@@ -4872,7 +4990,7 @@ export const dykeInteriors = {
             id: 33,
         },
         {
-            img: "res/abc1a0048853001677769925.jpg",
+            img: "wlcjqgy90gir00vneiez.jpg",
             noteRequired: false,
             description: "3-0 (PR 1-6)",
             title: "3-0 (PR 1-6)",
@@ -4885,7 +5003,7 @@ export const dykeInteriors = {
             id: 34,
         },
         {
-            img: "res/ac0a60117046001677769925.jpg",
+            img: "orozubmca4cablxirnwj.jpg",
             noteRequired: false,
             description: "2-8 (PR 1-4)",
             title: "2-8 (PR 1-4)",
@@ -4898,7 +5016,7 @@ export const dykeInteriors = {
             id: 35,
         },
         {
-            img: "res/239fb0622765001701891954.jpg",
+            img: "bw32ajsyltrazdmqmxvt.jpg",
             noteRequired: false,
             description: "2-4 (PR 1-2)",
             title: "2-4 (PR 1-2)",
@@ -4911,7 +5029,7 @@ export const dykeInteriors = {
             id: 36,
         },
         {
-            img: "res/0c06a0715060001701891824.jpg",
+            img: "lwjtsitelkrcvgu8ywzt.jpg",
             noteRequired: false,
             description: "2-0 (PR 1-0)",
             title: "2-0 (PR 1-0)",
@@ -4924,7 +5042,7 @@ export const dykeInteriors = {
             id: 37,
         },
         {
-            img: "res/dd95c0901448001677696305.jpg",
+            img: "hfyzeswvnb0owptvc202.jpg",
             noteRequired: false,
             description: "4-6 (PR 2-3)",
             title: '4-6 (PR 2-3) "Special Order Only"',
@@ -4937,7 +5055,7 @@ export const dykeInteriors = {
             id: 38,
         },
         {
-            img: "res/2b8530074044001677696306.jpg",
+            img: "g9k74hdwiceddidrz4sr.jpg",
             noteRequired: false,
             description: "3-8 (PR 1-10)",
             title: '3-8 (PR 1-10) "Special Order Only"',
@@ -4950,7 +5068,7 @@ export const dykeInteriors = {
             id: 39,
         },
         {
-            img: "res/efb810271194001688997948.jpg",
+            img: "egm4kfihxcvldlkjwym6.jpg",
             noteRequired: false,
             description: "2-10 (PR 1-5)",
             title: '2-10 (PR 1-5) "Special Order Only"',
@@ -4963,7 +5081,7 @@ export const dykeInteriors = {
             id: 40,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -4976,7 +5094,7 @@ export const dykeInteriors = {
             id: 41,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -4989,7 +5107,7 @@ export const dykeInteriors = {
             id: 42,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -5002,7 +5120,7 @@ export const dykeInteriors = {
             id: 43,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -5015,7 +5133,7 @@ export const dykeInteriors = {
             id: 44,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -5028,7 +5146,7 @@ export const dykeInteriors = {
             id: 45,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -5041,7 +5159,7 @@ export const dykeInteriors = {
             id: 46,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -5054,7 +5172,7 @@ export const dykeInteriors = {
             id: 47,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -5067,7 +5185,7 @@ export const dykeInteriors = {
             id: 48,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -5080,7 +5198,7 @@ export const dykeInteriors = {
             id: 49,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -5093,7 +5211,7 @@ export const dykeInteriors = {
             id: 50,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -5106,7 +5224,7 @@ export const dykeInteriors = {
             id: 51,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -5119,7 +5237,7 @@ export const dykeInteriors = {
             id: 52,
         },
         {
-            img: "res/7fc300666564001701714826.jpg",
+            img: "yejobfjgigelyp6yy2q2.jpg",
             noteRequired: false,
             description: "1-8",
             title: "1-8",
@@ -5132,7 +5250,7 @@ export const dykeInteriors = {
             id: 53,
         },
         {
-            img: "res/70e930299713001701269766.jpg",
+            img: "oahsvghazia6xtnixznm.jpg",
             noteRequired: false,
             description: "1-6",
             title: "1-6",
@@ -5145,7 +5263,7 @@ export const dykeInteriors = {
             id: 54,
         },
         {
-            img: "res/31c660703953001677696304.jpg",
+            img: "iisjkdqdpmgmq4tw2uwr.jpg",
             noteRequired: false,
             description: "2-10",
             title: '2-10 "Special Order Only"',
@@ -5158,7 +5276,7 @@ export const dykeInteriors = {
             id: 55,
         },
         {
-            img: "res/38cef0013381001677696305.jpg",
+            img: "wwg6mgzwvnfftjjtro1j.jpg",
             noteRequired: false,
             description: "2-3",
             title: '2-3 "Special Order Only"',
@@ -5171,7 +5289,7 @@ export const dykeInteriors = {
             id: 56,
         },
         {
-            img: "res/2259e0191969001677696305.jpg",
+            img: "yts1kl6c31xu5wuwk9iw.jpg",
             noteRequired: false,
             description: "1-10",
             title: '1-10 "Special Order Only"',
@@ -5184,7 +5302,7 @@ export const dykeInteriors = {
             id: 57,
         },
         {
-            img: "res/9f6660253554001687536547.jpg",
+            img: "mvbzb2jyzp6kcalawycy.jpg",
             noteRequired: false,
             description: "1-4",
             title: '1-4 "Special Order Only"',
@@ -5197,7 +5315,7 @@ export const dykeInteriors = {
             id: 58,
         },
         {
-            img: "res/eaf4d0476030001687536547.jpg",
+            img: "nnjdgmrn8zc5fkflqpzn.jpg",
             noteRequired: false,
             description: "1-2",
             title: '1-2 "Special Order Only"',
@@ -5210,7 +5328,7 @@ export const dykeInteriors = {
             id: 59,
         },
         {
-            img: "res/16d910610092001677696305.jpg",
+            img: "tw5iypglaipi34rrr0lz.jpg",
             noteRequired: false,
             description: "1-0",
             title: '1-0 "Special Order Only"',
@@ -5223,7 +5341,7 @@ export const dykeInteriors = {
             id: 60,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -5236,7 +5354,7 @@ export const dykeInteriors = {
             id: 61,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -5249,7 +5367,7 @@ export const dykeInteriors = {
             id: 62,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -5262,7 +5380,7 @@ export const dykeInteriors = {
             id: 63,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -5275,7 +5393,7 @@ export const dykeInteriors = {
             id: 64,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -5288,7 +5406,7 @@ export const dykeInteriors = {
             id: 65,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -5301,7 +5419,7 @@ export const dykeInteriors = {
             id: 66,
         },
         {
-            img: "res/7fc300666564001701714826.jpg",
+            img: "yejobfjgigelyp6yy2q2.jpg",
             noteRequired: false,
             description: "1-8",
             title: "1-8",
@@ -5314,7 +5432,7 @@ export const dykeInteriors = {
             id: 67,
         },
         {
-            img: "res/70e930299713001701269766.jpg",
+            img: "oahsvghazia6xtnixznm.jpg",
             noteRequired: false,
             description: "1-6",
             title: "1-6",
@@ -5327,7 +5445,7 @@ export const dykeInteriors = {
             id: 68,
         },
         {
-            img: "res/31c660703953001677696304.jpg",
+            img: "iisjkdqdpmgmq4tw2uwr.jpg",
             noteRequired: false,
             description: "2-10",
             title: '2-10 "Special Order Only"',
@@ -5340,7 +5458,7 @@ export const dykeInteriors = {
             id: 69,
         },
         {
-            img: "res/38cef0013381001677696305.jpg",
+            img: "wwg6mgzwvnfftjjtro1j.jpg",
             noteRequired: false,
             description: "2-3",
             title: '2-3 "Special Order Only"',
@@ -5353,7 +5471,7 @@ export const dykeInteriors = {
             id: 70,
         },
         {
-            img: "res/2259e0191969001677696305.jpg",
+            img: "yts1kl6c31xu5wuwk9iw.jpg",
             noteRequired: false,
             description: "1-10",
             title: '1-10 "Special Order Only"',
@@ -5366,7 +5484,7 @@ export const dykeInteriors = {
             id: 71,
         },
         {
-            img: "res/9f6660253554001687536547.jpg",
+            img: "mvbzb2jyzp6kcalawycy.jpg",
             noteRequired: false,
             description: "1-4",
             title: '1-4 "Special Order Only"',
@@ -5379,7 +5497,7 @@ export const dykeInteriors = {
             id: 72,
         },
         {
-            img: "res/eaf4d0476030001687536547.jpg",
+            img: "nnjdgmrn8zc5fkflqpzn.jpg",
             noteRequired: false,
             description: "1-2",
             title: '1-2 "Special Order Only"',
@@ -5392,7 +5510,7 @@ export const dykeInteriors = {
             id: 73,
         },
         {
-            img: "res/16d910610092001677696305.jpg",
+            img: "tw5iypglaipi34rrr0lz.jpg",
             noteRequired: false,
             description: "1-0",
             title: '1-0 "Special Order Only"',
@@ -5405,7 +5523,7 @@ export const dykeInteriors = {
             id: 74,
         },
         {
-            img: "res/182720118684001677768553.jpg",
+            img: "tz9zyhjejpaometpkuye.jpg",
             noteRequired: false,
             description: "8-0",
             title: "8-0",
@@ -5418,7 +5536,7 @@ export const dykeInteriors = {
             id: 75,
         },
         {
-            img: "res/cc5740175592001677768553.jpg",
+            img: "tc8lcjggmxnlpo5r1vg0.jpg",
             noteRequired: false,
             description: "7-0",
             title: "7-0",
@@ -5431,7 +5549,7 @@ export const dykeInteriors = {
             id: 76,
         },
         {
-            img: "res/5229e0522845001677769083.jpg",
+            img: "l5gqlj8sydtignwxuz3n.jpg",
             noteRequired: false,
             description: "6-0",
             title: "6-0",
@@ -5444,7 +5562,7 @@ export const dykeInteriors = {
             id: 77,
         },
         {
-            img: "res/01a3f0586714001677769083.jpg",
+            img: "kle0skohrggutlipyqqz.jpg",
             noteRequired: false,
             description: "5-0",
             title: "5-0",
@@ -5457,7 +5575,7 @@ export const dykeInteriors = {
             id: 78,
         },
         {
-            img: "res/ca59f0646549001677769083.jpg",
+            img: "u3pwlhdwsskhzfibk7ib.jpg",
             noteRequired: false,
             description: "4-0",
             title: "4-0",
@@ -5470,7 +5588,7 @@ export const dykeInteriors = {
             id: 79,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -5483,7 +5601,7 @@ export const dykeInteriors = {
             id: 80,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -5496,7 +5614,7 @@ export const dykeInteriors = {
             id: 81,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -5509,7 +5627,7 @@ export const dykeInteriors = {
             id: 82,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -5522,7 +5640,7 @@ export const dykeInteriors = {
             id: 83,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -5535,7 +5653,7 @@ export const dykeInteriors = {
             id: 84,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -5548,7 +5666,7 @@ export const dykeInteriors = {
             id: 85,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0",
             title: "3-0",
@@ -5561,7 +5679,7 @@ export const dykeInteriors = {
             id: 86,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10",
             title: "2-10",
@@ -5574,7 +5692,7 @@ export const dykeInteriors = {
             id: 87,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8",
             title: "2-8",
@@ -5587,7 +5705,7 @@ export const dykeInteriors = {
             id: 88,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6",
             title: "2-6",
@@ -5600,7 +5718,7 @@ export const dykeInteriors = {
             id: 89,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4",
             title: "2-4",
@@ -5613,7 +5731,7 @@ export const dykeInteriors = {
             id: 90,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0",
             title: "2-0",
@@ -5626,7 +5744,7 @@ export const dykeInteriors = {
             id: 91,
         },
         {
-            img: "res/7fc300666564001701714826.jpg",
+            img: "yejobfjgigelyp6yy2q2.jpg",
             noteRequired: false,
             description: "1-8",
             title: "1-8",
@@ -5639,7 +5757,7 @@ export const dykeInteriors = {
             id: 92,
         },
         {
-            img: "res/70e930299713001701269766.jpg",
+            img: "oahsvghazia6xtnixznm.jpg",
             noteRequired: false,
             description: "1-6",
             title: "1-6",
@@ -5652,7 +5770,7 @@ export const dykeInteriors = {
             id: 93,
         },
         {
-            img: "res/e37bc0933837001677696304.jpg",
+            img: "ez4h5pumqpsbyrrmfhly.jpg",
             noteRequired: false,
             description: "3-6",
             title: '3-6 "Special Order Only"',
@@ -5665,7 +5783,7 @@ export const dykeInteriors = {
             id: 94,
         },
         {
-            img: "res/79bd70307819001677768553.jpg",
+            img: "dqkruawmcklzumfv300k.jpg",
             noteRequired: false,
             description: "3-4",
             title: '3-4 "Special Order Only"',
@@ -5678,7 +5796,7 @@ export const dykeInteriors = {
             id: 95,
         },
         {
-            img: "res/31c660703953001677696304.jpg",
+            img: "iisjkdqdpmgmq4tw2uwr.jpg",
             noteRequired: false,
             description: "2-10",
             title: '2-10 "Special Order Only"',
@@ -5691,7 +5809,7 @@ export const dykeInteriors = {
             id: 96,
         },
         {
-            img: "res/38cef0013381001677696305.jpg",
+            img: "wwg6mgzwvnfftjjtro1j.jpg",
             noteRequired: false,
             description: "2-3",
             title: '2-3 "Special Order Only"',
@@ -5704,7 +5822,7 @@ export const dykeInteriors = {
             id: 97,
         },
         {
-            img: "res/acf8f0099572001677696305.jpg",
+            img: "bnmv8dyjgvn5mq2xpwea.jpg",
             noteRequired: false,
             description: "2-2",
             title: '2-2 "Special Order Only"',
@@ -5717,7 +5835,7 @@ export const dykeInteriors = {
             id: 98,
         },
         {
-            img: "res/2259e0191969001677696305.jpg",
+            img: "yts1kl6c31xu5wuwk9iw.jpg",
             noteRequired: false,
             description: "1-10",
             title: '1-10 "Special Order Only"',
@@ -5730,7 +5848,7 @@ export const dykeInteriors = {
             id: 99,
         },
         {
-            img: "res/9f6660253554001687536547.jpg",
+            img: "mvbzb2jyzp6kcalawycy.jpg",
             noteRequired: false,
             description: "1-4",
             title: '1-4 "Special Order Only"',
@@ -5743,7 +5861,7 @@ export const dykeInteriors = {
             id: 100,
         },
         {
-            img: "res/21ccf0394837001687536547.jpg",
+            img: "eloah8njepykqmebagx5.jpg",
             noteRequired: false,
             description: "1-3",
             title: '1-3 "Special Order Only"',
@@ -5756,7 +5874,7 @@ export const dykeInteriors = {
             id: 101,
         },
         {
-            img: "res/eaf4d0476030001687536547.jpg",
+            img: "nnjdgmrn8zc5fkflqpzn.jpg",
             noteRequired: false,
             description: "1-2",
             title: '1-2 "Special Order Only"',
@@ -5769,7 +5887,7 @@ export const dykeInteriors = {
             id: 102,
         },
         {
-            img: "res/16d910610092001677696305.jpg",
+            img: "tw5iypglaipi34rrr0lz.jpg",
             noteRequired: false,
             description: "1-0",
             title: '1-0 "Special Order Only"',
@@ -5782,7 +5900,7 @@ export const dykeInteriors = {
             id: 103,
         },
         {
-            img: "res/319310262353001677770470.jpg",
+            img: "nwydmndnmcssh8sdpmhu.jpg",
             noteRequired: false,
             description: "6-0 (PR 3-0)",
             title: "6-0 (PR 3-0)",
@@ -5795,7 +5913,7 @@ export const dykeInteriors = {
             id: 104,
         },
         {
-            img: "res/2715b0621017001705416366.jpg",
+            img: "puwfjdnzkuyehrh5cd4r.jpg",
             noteRequired: false,
             description: "5-4 (PR 2-8)",
             title: "5-4 (PR 2-8)",
@@ -5808,7 +5926,7 @@ export const dykeInteriors = {
             id: 105,
         },
         {
-            img: "res/33a260922911001705416366.jpg",
+            img: "w78cjmxgokb4mngqhkqg.jpg",
             noteRequired: false,
             description: "5-0 (PR 2-6)",
             title: "5-0 (PR 2-6)",
@@ -5821,7 +5939,7 @@ export const dykeInteriors = {
             id: 106,
         },
         {
-            img: "res/2885a0568941001705416602.jpg",
+            img: "il4919krtf3hfynrbdvt.jpg",
             noteRequired: false,
             description: "4-8 (PR 2-4)",
             title: "4-8 (PR 2-4)",
@@ -5834,7 +5952,7 @@ export const dykeInteriors = {
             id: 107,
         },
         {
-            img: "res/3dde30194913001701891824.jpg",
+            img: "j46eq3o15w8doiibjaqn.jpg",
             noteRequired: false,
             description: "4-0 (PR 2-0)",
             title: "4-0 (PR 2-0)",
@@ -5847,7 +5965,7 @@ export const dykeInteriors = {
             id: 108,
         },
         {
-            img: "res/296da0981119001677769924.jpg",
+            img: "ab8cmj6mozoiedozlnzm.jpg",
             noteRequired: false,
             description: "3-4 (PR 1-8)",
             title: "3-4 (PR 1-8)",
@@ -5860,7 +5978,7 @@ export const dykeInteriors = {
             id: 109,
         },
         {
-            img: "res/abc1a0048853001677769925.jpg",
+            img: "wlcjqgy90gir00vneiez.jpg",
             noteRequired: false,
             description: "3-0 (PR 1-6)",
             title: "3-0 (PR 1-6)",
@@ -5873,7 +5991,7 @@ export const dykeInteriors = {
             id: 110,
         },
         {
-            img: "res/ac0a60117046001677769925.jpg",
+            img: "orozubmca4cablxirnwj.jpg",
             noteRequired: false,
             description: "2-8 (PR 1-4)",
             title: "2-8 (PR 1-4)",
@@ -5886,7 +6004,7 @@ export const dykeInteriors = {
             id: 111,
         },
         {
-            img: "res/5f10b0422298001701891954.jpg",
+            img: "jfrx6oe2zlkvuwxhpy1r.jpg",
             noteRequired: false,
             description: "2-6 (PR 1-3)",
             title: "2-6 (PR 1-3)",
@@ -5899,7 +6017,7 @@ export const dykeInteriors = {
             id: 112,
         },
         {
-            img: "res/239fb0622765001701891954.jpg",
+            img: "bw32ajsyltrazdmqmxvt.jpg",
             noteRequired: false,
             description: "2-4 (PR 1-2)",
             title: "2-4 (PR 1-2)",
@@ -5912,7 +6030,7 @@ export const dykeInteriors = {
             id: 113,
         },
         {
-            img: "res/0c06a0715060001701891824.jpg",
+            img: "lwjtsitelkrcvgu8ywzt.jpg",
             noteRequired: false,
             description: "2-0 (PR 1-0)",
             title: "2-0 (PR 1-0)",
@@ -5925,7 +6043,7 @@ export const dykeInteriors = {
             id: 114,
         },
         {
-            img: "res/2f16f0670123001677696305.jpg",
+            img: "bzezvhpynfw7kid9vihr.jpg",
             noteRequired: false,
             description: "7-0 (PR 3-6)",
             title: '7-0 (PR 3-6) "Special Order Only"',
@@ -5938,7 +6056,7 @@ export const dykeInteriors = {
             id: 115,
         },
         {
-            img: "res/be11f0748333001677696305.jpg",
+            img: "cbmbqtktq76y9ephdvge.jpg",
             noteRequired: false,
             description: "6-8 (PR 3-4)",
             title: '6-8 (PR 3-4) "Special Order Only"',
@@ -5951,7 +6069,7 @@ export const dykeInteriors = {
             id: 116,
         },
         {
-            img: "res/08ed30825958001677696305.jpg",
+            img: "ayeh7ytxzbuwtyvmnufh.jpg",
             noteRequired: false,
             description: "5-8 (PR 2-10)",
             title: '5-8 (PR 2-10) "Special Order Only"',
@@ -5964,7 +6082,7 @@ export const dykeInteriors = {
             id: 117,
         },
         {
-            img: "res/dd95c0901448001677696305.jpg",
+            img: "hfyzeswvnb0owptvc202.jpg",
             noteRequired: false,
             description: "4-6 (PR 2-3)",
             title: '4-6 (PR 2-3) "Special Order Only"',
@@ -5977,7 +6095,7 @@ export const dykeInteriors = {
             id: 118,
         },
         {
-            img: "res/df85d0995683001677696305.jpg",
+            img: "ycy1r1f5fmvner0wesrr.jpg",
             noteRequired: false,
             description: "4-4 (PR 2-2)",
             title: '4-4 (PR 2-2) "Special Order Only"',
@@ -5990,7 +6108,7 @@ export const dykeInteriors = {
             id: 119,
         },
         {
-            img: "res/2b8530074044001677696306.jpg",
+            img: "g9k74hdwiceddidrz4sr.jpg",
             noteRequired: false,
             description: "3-8 (PR 1-10)",
             title: '3-8 (PR 1-10) "Special Order Only"',
@@ -6003,7 +6121,7 @@ export const dykeInteriors = {
             id: 120,
         },
         {
-            img: "res/319310262353001677770470.jpg",
+            img: "nwydmndnmcssh8sdpmhu.jpg",
             noteRequired: false,
             description: "6-0 (PR 3-0)",
             title: "6-0 (PR 3-0)",
@@ -6016,7 +6134,7 @@ export const dykeInteriors = {
             id: 121,
         },
         {
-            img: "res/7d7d20307884001705416367.jpg",
+            img: "a8gnnvjqzilmzxwndbpz.jpg",
             noteRequired: false,
             description: "5-8 (PR 2-10)",
             title: "5-8 (PR 2-10)",
@@ -6029,7 +6147,7 @@ export const dykeInteriors = {
             id: 122,
         },
         {
-            img: "res/2715b0621017001705416366.jpg",
+            img: "puwfjdnzkuyehrh5cd4r.jpg",
             noteRequired: false,
             description: "5-4 (PR 2-8)",
             title: "5-4 (PR 2-8)",
@@ -6042,7 +6160,7 @@ export const dykeInteriors = {
             id: 123,
         },
         {
-            img: "res/33a260922911001705416366.jpg",
+            img: "w78cjmxgokb4mngqhkqg.jpg",
             noteRequired: false,
             description: "5-0 (PR 2-6)",
             title: "5-0 (PR 2-6)",
@@ -6055,7 +6173,7 @@ export const dykeInteriors = {
             id: 124,
         },
         {
-            img: "res/2885a0568941001705416602.jpg",
+            img: "il4919krtf3hfynrbdvt.jpg",
             noteRequired: false,
             description: "4-8 (PR 2-4)",
             title: "4-8 (PR 2-4)",
@@ -6068,7 +6186,7 @@ export const dykeInteriors = {
             id: 125,
         },
         {
-            img: "res/3dde30194913001701891824.jpg",
+            img: "j46eq3o15w8doiibjaqn.jpg",
             noteRequired: false,
             description: "4-0 (PR 2-0)",
             title: "4-0 (PR 2-0)",
@@ -6081,7 +6199,7 @@ export const dykeInteriors = {
             id: 126,
         },
         {
-            img: "res/b6ffb0631704001687536547.jpg",
+            img: "yyokbfotcafx8flxbhow.jpg",
             noteRequired: false,
             description: "2-4 (PR 1-2)",
             title: '2-4 (PR 1-2) "Special Order Only"',
@@ -6094,7 +6212,7 @@ export const dykeInteriors = {
             id: 127,
         },
         {
-            img: "res/3d10b0708013001687543687.jpg",
+            img: "uo5ya1a7zjkmqz2mbeqk.jpg",
             noteRequired: false,
             description: "2-0 (PR 1-0)",
             title: '2-0 (PR 1-0) "Special Order Only"',
@@ -6107,7 +6225,7 @@ export const dykeInteriors = {
             id: 128,
         },
         {
-            img: "res2/temp.jpg",
+            img: "ff8zkn817rjqv6ml2qdr.jpg",
             noteRequired: false,
             description: "",
             title: "Single Pocket Door Frame",
@@ -6119,7 +6237,7 @@ export const dykeInteriors = {
             id: 129,
         },
         {
-            img: "res2/temp.jpg",
+            img: "ff8zkn817rjqv6ml2qdr.jpg",
             noteRequired: false,
             description: "",
             title: "Double Pocket Door Frame",
@@ -6132,7 +6250,7 @@ export const dykeInteriors = {
             id: 130,
         },
         {
-            img: "res/fa0d50829744001676486659.jpg",
+            img: "yyfirgddopjukieojsot.jpg",
             noteRequired: false,
             description: 'x 6-8, 1-3/8"',
             title: "6-8",
@@ -6144,7 +6262,7 @@ export const dykeInteriors = {
             id: 131,
         },
         {
-            img: "res/525ca0069873001676486660.jpg",
+            img: "vdpg0lhorayv5yfijowu.jpg",
             noteRequired: false,
             description: 'x 7-0, 1-3/8"',
             title: "7-0",
@@ -6157,7 +6275,7 @@ export const dykeInteriors = {
             id: 132,
         },
         {
-            img: "res/04dfc0269992001676486660.jpg",
+            img: "qlw2dh4lrmgdspkghnrz.jpg",
             noteRequired: false,
             description: 'x 8-0, 1-3/8"',
             title: "8-0",
@@ -6170,7 +6288,7 @@ export const dykeInteriors = {
             id: 133,
         },
         {
-            img: "res/fa0d50829744001676486659.jpg",
+            img: "yyfirgddopjukieojsot.jpg",
             noteRequired: false,
             description: 'x 6-8, 1-3/8"',
             title: "6-8",
@@ -6183,7 +6301,7 @@ export const dykeInteriors = {
             id: 134,
         },
         {
-            img: "res/a72210159176001677520370.jpg",
+            img: "kxef9gxwwsfvss7c6qas.jpg",
             noteRequired: false,
             description: "LH",
             title: "[LH] Left Hand",
@@ -6195,7 +6313,7 @@ export const dykeInteriors = {
             id: 135,
         },
         {
-            img: "res/dec700346996001677520370.jpg",
+            img: "do4cihlx9ooa1cu66zyw.jpg",
             noteRequired: false,
             description: "RH",
             title: "[RH] Right Hand",
@@ -6208,7 +6326,7 @@ export const dykeInteriors = {
             id: 136,
         },
         {
-            img: "res/b3d0b0531538001679669904.jpg",
+            img: "pwdssnigqehav64ztyvb.jpg",
             noteRequired: false,
             description: "FIXED,",
             title: "Fixed Unit",
@@ -6221,7 +6339,7 @@ export const dykeInteriors = {
             id: 137,
         },
         {
-            img: "res/93dc30299186001675868679.png",
+            img: "muu2x5sog9llny0lcy8d.png",
             noteRequired: false,
             description: "SB,",
             title: "Single Bore",
@@ -6233,7 +6351,7 @@ export const dykeInteriors = {
             id: 138,
         },
         {
-            img: "res/b14380090941001675868679.png",
+            img: "esw8bgg4dwkxfgazmxib.png",
             noteRequired: false,
             description: "DBL BORE,",
             title: "Double Bore",
@@ -6246,7 +6364,7 @@ export const dykeInteriors = {
             id: 139,
         },
         {
-            img: "res/e979d0438250001675869591.jpg",
+            img: "mmpnpn3msleqz6auefvc.jpg",
             noteRequired: false,
             description: "NO BORE,",
             title: "No Bore",
@@ -6259,7 +6377,7 @@ export const dykeInteriors = {
             id: 140,
         },
         {
-            img: "res/7dc640527904001675868680.jpg",
+            img: "msrdbxwj2mehs4plks2a.jpg",
             noteRequired: false,
             description: "Center Bore,",
             title: "Center Bore",
@@ -6272,7 +6390,7 @@ export const dykeInteriors = {
             id: 141,
         },
         {
-            img: "res/a72210159176001677520370.jpg",
+            img: "kxef9gxwwsfvss7c6qas.jpg",
             noteRequired: false,
             description: "LH",
             title: "[LH] Left Hand",
@@ -6285,7 +6403,7 @@ export const dykeInteriors = {
             id: 142,
         },
         {
-            img: "res/93dc30299186001675868679.png",
+            img: "muu2x5sog9llny0lcy8d.png",
             noteRequired: false,
             description: "SB,",
             title: "Single Bore",
@@ -6298,7 +6416,7 @@ export const dykeInteriors = {
             id: 143,
         },
         {
-            img: "res/a83db0930850001676488049.jpg",
+            img: "s22fhevligwhxtcmnxed.jpg",
             noteRequired: false,
             description: "HC Molded",
             title: "HC Molded",
@@ -6311,7 +6429,7 @@ export const dykeInteriors = {
             id: 144,
         },
         {
-            img: "res/30bd30814884001676488127.jpg",
+            img: "aphmyypyitd10g3wb7xn.jpg",
             noteRequired: false,
             description: "SC Molded",
             title: "SC Molded",
@@ -6324,7 +6442,7 @@ export const dykeInteriors = {
             id: 145,
         },
         {
-            img: "res/3b2cf0118286001676488050.jpg",
+            img: "obic4ef6fwxshskpckji.jpg",
             noteRequired: false,
             description: "HC Flush",
             title: "HC Flush",
@@ -6337,7 +6455,7 @@ export const dykeInteriors = {
             id: 146,
         },
         {
-            img: "res/9507f0807330001676488049.jpg",
+            img: "nshw5cgl4dckh8lpjk9b.jpg",
             noteRequired: false,
             description: "SC Flush",
             title: "SC Flush",
@@ -6350,7 +6468,7 @@ export const dykeInteriors = {
             id: 147,
         },
         {
-            img: "res/6f9230696290001676474329.jpg",
+            img: "ki8bgfw04x7omtuqueyx.jpg",
             noteRequired: false,
             description: "",
             title: "Wood Stile & Rail",
@@ -6422,7 +6540,7 @@ export const dykeInteriors = {
             id: 153,
         },
         {
-            img: "res/24c800343894001698848129.jpg",
+            img: "hxrpkvssihdzktjdkwig.jpg",
             noteRequired: false,
             description: '4-5/8"',
             title: '4-5/8"',
@@ -6434,7 +6552,7 @@ export const dykeInteriors = {
             id: 154,
         },
         {
-            img: "res/7c54c0671411001680790149.jpg",
+            img: "nrfu095nqrbpletray7x.jpg",
             noteRequired: false,
             description: '4-7/8"',
             title: '4-7/8"',
@@ -6447,7 +6565,7 @@ export const dykeInteriors = {
             id: 155,
         },
         {
-            img: "res/248e00242549001680790150.jpg",
+            img: "iowlxr3cxyuytxzbv6nr.jpg",
             noteRequired: false,
             description: '5-1/4"',
             title: '5-1/4"',
@@ -6460,7 +6578,7 @@ export const dykeInteriors = {
             id: 156,
         },
         {
-            img: "res/ec7d00329527001680790150.jpg",
+            img: "hchqiijynodzouaq6tdz.jpg",
             noteRequired: false,
             description: '7-1/4"',
             title: '7-1/4"',
@@ -6473,7 +6591,7 @@ export const dykeInteriors = {
             id: 157,
         },
         {
-            img: "res/3cc0b0489137001688997033.jpg",
+            img: "k1ijjukiem7n4qt02rpi.jpg",
             noteRequired: false,
             description: '9-1/4"',
             title: '9-1/4"',
@@ -6486,7 +6604,7 @@ export const dykeInteriors = {
             id: 158,
         },
         {
-            img: "res/049f20589770001688997033.jpg",
+            img: "w50qja2rb7ptbx7o0xaj.jpg",
             noteRequired: false,
             description: '11-1/4"',
             title: '11-1/4"',
@@ -6499,7 +6617,7 @@ export const dykeInteriors = {
             id: 159,
         },
         {
-            img: "res/164a30794128001678217204.jpg",
+            img: "audpkwxymdonxi0ksuwb.jpg",
             noteRequired: false,
             description: "Prm",
             title: "Primed Jamb",
@@ -6511,7 +6629,7 @@ export const dykeInteriors = {
             id: 160,
         },
         {
-            img: "res/243080792278001676490533.jpg",
+            img: "u4pydfpsqbktdm87enqb.jpg",
             noteRequired: false,
             description: "Flat Jamb,",
             title: "Flat Jamb",
@@ -6523,7 +6641,7 @@ export const dykeInteriors = {
             id: 161,
         },
         {
-            img: "res/164a30794128001678217204.jpg",
+            img: "audpkwxymdonxi0ksuwb.jpg",
             noteRequired: false,
             description: "Prm",
             title: "Primed Jamb",
@@ -6536,7 +6654,7 @@ export const dykeInteriors = {
             id: 162,
         },
         {
-            img: "res/243080792278001676490533.jpg",
+            img: "u4pydfpsqbktdm87enqb.jpg",
             noteRequired: false,
             description: "Flat Jamb,",
             title: "Flat Jamb",
@@ -6549,7 +6667,7 @@ export const dykeInteriors = {
             id: 163,
         },
         {
-            img: "res/24c800343894001698848129.jpg",
+            img: "hxrpkvssihdzktjdkwig.jpg",
             noteRequired: false,
             description: '4-5/8"',
             title: '4-5/8"',
@@ -6562,7 +6680,7 @@ export const dykeInteriors = {
             id: 164,
         },
         {
-            img: "res/8aa600082955001689702690.jpeg",
+            img: "qubahc38rix7gbzclitr.jpg",
             noteRequired: false,
             description: "PRM 887 Stop,",
             title: "PC PRMED 7-0 WM 887 DR STOP",
@@ -6574,7 +6692,7 @@ export const dykeInteriors = {
             id: 165,
         },
         {
-            img: "res2/temp.jpg",
+            img: "ff8zkn817rjqv6ml2qdr.jpg",
             noteRequired: false,
             description: "Prm 916 Stop,",
             title: "PC PRMED 7-0 WM 916 DR STOP",
@@ -6587,7 +6705,7 @@ export const dykeInteriors = {
             id: 166,
         },
         {
-            img: "res/8aa600082955001689702690.jpeg",
+            img: "qubahc38rix7gbzclitr.jpg",
             noteRequired: false,
             description: "PRM 887 Stop,",
             title: "PC PRMED 7-0 WM 887 DR STOP",
@@ -6600,7 +6718,7 @@ export const dykeInteriors = {
             id: 167,
         },
         {
-            img: "res/5922b0257590001676400220.jpg",
+            img: "q4qzdlfllpxgqcdqjdgr.jpg",
             noteRequired: false,
             description: "",
             title: "Do Not Rip Jamb",
@@ -6612,7 +6730,7 @@ export const dykeInteriors = {
             id: 168,
         },
         {
-            img: "res/1c5270469261001676400220.svg",
+            img: "tv7rmhhoa0tcmzmdsigd.svg",
             noteRequired: true,
             description: "**** RIP JAMB ****",
             title: "Rip Jamb to Custom Size",
@@ -6625,7 +6743,7 @@ export const dykeInteriors = {
             id: 169,
         },
         {
-            img: "res/376130154393001677157824.jpg",
+            img: "vsbjuqnxvk2wtcnm6sge.jpg",
             noteRequired: false,
             description: "US15 Satin Nickel",
             title: "US15---Satin Nickel",
@@ -6637,7 +6755,7 @@ export const dykeInteriors = {
             id: 170,
         },
         {
-            img: "res/1f7480810106001677158142.jpg",
+            img: "zyoinykaplouzfahq5qo.jpg",
             noteRequired: false,
             description: "US2D Dull Brass",
             title: "US2D---Dull Brass",
@@ -6650,7 +6768,7 @@ export const dykeInteriors = {
             id: 171,
         },
         {
-            img: "res/8c67e0207501001677158116.jpg",
+            img: "lditeuvrixdgglqfytoq.jpg",
             noteRequired: false,
             description: "US26 Bright Chrome",
             title: "US26---Bright Chrome",
@@ -6663,7 +6781,7 @@ export const dykeInteriors = {
             id: 172,
         },
         {
-            img: "res/672670571393001677157824.jpg",
+            img: "uroxwp7jf04w3zgf3jhy.jpg",
             noteRequired: false,
             description: "US10B Oil Rubbed Bronze",
             title: "US10B---Oil Rubbed Bronze",
@@ -6676,7 +6794,7 @@ export const dykeInteriors = {
             id: 173,
         },
         {
-            img: "res/011e10090713001677157826.jpg",
+            img: "wznihvkdyondtyzpz9de.jpg",
             noteRequired: false,
             description: "US19 Matte Black",
             title: "US19---Matte Black",
@@ -6689,7 +6807,7 @@ export const dykeInteriors = {
             id: 174,
         },
         {
-            img: "res/9c1880669899001677157825.jpg",
+            img: "dxrtup8pmgtjt9is3drr.jpg",
             noteRequired: false,
             description: "US3 Bright Brass",
             title: "US3---Bright Brass",
@@ -6702,7 +6820,7 @@ export const dykeInteriors = {
             id: 175,
         },
         {
-            img: "res/4b0000310353001677157825.jpg",
+            img: "ayzbud6erdnuz03guygf.jpg",
             noteRequired: false,
             description: "US5A Antique Brass",
             title: "US5A---Antique Brass",
@@ -6715,7 +6833,7 @@ export const dykeInteriors = {
             id: 176,
         },
         {
-            img: "res/5abbb0734088001677158115.jpg",
+            img: "yhv2vns6d1sn1tmo81pu.jpg",
             noteRequired: false,
             description: "USP Primed",
             title: "USP---Primed",
@@ -6728,7 +6846,7 @@ export const dykeInteriors = {
             id: 177,
         },
         {
-            img: "res/cdf710967535001677157824.jpg",
+            img: "g2vauu8yrperwxphjgls.jpg",
             noteRequired: false,
             description: "US26D Brushed Chrome",
             title: "US26D---Brushed Chrome",
@@ -6741,7 +6859,7 @@ export const dykeInteriors = {
             id: 178,
         },
         {
-            img: "res/46fe30175378001677157825.jpg",
+            img: "aeh8w1ps6q6nsqidogtp.jpg",
             noteRequired: false,
             description: "US32D Stainless Steel",
             title: "US32D---Stainless Steel",
@@ -6754,7 +6872,7 @@ export const dykeInteriors = {
             id: 179,
         },
         {
-            img: "res/4c0330439368001678216241.jpg",
+            img: "deaw7iasblb6txifxpz2.jpg",
             noteRequired: false,
             description: "Casing",
             title: "Casing Same Both Sides",
@@ -6766,7 +6884,7 @@ export const dykeInteriors = {
             id: 180,
         },
         {
-            img: "res/8349b0669806001675869591.jpg",
+            img: "xmtamczr4eq1sn7g30ik.jpg",
             noteRequired: false,
             description: "NO CASING,",
             title: "No Casing",
@@ -6779,7 +6897,7 @@ export const dykeInteriors = {
             id: 181,
         },
         {
-            img: "res/a5de60628716001673637769.jpg",
+            img: "wmvjklx1p9oqes6xpmqw.jpg",
             noteRequired: false,
             description: "",
             title: "No Cutdown",
@@ -6791,7 +6909,7 @@ export const dykeInteriors = {
             id: 182,
         },
         {
-            img: "res/008ac0639088001678216931.jpg",
+            img: "z2usy4jyugtbbrxgttyp.jpg",
             noteRequired: false,
             description: "Shipped Loose:",
             title: "Casing Shipped Loose",
@@ -6803,7 +6921,7 @@ export const dykeInteriors = {
             id: 183,
         },
         {
-            img: "res/4bb500806179001703167922.jpg",
+            img: "rb3nqavht9mmgtudjdke.jpg",
             noteRequired: false,
             description: "Prm FJ",
             title: "Primed Finger Joint",
@@ -6815,7 +6933,7 @@ export const dykeInteriors = {
             id: 184,
         },
         {
-            img: "res/c556a0526595001688737694.jpg",
+            img: "sss2yqqrqjzvwq6vmatx.jpg",
             noteRequired: false,
             description: "PC 1X4 PRIMED S4S 8-6",
             title: "PC 1X4 PRIMED S4S 8-6",
@@ -6827,7 +6945,7 @@ export const dykeInteriors = {
             id: 185,
         },
         {
-            img: "res/1a24c0188470001697119802.jpg",
+            img: "kofc9zbkzu5frt5v2vsb.jpg",
             noteRequired: false,
             description: "",
             title: "PC 11/16X2-1/2 8-0 PRIMED S4S",
@@ -6840,7 +6958,7 @@ export const dykeInteriors = {
             id: 186,
         },
         {
-            img: "res/7d4120462925001688737670.jpg",
+            img: "if9uuzxph9appstgvso7.jpg",
             noteRequired: false,
             description: "316,",
             title: "PC 7 PRIMED 316 2 1/4 CSNG",
@@ -6853,7 +6971,7 @@ export const dykeInteriors = {
             id: 187,
         },
         {
-            img: "res/2cad40247418001678130318.jpg",
+            img: "hzqc5vdx9a3lyonbpav8.jpg",
             noteRequired: false,
             description: "366,",
             title: "PC 7 PRIMED 366 2 1/4 CSNG",
@@ -6866,7 +6984,7 @@ export const dykeInteriors = {
             id: 188,
         },
         {
-            img: "res/1d2bd0684204001688737670.jpg",
+            img: "v7p9kpjxufspaoamnvxl.jpg",
             noteRequired: false,
             description: "376,",
             title: "PC 7 PRIMED 376 2 1/4 CSNG",
@@ -6879,7 +6997,7 @@ export const dykeInteriors = {
             id: 189,
         },
         {
-            img: "res/1731d0899463001688737670.jpg",
+            img: "c1quqosuar4dmmxwqqou.jpg",
             noteRequired: false,
             description: "445,",
             title: "PC 8-6 PRMED WM 445 3 1/4 CSNG",
@@ -6892,7 +7010,7 @@ export const dykeInteriors = {
             id: 190,
         },
         {
-            img: "res/dcb700941175001688737670.jpg",
+            img: "z2crzkjdcnazjthlkfvs.jpg",
             noteRequired: false,
             description: "473,",
             title: "PC 7-0 PRMED WM473 CSNG S4S",
@@ -6905,7 +7023,7 @@ export const dykeInteriors = {
             id: 191,
         },
         {
-            img: "res/6bc480485082001676392465.jpg",
+            img: "qmnmcegc1n63ug7emctv.jpg",
             noteRequired: false,
             description: "Butt Joint,",
             title: "Butt Joint",
@@ -6917,7 +7035,7 @@ export const dykeInteriors = {
             id: 192,
         },
         {
-            img: "res/d5a000688507001676392465.jpg",
+            img: "mcp2q6cgnxm1oi4n8mri.jpg",
             noteRequired: false,
             description: "Mitered,",
             title: "Mitered",
@@ -6930,7 +7048,7 @@ export const dykeInteriors = {
             id: 193,
         },
         {
-            img: "res/b65aa0928147001676392465.jpg",
+            img: "nsxqpclvzfb3udrz4lpk.jpg",
             noteRequired: true,
             description: "Butt Joint w/ Overhang,",
             title: "Butt Joint with Overhang",
@@ -6943,7 +7061,7 @@ export const dykeInteriors = {
             id: 194,
         },
         {
-            img: "res/6bc480485082001676392465.jpg",
+            img: "qmnmcegc1n63ug7emctv.jpg",
             noteRequired: false,
             description: "Butt Joint,",
             title: "Butt Joint",
@@ -6956,7 +7074,7 @@ export const dykeInteriors = {
             id: 195,
         },
         {
-            img: "res/a5de60628716001673637769.jpg",
+            img: "wmvjklx1p9oqes6xpmqw.jpg",
             noteRequired: false,
             description: "",
             title: "No Cutdown",
@@ -6969,7 +7087,7 @@ export const dykeInteriors = {
             id: 196,
         },
         {
-            img: "res/62da40698573001705335155.jpg",
+            img: "cgdkpqjowblnzwzy1eed.jpg",
             noteRequired: false,
             description: "3-0 x",
             title: "3-0",
@@ -6982,7 +7100,7 @@ export const dykeInteriors = {
             id: 197,
         },
         {
-            img: "res/ee7110745732001705335157.jpg",
+            img: "xcjrze1qyjwcppbma1xl.jpg",
             noteRequired: false,
             description: "2-10 x",
             title: "2-10",
@@ -6995,7 +7113,7 @@ export const dykeInteriors = {
             id: 198,
         },
         {
-            img: "res/92e380418727001705335156.jpg",
+            img: "tix6btqc3cq3ziqcx95c.jpg",
             noteRequired: false,
             description: "2-8 x",
             title: "2-8",
@@ -7008,7 +7126,7 @@ export const dykeInteriors = {
             id: 199,
         },
         {
-            img: "res/87e6b0088898001705335157.jpg",
+            img: "dglvzg3s54jmjgsyftxn.jpg",
             noteRequired: false,
             description: "2-6 x",
             title: "2-6",
@@ -7021,7 +7139,7 @@ export const dykeInteriors = {
             id: 200,
         },
         {
-            img: "res/f673f0190090001705335158.jpg",
+            img: "rcvwzps9vmxicmalqvxi.jpg",
             noteRequired: false,
             description: "2-4 x",
             title: "2-4",
@@ -7034,7 +7152,7 @@ export const dykeInteriors = {
             id: 201,
         },
         {
-            img: "res/7e4a10945485001704825278.jpg",
+            img: "l0zwgujauuvduasldhbz.jpg",
             noteRequired: false,
             description: "2-0 x",
             title: "2-0",
@@ -7047,7 +7165,7 @@ export const dykeInteriors = {
             id: 202,
         },
         {
-            img: "res/319310262353001677770470.jpg",
+            img: "nwydmndnmcssh8sdpmhu.jpg",
             noteRequired: false,
             description: "6-0 (PR 3-0) x",
             title: "6-0 (PR 3-0)",
@@ -7060,7 +7178,7 @@ export const dykeInteriors = {
             id: 203,
         },
         {
-            img: "res/7d7d20307884001705416367.jpg",
+            img: "a8gnnvjqzilmzxwndbpz.jpg",
             noteRequired: false,
             description: "5-8 (PR 2-10) x",
             title: "5-8 (PR 2-10)",
@@ -7073,7 +7191,7 @@ export const dykeInteriors = {
             id: 204,
         },
         {
-            img: "res/2715b0621017001705416366.jpg",
+            img: "puwfjdnzkuyehrh5cd4r.jpg",
             noteRequired: false,
             description: "5-4 (PR 2-8) x",
             title: "5-4 (PR 2-8)",
@@ -7086,7 +7204,7 @@ export const dykeInteriors = {
             id: 205,
         },
         {
-            img: "res/33a260922911001705416366.jpg",
+            img: "w78cjmxgokb4mngqhkqg.jpg",
             noteRequired: false,
             description: "5-0 (PR 2-6) x",
             title: "5-0 (PR 2-6)",
@@ -7099,7 +7217,7 @@ export const dykeInteriors = {
             id: 206,
         },
         {
-            img: "res/2885a0568941001705416602.jpg",
+            img: "il4919krtf3hfynrbdvt.jpg",
             noteRequired: false,
             description: "4-8 (PR 2-4) x",
             title: "4-8 (PR 2-4)",
@@ -7112,7 +7230,7 @@ export const dykeInteriors = {
             id: 207,
         },
         {
-            img: "res/3dde30194913001701891824.jpg",
+            img: "j46eq3o15w8doiibjaqn.jpg",
             noteRequired: false,
             description: "4-0 (PR 2-0) x",
             title: "4-0 (PR 2-0)",
@@ -7125,6 +7243,7 @@ export const dykeInteriors = {
             id: 208,
         },
     ],
+
     productsByCode: {
         null: 2,
         "KIT32/01-IDUS": 3,
@@ -7637,4 +7756,201 @@ export const dykeInteriors = {
         "casing side choice",
         "casing species",
     ],
+
+    stepValues: [
+        {
+            id: 1,
+            title: "Interior",
+        },
+        {
+            id: 2,
+            title: "Interior Door Unit - Single",
+        },
+        {
+            id: 3,
+            title: "Interior Door Unit - Double",
+        },
+        {
+            id: 4,
+            title: 'Interior Door Unit - Single 1-3/4"',
+        },
+        {
+            id: 5,
+            title: "Interior Door Slab (Prepped)",
+        },
+        {
+            id: 6,
+            title: "Interior Attic Access",
+        },
+        {
+            id: 7,
+            title: "Interior Cased Opening",
+        },
+        {
+            id: 8,
+            title: "Interior Frame Only - Single",
+        },
+        {
+            id: 9,
+            title: "Interior Frame Only - Double",
+        },
+        {
+            id: 10,
+            title: 'Interior Door Unit - Double 1-3/4"',
+        },
+        {
+            id: 11,
+            title: "Interior Pocket Door Frame",
+        },
+        {
+            id: 12,
+            title: "width",
+        },
+        {
+            id: 13,
+            title: "height",
+        },
+        {
+            id: 14,
+            title: "[LH] Left Hand",
+        },
+        {
+            id: 15,
+            title: "hand",
+        },
+        {
+            id: 16,
+            title: "bore",
+        },
+        {
+            id: 17,
+            title: "door type",
+        },
+        {
+            id: 18,
+            title: "door",
+        },
+        {
+            id: 19,
+            title: '4-5/8"',
+        },
+        {
+            id: 20,
+            title: "jamb species",
+        },
+        {
+            id: 21,
+            title: "jamb size",
+        },
+        {
+            id: 22,
+            title: "jamb type",
+        },
+        {
+            id: 23,
+            title: "--jamb stop",
+        },
+        {
+            id: 24,
+            title: "rip jamb",
+        },
+        {
+            id: 25,
+            title: "hinge finish",
+        },
+        {
+            id: 26,
+            title: "No Casing",
+        },
+        {
+            id: 27,
+            title: "cutdown height",
+        },
+        {
+            id: 28,
+            title: "Casing Same Both Sides",
+        },
+        {
+            id: 29,
+            title: "casing side choice",
+        },
+        {
+            id: 30,
+            title: "casing species",
+        },
+        {
+            id: 31,
+            title: "casing",
+        },
+        {
+            id: 32,
+            title: "casing 1x4 setup",
+        },
+        {
+            id: 33,
+            title: "Single Pocket Door Frame",
+        },
+        {
+            id: 34,
+            title: "Double Pocket Door Frame",
+        },
+    ],
 };
+
+export function dykeStepValues() {
+    let { steps, stepValues } = dykeInteriors;
+    const stepValueIdByValue = {};
+    let currentId = 0;
+    function getStepValueId(stepValue) {
+        if (!stepValue) return null;
+        let id = stepValueIdByValue[stepValue];
+        if (id > 0) return id;
+        ++currentId;
+        stepValues.push({
+            id: currentId,
+            title: stepValue,
+        });
+
+        stepValueIdByValue[stepValue] = currentId;
+        return currentId;
+    }
+    steps = steps.map((step) => {
+        if (step.value) {
+            const [root, ...rest] = step.value.split("_");
+            const end = rest.pop();
+            const prev = rest.pop();
+            step.prevStepValueId = getStepValueId(prev);
+            step.stepValueId = getStepValueId(end);
+            step.rootStepValueId = getStepValueId(root);
+            if (step.title == "Cutdown Height") {
+                console.log([root, end, prev, step.value]);
+                console.log(step);
+                console.log(stepValueIdByValue);
+            }
+        }
+        return step;
+    });
+    return { steps, stepValues };
+}
+
+export function dykeImages() {
+    const imgs = [
+        ...new Set(dykeInteriors.products.map((p) => p.img).filter(Boolean)),
+    ].map((img) => {
+        return transformImg(img);
+    });
+    return imgs;
+}
+export const imgSrc = {
+    res: "https://s3.us-east-2.amazonaws.com/dyke-site-assets/resources/doorparts",
+    res2: "https://edge.dykedoors.com/assets/images",
+};
+function transformImg(src) {
+    let src0 = src;
+    if (!src) return src;
+
+    Object.entries(imgSrc).map(([k, v]) => {
+        src = src.replace(`${k}/`, `${v}/`);
+    });
+    return { src, src0 };
+}

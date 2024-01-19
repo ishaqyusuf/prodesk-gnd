@@ -42,10 +42,12 @@ export default function RenderForm({
 let reCtxRender = 0;
 function ContextRenderForm({ children, ...props }) {
     reCtxRender++;
+    const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     return (
         <FormProvider {...(props as any)}>
             <div
                 className={cn(
+                    isProd && "hidden",
                     "fixed top-0 right-[50%] bg-red-500 rounded-full p-1 text-white text-xs  font-semibold px-2 leading-none z-[9999]"
                 )}
             >

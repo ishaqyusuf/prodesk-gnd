@@ -1,4 +1,6 @@
-import { DykeSalesShelfItem } from "@prisma/client";
+import { DykeSalesShelfItem, DykeStepForm } from "@prisma/client";
+import { getStepForm } from "./form/_action/get-dyke-step";
+import { getDykeFormAction } from "./form/_action/get-dyke-form";
 
 export interface IDykeSalesItem {
     meta: {
@@ -10,17 +12,24 @@ export interface IDykeSalesItem {
         };
     };
 }
-export interface DykeForm {
-    items: { [index in string]: DykeItemForm };
-    currentItemIndex: string | null;
-    itemsIndex: number[];
-    itemBlocks: {
-        [itemIndex in string]: {
-            blocks: any[];
-            openedBlockIndex: number;
-        };
-    };
-}
+type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
+// type IDykeStepForm = {
+//     data: DykeStepForm;
+//     step: Awaited<ReturnType<typeof getStepForm>>;
+// };
+export interface DykeForm
+    extends Awaited<ReturnType<typeof getDykeFormAction>> {}
+// export interface DykeForm {
+//     items: { [index in string]: DykeItemForm };
+//     currentItemIndex: string | null;
+//     itemsIndex: number[];
+//     itemBlocks: {
+//         [itemIndex in string]: {
+//             blocks: ItemBlock[];
+//             openedStepIndex: number;
+//         };
+//     };
+// }
 export interface DykeItemForm {
     meta: {
         configIndex;
@@ -32,16 +41,21 @@ export interface DykeItemForm {
 export interface CategorizedShelfItem {
     categoryId: number | undefined;
     categoryIds: number[];
-    products: { data: DykeShelfItemForm }[];
+    productArray: { item: DykeShelfItemForm }[];
 }
+export interface ShelfItemMeta {
+    categoryIds: number[];
+}
+export interface DykeFormStepMeta {}
 export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     meta: {
         categoryIds: number[];
     };
 }
 export interface IDykeFormContext {
-    currentItemIndex: string | null;
-    setOpened(index);
+    startLoadingStep;
+    loadingStep: boolean;
+    itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">;
 }
 export interface DykeBlock {
     title;

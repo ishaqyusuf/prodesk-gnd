@@ -3,9 +3,9 @@
 import { prisma } from "@/db";
 
 export async function createDykeProducts(products, cats) {
-    console.log(products.length);
-    console.log(cats.length);
-    return;
+    // console.log(products.length);
+    // console.log(cats.length);
+    // return;
     await prisma.dykeShelfCategories.createMany({
         data: cats,
     });

@@ -20,17 +20,14 @@ const server = z.object({
     NEXTAUTH_SECRET:
         process.env.NODE_ENV === "production"
             ? z.string().min(1)
-            : z
-                  .string()
-                  .min(1)
-                  .optional(),
+            : z.string().min(1).optional(),
     NEXTAUTH_URL: z.preprocess(
         // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
         // Since NextAuth.js automatically uses the VERCEL_URL if present.
-        str => process.env.VERCEL_URL ?? str,
+        (str) => process.env.VERCEL_URL ?? str,
         // VERCEL_URL doesn't include `https` so it cant be validated as a URL
         process.env.VERCEL ? z.string().min(1) : z.string().url()
-    )
+    ),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     // DISCORD_CLIENT_ID: z.string(),
     // DISCORD_CLIENT_SECRET: z.string(),
@@ -44,7 +41,8 @@ const client = z.object({
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL: z.string(),
     NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
-    NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"])
+    NEXT_PUBLIC_CLOUDINARY_BASE_URL: z.string(),
+    NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -63,6 +61,8 @@ const processEnv = {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    NEXT_PUBLIC_CLOUDINARY_BASE_URL:
+        process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL,
     BLESS_TOKEN: process.env.BLESS_TOKEN,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
         process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -73,7 +73,7 @@ const processEnv = {
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL:
         process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL,
     TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
-    TWILIO_PHONE: process.env.TWILIO_PHONE
+    TWILIO_PHONE: process.env.TWILIO_PHONE,
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
@@ -93,9 +93,11 @@ let env = /** @type {MergedOutput} */ (process.env);
 if (!!process.env.SKIP_ENV_VALIDATION == false) {
     const isServer = typeof window === "undefined";
 
-    const parsed = /** @type {MergedSafeParseReturn} */ (isServer
-        ? merged.safeParse(processEnv) // on server we can validate all env vars
-        : client.safeParse(processEnv)); // on client we can only validate the ones that are exposed
+    const parsed = /** @type {MergedSafeParseReturn} */ (
+        isServer
+            ? merged.safeParse(processEnv) // on server we can validate all env vars
+            : client.safeParse(processEnv)
+    ); // on client we can only validate the ones that are exposed
 
     if (parsed.success === false) {
         console.error(
@@ -117,7 +119,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
                         : `❌ Attempted to access server-side environment variable '${prop}' on the client`
                 );
             return target[/** @type {keyof typeof target} */ (prop)];
-        }
+        },
     });
 }
 

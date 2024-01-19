@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { DykeForm, IDykeFormContext } from "./type";
 import { useFormContext } from "react-hook-form";
 import { IDykeItemFormContext } from "./use-dyke-item";
@@ -9,3 +9,4 @@ export const DykeItemFormContext = createContext<IDykeItemFormContext>(
 );
 
 export const useDykeForm = () => useFormContext<DykeForm>();
+export const useDykeCtx = () => useContext(DykeFormContext);
