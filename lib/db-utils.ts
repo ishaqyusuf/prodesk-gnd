@@ -28,6 +28,7 @@ export async function queryBuilder<T>(query, table, soft = true) {
                 ...queryFilters,
             };
         },
+        pagePageInfo: async () => await getPageInfo(query, where.get(), table),
         async response(data) {
             const pageInfo = await getPageInfo(query, where.get(), table);
             return {

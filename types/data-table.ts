@@ -29,7 +29,7 @@ export interface DataTableFilterableColumn<TData, TValue>
     defaultValue?: string;
 }
 
-export interface TableShellProps<T> {
+export interface TableShellProps<T = any> {
     data: T[];
     pageInfo: TablePageInfo;
     searchParams?;

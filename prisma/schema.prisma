@@ -1084,9 +1084,10 @@ model Notifications {
 
 // Dyke Edge Db
 model DykeShelfCategories {
-    id               Int                  @unique @default(autoincrement())
-    name             String
-    type             String //parent/child
+    id   Int    @unique @default(autoincrement())
+    name String
+    type String //parent/child
+
     categoryId       Int?
     parentCategoryId Int?
     products         DykeShelfProducts[]  @relation(name: "childCategory")
@@ -1210,6 +1211,7 @@ model DykeProducts {
     value        String
     createdAt    DateTime?          @default(now()) @db.Timestamp(0)
     updatedAt    DateTime?          @db.Timestamp(0)
+    deletedAt    DateTime?          @db.Timestamp(0)
     stepProducts DykeStepProducts[]
     category     DykeCategories?    @relation(fields: [categoryId], references: [id])
 }

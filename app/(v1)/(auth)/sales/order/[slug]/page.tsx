@@ -13,7 +13,7 @@ import TabbedItemEmailOverview from "@/app/(v1)/(auth)/sales/order/[slug]/overvi
 import Timeline from "@/app/(v1)/(auth)/sales/order/[slug]/overview/timeline";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { prisma } from "@/db";
-import { ISalesOrder } from "@/types/sales";
+import { ISalesOrder, ISalesOrderMeta } from "@/types/sales";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -25,6 +25,47 @@ export default async function SalesOrderPage({ params: { slug } }) {
     const order: ISalesOrder = (await getOrderAction(slug)) as any;
     if (!order) return notFound();
     metadata.description = order.orderId;
+
+    // fix dissapered prices
+    const fixOrders = await prisma.salesOrderItems.findMany({
+        where: {
+            total: 0,
+            qty: {
+                gt: 0,
+            },
+        },
+        include: {
+            salesOrder: {
+                select: {
+                    orderId: true,
+                    type: true,
+                },
+            },
+        },
+    });
+    const slugs = new Set<string[]>([]);
+    await Promise.all(
+        fixOrders.map(async (item) => {
+            const meta: ISalesOrderMeta = item.meta as any;
+            if (meta.cost_price > 0) {
+                slugs.add(
+                    `${item.salesOrder?.type}/${item.salesOrder?.orderId}` as any
+                );
+                await prisma.salesOrderItems.update({
+                    where: {
+                        id: item.id,
+                    },
+                    data: {
+                        rate: meta.cost_price,
+                        price: meta.cost_price,
+                        total: Number(meta.cost_price) * (item.qty || 0),
+                    },
+                });
+            }
+        })
+    );
+    console.log([...slugs]);
+
     // console.log(order.i);
     return (
         <DataPageShell className="sm:px-8" data={order}>

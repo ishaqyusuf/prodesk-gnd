@@ -4,10 +4,10 @@ import { ICan } from "@/types/auth";
 
 import { Session } from "next-auth";
 
-function _route(title, icon, path) {
-    return { title, icon, path };
+function _route(title, icon, path, isNew = false) {
+    return { title, icon, path, isNew };
 }
-type Route = { title; icon; path };
+type Route = { title; icon; path; isNew?: boolean };
 interface ISidebarRoute {
     title?;
     routes: Route[];
@@ -247,6 +247,7 @@ export function nav(
         routes.Sales.push(
             ...([
                 // _route("Sales Jobs", Briefcase, "/sales/jobs"),
+                _route("Products", Icons.products, "/sales-v2/products", true),
                 __can.viewOrderPayment &&
                     _route("Payments", Icons.payment, "/sales/payments"),
                 _route("Catalogs", Icons.products, "/sales/catalogs"),
