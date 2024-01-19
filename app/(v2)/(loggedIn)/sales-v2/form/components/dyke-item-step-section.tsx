@@ -143,8 +143,8 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
                         {b.product.img && (
                             <Image
                                 className="cursor-pointer"
-                                width={150}
-                                height={150}
+                                width={100}
+                                height={100}
                                 src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${b.product.img}`}
                                 alt={b.product.description || b.product.value}
                             />
