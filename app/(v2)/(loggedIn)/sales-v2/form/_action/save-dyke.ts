@@ -3,21 +3,42 @@
 import { prisma } from "@/db";
 import { DykeForm } from "../../type";
 import { lastId } from "@/lib/nextId";
+import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
 
 export async function saveDykeSales(data: DykeForm) {
     const tx = await prisma.$transaction(async (tx) => {
+        const {
+            id,
+            customerId,
+            shippingAddressId,
+            salesRepId,
+            billingAddressId,
+            ...rest
+        } = data.order;
+        function connect(id) {
+            return id && { connect: { id } };
+        }
         const order = data.order.id
             ? await tx.salesOrders.update({
                   where: { id: data.order.id },
                   data: {
-                      ...data.order,
+                      ...rest,
                       updatedAt: new Date(),
+                      customer: connect(id),
+                      billingAddress: connect(billingAddressId),
+                      shippingAddress: connect(shippingAddressId),
                   } as any,
               })
             : await tx.salesOrders.create({
                   data: {
-                      ...data.order,
-                  } as any,
+                      ...(rest as any),
+                      ...(await generateSalesIdDac(rest)),
+                      updatedAt: new Date(),
+                      customer: connect(id),
+                      salesRep: connect(salesRepId),
+                      billingAddress: connect(billingAddressId),
+                      shippingAddress: connect(shippingAddressId),
+                  },
               });
         let lastItemId = await lastId(tx.salesOrderItems);
         let lastShelfItemId = await lastId(tx.dykeSalesShelfItem);
@@ -31,7 +52,7 @@ export async function saveDykeSales(data: DykeForm) {
             stepFormsIds: [] as number[],
         };
         await Promise.all(
-            data.itemArray.map(async (arr) => {
+            data.itemArray.map(async (arr, index) => {
                 let {
                     formStepArray,
                     shelfItemArray,
@@ -40,6 +61,7 @@ export async function saveDykeSales(data: DykeForm) {
                 } = arr.item;
                 // arr.item.shelfItemArray[0].
                 const newItem = !itemId;
+                item.meta.lineIndex = index;
                 if (!itemId) itemId = ++lastItemId;
                 const shelfMode = item.meta.shelfMode;
                 if (newItem) {

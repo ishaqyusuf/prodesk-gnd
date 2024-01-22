@@ -61,8 +61,8 @@ function whereProject(query: ProjectsQueryParams) {
     return where;
 }
 export async function staticProjectsAction() {
-    return await _cache(
-        "projects",
+    const f = await _cache(
+        "project-filter",
         async () => {
             const _data = await prisma.projects.findMany({
                 select: {
@@ -77,8 +77,10 @@ export async function staticProjectsAction() {
             });
             return _data;
         },
-        "projects"
+        "project-filter"
     );
+    // console.log(f);
+    return f;
 }
 export async function updateCommunityCost(id, meta: IProjectMeta) {
     await updateProjectMeta(id, meta);

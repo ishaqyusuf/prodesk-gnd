@@ -45,6 +45,7 @@ export async function _cache(name: CacheNames | string, fn, group: any = null) {
     console.log("CATCH LOADING");
 
     const cdata = await fetchCache(name as any, group);
+
     console.log(cdata);
 
     if (cdata) return cdata;

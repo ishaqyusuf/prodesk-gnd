@@ -35,6 +35,7 @@ export async function getDykeFormAction(type, slug) {
     const form = (order || {
         type,
         isDyke: true,
+        status: "New",
         items: [
             {
                 formSteps: [
@@ -90,6 +91,7 @@ export async function getDykeFormAction(type, slug) {
         shippingAddress,
         billingAddress,
         order: orderData,
+
         itemArray: items?.map(({ formSteps, shelfItems, ...itemData }) => {
             const shelfItemArray: {
                 [k in string]: {

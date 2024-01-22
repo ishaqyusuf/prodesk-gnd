@@ -15,8 +15,6 @@ import { SalesFormContext } from "../../ctx";
 import { deepCopy } from "@/lib/deep-copy";
 import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
-import { closeModal } from "@/lib/modal";
-import { DialogFooter } from "@/components/ui/dialog";
 import { useModal } from "@/_v2/components/common/modal/provider";
 import { usePathname } from "next/navigation";
 
