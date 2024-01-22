@@ -16,8 +16,12 @@ export async function fetchCache(name: CacheNames, group = null) {
             group,
         },
     });
-    if (c) return (c as any).meta.data;
-    return null;
+    const data = (c as any)?.meta?.data;
+    // if(!data)return null;
+    if (!data || (Array.isArray(data) && !data.length)) return null;
+
+    // if (data) return (c as any).meta.data;
+    return data;
 }
 export async function saveCache(name: CacheNames, data, group) {
     const type = `${name}-cache`;
@@ -42,11 +46,9 @@ export async function saveCache(name: CacheNames, data, group) {
     });
 }
 export async function _cache(name: CacheNames | string, fn, group: any = null) {
-    console.log("CATCH LOADING");
-
+    // console.log("CATCH LOADING");
     const cdata = await fetchCache(name as any, group);
-
-    console.log(cdata);
+    // console.log(cdata);
 
     if (cdata) return cdata;
 

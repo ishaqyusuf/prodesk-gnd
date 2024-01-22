@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { useModal } from "@/_v2/components/common/modal/provider";
 import { usePathname } from "next/navigation";
+import { DialogFooter } from "@/components/ui/dialog";
 
 export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();
@@ -82,7 +83,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                 } = resp.val;
                 const respData = isDyke
                     ? {
-                          "order.customerId": customer,
+                          "order.customerId": customerId,
                           "order.billingAddressId": billingAddressId,
                           "order.shippingAddressId": shippingAddressId,
                           shippingAddress,
