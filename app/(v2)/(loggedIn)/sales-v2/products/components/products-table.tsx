@@ -21,7 +21,11 @@ import Money from "@/components/_v1/money";
 export type IDykeProduct = Awaited<
     ReturnType<typeof getDykeProducts>
 >["data"][0];
-export default function ProductsTable({ data, pageInfo }: TableShellProps) {
+export default function ProductsTable({
+    data,
+    pageInfo,
+    searchParams,
+}: TableShellProps) {
     const table = SmartTable<IDykeProduct>(data);
 
     const modal = useModal();
@@ -70,6 +74,7 @@ export default function ProductsTable({ data, pageInfo }: TableShellProps) {
         <DataTable2
             data={data}
             columns={columns}
+            searchParams={searchParams}
             pageInfo={pageInfo}
             filterableColumns={[ProductCategoryFilter]}
             searchableColumns={[

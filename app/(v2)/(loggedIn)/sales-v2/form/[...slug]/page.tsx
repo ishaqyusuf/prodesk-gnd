@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 export default async function SalesForm({ params }) {
     const [type, slug] = params.slug;
-
     const form = await getDykeFormAction(type, slug);
     // form.itemArray[0]?.item.formStepArray[0]?.item.
     return (

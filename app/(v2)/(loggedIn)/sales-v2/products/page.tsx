@@ -15,7 +15,7 @@ export default async function ProductsPage({ searchParams }) {
                 <BreadLink isLast title="Products" />
             </Breadcrumbs>
             <div className="">
-                <ProductsTable {...response} />
+                <ProductsTable searchParams={searchParams} {...response} />
             </div>
         </DykeTabLayout>
     );
