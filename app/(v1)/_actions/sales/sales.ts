@@ -42,10 +42,12 @@ export async function whereSales(query: SalesQueryParams) {
         _payment,
         _deliveryStatus,
         deliveryOption,
+        // isDyke,
         type = "order",
     } = query;
     const inputQ = { contains: _q || undefined };
     const where: Prisma.SalesOrdersWhereInput = {
+        // isDyke,
         OR: !_q
             ? undefined
             : [

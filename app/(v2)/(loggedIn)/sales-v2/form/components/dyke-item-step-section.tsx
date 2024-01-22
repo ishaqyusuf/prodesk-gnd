@@ -100,16 +100,28 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
     async function selectProduct(stepProd: IStepProducts[0]) {
         ctx.startLoadingStep(async () => {
             const val = stepProd.product.title || stepProd.product.value;
+            form.setValue(
+                `itemArray.${item.rowIndex}.item.meta.shelfMode`,
+                false
+            );
+            const data: DykeStep["item"] = {
+                value: val,
+                qty: stepProd.product.qty,
+                price: stepProd.product.price,
+                stepId: stepProd.dykeStepId,
+                // title: stepProd.product.description,
+            } as any;
 
             form.setValue(
-                `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any,
-                val
+                `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
+                data
             );
             const nextStep = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd.product
             );
-            console.log({ stepForm, nextStep });
+
+            // console.log({ stepForm, nextStep });
             if (nextStep) {
                 for (let i = item.formStepArray.length - 1; i > stepIndex; i--)
                     item.removeStep(i);

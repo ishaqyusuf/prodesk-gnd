@@ -56,7 +56,11 @@ export default function ControlledSelect<
         return typeof option == "string" ? option : option[valueKey];
     }
     function itemText(option) {
-        return typeof option == "string" ? option : option[titleKey];
+        return typeof option == "string"
+            ? option
+            : titleKey == "label"
+            ? option[titleKey] || option["text"]
+            : option[titleKey];
     }
     return (
         <FormField
@@ -73,21 +77,25 @@ export default function ControlledSelect<
                                 <SelectValue placeholder={placeholder} />
                             </SelectTrigger>
                             <SelectContent>
-                                {list?.map((option, index) =>
-                                    SelItem ? (
-                                        <SelItem option={option} key={index} />
-                                    ) : (
-                                        <SelectItem
-                                            key={index}
-                                            value={itemValue(option)}
-                                        >
-                                            {Item ? (
-                                                <Item option={option} />
-                                            ) : (
-                                                <>{itemText(option)}</>
-                                            )}
-                                        </SelectItem>
-                                    )
+                                {(loader ? list : options)?.map(
+                                    (option, index) =>
+                                        SelItem ? (
+                                            <SelItem
+                                                option={option}
+                                                key={index}
+                                            />
+                                        ) : (
+                                            <SelectItem
+                                                key={index}
+                                                value={itemValue(option)}
+                                            >
+                                                {Item ? (
+                                                    <Item option={option} />
+                                                ) : (
+                                                    <>{itemText(option)}</>
+                                                )}
+                                            </SelectItem>
+                                        )
                                 )}
                             </SelectContent>
                         </Select>

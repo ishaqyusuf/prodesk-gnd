@@ -840,6 +840,7 @@ model SalesOrders {
     salesRepId        Int
     pickupId          Int?
     prodId            Int?
+    isDyke            Boolean?                     @default(false)
     summary           String?                      @db.Text
     instruction       String?                      @db.Text
     meta              Json?                        @db.Json

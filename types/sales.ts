@@ -122,6 +122,7 @@ export interface ISalesOrderItemMeta {
     manual_rate;
     isComponent: Boolean;
     components: WizardKvForm;
+    shelfMode?: boolean;
 }
 export type IPaymentOptions =
     | "Cash"

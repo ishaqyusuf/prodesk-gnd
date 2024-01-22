@@ -81,7 +81,7 @@ export default function SalesDetailsSection() {
         </div>
     );
 }
-function InfoLine({ label, children }: { label?; children? }) {
+export function InfoLine({ label, children }: { label?; children? }) {
     return (
         <div className="md:grid md:grid-cols-2 items-center xl:grid-cols-3">
             <Label className="text-muted-foreground whitespace-nowrap">

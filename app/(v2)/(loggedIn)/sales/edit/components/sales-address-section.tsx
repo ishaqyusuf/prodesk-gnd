@@ -11,7 +11,6 @@ import { useModal } from "@/_v2/components/common/modal/provider";
 import SalesAddressModal from "./sales-address-modal";
 
 export default function SalesAddressSection() {
-    const ctx = useContext(SalesFormContext);
     const form = useFormContext<ISalesForm>();
     const [shipping, billing, customer, customerId] = form.watch([
         "shippingAddress",
@@ -24,11 +23,11 @@ export default function SalesAddressSection() {
         <>
             <div
                 onClick={() => {
-                    modal?.show(<SalesAddressModal ctx={ctx} form={form} />);
+                    modal?.show(<SalesAddressModal form={form} />);
                 }}
                 className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg  hover:bg-accent-foreground hover:text-white"
             >
-                <div className="absolute right-0   opacity-0 group-hover:opacity-100 ">
+                <div className="absolute right-0 opacity-0 group-hover:opacity-100 ">
                     <Button size="sm" variant="secondary" className="h-8">
                         <Icons.edit className="h-3.5 w-3.5 " />
                     </Button>

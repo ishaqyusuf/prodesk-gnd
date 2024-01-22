@@ -5,11 +5,13 @@ import { getStepForm } from "./get-dyke-step";
 
 import { DykeFormStepMeta, ShelfItemMeta } from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
+import { user } from "@/app/(v1)/_actions/utils";
 
-export async function getDykeFormAction(slug) {
-    const order = await prisma.salesOrders.findUnique({
+export async function getDykeFormAction(type, slug) {
+    const order = await prisma.salesOrders.findFirst({
         where: {
-            orderId: slug,
+            orderId: slug || "",
+            isDyke: true,
         },
         include: {
             items: {
@@ -22,11 +24,17 @@ export async function getDykeFormAction(slug) {
                     shelfItems: true,
                 },
             },
+            salesRep: true,
+            customer: true,
+            shippingAddress: true,
+            billingAddress: true,
         },
     });
     type OrderType = NonNullable<typeof order>;
     const rootProds = await getStepForm(1);
     const form = (order || {
+        type,
+        isDyke: true,
         items: [
             {
                 formSteps: [
@@ -40,8 +48,12 @@ export async function getDykeFormAction(slug) {
                         meta: {},
                     },
                 ],
+                meta: {
+                    shelfMode: false,
+                },
             },
         ],
+        salesRep: await user(),
     }) as any as OrderType;
     const typedForm = {
         ...form,
@@ -61,13 +73,33 @@ export async function getDykeFormAction(slug) {
             };
         }),
     };
-    const { items, ...orderData } = typedForm;
+    const {
+        items,
+        salesRep,
+        customer,
+        shippingAddress,
+        billingAddress,
+        ...orderData
+    } = typedForm;
+
     return {
         // currentItemIndex: 0,
         // currentStepIndex: 0,
+        salesRep: salesRep,
+        customer,
+        shippingAddress,
+        billingAddress,
         order: orderData,
         itemArray: items?.map(({ formSteps, shelfItems, ...itemData }) => {
-            const shelfItemArray = {};
+            const shelfItemArray: {
+                [k in string]: {
+                    productArray: {
+                        item: (typeof shelfItems)[0];
+                    }[];
+                    categoryIds: number[];
+                    categoryId: number;
+                };
+            } = {};
             shelfItems.map((s) => {
                 const cid = s.categoryId?.toString();
                 if (!shelfItemArray[cid])
@@ -76,7 +108,8 @@ export async function getDykeFormAction(slug) {
                         categoryIds: s.meta.categoryIds,
                         categoryId: s.categoryId,
                     };
-                shelfItemArray[cid].productArray.push({ item: s });
+                if (shelfItemArray[cid])
+                    (shelfItemArray[cid] as any).productArray.push({ item: s });
             });
             // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
             //                 categoryIds: number[]

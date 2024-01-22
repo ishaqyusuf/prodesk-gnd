@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { DykeItemFormSection } from "./dyke-item-form-section";
 import { DykeForm, IDykeFormContext } from "../../type";
@@ -8,7 +8,9 @@ import { DykeFormContext } from "../../form-context";
 import RenderForm from "@/_v2/components/common/render-form";
 import { Button } from "@/components/ui/button";
 import { addDoorUnitAction } from "../_action/add-door-unit";
-import DykeBootstrap from "./dyke-bootstrap";
+import SalesMetaData from "./sales-meta-data";
+import HeaderSection from "./header-section";
+import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
 interface Props {
     defaultValues: any;
 }
@@ -41,7 +43,15 @@ export default function SalesFormComponent({ defaultValues }: Props) {
     return (
         <DykeFormContext.Provider value={ctxValue}>
             <RenderForm {...form}>
-                <DykeBootstrap />
+                <HeaderSection />
+                {/* <DykeBootstrap /> */}
+                <section
+                    id="detailsSection"
+                    className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
+                >
+                    <SalesMetaData />
+                    <SalesAddressSection />
+                </section>
                 {itemArray.fields.map((field, index) => (
                     <DykeItemFormSection key={field.id} rowIndex={index} />
                 ))}

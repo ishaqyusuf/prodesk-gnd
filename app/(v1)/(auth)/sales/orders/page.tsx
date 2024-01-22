@@ -24,6 +24,7 @@ export default async function OrdersPage({ searchParams }) {
     const response = await getSalesOrder({
         ...queryParams(searchParams),
         _noBackOrder: true,
+        isDyke: false,
     });
     return (
         <SalesTabLayout query={searchParams}>

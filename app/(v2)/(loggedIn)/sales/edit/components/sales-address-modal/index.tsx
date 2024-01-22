@@ -18,8 +18,9 @@ import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { closeModal } from "@/lib/modal";
 import { DialogFooter } from "@/components/ui/dialog";
 import { useModal } from "@/_v2/components/common/modal/provider";
+import { usePathname } from "next/navigation";
 
-export default function SalesAddressModal({ form: mainForm, ctx }) {
+export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();
     // const ctx = useContext(SalesFormContext);
     const { billingAddress, shippingAddress, customer } = mainForm.getValues();
@@ -36,7 +37,11 @@ export default function SalesAddressModal({ form: mainForm, ctx }) {
     const [tab, setTab] = useState("billingAddress");
     const checked = addressForm.watch("sameAddress");
     const [saving, startTransition] = useTransition();
+
+    const path = usePathname();
+
     async function save() {
+        const isDyke = path.includes("sales-v2");
         startTransition(async () => {
             const {
                 billingAddress, //: ,
@@ -77,16 +82,25 @@ export default function SalesAddressModal({ form: mainForm, ctx }) {
                     customer,
                     ...ext
                 } = resp.val;
-                const respData = {
-                    customerId,
-                    billingAddressId,
-                    shippingAddressId,
-                    billingAddress,
-                    shippingAddress,
-                    customer,
-                };
-                console.log(respData);
-                console.log(mainForm.getValues("customerId"));
+                const respData = isDyke
+                    ? {
+                          "order.customerId": customer,
+                          "order.billingAddressId": billingAddressId,
+                          "order.shippingAddressId": shippingAddressId,
+                          shippingAddress,
+                          billingAddress,
+                          customer,
+                      }
+                    : {
+                          customerId,
+                          billingAddressId,
+                          shippingAddressId,
+                          billingAddress,
+                          shippingAddress,
+                          customer,
+                      };
+                // console.log(respData);
+                // console.log(mainForm.getValues("customerId"));
                 // mainForm.reset(respData, {
                 //     keepValues: true,
 

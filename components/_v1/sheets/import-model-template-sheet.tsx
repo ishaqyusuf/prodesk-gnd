@@ -7,14 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import BaseSheet from "./base-sheet";
-import { IJobPayment, IJobs } from "@/types/hrm";
-import { Info } from "../info";
+import { IJobPayment } from "@/types/hrm";
 import {
     DateCellContent,
     PrimaryCellContent,
     SecondaryCellContent,
 } from "../columns/base-columns";
-import Money from "../money";
 import {
     Table,
     TableBody,
@@ -29,11 +27,7 @@ import { ScrollArea } from "../../ui/scroll-area";
 import { Button } from "../../ui/button";
 import { Import } from "lucide-react";
 import { cn, labelValue } from "@/lib/utils";
-import {
-    DesignTemplateForm,
-    ModelFormProps,
-    UnitTemplateTabs,
-} from "../forms/model-form/model-form";
+import { ModelFormProps } from "../forms/model-form/model-form";
 import { closeModal, openModal } from "@/lib/modal";
 import { searchImport } from "@/app/(v1)/_actions/community/_template-import";
 import { Command, CommandInput, CommandList } from "../../ui/command";

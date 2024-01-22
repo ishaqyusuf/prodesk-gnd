@@ -288,7 +288,7 @@ export function nav(
             setHref("Community Cost", "community-costs");
         }
         if (editProject) {
-            setHref("Model Templates", "model-templates");
+            // setHref("Model Templates", "model-templates");
             setHref("Community Templates", "community-templates");
         }
         if (viewBuilders) setHref("Builders", "builders");
@@ -299,7 +299,7 @@ export function nav(
                 _rw["install-costs"],
                 _rw["community-costs"],
                 _rw["model-costs"],
-                _rw["model-templates"],
+                // _rw["model-templates"],
             ].filter(Boolean)
         );
         if (href)
