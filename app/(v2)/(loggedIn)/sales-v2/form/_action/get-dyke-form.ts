@@ -116,7 +116,7 @@ export async function getDykeFormAction(type, slug) {
             // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
             //                 categoryIds: number[]
             //             }},
-            return {
+            const rItem = {
                 opened: true,
                 stepIndex: 0,
                 item: {
@@ -130,6 +130,8 @@ export async function getDykeFormAction(type, slug) {
                     // })),
                 },
             };
+            rItem.stepIndex = rItem.item.formStepArray.length - 1;
+            return rItem;
         }),
     };
 }

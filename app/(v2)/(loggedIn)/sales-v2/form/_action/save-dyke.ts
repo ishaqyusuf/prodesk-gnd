@@ -12,6 +12,8 @@ export async function saveDykeSales(data: DykeForm) {
             customerId,
             shippingAddressId,
             salesRepId,
+            pickupId,
+            prodId,
             billingAddressId,
             ...rest
         } = data.order;
@@ -24,18 +26,19 @@ export async function saveDykeSales(data: DykeForm) {
                   data: {
                       ...rest,
                       updatedAt: new Date(),
-                      customer: connect(id),
-                      billingAddress: connect(billingAddressId),
-                      shippingAddress: connect(shippingAddressId),
+                      //   customer: connect(id),
+                      //   billingAddress: connect(billingAddressId),
+                      //   shippingAddress: connect(shippingAddressId),
                   } as any,
               })
             : await tx.salesOrders.create({
                   data: {
                       ...(rest as any),
+                      //   salesRepId: data.salesRep?.id,
                       ...(await generateSalesIdDac(rest)),
                       updatedAt: new Date(),
                       customer: connect(id),
-                      salesRep: connect(salesRepId),
+                      salesRep: connect(data.salesRep?.id),
                       billingAddress: connect(billingAddressId),
                       shippingAddress: connect(shippingAddressId),
                   },
@@ -66,8 +69,9 @@ export async function saveDykeSales(data: DykeForm) {
                 const shelfMode = item.meta.shelfMode;
                 if (newItem) {
                     createItems.push({
-                        id: itemId,
                         ...item,
+                        id: itemId,
+                        salesOrderId: order.id,
                     });
                 } else {
                     await tx.salesOrderItems.update({

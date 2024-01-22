@@ -1140,7 +1140,7 @@ model PaydayInvoice {
 
 model DykeStepForm {
     id          Int              @unique @default(autoincrement())
-    value       String
+    value       String?
     qty         Int?             @default(0)
     price       Float?           @default(0)
     salesId     Int?

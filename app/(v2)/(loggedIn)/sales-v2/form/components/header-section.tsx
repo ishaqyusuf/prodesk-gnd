@@ -4,6 +4,7 @@ import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -12,11 +13,13 @@ export default function HeaderSection({}) {
         "order.id",
         "order.type",
     ]);
+    const router = useRouter();
     const [loading, startTransition] = useTransition();
     async function save(data) {
         startTransition(async () => {
-            await saveDykeSales(data);
+            const resp = await saveDykeSales(data);
             toast.success("Saved");
+            if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
         });
     }
     return (
