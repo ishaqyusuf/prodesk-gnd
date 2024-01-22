@@ -44,15 +44,19 @@ function whereBuilder(query: BuildersQueryParams) {
     return where;
 }
 export async function staticBuildersAction() {
-    return await _cache("builders", async () => {
-        const _data = await prisma.builders.findMany({
-            select: {
-                id: true,
-                name: true,
-            },
-        });
-        return _data;
-    });
+    return await _cache(
+        "builders",
+        async () => {
+            const _data = await prisma.builders.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                },
+            });
+            return _data;
+        },
+        "builders"
+    );
 }
 export async function deleteBuilderAction(id) {}
 export async function saveBuilder(data: IBuilder) {

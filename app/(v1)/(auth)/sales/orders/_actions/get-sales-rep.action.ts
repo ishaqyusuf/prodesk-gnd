@@ -1,20 +1,27 @@
 "use server";
 
+import { _cache } from "@/app/(v1)/_actions/_cache/load-data";
 import { prisma } from "@/db";
 
 export async function _getSalesRep() {
-    const users = await prisma.users.findMany({
-        where: {
-            reppedProductions: {
-                some: {
-                    id: { gt: 0 },
+    return await _cache(
+        "sales-rep",
+        async () => {
+            const users = await prisma.users.findMany({
+                where: {
+                    reppedProductions: {
+                        some: {
+                            id: { gt: 0 },
+                        },
+                    },
                 },
-            },
+                select: {
+                    id: true,
+                    name: true,
+                },
+            });
+            return users;
         },
-        select: {
-            id: true,
-            name: true,
-        },
-    });
-    return users;
+        "sales-rep"
+    );
 }

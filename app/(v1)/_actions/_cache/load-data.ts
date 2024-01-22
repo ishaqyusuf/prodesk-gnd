@@ -9,40 +9,47 @@ export type CacheNames =
     | "projects"
     | "job-employees"
     | "install-price-chart";
-export async function fetchCache(name: CacheNames) {
-    const c = await prisma.posts.findFirst({
+export async function fetchCache(name: CacheNames, group = null) {
+    const c = await prisma.cache.findFirst({
         where: {
-            type: `${name}-cache`,
+            name: `${name}-cache`,
+            group,
         },
     });
     if (c) return (c as any).meta.data;
     return null;
 }
-export async function saveCache(name: CacheNames, data) {
+export async function saveCache(name: CacheNames, data, group) {
     const type = `${name}-cache`;
-    const c = await prisma.posts.create({
+    const c = await prisma.cache.create({
         data: {
-            type,
+            name: type,
+            group,
             meta: {
                 data,
             },
             createdAt: new Date(),
         },
     });
-    await prisma.posts.deleteMany({
+    await prisma.cache.deleteMany({
         where: {
-            type,
+            name: type,
+            group,
             id: {
                 not: c.id,
             },
         },
     });
 }
-export async function _cache(name: CacheNames | string, fn) {
-    const cdata = await fetchCache(name as any);
+export async function _cache(name: CacheNames | string, fn, group: any = null) {
+    console.log("CATCH LOADING");
+
+    const cdata = await fetchCache(name as any, group);
+    console.log(cdata);
+
     if (cdata) return cdata;
 
     const c = await fn();
-    await saveCache(name as any, c);
+    await saveCache(name as any, c, group);
     return c;
 }

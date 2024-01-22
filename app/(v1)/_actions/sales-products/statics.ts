@@ -5,18 +5,25 @@ import { uniqueBy } from "@/lib/utils";
 import { _cache } from "../_cache/load-data";
 
 export async function getStaticCategories() {
-    return await _cache("product-categories", async () => {
-        return uniqueBy(
-            await prisma.inventoryProducts.findMany({
-                distinct: ["category"],
-                select: {
-                    category: true,
-                },
-            }),
-            "category"
-        ).filter((f) => f.category);
-    });
+    const a = await _cache(
+        "product-categories",
+        async () => {
+            return uniqueBy(
+                await prisma.inventoryProducts.findMany({
+                    distinct: ["category"],
+                    select: {
+                        category: true,
+                    },
+                }),
+                "category"
+            ).filter((f) => f.category);
+        },
+        "inventory-products"
+    );
+    // console.log(a);
+    return a;
 }
+
 export async function getStaticProducts() {
     return await _cache("products", async () => {
         return await prisma.inventoryProducts.findMany({

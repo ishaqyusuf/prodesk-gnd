@@ -11,6 +11,7 @@ export async function getDykeProducts(q: Query) {
         q,
         prisma.dykeProducts
     );
+    builder.searchQuery("title", "description");
     return {
         pageInfo: await builder.pagePageInfo(),
         data: await prisma.dykeProducts.findMany({

@@ -1,7 +1,6 @@
 "use client";
 
-import { Info, MoreHorizontal, Pen, Pencil, Trash } from "lucide-react";
-import { Cell } from "../columns/base-columns";
+import { Info, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "../../ui/button";
 import {
     DropdownMenu,

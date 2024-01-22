@@ -61,20 +61,24 @@ function whereProject(query: ProjectsQueryParams) {
     return where;
 }
 export async function staticProjectsAction() {
-    return await _cache("projects", async () => {
-        const _data = await prisma.projects.findMany({
-            select: {
-                id: true,
-                title: true,
-                builderId: true,
-                meta: true,
-            },
-            orderBy: {
-                title: "asc",
-            },
-        });
-        return _data;
-    });
+    return await _cache(
+        "projects",
+        async () => {
+            const _data = await prisma.projects.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    builderId: true,
+                    meta: true,
+                },
+                orderBy: {
+                    title: "asc",
+                },
+            });
+            return _data;
+        },
+        "projects"
+    );
 }
 export async function updateCommunityCost(id, meta: IProjectMeta) {
     await updateProjectMeta(id, meta);

@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useState,
+    useTransition,
+} from "react";
 import Modal from ".";
 
 interface ModalContextProps {
@@ -8,7 +14,9 @@ interface ModalContextProps {
     hide: () => void;
     data;
     opened?: boolean;
+    loading?: boolean;
     setShowModal;
+    startTransition;
 }
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
@@ -17,7 +25,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     const [modalContent, setModalContent] = useState<ReactNode | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [data, setData] = useState(null);
-
+    const [loading, startTransition] = useTransition();
     const show = (content: ReactNode, _data?) => {
         setModalContent(content);
         setShowModal(true);
@@ -33,7 +41,15 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 
     return (
         <ModalContext.Provider
-            value={{ show, hide, setShowModal, data, opened: showModal }}
+            value={{
+                show,
+                hide,
+                setShowModal,
+                data,
+                opened: showModal,
+                loading,
+                startTransition,
+            }}
         >
             {children}
             {showModal && (

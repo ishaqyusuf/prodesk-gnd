@@ -7,6 +7,7 @@ import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { whereQuery } from "@/lib/db-utils";
+import { _cache } from "../_cache/load-data";
 
 export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
@@ -168,10 +169,16 @@ export async function getCustomerProfileId(customer: ICustomer) {
     return id;
 }
 export async function getStaticCustomers() {
-    const customers = await prisma.customers.findMany({
-        orderBy: {
-            name: "asc",
+    return await _cache(
+        "sales-customers",
+        async () => {
+            const customers = await prisma.customers.findMany({
+                orderBy: {
+                    name: "asc",
+                },
+            });
+            return customers;
         },
-    });
-    return customers;
+        "customers"
+    );
 }

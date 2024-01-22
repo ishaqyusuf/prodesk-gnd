@@ -10,7 +10,7 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-    _FilterColumn
+    _FilterColumn,
 } from "../columns/base-columns";
 
 import { DataTable2 } from "../data-table/data-table-2";
@@ -27,7 +27,7 @@ export default function ProjectsTableShell<T>({
     data,
     pageInfo,
     searchParams,
-    cost
+    cost,
 }: TableShellProps<IProject> & { cost?: Boolean }) {
     const [isPending, startTransition] = useTransition();
 
@@ -39,20 +39,20 @@ export default function ProjectsTableShell<T>({
             CheckColumn({
                 selectedRowIds,
                 setSelectedRowIds,
-                data
+                data,
             }),
-            table.simpleColumn("Ref/Date", data => ({
+            table.simpleColumn("Ref/Date", (data) => ({
                 story: [
                     table.primaryText(data.refNo),
-                    table.secondary(data.createdAt)
-                ]
+                    table.secondary(data.createdAt),
+                ],
             })),
-            table.simpleColumn("Project", data => ({
+            table.simpleColumn("Project", (data) => ({
                 link: `/community/project/${data.slug}`,
                 story: [
                     table.primaryText(data.title),
-                    table.secondary(data.builder?.name)
-                ]
+                    table.secondary(data.builder?.name),
+                ],
             })),
             ...table.orColumns(
                 cost,
@@ -67,41 +67,41 @@ export default function ProjectsTableShell<T>({
                     //         />
                     //     ]
                     // })),
-                    table.simpleColumn("Install Cost", data => ({
+                    table.simpleColumn("Install Cost", (data) => ({
                         story: [
                             <InstallCostCell
                                 key={1}
                                 modal="communityInstallCost"
                                 row={data as any}
-                            />
-                        ]
-                    }))
+                            />,
+                        ],
+                    })),
                 ],
                 [
-                    table.simpleColumn("Supervisor", data => ({
+                    table.simpleColumn("Supervisor", (data) => ({
                         story: [
                             table.primaryText(data.meta?.supervisor?.name),
-                            table.secondary(data.meta?.supervisor?.email)
-                        ]
+                            table.secondary(data.meta?.supervisor?.email),
+                        ],
                     })),
-                    table.simpleColumn("Units", data => ({
-                        story: [table.primaryText(data._count?.homes)]
+                    table.simpleColumn("Units", (data) => ({
+                        story: [table.primaryText(data._count?.homes)],
                     })),
-                    table.simpleColumn("Addons", data => ({
-                        story: [<AddonCell key={1} project={data} />]
-                    }))
+                    table.simpleColumn("Addons", (data) => ({
+                        story: [<AddonCell key={1} project={data} />],
+                    })),
                 ]
             ),
             ..._FilterColumn("_q", "_builderId", "_status"),
 
             {
-                accessorKey: "actions",
+                id: "actions",
                 header: ColumnHeader(""),
                 size: 15,
                 maxSize: 15,
-                enableSorting: false
+                enableSorting: false,
                 // cell: ({ row }) => <OrderRowAction row={row.original} />,
-            }
+            },
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
@@ -115,8 +115,8 @@ export default function ProjectsTableShell<T>({
             searchableColumns={[
                 {
                     id: "_q" as any,
-                    title: ""
-                }
+                    title: "",
+                },
             ]}
 
             //  deleteRowsAction={() => void deleteSelectedRows()}

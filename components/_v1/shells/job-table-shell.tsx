@@ -161,7 +161,7 @@ export default function JobTableShell<T>({
                 [],
                 [
                     {
-                        accessorKey: "actions",
+                        id: "actions",
                         header: ColumnHeader(""),
                         size: 15,
                         maxSize: 15,

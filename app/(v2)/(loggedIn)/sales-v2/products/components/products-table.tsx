@@ -6,6 +6,17 @@ import { getDykeProducts } from "../_actions/get-dyke-products";
 import { useMemo } from "react";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 import { ColumnDef } from "@tanstack/react-table";
+import { _FilterColumn } from "@/components/_v1/columns/base-columns";
+import { ProductCategoryFilter } from "../../components/filters/product-category-filter";
+import {
+    DeleteRowAction,
+    EditRowAction,
+    RowActionCell,
+} from "@/components/_v1/data-table/data-table-row-actions";
+import { deleteDykeProductAtion } from "../_actions/delete-product-action";
+import { useModal } from "@/_v2/components/common/modal/provider";
+import EditProductModal from "../modals/edit-product-modal";
+import Money from "@/components/_v1/money";
 
 export type IDykeProduct = Awaited<
     ReturnType<typeof getDykeProducts>
@@ -13,6 +24,7 @@ export type IDykeProduct = Awaited<
 export default function ProductsTable({ data, pageInfo }: TableShellProps) {
     const table = SmartTable<IDykeProduct>(data);
 
+    const modal = useModal();
     const columns = useMemo<ColumnDef<IDykeProduct, unknown>[]>(
         () => [
             table.checkColumn(),
@@ -29,8 +41,27 @@ export default function ProductsTable({ data, pageInfo }: TableShellProps) {
                 story: [table.primaryText(data.qty)],
             })),
             table.simpleColumn("Price", (data) => ({
-                story: [table.primaryText(data.price)],
+                story: [table.primaryText(<Money value={data.price} />)],
             })),
+            ..._FilterColumn("_q", "_categoryId"),
+            {
+                id: "actions",
+                cell: ({ row }) => (
+                    <RowActionCell>
+                        <EditRowAction
+                            onClick={(e) => {
+                                modal?.show(
+                                    <EditProductModal data={row.original} />
+                                );
+                            }}
+                        />
+                        <DeleteRowAction
+                            row={row.original}
+                            action={deleteDykeProductAtion}
+                        />
+                    </RowActionCell>
+                ),
+            },
         ],
         [data]
     ); //table.Columns([table.checkColumn()]);
@@ -40,7 +71,7 @@ export default function ProductsTable({ data, pageInfo }: TableShellProps) {
             data={data}
             columns={columns}
             pageInfo={pageInfo}
-            // filterableColumns={[BuilderFilter, RolesFilter]}
+            filterableColumns={[ProductCategoryFilter]}
             searchableColumns={[
                 {
                     id: "_q" as any,

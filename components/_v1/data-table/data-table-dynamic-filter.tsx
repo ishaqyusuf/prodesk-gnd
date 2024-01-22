@@ -1,10 +1,7 @@
 "use client";
 
-import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
-
-import { useAppSelector } from "@/store";
-import { loadStaticList, ISlicer } from "@/store/slicers";
-import { useEffect } from "react";
+import { ISlicer } from "@/store/slicers";
+import { useEffect, useState } from "react";
 import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2";
 
 interface Props {
@@ -24,18 +21,29 @@ export function DynamicFilter({
     listKey,
     ...props
 }: Props) {
-    const list = useAppSelector((state) => state.slicers?.[listKey]);
+    // if(!listKey) listKey = generateRandomString
+    // const list = useAppSelector((state) => state.slicers?.[listKey as any]);
+    const [items, setItems] = useState([]);
     useEffect(() => {
-        // init();
-        loadStaticList(listKey, list, loader);
-    }, [list, listKey, loader]);
-    if (!list) return null;
+        console.log([columnId]);
+
+        (async () => {
+            const resp = await loader();
+            setItems(resp);
+        })();
+    }, []);
+    // useEffect(() => {
+    //     // init();
+
+    //     loadStaticList(listKey, list, loader);
+    // }, [list, listKey, loader]);
+    if (!items?.length) return <></>;
     return (
         <div>
             <DataTableFacetedFilter2
                 column={table.getColumn(columnId)}
                 {...props}
-                options={(list as any)?.map((l) => {
+                options={(items as any)?.map((l) => {
                     return typeof l === "object" ? l : { label: l, value: l };
                 })}
             />

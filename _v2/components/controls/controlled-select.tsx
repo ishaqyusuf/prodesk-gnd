@@ -17,6 +17,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 interface Props<T> {
     label?;
@@ -26,6 +27,7 @@ interface Props<T> {
     Item?({ option }: { option: T });
     valueKey?: keyof T;
     titleKey?: keyof T;
+    loader?;
 }
 export default function ControlledSelect<
     TFieldValues extends FieldValues = FieldValues,
@@ -35,12 +37,21 @@ export default function ControlledSelect<
     label,
     placeholder,
     options,
+    loader,
     SelectItem: SelItem,
     valueKey = "value" as any,
-    titleKey = "title" as any,
+    titleKey = "label" as any,
     Item,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
+    const [list, setList] = useState(options || []);
+    useEffect(() => {
+        if (loader) {
+            (async () => {
+                setList(await loader());
+            })();
+        }
+    }, []);
     function itemValue(option) {
         return typeof option == "string" ? option : option[valueKey];
     }
@@ -62,7 +73,7 @@ export default function ControlledSelect<
                                 <SelectValue placeholder={placeholder} />
                             </SelectTrigger>
                             <SelectContent>
-                                {options?.map((option, index) =>
+                                {list?.map((option, index) =>
                                     SelItem ? (
                                         <SelItem option={option} key={index} />
                                     ) : (

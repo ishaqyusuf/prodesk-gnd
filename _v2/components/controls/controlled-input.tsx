@@ -10,23 +10,18 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Props<T> {
     label?: string;
     placeholder?: string;
     className?: string;
     suffix?: string;
+    type?: string;
 }
 export default function ControlledInput<
     TFieldValues extends FieldValues = FieldValues,
@@ -37,6 +32,7 @@ export default function ControlledInput<
     placeholder,
     className,
     suffix,
+    type,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -51,7 +47,25 @@ export default function ControlledInput<
                                 suffix && "flex items-center space-x-1"
                             )}
                         >
-                            <Input placeholder={placeholder} {...field} />
+                            {type == "textarea" ? (
+                                <Textarea
+                                    placeholder={placeholder}
+                                    {...field}
+                                />
+                            ) : (
+                                <Input
+                                    type={type}
+                                    placeholder={placeholder}
+                                    {...field}
+                                    onChange={(e) => {
+                                        if (type == "number")
+                                            field.onChange(
+                                                Number(e.target.value)
+                                            );
+                                        else field.onChange(e);
+                                    }}
+                                />
+                            )}
                             {suffix && (
                                 <Button type="button" variant={"outline"}>
                                     {suffix}

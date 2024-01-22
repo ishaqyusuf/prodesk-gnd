@@ -92,7 +92,8 @@ export async function staticJobEmployees() {
                         },
                     },
                 },
-            })
+            }),
+        "employees"
     );
 }
 export async function staticLoadTechEmployees() {
@@ -101,7 +102,8 @@ export async function staticLoadTechEmployees() {
         async () =>
             await staticEmployees({
                 role: "Punchout",
-            })
+            }),
+        "employees"
     );
 }
 export async function loadStatic1099Contractors() {
