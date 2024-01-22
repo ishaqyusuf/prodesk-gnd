@@ -98,6 +98,7 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
         })();
     }, []);
     async function selectProduct(stepProd: IStepProducts[0]) {
+        // return;
         ctx.startLoadingStep(async () => {
             const val = stepProd.product.title || stepProd.product.value;
             form.setValue(

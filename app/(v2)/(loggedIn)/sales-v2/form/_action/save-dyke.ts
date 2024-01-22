@@ -159,15 +159,45 @@ export async function saveDykeSales(data: DykeForm) {
                 );
             })
         );
-        await tx.dykeStepForm.createMany({
-            data: createStepForms,
-        });
-        await tx.salesOrderItems.createMany({
-            data: createItems,
-        });
-        await tx.dykeSalesShelfItem.createMany({
-            data: createShelfItems,
-        });
+        await Promise.all(
+            [
+                {
+                    t: tx.salesOrderItems,
+                    data: createItems,
+                    ids: ids.itemIds,
+                    where: { salesOrderId: order.id },
+                },
+                {
+                    t: tx.dykeStepForm,
+                    data: createStepForms,
+                    ids: ids.stepFormsIds,
+                    where: { salesId: order.id },
+                },
+                {
+                    t: tx.dykeSalesShelfItem,
+                    data: createShelfItems,
+                    ids: ids.shelfIds,
+                    where: {
+                        salesOrderItem: {
+                            salesOrderId: order.id,
+                        },
+                    },
+                },
+            ].map(async (i) => {
+                await (i.t as any).createMany({
+                    data: i.data,
+                });
+                await (i.t as any).deleteMany({
+                    where: {
+                        id: {
+                            notIn: i.ids,
+                        },
+                        ...i.where,
+                    },
+                });
+            })
+        );
+
         return order;
     });
     return tx;
