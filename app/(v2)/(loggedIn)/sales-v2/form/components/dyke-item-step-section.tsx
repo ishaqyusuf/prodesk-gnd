@@ -25,6 +25,7 @@ import {
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
+import { timeout } from "@/lib/timeout";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -101,6 +102,7 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
     async function selectProduct(stepProd: IStepProducts[0]) {
         // return;
         ctx.startLoadingStep(async () => {
+            await timeout(1000);
             const val = stepProd.product.title || stepProd.product.value;
             form.setValue(
                 `itemArray.${item.rowIndex}.item.meta.shelfMode`,
@@ -164,11 +166,17 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
                             />
                         )}
                         <Label className="text-sm">{b.product.title}</Label>
-                        {b.product.price && (
-                            <div>
-                                <Money value={b.product.price} />
+                        {
+                            <div
+                                className={cn(
+                                    "text-xs font-bold",
+                                    !b.product.price && "opacity-0"
+                                )}
+                            >
+                                <Money value={b.product.price} />{" "}
+                                <span>x{b.product.qty}</span>
                             </div>
-                        )}
+                        }
                     </button>
                 ))}
             </div>

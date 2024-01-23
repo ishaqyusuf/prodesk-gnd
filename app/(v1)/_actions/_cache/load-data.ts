@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { unstable_noStore } from "next/cache";
 
 export type CacheNames =
     | "1099-contractors"
@@ -47,6 +48,7 @@ export async function saveCache(name: CacheNames, data, group) {
     });
 }
 export async function _cache(name: CacheNames | string, fn, group: any = null) {
+    unstable_noStore();
     console.log("CATCH LOADING", name);
     const cdata = await fetchCache(name as any, group);
     console.log([name, cdata]);

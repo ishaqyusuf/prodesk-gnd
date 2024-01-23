@@ -6,7 +6,7 @@ import { IProject, IProjectMeta } from "@/types/community";
 import { Prisma, Projects } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { slugModel, transformData } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore } from "next/cache";
 import { _revalidate } from "../_revalidate";
 import { _cache } from "../_cache/load-data";
 import { clearCacheAction } from "../_cache/clear-cache";
@@ -61,6 +61,7 @@ function whereProject(query: ProjectsQueryParams) {
     return where;
 }
 export async function staticProjectsAction() {
+    unstable_noStore();
     const f = await _cache(
         "project-filter",
         async () => {

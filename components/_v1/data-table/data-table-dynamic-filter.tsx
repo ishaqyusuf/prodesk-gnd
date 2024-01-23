@@ -3,6 +3,8 @@
 import { ISlicer } from "@/store/slicers";
 import { useEffect, useState } from "react";
 import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2";
+import { timeout } from "@/lib/timeout";
+import { randomNumber, randomNumber2 } from "@/lib/utils";
 
 interface Props {
     table;
@@ -26,9 +28,12 @@ export function DynamicFilter({
     const [items, setItems] = useState([]);
     useEffect(() => {
         (async () => {
-            console.log([columnId]);
+            // console.log([columnId]);
+            const w = randomNumber2(500, 1500);
+            // console.log(w);
+            await timeout(w as any);
             const resp = await loader();
-            console.log([columnId, resp]);
+            // console.log([columnId, resp]);
             setItems(resp);
         })();
     }, []);

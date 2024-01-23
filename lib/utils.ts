@@ -9,6 +9,11 @@ import { convertToNumber } from "./use-number";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+export function randomNumber2(min, max) {
+    var number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return "" + number; //.substring(add);
+}
 export function randomNumber(digit = 1) {
     var add = 1,
         max = 12 - add; // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.
