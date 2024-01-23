@@ -11,7 +11,7 @@ import {
     useDykeCtx,
     useDykeForm,
 } from "../../form-context";
-import { DykeStep } from "../../type";
+import { DykeForm, DykeStep } from "../../type";
 import ShelfItemIndex from "./shelf-item";
 import Image from "next/image";
 import { env } from "@/env.mjs";
@@ -26,6 +26,8 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
 import { timeout } from "@/lib/timeout";
+import { getWidthFromStep } from "../../utils/get-width-from-step";
+import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -80,23 +82,50 @@ export function DykeItemStepSection({ stepForm, stepIndex }: Props) {
                         <ShelfItemIndex />
                     </>
                 ) : (
-                    <StepProducts stepForm={stepForm} stepIndex={stepIndex} />
+                    <StepProducts
+                        stepForm={stepForm}
+                        stepIndex={stepIndex}
+                        rowIndex={item.rowIndex}
+                    />
                 )}
             </CollapsibleContent>
         </Collapsible>
     );
 }
 
-interface StepProductProps extends Props {}
+interface StepProductProps extends Props {
+    rowIndex;
+}
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
-function StepProducts({ stepForm, stepIndex }: StepProductProps) {
+function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     const form = useDykeForm();
+    // stepProducts[0].
     const item = useContext(DykeItemFormContext);
     const ctx = useDykeCtx();
     useEffect(() => {
         (async () => {
-            setStepProducts(await getStepProduct(stepForm?.step?.id));
+            if (stepForm.step?.title == "Door") {
+                const steps: DykeForm["itemArray"][0]["item"]["formStepArray"] =
+                    form.getValues(
+                        `itemArray.${rowIndex}.item.formStepArray` as any
+                    );
+                console.log(steps);
+                let [w, height] = steps
+                    .filter((step) =>
+                        ["Width", "Height"].some((s) => step.step.title == s)
+                    )
+                    .map((s) => s.item.value);
+                const { width, qty } = getWidthFromStep(w);
+                const prods = await getDykeStepDoors(
+                    width,
+                    height,
+                    qty,
+                    stepForm?.step?.id
+                );
+                // console.log(prods);
+                setStepProducts(prods);
+            } else setStepProducts(await getStepProduct(stepForm?.step?.id));
         })();
     }, []);
     async function selectProduct(stepProd: IStepProducts[0]) {
@@ -122,7 +151,8 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
             );
             const nextStep = await getNextDykeStepAction(
                 stepForm.step as any,
-                stepProd.product
+                stepProd.product as any,
+                stepProd.nextStepId
             );
 
             // console.log({ stepForm, nextStep });
@@ -150,6 +180,7 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
                 {stepProducts?.map((b, i) => (
                     <button
+                        disabled={ctx.loadingStep}
                         className="flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded p-2 space-y-2 justify-end"
                         onClick={() => {
                             selectProduct(b);
@@ -163,6 +194,12 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
                                 height={100}
                                 src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${b.product.img}`}
                                 alt={b.product.description || b.product.value}
+                            />
+                        )}
+                        {(b.product.meta as any)?.svg && (
+                            <object
+                                data={b.product.meta?.svg}
+                                type={"image/svg+xml"}
                             />
                         )}
                         <Label className="text-sm">{b.product.title}</Label>

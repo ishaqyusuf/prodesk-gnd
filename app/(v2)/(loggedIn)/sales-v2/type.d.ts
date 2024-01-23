@@ -47,6 +47,9 @@ export interface ShelfItemMeta {
     categoryIds: number[];
 }
 export interface DykeFormStepMeta {}
+export interface DykeProductMeta {
+    svg;
+}
 export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     meta: {
         categoryIds: number[];

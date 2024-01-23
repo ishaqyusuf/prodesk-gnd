@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { DykeProductMeta } from "../../type";
 
 export async function getStepProduct(stepId) {
     const tag = `dyke-step-product-${stepId}`;
@@ -13,14 +14,25 @@ export async function getStepProduct(stepId) {
             product: true,
         },
     });
-    const prods = stepProducts.filter(
-        (_, i) =>
-            stepProducts.findIndex(
-                (p) =>
-                    p.dykeProductId == _.dykeProductId ||
-                    p.product?.title == _.product?.title
-            ) == i
-    );
+    const prods = stepProducts
+        .filter(
+            (_, i) =>
+                stepProducts.findIndex(
+                    (p) =>
+                        p.dykeProductId == _.dykeProductId ||
+                        p.product?.title == _.product?.title
+                ) == i
+        )
+        .map((product) => {
+            return {
+                ...product,
+                product: {
+                    ...product.product,
+                    meta: (product.product.meta ||
+                        {}) as any as DykeProductMeta,
+                },
+            };
+        });
 
     console.log(prods);
 

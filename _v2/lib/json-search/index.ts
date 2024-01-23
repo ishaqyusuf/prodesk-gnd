@@ -160,7 +160,7 @@ export default class JsonSearch {
         };
     }
 
-    queryWithScore(q) {
+    queryWithScore(q, callBack: any = (item) => item.item) {
         const filter = this.filterFunc(q);
         return this.jsonArray
             .reduce((filtered, item) => {
@@ -171,7 +171,7 @@ export default class JsonSearch {
                 return filtered;
             }, [])
             .sort((a, b) => b.score - a.score)
-            .map((item) => item.item);
+            .map(callBack ? callBack : undefined);
     }
 
     /**

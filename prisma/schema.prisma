@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
     // previewFeatures = ["filteredRelationCount"]
 }
 
@@ -1097,19 +1098,31 @@ model DykeShelfCategories {
 }
 
 model DykeShelfProducts {
-    id               Int                  @unique @default(autoincrement())
+    id               Int                        @unique @default(autoincrement())
     title            String
     unitPrice        Float?
     categoryId       Int?
     parentCategoryId Int?
     img              String?
-    meta             Json?                @db.Json
-    createdAt        DateTime?            @db.Timestamp(0)
-    updatedAt        DateTime?            @db.Timestamp(0)
-    deletedAt        DateTime?            @db.Timestamp(0)
-    category         DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
-    parentCategory   DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
+    meta             Json?                      @db.Json
+    createdAt        DateTime?                  @db.Timestamp(0)
+    updatedAt        DateTime?                  @db.Timestamp(0)
+    deletedAt        DateTime?                  @db.Timestamp(0)
+    category         DykeShelfCategories?       @relation(name: "childCategory", fields: [categoryId], references: [id])
+    parentCategory   DykeShelfCategories?       @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
     orderItems       DykeSalesShelfItem[]
+    variants         DykeShelfProductVariants[]
+}
+
+model DykeShelfProductVariants {
+    id                  Int                @unique @default(autoincrement())
+    dykeShelfProductsId Int
+    title               String //width*height
+    shelfProduct        DykeShelfProducts? @relation(fields: [dykeShelfProductsId], references: [id])
+    meta                Json?              @db.Json
+    createdAt           DateTime?          @db.Timestamp(0)
+    updatedAt           DateTime?          @db.Timestamp(0)
+    deletedAt           DateTime?          @db.Timestamp(0)
 }
 
 model Cache {
@@ -1192,6 +1205,7 @@ model DykeStepProducts {
     id            Int          @unique @default(autoincrement())
     dykeProductId Int
     dykeStepId    Int
+    nextStepId    Int?
     createdAt     DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?    @db.Timestamp(0)
     product       DykeProducts @relation(fields: [dykeProductId], references: [id])
