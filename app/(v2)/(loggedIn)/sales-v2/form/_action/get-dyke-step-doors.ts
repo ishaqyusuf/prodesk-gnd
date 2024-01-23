@@ -3,6 +3,7 @@
 import { prisma } from "@/db";
 import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../utils/find-door-svg";
+import { DykeProductMeta } from "../../type";
 
 export async function getDykeStepDoors(
     width,
@@ -39,12 +40,22 @@ export async function getDykeStepDoors(
             },
         };
     });
-    return result.filter(
-        (r, i) =>
-            result.findIndex(
-                (f, j) =>
-                    r.product.title == f.product.title &&
-                    r.product.qty == f.product.qty
-            ) == i
-    );
+    return result
+        .filter(
+            (r, i) =>
+                result.findIndex(
+                    (f, j) =>
+                        r.product.title == f.product.title &&
+                        r.product.qty == f.product.qty
+                ) == i
+        )
+        .map((prd) => {
+            return {
+                ...prd,
+                product: {
+                    ...prd.product,
+                    meta: prd.product.meta as any as DykeProductMeta,
+                },
+            };
+        }) as any;
 }
