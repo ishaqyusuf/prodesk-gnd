@@ -25,10 +25,10 @@ export function DynamicFilter({
     // const list = useAppSelector((state) => state.slicers?.[listKey as any]);
     const [items, setItems] = useState([]);
     useEffect(() => {
-        console.log([columnId]);
-
         (async () => {
+            console.log([columnId]);
             const resp = await loader();
+            console.log([columnId, resp]);
             setItems(resp);
         })();
     }, []);
