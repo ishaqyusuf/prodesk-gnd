@@ -24,6 +24,7 @@ import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
+import Money from "@/components/_v1/money";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -163,6 +164,11 @@ function StepProducts({ stepForm, stepIndex }: StepProductProps) {
                             />
                         )}
                         <Label className="text-sm">{b.product.title}</Label>
+                        {b.product.price && (
+                            <div>
+                                <Money value={b.product.price} />
+                            </div>
+                        )}
                     </button>
                 ))}
             </div>
