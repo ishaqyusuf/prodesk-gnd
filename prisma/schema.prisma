@@ -1123,6 +1123,7 @@ model DykeShelfProductVariants {
     createdAt           DateTime?          @db.Timestamp(0)
     updatedAt           DateTime?          @db.Timestamp(0)
     deletedAt           DateTime?          @db.Timestamp(0)
+    dimensionId         Int
 }
 
 model Cache {
