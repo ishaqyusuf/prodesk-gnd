@@ -46,7 +46,9 @@ export interface CategorizedShelfItem {
 export interface ShelfItemMeta {
     categoryIds: number[];
 }
-export interface DykeFormStepMeta {}
+export interface DykeFormStepMeta {
+    hidden?: boolean;
+}
 export interface DykeProductMeta {
     svg;
 }

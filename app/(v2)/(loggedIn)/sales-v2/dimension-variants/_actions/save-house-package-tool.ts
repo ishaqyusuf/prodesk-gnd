@@ -10,5 +10,5 @@ export async function saveHousePackageTool(id, meta) {
             meta,
         },
     });
-    revalidatePath("sales-v2/dimension-variants", "page");
+    revalidatePath("/sales-v2/dimension-variants", "page");
 }

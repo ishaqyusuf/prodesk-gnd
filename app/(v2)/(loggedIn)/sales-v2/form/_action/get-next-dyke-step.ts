@@ -6,11 +6,14 @@ import { getStepForm } from "./get-dyke-step";
 
 export async function getNextDykeStepAction(
     step: DykeSteps,
-    product: DykeProducts,
-    nextStepId
+    product: DykeProducts | null,
+    nextStepId,
+    _steps: any[] = []
 ) {
-    const customStep = await CustomStep(product);
-    if (customStep) return customStep;
+    if (product) {
+        const customStep = await CustomStep(product, step.title);
+        if (customStep) return [..._steps, customStep];
+    }
     // if (step.title == 'House')
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
     if (!nextStepId) {
@@ -28,7 +31,7 @@ export async function getNextDykeStepAction(
             console.log(nextSteps);
             nextSteps.map((s) => {
                 if (
-                    (product.title && s.value?.endsWith(product.title)) ||
+                    (product?.title && s.value?.endsWith(product.title)) ||
                     (s.title == "Hand" && s.id == 22)
                 ) {
                     console.log({
@@ -40,19 +43,58 @@ export async function getNextDykeStepAction(
             });
         }
     }
-    if (nextStepId) return await getStepForm(nextStepId);
-    else {
+    if (nextStepId) {
+        const stepForm = await getStepForm(nextStepId);
+        const stepProd = stepForm.step?.stepProducts?.[0];
+        if (autoStep(stepForm.step?.title)) {
+            if (hiddenSteps(stepForm.step?.title)) {
+                stepForm.item.meta.hidden = true;
+                stepForm.item.stepId = stepForm.step?.id as any;
+
+                return await getNextDykeStepAction(
+                    stepForm.step as any,
+                    null,
+                    stepProd?.nextStepId,
+                    [..._steps, stepForm]
+                );
+            }
+            if (stepForm.step?.stepProducts.length == 1 && stepProd) {
+                stepForm.item.value =
+                    stepProd?.product.title || stepProd?.product.value;
+                stepForm.item.stepId = stepProd.dykeStepId;
+                return await getNextDykeStepAction(
+                    stepForm.step as any,
+                    stepProd?.product as any,
+                    stepProd?.nextStepId,
+                    [..._steps, stepForm]
+                );
+            }
+        }
+        return [..._steps, stepForm];
+    } else {
     }
     return null;
 }
-async function CustomStep({ title: productTitle }) {
-    console.log(productTitle);
-
+function hiddenSteps(title) {
+    return [
+        "width",
+        "hand",
+        "casing 1x4 setup",
+        "jamb stop",
+        "rip jamb",
+    ].includes(title?.toLowerCase());
+}
+function autoStep(title) {
+    return !["Shelf Items", "House Package Tool", "Door"].includes(title);
+}
+async function CustomStep({ title: productTitle }, stepTitle) {
     const customSteps = {
         "Shelf Items": "Shelf Items",
         "Cutdown Height": "House Package Tool",
     };
-    const title = customSteps[productTitle];
+    let title = customSteps[productTitle] || customSteps[stepTitle];
+
+    // if(!title && stepTitle != 'Shelf')
     if (title) {
         let step = await prisma.dykeSteps.findFirst({
             where: {

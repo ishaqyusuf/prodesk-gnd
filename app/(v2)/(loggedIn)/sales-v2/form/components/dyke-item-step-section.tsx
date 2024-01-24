@@ -38,9 +38,9 @@ export function DykeItemStepSection({ stepForm, stepIndex }: Props) {
     const stepValue = form.watch(
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any
     );
-    const dykeCtx = useDykeCtx();
     return (
         <Collapsible
+            className={cn("")}
             open={stepIndex == item.openedStepIndex}
             // onOpenChange={() => item.openBlock(stepIndex)}
         >
@@ -139,8 +139,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             );
             const data: DykeStep["item"] = {
                 value: val,
-                qty: stepProd.product.qty,
-                price: stepProd.product.price,
+                // qty: stepProd.product.qty,
+                // price: stepProd.product.price,
                 stepId: stepProd.dykeStepId,
                 // title: stepProd.product.description,
             } as any;
@@ -149,18 +149,17 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
-            const nextStep = await getNextDykeStepAction(
+            const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd.product as any,
                 stepProd.nextStepId
             );
-
             // console.log({ stepForm, nextStep });
-            if (nextStep) {
+            if (nextSteps) {
                 for (let i = item.formStepArray.length - 1; i > stepIndex; i--)
                     item.removeStep(i);
-                item.appendStep(nextStep as any);
-                item.toggleStep(item.openedStepIndex + 1);
+                item.appendStep(nextSteps as any);
+                item.toggleStep(item.openedStepIndex + nextSteps.length);
             } else toast.error("Next step not found");
         });
         // if(val == 'Shelf Items') {

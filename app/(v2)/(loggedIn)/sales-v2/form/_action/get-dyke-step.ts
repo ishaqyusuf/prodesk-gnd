@@ -2,6 +2,7 @@
 
 import { prisma } from "@/db";
 import { DykeStepForm } from "@prisma/client";
+import { DykeFormStepMeta } from "../../type";
 
 export async function getStepForm(id) {
     const tag = `dyke-step-${id}`;
@@ -12,14 +13,13 @@ export async function getStepForm(id) {
         where: {
             id,
         },
-
-        // include: {
-        //     stepProducts: {
-        //         include: {
-        //             product: true,
-        //         },
-        //     },
-        // },
+        include: {
+            stepProducts: {
+                include: {
+                    product: true,
+                },
+            },
+        },
     });
     // console.log(step);
     return {
@@ -28,7 +28,7 @@ export async function getStepForm(id) {
         item: {
             stepId: id,
             meta: {},
-        } as DykeStepForm,
+        } as Omit<DykeStepForm, "meta"> & { meta: DykeFormStepMeta },
     };
     //     },
     //     [tag],
