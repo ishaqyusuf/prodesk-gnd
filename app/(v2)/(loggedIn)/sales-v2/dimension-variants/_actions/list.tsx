@@ -26,7 +26,7 @@ import { saveHousePackageTool } from "./save-house-package-tool";
 export type ResetPasswordFormInputs = z.infer<typeof resetPasswordSchema>;
 
 export function DimensionList({ data }: { data: HousePackageTool }) {
-    console.log(data);
+    // console.log(data);
     const router = useRouter();
     const [isPending, startTransition] = React.useTransition();
 
@@ -45,11 +45,11 @@ export function DimensionList({ data }: { data: HousePackageTool }) {
     function onSubmit() {
         startTransition(async () => {
             try {
+                console.log(form.getValues("data"));
                 await saveHousePackageTool(
                     form.getValues("id"),
                     form.getValues("data")
                 );
-
                 toast.success("Saved.");
             } catch (err: any) {
                 toast.error(err.message);

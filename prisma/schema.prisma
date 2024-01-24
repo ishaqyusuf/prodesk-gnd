@@ -1115,15 +1115,16 @@ model DykeShelfProducts {
 }
 
 model DykeShelfProductVariants {
-    id                  Int                @unique @default(autoincrement())
-    dykeShelfProductsId Int
-    title               String //width*height
-    shelfProduct        DykeShelfProducts? @relation(fields: [dykeShelfProductsId], references: [id])
-    meta                Json?              @db.Json
-    createdAt           DateTime?          @db.Timestamp(0)
-    updatedAt           DateTime?          @db.Timestamp(0)
-    deletedAt           DateTime?          @db.Timestamp(0)
-    dimensionId         Int
+    id             Int                @unique @default(autoincrement())
+    shelfProductId Int?
+    dykeProductId  Int?
+    title          String //width*height
+    meta           Json?              @db.Json
+    createdAt      DateTime?          @db.Timestamp(0)
+    updatedAt      DateTime?          @db.Timestamp(0)
+    deletedAt      DateTime?          @db.Timestamp(0)
+    dykeProduct    DykeProducts?      @relation(fields: [dykeProductId], references: [id])
+    shelfProduct   DykeShelfProducts? @relation(fields: [shelfProductId], references: [id])
 }
 
 model Cache {
@@ -1214,20 +1215,21 @@ model DykeStepProducts {
 }
 
 model DykeProducts {
-    id           Int                @unique @default(autoincrement())
+    id           Int                        @unique @default(autoincrement())
     img          String?
     description  String?
-    noteRequired Boolean?           @default(false)
+    noteRequired Boolean?                   @default(false)
     title        String?
     price        Float?
     categoryId   Int?
     productCode  String?
-    qty          Int?               @default(0)
-    meta         Json?              @db.Json
+    qty          Int?                       @default(0)
+    meta         Json?                      @db.Json
     value        String
-    createdAt    DateTime?          @default(now()) @db.Timestamp(0)
-    updatedAt    DateTime?          @db.Timestamp(0)
-    deletedAt    DateTime?          @db.Timestamp(0)
+    createdAt    DateTime?                  @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?                  @db.Timestamp(0)
+    deletedAt    DateTime?                  @db.Timestamp(0)
     stepProducts DykeStepProducts[]
-    category     DykeCategories?    @relation(fields: [categoryId], references: [id])
+    category     DykeCategories?            @relation(fields: [categoryId], references: [id])
+    variants     DykeShelfProductVariants[]
 }
