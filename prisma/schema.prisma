@@ -1235,3 +1235,14 @@ model DykeProducts {
     category     DykeCategories?            @relation(fields: [categoryId], references: [id])
     variants     DykeShelfProductVariants[]
 }
+
+model DykeProductPrices {
+    id        Int       @unique @default(autoincrement())
+    price     Float
+    dimension String
+    type      String
+    productId Int
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
+}

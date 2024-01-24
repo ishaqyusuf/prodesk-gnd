@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
 import ControlledInput from "@/_v2/components/controls/controlled-input";
+import { Button } from "@/components/ui/button";
 
 interface Props {}
 export default function HousePackageTool({}: Props) {
@@ -21,7 +22,6 @@ export default function HousePackageTool({}: Props) {
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
         []
     );
-
     const doorsKey = `itemArray.${item.rowIndex}.item.meta.housePackageTool.doors`;
     const packageTool = form.getValues(
         `itemArray.${item.rowIndex}.item.meta.housePackageTool`
@@ -42,81 +42,80 @@ export default function HousePackageTool({}: Props) {
         })();
     }, []);
     return (
-        <Table>
-            <TableHeader>
-                <TableHead>Width</TableHead>
-                <TableHead className="w-[100px]">LH</TableHead>
-                <TableHead className="w-[100px]">RH</TableHead>
-                <TableHead>Unit Dimension</TableHead>
-                <TableHead className="">
-                    <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
-                        <div className="flex pb-1 justify-center">
-                            <p>Price</p>
-                        </div>
-                        <div className="flex pt-1 justify-between">
-                            {prices.map((p) => (
-                                <div className="flex-1" key={p}>
-                                    {p}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </TableHead>
-                <TableHead>Line Total</TableHead>
-            </TableHeader>
-            <TableBody>
-                {sizeList.map((row) => (
-                    <TableRow key={row.dim}>
-                        <TableCell>{row.width}</TableCell>
-                        <TableCell>
-                            {/* <SwingInput /> */}
-                            <ControlledInput
-                                type="number"
-                                control={form.control}
-                                name={
-                                    `${doorsKey}.${row.width}.leftHand` as any
-                                }
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <ControlledInput
-                                type="number"
-                                control={form.control}
-                                name={
-                                    `${doorsKey}.${row.width}.rightHand` as any
-                                }
-                            />
-                        </TableCell>
-                        <TableCell>{row.dim}</TableCell>
-                        <TableCell className="">
-                            <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
-                                <div className="flex pt-1 justify-between">
-                                    {prices.map((p) => (
-                                        <div className="flex-1" key={p}>
-                                            <div className="mx-1">
-                                                <ControlledInput
-                                                    type="number"
-                                                    control={form.control}
-                                                    name={
-                                                        `${doorsKey}.${row.width}.prices.${p}` as any
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+        <div>
+            <Table>
+                <TableHeader>
+                    <TableHead>Width</TableHead>
+                    <TableHead className="w-[100px]">LH</TableHead>
+                    <TableHead className="w-[100px]">RH</TableHead>
+                    <TableHead>Unit Dimension</TableHead>
+                    <TableHead className="">
+                        <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
+                            <div className="flex pb-1 justify-center">
+                                <p>Price</p>
                             </div>
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
-}
-function SwingInput() {
-    return (
-        <>
-            <Input type="number" className=" h-8" />
-        </>
+                            <div className="flex pt-1 justify-between">
+                                {prices.map((p) => (
+                                    <div className="flex-1" key={p}>
+                                        {p}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </TableHead>
+                    <TableHead>Line Total</TableHead>
+                </TableHeader>
+                <TableBody>
+                    {sizeList.map((row) => (
+                        <TableRow key={row.dim}>
+                            <TableCell>{row.width}</TableCell>
+                            <TableCell>
+                                {/* <SwingInput /> */}
+                                <ControlledInput
+                                    type="number"
+                                    control={form.control}
+                                    name={
+                                        `${doorsKey}.${row.width}.leftHand` as any
+                                    }
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <ControlledInput
+                                    type="number"
+                                    control={form.control}
+                                    name={
+                                        `${doorsKey}.${row.width}.rightHand` as any
+                                    }
+                                />
+                            </TableCell>
+                            <TableCell>{row.dim}</TableCell>
+                            <TableCell className="">
+                                <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
+                                    <div className="flex pt-1 justify-between">
+                                        {prices.map((p) => (
+                                            <div className="flex-1" key={p}>
+                                                <div className="mx-1">
+                                                    <ControlledInput
+                                                        type="number"
+                                                        control={form.control}
+                                                        name={
+                                                            `${doorsKey}.${row.width}.prices.${p}` as any
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+
+            <div className="flex justify-end">
+                <Button variant={"secondary"}>Calculate Price</Button>
+            </div>
+        </div>
     );
 }
