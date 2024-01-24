@@ -31,7 +31,7 @@ export const permissions: any[] = [
     "role",
     "employee",
     "customer service",
-    "tech"
+    "tech",
     // "assign installer",
     // "cost",
     // "sales invoice",
@@ -40,5 +40,10 @@ export const permissions: any[] = [
 ]; //.sort((a, b) => a - b);
 export const adminPermissions = permissions.reduce((acc, val, index, arr) => {
     const p = arr[index];
-    return { ...acc, [camel(`view ${p}`)]: true, [camel(`edit ${p}`)]: true };
+    return {
+        ...acc,
+        [camel(`view ${p}`) as any]: true,
+        [camel(`edit ${p}`) as any]: true,
+    };
 }, {});
+

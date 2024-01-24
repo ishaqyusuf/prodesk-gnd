@@ -22,17 +22,35 @@ export default function HousePackageTool({}: Props) {
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
         []
     );
-    const doorsKey = `itemArray.${item.rowIndex}.item.meta.housePackageTool.doors`;
-    const packageTool = form.getValues(
+    const rootKey = `itemArray.${item.rowIndex}.item.meta.housePackageTool`;
+    const doorsKey = `${rootKey}.doors`;
+    const packageTool = form.watch(
         `itemArray.${item.rowIndex}.item.meta.housePackageTool`
     );
-    const price = form.watch(
-        `itemArray.${item.rowIndex}.item.meta.housePackageTool.doors.1-0.prices`
-    );
-    useEffect(() => {
-        console.log(price);
-    }, [price]);
 
+    function calculate() {
+        // console.log(packageTool);
+        let sum = {
+            doors: 0,
+            unitPrice: 0,
+            totalPrice: 0,
+        };
+        Object.entries(packageTool.doors).map(([k, v]) => {
+            let doors = v.leftHand + v.rightHand;
+            let unitPrice = Object.values(v.prices).reduce((a, b) => a + b, 0);
+            let sumTotal = 0;
+            if (doors && unitPrice) {
+                sumTotal = doors * unitPrice;
+                sum.doors += doors;
+                sum.unitPrice += unitPrice;
+                sum.totalPrice += sumTotal;
+            }
+            form.setValue(`${rootKey}.doors.${k}.unitPrice` as any, unitPrice);
+            form.setValue(`${rootKey}.doors.${k}.lineTotal` as any, sumTotal);
+        });
+        form.setValue(`${rootKey}.totalPrice` as any, sum.totalPrice);
+        form.setValue(`${rootKey}.totalDoors` as any, sum.doors);
+    }
     useEffect(() => {
         (async () => {
             console.log(packageTool);
@@ -114,7 +132,9 @@ export default function HousePackageTool({}: Props) {
             </Table>
 
             <div className="flex justify-end">
-                <Button variant={"secondary"}>Calculate Price</Button>
+                <Button onClick={calculate} variant={"secondary"}>
+                    Calculate Price
+                </Button>
             </div>
         </div>
     );

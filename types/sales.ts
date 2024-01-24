@@ -126,6 +126,7 @@ export interface ISalesOrderItemMeta {
     housePackageTool: HousePackageTool;
 }
 export interface HousePackageTool {
+    calculated?: boolean;
     totalDoors: number;
     totalPrice: number;
     height: string;
