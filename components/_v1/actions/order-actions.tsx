@@ -33,6 +33,8 @@ import { printSalesPdf } from "@/app/(v1)/_actions/sales/save-pdf";
 import { env } from "@/env.mjs";
 import { sales } from "@/lib/sales/sales-helper";
 import { _cancelBackOrder } from "@/app/(v2)/(loggedIn)/sales/_actions/cancel-back-order";
+import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
+import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -54,6 +56,17 @@ export function OrderRowAction(props: IOrderRowProps) {
         await moveSales(row.id, "estimate");
         toast.message("Order moved to estimate");
         router.push(`/sales/estimate/${row.orderId}`);
+    }
+    async function updateDeliveryMode(delivery) {
+        if (delivery != row.deliveryOption) {
+            await updateDeliveryModeDac(
+                row.id,
+                delivery,
+                row.type == "order" ? "orders" : "estimates"
+            );
+
+            toast.success("Updated");
+        }
     }
     return (
         <AuthGuard permissions={["editOrders"]} className="">
@@ -99,6 +112,29 @@ export function OrderRowAction(props: IOrderRowProps) {
                 {!estimate ? (
                     <>
                         <ProductionAction row={row} />
+                        <MenuItem
+                            Icon={Icons.delivery}
+                            SubMenu={
+                                <>
+                                    {salesData.delivery.map((o) => (
+                                        <MenuItem
+                                            onClick={() => updateDeliveryMode}
+                                            Icon={
+                                                row.deliveryOption ==
+                                                o.value ? (
+                                                    <Icons.check />
+                                                ) : null
+                                            }
+                                            key={o}
+                                        >
+                                            {o.text}
+                                        </MenuItem>
+                                    ))}
+                                </>
+                            }
+                        >
+                            Delivery
+                        </MenuItem>
                         <MenuItem
                             Icon={Icons.estimates}
                             onClick={moveToEstimate}
