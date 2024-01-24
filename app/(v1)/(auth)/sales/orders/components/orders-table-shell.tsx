@@ -33,6 +33,7 @@ import { openModal } from "@/lib/modal";
 import { Button } from "../../../../../../components/ui/button";
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { _getSalesRep } from "../_actions/get-sales-rep.action";
+import StatusBadge from "@/components/_v1/status-badge";
 export default function OrdersTableShell<T>({
     data,
     pageInfo,
@@ -117,6 +118,18 @@ export default function OrdersTableShell<T>({
                           header: ColumnHeader("Production"),
                           cell: ({ row }) =>
                               OrderProductionStatusCell(row.original),
+                      },
+                      {
+                          accessorKey: "delivery",
+                          header: ColumnHeader("Delivery"),
+                          cell: ({ row }) => (
+                              <span className="capitalize">
+                                  <StatusBadge
+                                      status={row.original.deliveryOption}
+                                      sm
+                                  />
+                              </span>
+                          ),
                       },
                       {
                           accessorKey: "status",

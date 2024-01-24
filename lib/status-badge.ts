@@ -13,18 +13,20 @@ let StatusColorMap: { [key: string]: Colors } = {
     started: "blue",
     scheduled: "blue",
     incomplete: "orange",
+    pickup: "fuchsia",
     unknown: "orange",
     late: "red",
     in_transit: "fuchsia",
     assigned: "fuchsia",
     order_placed: "sky",
+    delivery: "emerald",
     arrived_warehouse: "emerald",
     item_not_available: "orange",
     payment_cancelled: "orange",
     prod_queued: "orange",
     install: "purple",
     deco: "orange",
-    punchout: "emerald"
+    punchout: "emerald",
 };
 
 export type Colors =

@@ -2,14 +2,7 @@
 
 import { IOrderPrintMode, IOrderType, ISalesOrder } from "@/types/sales";
 
-import {
-    Copy,
-    FileText,
-    MessageCircle,
-    Pen,
-    Printer,
-    View,
-} from "lucide-react";
+import { Copy, FileText, Pen, Printer, View } from "lucide-react";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -118,13 +111,17 @@ export function OrderRowAction(props: IOrderRowProps) {
                                 <>
                                     {salesData.delivery.map((o) => (
                                         <MenuItem
-                                            onClick={() => updateDeliveryMode}
-                                            Icon={
-                                                row.deliveryOption ==
-                                                o.value ? (
-                                                    <Icons.check />
-                                                ) : null
+                                            onClick={() =>
+                                                updateDeliveryMode(o.value)
                                             }
+                                            // Icon={
+                                            //     row.deliveryOption ==
+                                            //     o.value ? (
+                                            //         <Icons.check />
+                                            //     ) : (
+                                            //         <Icons.check />
+                                            //     )
+                                            // }
                                             key={o}
                                         >
                                             {o.text}
