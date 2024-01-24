@@ -5,6 +5,7 @@ import { getHousePackageTool } from "./_actions/get-house-package-tool";
 
 export default async function housePackageToolPage() {
     const data = await getHousePackageTool();
+    console.log(data);
     return (
         <div>
             <Breadcrumbs>
