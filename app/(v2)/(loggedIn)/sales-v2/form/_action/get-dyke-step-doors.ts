@@ -11,8 +11,8 @@ export async function getDykeStepDoors(
     qty,
     stepId
 ): Promise<IStepProducts> {
-    // console.log({ q, omit });
-
+    console.log({ q, omit });
+    // console.log({})
     const doors = await prisma.dykeShelfProducts.findMany({
         where: {
             AND: [

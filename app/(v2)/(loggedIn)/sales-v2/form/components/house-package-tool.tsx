@@ -13,6 +13,7 @@ import { useFieldArray } from "react-hook-form";
 import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
 import ControlledInput from "@/_v2/components/controls/controlled-input";
 import { Button } from "@/components/ui/button";
+import Money from "@/components/_v1/money";
 
 interface Props {}
 export default function HousePackageTool({}: Props) {
@@ -125,6 +126,22 @@ export default function HousePackageTool({}: Props) {
                                         ))}
                                     </div>
                                 </div>
+                            </TableCell>
+                            <TableCell>
+                                <Money
+                                    value={
+                                        packageTool.doors?.[row.width]
+                                            ?.unitPrice
+                                    }
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Money
+                                    value={
+                                        packageTool.doors?.[row.width]
+                                            ?.lineTotal
+                                    }
+                                />
                             </TableCell>
                         </TableRow>
                     ))}
