@@ -143,7 +143,7 @@ export async function saveDykeSales(data: DykeForm) {
                                 await prisma.dykeStepForm.update({
                                     where: { id: stepFormId },
                                     data: {
-                                        ...stepForm,
+                                        ...(stepForm as any),
                                         updatedAt: new Date(),
                                     },
                                 });

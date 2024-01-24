@@ -26,7 +26,7 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
 import { timeout } from "@/lib/timeout";
-import { getWidthFromStep } from "../../utils/get-width-from-step";
+import { getWidthFromStep } from "../../_utils/get-width-from-step";
 import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 interface Props {
     stepForm: DykeStep;
@@ -50,6 +50,7 @@ export function DykeItemStepSection({ stepForm, stepIndex }: Props) {
                         className="flex  w-full p-2 px-4 border space-x-2"
                         onClick={(e) => {
                             e.preventDefault();
+                            if (stepForm?.item?.meta?.hidden) return;
                             item.toggleStep(stepIndex);
                         }}
                     >
@@ -105,6 +106,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     const ctx = useDykeCtx();
     useEffect(() => {
         (async () => {
+            if (stepForm?.item?.meta?.hidden) return;
             if (stepForm.step?.title == "Door") {
                 const steps: DykeForm["itemArray"][0]["item"]["formStepArray"] =
                     form.getValues(
