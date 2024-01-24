@@ -2,6 +2,7 @@ export const dykeDoorsSvg = [
     {
         title: "2-6X6-8 HC 1PNL SHAKER (MADISON) 1-3/8 DOOR SLAB",
         url: "https://edge.dykedoors.com/assets/MASTER.php?clickable=true&doorConfigCode=IDUS&unitwidth=31.75&unitheight=81.75&doormaterial=molded&doorview=fullview&doorbtmpnl=1+square&doortoppnl=1+square&dooruse=interior&doorpaneltype=flat&doortexture=f9f9f9&webdescription=2-6x6-8+hollow+core+1+panelanel+shaker+%28madison%29+1-3%2F8%22+door+slab&doormoldedtexture=smooth&height=68",
+        svg: "",
     },
     {
         title: "2-6X6-8 HC 2PNL SQR TOP (CARRARA) 1-3/8 DOOR SLAB",

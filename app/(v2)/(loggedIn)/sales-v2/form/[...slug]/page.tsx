@@ -3,7 +3,6 @@ import SalesFormComponent from "../components";
 import { getDykeFormAction } from "../_action/get-dyke-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import { dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
 
 export const metadata: Metadata = {
     title: "Sales Form",
