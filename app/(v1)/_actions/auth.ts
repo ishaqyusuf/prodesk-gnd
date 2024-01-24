@@ -142,7 +142,7 @@ export async function loginAction({ email, password }) {
             console.log(can.viewProject);
         } else
             permissions.map((p) => {
-                can[camel(p.name)] =
+                can[camel(p.name) as any] =
                     permissionIds.includes(p.id) || _role?.name == "Admin";
             });
 
