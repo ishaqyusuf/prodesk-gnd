@@ -23,7 +23,7 @@ export default function DoorSvgsPage() {
     );
 }
 
-function Door({ title, svg, url, index, setDoors }) {
+function Door({ title, svg, url, index, setDoors }: any) {
     const [load, setLoad] = useState(false);
     if (!svg)
         return (
