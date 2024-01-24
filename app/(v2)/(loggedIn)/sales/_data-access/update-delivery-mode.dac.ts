@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import { _revalidate, revalidatePaths } from "@/app/(v1)/_actions/_revalidate";
 import { prisma } from "@/db";
