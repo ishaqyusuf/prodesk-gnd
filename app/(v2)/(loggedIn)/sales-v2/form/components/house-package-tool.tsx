@@ -6,32 +6,107 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { housePackageToolTable } from "../item-form-blocks";
 import { Input } from "@/components/ui/input";
+import { DykeItemFormContext, useDykeForm } from "../../form-context";
+import { useContext, useEffect, useState } from "react";
+import { useFieldArray } from "react-hook-form";
+import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
+import ControlledInput from "@/_v2/components/controls/controlled-input";
 
 interface Props {}
 export default function HousePackageTool({}: Props) {
+    const form = useDykeForm();
+    const item = useContext(DykeItemFormContext);
+    const prices = ["Door", "Jamb Size", "Casing"];
+    const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
+        []
+    );
+
+    const doorsKey = `itemArray.${item.rowIndex}.item.meta.housePackageTool.doors`;
+    const packageTool = form.getValues(
+        `itemArray.${item.rowIndex}.item.meta.housePackageTool`
+    );
+    const price = form.watch(
+        `itemArray.${item.rowIndex}.item.meta.housePackageTool.doors.1-0.prices`
+    );
+    useEffect(() => {
+        console.log(price);
+    }, [price]);
+
+    useEffect(() => {
+        (async () => {
+            console.log(packageTool);
+            const list = await getDimensionSizeList(packageTool.height);
+            console.log(list);
+            setSizeList(list as any);
+        })();
+    }, []);
     return (
         <Table>
             <TableHeader>
                 <TableHead>Width</TableHead>
-                <TableHead>Left Hand Swing</TableHead>
-                <TableHead>Right Hand Swing</TableHead>
+                <TableHead className="w-[100px]">LH</TableHead>
+                <TableHead className="w-[100px]">RH</TableHead>
                 <TableHead>Unit Dimension</TableHead>
-                <TableHead>Unit Price</TableHead>
+                <TableHead className="">
+                    <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
+                        <div className="flex pb-1 justify-center">
+                            <p>Price</p>
+                        </div>
+                        <div className="flex pt-1 justify-between">
+                            {prices.map((p) => (
+                                <div className="flex-1" key={p}>
+                                    {p}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </TableHead>
                 <TableHead>Line Total</TableHead>
             </TableHeader>
             <TableBody>
-                {housePackageToolTable.map((row) => (
-                    <TableRow key={row.width}>
+                {sizeList.map((row) => (
+                    <TableRow key={row.dim}>
                         <TableCell>{row.width}</TableCell>
                         <TableCell>
-                            <SwingInput />
+                            {/* <SwingInput /> */}
+                            <ControlledInput
+                                type="number"
+                                control={form.control}
+                                name={
+                                    `${doorsKey}.${row.width}.leftHand` as any
+                                }
+                            />
                         </TableCell>
                         <TableCell>
-                            <SwingInput />
+                            <ControlledInput
+                                type="number"
+                                control={form.control}
+                                name={
+                                    `${doorsKey}.${row.width}.rightHand` as any
+                                }
+                            />
                         </TableCell>
                         <TableCell>{row.dim}</TableCell>
+                        <TableCell className="">
+                            <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
+                                <div className="flex pt-1 justify-between">
+                                    {prices.map((p) => (
+                                        <div className="flex-1" key={p}>
+                                            <div className="mx-1">
+                                                <ControlledInput
+                                                    type="number"
+                                                    control={form.control}
+                                                    name={
+                                                        `${doorsKey}.${row.width}.prices.${p}` as any
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
@@ -41,7 +116,7 @@ export default function HousePackageTool({}: Props) {
 function SwingInput() {
     return (
         <>
-            <Input type="number" className="w-24 h-8" />
+            <Input type="number" className=" h-8" />
         </>
     );
 }

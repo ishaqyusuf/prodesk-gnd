@@ -157,7 +157,8 @@ export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
 }
 const camelCaseKey = (key) =>
     key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
-export function camel(str: string) {
+export function camel(str?: string) {
+    if (!str) return str;
     return str.replace(
         /^([A-Z])|\s(\w)/g,
         function (match: any, p1: any, p2: any, offset: any) {

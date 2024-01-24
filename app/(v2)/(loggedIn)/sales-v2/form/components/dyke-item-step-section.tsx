@@ -26,8 +26,8 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
 import { timeout } from "@/lib/timeout";
-import { getWidthFromStep } from "../../_utils/get-width-from-step";
 import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
+import { doorQueryBuilder } from "../../_utils/door-query-builder";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -108,21 +108,15 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
         (async () => {
             if (stepForm?.item?.meta?.hidden) return;
             if (stepForm.step?.title == "Door") {
-                const steps: DykeForm["itemArray"][0]["item"]["formStepArray"] =
+                const query = doorQueryBuilder(
                     form.getValues(
                         `itemArray.${rowIndex}.item.formStepArray` as any
-                    );
-                console.log(steps);
-                let [w, height] = steps
-                    .filter((step) =>
-                        ["Width", "Height"].some((s) => step.step.title == s)
                     )
-                    .map((s) => s.item.value);
-                const { width, qty } = getWidthFromStep(w);
+                );
                 const prods = await getDykeStepDoors(
-                    width,
-                    height,
-                    qty,
+                    query.q,
+                    query.omit,
+                    query.qty,
                     stepForm?.step?.id
                 );
                 // console.log(prods);
@@ -139,6 +133,33 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 `itemArray.${item.rowIndex}.item.meta.shelfMode`,
                 false
             );
+            // if(stepProd.product.)
+            switch (stepForm.step?.title) {
+                case "Height":
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.item.meta.housePackageTool`,
+                        {
+                            height: val,
+                            totalDoors: 0,
+                            totalPrice: 0,
+                            doors: {},
+                        }
+                    );
+                    break;
+                case "Jamb Size":
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.item.meta.housePackageTool.jambSizeId`,
+                        stepProd.dykeProductId
+                    );
+                    break;
+                case "Door":
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.item.meta.housePackageTool.doorId`,
+                        stepProd.dykeProductId
+                    );
+                    break;
+            }
+
             const data: DykeStep["item"] = {
                 value: val,
                 // qty: stepProd.product.qty,
@@ -154,7 +175,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd.product as any,
-                stepProd.nextStepId
+                stepProd
             );
             // console.log({ stepForm, nextStep });
             if (nextSteps) {
@@ -204,7 +225,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             />
                         )}
                         <Label className="text-sm">{b.product.title}</Label>
-                        {
+                        {/* {
                             <div
                                 className={cn(
                                     "text-xs font-bold",
@@ -214,7 +235,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 <Money value={b.product.price} />{" "}
                                 <span>x{b.product.qty}</span>
                             </div>
-                        }
+                        } */}
                     </button>
                 ))}
             </div>

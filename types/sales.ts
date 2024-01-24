@@ -123,7 +123,26 @@ export interface ISalesOrderItemMeta {
     isComponent: Boolean;
     components: WizardKvForm;
     shelfMode?: boolean;
+    housePackageTool: HousePackageTool;
 }
+export interface HousePackageTool {
+    totalDoors: number;
+    totalPrice: number;
+    height: string;
+    doorId?: number;
+    jambSizeId?: number;
+    doors: {
+        [width in string]: {
+            dimension: string;
+            leftHand: number;
+            rightHand: number;
+            lineTotal: number; // unitPrice * lefHand+rightHand
+            unitPrice: number;
+            prices: { [title in string]: number };
+        };
+    };
+}
+
 export type IPaymentOptions =
     | "Cash"
     | "Credit Card"

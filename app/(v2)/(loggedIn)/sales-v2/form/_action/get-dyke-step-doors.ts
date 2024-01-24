@@ -6,19 +6,36 @@ import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeProductMeta } from "../../type";
 
 export async function getDykeStepDoors(
-    width,
-    height,
+    q,
+    omit,
     qty,
     stepId
 ): Promise<IStepProducts> {
+    // console.log({ q, omit });
+
     const doors = await prisma.dykeShelfProducts.findMany({
         where: {
-            title: {
-                contains: `${width}x${height}`,
-            },
+            AND: [
+                {
+                    AND: q.map((w) => ({
+                        title: {
+                            contains: w,
+                        },
+                    })),
+                },
+                {
+                    AND: omit.map((w) => ({
+                        title: {
+                            not: {
+                                contains: w,
+                            },
+                        },
+                    })),
+                },
+            ],
         },
     });
-    console.log(doors);
+    // console.log(doors);
     const result = doors.map((door) => {
         return {
             dykeStepId: stepId,

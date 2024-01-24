@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
     // previewFeatures = ["filteredRelationCount"]
 }
 
@@ -1112,6 +1112,8 @@ model DykeShelfProducts {
     parentCategory   DykeShelfCategories?       @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
     orderItems       DykeSalesShelfItem[]
     variants         DykeShelfProductVariants[]
+
+    @@fulltext([title])
 }
 
 model DykeShelfProductVariants {
