@@ -66,7 +66,7 @@ export async function saveDykeSales(data: DykeForm) {
                 const newItem = !itemId;
                 item.meta.lineIndex = index;
                 if (!itemId) itemId = ++lastItemId;
-                const shelfMode = item.meta.shelfMode;
+                const shelfMode = item.meta.doorType == "Shelf Item";
                 if (newItem) {
                     createItems.push({
                         ...item,
@@ -87,9 +87,9 @@ export async function saveDykeSales(data: DykeForm) {
                     await Promise.all(
                         shelfItemArray.map(
                             async ({
-                                categoryIds,
+                                // categoryIds,
                                 productArray,
-                                categoryId,
+                                // categoryId,
                             }) => {
                                 await Promise.all(
                                     productArray.map(
@@ -99,10 +99,12 @@ export async function saveDykeSales(data: DykeForm) {
                                             const newShelf = !prodId;
                                             if (!prodId)
                                                 prodId = ++lastShelfItemId;
-                                            shelf.meta.categoryIds =
-                                                categoryIds;
-                                            shelf.categoryId = categoryId;
+                                            // shelf.meta.categoryIds =
+                                            // categoryIds;
+                                            // shelf.categoryId = categoryId;
                                             shelf.salesOrderItemId = itemId;
+                                            console.log(shelf);
+
                                             if (newShelf) {
                                                 createShelfItems.push({
                                                     id: prodId,

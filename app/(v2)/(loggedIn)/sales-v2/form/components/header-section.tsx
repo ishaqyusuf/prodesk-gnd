@@ -5,6 +5,8 @@ import { useTransition } from "react";
 import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { DykeForm } from "../../type";
+import { calculateSalesEstimate } from "../../_utils/calculate-sales-estimate";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -15,10 +17,12 @@ export default function HeaderSection({}) {
     ]);
     const router = useRouter();
     const [loading, startTransition] = useTransition();
-    async function save(data) {
+    async function save(data: DykeForm) {
         startTransition(async () => {
-            console.log(data);
-            const resp = await saveDykeSales(data);
+            // console.log(data);
+            const e = calculateSalesEstimate(data);
+            // return;
+            const resp = await saveDykeSales(e);
             toast.success("Saved");
             if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
         });

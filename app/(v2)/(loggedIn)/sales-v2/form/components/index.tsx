@@ -15,7 +15,7 @@ interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    // console.log(defaultValues);
+    console.log(defaultValues);
 
     const form = useForm<DykeForm>({
         defaultValues: {

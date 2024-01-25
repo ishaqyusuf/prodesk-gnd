@@ -131,10 +131,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
         ctx.startLoadingStep(async () => {
             await timeout(1000);
             const val = stepProd.product.title || stepProd.product.value;
-            form.setValue(
-                `itemArray.${item.rowIndex}.item.meta.shelfMode`,
-                false
-            );
+
             // if(stepProd.product.)
             switch (stepForm.step?.title) {
                 case "Height":
@@ -159,6 +156,32 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         `itemArray.${item.rowIndex}.item.meta.housePackageTool.doorId`,
                         stepProd.dykeProductId
                     );
+                    break;
+                case "Door Type":
+                    switch (stepProd.product.title) {
+                        case "Shelf Items":
+                            form.setValue(
+                                `itemArray.${item.rowIndex}.item.meta.housePackageTool`,
+                                null as any
+                            );
+                            form.setValue(
+                                `itemArray.${item.rowIndex}.item.meta.doorType`,
+                                "Shelf Item"
+                            );
+                            //clean up package tools
+                            break;
+                        case "Interior":
+                        case "Exterior":
+                        case "Bifold":
+                        case "Garage":
+                            form.setValue(
+                                `itemArray.${item.rowIndex}.item.meta.doorType`,
+                                stepForm.step?.title as any
+                            );
+                            break;
+                    }
+                    break;
+                case "Cutdown Height":
                     break;
             }
 

@@ -19,10 +19,10 @@ export interface ICreateOrderFormQuery {
 }
 export interface SalesFormResponse {
     form: ISalesOrder;
-    ctx: SalesFormCtx;
+    ctx: SalessalesFormData;
     paidAmount: number;
 }
-export interface SalesFormCtx {
+export interface SalessalesFormData {
     settings: ISalesSettingMeta;
     swings: (string | null)[];
     suppliers: (string | null)[];
@@ -57,21 +57,34 @@ export async function _getSalesFormAction(
     });
     if (!order) return await newSalesFormAction(query);
     const { payments, ..._order } = order;
-    const ctx = await formCtx();
+    const ctx = await salesFormData();
     let paidAmount = sum(payments, "amount");
     return {
         form: _order as any,
-        ctx,
+        ctx: ctx as any,
         paidAmount: paidAmount as any,
     };
 }
-async function formCtx(): Promise<SalesFormCtx> {
+export async function salesFormData(dyke = false) {
     const setting = await prisma.settings.findFirst({
         where: {
             type: PostTypes.SALES_SETTINGS,
         },
     });
     const meta: ISalesSettingMeta = setting?.meta as any;
+    const profiles = await prisma.customerTypes.findMany({
+        select: {
+            id: true,
+            coefficient: true,
+            defaultProfile: true,
+            title: true,
+        },
+    });
+    if (dyke)
+        return {
+            settings: meta,
+            profiles,
+        };
     const extras = await prisma.posts.findMany({
         where: {
             type: {
@@ -84,14 +97,7 @@ async function formCtx(): Promise<SalesFormCtx> {
             title: true,
         },
     });
-    const profiles = await prisma.customerTypes.findMany({
-        select: {
-            id: true,
-            coefficient: true,
-            defaultProfile: true,
-            title: true,
-        },
-    });
+
     const items = await prisma.salesOrderItems.findMany({
         where: {},
         distinct: "description",
@@ -120,7 +126,7 @@ async function formCtx(): Promise<SalesFormCtx> {
 async function newSalesFormAction(
     query: ICreateOrderFormQuery
 ): Promise<SalesFormResponse> {
-    const ctx = await formCtx();
+    const ctx = await salesFormData();
 
     const session = await user();
     const form = {
@@ -168,7 +174,7 @@ async function newSalesFormAction(
     console.log(form);
     return {
         form,
-        ctx,
+        ctx: ctx as any,
         paidAmount: 0,
     };
 }

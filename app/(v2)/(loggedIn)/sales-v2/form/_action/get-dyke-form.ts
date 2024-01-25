@@ -6,6 +6,9 @@ import { getStepForm } from "./get-dyke-step";
 import { DykeFormStepMeta, ShelfItemMeta } from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
+import { salesFormData } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+import { sum } from "@/lib/utils";
+import dayjs from "dayjs";
 
 export async function getDykeFormAction(type, slug) {
     const order = await prisma.salesOrders.findFirst({
@@ -24,18 +27,33 @@ export async function getDykeFormAction(type, slug) {
                     shelfItems: true,
                 },
             },
-            salesRep: true,
+            payments: true,
+            salesRep: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
             customer: true,
             shippingAddress: true,
             billingAddress: true,
         },
     });
+
+    let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
     const rootProds = await getStepForm(1);
+    const ctx = await salesFormData(true);
+    const session = await user();
     const form = (order || {
         type,
         isDyke: true,
-        status: "New",
+        status: "Active",
+        taxPercentage: +ctx.settings?.tax_percentage,
+        meta: {
+            sales_profile: ctx.defaultProfile?.title,
+            sales_percentage: ctx.defaultProfile?.coefficient,
+        },
         items: [
             {
                 formSteps: [
@@ -49,13 +67,16 @@ export async function getDykeFormAction(type, slug) {
                         meta: {},
                     },
                 ],
-                meta: {
-                    shelfMode: false,
-                },
+                meta: {},
             },
         ],
-        salesRep: await user(),
+        salesRep: {
+            name: session.name,
+            id: session.id,
+        },
+        createdAt: dayjs().toISOString() as any,
     }) as any as OrderType;
+
     const typedForm = {
         ...form,
         meta: form.meta as any as ISalesOrderMeta,
@@ -133,5 +154,7 @@ export async function getDykeFormAction(type, slug) {
             rItem.stepIndex = rItem.item.formStepArray.length - 1;
             return rItem;
         }),
+        data: ctx,
+        paidAmount,
     };
 }

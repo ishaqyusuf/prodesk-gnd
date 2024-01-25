@@ -14,6 +14,7 @@ import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size
 import ControlledInput from "@/_v2/components/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
+import { calculateSalesEstimate } from "../../_utils/calculate-sales-estimate";
 
 interface Props {}
 export default function HousePackageTool({}: Props) {
@@ -31,6 +32,8 @@ export default function HousePackageTool({}: Props) {
 
     function calculate() {
         // console.log(packageTool);
+        // calculateSalesEstimate(form);
+
         let sum = {
             doors: 0,
             unitPrice: 0,

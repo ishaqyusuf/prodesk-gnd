@@ -20,9 +20,7 @@ export default function ShelfItemIndex() {
         control: form.control,
         name: `itemArray.${item.rowIndex}.item.shelfItemArray`,
     });
-    useEffect(() => {
-        form.setValue(`itemArray.${item.rowIndex}.item.meta.shelfMode`, true);
-    }, []);
+
     // useEffect(() => {
     //     if (!fields.length)
     //         append({

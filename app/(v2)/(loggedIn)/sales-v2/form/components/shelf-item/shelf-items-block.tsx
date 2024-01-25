@@ -96,10 +96,8 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                 <Button
                                     onClick={() => {
                                         shelf.prodArray.append({
-                                            data: {
-                                                qty: null,
-                                                unitPrice: null,
-                                                totalPrice: null,
+                                            item: {
+                                                totalPrice: 0,
                                             },
                                         });
                                     }}
@@ -231,7 +229,7 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
     useEffect(() => {
         (async () => {
             const cids = shelf.shelfCategoryIds(index);
-            // console.log({ index, cids });
+
             const c = await _getShelfCategories(cids);
             setCategories(c);
         })();
@@ -242,7 +240,8 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
         <div>
             <ShelfSelect
                 control={shelf.categoryForm.control}
-                keyName={`ids.${index}.cid`}
+                keyName={`ids.${index}.id`}
+                defaultValue={field.id}
                 onValueChange={(field, v) => {
                     const value = Number(v) || null;
                     field.onChange(value);
@@ -254,36 +253,6 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
                     value: value.toString(),
                 }))}
             />
-            {/* <FormField
-                control={shelf.categoryForm.control}
-                name={`ids.${index}.cid`}
-                render={({ field }) => (
-                    <Select
-                        value={`${field.value}`}
-                        onValueChange={(v) => {
-                            const value = Number(v) || null;
-                            field.onChange(value);
-                            shelf.categorySelected(index, value);
-                        }}
-                    >
-                        <SelectTrigger className="h-6 w-auto min-w-[200px]">
-                            <SelectValue placeholder="Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {categories.map((category) => (
-                                    <SelectItem
-                                        key={category.id}
-                                        value={category.id?.toString()}
-                                    >
-                                        {category.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                )}
-            /> */}
         </div>
     );
 }
@@ -308,24 +277,30 @@ function ShelfSelect({
             control={control}
             name={keyName}
             render={({ field }) => (
-                <Select
-                    // value={`${field.value}`}
-                    defaultValue={defaultValue}
-                    onValueChange={(value) => onValueChange(field, value)}
-                >
-                    <SelectTrigger className="h-10">
-                        <SelectValue placeholder={placeholder} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            {items.map((item, index) => (
-                                <SelectItem key={index} value={item.value}>
-                                    {item.label}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <>
+                    <Select
+                        defaultValue={defaultValue?.toString()}
+                        onValueChange={(value) => {
+                            onValueChange(field, value);
+                        }}
+                    >
+                        <SelectTrigger className="h-10">
+                            <SelectValue placeholder={placeholder} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {items.map((item, index) => (
+                                    <SelectItem
+                                        key={index}
+                                        value={item.value?.toString()}
+                                    >
+                                        {item.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </>
             )}
         />
     );
