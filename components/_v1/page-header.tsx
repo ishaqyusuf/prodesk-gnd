@@ -1,9 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { Fragment } from "react";
 import { openModal } from "@/lib/modal";
 import { ModalName } from "@/store/slicers";
 import LinkableNode from "./link-node";

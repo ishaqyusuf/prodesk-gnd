@@ -2,7 +2,7 @@
 
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
-import { dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
+import { doorSvgsById, dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import SVG from "react-inlinesvg";
@@ -10,7 +10,8 @@ import SVG from "react-inlinesvg";
 export default function DoorSvgsPage() {
     const [doors, setDoors] = useState<typeof dykeDoorsSvg>([]);
     useEffect(() => {
-        console.log(doors);
+        // console.log(doors);
+
         setDoors(dykeDoorsSvg);
     }, [doors]);
 
@@ -25,11 +26,12 @@ export default function DoorSvgsPage() {
     );
 }
 
-function Door({ title, svg, url, index, setDoors }: any) {
+function Door({ title, url, index, setDoors }: any) {
     const [load, setLoad] = useState(false);
+    const svg: any = doorSvgsById[(index + 1).toString()];
     function save() {
         const _svg = document.querySelectorAll(`div#door-${index} svg`);
-        console.log(svg);
+        // console.log(svg);
         // setDoors((doors) => {
         //     let d = [
         //         ...doors.map((door, i) => {

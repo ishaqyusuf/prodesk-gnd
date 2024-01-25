@@ -1,11 +1,15 @@
 import JsonSearch from "@/_v2/lib/json-search";
-import { dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
+import { doorSvgsById, dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
 
 export function findDoorSvg(title) {
     console.log(title);
 
     const s = new JsonSearch(
-        dykeDoorsSvg.map(({ title, url }) => ({ title, url })),
+        dykeDoorsSvg.map(({ title, url }, index) => ({
+            title,
+            url,
+            id: (index + 1).toString(),
+        })),
         {
             sort: true,
             indices: {
@@ -20,7 +24,12 @@ export function findDoorSvg(title) {
     // return null;
     // console.log(res);
     //   return res;
-    console.log(res);
+    // console.log(res);
 
-    return res[0]?.item?.url;
+    const item = res[0]?.item;
+    if (!item) return {};
+    return {
+        svg: doorSvgsById[item.id],
+        url: item.url,
+    };
 }

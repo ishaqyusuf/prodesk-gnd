@@ -50,9 +50,8 @@ export async function getDykeStepDoors(
                 id: door.id,
                 price: door.unitPrice,
                 meta: {
-                    svg:
-                        ((door?.meta as any) || {})?.svg ||
-                        findDoorSvg(door.title),
+                    ...findDoorSvg(door.title),
+                    ...((door.meta as any) || {}),
                 },
             },
         };

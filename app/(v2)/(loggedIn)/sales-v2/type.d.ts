@@ -52,6 +52,7 @@ export interface DykeFormStepMeta {
 }
 export interface DykeProductMeta {
     svg;
+    url;
 }
 export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     meta: {

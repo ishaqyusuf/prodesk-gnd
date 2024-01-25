@@ -28,6 +28,8 @@ import Money from "@/components/_v1/money";
 import { timeout } from "@/lib/timeout";
 import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../_utils/door-query-builder";
+
+import SVG from "react-inlinesvg";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -218,12 +220,15 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 alt={b.product.description || b.product.value}
                             />
                         )}
-                        {(b.product.meta as any)?.svg && (
-                            <object
-                                data={b.product.meta?.svg}
-                                type={"image/svg+xml"}
-                            />
-                        )}
+                        {(b.product.meta as any)?.svg &&
+                            (b.product.meta?.svg ? (
+                                <SVG src={b.product.meta?.svg} />
+                            ) : b.product.meta?.url ? (
+                                <object
+                                    data={b.product.meta?.url}
+                                    type={"image/svg+xml"}
+                                />
+                            ) : null)}
                         <Label className="text-sm">{b.product.title}</Label>
                         {/* {
                             <div
