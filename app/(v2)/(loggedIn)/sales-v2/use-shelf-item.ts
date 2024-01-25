@@ -108,6 +108,13 @@ export default function useShelfItem(shelfIndex) {
                 this.getProdFormKey(index, "unitPrice", "totalPrice")
             );
         },
+        clearEstimates() {
+            prodArray.fields.map((f, i) => {
+                this.getProdFormKey(i, "unitPrice", "totalPrice").map((k) =>
+                    form.setValue(k as any, null)
+                );
+            });
+        },
         getParentCategoryId(index) {
             return index == 0 ? null : catArray.fields[0]?.id;
         },

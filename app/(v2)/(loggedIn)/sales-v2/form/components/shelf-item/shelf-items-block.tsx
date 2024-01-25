@@ -245,6 +245,7 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
                     const value = Number(v) || null;
                     field.onChange(value);
                     shelf.categorySelected(index, value);
+                    shelf.clearEstimates();
                 }}
                 placeholder={"Category"}
                 items={categories.map(({ name: label, id: value }) => ({

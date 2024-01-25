@@ -42,7 +42,7 @@ export function DykeItemStepSection({ stepForm, stepIndex }: Props) {
     );
     return (
         <Collapsible
-            className={cn("")}
+            className={cn(stepForm?.item?.meta?.hidden && "hidden")}
             open={stepIndex == item.openedStepIndex}
             // onOpenChange={() => item.openBlock(stepIndex)}
         >
@@ -228,7 +228,9 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 {stepProducts?.map((b, i) => (
                     <button
                         disabled={ctx.loadingStep}
-                        className="flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded p-2 space-y-2 justify-end"
+                        className={cn(
+                            "flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded p-2 space-y-2 justify-end"
+                        )}
                         onClick={() => {
                             selectProduct(b);
                         }}
