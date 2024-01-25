@@ -141,13 +141,13 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
             <div className="flex-1">
                 <ShelfSelect
                     control={shelf.categoryForm.control}
-                    keyName={`${shelf.shelfItemKey}.products.${index}.data.productId`}
+                    keyName={`${shelf.shelfItemKey}.products.${index}.item.productId`}
                     onValueChange={(field, v) => {
                         const productId = Number(v) || null;
                         field.onChange(productId);
                         shelf.productSelected(productId, index);
                     }}
-                    defaultValue={f.data?.productId}
+                    defaultValue={f.item?.productId}
                     placeholder={"Select Product"}
                     items={shelf.products?.map(
                         ({ title: label, id: value }) => ({
@@ -173,7 +173,7 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
                 <FormField
                     control={shelf.categoryForm.control}
                     name={
-                        `${shelf.shelfItemKey}.products.${index}.data.qty` as any
+                        `${shelf.shelfItemKey}.products.${index}.item.qty` as any
                     }
                     // name={`${shelf.getProdFormKey(index, "qty")}` as any}
                     render={({ field }) => (
@@ -181,7 +181,7 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
                             className="w-full"
                             type="number"
                             // {...field}
-                            defaultValue={f.data?.qty?.toString()}
+                            defaultValue={f.item?.qty?.toString()}
                             onChange={(e) => {
                                 // console.log(e.target.value);
                                 field.onChange(+e.target.value);
@@ -204,7 +204,6 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
             <div className="w-12">
                 <Button
                     onClick={() => {
-                        console.log(f);
                         shelf.prodArray.remove(index);
                         // shelf.prodArray.
                         // shelf.form.reset({});

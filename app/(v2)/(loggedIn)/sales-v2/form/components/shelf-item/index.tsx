@@ -71,8 +71,12 @@ export default function ShelfItemIndex() {
                             <Button
                                 onClick={() => {
                                     append({
-                                        categoryIds: [],
-                                        productArray: [],
+                                        categoryIds: [null as any],
+                                        productArray: [
+                                            {
+                                                item: {} as any,
+                                            },
+                                        ],
                                         categoryId: null as any,
                                     });
                                 }}

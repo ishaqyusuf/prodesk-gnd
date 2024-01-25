@@ -23,23 +23,32 @@ export default function useShelfItem(shelfIndex) {
         control: form.control,
         name: categoryProdsKey as any,
     });
-    // prodArray.
-    useEffect(() => {
-        const oldf: CategorizedShelfItem = form.getValues(configky as any);
-
-        const cids = (oldf?.categoryIds || [-1])?.map((id) => ({ id }));
-        catArray.replace(cids);
-    }, []);
     const catArray = useFieldArray({
         control: categoryForm.control,
         name: "ids",
         keyName: "_id",
     });
+    // prodArray.
+
+    useEffect(() => {
+        const oldf: CategorizedShelfItem = form.getValues(configky as any);
+
+        const cids = (oldf?.categoryIds || [null])?.map((id) => ({ id }));
+
+        // console.log(prodArray);
+
+        catArray.replace(cids);
+        const index = cids.length - 1;
+        const lastId = cids.slice(-1)[0]?.id;
+        // console.log({ lastId, index });
+        if (lastId && index > -1) ctx.categorySelected(index, lastId);
+    }, []);
+
     const [products, setProducts] = useState<
         DykeShelfProducts[] | undefined | null
     >(null);
 
-    return {
+    const ctx = {
         categoryForm,
         catArray,
         prodArray,
@@ -52,10 +61,10 @@ export default function useShelfItem(shelfIndex) {
                 // console.log(prod);
                 const catIds = categoryForm.getValues("ids").map((i) => i.id);
                 const lastId = catIds.slice(-1)[0];
-                console.log({
-                    catIds,
-                    lastId,
-                });
+                // console.log({
+                //     catIds,
+                //     lastId,
+                // });
                 const prodKey: any = `${configky}.productArray.${prodIndex}.item`;
                 form.setValue(`${prodKey}.categoryId` as any, lastId);
                 form.setValue(`${prodKey}.meta.categoryIds` as any, catIds);
@@ -89,7 +98,7 @@ export default function useShelfItem(shelfIndex) {
                 form.setValue(qtyPath, 1);
             }
             let totalPrice = (qty || 0) * (unitPrice || 0);
-            console.log(totalPrice);
+            // console.log(totalPrice);
 
             form.setValue(unitPricePath, unitPrice);
             form.setValue(totalPath, totalPrice);
@@ -122,7 +131,7 @@ export default function useShelfItem(shelfIndex) {
             if (removeIndices.length) catArray.remove(removeIndices);
             setProducts(null);
             const parentCategoryId = this.getParentCategoryId(index);
-            console.log({ categoryId, parentCategoryId });
+            // console.log({ categoryId, parentCategoryId });
             const { subCategoriesCount, products } = await getShelfProducts(
                 parentCategoryId,
                 categoryId
@@ -134,6 +143,7 @@ export default function useShelfItem(shelfIndex) {
             }
         },
     };
+    return ctx;
 }
 
 interface CategoryForm {

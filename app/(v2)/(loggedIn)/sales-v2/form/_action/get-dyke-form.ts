@@ -101,6 +101,7 @@ export async function getDykeFormAction(type, slug) {
         customer,
         shippingAddress,
         billingAddress,
+        payments,
         ...orderData
     } = typedForm;
 
