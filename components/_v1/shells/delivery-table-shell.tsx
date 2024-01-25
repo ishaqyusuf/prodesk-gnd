@@ -132,7 +132,7 @@ export default function DeliveryTableShell<T>({
                     single: true,
                     options: [
                         labelValue("Pending Production", "pending production"),
-                        labelValue("Queued for Delivery", "delivery"),
+                        labelValue("Queued for Delivery", "queued"),
                         labelValue("Ready For Delivery", "ready"),
                         labelValue("In Transit", "transit"),
                         labelValue("Delivered", "delivered"),

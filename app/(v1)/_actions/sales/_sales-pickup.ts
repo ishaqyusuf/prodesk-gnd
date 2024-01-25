@@ -18,13 +18,13 @@ export async function _getSalesPickup(query: SalesQueryParams) {
         ...(await queryFilter(query)),
         include: {
             customer: true,
-            pickup: true
-        }
+            pickup: true,
+        },
     });
     const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 export async function _cancelSalesPickup(salesId) {
@@ -33,14 +33,14 @@ export async function _cancelSalesPickup(salesId) {
         data: {
             pickup: {
                 disconnect: true,
-                delete: true
-            }
-        }
+                delete: true,
+            },
+        },
     });
     await saveProgress("SalesOrder", salesId, {
         type: "delivery",
         status: "Pickup Cancelled",
-        userId: await userId()
+        userId: await userId(),
     });
     _revalidate("pickup");
 }
@@ -53,34 +53,34 @@ export async function _createPickup(salesId, pickupData) {
                     ...pickupData,
                     pickupApprovedBy: await userId(),
                     createdAt: new Date(),
-                    updatedAt: new Date()
-                }
-            }
+                    updatedAt: new Date(),
+                },
+            },
         },
         include: {
-            pickup: true
-        }
+            pickup: true,
+        },
     });
     await saveProgress("SalesOrder", salesId, {
         type: "delivery",
         status: "Order Pickup",
         userId: await userId(),
-        description: `Order pickup by ${order.pickup?.pickupBy}`
+        description: `Order pickup by ${order.pickup?.pickupBy}`,
     });
     await _revalidate("pickup");
 }
 export async function updateSalesDelivery(id, status) {
     const updateData: any = {
-        status
+        status,
+        updatedAt: new Date(),
     };
     if (status == "Delivered") updateData.deliveredAt = new Date();
+    else updateData.deliveredAt = null;
     await prisma.salesOrders.update({
         where: { id },
         data: {
-            status,
-            deliveredAt: status == "Delivered" ? new Date() : null,
-            updatedAt: new Date()
-        }
+            ...updateData,
+        },
     });
-    await _revalidate("pickup");
+    await _revalidate("delivery");
 }

@@ -184,6 +184,7 @@ export type SalesStatus =
     | "Unassigned"
     | "Inbound"
     | "Late"
+    | "Delivered"
     | undefined;
 export interface SalesQueryParams extends BaseQuery {
     _q?;

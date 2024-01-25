@@ -19,9 +19,13 @@ export default async function OrdersPage({ searchParams }) {
         _deliveryStatus: "queued",
         ...queryParams(searchParams),
     });
+    const status = searchParams._deliveryStatus || "queued";
+    metadata.title = `Order Delivery | ${status}`;
+
     const _orders = await prisma.salesOrders.findMany({
         where: {
             deliveryOption: "delivery",
+            type: "order",
         },
         select: {
             id: true,
@@ -33,6 +37,8 @@ export default async function OrdersPage({ searchParams }) {
         },
     });
     // console.log(_orders.map(o => ({ s: o.status,bo: o. })));
+    // console.log(_orders.filter((d) => d.prodStatus != "Completed"));
+
     const stats = [
         {
             label: "Pending Production",
@@ -48,7 +54,7 @@ export default async function OrdersPage({ searchParams }) {
                 (d) =>
                     d.prodStatus == "Completed" &&
                     (!d.status ||
-                        !["ready", "delivered", "in transit", null, ""].every(
+                        ["ready", "delivered", "in transit"].every(
                             (s) => s != d.status?.toLowerCase()
                         ))
             ).length,
@@ -56,11 +62,8 @@ export default async function OrdersPage({ searchParams }) {
         {
             label: "Ready",
             link: "/sales/delivery?page=1&_deliveryStatus=ready",
-            value: _orders.filter(
-                (d) => d.status == "ready"
-                // d.prodStatus == "Completed" &&
-                // !["In Transit", "Return", "Delivered"].includes(d.status)
-            ).length,
+            value: _orders.filter((d) => d.status?.toLowerCase() == "ready")
+                .length,
             color: "teal",
         },
         {
@@ -83,7 +86,7 @@ export default async function OrdersPage({ searchParams }) {
                 <BreadLink isLast title="Delivery" />
             </Breadcrumbs>
             <div className="flex justify-between items-end">
-                <PageHeader title="Sales Delivery" />
+                <PageHeader title={`Sales Delivery - ${status}`} />
                 <div className="flex-1 h-20 flex justify-end space-x-2">
                     {stats.map((s, i) => (
                         <StartCard

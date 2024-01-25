@@ -6,13 +6,13 @@ import { useSession } from "next-auth/react";
 
 export default function SalesTabLayout({
     children,
-    query
+    query,
 }: {
     children;
     query?;
 }) {
     const { data: session } = useSession({
-        required: false
+        required: false,
     });
     const can = session?.can;
     // useEffect(() =>)
@@ -21,17 +21,19 @@ export default function SalesTabLayout({
             can?.viewOrders && { title: "Orders", path: "/sales/orders" },
             can?.viewOrders && {
                 title: "Back Orders",
-                path: "/sales/back-orders"
+                path: "/sales/back-orders",
             },
             can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
-            can?.viewInboundOrder && {
-                title: "Inbounds",
-                path: "/sales/inbounds"
+            // can?.viewInboundOrder && {
+            //     title: "Inbounds",
+            //     path: "/sales/inbounds",
+            // },
+            can?.viewDelivery && {
+                title: "Delivery",
+                path: "/sales/delivery?_deliveryStatus=queued",
             },
-            can?.viewDelivery && { title: "Delivery", path: "/sales/delivery" },
-            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" }
+            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" },
         ].filter(Boolean)
     );
     return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;
 }
-

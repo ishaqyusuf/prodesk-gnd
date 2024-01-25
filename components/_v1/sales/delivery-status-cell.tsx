@@ -12,6 +12,7 @@ import { Button } from "../../ui/button";
 import { toast } from "sonner";
 import { OrderStatus } from "../columns/sales-columns";
 import { updateSalesDelivery } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { MenuItem } from "../data-table/data-table-row-actions";
 
 export function DeliveryStatusCell({ order }: { order }) {
     const [isPending, startTransition] = useTransition();
@@ -39,17 +40,17 @@ export function DeliveryStatusCell({ order }: { order }) {
                         align="end"
                         className="w-[185px] p-4 grid gap-2 text-sm"
                     >
-                        {/* {["Ready", "In Transit", "Returned", "Delivered"]?.map(
-                            e => (
-                                <DropdownMenuItem
-                                    onClick={_e => submit(e)}
+                        {["Ready", "In Transit", "Returned", "Delivered"]?.map(
+                            (e) => (
+                                <MenuItem
+                                    onClick={(_e) => submit(e)}
                                     className="cursor-pointer hover:bg-accent"
                                     key={e}
                                 >
                                     {e}
-                                </DropdownMenuItem>
+                                </MenuItem>
                             )
-                        )} */}
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>

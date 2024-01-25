@@ -19,7 +19,6 @@ import {
     _notifyProductionDateUpdate,
 } from "../notifications";
 import { formatDate } from "@/lib/use-day";
-import { deepCopy } from "@/lib/deep-copy";
 import { _revalidate } from "../_revalidate";
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 
@@ -100,6 +99,7 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     }
     await _updateProdQty(id);
     if (order?.prodId && !completed) await _notifyProductionAssigned(order);
+    _revalidate(order.type == "order" ? "orders" : "estimates");
 }
 export async function cancelProductionAssignmentAction(id) {
     await prisma.salesOrders.update({

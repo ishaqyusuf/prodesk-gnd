@@ -163,9 +163,23 @@ export async function whereSales(query: SalesQueryParams) {
             };
             break;
         case "pending production":
-            where.prodStatus = {
-                not: "Completed",
-            };
+            if (!where.OR) where.OR = [];
+
+            where.OR.push({
+                OR: [
+                    {
+                        prodStatus: {
+                            notIn: ["Completed"],
+                        },
+                    },
+                    {
+                        prodStatus: null,
+                    },
+                ],
+            });
+            // where.prodStatus = {
+            //     notIn: ["Completed"],
+            // };
             break;
         case "ready":
             where.status = "Ready";

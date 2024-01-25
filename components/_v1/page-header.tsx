@@ -39,7 +39,10 @@ export default function PageHeader({
     return (
         <div className="flex items-center justify-between space-y-2">
             <div className="space-y-0.5">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
+                <h2
+                    className="text-xl sm:text-2xl font-bold tracking-tight capitalize
+                "
+                >
                     {title}
                 </h2>
                 {subtitle && (
