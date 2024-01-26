@@ -13,19 +13,35 @@ export function calculateSalesEstimate(data: DykeForm) {
         calculateShelfItems(item);
 
         taxEstimateAndUpdateTotal(item, data);
+
         // item = res.item;
         // (data.order as any).subTotal += res.totalPrice;
 
         return item;
     });
-    // form.reset(data);
-    // console.log(data);
+    const {
+        subTotal,
+        tax,
+        meta: { labor_cost = 0, discount = 0, payment_option },
+    } = data.order;
+    let total = formatMoney(subTotal + labor_cost + discount);
+    let ccc = 0;
+    const cccPercentage = Number(data.data?.settings?.ccc || 0);
+    if (payment_option == "Credit Card")
+        ccc += formatMoney((cccPercentage / 100) * (total + tax));
+    data.order.meta.ccc = ccc;
+    data.order.meta.ccc_percentage = cccPercentage;
+    const dt = (data.order.grandTotal = ccc + tax + total);
+    data.order.amountDue = dt - (data.paidAmount || 0);
+
     return data;
 }
 function taxEstimateAndUpdateTotal(
     item: DykeForm["itemArray"][0],
     formData: DykeForm
 ) {
+    if (!formData.order.tax) formData.order.tax = 0;
+    if (!formData.order.subTotal) formData.order.subTotal = 0;
     const totalPrice = item.item.total || 0;
 
     (formData.order as any).subTotal += totalPrice;
@@ -34,7 +50,8 @@ function taxEstimateAndUpdateTotal(
         tax = formatMoney(totalPrice * (formData.order.taxPercentage / 100));
     }
     item.item.tax = tax;
-    (formData.order as any).tax += tax;
+    formData.order.tax += tax;
+    formData.order.subTotal += totalPrice;
 }
 function calculateShelfItems(item: DykeForm["itemArray"][0]) {
     if (item.item.meta.doorType == "Shelf Item") {
@@ -85,5 +102,6 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         item.item.rate = item.item.price = item.item.total = sum.totalPrice;
         item.item.qty = 1;
     }
+
     return { item, totalPrice: sum.totalPrice };
 }

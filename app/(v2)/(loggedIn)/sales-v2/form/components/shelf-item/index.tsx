@@ -49,7 +49,6 @@ export default function ShelfItemIndex() {
                         <div className="w-12"></div>
                     </TableHead>
                     {/* <TableHead>Product</TableHead> */}
-
                     {/* <TableHead>Qty</TableHead> */}
                     {/* <TableHead>Unit Price</TableHead> */}
                     {/* <TableHead>Line Total</TableHead> */}

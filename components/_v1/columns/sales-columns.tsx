@@ -104,6 +104,13 @@ export function OrderIdCell(
 
                 <span className="text-muted-foreground">
                     {formatDate(order.createdAt)}
+                    <span>
+                        {order.isDyke && (
+                            <span className="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline">
+                                v2
+                            </span>
+                        )}
+                    </span>
                 </span>
             </LinkableNode>
         </div>

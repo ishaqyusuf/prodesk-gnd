@@ -69,7 +69,11 @@ export function OrderRowAction(props: IOrderRowProps) {
                 </MenuItem>
                 <MenuItem
                     Icon={Pen}
-                    link={`/sales/edit/${row.type}/${row.slug}`}
+                    link={
+                        row.isDyke
+                            ? `/sales-v2/form/${row.type}/${row.slug}`
+                            : `/sales/edit/${row.type}/${row.slug}`
+                    }
                 >
                     Edit
                 </MenuItem>

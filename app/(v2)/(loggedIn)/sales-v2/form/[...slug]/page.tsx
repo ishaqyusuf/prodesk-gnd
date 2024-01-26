@@ -6,12 +6,16 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
 export const metadata: Metadata = {
     title: "Sales Form",
+    description: "",
 };
 export default async function SalesForm({ params }) {
     const [type, slug] = params.slug;
     const form = await getDykeFormAction(type, slug);
     // form.itemArray[0]?.item.formStepArray[0]?.item.
 
+    metadata.title = `${slug ? "Edit " : "New "} ${form.order.type} ${
+        slug && `| ${slug}`
+    }`;
     return (
         <div className="sm:px-8 px-4">
             <Breadcrumbs>
