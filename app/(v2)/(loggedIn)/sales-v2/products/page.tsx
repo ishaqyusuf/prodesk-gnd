@@ -4,7 +4,12 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { getDykeProducts } from "./_actions/get-dyke-products";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import ProductsTable from "./components/products-table";
+import { Metadata } from "next";
+import { Shell } from "@/components/shell";
 
+export const metadata: Metadata = {
+    title: "Door Components | GND",
+};
 export default async function ProductsPage({ searchParams }) {
     const response = await getDykeProducts(queryParams(searchParams));
 
@@ -14,9 +19,9 @@ export default async function ProductsPage({ searchParams }) {
                 <BreadLink isFirst title="Sales" />
                 <BreadLink isLast title="Products" />
             </Breadcrumbs>
-            <div className="">
+            <Shell className="">
                 <ProductsTable searchParams={searchParams} {...response} />
-            </div>
+            </Shell>
         </DykeTabLayout>
     );
 }

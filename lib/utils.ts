@@ -14,6 +14,11 @@ export function randomNumber2(min, max) {
 
     return "" + number; //.substring(add);
 }
+export function toSentenceCase(str: string) {
+    return str
+        .replace(/([A-Z])/g, " $1")
+        .replace(/^./, (str) => str.toUpperCase());
+}
 export function randomNumber(digit = 1) {
     var add = 1,
         max = 12 - add; // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.
@@ -118,8 +123,7 @@ export function toSingular(plural) {
     const rules = [
         { suffix: "s", replace: "" },
         { suffix: "es", replace: "" },
-        { suffix: "ies", replace: "y" },
-        // Add more rules as needed
+        { suffix: "ies", replace: "y" }, // Add more rules as needed
     ];
 
     for (const rule of rules) {
