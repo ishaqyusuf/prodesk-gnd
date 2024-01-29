@@ -46,7 +46,7 @@ import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
     searchParams?;
-    columns: any[]; // ColumnDef<TData, TValue>[];
+    columns: ColumnDef<TData, TValue>[];
     data: TData[];
     pageInfo: TablePageInfo;
     filterableColumns?: (DataTableFilterableColumn<TData, TValue> | any)[];

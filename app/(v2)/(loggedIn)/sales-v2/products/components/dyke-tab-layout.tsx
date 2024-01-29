@@ -10,7 +10,7 @@ export default function DykeTabLayout({ children }) {
     });
     const can = session?.can;
     const [tabs, setTabs] = useState([
-        { title: "Products", path: "/sales-v2/products" },
+        { title: "Door Components", path: "/sales-v2/products" },
         { title: "Shelf Items", path: "/sales-v2/products/shelf-items" },
     ]);
     return <TabbedLayout tabs={tabs}>{children}</TabbedLayout>;
