@@ -1,13 +1,14 @@
 "use client";
 
 import { DateFormats, formatDate } from "@/lib/use-day";
-import { cn, formatCurrency } from "@/lib/utils";
-import { useState, useTransition } from "react";
+import { catchError, cn, formatCurrency } from "@/lib/utils";
+import { startTransition, useState, useTransition } from "react";
 import { Icons } from "../_v1/icons";
-import { Button, ButtonProps } from "../ui/button";
+import { Button, ButtonProps, buttonVariants } from "../ui/button";
 import { toast } from "sonner";
 import { MenuItem } from "../_v1/data-table/data-table-row-actions";
 import { DropdownMenuShortcut } from "../ui/dropdown-menu";
+import Link from "next/link";
 
 interface Props {
     children?;
@@ -151,11 +152,71 @@ function Btn({
         </Button>
     );
 }
+function NewBtn({ onClick, link }: { onClick?; link? }) {
+    if (link)
+        return (
+            <Link aria-label="Create new row" href={link}>
+                <div
+                    className={cn(
+                        buttonVariants({
+                            size: "sm",
+                            className: "h-8",
+                        })
+                    )}
+                >
+                    <Icons.add className="mr-2 h-4 w-4" aria-hidden="true" />
+                    New
+                </div>
+            </Link>
+        );
+    return (
+        <Button size="sm" onClick={onClick} className="h-8">
+            <Icons.add className="mr-2 h-4 w-4" aria-hidden="true" />
+            New
+        </Button>
+    );
+}
+function BatchDelete({ table, action, selectedIds }) {
+    const [isPending, startTransition] = useTransition();
+    function deleteRowsAction(e) {
+        toast.promise(Promise.all(selectedIds.map((id) => action(id))), {
+            loading: "Deleting...",
+            success: () => {
+                table.toggleAllPageRowsSelected(false);
+                return "Deleted Successfully";
+            },
+            error(err: unknown) {
+                table.toggleAllPageRowsSelected(false);
+                return catchError(err);
+            },
+        });
+    }
+    return (
+        <Button
+            aria-label="Delete selected rows"
+            variant="destructive"
+            size="sm"
+            className="h-8"
+            onClick={(event) => {
+                startTransition(() => {
+                    table.toggleAllPageRowsSelected(false);
+                    deleteRowsAction(event);
+                });
+            }}
+            disabled={isPending}
+        >
+            <Icons.trash className="mr-2 h-4 w-4" aria-hidden="true" />
+            Delete
+        </Button>
+    );
+}
 export let TableCol = Object.assign(Cell, {
     Primary,
+    NewBtn,
     Btn,
     Secondary,
     Money,
     Date,
+    BatchDelete,
     DeleteRow,
 });

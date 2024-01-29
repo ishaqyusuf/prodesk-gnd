@@ -119,36 +119,40 @@ export function DataTableToolbar<TData, TValue>({
                 )}
             </div>
             <div className="flex items-center space-x-2">
-                {table.getSelectedRowModel().rows.length > 0 && BatchAction && (
-                    <BatchAction
-                        items={table
-                            .getSelectedRowModel()
-                            .rows?.map((r) => r.original)}
-                    />
+                {table.getSelectedRowModel().rows.length > 0 ? (
+                    <>
+                        {BatchAction && (
+                            <BatchAction
+                                items={table
+                                    .getSelectedRowModel()
+                                    .rows?.map((r) => r.original)}
+                            />
+                        )}
+                        {deleteRowsAction && (
+                            <Button
+                                aria-label="Delete selected rows"
+                                variant="destructive"
+                                size="sm"
+                                className="h-8"
+                                onClick={(event) => {
+                                    startTransition(() => {
+                                        table.toggleAllPageRowsSelected(false);
+                                        deleteRowsAction(event);
+                                    });
+                                }}
+                                disabled={isPending}
+                            >
+                                <TrashIcon
+                                    className="mr-2 h-4 w-4"
+                                    aria-hidden="true"
+                                />
+                                Delete
+                            </Button>
+                        )}
+                    </>
+                ) : (
+                    <>{Toolbar && <Toolbar table={table} />}</>
                 )}
-                {Toolbar && <Toolbar table={table} />}
-                {deleteRowsAction &&
-                table.getSelectedRowModel().rows.length > 0 ? (
-                    <Button
-                        aria-label="Delete selected rows"
-                        variant="destructive"
-                        size="sm"
-                        className="h-8"
-                        onClick={(event) => {
-                            startTransition(() => {
-                                table.toggleAllPageRowsSelected(false);
-                                deleteRowsAction(event);
-                            });
-                        }}
-                        disabled={isPending}
-                    >
-                        <TrashIcon
-                            className="mr-2 h-4 w-4"
-                            aria-hidden="true"
-                        />
-                        Delete
-                    </Button>
-                ) : null}
                 <DataTableViewOptions table={table} />
             </div>
         </div>

@@ -48,7 +48,7 @@ interface DataTableProps<TData, TValue> {
     searchParams?;
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    pageInfo: TablePageInfo;
+    pageInfo?: TablePageInfo;
     filterableColumns?: (DataTableFilterableColumn<TData, TValue> | any)[];
     searchableColumns?: DataTableSearchableColumn<TData>[];
     dateFilterColumns?: DataTableDateFilterColumn<TData, TValue>[];

@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { toast } from "sonner";
 import Error from "next/error";
 import { convertToNumber } from "./use-number";
+import { z } from "zod";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
@@ -306,3 +307,16 @@ export const filteredOptions = (q, items, labelKey = "label") => {
     // );
     return uniqueBy(filteredOptions, labelKey)?.filter((_, i) => i < 25); //.filter((a, i) => i < 25);
 };
+export function catchError(err: unknown) {
+    return null;
+    // if (err instanceof z.ZodError) {
+    //     const errors = err.issues.map((issue) => {
+    //         return issue.message;
+    //     });
+    //     return toast.error(errors.join("\n"));
+    // } else if (err instanceof Error) {
+    //     return toast.error((err as any).message);
+    // } else {
+    //     return toast.error("Something went wrong, please try again later.");
+    // }
+}

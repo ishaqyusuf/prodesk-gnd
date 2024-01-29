@@ -1,7 +1,7 @@
 "use client";
 import { DataTableType, PromiseDataTable } from "@/types";
 import { getShelfItems } from "../_actions/get-shelf-items";
-import React from "react";
+import React, { useMemo } from "react";
 import useDataTableColumn from "@/components/data-table/columns/use-data-table-columns";
 import { TableCell } from "@/components/ui/table";
 import { TableCol } from "@/components/data-table/table-cells";
@@ -11,6 +11,7 @@ import { ProductCategoryFilter } from "../../components/filters/product-category
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { getShelfCategories } from "../_actions/get-shelf-categories";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
+import { ColumnDef } from "@tanstack/react-table";
 
 type Promise = PromiseDataTable<typeof getShelfItems>;
 export type ShelfItem = Awaited<Promise>["data"][0];
@@ -77,9 +78,20 @@ export default function ShelfItemsTable<T>({ promise }: Props<T>) {
                     />
                 ),
             ]}
-            newRowAction={() => {}}
-            deleteRowsAction={table.deleteSelectedRow}
-            BatchAction={({ table }) => <></>}
+            BatchAction={({ table: _table }) => (
+                <>
+                    <TableCol.BatchDelete
+                        table={_table}
+                        action={deleteDykeShelfItem}
+                        selectedIds={table.selectedRowIds}
+                    />
+                </>
+            )}
+            Toolbar={({ table }) => (
+                <>
+                    <TableCol.NewBtn onClick={() => {}} />
+                </>
+            )}
         />
     );
 }

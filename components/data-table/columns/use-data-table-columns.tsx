@@ -98,6 +98,7 @@ export default function useDataTableColumn<T>(
     return {
         ...ctx,
         columns,
+        ...checkBox,
         deleteSelectedRow() {
             toast.promise(
                 Promise.all(
