@@ -11,7 +11,7 @@ import { PrintOrderMenuAction } from "../actions/order-actions";
 import { dispatchSlice } from "@/store/slicers";
 import { deepCopy } from "@/lib/deep-copy";
 
-export function HomesSelectionAction({ items }) {
+export function HomesBatchAction({ items }) {
     return (
         <>
             {/* <span>{JSON.stringify(items)}</span> */}

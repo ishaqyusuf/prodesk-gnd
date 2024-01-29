@@ -79,7 +79,7 @@ export default function ShelfItemsTable<T>({ promise }: Props<T>) {
             ]}
             newRowAction={() => {}}
             deleteRowsAction={table.deleteSelectedRow}
-            // BatchAction={({ items }) => <span>abc....</span>}
+            BatchAction={({ table }) => <></>}
         />
     );
 }

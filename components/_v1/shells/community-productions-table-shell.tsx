@@ -43,7 +43,7 @@ import { MoreHorizontal, Printer, View } from "lucide-react";
 import Link from "next/link";
 import { deleteHome } from "@/app/(v1)/_actions/community/home";
 import { dispatchSlice } from "@/store/slicers";
-import { HomesSelectionAction } from "../community/homes-selection-action";
+import { HomesBatchAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import {
@@ -134,7 +134,7 @@ export default function CommunityProductionsTableShell<T>({
                 columns={columns}
                 pageInfo={pageInfo}
                 data={data}
-                SelectionAction={HomesSelectionAction}
+                BatchAction={HomesBatchAction}
                 filterableColumns={[
                     ProjectsFilter,
                     (props) => (

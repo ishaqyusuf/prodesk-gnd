@@ -4,7 +4,7 @@ import { openMergeDuplicatesModal } from "@/app/(v2)/(loggedIn)/sales/_modals/me
 import Btn from "../../btn";
 import { Icons } from "../../icons";
 
-export default function CustomersSelectionAction({ items }: { items }) {
+export default function CustomersBatchAction({ items }: { items }) {
     async function mergeDuplicates() {
         openMergeDuplicatesModal(items);
     }

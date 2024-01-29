@@ -9,7 +9,7 @@ import {
 } from "../../ui/dropdown-menu";
 import { PrintOrderMenuAction } from "../actions/order-actions";
 
-export function SalesSelectionAction({ items }) {
+export function SalesBatchAction({ items }) {
     return (
         <>
             {/* <span>{JSON.stringify(items)}</span> */}

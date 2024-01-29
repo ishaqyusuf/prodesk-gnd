@@ -25,7 +25,7 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
 import { labelValue, truthy } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
-import { DeliverySelectionAction } from "../list-selection-action/delivery-selection-action";
+import { DeliveryBatchAction } from "../list-selection-action/delivery-selection-action";
 import {
     RowActionCell,
     RowActionMenuItem,
@@ -123,7 +123,7 @@ export default function DeliveryTableShell<T>({
             columns={columns}
             pageInfo={pageInfo}
             data={data}
-            SelectionAction={DeliverySelectionAction}
+            BatchAction={DeliveryBatchAction}
             filterableColumns={[
                 {
                     id: "_deliveryStatus",

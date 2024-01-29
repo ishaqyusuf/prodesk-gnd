@@ -22,7 +22,7 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
-import { SalesSelectionAction } from "../list-selection-action/sales-selection-action";
+import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
 import { DeliveryStatusCell } from "../sales/delivery-status-cell";
@@ -90,7 +90,7 @@ export default function PickupTableShell<T>({
             columns={columns}
             pageInfo={pageInfo}
             data={data}
-            SelectionAction={SalesSelectionAction}
+            BatchAction={SalesBatchAction}
             filterableColumns={[
                 {
                     id: "_deliveryStatus",

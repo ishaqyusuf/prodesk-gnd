@@ -63,7 +63,7 @@ export default function InboundFormTableShell<T>({
                         title: "",
                     },
                 ]}
-                SelectionAction={({ items }) => (
+                BatchAction={({ items }) => (
                     <>
                         <Button
                             className="h-8"

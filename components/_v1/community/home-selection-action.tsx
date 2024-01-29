@@ -12,7 +12,7 @@ import { dispatchSlice } from "@/store/slicers";
 import { deepCopy } from "@/lib/deep-copy";
 import { openModal } from "@/lib/modal";
 
-export function HomeSelectionAction({ items }) {
+export function HomeBatchAction({ items }) {
     return (
         <>
             {/* <span>{JSON.stringify(items)}</span> */}

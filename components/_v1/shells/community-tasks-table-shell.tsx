@@ -9,7 +9,7 @@ import { DataTable2 } from "../data-table/data-table-2";
 
 import { ExtendedHomeTasks } from "@/types/community";
 import { Button } from "../../ui/button";
-import { HomesSelectionAction } from "../community/homes-selection-action";
+import { HomesBatchAction } from "../community/homes-selection-action";
 import { RowActionCell } from "../data-table/data-table-row-actions";
 import { openModal } from "@/lib/modal";
 import { ProjectsFilter } from "../filters/projects-filter";
@@ -100,7 +100,7 @@ export default function CommunityTaskTableShell({
                 columns={columns}
                 pageInfo={pageInfo}
                 data={data}
-                SelectionAction={HomesSelectionAction}
+                BatchAction={HomesBatchAction}
                 filterableColumns={[
                     ProjectsFilter,
                     BuilderFilter,

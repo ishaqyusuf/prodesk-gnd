@@ -40,7 +40,7 @@ import { openModal } from "@/lib/modal";
 import AuthGuard from "../auth-guard";
 import { SmartTable } from "../data-table/smart-table";
 import { Icons } from "../icons";
-import CustomersSelectionAction from "../sales/customers/customers-selection-action";
+import CustomersBatchAction from "../sales/customers/customers-selection-action";
 import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
 
 export default function CustomersTableShell<T>({
@@ -165,9 +165,7 @@ export default function CustomersTableShell<T>({
             columns={columns}
             pageInfo={pageInfo}
             data={data}
-            SelectionAction={({ items }) => (
-                <CustomersSelectionAction items={items} />
-            )}
+            BatchAction={({ items }) => <CustomersBatchAction items={items} />}
             filterableColumns={[]}
             searchableColumns={[
                 {

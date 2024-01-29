@@ -18,7 +18,7 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { ExtendedHome, IHome } from "@/types/community";
 import { BuilderFilter } from "../filters/builder-filter";
 import { HomeInvoiceColumn, HomeStatus } from "../columns/community-columns";
-import { HomesSelectionAction } from "../community/homes-selection-action";
+import { HomesBatchAction } from "../community/homes-selection-action";
 import { EditRowAction } from "../data-table/data-table-row-actions";
 import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
@@ -172,7 +172,7 @@ export default function HomesTableShell<T>({
                 columns={columns}
                 pageInfo={pageInfo}
                 data={data}
-                SelectionAction={HomesSelectionAction}
+                BatchAction={HomesBatchAction}
                 filterableColumns={[
                     BuilderFilter,
                     ProjectsFilter,

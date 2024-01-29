@@ -58,7 +58,7 @@ interface DataTableProps<TData, TValue> {
     hideHeader?: Boolean;
     hideFooter?: Boolean;
     mobile?: Boolean;
-    SelectionAction?;
+    BatchAction?;
     Toolbar?({ table }: { table: any });
 }
 
@@ -73,7 +73,7 @@ export function DataTable2<TData, TValue>({
     newRowLink,
     hideFooter,
     hideHeader,
-    SelectionAction,
+    BatchAction,
     deleteRowsAction,
     mobile,
     Toolbar,
@@ -264,7 +264,7 @@ export function DataTable2<TData, TValue>({
             {!hideHeader && (
                 <DataTableToolbar
                     table={table}
-                    SelectionAction={SelectionAction}
+                    BatchAction={BatchAction}
                     Toolbar={Toolbar}
                     filterableColumns={filterableColumns}
                     searchableColumns={searchableColumns}

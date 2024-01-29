@@ -31,7 +31,7 @@ import { MoreHorizontal, Printer, View } from "lucide-react";
 import Link from "next/link";
 import { deleteHome } from "@/app/(v1)/_actions/community/home";
 import { dispatchSlice } from "@/store/slicers";
-import { HomesSelectionAction } from "../community/homes-selection-action";
+import { HomesBatchAction } from "../community/homes-selection-action";
 import HomePrinter from "../print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import {
@@ -47,7 +47,7 @@ import { Icons } from "../icons";
 import { getUnitTemplateLink } from "@/app/(v1)/_actions/community/get-unit-template";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { HomeSelectionAction } from "../community/home-selection-action";
+import { HomeBatchAction } from "../community/home-selection-action";
 import { openModal } from "@/lib/modal";
 import { deactivateProduction } from "@/app/(v1)/_actions/community/activate-production";
 
@@ -293,7 +293,7 @@ export default function HomesTableShell<T>({
                 columns={columns}
                 pageInfo={pageInfo}
                 data={data}
-                SelectionAction={HomeSelectionAction}
+                BatchAction={HomeBatchAction}
                 filterableColumns={[
                     ProjectsFilter,
                     {

@@ -8,7 +8,7 @@ import { RowActionMoreMenu } from "../data-table/data-table-row-actions";
 import { DropdownMenuItem } from "../../ui/dropdown-menu";
 import { updateSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/sales-delivery";
 
-export function DeliverySelectionAction({ items }) {
+export function DeliveryBatchAction({ items }) {
     const { queryParams, setQueryParams } = useQueryParams<any>();
     async function _updateSales(status) {
         await updateSalesDelivery(

@@ -22,7 +22,7 @@ import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../../../../../../components/_v1/actions/order-actions";
 import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
 
-import { SalesSelectionAction } from "../../../../../../components/_v1/list-selection-action/sales-selection-action";
+import { SalesBatchAction } from "../../../../../../components/_v1/list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "./sales-customer-filter";
 import { SmartTable } from "../../../../../../components/_v1/data-table/smart-table";
 import { useMediaQuery } from "react-responsive";
@@ -167,7 +167,7 @@ export default function OrdersTableShell<T>({
                 pageInfo={pageInfo}
                 mobile
                 data={data}
-                SelectionAction={SalesSelectionAction}
+                BatchAction={SalesBatchAction}
                 filterableColumns={[
                     {
                         id: "status",
