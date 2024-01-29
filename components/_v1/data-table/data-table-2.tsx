@@ -27,6 +27,7 @@ import {
     type VisibilityState,
 } from "@tanstack/react-table";
 
+import { DataTablePagination as DTPagination } from "@/components/data-table/data-table-pagination";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
     Table,
@@ -45,24 +46,27 @@ import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
     searchParams?;
-    columns: ColumnDef<TData, TValue>[];
+    columns: any[]; // ColumnDef<TData, TValue>[];
     data: TData[];
     pageInfo: TablePageInfo;
     filterableColumns?: (DataTableFilterableColumn<TData, TValue> | any)[];
     searchableColumns?: DataTableSearchableColumn<TData>[];
     dateFilterColumns?: DataTableDateFilterColumn<TData, TValue>[];
     newRowLink?: string;
+    pageCount?: number;
     deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
     hideHeader?: Boolean;
     hideFooter?: Boolean;
     mobile?: Boolean;
     SelectionAction?;
+    Toolbar?({ table }: { table: any });
 }
 
 export function DataTable2<TData, TValue>({
     columns,
     data,
     pageInfo,
+    pageCount,
     filterableColumns = [],
     searchableColumns = [],
     dateFilterColumns = [],
@@ -72,6 +76,7 @@ export function DataTable2<TData, TValue>({
     SelectionAction,
     deleteRowsAction,
     mobile,
+    Toolbar,
     searchParams: _searchParams,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({});
@@ -88,7 +93,7 @@ export function DataTable2<TData, TValue>({
     // const [dataQuery, setDataQuery] = React.useState({});
     const [dataQueryString, setDataQueryString] = React.useState("");
     const [items, setItems] = React.useState([]);
-    const [pageCount, setPageCount] = React.useState(0);
+    // const [_pageCount, setPageCount] = React.useState(0);
     const [isFiltered, setIsFiltered] = React.useState(false);
     const [initialized, setInitialized] = React.useState(false);
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -96,10 +101,10 @@ export function DataTable2<TData, TValue>({
         pageIndex: 0,
         pageSize: 1,
     });
-    React.useEffect(() => {
-        // setItems(data);
-        setPageCount(pageInfo?.pageCount || 0);
-    }, [data, pageInfo]);
+    // React.useEffect(() => {
+    //     // setItems(data);
+    //     // setPageCount(pageInfo?.pageCount || 0);
+    // }, [data, pageInfo]);
 
     const debouncedQuery = useDebounce(dataQueryString, 800);
 
@@ -141,7 +146,7 @@ export function DataTable2<TData, TValue>({
             rowSelection,
             columnFilters,
         },
-        pageCount: pageCount,
+        pageCount: pageInfo?.pageCount || (pageCount ?? -1),
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
         onSortingChange(e: any) {
@@ -260,6 +265,7 @@ export function DataTable2<TData, TValue>({
                 <DataTableToolbar
                     table={table}
                     SelectionAction={SelectionAction}
+                    Toolbar={Toolbar}
                     filterableColumns={filterableColumns}
                     searchableColumns={searchableColumns}
                     dateFilterColumns={dateFilterColumns}
@@ -336,9 +342,10 @@ export function DataTable2<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            {!hideFooter && (
+            {!hideFooter && pageInfo && (
                 <DataTablePagination pageInfo={pageInfo} table={table} />
             )}
+            {!pageInfo && <DTPagination table={table} />}
         </div>
     );
 }

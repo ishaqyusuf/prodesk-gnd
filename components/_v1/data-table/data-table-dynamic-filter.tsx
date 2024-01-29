@@ -1,7 +1,7 @@
 "use client";
 
 import { ISlicer } from "@/store/slicers";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataTableFacetedFilter2 } from "./data-table-faceted-filter-2";
 import { timeout } from "@/lib/timeout";
 import { randomNumber, randomNumber2 } from "@/lib/utils";
@@ -14,7 +14,7 @@ interface Props {
     single?: Boolean;
     title;
     loader?;
-    columnId;
+    columnId: string;
 }
 export function DynamicFilter({
     table,
@@ -26,6 +26,7 @@ export function DynamicFilter({
     // if(!listKey) listKey = generateRandomString
     // const list = useAppSelector((state) => state.slicers?.[listKey as any]);
     const [items, setItems] = useState([]);
+    // const items: any = React.use(loader);
     useEffect(() => {
         (async () => {
             // console.log([columnId]);

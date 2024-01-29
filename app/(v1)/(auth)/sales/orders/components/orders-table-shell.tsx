@@ -8,9 +8,8 @@ import {
     ColumnHeader,
     _FilterColumn,
 } from "../../../../../../components/_v1/columns/base-columns";
-import { DataTable } from "../../../../../../components/_v1/data-table/data-table";
+
 import {
-    OrderCustomerCell,
     OrderIdCell,
     OrderInvoiceCell,
     OrderMemoCell,

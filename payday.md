@@ -6,7 +6,11 @@
     -EXPORT PDF IN ESTIMATE
     -
 # JAN 29: 00.00 == 00.00
-MIA 04:30-
+MIA 09:30-
+MIA 08:20-08:30
+MIA 04:30-05:30
+
+-----------------------------
 $713.75 + 327.58
 =$1041.33
 Zelle marzuqisiaka@gmail.com

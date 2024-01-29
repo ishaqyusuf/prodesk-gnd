@@ -66,6 +66,7 @@ import {
     Rocket,
     Phone,
     MapPin,
+    Info,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -87,6 +88,7 @@ export const Icons = {
         </Link>
     ),
     Merge: Merge,
+    Warn: Info,
     Rocket: Rocket,
     Delete: Delete,
     orders: ShoppingBag,

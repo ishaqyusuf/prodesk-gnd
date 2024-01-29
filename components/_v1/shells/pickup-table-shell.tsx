@@ -9,7 +9,6 @@ import {
     ColumnHeader,
     _FilterColumn,
 } from "../columns/base-columns";
-import { DataTable } from "../data-table/data-table";
 import {
     OrderCustomerCell,
     OrderIdCell,

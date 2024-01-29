@@ -27,6 +27,7 @@ interface DataTableToolbarProps<TData, TValue> {
     newRowLink?: string;
     deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
     SelectionAction?;
+    Toolbar?({ table }: { table: Table<TData> });
 }
 
 export function DataTableToolbar<TData, TValue>({
@@ -37,6 +38,7 @@ export function DataTableToolbar<TData, TValue>({
     newRowLink,
     SelectionAction,
     deleteRowsAction,
+    Toolbar,
 }: DataTableToolbarProps<TData, TValue>) {
     const isFiltered = table.getState().columnFilters.length > 0;
     const [isPending, startTransition] = React.useTransition();
@@ -125,11 +127,12 @@ export function DataTableToolbar<TData, TValue>({
                                 .rows?.map((r) => r.original)}
                         />
                     )}
+                {Toolbar && <Toolbar table={table} />}
                 {deleteRowsAction &&
                 table.getSelectedRowModel().rows.length > 0 ? (
                     <Button
                         aria-label="Delete selected rows"
-                        variant="outline"
+                        variant="destructive"
                         size="sm"
                         className="h-8"
                         onClick={(event) => {

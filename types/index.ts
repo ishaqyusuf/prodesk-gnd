@@ -1,4 +1,5 @@
 import { Icons } from "@/components/_v1/icons";
+import { Column } from "@tanstack/react-table";
 
 export interface PageProps<T = {}> {
     params: T;
@@ -45,9 +46,12 @@ export interface Option {
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
 }
-export interface DataTableFilterableColumn<TData>
+export interface DataTableFilterableColumn<TData, TValue>
     extends DataTableSearchableColumn<TData> {
+    column?: Column<TData, TValue>;
     options: Option[];
+    single?: Boolean;
+    defaultValue?: string;
 }
 // type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
 export type DataTableType<T extends (...args: any) => any> = Awaited<
