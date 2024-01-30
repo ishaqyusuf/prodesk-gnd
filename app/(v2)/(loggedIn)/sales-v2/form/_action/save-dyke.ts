@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { DykeForm } from "../../type";
 import { lastId } from "@/lib/nextId";
 import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
+import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
 
 export async function saveDykeSales(data: DykeForm) {
     const tx = await prisma.$transaction(async (tx) => {
@@ -48,15 +49,21 @@ export async function saveDykeSales(data: DykeForm) {
                   },
               });
         let lastItemId = await lastId(tx.salesOrderItems);
+        let lastHptId = await lastId(tx.housePackageTools);
+        let lastDoorId = await lastId(tx.dykeSalesDoors);
         let lastShelfItemId = await lastId(tx.dykeSalesShelfItem);
         let lastStepFormId = await lastId(tx.dykeStepForm);
         const createItems: any[] = [];
         const createShelfItems: any[] = [];
         const createStepForms: any[] = [];
+        const createHpts: Partial<HousePackageTools>[] = [];
+        const createDoors: Partial<DykeSalesDoors>[] = [];
         const ids = {
             itemIds: [] as number[],
             shelfIds: [] as number[],
             stepFormsIds: [] as number[],
+            doorsIds: [] as number[],
+            housePackageIds: [] as number[],
         };
         await Promise.all(
             data.itemArray.map(async (arr, index) => {
@@ -64,6 +71,7 @@ export async function saveDykeSales(data: DykeForm) {
                     formStepArray,
                     shelfItemArray,
                     id: itemId,
+                    housePackageTool,
                     ...item
                 } = arr.item;
                 // arr.item.shelfItemArray[0].
@@ -133,6 +141,59 @@ export async function saveDykeSales(data: DykeForm) {
                             }
                         )
                     );
+                } else {
+                    let {
+                        id: hptId,
+                        doors,
+                        _doorForm,
+                        _doorFormDefaultValue,
+                        ...hptData
+                    } = housePackageTool || {};
+                    housePackageTool.doors = Object.values(_doorForm);
+                    if (housePackageTool?.doors?.length) {
+                        const newHpt = !hptId;
+                        if (!hptId) hptId = ++lastHptId;
+                        if (newHpt) {
+                            createHpts.push({
+                                ...hptData,
+                                id: hptId,
+                                salesOrderId: order.id,
+                                orderItemId: itemId,
+                            });
+                        } else {
+                            await tx.housePackageTools.update({
+                                where: { id: hptId },
+                                data: {
+                                    ...(hptData as any),
+                                    updatedAt: new Date(),
+                                },
+                            });
+                        }
+                        await Promise.all(
+                            (doors || [])?.map(async (door) => {
+                                if (!door.lhQty && !door.rhQty) return null;
+                                door.salesOrderId = order.id;
+                                door.salesOrderItemId = itemId;
+                                let { id: doorId, ...doorData } = door;
+                                let newDoor = !id;
+                                newDoor && (doorId = ++doorId);
+                                if (newDoor)
+                                    createDoors.push({
+                                        ...doorData,
+                                    });
+                                else
+                                    await tx.dykeSalesDoors.update({
+                                        where: { id: doorId },
+                                        data: {
+                                            ...(doorData as any),
+                                            updatedAt: new Date(),
+                                        },
+                                    });
+                                ids.doorsIds.push(doorId);
+                            })
+                        );
+                        ids.housePackageIds.push(hptId);
+                    }
                 }
                 await Promise.all(
                     formStepArray.map(
@@ -183,6 +244,26 @@ export async function saveDykeSales(data: DykeForm) {
                     t: tx.dykeSalesShelfItem,
                     data: createShelfItems,
                     ids: ids.shelfIds,
+                    where: {
+                        salesOrderItem: {
+                            salesOrderId: order.id,
+                        },
+                    },
+                },
+                {
+                    t: tx.housePackageTools,
+                    data: createHpts,
+                    ids: ids.housePackageIds,
+                    where: {
+                        salesOrderItem: {
+                            salesOrderId: order.id,
+                        },
+                    },
+                },
+                {
+                    t: tx.dykeSalesDoors,
+                    data: createHpts,
+                    ids: ids.doorsIds,
                     where: {
                         salesOrderItem: {
                             salesOrderId: order.id,

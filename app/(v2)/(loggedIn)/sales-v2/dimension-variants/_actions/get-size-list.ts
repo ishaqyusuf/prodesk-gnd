@@ -15,7 +15,7 @@ export async function getDimensionSizeList(height) {
     d.data.sizes.map((size) => {
         if (size.width)
             list.push({
-                dim: `${size.in} x ${heightIn}`,
+                dim: `${size.in} x ${heightIn}`.replaceAll('"', "in"),
                 width: size.ft,
             });
     });

@@ -16,8 +16,6 @@ export function calculateSalesEstimate(data: DykeForm) {
 
         // item = res.item;
         // (data.order as any).subTotal += res.totalPrice;
-
-        return item;
     });
     const {
         subTotal,
@@ -74,7 +72,7 @@ function calculateShelfItems(item: DykeForm["itemArray"][0]) {
     }
 }
 function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
-    let packageTool = item.item.meta.housePackageTool;
+    let packageTool = item.item.housePackageTool;
     let sum = {
         doors: 0,
         unitPrice: 0,
@@ -82,10 +80,19 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         tax: 0,
     };
     if (item.item.meta.doorType != "Shelf Item") {
-        Object.entries(packageTool?.doors || {}).map(([k, v]) => {
-            let doors = v.leftHand + v.rightHand;
+        Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
+            let doors = v.lhQty + v.rhQty;
+            const {
+                doorPrice = 0,
+                casingPrice = 0,
+                jambSizePrice = 0,
+            } = v as any;
+
             let unitPrice = formatMoney(
-                Object.values(v.prices).reduce((a, b) => a + b, 0)
+                Object.values({ doorPrice, casingPrice, jambSizePrice }).reduce(
+                    (a, b) => a + b,
+                    0
+                )
             );
             let sumTotal = 0;
             if (doors && unitPrice) {
@@ -94,8 +101,12 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
                 sum.unitPrice += unitPrice;
                 sum.totalPrice += sumTotal;
             }
-            (packageTool.doors[k] as any).unitPrice = unitPrice;
-            (packageTool.doors[k] as any).sumTotal = sumTotal;
+            (packageTool._doorForm[k] as any).unitPrice = unitPrice;
+            (packageTool._doorForm[k] as any).sumTotal = sumTotal;
+            (packageTool._doorForm[k] as any).dimension = k?.replaceAll(
+                "in",
+                '"'
+            );
         });
         packageTool.totalPrice = sum.totalPrice;
         packageTool.totalDoors = sum.doors;

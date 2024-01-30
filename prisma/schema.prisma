@@ -728,41 +728,6 @@ model SalesJobs {
 //     salesOrderItem   SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
 // }
 
-model SalesOrderItems {
-    id                 Int                          @unique @default(autoincrement())
-    description        String?                      @db.Text
-    dykeDescription    String?                      @db.Text
-    productId          Int?
-    supplier           String?
-    swing              String?                      @db.VarChar(255)
-    price              Float?
-    tax                Float?
-    taxPercenatage     Float?
-    discount           Float?
-    discountPercentage Float?
-    meta               Json?                        @db.Json
-    createdAt          DateTime?                    @db.Timestamp(0)
-    updatedAt          DateTime?                    @db.Timestamp(0)
-    qty                Float?
-    prebuiltQty        Float?
-    truckLoadQty       Float?
-    salesOrderId       Int
-    profitMargin       Float?
-    rate               Float?
-    total              Float?
-    salesPercentage    Float?
-    prodStatus         String?                      @db.VarChar(255)
-    prodStartedAt      DateTime?                    @db.Timestamp(0)
-    sentToProdAt       DateTime?                    @db.Timestamp(0)
-    prodCompletedAt    DateTime?                    @db.Timestamp(0)
-    supplies           SalesItemSupply[]
-    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
-    productions        OrderProductionSubmissions[]
-    shelfItems         DykeSalesShelfItem[]
-    formSteps          DykeStepForm[]
-    // components         SalesOrderItemComponents[]
-}
-
 model DykeSalesShelfItem {
     id               Int                  @unique @default(autoincrement())
     salesOrderItemId Int?
@@ -881,6 +846,88 @@ model SalesOrders {
     supplies          SalesItemSupply[]
     commisions        SalesCommision[]
     formSteps         DykeStepForm[]
+    housePackageTools HousePackageTools[]
+    doors             DykeSalesDoors[]
+}
+
+model SalesOrderItems {
+    id                 Int                          @unique @default(autoincrement())
+    description        String?                      @db.Text
+    dykeDescription    String?                      @db.Text
+    productId          Int?
+    supplier           String?
+    swing              String?                      @db.VarChar(255)
+    price              Float?
+    tax                Float?
+    taxPercenatage     Float?
+    discount           Float?
+    discountPercentage Float?
+    meta               Json?                        @db.Json
+    createdAt          DateTime?                    @db.Timestamp(0)
+    updatedAt          DateTime?                    @db.Timestamp(0)
+    qty                Float?
+    prebuiltQty        Float?
+    truckLoadQty       Float?
+    salesOrderId       Int
+    profitMargin       Float?
+    rate               Float?
+    total              Float?
+    salesPercentage    Float?
+    prodStatus         String?                      @db.VarChar(255)
+    prodStartedAt      DateTime?                    @db.Timestamp(0)
+    sentToProdAt       DateTime?                    @db.Timestamp(0)
+    prodCompletedAt    DateTime?                    @db.Timestamp(0)
+    supplies           SalesItemSupply[]
+    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    productions        OrderProductionSubmissions[]
+    shelfItems         DykeSalesShelfItem[]
+    formSteps          DykeStepForm[]
+    // components         SalesOrderItemComponents[]
+    housePackageTool   HousePackageTools?
+    salesDoors         DykeSalesDoors[]
+}
+
+model HousePackageTools {
+    id             Int                @unique @default(autoincrement())
+    orderItemId    Int                @unique
+    height         String
+    doorId         Int?
+    jambSizeId     Int?
+    casingId       Int?
+    totalPrice     Float?             @default(0)
+    totalDoors     Int?               @default(0)
+    meta           Json?              @db.Json
+    salesOrderId   Int
+    createdAt      DateTime?          @db.Timestamp(0)
+    updatedAt      DateTime?          @db.Timestamp(0)
+    order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
+    salesOrderItem SalesOrderItems    @relation(fields: [orderItemId], references: [id])
+    door           DykeShelfProducts? @relation(name: "shelfProd", fields: [doorId], references: [id])
+    jambSize       DykeProducts?      @relation(name: "jamb", fields: [jambSizeId], references: [id])
+    casing         DykeProducts?      @relation(name: "casing", fields: [casingId], references: [id])
+    doors          DykeSalesDoors[]
+}
+
+model DykeSalesDoors {
+    id                 Int               @unique @default(autoincrement())
+    dimension          String
+    housePackageToolId Int
+    doorPrice          Float?
+    jambSizePrice      Float?
+    casingPrice        Float?
+    unitPrice          Float?
+    lhQty              Int               @default(0)
+    rhQty              Int               @default(0)
+    totalQty           Int               @default(0)
+    salesOrderId       Int
+    lineTotal          Float?            @default(0)
+    salesOrderItemId   Int?
+    meta               Json?             @db.Json
+    createdAt          DateTime?         @db.Timestamp(0)
+    updatedAt          DateTime?         @db.Timestamp(0)
+    housePackageTool   HousePackageTools @relation(fields: [housePackageToolId], references: [id])
+    salesOrderItem     SalesOrderItems?  @relation(fields: [salesOrderItemId], references: [id])
+    order              SalesOrders?      @relation(fields: [salesOrderId], references: [id])
 }
 
 model SalesPickup {
@@ -1098,19 +1145,20 @@ model DykeShelfCategories {
 }
 
 model DykeShelfProducts {
-    id               Int                  @unique @default(autoincrement())
-    title            String
-    unitPrice        Float?
-    categoryId       Int?
-    parentCategoryId Int?
-    img              String?
-    meta             Json?                @db.Json
-    createdAt        DateTime?            @db.Timestamp(0)
-    updatedAt        DateTime?            @db.Timestamp(0)
-    deletedAt        DateTime?            @db.Timestamp(0)
-    category         DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
-    parentCategory   DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
-    orderItems       DykeSalesShelfItem[]
+    id                Int                  @unique @default(autoincrement())
+    title             String
+    unitPrice         Float?
+    categoryId        Int?
+    parentCategoryId  Int?
+    img               String?
+    meta              Json?                @db.Json
+    createdAt         DateTime?            @db.Timestamp(0)
+    updatedAt         DateTime?            @db.Timestamp(0)
+    deletedAt         DateTime?            @db.Timestamp(0)
+    category          DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
+    parentCategory    DykeShelfCategories? @relation(name: "parentCategory", fields: [parentCategoryId], references: [id])
+    orderItems        DykeSalesShelfItem[]
+    housePackageTools HousePackageTools[]  @relation(name: "shelfProd")
 
     @@fulltext([title])
 }
@@ -1203,22 +1251,24 @@ model DykeStepProducts {
 }
 
 model DykeProducts {
-    id           Int                @unique @default(autoincrement())
-    img          String?
-    description  String?
-    noteRequired Boolean?           @default(false)
-    title        String?
-    price        Float?
-    categoryId   Int?
-    productCode  String?
-    qty          Int?               @default(0)
-    meta         Json?              @db.Json
-    value        String
-    createdAt    DateTime?          @default(now()) @db.Timestamp(0)
-    updatedAt    DateTime?          @db.Timestamp(0)
-    deletedAt    DateTime?          @db.Timestamp(0)
-    stepProducts DykeStepProducts[]
-    category     DykeCategories?    @relation(fields: [categoryId], references: [id])
+    id                      Int                 @unique @default(autoincrement())
+    img                     String?
+    description             String?
+    noteRequired            Boolean?            @default(false)
+    title                   String?
+    price                   Float?
+    categoryId              Int?
+    productCode             String?
+    qty                     Int?                @default(0)
+    meta                    Json?               @db.Json
+    value                   String
+    createdAt               DateTime?           @default(now()) @db.Timestamp(0)
+    updatedAt               DateTime?           @db.Timestamp(0)
+    deletedAt               DateTime?           @db.Timestamp(0)
+    stepProducts            DykeStepProducts[]
+    category                DykeCategories?     @relation(fields: [categoryId], references: [id])
+    jambHousePackageTools   HousePackageTools[] @relation(name: "jamb")
+    casingHousePackageTools HousePackageTools[] @relation(name: "casing")
 }
 
 model DykeProductPrices {

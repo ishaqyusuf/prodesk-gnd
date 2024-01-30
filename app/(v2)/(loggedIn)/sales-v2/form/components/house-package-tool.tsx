@@ -15,19 +15,27 @@ import ControlledInput from "@/_v2/components/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
 import { calculateSalesEstimate } from "../../_utils/calculate-sales-estimate";
+import { formatMoney } from "@/lib/use-number";
+import { camel } from "@/lib/utils";
 
 interface Props {}
 export default function HousePackageTool({}: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
-    const prices = ["Door", "Jamb Size", "Casing"];
+    const prices = ["Door", "Jamb Size", "Casing"].map((title) => ({
+        title,
+        key: camel(`${title} price`),
+    }));
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
         []
     );
-    const rootKey = `itemArray.${item.rowIndex}.item.meta.housePackageTool`;
-    const doorsKey = `${rootKey}.doors`;
-    const packageTool = form.watch(
-        `itemArray.${item.rowIndex}.item.meta.housePackageTool`
+    const rootKey = `itemArray.${item.rowIndex}.item.housePackageTool`;
+    const doorsKey = `${rootKey}._doorForm`;
+    const height = form.watch(
+        `itemArray.${item.rowIndex}.item.housePackageTool.height`
+    );
+    const _doorForm = form.watch(
+        `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
     );
 
     function calculate() {
@@ -39,9 +47,27 @@ export default function HousePackageTool({}: Props) {
             unitPrice: 0,
             totalPrice: 0,
         };
-        Object.entries(packageTool.doors).map(([k, v]) => {
-            let doors = v.leftHand + v.rightHand;
-            let unitPrice = Object.values(v.prices).reduce((a, b) => a + b, 0);
+        console.log(
+            form.getValues(
+                `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
+            )
+        );
+
+        Object.entries(_doorForm).map(([k, v]) => {
+            let doors = v.lhQty + v.rhQty;
+            const {
+                doorPrice = 0,
+                casingPrice = 0,
+                jambSizePrice = 0,
+            } = v as any;
+
+            let unitPrice = formatMoney(
+                Object.values({
+                    doorPrice,
+                    casingPrice,
+                    jambSizePrice,
+                }).reduce((a, b) => a + b, 0)
+            );
             let sumTotal = 0;
             if (doors && unitPrice) {
                 sumTotal = doors * unitPrice;
@@ -49,16 +75,22 @@ export default function HousePackageTool({}: Props) {
                 sum.unitPrice += unitPrice;
                 sum.totalPrice += sumTotal;
             }
-            form.setValue(`${rootKey}.doors.${k}.unitPrice` as any, unitPrice);
-            form.setValue(`${rootKey}.doors.${k}.lineTotal` as any, sumTotal);
+            form.setValue(
+                `${rootKey}._doorForm.${k}.unitPrice` as any,
+                unitPrice
+            );
+            form.setValue(
+                `${rootKey}._doorForm.${k}.lineTotal` as any,
+                sumTotal
+            );
         });
         form.setValue(`${rootKey}.totalPrice` as any, sum.totalPrice);
         form.setValue(`${rootKey}.totalDoors` as any, sum.doors);
     }
     useEffect(() => {
         (async () => {
-            console.log(packageTool);
-            const list = await getDimensionSizeList(packageTool.height);
+            console.log(_doorForm);
+            const list = await getDimensionSizeList(height);
             console.log(list);
             setSizeList(list as any);
         })();
@@ -78,8 +110,8 @@ export default function HousePackageTool({}: Props) {
                             </div>
                             <div className="flex pt-1 justify-between">
                                 {prices.map((p) => (
-                                    <div className="flex-1" key={p}>
-                                        {p}
+                                    <div className="flex-1" key={p.title}>
+                                        {p.title}
                                     </div>
                                 ))}
                             </div>
@@ -96,32 +128,33 @@ export default function HousePackageTool({}: Props) {
                                 <ControlledInput
                                     type="number"
                                     control={form.control}
-                                    name={
-                                        `${doorsKey}.${row.width}.leftHand` as any
-                                    }
+                                    name={`${doorsKey}.${row.dim}.lhQty` as any}
                                 />
                             </TableCell>
                             <TableCell>
                                 <ControlledInput
                                     type="number"
                                     control={form.control}
-                                    name={
-                                        `${doorsKey}.${row.width}.rightHand` as any
-                                    }
+                                    name={`${doorsKey}.${row.dim}.rhQty` as any}
                                 />
                             </TableCell>
-                            <TableCell>{row.dim}</TableCell>
+                            <TableCell>
+                                {row.dim?.replaceAll("in", '"')}
+                            </TableCell>
                             <TableCell className="">
                                 <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
                                     <div className="flex pt-1 justify-between">
                                         {prices.map((p) => (
-                                            <div className="flex-1" key={p}>
+                                            <div
+                                                className="flex-1"
+                                                key={p.title}
+                                            >
                                                 <div className="mx-1">
                                                     <ControlledInput
                                                         type="number"
                                                         control={form.control}
                                                         name={
-                                                            `${doorsKey}.${row.width}.prices.${p}` as any
+                                                            `${doorsKey}.${row.dim}.${p.key}` as any
                                                         }
                                                     />
                                                 </div>
@@ -132,18 +165,12 @@ export default function HousePackageTool({}: Props) {
                             </TableCell>
                             <TableCell>
                                 <Money
-                                    value={
-                                        packageTool.doors?.[row.width]
-                                            ?.unitPrice
-                                    }
+                                    value={_doorForm?.[row.dim]?.unitPrice}
                                 />
                             </TableCell>
                             <TableCell>
                                 <Money
-                                    value={
-                                        packageTool.doors?.[row.width]
-                                            ?.lineTotal
-                                    }
+                                    value={_doorForm?.[row.dim]?.lineTotal}
                                 />
                             </TableCell>
                         </TableRow>

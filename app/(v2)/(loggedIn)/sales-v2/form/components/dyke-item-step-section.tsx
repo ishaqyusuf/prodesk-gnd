@@ -131,29 +131,37 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
         ctx.startLoadingStep(async () => {
             await timeout(1000);
             const val = stepProd.product.title || stepProd.product.value;
-
+            const hpt = form.getValues(
+                `itemArray.${item.rowIndex}.item.housePackageTool`
+            );
             // if(stepProd.product.)
             switch (stepForm.step?.title) {
                 case "Height":
                     form.setValue(
-                        `itemArray.${item.rowIndex}.item.meta.housePackageTool`,
+                        `itemArray.${item.rowIndex}.item.housePackageTool`,
                         {
                             height: val,
                             totalDoors: 0,
                             totalPrice: 0,
-                            doors: {},
+                            // doors: {},
+                            _doorForm: {
+                                ...(hpt._doorFormDefaultValue as any),
+                            },
+                            _doorFormDefaultValue: {
+                                ...hpt._doorFormDefaultValue,
+                            },
                         }
                     );
                     break;
                 case "Jamb Size":
                     form.setValue(
-                        `itemArray.${item.rowIndex}.item.meta.housePackageTool.jambSizeId`,
+                        `itemArray.${item.rowIndex}.item.housePackageTool.jambSizeId`,
                         stepProd.dykeProductId
                     );
                     break;
                 case "Door":
                     form.setValue(
-                        `itemArray.${item.rowIndex}.item.meta.housePackageTool.doorId`,
+                        `itemArray.${item.rowIndex}.item.housePackageTool.doorId`,
                         stepProd.dykeProductId
                     );
                     break;
@@ -161,7 +169,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     switch (stepProd.product.title) {
                         case "Shelf Items":
                             form.setValue(
-                                `itemArray.${item.rowIndex}.item.meta.housePackageTool`,
+                                `itemArray.${item.rowIndex}.item.housePackageTool`,
                                 null as any
                             );
                             form.setValue(

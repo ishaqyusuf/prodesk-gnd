@@ -9,6 +9,7 @@ import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
 import { sum } from "@/lib/utils";
 import dayjs from "dayjs";
+import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
 
 export async function getDykeFormAction(type, slug) {
     const order = await prisma.salesOrders.findFirst({
@@ -25,6 +26,11 @@ export async function getDykeFormAction(type, slug) {
                         },
                     },
                     shelfItems: true,
+                    housePackageTool: {
+                        include: {
+                            doors: true,
+                        },
+                    },
                 },
             },
             payments: true,
@@ -81,8 +87,24 @@ export async function getDykeFormAction(type, slug) {
         ...form,
         meta: form.meta as any as ISalesOrderMeta,
         items: form.items.map((item) => {
+            let _doorForm: { [dimension in string]: DykeSalesDoors } = {};
+            let _doorFormDefaultValue: {
+                [dimension in string]: { id: number };
+            } = {};
+            item.housePackageTool?.doors?.map((d) => {
+                let dim = d.dimension?.replaceAll('"', "in");
+                _doorForm[dim] = { ...d };
+                _doorFormDefaultValue[dim] = {
+                    id: d.id,
+                };
+            });
             return {
                 ...item,
+                housePackageTool: {
+                    ...item.housePackageTool,
+                    _doorForm,
+                    _doorFormDefaultValue,
+                },
                 meta: item.meta as any as ISalesOrderItemMeta,
                 formSteps: item.formSteps.map((item) => ({
                     ...item,
@@ -114,47 +136,52 @@ export async function getDykeFormAction(type, slug) {
         billingAddress,
         order: orderData,
 
-        itemArray: items?.map(({ formSteps, shelfItems, ...itemData }) => {
-            const shelfItemArray: {
-                [k in string]: {
-                    productArray: {
-                        item: (typeof shelfItems)[0];
-                    }[];
-                    categoryIds: number[];
-                    categoryId: number;
-                };
-            } = {};
-            shelfItems.map((s) => {
-                const cid = s.categoryId?.toString();
-                if (!shelfItemArray[cid])
-                    shelfItemArray[cid] = {
-                        productArray: [],
-                        categoryIds: s.meta.categoryIds,
-                        categoryId: s.categoryId,
+        itemArray: items?.map(
+            ({ formSteps, shelfItems, housePackageTool, ...itemData }) => {
+                const shelfItemArray: {
+                    [k in string]: {
+                        productArray: {
+                            item: (typeof shelfItems)[0];
+                        }[];
+                        categoryIds: number[];
+                        categoryId: number;
                     };
-                if (shelfItemArray[cid])
-                    (shelfItemArray[cid] as any).productArray.push({ item: s });
-            });
-            // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
-            //                 categoryIds: number[]
-            //             }},
-            const rItem = {
-                opened: true,
-                stepIndex: 0,
-                item: {
-                    ...itemData,
-                    formStepArray: formSteps.map(({ step, ...rest }) => ({
-                        step,
-                        item: rest,
-                    })),
-                    shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
-                    // productArray
-                    // })),
-                },
-            };
-            rItem.stepIndex = rItem.item.formStepArray.length - 1;
-            return rItem;
-        }),
+                } = {};
+                shelfItems.map((s) => {
+                    const cid = s.categoryId?.toString();
+                    if (!shelfItemArray[cid])
+                        shelfItemArray[cid] = {
+                            productArray: [],
+                            categoryIds: s.meta.categoryIds,
+                            categoryId: s.categoryId,
+                        };
+                    if (shelfItemArray[cid])
+                        (shelfItemArray[cid] as any).productArray.push({
+                            item: s,
+                        });
+                });
+                // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
+                //                 categoryIds: number[]
+                //             }},
+                const rItem = {
+                    opened: true,
+                    stepIndex: 0,
+                    item: {
+                        ...itemData,
+                        housePackageTool,
+                        formStepArray: formSteps.map(({ step, ...rest }) => ({
+                            step,
+                            item: rest,
+                        })),
+                        shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
+                        // productArray
+                        // })),
+                    },
+                };
+                rItem.stepIndex = rItem.item.formStepArray.length - 1;
+                return rItem;
+            }
+        ),
         data: ctx,
         paidAmount,
     };

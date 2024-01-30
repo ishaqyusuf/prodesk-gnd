@@ -122,7 +122,7 @@ export interface ISalesOrderItemMeta {
     manual_rate;
     isComponent: Boolean;
     components: WizardKvForm;
-    housePackageTool: HousePackageTool;
+    // housePackageTool: HousePackageTool;
     doorType: "Shelf Item" | "Interior" | "Exterior" | "Garage" | "Bifold";
 }
 export interface HousePackageTool {
@@ -132,6 +132,7 @@ export interface HousePackageTool {
     height: string;
     doorId?: number;
     jambSizeId?: number;
+    casingId?: number;
     doors: {
         [width in string]: {
             dimension: string;
