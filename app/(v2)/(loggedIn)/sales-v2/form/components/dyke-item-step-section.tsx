@@ -184,7 +184,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Garage":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.meta.doorType`,
-                                stepForm.step?.title as any
+                                stepForm.step?.value as any
                             );
                             break;
                     }

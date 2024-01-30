@@ -102,7 +102,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
                 sum.totalPrice += sumTotal;
             }
             (packageTool._doorForm[k] as any).unitPrice = unitPrice;
-            (packageTool._doorForm[k] as any).sumTotal = sumTotal;
+            (packageTool._doorForm[k] as any).lineTotal = sumTotal;
             (packageTool._doorForm[k] as any).dimension = k?.replaceAll(
                 "in",
                 '"'

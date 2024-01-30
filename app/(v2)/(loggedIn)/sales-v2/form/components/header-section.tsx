@@ -21,6 +21,7 @@ export default function HeaderSection({}) {
         startTransition(async () => {
             // console.log(data);
             const e = calculateSalesEstimate(data);
+            console.log(e);
             // return;
             const resp = await saveDykeSales(e);
             toast.success("Saved");

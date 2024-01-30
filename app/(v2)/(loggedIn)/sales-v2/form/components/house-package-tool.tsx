@@ -89,7 +89,7 @@ export default function HousePackageTool({}: Props) {
     }
     useEffect(() => {
         (async () => {
-            console.log(_doorForm);
+            console.log(height);
             const list = await getDimensionSizeList(height);
             console.log(list);
             setSizeList(list as any);

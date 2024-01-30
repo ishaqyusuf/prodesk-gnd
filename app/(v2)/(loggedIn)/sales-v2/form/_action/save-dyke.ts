@@ -149,13 +149,18 @@ export async function saveDykeSales(data: DykeForm) {
                         _doorFormDefaultValue,
                         ...hptData
                     } = housePackageTool || {};
-                    housePackageTool.doors = Object.values(_doorForm);
-                    if (housePackageTool?.doors?.length) {
+                    doors = Object.values(_doorForm);
+                    console.log(doors);
+                    console.log(hptData);
+
+                    if (doors?.length) {
                         const newHpt = !hptId;
                         if (!hptId) hptId = ++lastHptId;
+                        hptData.meta = hptData.meta || {};
                         if (newHpt) {
                             createHpts.push({
                                 ...hptData,
+
                                 id: hptId,
                                 salesOrderId: order.id,
                                 orderItemId: itemId,
@@ -172,16 +177,21 @@ export async function saveDykeSales(data: DykeForm) {
                         await Promise.all(
                             (doors || [])?.map(async (door) => {
                                 if (!door.lhQty && !door.rhQty) return null;
+                                door.meta = door.meta || {};
+                                console.log("YES DOOR");
                                 door.salesOrderId = order.id;
                                 door.salesOrderItemId = itemId;
                                 let { id: doorId, ...doorData } = door;
-                                let newDoor = !id;
-                                newDoor && (doorId = ++doorId);
+                                let newDoor = !doorId;
+                                if (newDoor) doorId = ++lastDoorId;
+                                // console.log({ doorId, newDoor });
                                 if (newDoor)
                                     createDoors.push({
                                         ...doorData,
+                                        housePackageToolId: hptId,
                                     });
-                                else
+                                else {
+                                    // console.log(doorId);
                                     await tx.dykeSalesDoors.update({
                                         where: { id: doorId },
                                         data: {
@@ -189,6 +199,7 @@ export async function saveDykeSales(data: DykeForm) {
                                             updatedAt: new Date(),
                                         },
                                     });
+                                }
                                 ids.doorsIds.push(doorId);
                             })
                         );
@@ -226,6 +237,9 @@ export async function saveDykeSales(data: DykeForm) {
                 );
             })
         );
+        console.log(ids.doorsIds);
+        console.log({ createDoors });
+
         await Promise.all(
             [
                 {
@@ -262,7 +276,7 @@ export async function saveDykeSales(data: DykeForm) {
                 },
                 {
                     t: tx.dykeSalesDoors,
-                    data: createHpts,
+                    data: createDoors,
                     ids: ids.doorsIds,
                     where: {
                         salesOrderItem: {
