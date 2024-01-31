@@ -7,16 +7,19 @@ export function calculateSalesEstimate(data: DykeForm) {
     console.log(data);
     data.order.grandTotal = data.order.subTotal = data.order.tax = 0;
     data.order.taxPercentage = +(data.order.taxPercentage || 0);
+    console.log(data.order.subTotal);
     data.itemArray.map((item) => {
         item.item.rate = item.item.price = item.item.qty = item.item.total = 0;
         calculateHousePackageTool(item);
         calculateShelfItems(item);
 
         taxEstimateAndUpdateTotal(item, data);
+        console.log(item.item.total);
 
         // item = res.item;
         // (data.order as any).subTotal += res.totalPrice;
     });
+    console.log(data.order.subTotal);
     const {
         subTotal,
         tax,
@@ -49,7 +52,6 @@ function taxEstimateAndUpdateTotal(
     }
     item.item.tax = tax;
     formData.order.tax += tax;
-    formData.order.subTotal += totalPrice;
 }
 function calculateShelfItems(item: DykeForm["itemArray"][0]) {
     if (!item.item.housePackageTool?.doorType) {
@@ -79,6 +81,8 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         totalPrice: 0,
         tax: 0,
     };
+    console.log(packageTool?._doorForm);
+
     if (item.item.housePackageTool?.doorType) {
         Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
             let doors = v.lhQty + v.rhQty;
@@ -113,6 +117,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         item.item.rate = item.item.price = item.item.total = sum.totalPrice;
         item.item.qty = 1;
     }
+    console.log(sum);
 
     return { item, totalPrice: sum.totalPrice };
 }

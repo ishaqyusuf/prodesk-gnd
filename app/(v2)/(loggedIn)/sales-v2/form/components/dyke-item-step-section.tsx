@@ -147,7 +147,6 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
 
             switch (stepForm.step?.title) {
                 case "Height":
-                    console.log("HEIGHT>>>>");
                     form.setValue(
                         `itemArray.${item.rowIndex}.item.housePackageTool`,
                         {

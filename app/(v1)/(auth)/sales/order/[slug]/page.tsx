@@ -64,7 +64,6 @@ export default async function SalesOrderPage({ params: { slug } }) {
             }
         })
     );
-    console.log([...slugs]);
 
     // console.log(order.i);
     return (

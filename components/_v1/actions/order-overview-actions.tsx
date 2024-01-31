@@ -13,7 +13,10 @@ interface Props {
 }
 export default function OrderOverviewActions({ estimate }: Props) {
     const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
-    const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
+    // const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
+    const _linkDir = order.isDyke
+        ? `/sales-v2/form/${order.type}/${order.slug}`
+        : `/sales/edit/${order.type}/${order.slug}`;
     return (
         <div className="flex space-x-2">
             {/* <UpdateSalesDate sales={order} /> */}

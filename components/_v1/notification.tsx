@@ -180,7 +180,9 @@ function NotificationItem({
         <div className="relative group" key={item.id}>
             <Button variant="ghost" className="border-b w-full h-full p-4 py-3">
                 <LinkableNode
-                    href={item.link?.replace("/hrm/jobs", "/jobs")}
+                    href={item.link
+                        ?.replace("/hrm/jobs", "/contractor/jobs")
+                        ?.replace("/jobs", "/contractor/jobs")}
                     onClick={async () => {
                         if (!item.seenAt) await markAsReadAction(item.id);
                         onClick();
