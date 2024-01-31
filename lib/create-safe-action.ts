@@ -3,6 +3,7 @@ import { Ok, Err, Result } from "ts-results";
 import { _email } from "@/app/(v1)/_actions/_email";
 import { prisma } from "@/db";
 import { userId } from "@/app/(v1)/_actions/utils";
+import { generateRandomString } from "./utils";
 export type FieldErrors<T> = {
     [K in keyof T]?: string[];
 };
@@ -51,6 +52,7 @@ export const createSafeAction = <TInput = any, TOutput = any>(
                         userId: await userId(),
                         createdAt: new Date(),
                         updatedAt: new Date(),
+                        slug: generateRandomString(10),
                     },
                 });
                 console.log(e.message);
