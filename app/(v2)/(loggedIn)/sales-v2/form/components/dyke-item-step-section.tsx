@@ -121,6 +121,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     `itemArray.${rowIndex}.item.housePackageTool.doorType` as any
                 )
             );
+
             const prods = await getDykeStepDoors(
                 query.q,
                 query.omit,
@@ -142,9 +143,10 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
-            // if(stepProd.product.)
+
             switch (stepForm.step?.title) {
                 case "Height":
+                    console.log("HEIGHT>>>>");
                     form.setValue(
                         `itemArray.${item.rowIndex}.item.housePackageTool`,
                         {
@@ -154,7 +156,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             doorType: hpt.doorType,
                             // doors: {},
                             _doorForm: {
-                                ...(hpt._doorFormDefaultValue as any),
+                                // ...(hpt._doorFormDefaultValue as any),
                             },
                             _doorFormDefaultValue: {
                                 ...hpt._doorFormDefaultValue,
@@ -196,7 +198,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Garage":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
-                                stepForm.step?.value as any
+                                stepProd.product.title as any
                             );
                             break;
                     }

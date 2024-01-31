@@ -51,12 +51,16 @@ export default function ControlledInput<
                                 <Textarea
                                     placeholder={placeholder}
                                     {...field}
+                                    value={""}
+                                    defaultValue={field.value}
                                 />
                             ) : (
                                 <Input
                                     type={type}
                                     placeholder={placeholder}
                                     {...field}
+                                    value={""}
+                                    defaultValue={field.value}
                                     onChange={(e) => {
                                         if (type == "number")
                                             field.onChange(

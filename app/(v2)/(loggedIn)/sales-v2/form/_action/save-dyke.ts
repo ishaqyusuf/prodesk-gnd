@@ -237,8 +237,28 @@ export async function saveDykeSales(data: DykeForm) {
                 );
             })
         );
-        console.log(ids.doorsIds);
-        console.log({ createDoors });
+        // console.log(ids.doorsIds);
+        // console.log({ createDoors });
+        async function _deleteWhere(t, notIn: number[] = [], items = false) {
+            const where: any = items
+                ? { salesOrderId: order.id }
+                : {
+                      salesOrderItem: {
+                          salesOrderId: order.id,
+                      },
+                  };
+            where.id = {
+                notIn,
+            };
+            await t.deleteMany({
+                where,
+            });
+        }
+        await _deleteWhere(tx.dykeStepForm, ids.stepFormsIds);
+        await _deleteWhere(tx.dykeSalesShelfItem, ids.shelfIds);
+        await _deleteWhere(tx.dykeSalesDoors, ids.doorsIds);
+        await _deleteWhere(tx.housePackageTools, ids.housePackageIds);
+        await _deleteWhere(tx.salesOrderItems, ids.itemIds, true);
 
         await Promise.all(
             [
@@ -288,14 +308,14 @@ export async function saveDykeSales(data: DykeForm) {
                 await (i.t as any).createMany({
                     data: i.data,
                 });
-                await (i.t as any).deleteMany({
-                    where: {
-                        id: {
-                            notIn: i.ids,
-                        },
-                        ...i.where,
-                    },
-                });
+                // await (i.t as any).deleteMany({
+                //     where: {
+                //         id: {
+                //             notIn: i.ids,
+                //         },
+                //         ...i.where,
+                //     },
+                // });
             })
         );
 

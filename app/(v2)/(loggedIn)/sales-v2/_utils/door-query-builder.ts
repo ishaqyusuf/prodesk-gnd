@@ -8,47 +8,48 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     let q: any[] = [];
     let p1: any = `x${obj.height} `;
     let omit: any[] = []; //["primed", "pine", "prm"];
-    switch (obj.doorType) {
-        case "HC Molded":
-            // q.push("hc"); //shaker door slab
-            // p1 += "hc ";
-            // q.push(p1);
-            p1 = null;
-            q.push("hc ");
-            // omit.push("hc flush");
-            break;
-        case "SC Molded":
-            // q.push("sc");
-            // omit.push("sc flush");
-            p1 = null;
-            // p1 += "sc ";
-            q.push("sc ");
-            break;
-        case "HC Flush":
-        case "SC Flush":
-            // q.push(obj.doorType);
-            // p1 += obj.doorType;
-            p1 = null;
-            q.push(obj.doorType);
-            break;
-        case "Wood Stile & Rail":
-            // omit = ["hc", "sc"];
-            omit = [];
+    if (doorType != "Garage")
+        switch (obj.doorType) {
+            case "HC Molded":
+                // q.push("hc"); //shaker door slab
+                // p1 += "hc ";
+                // q.push(p1);
+                p1 = null;
+                q.push("hc ");
+                // omit.push("hc flush");
+                break;
+            case "SC Molded":
+                // q.push("sc");
+                // omit.push("sc flush");
+                p1 = null;
+                // p1 += "sc ";
+                q.push("sc ");
+                break;
+            case "HC Flush":
+            case "SC Flush":
+                // q.push(obj.doorType);
+                // p1 += obj.doorType;
+                p1 = null;
+                q.push(obj.doorType);
+                break;
+            case "Wood Stile & Rail":
+                // omit = ["hc", "sc"];
+                omit = [];
 
-            q.push(p1);
-            p1 = null;
-            switch (obj.doorSpecies) {
-                case "Pine":
-                    q.push("pine");
-                    // omit.push("primed", "prm");
-                    break;
-                case "Primed":
-                    q.push("primed", "prm");
-                    omit.push("pine");
-                    break;
-            }
-            break;
-    }
+                q.push(p1);
+                p1 = null;
+                switch (obj.doorSpecies) {
+                    case "Pine":
+                        q.push("pine");
+                        // omit.push("primed", "prm");
+                        break;
+                    case "Primed":
+                        q.push("primed", "prm");
+                        omit.push("pine");
+                        break;
+                }
+                break;
+        }
     if (p1) q.push(p1);
 
     switch (doorType) {
