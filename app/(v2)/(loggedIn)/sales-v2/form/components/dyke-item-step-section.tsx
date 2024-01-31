@@ -143,6 +143,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
+            // form.getValues('order.id')
 
             switch (stepForm.step?.title) {
                 case "Height":
@@ -156,7 +157,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             doorType: hpt.doorType,
                             // doors: {},
                             _doorForm: {
-                                // ...(hpt._doorFormDefaultValue as any),
+                                ...(hpt._doorFormDefaultValue as any),
                             },
                             _doorFormDefaultValue: {
                                 ...hpt._doorFormDefaultValue,

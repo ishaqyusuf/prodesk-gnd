@@ -18,6 +18,7 @@ import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { useModal } from "@/_v2/components/common/modal/provider";
 import { usePathname } from "next/navigation";
 import { DialogFooter } from "@/components/ui/dialog";
+import { updateSalesAddress } from "../../../_actions/update-sales-address";
 
 export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();
@@ -110,6 +111,16 @@ export default function SalesAddressModal({ form: mainForm }) {
                         shouldDirty: true,
                     });
                 });
+                let id = mainForm.getValues("order.id");
+
+                if (isDyke && id) {
+                    await updateSalesAddress(
+                        id,
+                        customerId,
+                        billingAddressId,
+                        shippingAddressId
+                    );
+                }
                 // closeModal();
                 modal?.close();
             }

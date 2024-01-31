@@ -22,6 +22,8 @@ interface Props<T> {
     className?: string;
     suffix?: string;
     type?: string;
+    list?: boolean;
+    // defaultValue?:boolean
 }
 export default function ControlledInput<
     TFieldValues extends FieldValues = FieldValues,
@@ -33,6 +35,7 @@ export default function ControlledInput<
     className,
     suffix,
     type,
+    list,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -50,17 +53,27 @@ export default function ControlledInput<
                             {type == "textarea" ? (
                                 <Textarea
                                     placeholder={placeholder}
-                                    {...field}
-                                    value={""}
-                                    defaultValue={field.value}
+                                    {...(list
+                                        ? {
+                                              defaultValue: field.value,
+                                              onChange: field.onChange,
+                                          }
+                                        : field)}
+                                    // value={""}
                                 />
                             ) : (
                                 <Input
                                     type={type}
                                     placeholder={placeholder}
-                                    {...field}
-                                    value={""}
-                                    defaultValue={field.value}
+                                    // {...field}
+                                    // value={""}
+                                    {...(list
+                                        ? {
+                                              defaultValue: field.value,
+                                              //   onChange: field.onChange,
+                                          }
+                                        : field)}
+                                    // defaultValue={field.value}
                                     onChange={(e) => {
                                         if (type == "number")
                                             field.onChange(

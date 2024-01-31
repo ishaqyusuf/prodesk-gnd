@@ -127,6 +127,7 @@ export default function HousePackageTool({}: Props) {
                                 {/* <SwingInput /> */}
                                 <ControlledInput
                                     type="number"
+                                    list
                                     control={form.control}
                                     name={`${doorsKey}.${row.dim}.lhQty` as any}
                                 />
@@ -134,6 +135,7 @@ export default function HousePackageTool({}: Props) {
                             <TableCell>
                                 <ControlledInput
                                     type="number"
+                                    list
                                     control={form.control}
                                     name={`${doorsKey}.${row.dim}.rhQty` as any}
                                 />
@@ -153,6 +155,7 @@ export default function HousePackageTool({}: Props) {
                                                     <ControlledInput
                                                         type="number"
                                                         control={form.control}
+                                                        list
                                                         name={
                                                             `${doorsKey}.${row.dim}.${p.key}` as any
                                                         }
