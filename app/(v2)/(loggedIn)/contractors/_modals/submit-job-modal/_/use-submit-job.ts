@@ -66,7 +66,7 @@ export default function useSubmitJob(form) {
         else await updateJobAction(job as any);
         toast.message("Success!");
         // closeModal();
-        modal?.hide();
+        modal?.close();
         await _revalidate(isAdmin ? "jobs" : "my-jobs");
     }
     const [cost, setCosts] = useState([]);

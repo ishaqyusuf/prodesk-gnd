@@ -23,7 +23,7 @@ export default function SalesAddressSection() {
         <>
             <div
                 onClick={() => {
-                    modal?.show(<SalesAddressModal form={form} />);
+                    modal?.open(<SalesAddressModal form={form} />);
                 }}
                 className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg  hover:bg-accent-foreground hover:text-white"
             >

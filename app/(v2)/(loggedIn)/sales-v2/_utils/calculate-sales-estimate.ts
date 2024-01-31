@@ -52,7 +52,7 @@ function taxEstimateAndUpdateTotal(
     formData.order.subTotal += totalPrice;
 }
 function calculateShelfItems(item: DykeForm["itemArray"][0]) {
-    if (item.item.meta.doorType == "Shelf Item") {
+    if (!item.item.housePackageTool?.doorType) {
         let sum = {
             doors: 0,
             unitPrice: 0,
@@ -79,7 +79,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         totalPrice: 0,
         tax: 0,
     };
-    if (item.item.meta.doorType != "Shelf Item") {
+    if (item.item.housePackageTool?.doorType) {
         Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
             let doors = v.lhQty + v.rhQty;
             const {

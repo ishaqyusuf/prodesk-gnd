@@ -27,10 +27,10 @@ export async function saveDykeSales(data: DykeForm) {
                   data: {
                       ...rest,
                       updatedAt: new Date(),
-                      customer: connect(customerId),
-                      salesRep: connect(data.salesRep?.id),
-                      billingAddress: connect(billingAddressId),
-                      shippingAddress: connect(shippingAddressId),
+                      //   customer: connect(customerId),
+                      //   salesRep: connect(data.salesRep?.id),
+                      //   billingAddress: connect(billingAddressId),
+                      //   shippingAddress: connect(shippingAddressId),
                       //   customer: connect(id),
                       //   billingAddress: connect(billingAddressId),
                       //   shippingAddress: connect(shippingAddressId),
@@ -78,7 +78,7 @@ export async function saveDykeSales(data: DykeForm) {
                 const newItem = !itemId;
                 item.meta.lineIndex = index;
                 if (!itemId) itemId = ++lastItemId;
-                const shelfMode = item.meta.doorType == "Shelf Item";
+                const shelfMode = !housePackageTool?.doorType;
                 if (newItem) {
                     createItems.push({
                         ...item,

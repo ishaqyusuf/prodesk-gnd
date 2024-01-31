@@ -49,7 +49,7 @@ export default function EditProductModal({ data }: Props) {
         modal?.startTransition(async () => {
             // console.log(data);
             await saveDykeProduct(data);
-            modal.hide();
+            modal.close();
             toast.success("Saved");
         });
     }

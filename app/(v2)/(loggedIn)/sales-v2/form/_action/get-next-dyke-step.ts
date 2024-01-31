@@ -11,10 +11,12 @@ export async function getNextDykeStepAction(
     stepProd,
     _steps: any[] = []
 ) {
+    // console.log(step);
+
     let nextStepId = stepProd?.nextStepId;
     if (product?.title == "Wood Stile & Rail") {
         nextStepId = await createDoorSpecies(step, stepProd);
-        console.log(product);
+        // console.log(product);
         stepProd.nextStepId = nextStepId;
     }
     if (product) {
@@ -45,17 +47,14 @@ export async function getNextDykeStepAction(
             });
         }
         nextStepId = nextSteps[0]?.id;
+
         if (nextSteps.length > 1) {
-            console.log(nextSteps);
+            // console.log(nextSteps);
             nextSteps.map((s) => {
                 if (
                     (product?.title && s.value?.endsWith(product.title)) ||
                     (s.title == "Hand" && s.id == 22)
                 ) {
-                    console.log({
-                        product,
-                        s,
-                    });
                     nextStepId = s.id;
                 }
             });
@@ -76,7 +75,18 @@ export async function getNextDykeStepAction(
                     [..._steps, stepForm]
                 );
             }
-            if (stepForm.step?.stepProducts.length == 1 && stepProd) {
+
+            // console.log(stepForm.step?.stepProducts.length);
+            // console.log(stepForm.step?.stepProducts);
+            let stepProds = stepForm.step?.stepProducts || [];
+            stepProds = stepProds.filter(
+                (p, i) =>
+                    stepProds?.findIndex(
+                        (p2) => p2.product?.title == p.product?.title
+                    ) == i
+            );
+
+            if (stepProds.length == 1 && stepProd) {
                 stepForm.item.value =
                     stepProd?.product.title || stepProd?.product.value;
                 stepForm.item.stepId = stepProd.dykeStepId;

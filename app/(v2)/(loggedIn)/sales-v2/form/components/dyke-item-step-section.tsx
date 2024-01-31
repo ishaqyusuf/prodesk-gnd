@@ -30,6 +30,9 @@ import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../_utils/door-query-builder";
 
 import SVG from "react-inlinesvg";
+import { useModal } from "@/_v2/components/common/modal/provider";
+import { Button } from "@/components/ui/button";
+import EditStepItemModal from "./modals/edit-step-item-modal";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -104,27 +107,32 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     const form = useDykeForm();
     // stepProducts[0].
+
     const item = useContext(DykeItemFormContext);
     const ctx = useDykeCtx();
+    const load = async () => {
+        if (stepForm?.item?.meta?.hidden) return;
+        if (stepForm.step?.title == "Door") {
+            const query = doorQueryBuilder(
+                form.getValues(
+                    `itemArray.${rowIndex}.item.formStepArray` as any
+                ),
+                form.getValues(
+                    `itemArray.${rowIndex}.item.housePackageTool.doorType` as any
+                )
+            );
+            const prods = await getDykeStepDoors(
+                query.q,
+                query.omit,
+                query.qty,
+                stepForm?.step?.id
+            );
+            // console.log(prods);
+            setStepProducts(prods);
+        } else setStepProducts(await getStepProduct(stepForm?.step?.id));
+    };
     useEffect(() => {
-        (async () => {
-            if (stepForm?.item?.meta?.hidden) return;
-            if (stepForm.step?.title == "Door") {
-                const query = doorQueryBuilder(
-                    form.getValues(
-                        `itemArray.${rowIndex}.item.formStepArray` as any
-                    )
-                );
-                const prods = await getDykeStepDoors(
-                    query.q,
-                    query.omit,
-                    query.qty,
-                    stepForm?.step?.id
-                );
-                // console.log(prods);
-                setStepProducts(prods);
-            } else setStepProducts(await getStepProduct(stepForm?.step?.id));
-        })();
+        load();
     }, []);
     async function selectProduct(stepProd: IStepProducts[0]) {
         // return;
@@ -143,6 +151,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             height: val,
                             totalDoors: 0,
                             totalPrice: 0,
+                            doorType: hpt.doorType,
                             // doors: {},
                             _doorForm: {
                                 ...(hpt._doorFormDefaultValue as any),
@@ -165,6 +174,12 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         stepProd.dykeProductId
                     );
                     break;
+                case "Casing":
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.item.housePackageTool.casingId`,
+                        stepProd.dykeProductId
+                    );
+                    break;
                 case "Door Type":
                     switch (stepProd.product.title) {
                         case "Shelf Items":
@@ -172,10 +187,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 `itemArray.${item.rowIndex}.item.housePackageTool`,
                                 null as any
                             );
-                            form.setValue(
-                                `itemArray.${item.rowIndex}.item.meta.doorType`,
-                                "Shelf Item"
-                            );
+
                             //clean up package tools
                             break;
                         case "Interior":
@@ -183,7 +195,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Bifold":
                         case "Garage":
                             form.setValue(
-                                `itemArray.${item.rowIndex}.item.meta.doorType`,
+                                `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepForm.step?.value as any
                             );
                             break;
@@ -230,51 +242,87 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
         // toast.success("selected");
         //get next step
     }
+    const modal = useModal();
+    function onCreate(stepItem: IStepProducts[0]) {
+        setStepProducts((cd) => {
+            const index = cd.findIndex((c) => c.id == stepItem.id);
+            const ret = [...cd];
+
+            if (index > -1) ret[index] = stepItem;
+            else ret.push(stepItem);
+            return ret;
+        });
+    }
     return (
         <div className="">
-            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {stepProducts?.map((b, i) => (
-                    <button
-                        disabled={ctx.loadingStep}
-                        className={cn(
-                            "flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded p-2 space-y-2 justify-end"
-                        )}
-                        onClick={() => {
-                            selectProduct(b);
-                        }}
-                        key={i}
-                    >
-                        {b.product.img && (
-                            <Image
-                                className="cursor-pointer"
-                                width={100}
-                                height={100}
-                                src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${b.product.img}`}
-                                alt={b.product.description || b.product.value}
-                            />
-                        )}
-                        {(b.product.meta as any)?.svg &&
-                            (b.product.meta?.svg ? (
-                                <SVG src={b.product.meta?.svg} />
-                            ) : b.product.meta?.url ? (
-                                <object
-                                    data={b.product.meta?.url}
-                                    type={"image/svg+xml"}
-                                />
-                            ) : null)}
-                        <Label className="text-sm">{b.product.title}</Label>
-                        {/* {
-                            <div
-                                className={cn(
-                                    "text-xs font-bold",
-                                    !b.product.price && "opacity-0"
-                                )}
+                    <div className="relative p-4 group" key={i}>
+                        <div className=" hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
+                            <Button
+                                size="icon"
+                                variant={"outline"}
+                                className="w-8 h-8"
+                                onClick={() => {
+                                    const { ...data } = b;
+                                    modal?.open(
+                                        <EditStepItemModal
+                                            onCreate={onCreate}
+                                            item={data as any}
+                                        />
+                                    );
+                                }}
                             >
-                                <Money value={b.product.price} />{" "}
-                                <span>x{b.product.qty}</span>
-                            </div>
-                        } */}
-                    </button>
+                                <Icons.edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                className="w-8 h-8"
+                                onClick={() => {
+                                    const { id, ...data } = b;
+                                    modal?.open(
+                                        <EditStepItemModal
+                                            onCreate={onCreate}
+                                            item={data as any}
+                                        />
+                                    );
+                                }}
+                            >
+                                <Icons.copy className="w-4 h-4" />
+                            </Button>
+                        </div>
+                        <button
+                            disabled={ctx.loadingStep}
+                            className={cn(
+                                "w-full  flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded  space-y-2 justify-end"
+                            )}
+                            onClick={() => {
+                                selectProduct(b);
+                            }}
+                        >
+                            {b.product.img && (
+                                <Image
+                                    className="cursor-pointer"
+                                    width={100}
+                                    height={100}
+                                    src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${b.product.img}`}
+                                    alt={
+                                        b.product.description || b.product.value
+                                    }
+                                />
+                            )}
+                            {(b.product.meta as any)?.svg &&
+                                (b.product.meta?.svg ? (
+                                    <SVG src={b.product.meta?.svg} />
+                                ) : b.product.meta?.url ? (
+                                    <object
+                                        data={b.product.meta?.url}
+                                        type={"image/svg+xml"}
+                                    />
+                                ) : null)}
+                            <Label className="text-sm">{b.product.title}</Label>
+                        </button>
+                    </div>
                 ))}
             </div>
             <div className="flex justify-center">

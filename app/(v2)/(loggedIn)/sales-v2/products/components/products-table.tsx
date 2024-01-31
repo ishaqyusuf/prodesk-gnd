@@ -54,7 +54,7 @@ export default function ProductsTable({
                     <RowActionCell>
                         <EditRowAction
                             onClick={(e) => {
-                                modal?.show(
+                                modal?.open(
                                     <EditProductModal data={row.original} />
                                 );
                             }}

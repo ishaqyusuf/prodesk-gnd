@@ -111,7 +111,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                     });
                 });
                 // closeModal();
-                modal?.hide();
+                modal?.close();
             }
         });
     }

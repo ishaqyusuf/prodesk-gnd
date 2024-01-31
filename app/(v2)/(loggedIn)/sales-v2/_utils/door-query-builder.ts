@@ -1,7 +1,8 @@
-import { addSpacesToCamelCase, camel } from "@/lib/utils";
-import { DykeForm, FormStepArray } from "../type";
+import { camel } from "@/lib/utils";
+import { FormStepArray } from "../type";
+export type DoorTypes = "Interior" | "Garage" | "Bifold";
 
-export function doorQueryBuilder(steps: FormStepArray) {
+export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     const obj = toKeyValue(steps);
 
     let q: any[] = [];
@@ -50,7 +51,7 @@ export function doorQueryBuilder(steps: FormStepArray) {
     }
     if (p1) q.push(p1);
 
-    switch (obj.doorType0) {
+    switch (doorType) {
         case "Garage":
             q.push("1-3/4");
             break;
@@ -67,7 +68,7 @@ export function doorQueryBuilder(steps: FormStepArray) {
 function toKeyValue(step: FormStepArray) {
     const obj: {
         doorConfiguration: string;
-        doorType0: "Interior" | "Garage";
+        doorType0: DoorTypes;
         height: string;
         doorType:
             | "HC Molded"

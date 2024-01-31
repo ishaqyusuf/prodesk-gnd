@@ -10,8 +10,8 @@ import {
 import Modal from ".";
 
 interface ModalContextProps {
-    show: (content: ReactNode, data?) => void;
-    hide: () => void;
+    open: (content: ReactNode, data?) => void;
+    close: () => void;
     data;
     opened?: boolean;
     loading?: boolean;
@@ -42,8 +42,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     return (
         <ModalContext.Provider
             value={{
-                show,
-                hide,
+                open: show,
+                close: hide,
                 setShowModal,
                 data,
                 opened: showModal,
