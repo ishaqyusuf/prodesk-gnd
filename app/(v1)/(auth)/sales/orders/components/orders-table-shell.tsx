@@ -29,8 +29,6 @@ import { SmartTable } from "../../../../../../components/_v1/data-table/smart-ta
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import SalesOrderMobileCell from "../../../../../../components/_v1/mobile/sales/sales-order-mobile-cell";
-import { openModal } from "@/lib/modal";
-import { Button } from "../../../../../../components/ui/button";
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { _getSalesRep } from "../_actions/get-sales-rep.action";
 import StatusBadge from "@/components/_v1/status-badge";

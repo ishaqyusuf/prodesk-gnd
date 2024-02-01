@@ -18,8 +18,8 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
                 // q.push("hc"); //shaker door slab
                 // p1 += "hc ";
 
-                q.push("hc ");
-                // omit.push("hc flush");
+                q.push("hc");
+                omit.push("hc flush");
                 break;
             case "SC Molded":
                 // q.push("sc");
@@ -66,6 +66,10 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     // console.log(q, doorType);
 
     // q = ["x8-0", "1-3/8"];
+    console.log({ q, omit });
+
+    q = ["hc ", "x8-0"];
+    // omit = ["hc flush"];
 
     return {
         q, //: q.join(" "),
