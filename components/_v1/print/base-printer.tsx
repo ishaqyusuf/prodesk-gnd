@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 
 interface Props {
@@ -26,3 +26,4 @@ export default function BasePrinter({ children, preview, id }: Props) {
         </>
     );
 }
+

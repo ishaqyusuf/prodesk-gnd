@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useTransition } from "react";
 import {
     ColumnHeader,
+    DateCellContent,
     _FilterColumn,
 } from "../../../../../../components/_v1/columns/base-columns";
 
@@ -121,14 +122,25 @@ export default function OrdersTableShell<T>({
                       {
                           accessorKey: "delivery",
                           header: ColumnHeader("Delivery"),
-                          cell: ({ row }) => (
-                              <span className="capitalize">
-                                  <StatusBadge
-                                      status={row.original.deliveryOption}
-                                      sm
-                                  />
-                              </span>
-                          ),
+                          cell: ({ row }) => {
+                              const date =
+                                  row.original.pickup?.pickupAt ||
+                                  row.original.pickup?.createdAt ||
+                                  row.original.deliveredAt;
+                              return (
+                                  <span className="capitalize">
+                                      <StatusBadge
+                                          status={row.original.deliveryOption}
+                                          sm
+                                      />
+                                      {date && (
+                                          <DateCellContent>
+                                              {date}
+                                          </DateCellContent>
+                                      )}
+                                  </span>
+                              );
+                          },
                       },
                       {
                           accessorKey: "status",

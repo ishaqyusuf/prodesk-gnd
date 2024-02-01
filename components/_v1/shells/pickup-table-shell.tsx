@@ -47,7 +47,8 @@ export default function PickupTableShell<T>({
             },
             {
                 accessorKey: "orderId",
-                cell: ({ row }) => OrderIdCell(row.original),
+                cell: ({ row }) =>
+                    OrderIdCell(row.original, "/sales/production/slug"),
                 header: ColumnHeader("Order"),
             },
             {

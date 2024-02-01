@@ -86,7 +86,8 @@ export default function PickupModal() {
                                 {...form.register("pickupAt")}
                             />
                         </div>
-                        <div className="border col-span-2">
+                        <div className="border col-span-2 grid gap-2">
+                            <Label>Signature</Label>
                             <SignaturePad
                                 ref={sigCanvas}
                                 options={{

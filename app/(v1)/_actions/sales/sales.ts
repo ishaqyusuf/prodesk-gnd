@@ -239,6 +239,7 @@ export async function getOrderAction(orderId, isProd = false) {
                   }
                 : false,
             productions: isProd,
+            pickup: true,
         },
     });
     if (!order) return null;

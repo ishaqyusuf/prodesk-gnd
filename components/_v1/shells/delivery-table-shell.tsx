@@ -52,7 +52,8 @@ export default function DeliveryTableShell<T>({
             },
             {
                 accessorKey: "orderId",
-                cell: ({ row }) => OrderIdCell(row.original),
+                cell: ({ row }) =>
+                    OrderIdCell(row.original, "/sales/production/slug"),
                 header: ColumnHeader("Order"),
             },
             {

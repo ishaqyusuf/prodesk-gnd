@@ -40,6 +40,7 @@ const server = z.object({
 const client = z.object({
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL: z.string(),
+    NEXT_PUBLIC_ROOT_DOMAIN: z.string(),
     NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
     NEXT_PUBLIC_CLOUDINARY_BASE_URL: z.string(),
     NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
@@ -74,6 +75,7 @@ const processEnv = {
         process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL,
     TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
     TWILIO_PHONE: process.env.TWILIO_PHONE,
+    NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
