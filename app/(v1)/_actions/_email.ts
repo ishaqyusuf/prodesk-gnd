@@ -13,8 +13,8 @@ interface Props {
 
 export async function _email({ from, user, subject, react }: Props) {
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
-    console.log(isProd, env.NEXT_PUBLIC_NODE_ENV);
-    return;
+    // console.log(isProd, env.NEXT_PUBLIC_NODE_ENV);
+    // return;
     await resend.emails.send({
         from,
         // to:  "ishaqyusuf024@gmail.com",
