@@ -18,6 +18,7 @@ import { _readyForDelivery } from "@/app/(v1)/_actions/sales/delivery/ready-for-
 import { IDataPage } from "@/types/type";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useDataPage } from "@/lib/data-page-context";
 
 export interface TruckLoaderForm {
     loader: {
@@ -47,17 +48,14 @@ export interface TruckLoaderForm {
     truck;
 }
 export type SalesInspectPageAction = "ready" | "load" | "create";
-export interface SalesDataPage
-    extends IDataPage<{
-        orders: ISalesOrder[];
-        action: SalesInspectPageAction;
-    }> {}
+export interface SalesDataPage {
+    orders: ISalesOrder[];
+    action: SalesInspectPageAction;
+}
 export default function LoadDelivery({ title }) {
     const [loadingTruck, startLoadingTruck] = useTransition();
-    const dataPage: SalesDataPage = useAppSelector<{
-        id;
-        data: { orders: ISalesOrder[]; action };
-    }>((s) => s.slicers.dataPage);
+    const dataPage = useDataPage<SalesDataPage>();
+
     const form = useForm<TruckLoaderForm>({
         defaultValues: {
             loader: {},

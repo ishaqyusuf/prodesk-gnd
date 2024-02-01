@@ -16,12 +16,13 @@ import { OrderInvoiceCell } from "../columns/sales-columns";
 import { ISalesDashboard } from "@/types/dashboard";
 import Link from "next/link";
 import { Button } from "../../ui/button";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     className?;
 }
 export default function RecentSalesDashboardCard({ className }: Props) {
-    const db: ISalesDashboard = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: db } = useDataPage<ISalesDashboard>();
     return (
         <Card className={cn(className)}>
             <CardHeader className="">

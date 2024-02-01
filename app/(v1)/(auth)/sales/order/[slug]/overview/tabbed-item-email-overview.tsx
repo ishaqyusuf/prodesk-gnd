@@ -4,9 +4,10 @@ import { useAppSelector } from "@/store";
 import { ISalesOrder } from "@/types/sales";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ItemDetailsSection from "./item-details";
+import { useDataPage } from "@/lib/data-page-context";
 
 export default function TabbedItemEmailOverview() {
-    const order: ISalesOrder = useAppSelector(s => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     const isProd = order?.ctx?.prodPage;
     return (
         <div className="">
@@ -25,3 +26,4 @@ export default function TabbedItemEmailOverview() {
         </div>
     );
 }
+

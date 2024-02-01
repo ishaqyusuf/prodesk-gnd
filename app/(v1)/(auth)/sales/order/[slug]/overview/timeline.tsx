@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useDataPage } from "@/lib/data-page-context";
 import { openModal } from "@/lib/modal";
 import { formatDate } from "@/lib/use-day";
 import { useAppSelector } from "@/store";
@@ -11,7 +12,7 @@ import { ISalesOrder } from "@/types/sales";
 import { Plus } from "lucide-react";
 
 export default function Timeline() {
-    const order: ISalesOrder = useAppSelector(s => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
 
     return (
         <div className="col-span-1">
@@ -63,3 +64,4 @@ export default function Timeline() {
         </div>
     );
 }
+

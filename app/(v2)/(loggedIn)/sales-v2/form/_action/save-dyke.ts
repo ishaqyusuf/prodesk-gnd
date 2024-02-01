@@ -76,6 +76,7 @@ export async function saveDykeSales(data: DykeForm) {
                 } = arr.item;
                 // arr.item.shelfItemArray[0].
                 const newItem = !itemId;
+                if (!item.meta) item.meta = {} as any;
                 item.meta.lineIndex = index;
                 if (!itemId) itemId = ++lastItemId;
                 const shelfMode = !housePackageTool?.doorType;

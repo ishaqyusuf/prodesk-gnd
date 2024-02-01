@@ -38,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { isProdClient } from "@/lib/is-prod";
 import RenderForm from "@/_v2/components/common/render-form";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     data: SalesFormResponse;
@@ -46,9 +47,7 @@ interface Props {
 }
 let renderCount = 0;
 export default function SalesForm({ data, newTitle, slug }: Props) {
-    const pageData: SalesFormResponse = useAppSelector(
-        (s) => s.slicers.dataPage.data
-    );
+    const { data: pageData } = useDataPage<SalesFormResponse>();
     const defaultValues: ISalesOrder = {
         ...data?.form,
     };

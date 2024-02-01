@@ -13,6 +13,7 @@ import Money from "@/components/_v1/money";
 import { ProdStatusCell } from "@/components/_v1/columns/sales-columns";
 import StatusBadge from "@/components/_v1/status-badge";
 import { formatDate } from "@/lib/use-day";
+import { useDataPage } from "@/lib/data-page-context";
 // import ProductionDueDate from "../../../../../../../components/_v1/sales/prod-due-date";
 
 interface Props {
@@ -21,8 +22,8 @@ interface Props {
     estimate?: Boolean;
 }
 export default function DetailsSection({ myProd, estimate }: Props) {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
-    console.log(order);
+    const { data: order } = useDataPage<ISalesOrder>();
+
     const isProd = order?.ctx?.prodPage;
     return (
         <div className="">

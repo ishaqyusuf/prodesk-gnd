@@ -14,15 +14,15 @@ import { ISalesOrder } from "@/types/sales";
 import { UseFormReturn } from "react-hook-form";
 import { SalesDataPage, TruckLoaderForm } from "./load-delivery";
 import { useAppSelector } from "@/store";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     form: UseFormReturn<TruckLoaderForm>;
     order: ISalesOrder;
 }
 export default function OrderInspection({ form, order }: Props) {
-    const dataP: SalesDataPage = useAppSelector((s) => s.slicers.dataPage);
-    const action = dataP?.data?.action; // != "ready-for-delivery";
-
+    const dataPage = useDataPage<SalesDataPage>();
+    const action = dataPage?.data?.action; // != "ready-for-delivery";
     return (
         <div className="space-y-4">
             <PageHeader
@@ -35,7 +35,7 @@ export default function OrderInspection({ form, order }: Props) {
                     </div>
                 }
             />
-            {dataP?.data?.action == "load" && (
+            {dataPage?.data?.action == "load" && (
                 <div className="grid gap-2">
                     <Label>Truck Load Location</Label>
                     <Input

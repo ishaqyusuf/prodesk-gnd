@@ -5,12 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { useEffect } from "react";
 import { Info } from "../info";
 import { DateCellContent } from "../columns/base-columns";
+import { useDataPage } from "@/lib/data-page-context";
 
 export default function WorkOrderOverviewSection({}) {
-    const workOrder: IWorkOrder = useAppSelector(
-        (s) => s.slicers.dataPage.data
-    );
-    useEffect(() => {}, []);
+    const { data: workOrder } = useDataPage<IWorkOrder>();
     return (
         <Card>
             <CardHeader>

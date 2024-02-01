@@ -9,12 +9,13 @@ import { Info } from "../../../../../../../components/_v1/info";
 import { AddressBooks } from "@prisma/client";
 import OrderOverviewActions from "../../../../../../../components/_v1/actions/order-overview-actions";
 import { convertToNumber } from "@/lib/use-number";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     isProd?: Boolean;
 }
 export default function SalesEmailSection({}: Props) {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     const isProd = order?.ctx?.prodPage;
     return (
         <div className="">

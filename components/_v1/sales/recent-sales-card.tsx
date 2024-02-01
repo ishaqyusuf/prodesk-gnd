@@ -13,12 +13,13 @@ import {
 } from "../columns/base-columns";
 import { formatDate } from "@/lib/use-day";
 import { OrderInvoiceCell } from "../columns/sales-columns";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     className?;
 }
 export default function RecentSalesCard({ className }: Props) {
-    const customer: ICustomer = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: customer } = useDataPage<ICustomer>();
     return (
         <Card className={cn(className)}>
             <CardHeader>

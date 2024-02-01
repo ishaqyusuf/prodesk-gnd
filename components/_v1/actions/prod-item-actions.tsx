@@ -9,11 +9,12 @@ import { orderItemProductionAction } from "@/app/(v1)/_actions/sales/sales-produ
 import { openModal } from "@/lib/modal";
 import { toast } from "sonner";
 import { useAppSelector } from "@/store";
+import { useDataPage } from "@/lib/data-page-context";
 interface IProp {
     item: ISalesOrderItem;
 }
 export const ProdItemActions = ({ item }: IProp) => {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     const { orderId, slug, id } = order;
     const {
         qty,

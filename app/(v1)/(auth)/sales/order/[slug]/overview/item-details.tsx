@@ -18,9 +18,10 @@ import { IInboundOrderItems } from "@/types/sales-inbound";
 import StatusBadge from "@/components/_v1/status-badge";
 import { PrimaryCellContent } from "@/components/_v1/columns/base-columns";
 import Money from "@/components/_v1/money";
+import { useDataPage } from "@/lib/data-page-context";
 
 export default function ItemDetailsSection() {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     const isProd = order?.ctx?.prodPage;
 
     return (

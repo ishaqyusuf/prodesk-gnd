@@ -5,6 +5,7 @@ import Btn from "@/components/_v1/btn";
 import Money from "@/components/_v1/money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useDataPage } from "@/lib/data-page-context";
 import { keyValue } from "@/lib/utils";
 import { useAppSelector } from "@/store";
 import { ISalesOrder } from "@/types/sales";
@@ -13,7 +14,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 
 export default function CostBreakdown() {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     let paidReceipt = 0;
     order?.payments?.map((p) => (paidReceipt += p?.amount || 0));
     let pendingPayment = (order.grandTotal || 0) - paidReceipt;

@@ -12,6 +12,7 @@ import {
 import Money from "@/components/_v1/money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useDataPage } from "@/lib/data-page-context";
 import { formatDate } from "@/lib/use-day";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store";
@@ -21,8 +22,7 @@ interface Props {
     className?;
 }
 export default function RecentPayments({ className }: Props) {
-    const customer: ICustomer = useAppSelector((s) => s.slicers.dataPage.data);
-
+    const { data: customer } = useDataPage<ICustomer>();
     return (
         <Card className={cn(className)}>
             <CardHeader>

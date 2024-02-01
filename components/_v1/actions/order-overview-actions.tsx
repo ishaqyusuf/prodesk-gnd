@@ -7,12 +7,13 @@ import { OrderRowAction } from "./order-actions";
 import { ISalesOrder } from "@/types/sales";
 import { useAppSelector } from "@/store";
 import UpdateSalesDate from "../sales/update-sales-date";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     estimate?: Boolean;
 }
 export default function OrderOverviewActions({ estimate }: Props) {
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+    const { data: order } = useDataPage<ISalesOrder>();
     // const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
     const _linkDir = order.isDyke
         ? `/sales-v2/form/${order.type}/${order.slug}`

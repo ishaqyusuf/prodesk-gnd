@@ -11,6 +11,7 @@ export async function addDoorUnitAction(): Promise<
         opened: true,
         stepIndex: 0,
         item: {
+            meta: {},
             formStepArray: [
                 {
                     item: {

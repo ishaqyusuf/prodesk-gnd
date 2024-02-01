@@ -24,6 +24,7 @@ import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
 import { getHomeTemplateSuggestions } from "@/app/(v1)/_actions/community/home-template-suggestion";
 import ImportModelTemplateSheet from "@/components/_v1/sheets/import-model-template-sheet";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {
     data: IHomeTemplate;
@@ -40,9 +41,10 @@ export interface DesignTemplateForm extends HomeTemplateDesign {
 }
 export default function ModelForm({ data, title = "Edit Model" }: Props) {
     // console.log(data);
-    const community = useAppSelector(
-        (s) => s.slicers.dataPage?.data?.community
-    ) as any;
+
+    const {
+        data: { community },
+    } = useDataPage();
     const form = useForm<DesignTemplateForm>({
         defaultValues: {
             ...(data?.meta?.design || {}),

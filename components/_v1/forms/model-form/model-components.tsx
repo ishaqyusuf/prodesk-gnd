@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAppSelector } from "@/store";
 import AutoComplete from "@/components/_v1/auto-complete-tw";
+import { useDataPage } from "@/lib/data-page-context";
 
 interface ModelFormSectionProps<T> {
     section?;
@@ -100,9 +101,9 @@ export function ModelComponents<T>({
     form,
     node,
 }: ModelFormProps & { node: keyof HomeTemplateDesign }) {
-    const community = useAppSelector(
-        (s) => s.slicers.dataPage?.data?.community
-    ) as any;
+    const {
+        data: { community },
+    } = useDataPage();
     const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
     const Field = ({
         label,

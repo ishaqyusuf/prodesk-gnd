@@ -44,13 +44,13 @@ export default function ShelfItemIndex() {
                     <TableHead className="flex  w-full  space-x-4 items-center">
                         <div className="flex-1">Product</div>
                         <div className="w-20">Qty</div>
-                        <div className="w-24 text-right">Unit Price</div>
+                        <div className="w-24 text-right">Rate</div>
                         <div className="w-24 text-right">Line Total</div>
                         <div className="w-12"></div>
                     </TableHead>
                     {/* <TableHead>Product</TableHead> */}
                     {/* <TableHead>Qty</TableHead> */}
-                    {/* <TableHead>Unit Price</TableHead> */}
+                    {/* <TableHead>Rate</TableHead> */}
                     {/* <TableHead>Line Total</TableHead> */}
                 </TableRow>
             </TableHeader>

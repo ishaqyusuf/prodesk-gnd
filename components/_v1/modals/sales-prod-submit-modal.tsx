@@ -21,6 +21,7 @@ import { closeModal } from "@/lib/modal";
 import Btn from "../btn";
 import { toast } from "sonner";
 import { useAppSelector } from "@/store";
+import { useDataPage } from "@/lib/data-page-context";
 export interface ICompleteItemProd {
     itemId;
     note;
@@ -32,7 +33,8 @@ export default function SalesProdSubmitModal() {
     const form = useForm<ICompleteItemProd>({
         defaultValues: {},
     });
-    const order: ISalesOrder = useAppSelector((s) => s.slicers.dataPage.data);
+
+    const { data: order } = useDataPage<ISalesOrder>();
     const { orderId, slug, id } = order;
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
