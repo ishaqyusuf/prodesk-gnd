@@ -12,11 +12,9 @@ import {
 import {
     OrderCustomerCell,
     OrderIdCell,
-    OrderInvoiceCell,
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-    OrderStatus,
 } from "../columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";

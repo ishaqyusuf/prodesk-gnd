@@ -239,7 +239,6 @@ export async function getOrderAction(orderId, isProd = false) {
                   }
                 : false,
             productions: isProd,
-            pickup: true,
         },
     });
     if (!order) return null;
@@ -283,6 +282,7 @@ export async function getSales(query: SalesQueryParams) {
             shippingAddress: true,
             producer: true,
             salesRep: true,
+            pickup: true,
             items: {
                 where: {
                     swing: {
