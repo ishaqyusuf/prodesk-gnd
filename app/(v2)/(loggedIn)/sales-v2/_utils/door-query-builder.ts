@@ -6,7 +6,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     const obj = toKeyValue(steps);
     // console.log(obj);
 
-    let q: any[] = [`x${obj.height} `];
+    let q: any[] = [];
 
     // let p1: any = `x${obj.height} `;
     let omit: any[] = []; //["primed", "pine", "prm"];
@@ -23,7 +23,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
                 break;
             case "SC Molded":
                 // q.push("sc");
-                // omit.push("sc flush");
+                omit.push("sc flush");
                 // p1 = null;
                 // p1 += "sc ";
                 q.push("sc ");
@@ -68,7 +68,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     // q = ["x8-0", "1-3/8"];
     console.log({ q, omit });
 
-    q = ["hc ", "x8-0"];
+    // q = ["hc ", "x8-0"];
     // omit = ["hc flush"];
 
     return {

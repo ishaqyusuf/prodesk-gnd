@@ -40,9 +40,10 @@ export default function Search() {
         router.push(
             `${pathname}?${createQueryString({
                 q,
+                omit,
             })}`
         );
-    }, [q]);
+    }, [q, omit]);
 
     return (
         <div className="grid grid-cols-2 gap-4">
