@@ -19,6 +19,22 @@ export async function getDykeStepDoors(
         },
     });
     if (_doors.length || final) return response(_doors, stepId);
+    if (query == "SC Molded") {
+        const hcDoors = await prisma.dykeDoors.findMany({
+            where: {
+                query: "HC Molded",
+            },
+        });
+        await prisma.dykeDoors.createMany({
+            data: hcDoors.map(({ id, query: _query, ...rest }) => ({
+                ...rest,
+                query,
+                title: rest.title.replace("HC", "SC"),
+            })) as any,
+        });
+
+        return await getDykeStepDoors(q, omit, qty, stepId, query);
+    }
     const where = {
         AND: [
             {
