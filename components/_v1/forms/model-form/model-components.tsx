@@ -101,9 +101,9 @@ export function ModelComponents<T>({
     form,
     node,
 }: ModelFormProps & { node: keyof HomeTemplateDesign }) {
-    const {
-        data: { community },
-    } = useDataPage();
+    // const {
+    //     data: { community },
+    // } = useDataPage();
     const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
     const Field = ({
         label,
