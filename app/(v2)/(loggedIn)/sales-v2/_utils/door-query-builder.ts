@@ -7,7 +7,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     // console.log(obj);
 
     let q: any[] = [];
-
+    let query = obj.doorType;
     // let p1: any = `x${obj.height} `;
     let omit: any[] = []; //["primed", "pine", "prm"];
     // q.push(p1);
@@ -17,7 +17,6 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
             case "HC Molded":
                 // q.push("hc"); //shaker door slab
                 // p1 += "hc ";
-
                 q.push("hc");
                 omit.push("hc flush");
                 break;
@@ -38,7 +37,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
             case "Wood Stile & Rail":
                 // omit = ["hc", "sc"];
                 omit = [];
-
+                query = obj.doorSpecies as any;
                 // q.push(p1);
                 // p1 = null;
                 switch (obj.doorSpecies) {
@@ -72,6 +71,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     // omit = ["hc flush"];
 
     return {
+        query,
         q, //: q.join(" "),
         qty: obj.qty,
         omit,

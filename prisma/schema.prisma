@@ -894,6 +894,7 @@ model HousePackageTools {
     height         String
     doorType       String?
     doorId         Int?
+    dykeDoorId     Int?
     jambSizeId     Int?
     casingId       Int?
     totalPrice     Float?             @default(0)
@@ -904,7 +905,8 @@ model HousePackageTools {
     updatedAt      DateTime?          @db.Timestamp(0)
     order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
     salesOrderItem SalesOrderItems    @relation(fields: [orderItemId], references: [id])
-    door           DykeShelfProducts? @relation(name: "shelfProd", fields: [doorId], references: [id])
+    door           DykeDoors?         @relation(name: "door", fields: [dykeDoorId], references: [id])
+    shelfProd      DykeShelfProducts? @relation(name: "shelfProd", fields: [doorId], references: [id])
     jambSize       DykeProducts?      @relation(name: "jamb", fields: [jambSizeId], references: [id])
     casing         DykeProducts?      @relation(name: "casing", fields: [casingId], references: [id])
     doors          DykeSalesDoors[]
@@ -1250,6 +1252,17 @@ model DykeStepProducts {
     updatedAt     DateTime?    @db.Timestamp(0)
     product       DykeProducts @relation(fields: [dykeProductId], references: [id])
     step          DykeSteps    @relation(fields: [dykeStepId], references: [id])
+}
+
+model DykeDoors {
+    id                Int                 @unique @default(autoincrement())
+    query             String?
+    title             String              @unique
+    img               String?
+    meta              Json?               @db.Json
+    createdAt         DateTime?           @default(now()) @db.Timestamp(0)
+    updatedAt         DateTime?           @db.Timestamp(0)
+    housePackageTools HousePackageTools[] @relation(name: "door")
 }
 
 model DykeProducts {
