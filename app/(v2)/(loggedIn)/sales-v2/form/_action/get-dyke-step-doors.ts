@@ -9,48 +9,59 @@ export async function getDykeStepDoors(
     q,
     omit,
     qty,
-    stepId
+    stepId,
+    final = false
 ): Promise<IStepProducts> {
-    // console.log({ q, omit });
+    console.log({ q, omit });
     // console.log({})
-    const doors = await prisma.dykeShelfProducts.findMany({
-        where: {
-            AND: [
-                {
-                    AND: q.map((w) => {
-                        if (Array.isArray(w))
-                            return {
-                                OR: w.map((_w) => ({
-                                    title: { contains: _w },
-                                })),
-                            };
-                        return {
-                            title: {
-                                contains: w,
-                            },
-                        };
-                    }),
-                },
-                {
-                    AND: omit.map((w) => ({
+    const where = {
+        AND: [
+            {
+                AND: q.map((w) => {
+                    // if (Array.isArray(w))
+                    //     return {
+                    //         OR: w.map((_w) => ({
+                    //             title: { contains: _w },
+                    //         })),
+                    //     };
+                    return {
                         title: {
-                            not: {
-                                contains: w,
-                            },
+                            contains: w,
                         },
-                    })),
-                },
-            ],
-        },
+                    };
+                }),
+            },
+            {
+                AND: omit.map((w) => ({
+                    title: {
+                        not: {
+                            contains: w,
+                        },
+                    },
+                })),
+            },
+        ],
+    };
+    let doorType = "dyke";
+    let doors = await prisma.dykeProducts.findMany({
+        where,
     });
-    // console.log(doors);
+    // console.log(doors.length);
+    if (!doors.length) {
+        doors = (await prisma.dykeShelfProducts.findMany({
+            where,
+        })) as any;
+        doorType = "shelf";
+    }
+
     const result = doors
         .map((door, index) => {
-            const spl = door.title.split(" ");
             let pattern = /\d+-\d+[xX]\d+-\d+\s*/;
-
+            if (!door.title) return null;
             door.title = door.title.replace(pattern, "");
-            const _index = doors.findIndex((d) => d.title.endsWith(door.title));
+            const _index = doors.findIndex((d) =>
+                d?.title?.endsWith(door?.title as any)
+            );
 
             if (_index != index) return null;
 
@@ -67,10 +78,11 @@ export async function getDykeStepDoors(
                     // img: door.img,
                     value: door.title,
                     id: door.id,
-                    price: door.unitPrice,
+                    // price: door.unitPrice,
                     meta: {
                         ...findDoorSvg(door.title),
                         ...((door.meta as any) || {}),
+                        doorType,
                     },
                 },
             };

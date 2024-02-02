@@ -4,7 +4,7 @@ import Search from "./search";
 export default async function DoorsDebug({ searchParams }) {
     const { q, omit } = searchParams;
 
-    const doors = await prisma.dykeProducts.findMany({
+    const doors = await prisma.dykeShelfProducts.findMany({
         where: {
             AND:
                 q || omit
