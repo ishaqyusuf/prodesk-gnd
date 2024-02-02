@@ -46,9 +46,9 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
                         q.push("pine");
                         // omit.push("primed", "prm");
                         break;
-                    case "Primed":
-                        q.push("primed", "prm");
-                        omit.push("pine");
+                    case "Prime":
+                        q.push(["primed", "prm"]);
+                        omit.push("pine", "flush");
                         break;
                 }
                 break;
@@ -88,7 +88,7 @@ function toKeyValue(step: FormStepArray) {
             | "HC Flush"
             | "SC Flush"
             | "Wood Stile & Rail";
-        doorSpecies: "Pine" | "Primed";
+        doorSpecies: "Pine" | "Prime";
         qty: number;
     } = {} as any;
     step.map((s) => {
