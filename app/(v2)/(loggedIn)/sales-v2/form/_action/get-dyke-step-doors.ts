@@ -5,17 +5,19 @@ import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeProductMeta } from "../../type";
 
-export async function getDykeStepDoors(
+export async function getDykeStepDoors({
     q,
     omit,
     qty,
     stepId,
     query,
-    final = false
-): Promise<{ result: IStepProducts }> {
+    doorType = null,
+    final = false,
+}): Promise<{ result: IStepProducts }> {
     const _doors = await prisma.dykeDoors.findMany({
         where: {
             query,
+            doorType,
         },
     });
     if (_doors.length || final) return response(_doors, stepId);
@@ -23,17 +25,19 @@ export async function getDykeStepDoors(
         const hcDoors = await prisma.dykeDoors.findMany({
             where: {
                 query: "HC Molded",
+                doorType,
             },
         });
         await prisma.dykeDoors.createMany({
             data: hcDoors.map(({ id, query: _query, ...rest }) => ({
                 ...rest,
                 query,
+                doorType,
                 title: rest.title.replace("HC", "SC"),
             })) as any,
         });
 
-        return await getDykeStepDoors(q, omit, qty, stepId, query);
+        return await getDykeStepDoors({ q, omit, qty, stepId, query });
     }
     const where = {
         AND: [
@@ -88,6 +92,7 @@ export async function getDykeStepDoors(
             return {
                 title: door.title,
                 img: door.img,
+                doorType,
                 query,
                 meta: {},
             };
@@ -98,7 +103,7 @@ export async function getDykeStepDoors(
         data: result as any,
     });
 
-    return await getDykeStepDoors(q, omit, qty, stepId, query, true);
+    return await getDykeStepDoors({ q, omit, qty, stepId, query, final: true });
 }
 function response(_doors, stepId) {
     return {

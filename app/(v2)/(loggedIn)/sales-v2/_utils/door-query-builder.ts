@@ -75,6 +75,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
         q, //: q.join(" "),
         qty: obj.qty,
         omit,
+        doorType: doorType == "Garage" ? doorType : null,
     };
 }
 function toKeyValue(step: FormStepArray) {

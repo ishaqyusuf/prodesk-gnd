@@ -1257,7 +1257,8 @@ model DykeStepProducts {
 model DykeDoors {
     id                Int                 @unique @default(autoincrement())
     query             String?
-    title             String              @unique
+    doorType          String? //GARAGE DOOR
+    title             String
     img               String?
     meta              Json?               @db.Json
     createdAt         DateTime?           @default(now()) @db.Timestamp(0)

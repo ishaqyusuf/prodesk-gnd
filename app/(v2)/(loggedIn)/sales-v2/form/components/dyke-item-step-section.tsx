@@ -122,11 +122,12 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 )
             );
             const { result: prods } = await getDykeStepDoors(
-                query.q,
-                query.omit,
-                query.qty,
-                stepForm?.step?.id,
-                query.query
+                { ...query, stepId: stepForm?.step?.id } as any
+                // query.q,
+                // query.omit,
+                // query.qty,
+                // stepForm?.step?.id,
+                // query.query
             );
             // console.log(prods);
             setStepProducts(prods);
@@ -302,7 +303,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 selectProduct(b);
                             }}
                         >
-                            {b.product.img && (
+                            {b.product.img && !(b.product.meta as any)?.svg && (
                                 <Image
                                     className="cursor-pointer"
                                     width={100}
