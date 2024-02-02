@@ -172,7 +172,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     break;
                 case "Door":
                     form.setValue(
-                        `itemArray.${item.rowIndex}.item.housePackageTool.doorId`,
+                        `itemArray.${item.rowIndex}.item.housePackageTool.dykeDoorId`,
                         stepProd.dykeProductId
                     );
                     break;
