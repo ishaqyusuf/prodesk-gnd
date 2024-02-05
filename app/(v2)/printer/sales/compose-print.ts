@@ -258,24 +258,33 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
                     position: "center",
                     colSpan: "1",
                 }),
-                styled(
-                    item.total ? formatCurrency.format(item.rate || 0) : null,
-                    null,
-                    {
-                        position: "right",
-                        colSpan: "2",
-                    }
-                ),
-                styled(
-                    !item.total ? null : formatCurrency.format(item.total || 0),
-                    null,
-                    {
-                        font: "bold",
-                        position: "right",
-                        colSpan: "2",
-                    }
-                ),
             ];
+            if (!noInvoice)
+                cells.push(
+                    ...[
+                        styled(
+                            item.total
+                                ? formatCurrency.format(item.rate || 0)
+                                : null,
+                            null,
+                            {
+                                position: "right",
+                                colSpan: "2",
+                            }
+                        ),
+                        styled(
+                            !item.total
+                                ? null
+                                : formatCurrency.format(item.total || 0),
+                            null,
+                            {
+                                font: "bold",
+                                position: "right",
+                                colSpan: "2",
+                            }
+                        ),
+                    ]
+                );
             return {
                 id: item.id,
                 total: item.total,

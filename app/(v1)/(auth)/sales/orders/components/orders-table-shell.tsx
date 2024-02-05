@@ -159,6 +159,7 @@ export default function OrdersTableShell<T>({
                           // accessorKey: "actions",
                           id: "actions",
                           header: ColumnHeader(""),
+                          position: "sticky",
                           size: 15,
                           maxSize: 15,
                           enableSorting: false,
