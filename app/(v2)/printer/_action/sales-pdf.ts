@@ -19,7 +19,7 @@ async function geenrate(query: SalesPrintProps["searchParams"]) {
     });
     page = await browser.newPage();
     console.log(query);
-    url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales/${QueryString.stringify(
+    url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales?${QueryString.stringify(
         query
     )}`;
     await page.goto(url, {
