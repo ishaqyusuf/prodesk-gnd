@@ -25,7 +25,7 @@ async function geenrate(query: SalesPrintProps["searchParams"]) {
     await page.goto(url, {
         waitUntil: "networkidle0",
     });
-    await timeout(2000);
+    // await timeout(2000);
 
     await page.emulateMediaType("print");
     const pdf = await page.pdf({
