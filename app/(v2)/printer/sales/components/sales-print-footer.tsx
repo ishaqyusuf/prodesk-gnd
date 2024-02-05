@@ -15,7 +15,7 @@ export default function SalesPrintFooter() {
                 <td
                     colSpan={10}
                     valign="top"
-                    className={`border border-gray-400`}
+                    className={`border border-gray-400 p-4`}
                 >
                     <p className="mb-2 text-left text-xs font-normal italic text-red-600">
                         Note: Payments made with Cards will have an additional
@@ -53,12 +53,12 @@ export default function SalesPrintFooter() {
                                     >
                                         <Text
                                             {...line.style}
-                                            className="whitespace-nowrap px-1 py-1"
+                                            className="whitespace-nowrap px-1 py-1.5"
                                         >
                                             {line.title}
                                         </Text>
                                     </td>
-                                    <td className="" colSpan={2}>
+                                    <td className="py-1" colSpan={2}>
                                         <Text
                                             {...line.style}
                                             className="whitespace-nowrap px-1"

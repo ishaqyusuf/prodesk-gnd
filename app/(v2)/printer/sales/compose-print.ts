@@ -24,7 +24,7 @@ export function composePrint(
     const printData = {
         isEstimate: query.mode == "estimate",
         isProd: query.mode == "production",
-        isPacking: query.mode == "packing-list",
+        isPacking: query.mode == "packing list",
         isOrder: query.mode != "estimate",
         ...query,
         // address: address(data,this.isOrder),

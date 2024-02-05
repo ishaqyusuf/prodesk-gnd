@@ -28,6 +28,7 @@ import { sales } from "@/lib/sales/sales-helper";
 import { _cancelBackOrder } from "@/app/(v2)/(loggedIn)/sales/_actions/cancel-back-order";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
+import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -178,31 +179,38 @@ export const PrintOrderMenuAction = typedMemo(
             link?: Boolean;
         }
     ) => {
+        const pdf = useSalesPdf();
         async function _print(mode: IOrderPrintMode) {
-            const ids = props.ids || [props.row.id];
+            const ids = props.ids || [props.row.slug];
 
             if (props.link) {
                 const link = document.createElement("a");
-                const prod = env.NEXT_PUBLIC_NODE_ENV == "production";
-                let base = prod
-                    ? `https://gnd-prodesk.vercel.app`
-                    : "http://localhost:3000";
-                link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true&mockup=${props.mockup}`;
+                let base = env.NEXT_PUBLIC_APP_URL;
                 link.target = "_blank";
+                link.href = `${base}/printer/sales?slugs=${ids}&mode=${mode}&mockup=${props.mockup}`;
+                // link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true&mockup=${props.mockup}`;
                 // link.download = "file.pdf";
                 // document.body.appendChild(link);
                 link.click();
-            } else
-                dispatchSlice("printOrders", {
-                    mode,
-                    pdf: props.pdf,
-                    mockup: props.mockup,
-                    ids,
-                    isClient: !["production", "packing list"].includes(mode),
-                    showInvoice: ["order", "quote", "invoice"].includes(mode),
-                    packingList: mode == "packing list",
-                    isProd: mode == "production",
+            } else {
+                pdf.print({
+                    slugs: ids.join(","),
+                    mode: mode as any,
+                    mockup: props.mockup ? "yes" : "no",
+                    preview: false,
+                    pdf: true,
                 });
+                // dispatchSlice("printOrders", {
+                //     mode,
+                //     pdf: props.pdf,
+                //     mockup: props.mockup,
+                //     ids,
+                //     isClient: !["production", "packing list"].includes(mode),
+                //     showInvoice: ["order", "quote", "invoice"].includes(mode),
+                //     packingList: mode == "packing list",
+                //     isProd: mode == "production",
+                // });
+            }
         }
         function PrintOptions() {
             return (

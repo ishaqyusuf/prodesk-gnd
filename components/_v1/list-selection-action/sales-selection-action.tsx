@@ -29,7 +29,7 @@ export function SalesBatchAction({ items }) {
                     <PrintOrderMenuAction
                         link
                         row={null as any}
-                        ids={items?.map((i) => i?.id)}
+                        ids={items?.map((i) => i?.slug)}
                     />
                 </DropdownMenuContent>
             </DropdownMenu>

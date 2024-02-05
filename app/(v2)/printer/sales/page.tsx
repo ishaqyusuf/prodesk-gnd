@@ -7,9 +7,10 @@ import SalesPrintBlock from "./sales-print-block";
 export interface SalesPrintProps {
     searchParams: {
         slugs: string;
-        mode: "order" | "estimate" | "production" | "packing-list";
+        mode: "order" | "estimate" | "production" | "packing list";
         mockup: "yes" | "no";
         preview: boolean;
+        pdf: boolean;
     };
 }
 export default async function PrintOrderPage({

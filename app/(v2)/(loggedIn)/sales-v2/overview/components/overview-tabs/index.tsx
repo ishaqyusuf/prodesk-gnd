@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useDataPage } from "@/lib/data-page-context";
 import { SalesOverviewType } from "../overview-shell";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DykeDoorsSalesOverviewTab } from "./dyke-doors-sales-overview-tab";
+import { SalesOverviewDykeInvoiceTab } from "./dyke-doors-sales-overview-tab";
 import { Badge } from "@/components/ui/badge";
 import { ShelfItemsSalesOverviewTab } from "./shelf-items-sales-overview-tab";
 
@@ -59,7 +59,7 @@ export default function OverviewTabs() {
                             Production Items
                         </TabsTrigger>
                     </TabsList>
-                    <DykeDoorsSalesOverviewTab />
+                    <SalesOverviewDykeInvoiceTab />
                     <ShelfItemsSalesOverviewTab />
                 </Tabs>
             </CardContent>

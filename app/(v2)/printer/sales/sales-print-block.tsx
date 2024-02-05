@@ -47,7 +47,7 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
                     id={`s${data.order.orderId}`}
                     className={cn(className)}
                 >
-                    <table className="report-table mr-10s w-full text-xs table-fixed">
+                    <table className="main mr-10s w-full text-xs table-fixed">
                         <SalesPrintHeader />
                         <tbody>
                             <SalesPrintDoorItems />
