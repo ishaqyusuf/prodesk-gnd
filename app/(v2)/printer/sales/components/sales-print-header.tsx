@@ -33,11 +33,11 @@ export default function SalesPrintHeader() {
                                 <td colSpan={1}></td>
                                 <td valign="top" colSpan={9}>
                                     <p className="text-black mb-2 text-end text-xl font-bold capitalize">
-                                        {sale.mode}
+                                        {sale?.mode}
                                     </p>
                                     <table className="w-full table-fixed">
                                         <tbody>
-                                            {sale.heading.lines.map((h) => (
+                                            {sale?.heading?.lines?.map((h) => (
                                                 <tr key={h.title}>
                                                     <td
                                                         colSpan={3}
@@ -61,7 +61,7 @@ export default function SalesPrintHeader() {
                                 </td>
                             </tr>
                             <tr className="">
-                                {sale.address.map((address, index) => (
+                                {sale?.address?.map((address, index) => (
                                     <React.Fragment key={address?.title}>
                                         {index == 1 && <td colSpan={1}></td>}
                                         <td colSpan={10} key={address?.title}>

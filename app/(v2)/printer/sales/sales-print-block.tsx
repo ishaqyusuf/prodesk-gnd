@@ -34,7 +34,6 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
     useEffect(() => {
         if (data) ctx.pageReady(slug, data);
     }, [data]);
-    if (!data) return null;
     return (
         <SalesBlockCtx.Provider
             value={{
@@ -43,17 +42,16 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
             }}
         >
             <div className="" id={`salesPrinter`}>
-                <section
-                    id={`s${data.order.orderId}`}
-                    className={cn(className)}
-                >
+                <section id={`s${slug}`} className={cn(className)}>
                     <table className="main mr-10s w-full text-xs table-fixed">
                         <SalesPrintHeader />
-                        <tbody>
-                            <SalesPrintDoorItems />
-                            <SalesPrintShelfItems />
-                            <SalesPrintLineItems />
-                        </tbody>
+                        {data?.order?.id && (
+                            <tbody>
+                                <SalesPrintDoorItems />
+                                <SalesPrintShelfItems />
+                                <SalesPrintLineItems />
+                            </tbody>
+                        )}
                         <SalesPrintFooter />
                     </table>
                 </section>
