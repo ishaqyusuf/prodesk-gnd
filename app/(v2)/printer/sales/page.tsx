@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import BasePrinter from "../base-printer";
 import { getSalesPrintData } from "./get-sales-print-data";
-import { OrderBasePrinter } from "./order-base-printer";
+import { BasePrintProps, OrderBasePrinter } from "./order-base-printer";
 import SalesPrintBlock from "./sales-print-block";
 
 export interface SalesPrintProps {
@@ -21,9 +21,14 @@ export default async function PrintOrderPage({
         slug,
         action: getSalesPrintData(slug, searchParams),
     }));
+    const value: BasePrintProps = {
+        ...searchParams,
+        preview: (searchParams.preview as any) == true,
+        pdf: (searchParams.pdf as any) == true,
+    };
     return (
-        <OrderBasePrinter {...searchParams}>
-            <BasePrinter slugs={slugs}>
+        <BasePrinter {...value} slugs={slugs}>
+            <OrderBasePrinter {...searchParams}>
                 {actions?.map((props, index) => (
                     <SalesPrintBlock
                         className={cn(index > 0 && "break-before-page")}
@@ -31,7 +36,7 @@ export default async function PrintOrderPage({
                         {...props}
                     />
                 ))}
-            </BasePrinter>
-        </OrderBasePrinter>
+            </OrderBasePrinter>
+        </BasePrinter>
     );
 }

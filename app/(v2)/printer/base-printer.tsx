@@ -23,14 +23,13 @@ export const PrintCtx = React.createContext<Props>({
     // pages: {},
 } as any);
 export const usePrintContext = () => React.useContext<Props>(PrintCtx);
-export default function BasePrinter({ slugs, children }) {
+export default function BasePrinter({ slugs, children, preview, pdf }) {
     const defaultValues = {};
     slugs.map((s) => (defaultValues[s] = { ready: false }));
     // const [pages,setPages] = useState(defaultValues)
     const form = useForm<PagesProps>({
         defaultValues,
     });
-    const params = useSearchParams();
     const pages = form.watch();
     useEffect(() => {
         // if(!params.values.preview)
@@ -39,11 +38,7 @@ export default function BasePrinter({ slugs, children }) {
         // }
         // console.log(params.get("preview"));
         const slugs = Object.keys(pages);
-        if (
-            Object.values(pages).every((p) => p.ready) &&
-            !params.get("preview") &&
-            !params.get("pdf")
-        ) {
+        if (Object.values(pages).every((p) => p.ready) && !preview && !pdf) {
             // console.log("ADJUSTING WATERMARKS");
 
             // adjustWatermark(slugs);
