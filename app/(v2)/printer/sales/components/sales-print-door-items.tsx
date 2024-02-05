@@ -59,6 +59,7 @@ export default function SalesPrintDoorItems() {
                                                 {sale.doorsTable?.cells.map(
                                                     (cell, i) => (
                                                         <th
+                                                            key={i}
                                                             className="border px-2"
                                                             colSpan={
                                                                 cell.colSpan
