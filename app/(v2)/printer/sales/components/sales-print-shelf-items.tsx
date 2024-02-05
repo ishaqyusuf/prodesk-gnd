@@ -23,7 +23,11 @@ export default function SalesPrintShelfItems() {
                     </thead>
                     <thead id="topHeader">
                         {sale.shelfItemsTable?.cells?.map((cell, i) => (
-                            <th className="border px-2" colSpan={cell.colSpan}>
+                            <th
+                                className="border px-2"
+                                key={i}
+                                colSpan={cell.colSpan}
+                            >
                                 <Text {...cell.style}>{cell.title}</Text>
                             </th>
                         ))}
@@ -33,6 +37,7 @@ export default function SalesPrintShelfItems() {
                             <tr key={i}>
                                 {cells.map((cel, i) => (
                                     <td
+                                        key={`a-${i}`}
                                         className="border px-2"
                                         colSpan={cel.colSpan}
                                     >
