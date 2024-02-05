@@ -2,6 +2,7 @@
 import { env } from "@/env.mjs";
 import { SalesPrintProps } from "../sales/page";
 import QueryString from "qs";
+import { timeout } from "@/lib/timeout";
 
 export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdf = await geenrate(query);
@@ -17,12 +18,14 @@ async function geenrate(query: SalesPrintProps["searchParams"]) {
         browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
     });
     page = await browser.newPage();
+    console.log(query);
     url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales/${QueryString.stringify(
         query
     )}`;
     await page.goto(url, {
         waitUntil: "networkidle0",
     });
+    await timeout(2000);
 
     await page.emulateMediaType("print");
     const pdf = await page.pdf({

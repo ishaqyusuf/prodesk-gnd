@@ -40,7 +40,9 @@ export interface IOrderRowProps {
 }
 export function OrderRowAction(props: IOrderRowProps) {
     const { row, viewMode, estimate } = props;
-    const _linkDir = `/sales/${row.type}/${row.slug}`;
+    const _linkDir = row.isDyke
+        ? `/sales-v2/overview/${row.type}/${row.slug}`
+        : `/sales/${row.type}/${row.slug}`;
     const router = useRouter();
     async function moveEstimateToOrder() {
         await moveSales(row.id, "order");
