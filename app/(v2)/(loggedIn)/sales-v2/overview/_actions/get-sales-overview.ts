@@ -1,8 +1,13 @@
 "use server";
 
 import { prisma } from "@/db";
-import { IOrderType } from "@/types/sales";
+import {
+    IOrderType,
+    ISalesOrderItemMeta,
+    ISalesOrderMeta,
+} from "@/types/sales";
 import { redirect } from "next/navigation";
+import { composeSalesItems } from "../../_utils/compose-sales-items";
 
 export async function getSalesOverview({
     type,
@@ -13,9 +18,20 @@ export async function getSalesOverview({
     type: IOrderType;
     dyke?: boolean;
 }) {
+    const order = await viewSale(type, slug);
+
+    const salesItems = composeSalesItems(order);
+    const resp = {
+        ...order,
+        type: order.type as IOrderType,
+        ...salesItems,
+    };
+    return resp;
+}
+export async function viewSale(type, slug) {
     const order = await prisma.salesOrders.findFirst({
         where: {
-            type,
+            type: type ? type : undefined,
             slug,
         },
         include: {
@@ -24,6 +40,16 @@ export async function getSalesOverview({
                     shelfItems: {
                         include: {
                             shelfProduct: true,
+                        },
+                    },
+                    formSteps: {
+                        include: {
+                            step: {
+                                select: {
+                                    id: true,
+                                    title: true,
+                                },
+                            },
                         },
                     },
                     housePackageTool: {
@@ -45,39 +71,15 @@ export async function getSalesOverview({
             payments: true,
         },
     });
-    if (!order) redirect("");
-    type Order = typeof order;
-    const housePakageTools: {
-        [doorType: string]: {
-            type: string;
-            housePackageTools: NonNullable<
-                Order["items"][0]["housePackageTool"]
-            >[];
-        };
-    } = {};
-    const shelfItems: NonNullable<Order["items"][0]["shelfItems"]> = [];
-    let totalDoors = 0;
-    order.items.map((item) => {
-        if (item.housePackageTool) {
-            const tool = item.housePackageTool;
-            const dt = tool.doorType as string;
-            if (!housePakageTools[dt])
-                housePakageTools[dt] = { type: dt, housePackageTools: [] };
-
-            housePakageTools[dt]?.housePackageTools?.push(
-                item.housePackageTool
-            );
-            totalDoors += item.housePackageTool?.totalDoors || 0;
-        }
-        if (item.shelfItems) shelfItems.push(...item.shelfItems);
-    });
-    const resp = {
+    if (!order) throw Error();
+    return {
         ...order,
-        type: order.type as IOrderType,
-        doors: Object.values(housePakageTools),
-
-        shelfItems,
-        totalDoors,
+        meta: order.meta as any as ISalesOrderMeta,
+        items: order.items.map((item) => {
+            return {
+                ...item,
+                meta: item.meta as any as ISalesOrderItemMeta,
+            };
+        }),
     };
-    return resp;
 }

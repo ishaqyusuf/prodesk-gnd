@@ -87,6 +87,17 @@ export const Icons = {
             <Image alt="" src={logo} width={48} height={48} />
         </Link>
     ),
+    PrintLogo: () => (
+        <Link href="/">
+            <Image
+                alt=""
+                onLoadingComplete={(img) => {}}
+                width={178}
+                height={80}
+                src={logo2}
+            />
+        </Link>
+    ),
     Merge: Merge,
     Warn: Info,
     Rocket: Rocket,

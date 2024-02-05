@@ -732,6 +732,7 @@ model SalesJobs {
 model DykeSalesShelfItem {
     id               Int                  @unique @default(autoincrement())
     salesOrderItemId Int?
+    description      String?
     productId        Int?
     categoryId       Int
     qty              Int?

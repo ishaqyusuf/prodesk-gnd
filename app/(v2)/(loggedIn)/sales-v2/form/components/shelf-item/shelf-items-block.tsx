@@ -141,7 +141,7 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
             <div className="flex-1">
                 <ShelfSelect
                     control={shelf.categoryForm.control}
-                    keyName={`${shelf.shelfItemKey}.products.${index}.item.productId`}
+                    keyName={`${shelf.shelfItemKey}.productArray.${index}.item.productId`}
                     onValueChange={(field, v) => {
                         const productId = Number(v) || null;
                         field.onChange(productId);
@@ -173,7 +173,7 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
                 <FormField
                     control={shelf.categoryForm.control}
                     name={
-                        `${shelf.shelfItemKey}.products.${index}.item.qty` as any
+                        `${shelf.shelfItemKey}.productArray.${index}.item.qty` as any
                     }
                     // name={`${shelf.getProdFormKey(index, "qty")}` as any}
                     render={({ field }) => (

@@ -5,8 +5,19 @@
     -MAKE DYKE SHELF TYPABLE
     -EXPORT PDF IN ESTIMATE
     -
-# FEB 02: 00.00 == 00.00
-MIA 11:15-
+# FEB 05: 00.00 == 00.00
+    07:40-
+    04:50-06:55
+----------------------------
+$713.75 + 327.58 + $745.83
+=$1787.16
+Zelle marzuqisiaka@gmail.com
+PAYMENT INVOICE JAN 29 - FEB 03
+$745.83
+# FEB 03: 01.30 == 21.20
+MIA 11:00-12:30
+# FEB 02: 03.05 == 19.50
+MIA 11:15-12:20
 MIA 09:15-10:00
 MIA 05:00-07:00
 # FEB 01: 03.45 == 16.45

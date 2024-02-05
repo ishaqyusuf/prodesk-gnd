@@ -168,11 +168,12 @@ export type IOrderComponent = {
 export interface WizardKvForm {
     [id: string]: Partial<IOrderComponent> | undefined;
 }
-export interface IAddressBook extends AddressBooks {
-    meta: {
-        zip_code;
-    };
+export interface IAddressBook extends Omit<AddressBooks, "meta"> {
+    meta: IAddressMeta;
     customer: ICustomer;
+}
+export interface IAddressMeta {
+    zip_code;
 }
 
 export type AddressType = "shippingAddress" | "billingAddress";

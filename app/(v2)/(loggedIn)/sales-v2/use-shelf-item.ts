@@ -70,6 +70,7 @@ export default function useShelfItem(shelfIndex) {
                 form.setValue(`${prodKey}.meta.categoryIds` as any, catIds);
                 form.setValue(`${prodKey}.productId` as any, prod.id);
                 form.setValue(`${prodKey}.unitPrice` as any, prod?.unitPrice);
+                form.setValue(`${prodKey}.description` as any, prod?.title);
                 // const qty = form.getValues(`${prodKey}.qty` as any);
                 // if(!qty)
                 // form.setValue
@@ -92,11 +93,12 @@ export default function useShelfItem(shelfIndex) {
                 "totalPrice"
             );
             if (!qty) qty = +form.getValues(qtyPath);
+
             if (!unitPrice) unitPrice = form.getValues(unitPricePath);
             if (!qty) {
                 qty = 1;
-                form.setValue(qtyPath, 1);
             }
+            form.setValue(qtyPath, qty);
             let totalPrice = (qty || 0) * (unitPrice || 0);
             // console.log(totalPrice);
 

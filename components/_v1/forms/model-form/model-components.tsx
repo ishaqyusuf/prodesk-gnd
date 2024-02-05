@@ -104,7 +104,7 @@ export function ModelComponents<T>({
     // const {
     //     data: { community },
     // } = useDataPage();
-    const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
+    // const suggestions = useAppSelector((s) => s.slicers.templateFormSuggestion);
     const Field = ({
         label,
         cells = [2, 10],

@@ -15,7 +15,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 
-export function DykeDoorsSalesOverviewTab() {
+export function SalesOverviewDykeInvoiceTab() {
     const { data } = useDataPage<SalesOverviewType>();
 
     return (
