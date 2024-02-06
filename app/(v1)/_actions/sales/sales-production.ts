@@ -149,6 +149,7 @@ export async function getUserProductionEventsAction({
     const prods = await prisma.salesOrders.findMany({
         where: {
             prodId: userId,
+            deletedAt: null,
             prodDueDate: {
                 gte,
                 lte,

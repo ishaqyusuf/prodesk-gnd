@@ -80,6 +80,9 @@ async function addTypeToSalesOrder() {
     };
     (
         await prisma.salesOrders.findMany({
+            where: {
+                deletedAt: null,
+            },
             select: {
                 id: true,
                 prodId: true,
@@ -110,7 +113,7 @@ async function addTypeToSalesOrder() {
 }
 async function upgradeOrderQty() {
     const orders = await prisma.salesOrders.findMany({
-        where: {},
+        where: { deletedAt: null },
         select: {
             id: true,
         },

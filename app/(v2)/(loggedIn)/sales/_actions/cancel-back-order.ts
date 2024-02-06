@@ -8,9 +8,7 @@ import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 export async function _cancelBackOrder(slug) {
     let orderSlug = slug.toLowerCase().replace("-bo", "");
     const [order, backOrder] = await prisma.salesOrders.findMany({
-        where: {
-            slug: { in: [orderSlug, slug] },
-        },
+        where: { deletedAt: null, slug: { in: [orderSlug, slug] } },
         include: {
             items: true,
             payments: true,

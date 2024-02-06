@@ -47,6 +47,7 @@ export async function whereSales(query: SalesQueryParams) {
     } = query;
     const inputQ = { contains: _q || undefined };
     const where: Prisma.SalesOrdersWhereInput = {
+        deletedAt: null,
         // isDyke,
         OR: !_q
             ? undefined
@@ -321,6 +322,15 @@ export async function saveOrderAction({
     return _order;
 }
 export async function deleteOrderAction(id) {
+    await prisma.salesOrders.updateMany({
+        where: {
+            id,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+    return;
     await prisma.orderProductionSubmissions.deleteMany({
         where: {
             salesOrderId: id,
@@ -431,7 +441,9 @@ export async function salesPrintAction({
                 await fixSalesPaymentAction(Number(id));
             })
         );
-    const where: Prisma.SalesOrdersWhereInput = {};
+    const where: Prisma.SalesOrdersWhereInput = {
+        deletedAt: null,
+    };
     if (isId) where.id = { in: ids };
     else
         where.slug = {

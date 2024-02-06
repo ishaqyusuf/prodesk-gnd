@@ -27,6 +27,7 @@ export default async function LoadDeliveryPage({ searchParams }) {
             slug: {
                 in: orderIds,
             },
+            deletedAt: null,
         },
         include: {
             items: true,

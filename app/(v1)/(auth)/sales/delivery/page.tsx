@@ -26,6 +26,7 @@ export default async function OrdersPage({ searchParams }) {
         where: {
             deliveryOption: "delivery",
             type: "order",
+            deletedAt: null,
         },
         select: {
             id: true,

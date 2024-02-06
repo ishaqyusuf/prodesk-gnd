@@ -15,6 +15,7 @@ export async function printSalesPdf(mode: SalesPrintModes, ids) {
     const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
     const orders = await prisma.salesOrders.findMany({
         where: {
+            deletedAt: null,
             id: {
                 in: ids
                     .toString()
