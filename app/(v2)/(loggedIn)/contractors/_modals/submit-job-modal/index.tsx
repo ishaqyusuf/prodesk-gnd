@@ -1,6 +1,7 @@
 import { useModal } from "@/_v2/components/common/modal/provider";
 
 import {
+    DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
@@ -43,23 +44,25 @@ export default function SubmitJobModal() {
     }, []);
     return (
         // <Dialog open={modal?.opened} onOpenChange={modal?.setShowModal}>
-        <Form {...form}>
-            <JobSubmitContext.Provider value={ctx}>
-                <DialogHeader>
-                    <DialogTitle>
-                        {/* <span>as</span> */}
-                        <SubmitJobModalTitle />
-                    </DialogTitle>
-                    <DialogDescription>
-                        <SubmitJobModalSubtitle data={modal?.data} />
-                    </DialogDescription>
-                </DialogHeader>
-                <SubmitJobModalContent />
-                <DialogFooter>
-                    <SubmitJobModalFooter />{" "}
-                </DialogFooter>
-            </JobSubmitContext.Provider>
-        </Form>
+        <DialogContent>
+            <Form {...form}>
+                <JobSubmitContext.Provider value={ctx}>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {/* <span>as</span> */}
+                            <SubmitJobModalTitle />
+                        </DialogTitle>
+                        <DialogDescription>
+                            <SubmitJobModalSubtitle data={modal?.data} />
+                        </DialogDescription>
+                    </DialogHeader>
+                    <SubmitJobModalContent />
+                    <DialogFooter>
+                        <SubmitJobModalFooter />{" "}
+                    </DialogFooter>
+                </JobSubmitContext.Provider>
+            </Form>
+        </DialogContent>
         // </Dialog>
     );
 }

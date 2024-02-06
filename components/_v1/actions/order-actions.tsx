@@ -30,6 +30,8 @@ import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 import QueryString from "qs";
+import { useModal } from "@/_v2/components/common/modal/provider";
+import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -341,7 +343,10 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
 });
 export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
     const router = useRouter();
-
+    const modal = useModal();
+    function openAssignProd(order) {
+        modal?.open(<AssignProductionModal order={order} />);
+    }
     return (
         <MenuItem
             Icon={Icons.production}
@@ -356,7 +361,7 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
                     </MenuItem>
                     <MenuItem
                         Icon={Icons.flag}
-                        onClick={() => sales.productionModal(row)}
+                        onClick={() => openAssignProd(row)}
                     >
                         <span>
                             {row.prodId ? "Update Assignment" : "Assign"}

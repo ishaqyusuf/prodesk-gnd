@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { useModal } from "@/_v2/components/common/modal/provider";
 import { usePathname } from "next/navigation";
-import { DialogFooter } from "@/components/ui/dialog";
+import { DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { updateSalesAddress } from "../../../_actions/update-sales-address";
 
 export default function SalesAddressModal({ form: mainForm }) {
@@ -135,42 +135,45 @@ export default function SalesAddressModal({ form: mainForm }) {
         })();
     }, []);
     return (
-        <Form {...addressForm}>
-            <Tabs defaultValue={tab} className="">
-                <TabsList className="grid w-full grid-cols-2">
+        <DialogContent>
+            <Form {...addressForm}>
+                <Tabs defaultValue={tab} className="">
+                    <TabsList className="grid w-full grid-cols-2">
+                        {tabs.map((t) => (
+                            <TabsTrigger
+                                key={t.name}
+                                onClick={() => setTab("billingAddress")}
+                                value={t.value}
+                                disabled={
+                                    checked && t.value == "shippingAddress"
+                                }
+                            >
+                                {t.name}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
                     {tabs.map((t) => (
-                        <TabsTrigger
-                            key={t.name}
-                            onClick={() => setTab("billingAddress")}
-                            value={t.value}
-                            disabled={checked && t.value == "shippingAddress"}
-                        >
-                            {t.name}
-                        </TabsTrigger>
+                        <TabsContent value={t.value} key={t.name}>
+                            <AddressForm
+                                customers={customers}
+                                formKey={t.value as any}
+                            />
+                        </TabsContent>
                     ))}
-                </TabsList>
-                {tabs.map((t) => (
-                    <TabsContent value={t.value} key={t.name}>
-                        <AddressForm
-                            customers={customers}
-                            formKey={t.value as any}
+                </Tabs>
+                <DialogFooter className="flex justify-end">
+                    <div className="flex-1 flex items-center justify-between">
+                        <InputControl
+                            label="Same as Shipping"
+                            check
+                            name="sameAddress"
                         />
-                    </TabsContent>
-                ))}
-            </Tabs>
-            <DialogFooter className="flex justify-end">
-                <div className="flex-1 flex items-center justify-between">
-                    <InputControl
-                        label="Same as Shipping"
-                        check
-                        name="sameAddress"
-                    />
-                    <Btn onClick={save} isLoading={saving} size="sm">
-                        Save
-                    </Btn>
-                </div>
-            </DialogFooter>
-            {/* <BaseModal
+                        <Btn onClick={save} isLoading={saving} size="sm">
+                            Save
+                        </Btn>
+                    </div>
+                </DialogFooter>
+                {/* <BaseModal
                 className="sm:max-w-[550px]"
                 modalName="salesAddressForm"
                 Title={({ data }) => <div></div>}
@@ -214,7 +217,8 @@ export default function SalesAddressModal({ form: mainForm }) {
                     </div>
                 )}
             /> */}
-        </Form>
+            </Form>
+        </DialogContent>
     );
 }
 function AddressForm({

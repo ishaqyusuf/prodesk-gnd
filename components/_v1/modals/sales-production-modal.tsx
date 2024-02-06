@@ -40,6 +40,7 @@ import {
 } from "../../ui/select";
 import { Label } from "../../ui/label";
 import { useStaticProducers } from "@/_v2/hooks/use-static-data";
+import dayjs from "dayjs";
 // import { UseFormReturn } from "react-hook-form/dist/types";
 
 export default function SalesProductionModal() {
@@ -216,39 +217,51 @@ export default function SalesProductionModal() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="">
-                                        Production Queue
+                                        Production Queues
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {productions?.map((field, i) => (
-                                    <TableRow key={field.id}>
-                                        <TableCell
-                                            onClick={() =>
-                                                selectProducer(field)
-                                            }
-                                            id="Name"
-                                            className={`flex p-2 pr-4`}
-                                        >
-                                            <div className="w-10">{i + 1}.</div>
-                                            <div className="flex-1">
-                                                <div className="flex justify-between">
-                                                    <p className="font-semibold text-primary">
-                                                        {field.orderId}
-                                                    </p>
+                                {prodDueDate}
+                                {"s"}
+                                {productions
+                                    ?.filter(
+                                        (p) =>
+                                            !dayjs(p.prodDueDate).isSame(
+                                                prodDueDate,
+                                                "day"
+                                            )
+                                    )
+                                    .map((field, i) => (
+                                        <TableRow key={field.id}>
+                                            <TableCell
+                                                onClick={() =>
+                                                    selectProducer(field)
+                                                }
+                                                id="Name"
+                                                className={`flex p-2 pr-4`}
+                                            >
+                                                <div className="w-10">
+                                                    {i + 1}.
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between">
+                                                        <p className="font-semibold text-primary">
+                                                            {field.orderId}
+                                                        </p>
+                                                        <p className="text-text-muted-foreground">
+                                                            {field.prodStatus}
+                                                        </p>
+                                                    </div>
                                                     <p className="text-text-muted-foreground">
-                                                        {field.prodStatus}
+                                                        {formatDate(
+                                                            field.prodDueDate
+                                                        )}
                                                     </p>
                                                 </div>
-                                                <p className="text-text-muted-foreground">
-                                                    {formatDate(
-                                                        field.prodDueDate
-                                                    )}
-                                                </p>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                                 {!productions?.length && userId && (
                                     <TableRow>
                                         <TableCell>

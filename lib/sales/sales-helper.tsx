@@ -14,6 +14,7 @@ import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
 import { dispatchSlice } from "@/store/slicers";
+import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export const sales = {
     async move(order, to: "estimate" | "order", router?) {
@@ -39,16 +40,17 @@ export const sales = {
             // }
         });
     },
-    productionModal(order) {
-        const { id, orderId, prodDueDate, prodId } = order;
+    // productionModal(order,modal) {
+    //     // const { id, orderId, prodDueDate, prodId } = order;
 
-        openModal("assignProduction", {
-            id,
-            orderId,
-            prodDueDate,
-            prodId,
-        });
-    },
+    //     // openModal("assignProduction", {
+    //     //     id,
+    //     //     orderId,
+    //     //     prodDueDate,
+    //     //     prodId,
+    //     // });
+    //     // modal.open(<AssignProductionModa order={order}/>)
+    // },
     async markIncomplete(row) {
         await markProductionIncompleteAction(row.id);
         toast.message("Production Marked as Incomplete");
@@ -64,7 +66,7 @@ export const sales = {
         toast.message("Production Completed");
         closeModal();
     },
-    salesMenuOption(row: ISalesOrder) {
+    salesMenuOption(row: ISalesOrder, modal) {
         const estimate = row.type == "estimate";
         const _linkDir = `/sales/${row.type}/${row.slug}`;
         const mb = optionBuilder;
@@ -93,7 +95,10 @@ export const sales = {
                         ),
                         mb.simple(
                             row?.prodId ? "Update Assignment" : "Assign",
-                            () => this.productionModal(row),
+                            () =>
+                                modal.open(
+                                    <AssignProductionModal order={row} />
+                                ),
                             Icons.flag
                         ),
                         ...(prodCompleted

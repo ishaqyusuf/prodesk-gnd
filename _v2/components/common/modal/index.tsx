@@ -54,7 +54,7 @@ export default function Modal({
                                 open={showModal}
                                 onOpenChange={setShowModal}
                             >
-                                <DialogContent> {children}</DialogContent>
+                                {children}
                             </Dialog>
                             {/* <FocusTrap
                                 focusTrapOptions={{ initialFocus: false }}

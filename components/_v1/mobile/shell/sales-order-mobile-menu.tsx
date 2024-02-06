@@ -8,6 +8,8 @@ import { sales } from "@/lib/sales/sales-helper";
 import { useRouter } from "next/navigation";
 import { TabsContent } from "@/components/ui/tabs";
 import MobileMenuCtx from "../mobile-menu-ctx";
+import { useModal } from "@/_v2/components/common/modal/provider";
+import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export default function SalesOrderMobileMenuShell() {
     const router = useRouter();
@@ -16,6 +18,10 @@ export default function SalesOrderMobileMenuShell() {
     return <MobileMenuCtx Title={({ data }) => data?.orderId} />;
 }
 export function SalesProductionMobileMenu({ data }) {
+    const modal = useModal();
+    function openAssignProd(order) {
+        modal?.open(<AssignProductionModal order={order} />);
+    }
     return (
         <TabsContent value="production">
             <MobileMenu>
@@ -27,7 +33,8 @@ export function SalesProductionMobileMenu({ data }) {
                 />
                 <MobileOption
                     onClick={() => {
-                        sales.productionModal(data);
+                        // sales.productionModal(data);
+                        openAssignProd(data);
                     }}
                     Icon={Icons.flag}
                     label={data?.prodId ? "Update Assignment" : "Assign"}

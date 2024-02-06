@@ -8,6 +8,7 @@ import { Button } from "../../ui/button";
 import { Icons } from "../icons";
 import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
+import { useModal } from "@/_v2/components/common/modal/provider";
 
 const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
     const [options, setOptions] = useState<any[]>([]);
@@ -15,12 +16,15 @@ const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
     useEffect(() => {
         setTab("main");
     }, []);
+    const modal = useModal();
     return (
         <BaseSheet
             onOpen={(data) => {
                 setTab("main");
                 setOptions(
-                    optionBuilder.toMobile(sales.salesMenuOption(data as any))
+                    optionBuilder.toMobile(
+                        sales.salesMenuOption(data as any, modal)
+                    )
                 );
             }}
             Title={({ data }) => (
