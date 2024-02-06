@@ -14,3 +14,6 @@ export const emailSchema = z.object({
     body: z.string(),
     type: z.string(),
 });
+export const newsletterSchema = z.object({
+    email: z.string(),
+});

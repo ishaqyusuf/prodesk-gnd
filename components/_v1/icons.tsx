@@ -67,6 +67,7 @@ import {
     Phone,
     MapPin,
     Info,
+    Timer,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -77,11 +78,13 @@ import { LineChart } from "recharts";
 export type Icon = LucideIcon;
 
 export const Icons = {
-    logoLg: () => (
+    logoLg: ({ width = 120 }) => (
         <Link href="/">
-            <Image alt="" src={logo2} width={120} />
+            <Image alt="" src={logo2} width={width} />
         </Link>
     ),
+    time: Timer,
+    cart: ShoppingBag,
     logo: () => (
         <Link href="/">
             <Image alt="" src={logo} width={48} height={48} />

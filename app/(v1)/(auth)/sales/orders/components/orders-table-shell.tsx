@@ -32,6 +32,15 @@ import SalesOrderMobileCell from "../../../../../../components/_v1/mobile/sales/
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { _getSalesRep } from "../_actions/get-sales-rep.action";
 import StatusBadge from "@/components/_v1/status-badge";
+import { getSalesOrder } from "@/app/(v1)/_actions/sales/sales";
+import DeliveryCell from "./cells/delivery-cell";
+
+export type SalesTableItem = Awaited<
+    ReturnType<typeof getSalesOrder>
+>["data"][0];
+export interface SalesCellProps {
+    item: SalesTableItem;
+}
 export default function OrdersTableShell<T>({
     data,
     pageInfo,
@@ -120,25 +129,9 @@ export default function OrdersTableShell<T>({
                       {
                           accessorKey: "delivery",
                           header: ColumnHeader("Delivery"),
-                          cell: ({ row }) => {
-                              const date =
-                                  row.original.pickup?.pickupAt ||
-                                  row.original.pickup?.createdAt ||
-                                  row.original.deliveredAt;
-                              return (
-                                  <span className="capitalize">
-                                      <StatusBadge
-                                          status={row.original.deliveryOption}
-                                          sm
-                                      />
-                                      {date && (
-                                          <DateCellContent>
-                                              {date}
-                                          </DateCellContent>
-                                      )}
-                                  </span>
-                              );
-                          },
+                          cell: ({ row }) => (
+                              <DeliveryCell item={row.original as any} />
+                          ),
                       },
                       {
                           accessorKey: "status",

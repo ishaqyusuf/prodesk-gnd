@@ -59,7 +59,6 @@ export default function OrderPrinter({
             adjustWatermark(sales?.map((s) => s.orderId));
         }
     }, [sales]);
-
     async function print(printer) {
         if (!printer) return;
         if (printer.pdf) {
