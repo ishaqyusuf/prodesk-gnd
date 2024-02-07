@@ -102,27 +102,23 @@ export const siteConfig = {
         },
 
         {
-            title: "Social",
+            title: "Customer Service",
             items: [
                 {
-                    title: "Twitter",
+                    title: "My Account",
                     href: links.twitter,
-                    external: true,
                 },
                 {
-                    title: "GitHub",
-                    href: links.githubAccount,
-                    external: true,
+                    title: "Terms of service",
+                    href: "/terms/tos",
                 },
                 {
-                    title: "Discord",
-                    href: links.discord,
-                    external: true,
+                    title: "Privacy Policy",
+                    href: "/terms/privacy",
                 },
                 {
-                    title: "cal.com",
-                    href: links.calDotCom,
-                    external: true,
+                    title: "Return Policy",
+                    href: "/terms/return",
                 },
             ],
         },

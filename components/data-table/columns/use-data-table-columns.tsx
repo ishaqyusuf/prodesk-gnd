@@ -10,8 +10,8 @@ import { RowActionCell } from "@/components/_v1/data-table/data-table-row-action
 type CellValueType<T> = ((item: T) => any) | keyof T;
 type CtxType<T> = {
     PrimaryColumn(title, value: CellValueType<T>): ColumnDef<T, unknown>;
-    Column(title, Column: ({ data }: { data: T }) => React.ReactElement);
-    ActionColumn(Column: ({ data }: { data: T }) => React.ReactElement);
+    Column(title, Column: ({ item }: { item: T }) => React.ReactElement);
+    ActionColumn(Column: ({ item }: { item: T }) => React.ReactElement);
     Primary({ children });
     Secondary({ children });
     queryFields(...ids);
@@ -34,13 +34,13 @@ export default function useDataTableColumn<T>(
         addColumns(...__columns) {
             // _setColumns(__columns);
         },
-        Column(title, Column: ({ data }: { data: T }) => React.ReactElement) {
+        Column(title, Column: ({ item }: { item: T }) => React.ReactElement) {
             return {
                 accessorKey: title.toLowerCase(),
                 header: ({ column }) => (
                     <DataTableColumnHeader column={column} title={title} />
                 ),
-                cell: ({ cell }) => <Column data={cell.row.original} />,
+                cell: ({ cell }) => <Column item={cell.row.original} />,
             };
         },
         queryFields(...ids) {
@@ -77,12 +77,12 @@ export default function useDataTableColumn<T>(
                 },
             };
         },
-        ActionColumn(Column: ({ data }: { data: T }) => React.ReactElement) {
+        ActionColumn(Column: ({ item }: { item: T }) => React.ReactElement) {
             return {
                 id: "action",
                 cell: ({ cell }) => (
                     <div className="flex justify-end items-center space-x-2">
-                        <Column data={cell.row.original} />
+                        <Column item={cell.row.original} />
                     </div>
                 ),
             };

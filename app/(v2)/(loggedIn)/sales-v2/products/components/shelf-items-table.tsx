@@ -24,27 +24,27 @@ export default function ShelfItemsTable<T>({ promise }: Props<T>) {
     const table = useDataTableColumn(
         data,
         (ctx) => [
-            ctx.Column("Product", ({ data }) => (
+            ctx.Column("Product", ({ item }) => (
                 <TableCol>
-                    <TableCol.Primary>{data.title}</TableCol.Primary>
+                    <TableCol.Primary>{item.title}</TableCol.Primary>
                     <TableCol.Secondary>
-                        {data.category?.name}
+                        {item.category?.name}
                     </TableCol.Secondary>
                 </TableCol>
             )),
-            ctx.Column("Price", ({ data }) => (
+            ctx.Column("Price", ({ item }) => (
                 <TableCol>
                     <TableCol.Primary>
-                        <TableCol.Money value={data.unitPrice} />
+                        <TableCol.Money value={item.unitPrice} />
                     </TableCol.Primary>
                 </TableCol>
             )),
-            ctx.ActionColumn(({ data }) => (
+            ctx.ActionColumn(({ item }) => (
                 <>
                     <TableCol.Btn icon="edit" onClick={(e) => {}} />
                     <TableCol.DeleteRow
                         action={deleteDykeShelfItem}
-                        data={data}
+                        data={item}
                     />
                 </>
             )),

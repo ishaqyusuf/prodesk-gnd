@@ -357,7 +357,8 @@ function heading({ mode, isOrder, order, isEstimate }) {
             "Good Until",
             order.goodUntil ? formatDate(order.goodUntil) : "-"
         );
-    } else {
+    }
+    if (isOrder) {
         h.lines.push(
             styled(
                 "Invoice Status",

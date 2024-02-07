@@ -199,7 +199,7 @@ export function toDotNotation(obj, res = {}, current = "") {
     }
     return res;
 }
-export function generateRandomString(length) {
+export function generateRandomString(length = 15) {
     const charset =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let randomString = "";
