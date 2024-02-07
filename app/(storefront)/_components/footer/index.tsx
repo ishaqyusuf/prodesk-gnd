@@ -74,16 +74,6 @@ export default function SiteFooter() {
                                         <li key={link.title}>
                                             <Link
                                                 href={link.href}
-                                                target={
-                                                    link?.external
-                                                        ? "_blank"
-                                                        : undefined
-                                                }
-                                                rel={
-                                                    link?.external
-                                                        ? "noreferrer"
-                                                        : undefined
-                                                }
                                                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                                             >
                                                 {link.title}
