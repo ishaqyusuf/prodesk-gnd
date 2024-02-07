@@ -97,16 +97,16 @@ export default function SalesFormAction() {
                     </MenuItem> */}
                     <PrintOrderMenuAction
                         link
-                        row={{ id: form.getValues("id") } as any}
+                        row={{ slug: form.getValues("slug") } as any}
                     />
                     <PrintOrderMenuAction
                         mockup
                         link
-                        row={{ id: form.getValues("id") } as any}
+                        row={{ slug: form.getValues("slug") } as any}
                     />
                     <PrintOrderMenuAction
                         pdf
-                        row={{ id: form.getValues("id") } as any}
+                        row={{ slug: form.getValues("slug") } as any}
                     />
                     <MenuItem Icon={Icons.production} onClick={() => {}}>
                         Production
