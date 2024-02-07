@@ -52,7 +52,12 @@ export default function EstimatesTableShell<T>({
                       {
                           accessorKey: "orderId",
                           cell: ({ row }) =>
-                              OrderIdCell(row.original, "/sales/estimate/slug"),
+                              OrderIdCell(
+                                  row.original,
+                                  row.original.isDyke
+                                      ? `/sales-v2/overview/${row.original.type}/slug`
+                                      : "/sales/estimate/slug"
+                              ),
                           header: ColumnHeader("Estimate #"),
                       },
                       {

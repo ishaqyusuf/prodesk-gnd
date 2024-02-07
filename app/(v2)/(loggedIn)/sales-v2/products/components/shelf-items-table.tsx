@@ -1,17 +1,15 @@
 "use client";
-import { DataTableType, PromiseDataTable } from "@/types";
+import { PromiseDataTable } from "@/types";
 import { getShelfItems } from "../_actions/get-shelf-items";
-import React, { useMemo } from "react";
+import React from "react";
 import useDataTableColumn from "@/components/data-table/columns/use-data-table-columns";
-import { TableCell } from "@/components/ui/table";
 import { TableCol } from "@/components/data-table/table-cells";
 import { deleteDykeShelfItem } from "../_actions/delete-shelf-item-action";
 import { useModal } from "@/_v2/components/common/modal/provider";
-import { ProductCategoryFilter } from "../../components/filters/product-category-filter";
+
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { getShelfCategories } from "../_actions/get-shelf-categories";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
-import { ColumnDef } from "@tanstack/react-table";
 
 type Promise = PromiseDataTable<typeof getShelfItems>;
 export type ShelfItem = Awaited<Promise>["data"][0];

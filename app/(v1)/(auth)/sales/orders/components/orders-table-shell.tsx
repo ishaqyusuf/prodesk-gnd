@@ -89,7 +89,12 @@ export default function OrdersTableShell<T>({
                       {
                           accessorKey: "orderId",
                           cell: ({ row }) =>
-                              OrderIdCell(row.original, "/sales/order/slug"),
+                              OrderIdCell(
+                                  row.original,
+                                  row.original.isDyke
+                                      ? `/sales-v2/overview/${row.original.type}/slug`
+                                      : "/sales/order/slug"
+                              ),
                           header: ColumnHeader("Order"),
                       },
                       {

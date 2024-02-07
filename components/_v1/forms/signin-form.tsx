@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { ILogin, loginSchema } from "@/lib/validations/auth";
 import { PasswordInput } from "../password-input";
 import { loginAction } from "@/app/(v1)/_actions/auth";
@@ -47,6 +47,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
             });
         });
     }
+    if (session?.user?.id) redirect("/");
     return (
         <Form {...form}>
             <form

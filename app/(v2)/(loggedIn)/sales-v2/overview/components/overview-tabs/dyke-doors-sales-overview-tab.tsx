@@ -20,61 +20,100 @@ export function SalesOverviewDykeInvoiceTab() {
 
     return (
         <TabsContent value="dyke-doors">
-            <Table>
-                <TableHeader>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Dimension</TableHead>
-                    <TableHead>Left Hand</TableHead>
-                    <TableHead>Right Hand</TableHead>
-                    <TableHead>Rate</TableHead>
-                    <TableHead>Total</TableHead>
-                </TableHeader>
-                <TableBody>
-                    {data.doors.map((door) => (
-                        <React.Fragment key={door.type}>
-                            <TableRow>
-                                <TableCell
-                                    className="bg-secondary font-bold uppercase"
-                                    colSpan={6}
-                                >
-                                    {door.type}
-                                </TableCell>
-                            </TableRow>
-                            {door.housePackageTools.map((hpt) => (
-                                <React.Fragment key={hpt.id}>
-                                    {hpt.doors.map((door, doorIndex) => (
-                                        <TableRow key={`door-${door.id}`}>
-                                            <TableCell>
-                                                {doorIndex == 0 &&
-                                                    hpt.door?.title}
-                                            </TableCell>
-                                            <TableCell>
-                                                {door.dimension}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant={"secondary"}>
-                                                    {door.lhQty}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant={"secondary"}>
-                                                    {door.rhQty}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Money value={door.unitPrice} />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Money value={door.lineTotal} />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </React.Fragment>
-                            ))}
-                        </React.Fragment>
-                    ))}
-                </TableBody>
-            </Table>
+            {data.housePackageTools.map((hpt, index) => (
+                <React.Fragment key={index}>
+                    <Table key={index}>
+                        <TableBody>
+                            <React.Fragment>
+                                <TableRow>
+                                    <TableCell
+                                        className="bg-secondary font-bold uppercase"
+                                        colSpan={6}
+                                    >
+                                        {hpt.doorType}
+                                    </TableCell>
+                                </TableRow>
+                                {/* {hpt.doors?.map((door, doorIndex) => ( */}
+                                {/* <React.Fragment key={doorIndex}> */}
+                                <TableRow>
+                                    <TableCell colSpan={6}>
+                                        <div className="grid grid-cols-2">
+                                            {hpt.doorDetails
+                                                .filter((d) => d.value)
+
+                                                .map((detail) => (
+                                                    <div
+                                                        key={detail.title}
+                                                        className="grid grid-cols-5 border-b border-r  gap-2"
+                                                    >
+                                                        <div className="font-bold col-span-2  border-r px-2 py-1">
+                                                            {detail.title}
+                                                        </div>
+                                                        <div className=" col-span-3 px-2 py-1">
+                                                            {detail.value}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            </React.Fragment>
+                        </TableBody>
+                    </Table>
+                    <Table className="w-full ">
+                        <TableBody>
+                            <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead>Dimension</TableHead>
+                                <TableHead>Left Hand</TableHead>
+                                <TableHead>Right Hand</TableHead>
+                                <TableHead>Rate</TableHead>
+                                <TableHead>Total</TableHead>
+                            </TableHeader>
+                            <TableBody>
+                                {data.housePackageTools.map((hpt, index) => (
+                                    <React.Fragment key={index}>
+                                        {hpt.doors?.map((door, doorIndex) => (
+                                            <TableRow key={`door-${doorIndex}`}>
+                                                <TableCell>
+                                                    {/* {doorIndex == 0 && hpt.door?.title} */}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {door.dimension}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={"secondary"}
+                                                    >
+                                                        {door.lhQty}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={"secondary"}
+                                                    >
+                                                        {door.rhQty}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Money
+                                                        value={door.unitPrice}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Money
+                                                        value={door.totalPrice}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </React.Fragment>
+                                ))}
+                            </TableBody>
+                        </TableBody>
+                    </Table>
+                </React.Fragment>
+            ))}
         </TabsContent>
     );
 }

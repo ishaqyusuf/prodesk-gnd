@@ -192,15 +192,10 @@ export interface SalesQueryParams extends BaseQuery {
     _q?;
     _backOrder?: boolean;
     _noBackOrder?: boolean;
-    skip?;
-    take?;
-    page?;
-    per_page?;
+
     sort?: "customer" | "status" | "prodDueDate";
     sort_order?: "asc" | "desc" | undefined;
-    date?;
-    from?;
-    to?;
+
     _customerId?;
     status?: SalesStatus;
     statusNot?;
