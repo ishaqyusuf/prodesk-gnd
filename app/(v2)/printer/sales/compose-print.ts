@@ -25,7 +25,7 @@ export function composePrint(
         isEstimate: query.mode == "estimate",
         isProd: query.mode == "production",
         isPacking: query.mode == "packing list",
-        isOrder: query.mode != "estimate",
+        isOrder: query.mode == "order",
         ...query,
         // address: address(data,this.isOrder),
         // heading: heading(data,),
