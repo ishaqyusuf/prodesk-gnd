@@ -285,6 +285,7 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
                         ),
                     ]
                 );
+            if (isPacking) cells.push(styled("", "", {}));
             return {
                 id: item.id,
                 total: item.total,
