@@ -4,13 +4,15 @@ import { SalesFormContext } from "../ctx";
 import SelectControl from "@/_v2/components/common/select-control";
 import transformOptions from "@/_v2/lib/transform-option";
 import { ISalesForm } from "../type";
-import { FieldPath, FieldValues } from "react-hook-form";
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form";
 import InputControl from "@/_v2/components/common/input-control";
 import salesData from "../../sales-data";
 import DateControl from "@/_v2/components/common/date-control";
 
 export default function SalesDetailsSection() {
     const ctx = useContext(SalesFormContext);
+    const form = useFormContext<ISalesForm>();
+
     return (
         <div className="xl:col-span-3 grid gap-2 xl:grid-cols-2 xl:gap-x-4">
             <InfoLine label="Sales Rep:">

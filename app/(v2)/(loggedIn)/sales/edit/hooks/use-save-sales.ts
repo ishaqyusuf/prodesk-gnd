@@ -13,6 +13,7 @@ import debounce from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { isProdClient } from "@/lib/is-prod";
 import usePersistDirtyForm from "@/_v2/hooks/use-persist-dirty-form";
+import salesFormUtils from "../sales-form-utils";
 
 export default function useSaveSalesHook() {
     const form = useFormContext<ISalesForm>();
@@ -111,6 +112,10 @@ function formData(data: ISalesForm, paidAmount): SaveOrderActionProps {
     let { _lineSummary, items, id, ...form } = data;
     form.amountDue = +toFixed(Number((form.grandTotal || 0) - paidAmount));
     form.meta = removeEmptyValues(form.meta);
+    form.goodUntil = salesFormUtils._calculatePaymentTerm(
+        form.paymentTerm,
+        form.createdAt
+    );
     const deleteIds: any = [];
     items = items
         .map(({ salesOrderId, _ctx, ...item }, index) => {

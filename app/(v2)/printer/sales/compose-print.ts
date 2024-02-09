@@ -13,6 +13,7 @@ import {
 import { SalesPrintProps } from "./page";
 import { formatCurrency } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
+import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
@@ -379,13 +380,18 @@ function heading({ mode, isOrder, order, isEstimate }) {
                 font: "bold",
             })
         );
-        if (order?.amountDue > 0 && order?.goodUntil)
+        if (order?.amountDue > 0) {
+            let { goodUntil, paymentTerm, createdAt } = order;
+            if (paymentTerm)
+                goodUntil = salesFormUtils._calculatePaymentTerm(
+                    paymentTerm,
+                    createdAt
+                );
+
             h.lines.push(
-                styled(
-                    "Good Until",
-                    order.goodUntil ? formatDate(order.goodUntil) : "-"
-                )
+                styled("Good Until", goodUntil ? formatDate(goodUntil) : "-")
             );
+        }
     }
     return h;
 }

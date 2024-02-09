@@ -16,7 +16,7 @@ import {
 } from "@/app/(v2)/(loggedIn)/sales/edit/type";
 // type form =
 export default {
-    calculatePaymentTerm,
+    _calculatePaymentTerm,
     calibrateLines,
     formData,
     generateInvoiceItem,
@@ -87,7 +87,8 @@ function formData(data, paidAmount): SaveOrderActionProps {
         items: items as any,
     };
 }
-function calculatePaymentTerm(form: ISalesOrderForm, paymentTerm, createdAt) {
+
+function _calculatePaymentTerm(paymentTerm, createdAt) {
     const t = +paymentTerm?.replace("Net", "");
     let goodUntil: any = null;
     console.log("CALCULATING PAYMENT TERM");
@@ -95,8 +96,8 @@ function calculatePaymentTerm(form: ISalesOrderForm, paymentTerm, createdAt) {
         goodUntil = dayjs(createdAt).add(goodUntil, "days");
         console.log(goodUntil);
     }
-
-    form.setValue("goodUntil", goodUntil);
+    // form.setValue("goodUntil", goodUntil);
+    return goodUntil;
 }
 function initInvoiceItems(items: ISalesFormItem[] | undefined) {
     if (!items) items = [];
