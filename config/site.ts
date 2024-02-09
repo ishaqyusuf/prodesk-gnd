@@ -56,7 +56,7 @@ export const siteConfig = {
         },
         {
             title: "Contact Us",
-            href: "/blog",
+            href: "/contact-us",
         },
         // ...productCategories.map((category) => ({
         //     title: category.title,

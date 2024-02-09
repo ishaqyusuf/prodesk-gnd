@@ -354,9 +354,11 @@ function heading({ mode, isOrder, order, isEstimate }) {
         ],
     };
     if (isEstimate) {
-        styled(
-            "Good Until",
-            order.goodUntil ? formatDate(order.goodUntil) : "-"
+        h.lines.push(
+            styled(
+                "Good Until",
+                order.goodUntil ? formatDate(order.goodUntil) : "-"
+            )
         );
     }
     if (isOrder) {
@@ -377,6 +379,13 @@ function heading({ mode, isOrder, order, isEstimate }) {
                 font: "bold",
             })
         );
+        if (order?.amountDue > 0 && order?.goodUntil)
+            h.lines.push(
+                styled(
+                    "Good Until",
+                    order.goodUntil ? formatDate(order.goodUntil) : "-"
+                )
+            );
     }
     return h;
 }

@@ -21,7 +21,7 @@ export default async function EditBlog({ searchParams, params }) {
                 slug={slug}
                 data={blog}
             />
-            <div className="max-h-[90vh] overflow-auto p-4">
+            <div className="max-h-[90vh] prose lg:prose-xl overflow-auto p-4">
                 <MDX source={content} components={mdxComponents[type]} />
             </div>
         </div>

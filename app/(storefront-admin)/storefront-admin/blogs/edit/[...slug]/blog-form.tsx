@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import MDXEdit from "@/components/common/mdx-editor";
 
 type Prom = PromiseType<typeof getBlogAction>;
 interface Props {
@@ -60,10 +61,16 @@ export default function BlogForm({ data, renderSlug, type, slug }: Props) {
                     </div>
                 </div>
                 <div className="">
-                    <div className="min-h-screen">
-                        <Textarea
+                    <div className="max-h-[80vh] overflow-auto px-4">
+                        {/* <Textarea
                             {...form.register("content")}
                             className="h-full min-h-[90vh]"
+                        /> */}
+                        <MDXEdit
+                            onChange={(e) => {
+                                form.setValue("content", e);
+                            }}
+                            markdown={content}
                         />
                     </div>
                 </div>
