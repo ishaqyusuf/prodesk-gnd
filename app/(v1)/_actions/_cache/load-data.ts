@@ -48,12 +48,12 @@ export async function saveCache(name: CacheNames, data, group) {
     });
 }
 export async function _cache(name: CacheNames | string, fn, group: any = null) {
-    unstable_noStore();
-    console.log("CATCH LOADING", name);
-    const cdata = await fetchCache(name as any, group);
-    console.log([name, cdata]);
+    // unstable_noStore();
+    // console.log("CATCH LOADING", name);
+    // const cdata = await fetchCache(name as any, group);
+    // console.log([name, cdata]);
 
-    if (cdata) return cdata;
+    // if (cdata) return cdata;
 
     const c = await fn();
     console.log(["FRESH CACHE", name, c]);
