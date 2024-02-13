@@ -91,10 +91,8 @@ function formData(data, paidAmount): SaveOrderActionProps {
 function _calculatePaymentTerm(paymentTerm, createdAt) {
     const t = +paymentTerm?.replace("Net", "");
     let goodUntil: any = null;
-    console.log("CALCULATING PAYMENT TERM");
     if (t) {
         goodUntil = dayjs(createdAt).add(goodUntil, "days");
-        console.log(goodUntil);
     }
     // form.setValue("goodUntil", goodUntil);
     return goodUntil;

@@ -22,8 +22,8 @@ model AddressBooks {
     id             Int           @unique @default(autoincrement())
     customerId     Int?
     name           String?       @db.VarChar(255)
-    address1       String?       @db.Text
-    address2       String?       @db.Text
+    address1       String?       @db.VarChar(300)
+    address2       String?       @db.VarChar(300)
     country        String?       @db.VarChar(255)
     state          String?       @db.VarChar(255)
     city           String?       @db.VarChar(255)
@@ -36,6 +36,8 @@ model AddressBooks {
     customer       Customers?    @relation(fields: [customerId], references: [id], name: "addressBooks", onDelete: Cascade)
     billingOrders  SalesOrders[] @relation(name: "billingAddress")
     shippingOrders SalesOrders[] @relation(name: "shippingAddress")
+
+    @@index([name, address1])
 }
 
 model ErrorLog {
@@ -177,6 +179,8 @@ model Customers {
     addressBooks   AddressBooks[]  @relation(name: "addressBooks")
     payments       SalesPayments[] @relation()
     wallet         CustomerWallet?
+
+    @@index([name, email, phoneNo])
 }
 
 model CustomerWallet {
@@ -250,6 +254,8 @@ model Homes {
     tasks               HomeTasks[]
     jobs                Jobs[]
     invoices            Invoices[]
+
+    @@index([modelName, search])
 }
 
 model HomeTasks {
@@ -292,6 +298,8 @@ model HomeTasks {
     project              Projects? @relation(fields: [projectId], references: [id])
     job                  Jobs?     @relation(fields: [jobId], references: [id])
     assignedTo           Users?    @relation(fields: [assignedToId], references: [id])
+
+    @@index([homeId, deletedAt, produceable, billable, addon, deco, punchout, installable, taskName, projectId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -850,12 +858,14 @@ model SalesOrders {
     formSteps         DykeStepForm[]
     housePackageTools HousePackageTools[]
     doors             DykeSalesDoors[]
+
+    @@index([deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
 }
 
 model SalesOrderItems {
     id                 Int                          @unique @default(autoincrement())
-    description        String?                      @db.Text
-    dykeDescription    String?                      @db.Text
+    description        String?                      @db.VarChar(300)
+    dykeDescription    String?                      @db.VarChar(300)
     productId          Int?
     supplier           String?
     swing              String?                      @db.VarChar(255)
@@ -887,6 +897,8 @@ model SalesOrderItems {
     // components         SalesOrderItemComponents[]
     housePackageTool   HousePackageTools?
     salesDoors         DykeSalesDoors[]
+
+    @@index([salesOrderId, description])
 }
 
 model HousePackageTools {
@@ -1081,6 +1093,8 @@ model Users {
     myIssuedCommissionPayments CommissionPayment[]        @relation(name: "worker")
     CommissionPayment          CommissionPayment[]
     blogs                      Blogs[]
+
+    @@index([name])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1135,6 +1149,8 @@ model Notifications {
     archivedAt DateTime? @db.Timestamp(0)
     createdAt  DateTime? @db.Timestamp(0)
     updatedAt  DateTime? @db.Timestamp(0)
+
+    @@index([userId, seenAt, archivedAt])
 }
 
 // Dyke Edge Db

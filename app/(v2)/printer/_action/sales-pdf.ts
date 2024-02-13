@@ -2,7 +2,6 @@
 import { env } from "@/env.mjs";
 import { SalesPrintProps } from "../sales/page";
 import QueryString from "qs";
-import { timeout } from "@/lib/timeout";
 
 export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdf = await geenrate(query);
