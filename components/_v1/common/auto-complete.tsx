@@ -53,7 +53,7 @@ export default function AutoComplete({
     uppercase,
     onSelect,
     fuzzy,
-    perPage = 100,
+    perPage = 500,
     ...props
 }: Props & PrimitiveDivProps) {
     const transformedOptions = transformItems(

@@ -92,6 +92,7 @@ export default function ProjectFormSection({}) {
                                 itemText={"title"}
                                 id={"project"}
                                 itemValue={"id"}
+                                perPage={9999}
                                 options={[
                                     { title: "Custom", id: null },
                                     ...(ctx?.projects?.data || []),
@@ -112,6 +113,7 @@ export default function ProjectFormSection({}) {
                             <AutoComplete
                                 {...field}
                                 itemText={"name"}
+                                perPage={9999}
                                 id={"unit"}
                                 itemValue={"id"}
                                 options={[
