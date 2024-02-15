@@ -900,7 +900,7 @@ model SalesOrderItems {
     housePackageTool HousePackageTools?
     salesDoors       DykeSalesDoors[]
 
-    @@index([createdAt, salesOrderId, description])
+    @@index([createdAt, salesOrderId, description, swing])
 }
 
 model HousePackageTools {

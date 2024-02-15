@@ -18,15 +18,16 @@ export async function loadNotificationsAction() {
     const id = await userId();
     const noficiations: INotification[] = (await prisma.notifications.findMany({
         where: {
-            userId: id
+            userId: id,
         },
         take: 20,
         orderBy: {
-            createdAt: "desc"
-        }
+            createdAt: "desc",
+        },
     })) as any;
     return noficiations;
 }
+export async function deleteOldNotifications() {}
 export async function getNotificationCountAction() {
     const id = await userId();
     const count = await prisma.notifications.count({
@@ -35,21 +36,19 @@ export async function getNotificationCountAction() {
             OR: [
                 {
                     seenAt: {
-                        equals: null
-                    }
+                        equals: null,
+                    },
                 },
                 {
                     archivedAt: {
-                        equals: null
-                    }
-                }
+                        equals: null,
+                    },
+                },
             ],
             createdAt: {
-                gte: dayjs()
-                    .subtract(7, "days")
-                    .toISOString()
-            }
-        }
+                gte: dayjs().subtract(7, "days").toISOString(),
+            },
+        },
     });
     return count;
 }
@@ -57,22 +56,22 @@ export async function getNotificationCountAction() {
 export async function markAsReadAction(id) {
     await prisma.notifications.update({
         where: {
-            id
+            id,
         },
         data: {
-            seenAt: new Date()
-        }
+            seenAt: new Date(),
+        },
     });
 }
 export async function archiveAction(id, seenAt) {
     await prisma.notifications.update({
         where: {
-            id
+            id,
         },
         data: {
             seenAt: seenAt ? seenAt : new Date(),
-            archivedAt: new Date()
-        }
+            archivedAt: new Date(),
+        },
     });
 }
 export type NotificationType =
@@ -85,19 +84,19 @@ async function _notify(_userId, type: NotificationType, message, link?) {
         data: transformData({
             fromUser: {
                 connect: {
-                    id: (await userId()) || 0
-                }
+                    id: (await userId()) || 0,
+                },
             },
             user: {
                 connect: {
-                    id: _userId
-                }
+                    id: _userId,
+                },
             },
             meta: {},
             message,
             type,
-            link
-        })
+            link,
+        }),
     });
 }
 export async function _notifyProdStarted(
@@ -160,6 +159,6 @@ export async function _alert() {
                 ${__taskSubtitle}) has been assigned to you for installation.`
                 // `/tasks/sales-production/${order.orderId}`
             );
-        }
+        },
     };
 }
