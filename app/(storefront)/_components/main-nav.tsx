@@ -24,12 +24,14 @@ interface MainNavProps {
 export function MainNav({ items }: MainNavProps) {
     return (
         <div className="hidden gap-6 lg:flex">
-            <Link href="/" className="hidden items-center space-x-2 lg:flex">
-                <Icons.logoLg width={160} />
-                <span className="hidden font-bold lg:inline-block">
-                    {/* {siteConfig.name} */}
-                </span>
-                <span className="sr-only">Home</span>
+            <Link href="/" className="">
+                <div className="hidden items-center space-x-2 lg:flex">
+                    <Icons.logoLg width={160} />
+                    <span className="hidden font-bold lg:inline-block">
+                        {/* {siteConfig.name} */}
+                    </span>
+                    <span className="sr-only">Home</span>
+                </div>
             </Link>
             <NavigationMenu>
                 <NavigationMenuList>
@@ -98,7 +100,7 @@ export function MainNav({ items }: MainNavProps) {
                                 item.href && (
                                     <NavigationMenuItem key={item.title}>
                                         <Link
-                                            href={item.href}
+                                            href={item.href || "/"}
                                             legacyBehavior
                                             passHref
                                         >
@@ -130,7 +132,7 @@ const ListItem = React.forwardRef<
             <NavigationMenuLink asChild>
                 <Link
                     ref={ref}
-                    href={String(href)}
+                    href={String(href) || "/"}
                     className={cn(
                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                         className

@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
-import ProjectsTableShell from "@/components/_v1/shells/projects-table-shell";
+import ProjectsTableShell from "@/app/(v1)/(auth)/community/projects/components/projects-table-shell";
 import { getProjectsAction } from "@/app/(v1)/_actions/community/projects";
 import CommunityInstallCostModal from "@/components/_v1/modals/community-install-cost";
 

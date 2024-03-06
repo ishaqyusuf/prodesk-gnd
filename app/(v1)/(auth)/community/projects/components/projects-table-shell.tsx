@@ -6,22 +6,22 @@ import { useMemo, useState, useTransition } from "react";
 import {
     CheckColumn,
     ColumnHeader,
-    Cell,
-    PrimaryCellContent,
-    DateCellContent,
-    SecondaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../../components/_v1/columns/base-columns";
 
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
+import { BuilderFilter } from "../../../../../../components/_v1/filters/builder-filter";
 import { IProject } from "@/types/community";
 
-import AddonCell from "../community/addon-cell";
-import { SmartTable } from "../data-table/smart-table";
-import ModelCostCell from "../community/model-cost-cell";
-import InstallCostCell from "../community/install-cost-cell";
+import AddonCell from "../../../../../../components/_v1/community/addon-cell";
+import { SmartTable } from "../../../../../../components/_v1/data-table/smart-table";
+import InstallCostCell from "../../../../../../components/_v1/community/install-cost-cell";
+import {
+    DeleteRowAction,
+    RowActionCell,
+} from "../../../../../../components/_v1/data-table/data-table-row-actions";
+import { deleteProjectAction } from "../actions/delete-project-action";
 
 export default function ProjectsTableShell<T>({
     data,
@@ -100,6 +100,14 @@ export default function ProjectsTableShell<T>({
                 size: 15,
                 maxSize: 15,
                 enableSorting: false,
+                cell: ({ row }) => (
+                    <RowActionCell>
+                        <DeleteRowAction
+                            row={row.original}
+                            action={deleteProjectAction}
+                        />
+                    </RowActionCell>
+                ),
                 // cell: ({ row }) => <OrderRowAction row={row.original} />,
             },
         ], //.filter(Boolean) as any,

@@ -1,12 +1,9 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import slugify from "slugify";
-import { env } from "@/env.mjs";
-import dayjs from "dayjs";
+
 import { toast } from "sonner";
-import Error from "next/error";
-import { convertToNumber } from "./use-number";
-import { z } from "zod";
+
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
@@ -124,7 +121,7 @@ export function toSingular(plural) {
     const rules = [
         { suffix: "s", replace: "" },
         { suffix: "es", replace: "" },
-        { suffix: "ies", replace: "y" }, // Add more rules as needed
+        { suffix: "ies", replace: "y" },
     ];
 
     for (const rule of rules) {

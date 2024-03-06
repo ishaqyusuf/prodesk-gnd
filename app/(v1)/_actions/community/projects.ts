@@ -56,6 +56,7 @@ function whereProject(query: ProjectsQueryParams) {
             equals: Number(query._builderId) || undefined,
         },
         title: q,
+        deletedAt: null,
     };
 
     return where;
@@ -74,6 +75,9 @@ export async function staticProjectsAction() {
                 },
                 orderBy: {
                     title: "asc",
+                },
+                where: {
+                    deletedAt: null,
                 },
             });
             return _data;

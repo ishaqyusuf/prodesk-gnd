@@ -7,7 +7,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
 import { getProjectsAction } from "@/app/(v1)/_actions/community/projects";
 import ProjectModal from "@/components/_v1/modals/project-modal";
-import ProjectsTableShell from "@/components/_v1/shells/projects-table-shell";
+import ProjectsTableShell from "@/app/(v1)/(auth)/community/projects/components/projects-table-shell";
 
 export const metadata: Metadata = {
     title: "Projects",

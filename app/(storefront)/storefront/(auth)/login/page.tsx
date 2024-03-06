@@ -3,52 +3,83 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardFooter, Card } from "@/components/ui/card";
+import {
+    CardContent,
+    CardFooter,
+    Card,
+    CardHeader,
+} from "@/components/ui/card";
 import { Icons } from "@/components/_v1/icons";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import ControlledInput from "@/_v2/components/controls/controlled-input";
+import { Form } from "@/components/ui/form";
 
 export default function CustomerLoginPage() {
+    const form = useForm({
+        resolver: zodResolver(
+            z.object({
+                email: z.string().min(1),
+                password: z.string().min(1),
+                type: z.string().min(1),
+            })
+        ),
+        defaultValues: {
+            email: "",
+            password: "",
+            type: "storefront",
+        },
+    });
+    async function submit(data) {}
     return (
         <div className="  bg-gray-50 dark:bg-gray-900">
-            <div className="mx-auto px-4  min-h-[70vh]  flex flex-col justify-center max-w-3xl space-y-8">
-                <div className="flex items-center space-x-4">
-                    <Icons.logoLg />
-                    <div className="text-2xl font-bold">Welcome Back!</div>
-                </div>
-                <Card>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                placeholder="m@example.com"
-                                required
-                                type="email"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
-                                <Link
-                                    className="ml-auto inline-block text-sm underline"
-                                    href="#"
-                                >
-                                    Forgot your password?
-                                </Link>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(submit)}>
+                    <div className="mx-auto px-4  min-h-[70vh]  flex flex-col justify-center max-w-3xl space-y-8">
+                        <div className="flex items-center space-x-4">
+                            <Icons.logoLg />
+                            <div className="text-2xl font-bold">
+                                Welcome Back!
                             </div>
-                            <Input id="password" required type="password" />
                         </div>
-                        <Button className="w-full">Login</Button>
-                    </CardContent>
-                    <CardFooter className="text-center">
-                        <div className="text-sm">
-                            {"Don't"} have an account?
-                            <Link className="underline ml-1" href="/register">
-                                Create an Account
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </Card>
-            </div>
+                        <Card>
+                            <CardHeader />
+                            <CardContent className="space-y-4">
+                                <div className="space-y-2">
+                                    <ControlledInput
+                                        label="Email"
+                                        control={form.control}
+                                        placeholder="m@example.com"
+                                        type="email"
+                                        name="email"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <ControlledInput
+                                        control={form.control}
+                                        name="password"
+                                        type="password"
+                                        label="Password"
+                                    />
+                                </div>
+                                <Button className="w-full">Login</Button>
+                            </CardContent>
+                            <CardFooter className="text-center">
+                                <div className="text-sm">
+                                    {"Don't"} have an account?
+                                    <Link
+                                        className="underline ml-1"
+                                        href="/register"
+                                    >
+                                        Create an Account
+                                    </Link>
+                                </div>
+                            </CardFooter>
+                        </Card>
+                    </div>
+                </form>
+            </Form>
         </div>
     );
 }

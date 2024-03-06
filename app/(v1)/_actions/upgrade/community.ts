@@ -5,7 +5,7 @@ import {
     dotArray,
     generateRandomString,
     removeEmptyValues,
-    toDotNotation
+    toDotNotation,
 } from "@/lib/utils";
 import { HomeTemplateMeta, ICostChart } from "@/types/community";
 import { InstallCostMeta, InstallCostSettings } from "@/types/settings";
@@ -21,12 +21,16 @@ export async function _debugUnitsWithNoProjects() {
             id: true,
             modelName: true,
             projectId: true,
-            createdAt: true
-        }
+            createdAt: true,
+        },
     });
-    const projects = await prisma.projects.findMany({});
+    const projects = await prisma.projects.findMany({
+        where: {
+            deletedAt: null,
+        },
+    });
     let bloat = data.filter(
-        d => !d.projectId || !projects.some(p => p.id == d.projectId)
+        (d) => !d.projectId || !projects.some((p) => p.id == d.projectId)
     );
 
     return [bloat.length, data.length];
@@ -35,7 +39,7 @@ export async function _debugUnitsWithNoProjects() {
 export async function upgradeCommunity() {
     const templates = await prisma.communityModels.findMany({});
     await Promise.all(
-        templates?.map(async v => {
+        templates?.map(async (v) => {
             let meta = (v.meta || {}) as any;
             let { overrides, design, data, ...rest } = meta;
             if (Array.isArray(overrides)) overrides = {};
@@ -47,7 +51,7 @@ export async function upgradeCommunity() {
                 if (v) {
                     _design[`${k}`] = {
                         c: true,
-                        v: dd[k]
+                        v: dd[k],
                     };
                     // _design[`${k}.c`] = true;
                     // _design[`${k}.v`] = dd[k];
@@ -58,9 +62,9 @@ export async function upgradeCommunity() {
                 data: {
                     meta: removeEmptyValues({
                         ...rest,
-                        design: _transformDesign(_design)
-                    }) as any
-                }
+                        design: _transformDesign(_design),
+                    }) as any,
+                },
             });
         })
     );
@@ -78,7 +82,7 @@ export async function upgradeHomeTemplateDesign() {
                 deb.push({
                     v,
                     design: design,
-                    leng: Object.keys(designs).length
+                    leng: Object.keys(designs).length,
                 });
             // if (i > 2) return;
             if (!design || Array.isArray(design)) return;
@@ -88,7 +92,7 @@ export async function upgradeHomeTemplateDesign() {
             let { ...rest } = meta as any;
 
             const dotObject = dotArray(design);
-            Object.keys(dotObject).map(k => (fields[k] = true));
+            Object.keys(dotObject).map((k) => (fields[k] = true));
             let _design = _transformDesign(dotObject);
             sql.push(
                 `UPDATE HomeTemplates SET meta = JSON_SET(meta,'$.design','${JSON.stringify(
@@ -99,13 +103,13 @@ export async function upgradeHomeTemplateDesign() {
             // meta.design = _design;
             let newMeta = {
                 design: _design,
-                ...rest
+                ...rest,
             };
             await prisma.homeTemplates.update({
                 where: { id: v.id },
                 data: {
-                    meta: removeEmptyValues(newMeta) as any
-                }
+                    meta: removeEmptyValues(newMeta) as any,
+                },
             });
         })
     );
@@ -118,7 +122,7 @@ export async function upgradeHomeTemplates() {
     const templates = await prisma.homeTemplates.findMany({});
     const sql: string[] = [];
     await Promise.all(
-        templates?.map(async v => {
+        templates?.map(async (v) => {
             let meta: HomeTemplateMeta = (v.meta || {}) as any;
             let {
                 install_costs,
@@ -128,7 +132,7 @@ export async function upgradeHomeTemplates() {
                 ...rest
             } = meta as any;
             const dotObject = dotArray(design);
-            Object.keys(dotObject).map(k => (fields[k] = true));
+            Object.keys(dotObject).map((k) => (fields[k] = true));
             let _design = _transformDesign(dotObject);
             // meta.design = _design;
             let newMeta = {
@@ -142,16 +146,16 @@ export async function upgradeHomeTemplates() {
                             ({ title, unitValue, max_qty, checked }) => ({
                                 title,
                                 cost: unitValue,
-                                maxQty: checked ? max_qty : 0
+                                maxQty: checked ? max_qty : 0,
                             })
-                        )
-                    })) || []
+                        ),
+                    })) || [],
             };
             await prisma.homeTemplates.update({
                 where: { id: v.id },
                 data: {
-                    meta: removeEmptyValues(newMeta) as any
-                }
+                    meta: removeEmptyValues(newMeta) as any,
+                },
             });
         })
     );
@@ -162,26 +166,26 @@ export async function upgradeCostCharts() {
         (
             await prisma.costCharts.findMany({
                 where: {
-                    type: "task_costs"
-                }
+                    type: "task_costs",
+                },
             })
-        ).map(async cs => {
+        ).map(async (cs) => {
             const meta: any = cs.meta;
             const { tax, costs, last_sync } = meta;
             delete costs?.["0"];
             delete tax?.["0"];
             await prisma.costCharts.update({
                 where: {
-                    id: cs.id
+                    id: cs.id,
                 },
                 data: {
                     type: "task-costs",
                     meta: {
                         costs,
                         lastSync: last_sync,
-                        tax
-                    }
-                }
+                        tax,
+                    },
+                },
             });
         })
     );
@@ -191,32 +195,34 @@ export async function upgradeInstallCostToKeyValue() {
         "install-price-chart"
     );
 
-    const list = s.meta.list.map(ls => {
+    const list = s.meta.list.map((ls) => {
         if (ls.uid) return ls;
         ls.uid = generateRandomString(4);
         return ls;
     });
     await prisma.settings.update({
         where: {
-            id: s.id
+            id: s.id,
         },
         data: {
             meta: {
                 ...s.meta,
-                list
-            } as any
-        }
+                list,
+            } as any,
+        },
     });
     await Promise.all(
-        (await prisma.homeTemplates.findMany({})).map(async template => {
+        (
+            await prisma.homeTemplates.findMany({})
+        ).map(async (template) => {
             const tmeta: HomeTemplateMeta = template.meta as any;
             if (tmeta.installCosts?.length > 0) {
-                const costings = tmeta.installCosts.map(ic => {
+                const costings = tmeta.installCosts.map((ic) => {
                     const nCost = {};
                     const costings = ic.costings as any;
                     if (!Array.isArray(costings)) return null;
-                    costings.map(c => {
-                        const uid = list.find(l => l.title == c.title)?.uid;
+                    costings.map((c) => {
+                        const uid = list.find((l) => l.title == c.title)?.uid;
                         if (Number(c.maxQty) > 0 && uid) nCost[uid] = c.maxQty;
                     });
                     ic.costings = nCost as any;
@@ -225,14 +231,14 @@ export async function upgradeInstallCostToKeyValue() {
                 if (costings)
                     await prisma.homeTemplates.update({
                         where: {
-                            id: template.id
+                            id: template.id,
                         },
                         data: {
                             meta: {
                                 ...tmeta,
-                                costings
-                            }
-                        } as any
+                                costings,
+                            },
+                        } as any,
                     });
             }
         })
@@ -244,7 +250,9 @@ export async function upgradeJobCostData() {
     )) as any;
     const jobNotFound: any[] = [];
     await Promise.all(
-        (await prisma.jobs.findMany({})).map(async k => {
+        (
+            await prisma.jobs.findMany({})
+        ).map(async (k) => {
             // const { cost_data, ...meta }: IJobMeta = k.meta as any;
             // if (cost_data) {
             //   meta.costData = {};
@@ -287,7 +295,7 @@ export async function convertModelInstallCost() {
     const templates = await prisma.homeTemplates.findMany({});
     const costs: ICostChart[] = [];
     await Promise.all(
-        templates.map(async template => {
+        templates.map(async (template) => {
             const m: HomeTemplateMeta = template.meta || ({} as any);
             if (m.installCosts) {
                 // await prisma.costCharts.create({
@@ -311,24 +319,24 @@ export async function linkHomeTemplateCosts() {
     const templates = await prisma.homeTemplates.findMany({
         select: {
             id: true,
-            modelName: true
-        }
+            modelName: true,
+        },
     });
     const costs = await prisma.costCharts.findMany({
         select: {
             model: true,
             id: true,
             meta: true,
-            endDate: true
+            endDate: true,
         },
         orderBy: {
-            endDate: "desc"
-        }
+            endDate: "desc",
+        },
     });
     await Promise.all(
-        templates.map(async t => {
+        templates.map(async (t) => {
             const _c = costs.filter(
-                c =>
+                (c) =>
                     t.modelName?.toLocaleLowerCase() ==
                     c.model?.toLocaleLowerCase()
             );
@@ -337,18 +345,18 @@ export async function linkHomeTemplateCosts() {
                 await prisma.costCharts.updateMany({
                     where: {
                         id: {
-                            in: _c.map(c => c.id)
-                        }
+                            in: _c.map((c) => c.id),
+                        },
                     },
                     data: {
-                        parentId: t.id
-                    }
+                        parentId: t.id,
+                    },
                 });
                 let cid = _c[0];
                 let id = cid?.id;
                 let grob: any = {
                     id: null,
-                    meta: null
+                    meta: null,
                 };
                 let ls = _c.slice(-1)[0];
                 if (ls && !ls.endDate) {
@@ -379,19 +387,19 @@ export async function linkHomeTemplateCosts() {
                     const { totalTask, total, ...met } = grob.meta || {};
                     await prisma.costCharts.update({
                         where: {
-                            id: id
+                            id: id,
                         },
                         data: {
                             current: true,
-                            meta: met
-                        }
+                            meta: met,
+                        },
                     });
                 }
             }
         })
     );
 }
-const camelCaseKey = key =>
+const camelCaseKey = (key) =>
     key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
 
 function _transformDesign(object) {
@@ -407,7 +415,7 @@ function _transformDesign(object) {
     return tr;
 }
 function transformDesign(obj) {
-    const camelCaseKey = key =>
+    const camelCaseKey = (key) =>
         key.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
     //.replace(/\.([a-zA-Z])/g, (_, c) => c.toUpperCase());
 
@@ -430,21 +438,21 @@ function transformDesign(obj) {
 export async function upgradeInstallPriceChart() {
     const price = await prisma.posts.findFirst({
         where: {
-            type: "install-price-chart"
-        }
+            type: "install-price-chart",
+        },
     });
     await prisma.settings.deleteMany({
         where: {
-            type: "install-price-chart"
-        }
+            type: "install-price-chart",
+        },
     });
 
     let meta: InstallCostMeta = {
         list: ((price?.meta as any)?.list).map(({ id, title, unit_value }) => ({
             id,
             title,
-            cost: +unit_value
-        }))
+            cost: +unit_value,
+        })),
     };
 
     return await prisma.settings.create({
@@ -452,8 +460,9 @@ export async function upgradeInstallPriceChart() {
             type: "install-price-chart",
             createdAt: new Date(),
             updatedAt: new Date(),
-            meta: meta as any
-        }
+            meta: meta as any,
+        },
     });
     // return price;
 }
+
