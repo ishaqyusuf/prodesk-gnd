@@ -331,11 +331,20 @@ function printFooter(data: PrintData, notPrintable) {
                     font: "bold",
                 }
             ),
+            data.order.meta?.ccc
+                ? styled(
+                      "C.C.C",
+                      formatCurrency.format(data.order.meta.ccc || 0),
+                      {
+                          font: "bold",
+                      }
+                  )
+                : null,
             styled("Total", formatCurrency.format(data.order.grandTotal || 0), {
                 font: "bold",
                 size: "base",
             }),
-        ],
+        ].filter(Boolean),
     };
 }
 

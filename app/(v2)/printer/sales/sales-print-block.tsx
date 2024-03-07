@@ -11,7 +11,9 @@ import SalesPrintShelfItems from "./components/sales-print-shelf-items";
 import SalesPrintDoorItems from "./components/sales-print-door-items";
 import SalesPrintFooter from "./components/sales-print-footer";
 
-export type SalesPrintData = Awaited<ReturnType<typeof getSalesPrintData>>;
+export type SalesPrintData = NonNullable<
+    Awaited<ReturnType<typeof getSalesPrintData>>
+>;
 interface Props {
     action: Promise<SalesPrintData>;
     slug;

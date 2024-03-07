@@ -1,6 +1,5 @@
 "use client";
 
-import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
 import { Button, ButtonProps } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { useBool } from "@/lib/use-loader";

@@ -9,6 +9,9 @@ export default function SalesPrintFooter() {
     const ctx = useSalesBlockCtx();
     const { sale } = ctx;
     if (!sale.footer) return null;
+
+    const lines: NonNullable<(typeof sale.footer.lines)[number]>[] = sale.footer
+        .lines as any;
     return (
         <tfoot id="footer" className="">
             <tr className={`text-right font-bold`}>
@@ -41,7 +44,7 @@ export default function SalesPrintFooter() {
                 <td className="relative" colSpan={6}>
                     <div>
                         <table className="h-full w-full">
-                            {sale.footer.lines.map((line, index) => (
+                            {lines.map((line, index) => (
                                 <tr
                                     className="border border-gray-400"
                                     key={index}
