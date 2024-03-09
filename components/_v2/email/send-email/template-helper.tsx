@@ -18,6 +18,8 @@ export function SendEmailTemplateSection() {
     const [templates, setTemplates] = useState<any>([]);
     function init() {
         getEmailTemplates(form.getValues("template.type")).then((data) => {
+            console.log(data);
+
             setTemplates([
                 { title: "New", id: -1, subject: "", html: "" },
                 ...data,

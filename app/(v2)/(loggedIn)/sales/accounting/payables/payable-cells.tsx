@@ -90,9 +90,11 @@ function Options({ item }: Props) {
                 onClick={() => {
                     modal?.openSheet(
                         <SendEmailSheet
-                            parentId={item.id}
-                            to={item.customer?.email as any}
-                            emailType="sales"
+                            data={{
+                                parentId: item.id,
+                                to: item.customer?.email as any,
+                                type: "sales",
+                            }}
                             subtitle={`Payable | ${item.orderId}`}
                         />
                     );

@@ -7,40 +7,79 @@ import { Form } from "@/components/ui/form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Controller, useForm } from "react-hook-form";
 import { SendEmailTemplateSection } from "./template-helper";
+import { useEffect, useState } from "react";
+import { getEmailData } from "../_actions/get-email-data";
+import { PromiseType } from "@/types";
+import { useModal } from "@/components/common/modal/provider";
+import { toast } from "sonner";
+import { sendMessage } from "@/app/(v1)/_actions/email";
 
 interface Props {
-    subject?: string;
-    to?: string;
-    body?: string;
-    parentId?;
-    emailType?: "sales";
+    // subject?: string;
+    // to?: string;
+    // body?: string;
+    // parentId?;
+    // emailType?: "sales";
     subtitle?: string;
+
+    data: {
+        to: string;
+        parentId: number;
+        type: "sales";
+    };
 }
-export default function SendEmailSheet({
-    subject,
-    to,
-    body,
-    parentId,
-    subtitle,
-    emailType,
-    ...props
-}: Props) {
+export default function SendEmailSheet({ subtitle, data }: Props) {
     const form = useForm({
         defaultValues: {
-            subject,
-            to,
-            body,
-            parentId,
+            subject: "",
+            body: "",
+            ...data,
+
             template: {
                 title: "",
                 id: null,
                 html: "",
-                type: emailType,
+                type: data.type,
             },
         },
     });
+    const modal = useModal();
+    const [emailData, setEmailData] = useState<
+        PromiseType<typeof getEmailData>["Response"]
+    >(null as any);
+    async function sendEmail() {
+        const {
+            to,
+            subject,
+            body,
+            parentId,
+            template: { type },
+        } = form.getValues();
+        await sendMessage({
+            to,
+            subject,
+            body,
+            parentId,
+            type,
+            data: emailData.data,
+            from: emailData.from,
+            meta: {},
+            attachOrder: false,
+        } as any);
+    }
+    useEffect(() => {
+        getEmailData(data.parentId, data.type).then((resp) => {
+            console.log(resp);
 
-    async function sendEmail() {}
+            if (resp) {
+                setEmailData(resp);
+            } else {
+                modal.close();
+                toast.error("Invalid operation");
+            }
+        });
+    }, []);
+    if (!emailData) return null;
     return (
         <Form {...form}>
             <Modal.Content
@@ -67,7 +106,7 @@ export default function SendEmailSheet({
                                 control={form.control}
                                 name="body"
                                 className="flex-1"
-                                mentions={["orderId", "customer.name"]}
+                                mentions={emailData.suggestions}
                             />
                         </div>
                     </div>

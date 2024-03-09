@@ -2,12 +2,9 @@
 
 import { EmailProps } from "@/types/email";
 import { _email } from "./_email";
-import MailComposer from "@/components/_v1/emails/mail-composer";
 import { prisma } from "@/db";
-import dayjs from "dayjs";
-import { _dbUser, user, userId } from "./utils";
+import { _dbUser, userId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
-import va from "@/lib/va";
 import { resend } from "@/lib/resend";
 import { _generateSalesPdf } from "./sales/save-pdf";
 import { env } from "@/env.mjs";
@@ -28,15 +25,15 @@ export async function sendMessage(data: EmailProps) {
     }
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
 
+    const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
-        to: isProd ? data.to?.split(",") : "ishaqyusuf024@gmail.com",
+        to,
         // to:["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
         subject: trs.subject,
-        html: trs.body?.split("\n").join("<br/>"),
-
+        html: trs.body, //?.split("\n").join("<br/>"),
         attachments,
         //  react: MailComposer({ firstName: "John" }),
     });
@@ -55,7 +52,7 @@ export async function sendMessage(data: EmailProps) {
             type: data.type,
             body: trs.body,
             senderId: (await userId()) as number,
-            to: data.to,
+            to: to.join(","),
             sentAt: new Date(),
             subject: trs?.subject,
             parentId: data.parentId,

@@ -322,3 +322,42 @@ export function htmlIsEmpty(html) {
     var doc = parser.parseFromString(html, "text/html");
     return doc.textContent?.trim() == "";
 }
+
+export function getAllDotPaths<T>(obj: T, parentKey: string = ""): string[] {
+    let dotPaths: string[] = [];
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const value = obj[key];
+            const currentKey = parentKey ? `${parentKey}.${key}` : key;
+
+            if (typeof value === "object" && value !== null) {
+                dotPaths = dotPaths.concat(getAllDotPaths(value, currentKey));
+            } else {
+                dotPaths.push(currentKey);
+            }
+        }
+    }
+
+    return dotPaths;
+}
+export function getLeafDotPaths<T>(obj: T, parentKey: string = ""): string[] {
+    let leafDotPaths: string[] = [];
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const value = obj[key];
+            const currentKey = parentKey ? `${parentKey}.${key}` : key;
+
+            if (typeof value !== "object" || Array.isArray(value)) {
+                leafDotPaths.push(currentKey);
+            } else {
+                leafDotPaths = leafDotPaths.concat(
+                    getLeafDotPaths(value, currentKey)
+                );
+            }
+        }
+    }
+
+    return leafDotPaths;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { EmailTypes } from "@/components/_v2/email/types";
 import { ModalName, dispatchSlice } from "@/store/slicers";
 
 export function openModal<T>(name: ModalName | string, data?: T) {
@@ -16,7 +17,6 @@ export function closeModal(name?: ModalName | string) {
         data: null,
     });
 }
-export type EmailTypes = "sales";
 export function openEmailComposer(
     data,
     extras: { type: EmailTypes; parentId?: number }
