@@ -247,9 +247,14 @@ export function nav(
         routes.Sales.push(
             ...([
                 // _route("Sales Jobs", Briefcase, "/sales/jobs"),
-                _route("Products", Icons.products, "/sales-v2/products", true),
+                _route("Products", Icons.products, "/sales-v2/products"),
                 __can.viewOrderPayment &&
-                    _route("Payments", Icons.payment, "/sales/payments"),
+                    _route(
+                        "Accounting",
+                        Icons.reciept,
+                        "/sales/accounting",
+                        true
+                    ),
                 _route("Catalogs", Icons.products, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
                 _route("Productions", Icons.production, `/sales/productions`),

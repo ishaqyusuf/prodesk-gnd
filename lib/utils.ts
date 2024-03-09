@@ -317,3 +317,8 @@ export function catchError(err: unknown) {
     //     return toast.error("Something went wrong, please try again later.");
     // }
 }
+export function htmlIsEmpty(html) {
+    const parser = new DOMParser();
+    var doc = parser.parseFromString(html, "text/html");
+    return doc.textContent?.trim() == "";
+}

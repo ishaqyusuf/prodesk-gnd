@@ -9,14 +9,14 @@ import {
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IDykeProduct } from "../components/products-table";
-import ControlledInput from "@/_v2/components/controls/controlled-input";
-import ControlledCheckbox from "@/_v2/components/controls/controlled-checkbox";
+import ControlledInput from "@/components/common/controls/controlled-input";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { Button } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import ControlledSelect from "@/_v2/components/controls/controlled-select";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 import { getDykeCategoriesList } from "../../_actions/dyke-categories-list";
 import { saveDykeProduct } from "../_actions/save-dyke-product";
 import { toast } from "sonner";

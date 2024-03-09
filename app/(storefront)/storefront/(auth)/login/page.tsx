@@ -13,7 +13,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import ControlledInput from "@/_v2/components/controls/controlled-input";
+import ControlledInput from "@/components/common/controls/controlled-input";
 import { Form } from "@/components/ui/form";
 
 export default function CustomerLoginPage() {

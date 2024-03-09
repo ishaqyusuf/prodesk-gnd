@@ -44,37 +44,35 @@ export default function TabbedLayout({
             setTabElement(document?.getElementById("tab"));
         })();
     }, []);
-    // if (!TabElement) return <></>;
-
+    if (!TabElement) return <></>;
     return (
         <div className="space-y-4 ">
-            {TabElement &&
-                createPortal(
-                    <div className="flex ">
-                        {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
-                            <div className="flex flex-col" key={i}>
-                                <Button
-                                    size="sm"
-                                    className={cn(
-                                        "p-1 h-8 px-4",
-                                        c.path != tab && "text-muted-foreground"
-                                    )}
-                                    variant={c.path == tab ? "ghost" : "ghost"}
-                                    asChild
-                                >
-                                    <Link href={c.path}>{c.title}</Link>
-                                </Button>
-                                <div
-                                    className={cn(
-                                        "h-0.5 w-full mt-1",
-                                        c.path == tab && "bg-primary"
-                                    )}
-                                ></div>
-                            </div>
-                        ))}
-                    </div>,
-                    TabElement
-                )}
+            {createPortal(
+                <div className="flex ">
+                    {(tabKey ? _nav?.[tabKey] : tabs).map((c, i) => (
+                        <div className="flex flex-col" key={i}>
+                            <Button
+                                size="sm"
+                                className={cn(
+                                    "p-1 h-8 px-4",
+                                    c.path != tab && "text-muted-foreground"
+                                )}
+                                variant={c.path == tab ? "ghost" : "ghost"}
+                                asChild
+                            >
+                                <Link href={c.path}>{c.title}</Link>
+                            </Button>
+                            <div
+                                className={cn(
+                                    "h-0.5 w-full mt-1",
+                                    c.path == tab && "bg-primary"
+                                )}
+                            ></div>
+                        </div>
+                    ))}
+                </div>,
+                TabElement
+            )}
             {/* <Tabs
         defaultValue={tab}
         onChange={(v) => {
@@ -96,9 +94,11 @@ export default function TabbedLayout({
           ))}
         </TabsList>
       </Tabs> */}
-            <div className={cn("px-4 sm:px-8 space-y-4", className)}>
-                {children}
-            </div>
+            {children && (
+                <div className={cn("px-4 sm:px-8 space-y-4", className)}>
+                    {children}
+                </div>
+            )}
         </div>
     );
 }

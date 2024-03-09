@@ -1,4 +1,4 @@
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 
 import {
     DialogContent,

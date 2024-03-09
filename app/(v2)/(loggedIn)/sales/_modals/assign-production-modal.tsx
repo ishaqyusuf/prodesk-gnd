@@ -33,7 +33,7 @@ import {
     assignProductionAction,
     getUserProductionEventsAction,
 } from "@/app/(v1)/_actions/sales/sales-production";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import {

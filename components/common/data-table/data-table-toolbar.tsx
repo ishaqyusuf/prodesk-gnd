@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
+import { DataTableViewOptions } from "@/components/common/data-table/data-table-view-options";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 
 interface DataTableToolbarProps<TData, TValue> {

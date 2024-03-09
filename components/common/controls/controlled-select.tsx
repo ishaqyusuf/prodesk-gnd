@@ -18,6 +18,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Props<T> {
     label?;
@@ -28,6 +29,7 @@ interface Props<T> {
     valueKey?: keyof T;
     titleKey?: keyof T;
     loader?;
+    className?: string;
 }
 export default function ControlledSelect<
     TFieldValues extends FieldValues = FieldValues,
@@ -41,6 +43,7 @@ export default function ControlledSelect<
     SelectItem: SelItem,
     valueKey = "value" as any,
     titleKey = "label" as any,
+    className,
     Item,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
@@ -66,7 +69,7 @@ export default function ControlledSelect<
         <FormField
             {...(props as any)}
             render={({ field }) => (
-                <FormItem className="">
+                <FormItem className={cn(className, "mx-1")}>
                     {label && <FormLabel>{label}</FormLabel>}
                     <FormControl>
                         <Select

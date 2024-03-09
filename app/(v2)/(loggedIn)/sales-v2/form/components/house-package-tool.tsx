@@ -11,7 +11,7 @@ import { DykeItemFormContext, useDykeForm } from "../../form-context";
 import { useContext, useEffect, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
-import ControlledInput from "@/_v2/components/controls/controlled-input";
+import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
 import { calculateSalesEstimate } from "../../_utils/calculate-sales-estimate";

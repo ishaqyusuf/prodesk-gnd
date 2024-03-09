@@ -8,7 +8,7 @@ import { Button } from "../../ui/button";
 import { Icons } from "../icons";
 import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 
 const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
     const [options, setOptions] = useState<any[]>([]);

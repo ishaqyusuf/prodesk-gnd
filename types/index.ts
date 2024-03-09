@@ -62,7 +62,7 @@ export type DataTableType<T extends (...args: any) => any> = Awaited<
         : never
     : never;
 export type PromiseDataTable<T extends (...args: any) => any> = Promise<
-    Awaited<ReturnType<T>>
+    NonNullable<Awaited<ReturnType<T>>>
 >;
 export interface PromiseType<T extends (...args: any) => any> {
     Promise: PromiseDataTable<T>;

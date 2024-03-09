@@ -30,7 +30,7 @@ import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../_utils/door-query-builder";
 
 import SVG from "react-inlinesvg";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "./modals/edit-step-item-modal";
 interface Props {

@@ -3,9 +3,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import React, { ReactElement, useState } from "react";
 import { useDatableCheckbox } from "./checkbox";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/common/data-table/data-table-column-header";
 import { toast } from "sonner";
 import { RowActionCell } from "@/components/_v1/data-table/data-table-row-actions";
+import { TableCol } from "../table-cells";
 
 type CellValueType<T> = ((item: T) => any) | keyof T;
 type CtxType<T> = {
@@ -17,7 +18,12 @@ type CtxType<T> = {
     queryFields(...ids);
 };
 interface Props {
-    deleteAction;
+    deleteAction?;
+    sn?: boolean;
+    snId?: string;
+    snDate?: string;
+    snTitle?: string;
+    filterCells?: string[];
 }
 export default function useDataTableColumn<T>(
     data: T[],
@@ -88,11 +94,31 @@ export default function useDataTableColumn<T>(
             };
         },
     } as any;
+    const SnCol = ctx.Column(props?.snTitle || "#", ({ item }) => (
+        <TableCol>
+            <TableCol.Primary>
+                {(item as any)?.[props?.snId || "id"]}
+            </TableCol.Primary>
+            <TableCol.Secondary>
+                <TableCol.Date>
+                    {(item as any)?.[props?.snDate || "createdAt"]}
+                </TableCol.Date>
+            </TableCol.Secondary>
+        </TableCol>
+    ));
     const columns = React.useMemo<ColumnDef<T, unknown>[]>(
         () =>
-            [checkable && checkBox.column, ...cells(ctx)].filter(
-                Boolean
-            ) as any,
+            [
+                checkable && checkBox.column,
+                props?.sn && SnCol,
+                ...cells(ctx),
+                ...(props?.filterCells?.map((fs) => {
+                    return {
+                        accessorKey: fs,
+                        enableHiding: false,
+                    };
+                }) as any),
+            ].filter(Boolean) as any,
         [data, isPending]
     );
     return {
@@ -102,7 +128,9 @@ export default function useDataTableColumn<T>(
         deleteSelectedRow() {
             toast.promise(
                 Promise.all(
-                    checkBox.selectedRowIds.map((id) => props?.deleteAction(id))
+                    checkBox.selectedRowIds.map((id) =>
+                        props?.deleteAction?.(id)
+                    )
                 ),
                 {
                     loading: "Deleting...",

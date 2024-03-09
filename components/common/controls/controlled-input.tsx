@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -42,12 +41,13 @@ export default function ControlledInput<
         <FormField
             {...(props as any)}
             render={({ field }) => (
-                <FormItem className={cn(className)}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                <FormItem className={cn(className, "mx-1")}>
+                    {label && <FormLabel className="">{label}</FormLabel>}
                     <FormControl>
                         <div
                             className={cn(
-                                suffix && "flex items-center space-x-1"
+                                suffix && "flex items-center space-x-1",
+                                ""
                             )}
                         >
                             {type == "textarea" ? (

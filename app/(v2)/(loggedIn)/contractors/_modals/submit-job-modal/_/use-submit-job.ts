@@ -21,7 +21,7 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 import { createContext, useContext, useState } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 
 export const JobSubmitContext = createContext<any>({});
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);

@@ -2,10 +2,10 @@
 import { PromiseDataTable } from "@/types";
 import { getShelfItems } from "../_actions/get-shelf-items";
 import React from "react";
-import useDataTableColumn from "@/components/data-table/columns/use-data-table-columns";
-import { TableCol } from "@/components/data-table/table-cells";
+import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
+import { TableCol } from "@/components/common/data-table/table-cells";
 import { deleteDykeShelfItem } from "../_actions/delete-shelf-item-action";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { getShelfCategories } from "../_actions/get-shelf-categories";

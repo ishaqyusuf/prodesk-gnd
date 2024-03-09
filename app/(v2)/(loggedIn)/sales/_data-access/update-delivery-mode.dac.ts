@@ -1,12 +1,12 @@
 "use server";
 
-import { _revalidate, revalidatePaths } from "@/app/(v1)/_actions/_revalidate";
+import { _revalidate, RevalidatePaths } from "@/app/(v1)/_actions/_revalidate";
 import { prisma } from "@/db";
 
 export async function updateDeliveryModeDac(
     id,
     mode,
-    revalidate?: revalidatePaths
+    revalidate?: RevalidatePaths
 ) {
     await prisma.salesOrders.update({
         where: {

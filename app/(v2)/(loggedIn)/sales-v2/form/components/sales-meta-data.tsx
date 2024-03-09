@@ -2,10 +2,10 @@
 
 import { InfoLine } from "../../../sales/edit/components/sales-details-section";
 import { useDykeForm } from "../../form-context";
-import ControlledSelect from "@/_v2/components/controls/controlled-select";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 import { useEffect, useState } from "react";
 import { getCustomerProfileList } from "../_action/get-customer-profiles";
-import ControlledInput from "@/_v2/components/controls/controlled-input";
+import ControlledInput from "@/components/common/controls/controlled-input";
 import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
 

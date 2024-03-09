@@ -68,6 +68,8 @@ import {
     MapPin,
     Info,
     Timer,
+    Receipt,
+    Calendar,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -78,6 +80,8 @@ import { LineChart } from "recharts";
 export type Icon = LucideIcon;
 
 export const Icons = {
+    reciept: Receipt,
+    calendar: Calendar,
     logoLg: ({ width = 120 }) => (
         <Link href="/">
             <Image alt="" src={logo2} width={width} />

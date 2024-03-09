@@ -10,12 +10,12 @@ import { IStepProducts } from "../dyke-item-step-section";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import RenderForm from "@/_v2/components/common/render-form";
-import ControlledInput from "@/_v2/components/controls/controlled-input";
+import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/common/file-uploader";
 import { useTransition } from "react";
 import { saveStepProduct } from "../../_action/save-step-product";
-import { useModal } from "@/_v2/components/common/modal/provider";
+import { useModal } from "@/components/common/modal-old/provider";
 
 interface Props {
     item: IStepProducts[0];

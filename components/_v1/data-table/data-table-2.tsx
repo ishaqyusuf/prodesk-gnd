@@ -27,7 +27,7 @@ import {
     type VisibilityState,
 } from "@tanstack/react-table";
 
-import { DataTablePagination as DTPagination } from "@/components/data-table/data-table-pagination";
+import { DataTablePagination as DTPagination } from "@/components/common/data-table/data-table-pagination";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
     Table,

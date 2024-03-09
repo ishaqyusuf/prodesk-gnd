@@ -1,9 +1,9 @@
 "use client";
 
-import { PromiseDataTable, PromiseType } from "@/types";
+import { PromiseType } from "@/types";
 import { getBlogsAction } from "./_actions/get-blogs-action";
 import React from "react";
-import useDataTableColumn from "@/components/data-table/columns/use-data-table-columns";
+import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { TitleCell } from "./_cells/title-cell";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 

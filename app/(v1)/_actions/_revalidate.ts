@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-// type revalidatePaths =
+// type RevalidatePaths =
 //     | "pickup"
 //     | "jobs"
 //     | "orders"
@@ -28,9 +28,10 @@ const _path = {
     "my-jobs": "tasks/installations",
     "invoice-estimate": "/sales/estimate/[slug]/form",
     sales2: "/sales-v2/form/[...slug]",
+    payables: "/sales/accounting/payables",
 };
-export type revalidatePaths = keyof typeof _path;
-export async function _revalidate(pathName: revalidatePaths) {
+export type RevalidatePaths = keyof typeof _path;
+export async function _revalidate(pathName: RevalidatePaths) {
     const path = _path[pathName];
     await revalidatePath(path, "page");
 }

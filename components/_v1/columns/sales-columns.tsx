@@ -144,10 +144,7 @@ export function OrderCustomerCell(
     const Node = link ? Link : Fragment;
     return (
         <div className="w-full">
-            <LinkableNode
-                href={link || ""}
-                className={cn(link && "hover:underline")}
-            >
+            <LinkableNode href={link || ""}>
                 <div className="font-medium uppercase">{customer?.name}</div>
                 <span className="text-muted-foreground">
                     {phone || customer?.phoneNo}

@@ -3,11 +3,11 @@
 import { prisma } from "@/db";
 import {
     CommunityTaskQuery,
-    whereProductionQuery
+    whereProductionQuery,
 } from "../community-production/get-productions";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { _taskNames } from "../community/_task-names";
-import { _revalidate, revalidatePaths } from "../_revalidate";
+import { _revalidate, RevalidatePaths } from "../_revalidate";
 import { _alert, _notifyTaskAssigned } from "../notifications";
 import { IJobs } from "@/types/hrm";
 import { ICommunityPivot } from "@/types/community";
@@ -15,7 +15,7 @@ import { ICommunityPivot } from "@/types/community";
 export async function _getCommunityJobTasks(query: CommunityTaskQuery) {
     if (!query._task)
         query._task = await _taskNames({
-            installable: true
+            installable: true,
         } as any);
     const where = await whereProductionQuery(query);
     const _items = await prisma.homeTasks.findMany({
@@ -28,32 +28,32 @@ export async function _getCommunityJobTasks(query: CommunityTaskQuery) {
                 include: {
                     communityTemplate: {
                         include: {
-                            pivot: true
-                        }
-                    }
-                }
+                            pivot: true,
+                        },
+                    },
+                },
             },
-            project: true
-        }
+            project: true,
+        },
     });
     const pageInfo = await getPageInfo(query, where, prisma.homeTasks);
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 export async function _linkTaskToJob(taskId, jobId) {
     await prisma.homeTasks.update({
         where: {
-            id: taskId
+            id: taskId,
         },
         data: {
             job: {
                 connect: {
-                    id: jobId
-                }
-            }
-        }
+                    id: jobId,
+                },
+            },
+        },
     });
 }
 export interface AssignJobProps {
@@ -78,25 +78,25 @@ export type AssignJobActions =
 export async function _unassignTask({
     taskId,
     jobId,
-    path = "communityTasks"
+    path = "communityTasks",
 }: {
     taskId;
     jobId;
-    path?: revalidatePaths;
+    path?: RevalidatePaths;
 }) {
     await prisma.homeTasks.update({
         where: {
-            id: taskId
+            id: taskId,
         },
         data: {
             assignedToId: null,
-            jobId: null
-        }
+            jobId: null,
+        },
     });
     await prisma.jobs.delete({
         where: {
-            id: jobId
-        }
+            id: jobId,
+        },
     });
     await _revalidate(path);
 }
@@ -111,13 +111,13 @@ export async function _assignJob({
     addon,
     jobId,
     oldUserId,
-    __taskSubtitle
+    __taskSubtitle,
 }: AssignJobProps) {
     if (!action) {
         const jobs = await prisma.jobs.findMany({
             where: {
                 projectId,
-                homeId
+                homeId,
                 // homeTasks: {
                 //     none: {
                 //         id: taskId
@@ -125,8 +125,8 @@ export async function _assignJob({
                 // }
             },
             include: {
-                user: true
-            }
+                user: true,
+            },
         });
         // console.log(jobs);
         if (jobs.length > 0) {
@@ -140,13 +140,13 @@ export async function _assignJob({
     if (action == "ignoreAssignAndComplete") {
         await prisma.homeTasks.update({
             where: {
-                id: taskId
+                id: taskId,
             },
             data: {
                 status: "Completed",
                 statusDate: new Date(),
-                updatedAt: new Date()
-            }
+                updatedAt: new Date(),
+            },
         });
     }
     //    if(action != 'ignoreInstallCost') {
@@ -175,23 +175,23 @@ export async function _assignJob({
             status: "Assigned",
             assignedTo: {
                 connect: {
-                    id: userId
-                }
+                    id: userId,
+                },
             },
             job: jobId
                 ? {
                       update: {
                           where: {
-                              id: jobId
+                              id: jobId,
                           },
                           data: {
                               userId,
-                              updatedAt: new Date()
-                          }
-                      }
+                              updatedAt: new Date(),
+                          },
+                      },
                   }
                 : {
-                      create: ({
+                      create: {
                           title: projectTitle,
                           subtitle: __taskSubtitle,
                           homeId,
@@ -205,14 +205,14 @@ export async function _assignJob({
                           meta: {
                               costData: {},
                               taskCost: {},
-                              addon
-                          }
-                      } as IJobs) as any
-                  }
+                              addon,
+                          },
+                      } as IJobs as any,
+                  },
         },
         include: {
-            assignedTo: true
-        }
+            assignedTo: true,
+        },
     });
     console.log(_task);
     // const _job = await prisma.

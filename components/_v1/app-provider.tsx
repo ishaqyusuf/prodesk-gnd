@@ -6,17 +6,20 @@ import { store } from "@/store";
 import { useState } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ModalProvider } from "@/_v2/components/common/modal/provider";
+import { ModalProvider as OldModalProvider } from "@/components/common/modal-old/provider";
+import { ModalProvider } from "../common/modal/provider";
 const AppProvider = ({ children }) => {
     const [queryClient] = useState(() => new QueryClient());
     return (
         <SessionProvider>
             <Provider store={store}>
                 <ModalProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <ReactQueryDevtools initialIsOpen={false} />
-                        {children}
-                    </QueryClientProvider>
+                    <OldModalProvider>
+                        <QueryClientProvider client={queryClient}>
+                            <ReactQueryDevtools initialIsOpen={false} />
+                            {children}
+                        </QueryClientProvider>
+                    </OldModalProvider>
                 </ModalProvider>
             </Provider>
         </SessionProvider>
