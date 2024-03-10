@@ -10,7 +10,7 @@ import {
     ColumnHeader,
     PrimaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 import {
     OrderCustomerCell,
     OrderIdCell,
@@ -18,19 +18,19 @@ import {
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-} from "../columns/sales-columns";
+} from "../../../../../components/_v1/columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
-import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
+import { SalesCustomerFilter } from "../orders/components/sales-customer-filter";
 import { labelValue, truthy } from "@/lib/utils";
-import { DeliveryStatusCell } from "../sales/delivery-status-cell";
-import { DeliveryBatchAction } from "../list-selection-action/delivery-selection-action";
+import { DeliveryStatusCell } from "../../../../../components/_v1/sales/delivery-status-cell";
+import { DeliveryBatchAction } from "../../../../../components/_v1/list-selection-action/delivery-selection-action";
 import {
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
+} from "../../../../../components/_v1/data-table/data-table-row-actions";
 import useQueryParams from "@/lib/use-query-params";
 
 export default function DeliveryTableShell<T>({

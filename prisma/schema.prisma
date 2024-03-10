@@ -852,32 +852,32 @@ model SalesOrders {
     salesRep          Users?                       @relation(name: "salesRep", fields: [salesRepId], references: [id])
     payments          SalesPayments[]              @relation(name: "salesPayment")
     productions       OrderProductionSubmissions[]
-    // components        SalesOrderItemComponents[]
     pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
     supplies          SalesItemSupply[]
     commisions        SalesCommision[]
     formSteps         DykeStepForm[]
     housePackageTools HousePackageTools[]
     doors             DykeSalesDoors[]
+    itemDeliveries    OrderItemDelivery[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
 }
 
 model SalesOrderItems {
-    id                 Int       @unique @default(autoincrement())
-    description        String?   @db.VarChar(300)
-    dykeDescription    String?   @db.VarChar(300)
+    id                 Int                          @unique @default(autoincrement())
+    description        String?                      @db.VarChar(300)
+    dykeDescription    String?                      @db.VarChar(300)
     productId          Int?
     supplier           String?
-    swing              String?   @db.VarChar(255)
+    swing              String?                      @db.VarChar(255)
     price              Float?
     tax                Float?
     taxPercenatage     Float?
     discount           Float?
     discountPercentage Float?
-    meta               Json?     @db.Json
-    createdAt          DateTime? @db.Timestamp(0)
-    updatedAt          DateTime? @updatedAt
+    meta               Json?                        @db.Json
+    createdAt          DateTime?                    @db.Timestamp(0)
+    updatedAt          DateTime?                    @updatedAt
     qty                Float?
     prebuiltQty        Float?
     truckLoadQty       Float?
@@ -886,21 +886,35 @@ model SalesOrderItems {
     rate               Float?
     total              Float?
     salesPercentage    Float?
-    prodStatus         String?   @db.VarChar(255)
-    prodStartedAt      DateTime? @db.Timestamp(0)
-    sentToProdAt       DateTime? @db.Timestamp(0)
-    prodCompletedAt    DateTime? @db.Timestamp(0)
-
-    supplies         SalesItemSupply[]
-    salesOrder       SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
-    productions      OrderProductionSubmissions[]
-    shelfItems       DykeSalesShelfItem[]
-    formSteps        DykeStepForm[]
-    // components         SalesOrderItemComponents[]
-    housePackageTool HousePackageTools?
-    salesDoors       DykeSalesDoors[]
+    prodStatus         String?                      @db.VarChar(255)
+    prodStartedAt      DateTime?                    @db.Timestamp(0)
+    sentToProdAt       DateTime?                    @db.Timestamp(0)
+    prodCompletedAt    DateTime?                    @db.Timestamp(0)
+    supplies           SalesItemSupply[]
+    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    itemDeliveries     OrderItemDelivery[]
+    productions        OrderProductionSubmissions[]
+    shelfItems         DykeSalesShelfItem[]
+    formSteps          DykeStepForm[]
+    housePackageTool   HousePackageTools?
+    salesDoors         DykeSalesDoors[]
 
     @@index([createdAt, salesOrderId, description, swing])
+}
+
+model OrderItemDelivery {
+    id           Int             @unique @default(autoincrement())
+    orderItemId  Int
+    orderId      Int
+    approvedById Int
+    qty          Int             @default(0)
+    meta         Json?           @db.Json
+    createdAt    DateTime        @default(now())
+    updatedAt    DateTime        @updatedAt
+    deletedAt    DateTime?       @db.Timestamp(0)
+    order        SalesOrders     @relation(fields: [orderId], references: [id])
+    items        SalesOrderItems @relation(fields: [orderItemId], references: [id])
+    approvedBy   Users           @relation(fields: [approvedById], references: [id])
 }
 
 model HousePackageTools {
@@ -1097,6 +1111,7 @@ model Users {
     myIssuedCommissionPayments CommissionPayment[]        @relation(name: "worker")
     CommissionPayment          CommissionPayment[]
     blogs                      Blogs[]
+    approvedDeliveries         OrderItemDelivery[]
 
     @@index([createdAt, deletedAt, name])
 }

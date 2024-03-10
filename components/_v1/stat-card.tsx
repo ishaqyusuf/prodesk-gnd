@@ -2,7 +2,6 @@
 
 import { cn, formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { DollarSign, LineChart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Icons } from "./icons";
 import LinkableNode from "./link-node";

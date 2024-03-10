@@ -11,7 +11,7 @@ import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
-import DeliveryTableShell from "@/components/_v1/shells/delivery-table-shell";
+import DeliveryTableShell from "@/app/(v1)/(auth)/sales/delivery/delivery-table-shell";
 import { getSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/sales-delivery";
 import { Metadata } from "next";
 import PickupTableShell from "@/components/_v1/shells/pickup-table-shell";
