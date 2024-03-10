@@ -89,7 +89,10 @@ export function OrderRowAction(props: IOrderRowProps) {
                                 data={{
                                     parentId: row.id,
                                     to: row.customer?.email as any,
-                                    type: "sales",
+                                    type:
+                                        row.type == "order"
+                                            ? "sales"
+                                            : "estimate",
                                 }}
                                 subtitle={`Sales Order | ${row.orderId}`}
                             />

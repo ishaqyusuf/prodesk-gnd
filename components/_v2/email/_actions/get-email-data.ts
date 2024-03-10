@@ -21,7 +21,7 @@ export async function getEmailData(id, type: EmailTypes) {
                 phoneNo: true,
                 // meta: true,
             };
-            const resp = await prisma.salesOrders.findFirst({
+            let resp = await prisma.salesOrders.findFirst({
                 where: {
                     id,
                 },
@@ -53,10 +53,39 @@ export async function getEmailData(id, type: EmailTypes) {
             });
             if (resp) {
                 const dots = getLeafDotPaths(resp);
-                console.log(resp.customer);
-
+                // console.log(resp.customer);
                 suggestions.push(...dots);
                 data = { ...resp };
+            }
+            break;
+        case "estimate":
+            let _resp = await prisma.salesOrders.findFirst({
+                where: {
+                    id,
+                },
+                select: {
+                    amountDue: true,
+                    grandTotal: true,
+                    // meta: true,
+                    orderId: true,
+                    status: true,
+                    customer: {
+                        select: {
+                            address: true,
+                            email: true,
+                            phoneNo: true,
+                            phoneNo2: true,
+                            businessName: true,
+                            name: true,
+                        },
+                    },
+                },
+            });
+            if (_resp) {
+                const dots = getLeafDotPaths(_resp);
+                // console.log(resp.customer);
+                suggestions.push(...dots);
+                data = { ..._resp };
             }
             break;
     }

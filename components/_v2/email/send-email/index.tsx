@@ -13,6 +13,8 @@ import { PromiseType } from "@/types";
 import { useModal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { sendMessage } from "@/app/(v1)/_actions/email";
+import { EmailTypes } from "../types";
+import { isProdClient } from "@/lib/is-prod";
 
 interface Props {
     // subject?: string;
@@ -25,7 +27,7 @@ interface Props {
     data: {
         to: string;
         parentId: number;
-        type: "sales";
+        type: EmailTypes;
     };
 }
 export default function SendEmailSheet({ subtitle, data }: Props) {
@@ -55,6 +57,10 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             parentId,
             template: { type },
         } = form.getValues();
+        if (!to && !isProdClient) {
+            toast.error("Please enter email address");
+            return;
+        }
         await sendMessage({
             to,
             subject,
@@ -69,8 +75,6 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
     }
     useEffect(() => {
         getEmailData(data.parentId, data.type).then((resp) => {
-            console.log(resp);
-
             if (resp) {
                 setEmailData(resp);
             } else {
