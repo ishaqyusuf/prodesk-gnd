@@ -1,4 +1,4 @@
-import AccountingTab from "../components/accounting-tab";
+import AccountingTab from "../accounting-tab";
 import getPayablesAction from "./get-payables";
 import PayablesTable from "./payable-tables";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";

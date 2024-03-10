@@ -19,7 +19,7 @@ export default async function getPayablesAction(query) {
         };
         if (query._q) {
             //
-            let numSearch = query._q;
+            let numSearch = query._q?.split(" ")?.filter(Boolean).join("");
             [">", ">=", "<", "<=", "="].map(
                 (s) => (numSearch = numSearch?.replace(s, ""))
             );
