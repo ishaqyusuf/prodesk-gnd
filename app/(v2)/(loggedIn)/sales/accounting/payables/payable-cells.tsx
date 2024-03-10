@@ -11,7 +11,6 @@ import {
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
 import DueDateModal from "../../_modals/due-date-modal";
-import { openEmailComposer } from "@/lib/modal";
 import SendEmailSheet from "@/components/_v2/email/send-email";
 
 interface Props {

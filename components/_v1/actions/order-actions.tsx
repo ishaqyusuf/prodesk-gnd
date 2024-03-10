@@ -13,7 +13,6 @@ import {
 } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
-import { openEmailComposer } from "@/lib/modal";
 import {
     DeleteRowAction,
     MenuItem,
@@ -27,8 +26,9 @@ import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 import QueryString from "qs";
-import { useModal } from "@/components/common/modal-old/provider";
 import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
+import { useModal } from "@/components/common/modal/provider";
+import SendEmailSheet from "@/components/_v2/email/send-email";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -64,6 +64,7 @@ export function OrderRowAction(props: IOrderRowProps) {
             toast.success("Updated");
         }
     }
+    const modal = useModal();
     return (
         <AuthGuard permissions={["editOrders"]} className="">
             <RowActionMoreMenu>
@@ -83,10 +84,20 @@ export function OrderRowAction(props: IOrderRowProps) {
                 <MenuItem
                     Icon={Icons.Email}
                     onClick={() => {
-                        openEmailComposer(row, {
-                            type: "sales",
-                            parentId: row.id,
-                        });
+                        modal?.openSheet(
+                            <SendEmailSheet
+                                data={{
+                                    parentId: row.id,
+                                    to: row.customer?.email as any,
+                                    type: "sales",
+                                }}
+                                subtitle={`Sales Order | ${row.orderId}`}
+                            />
+                        );
+                        // openEmailComposer(row, {
+                        //     type: "sales",
+                        //     parentId: row.id,
+                        // });
                     }}
                 >
                     Email
@@ -342,7 +353,7 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
     const router = useRouter();
     const modal = useModal();
     function openAssignProd(order) {
-        modal?.open(<AssignProductionModal order={order} />);
+        modal?.openModal(<AssignProductionModal order={order} />);
     }
     return (
         <MenuItem
