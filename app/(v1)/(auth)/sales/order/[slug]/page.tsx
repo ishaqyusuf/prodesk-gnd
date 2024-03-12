@@ -16,54 +16,56 @@ import { prisma } from "@/db";
 import { ISalesOrder, ISalesOrderMeta } from "@/types/sales";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SalesOverview } from "./type";
 
 export const metadata: Metadata = {
     title: "Order Overview",
     description: "Order Overview",
 };
+
 export default async function SalesOrderPage({ params: { slug } }) {
-    const order: ISalesOrder = (await getOrderAction(slug)) as any;
+    const order: SalesOverview = (await getOrderAction(slug)) as any;
     if (!order) return notFound();
     metadata.description = order.orderId;
 
     // fix dissapered prices
-    const fixOrders = await prisma.salesOrderItems.findMany({
-        where: {
-            total: 0,
-            qty: {
-                gt: 0,
-            },
-        },
-        include: {
-            salesOrder: {
-                select: {
-                    orderId: true,
-                    type: true,
-                },
-            },
-        },
-    });
-    const slugs = new Set<string[]>([]);
-    await Promise.all(
-        fixOrders.map(async (item) => {
-            const meta: ISalesOrderMeta = item.meta as any;
-            if (meta.cost_price > 0) {
-                slugs.add(
-                    `${item.salesOrder?.type}/${item.salesOrder?.orderId}` as any
-                );
-                await prisma.salesOrderItems.update({
-                    where: {
-                        id: item.id,
-                    },
-                    data: {
-                        rate: meta.cost_price,
-                        price: meta.cost_price,
-                        total: Number(meta.cost_price) * (item.qty || 0),
-                    },
-                });
-            }
-        })
-    );
+    // const fixOrders = await prisma.salesOrderItems.findMany({
+    //     where: {
+    //         total: 0,
+    //         qty: {
+    //             gt: 0,
+    //         },
+    //     },
+    //     include: {
+    //         salesOrder: {
+    //             select: {
+    //                 orderId: true,
+    //                 type: true,
+    //             },
+    //         },
+    //     },
+    // });
+    // const slugs = new Set<string[]>([]);
+    // await Promise.all(
+    //     fixOrders.map(async (item) => {
+    //         const meta: ISalesOrderMeta = item.meta as any;
+    //         if (meta.cost_price > 0) {
+    //             slugs.add(
+    //                 `${item.salesOrder?.type}/${item.salesOrder?.orderId}` as any
+    //             );
+    //             await prisma.salesOrderItems.update({
+    //                 where: {
+    //                     id: item.id,
+    //                 },
+    //                 data: {
+    //                     rate: meta.cost_price,
+    //                     price: meta.cost_price,
+    //                     total: Number(meta.cost_price) * (item.qty || 0),
+    //                 },
+    //             });
+    //         }
+    //     })
+    // );
 
     // console.log(order.i);
     return (

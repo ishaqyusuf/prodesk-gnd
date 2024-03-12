@@ -240,6 +240,7 @@ export async function getOrderAction(orderId, isProd = false) {
                   }
                 : false,
             productions: isProd,
+            itemDeliveries: true,
         },
     });
     if (!order) return null;

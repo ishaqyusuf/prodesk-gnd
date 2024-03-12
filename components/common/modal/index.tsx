@@ -77,8 +77,8 @@ const contentVariants = cva(``, {
     variants: {
         size: {
             sm: "w-[350px]",
-            xl: "",
-            lg: "",
+            lg: "w-[700px]",
+            xl: "w-[900px]",
             "2xl": "",
         },
     },
@@ -98,7 +98,11 @@ function Content({ children, size, ...props }: ContentProps) {
     return (
         <Content
             {...props}
-            className={cn(contentVariants({ size }), props.className)}
+            className={cn(
+                contentVariants({ size }),
+                props.className,
+                "sm:max-w-none"
+            )}
         >
             {children}
         </Content>
