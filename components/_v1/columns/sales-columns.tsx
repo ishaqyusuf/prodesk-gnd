@@ -22,7 +22,12 @@ import { updateOrderPriorityActon } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
 import { Progress } from "../../ui/progress";
-import { Cell, PrimaryCellContent, SecondaryCellContent } from "./base-columns";
+import {
+    Cell,
+    DateCellContent,
+    PrimaryCellContent,
+    SecondaryCellContent,
+} from "./base-columns";
 import { toFixed } from "@/lib/use-number";
 import { Progressor, getProgress } from "@/lib/status";
 import ProgressStatus from "../progress-status";
@@ -227,6 +232,9 @@ export function OrderStatus({
                 {/* {order?.prodStatus || "-"} */}
                 {status || "no status"}
             </Badge>
+            {delivery && order?.deliveredAt && (
+                <DateCellContent>{order.deliveredAt}</DateCellContent>
+            )}
         </div>
     );
 }

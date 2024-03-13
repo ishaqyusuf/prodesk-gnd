@@ -188,6 +188,8 @@ export type SalesStatus =
     | "Late"
     | "Delivered"
     | undefined;
+
+export type DeliveryOption = "delivery" | "pickup";
 export interface SalesQueryParams extends BaseQuery {
     _q?;
     _backOrder?: boolean;
@@ -204,7 +206,7 @@ export interface SalesQueryParams extends BaseQuery {
     _page?: "production" | undefined;
     type?: IOrderType;
     _dateType?: "createdAt" | "prodDueDate";
-    deliveryOption?: "delivery" | "pickup";
+    deliveryOption?: DeliveryOption;
     _salesRepId?;
     _deliveryStatus?:
         | "pending production"

@@ -8,24 +8,24 @@ import {
     CheckColumn,
     ColumnHeader,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 import {
     OrderCustomerCell,
     OrderIdCell,
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-} from "../columns/sales-columns";
+} from "../../../../../components/_v1/columns/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/order-actions";
-import { DataTable2 } from "../data-table/data-table-2";
+import { OrderRowAction } from "../../../../../components/_v1/actions/order-actions";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
-import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
+import { SalesBatchAction } from "../../../../../components/_v1/list-selection-action/sales-selection-action";
+import { SalesCustomerFilter } from "../orders/components/sales-customer-filter";
 import { labelValue } from "@/lib/utils";
-import { DeliveryStatusCell } from "../sales/delivery-status-cell";
-import { PickupStatusCell } from "../sales/pickup-status-cell";
-import { PickupAction } from "../actions/pickup-action";
+import { DeliveryStatusCell } from "../../../../../components/_v1/sales/delivery-status-cell";
+import { PickupStatusCell } from "../../../../../components/_v1/sales/pickup-status-cell";
+import { PickupAction } from "./pickup-action";
 
 export default function PickupTableShell<T>({
     data,

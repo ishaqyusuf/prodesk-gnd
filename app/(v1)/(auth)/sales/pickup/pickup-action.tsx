@@ -1,21 +1,22 @@
 "use client";
 import Btn from "@/components/_v1/btn";
 import { ToolTip } from "@/components/_v1/tool-tip";
-import { CheckCircle, Play, StopCircle, Undo } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useCallback, useState, useTransition } from "react";
-import { ISalesOrder, ISalesOrderItem, ProdActions } from "@/types/sales";
-import { orderItemProductionAction } from "@/app/(v1)/_actions/sales/sales-production";
-import { openModal } from "@/lib/modal";
+import { CheckCircle, Undo } from "lucide-react";
+
+import { useTransition } from "react";
+import { ISalesOrder } from "@/types/sales";
+
 import { toast } from "sonner";
-import { useAppSelector } from "@/store";
 import { _cancelSalesPickup } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { useModal } from "@/components/common/modal/provider";
+import PickupModal from "./pickup-modal";
+
 interface IProp {
     item: ISalesOrder;
 }
 export const PickupAction = ({ item }: IProp) => {
     const [isPending, startTransition] = useTransition();
-
+    const modal = useModal();
     return (
         <div className="flex items-end space-x-2">
             {!item.pickup ? (
@@ -23,7 +24,8 @@ export const PickupAction = ({ item }: IProp) => {
                     <Btn
                         icon
                         onClick={() => {
-                            openModal("pickup", { order: item });
+                            // openModal("pickup", { order: item });
+                            modal.openModal(<PickupModal order={item} />);
                         }}
                         isLoading={isPending}
                         className="h-8  w-8 bg-green-500 p-0"

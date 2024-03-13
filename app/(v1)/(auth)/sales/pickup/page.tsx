@@ -1,22 +1,14 @@
-import {
-    getSalesEstimates,
-    getSalesOrder,
-} from "@/app/(v1)/_actions/sales/sales";
-import OrdersTableShell from "@/app/(v1)/(auth)/sales/orders/components/orders-table-shell";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
-import OrderPrinter from "@/components/_v1/print/order/order-printer";
-import EstimatesTableShell from "@/components/_v1/shells/estimates-table-shell";
 import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
-import DeliveryTableShell from "@/app/(v1)/(auth)/sales/delivery/delivery-table-shell";
-import { getSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/sales-delivery";
+
 import { Metadata } from "next";
-import PickupTableShell from "@/components/_v1/shells/pickup-table-shell";
+import PickupTableShell from "@/app/(v1)/(auth)/sales/pickup/pickup-table-shell";
 import { _getSalesPickup } from "@/app/(v1)/_actions/sales/_sales-pickup";
-import PickupModal from "@/components/_v1/modals/pickup-modal";
+import UpgradeBtn from "./components/upgrade-btn";
 export const metadata: Metadata = {
     title: "Order Pickup",
 };
@@ -30,11 +22,11 @@ export default async function OrdersPage({ searchParams }) {
                 <BreadLink isLast title="Pickup" />
             </Breadcrumbs>
             <PageHeader title="Sales Pickup" />
+            <UpgradeBtn />
             <PickupTableShell<ISalesOrder>
                 searchParams={searchParams}
                 {...response}
             />
-            <PickupModal />
         </SalesTabLayout>
     );
 }
