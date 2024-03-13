@@ -37,9 +37,9 @@ export default function DeliveryTabIndex() {
                         <div>
                             <Button
                                 onClick={() => {
-                                    modal.openModal(
-                                        <CreateDeliveryModal order={order} />
-                                    );
+                                    // modal.openModal(
+                                    //     <CreateDeliveryModal order={order} />
+                                    // );
                                 }}
                                 size={"sm"}
                             >

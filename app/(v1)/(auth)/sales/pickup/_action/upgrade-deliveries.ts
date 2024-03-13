@@ -40,6 +40,7 @@ export async function upgradeDeliveries() {
             deliveryMode: "delivery",
             meta: {},
             salesOrderId: order.id,
+            createdAt: order.deliveredAt || new Date(),
         });
         order.items.map((item) => {
             if (item.swing)
@@ -78,5 +79,35 @@ export async function upgradeDeliveries() {
             pickup: true,
         },
     });
+    pickupOrders.map((order) => {
+        ++currentId;
+        orderDeliveries.push({
+            id: currentId,
+            approvedById: order?.pickup?.pickupApprovedBy,
+            deliveryMode: "pickup",
+            meta: order.pickup?.meta || {},
+            createdAt:
+                order.pickup?.pickupAt || order.deliveredAt || new Date(),
+            salesOrderId: order.id,
+            deliveredTo: order.pickup?.pickupBy,
+        });
+        order.items.map((item) => {
+            if (item.swing)
+                orderDeliveryItems.push({
+                    meta: {},
+                    orderDeliveryId: currentId,
+                    orderItemId: item.id,
+                    orderId: order.id,
+                    qty: item.qty || 0,
+                });
+        });
+    });
+    await prisma.orderDelivery.createMany({
+        data: orderDeliveries as any,
+    });
+    await prisma.orderItemDelivery.createMany({
+        data: orderDeliveryItems as any,
+    });
+    // return [orderDeliveries.length, orderDeliveryItems.length];
     return pickupOrders.length;
 }
