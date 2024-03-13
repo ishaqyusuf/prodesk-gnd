@@ -70,11 +70,11 @@ export default function PickupModal({ order }: Props) {
                     <TabsTrigger value="form">Pickup Form</TabsTrigger>
                 </TabsList>
             </Tabs>
-            <Modal.Footer
+            {/* <Modal.Footer
                 className=""
                 submitText="Save"
                 onSubmit={submit}
-            ></Modal.Footer>
+            ></Modal.Footer> */}
         </Modal.Content>
     );
     // return (
