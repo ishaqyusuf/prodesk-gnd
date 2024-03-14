@@ -9,10 +9,10 @@ export default function UpgradeBtn() {
         <div>
             <Button
                 onClick={() => {
-                    upgradeDeliveries().then((d) => {
-                        toast.success("Done!");
-                        console.log(d);
-                    });
+                    // upgradeDeliveries().then((d) => {
+                    //     toast.success("Done!");
+                    //     console.log(d);
+                    // });
                 }}
             >
                 Upgrade
