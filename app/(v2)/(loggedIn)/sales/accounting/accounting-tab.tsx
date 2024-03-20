@@ -16,12 +16,12 @@ export default function AccountingTab() {
         tab.registerTab(
             "Payments",
             "/sales/accounting",
-            ({ viewOrderPayment }) => viewOrderPayment
+            tab.can("viewOrderPayment")
         );
         tab.registerTab(
             "Payables",
             "/sales/accounting/payables",
-            ({ viewOrderPayment }) => viewOrderPayment
+            tab.can("viewOrderPayment")
         );
     }, []);
     return <TabbedLayout tabs={tab.tabs} />;

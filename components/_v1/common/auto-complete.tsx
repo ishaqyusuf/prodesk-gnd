@@ -8,8 +8,9 @@ import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import JsonSearch from "@/_v2/lib/json-search";
+import useStaticDataLoader from "@/lib/static-data-loader";
 // import JsonSearch from "search-array";
-interface Props {
+export interface AutoCompleteProps {
     options?: any[];
     value?: any;
     onChange?;
@@ -31,6 +32,7 @@ interface Props {
     fuzzy?: boolean;
     placeholder?;
     form?;
+    loader?;
 }
 export default function AutoComplete({
     options,
@@ -54,22 +56,27 @@ export default function AutoComplete({
     onSelect,
     fuzzy,
     perPage = 500,
+    loader,
     ...props
-}: Props & PrimitiveDivProps) {
+}: AutoCompleteProps & PrimitiveDivProps) {
     const transformedOptions = transformItems(
         options || [],
         itemText,
         itemValue
     );
     useEffect(() => {
+        resetOptions(options);
+    }, [options]);
+    function resetOptions(_opts) {
         const transformedOptions = transformItems(
-            options || [],
+            _opts || [],
             itemText,
             itemValue
         );
         setItems(transformedOptions);
         setAllItems(transformedOptions);
-    }, [options]);
+        return transformedOptions;
+    }
     const [allItems, setAllItems] = useState(transformedOptions);
     const [items, setItems] = useState(transformedOptions);
     const [modelValue, setModelValue] = useState("");
@@ -85,17 +92,34 @@ export default function AutoComplete({
     //         }
     //     }
     // }, [options]);
-    useEffect(() => {
+    const dataLoader = useStaticDataLoader(loader, {
+        onSuccess(ls) {
+            const list = resetOptions(ls);
+
+            init(list);
+        },
+    });
+    function init(list?) {
         let text = value;
         if (itemText != itemValue) {
-            let v = allItems.find(
-                (item) => item.value?.toLowerCase() == text?.toLowerCase()
+            const ls = list || allItems;
+            console.log(ls);
+
+            let v = ls.find(
+                (item) =>
+                    String(item.value)?.toLowerCase() ==
+                    String(text)?.toLowerCase()
             );
             if (!v && !allowCreate) text = "";
             else text = v?.title;
             // if (props.id == "unit") console.log([v, text]);
         }
+        console.log(text);
+
         setInputValue(text);
+    }
+    useEffect(() => {
+        if (!loader) init();
     }, []);
     const {
         isOpen,
@@ -119,7 +143,11 @@ export default function AutoComplete({
         onInputValueChange({ inputValue }) {
             setItems(
                 filter(
-                    transformItems(options || [], itemText, itemValue),
+                    transformItems(
+                        dataLoader.items || options || [],
+                        itemText,
+                        itemValue
+                    ),
                     inputValue,
                     fuzzy
                 )
@@ -151,7 +179,11 @@ export default function AutoComplete({
             if (changes.isOpen) {
                 setItems(
                     filter(
-                        transformItems(options || [], itemText, itemValue),
+                        transformItems(
+                            dataLoader.items || options || [],
+                            itemText,
+                            itemValue
+                        ),
                         // changes.inputValue
                         "",
                         fuzzy
@@ -176,7 +208,6 @@ export default function AutoComplete({
             }
         },
     });
-    useEffect(() => {}, [isOpen]);
     const listRef = useRef<HTMLDivElement>();
     const rowVirtualizer = useVirtualizer({
         count: items.length,
@@ -194,7 +225,7 @@ export default function AutoComplete({
                 <div className="flex">
                     <Input
                         className={cn(
-                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-white text-left  sm:text-sm border border-input h-8",
+                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-white text-left  sm:text-sm border border-input h-10",
                             uppercase && "uppercase",
                             className
                         )}

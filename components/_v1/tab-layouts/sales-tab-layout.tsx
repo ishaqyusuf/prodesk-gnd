@@ -24,10 +24,6 @@ export default function SalesTabLayout({
                 path: "/sales/back-orders",
             },
             can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
-            // can?.viewInboundOrder && {
-            //     title: "Inbounds",
-            //     path: "/sales/inbounds",
-            // },
             can?.viewDelivery && {
                 title: "Delivery",
                 path: "/sales/delivery?_deliveryStatus=queued",

@@ -17,10 +17,11 @@ type CtxType<T> = {
     Secondary({ children });
     queryFields(...ids);
 };
-interface Props {
+interface Props<T> {
     deleteAction?;
     sn?: boolean;
     snId?: string;
+    snIdFn?(item: T);
     snDate?: string;
     snTitle?: string;
     filterCells?: string[];
@@ -29,7 +30,7 @@ export default function useDataTableColumn<T>(
     data: T[],
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[],
     checkable = true,
-    props?: Props
+    props?: Props<T>
 ) {
     const [isPending, startTransition] = React.useTransition();
     // type ValueType = typeof keyof T;
@@ -97,7 +98,9 @@ export default function useDataTableColumn<T>(
     const SnCol = ctx.Column(props?.snTitle || "#", ({ item }) => (
         <TableCol>
             <TableCol.Primary>
-                {(item as any)?.[props?.snId || "id"]}
+                {props?.snIdFn
+                    ? props.snIdFn(item)
+                    : (item as any)?.[props?.snId || "id"]}
             </TableCol.Primary>
             <TableCol.Secondary>
                 <TableCol.Date>

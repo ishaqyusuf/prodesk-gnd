@@ -6,7 +6,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
 import HrmLayout from "@/components/_v1/tab-layouts/hrm-layout";
-import EmployeesTableShell from "@/components/_v1/shells/employees-table-shell";
+import EmployeesTableShell from "@/app/(v1)/(auth)/hrm/employees/employees-table-shell";
 import { getEmployees } from "@/app/(v1)/_actions/hrm/get-employess";
 import EmployeeModal from "@/components/_v1/modals/employee-modal";
 import ContractorsTableShell from "@/components/_v1/shells/contractors-table-shell";

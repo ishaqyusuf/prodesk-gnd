@@ -30,6 +30,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
+import { Icons } from "@/components/_v1/icons";
 
 function BaseModal({
     children,
@@ -77,13 +78,14 @@ const contentVariants = cva(``, {
     variants: {
         size: {
             sm: "w-[350px]",
+            md: "w-[500px]",
             lg: "w-[700px]",
             xl: "w-[900px]",
             "2xl": "",
         },
     },
     defaultVariants: {
-        size: "lg",
+        size: "md",
     },
 });
 interface ContentProps
@@ -111,9 +113,10 @@ function Content({ children, size, ...props }: ContentProps) {
 
 interface HeaderProps {
     title?: string;
-    subtitle?: string | null;
+    subtitle?: string;
+    onBack?;
 }
-function Header({ title, subtitle }: HeaderProps) {
+function Header({ title, subtitle, onBack }: HeaderProps) {
     const modal = useModal();
     const isModal = modal?.data?.type == "modal";
     const [Header, Title, Subtitle] = isModal
@@ -121,8 +124,23 @@ function Header({ title, subtitle }: HeaderProps) {
         : [SheetHeader, SheetTitle, SheetDescription];
     return (
         <Header>
-            {title && <Title>{title}</Title>}
-            {subtitle && <Subtitle>{subtitle}</Subtitle>}
+            <div className={cn(onBack && "flex space-x-4")}>
+                {onBack && (
+                    <div>
+                        <Button
+                            onClick={onBack}
+                            variant={"secondary"}
+                            size={"icon"}
+                        >
+                            <Icons.chevronLeft className="w-4 h-4" />
+                        </Button>
+                    </div>
+                )}
+                <div className="flex-1">
+                    {title && <Title>{title}</Title>}
+                    {subtitle && <Subtitle>{subtitle}</Subtitle>}
+                </div>
+            </div>
         </Header>
     );
 }

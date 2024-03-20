@@ -11,21 +11,24 @@ import {
     DateCellContent,
     SecondaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
-import { DataTable2 } from "../data-table/data-table-2";
+import {
+    OrderRowAction,
+    PrintOrderMenuAction,
+} from "../../../../../components/_v1/actions/order-actions";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
-import { HomeProductionStatus } from "../columns/community-columns";
+import { BuilderFilter } from "../../../../../components/_v1/filters/builder-filter";
+import { HomeProductionStatus } from "../../../../../components/_v1/columns/community-columns";
 import { IBuilder, IProject } from "@/types/community";
 import {
     DeleteRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
-import { Icons } from "../icons";
+} from "../../../../../components/_v1/data-table/data-table-row-actions";
+import { Icons } from "../../../../../components/_v1/icons";
 import { openModal } from "@/lib/modal";
 import { IUser } from "@/types/hrm";
 import { Key } from "lucide-react";
@@ -42,13 +45,16 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { Button } from "../../ui/button";
+} from "../../../../../components/ui/dropdown-menu";
+import { Button } from "../../../../../components/ui/button";
 import { useRouter } from "next/navigation";
-import { RolesFilter } from "../filters/roles-filter";
+import { RolesFilter } from "../../../../../components/_v1/filters/roles-filter";
 import { _deleteEmployee } from "@/app/(v1)/_actions/hrm/employees.crud";
-import { SmartTable } from "../data-table/smart-table";
+import { SmartTable } from "../../../../../components/_v1/data-table/smart-table";
 import { useEmployeeProfiles } from "@/_v2/hooks/use-static-data";
+import PageHeader from "@/components/_v1/page-header";
+import { useModal } from "@/components/common/modal/provider";
+import EmployeeForm from "../_modals/employee-form";
 
 export default function EmployeesTableShell<T>({
     data,
@@ -128,7 +134,11 @@ export default function EmployeesTableShell<T>({
                         <RowActionMoreMenu>
                             <RowActionMenuItem
                                 onClick={() => {
-                                    openModal("employee", row.original);
+                                    modal.openModal(
+                                        <EmployeeForm
+                                            defaultData={row.original}
+                                        />
+                                    );
                                 }}
                                 Icon={Icons.edit}
                             >
@@ -159,21 +169,30 @@ export default function EmployeesTableShell<T>({
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
+    const modal = useModal();
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={columns}
-            pageInfo={pageInfo}
-            data={data}
-            filterableColumns={[BuilderFilter, RolesFilter]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "title, builder",
-                },
-            ]}
+        <>
+            <PageHeader
+                title="Employees"
+                newAction={() => {
+                    modal.openModal(<EmployeeForm />);
+                }}
+            />
+            <DataTable2
+                searchParams={searchParams}
+                columns={columns}
+                pageInfo={pageInfo}
+                data={data}
+                filterableColumns={[BuilderFilter, RolesFilter]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "title, builder",
+                    },
+                ]}
 
-            //  deleteRowsAction={() => void deleteSelectedRows()}
-        />
+                //  deleteRowsAction={() => void deleteSelectedRows()}
+            />
+        </>
     );
 }

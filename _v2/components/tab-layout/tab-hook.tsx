@@ -1,26 +1,20 @@
+import { usePermission } from "@/hooks/use-permission";
 import { ICan } from "@/types/auth";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export function useTab() {
-    const { data: session } = useSession({
-        required: false,
-    });
-    const can = session?.can;
+    const permission = usePermission();
     const [tabs, setTabs] = useState<{ title: string; path: string }[]>([]);
     return {
         tabs,
         setTabs,
+        ...permission,
         reset() {
             setTabs([]);
         },
-        registerTab(
-            title,
-            path,
-            canAccess?: (can: ICan) => boolean | undefined
-        ) {
-            const permission = canAccess ? canAccess(can || {}) : true;
-            if (permission) {
+        registerTab(title, path, canAccess?: boolean | undefined) {
+            const p = canAccess == undefined ? true : canAccess;
+            if (p) {
                 setTabs((prevTabs) => [...prevTabs, { title, path }]);
             }
         },

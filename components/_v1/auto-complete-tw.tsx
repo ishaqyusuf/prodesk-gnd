@@ -7,10 +7,9 @@ import {
     useState,
 } from "react";
 import { Combobox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn, uniqueBy } from "@/lib/utils";
-import { InputProps } from "../ui/input";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import { Label } from "../ui/label";
 
@@ -34,6 +33,7 @@ interface Props {
     placeholder?;
     form?;
     perPage?;
+    loader?;
     fluid?: Boolean;
 }
 function AutoComplete2({
@@ -55,6 +55,7 @@ function AutoComplete2({
     formKey,
     uppercase,
     onSelect,
+    loader,
     fluid,
     perPage = 9999,
     ...props
@@ -62,8 +63,13 @@ function AutoComplete2({
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<any[]>(transformItems(options || [])); //[{label:}]
     useEffect(() => {
-        // console.log("..");
-        setItems(transformItems(options || []));
+        if (loader) {
+            (async () => {
+                const ls = await loader();
+                setItems(transformItems(ls));
+                console.log(ls);
+            })();
+        } else setItems(transformItems(options || []));
     }, [options]);
     const [results, setResults] = useState<any[]>([]);
     const [selected, setSelected] = useState<{

@@ -1,7 +1,6 @@
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import AccountingTab from "./accounting-tab";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import SalesPaymentPage from "@/app/(v1)/(auth)/sales/payments/page";
 import PageShell from "@/_v2/components/page-shell";
 import PageHeader from "@/components/_v1/page-header";
 import SalesPaymentTableShell from "@/components/_v1/shells/sales-payment-table-shell";

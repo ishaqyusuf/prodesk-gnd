@@ -43,7 +43,7 @@ export default function useStaticData<T>(key, loader, __load = true) {
     useEffect(() => {
         // if (__load) {
         load();
-        console.log(key);
+        // console.log(key);
         // } else {
         // console.log("NOT LOADING...");
         // }

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
 import { ISalesForm } from "../type";
-import AddressDispaly from "../../components/address-display";
+import AddressDispaly from "../../_components/address-display";
 import { useModal } from "@/components/common/modal-old/provider";
 import SalesAddressModal from "./sales-address-modal";
 
