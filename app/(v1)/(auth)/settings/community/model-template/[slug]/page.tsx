@@ -28,7 +28,7 @@ export default async function ModelTemplatePage({ params }) {
                     link="/settings/community/model-templates"
                     title="Model Templates"
                 />
-                <BreadLink title={response.modelName} isLast />
+                <BreadLink title={response.modelName as any} isLast />
             </Breadcrumbs>
 
             <ModelForm data={response as any} />
