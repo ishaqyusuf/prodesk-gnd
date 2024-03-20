@@ -15,7 +15,7 @@ export default async function ContractorOverviewPage({ searchParams, params }) {
             <Breadcrumbs>
                 <BreadLink isFirst title="Contractor" />
                 <BreadLink link="/contractor/contractors" title="Contractors" />
-                <BreadLink isLast title={contractor.user.name} />
+                <BreadLink isLast title={contractor.user.name as any} />
             </Breadcrumbs>
             <div className="flex items-center justify-between space-y-2">
                 <h2 className="text-3xl font-bold tracking-tight">
