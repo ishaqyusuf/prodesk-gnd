@@ -24,23 +24,23 @@ export async function saveSalesComponentAction(
     await Promise.all(
         wizards
             .sort((a, b) => (!a.depId ? -1 : !b.depId ? 1 : 0))
-            .map(async wiz => {
+            .map(async (wiz) => {
                 const comp = args[wiz.uuid];
                 if (comp && Boolean(comp?.title?.trim())) {
                     let inventory: any = null;
                     const dep = args[wiz.depId];
-                    const depWiz = wizards.find(w => w.uuid == wiz.depId);
+                    const depWiz = wizards.find((w) => w.uuid == wiz.depId);
                     const where: Prisma.OrderInventoryWhereInput = {
                         name: comp.title,
-                        category: wiz.category
+                        category: wiz.category,
                     };
                     const OR: any = [
                         {
                             OR: [
                                 { price: null },
-                                { price: convertToNumber(comp.price) }
-                            ]
-                        }
+                                { price: convertToNumber(comp.price) },
+                            ],
+                        },
                     ];
                     if (Boolean(dep?.title?.trim()) && depWiz)
                         OR.push({
@@ -48,18 +48,18 @@ export async function saveSalesComponentAction(
                                 {
                                     product: {
                                         name: dep?.title,
-                                        category: depWiz?.category
-                                    }
+                                        category: depWiz?.category,
+                                    },
                                 },
-                                { parentId: null }
-                            ]
+                                { parentId: null },
+                            ],
                         });
                     where.OR = OR;
                     inventory = await prisma.orderInventory.findFirst({
                         where,
-                        include: {
-                            product: true
-                        }
+                        // include: {
+                        // product: true
+                        // },
                     });
                     if (depWiz && inventory?.product) {
                         if (dep?.title && inventory.product.name != dep.title) {
@@ -70,12 +70,12 @@ export async function saveSalesComponentAction(
                         if (inventory.price != comp?.price && comp.price > 0) {
                             await prisma.orderInventory.update({
                                 where: {
-                                    id: inventory.id
+                                    id: inventory.id,
                                 },
                                 data: {
                                     parentId: parentIds[depWiz?.uuid] ?? null,
-                                    price: convertToNumber(comp.price)
-                                }
+                                    price: convertToNumber(comp.price),
+                                },
                             });
                         }
                     }
@@ -86,8 +86,8 @@ export async function saveSalesComponentAction(
                                 price: convertToNumber(comp.price),
                                 name: comp.title,
                                 category: wiz.category,
-                                createdAt: new Date()
-                            }
+                                createdAt: new Date(),
+                            },
                         });
                     }
                     parentIds[wiz.uuid] = inventory.id;
@@ -97,11 +97,11 @@ export async function saveSalesComponentAction(
                         if (findParentId)
                             await prisma.orderInventory.update({
                                 where: {
-                                    id: inventory.id
+                                    id: inventory.id,
                                 },
                                 data: {
-                                    parentId: findParentId
-                                }
+                                    parentId: findParentId,
+                                },
                             });
                         else {
                             expectingParent[depWiz.uuid] = inventory.id;
@@ -117,14 +117,13 @@ export async function saveSalesComponentAction(
             if (parentId > 0)
                 await prisma.orderInventory.update({
                     where: {
-                        id: v as any
+                        id: v as any,
                     },
                     data: {
-                        parentId: parentId
-                    }
+                        parentId: parentId,
+                    },
                 });
         })
     );
     return args;
 }
-
