@@ -14,21 +14,21 @@ export interface ISearchQuery {
 export async function searchOrderInventoryAction(query: ISearchQuery) {
     const { q, category } = query;
     const where: Prisma.OrderInventoryWhereInput = {
-        category
+        category,
     };
 
     if (q) {
         where.OR = [
             {
                 description: {
-                    contains: q || undefined
-                }
+                    contains: q || undefined,
+                },
             },
             {
                 name: {
-                    contains: q || undefined
-                }
-            }
+                    contains: q || undefined,
+                },
+            },
         ];
     }
     // const products = await prisma.orderInventory.findMany({
@@ -39,10 +39,10 @@ export async function searchOrderInventoryAction(query: ISearchQuery) {
     const prods = await prisma.orderInventory.groupBy({
         by: ["name"],
         orderBy: {
-            name: "asc"
+            name: "asc",
         },
         take: 10,
-        where
+        where,
     });
     // console.log(prods);
     return prods;
@@ -59,8 +59,8 @@ export async function getComponentCostHistoryAction(
         category,
         name: title,
         price: {
-            gt: 0
-        }
+            gt: 0,
+        },
     };
     const products = await prisma.orderInventory.findMany({
         // take: 5,
@@ -70,10 +70,11 @@ export async function getComponentCostHistoryAction(
         //     name: true,
         //     price: true
         // },
-        distinct: ["price"],
-        include: {
-            product: true
-        }
+        // distinct: ["price"],
+        // include: {
+        //     product: true
+
+        // }
     });
     console.log(products);
     return products;
@@ -88,14 +89,13 @@ export async function updateInventoryComponentTitleAction({
     title,
     oldTitle,
     variantId,
-    meta
+    meta,
 }: InvCompTitleProps) {
     meta.componentTitle = title;
     await prisma.productVariants.update({
         where: { id: variantId },
         data: {
-            meta: removeEmptyValues(meta)
-        }
+            meta: removeEmptyValues(meta),
+        },
     });
 }
-
