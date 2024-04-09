@@ -19,7 +19,7 @@ next-env.d.ts
 
 # production
 /build
-
+/public/**/*.json
 # misc
 .DS_Store
 *.pem

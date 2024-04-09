@@ -7,7 +7,7 @@ generator client {
 datasource db {
     provider     = "postgres"
     relationMode = "prisma"
-    url          = env("POSTGRESS_URL")
+    url          = env("DATABASE_URL")
 }
 
 model AutoCompletes {
@@ -355,16 +355,16 @@ model Inventories {
 }
 
 model OrderInventory {
-    id          Int       @unique @default(autoincrement())
+    id          Int              @unique @default(autoincrement())
     category    String
-    meta        Json?     @db.Json
+    meta        Json?            @db.Json
     name        String
     description String?
     price       Float?
     parentId    Int?
-    // components  OrderInventory[] @relation(name: "components")
-    // product     OrderInventory?  @relation(name: "components", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    createdAt   DateTime? @db.Timestamp(0)
+    components  OrderInventory[] @relation(name: "components")
+    product     OrderInventory?  @relation(name: "components", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    createdAt   DateTime?        @db.Timestamp(0)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -656,9 +656,9 @@ model RoleHasPermissions {
     roleId       Int
     permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
     role         Roles       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_role_id_foreign")
-    // @@index([roleId], map: "role_has_permissions_role_id_foreign")
 
     @@id([permissionId, roleId])
+    @@index([roleId], map: "role_has_permissions_role_id_foreign")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1154,7 +1154,7 @@ model WorkOrders {
     block        String?   @db.VarChar(255)
     projectName  String?   @db.VarChar(255)
     builderName  String?   @db.VarChar(255)
-    requestDate  DateTime? @db.Timestamp(0)
+    requestDate  DateTime?
     supervisor   String?   @db.VarChar(255)
     scheduleDate DateTime? @db.Timestamp(0)
     scheduleTime String?   @db.VarChar(255)
@@ -1219,7 +1219,7 @@ model DykeShelfProducts {
     orderItems        DykeSalesShelfItem[]
     housePackageTools HousePackageTools[]  @relation(name: "shelfProd")
 
-    // @@fulltext([title])
+    @@fulltext([title])
 }
 
 model Cache {

@@ -9,14 +9,14 @@ interface Props {}
 export async function salesDashboardAction(): Promise<ISalesDashboard> {
     const salesByMonthAndYear: any[] = await prisma.$queryRaw`
     SELECT
-      EXTRACT(YEAR FROM createdAt) as year,
-      EXTRACT(MONTH FROM createdAt) as month,
+      EXTRACT(YEAR FROM "createdAt") as year,
+      EXTRACT(MONTH FROM "createdAt") as month,
      SUM(amount) as value
     -- ROUND(SUM(amount)::numeric, 2) as value
     FROM
-      SalesPayments 
+      "SalesPayments" 
     WHERE 
-        deletedAt IS NULL
+        "deletedAt" IS NULL
     GROUP BY
       year,
       month

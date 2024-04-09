@@ -26,6 +26,7 @@ export async function fetchCache(name: CacheNames, group = null) {
     return data;
 }
 export async function saveCache(name: CacheNames, data, group) {
+    return;
     const type = `${name}-cache`;
     const c = await prisma.cache.create({
         data: {
