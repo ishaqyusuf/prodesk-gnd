@@ -9,8 +9,7 @@ interface QueryProps extends BaseQuery {}
 export async function getShelfItems(query: QueryProps) {
     return prisma.$transaction(async (tx) => {
         const where: Prisma.DykeShelfProductsWhereInput = {};
-        if (query._q)
-            where.OR = [{ title: { contains: query._q, mode: "insensitive" } }];
+        if (query._q) where.OR = [{ title: { contains: query._q } }];
         const { pageCount, skip, take } = await paginatedAction(
             query,
             tx.dykeShelfProducts,

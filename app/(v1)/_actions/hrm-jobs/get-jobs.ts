@@ -35,7 +35,7 @@ export async function getJobs(query: JobsQueryParamsProps) {
         });
     else
         builder.search({
-            status: { contains: query._show || undefined, mode: "insensitive" },
+            status: { contains: query._show || undefined },
         });
 
     return builder.response(

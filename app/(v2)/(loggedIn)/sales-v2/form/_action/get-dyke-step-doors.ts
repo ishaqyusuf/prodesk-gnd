@@ -46,7 +46,7 @@ export async function getDykeStepDoors({
                     if (Array.isArray(w))
                         return {
                             OR: w.map((_w) => ({
-                                title: { contains: _w, mode: "insensitive" },
+                                title: { contains: _w },
                             })),
                         };
                     return {

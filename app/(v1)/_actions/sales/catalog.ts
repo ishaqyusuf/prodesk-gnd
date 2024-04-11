@@ -10,7 +10,7 @@ interface Props {
 }
 export async function loadCatalog(filter: Props) {
     if (!filter.per_page) filter.per_page = 20;
-    const inputQ = { contains: filter.q || undefined, mode: "insensitive" };
+    const inputQ = { contains: filter.q || undefined };
     const where = {
         OR: [
             { title: inputQ },

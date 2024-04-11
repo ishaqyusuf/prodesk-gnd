@@ -45,7 +45,7 @@ export async function whereSales(query: SalesQueryParams) {
         // isDyke,
         type = "order",
     } = query;
-    const inputQ = { contains: _q || undefined, mode: "insensitive" } as any;
+    const inputQ = { contains: _q || undefined } as any;
     const where: Prisma.SalesOrdersWhereInput = {
         deletedAt: null,
         // isDyke,
