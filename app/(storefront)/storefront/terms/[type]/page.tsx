@@ -16,7 +16,7 @@ export default async function TermsPage({ params }) {
     if (!term) {
         await prisma.blogs.create({
             data: {
-                // id: await nextId(prisma.blogs),
+                id: await nextId(prisma.blogs),
                 authorId: 1,
                 slug: params.type,
                 title: params.type,

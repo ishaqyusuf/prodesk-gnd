@@ -25,7 +25,7 @@ export async function saveBlogAction(data: Blogs) {
     else
         await prisma.blogs.create({
             data: {
-                // id: await nextId(prisma.blogs),
+                id: await nextId(prisma.blogs),
                 title: data.title,
                 content: data.content,
                 slug: await slugModel(data.title, prisma.blogs),

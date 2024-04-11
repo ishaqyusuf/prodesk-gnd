@@ -71,7 +71,7 @@ export default function SalesAddressModal({ form: mainForm }) {
             // console.log(_form);
             const resp = await saveSalesAddressAction({ ..._form } as any);
             // console.log(resp);
-            if (resp.ok) {
+            if (resp) {
                 const {
                     profileUpdate,
                     customerId,
@@ -81,7 +81,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                     shippingAddress,
                     customer,
                     ...ext
-                } = resp.val;
+                } = resp;
                 const respData = isDyke
                     ? {
                           "order.customerId": customerId,

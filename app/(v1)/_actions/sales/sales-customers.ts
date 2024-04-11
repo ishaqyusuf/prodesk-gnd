@@ -8,6 +8,7 @@ import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { whereQuery } from "@/lib/db-utils";
 import { _cache } from "../_cache/load-data";
+import { nextId } from "@/lib/nextId";
 
 export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
@@ -121,9 +122,11 @@ export async function saveCustomer(customer: ICustomer) {
     if (!id) {
         const { email, name, meta, businessName, phoneNo } = customer;
         const customerTypeId = await getCustomerProfileId(customer);
+
         const _customer = await prisma.customers.create({
             data: {
                 ...transformData({
+                    id: await nextId(prisma.customers),
                     email,
                     name,
                     businessName,

@@ -6,7 +6,6 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 async function saveSalesAddressActionHandler(form: ISalesAddressForm) {
     const response = _saveSalesAddress(form);
-
     return response;
 }
 

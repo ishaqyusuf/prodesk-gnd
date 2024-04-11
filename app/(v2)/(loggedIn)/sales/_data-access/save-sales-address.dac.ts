@@ -154,7 +154,7 @@ export async function _saveSalesAddress({
                         if (!customer) {
                             customer = (await prisma.customers.create({
                                 data: {
-                                    // id: await nextId(prisma.customers),
+                                    id: await nextId(prisma.customers),
                                     name,
                                     phoneNo,
                                     phoneNo2,
@@ -208,7 +208,7 @@ export async function _saveSalesAddress({
                 const addr = await prisma.addressBooks.create({
                     data: {
                         ...(address as any),
-                        // id: await nextId(prisma.addressBooks),
+                        id: await nextId(prisma.addressBooks),
                     },
                 });
                 newId = addr.id as any;
