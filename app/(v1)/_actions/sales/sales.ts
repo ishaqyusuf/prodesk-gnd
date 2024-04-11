@@ -301,9 +301,6 @@ export async function getSales(query: SalesQueryParams) {
                 },
             },
         },
-        orderBy: {
-            createdAt: "desc",
-        },
     });
     const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
     return {

@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 export function queryParams(searchParams, _baseQuery = {}) {
     const q: any = {
         ...(searchParams || {}),
-        ..._baseQuery
+        ..._baseQuery,
     };
     Object.entries(q).map(([k, v]) => {
         const vals = Array.isArray(v)
@@ -17,16 +17,13 @@ export function queryParams(searchParams, _baseQuery = {}) {
     return q;
 }
 export function fixDbTime(date: dayjs.Dayjs, h = 0, m = 0, s = 0) {
-    return date
-        .set("hours", h)
-        .set("minutes", m)
-        .set("seconds", s);
+    return date.set("hours", h).set("minutes", m).set("seconds", s);
 }
 export function dateQuery({
     date,
     from,
     to,
-    _dateType = "createdAt"
+    _dateType = "createdAt",
 }: {
     date?;
     from?;
@@ -38,7 +35,7 @@ export function dateQuery({
     if (date) {
         const _whereDate = {
             gte: fixDbTime(dayjs(date)).toISOString(),
-            lte: fixDbTime(dayjs(date), 23, 59, 59).toISOString()
+            lte: fixDbTime(dayjs(date), 23, 59, 59).toISOString(),
         };
         where[_dateType] = _whereDate;
     }
@@ -47,7 +44,7 @@ export function dateQuery({
             gte: !from ? undefined : fixDbTime(dayjs(from)).toISOString(),
             lte: !to
                 ? undefined
-                : fixDbTime(dayjs(to), 23, 59, 59).toISOString()
+                : fixDbTime(dayjs(to), 23, 59, 59).toISOString(),
         };
     }
     return where;
@@ -56,32 +53,32 @@ export async function queryFilter(input) {
     const { page = 1, per_page = 20 } = input;
     const skip = (page - 1) * per_page;
     let orderBy = {};
-    const { sort_order = "desc", sort = "id" } = input;
+    const { sort_order = "desc", sort = "createdAt" } = input;
     if (sort == "customer")
         orderBy = {
             customer: {
-                name: sort_order
-            }
+                name: sort_order,
+            },
             // meta: {
             //   aaa: true
             // }
         };
     else {
         orderBy = {
-            [sort]: sort_order
+            [sort]: sort_order,
         };
     }
     return {
         take: Number(per_page),
         skip: Number(skip),
-        orderBy
+        orderBy,
     };
 }
 export async function getPageInfo(input, where, model) {
     const { page = 1, per_page = 20 } = input;
     const skip = (page - 1) * Number(per_page);
     const count = await model.count({
-        where
+        where,
     });
     const from = skip + 1;
     const pageInfo = {
@@ -92,7 +89,7 @@ export async function getPageInfo(input, where, model) {
         currentPage: page,
         from,
         to: Math.min(skip + Number(per_page), count),
-        perPage: per_page
+        perPage: per_page,
     };
     return pageInfo;
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { nextId } from "@/lib/nextId";
 import { ICustomer } from "@/types/customers";
 import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
@@ -153,6 +154,7 @@ export async function _saveSalesAddress({
                         if (!customer) {
                             customer = (await prisma.customers.create({
                                 data: {
+                                    // id: await nextId(prisma.customers),
                                     name,
                                     phoneNo,
                                     phoneNo2,
@@ -204,7 +206,10 @@ export async function _saveSalesAddress({
 
                 // address.customerId = "1" as any;
                 const addr = await prisma.addressBooks.create({
-                    data: address as any,
+                    data: {
+                        ...(address as any),
+                        // id: await nextId(prisma.addressBooks),
+                    },
                 });
                 newId = addr.id as any;
                 customerId = addr.customerId;

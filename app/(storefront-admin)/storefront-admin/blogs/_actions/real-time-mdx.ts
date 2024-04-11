@@ -21,7 +21,7 @@ export async function realtimeMdx(type, slug, content) {
 export async function saveRealtimeMdx(type, slug, content) {
     const d = await prisma.posts.create({
         data: {
-            id: await nextId(prisma.blogs),
+            // id: await nextId(prisma.blogs),
             slug,
             type,
             content,

@@ -35,7 +35,7 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
         slug = orderId = [
             now.format("YY"),
             now.format("MMDD"),
-            await nextId(prisma.salesOrders),
+            // await nextId(prisma.salesOrders),
         ].join("-");
         order.invoiceStatus = "Pending Items";
         // order.goodUntil

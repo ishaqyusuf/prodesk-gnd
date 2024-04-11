@@ -10,6 +10,7 @@ async function saveSalesAddressActionHandler(form: ISalesAddressForm) {
     return response;
 }
 
-export const saveSalesAddressAction = createSafeAction(
-    saveSalesAddressActionHandler
-);
+export const saveSalesAddressAction = saveSalesAddressActionHandler;
+//createSafeAction(
+//  saveSalesAddressActionHandler
+//);
