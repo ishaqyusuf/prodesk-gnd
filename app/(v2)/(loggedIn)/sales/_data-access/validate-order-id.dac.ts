@@ -3,11 +3,16 @@
 import { prisma } from "@/db";
 
 export async function _validateOrderId(orderId, id) {
-    const e = await prisma.salesOrders.findUnique({
+    console.log([orderId]);
+    const e = await prisma.salesOrders.findFirst({
         where: {
-            orderId: orderId,
+            orderId: {
+                equals: orderId,
+                mode: "insensitive",
+            },
         },
     });
+    console.log(e);
     if (e) {
         const [y, m] = e.orderId.split("-");
         const nOrderId = [y, m, e.id].join("-");
