@@ -33,6 +33,14 @@ export async function _saveSales(
         let id = await nextId(prisma.salesOrders);
         slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
         await _validateOrderId(orderId, id);
+    } else {
+        if (
+            slug?.endsWith("-") ||
+            slug.split("-")?.filter(Boolean).length != 3
+        ) {
+            const [y, m] = orderId.split("-");
+            orderId = slug = [y, m, _id].join("-");
+        }
     }
 
     const metadata = {
@@ -98,6 +106,8 @@ export async function _saveSales(
               where: { id: _id },
               data: {
                   ...metadata,
+                  slug,
+                  orderId,
                   items: {
                       updateMany,
                       createMany,

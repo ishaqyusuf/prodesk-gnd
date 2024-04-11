@@ -11,7 +11,6 @@ export async function _validateOrderId(orderId, id) {
             },
         },
     });
-    console.log(e);
     if (e) {
         const [y, m] = e.orderId.split("-");
         const nOrderId = [y, m, e.id].join("-");
