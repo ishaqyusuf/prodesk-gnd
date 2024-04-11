@@ -3,48 +3,49 @@
 import { prisma } from "@/db";
 import bcrypt from "bcrypt";
 export async function fixUsersMeta() {
-  const _ = await prisma.users.findMany({
-    where: {
-      meta: {
-        not: undefined,
-      },
-    },
-  });
-  _.map(async (user) => {
-    let meta: any = user.meta as any;
-    const { line, trace, message, ...m } = meta;
-
-    if (line || trace || message) {
-      await prisma.users.update({
+    const _ = await prisma.users.findMany({
         where: {
-          id: user.id,
+            meta: {
+                not: undefined,
+            },
         },
-        data: {
-          meta: m as any,
-        },
-      });
-    }
-  });
-  return _;
+    });
+    _.map(async (user) => {
+        let meta: any = user.meta as any;
+        const { line, trace, message, ...m } = meta;
+
+        if (line || trace || message) {
+            await prisma.users.update({
+                where: {
+                    id: user.id,
+                },
+                data: {
+                    meta: m as any,
+                },
+            });
+        }
+    });
+    return _;
 }
 export async function changeIzriEmail() {
-  const user = await prisma.users.findFirst({
-    where: {
-      name: {
-        contains: "izri",
-      },
-    },
-  });
-  const password = await bcrypt.hash("Millwork", 10);
-  if (!user) throw new Error("error");
-  await prisma.users.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      password,
-      email: "izrispam@gmail.com",
-    },
-  });
-  console.log(user);
+    const user = await prisma.users.findFirst({
+        where: {
+            name: {
+                contains: "izri",
+                mode: "insensitive",
+            },
+        },
+    });
+    const password = await bcrypt.hash("Millwork", 10);
+    if (!user) throw new Error("error");
+    await prisma.users.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            password,
+            email: "izrispam@gmail.com",
+        },
+    });
+    console.log(user);
 }

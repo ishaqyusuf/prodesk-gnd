@@ -34,6 +34,7 @@ export async function getHomeInvoices(query: HomeQueryParams) {
 function whereInvoice(query: InvoiceQueryParams) {
     const q = {
         contains: query._q || undefined,
+        mode: "insensitive",
     };
     const where: Prisma.InboxWhereInput = {
         // builderId: {

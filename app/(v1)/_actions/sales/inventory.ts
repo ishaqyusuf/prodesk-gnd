@@ -22,11 +22,13 @@ export async function searchOrderInventoryAction(query: ISearchQuery) {
             {
                 description: {
                     contains: q || undefined,
+                    mode: "insensitive",
                 },
             },
             {
                 name: {
                     contains: q || undefined,
+                    mode: "insensitive",
                 },
             },
         ];

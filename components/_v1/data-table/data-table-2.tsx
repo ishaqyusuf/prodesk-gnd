@@ -87,6 +87,7 @@ export function DataTable2<TData, TValue>({
     React.useEffect(() => {
         console.log(_searchParams);
     }, []);
+
     function __updateQuery(q) {
         setDataQueryString(qs.stringify(q));
     }

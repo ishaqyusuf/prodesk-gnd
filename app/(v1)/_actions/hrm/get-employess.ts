@@ -16,6 +16,17 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
         query.sort = "name";
         query.sort_order = "asc";
     }
+    console.log(query._q);
+
+    // const c = await prisma.users.count({
+    //     where: {
+    //         name: {
+    //             contains: "volcan", //query._q
+    //             mode: "insensitive",
+    //         },
+    //     },
+    // });
+    // console.log(c);
     const where = whereEmployee(query);
     const items = await prisma.users.findMany({
         where,
@@ -42,9 +53,10 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
 function whereEmployee(query: EmployeeQueryParamsProps) {
     const q = {
         contains: query._q || undefined,
+        mode: "insensitive",
     };
     const where: Prisma.UsersWhereInput = {
-        name: q,
+        name: q as any,
         deletedAt: null,
     };
     if (query._roleId) {

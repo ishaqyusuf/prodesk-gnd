@@ -22,10 +22,10 @@ export async function getLegacyProducts(query: LegacyProductsQueryParamsProps) {
                 product: {
                     select: {
                         category: true,
-                        id: true
-                    }
-                }
-            }
+                        id: true,
+                    },
+                },
+            },
         })
     );
     const where = whereLegacyProducts(query);
@@ -35,18 +35,18 @@ export async function getLegacyProducts(query: LegacyProductsQueryParamsProps) {
             product: {
                 select: {
                     category: true,
-                    id: true
-                }
-            }
+                    id: true,
+                },
+            },
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
 
     const pageInfo = await getPageInfo(query, where, prisma.productVariants);
 
     return {
         pageInfo,
-        data: items as any
+        data: items as any,
     };
 }
 export async function createProductAction(
@@ -65,8 +65,8 @@ export async function createProductAction(
                         product.title,
                         prisma.inventoryProducts
                     ),
-                    meta: {}
-                }
+                    meta: {},
+                },
             })
         ).id;
     }
@@ -76,34 +76,35 @@ export async function createProductAction(
             ...transformData({}),
             product: {
                 connect: {
-                    id
-                }
+                    id,
+                },
             },
             variantTitle: variant.variantTitle,
             title,
             slug: await slugModel(title, prisma.productVariants),
             price: variant.price,
-            meta: {}
-        }
+            meta: {},
+        },
     });
 }
 function whereLegacyProducts(query: LegacyProductsQueryParamsProps) {
     const q = {
-        contains: query._q || undefined
-    };
+        contains: query._q || undefined,
+        mode: "insensitive",
+    } as any;
     const where: Prisma.ProductVariantsWhereInput = {
         description: q,
         title: q,
         variantTitle: q,
         product: {
             title: q,
-            category: q
-        }
+            category: q,
+        },
     };
     return where;
 }
 export async function deleteLegacyProductAction(id) {
     await prisma.productVariants.delete({
-        where: { id }
+        where: { id },
     });
 }

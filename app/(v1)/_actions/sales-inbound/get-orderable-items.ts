@@ -19,28 +19,29 @@ export async function getOrderableItems(
         include: {
             salesOrder: {
                 include: {
-                    customer: true
-                }
-            }
+                    customer: true,
+                },
+            },
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.salesOrderItems);
     return {
         pageInfo,
-        data: items as any
+        data: items as any,
     };
 }
 function buildQuery(query: InboundOrderableItemQueryParamProps) {
     const q = {
-        contains: query._q || undefined
-    };
+        contains: query._q || undefined,
+        mode: "insensitive",
+    } as any;
     const where: Prisma.SalesOrderItemsWhereInput = {
         prodStartedAt: null,
         supplier: {
-            not: null
+            not: null,
         },
-        prodCompletedAt: null
+        prodCompletedAt: null,
     };
     if (q.contains) {
         where.OR = [
@@ -48,28 +49,27 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
                 salesOrder: {
                     OR: [
                         {
-                            orderId: q
+                            orderId: q,
                         },
                         {
                             customer: {
-                                OR: [{ name: q }, { phoneNo: q }]
-                            }
-                        }
-                    ]
-                }
+                                OR: [{ name: q }, { phoneNo: q }],
+                            },
+                        },
+                    ],
+                },
             },
             {
-                description: q
-            }
+                description: q,
+            },
         ];
     }
     if (query._supplier) {
         let noSupply = false;
-        const suppliers = (Array.isArray(query._supplier)
-            ? query._supplier
-            : [query._supplier]
+        const suppliers = (
+            Array.isArray(query._supplier) ? query._supplier : [query._supplier]
         )
-            ?.map(f => {
+            ?.map((f) => {
                 if (!noSupply) noSupply = f == "No Supplier";
                 return noSupply ? "" : f;
             })
@@ -78,7 +78,7 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
         if (noSupply) orSupplier.push({ supplier: null });
         if (suppliers.length)
             where.supplier = {
-                in: suppliers
+                in: suppliers,
             };
         // orSupplier.push({
         //     supplier: { in: suppliers }
@@ -95,7 +95,7 @@ function buildQuery(query: InboundOrderableItemQueryParamProps) {
     switch (query._show) {
         case "paid":
             where.salesOrder = {
-                amountDue: 0
+                amountDue: 0,
             };
             break;
     }
@@ -106,17 +106,16 @@ export async function getOrderableItemsCount() {
         where: {
             prodStartedAt: null,
             supplier: {
-                not: null
+                not: null,
             },
-            prodCompletedAt: null
+            prodCompletedAt: null,
 
             // prodStatus: {
             //     not: {
             //         contains: "Completed"
             //     }
             // }
-        }
+        },
     });
     return count;
 }
-

@@ -46,12 +46,13 @@ export async function getDykeStepDoors({
                     if (Array.isArray(w))
                         return {
                             OR: w.map((_w) => ({
-                                title: { contains: _w },
+                                title: { contains: _w, mode: "insensitive" },
                             })),
                         };
                     return {
                         title: {
                             contains: w,
+                            mode: "insensitive",
                         },
                     };
                 }),
@@ -61,6 +62,7 @@ export async function getDykeStepDoors({
                     title: {
                         not: {
                             contains: w,
+                            mode: "insensitive",
                         },
                     },
                 })),

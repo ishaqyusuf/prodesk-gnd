@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     title: "Employees",
 };
 export default async function EmployeesPage({ searchParams }) {
-    const response = await getEmployees(queryParams(searchParams));
+    // const response = await getEmployees(queryParams(searchParams));
+    const promise = getEmployees({ ...queryParams(searchParams) });
 
     return (
         <HrmLayout>
@@ -23,7 +24,10 @@ export default async function EmployeesPage({ searchParams }) {
                 <BreadLink isLast title="Employees" />
             </Breadcrumbs>
 
-            <EmployeesTableShell searchParams={searchParams} {...response} />
+            <EmployeesTableShell
+                searchParams={searchParams}
+                promise={promise}
+            />
             <EmployeeModal />
         </HrmLayout>
     );

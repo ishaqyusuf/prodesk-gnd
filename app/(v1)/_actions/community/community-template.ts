@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 import {
     calculateCommunitModelCost,
-    getPivotModel
+    getPivotModel,
 } from "@/lib/community/community-utils";
 import { ICommunityTemplateMeta, ICostChart } from "@/types/community";
 import { revalidatePath } from "next/cache";
@@ -19,16 +19,16 @@ export async function updateCommunityModelInstallCost(
         where: { id: pivotId },
         data: {
             meta: pivotMeta as any,
-            updatedAt: new Date()
-        }
+            updatedAt: new Date(),
+        },
     });
     if (meta)
         await prisma.communityModels.update({
             where: { id },
             data: {
                 meta: meta as any,
-                updatedAt: new Date()
-            }
+                updatedAt: new Date(),
+            },
         });
     revalidatePath("/settings/community/community-templates", "page");
 }
@@ -37,8 +37,8 @@ export async function staticCommunity() {
         select: {
             id: true,
             modelName: true,
-            projectId: true
-        }
+            projectId: true,
+        },
     });
 }
 export async function _saveCommunityModelCost(
@@ -49,26 +49,26 @@ export async function _saveCommunityModelCost(
         where: { id },
         data: {
             meta: meta as any,
-            updatedAt: new Date()
+            updatedAt: new Date(),
         },
         include: {
             _count: {
                 select: {
-                    homes: true
-                }
-            }
-        }
+                    homes: true,
+                },
+            },
+        },
     });
     // community.
     if (!community._count.homes)
         await prisma.homes.updateMany({
             where: {
                 projectId: community.projectId,
-                modelName: community.modelName
+                modelName: community.modelName,
             },
             data: {
-                communityTemplateId: community.id
-            }
+                communityTemplateId: community.id,
+            },
         });
     await Promise.all(
         Object.entries(meta.modelCost.sumCosts).map(async ([k, v]) => {
@@ -77,13 +77,13 @@ export async function _saveCommunityModelCost(
                     taskUid: k,
                     home: {
                         projectId: community.projectId,
-                        modelName: community.modelName
-                    }
+                        modelName: community.modelName,
+                    },
                 },
                 data: {
                     // taxCost:
-                    amountDue: Number(v) || 0
-                }
+                    amountDue: Number(v) || 0,
+                },
             });
         })
     );
@@ -95,8 +95,8 @@ export async function _createCommunityTemplate(data, projectName) {
     let pivot = await prisma.communityModelPivot.findFirst({
         where: {
             model: pivotM,
-            projectId: data.projectId
-        }
+            projectId: data.projectId,
+        },
     });
     if (!pivot) {
         pivot = await prisma.communityModelPivot.create({
@@ -105,8 +105,8 @@ export async function _createCommunityTemplate(data, projectName) {
                 projectId: data.projectId,
                 meta: {},
                 createdAt: new Date(),
-                updatedAt: new Date()
-            }
+                updatedAt: new Date(),
+            },
         });
     }
     const temp = await prisma.communityModels.create({
@@ -114,18 +114,18 @@ export async function _createCommunityTemplate(data, projectName) {
             slug,
             ...data,
             pivotId: pivot.id,
-            ...transformData({})
-        }
+            ...transformData({}),
+        },
     });
 
     await prisma.homes.updateMany({
         where: {
             projectId: temp.projectId,
-            modelName: temp.modelName
+            modelName: temp.modelName,
         },
         data: {
-            communityTemplateId: temp.id
-        }
+            communityTemplateId: temp.id,
+        },
     });
     revalidatePath("/settings/community/community-templates", "page");
 }
@@ -135,20 +135,20 @@ export async function _updateCommunityModel(newData, oldData) {
         const homes = await prisma.homes.updateMany({
             where: {
                 projectId: oldData.projectId,
-                modelName: oldData.modelName
+                modelName: oldData.modelName,
             },
             data: {
                 communityTemplateId: newData.id,
-                modelName: newData.modelName
-            }
+                modelName: newData.modelName,
+            },
         });
         await prisma.communityModels.update({
             where: {
-                id: oldData.id
+                id: oldData.id,
             },
             data: {
-                modelName: newData.modelName
-            }
+                modelName: newData.modelName,
+            },
         });
         revalidatePath("/settings/community/community-templates", "page");
         // await prisma.$queryRaw`
@@ -174,14 +174,14 @@ export async function _importModelCost(
     const q = modelName
         .toLowerCase()
         .split(" ")
-        .filter(v => ["lh", "rh"].every(sp => v != sp))
+        .filter((v) => ["lh", "rh"].every((sp) => v != sp))
         .filter(Boolean)
         .join(" ");
     // console.log({ builderId, q, modelName });
     const cost: ICostChart = (await prisma.costCharts.findFirst({
         where: {
             template: {
-                builderId
+                builderId,
                 // modelName: {
                 //     contains: q
                 // }
@@ -189,13 +189,14 @@ export async function _importModelCost(
             OR: [
                 {
                     model: {
-                        contains: modelName
-                    }
+                        contains: modelName,
+                        mode: "insensitive",
+                    },
                 },
                 {
-                    model: q
-                }
-            ]
+                    model: q,
+                },
+            ],
         },
         // include: {
         //     template: {
@@ -205,14 +206,14 @@ export async function _importModelCost(
         //     }
         // },
         orderBy: {
-            updatedAt: "desc"
-        }
+            updatedAt: "desc",
+        },
     })) as any;
     // console.log(cost);
     if (cost) {
         await _saveCommunityModelCost(id, {
             ...(meta ?? {}),
-            modelCost: calculateCommunitModelCost(cost.meta, builderTasks)
+            modelCost: calculateCommunitModelCost(cost.meta, builderTasks),
         });
         return true;
     }
@@ -221,19 +222,19 @@ export async function _importModelCost(
 export async function _deleteCommunitModel(id) {
     await prisma.homes.updateMany({
         where: {
-            communityTemplateId: id
+            communityTemplateId: id,
         },
         data: {
-            communityTemplateId: null
-        }
+            communityTemplateId: null,
+        },
     });
     await prisma.communityModels.delete({
         where: {
-            id
+            id,
         },
         include: {
-            costs: true
-        }
+            costs: true,
+        },
     });
     revalidatePath("/settings/community/community-templates");
 }

@@ -20,23 +20,23 @@ export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
             builder: true,
             costs: {
                 orderBy: {
-                    title: "desc"
+                    title: "desc",
                     // createdAt: "desc"
-                }
-            }
+                },
+            },
 
             // _count: {
             //   // homes: true,
             // },
         },
 
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.homeTemplates);
 
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
@@ -52,47 +52,48 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
                     builder: {
                         select: {
                             name: true,
-                            meta: true
-                        }
-                    }
-                }
+                            meta: true,
+                        },
+                    },
+                },
             },
             pivot: {
                 include: {
                     modelCosts: true,
                     _count: {
                         select: {
-                            modelCosts: true
-                        }
-                    }
-                }
+                            modelCosts: true,
+                        },
+                    },
+                },
             },
             costs: true,
             // builder: true,
             _count: {
                 select: {
-                    homes: true
+                    homes: true,
                     // piv: true
-                }
-            }
+                },
+            },
         },
-        ...(await queryFilter(query))
+        ...(await queryFilter(query)),
     });
     const pageInfo = await getPageInfo(query, where, prisma.communityModels);
 
     return {
         pageInfo,
-        data: _items as any
+        data: _items as any,
     };
 }
 function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
+        mode: "insensitive",
     };
     const where = whereQuery<Prisma.CommunityModelsWhereInput>(query);
     where.searchQuery("modelName");
     where.search({
-        project: { title: where.q }
+        project: { title: where.q },
     });
     where.orWhere("projectId", +query._projectId);
     return where.get();
@@ -105,10 +106,11 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
 }
 function whereHomeTemplate(query: HomeTemplatesQueryParams) {
     const q = {
-        contains: query._q || undefined
+        contains: query._q || undefined,
+        mode: "insensitive",
     };
     const where: Prisma.HomeTemplatesWhereInput = {
-        modelName: q
+        modelName: q as any,
 
         // builderId: {
         //   equals: Number(query._builderId) || undefined,
@@ -125,36 +127,36 @@ export async function printHomesAction(
             OR: homes.map(({ builderId, modelName }) => {
                 const w: Prisma.HomeTemplatesWhereInput = {
                     builderId,
-                    modelName
+                    modelName,
                 };
                 return w;
-            })
-        }
+            }),
+        },
     });
     const communityPrints = await prisma.communityModels.findMany({
         where: {
             OR: homes.map(({ projectId, modelName }) => {
                 const w: Prisma.CommunityModelsWhereInput = {
                     projectId,
-                    modelName
+                    modelName,
                 };
                 return w;
-            })
-        }
+            }),
+        },
     });
     // console.log(communityPrints);
     return { prints, communityPrints };
 }
 export async function getHomeTemplate(slug) {
     const homeTemplate = await prisma.homeTemplates.findUnique({
-        where: { slug }
+        where: { slug },
     });
     if (!homeTemplate) throw new Error("Home template not found");
     return homeTemplate;
 }
 export async function getCommunityTemplate(slug) {
     const homeTemplate = await prisma.communityModels.findUnique({
-        where: { slug }
+        where: { slug },
     });
     if (!homeTemplate) throw new Error("Home template not found");
     return homeTemplate;
@@ -164,8 +166,8 @@ export async function saveHomeTemplateDesign(slug, meta) {
         where: { slug },
         data: {
             ...transformData({}, true),
-            meta: removeEmptyValues(meta) as any
-        }
+            meta: removeEmptyValues(meta) as any,
+        },
     });
 }
 export async function saveCommunityTemplateDesign(slug, _meta) {
@@ -174,7 +176,7 @@ export async function saveCommunityTemplateDesign(slug, _meta) {
 
     await prisma.communityModels.update({
         where: {
-            slug
+            slug,
         },
         data: {
             ...transformData({}, true),
@@ -183,13 +185,13 @@ export async function saveCommunityTemplateDesign(slug, _meta) {
                 create: {
                     createdAt: new Date(),
                     meta: {
-                        design: meta.design
+                        design: meta.design,
                     } as any,
                     updatedAt: new Date(),
-                    userId: await userId()
-                }
-            }
-        }
+                    userId: await userId(),
+                },
+            },
+        },
     });
 }
 export async function deleteHomeTemplateAction(id) {}
@@ -201,8 +203,8 @@ export async function _createModelTemplate(data, builderName) {
         data: {
             // slug: slugify(data.modelName)
             ...data,
-            ...transformData({})
-        }
+            ...transformData({}),
+        },
     });
     revalidatePath("/settings/community/model-templates", "page");
 }

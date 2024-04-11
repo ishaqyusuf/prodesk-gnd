@@ -31,6 +31,7 @@ export interface DataTableFilterableColumn<TData, TValue>
 
 export interface TableShellProps<T = any> {
     data: T[];
+    promise?;
     pageInfo: TablePageInfo;
     searchParams?;
 }

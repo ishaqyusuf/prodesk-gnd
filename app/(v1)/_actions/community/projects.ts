@@ -50,12 +50,13 @@ export async function saveProject(project: IProject) {
 function whereProject(query: ProjectsQueryParams) {
     const q = {
         contains: query._q || undefined,
+        mode: "insensitive",
     };
     const where: Prisma.ProjectsWhereInput = {
         builderId: {
             equals: Number(query._builderId) || undefined,
         },
-        title: q,
+        title: q as any,
         deletedAt: null,
     };
 

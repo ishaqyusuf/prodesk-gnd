@@ -31,11 +31,11 @@ export async function getJobs(query: JobsQueryParamsProps) {
     if (query._show == "unpaid") builder.register("paymentId", null);
     else if (query._show == "paid")
         builder.search({
-            paymentId: { gt: 0 }
+            paymentId: { gt: 0 },
         });
     else
         builder.search({
-            status: { contains: query._show || undefined }
+            status: { contains: query._show || undefined, mode: "insensitive" },
         });
 
     return builder.response(
@@ -44,8 +44,8 @@ export async function getJobs(query: JobsQueryParamsProps) {
             where: builder.getWhere(),
             include: {
                 user: true,
-                homeTasks: true
-            }
+                homeTasks: true,
+            },
         })
     );
 }

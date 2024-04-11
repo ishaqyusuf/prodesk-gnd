@@ -1,16 +1,20 @@
 import { getPageInfo, queryFilter } from "@/app/(v1)/_actions/action-utils";
 
-export function searchQuery<T>(query, ...columns: (keyof T)[]) {
+export function _searchQuery<T>(query, ...columns: (keyof T)[]) {
     if (!query._q) return {};
     const q = {
         contains: query._q || undefined,
+        mode: "insensitive",
     };
+    console.log(q);
+
     const OR: any = [];
     columns.map((c) => {
         OR.push({
             [c]: q,
         });
     });
+
     return {
         OR,
     };
@@ -43,7 +47,10 @@ export function whereQuery<T>(query, soft = true) {
     if (soft) where.deletedAt = null;
     const q = {
         contains: query._q || undefined,
-    };
+        mode: "insensitive",
+    } as any;
+    console.log(q);
+
     return {
         where,
         get: () => where as any,
@@ -54,7 +61,7 @@ export function whereQuery<T>(query, soft = true) {
             if (value) this.register(column, value || undefined);
         },
         searchRelationQuery: <T1>(...columns: (keyof T)[]) => {
-            Object.entries(searchQuery<T>(query, ...columns)).map(
+            Object.entries(_searchQuery<T>(query, ...columns)).map(
                 ([k, v]) => (where[k] = v)
             );
         },
@@ -77,7 +84,7 @@ export function whereQuery<T>(query, soft = true) {
             }
         },
         searchQuery: (...columns: (keyof T)[]) => {
-            Object.entries(searchQuery<T>(query, ...columns)).map(
+            Object.entries(_searchQuery<T>(query, ...columns)).map(
                 ([k, v]) => (where[k] = v)
             );
         },

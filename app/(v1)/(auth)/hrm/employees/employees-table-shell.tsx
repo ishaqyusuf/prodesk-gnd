@@ -2,7 +2,7 @@
 
 import { TableShellProps } from "@/types/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 import {
     CheckColumn,
     ColumnHeader,
@@ -57,12 +57,15 @@ import { useModal } from "@/components/common/modal/provider";
 import EmployeeForm from "../_modals/employee-form";
 
 export default function EmployeesTableShell<T>({
-    data,
-    pageInfo,
+    // data,
+    // pageInfo,
     searchParams,
-}: TableShellProps<IUser>) {
+    promise,
+}: Partial<TableShellProps<IUser>>) {
     const [isPending, startTransition] = useTransition();
     const profiles = useEmployeeProfiles();
+    const { data, pageInfo } = React.use(promise) as any;
+
     const route = useRouter();
     async function setEmployeeProfile(employeeId, profile) {
         await setEmployeeProfileAction(employeeId, profile.id);

@@ -6,18 +6,19 @@ export async function searchImport(q, id, community) {
     if (!q) return [];
     const where = {
         modelName: {
-            contains: q
-        }
-    };
+            contains: q,
+            mode: "insensitive",
+        },
+    } as any;
     const result = await (community
         ? prisma.communityModels.findMany({
               where,
               include: {
-                  project: true
-              }
+                  project: true,
+              },
           })
         : prisma.homeTemplates.findMany({
-              where
+              where,
           }));
     return result;
 }

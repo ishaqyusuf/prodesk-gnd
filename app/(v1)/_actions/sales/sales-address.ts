@@ -12,20 +12,21 @@ import { _saveSalesAddress } from "@/app/(v2)/(loggedIn)/sales/_data-access/save
 export async function findAddressAction({ q }: { q: string }) {
     const _contains = {
         contains: q,
+        mode: "insensitive",
     };
 
     // const builder = queryBuilder()
     const where: Prisma.AddressBooksWhereInput = {
         OR: !q
             ? undefined
-            : [
+            : ([
                   {
                       name: _contains,
                   },
                   {
                       phoneNo: _contains,
                   },
-              ],
+              ] as any),
         customerId: {
             not: null,
         },

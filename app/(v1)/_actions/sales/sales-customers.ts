@@ -15,21 +15,24 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
     const qb = whereQuery<Prisma.CustomersWhereInput>(query);
     qb.searchQuery("name", "address");
     // qb.raw({})
-    const q = { contains: query._q || undefined };
+    const q = { contains: query._q || undefined, mode: "insensitive" } as any;
+    console.log(query._q);
 
-    // const where: Prisma.CustomersWhereInput = {
-    //     OR: [
-    //         {
-    //             name: q,
-    //         },
-    //         {
-    //             address: q,
-    //         },
-    //     ],
-    //     deletedAt: null,
-    // };
+    // console.log(qb.get().OR[0]);
+
+    const where: Prisma.CustomersWhereInput = {
+        OR: [
+            {
+                name: q,
+            },
+            {
+                address: q,
+            },
+        ],
+        deletedAt: null,
+    };
     const _items = await prisma.customers.findMany({
-        where: qb.get(),
+        where,
         ...(await queryFilter(query)),
         orderBy: {
             // businessName: "asc",
@@ -45,6 +48,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
             },
         },
     });
+    console.log(_items.length);
 
     const pageInfo = await getPageInfo(query, qb.get(), prisma.customers);
     return {

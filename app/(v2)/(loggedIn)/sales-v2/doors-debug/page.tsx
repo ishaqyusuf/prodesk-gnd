@@ -16,6 +16,7 @@ export default async function DoorsDebug({ searchParams }) {
                                   ?.map((w) => ({
                                       title: {
                                           contains: w,
+                                          mode: "insensitive",
                                       },
                                   })),
                           },
@@ -29,6 +30,7 @@ export default async function DoorsDebug({ searchParams }) {
                                             title: {
                                                 not: {
                                                     contains: w,
+                                                    mode: "insensitive",
                                                 },
                                             },
                                         })),
