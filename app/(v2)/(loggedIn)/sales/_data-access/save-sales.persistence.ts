@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { lastId, nextId } from "@/lib/nextId";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import dayjs from "dayjs";
+import { _validateOrderId } from "./validate-order-id.dac";
 
 export async function _saveSales(
     _id,
@@ -32,6 +33,7 @@ export async function _saveSales(
         const now = dayjs();
         id = await nextId(prisma.salesOrders);
         slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
+        await _validateOrderId(orderId, id);
     }
 
     const metadata = {
