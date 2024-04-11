@@ -103,9 +103,9 @@ export function SalesCustomerModal({
 
             console.log(resp);
 
-            if (resp.ok) {
+            if (resp) {
                 // console.log(_form);
-                const { profileUpdate, ...ext } = resp.val;
+                const { profileUpdate, ...ext } = resp;
                 // console.log(ext);
                 Object.entries(ext).map(([k, v]) => {
                     form.setValue(k as any, v, { shouldDirty: true });
