@@ -57,7 +57,7 @@ export async function _cache(name: CacheNames | string, fn, group: any = null) {
     // if (cdata) return cdata;
 
     const c = await fn();
-    console.log(["FRESH CACHE", name, c]);
-    await saveCache(name as any, c, group);
+    // console.log(["FRESH CACHE", name, c]);
+    // await saveCache(name as any, c, group);
     return c;
 }

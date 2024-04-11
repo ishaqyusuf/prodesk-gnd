@@ -20,5 +20,6 @@ export async function _validateOrderId(orderId, id) {
                 slug: nOrderId,
             },
         });
+        console.log(["orderId edited", nOrderId, orderId]);
     }
 }
