@@ -7,7 +7,6 @@ export async function searchImport(q, id, community) {
     const where = {
         modelName: {
             contains: q,
-            mode: "insensitive",
         },
     } as any;
     const result = await (community

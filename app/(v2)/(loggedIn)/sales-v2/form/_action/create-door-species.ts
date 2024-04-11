@@ -16,7 +16,6 @@ export async function createDoorSpecies(
                 title: "Door Species",
                 value: {
                     contains: "Interior",
-                    mode: "insensitive",
                 },
             },
         })

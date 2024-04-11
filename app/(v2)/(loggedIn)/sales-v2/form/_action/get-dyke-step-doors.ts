@@ -52,7 +52,6 @@ export async function getDykeStepDoors({
                     return {
                         title: {
                             contains: w,
-                            mode: "insensitive",
                         },
                     };
                 }),
@@ -62,7 +61,6 @@ export async function getDykeStepDoors({
                     title: {
                         not: {
                             contains: w,
-                            mode: "insensitive",
                         },
                     },
                 })),

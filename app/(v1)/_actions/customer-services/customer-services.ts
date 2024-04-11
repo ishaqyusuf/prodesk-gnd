@@ -31,7 +31,6 @@ export async function getCustomerServices(
 function whereCustomerService(query: CustomerServiceQueryParamsProps) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     const _where = whereQuery<Prisma.WorkOrdersWhereInput>(query);
     _where.searchQuery("description", "projectName", "homeOwner", "homePhone");

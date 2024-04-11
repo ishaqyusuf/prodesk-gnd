@@ -22,7 +22,7 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
     //     where: {
     //         name: {
     //             contains: "volcan", //query._q
-    //             mode: "insensitive",
+    //
     //         },
     //     },
     // });
@@ -53,7 +53,6 @@ export async function getEmployees(query: EmployeeQueryParamsProps) {
 function whereEmployee(query: EmployeeQueryParamsProps) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     const where: Prisma.UsersWhereInput = {
         name: q as any,

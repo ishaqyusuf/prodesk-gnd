@@ -31,7 +31,7 @@ export async function _saveSales(
     console.log(_order);
     if (!slug && !orderId) {
         const now = dayjs();
-        id = await nextId(prisma.salesOrders);
+        // id = await nextId(prisma.salesOrders);
         slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
         await _validateOrderId(orderId, id);
     }

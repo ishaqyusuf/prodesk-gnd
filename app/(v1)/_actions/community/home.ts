@@ -115,7 +115,6 @@ export async function deleteHome(id) {
 export async function whereHome(query: HomeQueryParams, asInclude = false) {
     const q: any = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     // if (query._q) q.contains = query._q;
 

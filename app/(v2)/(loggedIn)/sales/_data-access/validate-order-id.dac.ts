@@ -8,7 +8,6 @@ export async function _validateOrderId(orderId, id) {
         where: {
             orderId: {
                 equals: orderId,
-                mode: "insensitive",
             },
         },
     });

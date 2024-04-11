@@ -133,7 +133,7 @@ export async function saveCustomer(customer: ICustomer) {
         const _customer = await prisma.customers.create({
             data: {
                 ...transformData({
-                    id: await nextId(prisma.customers),
+                    // id: await nextId(prisma.customers),
                     email,
                     name,
                     businessName,

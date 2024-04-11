@@ -39,7 +39,6 @@ export async function whereProductionQuery(query: CommunityTaskQuery) {
 
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     } as any;
     const builder = whereQuery<Prisma.HomeTasksWhereInput>(query);
     builder.raw({

@@ -34,7 +34,6 @@ export async function getBuildersAction(query: BuildersQueryParams) {
 function whereBuilder(query: BuildersQueryParams) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     const where: Prisma.BuildersWhereInput = {
         // builderId: {

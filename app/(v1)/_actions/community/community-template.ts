@@ -190,7 +190,6 @@ export async function _importModelCost(
                 {
                     model: {
                         contains: modelName,
-                        mode: "insensitive",
                     },
                 },
                 {

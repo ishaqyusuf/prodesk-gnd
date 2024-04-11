@@ -4,7 +4,6 @@ export function _searchQuery<T>(query, ...columns: (keyof T)[]) {
     if (!query._q) return {};
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     console.log(q);
 
@@ -47,7 +46,6 @@ export function whereQuery<T>(query, soft = true) {
     if (soft) where.deletedAt = null;
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     } as any;
     console.log(q);
 

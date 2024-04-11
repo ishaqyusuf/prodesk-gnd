@@ -22,13 +22,11 @@ export async function searchOrderInventoryAction(query: ISearchQuery) {
             {
                 description: {
                     contains: q || undefined,
-                    mode: "insensitive",
                 },
             },
             {
                 name: {
                     contains: q || undefined,
-                    mode: "insensitive",
                 },
             },
         ];
@@ -73,10 +71,9 @@ export async function getComponentCostHistoryAction(
         //     price: true
         // },
         // distinct: ["price"],
-        // include: {
-        //     product: true
-
-        // }
+        include: {
+            product: true,
+        },
     });
     console.log(products);
     return products;

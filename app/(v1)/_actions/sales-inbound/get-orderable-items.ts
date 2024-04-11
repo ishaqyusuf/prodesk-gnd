@@ -34,7 +34,6 @@ export async function getOrderableItems(
 function buildQuery(query: InboundOrderableItemQueryParamProps) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     } as any;
     const where: Prisma.SalesOrderItemsWhereInput = {
         prodStartedAt: null,

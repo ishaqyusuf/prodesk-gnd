@@ -32,7 +32,6 @@ export async function changeIzriEmail() {
         where: {
             name: {
                 contains: "izri",
-                mode: "insensitive",
             },
         },
     });

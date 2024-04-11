@@ -88,7 +88,6 @@ export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
 function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     const where = whereQuery<Prisma.CommunityModelsWhereInput>(query);
     where.searchQuery("modelName");
@@ -107,7 +106,6 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
 function whereHomeTemplate(query: HomeTemplatesQueryParams) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     };
     const where: Prisma.HomeTemplatesWhereInput = {
         modelName: q as any,

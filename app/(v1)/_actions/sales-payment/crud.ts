@@ -32,7 +32,6 @@ export async function getsalesPayments(query: salesPaymentsQueryParamsProps) {
 function wheresalesPayments(query: salesPaymentsQueryParamsProps) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     } as any;
     const where: Prisma.SalesPaymentsWhereInput = {
         customerId: +query._customerId || undefined,

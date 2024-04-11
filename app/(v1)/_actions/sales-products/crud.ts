@@ -90,7 +90,6 @@ export async function createProductAction(
 function whereLegacyProducts(query: LegacyProductsQueryParamsProps) {
     const q = {
         contains: query._q || undefined,
-        mode: "insensitive",
     } as any;
     const where: Prisma.ProductVariantsWhereInput = {
         description: q,

@@ -41,7 +41,6 @@ export async function getNextDykeStepAction(
                 where: {
                     value: {
                         contains: "Interior_",
-                        mode: "insensitive",
                     },
                     title: "Door",
                 },
