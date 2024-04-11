@@ -205,7 +205,7 @@ model CustomerTransaction {
     authorId      Int
     amount        Float
     walletId      Int
-    description   String?         @db.Text
+    description   String?         @db.LongText
     meta          Json?           @db.Json
     createdAt     DateTime?       @db.Timestamp(0)
     updatedAt     DateTime?       @updatedAt
@@ -433,7 +433,7 @@ model MailGrids {
     subject   String?   @db.VarChar(255)
     html      String?   @db.Text
     message   String?   @db.Text
-    design    String?   @db.Text
+    design    String?   @db.LongText
     fromName  String?   @db.VarChar(255)
     fromEmail String?   @db.VarChar(255)
     meta      Json?     @db.Json
@@ -472,7 +472,7 @@ model Migrations {
 model ModelHasPermissions {
     permissionId Int
     modelType    String      @db.VarChar(255)
-    modelId      BigInt      @db.BigInt
+    modelId      BigInt      @db.UnsignedBigInt
     permissions  Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_permissions_permission_id_foreign")
     // @@index([createdAt,deletedAt,modelId, modelType], map: "model_has_permissions_model_id_model_type_index")
 
@@ -665,9 +665,9 @@ model RoleHasPermissions {
     roleId       Int
     permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
     role         Roles       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_role_id_foreign")
-    // @@index([roleId], map: "role_has_permissions_role_id_foreign")
 
     @@id([permissionId, roleId])
+    @@index([roleId], map: "role_has_permissions_role_id_foreign")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1031,7 +1031,7 @@ model Jobs {
     amount      Float
     title       String?   @db.VarChar(255)
     subtitle    String?   @db.VarChar(255)
-    description String?   @db.Text
+    description String?   @db.LongText
     note        String?   @db.Text
     // doneBy      String?      @db.VarChar(255)
     status      String    @db.VarChar(255)
@@ -1163,7 +1163,7 @@ model WorkOrders {
     block        String?   @db.VarChar(255)
     projectName  String?   @db.VarChar(255)
     builderName  String?   @db.VarChar(255)
-    requestDate  DateTime? @db.Timestamp(0)
+    requestDate  DateTime?
     supervisor   String?   @db.VarChar(255)
     scheduleDate DateTime? @db.Timestamp(0)
     scheduleTime String?   @db.VarChar(255)
@@ -1368,7 +1368,7 @@ model Blogs {
     slug        String    @unique
     authorId    Int
     type        String
-    content     String    @db.Text
+    content     String    @db.LongText
     meta        Json      @db.Json
     status      String    @default("draft")
     publishedAt DateTime? @db.Timestamp(0)
