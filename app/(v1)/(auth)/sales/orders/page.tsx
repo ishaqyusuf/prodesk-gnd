@@ -26,6 +26,8 @@ export default async function OrdersPage({ searchParams }) {
         _noBackOrder: true,
         isDyke: false,
     });
+    console.log(response.data[0]);
+
     return (
         <SalesTabLayout query={searchParams}>
             <Breadcrumbs>

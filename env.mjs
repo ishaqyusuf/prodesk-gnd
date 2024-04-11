@@ -6,6 +6,7 @@ import { z } from "zod";
  */
 const server = z.object({
     DATABASE_URL: z.string().url(),
+    POSTGRESS_URL: z.string().url(),
     RESEND_API_KEY: z.string(),
     BLESS_TOKEN: z.string(),
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string(),
@@ -56,6 +57,7 @@ const client = z.object({
 const processEnv = {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     DATABASE_URL: process.env.DATABASE_URL,
+    POSTGRESS_URL: process.env.POSTGRESS_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     EMAIL_FROM_ADDRESS: process.env.EMAIL_FROM_ADDRESS,

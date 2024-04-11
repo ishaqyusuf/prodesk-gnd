@@ -144,7 +144,7 @@ async function newSalesFormAction(
                 addressBooks: {
                     take: 1,
                     orderBy: {
-                        id: "desc",
+                        createdAt: "desc",
                     },
                 },
             },

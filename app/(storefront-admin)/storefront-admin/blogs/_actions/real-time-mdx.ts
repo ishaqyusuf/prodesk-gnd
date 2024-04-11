@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
+import { nextId } from "@/lib/nextId";
 import { revalidatePath } from "next/cache";
 
 export async function realtimeMdx(type, slug, content) {
@@ -20,6 +21,7 @@ export async function realtimeMdx(type, slug, content) {
 export async function saveRealtimeMdx(type, slug, content) {
     const d = await prisma.posts.create({
         data: {
+            id: await nextId(prisma.blogs),
             slug,
             type,
             content,

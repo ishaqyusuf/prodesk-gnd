@@ -5,6 +5,7 @@ import { slugModel } from "@/lib/utils";
 import { Blogs } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { deleteRealtimeMdx } from "./real-time-mdx";
+import { nextId } from "@/lib/nextId";
 
 export async function saveBlogAction(data: Blogs) {
     if (data.id)
@@ -24,6 +25,7 @@ export async function saveBlogAction(data: Blogs) {
     else
         await prisma.blogs.create({
             data: {
+                id: await nextId(prisma.blogs),
                 title: data.title,
                 content: data.content,
                 slug: await slugModel(data.title, prisma.blogs),

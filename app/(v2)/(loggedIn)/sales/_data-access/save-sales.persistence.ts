@@ -6,7 +6,7 @@ import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import dayjs from "dayjs";
 
 export async function _saveSales(
-    id,
+    _id,
     order: ISalesOrder,
     items: ISalesOrderItem[]
 ) {
@@ -26,14 +26,12 @@ export async function _saveSales(
         pickupId,
         ..._order
     } = order;
+    let id = _id;
     console.log(_order);
     if (!slug && !orderId) {
         const now = dayjs();
-        slug = orderId = [
-            now.format("YY"),
-            now.format("MMDD"),
-            await nextId(prisma.salesOrders),
-        ].join("-");
+        id = await nextId(prisma.salesOrders);
+        slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
     }
 
     const metadata = {
@@ -67,7 +65,7 @@ export async function _saveSales(
     };
     let lastItemId: number | undefined = undefined;
     let updatedIds: any[] = [];
-    if (id) {
+    if (_id) {
         lastItemId = await lastId(prisma.salesOrderItems);
     }
     const updateMany = items
@@ -94,7 +92,7 @@ export async function _saveSales(
             })
             .filter(Boolean) as any,
     };
-    const sale_order = id
+    const sale_order = _id
         ? await prisma.salesOrders.update({
               where: { id },
               data: {
@@ -107,13 +105,14 @@ export async function _saveSales(
           })
         : await prisma.salesOrders.create({
               data: {
+                  id,
                   ...metadata,
                   items: {
                       createMany,
                   },
               },
           });
-    if (id) {
+    if (_id) {
         const ids = await prisma.salesOrderItems.findMany({
             where: {
                 id: {

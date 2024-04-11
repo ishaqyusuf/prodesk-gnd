@@ -355,16 +355,19 @@ model Inventories {
 }
 
 model OrderInventory {
-    id          Int       @unique @default(autoincrement())
-    category    String
-    meta        Json?     @db.Json
-    name        String
-    description String?
-    price       Float?
-    parentId    Int?
+    id               Int       @unique @default(autoincrement())
+    category         String
+    meta             Json?     @db.Json
+    name             String
+    description      String?
+    price            Float?
+    parentId         Int?
+    // components       OrderInventory[] @relation(name: "ParentChild")
+    // product          OrderInventory?  @relation(name: "ParentChild", fields: [orderInventoryId], references: [id])
     // components  OrderInventory[] @relation(name: "components")
     // product     OrderInventory?  @relation(name: "components", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    createdAt   DateTime? @db.Timestamp(0)
+    createdAt        DateTime? @db.Timestamp(0)
+    orderInventoryId Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

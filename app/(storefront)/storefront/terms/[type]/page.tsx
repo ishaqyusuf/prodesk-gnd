@@ -3,6 +3,7 @@ import { userId } from "@/app/(v1)/_actions/utils";
 import MDX from "@/components/common/mdx";
 import { Shell } from "@/components/shell";
 import { prisma } from "@/db";
+import { nextId } from "@/lib/nextId";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -15,6 +16,7 @@ export default async function TermsPage({ params }) {
     if (!term) {
         await prisma.blogs.create({
             data: {
+                id: await nextId(prisma.blogs),
                 authorId: 1,
                 slug: params.type,
                 title: params.type,
