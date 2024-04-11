@@ -27,11 +27,10 @@ export async function _saveSales(
         pickupId,
         ..._order
     } = order;
-    let id = _id;
     console.log(_order);
     if (!slug && !orderId) {
         const now = dayjs();
-        // id = await nextId(prisma.salesOrders);
+        let id = await nextId(prisma.salesOrders);
         slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
         await _validateOrderId(orderId, id);
     }
@@ -96,7 +95,7 @@ export async function _saveSales(
     };
     const sale_order = _id
         ? await prisma.salesOrders.update({
-              where: { id },
+              where: { id: _id },
               data: {
                   ...metadata,
                   items: {
@@ -107,7 +106,6 @@ export async function _saveSales(
           })
         : await prisma.salesOrders.create({
               data: {
-                  id,
                   ...metadata,
                   items: {
                       createMany,
