@@ -10,10 +10,12 @@ import {
     CommandShortcut,
 } from "../ui/command";
 import Link from "next/link";
+import useCommands from "./commands";
 
 export function Cmd() {
     const [open, setOpen] = React.useState(false);
 
+    const commands = useCommands();
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
             if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -31,33 +33,27 @@ export function Cmd() {
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Suggestions">
-                    <Link href="/sales/edit/order/new">
-                        <CommandItem>
-                            Orders
-                            <CommandShortcut>⌘O</CommandShortcut>
-                        </CommandItem>
-                    </Link>
-                    <Link
-                        href="/sales/edit/order/new"
-                        onClick={() => setOpen(false)}
-                    >
-                        <CommandItem>
-                            New Order
-                            <CommandShortcut>⌘N</CommandShortcut>
-                        </CommandItem>
-                    </Link>
-                    <Link href="/sales/edit/order/new">
-                        <CommandItem>
-                            Estimates
-                            <CommandShortcut>⌘E</CommandShortcut>
-                        </CommandItem>
-                    </Link>
-                    <Link href="/sales/edit/order/new">
-                        <CommandItem>
-                            New Estimate
-                            <CommandShortcut>⌘E</CommandShortcut>
-                        </CommandItem>
-                    </Link>
+                    {commands.commands.map((cmd, i) => (
+                        <Link
+                            onClick={() => setOpen(false)}
+                            key={i}
+                            href="/sales/edit/order/new"
+                        >
+                            <CommandItem
+                                onClick={(e) => {
+                                    console.log("....");
+                                }}
+                            >
+                                {<cmd.Icon className="mr-2 h-4 w-4" />}
+                                <span>{cmd.title}</span>
+                                {cmd.shortCut && (
+                                    <CommandShortcut>
+                                        ⌘{cmd.shortCut}
+                                    </CommandShortcut>
+                                )}
+                            </CommandItem>
+                        </Link>
+                    ))}
                 </CommandGroup>
             </CommandList>
         </CommandDialog>
