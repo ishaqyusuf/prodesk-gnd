@@ -7,7 +7,9 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
+    CommandShortcut,
 } from "../ui/command";
+import Link from "next/link";
 
 export function Cmd() {
     const [open, setOpen] = React.useState(false);
@@ -29,9 +31,33 @@ export function Cmd() {
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Suggestions">
-                    <CommandItem>Calendar</CommandItem>
-                    <CommandItem>Search Emoji</CommandItem>
-                    <CommandItem>Calculator</CommandItem>
+                    <Link href="/sales/edit/order/new">
+                        <CommandItem>
+                            Orders
+                            <CommandShortcut>⌘O</CommandShortcut>
+                        </CommandItem>
+                    </Link>
+                    <Link
+                        href="/sales/edit/order/new"
+                        onClick={() => setOpen(false)}
+                    >
+                        <CommandItem>
+                            New Order
+                            <CommandShortcut>⌘N</CommandShortcut>
+                        </CommandItem>
+                    </Link>
+                    <Link href="/sales/edit/order/new">
+                        <CommandItem>
+                            Estimates
+                            <CommandShortcut>⌘E</CommandShortcut>
+                        </CommandItem>
+                    </Link>
+                    <Link href="/sales/edit/order/new">
+                        <CommandItem>
+                            New Estimate
+                            <CommandShortcut>⌘E</CommandShortcut>
+                        </CommandItem>
+                    </Link>
                 </CommandGroup>
             </CommandList>
         </CommandDialog>

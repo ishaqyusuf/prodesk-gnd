@@ -26,6 +26,8 @@ export default async function EditSalesPage({ searchParams, params }) {
     // if (!resp.form.deliveryOption) resp.form.deliveryOption = "pickup";
     const orderId = resp?.form?.orderId;
     metadata.title = title;
+    const suppliers = resp.form?.items?.map((item) => item.supplier) || [];
+    resp.ctx.suppliers = [...new Set([...resp.ctx.suppliers, ...suppliers])];
     return (
         <div id="salesEditPage">
             <Breadcrumbs>
