@@ -82,6 +82,7 @@ export async function getCustomerAction(id) {
             salesOrders: {
                 where: {
                     type: "order",
+                    deletedAt: null,
                 },
             },
             wallet: true,
@@ -90,6 +91,7 @@ export async function getCustomerAction(id) {
                     salesOrders: {
                         where: {
                             type: "order",
+                            deletedAt: null,
                         },
                     },
                 },
