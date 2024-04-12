@@ -1,5 +1,7 @@
+import { DatePicker } from "@/components/_v1/date-range-picker";
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/use-day";
 import { ISalesOrder } from "@/types/sales";
 import { Dot } from "lucide-react";
 import { useState } from "react";
@@ -29,20 +31,37 @@ export default function SupplierCell({
                 options={suppliers}
                 watchValue={[supplier]}
             />
-            {!hover && (
+            {(!rowHover || !supplier) && (
                 <div className="absolute -top-[10px] -right-[10px]">
                     <Dot className="text-muted-foreground" />
                 </div>
             )}
-            {hover && (
-                <div className="absolute -top-[15px] -right-[15px]">
-                    <Button
-                        variant={"secondary"}
-                        size="icon"
-                        className="w-6 h-7"
-                    >
-                        <Icons.calendar className="w-4 h-4 text-muted-foreground" />
-                    </Button>
+            {supplier && rowHover && (
+                <div className="absolute  -top-[15px] -right-[15px]">
+                    <div className="relative bg-white z-10">
+                        {/* <Button
+                            variant={"outline"}
+                            size={"sm"}
+                            className="p-1 h-6"
+                        >
+                            <Icons.calendar className="w-4 h-4 text-muted-foreground" />
+                            <span className="text-muted-foreground text-xs ml-2">
+                                {!date ? "Set Date" : formatDate(date)}
+                            </span>
+                        </Button> */}
+                        <DatePicker
+                            className="h-6 w-auto p-1"
+                            // hideIcon={}
+                            format="MM/DD/YY"
+                            value={date}
+                            setValue={async (value) => {
+                                form.setValue(supplyDateKey, value);
+                                // await updateProductionDate(data.id, value);
+                                // setDate(value);
+                                // toast.success("Production Due Date Updated!");
+                            }}
+                        />
+                    </div>
                 </div>
             )}
         </div>

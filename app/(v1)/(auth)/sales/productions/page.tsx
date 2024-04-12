@@ -1,7 +1,7 @@
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
-import SalesProductionTableShell from "@/components/_v1/shells/sales-production-table-shell";
+import SalesProductionTableShell from "@/app/(v1)/(auth)/sales/productions/sales-production-table-shell";
 import {
     getSalesProductionsAction,
     prodsDueToday,

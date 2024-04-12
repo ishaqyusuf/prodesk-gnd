@@ -18,7 +18,7 @@ export default function ProductionDueDate({
 }) {
     const [date, setDate] = useState(data.prodDueDate);
     if (!editable) return <p>{formatDate(date)}</p>;
-    console.log(editable);
+
     return (
         <div className="inline-flex">
             <DatePicker

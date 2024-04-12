@@ -99,6 +99,7 @@ export type ISalesOrderItem = Omit<SalesOrderItems, "meta"> & {
 };
 export interface ISalesOrderItemMeta {
     supplier;
+    supplyDate;
     prehung_description;
     prehung_information;
     product_information;

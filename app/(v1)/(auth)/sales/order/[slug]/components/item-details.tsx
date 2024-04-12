@@ -19,6 +19,7 @@ import StatusBadge from "@/components/_v1/status-badge";
 import { PrimaryCellContent } from "@/components/_v1/columns/base-columns";
 import Money from "@/components/_v1/money";
 import { useDataPage } from "@/lib/data-page-context";
+import { formatDate } from "@/lib/use-day";
 
 export default function ItemDetailsSection() {
     const { data: order } = useDataPage<ISalesOrder>();
@@ -120,6 +121,12 @@ export default function ItemDetailsSection() {
                                             {item.supplier && (
                                                 <Badge className="leading-none bg-accent text-accent-foreground hover:bg-accent">
                                                     {item.supplier}
+
+                                                    {item.meta.supplyDate &&
+                                                        item.supplier &&
+                                                        ` | ${formatDate(
+                                                            item.meta.supplyDate
+                                                        )}`}
                                                 </Badge>
                                             )}
                                             {item.supplier && (
@@ -135,7 +142,7 @@ export default function ItemDetailsSection() {
                                     </TableCell>
                                     <TableCell className="p-2 ">
                                         <p className="whitespace-nowrap font-semibold text-muted-foreground">
-                                            {item.swing}
+                                            {item.swing}{" "}
                                         </p>
                                     </TableCell>
                                     <TableCell className="p-2 text-center font-semibold text-muted-foreground">
