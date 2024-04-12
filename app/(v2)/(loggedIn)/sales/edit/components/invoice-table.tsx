@@ -11,7 +11,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { screens } from "@/lib/responsive";
 import { cn } from "@/lib/utils";
 import { ISalesOrder } from "@/types/sales";
@@ -38,6 +37,7 @@ import EstimateFooter from "./estimate-footer";
 import { Button } from "@/components/ui/button";
 import salesFormUtils from "../sales-form-utils";
 import useSalesInvoiceRowActions from "../hooks/use-row-actions";
+import SupplierCell from "./supplier-cell";
 
 export function InvoiceTable() {
     const form = useFormContext<ISalesForm>();
@@ -45,7 +45,7 @@ export function InvoiceTable() {
         control: form.control,
         name: "items",
     });
-    const { fields, append, insert, remove } = fieldArray;
+    const { fields, append } = fieldArray;
 
     useInvoiceTotalEstimate();
 
@@ -117,6 +117,8 @@ function InvoiceTableRow({ index, field, length }) {
         //     {(provided) => {
         //         return (
         <TableRow
+            onMouseEnter={() => item.setHover(true)}
+            onMouseLeave={() => item.setHover(false)}
             // {...provided.draggableProps}
             // {...provided.dragHandleProps}
             // ref={provided.innerRef}
@@ -151,11 +153,12 @@ function InvoiceTableRow({ index, field, length }) {
                 />
             </TableCell>
             <TableCell className="p-0 px-1">
-                <InputHelper
+                <SupplierCell
+                    rowHover={item.hover}
+                    InputHelper={InputHelper}
                     index={index}
-                    formKey={"supplier"}
-                    options={data.ctx.suppliers}
-                />
+                    suppliers={data.ctx.suppliers}
+                ></SupplierCell>
             </TableCell>
             <TableCell className="p-0 px-1">
                 <InputHelper index={index} type="number" formKey={"qty"} />
@@ -290,12 +293,19 @@ interface InputHelperProps {
     onSelect?;
     perPage?;
     type?;
+    watchValue?;
 }
-function InputHelper({ index, formKey, checkbox, ...props }: InputHelperProps) {
+function InputHelper({
+    index,
+    formKey,
+    checkbox,
+    watchValue,
+    ...props
+}: InputHelperProps) {
     const form = useFormContext<ISalesOrder>();
     const ctx = useContext(SalesRowContext);
     const valueKey: any = `items.${index}.${formKey}`;
-    const [wValue] = form.watch([valueKey]);
+    const [wValue] = watchValue || form.watch([valueKey]);
     // useEffect(() => {},[formKey])
 
     const [expression, setExpression] = useState("");

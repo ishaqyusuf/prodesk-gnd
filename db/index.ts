@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { env } from "@/env.mjs";
@@ -16,5 +16,19 @@ export const prisma =
                 ? ["query", "error", "warn"]
                 : ["error"],
     });
-
+// const softDelete = Prisma.defineExtension({
+//     name: 'softdelete',
+//     model: {
+//        salesOrders: {
+//         delete: async function (pk, query) {
+//         //    return this.update({
+//         //     where: {
+//         //          id: pk
+//         //       },
+//         //       data
+//         //     }
+//        }
+//     }
+// })
+// prisma.$extends(softDelete)
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

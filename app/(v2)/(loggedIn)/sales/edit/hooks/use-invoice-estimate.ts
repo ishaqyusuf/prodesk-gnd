@@ -1,5 +1,5 @@
 import { ISalesOrder } from "@/types/sales";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { SalesFormContext } from "../ctx";
 import { convertToNumber, toFixed } from "@/lib/use-number";
@@ -69,8 +69,10 @@ export function useInvoiceItem(index) {
         toggleMockup,
         index,
     ]);
-
+    const [hover, setHover] = useState(false);
     return {
+        hover,
+        setHover,
         lid,
         qty,
         rate,

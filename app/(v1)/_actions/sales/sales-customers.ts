@@ -1,14 +1,13 @@
 "use server";
 
 import { prisma } from "@/db";
-import { Prisma, PrismaPromise } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { getPageInfo, queryFilter } from "../action-utils";
 import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { whereQuery } from "@/lib/db-utils";
 import { _cache } from "../_cache/load-data";
-import { nextId } from "@/lib/nextId";
 
 export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {

@@ -18,7 +18,7 @@ export default function DeliveryCell({ item }: SalesCellProps) {
         return (
             <>
                 <span className="capitalize">
-                    <StatusBadge status={item.deliveryOption} sm />
+                    <StatusBadge status={item.deliveryOption || "not set"} sm />
                     {date && <DateCellContent>{date}</DateCellContent>}
                 </span>
             </>
