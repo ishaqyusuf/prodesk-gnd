@@ -4,13 +4,14 @@
     -AUTOCOMPLE SALES ITEM BUG
     -MAKE DYKE SHELF TYPABLE
     -EXPORT PDF IN ESTIMATE
-# APR 12: 00.00 == 00.00
+PAYMENT INVOICE FEB 05 - APR 11
+Zelle marzuqisiaka@gmail.com
+$723.33
+# APR 12: 01.50 == 20.40
     11:40-01:30
 # APR 11: 02.20 == 18.50
     11:00-01:20
---------------------------
-PAYMENT INVOICE FEB 05 - MAR 14
-$577.50
+-------------------------- 
 # MAR 14: 01.20 == 16.30
     08:45-09:05
     07:05-07:35
