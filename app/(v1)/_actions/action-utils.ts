@@ -53,7 +53,7 @@ export async function queryFilter(input) {
     const { page = 1, per_page = 20 } = input;
     const skip = (page - 1) * per_page;
     let orderBy = {};
-    const { sort_order = "desc", sort = "createdAt" } = input;
+    const { sort_order = "desc", sort = "id" } = input;
     if (sort == "customer")
         orderBy = {
             customer: {

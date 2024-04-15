@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     CommandDialog,
     CommandEmpty,
@@ -11,21 +11,51 @@ import {
 } from "../ui/command";
 import Link from "next/link";
 import useCommands from "./commands";
+import { useCmd } from "./provider";
+import { usePathname, useRouter } from "next/navigation";
 
 export function Cmd() {
     const [open, setOpen] = React.useState(false);
 
     const commands = useCommands();
+    const cmd = useCmd();
+    const path = usePathname();
+
+    const route = useRouter();
+    const [specialCmds, setSpecialCmds] = useState<any[]>([]);
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
-            if (e.key === "k" && (e.metaKey || e.altKey)) {
-                e.preventDefault();
-                setOpen((open) => !open);
+            const metaKey = e.metaKey || e.altKey;
+            if (metaKey) {
+                switch (e.key) {
+                    case "o":
+                        e.preventDefault();
+                        route.push(`/sales/edit/order/new`);
+                        break;
+                    case "e":
+                        e.preventDefault();
+                        route.push(`/sales/edit/estimate/new`);
+                        break;
+                }
             }
+            // if (e.key === "k" && (e.metaKey || e.altKey)) {
+            //     // console.log(route.pathname);
+            //     // console.log(path);
+            //     let sc = [];
+            //     e.preventDefault();
+            //     if (cmd.form) {
+            //         const k = `pageActions.${path}`;
+            //         const { commands } = cmd.form.getValues(k) || {};
+            //         sc = commands || [];
+            //         console.log(k);
+            //     }
+            //     setSpecialCmds(sc);
+            //     setOpen((open) => !open);
+            // }
         };
         document.addEventListener("keydown", down);
         return () => document.removeEventListener("keydown", down);
-    }, []);
+    }, [path]);
 
     return (
         <CommandDialog open={open} onOpenChange={setOpen}>
@@ -33,6 +63,17 @@ export function Cmd() {
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Suggestions">
+                    {specialCmds.map((cmdItem, i) => (
+                        <CommandItem
+                            onSelect={(e) => {
+                                cmdItem.action && cmdItem.action();
+                            }}
+                            key={i}
+                        >
+                            {cmdItem.title}
+                        </CommandItem>
+                    ))}
+
                     {commands.commands.map((cmd, i) => (
                         <Link
                             onClick={() => setOpen(false)}

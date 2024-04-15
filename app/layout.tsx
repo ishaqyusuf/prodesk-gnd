@@ -36,7 +36,6 @@ export default async function RootLayout({
             <body className={inter.className}>
                 <div className="print:hidden">
                     <AppProvider>{children}</AppProvider>
-                    <Cmd />
                     <div
                         className={cn(
                             isProd

@@ -22,7 +22,7 @@ export default async function OrdersPage({ searchParams }) {
                 <BreadLink isLast title="Pickup" />
             </Breadcrumbs>
             <PageHeader title="Sales Pickup" />
-            <UpgradeBtn />
+            {/* <UpgradeBtn /> */}
             <PickupTableShell<ISalesOrder>
                 searchParams={searchParams}
                 {...response}

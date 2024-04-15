@@ -31,9 +31,9 @@ import { screens } from "@/lib/responsive";
 import SalesOrderMobileCell from "../../../../../../components/_v1/mobile/sales/sales-order-mobile-cell";
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { _getSalesRep } from "../_actions/get-sales-rep.action";
-import StatusBadge from "@/components/_v1/status-badge";
 import { getSalesOrder } from "@/app/(v1)/_actions/sales/sales";
 import DeliveryCell from "./cells/delivery-cell";
+import { useCmd } from "@/components/cmd/provider";
 
 export type SalesTableItem = Awaited<
     ReturnType<typeof getSalesOrder>
@@ -48,7 +48,13 @@ export default function OrdersTableShell<T>({
 }: TableShellProps<ISalesOrder>) {
     const [isPending, startTransition] = useTransition();
 
-    // const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const cmd = useCmd([
+        {
+            title: "special action",
+            action: () => console.log("special action"),
+        },
+    ]);
+
     const table = SmartTable<ISalesOrder>(data);
     const isMobile = useMediaQuery(screens.xs);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(

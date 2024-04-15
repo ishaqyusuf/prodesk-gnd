@@ -8,6 +8,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import CommunityProductionsTableShell from "@/components/_v1/shells/community-productions-table-shell";
 import { getProductions } from "@/app/(v1)/_actions/community-production/get-productions";
 import { _taskNames } from "@/app/(v1)/_actions/community/_task-names";
+import { prisma } from "@/db";
 
 export const metadata: Metadata = {
     title: "Unit Productions",
