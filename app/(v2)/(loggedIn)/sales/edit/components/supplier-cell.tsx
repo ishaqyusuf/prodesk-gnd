@@ -1,7 +1,5 @@
 import { DatePicker } from "@/components/_v1/date-range-picker";
-import { Icons } from "@/components/_v1/icons";
-import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/use-day";
+
 import { ISalesOrder } from "@/types/sales";
 import { Dot } from "lucide-react";
 import { useState } from "react";
@@ -15,7 +13,6 @@ export default function SupplierCell({
 }) {
     const [hover, setHover] = useState(false);
     const form = useFormContext<ISalesOrder>();
-
     const valueKey: any = `items.${index}.supplier`;
     const supplyDateKey: any = `items.${index}.meta.supplyDate`;
     const [supplier, date] = form.watch([valueKey, supplyDateKey]);

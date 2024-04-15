@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     CommandDialog,
     CommandEmpty,
@@ -16,7 +16,6 @@ import { usePathname, useRouter } from "next/navigation";
 
 export function Cmd() {
     const [open, setOpen] = React.useState(false);
-
     const commands = useCommands();
     const cmd = useCmd();
     const path = usePathname();

@@ -84,11 +84,16 @@ export function OrderRowAction(props: IOrderRowProps) {
                 <MenuItem
                     Icon={Icons.Email}
                     onClick={() => {
+                        const email =
+                            row.billingAddress?.email ||
+                            row.shippingAddress?.email ||
+                            row.customer?.email;
+
                         modal?.openSheet(
                             <SendEmailSheet
                                 data={{
                                     parentId: row.id,
-                                    to: row.customer?.email as any,
+                                    to: email as any,
                                     type:
                                         row.type == "order"
                                             ? "sales"
