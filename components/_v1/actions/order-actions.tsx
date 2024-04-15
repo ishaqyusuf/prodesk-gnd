@@ -288,13 +288,13 @@ export const PrintOrderMenuAction = typedMemo(
         }
         return props.myProd || props.estimate ? (
             <MenuItem
-                Icon={Printer}
+                Icon={!props.pdf ? Printer : FileText}
                 onClick={() => {
                     if (props.estimate) _print("quote");
                     else _print("production");
                 }}
             >
-                Print {props.mockup && " Mockup"}
+                {!props.pdf ? <>Print {props.mockup && " Mockup"}</> : "Pdf"}
             </MenuItem>
         ) : (
             <MenuItem

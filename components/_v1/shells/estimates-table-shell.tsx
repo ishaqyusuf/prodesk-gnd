@@ -23,6 +23,7 @@ import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/compo
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import SalesEstimateMobileCell from "../mobile/sales/sales-estimate-mobile-cell";
+import { SmartTable } from "../data-table/smart-table";
 
 export default function EstimatesTableShell<T>({
     data,
@@ -33,6 +34,7 @@ export default function EstimatesTableShell<T>({
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
 
+    const table = SmartTable<ISalesOrder>(data);
     const isMobile = useMediaQuery(screens.xs);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
         () =>
@@ -48,7 +50,6 @@ export default function EstimatesTableShell<T>({
                   ]
                 : [
                       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-
                       {
                           accessorKey: "orderId",
                           cell: ({ row }) =>
@@ -75,6 +76,9 @@ export default function EstimatesTableShell<T>({
                           cell: ({ row }) =>
                               OrderMemoCell(row.original.shippingAddress),
                       },
+                      table.simpleColumn("Rep", (data) => ({
+                          story: [table.secondary(data.salesRep?.name)],
+                      })),
                       {
                           accessorKey: "invoice",
                           header: ColumnHeader("Total"),
