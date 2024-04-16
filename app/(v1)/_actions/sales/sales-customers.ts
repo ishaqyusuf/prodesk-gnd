@@ -48,6 +48,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                     salesOrders: {
                         where: {
                             deletedAt: null,
+                            type: "order",
                         },
                     },
                 },
