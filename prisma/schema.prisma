@@ -870,6 +870,7 @@ model SalesOrders {
     doors             DykeSalesDoors[]
     itemDeliveries    OrderItemDelivery[]
     deliveries        OrderDelivery[]
+    deliverProgresses OrderDeliveryProgress?
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
 }
@@ -913,19 +914,32 @@ model SalesOrderItems {
     @@index([createdAt, salesOrderId, description, swing])
 }
 
+model OrderDeliveryProgress {
+    id           Int             @unique @default(autoincrement())
+    deliveredQty Int             @default(0)
+    pendingQty   Int             @default(0)
+    orderId      Int             @unique
+    order        SalesOrders     @relation(fields: [orderId], references: [id])
+    deliveries   OrderDelivery[]
+}
+
 model OrderDelivery {
-    id           Int                 @unique @default(autoincrement())
-    salesOrderId Int
-    deliveredTo  String?
-    deliveryMode String
-    items        OrderItemDelivery[]
-    approvedById Int
-    meta         Json?               @db.Json
-    createdAt    DateTime            @default(now())
-    updatedAt    DateTime            @updatedAt
-    deletedAt    DateTime?           @db.Timestamp(0)
-    order        SalesOrders         @relation(fields: [salesOrderId], references: [id])
-    approvedBy   Users               @relation(fields: [approvedById], references: [id])
+    id                      Int                    @unique @default(autoincrement())
+    salesOrderId            Int
+    deliveredTo             String?
+    deliveryMode            String
+    items                   OrderItemDelivery[]
+    driverId                Int?
+    createdById             Int
+    meta                    Json?                  @db.Json
+    createdAt               DateTime               @default(now())
+    updatedAt               DateTime               @updatedAt
+    deletedAt               DateTime?              @db.Timestamp(0)
+    order                   SalesOrders            @relation(fields: [salesOrderId], references: [id])
+    driver                  Users?                 @relation(name: "driver", fields: [driverId], references: [id])
+    createdBy               Users                  @relation(name: "createdBy", fields: [createdById], references: [id])
+    OrderDeliveryProgress   OrderDeliveryProgress? @relation(fields: [orderDeliveryProgressId], references: [id])
+    orderDeliveryProgressId Int?
 }
 
 model OrderItemDelivery {
@@ -933,6 +947,7 @@ model OrderItemDelivery {
     orderItemId     Int
     orderId         Int
     qty             Int             @default(0)
+    pendingQty      Int             @default(0)
     meta            Json?           @db.Json
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
@@ -1129,7 +1144,8 @@ model Users {
     templateHistory            CommunityTemplateHistory[]
     employeeProfile            EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
     SalesPickup                SalesPickup[]
-    approvedDeliveries         OrderDelivery[]
+    driverDeliveries           OrderDelivery[]            @relation(name: "driver")
+    createdDeliveries          OrderDelivery[]            @relation(name: "createdBy")
     assignedTasks              HomeTasks[]
     errors                     ErrorLog[]
     documents                  UserDocuments[]
