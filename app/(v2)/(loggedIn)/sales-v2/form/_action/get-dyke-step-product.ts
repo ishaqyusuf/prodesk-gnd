@@ -34,7 +34,7 @@ export async function getStepProduct(stepId) {
             };
         });
 
-    console.log(prods);
+    // console.log(prods);
 
     return prods;
 }

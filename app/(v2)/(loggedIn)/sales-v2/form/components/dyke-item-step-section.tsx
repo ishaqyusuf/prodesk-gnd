@@ -11,7 +11,7 @@ import {
     useDykeCtx,
     useDykeForm,
 } from "../../form-context";
-import { DykeForm, DykeStep } from "../../type";
+import { DykeDoorType, DykeForm, DykeStep } from "../../type";
 import ShelfItemIndex from "./shelf-item";
 import Image from "next/image";
 import { env } from "@/env.mjs";
@@ -197,6 +197,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Exterior":
                         case "Bifold":
                         case "Garage":
+                        case "Moldings":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepProd.product.title as any
@@ -220,10 +221,15 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
+            const doorType = form.getValues(
+                `itemArray.${item.rowIndex}.item.housePackageTool.doorType`
+            ) as DykeDoorType;
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd.product as any,
-                stepProd
+                stepProd,
+                [],
+                doorType
             );
             // console.log({ stepForm, nextStep });
             if (nextSteps) {

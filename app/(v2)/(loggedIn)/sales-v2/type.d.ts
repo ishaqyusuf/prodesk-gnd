@@ -12,6 +12,13 @@ export interface IDykeSalesItem {
         };
     };
 }
+export type DykeDoorType =
+    | "Interior"
+    | "Exterior"
+    | "Shelf Items"
+    | "Garage"
+    | "Bifold"
+    | "Moldings";
 type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
 // type IDykeStepForm = {
 //     data: DykeStepForm;

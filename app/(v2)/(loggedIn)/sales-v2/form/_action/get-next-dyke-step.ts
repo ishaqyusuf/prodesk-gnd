@@ -4,12 +4,14 @@ import { DykeProducts, DykeSteps } from "@prisma/client";
 import { prisma } from "@/db";
 import { getStepForm } from "./get-dyke-step";
 import { createDoorSpecies } from "./create-door-species";
+import { DykeDoorType } from "../../type";
 
 export async function getNextDykeStepAction(
     step: DykeSteps,
     product: DykeProducts | null,
     stepProd,
-    _steps: any[] = []
+    _steps: any[] = [],
+    doorType: DykeDoorType
 ) {
     // console.log(step);
 
@@ -20,7 +22,7 @@ export async function getNextDykeStepAction(
         stepProd.nextStepId = nextStepId;
     }
     if (product) {
-        const customStep = await CustomStep(product, step.title);
+        const customStep = await CustomStepForm(product, step.title, doorType);
         if (customStep) return [..._steps, customStep];
     }
     // if (step.title == 'House')
@@ -63,8 +65,8 @@ export async function getNextDykeStepAction(
     if (nextStepId) {
         const stepForm = await getStepForm(nextStepId);
         const stepProd = stepForm.step?.stepProducts?.[0];
-        if (autoStep(stepForm.step?.title)) {
-            if (hiddenSteps(stepForm.step?.title)) {
+        if (!isCustomStep(stepForm.step?.title, doorType)) {
+            if (hiddenSteps(stepForm.step?.title, doorType)) {
                 stepForm.item.meta.hidden = true;
                 stepForm.item.stepId = stepForm.step?.id as any;
 
@@ -72,7 +74,8 @@ export async function getNextDykeStepAction(
                     stepForm.step as any,
                     null,
                     stepProd,
-                    [..._steps, stepForm]
+                    [..._steps, stepForm],
+                    doorType
                 );
             }
 
@@ -94,7 +97,8 @@ export async function getNextDykeStepAction(
                     stepForm.step as any,
                     stepProd?.product as any,
                     stepProd,
-                    [..._steps, stepForm]
+                    [..._steps, stepForm],
+                    doorType
                 );
             }
         }
@@ -103,25 +107,55 @@ export async function getNextDykeStepAction(
     }
     return null;
 }
-function hiddenSteps(title) {
-    return [
+function hiddenSteps(title, doorType: DykeDoorType) {
+    let hidden = [
         "width",
         "hand",
         "casing 1x4 setup",
         "--jamb stop",
         "rip jamb",
     ].includes(title?.toLowerCase());
+
+    if (doorType == "Moldings") {
+    }
+    if (doorType == "Bifold" && !hidden) {
+        hidden = [
+            "door configuration",
+            "bore",
+            "jamb size",
+            "casing",
+            "jamb species",
+            "jamb type",
+            "cutdown height",
+            "casing y/n",
+            "hinge finish",
+            "door type",
+            "casing side choice",
+            "casing species",
+            "cutdown height",
+        ].includes(title?.toLowerCase());
+    }
+    return hidden;
 }
-function autoStep(title) {
-    return !["Shelf Items", "House Package Tool", "Door"].includes(title);
+function isCustomStep(stepTitle, doorType: DykeDoorType) {
+    return ["Shelf Items", "House Package Tool", "Door"].includes(stepTitle);
 }
-async function CustomStep({ title: productTitle }, stepTitle) {
+async function CustomStepForm(
+    { title: productTitle },
+    stepTitle,
+    doorType: DykeDoorType
+) {
     const customSteps = {
         "Shelf Items": "Shelf Items",
         "Cutdown Height": "House Package Tool",
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
-
+    if (doorType == "Bifold") {
+        const customSteps = {
+            Door: "House Package Tool",
+        };
+        title = customSteps[productTitle] || customSteps[stepTitle];
+    }
     // if(!title && stepTitle != 'Shelf')
     if (title) {
         let step = await prisma.dykeSteps.findFirst({

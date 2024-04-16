@@ -5,11 +5,9 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { UseFormReturn } from "react-hook-form";
 import { DykeItemStepSection } from "./dyke-item-step-section";
-import { useContext, useEffect, useState } from "react";
+
 import {
-    DykeFormContext,
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
