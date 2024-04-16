@@ -15,7 +15,6 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
     qb.searchQuery("name", "address");
     // qb.raw({})
     const q = { contains: query._q || undefined };
-    console.log(query._q);
 
     // console.log(qb.get().OR[0]);
 
@@ -46,7 +45,11 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
             addressBooks: true,
             _count: {
                 select: {
-                    salesOrders: true,
+                    salesOrders: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
                 },
             },
         },

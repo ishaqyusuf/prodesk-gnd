@@ -18,7 +18,6 @@ interface Props {}
 export default async function CustomersPage({ searchParams }) {
     // await _mergeConflictCustomers();
     const response = await getCustomersAction(queryParams(searchParams));
-    console.log(searchParams._q);
 
     return (
         <CustomersLayout>
