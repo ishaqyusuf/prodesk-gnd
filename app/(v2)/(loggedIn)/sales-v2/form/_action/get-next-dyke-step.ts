@@ -23,6 +23,8 @@ export async function getNextDykeStepAction(
     }
     if (product) {
         const customStep = await CustomStepForm(product, step.title, doorType);
+        console.log({ customStep, product, step, doorType });
+
         if (customStep) return [..._steps, customStep];
     }
     // if (step.title == 'House')
@@ -116,7 +118,7 @@ function hiddenSteps(title, doorType: DykeDoorType) {
         "rip jamb",
     ].includes(title?.toLowerCase());
 
-    if (doorType == "Moldings") {
+    if (doorType == "Molding") {
     }
     if (doorType == "Bifold" && !hidden) {
         hidden = [
@@ -155,6 +157,15 @@ async function CustomStepForm(
             Door: "House Package Tool",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
+    }
+    if (doorType == "Molding") {
+        const customSteps = {
+            "Door Type": "Specie",
+            Specie: "Molding",
+            Molding: "House Package Tool",
+        };
+        title = customSteps[stepTitle];
+        // console.log({ title, productTitle, stepTitle });
     }
     // if(!title && stepTitle != 'Shelf')
     if (title) {

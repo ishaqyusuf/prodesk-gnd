@@ -19,7 +19,7 @@ export async function saveStepProduct(data: IStepProducts[0]) {
                 product: {
                     create: {
                         ...productData,
-
+                        value: productData.title as any,
                         meta: productData.meta as any,
                     },
                 },
@@ -51,6 +51,7 @@ export async function saveStepProduct(data: IStepProducts[0]) {
                         },
                         data: {
                             ...productData,
+                            value: productData.title as any,
                             meta: productData.meta as any,
                         },
                     },

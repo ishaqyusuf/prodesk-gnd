@@ -967,6 +967,7 @@ model HousePackageTools {
     dykeDoorId     Int?
     jambSizeId     Int?
     casingId       Int?
+    moldingId      Int?
     totalPrice     Float?             @default(0)
     totalDoors     Int?               @default(0)
     meta           Json?              @db.Json
@@ -979,6 +980,7 @@ model HousePackageTools {
     shelfProd      DykeShelfProducts? @relation(name: "shelfProd", fields: [doorId], references: [id])
     jambSize       DykeProducts?      @relation(name: "jamb", fields: [jambSizeId], references: [id])
     casing         DykeProducts?      @relation(name: "casing", fields: [casingId], references: [id])
+    molding        DykeProducts?      @relation(name: "molding", fields: [moldingId], references: [id])
     doors          DykeSalesDoors[]
 }
 
@@ -1365,6 +1367,7 @@ model DykeProducts {
     category                DykeCategories?     @relation(fields: [categoryId], references: [id])
     jambHousePackageTools   HousePackageTools[] @relation(name: "jamb")
     casingHousePackageTools HousePackageTools[] @relation(name: "casing")
+    moldingHousePkgTools    HousePackageTools[] @relation(name: "molding")
 }
 
 model DykeProductPrices {

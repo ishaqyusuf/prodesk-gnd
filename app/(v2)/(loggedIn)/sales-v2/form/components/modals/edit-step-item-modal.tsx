@@ -30,7 +30,7 @@ export default function EditStepItemModal({ item, onCreate }: Props) {
     const src = form.watch("product.img");
 
     function onUpload(assetId) {
-        console.log(assetId);
+        // console.log(assetId);
 
         form.setValue("product.img", assetId);
     }

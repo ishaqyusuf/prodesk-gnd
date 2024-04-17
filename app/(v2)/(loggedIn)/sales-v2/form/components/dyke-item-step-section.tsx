@@ -199,7 +199,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Exterior":
                         case "Bifold":
                         case "Garage":
-                        case "Moldings":
+                        case "Molding":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepProd.product.title as any
@@ -279,7 +279,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 className="w-8 h-8"
                                 onClick={() => {
                                     const { ...data } = b;
-                                    console.log(data);
+                                    // console.log(data);
 
                                     modal?.open(
                                         <EditStepItemModal
@@ -357,7 +357,14 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             },
                             dykeProductId,
                             ...stepProd
-                        } = stepProducts[0] as IStepProducts[0];
+                        } = stepProducts[0] ||
+                        ({
+                            dykeStepId: stepForm.step?.id,
+                            nextStepId: null,
+                            product: {
+                                meta: {},
+                            },
+                        } as IStepProducts[0]);
                         modal?.open(
                             <EditStepItemModal
                                 onCreate={onCreate}
@@ -374,8 +381,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         );
                     }}
                     className={cn(
-                        "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center",
-                        stepForm?.step?.title == "Door Type" && "hidden"
+                        "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center min-h-[150px]"
+                        // stepForm?.step?.title == "Door Type" && "hidden"
                     )}
                 >
                     <Icons.add />
