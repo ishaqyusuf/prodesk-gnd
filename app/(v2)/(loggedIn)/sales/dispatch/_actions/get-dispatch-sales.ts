@@ -20,7 +20,7 @@ export async function getDispatchSales(query) {
                 createdAt: "desc",
             },
             include: {
-                approvedBy: true,
+                // approvedBy: true,
                 order: {
                     include: {
                         customer: true,
