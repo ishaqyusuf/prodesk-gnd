@@ -199,7 +199,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Exterior":
                         case "Bifold":
                         case "Garage":
-                        case "Molding":
+                        case "Moulding":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepProd.product.title as any

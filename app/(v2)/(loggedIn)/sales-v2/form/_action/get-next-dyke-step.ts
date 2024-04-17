@@ -117,8 +117,7 @@ function hiddenSteps(title, doorType: DykeDoorType) {
         "--jamb stop",
         "rip jamb",
     ].includes(title?.toLowerCase());
-
-    if (doorType == "Molding") {
+    if (doorType == "Moulding") {
     }
     if (doorType == "Bifold" && !hidden) {
         hidden = [
@@ -158,11 +157,11 @@ async function CustomStepForm(
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
     }
-    if (doorType == "Molding") {
+    if (doorType == "Moulding") {
         const customSteps = {
             "Door Type": "Specie",
-            Specie: "Molding",
-            Molding: "House Package Tool",
+            Specie: "Moulding",
+            Moulding: "House Package Tool",
         };
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });
