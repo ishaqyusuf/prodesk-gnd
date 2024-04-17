@@ -121,6 +121,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     `itemArray.${rowIndex}.item.housePackageTool.doorType` as any
                 )
             );
+            // console.log(query);
+
             const { result: prods } = await getDykeStepDoors(
                 { ...query, stepId: stepForm?.step?.id } as any
                 // query.q,

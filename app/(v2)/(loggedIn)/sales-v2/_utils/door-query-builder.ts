@@ -1,8 +1,7 @@
 import { camel } from "@/lib/utils";
-import { FormStepArray } from "../type";
-export type DoorTypes = "Interior" | "Garage" | "Bifold";
+import { DykeDoorType, FormStepArray } from "../type";
 
-export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
+export function doorQueryBuilder(steps: FormStepArray, doorType: DykeDoorType) {
     const obj = toKeyValue(steps);
     // console.log(obj);
 
@@ -65,7 +64,7 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
     // console.log(q, doorType);
 
     // q = ["x8-0", "1-3/8"];
-    console.log({ q, omit });
+    // console.log({ q, omit });
 
     // q = ["hc ", "x8-0"];
     // omit = ["hc flush"];
@@ -75,13 +74,14 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DoorTypes) {
         q, //: q.join(" "),
         qty: obj.qty,
         omit,
-        doorType: doorType == "Garage" ? doorType : null,
+        doorType:
+            doorType == "Garage" || doorType == "Bifold" ? doorType : null,
     };
 }
 function toKeyValue(step: FormStepArray) {
     const obj: {
         doorConfiguration: string;
-        doorType0: DoorTypes;
+        doorType0: DykeDoorType;
         height: string;
         doorType:
             | "HC Molded"

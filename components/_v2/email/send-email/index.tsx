@@ -70,7 +70,7 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             data: emailData.data,
             from: emailData.from,
             meta: {},
-            attachOrder: false,
+            attachOrder: true,
         } as any);
     }
     useEffect(() => {

@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeProductMeta } from "../../type";
+import { createSearchParamsBailoutProxy } from "next/dist/client/components/searchparams-bailout-proxy";
 
 export async function getDykeStepDoors({
     q,
@@ -20,6 +21,8 @@ export async function getDykeStepDoors({
             doorType,
         },
     });
+    console.log(_doors.length);
+
     if (_doors.length || final) return response(_doors, stepId);
     if (query == "SC Molded") {
         const hcDoors = await prisma.dykeDoors.findMany({
@@ -39,7 +42,9 @@ export async function getDykeStepDoors({
 
         return await getDykeStepDoors({ q, omit, qty, stepId, query });
     }
+    console.log(q);
     const where = {
+        doorType: doorType ? doorType : undefined,
         AND: [
             {
                 AND: q.map((w) => {
@@ -72,7 +77,7 @@ export async function getDykeStepDoors({
         where,
     });
 
-    if (!doors.length) {
+    if (!doors.length && doorType != "Bifold") {
         doors = (await prisma.dykeShelfProducts.findMany({
             where,
         })) as any;
