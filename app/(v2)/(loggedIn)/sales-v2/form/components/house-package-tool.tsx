@@ -174,7 +174,6 @@ export default function HousePackageTool({}: Props) {
                                     </TableCell>
                                 </>
                             )}
-
                             <TableCell>
                                 {row.dim?.replaceAll("in", '"')}
                             </TableCell>

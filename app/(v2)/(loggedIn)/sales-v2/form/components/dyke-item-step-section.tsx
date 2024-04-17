@@ -311,7 +311,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         <button
                             disabled={ctx.loadingStep}
                             className={cn(
-                                "w-full  flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded  space-y-2 justify-end"
+                                "w-full  flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded  space-y-2 justify-end min-h-[150px]"
                             )}
                             onClick={() => {
                                 selectProduct(b);
@@ -373,7 +373,10 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             />
                         );
                     }}
-                    className="border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center"
+                    className={cn(
+                        "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center",
+                        stepForm?.step?.title == "Door Type" && "hidden"
+                    )}
                 >
                     <Icons.add />
                 </button>

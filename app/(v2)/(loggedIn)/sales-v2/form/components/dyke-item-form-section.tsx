@@ -14,6 +14,7 @@ import {
 } from "../../form-context";
 import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface Props {
     rowIndex;
@@ -33,11 +34,11 @@ export function DykeItemFormSection({ rowIndex }: Props) {
             <Collapsible
                 open={item.opened}
                 onOpenChange={item.openChange}
-                className=""
+                className={cn(rowIndex > 0 && "mt-4")}
             >
                 <div className="flex bg-accent p-2 px-4 justify-between">
                     <CollapsibleTrigger>
-                        <Label className="text-base">
+                        <Label className="text-base uppercase font-bold">
                             Item {Number(rowIndex) + 1}
                         </Label>
                     </CollapsibleTrigger>
