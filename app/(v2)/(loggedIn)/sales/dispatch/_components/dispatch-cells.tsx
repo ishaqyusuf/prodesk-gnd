@@ -25,7 +25,8 @@ function Recipient({ item }: Props) {
 function ApprovedBy({ item }: Props) {
     return (
         <TableCol>
-            <TableCol.Primary>{item.approvedBy?.name || "-"}</TableCol.Primary>
+            <></>
+            {/* <TableCol.Primary>{item.approvedBy?.name || "-"}</TableCol.Primary> */}
         </TableCol>
     );
 }
