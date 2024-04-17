@@ -9,10 +9,10 @@ const server = z.object({
     POSTGRESS_URL: z.string().url(),
     RESEND_API_KEY: z.string(),
     BLESS_TOKEN: z.string(),
-    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string(),
-    NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
-    NEXT_PUBLIC_CLOUDINARY_API_SECRET: z.string(),
-    NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL: z.string(),
+    CLOUDINARY_CLOUD_NAME: z.string(),
+    CLOUDINARY_API_KEY: z.string(),
+    CLOUDINARY_API_SECRET: z.string(),
+    CLOUDINARY_UPLOAD_URL: z.string(),
     TWILIO_ACCOUNT_SID: z.string(),
     TWILIO_ACCOUNT_TOKEN: z.string(),
     TWILIO_PHONE: z.string(),
@@ -40,9 +40,9 @@ const server = z.object({
  */
 const client = z.object({
     NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL: z.string(),
+    // CLOUDINARY_UPLOAD_URL: z.string(),
     NEXT_PUBLIC_ROOT_DOMAIN: z.string(),
-    NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
+    // CLOUDINARY_API_KEY: z.string(),
     NEXT_PUBLIC_CLOUDINARY_BASE_URL: z.string(),
     NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
@@ -67,14 +67,11 @@ const processEnv = {
     NEXT_PUBLIC_CLOUDINARY_BASE_URL:
         process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL,
     BLESS_TOKEN: process.env.BLESS_TOKEN,
-    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
-        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-    NEXT_PUBLIC_CLOUDINARY_API_SECRET:
-        process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
-    NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL:
-        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL,
+    CLOUDINARY_UPLOAD_URL: process.env.CLOUDINARY_UPLOAD_URL,
     TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
     TWILIO_PHONE: process.env.TWILIO_PHONE,
     NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,

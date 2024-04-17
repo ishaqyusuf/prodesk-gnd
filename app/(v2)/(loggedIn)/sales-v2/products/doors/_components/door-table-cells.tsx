@@ -9,6 +9,8 @@ import {
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
 import { DykeDoorTablePromiseProps } from "./dyke-doors-table";
+import Image from "next/image";
+import { env } from "@/env.mjs";
 
 interface Props {
     item: DykeDoorTablePromiseProps["Item"];
@@ -18,8 +20,21 @@ function Door({ item }: Props) {
     return (
         <TableCol>
             <LinkableNode href={""}>
-                <TableCol.Primary>{item.title}</TableCol.Primary>
-                <TableCol.Secondary>{item.doorType}</TableCol.Secondary>
+                <div className="flex gap-2">
+                    <div className="">
+                        <Image
+                            className="cursor-pointer"
+                            width={100}
+                            height={100}
+                            src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.img}`}
+                            alt={""}
+                        />
+                    </div>
+                    <div className="">
+                        <TableCol.Primary>{item.title}</TableCol.Primary>
+                        <TableCol.Secondary>{item.doorType}</TableCol.Secondary>
+                    </div>
+                </div>
             </LinkableNode>
         </TableCol>
     );

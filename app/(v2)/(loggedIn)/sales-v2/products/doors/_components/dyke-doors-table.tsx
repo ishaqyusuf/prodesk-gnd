@@ -5,7 +5,7 @@ import React from "react";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 import { _getDykeDoors } from "../../_actions/dyke-doors";
-import { DoorCells } from "./door-cells";
+import { DoorCells } from "./door-table-cells";
 
 export type DykeDoorTablePromiseProps = PromiseType<typeof _getDykeDoors>;
 interface Props {

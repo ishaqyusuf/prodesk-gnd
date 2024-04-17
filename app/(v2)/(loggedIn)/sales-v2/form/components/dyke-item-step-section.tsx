@@ -255,6 +255,9 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     }
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[0]) {
+        console.log("oncreate");
+        console.log(stepItem);
+
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];
@@ -276,6 +279,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 className="w-8 h-8"
                                 onClick={() => {
                                     const { ...data } = b;
+                                    console.log(data);
+
                                     modal?.open(
                                         <EditStepItemModal
                                             onCreate={onCreate}
@@ -286,7 +291,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                             >
                                 <Icons.edit className="w-4 h-4" />
                             </Button>
-                            <Button
+                            {/* <Button
                                 size="icon"
                                 className="w-8 h-8"
                                 onClick={() => {
@@ -300,7 +305,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 }}
                             >
                                 <Icons.copy className="w-4 h-4" />
-                            </Button>
+                                 
+                            </Button> */}
                         </div>
                         <button
                             disabled={ctx.loadingStep}
@@ -335,6 +341,42 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         </button>
                     </div>
                 ))}
+                <button
+                    onClick={() => {
+                        const {
+                            id,
+                            product: {
+                                id: prodId,
+                                createdAt,
+                                updatedAt,
+                                value,
+                                description,
+                                img,
+                                meta,
+                                ...prod
+                            },
+                            dykeProductId,
+                            ...stepProd
+                        } = stepProducts[0] as IStepProducts[0];
+                        modal?.open(
+                            <EditStepItemModal
+                                onCreate={onCreate}
+                                item={
+                                    {
+                                        ...stepProd,
+                                        product: {
+                                            ...prod,
+                                            meta: {},
+                                        },
+                                    } as any
+                                }
+                            />
+                        );
+                    }}
+                    className="border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center"
+                >
+                    <Icons.add />
+                </button>
             </div>
             <div className="flex justify-center">
                 {ctx.loadingStep && (

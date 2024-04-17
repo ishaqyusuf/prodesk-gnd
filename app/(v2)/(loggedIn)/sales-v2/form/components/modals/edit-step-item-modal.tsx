@@ -30,6 +30,8 @@ export default function EditStepItemModal({ item, onCreate }: Props) {
     const src = form.watch("product.img");
 
     function onUpload(assetId) {
+        console.log(assetId);
+
         form.setValue("product.img", assetId);
     }
     const [saving, startSaving] = useTransition();
@@ -42,30 +44,32 @@ export default function EditStepItemModal({ item, onCreate }: Props) {
         });
     }
     return (
-        <RenderForm {...form}>
-            <DialogHeader>
-                <DialogTitle>Copy Product</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4">
-                <ControlledInput
-                    control={form.control}
-                    name="product.title"
-                    label="Product Title"
-                />
-                <FileUploader
-                    onUpload={onUpload}
-                    label="Product Image"
-                    folder="dyke"
-                    src={src}
-                />
-            </div>
-            <DialogFooter>
-                <div className="flex justify-end">
-                    <Button disabled={saving} onClick={save}>
-                        Save
-                    </Button>
+        <DialogContent>
+            <RenderForm {...form}>
+                <DialogHeader>
+                    <DialogTitle>Copy Product</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4">
+                    <ControlledInput
+                        control={form.control}
+                        name="product.title"
+                        label="Product Title"
+                    />
+                    <FileUploader
+                        onUpload={onUpload}
+                        label="Product Image"
+                        folder="dyke"
+                        src={src}
+                    />
                 </div>
-            </DialogFooter>
-        </RenderForm>
+                <DialogFooter>
+                    <div className="flex justify-end">
+                        <Button disabled={saving} onClick={save}>
+                            Save
+                        </Button>
+                    </div>
+                </DialogFooter>
+            </RenderForm>
+        </DialogContent>
     );
 }

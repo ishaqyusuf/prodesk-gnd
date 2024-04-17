@@ -22,6 +22,7 @@ interface Props {}
 export default function HousePackageTool({}: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
+    const doorType = item.doorType();
     const prices = ["Door", "Jamb Size", "Casing"].map((title) => ({
         title,
         key: camel(`${title} price`),
@@ -87,11 +88,12 @@ export default function HousePackageTool({}: Props) {
         form.setValue(`${rootKey}.totalPrice` as any, sum.totalPrice);
         form.setValue(`${rootKey}.totalDoors` as any, sum.doors);
     }
+
     useEffect(() => {
         (async () => {
             // console.log(height);
             const list = await getDimensionSizeList(height);
-            console.log(list);
+            // console.log(list);
             setSizeList(list as any);
         })();
     }, []);
@@ -100,8 +102,17 @@ export default function HousePackageTool({}: Props) {
             <Table>
                 <TableHeader>
                     <TableHead>Width</TableHead>
-                    <TableHead className="w-[100px]">LH</TableHead>
-                    <TableHead className="w-[100px]">RH</TableHead>
+                    {doorType == "Bifold" ? (
+                        <>
+                            <TableHead className="w-[100px]">Qty</TableHead>
+                        </>
+                    ) : (
+                        <>
+                            <TableHead className="w-[100px]">LH</TableHead>
+                            <TableHead className="w-[100px]">RH</TableHead>
+                        </>
+                    )}
+
                     <TableHead>Unit Dimension</TableHead>
                     <TableHead className="">
                         <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
@@ -123,23 +134,47 @@ export default function HousePackageTool({}: Props) {
                     {sizeList.map((row) => (
                         <TableRow key={row.dim}>
                             <TableCell>{row.width}</TableCell>
-                            <TableCell>
-                                {/* <SwingInput /> */}
-                                <ControlledInput
-                                    type="number"
-                                    list
-                                    control={form.control}
-                                    name={`${doorsKey}.${row.dim}.lhQty` as any}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <ControlledInput
-                                    type="number"
-                                    list
-                                    control={form.control}
-                                    name={`${doorsKey}.${row.dim}.rhQty` as any}
-                                />
-                            </TableCell>
+                            {doorType == "Bifold" ? (
+                                <>
+                                    <TableCell>
+                                        {/* <SwingInput /> */}
+                                        <ControlledInput
+                                            type="number"
+                                            list
+                                            control={form.control}
+                                            name={
+                                                `${doorsKey}.${row.dim}.lhQty` as any
+                                            }
+                                        />
+                                    </TableCell>
+                                </>
+                            ) : (
+                                <>
+                                    <TableCell>
+                                        {/* <SwingInput /> */}
+                                        <ControlledInput
+                                            type="number"
+                                            list
+                                            control={form.control}
+                                            name={
+                                                `${doorsKey}.${row.dim}.lhQty` as any
+                                            }
+                                        />
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <ControlledInput
+                                            type="number"
+                                            list
+                                            control={form.control}
+                                            name={
+                                                `${doorsKey}.${row.dim}.rhQty` as any
+                                            }
+                                        />
+                                    </TableCell>
+                                </>
+                            )}
+
                             <TableCell>
                                 {row.dim?.replaceAll("in", '"')}
                             </TableCell>

@@ -45,7 +45,12 @@ export function FileUploader({
             const file = isUrl ? url : fileInput?.files?.[0];
 
             if (file) {
-                const data = await uploadFile(file, folder);
+                // console.log("UPLOADING....");
+
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const data = await uploadFile(formData, folder);
 
                 if (data.error) {
                     toast.error(data.error.message);

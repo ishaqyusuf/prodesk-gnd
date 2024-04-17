@@ -4,10 +4,10 @@ import { env } from "@/env.mjs";
 import { v2 as cloudinary } from "cloudinary";
 
 const cloudinaryConfig = cloudinary.config({
-    cloud_name: env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-    api_secret: env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
-    secure: true
+    cloud_name: env.CLOUDINARY_CLOUD_NAME,
+    api_key: env.CLOUDINARY_API_KEY,
+    api_secret: env.CLOUDINARY_API_SECRET,
+    secure: true,
 });
 
 export async function getSignature(folder) {

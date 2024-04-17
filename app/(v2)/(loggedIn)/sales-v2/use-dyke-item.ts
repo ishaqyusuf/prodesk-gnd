@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDykeForm } from "./form-context";
 import { useFieldArray } from "react-hook-form";
 import { createBlock } from "./form/item-form-blocks";
-import { DykeBlock } from "./type";
+import { DykeBlock, DykeDoorType } from "./type";
 
 // export interface IDykeItemFormContext {
 //     blocks: DykeBlock[];
@@ -20,7 +20,7 @@ export type IDykeItemFormContext = ReturnType<typeof useDykeItem>;
 export default function useDykeItem(rowIndex: number) {
     const form = useDykeForm();
     const stepArrayName = `itemArray.${rowIndex}.item.formStepArray` as const;
-    const itemKey = `items.${rowIndex}` as any;
+    const itemKey = `itemArray.${rowIndex}.item` as any;
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: stepArrayName,
@@ -46,6 +46,11 @@ export default function useDykeItem(rowIndex: number) {
         removeStep: remove,
         rowIndex,
         itemKey,
+        doorType(): DykeDoorType {
+            return form.getValues(
+                `${itemKey}.housePackageTool.doorType` as any
+            );
+        },
         configValueKey(blockName) {
             return `items.${rowIndex}.meta.config.${blockName}` as any;
         },
