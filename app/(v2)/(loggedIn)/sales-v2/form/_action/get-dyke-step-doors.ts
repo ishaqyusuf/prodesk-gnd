@@ -4,7 +4,6 @@ import { prisma } from "@/db";
 import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeProductMeta } from "../../type";
-import { createSearchParamsBailoutProxy } from "next/dist/client/components/searchparams-bailout-proxy";
 
 export async function getDykeStepDoors({
     q,
@@ -21,7 +20,6 @@ export async function getDykeStepDoors({
             doorType,
         },
     });
-    console.log(_doors.length);
 
     if (_doors.length || final) return response(_doors, stepId);
     if (query == "SC Molded") {
@@ -42,7 +40,7 @@ export async function getDykeStepDoors({
 
         return await getDykeStepDoors({ q, omit, qty, stepId, query });
     }
-    console.log(q);
+
     const where = {
         doorType: doorType ? doorType : undefined,
         AND: [
@@ -72,7 +70,6 @@ export async function getDykeStepDoors({
             },
         ],
     };
-
     let doors = await prisma.dykeProducts.findMany({
         where,
     });

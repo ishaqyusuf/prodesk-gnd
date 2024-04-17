@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IDykeProduct } from "../components/products-table";
+import { IDykeProduct } from "../_components/products-table";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { Button } from "@/components/ui/button";

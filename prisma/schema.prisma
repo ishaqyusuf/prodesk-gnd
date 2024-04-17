@@ -930,14 +930,14 @@ model OrderDelivery {
     deliveryMode            String
     items                   OrderItemDelivery[]
     driverId                Int?
-    createdById             Int
+    createdById             Int?
     meta                    Json?                  @db.Json
     createdAt               DateTime               @default(now())
     updatedAt               DateTime               @updatedAt
     deletedAt               DateTime?              @db.Timestamp(0)
     order                   SalesOrders            @relation(fields: [salesOrderId], references: [id])
     driver                  Users?                 @relation(name: "driver", fields: [driverId], references: [id])
-    createdBy               Users                  @relation(name: "createdBy", fields: [createdById], references: [id])
+    createdBy               Users?                 @relation(name: "createdBy", fields: [createdById], references: [id])
     OrderDeliveryProgress   OrderDeliveryProgress? @relation(fields: [orderDeliveryProgressId], references: [id])
     orderDeliveryProgressId Int?
 }

@@ -1,9 +1,9 @@
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
-import DykeTabLayout from "./components/dyke-tab-layout";
+import DykeTabLayout from "./_components/dyke-tab-layout";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { getDykeProducts } from "./_actions/get-dyke-products";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
-import ProductsTable from "./components/products-table";
+import ProductsTable from "./_components/products-table";
 import { Metadata } from "next";
 import { Shell } from "@/components/shell";
 

@@ -15,7 +15,7 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { deleteDykeProductAtion } from "../_actions/delete-product-action";
 import { useModal } from "@/components/common/modal-old/provider";
-import EditProductModal from "../modals/edit-product-modal";
+import EditProductModal from "../_modals/edit-product-modal";
 import Money from "@/components/_v1/money";
 
 export type IDykeProduct = Awaited<

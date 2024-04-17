@@ -36,7 +36,7 @@ export async function upgradeDeliveries() {
         ++currentId;
         orderDeliveries.push({
             id: currentId,
-            approvedById: order.salesRepId,
+            // approvedById: order.salesRepId,
             deliveryMode: "delivery",
             meta: {},
             salesOrderId: order.id,
@@ -83,7 +83,7 @@ export async function upgradeDeliveries() {
         ++currentId;
         orderDeliveries.push({
             id: currentId,
-            approvedById: order?.pickup?.pickupApprovedBy,
+            // approvedById: order?.pickup?.pickupApprovedBy,
             deliveryMode: "pickup",
             meta: order.pickup?.meta || {},
             createdAt:
