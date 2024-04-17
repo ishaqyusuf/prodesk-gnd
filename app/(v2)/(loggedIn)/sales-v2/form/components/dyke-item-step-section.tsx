@@ -311,7 +311,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         <button
                             disabled={ctx.loadingStep}
                             className={cn(
-                                "w-full  flex flex-col items-center border-2 border-transparent hover:border-muted-foreground rounded  space-y-2 justify-end min-h-[150px]"
+                                "w-full  flex flex-col items-center border-2 border-muted-foreground/10  hover:border-muted-foreground rounded  space-y-2 justify-end h-[200px] overflow-hidden p-2"
                             )}
                             onClick={() => {
                                 selectProduct(b);
@@ -341,52 +341,54 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         </button>
                     </div>
                 ))}
-                <button
-                    onClick={() => {
-                        const {
-                            id,
-                            product: {
-                                id: prodId,
-                                createdAt,
-                                updatedAt,
-                                value,
-                                description,
-                                img,
-                                meta,
-                                ...prod
-                            },
-                            dykeProductId,
-                            ...stepProd
-                        } = stepProducts[0] ||
-                        ({
-                            dykeStepId: stepForm.step?.id,
-                            nextStepId: null,
-                            product: {
-                                meta: {},
-                            },
-                        } as IStepProducts[0]);
-                        modal?.open(
-                            <EditStepItemModal
-                                onCreate={onCreate}
-                                item={
-                                    {
-                                        ...stepProd,
-                                        product: {
-                                            ...prod,
-                                            meta: {},
-                                        },
-                                    } as any
-                                }
-                            />
-                        );
-                    }}
-                    className={cn(
-                        "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center min-h-[150px]"
-                        // stepForm?.step?.title == "Door Type" && "hidden"
-                    )}
-                >
-                    <Icons.add />
-                </button>
+                <div className="p-4">
+                    <button
+                        onClick={() => {
+                            const {
+                                id,
+                                product: {
+                                    id: prodId,
+                                    createdAt,
+                                    updatedAt,
+                                    value,
+                                    description,
+                                    img,
+                                    meta,
+                                    ...prod
+                                },
+                                dykeProductId,
+                                ...stepProd
+                            } = stepProducts[0] ||
+                            ({
+                                dykeStepId: stepForm.step?.id,
+                                nextStepId: null,
+                                product: {
+                                    meta: {},
+                                },
+                            } as IStepProducts[0]);
+                            modal?.open(
+                                <EditStepItemModal
+                                    onCreate={onCreate}
+                                    item={
+                                        {
+                                            ...stepProd,
+                                            product: {
+                                                ...prod,
+                                                meta: {},
+                                            },
+                                        } as any
+                                    }
+                                />
+                            );
+                        }}
+                        className={cn(
+                            "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                            // stepForm?.step?.title == "Door Type" && "hidden"
+                        )}
+                    >
+                        <Icons.add />
+                    </button>
+                </div>
             </div>
             <div className="flex justify-center">
                 {ctx.loadingStep && (
