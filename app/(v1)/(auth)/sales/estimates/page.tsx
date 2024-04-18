@@ -12,6 +12,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order-mobile-menu";
+import NewEstimateBtn from "./new-sales-btn";
 
 interface Props {}
 export default async function DeliveryPage({ searchParams }) {
@@ -25,7 +26,8 @@ export default async function DeliveryPage({ searchParams }) {
             <PageHeader
                 title="Sales Estimates"
                 permissions={["editOrders"]}
-                newLink="/sales/edit/estimate/new"
+                Action={NewEstimateBtn}
+                // newLink="/sales/edit/estimate/new"
             />
             <EstimatesTableShell<ISalesOrder>
                 searchParams={searchParams}

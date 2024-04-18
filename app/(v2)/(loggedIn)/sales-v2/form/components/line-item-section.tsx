@@ -30,7 +30,7 @@ export default function LineItemSection({}: Props) {
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
         []
     );
-    const rootKey = `itemArray.${item.rowIndex}.item.housePackageTool`;
+    const rootKey = `itemArray.${item.rowIndex}.item`;
     const doorsKey = `${rootKey}._doorForm`;
     const height = form.watch(
         `itemArray.${item.rowIndex}.item.housePackageTool.height`
@@ -106,91 +106,25 @@ export default function LineItemSection({}: Props) {
                     <TableHead>Line Total</TableHead>
                 </TableHeader>
                 <TableBody>
-                    {sizeList.map((row) => (
-                        <TableRow key={row.dim}>
-                            <TableCell>{row.width}</TableCell>
-                            {doorType == "Bifold" ? (
-                                <>
-                                    <TableCell>
-                                        {/* <SwingInput /> */}
-                                        <ControlledInput
-                                            type="number"
-                                            list
-                                            control={form.control}
-                                            name={
-                                                `${doorsKey}.${row.dim}.lhQty` as any
-                                            }
-                                        />
-                                    </TableCell>
-                                </>
-                            ) : (
-                                <>
-                                    <TableCell>
-                                        {/* <SwingInput /> */}
-                                        <ControlledInput
-                                            type="number"
-                                            list
-                                            control={form.control}
-                                            name={
-                                                `${doorsKey}.${row.dim}.lhQty` as any
-                                            }
-                                        />
-                                    </TableCell>
-
-                                    <TableCell>
-                                        <ControlledInput
-                                            type="number"
-                                            list
-                                            control={form.control}
-                                            name={
-                                                `${doorsKey}.${row.dim}.rhQty` as any
-                                            }
-                                        />
-                                    </TableCell>
-                                </>
-                            )}
-                            <TableCell>
-                                {row.dim?.replaceAll("in", '"')}
-                            </TableCell>
-                            <TableCell className="">
-                                <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
-                                    <div className="flex pt-1 justify-between">
-                                        {prices.map((p) => (
-                                            <div
-                                                className="flex-1"
-                                                key={p.title}
-                                            >
-                                                <div className="mx-1">
-                                                    <ControlledInput
-                                                        type="number"
-                                                        className={cn(
-                                                            prices.length ==
-                                                                1 && "w-[80px]"
-                                                        )}
-                                                        control={form.control}
-                                                        list
-                                                        name={
-                                                            `${doorsKey}.${row.dim}.${p.key}` as any
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <Money
-                                    value={_doorForm?.[row.dim]?.unitPrice}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Money
-                                    value={_doorForm?.[row.dim]?.lineTotal}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    <TableRow>
+                        <TableCell>
+                            <ControlledInput
+                                type="number"
+                                list
+                                control={form.control}
+                                name={`${rootKey}.qty` as any}
+                            />
+                        </TableCell>
+                        <TableCell>
+                            <ControlledInput
+                                type="number"
+                                list
+                                control={form.control}
+                                name={`${rootKey}.price` as any}
+                            />
+                        </TableCell>
+                        <TableCell></TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
 
