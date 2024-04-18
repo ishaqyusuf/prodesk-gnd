@@ -53,8 +53,8 @@ function create(name, categoryId, parentCategoryId, type: "parent" | "child") {
             name,
             categoryId,
             parentCategoryId,
-        };
-        categories.push(cat);
+        } as any;
+        categories.push(cat as any);
     }
     return cat;
 }
