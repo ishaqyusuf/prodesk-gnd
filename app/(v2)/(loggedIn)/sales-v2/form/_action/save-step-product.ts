@@ -63,12 +63,12 @@ export async function saveStepProduct(data: Props) {
     } = data;
     if (!id) {
         if (_meta?.isMoulding && !_meta.mouldingCategoryId) {
-            const d = await prisma.dykeCategories.create({
-                data: {
-                    title: "Moulding",
-                },
-            });
-            _meta.mouldingCategoryId = d.id;
+            // const d = await prisma.dykeCategories.create({
+            //     data: {
+            //         title: "Moulding",
+            //     },
+            // });
+            // _meta.mouldingCategoryId = d.id;
         }
         return await prisma.dykeStepProducts.create({
             data: {
@@ -76,8 +76,21 @@ export async function saveStepProduct(data: Props) {
                 product: {
                     create: {
                         ...productData,
+                        categoryId: undefined,
                         value: productData.title as any,
                         meta: productData.meta as any,
+                        category: !_meta?.isMoulding
+                            ? undefined
+                            : {
+                                  connectOrCreate: {
+                                      where: {
+                                          title: "Moulding",
+                                      },
+                                      create: {
+                                          title: "Moulding",
+                                      },
+                                  },
+                              },
                         // category: _meta?.mouldingCategoryId
                         //     ? {
                         //           connect: {

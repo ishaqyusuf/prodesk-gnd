@@ -168,7 +168,8 @@ async function CustomStepForm(
         const customSteps = {
             "Door Type": "Specie",
             Specie: "Moulding",
-            Moulding: "House Package Tool",
+            Moulding: "M Casing",
+            "M Casing": "Line Item",
         };
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });

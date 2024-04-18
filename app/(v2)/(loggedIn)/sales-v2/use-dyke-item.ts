@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDykeForm } from "./form-context";
 import { useFieldArray } from "react-hook-form";
 import { createBlock } from "./form/item-form-blocks";
-import { DykeBlock, DykeDoorType } from "./type";
+import { DykeBlock, DykeDoorType, FormStepArray } from "./type";
 
 // export interface IDykeItemFormContext {
 //     blocks: DykeBlock[];
@@ -29,9 +29,27 @@ export default function useDykeItem(rowIndex: number) {
         `itemArray.${rowIndex}.opened`,
         `itemArray.${rowIndex}.stepIndex`,
     ]);
+    function getFormStepArray(): FormStepArray {
+        return form.getValues(
+            `itemArray.${rowIndex}.item.formStepArray` as any
+        );
+    }
+    function doorType(): DykeDoorType {
+        return form.getValues(`${itemKey}.housePackageTool.doorType` as any);
+    }
     return {
+        get: {
+            getFormStepArray,
+            doorType,
+            getMouldingSpecie() {
+                const formSteps = getFormStepArray();
+                const s = formSteps.find((fs) => fs.step?.title == "Specie");
+                return s?.item?.value;
+            },
+        },
         opened,
         openedStepIndex,
+
         toggleStep(stepIndex) {
             form.setValue(
                 `itemArray.${rowIndex}.stepIndex`,
@@ -46,11 +64,7 @@ export default function useDykeItem(rowIndex: number) {
         removeStep: remove,
         rowIndex,
         itemKey,
-        doorType(): DykeDoorType {
-            return form.getValues(
-                `${itemKey}.housePackageTool.doorType` as any
-            );
-        },
+
         // doorType(): DykeDoorType {
         //     return form.getValues(
         //         `${itemKey}.housePackageTool.doorType` as any

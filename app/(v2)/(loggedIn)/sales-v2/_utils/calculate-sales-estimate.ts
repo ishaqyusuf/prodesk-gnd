@@ -1,6 +1,5 @@
-import { UseFormReturn } from "react-hook-form";
 import { DykeForm } from "../type";
-import { formatMoney, toFixed } from "@/lib/use-number";
+import { formatMoney } from "@/lib/use-number";
 
 export function calculateSalesEstimate(data: DykeForm) {
     // const data = form.getValues();
@@ -10,8 +9,12 @@ export function calculateSalesEstimate(data: DykeForm) {
     console.log(data.order.subTotal);
     data.itemArray.map((item) => {
         item.item.rate = item.item.price = item.item.qty = item.item.total = 0;
-        calculateHousePackageTool(item);
-        calculateShelfItems(item);
+        if (item.item.housePackageTool.doorType == "Moulding") {
+            calculateLineItem(item);
+        } else {
+            calculateHousePackageTool(item);
+            calculateShelfItems(item);
+        }
 
         taxEstimateAndUpdateTotal(item, data);
         console.log(item.item.total);
@@ -73,6 +76,12 @@ function calculateShelfItems(item: DykeForm["itemArray"][0]) {
         item.item.rate = item.item.price = item.item.total = sum.totalPrice;
     }
 }
+function calculateLineItem(item: DykeForm["itemArray"][0]) {
+    const price = item.item.price || 0;
+    const qty = item.item.qty || 0;
+    item.item.rate = price;
+    item.item.total = price * qty || 0;
+}
 function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
     let packageTool = item.item.housePackageTool;
     let sum = {
@@ -81,8 +90,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
         totalPrice: 0,
         tax: 0,
     };
-    console.log(packageTool?._doorForm);
-
+    // console.log(packageTool?._doorForm);
     if (item.item.housePackageTool?.doorType) {
         Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
             let doors = v.lhQty + v.rhQty;

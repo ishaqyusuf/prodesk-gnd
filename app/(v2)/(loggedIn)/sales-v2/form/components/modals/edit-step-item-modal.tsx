@@ -13,22 +13,38 @@ import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/common/file-uploader";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { saveStepProduct } from "../../_action/save-step-product";
 import { useModal } from "@/components/common/modal-old/provider";
+import { _getMouldingSpecies } from "./_action";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 
 interface Props {
     item: IStepProducts[0];
     onCreate(stepItem: IStepProducts[0]);
+    moulding?: boolean;
 }
-export default function EditStepItemModal({ item, onCreate }: Props) {
+export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
     const { ...defaultValues } = item;
     if (!item.id) defaultValues.product.title = "";
     const form = useForm<IStepProducts[0]>({
         defaultValues,
     });
     const src = form.watch("product.img");
-
+    const [species, setSpecies] = useState<string[]>([]);
+    useEffect(() => {
+        if (moulding) {
+            (async () => {
+                const _species = await _getMouldingSpecies();
+                setSpecies(_species as any);
+                const def: any = {};
+                _species?.map((s) => (def[s as any] = true));
+                if (!item.id) {
+                    form.setValue(`product.meta.mouldingSpecies`, def);
+                }
+            })();
+        }
+    }, []);
     function onUpload(assetId) {
         // console.log(assetId);
 
@@ -55,6 +71,18 @@ export default function EditStepItemModal({ item, onCreate }: Props) {
                         name="product.title"
                         label="Product Title"
                     />
+                    {moulding && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {species.map((s, i) => (
+                                <ControlledCheckbox
+                                    key={i}
+                                    label={s}
+                                    control={form.control}
+                                    name={`product.meta.mouldingSpecies.${s}`}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <FileUploader
                         onUpload={onUpload}
                         label="Product Image"

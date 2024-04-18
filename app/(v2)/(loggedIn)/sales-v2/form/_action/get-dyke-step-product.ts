@@ -4,6 +4,8 @@ import { prisma } from "@/db";
 import { DykeProductMeta } from "../../type";
 
 export async function getMouldingStepProduct(specie) {
+    console.log(specie);
+
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where: {
             product: {
@@ -19,7 +21,7 @@ export async function getMouldingStepProduct(specie) {
     const prods = stepProducts
         .filter((s) => {
             let meta = s.product.meta as any as DykeProductMeta;
-            return meta.mouldingSpecies[specie];
+            return meta?.mouldingSpecies?.[specie] || false;
         })
         .map((sp) => {
             return {

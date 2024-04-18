@@ -5,7 +5,8 @@
     -MAKE DYKE SHELF TYPABLE
     -EXPORT PDF IN ESTIMATE
 # APR 18: 00.00 == 00.00
-    06:45-
+    09:00-
+    06:45-07:45
 # APR 17: 04.15 == 10.00
     12:00-01:30
     09:00-11:00

@@ -17,7 +17,7 @@ import { formatMoney } from "@/lib/use-number";
 import { camel, cn } from "@/lib/utils";
 
 interface Props {}
-export default function HousePackageTool({}: Props) {
+export default function LineItemSection({}: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
@@ -101,38 +101,8 @@ export default function HousePackageTool({}: Props) {
         <div>
             <Table>
                 <TableHeader>
-                    <TableHead>Width</TableHead>
-                    {doorType == "Bifold" ? (
-                        <>
-                            <TableHead className="w-[100px]">Qty</TableHead>
-                        </>
-                    ) : (
-                        <>
-                            <TableHead className="w-[100px]">LH</TableHead>
-                            <TableHead className="w-[100px]">RH</TableHead>
-                        </>
-                    )}
-
-                    <TableHead>Unit Dimension</TableHead>
-                    <TableHead className="">
-                        {doorType == "Bifold" ? (
-                            <>Price</>
-                        ) : (
-                            <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
-                                <div className="flex pb-1 justify-center">
-                                    <p>Price</p>
-                                </div>
-                                <div className="flex pt-1 justify-between">
-                                    {prices.map((p) => (
-                                        <div className="flex-1" key={p.title}>
-                                            {p.title}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </TableHead>
-                    <TableHead>Unit Price</TableHead>
+                    <TableHead>Qty</TableHead>
+                    <TableHead>Price</TableHead>
                     <TableHead>Line Total</TableHead>
                 </TableHeader>
                 <TableBody>
