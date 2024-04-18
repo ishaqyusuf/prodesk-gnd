@@ -11,7 +11,7 @@ export async function generateSalesIdDac(sales) {
         slug = orderId = [
             now.format("YY"),
             now.format("MMDD"),
-            // await nextId(prisma.salesOrders),
+            await nextId(prisma.salesOrders),
         ].join("-");
     else slug = orderId;
 
