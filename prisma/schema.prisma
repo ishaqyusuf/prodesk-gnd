@@ -106,20 +106,21 @@ model CostCharts {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CommunityModels {
-    id        Int                        @unique @default(autoincrement())
+    id        Int       @unique @default(autoincrement())
     projectId Int
     pivotId   Int?
-    modelName String                     @db.VarChar(255)
-    meta      Json?                      @db.Json
-    createdAt DateTime?                  @db.Timestamp(0)
-    updatedAt DateTime?                  @updatedAt
-    deletedAt DateTime?                  @db.Timestamp(0)
-    slug      String                     @unique @db.VarChar(255)
-    project   Projects                   @relation(fields: [projectId], references: [id])
-    homes     Homes[]
-    history   CommunityTemplateHistory[]
-    costs     CommunityModelCost[]
-    pivot     CommunityModelPivot?       @relation(fields: [pivotId], references: [id])
+    modelName String    @db.VarChar(255)
+    meta      Json?     @db.Json
+    createdAt DateTime? @db.Timestamp(0)
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime? @db.Timestamp(0)
+
+    slug    String                     @unique @db.VarChar(255)
+    project Projects                   @relation(fields: [projectId], references: [id])
+    homes   Homes[]
+    history CommunityTemplateHistory[]
+    costs   CommunityModelCost[]
+    pivot   CommunityModelPivot?       @relation(fields: [pivotId], references: [id])
 }
 
 model CommunityTemplateHistory {
@@ -128,6 +129,7 @@ model CommunityTemplateHistory {
     meta              Json?            @db.Json
     createdAt         DateTime?        @db.Timestamp(0)
     updatedAt         DateTime?        @updatedAt
+    deletedAt         DateTime?        @db.Timestamp(0)
     model             CommunityModels? @relation(fields: [communityModelsId], references: [id])
     communityModelsId Int?
     Users             Users            @relation(fields: [userId], references: [id])
@@ -198,6 +200,7 @@ model CustomerWallet {
     transactions CustomerTransaction[]
     createdAt    DateTime?             @db.Timestamp(0)
     updatedAt    DateTime?             @updatedAt
+    deletedAt    DateTime?             @db.Timestamp(0)
 }
 
 model CustomerTransaction {
@@ -209,6 +212,7 @@ model CustomerTransaction {
     meta          Json?           @db.Json
     createdAt     DateTime?       @db.Timestamp(0)
     updatedAt     DateTime?       @updatedAt
+    deletedAt     DateTime?       @db.Timestamp(0)
     wallet        CustomerWallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
     salesPayments SalesPayments[]
 }
@@ -373,6 +377,8 @@ model OrderInventory {
     components       OrderInventory[] @relation(name: "components")
     product          OrderInventory?  @relation(name: "components", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     createdAt        DateTime?        @db.Timestamp(0)
+    deletedAt        DateTime?        @db.Timestamp(0)
+    updatedAt        DateTime?        @updatedAt
     orderInventoryId Int?
 }
 
@@ -521,6 +527,7 @@ model Permissions {
     name                  String                @db.VarChar(255)
     createdAt             DateTime?             @db.Timestamp(0)
     updatedAt             DateTime?             @updatedAt
+    deletedAt             DateTime?             @db.Timestamp(0)
     model_has_permissions ModelHasPermissions[]
     role_has_permissions  RoleHasPermissions[]
 
@@ -558,6 +565,7 @@ model ProductCategories {
     categoryId Int
     createdAt  DateTime? @db.Timestamp(0)
     updatedAt  DateTime? @updatedAt
+    deletedAt  DateTime? @db.Timestamp(0)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -676,6 +684,7 @@ model Roles {
     name               String               @db.VarChar(255)
     createdAt          DateTime?            @db.Timestamp(0)
     updatedAt          DateTime?            @updatedAt
+    deletedAt          DateTime?            @db.Timestamp(0)
     ModelHasRoles      ModelHasRoles[]
     RoleHasPermissions RoleHasPermissions[]
 }
@@ -890,6 +899,7 @@ model SalesOrderItems {
     meta               Json?                        @db.Json
     createdAt          DateTime?                    @db.Timestamp(0)
     updatedAt          DateTime?                    @updatedAt
+    deletedAt          DateTime?                    @db.Timestamp(0)
     qty                Float?
     prebuiltQty        Float?
     truckLoadQty       Float?
@@ -921,6 +931,9 @@ model OrderDeliveryProgress {
     orderId      Int             @unique
     order        SalesOrders     @relation(fields: [orderId], references: [id])
     deliveries   OrderDelivery[]
+    createdAt    DateTime        @default(now())
+    updatedAt    DateTime        @updatedAt
+    deletedAt    DateTime?       @db.Timestamp(0)
 }
 
 model OrderDelivery {
@@ -961,7 +974,7 @@ model OrderItemDelivery {
 model HousePackageTools {
     id             Int                @unique @default(autoincrement())
     orderItemId    Int                @unique
-    height         String
+    height         String?
     doorType       String?
     doorId         Int?
     dykeDoorId     Int?
@@ -974,6 +987,7 @@ model HousePackageTools {
     salesOrderId   Int
     createdAt      DateTime?          @default(now())
     updatedAt      DateTime?          @updatedAt
+    deletedAt      DateTime?          @db.Timestamp(0)
     order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
     salesOrderItem SalesOrderItems    @relation(fields: [orderItemId], references: [id])
     door           DykeDoors?         @relation(name: "door", fields: [dykeDoorId], references: [id])
@@ -1001,6 +1015,7 @@ model DykeSalesDoors {
     meta               Json?             @db.Json
     createdAt          DateTime?         @db.Timestamp(0)
     updatedAt          DateTime?         @updatedAt
+    deletedAt          DateTime?         @db.Timestamp(0)
     housePackageTool   HousePackageTools @relation(fields: [housePackageToolId], references: [id])
     salesOrderItem     SalesOrderItems?  @relation(fields: [salesOrderItemId], references: [id])
     order              SalesOrders?      @relation(fields: [salesOrderId], references: [id])
@@ -1014,6 +1029,7 @@ model SalesPickup {
     pickupAt         DateTime?     @db.Timestamp(0)
     createdAt        DateTime?     @db.Timestamp(0)
     updatedAt        DateTime?     @updatedAt
+    deletedAt        DateTime?     @db.Timestamp(0)
     sales            SalesOrders[]
     approvedBy       Users         @relation(fields: [pickupApprovedBy], references: [id])
 }
@@ -1088,6 +1104,7 @@ model JobPayments {
     meta          Json?     @db.Json
     createdAt     DateTime? @db.Timestamp(0)
     updatedAt     DateTime? @updatedAt
+    deletedAt     DateTime? @db.Timestamp(0)
     jobs          Jobs[]
     user          Users?    @relation(name: "worker", fields: [userId], references: [id])
     payer         Users?    @relation(name: "payer", fields: [paidBy], references: [id])
@@ -1099,7 +1116,9 @@ model EmployeeProfile {
     discount  Int?
     meta      Json?     @db.Json
     createdAt DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
+
     employees Users[]
 }
 
@@ -1112,6 +1131,7 @@ model UserDocuments {
     meta        Json?     @db.Json
     createdAt   DateTime? @db.Timestamp(0)
     updatedAt   DateTime? @updatedAt
+    deletedAt   DateTime? @db.Timestamp(0)
     user        Users?    @relation(fields: [userId], references: [id])
 }
 
@@ -1228,6 +1248,9 @@ model DykeShelfCategories {
     products         DykeShelfProducts[]  @relation(name: "childCategory")
     groupedProducts  DykeShelfProducts[]  @relation(name: "parentCategory")
     shelfItems       DykeSalesShelfItem[]
+    createdAt        DateTime?            @db.Timestamp(0)
+    updatedAt        DateTime?            @updatedAt
+    deletedAt        DateTime?            @db.Timestamp(0)
 }
 
 model DykeShelfProducts {
@@ -1256,6 +1279,7 @@ model Cache {
     group     String?
     meta      Json?     @db.Json
     createdAt DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
 }
 
 model Payday {
@@ -1265,6 +1289,7 @@ model Payday {
     endTime   DateTime?      @db.Timestamp(0)
     createdAt DateTime?      @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
+    deletedAt DateTime?      @db.Timestamp(0)
     invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
 }
 
@@ -1272,6 +1297,7 @@ model PaydayInvoice {
     id        Int       @unique @default(autoincrement())
     payments  Payday[]
     createdAt DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
 }
 
@@ -1284,6 +1310,7 @@ model DykeStepForm {
     salesItemId    Int?
     stepId         Int
     meta           Json?            @db.Json
+    deletedAt      DateTime?        @db.Timestamp(0)
     createdAt      DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?        @updatedAt
     sales          SalesOrders?     @relation(fields: [salesId], references: [id])
@@ -1302,6 +1329,7 @@ model DykeSteps {
     rootStepValueId Int?
     prevStepValueId Int?
     stepForms       DykeStepForm[]
+    deletedAt       DateTime?          @db.Timestamp(0)
     rootStepValue   DykeStepValues?    @relation(fields: [rootStepValueId], references: [id], name: "rootValue")
     stepValue       DykeStepValues?    @relation(fields: [stepValueId], references: [id], name: "stepValue")
     prevStepValue   DykeStepValues?    @relation(fields: [prevStepValueId], references: [id], name: "prevStepValue")
@@ -1312,6 +1340,7 @@ model DykeStepValues {
     title     String?
     createdAt DateTime?   @default(now()) @db.Timestamp(0)
     updatedAt DateTime?   @updatedAt
+    deletedAt DateTime?   @db.Timestamp(0)
     rootSteps DykeSteps[] @relation(name: "rootValue")
     steps     DykeSteps[] @relation(name: "stepValue")
     prevStep  DykeSteps[] @relation(name: "prevStepValue")
@@ -1322,6 +1351,7 @@ model DykeCategories {
     title     String         @unique
     createdAt DateTime?      @default(now()) @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
+    deletedAt DateTime?      @db.Timestamp(0)
     products  DykeProducts[]
 }
 
@@ -1332,6 +1362,7 @@ model DykeStepProducts {
     nextStepId    Int?
     createdAt     DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?    @updatedAt
+    deletedAt     DateTime?    @db.Timestamp(0)
     product       DykeProducts @relation(fields: [dykeProductId], references: [id])
     step          DykeSteps    @relation(fields: [dykeStepId], references: [id])
 }
@@ -1345,6 +1376,7 @@ model DykeDoors {
     meta              Json?               @db.Json
     createdAt         DateTime?           @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?           @updatedAt
+    deletedAt         DateTime?           @db.Timestamp(0)
     housePackageTools HousePackageTools[] @relation(name: "door")
 }
 

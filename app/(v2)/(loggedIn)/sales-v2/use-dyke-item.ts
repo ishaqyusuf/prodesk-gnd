@@ -39,6 +39,7 @@ export default function useDykeItem(rowIndex: number) {
     }
     return {
         get: {
+            data: () => form.getValues(`${itemKey}` as any),
             getFormStepArray,
             doorType,
             getMouldingSpecie() {

@@ -19,16 +19,33 @@ export async function getDykeFormAction(type, slug) {
         },
         include: {
             items: {
+                where: {
+                    deletedAt: null,
+                },
                 include: {
                     formSteps: {
+                        where: {
+                            deletedAt: null,
+                        },
                         include: {
-                            step: true,
+                            step: {},
                         },
                     },
-                    shelfItems: true,
+                    shelfItems: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
                     housePackageTool: {
+                        where: {
+                            deletedAt: null,
+                        },
                         include: {
-                            doors: true,
+                            doors: {
+                                where: {
+                                    deletedAt: null,
+                                },
+                            },
                         },
                     },
                 },

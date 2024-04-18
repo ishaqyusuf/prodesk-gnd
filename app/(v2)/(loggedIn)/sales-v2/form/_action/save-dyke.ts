@@ -146,15 +146,13 @@ export async function saveDykeSales(data: DykeForm) {
                     let {
                         id: hptId,
                         doors,
-                        _doorForm,
+                        _doorForm = {},
                         _doorFormDefaultValue,
                         ...hptData
                     } = housePackageTool || {};
                     doors = Object.values(_doorForm);
-                    console.log(doors);
-                    console.log(hptData);
 
-                    if (doors?.length) {
+                    if (doors?.length || hptData.doorType == "Moulding") {
                         const newHpt = !hptId;
                         if (!hptId) hptId = ++lastHptId;
                         hptData.meta = hptData.meta || {};
@@ -240,6 +238,7 @@ export async function saveDykeSales(data: DykeForm) {
         );
         // console.log(ids.doorsIds);
         // console.log({ createDoors });
+
         async function _deleteWhere(t, notIn: number[] = [], items = false) {
             const where: any = items
                 ? { salesOrderId: order.id }
@@ -251,14 +250,22 @@ export async function saveDykeSales(data: DykeForm) {
             where.id = {
                 notIn,
             };
-            await t.deleteMany({
+            await t.updateMany({
                 where,
+                data: {
+                    deletedAt: new Date(),
+                },
             });
         }
+
         await _deleteWhere(tx.dykeStepForm, ids.stepFormsIds);
+
         await _deleteWhere(tx.dykeSalesShelfItem, ids.shelfIds);
+
         await _deleteWhere(tx.dykeSalesDoors, ids.doorsIds);
+
         await _deleteWhere(tx.housePackageTools, ids.housePackageIds);
+
         await _deleteWhere(tx.salesOrderItems, ids.itemIds, true);
 
         await Promise.all(

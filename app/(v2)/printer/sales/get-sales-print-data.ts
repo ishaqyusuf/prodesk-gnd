@@ -1,6 +1,5 @@
 "use server";
 
-import { prisma } from "@/db";
 import { SalesPrintProps } from "./page";
 import { viewSale } from "../../(loggedIn)/sales-v2/overview/_actions/get-sales-overview";
 import { composeSalesItems } from "../../(loggedIn)/sales-v2/_utils/compose-sales-items";

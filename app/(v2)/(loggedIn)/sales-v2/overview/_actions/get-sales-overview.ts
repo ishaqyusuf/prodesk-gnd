@@ -36,13 +36,16 @@ export async function viewSale(type, slug) {
         },
         include: {
             items: {
+                where: { deletedAt: null },
                 include: {
                     shelfItems: {
+                        where: { deletedAt: null },
                         include: {
                             shelfProduct: true,
                         },
                     },
                     formSteps: {
+                        where: { deletedAt: null },
                         include: {
                             step: {
                                 select: {
@@ -53,6 +56,7 @@ export async function viewSale(type, slug) {
                         },
                     },
                     housePackageTool: {
+                        where: { deletedAt: null },
                         include: {
                             casing: true,
                             door: true,

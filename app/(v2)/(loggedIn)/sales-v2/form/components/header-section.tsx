@@ -19,10 +19,10 @@ export default function HeaderSection({}) {
     const [loading, startTransition] = useTransition();
     async function save(data: DykeForm) {
         startTransition(async () => {
-            // console.log(data);
-            const e = calculateSalesEstimate(data);
-            // console.log(e);
+            // console.log(data.itemArray[0]?.item);
             // return;
+            const e = calculateSalesEstimate(data);
+            debugger;
             const resp = await saveDykeSales(e);
             toast.success("Saved");
             if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);

@@ -8,17 +8,17 @@ import {
 } from "@/components/ui/table";
 import { DykeItemFormContext, useDykeForm } from "../../form-context";
 import { useContext, useEffect, useState } from "react";
-import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
+
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
 
-import { formatMoney } from "@/lib/use-number";
 import { camel, cn } from "@/lib/utils";
 
 interface Props {}
 export default function LineItemSection({}: Props) {
     const form = useDykeForm();
+    console.log(form.getValues());
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
     const prices = (
@@ -32,71 +32,17 @@ export default function LineItemSection({}: Props) {
     );
     const rootKey = `itemArray.${item.rowIndex}.item`;
     const doorsKey = `${rootKey}._doorForm`;
-    const height = form.watch(
-        `itemArray.${item.rowIndex}.item.housePackageTool.height`
-    );
-    const _doorForm = form.watch(
-        `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
-    );
+
+    const _lineTotal = form.watch(`itemArray.${item.rowIndex}.item.total`);
 
     function calculate() {
-        // console.log(packageTool);
-        // calculateSalesEstimate(form);
-
-        let sum = {
-            doors: 0,
-            unitPrice: 0,
-            totalPrice: 0,
-        };
-        console.log(
-            form.getValues(
-                `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
-            )
-        );
-
-        Object.entries(_doorForm).map(([k, v]) => {
-            let doors = v.lhQty + v.rhQty;
-            const {
-                doorPrice = 0,
-                casingPrice = 0,
-                jambSizePrice = 0,
-            } = v as any;
-
-            let unitPrice = formatMoney(
-                Object.values({
-                    doorPrice,
-                    casingPrice,
-                    jambSizePrice,
-                }).reduce((a, b) => a + b, 0)
-            );
-            let sumTotal = 0;
-            if (doors && unitPrice) {
-                sumTotal = doors * unitPrice;
-                sum.doors += doors;
-                sum.unitPrice += unitPrice;
-                sum.totalPrice += sumTotal;
-            }
-            form.setValue(
-                `${rootKey}._doorForm.${k}.unitPrice` as any,
-                unitPrice
-            );
-            form.setValue(
-                `${rootKey}._doorForm.${k}.lineTotal` as any,
-                sumTotal
-            );
-        });
-        form.setValue(`${rootKey}.totalPrice` as any, sum.totalPrice);
-        form.setValue(`${rootKey}.totalDoors` as any, sum.doors);
+        const [price, qty] = form.getValues([
+            `${rootKey}.price`,
+            `${rootKey}.qty`,
+        ] as any);
+        form.setValue(`${rootKey}.total` as any, (price || 0) * (qty || 0));
     }
 
-    useEffect(() => {
-        (async () => {
-            // console.log(height);
-            const list = await getDimensionSizeList(height);
-            // console.log(list);
-            setSizeList(list as any);
-        })();
-    }, []);
     return (
         <div>
             <Table>
@@ -123,7 +69,9 @@ export default function LineItemSection({}: Props) {
                                 name={`${rootKey}.price` as any}
                             />
                         </TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>
+                            <Money value={_lineTotal} />
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

@@ -2,16 +2,19 @@ import { DykeForm } from "../type";
 import { formatMoney } from "@/lib/use-number";
 
 export function calculateSalesEstimate(data: DykeForm) {
-    // const data = form.getValues();
-    console.log(data);
     data.order.grandTotal = data.order.subTotal = data.order.tax = 0;
     data.order.taxPercentage = +(data.order.taxPercentage || 0);
-    console.log(data.order.subTotal);
+
     data.itemArray.map((item) => {
-        item.item.rate = item.item.price = item.item.qty = item.item.total = 0;
+        item.item.rate = item.item.total = 0;
         if (item.item.housePackageTool.doorType == "Moulding") {
             calculateLineItem(item);
         } else {
+            item.item.rate =
+                item.item.price =
+                item.item.qty =
+                item.item.total =
+                    0;
             calculateHousePackageTool(item);
             calculateShelfItems(item);
         }
@@ -93,7 +96,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
     // console.log(packageTool?._doorForm);
     if (item.item.housePackageTool?.doorType) {
         Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
-            let doors = v.lhQty + v.rhQty;
+            let doors = v?.lhQty + v?.rhQty;
             const {
                 doorPrice = 0,
                 casingPrice = 0,

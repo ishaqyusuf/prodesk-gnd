@@ -15,6 +15,8 @@ import {
 import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { DykeItemForm, FormStepArray } from "../../type";
+import { _deleteDykeItem } from "../_action/delete-item";
 
 interface Props {
     rowIndex;
@@ -29,6 +31,11 @@ export function DykeItemFormSection({ rowIndex }: Props) {
     const ctx = {
         ...item,
     } as IDykeItemFormContext;
+    async function deleteSection() {
+        const itemData = item.get.data() as FormStepArray[0];
+        await _deleteDykeItem(itemData?.item?.id);
+        dykeCtx.itemArray.remove(rowIndex);
+    }
     return (
         <DykeItemFormContext.Provider value={ctx}>
             <Collapsible
@@ -44,9 +51,7 @@ export function DykeItemFormSection({ rowIndex }: Props) {
                     </CollapsibleTrigger>
                     <div className="flex items-center justify-between space-x-2">
                         <Button
-                            onClick={() => {
-                                dykeCtx.itemArray.remove(rowIndex);
-                            }}
+                            onClick={deleteSection}
                             className="p-0 h-6 w-6"
                             variant={"destructive"}
                         >
