@@ -60,6 +60,7 @@ export interface DykeFormStepMeta {
 export interface DykeProductMeta {
     svg;
     url;
+    mouldingSpecies: { [id in string]: boolean };
 }
 export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     meta: {

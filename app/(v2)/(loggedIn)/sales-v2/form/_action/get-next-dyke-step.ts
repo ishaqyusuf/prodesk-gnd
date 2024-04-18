@@ -146,16 +146,23 @@ async function CustomStepForm(
     stepTitle,
     doorType: DykeDoorType
 ) {
+    console.log({ stepTitle, doorType, productTitle });
+
     const customSteps = {
         "Shelf Items": "Shelf Items",
         "Cutdown Height": "House Package Tool",
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
     if (doorType == "Bifold") {
+        console.log(doorType);
+
         const customSteps = {
+            "Door Type": "Height",
+            Height: "Door",
             Door: "House Package Tool",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
+        console.log(title);
     }
     if (doorType == "Moulding") {
         const customSteps = {

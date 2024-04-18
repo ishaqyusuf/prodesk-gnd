@@ -51,6 +51,11 @@ export default function useDykeItem(rowIndex: number) {
                 `${itemKey}.housePackageTool.doorType` as any
             );
         },
+        // doorType(): DykeDoorType {
+        //     return form.getValues(
+        //         `${itemKey}.housePackageTool.doorType` as any
+        //     );
+        // },
         configValueKey(blockName) {
             return `items.${rowIndex}.meta.config.${blockName}` as any;
         },

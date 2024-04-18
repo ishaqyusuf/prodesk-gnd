@@ -16,7 +16,10 @@ import ShelfItemIndex from "./shelf-item";
 import Image from "next/image";
 import { env } from "@/env.mjs";
 import { Label } from "@/components/ui/label";
-import { getStepProduct } from "../_action/get-dyke-step-product";
+import {
+    getMouldingStepProduct,
+    getStepProduct,
+} from "../_action/get-dyke-step-product";
 import { toast } from "sonner";
 import { getNextDykeStepAction } from "../_action/get-next-dyke-step";
 import { Icons } from "@/components/_v1/icons";
@@ -33,6 +36,7 @@ import SVG from "react-inlinesvg";
 import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "./modals/edit-step-item-modal";
+import { SaveStepProductExtra } from "../_action/save-step-product";
 interface Props {
     stepForm: DykeStep;
     stepIndex: number;
@@ -109,10 +113,12 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     // stepProducts[0].
 
     const item = useContext(DykeItemFormContext);
+    let doorType = item.doorType();
+    const stepFormTitle = stepForm.step?.title;
     const ctx = useDykeCtx();
     const load = async () => {
         if (stepForm?.item?.meta?.hidden) return;
-        if (stepForm.step?.title == "Door") {
+        if (stepFormTitle == "Door") {
             const query = doorQueryBuilder(
                 form.getValues(
                     `itemArray.${rowIndex}.item.formStepArray` as any
@@ -121,8 +127,6 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     `itemArray.${rowIndex}.item.housePackageTool.doorType` as any
                 )
             );
-            // console.log(query);
-
             const { result: prods } = await getDykeStepDoors(
                 { ...query, stepId: stepForm?.step?.id } as any
                 // query.q,
@@ -133,6 +137,9 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             );
             // console.log(prods);
             setStepProducts(prods);
+        } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
+            //
+            setStepProducts(await getMouldingStepProduct(stepForm?.step?.id));
         } else setStepProducts(await getStepProduct(stepForm?.step?.id));
     };
     useEffect(() => {
@@ -180,10 +187,22 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     );
                     break;
                 case "Casing":
+                    if (doorType != "Moulding")
+                        form.setValue(
+                            `itemArray.${item.rowIndex}.item.housePackageTool.casingId`,
+                            stepProd.dykeProductId
+                        );
+                    else {
+                        //
+                    }
+                    break;
+                case "Moulding":
                     form.setValue(
-                        `itemArray.${item.rowIndex}.item.housePackageTool.casingId`,
+                        `itemArray.${item.rowIndex}.item.housePackageTool.moldingId`,
                         stepProd.dykeProductId
                     );
+                    break;
+                case "Specie":
                     break;
                 case "Door Type":
                     switch (stepProd.product.title) {
@@ -204,6 +223,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepProd.product.title as any
                             );
+                            doorType = stepProd.product.title;
                             break;
                     }
                     break;
@@ -223,9 +243,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
-            const doorType = form.getValues(
-                `itemArray.${item.rowIndex}.item.housePackageTool.doorType`
-            ) as DykeDoorType;
+
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd.product as any,
@@ -344,6 +362,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 <div className="p-4">
                     <button
                         onClick={() => {
+                            console.log(stepFormTitle);
+
                             const {
                                 id,
                                 product: {
@@ -366,6 +386,15 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                     meta: {},
                                 },
                             } as IStepProducts[0]);
+                            let _meta: SaveStepProductExtra["_meta"] = {
+                                isMoulding: doorType == "Moulding",
+                                doorType: doorType,
+                                stepTitle: stepFormTitle,
+                                doorQuery: (meta as any).query,
+                            };
+                            // if (doorType == "Moulding") {
+                            //     _meta.isMoulding = true;
+                            // }
                             modal?.open(
                                 <EditStepItemModal
                                     onCreate={onCreate}
@@ -376,6 +405,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                                 ...prod,
                                                 meta: {},
                                             },
+                                            _meta,
                                         } as any
                                     }
                                 />
