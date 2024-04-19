@@ -295,6 +295,60 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             return ret;
         });
     }
+    function openStepForm(item?) {
+        const {
+            id,
+            product: {
+                id: prodId,
+                createdAt,
+                updatedAt,
+                value,
+                description,
+                img,
+                meta,
+                query,
+                ...prod
+            },
+            dykeProductId,
+            ...stepProd
+        } = item ||
+        stepProducts.filter((s) => (s.product as any).query)[0] ||
+        stepProducts[0] ||
+        ({
+            dykeStepId: stepForm.step?.id,
+            nextStepId: null,
+            product: {
+                meta: {},
+            },
+        } as IStepProducts[0]);
+        let _meta: SaveStepProductExtra["_meta"] = {
+            isMoulding: doorType == "Moulding",
+            doorType: doorType,
+            stepTitle: stepFormTitle,
+            doorQuery: query,
+        };
+
+        const _item = item
+            ? {
+                  ...item,
+                  _meta,
+              }
+            : ({
+                  ...stepProd,
+                  product: {
+                      ...prod,
+                      meta: {},
+                  },
+                  _meta,
+              } as any);
+        modal?.open(
+            <EditStepItemModal
+                onCreate={onCreate}
+                moulding={isMoulding && stepFormTitle == "Moulding"}
+                item={_item}
+            />
+        );
+    }
     return (
         <div className="">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -306,39 +360,11 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 variant={"outline"}
                                 className="w-8 h-8"
                                 onClick={() => {
-                                    const { ...data } = b;
-                                    // console.log(data);
-
-                                    modal?.open(
-                                        <EditStepItemModal
-                                            moulding={
-                                                isMoulding &&
-                                                stepFormTitle == "Moulding"
-                                            }
-                                            onCreate={onCreate}
-                                            item={data as any}
-                                        />
-                                    );
+                                    openStepForm(b);
                                 }}
                             >
                                 <Icons.edit className="w-4 h-4" />
                             </Button>
-                            {/* <Button
-                                size="icon"
-                                className="w-8 h-8"
-                                onClick={() => {
-                                    const { id, ...data } = b;
-                                    modal?.open(
-                                        <EditStepItemModal
-                                            onCreate={onCreate}
-                                            item={data as any}
-                                        />
-                                    );
-                                }}
-                            >
-                                <Icons.copy className="w-4 h-4" />
-                                 
-                            </Button> */}
                         </div>
                         <button
                             disabled={ctx.loadingStep}
@@ -349,7 +375,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 selectProduct(b);
                             }}
                         >
-                            {b.product.img && !(b.product.meta as any)?.svg && (
+                            {b.product.img ? (
                                 <Image
                                     className="cursor-pointer"
                                     width={100}
@@ -359,16 +385,14 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                         b.product.description || b.product.value
                                     }
                                 />
-                            )}
-                            {(b.product.meta as any)?.svg &&
-                                (b.product.meta?.svg ? (
-                                    <SVG src={b.product.meta?.svg} />
-                                ) : b.product.meta?.url ? (
-                                    <object
-                                        data={b.product.meta?.url}
-                                        type={"image/svg+xml"}
-                                    />
-                                ) : null)}
+                            ) : (b.product.meta as any)?.svg ? (
+                                <SVG src={b.product.meta?.svg} />
+                            ) : b.product.meta?.url ? (
+                                <object
+                                    data={b.product.meta?.url}
+                                    type={"image/svg+xml"}
+                                />
+                            ) : null}
                             <Label className="text-sm">{b.product.title}</Label>
                         </button>
                     </div>
@@ -376,58 +400,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                 <div className="p-4">
                     <button
                         onClick={() => {
-                            console.log(stepFormTitle);
-
-                            const {
-                                id,
-                                product: {
-                                    id: prodId,
-                                    createdAt,
-                                    updatedAt,
-                                    value,
-                                    description,
-                                    img,
-                                    meta,
-                                    ...prod
-                                },
-                                dykeProductId,
-                                ...stepProd
-                            } = stepProducts[0] ||
-                            ({
-                                dykeStepId: stepForm.step?.id,
-                                nextStepId: null,
-                                product: {
-                                    meta: {},
-                                },
-                            } as IStepProducts[0]);
-                            let _meta: SaveStepProductExtra["_meta"] = {
-                                isMoulding: doorType == "Moulding",
-                                doorType: doorType,
-                                stepTitle: stepFormTitle,
-                                doorQuery: (meta as any).query,
-                            };
-                            // if (doorType == "Moulding") {
-                            //     _meta.isMoulding = true;
-                            // }
-                            modal?.open(
-                                <EditStepItemModal
-                                    onCreate={onCreate}
-                                    moulding={
-                                        isMoulding &&
-                                        stepFormTitle == "Moulding"
-                                    }
-                                    item={
-                                        {
-                                            ...stepProd,
-                                            product: {
-                                                ...prod,
-                                                meta: {},
-                                            },
-                                            _meta,
-                                        } as any
-                                    }
-                                />
-                            );
+                            openStepForm();
                         }}
                         className={cn(
                             "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"

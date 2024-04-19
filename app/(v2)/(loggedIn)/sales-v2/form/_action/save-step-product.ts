@@ -15,8 +15,11 @@ export interface SaveStepProductExtra {
 type Props = IStepProducts[0] & Partial<SaveStepProductExtra>;
 async function saveDykeDoor(data: Props) {
     let door: any = undefined;
-
-    if (!data.id)
+    if (data.product.img) {
+        delete data.product.meta.svg;
+        console.log("svg deleted");
+    }
+    if (!data.id) {
         door = await prisma.dykeDoors.create({
             data: {
                 title: data.product.title as any,
@@ -26,7 +29,8 @@ async function saveDykeDoor(data: Props) {
                 meta: {},
             },
         });
-    else {
+        console.log(door);
+    } else {
         door = await prisma.dykeDoors.update({
             where: { id: data.id },
             data: {
@@ -34,6 +38,7 @@ async function saveDykeDoor(data: Props) {
                 doorType: data._meta?.doorType,
                 query: data._meta?.doorQuery,
                 img: data.product.img,
+                meta: data.product.meta as any,
             },
         });
     }

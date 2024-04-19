@@ -3,7 +3,7 @@
     IF COMPLETED: PROMPT TO MARK UNCOMPLETED PRODUCTION AS COMPLETED!
     -AUTOCOMPLE SALES ITEM BUG
     -MAKE DYKE SHELF TYPABLE
-    -EXPORT PDF IN ESTIMATE
+    -EXPORT PDF IN ESTIMATE 
 
 TODO: House Package Tool Estimate.
 TODO: Door Image not replacing
@@ -14,9 +14,9 @@ TODO: Price history
 TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
-TODO: Add
 # APR 19: 00.00 == 00.00
-    07:10-
+    11:45-
+    07:10-07:40
     05:30-05:40
 # APR 18: 04.50 == 15.05
     11:40-01:30

@@ -16,12 +16,11 @@ import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/_v1/icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { redirect, useRouter } from "next/navigation";
 import { ILogin, loginSchema } from "@/lib/validations/auth";
 import { PasswordInput } from "../password-input";
-import { loginAction } from "@/app/(v1)/_actions/auth";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 

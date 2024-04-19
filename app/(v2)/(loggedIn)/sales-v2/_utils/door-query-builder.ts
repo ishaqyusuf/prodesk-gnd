@@ -74,8 +74,8 @@ export function doorQueryBuilder(steps: FormStepArray, doorType: DykeDoorType) {
         q, //: q.join(" "),
         qty: obj.qty,
         omit,
-        doorType:
-            doorType == "Garage" || doorType == "Bifold" ? doorType : null,
+        doorType,
+        // doorType == "Garage" || doorType == "Bifold" ? doorType : null,
     };
 }
 function toKeyValue(step: FormStepArray) {

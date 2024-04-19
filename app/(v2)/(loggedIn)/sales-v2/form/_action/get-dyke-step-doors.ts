@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeDoorType, DykeProductMeta } from "../../type";
+import { DykeDoors } from "@prisma/client";
 interface Props {
     q;
     omit;
@@ -22,20 +23,38 @@ export async function getDykeStepDoors({
     doorType,
     final = false,
 }: Props): Promise<{ result: IStepProducts }> {
-    if (!final) final = doorType == "Bifold";
+    const isBifold = doorType == "Bifold";
+    if (!final) final = isBifold;
+    console.log("////");
+
+    const whereDoor: any = {
+        query: isBifold ? undefined : query,
+    };
+    if (!isBifold)
+        whereDoor.OR = [
+            doorType && {
+                doorType: null,
+            },
+            {
+                doorType,
+            },
+        ].filter(Boolean);
+
     const _doors = await prisma.dykeDoors.findMany({
-        where: {
-            query: doorType == "Bifold" ? undefined : query,
-            doorType,
-        },
+        where: whereDoor,
     });
 
     if (_doors.length || final) {
-        // console.log("doors", _doors.length, doorType);
+        const _fd = _doors.filter(
+            (d, i) => i == _doors.findIndex((_) => _.title == d.title)
+        );
+        // console.log(_doors.length, doorType);
+        console.log(_fd.length);
 
-        return response(_doors, stepId);
+        return response(_fd, stepId);
     }
     if (query == "SC Molded") {
+        // console.log("SC Molded");
         const hcDoors = await prisma.dykeDoors.findMany({
             where: {
                 query: "HC Molded",
@@ -50,12 +69,10 @@ export async function getDykeStepDoors({
                 title: rest.title.replace("HC", "SC"),
             })) as any,
         });
-
         return await getDykeStepDoors({ q, omit, qty, stepId, query });
     }
-
     const where = {
-        doorType: doorType ? doorType : undefined,
+        // doorType: doorType ? doorType : undefined,
         AND: [
             {
                 AND: q.map((w) => {
@@ -120,7 +137,8 @@ export async function getDykeStepDoors({
 
     return await getDykeStepDoors({ q, omit, qty, stepId, query, final: true });
 }
-function response(_doors, stepId) {
+function response(_doors: DykeDoors[], stepId) {
+    // _doors[0].q
     return {
         result: _doors.map((door: any) => {
             return {
@@ -130,8 +148,9 @@ function response(_doors, stepId) {
                 product: {
                     ...door,
                     value: door.title,
+
                     meta: {
-                        ...findDoorSvg(door.title),
+                        ...findDoorSvg(door.title, door.img),
                         ...((door.meta as any) || {}),
                     } as DykeProductMeta,
                 },

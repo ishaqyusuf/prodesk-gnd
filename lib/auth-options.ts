@@ -2,7 +2,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Prisma, PrismaClient, Roles, Users } from "@prisma/client";
 import type { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
 import { ICan } from "@/types/auth";
 import { loginAction } from "@/app/(v1)/_actions/auth";
 
