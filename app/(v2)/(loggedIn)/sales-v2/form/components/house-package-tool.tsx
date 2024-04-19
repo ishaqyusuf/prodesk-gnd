@@ -48,14 +48,9 @@ export default function HousePackageTool({}: Props) {
             unitPrice: 0,
             totalPrice: 0,
         };
-        console.log(
-            form.getValues(
-                `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
-            )
-        );
 
         Object.entries(_doorForm).map(([k, v]) => {
-            let doors = v.lhQty + v.rhQty;
+            let doors = v.lhQty || 0 + v.rhQty || 0;
             const {
                 doorPrice = 0,
                 casingPrice = 0,
@@ -80,6 +75,13 @@ export default function HousePackageTool({}: Props) {
                 `${rootKey}._doorForm.${k}.unitPrice` as any,
                 unitPrice
             );
+            console.log({
+                sumTotal,
+                doors,
+                doorPrice,
+                unitPrice,
+            });
+
             form.setValue(
                 `${rootKey}._doorForm.${k}.lineTotal` as any,
                 sumTotal
@@ -225,7 +227,7 @@ export default function HousePackageTool({}: Props) {
             </Table>
 
             <div className="flex justify-end">
-                <Button onClick={calculate} variant={"secondary"}>
+                <Button onClick={calculate} type="button" variant={"secondary"}>
                     Calculate Price
                 </Button>
             </div>

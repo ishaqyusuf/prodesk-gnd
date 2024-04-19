@@ -18,7 +18,6 @@ import { camel, cn } from "@/lib/utils";
 interface Props {}
 export default function LineItemSection({}: Props) {
     const form = useDykeForm();
-    console.log(form.getValues());
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
     const prices = (
@@ -36,11 +35,15 @@ export default function LineItemSection({}: Props) {
     const _lineTotal = form.watch(`itemArray.${item.rowIndex}.item.total`);
 
     function calculate() {
+        console.log("....");
+
         const [price, qty] = form.getValues([
             `${rootKey}.price`,
             `${rootKey}.qty`,
         ] as any);
-        form.setValue(`${rootKey}.total` as any, (price || 0) * (qty || 0));
+        const lineTotal = (price || 0) * (qty || 0);
+        console.log(lineTotal);
+        form.setValue(`${rootKey}.total` as any, lineTotal);
     }
 
     return (
@@ -77,7 +80,7 @@ export default function LineItemSection({}: Props) {
             </Table>
 
             <div className="flex justify-end">
-                <Button onClick={calculate} variant={"secondary"}>
+                <Button type="button" onClick={calculate} variant={"secondary"}>
                     Calculate Price
                 </Button>
             </div>

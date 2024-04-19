@@ -15,7 +15,7 @@ TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 # APR 19: 00.00 == 00.00
-    11:45-
+    11:45-01:20
     07:10-07:40
     05:30-05:40
 # APR 18: 04.50 == 15.05
