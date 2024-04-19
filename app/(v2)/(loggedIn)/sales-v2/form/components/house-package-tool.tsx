@@ -40,9 +40,6 @@ export default function HousePackageTool({}: Props) {
     );
 
     function calculate() {
-        // console.log(packageTool);
-        // calculateSalesEstimate(form);
-
         let sum = {
             doors: 0,
             unitPrice: 0,

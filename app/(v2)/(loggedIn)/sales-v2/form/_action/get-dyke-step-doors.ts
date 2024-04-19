@@ -25,20 +25,20 @@ export async function getDykeStepDoors({
 }: Props): Promise<{ result: IStepProducts }> {
     const isBifold = doorType == "Bifold";
     if (!final) final = isBifold;
-    console.log("////");
 
     const whereDoor: any = {
         query: isBifold ? undefined : query,
     };
-    if (!isBifold)
-        whereDoor.OR = [
-            doorType && {
+    // if (!isBifold)
+    whereDoor.OR = [
+        doorType &&
+            !isBifold && {
                 doorType: null,
             },
-            {
-                doorType,
-            },
-        ].filter(Boolean);
+        {
+            doorType,
+        },
+    ].filter(Boolean);
 
     const _doors = await prisma.dykeDoors.findMany({
         where: whereDoor,
