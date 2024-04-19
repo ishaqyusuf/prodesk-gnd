@@ -7,7 +7,7 @@ export function calculateSalesEstimate(data: DykeForm) {
 
     data.itemArray.map((item) => {
         item.item.rate = item.item.total = 0;
-        if (item.item.housePackageTool.doorType == "Moulding") {
+        if (item.item?.housePackageTool?.doorType == "Moulding") {
             calculateLineItem(item);
         } else {
             item.item.rate =

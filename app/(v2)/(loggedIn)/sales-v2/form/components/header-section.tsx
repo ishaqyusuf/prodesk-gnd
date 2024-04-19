@@ -22,7 +22,7 @@ export default function HeaderSection({}) {
             // console.log(data.itemArray[0]?.item);
             // return;
             const e = calculateSalesEstimate(data);
-            debugger;
+
             const resp = await saveDykeSales(e);
             toast.success("Saved");
             if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);

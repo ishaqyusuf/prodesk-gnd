@@ -11,6 +11,7 @@ import { addDoorUnitAction } from "../_action/add-door-unit";
 import SalesMetaData from "./sales-meta-data";
 import HeaderSection from "./header-section";
 import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
+import { Icons } from "@/components/_v1/icons";
 interface Props {
     defaultValues: any;
 }
@@ -69,7 +70,8 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                             // form.setValue("currentItemIndex", lastIndex);
                         }}
                     >
-                        Add Door Unit
+                        <Icons.add className="w-4 h-4 mr-2" />
+                        <span>Add Item</span>
                     </Button>
                 </div>
             </RenderForm>

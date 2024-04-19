@@ -168,8 +168,8 @@ async function CustomStepForm(
         const customSteps = {
             "Door Type": "Specie",
             Specie: "Moulding",
-            Moulding: "M Casing",
-            "M Casing": "Line Item",
+            Moulding: "Line Item",
+            // "M Casing": "Line Item",
         };
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });
@@ -181,6 +181,7 @@ async function CustomStepForm(
                 title,
             },
         });
+
         if (!step)
             step = await prisma.dykeSteps.create({
                 data: {

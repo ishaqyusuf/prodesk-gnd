@@ -4,8 +4,22 @@
     -AUTOCOMPLE SALES ITEM BUG
     -MAKE DYKE SHELF TYPABLE
     -EXPORT PDF IN ESTIMATE
-# APR 18: 04.30 == 14.45
-    11:40-01:10
+
+TODO: House Package Tool Estimate.
+TODO: Door Image not replacing
+TODO: Bifold and Interior: ability to setup up multiple doors with different sizes and qty.
+TODO: Moulding set price (include price input in edit)
+TODO: Calculate Amount glitch, sometimes does not work.
+TODO: Price history
+TODO: Bifold doors as in unit template.
+TODO: Primed Lover are LL sizes (including 2/0)
+TODO: When door is selected, pop up window to show required sizes
+TODO: Add
+# APR 19: 00.00 == 00.00
+    07:10-
+    05:30-05:40
+# APR 18: 04.50 == 15.05
+    11:40-01:30
     09:00-11:00
     06:45-07:45
 # APR 17: 04.15 == 10.00
