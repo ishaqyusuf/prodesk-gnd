@@ -90,13 +90,13 @@ export function StepProducts({
                 stepFormTitle
             ) as any;
         }
-        if (!stepProd || !stepProd.product) {
+        if (!stepProd || !stepProd?.product) {
             toast.error("Unable to proceed, no item selected");
             return;
         }
         ctx.startLoadingStep(async () => {
             await timeout(1000);
-            const val = stepProd.product.title || stepProd.product.value;
+            const val = stepProd?.product?.title || stepProd?.product?.value;
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
@@ -152,7 +152,7 @@ export function StepProducts({
                 case "Specie":
                     break;
                 case "Door Type":
-                    switch (stepProd.product.title) {
+                    switch (stepProd?.product?.title) {
                         case "Shelf Items":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool`,
@@ -173,9 +173,9 @@ export function StepProducts({
                             // console.log(".");
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
-                                stepProd.product.title as any
+                                stepProd?.product?.title as any
                             );
-                            doorType = stepProd.product.title;
+                            doorType = stepProd?.product?.title;
                             break;
                     }
                     break;
@@ -185,10 +185,10 @@ export function StepProducts({
 
             const data: DykeStep["item"] = {
                 value: val,
-                // qty: stepProd.product.qty,
-                // price: stepProd.product.price,
+                // qty: stepProd?.product?.qty,
+                // price: stepProd?.product?.price,
                 stepId: stepProd.dykeStepId,
-                // title: stepProd.product.description,
+                // title: stepProd?.product?.description,
             } as any;
 
             form.setValue(
@@ -198,7 +198,7 @@ export function StepProducts({
 
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
-                stepProd.product as any,
+                stepProd?.product as any,
                 stepProd,
                 [],
                 doorType
