@@ -1,6 +1,6 @@
 import { DykeItemStepSectionProps } from "./dyke-item-step-section";
 
-import { cn } from "@/lib/utils";
+import { cn, safeFormText } from "@/lib/utils";
 import { useContext, useEffect, useState } from "react";
 import {
     DykeItemFormContext,
@@ -356,7 +356,7 @@ export function StepProducts({
 function Item({ item, select, loadingStep, isMultiSection }) {
     const ctx = useContext(DykeItemFormContext);
     const selected = isMultiSection
-        ? ctx.multi.watchItemSelected(item.product.title)
+        ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
     return (
         <button

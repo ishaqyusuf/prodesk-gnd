@@ -85,7 +85,7 @@ export default function SelectDoorHeightsModal({
         const checked = (Object.values(sizesData).filter((s) => s.checked)
             ?.length > 0) as any;
 
-        console.log(checked, stepProd.product.title);
+        console.log(checked, safeTitle);
 
         // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);

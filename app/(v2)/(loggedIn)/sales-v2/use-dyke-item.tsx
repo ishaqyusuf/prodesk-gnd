@@ -7,6 +7,7 @@ import { IStepProducts } from "./form/components/step-items-list/item";
 import { useModal } from "@/components/common/modal/provider";
 import SelectDoorHeightsModal from "./form/components/modals/select-door-heights";
 import { toast } from "sonner";
+import { safeFormText } from "@/lib/utils";
 
 // export interface IDykeItemFormContext {
 //     blocks: DykeBlock[];
@@ -89,7 +90,7 @@ export default function useDykeItem(rowIndex: number) {
                 .map(([k, v]) => v.checked && k)
                 .filter(Boolean);
             const prods = products.filter((p) =>
-                checked.includes(p.product.title as any)
+                checked.includes(safeFormText(p.product.title) as any)
             );
             let prod = prods[0];
             if (pkdId) {
@@ -108,9 +109,10 @@ export default function useDykeItem(rowIndex: number) {
             stepFormTitle,
             onSelect
         ) {
+            const safeTitle = safeFormText(stepProd.product.title);
             const isMoulding = stepFormTitle == "Moulding";
             form.setValue(
-                `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.toolId`,
+                `itemArray.${rowIndex}.multiComponent.${safeTitle}.toolId` as any,
                 stepProd.dykeProductId
             );
             if (!currentState && !isMoulding) {
@@ -124,7 +126,7 @@ export default function useDykeItem(rowIndex: number) {
                 return;
             }
             form.setValue(
-                `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.checked`,
+                `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked` as any,
                 !currentState
             );
 
@@ -134,8 +136,9 @@ export default function useDykeItem(rowIndex: number) {
             // );
         },
         isChecked(stepProd) {
+            const safeTitle = safeFormText(stepProd.product.title);
             return form.getValues(
-                `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.checked`
+                `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked`
             );
         },
     };
