@@ -8,6 +8,7 @@ import { getDimensionSizeList } from "../../../../dimension-variants/_actions/ge
 import { Form } from "@/components/ui/form";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { useModal } from "@/components/common/modal/provider";
+import { safeFormText } from "@/lib/utils";
 
 interface Props {
     form: UseFormReturn<DykeForm>;
@@ -19,11 +20,12 @@ export default function SelectDoorHeightsModal({
     rowIndex,
     stepProd,
 }: Props) {
+    const safeTitle = safeFormText(stepProd.product.title);
     const item = form.getValues(`itemArray.${rowIndex}`);
-    const heightsKey = `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.heights`;
+    const heightsKey = `itemArray.${rowIndex}.multiComponent.${safeTitle}.heights`;
     const heights: DykeForm["itemArray"][0]["multiComponent"][""]["heights"] =
         form.getValues(
-            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.heights`
+            `itemArray.${rowIndex}.multiComponent.${safeTitle}.heights`
         );
     const height = form.watch(
         `itemArray.${rowIndex}.item.housePackageTool.height`
@@ -88,11 +90,8 @@ export default function SelectDoorHeightsModal({
         // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         form.setValue(
-            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title?.replace(
-                ".",
-                "-"
-            )}.checked`,
-            checked
+            `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked`,
+            checked as any
         );
         modal.close();
     }

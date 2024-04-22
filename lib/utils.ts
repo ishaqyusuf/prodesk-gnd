@@ -378,3 +378,6 @@ export function ftToIn(h) {
         .filter(Boolean);
     return `${+_in + +ft * 12}"`;
 }
+export function safeFormText(t) {
+    return t?.replaceAll(".", "_")?.replaceAll("'", "-");
+}
