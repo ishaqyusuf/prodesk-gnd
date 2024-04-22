@@ -20,10 +20,10 @@ export default function SelectDoorHeightsModal({
     stepProd,
 }: Props) {
     const item = form.getValues(`itemArray.${rowIndex}`);
-    const heightsKey = `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.height`;
+    const heightsKey = `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.heights`;
     const heights: DykeForm["itemArray"][0]["multiComponent"][""]["heights"] =
         form.getValues(
-            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.height`
+            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.heights`
         );
     const height = form.watch(
         `itemArray.${rowIndex}.item.housePackageTool.height`

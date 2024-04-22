@@ -99,7 +99,7 @@ export default function HousePackageTool({}: Props) {
                 if (v.checked) {
                     console.log(v);
 
-                    const ls = Object.values(v.height || {})
+                    const ls = Object.values(v.heights || {})
                         .filter((i) => i.checked)
                         ?.map((s) => {
                             s.dim = s.dim?.replaceAll('"', "in");
