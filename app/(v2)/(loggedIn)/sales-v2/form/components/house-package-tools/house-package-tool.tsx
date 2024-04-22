@@ -40,6 +40,7 @@ export default function HousePackageTool({}: Props) {
     const _doorForm = form.watch(
         `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
     );
+    console.log(_doorForm);
 
     function calculate() {
         let sum = {
@@ -96,9 +97,15 @@ export default function HousePackageTool({}: Props) {
         const selection = Object.entries(itemArray.multiComponent).map(
             ([k, v]) => {
                 if (v.checked) {
-                    setSizeList(
-                        Object.values(v.heights).map((i) => i.checked) as any
-                    );
+                    const ls = Object.values(v.heights)
+                        .filter((i) => i.checked)
+                        ?.map((s) => {
+                            s.dim = s.dim?.replaceAll('"', "in");
+                            return s;
+                        }) as any;
+                    // console.log(v);
+
+                    setSizeList(ls);
                 }
             }
         );

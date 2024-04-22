@@ -361,7 +361,16 @@ export function getLeafDotPaths<T>(obj: T, parentKey: string = ""): string[] {
 
     return leafDotPaths;
 }
-export function inToFt(h) {
+export function inToFt(_in) {
+    _in = +_in.split('"')[0]?.split("'")[0];
+    if (_in > 0) {
+        const ft = Math.floor(_in / 12);
+        const rem = _in % 12;
+        return `${ft}-${rem}`;
+    }
+    return _in;
+}
+export function ftToIn(h) {
     const [ft, _in] = h
         ?.split(" ")?.[0]
         ?.split("-")

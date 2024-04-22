@@ -1,18 +1,18 @@
 "use server";
 
-import { inToFt } from "@/lib/utils";
+import { ftToIn } from "@/lib/utils";
 import { getHousePackageTool } from "./get-house-package-tool";
 
 export async function getDimensionSizeList(height, _bifold) {
     const d = await getHousePackageTool();
-    console.log(d);
+
     const list: {
         dim: string;
         width: string;
     }[] = [];
     const heightIn =
         d.data.sizes.find((s) => s.ft == height && s.height)?.in ||
-        inToFt(height);
+        ftToIn(height);
 
     // if (!heightIn) return [];
 

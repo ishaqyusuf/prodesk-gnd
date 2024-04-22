@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 import { HousePackageTool, HousePackageToolMeta } from "../type";
 import { bifold_door } from "@/lib/community/home-template-builder";
-import { inToFt } from "@/lib/utils";
+import { ftToIn } from "@/lib/utils";
 
 export async function getHousePackageTool(): Promise<HousePackageTool> {
     const s =
@@ -43,7 +43,7 @@ export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
                 // if (i > 0) return;
                 let _in =
                     data.sizes.find((d) => s?.startsWith(d.ft))?.in ||
-                    inToFt(s);
+                    ftToIn(s);
                 // const fa = data.sizes.find((_) => _.ft == "8-0");
                 // console.log(fa);
                 if (

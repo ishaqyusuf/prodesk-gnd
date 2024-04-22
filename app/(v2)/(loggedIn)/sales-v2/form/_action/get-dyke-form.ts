@@ -7,7 +7,7 @@ import { DykeFormStepMeta, MultiDyke, ShelfItemMeta } from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
-import { sum } from "@/lib/utils";
+import { inToFt, sum } from "@/lib/utils";
 import dayjs from "dayjs";
 import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
 
@@ -202,7 +202,19 @@ export async function getDykeFormAction(type, slug) {
                         if (!_dykeSizes) {
                             _dykeSizes = {};
                             item.housePackageTool.doors?.map((door) => {
-                                _dykeSizes[door.dimension] = true;
+                                const dim = door.dimension?.replaceAll(
+                                    '"',
+                                    "in"
+                                );
+                                console.log(dim);
+
+                                _dykeSizes[door.dimension] = {
+                                    dim,
+                                    width: inToFt(
+                                        door.dimension.split(" x ")[0]
+                                    ),
+                                    checked: true,
+                                };
                             });
                         }
                         if (formStep) {
