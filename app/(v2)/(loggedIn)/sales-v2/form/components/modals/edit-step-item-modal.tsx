@@ -6,7 +6,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { IStepProducts } from "../step-items-list/dyke-item-step-section";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import RenderForm from "@/_v2/components/common/render-form";
@@ -18,6 +17,7 @@ import { saveStepProduct } from "../../_action/save-step-product";
 import { useModal } from "@/components/common/modal-old/provider";
 import { _getMouldingSpecies } from "./_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import { IStepProducts } from "../step-items-list/item";
 
 interface Props {
     item: IStepProducts[0];
