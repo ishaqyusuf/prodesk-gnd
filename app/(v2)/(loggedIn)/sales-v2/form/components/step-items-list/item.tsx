@@ -81,7 +81,12 @@ export function StepProducts({
         // return;
         let proceed = !stepProd;
         if (isMultiSection && !proceed && stepProd) {
-            item.multi.select(currentState, stepProd as any, stepFormTitle);
+            item.multi.select(
+                currentState,
+                stepProd as any,
+                stepFormTitle,
+                () => {}
+            );
             return;
         }
         if (proceed) {
