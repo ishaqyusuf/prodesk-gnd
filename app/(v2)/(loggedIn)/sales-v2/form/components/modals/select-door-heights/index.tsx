@@ -30,7 +30,15 @@ export default function SelectDoorHeightsModal({
     );
     const doorType = item.item.meta.doorType;
     const [sizes, setSizes] = useState<{ dim: string; width: string }[]>([]);
-    const sizeForm = useForm<{ sizes: {} }>({
+    const sizeForm = useForm<{
+        sizes: {
+            [id in string]: {
+                checked?: boolean;
+                dim?: string;
+                width?: string;
+            };
+        };
+    }>({
         defaultValues: {
             sizes: {},
         },
@@ -51,6 +59,7 @@ export default function SelectDoorHeightsModal({
                     ...(v || {}),
                 };
             });
+            console.log(_defData);
 
             sizeForm.reset({
                 sizes: _defData,
@@ -63,8 +72,9 @@ export default function SelectDoorHeightsModal({
     const modal = useModal();
     function onSubmit() {
         const sizesData = sizeForm.getValues("sizes");
-        const checked = (Object.values(sizesData).filter(Boolean).length >
-            0) as any;
+        const checked = (Object.values(sizesData).filter((s) => s.checked)
+            ?.length > 0) as any;
+        console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         form.setValue(
             `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.checked`,

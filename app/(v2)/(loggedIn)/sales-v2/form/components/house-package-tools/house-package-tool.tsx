@@ -93,11 +93,13 @@ export default function HousePackageTool({}: Props) {
 
     useEffect(() => {
         const itemArray = item.get.itemArray();
-
+        console.log(itemArray);
         const selection = Object.entries(itemArray.multiComponent).map(
             ([k, v]) => {
                 if (v.checked) {
-                    const ls = Object.values(v.heights)
+                    console.log(v);
+
+                    const ls = Object.values(v.height || {})
                         .filter((i) => i.checked)
                         ?.map((s) => {
                             s.dim = s.dim?.replaceAll('"', "in");
