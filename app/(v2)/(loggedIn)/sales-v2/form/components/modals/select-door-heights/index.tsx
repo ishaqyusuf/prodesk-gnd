@@ -56,16 +56,14 @@ export default function SelectDoorHeightsModal({
                 _defData[k] = {
                     // checked: s != null,
                     ...(v || {}),
-                    dim: s.dim,
-                    width: s.width,
+                    dim: s?.dim,
+                    width: s?.width,
                 };
             });
-            console.log(_defData);
 
             sizeForm.reset({
                 sizes: _defData,
             });
-            console.log(_defData);
 
             setSizes(_sizes);
         })();
