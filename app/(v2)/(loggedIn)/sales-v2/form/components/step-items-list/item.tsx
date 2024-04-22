@@ -90,7 +90,7 @@ export function StepProducts({
                 stepFormTitle
             ) as any;
         }
-        if (!stepProd) {
+        if (!stepProd || !stepProd.product) {
             toast.error("Unable to proceed, no item selected");
             return;
         }
