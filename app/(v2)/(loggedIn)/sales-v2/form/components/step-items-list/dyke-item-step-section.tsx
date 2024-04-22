@@ -93,7 +93,7 @@ export function DykeItemStepSection({
             <CollapsibleContent className="p-8 border">
                 {stepForm?.step?.title == "House Package Tool" ? (
                     // <HousePackageTool />
-                    <MultiComponent Render={LineItemSection} />
+                    <MultiComponent Render={HousePackageTool} />
                 ) : stepForm?.step?.title == "Shelf Items" ? (
                     <>
                         <ShelfItemIndex />

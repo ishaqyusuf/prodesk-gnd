@@ -85,7 +85,9 @@ export function StepProducts({
                 currentState,
                 stepProd as any,
                 stepFormTitle,
-                () => {}
+                () => {
+                    selectProduct(false);
+                }
             );
             return;
         }
