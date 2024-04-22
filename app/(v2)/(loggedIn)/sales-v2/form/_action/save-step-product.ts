@@ -1,8 +1,9 @@
 "use server";
 
 import { prisma } from "@/db";
-import { IStepProducts } from "../components/step-items-list/dyke-item-step-section";
+
 import { DykeDoorType } from "../../type";
+import { IStepProducts } from "../components/step-items-list/item";
 export interface SaveStepProductExtra {
     _meta: {
         isMoulding: boolean;
