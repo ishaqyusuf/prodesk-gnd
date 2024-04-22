@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 import { getStepForm } from "./get-dyke-step";
 
-import { DykeFormStepMeta, ShelfItemMeta } from "../../type";
+import { DykeFormStepMeta, MultiDyke, ShelfItemMeta } from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
@@ -62,7 +62,6 @@ export async function getDykeFormAction(type, slug) {
             billingAddress: true,
         },
     });
-
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
     const rootProds = await getStepForm(1);
@@ -180,10 +179,48 @@ export async function getDykeFormAction(type, slug) {
                 // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
                 //                 categoryIds: number[]
                 //             }},
-                itemData.meta;
+                // itemData.meta;
+                const multiComponent: MultiDyke = {};
+                items
+                    .filter((item) => {
+                        if (item.id == itemData.id) return true;
+                        if (
+                            itemData.multiDyke &&
+                            itemData.multiDykeUid == item.multiDykeUid
+                        )
+                            return true;
+                        return false;
+                    })
+                    .map((item) => {
+                        const formStep = item.formSteps.find(
+                            (d) =>
+                                d.step?.title == "Door" ||
+                                d.step?.title == "Moulding"
+                        );
+                        const isMoulding = formStep?.step.title == "Moulding";
+                        let _dykeSizes: any = item.meta._dykeSizes;
+                        if (!_dykeSizes) {
+                            _dykeSizes = {};
+                            item.housePackageTool.doors?.map((door) => {
+                                _dykeSizes[door.dimension] = true;
+                            });
+                        }
+                        if (formStep) {
+                            multiComponent[formStep.value as string] = {
+                                checked: true,
+                                heights: _dykeSizes,
+                                toolId: isMoulding
+                                    ? item.housePackageTool.moldingId
+                                    : item.housePackageTool.doorId,
+                            };
+                        }
+                    });
+                // console.log(multiComponent);
                 const rItem = {
                     opened: true,
                     stepIndex: 0,
+                    multiComponent,
+                    stillChecked: true,
                     item: {
                         ...itemData,
                         housePackageTool,

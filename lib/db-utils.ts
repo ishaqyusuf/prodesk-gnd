@@ -88,3 +88,4 @@ export function whereQuery<T>(query, soft = true) {
         },
     };
 }
+// export function

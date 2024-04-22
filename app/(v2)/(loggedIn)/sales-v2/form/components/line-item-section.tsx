@@ -15,8 +15,10 @@ import Money from "@/components/_v1/money";
 
 import { camel, cn } from "@/lib/utils";
 
-interface Props {}
-export default function LineItemSection({}: Props) {
+interface Props {
+    rowIndex;
+}
+export default function LineItemSection({ rowIndex }: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
@@ -35,8 +37,7 @@ export default function LineItemSection({}: Props) {
     const _lineTotal = form.watch(`itemArray.${item.rowIndex}.item.total`);
 
     function calculate() {
-        console.log("....");
-
+        // console.log("....");
         const [price, qty] = form.getValues([
             `${rootKey}.price`,
             `${rootKey}.qty`,

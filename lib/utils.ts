@@ -361,3 +361,11 @@ export function getLeafDotPaths<T>(obj: T, parentKey: string = ""): string[] {
 
     return leafDotPaths;
 }
+export function inToFt(h) {
+    const [ft, _in] = h
+        ?.split(" ")?.[0]
+        ?.split("-")
+        ?.map((s) => s?.trim())
+        .filter(Boolean);
+    return `${+_in + +ft * 12}"`;
+}

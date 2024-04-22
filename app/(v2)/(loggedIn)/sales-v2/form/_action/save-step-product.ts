@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { IStepProducts } from "../components/dyke-item-step-section";
+import { IStepProducts } from "../components/step-items-list/dyke-item-step-section";
 import { DykeDoorType } from "../../type";
 export interface SaveStepProductExtra {
     _meta: {

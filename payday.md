@@ -14,7 +14,17 @@ TODO: Price history
 TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
-# APR 19: 00.00 == 00.00
+TODO: No more edit on dyke when production is started
+
+# APR 22: 00.00 == 00.00
+    08:40-
+    05:45-06:50
+PAYMENT INVOICE APR 15 - APR 20
+Zelle marzuqisiaka@gmail.com
+$651.67
+# APR 20: 01.30 == 18.40
+    11:50-01:20
+# APR 19: 02.05 == 17.10
     11:45-01:20
     07:10-07:40
     05:30-05:40

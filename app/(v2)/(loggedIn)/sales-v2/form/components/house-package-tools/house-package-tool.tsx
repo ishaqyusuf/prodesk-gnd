@@ -6,9 +6,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { DykeItemFormContext, useDykeForm } from "../../form-context";
+import { DykeItemFormContext, useDykeForm } from "../../../form-context";
 import { useContext, useEffect, useState } from "react";
-import { getDimensionSizeList } from "../../dimension-variants/_actions/get-size-list";
+import { getDimensionSizeList } from "../../../dimension-variants/_actions/get-size-list";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
@@ -16,8 +16,10 @@ import Money from "@/components/_v1/money";
 import { formatMoney } from "@/lib/use-number";
 import { camel, cn } from "@/lib/utils";
 
-interface Props {}
-export default function HousePackageTool({}: Props) {
+interface Props {
+    rowIndex;
+}
+export default function HousePackageTool({ rowIndex }: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
@@ -91,7 +93,10 @@ export default function HousePackageTool({}: Props) {
     useEffect(() => {
         (async () => {
             // console.log(height);
-            const list = await getDimensionSizeList(height);
+            const list = await getDimensionSizeList(
+                height,
+                doorType == "Bifold"
+            );
             // console.log(list);
             setSizeList(list as any);
         })();

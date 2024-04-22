@@ -131,6 +131,9 @@ export interface ISalesOrderItemMeta {
         | "Garage"
         | "Bifold"
         | "Moulding";
+
+    _dykeSizes: { [size in string]: boolean };
+    // _dykeMulti: { [item in string]: boolean };
 }
 export interface HousePackageTool {
     calculated?: boolean;

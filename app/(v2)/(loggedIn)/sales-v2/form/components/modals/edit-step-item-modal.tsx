@@ -6,7 +6,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { IStepProducts } from "../dyke-item-step-section";
+import { IStepProducts } from "../step-items-list/dyke-item-step-section";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import RenderForm from "@/_v2/components/common/render-form";

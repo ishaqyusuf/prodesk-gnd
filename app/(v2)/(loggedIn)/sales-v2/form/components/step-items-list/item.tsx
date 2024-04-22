@@ -1,118 +1,41 @@
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { DykeItemStepSectionProps } from "./dyke-item-step-section";
+
 import { cn } from "@/lib/utils";
-import HousePackageTool from "./house-package-tool";
 import { useContext, useEffect, useState } from "react";
 import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../form-context";
-import { DykeDoorType, DykeForm, DykeStep } from "../../type";
-import ShelfItemIndex from "./shelf-item";
+} from "../../../form-context";
+import { DykeStep } from "../../../type";
 import Image from "next/image";
 import { env } from "@/env.mjs";
 import { Label } from "@/components/ui/label";
 import {
     getMouldingStepProduct,
     getStepProduct,
-} from "../_action/get-dyke-step-product";
+} from "../../_action/get-dyke-step-product";
 import { toast } from "sonner";
-import { getNextDykeStepAction } from "../_action/get-next-dyke-step";
+import { getNextDykeStepAction } from "../../_action/get-next-dyke-step";
 import { Icons } from "@/components/_v1/icons";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
-import Money from "@/components/_v1/money";
 import { timeout } from "@/lib/timeout";
-import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
-import { doorQueryBuilder } from "../../_utils/door-query-builder";
+import { getDykeStepDoors } from "../../_action/get-dyke-step-doors";
+import { doorQueryBuilder } from "../../../_utils/door-query-builder";
 
 import SVG from "react-inlinesvg";
 import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
-import EditStepItemModal from "./modals/edit-step-item-modal";
-import { SaveStepProductExtra } from "../_action/save-step-product";
-import LineItemSection from "./line-item-section";
-interface Props {
-    stepForm: DykeStep;
-    stepIndex: number;
-}
-export function DykeItemStepSection({ stepForm, stepIndex }: Props) {
-    const form = useDykeForm();
-    const item = useContext(DykeItemFormContext);
-    const stepValue = form.watch(
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any
-    );
-    return (
-        <Collapsible
-            className={cn(stepForm?.item?.meta?.hidden && "hidden")}
-            open={stepIndex == item.openedStepIndex}
-            // onOpenChange={() => item.openBlock(stepIndex)}
-        >
-            <CollapsibleTrigger asChild>
-                <div className="flex bg-accent">
-                    <button
-                        className="flex  w-full p-2 px-4 border space-x-2"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (stepForm?.item?.meta?.hidden) return;
-                            item.toggleStep(stepIndex);
-                        }}
-                    >
-                        <span className="font-semibold">
-                            {stepForm?.step?.title}:
-                        </span>
-                        <span>{stepValue}</span>
-                    </button>
-                    <div className="px-2">
-                        <Menu Icon={Icons.more}>
-                            <MenuItem
-                                SubMenu={
-                                    <>
-                                        <MenuItem>Before</MenuItem>
-                                        <MenuItem>After</MenuItem>
-                                    </>
-                                }
-                            >
-                                New Step
-                            </MenuItem>
-                        </Menu>
-                    </div>
-                </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="p-8 border">
-                {stepForm?.step?.title == "House Package Tool" ? (
-                    <HousePackageTool />
-                ) : stepForm?.step?.title == "Shelf Items" ? (
-                    <>
-                        <ShelfItemIndex />
-                    </>
-                ) : stepForm?.step?.title == "Line Item" ? (
-                    <>
-                        <LineItemSection />
-                    </>
-                ) : (
-                    <StepProducts
-                        stepForm={stepForm}
-                        stepIndex={stepIndex}
-                        rowIndex={item.rowIndex}
-                    />
-                )}
-            </CollapsibleContent>
-        </Collapsible>
-    );
-}
-
-interface StepProductProps extends Props {
+import EditStepItemModal from "../modals/edit-step-item-modal";
+import { SaveStepProductExtra } from "../../_action/save-step-product";
+interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
 }
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
-function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
+export function StepProducts({
+    stepForm,
+    stepIndex,
+    rowIndex,
+}: StepProductProps) {
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     const form = useDykeForm();
     // stepProducts[0].
@@ -122,6 +45,8 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     const isMoulding = doorType == "Moulding";
     const stepFormTitle = stepForm.step?.title;
     const ctx = useDykeCtx();
+    const multi = item.multi.watchMultiComponent();
+
     const load = async () => {
         if (stepForm?.item?.meta?.hidden) return;
         if (stepFormTitle == "Door") {
@@ -150,8 +75,25 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
     useEffect(() => {
         load();
     }, []);
-    async function selectProduct(stepProd: IStepProducts[0]) {
+    const t = stepForm?.step?.title;
+    const isMultiSection = t == "Moulding" || t == "Door";
+    async function selectProduct(currentState, stepProd?: IStepProducts[0]) {
         // return;
+        let proceed = !stepProd;
+        if (isMultiSection && !proceed && stepProd) {
+            item.multi.select(currentState, stepProd as any, stepFormTitle);
+            return;
+        }
+        if (proceed) {
+            stepProd = item.multi.validateMultiSelect(
+                stepProducts,
+                stepFormTitle
+            ) as any;
+        }
+        if (!stepProd) {
+            toast.error("Unable to proceed, no item selected");
+            return;
+        }
         ctx.startLoadingStep(async () => {
             await timeout(1000);
             const val = stepProd.product.title || stepProd.product.value;
@@ -228,7 +170,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                         case "Bifold":
                         case "Garage":
                         case "Moulding":
-                            console.log(".");
+                            // console.log(".");
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,
                                 stepProd.product.title as any
@@ -349,6 +291,7 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
             />
         );
     }
+
     return (
         <div className="">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -366,35 +309,12 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                                 <Icons.edit className="w-4 h-4" />
                             </Button>
                         </div>
-                        <button
-                            disabled={ctx.loadingStep}
-                            className={cn(
-                                "w-full  flex flex-col items-center border-2 border-muted-foreground/10  hover:border-muted-foreground rounded  space-y-2 justify-end h-[200px] overflow-hidden p-2"
-                            )}
-                            onClick={() => {
-                                selectProduct(b);
-                            }}
-                        >
-                            {b.product.img ? (
-                                <Image
-                                    className="cursor-pointer"
-                                    width={100}
-                                    height={100}
-                                    src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${b.product.img}`}
-                                    alt={
-                                        b.product.description || b.product.value
-                                    }
-                                />
-                            ) : (b.product.meta as any)?.svg ? (
-                                <SVG src={b.product.meta?.svg} />
-                            ) : b.product.meta?.url ? (
-                                <object
-                                    data={b.product.meta?.url}
-                                    type={"image/svg+xml"}
-                                />
-                            ) : null}
-                            <Label className="text-sm">{b.product.title}</Label>
-                        </button>
+                        <Item
+                            isMultiSection={isMultiSection}
+                            select={selectProduct}
+                            loadingStep={ctx.loadingStep}
+                            item={b}
+                        />
                     </div>
                 ))}
                 <div className="p-4">
@@ -411,11 +331,51 @@ function StepProducts({ stepForm, stepIndex, rowIndex }: StepProductProps) {
                     </button>
                 </div>
             </div>
+            {isMultiSection && (
+                <div className="flex justify-end">
+                    <Button onClick={() => selectProduct(false)}>
+                        Proceed
+                    </Button>
+                </div>
+            )}
             <div className="flex justify-center">
                 {ctx.loadingStep && (
                     <Icons.spinner className="h-8 w-8 animate-spin" />
                 )}
             </div>
         </div>
+    );
+}
+function Item({ item, select, loadingStep, isMultiSection }) {
+    const ctx = useContext(DykeItemFormContext);
+    const selected = isMultiSection
+        ? ctx.multi.watchItemSelected(item.product.title)
+        : false;
+    return (
+        <button
+            disabled={loadingStep}
+            className={cn(
+                "w-full  flex flex-col items-center border-2 border-muted-foreground/10  hover:border-muted-foreground rounded  space-y-2 justify-end h-[200px] overflow-hidden p-2",
+                selected && "hover:border-green-500 border-green-500"
+            )}
+            onClick={() => {
+                select(selected, item);
+            }}
+        >
+            {item.product.img ? (
+                <Image
+                    className="cursor-pointer"
+                    width={100}
+                    height={100}
+                    src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
+                    alt={item.product.description || item.product.value}
+                />
+            ) : (item.product.meta as any)?.svg ? (
+                <SVG src={item.product.meta?.svg} />
+            ) : item.product.meta?.url ? (
+                <object data={item.product.meta?.url} type={"image/svg+xml"} />
+            ) : null}
+            <Label className="text-sm">{item.product.title}</Label>
+        </button>
     );
 }

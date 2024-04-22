@@ -1,10 +1,10 @@
 "use server";
 
 import { prisma } from "@/db";
-import { IStepProducts } from "../components/dyke-item-step-section";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeDoorType, DykeProductMeta } from "../../type";
 import { DykeDoors } from "@prisma/client";
+import { IStepProducts } from "../components/step-items-list/item";
 interface Props {
     q;
     omit;

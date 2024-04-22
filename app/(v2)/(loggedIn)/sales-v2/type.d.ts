@@ -67,6 +67,13 @@ export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
         categoryIds: number[];
     };
 }
+export type MultiDyke = {
+    [id in string]: {
+        checked?: boolean;
+        heights: { [height in string]: boolean };
+        toolId?;
+    };
+};
 export interface IDykeFormContext {
     startLoadingStep;
     loadingStep: boolean;

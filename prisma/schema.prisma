@@ -912,6 +912,8 @@ model SalesOrderItems {
     prodStartedAt      DateTime?                    @db.Timestamp(0)
     sentToProdAt       DateTime?                    @db.Timestamp(0)
     prodCompletedAt    DateTime?                    @db.Timestamp(0)
+    multiDyke          Boolean                      @default(false)
+    multiDykeUid       String?
     supplies           SalesItemSupply[]
     salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     itemDeliveries     OrderItemDelivery[]
@@ -972,10 +974,9 @@ model OrderItemDelivery {
 }
 
 model HousePackageTools {
-    id             Int                @unique @default(autoincrement())
-    orderItemId    Int                @unique
-    linked         Boolean            @default(false)
-    linkUid        String?
+    id          Int @unique @default(autoincrement())
+    orderItemId Int @unique
+
     height         String?
     doorType       String?
     doorId         Int?
