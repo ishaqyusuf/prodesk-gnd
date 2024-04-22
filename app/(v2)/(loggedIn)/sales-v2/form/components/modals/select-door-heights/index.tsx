@@ -83,12 +83,15 @@ export default function SelectDoorHeightsModal({
         const checked = (Object.values(sizesData).filter((s) => s.checked)
             ?.length > 0) as any;
 
-        // console.log(sizes);
+        console.log(checked, stepProd.product.title);
 
         // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         form.setValue(
-            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.checked`,
+            `itemArray.${rowIndex}.multiComponent.${stepProd.product.title?.replace(
+                ".",
+                "-"
+            )}.checked`,
             checked
         );
         modal.close();

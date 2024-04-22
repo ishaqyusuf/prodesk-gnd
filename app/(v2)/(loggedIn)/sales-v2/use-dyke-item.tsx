@@ -71,6 +71,7 @@ export default function useDykeItem(rowIndex: number) {
             const items = form.getValues(
                 `itemArray.${rowIndex}.multiComponent`
             );
+            // console.log(items);
             const checkedItems = Object.values(items || {}).filter(
                 (b) => b.checked
             );
