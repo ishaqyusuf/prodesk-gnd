@@ -101,7 +101,12 @@ export default function useDykeItem(rowIndex: number) {
             }
             return prod;
         },
-        select(currentState, stepProd: IStepProducts[0], stepFormTitle) {
+        select(
+            currentState,
+            stepProd: IStepProducts[0],
+            stepFormTitle,
+            onSelect
+        ) {
             const isMoulding = stepFormTitle == "Moulding";
             form.setValue(
                 `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.toolId`,

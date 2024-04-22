@@ -4,6 +4,7 @@ import { DykeItemFormContext, useDykeForm } from "../../form-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function MultiComponent({ Render }) {
+    return <Render />;
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const [tabs, setTabs] = useState<{ title }[]>([]);

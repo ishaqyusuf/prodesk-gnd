@@ -70,7 +70,13 @@ export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
 export type MultiDyke = {
     [id in string]: {
         checked?: boolean;
-        heights: { [height in string]: boolean };
+        heights: {
+            [height in string]: {
+                checked?: boolean;
+                dim?: string;
+                width?: string;
+            };
+        };
         toolId?;
     };
 };

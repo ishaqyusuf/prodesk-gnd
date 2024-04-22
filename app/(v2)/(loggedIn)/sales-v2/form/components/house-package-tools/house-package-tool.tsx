@@ -17,9 +17,9 @@ import { formatMoney } from "@/lib/use-number";
 import { camel, cn } from "@/lib/utils";
 
 interface Props {
-    rowIndex;
+    rowIndex?;
 }
-export default function HousePackageTool({ rowIndex }: Props) {
+export default function HousePackageTool({}: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
@@ -91,15 +91,27 @@ export default function HousePackageTool({ rowIndex }: Props) {
     }
 
     useEffect(() => {
-        (async () => {
-            // console.log(height);
-            const list = await getDimensionSizeList(
-                height,
-                doorType == "Bifold"
-            );
-            // console.log(list);
-            setSizeList(list as any);
-        })();
+        const itemArray = item.get.itemArray();
+
+        const selection = Object.entries(itemArray.multiComponent).map(
+            ([k, v]) => {
+                if (v.checked) {
+                    setSizeList(
+                        Object.values(v.heights).map((i) => i.checked) as any
+                    );
+                }
+            }
+        );
+        // (async () => {
+        //     // console.log(height);
+
+        //     // const list = await getDimensionSizeList(
+        //     //     height,
+        //     //     doorType == "Bifold"
+        //     // );
+        //     // // console.log(list);
+        //     // setSizeList(list as any);
+        // })();
     }, []);
     return (
         <div>

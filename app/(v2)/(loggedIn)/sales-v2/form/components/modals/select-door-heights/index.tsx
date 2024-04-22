@@ -29,7 +29,7 @@ export default function SelectDoorHeightsModal({
         `itemArray.${rowIndex}.item.housePackageTool.height`
     );
     const doorType = item.item.meta.doorType;
-    const [sizes, setSizes] = useState<{ dim: string }[]>([]);
+    const [sizes, setSizes] = useState<{ dim: string; width: string }[]>([]);
     const sizeForm = useForm<{ sizes: {} }>({
         defaultValues: {
             sizes: {},
@@ -37,7 +37,6 @@ export default function SelectDoorHeightsModal({
     });
 
     useEffect(() => {
-        console.log(">><<");
         (async () => {
             const _sizes = await getDimensionSizeList(
                 height,
@@ -45,7 +44,12 @@ export default function SelectDoorHeightsModal({
             );
             let _defData: any = {};
             Object.entries(heights || {}).map(([k, v]) => {
-                if (_sizes.find((s) => s.dim == (k as any))) _defData[k] = v;
+                const s = _sizes.find((s) => s.dim == (k as any));
+                _defData[k] = {
+                    // checked: s != null,
+                    ...(s || {}),
+                    ...(v || {}),
+                };
             });
 
             sizeForm.reset({
@@ -81,7 +85,7 @@ export default function SelectDoorHeightsModal({
                             <div className="" key={index}>
                                 <ControlledCheckbox
                                     control={sizeForm.control}
-                                    name={`sizes.${size.dim}` as any}
+                                    name={`sizes.${size.dim}.checked` as any}
                                     label={size.dim}
                                 />
                             </div>
