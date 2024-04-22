@@ -56,7 +56,8 @@ export default function SelectDoorHeightsModal({
                 _defData[k] = {
                     // checked: s != null,
                     ...(v || {}),
-                    ...(s || {}),
+                    dim: s.dim,
+                    width: s.width,
                 };
             });
             console.log(_defData);
@@ -72,9 +73,21 @@ export default function SelectDoorHeightsModal({
     const modal = useModal();
     function onSubmit() {
         const sizesData = sizeForm.getValues("sizes");
+        Object.entries(sizesData || {}).map(([size, d]) => {
+            const _d = sizes.find((_) => size == _.dim) || {};
+            if (d.checked && _d) {
+                sizesData[size] = {
+                    checked: true,
+                    ..._d,
+                };
+            }
+        });
         const checked = (Object.values(sizesData).filter((s) => s.checked)
             ?.length > 0) as any;
-        console.log(sizesData);
+
+        // console.log(sizes);
+
+        // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         form.setValue(
             `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.checked`,
