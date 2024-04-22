@@ -124,20 +124,20 @@ export function StepProducts({
                 case "Jamb Size":
                     form.setValue(
                         `itemArray.${item.rowIndex}.item.housePackageTool.jambSizeId`,
-                        stepProd.dykeProductId
+                        stepProd?.dykeProductId
                     );
                     break;
                 case "Door":
                     form.setValue(
                         `itemArray.${item.rowIndex}.item.housePackageTool.dykeDoorId`,
-                        stepProd.dykeProductId
+                        stepProd?.dykeProductId
                     );
                     break;
                 case "Casing":
                     if (doorType != "Moulding")
                         form.setValue(
                             `itemArray.${item.rowIndex}.item.housePackageTool.casingId`,
-                            stepProd.dykeProductId
+                            stepProd?.dykeProductId
                         );
                     else {
                         //
@@ -146,7 +146,7 @@ export function StepProducts({
                 // case "Moulding":
                 //     form.setValue(
                 //         `itemArray.${item.rowIndex}.item.housePackageTool.moldingId`,
-                //         stepProd.dykeProductId
+                //         stepProd?.dykeProductId
                 //     );
                 //     break;
                 case "Specie":
@@ -163,7 +163,7 @@ export function StepProducts({
                         case "Moulding":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.moldingId`,
-                                stepProd.dykeProductId
+                                stepProd?.dykeProductId
                             );
                         case "Interior":
                         case "Exterior":
@@ -187,7 +187,7 @@ export function StepProducts({
                 value: val,
                 // qty: stepProd?.product?.qty,
                 // price: stepProd?.product?.price,
-                stepId: stepProd.dykeStepId,
+                stepId: stepProd?.dykeStepId,
                 // title: stepProd?.product?.description,
             } as any;
 
