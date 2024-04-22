@@ -55,8 +55,8 @@ export default function SelectDoorHeightsModal({
                 const s = _sizes.find((s) => s.dim == (k as any));
                 _defData[k] = {
                     // checked: s != null,
-                    ...(s || {}),
                     ...(v || {}),
+                    ...(s || {}),
                 };
             });
             console.log(_defData);
