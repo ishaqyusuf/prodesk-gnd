@@ -90,8 +90,8 @@ export default function SelectDoorHeightsModal({
         // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         form.setValue(
-            `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked`,
-            checked as any
+            `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked` as any,
+            checked
         );
         modal.close();
     }

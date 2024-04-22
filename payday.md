@@ -17,7 +17,7 @@ TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
 
 # APR 22: 00.00 == 00.00
-    01:10-
+    01:10-01:45
     11:30-12:40
     08:40-11:00
     05:45-06:50
