@@ -14,12 +14,14 @@ import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order-mobile-menu";
 import NewEstimateBtn from "./new-sales-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
+import DebugSaveError from "@/app/(v2)/(loggedIn)/sales-v2/form/[...slug]/_debug/debug-save-error";
 
 interface Props {}
 export default async function SalesEstimatesPage({ searchParams }) {
     const response = await getSalesEstimates(queryParams(searchParams));
     return (
         <AuthGuard can={["viewEstimates"]}>
+            <DebugSaveError />
             <SalesTabLayout>
                 <Breadcrumbs>
                     <BreadLink isFirst title="Sales" />

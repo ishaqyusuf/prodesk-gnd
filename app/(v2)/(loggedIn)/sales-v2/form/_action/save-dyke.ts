@@ -4,7 +4,8 @@ import { prisma } from "@/db";
 import { DykeForm } from "../../type";
 import { lastId } from "@/lib/nextId";
 import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
-import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
+import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
+import { timeout } from "@/lib/timeout";
 
 export async function saveDykeSales(data: DykeForm) {
     const tx =
@@ -240,14 +241,15 @@ export async function saveDykeSales(data: DykeForm) {
                     );
                 })
             );
-            // console.log(ids.doorsIds);
-            // console.log({ createDoors });
+            console.log(ids.doorsIds);
+            console.log({ createDoors });
 
             async function _deleteWhere(
                 t,
                 notIn: number[] = [],
                 items = false
             ) {
+                // return;
                 const where: any = items
                     ? { salesOrderId: order.id }
                     : {
@@ -275,6 +277,7 @@ export async function saveDykeSales(data: DykeForm) {
             await _deleteWhere(tx.housePackageTools, ids.housePackageIds);
 
             await _deleteWhere(tx.salesOrderItems, ids.itemIds, true);
+            console.log("INSERTING>>>>>>");
 
             await Promise.all(
                 [
@@ -320,23 +323,31 @@ export async function saveDykeSales(data: DykeForm) {
                             },
                         },
                     },
-                ].map(async (i) => {
-                    await (i.t as any).createMany({
-                        data: i.data,
-                    });
-                    // await (i.t as any).deleteMany({
-                    //     where: {
-                    //         id: {
-                    //             notIn: i.ids,
-                    //         },
-                    //         ...i.where,
-                    //     },
-                    // });
-                })
+                ]
+                    .filter((p) => p.data.length)
+                    .map(async (i, _) => {
+                        await timeout(1000 * (_ + 1));
+                        await (i.t as any).createMany({
+                            data: i.data,
+                        });
+
+                        // await (i.t as any).deleteMany({
+                        //     where: {
+                        //         id: {
+                        //             notIn: i.ids,
+                        //         },
+                        //         ...i.where,
+                        //     },
+                        // });
+                    })
             );
 
             return order;
         };
-
-    return await tx(prisma);
+    return await prisma.$transaction(tx, {
+        maxWait: 5000,
+        timeout: 10000,
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    });
+    // return await tx(prisma);
 }

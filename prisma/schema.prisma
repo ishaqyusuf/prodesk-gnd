@@ -310,7 +310,8 @@ model HomeTasks {
     job                  Jobs?     @relation(fields: [jobId], references: [id])
     assignedTo           Users?    @relation(fields: [assignedToId], references: [id])
 
-    @@index([createdAt, homeId, deletedAt, produceable, billable, addon, deco, punchout, installable, taskName, projectId, jobId])
+    @@index([createdAt, deletedAt, produceable, billable, addon, deco, punchout, installable, taskName, projectId, jobId])
+    @@index([homeId], name: "idx_HomeTasks_on_homeId")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -923,7 +924,8 @@ model SalesOrderItems {
     housePackageTool   HousePackageTools?
     salesDoors         DykeSalesDoors[]
 
-    @@index([createdAt, salesOrderId, description, swing])
+    @@index([createdAt, description, swing])
+    @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
 }
 
 model OrderDeliveryProgress {

@@ -4,6 +4,9 @@ export async function nextId(model) {
 export async function lastId(model, _default = 0) {
     return ((
         await model.findFirst({
+            where: {
+                deletedAt: undefined,
+            },
             orderBy: {
                 id: "desc",
             },
@@ -11,4 +14,3 @@ export async function lastId(model, _default = 0) {
     )?.id || _default) as number;
 }
 // export async function slugModel()
-
