@@ -206,9 +206,8 @@ export async function getDykeFormAction(type, slug) {
                                     '"',
                                     "in"
                                 );
-                                console.log(dim);
 
-                                _dykeSizes[door.dimension] = {
+                                _dykeSizes[dim] = {
                                     dim,
                                     width: inToFt(
                                         door.dimension.split(" x ")[0]

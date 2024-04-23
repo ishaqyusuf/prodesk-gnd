@@ -8,13 +8,16 @@ import {
 } from "@/components/ui/table";
 import { DykeItemFormContext, useDykeForm } from "../../../form-context";
 import { useContext, useEffect, useState } from "react";
-import { getDimensionSizeList } from "../../../dimension-variants/_actions/get-size-list";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
 import Money from "@/components/_v1/money";
 
 import { formatMoney } from "@/lib/use-number";
 import { camel, cn } from "@/lib/utils";
+import { useModal } from "@/components/common/modal/provider";
+import SelectDoorHeightsModal, {
+    SizeForm,
+} from "../modals/select-door-heights";
 
 interface Props {
     rowIndex?;
@@ -89,27 +92,42 @@ export default function HousePackageTool({}: Props) {
         form.setValue(`${rootKey}.totalPrice` as any, sum.totalPrice);
         form.setValue(`${rootKey}.totalDoors` as any, sum.doors);
     }
+    const [productTitle, setProductTitle] = useState<string>("");
+    const modal = useModal();
+    function editSize() {
+        modal.openModal(
+            <SelectDoorHeightsModal
+                form={form}
+                rowIndex={item.rowIndex}
+                productTitle={productTitle}
+                onSubmit={_setSizeList}
+            />
+        );
+    }
 
-    useEffect(() => {
+    function _setSizeList(heights: SizeForm) {
+        const ls = Object.values(heights || {})
+            .filter((i) => i.checked)
+            ?.map((s) => {
+                s.dim = s.dim?.replaceAll('"', "in");
+                return s;
+            }) as any;
+        setSizeList(ls);
+    }
+    function initialize() {
         const itemArray = item.get.itemArray();
         console.log(itemArray);
         const selection = Object.entries(itemArray.multiComponent).map(
-            ([k, v]) => {
+            ([prodTitle, v]) => {
                 if (v.checked) {
-                    console.log(v);
-
-                    const ls = Object.values(v.heights || {})
-                        .filter((i) => i.checked)
-                        ?.map((s) => {
-                            s.dim = s.dim?.replaceAll('"', "in");
-                            return s;
-                        }) as any;
-                    // console.log(v);
-
-                    setSizeList(ls);
+                    _setSizeList(v.heights);
+                    setProductTitle(prodTitle);
                 }
             }
         );
+    }
+    useEffect(() => {
+        initialize();
         // (async () => {
         //     // console.log(height);
 
@@ -248,7 +266,10 @@ export default function HousePackageTool({}: Props) {
                 </TableBody>
             </Table>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-4">
+                <Button onClick={editSize} type="button" variant={"outline"}>
+                    Edit Size
+                </Button>
                 <Button onClick={calculate} type="button" variant={"secondary"}>
                     Calculate Price
                 </Button>
