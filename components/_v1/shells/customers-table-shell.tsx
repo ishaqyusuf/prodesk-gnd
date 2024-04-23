@@ -146,7 +146,7 @@ export default function CustomersTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
-                        <AuthGuard permissions={["editOrders"]}>
+                        <AuthGuard can={["editOrders"]}>
                             <EditRowAction
                                 onClick={(e) => {
                                     openModal("customerForm", row.original);

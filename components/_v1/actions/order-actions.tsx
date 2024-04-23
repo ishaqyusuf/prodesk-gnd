@@ -66,7 +66,7 @@ export function OrderRowAction(props: IOrderRowProps) {
     }
     const modal = useModal();
     return (
-        <AuthGuard permissions={["editOrders"]} className="">
+        <AuthGuard can={["editOrders"]} className="">
             <RowActionMoreMenu>
                 <MenuItem Icon={View} link={_linkDir}>
                     View
