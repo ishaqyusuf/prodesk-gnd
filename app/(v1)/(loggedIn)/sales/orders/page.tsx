@@ -13,8 +13,8 @@ import { _restoreSalesOrder } from "@/app/(v1)/_actions/fix/restore-sales-order"
 import { _mergeConflictCustomers } from "@/app/(v1)/_actions/fix/merge-conflict-customer";
 import BackOrderModal from "@/components/_v1/modals/sales/back-order-modal";
 import AssignProdModal from "@/components/_v1/modals/assign-prod-modal";
-import NewSalesBtn from "./components/new-sales-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
+import NewSalesBtn from "./components/new-sales-btn";
 
 export const metadata: Metadata = {
     title: "Sales Orders",

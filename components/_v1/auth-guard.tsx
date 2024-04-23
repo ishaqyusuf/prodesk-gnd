@@ -13,7 +13,12 @@ interface Props {
     children?;
     className?;
 }
-export default function AuthGuard({ can, className, children, roles }: Props) {
+export default function AuthGuard({
+    can = [],
+    className,
+    children,
+    roles = [],
+}: Props) {
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
@@ -24,13 +29,16 @@ export default function AuthGuard({ can, className, children, roles }: Props) {
     const [visible, setVisible] = useState(false);
     useEffect(() => {
         const _visible =
-            can?.every((v) =>
-                Array.isArray(v)
-                    ? v.some((p) => session?.can?.[p])
-                    : session?.can?.[v]
-            ) && roles?.some((r) => r == session?.role?.name);
+            (!can.length ||
+                can?.every((v) =>
+                    Array.isArray(v)
+                        ? v.some((p) => session?.can?.[p])
+                        : session?.can?.[v]
+                )) &&
+            (!roles.length || roles?.some((r) => r == session?.role?.name));
         setVisible(_visible || false);
         // console.log(_visible);
+
         if (!_visible && session?.role?.name != "Admin") {
             redirect("/");
         }
