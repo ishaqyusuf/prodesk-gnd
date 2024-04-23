@@ -7,7 +7,8 @@ import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-i
 import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
 
 export async function saveDykeSales(data: DykeForm) {
-    const tx = await prisma.$transaction(
+    const tx =
+        // await prisma.$transaction(
         async (tx) => {
             const {
                 id,
@@ -335,11 +336,7 @@ export async function saveDykeSales(data: DykeForm) {
             );
 
             return order;
-        },
-        {
-            maxWait: 5000,
-            timeout: 10000,
-        }
-    );
-    return tx;
+        };
+
+    return await tx(prisma);
 }
