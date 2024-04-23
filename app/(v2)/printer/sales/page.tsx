@@ -23,9 +23,11 @@ export default async function PrintOrderPage({
     }));
     const value: BasePrintProps = {
         ...searchParams,
-        preview: (searchParams.preview as any) == true,
-        pdf: (searchParams.pdf as any) == true,
+        preview: (searchParams.preview as any) == "true",
+        pdf: (searchParams.pdf as any) == "true",
     };
+    // console.log({ value, searchParams });
+
     return (
         <BasePrinter {...value} slugs={slugs}>
             <OrderBasePrinter {...searchParams}>

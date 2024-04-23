@@ -6,7 +6,6 @@ import {
     ISalesOrderItemMeta,
     ISalesOrderMeta,
 } from "@/types/sales";
-import { redirect } from "next/navigation";
 import { composeSalesItems } from "../../_utils/compose-sales-items";
 
 export async function getSalesOverview({
@@ -80,6 +79,8 @@ export async function viewSale(type, slug) {
         ...order,
         meta: order.meta as any as ISalesOrderMeta,
         items: order.items.map((item) => {
+            // console.log(item.meta);
+
             return {
                 ...item,
                 meta: item.meta as any as ISalesOrderItemMeta,

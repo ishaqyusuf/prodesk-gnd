@@ -43,7 +43,7 @@ export function composeSalesItems(data: ViewSaleType) {
             .map((item) => {
                 return {
                     doorType: item.housePackageTool?.doorType,
-                    doorDetails: composeDoorDetails(item.formSteps),
+                    doorDetails: composeDoorDetails(item.formSteps, item),
                     doors: item.housePackageTool?.doors.map((door) => {
                         return {
                             dimension: door.dimension,
@@ -59,13 +59,31 @@ export function composeSalesItems(data: ViewSaleType) {
     };
 }
 export function composeDoorDetails(
-    steps: ViewSaleType["items"][0]["formSteps"]
+    steps: ViewSaleType["items"][0]["formSteps"],
+    item: ViewSaleType["items"][0]
 ) {
     if (!steps) steps = [];
-    return steps.map((fs) => {
+
+    let _steps = steps.map((fs) => {
         return {
             title: fs.step.title,
             value: fs.value,
         };
     });
+    // _steps.push({
+    //     title: "----",
+    //     value: "####",
+    // });
+    // if (item.housePackageTool?.doorType == "Moulding") {
+    //     console.log(item);
+    //     _steps.push(
+    //         ...[
+    //             {
+    //                 title: "Qty",
+    //                 value: `$ 100`,
+    //             },
+    //         ]
+    //     );
+    // }
+    return _steps;
 }

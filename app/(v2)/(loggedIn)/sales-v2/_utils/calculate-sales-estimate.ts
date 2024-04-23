@@ -1,3 +1,4 @@
+import { sum as _sum } from "@/lib/utils";
 import { DykeForm } from "../type";
 import { formatMoney } from "@/lib/use-number";
 
@@ -96,7 +97,7 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
     // console.log(packageTool?._doorForm);
     if (item.item.housePackageTool?.doorType) {
         Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
-            let doors = v?.lhQty + v?.rhQty;
+            let doors = _sum([v?.lhQty, v?.rhQty]);
             const {
                 doorPrice = 0,
                 casingPrice = 0,

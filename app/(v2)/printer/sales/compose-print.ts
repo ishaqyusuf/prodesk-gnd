@@ -14,6 +14,7 @@ import { SalesPrintProps } from "./page";
 import { formatCurrency } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
+import { DykeDoorType } from "../../(loggedIn)/sales-v2/type";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
@@ -183,21 +184,78 @@ function getDoorsTable(
     if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
     const dt = {
         ...res,
+
         doors: data.order.items
             .filter((item) => item.housePackageTool)
             .map((item) => {
+                const doorType = item.housePackageTool
+                    ?.doorType as DykeDoorType;
+                const isMoulding = doorType == "Moulding";
+
+                const details = [...item.formSteps];
+                if (isMoulding) {
+                    details.push({
+                        step: {
+                            title: "Qty",
+                        },
+                        value: item.qty,
+                    } as any);
+                    if (price) {
+                        details.push(
+                            ...([
+                                {
+                                    step: {
+                                        title: "Rate",
+                                    },
+                                    value: formatCurrency.format(
+                                        item.rate || 0
+                                    ),
+                                },
+                                ,
+                                {
+                                    step: {
+                                        title: "Total",
+                                    },
+                                    value: formatCurrency.format(
+                                        item.total || 0
+                                    ),
+                                },
+                                ,
+                            ] as any)
+                        );
+                    }
+                }
+                const isBifold = doorType == "Bifold";
+                const itemCells: NonNullable<typeof res.cells> = res.cells
+                    .map((c) => {
+                        if (isBifold) {
+                            if (c.title == "Right Hand") {
+                                return null;
+                            }
+                            if (c.title == "Left Hand") c.title = "Qty";
+                        }
+                        return c;
+                    })
+                    .filter((c) => c != null) as any;
                 return {
-                    doorType: item.housePackageTool?.doorType,
-                    details: item.formSteps,
-                    lines: item.housePackageTool?.doors.map((door, i) => {
-                        return res.cells.map((cell, _i) => {
+                    doorType: item.housePackageTool?.doorType as DykeDoorType,
+                    details: details,
+                    itemCells,
+                    lines: (isMoulding
+                        ? []
+                        : item.housePackageTool?.doors
+                    )?.map((door, i) => {
+                        return itemCells.map((cell, _i) => {
                             const ret = {
                                 style: cell.cellStyle,
                                 colSpan: cell.colSpan,
                                 value: door[cell.cell as any],
                             };
                             if (_i == 0) ret.value = i + 1;
-                            if (_i > 3 && ret.value) {
+                            const currency = ["Rate", "Total"].includes(
+                                cell.title
+                            );
+                            if (ret.value && currency) {
                                 ret.value = formatCurrency.format(ret.value);
                             }
                             return ret;

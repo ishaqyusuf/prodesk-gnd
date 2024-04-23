@@ -125,7 +125,7 @@ export default function SelectDoorHeightsModal({
                     ...os,
                     {
                         dim: `${r.in} x ${hIn}`,
-                        width: r.in,
+                        width: r.ft,
                     },
                 ];
             });

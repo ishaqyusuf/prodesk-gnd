@@ -12,6 +12,8 @@ export async function getSalesPrintData(
     const resp = {};
 
     const order = await viewSale(null, slug);
+    // console.log(order);
+
     const salesitems = composeSalesItems(order);
     // const billingMeta = order.billingAddress?.meta as any as IAddressMeta;
 

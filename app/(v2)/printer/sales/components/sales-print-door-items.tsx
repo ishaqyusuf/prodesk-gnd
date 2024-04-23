@@ -35,9 +35,9 @@ export default function SalesPrintDoorItems() {
                                                         d.step?.title as any
                                                     )
                                             )
-                                            .map((detail) => (
+                                            .map((detail, i) => (
                                                 <div
-                                                    key={detail.id}
+                                                    key={i}
                                                     className="grid grid-cols-5 border-b border-r  gap-2"
                                                 >
                                                     <div className="font-bold col-span-2  border-r px-2 py-1">
@@ -51,48 +51,52 @@ export default function SalesPrintDoorItems() {
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td colSpan={16}>
-                                    <table className="table-fixed w-full printly">
-                                        <thead className="">
-                                            <tr>
-                                                {sale.doorsTable?.cells.map(
-                                                    (cell, i) => (
-                                                        <th
-                                                            key={i}
-                                                            className="border px-2"
-                                                            colSpan={
-                                                                cell.colSpan
-                                                            }
-                                                        >
-                                                            <Text
-                                                                {...cell.style}
+                            {dt.lines?.length ? (
+                                <tr>
+                                    <td colSpan={16}>
+                                        <table className="table-fixed w-full printly">
+                                            <thead className="">
+                                                <tr>
+                                                    {dt.itemCells.map(
+                                                        (cell, i) => (
+                                                            <th
+                                                                key={i}
+                                                                className="border px-2"
+                                                                colSpan={
+                                                                    cell.colSpan
+                                                                }
                                                             >
-                                                                {cell.title}
+                                                                <Text
+                                                                    {...cell.style}
+                                                                >
+                                                                    {cell.title}
+                                                                </Text>
+                                                            </th>
+                                                        )
+                                                    )}
+                                                </tr>
+                                            </thead>
+                                            {dt.lines?.map((line, i) => (
+                                                <tr key={i}>
+                                                    {line.map((ld, ldi) => (
+                                                        <td
+                                                            className="border px-2"
+                                                            colSpan={ld.colSpan}
+                                                            key={ldi}
+                                                        >
+                                                            <Text {...ld.style}>
+                                                                {ld.value}
                                                             </Text>
-                                                        </th>
-                                                    )
-                                                )}
-                                            </tr>
-                                        </thead>
-                                        {dt.lines?.map((line, i) => (
-                                            <tr key={i}>
-                                                {line.map((ld, ldi) => (
-                                                    <td
-                                                        className="border px-2"
-                                                        colSpan={ld.colSpan}
-                                                        key={ldi}
-                                                    >
-                                                        <Text {...ld.style}>
-                                                            {ld.value}
-                                                        </Text>
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </table>
-                                </td>
-                            </tr>
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </table>
+                                    </td>
+                                </tr>
+                            ) : (
+                                <></>
+                            )}
                             {/* ))} */}
                         </tbody>
                     </table>
