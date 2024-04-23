@@ -119,7 +119,7 @@ export default function useDykeItem(rowIndex: number) {
                 modal.openModal(
                     <SelectDoorHeightsModal
                         form={form}
-                        productTitle={stepProd?.product?.title}
+                        productTitle={stepProd?.product?.title as any}
                         rowIndex={rowIndex}
                     />
                 );

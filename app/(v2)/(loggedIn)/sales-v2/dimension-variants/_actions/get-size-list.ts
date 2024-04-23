@@ -19,7 +19,7 @@ export async function getDimensionSizeList(height, _bifold) {
     d.data.sizes
         .filter((s) => (_bifold ? s.type == "Bifold" : s.type != "Bifold"))
         .map((size) => {
-            if (size.width)
+            if (size.width && size.ft)
                 list.push({
                     dim: `${size.in} x ${heightIn}`.replaceAll('"', "in"),
                     width: size.ft,

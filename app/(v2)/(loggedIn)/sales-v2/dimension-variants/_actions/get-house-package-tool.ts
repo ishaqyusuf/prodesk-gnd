@@ -34,7 +34,7 @@ export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
         const sizes = bifold_door
             .map((d) => d.label)
             .filter((s) => s?.includes("/"));
-
+        // console.log(sizes);
         const _ = sizes
             .map((s) => {
                 return s.replace("/", "-");

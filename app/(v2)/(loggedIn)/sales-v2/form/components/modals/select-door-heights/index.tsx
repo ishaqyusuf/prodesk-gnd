@@ -8,7 +8,10 @@ import { getDimensionSizeList } from "../../../../dimension-variants/_actions/ge
 import { Form } from "@/components/ui/form";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { useModal } from "@/components/common/modal/provider";
-import { safeFormText } from "@/lib/utils";
+import { ftToIn, safeFormText } from "@/lib/utils";
+import ControlledInput from "@/components/common/controls/controlled-input";
+import { toast } from "sonner";
+import { _addSize } from "../../../../dimension-variants/_actions/add-size";
 
 export type SizeForm = {
     [id in string]: {
@@ -43,10 +46,14 @@ export default function SelectDoorHeightsModal({
     const height = form.watch(
         `itemArray.${rowIndex}.item.housePackageTool.height`
     );
+    let hIn = ftToIn(height);
+
     const doorType = item.item.meta.doorType;
+    const isBifold = doorType == "Bifold";
     const [sizes, setSizes] = useState<{ dim: string; width: string }[]>([]);
     const sizeForm = useForm<{
         sizes: SizeForm;
+        size: "";
     }>({
         defaultValues: {
             sizes: {},
@@ -55,12 +62,7 @@ export default function SelectDoorHeightsModal({
 
     useEffect(() => {
         (async () => {
-            const _sizes = await getDimensionSizeList(
-                height,
-                doorType == "Bifold"
-            );
-            console.log(_sizes);
-
+            const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
@@ -71,11 +73,9 @@ export default function SelectDoorHeightsModal({
                     width: s?.width,
                 };
             });
-
             sizeForm.reset({
                 sizes: _defData,
             });
-
             setSizes(_sizes);
         })();
     }, []);
@@ -105,6 +105,35 @@ export default function SelectDoorHeightsModal({
         );
         modal.close();
     }
+    async function createNewSize() {
+        const s = sizeForm.getValues("size")?.toLowerCase();
+        try {
+            if (!s) {
+                throw new Error("input cannot be empty");
+            }
+            const [w, ...rest] = s.split(" ");
+
+            if (rest.length || ![w].every((s) => s?.includes("in")))
+                throw new Error("Invalid size");
+            const e = sizeForm.getValues(`sizes.${s} x ${hIn}`);
+
+            if (e) throw new Error("Size already exist");
+            const r = await _addSize(w, isBifold);
+            sizeForm.setValue("size", "");
+            setSizes((os) => {
+                return [
+                    ...os,
+                    {
+                        dim: `${r.in} x ${hIn}`,
+                        width: "",
+                    },
+                ];
+            });
+        } catch (error) {
+            // console.log(error.message);
+            toast.error((error as any).message);
+        }
+    }
     return (
         <Modal.Content>
             <Modal.Header title="Select Sizes" subtitle={productTitle || ""} />
@@ -122,6 +151,21 @@ export default function SelectDoorHeightsModal({
                         );
                     })}
                 </div>
+                <form
+                    className="grid gap-4"
+                    onSubmit={(...args) =>
+                        void form.handleSubmit(createNewSize)(...args)
+                    }
+                >
+                    <div className="border-t pt-2">
+                        <ControlledInput
+                            control={sizeForm.control}
+                            name="size"
+                            label="Add Width (eg; 54in)"
+                            placeholder="Missing width? type and click enter to submit."
+                        />
+                    </div>
+                </form>
             </Form>
             <Modal.Footer
                 submitText="Proceed"

@@ -362,12 +362,19 @@ export function getLeafDotPaths<T>(obj: T, parentKey: string = ""): string[] {
     return leafDotPaths;
 }
 export function inToFt(_in) {
-    _in = +_in.split('"')[0]?.split("'")[0];
-    if (_in > 0) {
-        const ft = Math.floor(_in / 12);
-        const rem = _in % 12;
-        return `${ft}-${rem}`;
-    }
+    let _ft = _in;
+    try {
+        _ft = +_in.split('"')?.[0]?.split("'")[0]?.split("in")?.[0];
+
+        if (_ft > 0) {
+            _ft = +_ft;
+            const ft = Math.floor(_ft / 12);
+            const rem = _ft % 12;
+            console.log([ft, rem, _in]);
+
+            return `${ft}-${rem}`;
+        }
+    } catch (e) {}
     return _in;
 }
 export function ftToIn(h) {
@@ -376,7 +383,7 @@ export function ftToIn(h) {
         ?.split("-")
         ?.map((s) => s?.trim())
         .filter(Boolean);
-    return `${+_in + +ft * 12}"`;
+    return `${+_in + +ft * 12}in`;
 }
 export function safeFormText(t) {
     return t?.replaceAll(".", "_")?.replaceAll("'", "-");
