@@ -9,6 +9,7 @@ import { getDispatchSales } from "../_actions/get-dispatch-sales";
 import DispatchTableShell from "./dispatch-table-shell";
 import { Button } from "@/components/ui/button";
 import PageAction from "../_components/page-action";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Delivery",
@@ -21,15 +22,17 @@ export default async function DeliveryPage({ searchParams, params }) {
         type,
     });
     return (
-        <PageShell>
-            <Breadcrumbs>
-                <BreadLink isFirst title="Sales" />
-                <BreadLink link="/sales/orders" title="Orders" />
-                <BreadLink isLast title={type} />
-            </Breadcrumbs>
-            <SalesTab />
-            <PageHeader Action={PageAction} title={type} />
-            <DispatchTableShell promise={promise} type={type} />
-        </PageShell>
+        <AuthGuard can={["editDelivery"]}>
+            <PageShell>
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Sales" />
+                    <BreadLink link="/sales/orders" title="Orders" />
+                    <BreadLink isLast title={type} />
+                </Breadcrumbs>
+                <SalesTab />
+                <PageHeader Action={PageAction} title={type} />
+                <DispatchTableShell promise={promise} type={type} />
+            </PageShell>
+        </AuthGuard>
     );
 }

@@ -15,7 +15,7 @@ import {
 
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
+import { SalesCustomerFilter } from "../../../app/(v1)/(loggedIn)/sales/orders/components/sales-customer-filter";
 import Money from "../money";
 import { IProductVariant } from "@/types/product";
 import {

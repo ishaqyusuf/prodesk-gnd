@@ -1,6 +1,6 @@
 "use client";
 
-import { SalesFormResponse } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+import { SalesFormResponse } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import { FormProvider, useForm } from "react-hook-form";
 import { InvoiceTable } from "./invoice-table";
 import { SalesFormContext } from "../ctx";

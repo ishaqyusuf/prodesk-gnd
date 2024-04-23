@@ -22,7 +22,7 @@ import { ISalesOrder, ISalesPayment } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../../../app/(v1)/(auth)/sales/orders/components/sales-customer-filter";
+import { SalesCustomerFilter } from "../../../app/(v1)/(loggedIn)/sales/orders/components/sales-customer-filter";
 import Money from "../money";
 import { DeleteRowAction } from "../data-table/data-table-row-actions";
 import { deleteSalesPayment } from "@/app/(v1)/_actions/sales/sales-payment";

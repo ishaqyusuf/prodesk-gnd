@@ -3,7 +3,7 @@
 import {
     SalesFormResponse,
     _getSalesFormAction,
-} from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import AutoComplete from "@/components/_v1/common/auto-complete";
 import {
     Menu,

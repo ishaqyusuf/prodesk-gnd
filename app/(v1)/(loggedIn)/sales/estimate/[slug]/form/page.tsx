@@ -1,0 +1,55 @@
+import {
+    SalesFormResponse,
+    salesFormAction,
+} from "@/app/(v1)/_actions/sales/sales-form";
+import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
+import {
+    BreadLink,
+    EstimatesCrumb,
+    OrdersCrumb,
+} from "@/components/_v1/breadcrumbs/links";
+import SalesForm from "@/app/(v1)/(loggedIn)/sales/order/[slug]/form/components/sales-form";
+import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import AuthGuard from "@/components/_v1/auth-guard";
+
+export const metadata: Metadata = {
+    title: "Edit Invoice",
+    description: "",
+};
+
+export default async function EstimateFormPage({
+    searchParams,
+    params: { slug },
+}) {
+    redirect(`/sales/edit/estimate/${slug}`);
+    const resp: SalesFormResponse = await salesFormAction({
+        orderId: slug,
+        type: "estimate",
+    });
+    const orderId = resp?.form?.orderId;
+    return (
+        <AuthGuard can={["editEstimates"]}>
+            <DataPageShell data={resp}>
+                <Breadcrumbs>
+                    <EstimatesCrumb isFirst />
+                    {orderId && (
+                        <BreadLink
+                            title={orderId}
+                            link={`/sales/estimate/${orderId}`}
+                            slug={orderId}
+                        />
+                    )}
+                    <BreadLink title={orderId ? "Edit" : "New"} isLast />
+                </Breadcrumbs>
+                <SalesForm
+                    newTitle="New Estimate"
+                    slug={slug}
+                    data={resp}
+                ></SalesForm>
+            </DataPageShell>
+        </AuthGuard>
+        // <SalesForm newTitle="New Estimate" slug={slug} data={resp}></SalesForm>
+    );
+}

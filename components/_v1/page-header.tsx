@@ -5,8 +5,7 @@ import { openModal } from "@/lib/modal";
 import { ModalName } from "@/store/slicers";
 import LinkableNode from "./link-node";
 import { Icons } from "./icons";
-import { ICan } from "@/types/auth";
-import AuthGuard from "./auth-guard";
+import AuthGuard, { AuthPermissions } from "./auth-guard";
 
 interface Props {
     title;
@@ -17,7 +16,7 @@ interface Props {
     buttonText?;
     newDialog?: ModalName;
     ButtonIcon?;
-    permissions?: (keyof ICan)[];
+    permissions?: AuthPermissions;
     newAction?;
 }
 export default function PageHeader({
@@ -47,7 +46,7 @@ export default function PageHeader({
                 )}
             </div>
             <div className="flex items-center space-x-2">
-                <AuthGuard permissions={permissions || []}>
+                <AuthGuard can={permissions || []}>
                     {(newLink || newDialog || newAction) && (
                         <Button
                             onClick={() => {

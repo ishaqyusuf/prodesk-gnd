@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import PageHeader from "@/components/_v1/page-header";
 import CommissionsTable from "./commissions-table";
+import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {
     title: "Sales Commissions",
 };
@@ -15,13 +16,15 @@ export default async function SalesCommissions({ searchParams }) {
     });
 
     return (
-        <CommissionsLayout query={searchParams}>
-            <Breadcrumbs>
-                <BreadLink isFirst title="Sales" />
-                <BreadLink isLast title="Commissions" />
-            </Breadcrumbs>
-            <PageHeader title="Sales Commissions" />
-            <CommissionsTable searchParams={searchParams} {...resp} />
-        </CommissionsLayout>
+        <AuthGuard can={["editOrderPayment"]}>
+            <CommissionsLayout query={searchParams}>
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Sales" />
+                    <BreadLink isLast title="Commissions" />
+                </Breadcrumbs>
+                <PageHeader title="Sales Commissions" />
+                <CommissionsTable searchParams={searchParams} {...resp} />
+            </CommissionsLayout>
+        </AuthGuard>
     );
 }

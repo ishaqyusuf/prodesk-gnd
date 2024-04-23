@@ -8,6 +8,7 @@ import SalesTimelineModal from "@/components/_v1/modals/sales-timeline-modal";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Sales Overview",
@@ -20,17 +21,19 @@ export default async function SalesOverviewPage({ params: { slugs } }) {
     const data = getSalesOverview({ type, slug });
 
     return (
-        <div className="">
-            <Breadcrumbs>
-                <BreadLink isFirst title="Sales" />
-                <BreadLink title="Orders" link="/sales/orders" />
-            </Breadcrumbs>
-            <OverviewShell data={data} />
-            <SalesProductionModal />
-            <SalesTimelineModal />
-            <SalesPaymentModal />
-            <OrderPrinter />
-            <DeletePaymentPrompt />
-        </div>
+        <AuthGuard can={["viewOrders"]}>
+            <div className="">
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Sales" />
+                    <BreadLink title="Orders" link="/sales/orders" />
+                </Breadcrumbs>
+                <OverviewShell data={data} />
+                <SalesProductionModal />
+                <SalesTimelineModal />
+                <SalesPaymentModal />
+                <OrderPrinter />
+                <DeletePaymentPrompt />
+            </div>
+        </AuthGuard>
     );
 }

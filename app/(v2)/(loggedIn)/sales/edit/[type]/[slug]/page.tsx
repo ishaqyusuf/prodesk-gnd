@@ -1,5 +1,5 @@
 import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
-import { _getSalesFormAction } from "@/app/(v1)/(auth)/sales/_actions/get-sales-form";
+import { _getSalesFormAction } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import {
     BreadLink,
@@ -8,6 +8,7 @@ import {
 } from "@/components/_v1/breadcrumbs/links";
 import EditSalesForm from "../../components/form";
 import { Metadata } from "next";
+import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {
     title: "Edit Sales",
 };
@@ -30,12 +31,14 @@ export default async function EditSalesPage({ searchParams, params }) {
     resp.ctx.suppliers = [...new Set([...resp.ctx.suppliers, ...suppliers])];
     return (
         <div id="salesEditPage">
-            <Breadcrumbs>
-                <OrdersCrumb isFirst />
-                {orderId && <OrderViewCrumb slug={orderId} />}
-                <BreadLink title={orderId ? "Edit" : "New"} isLast />
-            </Breadcrumbs>
-            <EditSalesForm data={resp} />
+            <AuthGuard can={["editOrders"]}>
+                <Breadcrumbs>
+                    <OrdersCrumb isFirst />
+                    {orderId && <OrderViewCrumb slug={orderId} />}
+                    <BreadLink title={orderId ? "Edit" : "New"} isLast />
+                </Breadcrumbs>
+                <EditSalesForm data={resp} />
+            </AuthGuard>
         </div>
     );
 }

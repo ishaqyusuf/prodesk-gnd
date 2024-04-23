@@ -10,7 +10,7 @@ import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import { getUnitJobs } from "../../../_actions/get-unit-jobs";
 import { useValidateTaskQty } from "./use-validate-task-qty";
-import submitJobUtils from "@/app/(v1)/(auth)/tasks/submit-job-modal/submit-job-utils";
+import submitJobUtils from "@/app/(v1)/(loggedIn)/tasks/submit-job-modal/submit-job-utils";
 import {
     createJobAction,
     updateJobAction,

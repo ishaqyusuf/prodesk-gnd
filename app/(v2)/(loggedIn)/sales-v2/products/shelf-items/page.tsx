@@ -7,6 +7,7 @@ import ShelfItemsTable from "../_components/shelf-items-table";
 import { SearchParams } from "@/types";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getShelfItems } from "../_actions/get-shelf-items";
+import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {
     title: "Shelf Items | GND",
 };
@@ -23,7 +24,9 @@ export default function ShelfItemsPage({ searchParams }: Props) {
                 <BreadLink isLast title="Shelf Products" />
             </Breadcrumbs>
             <Shell className="">
-                <ShelfItemsTable promise={promise} />
+                <AuthGuard can={["editOrders"]}>
+                    <ShelfItemsTable promise={promise} />
+                </AuthGuard>
             </Shell>
         </DykeTabLayout>
     );

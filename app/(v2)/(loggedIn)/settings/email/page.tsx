@@ -4,6 +4,7 @@ import EmailPersolizeForm from "./email-personalize-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { IUser } from "@/types/hrm";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Email Settings",
@@ -24,12 +25,12 @@ export default async function EmailSettingsPage({}) {
         _user.meta.email = `${p1}@gndprodesk.com`;
     }
     return (
-        <>
+        <AuthGuard roles={["Admin"]}>
             <Breadcrumbs>
                 <BreadLink isFirst title="Settings" />
                 <BreadLink isLast title="Email" />
             </Breadcrumbs>
             <EmailPersolizeForm user={_user as any} />
-        </>
+        </AuthGuard>
     );
 }

@@ -3,6 +3,7 @@ import SalesFormComponent from "../components";
 import { getDykeFormAction } from "../_action/get-dyke-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Sales Form",
@@ -17,12 +18,14 @@ export default async function SalesForm({ params }) {
         slug && `| ${slug}`
     }`;
     return (
-        <div className="sm:px-8 px-4">
-            <Breadcrumbs>
-                <BreadLink title={"Sales"} isFirst link={"/sales/orders"} />
-                {/* <BreadLink title={orderId ? "Edit" : "New"} isLast /> */}
-            </Breadcrumbs>
-            <SalesFormComponent defaultValues={form} />
-        </div>
+        <AuthGuard can={["editOrders"]}>
+            <div className="sm:px-8 px-4">
+                <Breadcrumbs>
+                    <BreadLink title={"Sales"} isFirst link={"/sales/orders"} />
+                    {/* <BreadLink title={orderId ? "Edit" : "New"} isLast /> */}
+                </Breadcrumbs>
+                <SalesFormComponent defaultValues={form} />
+            </div>
+        </AuthGuard>
     );
 }

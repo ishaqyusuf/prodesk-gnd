@@ -8,6 +8,7 @@ import PageHeader from "@/components/_v1/page-header";
 import { Metadata } from "next";
 import { getPayableAnalyticsStats } from "./_actions/analytics";
 import { StatCards } from "@/components/common/stat-cards";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Payables",
@@ -17,18 +18,20 @@ export default async function PayablesPage({ searchParams }) {
     const statCards = await getPayableAnalyticsStats(searchParams);
 
     return (
-        <PageShell>
-            <Breadcrumbs>
-                <BreadLink isFirst title="Sales" />
-                <BreadLink isLast title="Commissions" />
-            </Breadcrumbs>
-            <AccountingTab />
-            <div className="flex items-end justify-between">
-                <PageHeader title="Payables" />
+        <AuthGuard can={["editOrderPayment"]}>
+            <PageShell>
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Sales" />
+                    <BreadLink isLast title="Commissions" />
+                </Breadcrumbs>
+                <AccountingTab />
+                <div className="flex items-end justify-between">
+                    <PageHeader title="Payables" />
 
-                <StatCards cards={statCards} />
-            </div>
-            <PayablesTable promise={promise} />
-        </PageShell>
+                    <StatCards cards={statCards} />
+                </div>
+                <PayablesTable promise={promise} />
+            </PageShell>
+        </AuthGuard>
     );
 }

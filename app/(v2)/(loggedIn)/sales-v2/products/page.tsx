@@ -6,6 +6,7 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import ProductsTable from "./_components/products-table";
 import { Metadata } from "next";
 import { Shell } from "@/components/shell";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Door Components | GND",
@@ -14,14 +15,16 @@ export default async function ProductsPage({ searchParams }) {
     const response = await getDykeProducts(queryParams(searchParams));
 
     return (
-        <DykeTabLayout>
-            <Breadcrumbs>
-                <BreadLink isFirst title="Sales" />
-                <BreadLink isLast title="Products" />
-            </Breadcrumbs>
-            <Shell className="">
-                <ProductsTable searchParams={searchParams} {...response} />
-            </Shell>
-        </DykeTabLayout>
+        <AuthGuard can={["editOrders"]}>
+            <DykeTabLayout>
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Sales" />
+                    <BreadLink isLast title="Products" />
+                </Breadcrumbs>
+                <Shell className="">
+                    <ProductsTable searchParams={searchParams} {...response} />
+                </Shell>
+            </DykeTabLayout>
+        </AuthGuard>
     );
 }
