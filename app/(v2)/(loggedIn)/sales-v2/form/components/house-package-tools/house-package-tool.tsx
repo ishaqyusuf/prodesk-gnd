@@ -50,7 +50,7 @@ export default function HousePackageTool({}: Props) {
         };
 
         Object.entries(_doorForm).map(([k, v]) => {
-            let doors = v.lhQty || 0 + v.rhQty || 0;
+            let doors = (v.lhQty || 0) + (v.rhQty || 0);
             const {
                 doorPrice = 0,
                 casingPrice = 0,
