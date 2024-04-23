@@ -28,18 +28,20 @@ export default function AuthGuard({
 
     const [visible, setVisible] = useState(false);
     useEffect(() => {
-        const _visible =
-            (!can.length ||
-                can?.every((v) =>
-                    Array.isArray(v)
-                        ? v.some((p) => session?.can?.[p])
-                        : session?.can?.[v]
-                )) &&
-            (!roles.length || roles?.some((r) => r == session?.role?.name));
-        setVisible(_visible || false);
-        // console.log(_visible);
+        const permission =
+            !can.length ||
+            can?.every((v) =>
+                Array.isArray(v)
+                    ? v.some((p) => session?.can?.[p])
+                    : session?.can?.[v]
+            );
+        const rolePermission =
+            !roles.length || roles?.some((r) => r == session?.role?.name);
 
-        if (!_visible && session?.role?.name != "Admin") {
+        const _visible =
+            (permission && rolePermission) || session?.role.name == "Admin";
+        setVisible(_visible);
+        if (!_visible) {
             redirect("/");
         }
     }, []);
