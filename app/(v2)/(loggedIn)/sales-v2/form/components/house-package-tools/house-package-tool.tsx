@@ -40,7 +40,6 @@ export default function HousePackageTool({}: Props) {
     const _doorForm = form.watch(
         `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
     );
-    console.log(_doorForm);
 
     function calculate() {
         let sum = {
