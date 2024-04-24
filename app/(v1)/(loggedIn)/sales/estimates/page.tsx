@@ -15,8 +15,13 @@ import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order
 import NewEstimateBtn from "./new-sales-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
 import DebugSaveError from "@/app/(v2)/(loggedIn)/sales-v2/form/[...slug]/_debug/debug-save-error";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Sales Quote",
+};
 interface Props {}
+
 export default async function SalesEstimatesPage({ searchParams }) {
     const response = await getSalesEstimates(queryParams(searchParams));
     return (
@@ -28,7 +33,7 @@ export default async function SalesEstimatesPage({ searchParams }) {
                     <BreadLink isLast title="Estimates" />
                 </Breadcrumbs>
                 <PageHeader
-                    title="Sales Estimates"
+                    title="Sales Quotes"
                     permissions={["editOrders"]}
                     Action={NewEstimateBtn}
                     // newLink="/sales/edit/estimate/new"

@@ -12,6 +12,7 @@ import {
     getMyPayments,
 } from "@/app/(v1)/_actions/hrm-jobs/get-payments";
 import JobPaymentTableShell from "@/components/_v1/shells/job-payment-table-shell";
+import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
     title: "Employees",
@@ -19,14 +20,21 @@ export const metadata: Metadata = {
 export default async function MyJobPaymentsPage({ searchParams }) {
     const response = await getMyPayments(queryParams(searchParams));
     return (
-        <div className="space-y-4 flex flex-col">
-            <Breadcrumbs>
-                <BreadLink isFirst title="Hrm" />
-                <BreadLink isLast title="Payments" />
-            </Breadcrumbs>
-            <PageHeader title="My Payments" />
-            <JobPaymentTableShell searchParams={searchParams} {...response} />
-            <JobOverviewSheet admin={true} />
-        </div>
+        <AuthGuard
+            can={[["viewInstallation", "viewDecoShutterInstall", "viewTech"]]}
+        >
+            <div className="space-y-4 flex flex-col">
+                <Breadcrumbs>
+                    <BreadLink isFirst title="Hrm" />
+                    <BreadLink isLast title="Payments" />
+                </Breadcrumbs>
+                <PageHeader title="My Payments" />
+                <JobPaymentTableShell
+                    searchParams={searchParams}
+                    {...response}
+                />
+                <JobOverviewSheet admin={true} />
+            </div>
+        </AuthGuard>
     );
 }

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-export type AuthPermissions = (keyof ICan | keyof ICan[])[];
+export type AuthPermissions = (keyof ICan | (keyof ICan)[])[];
 interface Props {
     can?: AuthPermissions;
     roles?: string[];
@@ -42,8 +42,10 @@ export default function AuthGuard({
             (permission && rolePermission) || session?.role.name == "Admin";
         setVisible(_visible);
         if (!_visible) {
-            redirect("/");
+            console.log("REDIRECTED!!!");
+            // redirect("/");
         }
+        console.log("____||}}}}");
     }, []);
 
     return <div className={cn(className)}>{visible && children}</div>;

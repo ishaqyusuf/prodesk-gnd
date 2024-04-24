@@ -21,7 +21,9 @@ export const metadata: Metadata = {
 export default async function TaskInstallationPage({ searchParams }) {
     const response = await getMyJobs(queryParams(searchParams));
     return (
-        <AuthGuard can={["viewInstallation"]}>
+        <AuthGuard
+            can={[["viewInstallation", "viewDecoShutterInstall", "viewTech"]]}
+        >
             <div className="space-y-4 flex flex-col">
                 <Breadcrumbs>
                     <BreadLink isLast title="Jobs" />

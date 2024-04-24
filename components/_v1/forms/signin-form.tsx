@@ -46,7 +46,14 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
             });
         });
     }
-    if (session?.user?.id) redirect("/");
+    React.useEffect(() => {
+        console.log(">>>>>");
+
+        if (session?.user?.id) {
+            console.log(session?.user);
+            redirect("/");
+        }
+    }, [session]);
     return (
         <Form {...form}>
             <form

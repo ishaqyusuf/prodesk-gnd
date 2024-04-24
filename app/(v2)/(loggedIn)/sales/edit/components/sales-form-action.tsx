@@ -29,9 +29,9 @@ export default function SalesFormAction() {
                     {ctx.data?.form?.orderId &&
                     ctx?.data?.form?.id &&
                     ctx?.data?.form?.type == "order"
-                        ? "#ORD"
-                        : "#EST"}{" "}
-                    {ctx.data?.form?.orderId || "New Sales"}
+                        ? "Sales"
+                        : "Quote"}{" "}
+                    {ctx.data?.form?.orderId && `| ${ctx.data?.form?.orderId}`}
                 </h2>
             </div>
 
