@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     description: "",
 };
 
-export default async function SalesOverviewPage({ params: { slugs } }) {
-    const [type, slug] = slugs;
+export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
+    const [type, slug] = typeAndSlug;
 
     const data = getSalesOverview({ type, slug });
 

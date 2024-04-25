@@ -15,14 +15,21 @@ TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
-# APR 24: 00.00 == 00.00
-    05:30-
-# APR 23: 00.00 == 00.00
+# APR 25: 00.00 == 00.00
+    11:45-
+    08:30-10:55
+    06:20-08:00
+# APR 24: 02.20 == 11.40
+    04:10-04:45
+    11:25-12:10
+    10:00-10:30 
+    05:30-06:00
+# APR 23: 04.15 == 09.20
     10:20-11:00
     09:00-10:00
     05:40-08:00
     04:00-04:15
-# APR 22: 00.00 == 00.00
+# APR 22: 05.05 == 05.05
     01:10-01:45
     11:30-12:40
     08:40-11:00

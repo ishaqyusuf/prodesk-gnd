@@ -11,8 +11,8 @@ import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../form-context";
-import useDykeItem, { IDykeItemFormContext } from "../../use-dyke-item";
+} from "../_hooks/form-context";
+import useDykeItem, { IDykeItemFormContext } from "../_hooks/use-dyke-item";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { FormStepArray } from "../../type";

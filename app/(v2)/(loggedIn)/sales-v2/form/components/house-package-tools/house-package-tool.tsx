@@ -6,7 +6,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { DykeItemFormContext, useDykeForm } from "../../../form-context";
+import { DykeItemFormContext, useDykeForm } from "../../_hooks/form-context";
 import { useContext, useEffect, useState } from "react";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,9 @@ import SelectDoorHeightsModal, {
 } from "../modals/select-door-heights";
 
 interface Props {
-    rowIndex?;
+    componentTitle;
 }
-export default function HousePackageTool({}: Props) {
+export default function HousePackageToolOld({ componentTitle }: Props) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
     const doorType = item.get.doorType();
@@ -43,7 +43,6 @@ export default function HousePackageTool({}: Props) {
     const _doorForm = form.watch(
         `itemArray.${item.rowIndex}.item.housePackageTool._doorForm`
     );
-
     function calculate() {
         let sum = {
             doors: 0,
@@ -116,15 +115,15 @@ export default function HousePackageTool({}: Props) {
     }
     function initialize() {
         const itemArray = item.get.itemArray();
-        console.log(itemArray);
-        const selection = Object.entries(itemArray.multiComponent).map(
-            ([prodTitle, v]) => {
-                if (v.checked) {
-                    _setSizeList(v.heights);
-                    setProductTitle(prodTitle);
-                }
+
+        const selection = Object.entries(
+            itemArray.multiComponent.components
+        ).map(([prodTitle, v]) => {
+            if (v.checked) {
+                _setSizeList(v.heights);
+                setProductTitle(prodTitle);
             }
-        );
+        });
     }
     useEffect(() => {
         initialize();
@@ -140,7 +139,7 @@ export default function HousePackageTool({}: Props) {
         // })();
     }, []);
     return (
-        <div>
+        <div className="min-h-[250px]">
             <Table>
                 <TableHeader>
                     <TableHead>Width</TableHead>
@@ -198,7 +197,6 @@ export default function HousePackageTool({}: Props) {
                             ) : (
                                 <>
                                     <TableCell>
-                                        {/* <SwingInput /> */}
                                         <ControlledInput
                                             type="number"
                                             list

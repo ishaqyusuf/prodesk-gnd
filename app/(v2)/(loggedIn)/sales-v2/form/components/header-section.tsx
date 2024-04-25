@@ -1,12 +1,8 @@
 "use client";
-import { useDykeForm } from "../../form-context";
+import { useDykeForm } from "../_hooks/form-context";
 import Btn from "@/components/_v1/btn";
-import { useTransition } from "react";
-import { saveDykeSales } from "../_action/save-dyke";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { DykeForm } from "../../type";
-import { calculateSalesEstimate } from "../../_utils/calculate-sales-estimate";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import useDykeFormSaver from "../_hooks/use-dyke-form-saver";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -15,19 +11,7 @@ export default function HeaderSection({}) {
         "order.id",
         "order.type",
     ]);
-    const router = useRouter();
-    const [loading, startTransition] = useTransition();
-    async function save(data: DykeForm) {
-        startTransition(async () => {
-            // console.log(data.itemArray[0]?.item);
-            // return;
-            const e = calculateSalesEstimate(data);
-
-            const resp = await saveDykeSales(e);
-            toast.success("Saved");
-            if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
-        });
-    }
+    const saver = useDykeFormSaver(form);
     return (
         <div className="flex justify-between items-center">
             <div className="">
@@ -37,7 +21,12 @@ export default function HeaderSection({}) {
                 </h2>
             </div>
             <div className="">
-                <Btn onClick={() => form.handleSubmit(save)()}>Save</Btn>
+                <Btn
+                    isLoading={saver.saving}
+                    onClick={() => form.handleSubmit(saver.save)()}
+                >
+                    Save
+                </Btn>
             </div>
         </div>
     );

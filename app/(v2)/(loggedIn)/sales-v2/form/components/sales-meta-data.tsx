@@ -1,7 +1,7 @@
 "use client";
 
 import { InfoLine } from "../../../sales/edit/components/sales-details-section";
-import { useDykeForm } from "../../form-context";
+import { useDykeForm } from "../_hooks/form-context";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { useEffect, useState } from "react";
 import { getCustomerProfileList } from "../_action/get-customer-profiles";

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { _getShelfCategories } from "../../_action/get-shelf-categories";
 import { DykeShelfCategories } from "@prisma/client";
-import useShelfItem, { IUseShelfItem } from "../../../use-shelf-item";
+import useShelfItem, { IUseShelfItem } from "../../_hooks/use-shelf-item";
 import { Input } from "@/components/ui/input";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";

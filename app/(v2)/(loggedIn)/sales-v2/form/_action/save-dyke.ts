@@ -6,6 +6,7 @@ import { lastId } from "@/lib/nextId";
 import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
 import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
 import { timeout } from "@/lib/timeout";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export async function saveDykeSales(data: DykeForm) {
     const tx =
@@ -151,11 +152,21 @@ export async function saveDykeSales(data: DykeForm) {
                         let {
                             id: hptId,
                             doors,
+                            door,
+                            molding,
                             _doorForm = {},
                             _doorFormDefaultValue,
                             ...hptData
                         } = housePackageTool || {};
-                        doors = Object.values(_doorForm);
+                        doors = []; //Object.values(_doorForm);
+                        Object.entries(_doorForm).map(
+                            ([dimension, doorData]) => {
+                                doors.push({
+                                    ...doorData,
+                                    dimension,
+                                });
+                            }
+                        );
 
                         if (doors?.length || hptData.doorType == "Moulding") {
                             const newHpt = !hptId;
@@ -164,7 +175,6 @@ export async function saveDykeSales(data: DykeForm) {
                             if (newHpt) {
                                 createHpts.push({
                                     ...hptData,
-
                                     id: hptId,
                                     salesOrderId: order.id,
                                     orderItemId: itemId,
@@ -242,7 +252,7 @@ export async function saveDykeSales(data: DykeForm) {
                 })
             );
             console.log(ids.doorsIds);
-            console.log({ createDoors });
+            // console.log({ createDoors });
 
             async function _deleteWhere(
                 t,
@@ -260,6 +270,7 @@ export async function saveDykeSales(data: DykeForm) {
                 where.id = {
                     notIn,
                 };
+                // console.log(where);
                 await t.updateMany({
                     where,
                     data: {
@@ -326,7 +337,7 @@ export async function saveDykeSales(data: DykeForm) {
                 ]
                     .filter((p) => p.data.length)
                     .map(async (i, _) => {
-                        await timeout(1000 * (_ + 1));
+                        // await timeout(1000 * (_ + 1));
                         await (i.t as any).createMany({
                             data: i.data,
                         });
@@ -344,10 +355,13 @@ export async function saveDykeSales(data: DykeForm) {
 
             return order;
         };
-    return await prisma.$transaction(tx, {
-        maxWait: 5000,
-        timeout: 10000,
-        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-    });
+    // const resp = await prisma.$transaction(tx, {
+    //     maxWait: 5000,
+    //     timeout: 15000,
+    //     isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    // });
+    const resp = await tx(prisma);
+    // _revalidate("salesV2Form");
+    return resp;
     // return await tx(prisma);
 }

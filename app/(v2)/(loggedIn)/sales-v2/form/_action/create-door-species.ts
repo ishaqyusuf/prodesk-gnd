@@ -75,6 +75,6 @@ export async function createDoorSpecies(
             },
         },
     });
-    _revalidate("sales2");
+    _revalidate("salesV2Form");
     return ns.id;
 }

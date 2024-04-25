@@ -1,42 +1,75 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { DykeItemFormContext, useDykeForm } from "../../form-context";
+import { DykeItemFormContext, useDykeForm } from "../_hooks/form-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useMultiDykeForm from "../_hooks/use-multi-generator";
+import { cn } from "@/lib/utils";
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
-export default function MultiComponent({ Render }) {
-    return <Render />;
-    const form = useDykeForm();
-    const item = useContext(DykeItemFormContext);
-    const [tabs, setTabs] = useState<{ title }[]>([]);
-    const [ready, setReady] = useState(false);
+export default function MultiComponentRender({ Render, line = false }) {
+    const mdf = useMultiDykeForm();
+
     useEffect(() => {
-        const formData = form.getValues();
-        const itemData = item.get.itemArray();
-
-        const _tabs = Object.entries(itemData.multiComponent)
-            .map(([productTitle, cData]) => {
-                if (!cData.checked) return null;
-                return { title: productTitle, toolId: cData.toolId };
-            })
-            .filter(Boolean);
-
-        // console.log(_tabs);
-        setTabs(_tabs as any);
-        setReady(true);
+        mdf.initialize();
     }, []);
-    if (ready)
+    if (mdf.ready)
         return (
-            <div className="flex flex-col overflow-hidden">
-                <Tabs>
-                    <TabsList className="w-auto">
-                        {tabs?.map((tab, index) => (
-                            <TabsTrigger value={tab.title} key={index}>
-                                {tab.title}
-                            </TabsTrigger>
+            <div className="flex flex-col h-[500px] overflow-auto">
+                {line ? (
+                    <>
+                        <Table>
+                            <TableHeader>
+                                <TableHead>Moulding</TableHead>
+                                <TableHead>Qty</TableHead>
+                                <TableHead>Unit Price</TableHead>
+                                <TableHead>Line Total</TableHead>
+                                <TableHead></TableHead>
+                            </TableHeader>
+                            <TableBody>
+                                {mdf.tabs?.map((tab, index) => (
+                                    <TableRow key={index}>
+                                        <Render componentTitle={tab.title} />
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </>
+                ) : (
+                    <Tabs
+                        defaultValue={mdf.currentTab}
+                        onValueChange={mdf.setCurrentTab}
+                        className={cn(line && "flex space-x-4")}
+                    >
+                        <TabsList
+                            defaultValue={mdf.tabs?.[0]?.title}
+                            className={cn(
+                                line && "flex flex-col w-1/3",
+                                "h-auto"
+                            )}
+                        >
+                            {mdf.tabs?.map((tab, index) => (
+                                <TabsTrigger
+                                    value={tab.title}
+                                    key={index}
+                                    className="whitespace-normal"
+                                >
+                                    {tab.title}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                        {mdf.tabs?.map((tab, index) => (
+                            <TabsContent value={tab.title} key={index}>
+                                <Render componentTitle={mdf.currentTab} />
+                            </TabsContent>
                         ))}
-                    </TabsList>
-                    {/* <TabsContent></TabsContent> */}
-                </Tabs>
+                    </Tabs>
+                )}
             </div>
         );
 }

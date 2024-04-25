@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { DykeItemFormContext, useDykeForm } from "./form-context";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CategorizedShelfItem } from "./type";
+import { CategorizedShelfItem } from "../../type";
 import { DykeShelfProducts } from "@prisma/client";
-import { getShelfProducts } from "./form/_action/get-shelf-products.actions";
+import { getShelfProducts } from "../_action/get-shelf-products.actions";
 
 export default function useShelfItem(shelfIndex) {
     const form = useDykeForm();

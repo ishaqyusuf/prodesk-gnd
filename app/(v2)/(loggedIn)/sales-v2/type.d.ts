@@ -1,4 +1,8 @@
-import { DykeSalesShelfItem, DykeStepForm } from "@prisma/client";
+import {
+    DykeSalesDoors,
+    DykeSalesShelfItem,
+    DykeStepForm,
+} from "@prisma/client";
 import { getStepForm } from "./form/_action/get-dyke-step";
 import { getDykeFormAction } from "./form/_action/get-dyke-form";
 
@@ -68,17 +72,33 @@ export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     };
 }
 export type MultiDyke = {
-    [id in string]: {
-        checked?: boolean;
-        heights: {
-            [height in string]: {
-                checked?: boolean;
-                dim?: string;
-                width?: string;
+    components: {
+        [doorTitle in string]: {
+            checked?: boolean;
+            heights: {
+                [height in string]: {
+                    checked?: boolean;
+                    dim?: string;
+                    width?: string;
+                };
+            };
+            toolId?;
+            itemId?;
+            qty: number | null;
+            doorQty: number | null;
+            unitPrice: number | null;
+            totalPrice: number | null;
+            hptId: number | null;
+            doorTotalPrice: number | null;
+            _doorForm: {
+                [dim in string]: DykeSalesDoors;
             };
         };
-        toolId?;
     };
+    uid?: string;
+    multiDyke?: boolean;
+    primary?: boolean;
+    rowIndex?;
 };
 export interface IDykeFormContext {
     startLoadingStep;

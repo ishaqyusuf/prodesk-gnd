@@ -6,7 +6,7 @@ import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../../form-context";
+} from "../../_hooks/form-context";
 import { DykeStep } from "../../../type";
 import Image from "next/image";
 import { env } from "@/env.mjs";
@@ -45,7 +45,6 @@ export function StepProducts({
     const isMoulding = doorType == "Moulding";
     const stepFormTitle = stepForm.step?.title;
     const ctx = useDykeCtx();
-    const multi = item.multi.watchMultiComponent();
 
     const load = async () => {
         if (stepForm?.item?.meta?.hidden) return;

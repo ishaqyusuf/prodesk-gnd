@@ -7,26 +7,25 @@ export function calculateSalesEstimate(data: DykeForm) {
     data.order.taxPercentage = +(data.order.taxPercentage || 0);
 
     data.itemArray.map((item) => {
-        item.item.rate = item.item.total = 0;
+        // item.item.rate = item.item.total = 0;
         if (item.item?.housePackageTool?.doorType == "Moulding") {
-            calculateLineItem(item);
+            // calculateLineItem(item);
         } else {
-            item.item.rate =
-                item.item.price =
-                item.item.qty =
-                item.item.total =
-                    0;
-            calculateHousePackageTool(item);
+            // item.item.rate =
+            //     item.item.price =
+            //     item.item.qty =
+            //     item.item.total =
+            //         0;
+            // calculateHousePackageTool(item);
             calculateShelfItems(item);
         }
 
         taxEstimateAndUpdateTotal(item, data);
-        console.log(item.item.total);
+        // console.log(item.item.total);
 
         // item = res.item;
         // (data.order as any).subTotal += res.totalPrice;
     });
-    console.log(data.order.subTotal);
     const {
         subTotal,
         tax,
@@ -41,7 +40,6 @@ export function calculateSalesEstimate(data: DykeForm) {
     data.order.meta.ccc_percentage = cccPercentage;
     const dt = (data.order.grandTotal = ccc + tax + total);
     data.order.amountDue = dt - (data.paidAmount || 0);
-
     return data;
 }
 function taxEstimateAndUpdateTotal(
@@ -96,40 +94,39 @@ function calculateHousePackageTool(item: DykeForm["itemArray"][0]) {
     };
     // console.log(packageTool?._doorForm);
     if (item.item.housePackageTool?.doorType) {
-        Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
-            let doors = _sum([v?.lhQty, v?.rhQty]);
-            const {
-                doorPrice = 0,
-                casingPrice = 0,
-                jambSizePrice = 0,
-            } = v as any;
-
-            let unitPrice = formatMoney(
-                Object.values({ doorPrice, casingPrice, jambSizePrice }).reduce(
-                    (a, b) => a + b,
-                    0
-                )
-            );
-            let sumTotal = 0;
-            if (doors && unitPrice) {
-                sumTotal = formatMoney(doors * unitPrice);
-                sum.doors += doors;
-                sum.unitPrice += unitPrice;
-                sum.totalPrice += sumTotal;
-            }
-            (packageTool._doorForm[k] as any).unitPrice = unitPrice;
-            (packageTool._doorForm[k] as any).lineTotal = sumTotal;
-            (packageTool._doorForm[k] as any).dimension = k?.replaceAll(
-                "in",
-                '"'
-            );
-        });
-        packageTool.totalPrice = sum.totalPrice;
-        packageTool.totalDoors = sum.doors;
-        item.item.rate = item.item.price = item.item.total = sum.totalPrice;
-        item.item.qty = 1;
+        // Object.entries(packageTool?._doorForm || {}).map(([k, v]) => {
+        //     let doors = _sum([v?.lhQty, v?.rhQty]);
+        //     const {
+        //         doorPrice = 0,
+        //         casingPrice = 0,
+        //         jambSizePrice = 0,
+        //     } = v as any;
+        //     let unitPrice = formatMoney(
+        //         Object.values({ doorPrice, casingPrice, jambSizePrice }).reduce(
+        //             (a, b) => a + b,
+        //             0
+        //         )
+        //     );
+        //     let sumTotal = 0;
+        //     if (doors && unitPrice) {
+        //         sumTotal = formatMoney(doors * unitPrice);
+        //         sum.doors += doors;
+        //         sum.unitPrice += unitPrice;
+        //         sum.totalPrice += sumTotal;
+        //     }
+        //     (packageTool._doorForm[k] as any).unitPrice = unitPrice;
+        //     (packageTool._doorForm[k] as any).lineTotal = sumTotal;
+        //     (packageTool._doorForm[k] as any).dimension = k?.replaceAll(
+        //         "in",
+        //         '"'
+        //     );
+        // });
+        // packageTool.totalPrice = sum.totalPrice;
+        // packageTool.totalDoors = sum.doors;
+        // item.item.rate = item.item.price = item.item.total = sum.totalPrice;
+        // item.item.qty = 1;
     }
     console.log(sum);
 
-    return { item, totalPrice: sum.totalPrice };
+    return { item, totalPrice: item.item.total };
 }

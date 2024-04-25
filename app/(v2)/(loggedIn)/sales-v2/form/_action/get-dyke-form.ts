@@ -9,7 +9,7 @@ import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import { inToFt, safeFormText, sum } from "@/lib/utils";
 import dayjs from "dayjs";
-import { DykeSalesDoors, HousePackageTools } from "@prisma/client";
+import { DykeSalesDoors } from "@prisma/client";
 
 export async function getDykeFormAction(type, slug) {
     const order = await prisma.salesOrders.findFirst({
@@ -22,6 +22,7 @@ export async function getDykeFormAction(type, slug) {
                 where: {
                     deletedAt: null,
                 },
+
                 include: {
                     formSteps: {
                         where: {
@@ -42,6 +43,16 @@ export async function getDykeFormAction(type, slug) {
                         },
                         include: {
                             doors: {
+                                where: {
+                                    deletedAt: null,
+                                },
+                            },
+                            door: {
+                                where: {
+                                    deletedAt: null,
+                                },
+                            },
+                            molding: {
                                 where: {
                                     deletedAt: null,
                                 },
@@ -114,6 +125,8 @@ export async function getDykeFormAction(type, slug) {
                     id: d.id,
                 };
             });
+            console.log(item.housePackageTool?.dykeDoorId);
+
             return {
                 ...item,
                 housePackageTool: {
@@ -152,52 +165,82 @@ export async function getDykeFormAction(type, slug) {
         billingAddress,
         order: orderData,
 
-        itemArray: items?.map(
-            ({ formSteps, shelfItems, housePackageTool, ...itemData }) => {
-                const shelfItemArray: {
-                    [k in string]: {
-                        productArray: {
-                            item: (typeof shelfItems)[0];
-                        }[];
-                        categoryIds: number[];
-                        categoryId: number;
-                    };
-                } = {};
-                shelfItems.map((s) => {
-                    const cid = s.categoryId?.toString();
-                    if (!shelfItemArray[cid])
-                        shelfItemArray[cid] = {
-                            productArray: [],
-                            categoryIds: s.meta.categoryIds,
-                            categoryId: s.categoryId,
+        itemArray: items
+            ?.filter((item) => {
+                if (item.multiDykeUid) return item.multiDyke;
+                return true;
+            })
+            .map(
+                (
+                    { formSteps, shelfItems, housePackageTool, ...itemData },
+                    itemIndex
+                ) => {
+                    const shelfItemArray: {
+                        [k in string]: {
+                            productArray: {
+                                item: (typeof shelfItems)[0];
+                            }[];
+                            categoryIds: number[];
+                            categoryId: number;
                         };
-                    if (shelfItemArray[cid])
-                        (shelfItemArray[cid] as any).productArray.push({
-                            item: s,
-                        });
-                });
-                // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
-                //                 categoryIds: number[]
-                //             }},
-                // itemData.meta;
-                const multiComponent: MultiDyke = {};
-                items
-                    .filter((item) => {
-                        if (item.id == itemData.id) return true;
+                    } = {};
+                    shelfItems.map((s) => {
+                        const cid = s.categoryId?.toString();
+                        if (!shelfItemArray[cid])
+                            shelfItemArray[cid] = {
+                                productArray: [],
+                                categoryIds: s.meta.categoryIds,
+                                categoryId: s.categoryId,
+                            };
+                        if (shelfItemArray[cid])
+                            (shelfItemArray[cid] as any).productArray.push({
+                                item: s,
+                            });
+                    });
+                    // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
+                    //                 categoryIds: number[]
+                    //             }},
+                    // itemData.meta;
+                    const multiComponent: MultiDyke = {
+                        components: {},
+                        uid: itemData.multiDykeUid as any,
+                        multiDyke: itemData.multiDyke as any,
+                    };
+                    multiComponent.primary = ((multiComponent.uid &&
+                        multiComponent.multiDyke) ||
+                        (!multiComponent.multiDyke &&
+                            multiComponent.uid)) as any;
+                    if (multiComponent.primary)
+                        multiComponent.rowIndex = itemIndex;
+                    const _comps = items.filter((item) => {
+                        if (item.id == itemData.id) {
+                            return true;
+                        }
                         if (
                             itemData.multiDyke &&
                             itemData.multiDykeUid == item.multiDykeUid
                         )
                             return true;
                         return false;
-                    })
-                    .map((item) => {
+                    });
+                    console.log(
+                        _comps.map((i) => i.housePackageTool.dykeDoorId)
+                    );
+
+                    _comps.map((item) => {
+                        // console.log(item.housePackageTool?.door);
                         const formStep = item.formSteps.find(
                             (d) =>
                                 d.step?.title == "Door" ||
                                 d.step?.title == "Moulding"
                         );
-                        const isMoulding = formStep?.step.title == "Moulding";
+                        const component =
+                            item.housePackageTool?.door ||
+                            item.housePackageTool?.molding;
+
+                        const isMoulding =
+                            item.housePackageTool?.moldingId != null;
+
                         let _dykeSizes: any = item.meta._dykeSizes;
                         if (!_dykeSizes) {
                             _dykeSizes = {};
@@ -216,38 +259,56 @@ export async function getDykeFormAction(type, slug) {
                                 };
                             });
                         }
-                        if (formStep) {
-                            multiComponent[safeFormText(formStep.value)] = {
+                        if (component) {
+                            console.log(item.housePackageTool.door);
+
+                            // item.meta.doo
+                            multiComponent.components[
+                                safeFormText(component.title)
+                            ] = {
                                 checked: true,
                                 heights: _dykeSizes,
+                                itemId: item.id,
+                                qty: item.qty,
+                                doorQty: item.qty,
+                                unitPrice: item.rate,
+                                totalPrice: item.total,
                                 toolId: isMoulding
                                     ? item.housePackageTool.moldingId
-                                    : item.housePackageTool.doorId,
+                                    : item.housePackageTool.dykeDoorId,
+                                _doorForm:
+                                    item.housePackageTool._doorForm || {},
+                                hptId: item.housePackageTool.id as any,
+                                doorTotalPrice: item?.housePackageTool
+                                    ?.totalPrice as any,
                             };
                         }
                     });
-                // console.log(multiComponent);
-                const rItem = {
-                    opened: true,
-                    stepIndex: 0,
-                    multiComponent,
-                    stillChecked: true,
-                    item: {
-                        ...itemData,
-                        housePackageTool,
-                        formStepArray: formSteps.map(({ step, ...rest }) => ({
-                            step,
-                            item: rest,
-                        })),
-                        shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
-                        // productArray
-                        // })),
-                    },
-                };
-                rItem.stepIndex = rItem.item.formStepArray.length - 1;
-                return rItem;
-            }
-        ),
+                    console.log(Object.keys(multiComponent.components));
+
+                    const rItem = {
+                        opened: true,
+                        stepIndex: 0,
+                        multiComponent,
+                        stillChecked: true,
+                        item: {
+                            ...itemData,
+                            housePackageTool,
+                            formStepArray: formSteps.map(
+                                ({ step, ...rest }) => ({
+                                    step,
+                                    item: rest,
+                                })
+                            ),
+                            shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
+                            // productArray
+                            // })),
+                        },
+                    };
+                    rItem.stepIndex = rItem.item.formStepArray.length - 1;
+                    return rItem;
+                }
+            ),
         data: ctx,
         paidAmount,
     };

@@ -36,10 +36,10 @@ export default function SelectDoorHeightsModal({
 }: Props) {
     const safeTitle = safeFormText(productTitle);
     const item = form.getValues(`itemArray.${rowIndex}`);
-    const heightsKey = `itemArray.${rowIndex}.multiComponent.${safeTitle}.heights`;
-    const heights: DykeForm["itemArray"][0]["multiComponent"][""]["heights"] =
+    const heightsKey = `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.heights`;
+    const heights: DykeForm["itemArray"][0]["multiComponent"]["components"]["heights"] =
         form.getValues(
-            `itemArray.${rowIndex}.multiComponent.${safeTitle}.heights`
+            `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.heights`
         );
     console.log({ heights, safeTitle });
 
@@ -100,7 +100,7 @@ export default function SelectDoorHeightsModal({
         form.setValue(heightsKey as any, sizesData);
         onSubmit && onSubmit(sizesData);
         form.setValue(
-            `itemArray.${rowIndex}.multiComponent.${safeTitle}.checked` as any,
+            `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.checked` as any,
             checked
         );
         modal.close();

@@ -4,13 +4,13 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import HousePackageTool from "../house-package-tools/house-package-tool";
+
 import { useContext, useEffect, useState } from "react";
 import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../../form-context";
+} from "../../_hooks/form-context";
 import { DykeDoorType, DykeForm, DykeStep } from "../../../type";
 import ShelfItemIndex from "../shelf-item";
 import Image from "next/image";
@@ -37,9 +37,11 @@ import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../_action/save-step-product";
-import LineItemSection from "../line-item-section";
+import LineItemSection from "../line-item-section/line-item-section";
 import { StepProducts } from "./item";
-import MultiComponent from "../multi-component";
+import MultiComponentRender from "../multi-component";
+import HousePackageToolOld from "../house-package-tools/house-package-tool";
+import HousePackageTool from "../house-package-tools";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -93,14 +95,17 @@ export function DykeItemStepSection({
             <CollapsibleContent className="p-8 border">
                 {stepForm?.step?.title == "House Package Tool" ? (
                     // <HousePackageTool />
-                    <MultiComponent Render={HousePackageTool} />
+                    <>
+                        <MultiComponentRender Render={HousePackageTool} />
+                        {/* <MultiComponentRender Render={HousePackageToolOld} /> */}
+                    </>
                 ) : stepForm?.step?.title == "Shelf Items" ? (
                     <>
                         <ShelfItemIndex />
                     </>
                 ) : stepForm?.step?.title == "Line Item" ? (
                     <>
-                        <MultiComponent Render={LineItemSection} />
+                        <MultiComponentRender line Render={LineItemSection} />
                         {/* <LineItemSection /> */}
                     </>
                 ) : (

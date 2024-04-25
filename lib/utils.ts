@@ -105,6 +105,10 @@ export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
         .filter((v) => (v as any) > 0 && !isNaN(v as any))
         .reduce((sum, val) => (sum || 0) + (val as number), 0);
 }
+export function toNumber(s) {
+    s = Number(s);
+    return isNaN(s) ? 0 : s;
+}
 export function sumKeyValues(arg) {
     let total = 0;
     if (arg && typeof arg === "object")
@@ -388,3 +392,15 @@ export function ftToIn(h) {
 export function safeFormText(t) {
     return t?.replaceAll(".", "_")?.replaceAll("'", "-");
 }
+
+export const math = {
+    multiply: (...values) => {
+        let est = 0;
+
+        values.map((v, i) =>
+            i == 0 ? (est = toNumber(v)) : (est *= toNumber(v))
+        );
+
+        return est;
+    },
+};
