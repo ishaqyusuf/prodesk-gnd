@@ -158,10 +158,11 @@ export async function saveDykeSales(data: DykeForm) {
                             _doorFormDefaultValue,
                             ...hptData
                         } = housePackageTool || {};
+
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
                             ([dimension, doorData]) => {
-                                doors.push({
+                                doors?.push({
                                     ...doorData,
                                     dimension,
                                 });
