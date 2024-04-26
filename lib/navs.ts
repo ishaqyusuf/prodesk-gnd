@@ -197,31 +197,14 @@ export function nav(
         // single: true,
         groupName: "Jobs",
     });
-    // const Job: Route[] = [];
-    // let _job = (() => {
-    //     const _rw: any = {};
-    //     let href: any = null;
-    //     function setHref(title, _href) {
-    //         if (!href) href = _href;
-    //         _rw[_href] = _route(title, Icons.communitySettings, `${_href}`);
-    //     }
 
-    //     if (viewProject && viewInvoice) setHref("Jobs", "/jobs");
-    //     if (viewProject && viewInvoice)
-    //         setHref("Payment Receipts", "/jobs/payments");
-    //     if (viewProject && viewInvoice)
-    //         setHref("Pending Payments", "/jobs/payments/pay");
-    //     Job.push(...(Object.values(_rw) as any));
-    //     if (href) return _route("Jobs", Icons.jobs, `${href}`);
-    // })();
-    // if (_job) routes.Job.push(_job);
     if (viewOrders || isAdmin) {
         routes.Sales.push(
             ...[
                 _route(
-                    "Estimates",
+                    "Quotes",
                     Icons.estimates,
-                    `/sales/estimates`
+                    `/sales/quotes`
                     // `/sales/estimates?_salesRepId=${session.user.id}`
                 ), //employees,roles
                 _route("Orders", Icons.orders, `/sales/orders`), //employees,roles

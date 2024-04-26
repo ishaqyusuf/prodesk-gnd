@@ -12,6 +12,7 @@ import { TableApiResponse } from "@/types/action";
 import {
     CopyOrderActionProps,
     IOrderPrintMode,
+    IOrderType,
     ISalesOrder,
     ISalesOrderItem,
     ISalesOrderItemMeta,
@@ -270,7 +271,7 @@ export async function getOrderAction(orderId, isProd = false) {
 export async function getSalesEstimates(
     query: SalesQueryParams
 ): TableApiResponse<ISalesOrder> {
-    query.type = "estimate";
+    query.type = "quote";
     return await getSales(query);
 }
 export async function getSales(query: SalesQueryParams) {
@@ -462,7 +463,7 @@ export async function salesPrintAction({
     });
     return sales;
 }
-export async function moveSales(id, type: "order" | "estimate") {
+export async function moveSales(id, type: IOrderType) {
     const order = await prisma.salesOrders.update({
         where: {
             id,
@@ -477,5 +478,5 @@ export async function moveSales(id, type: "order" | "estimate") {
         status: title,
         headline: `${title} by ${(await user()).name}`,
     });
-    _revalidate(type == "order" ? "orders" : "estimates");
+    _revalidate(type == "order" ? "orders" : "quotes");
 }

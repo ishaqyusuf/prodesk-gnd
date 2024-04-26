@@ -20,7 +20,7 @@ export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
-export type IOrderType = "order" | "estimate";
+export type IOrderType = "order" | "quote";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 
 export interface IBackOrderForm {
@@ -232,7 +232,7 @@ export interface UpdateOrderPriorityProps {
 }
 export interface CopyOrderActionProps {
     orderId;
-    as: "estimate" | "order";
+    as: "quote" | "order";
 }
 export interface SaveOrderActionProps {
     order: SalesOrders;

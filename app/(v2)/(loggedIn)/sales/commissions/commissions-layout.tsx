@@ -23,7 +23,7 @@ export default function CommissionsLayout({
                 title: "Back Orders",
                 path: "/sales/back-orders",
             },
-            can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
+            can?.viewOrders && { title: "Estimates", path: "/sales/quotes" },
             can?.viewInboundOrder && {
                 title: "Inbounds",
                 path: "/sales/inbounds",

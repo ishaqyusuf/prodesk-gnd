@@ -410,12 +410,12 @@ function heading({ mode, isOrder, order, isEstimate }) {
     let h = {
         title: mode,
         lines: [
-            styled(isOrder ? "Order #" : "Estimate #", order.orderId, {
+            styled(isOrder ? "Order #" : "Quote #", order.orderId, {
                 font: "bold",
                 size: "lg",
             }),
             styled(
-                isOrder ? "Order Date" : "Estimate Date",
+                isOrder ? "Order Date" : "Quote Date",
                 formatDate(order.createdAt)
             ),
             styled("Rep", order.salesRep?.name),
@@ -471,7 +471,7 @@ function styled(title, value?, style?: PrintTextProps) {
 }
 function address({ type, customer, billingAddress, shippingAddress }) {
     // const { estimate, order } = data;
-    const estimate = type == "estimate";
+    const estimate = type == "quote";
     return [
         addressLine(
             estimate ? "Customer" : "Sold To",

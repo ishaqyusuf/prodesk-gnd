@@ -23,7 +23,7 @@ export default function SalesTabLayout({
                 title: "Back Orders",
                 path: "/sales/back-orders",
             },
-            can?.viewOrders && { title: "Estimates", path: "/sales/estimates" },
+            can?.viewOrders && { title: "Quotes", path: "/sales/quotes" },
             can?.viewDelivery && {
                 title: "Delivery",
                 path: "/sales/delivery?_deliveryStatus=queued",

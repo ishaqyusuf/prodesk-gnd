@@ -29,7 +29,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                     <CardTitle className="flex items-center justify-between">
                         <div className="inline-flex items-center space-x-2">
                             <span>
-                                {estimate ? "Estimate " : "Order "} Information
+                                {estimate ? "Quote " : "Order "} Information
                             </span>
                             <OrderFlag order={order} />
                             <StatusBadge
@@ -71,14 +71,14 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                         </Info>
                         <Info
                             label={
-                                order.type == "estimate"
-                                    ? "Estimate Date"
+                                order.type == "quote"
+                                    ? "Quote Date"
                                     : "Order Date"
                             }
                         >
                             <span>{formatDate(order.createdAt as any)}</span>
                         </Info>
-                        {order.type == "estimate" ? (
+                        {order.type == "quote" ? (
                             <>
                                 <Info label="Good Until">
                                     <span>

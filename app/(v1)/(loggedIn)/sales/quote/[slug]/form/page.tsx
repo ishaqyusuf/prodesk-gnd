@@ -23,10 +23,10 @@ export default async function EstimateFormPage({
     searchParams,
     params: { slug },
 }) {
-    redirect(`/sales/edit/estimate/${slug}`);
+    redirect(`/sales/edit/quote/${slug}`);
     const resp: SalesFormResponse = await salesFormAction({
         orderId: slug,
-        type: "estimate",
+        type: "quote",
     });
     const orderId = resp?.form?.orderId;
     return (
@@ -37,14 +37,14 @@ export default async function EstimateFormPage({
                     {orderId && (
                         <BreadLink
                             title={orderId}
-                            link={`/sales/estimate/${orderId}`}
+                            link={`/sales/quote/${orderId}`}
                             slug={orderId}
                         />
                     )}
                     <BreadLink title={orderId ? "Edit" : "New"} isLast />
                 </Breadcrumbs>
                 <SalesForm
-                    newTitle="New Estimate"
+                    newTitle="New Quote"
                     slug={slug}
                     data={resp}
                 ></SalesForm>

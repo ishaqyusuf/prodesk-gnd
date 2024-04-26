@@ -1,1 +1,1 @@
-export type EmailTypes = "sales" | "estimate";
+export type EmailTypes = "sales" | "quote";

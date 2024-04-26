@@ -19,6 +19,6 @@ function _new(title, link, Icon, shortCut: any = null) {
 const commands = [
     _new("Orders", "/sales/orders", Icons.orders, "O"),
     _new("New Order", "/sales/edit/order/new", Icons.orders),
-    _new("Estimates", "/sales/estimates", Icons.estimates),
-    _new("New Estimates", "/sales/edit/order/new", Icons.estimates),
+    _new("Quotes", "/sales/quotes", Icons.estimates),
+    _new("New Quote", "/sales/edit/quote/new", Icons.estimates),
 ];

@@ -99,7 +99,7 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     }
     await _updateProdQty(id);
     if (order?.prodId && !completed) await _notifyProductionAssigned(order);
-    _revalidate(order.type == "order" ? "orders" : "estimates");
+    _revalidate(order.type == "order" ? "orders" : "quotes");
 }
 export async function cancelProductionAssignmentAction(id) {
     await prisma.salesOrders.update({

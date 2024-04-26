@@ -49,16 +49,16 @@ export function OrderRowAction(props: IOrderRowProps) {
         router.push(`/sales/order/${row.orderId}`);
     }
     async function moveToEstimate() {
-        await moveSales(row.id, "estimate");
-        toast.message("Order moved to estimate");
-        router.push(`/sales/estimate/${row.orderId}`);
+        await moveSales(row.id, "quote");
+        toast.message("Order moved to quote");
+        router.push(`/sales/quote/${row.orderId}`);
     }
     async function updateDeliveryMode(delivery) {
         if (delivery != row.deliveryOption) {
             await updateDeliveryModeDac(
                 row.id,
                 delivery,
-                row.type == "order" ? "orders" : "estimates"
+                row.type == "order" ? "orders" : "quotes"
             );
 
             toast.success("Updated");
@@ -95,9 +95,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                                     parentId: row.id,
                                     to: email as any,
                                     type:
-                                        row.type == "order"
-                                            ? "sales"
-                                            : "estimate",
+                                        row.type == "order" ? "sales" : "quote",
                                 }}
                                 subtitle={`Sales Order | ${row.orderId}`}
                             />
@@ -336,10 +334,10 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                     <MenuItem
                         Icon={Icons.estimates}
                         onClick={() => {
-                            _copyOrder("estimate");
+                            _copyOrder("quote");
                         }}
                     >
-                        Estimates
+                        Quotes
                     </MenuItem>
                     <MenuItem
                         Icon={Icons.orders}

@@ -14,7 +14,7 @@ export default function SalesTab() {
             "/sales/back-orders",
             tab.can("viewOrders")
         );
-        tab.registerTab("Estimates", "/sales/estimates");
+        tab.registerTab("Quotes", "/sales/quotes");
         tab.registerTab(
             "Delivery",
             "/sales/dispatch/delivery",

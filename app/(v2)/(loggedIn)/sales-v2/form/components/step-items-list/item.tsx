@@ -73,6 +73,7 @@ export function StepProducts({
     };
     useEffect(() => {
         load();
+        console.log(">>>>>>");
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";

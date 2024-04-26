@@ -1,8 +1,5 @@
-import {
-    getSalesEstimates,
-    getSalesOrder,
-} from "@/app/(v1)/_actions/sales/sales";
-import OrdersTableShell from "@/app/(v1)/(loggedIn)/sales/orders/components/orders-table-shell";
+import { getSalesEstimates } from "@/app/(v1)/_actions/sales/sales";
+
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
@@ -15,6 +12,7 @@ import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order
 import NewEstimateBtn from "./new-sales-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { Metadata } from "next";
+import { prisma } from "@/db";
 
 export const metadata: Metadata = {
     title: "Sales Quote",
@@ -28,7 +26,7 @@ export default async function SalesEstimatesPage({ searchParams }) {
             <SalesTabLayout>
                 <Breadcrumbs>
                     <BreadLink isFirst title="Sales" />
-                    <BreadLink isLast title="Estimates" />
+                    <BreadLink isLast title="Quotes" />
                 </Breadcrumbs>
                 <PageHeader
                     title="Sales Quotes"

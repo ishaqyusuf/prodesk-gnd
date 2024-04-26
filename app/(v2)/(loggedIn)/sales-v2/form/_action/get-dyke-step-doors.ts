@@ -49,8 +49,7 @@ export async function getDykeStepDoors({
             (d, i) => i == _doors.findIndex((_) => _.title == d.title)
         );
         // console.log(_doors.length, doorType);
-        console.log(_fd.length);
-
+        // console.log(_fd.length);
         return response(_fd, stepId);
     }
     if (query == "SC Molded") {
@@ -134,6 +133,7 @@ export async function getDykeStepDoors({
         skipDuplicates: true,
         data: result as any,
     });
+    console.log(res.count);
 
     return await getDykeStepDoors({ q, omit, qty, stepId, query, final: true });
 }

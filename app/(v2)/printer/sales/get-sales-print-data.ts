@@ -17,7 +17,7 @@ export async function getSalesPrintData(
     const salesitems = composeSalesItems(order);
     // const billingMeta = order.billingAddress?.meta as any as IAddressMeta;
 
-    const estimate = order.type == "estimate";
+    const estimate = order.type == "quote";
 
     return composePrint(
         {

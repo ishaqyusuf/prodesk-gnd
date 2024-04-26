@@ -33,7 +33,7 @@ export function Cmd() {
                         break;
                     case "e":
                         e.preventDefault();
-                        route.push(`/sales/edit/estimate/new`);
+                        route.push(`/sales/edit/quote/new`);
                         break;
                 }
             }

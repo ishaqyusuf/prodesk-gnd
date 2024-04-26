@@ -13,9 +13,9 @@ export default function CustomerMenu({ customer }: Props) {
         <Menu label="New" variant="secondary" Icon={Plus}>
             <MenuItem
                 Icon={Banknote}
-                href={`/sales/estimate/new/form?customerId=${customer.id}`}
+                href={`/sales/quote/new/form?customerId=${customer.id}`}
             >
-                Estimates
+                Quote
             </MenuItem>
             <MenuItem
                 Icon={ShoppingBag}

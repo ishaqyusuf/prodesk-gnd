@@ -10,10 +10,8 @@ export default function NewEstimateBtn({}) {
     return (
         <>
             <Menu label="New" variant={"default"} Icon={Icons.add}>
-                <MenuItem href={"/sales/edit/estimate/new"}>
-                    Sales Form
-                </MenuItem>
-                <MenuItem href={"/sales-v2/form/estimate"}>
+                <MenuItem href={"/sales/edit/quote/new"}>Sales Form</MenuItem>
+                <MenuItem href={"/sales-v2/form/quote"}>
                     Sales Form 2 (Test Mode)
                 </MenuItem>
             </Menu>

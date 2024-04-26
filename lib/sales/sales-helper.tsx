@@ -17,12 +17,10 @@ import { dispatchSlice } from "@/store/slicers";
 import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export const sales = {
-    async move(order, to: "estimate" | "order", router?) {
+    async move(order, to: IOrderType, router?) {
         await moveSales(order.id, to);
         toast.message(
-            to == "estimate"
-                ? "Order moved to estimate"
-                : "Estimate moved to order"
+            to == "quote" ? "Order moved to quote" : "Quote moved to order"
         );
         router?.push(`/sales/${to}/${order.orderId}`);
         closeModal();
@@ -67,7 +65,7 @@ export const sales = {
         closeModal();
     },
     salesMenuOption(row: ISalesOrder, modal) {
-        const estimate = row.type == "estimate";
+        const estimate = row.type == "quote";
         const _linkDir = `/sales/${row.type}/${row.slug}`;
         const mb = optionBuilder;
         const prodCompleted = row?.prodStatus == "Completed";
@@ -119,9 +117,8 @@ export const sales = {
                     Icons.production
                 ),
             mb.simple(
-                !estimate ? "Move to Estimate" : "Move to Order",
-                async () =>
-                    await this.move(row, estimate ? "order" : "estimate"),
+                !estimate ? "Move to Quote" : "Move to Order",
+                async () => await this.move(row, estimate ? "order" : "quote"),
                 estimate ? Icons.orders : Icons.estimates
             ),
             mb.more(
@@ -135,9 +132,9 @@ export const sales = {
                         Icons.orders
                     ),
                     mb.simple(
-                        "As Estimate",
+                        "As Quote",
                         async () => {
-                            await this.copy(row, "estimate");
+                            await this.copy(row, "quote");
                         },
                         Icons.estimates
                     ),
@@ -202,7 +199,7 @@ export const sales = {
         return optionBuilder.more(
             title,
             [
-                mb.simple("Estimate", () => _print("quote"), Icons.estimates),
+                mb.simple("Quote", () => _print("quote"), Icons.estimates),
                 mb.simple("Order", () => _print("order"), Icons.orders),
                 mb.simple(
                     "Packing List",

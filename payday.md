@@ -16,7 +16,8 @@ TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
 # APR 26: 00.00 == 00.00
-    04:10-
+    06:25-
+    04:10-05:10
 # APR 25: 05.40 == 17.20
     11:45-01:20
     08:30-10:55

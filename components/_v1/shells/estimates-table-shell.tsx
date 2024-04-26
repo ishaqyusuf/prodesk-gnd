@@ -57,9 +57,9 @@ export default function EstimatesTableShell<T>({
                                   row.original,
                                   row.original.isDyke
                                       ? `/sales-v2/overview/${row.original.type}/slug`
-                                      : "/sales/estimate/slug"
+                                      : "/sales/quote/slug"
                               ),
-                          header: ColumnHeader("Estimate #"),
+                          header: ColumnHeader("Quote #"),
                       },
                       {
                           accessorKey: "customer",

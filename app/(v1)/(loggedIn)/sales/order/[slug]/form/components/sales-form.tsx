@@ -121,20 +121,6 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
             ..._formData,
             items: _items,
         });
-        //  const _baseLink = estimate ? "/sales/estimates" : "/sales/orders";
-        //  store.dispatch(
-        //    setNav(
-        //      [
-        //        { title: estimate ? "Estimates" : "Orders", link: _baseLink },
-        //        _formData.orderId &&
-        //          !estimate && {
-        //            title: _formData.orderId,
-        //            link: "/sales/orders/" + _formData.orderId,
-        //          },
-        //        { title: _formData.orderId ? "Edit" : "New" },
-        //      ].filter(Boolean) as any
-        //    )
-        //  );
     }, [data]);
 
     const watchOrderId = form.watch("orderId");

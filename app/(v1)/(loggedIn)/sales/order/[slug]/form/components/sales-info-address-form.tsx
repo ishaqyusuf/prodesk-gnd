@@ -228,7 +228,7 @@ export default function InfoCard({
                         </InfoLine>
                     </>
                 )}
-                {watchType == "estimate" && (
+                {watchType == "quote" && (
                     <InfoLine label="Good Until">
                         <DatePicker
                             value={watchGoodUntil}

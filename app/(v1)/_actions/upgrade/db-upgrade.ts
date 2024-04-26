@@ -91,15 +91,15 @@ async function addTypeToSalesOrder() {
         })
     ).map((e) => {
         let meta: ISalesOrderMeta = e?.meta as any;
-        if (meta?.type == "estimate") updates.estimate.push(e.id);
-        else updates.order.push(e.id);
+        // if (meta?.type == "quote") updates.estimate.push(e.id);
+        // else updates.order.push(e.id);
     });
     await Promise.all(
         Object.entries(updates).map(async ([type, ids]) => {
             let data: any = {
                 type,
             };
-            if (type == "estimate") data.prodId = null;
+            if (type == "quote") data.prodId = null;
             await prisma.salesOrders.updateMany({
                 where: {
                     id: {

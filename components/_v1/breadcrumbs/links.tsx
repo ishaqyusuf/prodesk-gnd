@@ -39,7 +39,7 @@ export const OrdersCrumb = (props: Props) => (
     <BreadLink {...props} title="Orders" link="/sales/orders" />
 );
 export const EstimatesCrumb = (props: Props) => (
-    <BreadLink {...props} title="Estimates" link="/sales/estimates" />
+    <BreadLink {...props} title="Quotes" link="/sales/quotes" />
 );
 export const OrderViewCrumb = (props: Props) => (
     <BreadLink

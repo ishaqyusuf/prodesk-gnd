@@ -29,7 +29,7 @@ export default function DeliveryCell({ item }: SalesCellProps) {
             await updateDeliveryModeDac(
                 item.id,
                 delivery,
-                item.type == "order" ? "orders" : "estimates"
+                item.type == "order" ? "orders" : "quotes"
             );
 
             toast.success("Updated");
