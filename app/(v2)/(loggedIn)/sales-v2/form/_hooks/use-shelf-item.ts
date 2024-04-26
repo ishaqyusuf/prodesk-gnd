@@ -58,7 +58,7 @@ export default function useShelfItem(shelfIndex) {
         productSelected(productId, prodIndex) {
             let prod = products?.find((p) => p.id == productId);
             if (prod) {
-                // console.log(prod);
+                console.log(prod);
                 const catIds = categoryForm.getValues("ids").map((i) => i.id);
                 const lastId = catIds.slice(-1)[0];
                 // console.log({

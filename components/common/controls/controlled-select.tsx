@@ -1,9 +1,4 @@
-import {
-    ControllerProps,
-    FieldPath,
-    FieldValues,
-    useFormContext,
-} from "react-hook-form";
+import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import {
     FormControl,
     FormField,
@@ -46,6 +41,7 @@ interface Props<T> {
     loader?;
     className?: string;
     type?: "select" | "combo";
+    transformValue?(value?);
 }
 export default function ControlledSelect<
     TFieldValues extends FieldValues = FieldValues,
@@ -54,7 +50,7 @@ export default function ControlledSelect<
 >({
     label,
     placeholder,
-    options,
+    options = [],
     loader,
     SelectItem: SelItem,
     valueKey = "value" as any,
@@ -63,9 +59,14 @@ export default function ControlledSelect<
     onSelect,
     className,
     Item,
+    transformValue,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
-    const [list, setList] = useState(options || []);
+    const [list, setList] = useState<any>([]);
+    useEffect(() => {
+        setList(options || []);
+        // console.log(options?.length);
+    }, [options]);
     useEffect(() => {
         if (loader) {
             (async () => {
@@ -76,9 +77,11 @@ export default function ControlledSelect<
         }
     }, []);
     function itemValue(option) {
+        if (!option) return option;
         return typeof option == "string" ? option : option[valueKey];
     }
     function itemText(option) {
+        if (!option) return option;
         return typeof option == "string"
             ? option
             : titleKey == "label"
@@ -91,12 +94,21 @@ export default function ControlledSelect<
             render={({ field }) => (
                 <FormItem className={cn(className, "mx-1")}>
                     {label && <FormLabel>{label}</FormLabel>}
+
                     <FormControl>
                         {type == "combo" ? (
                             <ControlledCombox
                                 field={field}
                                 placeholder={placeholder}
-                                onSelect={onSelect}
+                                onSelect={(s) => {
+                                    let value = itemValue(s);
+                                    if (transformValue)
+                                        value = transformValue(value);
+
+                                    field?.onChange(value);
+                                    onSelect && onSelect(value);
+                                    // onSelect;
+                                }}
                                 options={list}
                                 itemValue={itemValue}
                                 itemText={itemText}
@@ -147,11 +159,15 @@ export function ControlledCombox({
     itemText,
     itemValue,
 }) {
+    const [show, setShow] = useState(false);
     return (
-        <Popover>
+        <Popover open={show} onOpenChange={setShow}>
             <PopoverTrigger asChild>
                 <FormControl>
                     <Button
+                        onClick={() => {
+                            setShow(!show);
+                        }}
                         variant="outline"
                         role="combobox"
                         className={cn(
@@ -164,12 +180,21 @@ export function ControlledCombox({
                         (sel) => sel. === field.value
                       )?.label
                     : "Select language"} */}
-                        <span className="">{field.value || placeholder}</span>
+                        {/* <span>{options.length}</span> */}
+                        <span className="">
+                            {field.value
+                                ? itemText(
+                                      options.find(
+                                          (o) => itemValue(o) == field.value
+                                      )
+                                  )
+                                : placeholder}
+                        </span>
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="min-w-[250px] max-w-[400px] p-0 ">
                 <Command>
                     <CommandInput
                         onValueChange={(e) => {
@@ -180,22 +205,21 @@ export function ControlledCombox({
                         className="h-9"
                     />
                     <CommandEmpty>Nothing to display.</CommandEmpty>
-                    <CommandGroup>
-                        {options?.map((language, index) => (
+                    <CommandGroup className="max-h-[35vh] overflow-auto">
+                        {options?.map((opt, index) => (
                             <CommandItem
-                                value={itemValue(language)}
+                                value={itemValue(opt)}
                                 key={index}
                                 onSelect={() => {
-                                    field.onChange(itemValue(language));
-                                    onSelect && onSelect(language);
-                                    // data.setValue("language", language.value);
+                                    onSelect && onSelect(opt);
+                                    setShow(false);
                                 }}
                             >
-                                {itemText(language)}
+                                {itemText(opt)}
                                 <CheckIcon
                                     className={cn(
                                         "ml-auto h-4 w-4",
-                                        itemValue(language) === field.value
+                                        itemValue(opt) === field.value
                                             ? "opacity-100"
                                             : "opacity-0"
                                     )}

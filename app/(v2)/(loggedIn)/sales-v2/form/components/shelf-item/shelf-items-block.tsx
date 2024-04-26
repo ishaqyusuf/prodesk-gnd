@@ -29,6 +29,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
 import ShelfItemModal from "../modals/shelf-item-modal";
 import { toast } from "sonner";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 // import { ArrowDown } from "lucide-react";
 
 interface Props {
@@ -193,12 +194,12 @@ function ShellProductCells({
                 <ShelfSelect
                     control={shelf.categoryForm.control}
                     keyName={`${shelf.shelfItemKey}.productArray.${index}.item.productId`}
-                    onValueChange={(field, v) => {
-                        const productId = Number(v) || null;
-                        field.onChange(productId);
+                    onValueChange={(productId) => {
+                        // const productId = Number(v) || null;
+                        // f.onChange(productId);
                         shelf.productSelected(productId, index);
                     }}
-                    defaultValue={f.item?.productId}
+                    defaultValue={f.id}
                     placeholder={"Select Product"}
                     items={shelf.products?.map(
                         ({ title: label, id: value }) => ({
@@ -300,10 +301,10 @@ function ShelfCategory({ index, shelf, field }: ShelfCategoryProps) {
                 control={shelf.categoryForm.control}
                 keyName={`ids.${index}.id`}
                 defaultValue={field.id}
-                onValueChange={(field, v) => {
-                    const value = Number(v) || null;
-                    field.onChange(value);
-                    shelf.categorySelected(index, value);
+                onValueChange={(v) => {
+                    // const value = Number(v) || null;
+                    // field.onChange(value);
+                    shelf.categorySelected(index, v);
                     shelf.clearEstimates();
                 }}
                 placeholder={"Category"}
@@ -331,6 +332,20 @@ function ShelfSelect({
     items,
     defaultValue,
 }: ShelfSelectProps) {
+    return (
+        <ControlledSelect
+            control={control}
+            name={keyName}
+            options={items}
+            type="combo"
+            titleKey={"label"}
+            valueKey="value"
+            transformValue={(v) => (v ? Number(v) : null)}
+            onSelect={(value) => {
+                onValueChange(value);
+            }}
+        />
+    );
     return (
         <FormField
             control={control}
