@@ -58,7 +58,7 @@ export async function getEmailData(id, type: EmailTypes) {
                 data = { ...resp };
             }
             break;
-        case "estimate":
+        case "quote":
             let _resp = await prisma.salesOrders.findFirst({
                 where: {
                     id,
