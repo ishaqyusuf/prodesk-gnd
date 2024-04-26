@@ -15,7 +15,6 @@ import {
 import useDykeItem, { IDykeItemFormContext } from "../_hooks/use-dyke-item";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { FormStepArray } from "../../type";
 import { _deleteDykeItem } from "../_action/delete-item";
 
 interface Props {
@@ -33,6 +32,8 @@ export function DykeItemFormSection({ rowIndex }: Props) {
     } as IDykeItemFormContext;
     async function deleteSection() {
         const itemData = item.get.data();
+        console.log(itemData);
+
         await _deleteDykeItem(itemData?.item?.id);
         dykeCtx.itemArray.remove(rowIndex);
     }

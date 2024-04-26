@@ -43,9 +43,9 @@ export default function AuthGuard({
         setVisible(_visible);
         if (!_visible) {
             console.log("REDIRECTED!!!");
-            // redirect("/");
+            redirect("/");
         }
-        console.log("____||}}}}");
+        // console.log("____||}}}}");
     }, []);
 
     return <div className={cn(className)}>{visible && children}</div>;
