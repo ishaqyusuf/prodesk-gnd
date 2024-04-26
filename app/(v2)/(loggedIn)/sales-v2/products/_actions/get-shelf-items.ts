@@ -22,7 +22,12 @@ export async function getShelfItems(query: QueryProps) {
             include: {
                 category: true,
             },
+            orderBy: {
+                createdAt: "desc",
+            },
         });
+        // console.log(data);
+
         return {
             data,
             pageCount,

@@ -9,6 +9,7 @@ import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
 import AuthGuard from "@/components/_v1/auth-guard";
+import { ISalesType } from "@/types/sales";
 
 export const metadata: Metadata = {
     title: "Sales Overview",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
-    const [type, slug] = typeAndSlug;
+    const [type, slug]: [ISalesType, string] = typeAndSlug;
 
     const data = getSalesOverview({ type, slug });
 
@@ -28,6 +29,7 @@ export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
                     <BreadLink title="Orders" link="/sales/orders" />
                 </Breadcrumbs>
                 <OverviewShell data={data} />
+                {/*  */}
                 <SalesProductionModal />
                 <SalesTimelineModal />
                 <SalesPaymentModal />

@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db";
 import {
-    IOrderType,
+    ISalesType,
     ISalesOrderItemMeta,
     ISalesOrderMeta,
 } from "@/types/sales";
@@ -14,7 +14,7 @@ export async function getSalesOverview({
     dyke,
 }: {
     slug: string;
-    type: IOrderType;
+    type: ISalesType;
     dyke?: boolean;
 }) {
     const order = await viewSale(type, slug);
@@ -22,7 +22,7 @@ export async function getSalesOverview({
     const salesItems = composeSalesItems(order);
     const resp = {
         ...order,
-        type: order.type as IOrderType,
+        type: order.type as ISalesType,
         ...salesItems,
     };
     return resp;
@@ -80,7 +80,6 @@ export async function viewSale(type, slug) {
         meta: order.meta as any as ISalesOrderMeta,
         items: order.items.map((item) => {
             // console.log(item.meta);
-
             return {
                 ...item,
                 meta: item.meta as any as ISalesOrderItemMeta,

@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 import { authOptions } from "@/lib/auth-options";
 import { ISalesSettingMeta, PostTypes } from "@/types/post";
-import { IOrderType, ISalesOrder } from "@/types/sales";
+import { ISalesType, ISalesOrder } from "@/types/sales";
 import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 export interface ICreateOrderFormQuery {
     customerId?;
     addressId?;
-    type?: IOrderType;
+    type?: ISalesType;
     salesRep?;
     orderId?;
     salesRepId?;

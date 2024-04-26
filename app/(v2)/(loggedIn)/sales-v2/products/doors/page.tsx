@@ -3,7 +3,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import DykeTabLayout from "../_components/dyke-tab-layout";
 import { Metadata } from "next";
 import { Shell } from "@/components/shell";
-import ShelfItemsTable from "../_components/shelf-items-table";
+import ShelfItemsTable from "../shelf-items/_components/shelf-items-table";
 import { SearchParams } from "@/types";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getShelfItems } from "../_actions/get-shelf-items";

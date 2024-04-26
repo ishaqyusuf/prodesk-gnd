@@ -115,7 +115,7 @@ export default function useDataTableColumn<T>(
                 checkable && checkBox.column,
                 props?.sn && SnCol,
                 ...cells(ctx),
-                ...(props?.filterCells?.map((fs) => {
+                ...((props?.filterCells || [])?.map((fs) => {
                     return {
                         accessorKey: fs,
                         enableHiding: false,

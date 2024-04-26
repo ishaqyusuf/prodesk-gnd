@@ -20,7 +20,7 @@ export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
-export type IOrderType = "order" | "quote";
+export type ISalesType = "order" | "quote";
 export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
 
 export interface IBackOrderForm {
@@ -44,7 +44,7 @@ export type ISalesOrder = OmitMeta<SalesOrders> & {
     payments: ISalesPayment[] | undefined;
     prodStatus: ProdStatus;
     productions: OrderProductionSubmissions[];
-    type: IOrderType;
+    type: ISalesType;
     meta: ISalesOrderMeta;
     pickup: ISalesPickup;
     ctx: {
@@ -214,7 +214,7 @@ export interface SalesQueryParams extends BaseQuery {
     _payment?: "Paid" | "Part" | "Pending";
     prodId?;
     _page?: "production" | undefined;
-    type?: IOrderType;
+    type?: ISalesType;
     _dateType?: "createdAt" | "prodDueDate";
     deliveryOption?: DeliveryOption;
     _salesRepId?;

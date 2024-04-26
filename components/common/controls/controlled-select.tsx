@@ -139,7 +139,7 @@ export default function ControlledSelect<
         />
     );
 }
-function ControlledCombox({
+export function ControlledCombox({
     field,
     placeholder,
     onSelect,

@@ -1,15 +1,16 @@
 "use client";
 import { PromiseDataTable } from "@/types";
-import { getShelfItems } from "../_actions/get-shelf-items";
+import { getShelfItems } from "../../_actions/get-shelf-items";
 import React from "react";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { TableCol } from "@/components/common/data-table/table-cells";
-import { deleteDykeShelfItem } from "../_actions/delete-shelf-item-action";
-import { useModal } from "@/components/common/modal-old/provider";
+import { deleteDykeShelfItem } from "../../_actions/delete-shelf-item-action";
 
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
-import { getShelfCategories } from "../_actions/get-shelf-categories";
+import { getShelfCategories } from "../../_actions/get-shelf-categories";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
+import { useModal } from "@/components/common/modal/provider";
+import ShelfItemFormModal from "../_shelf-item-form-modal";
 
 type Promise = PromiseDataTable<typeof getShelfItems>;
 export type ShelfItem = Awaited<Promise>["data"][0];
@@ -20,6 +21,7 @@ interface Props<T> {
 
 export default function ShelfItemsTable<T>({ promise }: Props<T>) {
     const { data, pageCount } = React.use(promise);
+    // console.log(data.length);
 
     const table = useDataTableColumn(
         data,
@@ -41,16 +43,27 @@ export default function ShelfItemsTable<T>({ promise }: Props<T>) {
             )),
             ctx.ActionColumn(({ item }) => (
                 <>
-                    <TableCol.Btn icon="edit" onClick={(e) => {}} />
+                    <TableCol.Btn
+                        icon="edit"
+                        onClick={(e) => {
+                            modal?.openModal(
+                                <ShelfItemFormModal data={item as any} />
+                            );
+                        }}
+                    />
                     <TableCol.DeleteRow
                         action={deleteDykeShelfItem}
                         data={item}
                     />
                 </>
             )),
-            ...ctx.queryFields("_q", "_categoryId"),
+            // ...ctx.queryFields("_q", "_categoryId"),
         ],
-        true
+        true,
+        {
+            sn: true,
+            filterCells: ["_q"],
+        }
     );
     const modal = useModal();
     return (
@@ -87,7 +100,11 @@ export default function ShelfItemsTable<T>({ promise }: Props<T>) {
             )}
             Toolbar={({ table }) => (
                 <>
-                    <TableCol.NewBtn onClick={() => {}} />
+                    <TableCol.NewBtn
+                        onClick={() => {
+                            modal?.openModal(<ShelfItemFormModal />);
+                        }}
+                    />
                 </>
             )}
         />

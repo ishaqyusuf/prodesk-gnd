@@ -12,7 +12,7 @@ import { TableApiResponse } from "@/types/action";
 import {
     CopyOrderActionProps,
     IOrderPrintMode,
-    IOrderType,
+    ISalesType,
     ISalesOrder,
     ISalesOrderItem,
     ISalesOrderItemMeta,
@@ -463,7 +463,7 @@ export async function salesPrintAction({
     });
     return sales;
 }
-export async function moveSales(id, type: IOrderType) {
+export async function moveSales(id, type: ISalesType) {
     const order = await prisma.salesOrders.update({
         where: {
             id,

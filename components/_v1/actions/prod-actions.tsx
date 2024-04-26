@@ -1,6 +1,6 @@
 "use client";
 
-import { IOrderType, ISalesOrder } from "@/types/sales";
+import { ISalesType, ISalesOrder } from "@/types/sales";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,7 +19,7 @@ export interface IOrderRowProps {
     row: ISalesOrder;
     viewMode?: Boolean;
     estimate?: Boolean;
-    print?(mode: IOrderType | "production");
+    print?(mode: ISalesType | "production");
     myProd?: Boolean;
 }
 export function ProdActions(props: IOrderRowProps) {

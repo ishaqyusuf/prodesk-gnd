@@ -3,7 +3,7 @@
 import { copyOrderAction, moveSales } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
 import { closeModal, openEmailComposer, openModal } from "../modal";
-import { ISalesOrder, IOrderType, IOrderPrintMode } from "@/types/sales";
+import { ISalesOrder, ISalesType, IOrderPrintMode } from "@/types/sales";
 import {
     adminCompleteProductionAction,
     cancelProductionAssignmentAction,
@@ -17,7 +17,7 @@ import { dispatchSlice } from "@/store/slicers";
 import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export const sales = {
-    async move(order, to: IOrderType, router?) {
+    async move(order, to: ISalesType, router?) {
         await moveSales(order.id, to);
         toast.message(
             to == "quote" ? "Order moved to quote" : "Quote moved to order"
@@ -25,7 +25,7 @@ export const sales = {
         router?.push(`/sales/${to}/${order.orderId}`);
         closeModal();
     },
-    async copy(order, as: IOrderType = "order") {
+    async copy(order, as: ISalesType = "order") {
         const _ = await copyOrderAction({
             orderId: order.orderId,
             as,

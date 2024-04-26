@@ -1,6 +1,6 @@
 "use client";
 
-import { IOrderPrintMode, IOrderType, ISalesOrder } from "@/types/sales";
+import { IOrderPrintMode, ISalesType, ISalesOrder } from "@/types/sales";
 
 import { Copy, FileText, Pen, Printer, View } from "lucide-react";
 import { typedMemo } from "@/lib/hocs/typed-memo";
@@ -34,7 +34,7 @@ export interface IOrderRowProps {
     row: ISalesOrder;
     viewMode?: Boolean;
     estimate?: Boolean;
-    print?(mode: IOrderType | "production");
+    print?(mode: ISalesType | "production");
     myProd?: Boolean;
 }
 export function OrderRowAction(props: IOrderRowProps) {
@@ -310,7 +310,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const router = useRouter();
 
     const _copyOrder = useCallback(
-        async (as: IOrderType = "order") => {
+        async (as: ISalesType = "order") => {
             startTransition(async () => {
                 const _ = await copyOrderAction({
                     orderId: props.row.orderId,

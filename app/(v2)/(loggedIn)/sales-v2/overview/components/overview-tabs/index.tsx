@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useDataPage } from "@/lib/data-page-context";
 import { SalesOverviewType } from "../overview-shell";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SalesOverviewDykeInvoiceTab } from "./dyke-doors-sales-overview-tab";
 import { Badge } from "@/components/ui/badge";
 import { ShelfItemsSalesOverviewTab } from "./shelf-items-sales-overview-tab";

@@ -3,11 +3,11 @@
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
-import { IOrderType } from "@/types/sales";
+import { ISalesType } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 
 export interface SalesQueryParams extends BaseQuery {
-    type: IOrderType;
+    type: ISalesType;
 }
 export async function getSalesAction(query: SalesQueryParams) {
     return prisma.$transaction(async (tx) => {

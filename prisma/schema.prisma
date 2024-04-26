@@ -37,7 +37,7 @@ model AddressBooks {
     phoneNo        String?       @db.VarChar(255)
     phoneNo2       String?       @db.VarChar(255)
     meta           Json?         @db.Json
-    createdAt      DateTime?     @db.Timestamp(0)
+    createdAt      DateTime?     @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?     @updatedAt
     deletedAt      DateTime?
     customer       Customers?    @relation(fields: [customerId], references: [id], name: "addressBooks", onDelete: Cascade)
@@ -54,7 +54,7 @@ model ErrorLog {
     meta      Json           @db.Json
     status    String
     deletedAt DateTime?      @db.Timestamp(0)
-    createdAt DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @default(now()) @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
     Users     Users          @relation(fields: [userId], references: [id])
     tags      ErrorLogTags[]
@@ -81,7 +81,7 @@ model Builders {
     slug          String?         @db.VarChar(255)
     meta          Json?           @db.Json
     deletedAt     DateTime?       @db.Timestamp(0)
-    createdAt     DateTime?       @db.Timestamp(0)
+    createdAt     DateTime?       @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?       @updatedAt
     projects      Projects[]
     homeTemplates HomeTemplates[]
@@ -99,7 +99,7 @@ model CostCharts {
     startDate DateTime       @default(now()) @db.Timestamp(0)
     endDate   DateTime?      @db.Timestamp(0)
     deletedAt DateTime?      @db.Timestamp(0)
-    createdAt DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @default(now()) @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
     template  HomeTemplates? @relation(fields: [parentId], references: [id])
 }
@@ -111,7 +111,7 @@ model CommunityModels {
     pivotId   Int?
     modelName String    @db.VarChar(255)
     meta      Json?     @db.Json
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
     deletedAt DateTime? @db.Timestamp(0)
 
@@ -127,7 +127,7 @@ model CommunityTemplateHistory {
     id                Int              @unique @default(autoincrement())
     userId            Int
     meta              Json?            @db.Json
-    createdAt         DateTime?        @db.Timestamp(0)
+    createdAt         DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?        @updatedAt
     deletedAt         DateTime?        @db.Timestamp(0)
     model             CommunityModels? @relation(fields: [communityModelsId], references: [id])
@@ -140,7 +140,7 @@ model CommunityModelPivot {
     model           String               @db.VarChar(255)
     projectId       Int
     meta            Json?                @db.Json
-    createdAt       DateTime?            @db.Timestamp(0)
+    createdAt       DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt       DateTime?            @updatedAt
     deletedAt       DateTime?            @db.Timestamp(0)
     communityModels CommunityModels[]
@@ -158,7 +158,7 @@ model CommunityModelCost {
     meta             Json?                @db.Json
     startDate        DateTime             @default(now()) @db.Timestamp(0)
     endDate          DateTime?            @db.Timestamp(0)
-    createdAt        DateTime?            @db.Timestamp(0)
+    createdAt        DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?            @updatedAt
     deletedAt        DateTime?            @db.Timestamp(0)
     community        CommunityModels?     @relation(fields: [communityModelId], references: [id])
@@ -180,7 +180,7 @@ model Customers {
     address        String?         @db.Text
     meta           Json?           @db.Json
     deletedAt      DateTime?       @db.Timestamp(0)
-    createdAt      DateTime?       @db.Timestamp(0)
+    createdAt      DateTime?       @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?       @updatedAt
     salesOrders    SalesOrders[]
     profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
@@ -198,7 +198,7 @@ model CustomerWallet {
     meta         Json?                 @db.Json
     customer     Customers             @relation(fields: [id], references: [walletId], onDelete: Cascade)
     transactions CustomerTransaction[]
-    createdAt    DateTime?             @db.Timestamp(0)
+    createdAt    DateTime?             @default(now()) @db.Timestamp(0)
     updatedAt    DateTime?             @updatedAt
     deletedAt    DateTime?             @db.Timestamp(0)
 }
@@ -210,7 +210,7 @@ model CustomerTransaction {
     walletId      Int
     description   String?         @db.LongText
     meta          Json?           @db.Json
-    createdAt     DateTime?       @db.Timestamp(0)
+    createdAt     DateTime?       @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?       @updatedAt
     deletedAt     DateTime?       @db.Timestamp(0)
     wallet        CustomerWallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
@@ -225,7 +225,7 @@ model CustomerTypes {
     defaultProfile Boolean?
     meta           Json?     @db.Json
     deletedAt      DateTime? @db.Timestamp(0)
-    createdAt      DateTime? @db.Timestamp(0)
+    createdAt      DateTime? @default(now()) @db.Timestamp(0)
     updatedAt      DateTime? @updatedAt
 
     customers Customers[]
@@ -253,7 +253,7 @@ model Homes {
     sentToProdAt        DateTime?        @db.Timestamp(0)
     installedAt         DateTime?        @db.Timestamp(0)
     deletedAt           DateTime?        @db.Timestamp(0)
-    createdAt           DateTime?        @db.Timestamp(0)
+    createdAt           DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt           DateTime?        @updatedAt
     search              String?          @db.VarChar(255)
     punchoutAt          DateTime?        @db.Timestamp(0)
@@ -303,7 +303,7 @@ model HomeTasks {
     productionStatusDate DateTime? @db.Timestamp(0)
     productionDueDate    DateTime? @db.Timestamp(0)
     deletedAt            DateTime? @db.Timestamp(0)
-    createdAt            DateTime? @db.Timestamp(0)
+    createdAt            DateTime? @default(now()) @db.Timestamp(0)
     updatedAt            DateTime? @updatedAt
     home                 Homes?    @relation(fields: [homeId], references: [id])
     project              Projects? @relation(fields: [projectId], references: [id])
@@ -323,7 +323,7 @@ model HomeTemplates {
     modelName String?      @db.VarChar(255)
     meta      Json?        @db.Json
     deletedAt DateTime?    @db.Timestamp(0)
-    createdAt DateTime?    @db.Timestamp(0)
+    createdAt DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt DateTime?    @updatedAt
     builder   Builders?    @relation(fields: [builderId], references: [id])
     homes     Homes[]
@@ -345,7 +345,7 @@ model SalesItemSupply {
     putAwayBy        Int?
     putawayAt        DateTime?        @db.Timestamp(0)
     deletedAt        DateTime?        @db.Timestamp(0)
-    createdAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?        @updatedAt
     unitCost         Float?
     totalCost        Float?
@@ -361,7 +361,7 @@ model Inventories {
     productVariantId Int
     meta             Json?     @db.Json
     deletedAt        DateTime? @db.Timestamp(0)
-    createdAt        DateTime? @db.Timestamp(0)
+    createdAt        DateTime? @default(now()) @db.Timestamp(0)
     updatedAt        DateTime? @updatedAt
 }
 
@@ -377,7 +377,7 @@ model OrderInventory {
     // product          OrderInventory?  @relation(name: "ParentChild", fields: [orderInventoryId], references: [id])
     components       OrderInventory[] @relation(name: "components")
     product          OrderInventory?  @relation(name: "components", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    createdAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @default(now()) @db.Timestamp(0)
     deletedAt        DateTime?        @db.Timestamp(0)
     updatedAt        DateTime?        @updatedAt
     orderInventoryId Int?
@@ -394,7 +394,7 @@ model InventoryProducts {
     weight            Float?
     meta              Json?             @db.Json
     deletedAt         DateTime?         @db.Timestamp(0)
-    createdAt         DateTime?         @db.Timestamp(0)
+    createdAt         DateTime?         @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?         @updatedAt
     priceUpdateAt     String?           @db.VarChar(255)
     type              String?           @db.VarChar(255)
@@ -425,7 +425,7 @@ model Invoices {
     taskName  String?   @db.VarChar(255)
     meta      Json?     @db.Json
     deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
     taskUid   String?   @db.VarChar(255)
     checkDate DateTime? @db.Timestamp(0)
@@ -446,7 +446,7 @@ model MailGrids {
     meta      Json?     @db.Json
     status    String    @db.VarChar(255)
     deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
     slug      String?   @db.VarChar(255)
     type      String?   @db.VarChar(255)
@@ -464,7 +464,7 @@ model Inbox {
     body      String    @db.Text()
     meta      Json?     @db.Json
     sentAt    DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     sender    Users     @relation(fields: [senderId], references: [id])
 }
 
@@ -506,7 +506,7 @@ model OrderProductionSubmissions {
     salesOrderItemId Int?
     qty              Int
     deletedAt        DateTime?        @db.Timestamp(0)
-    createdAt        DateTime?        @db.Timestamp(0)
+    createdAt        DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?        @updatedAt
     meta             Json?            @db.Json
     order            SalesOrders?     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
@@ -519,14 +519,14 @@ model PasswordResets {
     email     String    @db.VarChar(255)
     token     String    @db.VarChar(255)
     usedAt    DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Permissions {
     id                    Int                   @unique @default(autoincrement())
     name                  String                @db.VarChar(255)
-    createdAt             DateTime?             @db.Timestamp(0)
+    createdAt             DateTime?             @default(now()) @db.Timestamp(0)
     updatedAt             DateTime?             @updatedAt
     deletedAt             DateTime?             @db.Timestamp(0)
     model_has_permissions ModelHasPermissions[]
@@ -546,7 +546,7 @@ model Posts {
     status    String?   @db.VarChar(255)
     parentId  Int?
     deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
 }
 
@@ -555,7 +555,7 @@ model Settings {
     type      String    @db.VarChar(255)
     meta      Json?     @db.Json
     deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
 }
 
@@ -564,7 +564,7 @@ model ProductCategories {
     id         Int       @unique @default(autoincrement())
     productId  Int
     categoryId Int
-    createdAt  DateTime? @db.Timestamp(0)
+    createdAt  DateTime? @default(now()) @db.Timestamp(0)
     updatedAt  DateTime? @updatedAt
     deletedAt  DateTime? @db.Timestamp(0)
 }
@@ -590,7 +590,7 @@ model Products {
     priceType   String?   @db.VarChar(255)
     meta        Json?     @db.Json
     deletedAt   DateTime? @db.Timestamp(0)
-    createdAt   DateTime? @db.Timestamp(0)
+    createdAt   DateTime? @default(now()) @db.Timestamp(0)
     updatedAt   DateTime? @updatedAt
 }
 
@@ -599,7 +599,7 @@ model Products {
 //     id        Int       @unique @default(autoincrement())
 //     productId Int
 //     tagId     Int
-//     createdAt DateTime? @db.Timestamp(0)
+//     createdAt    DateTime?         @default(now())    @db.Timestamp(0)
 //     updatedAt DateTime? @updatedAt
 // }
 
@@ -612,7 +612,7 @@ model ProductVariants {
     description       String?           @db.VarChar(255)
     meta              Json?             @db.Json
     deletedAt         DateTime?         @db.Timestamp(0)
-    createdAt         DateTime?         @db.Timestamp(0)
+    createdAt         DateTime?         @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?         @updatedAt
     slug              String            @db.VarChar(255)
     title             String?           @db.VarChar(255)
@@ -643,7 +643,7 @@ model Progress {
     description      String?   @db.Text
     meta             Json?     @db.Json
     deletedAt        DateTime? @db.Timestamp(0)
-    createdAt        DateTime? @db.Timestamp(0)
+    createdAt        DateTime? @default(now()) @db.Timestamp(0)
     updatedAt        DateTime? @updatedAt
 }
 
@@ -658,7 +658,7 @@ model Projects {
     meta            Json?             @db.Json
     refNo           String?           @db.VarChar(255)
     deletedAt       DateTime?         @db.Timestamp(0)
-    createdAt       DateTime?         @db.Timestamp(0)
+    createdAt       DateTime?         @default(now()) @db.Timestamp(0)
     updatedAt       DateTime?         @updatedAt
     homes           Homes[]
     builder         Builders?         @relation(fields: [builderId], references: [id])
@@ -683,7 +683,7 @@ model RoleHasPermissions {
 model Roles {
     id                 Int                  @unique @default(autoincrement())
     name               String               @db.VarChar(255)
-    createdAt          DateTime?            @db.Timestamp(0)
+    createdAt          DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt          DateTime?            @updatedAt
     deletedAt          DateTime?            @db.Timestamp(0)
     ModelHasRoles      ModelHasRoles[]
@@ -706,7 +706,7 @@ model SalesInvoiceItems {
     tax             Float?
     meta            Json?     @db.Json
     deletedAt       DateTime? @db.Timestamp(0)
-    createdAt       DateTime? @db.Timestamp(0)
+    createdAt       DateTime? @default(now()) @db.Timestamp(0)
     updatedAt       DateTime? @updatedAt
 }
 
@@ -723,7 +723,7 @@ model SalesInvoices {
     taxPercentage   Float?
     meta            Json?     @db.Json
     deletedAt       DateTime? @db.Timestamp(0)
-    createdAt       DateTime? @db.Timestamp(0)
+    createdAt       DateTime? @default(now()) @db.Timestamp(0)
     updatedAt       DateTime? @updatedAt
 }
 
@@ -734,7 +734,7 @@ model SalesJobs {
     salesOrderId Int
     meta         Json?     @db.Json
     status       String    @db.VarChar(255)
-    createdAt    DateTime? @db.Timestamp(0)
+    createdAt    DateTime? @default(now()) @db.Timestamp(0)
     updatedAt    DateTime? @updatedAt
     deletedAt    DateTime? @db.Timestamp(0)
 }
@@ -750,7 +750,7 @@ model SalesJobs {
 //     cost             Float?
 //     qty              Float?
 //     total            Float?
-//     createdAt        DateTime?        @db.Timestamp(0)
+//     createdAt    DateTime?         @default(now())    @db.Timestamp(0)
 //     updatedAt DateTime? @updatedAt
 //     deletedAt        DateTime?        @db.Timestamp(0)
 //     salesOrder       SalesOrders?     @relation(fields: [salesOrderId], references: [id])
@@ -767,7 +767,7 @@ model DykeSalesShelfItem {
     unitPrice        Int?
     totalPrice       Int?
     meta             Json?                @db.Json
-    createdAt        DateTime?            @db.Timestamp(0)
+    createdAt        DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?            @updatedAt
     deletedAt        DateTime?            @db.Timestamp(0)
     salesOrderItem   SalesOrderItems?     @relation(fields: [salesOrderItemId], references: [id])
@@ -787,7 +787,7 @@ model SalesOrderProducts {
     productId        Int?
     status           String    @db.VarChar(255)
     deletedAt        DateTime? @db.Timestamp(0)
-    createdAt        DateTime? @db.Timestamp(0)
+    createdAt        DateTime? @default(now()) @db.Timestamp(0)
     updatedAt        DateTime? @updatedAt
 }
 
@@ -800,7 +800,7 @@ model SalesCommision {
     commissionPaymentId Int?
     status              String             @db.VarChar(255)
     deletedAt           DateTime?          @db.Timestamp(0)
-    createdAt           DateTime?          @db.Timestamp(0)
+    createdAt           DateTime?          @default(now()) @db.Timestamp(0)
     updatedAt           DateTime?          @updatedAt
     order               SalesOrders        @relation(fields: [orderId], references: [id])
     user                Users              @relation(fields: [userId], references: [id])
@@ -817,7 +817,7 @@ model CommissionPayment {
     paymentMethod String?
     meta          Json?            @db.Json
     deletedAt     DateTime?        @db.Timestamp(0)
-    createdAt     DateTime?        @db.Timestamp(0)
+    createdAt     DateTime?        @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?        @updatedAt
     commissions   SalesCommision[]
     user          Users?           @relation(name: "worker", fields: [userId], references: [id])
@@ -843,7 +843,7 @@ model SalesOrders {
     status            String                       @db.VarChar(255)
     inventoryStatus   String?                      @db.VarChar(255)
     deletedAt         DateTime?                    @db.Timestamp(0)
-    createdAt         DateTime?                    @db.Timestamp(0)
+    createdAt         DateTime?                    @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?                    @updatedAt
     orderId           String                       @unique @db.VarChar(255)
     slug              String                       @db.VarChar(255)
@@ -898,7 +898,7 @@ model SalesOrderItems {
     discount           Float?
     discountPercentage Float?
     meta               Json?                        @db.Json
-    createdAt          DateTime?                    @db.Timestamp(0)
+    createdAt          DateTime?                    @default(now()) @db.Timestamp(0)
     updatedAt          DateTime?                    @updatedAt
     deletedAt          DateTime?                    @db.Timestamp(0)
     qty                Float?
@@ -935,7 +935,7 @@ model OrderDeliveryProgress {
     orderId      Int             @unique
     order        SalesOrders     @relation(fields: [orderId], references: [id])
     deliveries   OrderDelivery[]
-    createdAt    DateTime        @default(now())
+    createdAt    DateTime?       @default(now()) @db.Timestamp(0)
     updatedAt    DateTime        @updatedAt
     deletedAt    DateTime?       @db.Timestamp(0)
 }
@@ -949,7 +949,7 @@ model OrderDelivery {
     driverId                Int?
     createdById             Int?
     meta                    Json?                  @db.Json
-    createdAt               DateTime               @default(now())
+    createdAt               DateTime?              @default(now()) @db.Timestamp(0)
     updatedAt               DateTime               @updatedAt
     deletedAt               DateTime?              @db.Timestamp(0)
     order                   SalesOrders            @relation(fields: [salesOrderId], references: [id])
@@ -966,7 +966,7 @@ model OrderItemDelivery {
     qty             Int             @default(0)
     pendingQty      Int             @default(0)
     meta            Json?           @db.Json
-    createdAt       DateTime        @default(now())
+    createdAt       DateTime?       @default(now()) @db.Timestamp(0)
     updatedAt       DateTime        @updatedAt
     deletedAt       DateTime?       @db.Timestamp(0)
     orderDeliveryId Int?
@@ -990,7 +990,7 @@ model HousePackageTools {
     totalDoors     Int?               @default(0)
     meta           Json?              @db.Json
     salesOrderId   Int
-    createdAt      DateTime?          @default(now())
+    createdAt      DateTime?          @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?          @updatedAt
     deletedAt      DateTime?          @db.Timestamp(0)
     order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
@@ -1018,7 +1018,7 @@ model DykeSalesDoors {
     lineTotal          Float?            @default(0)
     salesOrderItemId   Int?
     meta               Json?             @db.Json
-    createdAt          DateTime?         @db.Timestamp(0)
+    createdAt          DateTime?         @default(now()) @db.Timestamp(0)
     updatedAt          DateTime?         @updatedAt
     deletedAt          DateTime?         @db.Timestamp(0)
     housePackageTool   HousePackageTools @relation(fields: [housePackageToolId], references: [id])
@@ -1032,7 +1032,7 @@ model SalesPickup {
     pickupApprovedBy Int
     meta             Json?         @db.Json
     pickupAt         DateTime?     @db.Timestamp(0)
-    createdAt        DateTime?     @db.Timestamp(0)
+    createdAt        DateTime?     @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?     @updatedAt
     deletedAt        DateTime?     @db.Timestamp(0)
     sales            SalesOrders[]
@@ -1048,7 +1048,7 @@ model SalesPayments {
     amount        Float
     meta          Json?                @db.Json
     deletedAt     DateTime?            @db.Timestamp(0)
-    createdAt     DateTime?            @db.Timestamp(0)
+    createdAt     DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?            @updatedAt
     order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
     customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
@@ -1085,7 +1085,7 @@ model Jobs {
 
     // checkNo     String?      @db.VarChar(255)
     deletedAt DateTime?    @db.Timestamp(0)
-    createdAt DateTime?    @db.Timestamp(0)
+    createdAt DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt DateTime?    @updatedAt
     payment   JobPayments? @relation(fields: [paymentId], references: [id])
     home      Homes?       @relation(fields: [homeId], references: [id])
@@ -1107,7 +1107,7 @@ model JobPayments {
     checkNo       String?
     paymentMethod String?
     meta          Json?     @db.Json
-    createdAt     DateTime? @db.Timestamp(0)
+    createdAt     DateTime? @default(now()) @db.Timestamp(0)
     updatedAt     DateTime? @updatedAt
     deletedAt     DateTime? @db.Timestamp(0)
     jobs          Jobs[]
@@ -1120,7 +1120,7 @@ model EmployeeProfile {
     name      String
     discount  Int?
     meta      Json?     @db.Json
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     deletedAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
 
@@ -1134,7 +1134,7 @@ model UserDocuments {
     url         String
     userId      Int
     meta        Json?     @db.Json
-    createdAt   DateTime? @db.Timestamp(0)
+    createdAt   DateTime? @default(now()) @db.Timestamp(0)
     updatedAt   DateTime? @updatedAt
     deletedAt   DateTime? @db.Timestamp(0)
     user        Users?    @relation(fields: [userId], references: [id])
@@ -1154,7 +1154,7 @@ model Users {
     rememberToken              String?                    @db.VarChar(100)
     meta                       Json?                      @db.Json
     deletedAt                  DateTime?                  @db.Timestamp(0)
-    createdAt                  DateTime?                  @db.Timestamp(0)
+    createdAt                  DateTime?                  @default(now()) @db.Timestamp(0)
     updatedAt                  DateTime?                  @updatedAt
     employeeProfileId          Int?
     workOrders                 WorkOrders[]
@@ -1192,7 +1192,7 @@ model Users {
 //     value     String    @db.VarChar(255)
 //     meta      Json?     @db.Json
 //     deletedAt DateTime? @db.Timestamp(0)
-//     createdAt DateTime? @db.Timestamp(0)
+//     createdAt    DateTime?         @default(now())    @db.Timestamp(0)
 //     updatedAt DateTime? @updatedAt
 // }
 
@@ -1218,7 +1218,7 @@ model WorkOrders {
     assignedAt   DateTime? @db.Timestamp(0)
     completedAt  DateTime  @default(now()) @db.Timestamp(0)
     deletedAt    DateTime? @db.Timestamp(0)
-    createdAt    DateTime? @db.Timestamp(0)
+    createdAt    DateTime? @default(now()) @db.Timestamp(0)
     updatedAt    DateTime? @updatedAt
     tech         Users?    @relation(fields: [techId], references: [id])
 }
@@ -1235,7 +1235,7 @@ model Notifications {
     fromUser   Users     @relation(name: "fromUser", fields: [fromUserId], references: [id])
     seenAt     DateTime? @db.Timestamp(0)
     archivedAt DateTime? @db.Timestamp(0)
-    createdAt  DateTime? @db.Timestamp(0)
+    createdAt  DateTime? @default(now()) @db.Timestamp(0)
     updatedAt  DateTime? @updatedAt
     deletedAt  DateTime?
 
@@ -1253,7 +1253,7 @@ model DykeShelfCategories {
     products         DykeShelfProducts[]  @relation(name: "childCategory")
     groupedProducts  DykeShelfProducts[]  @relation(name: "parentCategory")
     shelfItems       DykeSalesShelfItem[]
-    createdAt        DateTime?            @db.Timestamp(0)
+    createdAt        DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?            @updatedAt
     deletedAt        DateTime?            @db.Timestamp(0)
 }
@@ -1266,7 +1266,7 @@ model DykeShelfProducts {
     parentCategoryId  Int?
     img               String?
     meta              Json?                @db.Json
-    createdAt         DateTime?            @db.Timestamp(0)
+    createdAt         DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?            @updatedAt
     deletedAt         DateTime?            @db.Timestamp(0)
     category          DykeShelfCategories? @relation(name: "childCategory", fields: [categoryId], references: [id])
@@ -1283,7 +1283,7 @@ model Cache {
     name      String
     group     String?
     meta      Json?     @db.Json
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     deletedAt DateTime? @db.Timestamp(0)
 }
 
@@ -1292,7 +1292,7 @@ model Payday {
     invoiceId Int?
     startedAt DateTime?      @db.Timestamp(0)
     endTime   DateTime?      @db.Timestamp(0)
-    createdAt DateTime?      @db.Timestamp(0)
+    createdAt DateTime?      @default(now()) @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
     deletedAt DateTime?      @db.Timestamp(0)
     invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
@@ -1301,7 +1301,7 @@ model Payday {
 model PaydayInvoice {
     id        Int       @unique @default(autoincrement())
     payments  Payday[]
-    createdAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
     deletedAt DateTime? @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
 }

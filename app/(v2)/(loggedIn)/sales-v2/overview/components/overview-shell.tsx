@@ -10,6 +10,7 @@ import CostBreakdown from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/c
 import PaymentHistory from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/payment-history";
 import Timeline from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/timeline";
 import OverviewTabs from "./overview-tabs";
+import SalesItemsOverview from "./sales-items-overview";
 
 export type SalesOverviewType = Awaited<ReturnType<typeof getSalesOverview>>;
 interface Props {
@@ -23,7 +24,8 @@ export default function OverviewShell({ data }: Props) {
             <div className="grid sm:grid-cols-3 gap-4 ">
                 <div className="sm:col-span-2 max-sm:divide-y flex flex-col space-y-4">
                     <DetailsSection />
-                    <OverviewTabs />
+                    {/* <OverviewTabs /> */}
+                    <SalesItemsOverview />
                     {/* <ItemDetailsSection /> */}
                     {/* <TabbedItemEmailOverview /> */}
                 </div>

@@ -39,6 +39,12 @@ export default function useDykeFormSaver(form) {
         };
         data.itemArray.map((item) => {
             let items: DykeForm["itemArray"] = [];
+            // if (!item?.multiComponent?.components) {
+            if (item.item.shelfItemArray.length) {
+                allItems.push(item);
+                return;
+            }
+            // }
             const components = Object.values(item.multiComponent.components);
             let parented =
                 components.find(

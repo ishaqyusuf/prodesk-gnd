@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { DykeItemFormContext, useDykeForm } from "./form-context";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CategorizedShelfItem } from "../../type";
+import { CategorizedShelfItem, IDykeShelfProducts } from "../../type";
 import { DykeShelfProducts } from "@prisma/client";
 import { getShelfProducts } from "../_action/get-shelf-products.actions";
 
@@ -133,6 +133,35 @@ export default function useShelfItem(shelfIndex) {
             return form.getValues(this.getProdFormKey(index, key));
         },
         products,
+        productUpdated(product: IDykeShelfProducts, prodIndex) {
+            setProducts((current) => {
+                const cIndex: any = current?.findIndex(
+                    (p) => p.id == product.id
+                );
+                const newData = [...((current || []) as any)];
+                if (cIndex > -1) newData[cIndex] = product;
+                else newData.push(product);
+                if (prodIndex != null) {
+                    console.log([prodIndex, product?.unitPrice]);
+
+                    const prodKey: any = `${configky}.productArray.${prodIndex}.item`;
+                    form.setValue(
+                        `${prodKey}.unitPrice` as any,
+                        product?.unitPrice
+                    );
+                    form.setValue(
+                        `${prodKey}.description` as any,
+                        product?.title
+                    );
+                    // const qty = form.getValues(`${prodKey}.qty` as any);
+                    // if(!qty)
+                    // form.setValue
+                    // form.setValue()
+                    this.updateProductPrice(prodIndex, product?.unitPrice);
+                }
+                return newData;
+            });
+        },
         async categorySelected(index, categoryId) {
             let removeIndices: number[] = [];
             for (let i = index + 1; i < catArray.fields.length; i++)

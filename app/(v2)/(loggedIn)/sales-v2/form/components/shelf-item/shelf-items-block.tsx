@@ -26,6 +26,9 @@ import { Input } from "@/components/ui/input";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { useModal } from "@/components/common/modal/provider";
+import ShelfItemModal from "../modals/shelf-item-modal";
+import { toast } from "sonner";
 // import { ArrowDown } from "lucide-react";
 
 interface Props {
@@ -53,8 +56,38 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
             // append({ cid: -1 });
         }
     }
-    if (!shelf.categoryForm) return <></>;
+    const modal = useModal();
+    function shelfItemForm(index?) {
+        const categoryIds = categories?.map((c) => c.id);
+        const generatedProd: any = shelf.prodArray.fields[index];
+        const prodId = generatedProd?.item?.id;
+        let prod = shelf.products?.find(
+            (p) => p.id == generatedProd?.item?.productId
+        );
+        if (!prod && index) {
+            toast.error("Something went wrong editing product");
+            return;
+        }
+        if (!prod)
+            prod = {
+                categoryId: categoryIds?.slice(-1)?.[0],
+                parentCategoryId: categoryIds?.[0],
+                meta: {
+                    categoryIds,
+                },
+            } as any;
 
+        // console.log({ index, categoryIds, prod, generatedProd })
+        modal.openModal(
+            <ShelfItemModal
+                onCreate={(prod) => shelf.productUpdated(prod, index)}
+                prod={prod}
+                categoryIds={categoryIds}
+            />
+        );
+        // shelf.prodArray.remove(index);
+    }
+    if (!shelf.categoryForm) return <></>;
     return (
         <Form {...categoryForm}>
             <TableRow>
@@ -85,6 +118,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                             {shelf.prodArray.fields.map(
                                 (prodField, prodIndex) => (
                                     <ShellProductCells
+                                        shelfItemForm={shelfItemForm}
                                         key={prodField.id}
                                         index={prodIndex}
                                         field={prodField}
@@ -92,7 +126,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                     />
                                 )
                             )}
-                            <div>
+                            <div className="flex gap-4">
                                 <Button
                                     onClick={() => {
                                         shelf.prodArray.append({
@@ -106,6 +140,16 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                 >
                                     <Icons.add className="w-4 h-4 mr-4" />
                                     Add Product
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        shelfItemForm();
+                                    }}
+                                    className="w-full mt-2"
+                                    size="sm"
+                                >
+                                    <Icons.add className="w-4 h-4 mr-4" />
+                                    Create
                                 </Button>
                             </div>
                         </>
@@ -130,12 +174,19 @@ interface ShellProductCells {
     shelf: IUseShelfItem;
     index;
     field?;
+    shelfItemForm;
 }
-function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
+function ShellProductCells({
+    shelf,
+    field: f,
+    index,
+    shelfItemForm,
+}: ShellProductCells) {
     const [unitPrice, totalPrice] = shelf.watchProductEstimate(index);
     // useEffect(() => {
     //     shelf.prodArray.update(index, {});
     // }, []);
+
     return (
         <div className="w-full flex items-center space-x-4">
             <div className="flex-1">
@@ -201,12 +252,20 @@ function ShellProductCells({ shelf, field: f, index }: ShellProductCells) {
             <div className="w-24 text-right">
                 <Money value={totalPrice} />
             </div>
-            <div className="w-12">
+            <div className="w-12 flex gap-2">
                 <Button
                     onClick={() => {
-                        shelf.prodArray.remove(index);
-                        // shelf.prodArray.
-                        // shelf.form.reset({});
+                        shelfItemForm(index);
+                    }}
+                    className="w-8 h-8"
+                    size="icon"
+                    variant="ghost"
+                >
+                    <Icons.edit className="w-4 h-4" />
+                </Button>
+                <Button
+                    onClick={() => {
+                        shelfItemForm(index);
                     }}
                     className="w-8 h-8"
                     size="icon"

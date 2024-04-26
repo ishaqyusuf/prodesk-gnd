@@ -1,6 +1,7 @@
 import {
     DykeSalesDoors,
     DykeSalesShelfItem,
+    DykeShelfProducts,
     DykeStepForm,
 } from "@prisma/client";
 import { getStepForm } from "./form/_action/get-dyke-step";
@@ -58,6 +59,15 @@ export interface CategorizedShelfItem {
 export interface ShelfItemMeta {
     categoryIds: number[];
 }
+export type IDykeShelfProducts = Omit<DykeShelfProducts, "meta"> & {
+    meta: ShelfItemMeta;
+};
+export type IDykeShelfProductsForm = IDykeShelfProducts & {
+    _meta: {
+        categories: { id: number }[];
+        parentCategoryId;
+    };
+};
 export interface DykeFormStepMeta {
     hidden?: boolean;
 }
