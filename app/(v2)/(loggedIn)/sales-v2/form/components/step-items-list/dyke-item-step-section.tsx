@@ -27,20 +27,10 @@ import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
-import Money from "@/components/_v1/money";
-import { timeout } from "@/lib/timeout";
-import { getDykeStepDoors } from "../../_action/get-dyke-step-doors";
-import { doorQueryBuilder } from "../../../_utils/door-query-builder";
 
-import SVG from "react-inlinesvg";
-import { useModal } from "@/components/common/modal-old/provider";
-import { Button } from "@/components/ui/button";
-import EditStepItemModal from "../modals/edit-step-item-modal";
-import { SaveStepProductExtra } from "../../_action/save-step-product";
 import LineItemSection from "../line-item-section/line-item-section";
 import { StepProducts } from "./item";
-import MultiComponentRender from "../multi-component";
-import HousePackageToolOld from "../house-package-tools/house-package-tool";
+import MultiComponentRender from "../multi-component-render";
 import HousePackageTool from "../house-package-tools";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;

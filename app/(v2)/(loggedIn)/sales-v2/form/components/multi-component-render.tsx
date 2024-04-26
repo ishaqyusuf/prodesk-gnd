@@ -20,9 +20,9 @@ export default function MultiComponentRender({ Render, line = false }) {
     }, []);
     if (mdf.ready)
         return (
-            <div className="flex flex-col h-[500px] overflow-auto">
+            <div className="flex flex-col">
                 {line ? (
-                    <>
+                    <div className="h-[300px] px-8 -mx-8 overflow-auto">
                         <Table>
                             <TableHeader>
                                 <TableHead>Moulding</TableHead>
@@ -39,7 +39,7 @@ export default function MultiComponentRender({ Render, line = false }) {
                                 ))}
                             </TableBody>
                         </Table>
-                    </>
+                    </div>
                 ) : (
                     <Tabs
                         defaultValue={mdf.currentTab}
@@ -65,7 +65,9 @@ export default function MultiComponentRender({ Render, line = false }) {
                         </TabsList>
                         {mdf.tabs?.map((tab, index) => (
                             <TabsContent value={tab.title} key={index}>
-                                <Render componentTitle={mdf.currentTab} />
+                                <div className="h-[300px] px-8 -mx-8 overflow-auto">
+                                    <Render componentTitle={tab.title} />
+                                </div>
                             </TabsContent>
                         ))}
                     </Tabs>

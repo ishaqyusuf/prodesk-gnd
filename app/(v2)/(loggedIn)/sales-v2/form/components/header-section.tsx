@@ -16,7 +16,7 @@ export default function HeaderSection({}) {
         <div className="flex justify-between items-center">
             <div className="">
                 <h2 className="text-2xl font-bold tracking-tight">
-                    {orderId && id && type == "order" ? "#ORD" : "#EST"}{" "}
+                    {orderId && id && type == "order" ? "SALES #:" : "QUOTE #:"}{" "}
                     {orderId || "New"}
                 </h2>
             </div>
