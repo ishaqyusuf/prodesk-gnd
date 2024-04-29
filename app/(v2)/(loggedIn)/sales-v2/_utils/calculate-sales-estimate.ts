@@ -8,17 +8,17 @@ export function calculateSalesEstimate(data: DykeForm) {
 
     data.itemArray.map((item) => {
         // item.item.rate = item.item.total = 0;
-        if (item.item?.housePackageTool?.doorType == "Moulding") {
-            // calculateLineItem(item);
-        } else {
-            // item.item.rate =
-            //     item.item.price =
-            //     item.item.qty =
-            //     item.item.total =
-            //         0;
-            // calculateHousePackageTool(item);
-            calculateShelfItems(item);
-        }
+        // if (item.item?.housePackageTool?.doorType == "Moulding") {
+        // calculateLineItem(item);
+        // } else {
+        // item.item.rate =
+        //     item.item.price =
+        //     item.item.qty =
+        //     item.item.total =
+        //         0;
+        // calculateHousePackageTool(item);
+        calculateShelfItems(item);
+        // }
 
         taxEstimateAndUpdateTotal(item, data);
         // console.log(item.item.total);
@@ -59,7 +59,7 @@ function taxEstimateAndUpdateTotal(
     formData.order.tax += tax;
 }
 function calculateShelfItems(item: DykeForm["itemArray"][0]) {
-    if (!item.item.housePackageTool?.doorType) {
+    if (item.item.shelfItemArray?.length) {
         let sum = {
             doors: 0,
             unitPrice: 0,

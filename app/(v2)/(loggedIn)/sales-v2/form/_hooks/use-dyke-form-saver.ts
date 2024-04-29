@@ -19,9 +19,21 @@ export default function useDykeFormSaver(form) {
         startTransition(async () => {
             // console.log(data.itemArray[0]?.item);
             // return;
-            const e = calculateSalesEstimate(initializeMultiComponents(data));
-            console.log(e);
-            console.log(e.itemArray.length);
+            const init = initializeMultiComponents(data);
+            console.log("INIT>", init);
+
+            const e = calculateSalesEstimate({
+                ...init,
+                itemArray: init.itemArray.map((_) => {
+                    const _item = { ..._ };
+                    const t = _item.item.formStepArray?.[0]?.item?.value;
+                    if (t == "Shelf Item") _item.item.shelfItemArray = [];
+                    return {
+                        ..._item,
+                    };
+                }),
+            });
+            console.log("SAVE FORM DATA", e);
 
             // return;
             const { order: resp, createHpts } = await saveDykeSales(e);

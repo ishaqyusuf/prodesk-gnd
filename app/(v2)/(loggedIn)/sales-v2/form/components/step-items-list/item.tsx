@@ -53,7 +53,7 @@ export function StepProducts({
                 item.get.getFormStepArray(),
                 item.get.doorType()
             );
-            // console.log(query);
+            console.log("QUERY>", query);
 
             const { result: prods } = await getDykeStepDoors(
                 { ...query, stepId: stepForm?.step?.id } as any
