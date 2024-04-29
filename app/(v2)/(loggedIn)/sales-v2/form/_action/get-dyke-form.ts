@@ -223,9 +223,9 @@ export async function getDykeFormAction(type, slug) {
                             return true;
                         return false;
                     });
-                    console.log(
-                        _comps.map((i) => i.housePackageTool.dykeDoorId)
-                    );
+                    // console.log(
+                    //     _comps.map((i) => i.housePackageTool.dykeDoorId)
+                    // );
 
                     _comps.map((item) => {
                         // console.log(item.housePackageTool?.door);
@@ -284,7 +284,7 @@ export async function getDykeFormAction(type, slug) {
                             };
                         }
                     });
-                    console.log(Object.keys(multiComponent.components));
+                    // console.log(Object.keys(multiComponent.components));
 
                     const rItem = {
                         opened: true,

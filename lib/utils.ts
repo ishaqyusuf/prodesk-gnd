@@ -390,7 +390,7 @@ export function ftToIn(h) {
     return `${+_in + +ft * 12}in`;
 }
 export function safeFormText(t) {
-    return t?.replaceAll(".", "_")?.replaceAll("'", "-");
+    return t?.replaceAll(".", "_")?.replaceAll("'", "-")?.replaceAll('"', "-");
 }
 
 export const math = {
