@@ -203,34 +203,32 @@ function getDoorsTable(
                                       { position: "left" },
                                       { position: "left" }
                                   ),
-                                  ...(
-                                      doorType == "Bifold"
-                                          ? [
-                                                _cell(
-                                                    "Qty",
-                                                    "qty",
-                                                    2,
-                                                    { position: "center" },
-                                                    { position: "center" }
-                                                ),
-                                            ]
-                                          : [
-                                                _cell(
-                                                    "Left Hand",
-                                                    "lhQty",
-                                                    2,
-                                                    { position: "center" },
-                                                    { position: "center" }
-                                                ),
-                                                _cell(
-                                                    "Right Hand",
-                                                    "rhQty",
-                                                    2,
-                                                    { position: "center" },
-                                                    { position: "center" }
-                                                ),
-                                            ],
-                                  ),
+                                  ...(doorType == "Bifold"
+                                      ? [
+                                            _cell(
+                                                "Qty",
+                                                "qty",
+                                                2,
+                                                { position: "center" },
+                                                { position: "center" }
+                                            ),
+                                        ]
+                                      : [
+                                            _cell(
+                                                "Left Hand",
+                                                "lhQty",
+                                                2,
+                                                { position: "center" },
+                                                { position: "center" }
+                                            ),
+                                            _cell(
+                                                "Right Hand",
+                                                "rhQty",
+                                                2,
+                                                { position: "center" },
+                                                { position: "center" }
+                                            ),
+                                        ]),
                               ]),
                     ],
                 };
@@ -263,7 +261,7 @@ function getDoorsTable(
                         : [
                               ...item.formSteps.filter(
                                   (t) =>
-                                      !["Door","Door Type", "Moulding"].some(
+                                      !["Door", "Door Type", "Moulding"].some(
                                           (s) => s == t.step.title
                                       )
                               ),
@@ -320,18 +318,22 @@ function getDoorsTable(
                         (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
                 );
                 console.log(_multies.length);
-                _multies.map((m,_) => {
-                    const getVal = (cell: Cell, door?: DykeSalesDoors,doorTitle?) => {
+                _multies.map((m, _) => {
+                    const getVal = (
+                        cell: Cell,
+                        door?: DykeSalesDoors,
+                        doorTitle?
+                    ) => {
                         switch (cell) {
                             case "qty":
                                 return m.qty;
                             case "door":
-                                return   doorTitle;
-                                // return item.formSteps.find(
-                                //     (s) => s.step.title == "Door"
-                                // )?.value;
+                                return doorTitle;
+                            // return item.formSteps.find(
+                            //     (s) => s.step.title == "Door"
+                            // )?.value;
                             case "dimension":
-                                return door?.dimension?.replaceAll("in",'"');
+                                return door?.dimension?.replaceAll("in", '"');
                             case "moulding":
                                 return m.housePackageTool?.molding?.title;
                             case "unitPrice":
@@ -374,9 +376,15 @@ function getDoorsTable(
                                     const ret = {
                                         style: cell.cellStyle,
                                         colSpan: cell.colSpan,
-                                        value: getVal(cell.cell, door,
-                                            _doorI > 0 ? "as-above":m.housePackageTool?.door?.title),
-                                    };  
+                                        value: getVal(
+                                            cell.cell,
+                                            door,
+                                            _doorI > 0
+                                                ? "as-above"
+                                                : m.housePackageTool?.door
+                                                      ?.title
+                                        ),
+                                    };
                                     return ret;
                                 })
                             );
