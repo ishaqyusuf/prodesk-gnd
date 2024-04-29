@@ -126,7 +126,7 @@ export interface ISalesOrderItemMeta {
     components: WizardKvForm;
     // housePackageTool: HousePackageTool;
     doorType:
-        | "Shelf Item"
+        | "Shelf Items"
         | "Interior"
         | "Exterior"
         | "Garage"

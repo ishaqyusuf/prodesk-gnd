@@ -120,9 +120,20 @@ function shelfItemsTable(
     if (!dt.items.length) return null;
     return dt;
 }
+type Cell =
+    | "door"
+    | "dimension"
+    | "lhQty"
+    | "rhQty"
+    | "qty"
+    | "unitPrice"
+    | "lineTotal"
+    | "description"
+    | "totalPrice"
+    | null;
 function _cell<T>(
     title,
-    cell: T | null,
+    cell: Cell,
     colSpan = 2,
     style?: PrintTextProps,
     cellStyle?: PrintTextProps
@@ -134,64 +145,9 @@ function getDoorsTable(
     data: PrintData
 ) {
     const price = !isProd && !isPacking;
-    type T = keyof DykeSalesDoors;
-    const res = {
-        cells: [
-            _cell("#", null, 1, { position: "center" }, { position: "center" }),
-            _cell(
-                "Door",
-                "door",
-                price ? 4 : isPacking ? 7 : 10,
-                { position: "left" },
-                { position: "left" }
-            ),
-            _cell(
-                "Size",
-                "dimension",
-                2,
-                { position: "left" },
-                { position: "left" }
-            ),
-            _cell(
-                "Left Hand",
-                "lhQty",
-                2,
-                { position: "center" },
-                { position: "center" }
-            ),
-            _cell(
-                "Right Hand",
-                "rhQty",
-                2,
-                { position: "center" },
-                { position: "center" }
-            ),
-        ],
-    };
-    if (price) {
-        res.cells.push(
-            ...[
-                _cell(
-                    "Rate",
-                    "unitPrice",
-                    3,
-                    { position: "right" },
-                    { position: "right" }
-                ),
-                _cell(
-                    "Total",
-                    "lineTotal",
-                    3,
-                    { position: "right" },
-                    { position: "right", font: "bold" }
-                ),
-            ]
-        );
-    }
-    if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
-    const dt = {
-        ...res,
 
+    const dt = {
+        // ...res,
         doors: data.order.items
             .filter((item) => item.housePackageTool)
             .filter(
@@ -199,9 +155,69 @@ function getDoorsTable(
                     !item.multiDykeUid || (item.multiDykeUid && item.multiDyke)
             )
             .map((item) => {
-                const doorType = item.housePackageTool
-                    ?.doorType as DykeDoorType;
+                const doorType = item.housePackageTool?.doorType;
                 const isMoulding = doorType == "Moulding";
+                const res = {
+                    cells: [
+                        _cell(
+                            "#",
+                            null,
+                            1,
+                            { position: "center" },
+                            { position: "center" }
+                        ),
+
+                        _cell(
+                            "Door",
+                            "door",
+                            price ? 4 : isPacking ? 7 : 10,
+                            { position: "left" },
+                            { position: "left" }
+                        ),
+                        _cell(
+                            "Size",
+                            "dimension",
+                            2,
+                            { position: "left" },
+                            { position: "left" }
+                        ),
+                        _cell(
+                            "Left Hand",
+                            "lhQty",
+                            2,
+                            { position: "center" },
+                            { position: "center" }
+                        ),
+                        _cell(
+                            "Right Hand",
+                            "rhQty",
+                            2,
+                            { position: "center" },
+                            { position: "center" }
+                        ),
+                    ],
+                };
+                if (price) {
+                    res.cells.push(
+                        ...[
+                            _cell(
+                                "Rate",
+                                "unitPrice",
+                                3,
+                                { position: "right" },
+                                { position: "right" }
+                            ),
+                            _cell(
+                                "Total",
+                                "lineTotal",
+                                3,
+                                { position: "right" },
+                                { position: "right", font: "bold" }
+                            ),
+                        ]
+                    );
+                }
+                if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
 
                 const details = [
                     ...item.formSteps.filter(
@@ -242,41 +258,95 @@ function getDoorsTable(
                     }
                 }
                 const isBifold = doorType == "Bifold";
-                const itemCells: NonNullable<typeof res.cells> = res.cells
+                const itemCells: NonNullable<typeof res.cells> = [...res.cells]
                     .map((c) => {
                         if (isBifold) {
                             if (c.title == "Right Hand") {
                                 return null;
                             }
-                            if (c.title == "Left Hand") c.title = "Qty";
+                            if (c.title == "Left Hand") {
+                                c.title = "Qty";
+                            }
                         }
                         return c;
                     })
                     .filter((c) => c != null) as any;
+                const lines: any = [];
+                const _multies = data.order.items.filter(
+                    (i) =>
+                        (!item.multiDyke && i.id == item.id) ||
+                        (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
+                );
+                console.log(_multies.length);
+                _multies.map((m) => {
+                    if (isMoulding) {
+                        lines.push(
+                            itemCells.map((cell, _i) => {
+                                const getVal = () => {
+                                    switch (cell.cell) {
+                                        case "qty":
+                                            return m.qty;
+                                        case "door":
+                                            return m.housePackageTool?.molding
+                                                ?.title;
+                                        case "unitPrice":
+                                            return m.rate;
+                                        case "lineTotal":
+                                        case "totalPrice":
+                                            return m.total;
+                                    }
+                                    return null;
+                                };
+                                const ret = {
+                                    style: cell.cellStyle,
+                                    colSpan: cell.colSpan,
+                                    value: getVal(),
+                                };
+
+                                if (_i == 0) ret.value = lines.length + 1;
+                                const currency = ["Rate", "Total"].includes(
+                                    cell.title
+                                );
+                                if (ret.value && currency) {
+                                    ret.value = formatCurrency.format(
+                                        ret.value as any
+                                    );
+                                }
+                                return ret;
+                            })
+                        );
+                    } else {
+                        lines.push();
+                    }
+                });
                 return {
                     doorType: item.housePackageTool?.doorType as DykeDoorType,
                     details: details,
                     itemCells,
-                    lines: (isMoulding
-                        ? []
-                        : item.housePackageTool?.doors
-                    )?.map((door, i) => {
-                        return itemCells.map((cell, _i) => {
-                            const ret = {
-                                style: cell.cellStyle,
-                                colSpan: cell.colSpan,
-                                value: door[cell.cell as any],
-                            };
-                            if (_i == 0) ret.value = i + 1;
-                            const currency = ["Rate", "Total"].includes(
-                                cell.title
-                            );
-                            if (ret.value && currency) {
-                                ret.value = formatCurrency.format(ret.value);
-                            }
-                            return ret;
-                        });
-                    }),
+                    lines: true
+                        ? lines
+                        : (isMoulding ? [] : item.housePackageTool?.doors)?.map(
+                              (door, i) => {
+                                  return itemCells.map((cell, _i) => {
+                                      const ret = {
+                                          style: cell.cellStyle,
+                                          colSpan: cell.colSpan,
+                                          value: door[cell.cell as any],
+                                      };
+                                      if (_i == 0) ret.value = i + 1;
+                                      const currency = [
+                                          "Rate",
+                                          "Total",
+                                      ].includes(cell.title);
+                                      if (ret.value && currency) {
+                                          ret.value = formatCurrency.format(
+                                              ret.value
+                                          );
+                                      }
+                                      return ret;
+                                  });
+                              }
+                          ),
                 };
             }),
     };

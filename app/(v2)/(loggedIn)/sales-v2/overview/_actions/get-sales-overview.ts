@@ -7,6 +7,7 @@ import {
     ISalesOrderMeta,
 } from "@/types/sales";
 import { composeSalesItems } from "../../_utils/compose-sales-items";
+import { DykeDoorType } from "../../type";
 
 export async function getSalesOverview({
     type,
@@ -61,6 +62,7 @@ export async function viewSale(type, slug) {
                             door: true,
                             jambSize: true,
                             doors: true,
+                            molding: true,
                         },
                     },
                 },
@@ -82,6 +84,13 @@ export async function viewSale(type, slug) {
             // console.log(item.meta);
             return {
                 ...item,
+                housePackageTool: item.housePackageTool
+                    ? {
+                          ...item.housePackageTool,
+                          doorType: item.housePackageTool
+                              .doorType as DykeDoorType,
+                      }
+                    : null,
                 meta: item.meta as any as ISalesOrderItemMeta,
             };
         }),

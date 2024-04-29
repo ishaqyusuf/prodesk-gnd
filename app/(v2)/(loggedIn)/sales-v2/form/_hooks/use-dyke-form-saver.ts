@@ -25,13 +25,15 @@ export default function useDykeFormSaver(form) {
                     const _item = { ..._ };
                     const t = _item.item.formStepArray?.[0]?.item?.value;
                     _item.item.meta.doorType = t as any;
-                    if (_item.item.meta.doorType != "Shelf Item")
+                    if (_item.item.meta.doorType != "Shelf Items")
                         _item.item.shelfItemArray = [];
                     return {
                         ..._item,
                     };
                 }),
             };
+            console.log("ITEMS>", data);
+
             const init = initializeMultiComponents(data);
             console.log("INIT>", init);
 
