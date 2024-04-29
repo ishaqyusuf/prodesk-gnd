@@ -130,7 +130,7 @@ export async function getDykeFormAction(type, slug) {
             return {
                 ...item,
                 housePackageTool: {
-                    ...item.housePackageTool,
+                    ...(item.housePackageTool || {}),
                     _doorForm,
                     _doorFormDefaultValue,
                 },

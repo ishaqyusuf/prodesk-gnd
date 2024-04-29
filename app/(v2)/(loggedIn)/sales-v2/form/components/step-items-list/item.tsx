@@ -53,6 +53,8 @@ export function StepProducts({
                 item.get.getFormStepArray(),
                 item.get.doorType()
             );
+            // console.log(query);
+
             const { result: prods } = await getDykeStepDoors(
                 { ...query, stepId: stepForm?.step?.id } as any
                 // query.q,
@@ -73,7 +75,7 @@ export function StepProducts({
     };
     useEffect(() => {
         load();
-        console.log(">>>>>>");
+        // console.log(">>>>>>");
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";
