@@ -354,7 +354,7 @@ export async function saveDykeSales(data: DykeForm) {
                     })
             );
 
-            return order;
+            return { order, createHpts };
         };
     // const resp = await prisma.$transaction(tx, {
     //     maxWait: 5000,

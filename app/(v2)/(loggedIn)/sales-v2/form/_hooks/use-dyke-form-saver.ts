@@ -24,7 +24,9 @@ export default function useDykeFormSaver(form) {
             console.log(e.itemArray.length);
 
             // return;
-            const resp = await saveDykeSales(e);
+            const { order: resp, createHpts } = await saveDykeSales(e);
+            console.log(createHpts);
+
             toast.success("Saved");
             if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
             else await _revalidate("salesV2Form");

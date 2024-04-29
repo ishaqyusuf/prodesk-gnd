@@ -38,9 +38,9 @@ export async function getDykeFormAction(type, slug) {
                         },
                     },
                     housePackageTool: {
-                        where: {
-                            deletedAt: null,
-                        },
+                        // where: {
+                        //     deletedAt: null,
+                        // },
                         include: {
                             doors: {
                                 where: {
