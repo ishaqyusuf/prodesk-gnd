@@ -375,7 +375,7 @@ function getDoorsTable(
                                         style: cell.cellStyle,
                                         colSpan: cell.colSpan,
                                         value: getVal(cell.cell, door,
-                                            _doorI > 0 ? "\t✔\t":m.housePackageTool?.door?.title),
+                                            _doorI > 0 ? "as-above":m.housePackageTool?.door?.title),
                                     };  
                                     return ret;
                                 })

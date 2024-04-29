@@ -10,7 +10,6 @@ export default function SalesPrintDoorItems() {
     const { sale } = ctx;
 
     if (!sale.doorsTable) return <></>;
-    console.log(sale.doorsTable);
 
     return (
         <tr>
@@ -86,9 +85,18 @@ export default function SalesPrintDoorItems() {
                                                             colSpan={ld.colSpan}
                                                             key={ldi}
                                                         >
-                                                            <Text {...ld.style}>
-                                                                {ld.value}
-                                                            </Text>
+                                                            {ld.value ==
+                                                            "as-above" ? (
+                                                                <div className="flex justify-center">
+                                                                    ✔
+                                                                </div>
+                                                            ) : (
+                                                                <Text
+                                                                    {...ld.style}
+                                                                >
+                                                                    {ld.value}
+                                                                </Text>
+                                                            )}
                                                         </td>
                                                     ))}
                                                 </tr>
