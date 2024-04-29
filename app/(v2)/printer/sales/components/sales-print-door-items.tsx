@@ -10,6 +10,8 @@ export default function SalesPrintDoorItems() {
     const { sale } = ctx;
 
     if (!sale.doorsTable) return <></>;
+    console.log(sale.doorsTable);
+
     return (
         <tr>
             <td colSpan={16} className="">

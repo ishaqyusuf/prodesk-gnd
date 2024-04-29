@@ -27,6 +27,8 @@ export default function useMultiDykeForm() {
             uid = generateRandomString(5);
             setValue("uid", uid);
         }
+        console.log(multiComp.components);
+
         Object.entries(multiComp.components).map(([title, compData]) => {
             // [].findIndex()
             let currentItemIndex = formData.itemArray.findIndex((item) => {

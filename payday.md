@@ -17,7 +17,7 @@ TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
 # APR 29: 00.00 == 00.00
-    08:45-
+    08:45-11:05
 PAYMENT INVOICE  
 $831.25
 # APR 26: 05.25 == 23.45

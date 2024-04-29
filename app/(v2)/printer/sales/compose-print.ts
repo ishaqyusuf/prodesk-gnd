@@ -1,5 +1,6 @@
 import {
     AddressBooks,
+    DykeDoors,
     DykeSalesDoors,
     DykeSalesShelfItem,
 } from "@prisma/client";
@@ -130,6 +131,7 @@ type Cell =
     | "lineTotal"
     | "description"
     | "totalPrice"
+    | "moulding"
     | null;
 function _cell<T>(
     title,
@@ -156,7 +158,9 @@ function getDoorsTable(
             )
             .map((item) => {
                 const doorType = item.housePackageTool?.doorType;
+                // console.log(doorType);
                 const isMoulding = doorType == "Moulding";
+                const isBifold = doorType == "Moulding";
                 const res = {
                     cells: [
                         _cell(
@@ -166,37 +170,71 @@ function getDoorsTable(
                             { position: "center" },
                             { position: "center" }
                         ),
-                        ...[isMoulding],
-                        _cell(
-                            "Door",
-                            "door",
-                            price ? 4 : isPacking ? 7 : 10,
-                            { position: "left" },
-                            { position: "left" }
-                        ),
-                        _cell(
-                            "Size",
-                            "dimension",
-                            2,
-                            { position: "left" },
-                            { position: "left" }
-                        ),
-                        _cell(
-                            "Left Hand",
-                            "lhQty",
-                            2,
-                            { position: "center" },
-                            { position: "center" }
-                        ),
-                        _cell(
-                            "Right Hand",
-                            "rhQty",
-                            2,
-                            { position: "center" },
-                            { position: "center" }
-                        ),
+
+                        ...(isMoulding
+                            ? [
+                                  _cell(
+                                      "Moulding",
+                                      "moulding",
+                                      price ? 4 : isPacking ? 7 : 10,
+                                      { position: "left" },
+                                      { position: "left" }
+                                  ),
+                                  _cell(
+                                      "Qty",
+                                      "qty",
+                                      2,
+                                      { position: "center" },
+                                      { position: "center" }
+                                  ),
+                              ]
+                            : [
+                                  _cell(
+                                      "Door",
+                                      "door",
+                                      price ? 4 : isPacking ? 7 : 10,
+                                      { position: "left" },
+                                      { position: "left" }
+                                  ),
+                                  _cell(
+                                      "Size",
+                                      "dimension",
+                                      2,
+                                      { position: "left" },
+                                      { position: "left" }
+                                  ),
+                                  ...(
+                                      doorType == "Bifold"
+                                          ? [
+                                                _cell(
+                                                    "Qty",
+                                                    "qty",
+                                                    2,
+                                                    { position: "center" },
+                                                    { position: "center" }
+                                                ),
+                                            ]
+                                          : [
+                                                _cell(
+                                                    "Left Hand",
+                                                    "lhQty",
+                                                    2,
+                                                    { position: "center" },
+                                                    { position: "center" }
+                                                ),
+                                                _cell(
+                                                    "Right Hand",
+                                                    "rhQty",
+                                                    2,
+                                                    { position: "center" },
+                                                    { position: "center" }
+                                                ),
+                                            ],
+                                  ),
+                              ]),
                     ],
                 };
+
                 if (price) {
                     res.cells.push(
                         ...[
@@ -219,58 +257,62 @@ function getDoorsTable(
                 }
                 if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
 
-                const details = [
-                    ...item.formSteps.filter(
-                        (t) =>
-                            !["Door", "Moulding"].some((s) => s == t.step.title)
-                    ),
-                ];
-                if (isMoulding) {
-                    details.push({
-                        step: {
-                            title: "Qty",
-                        },
-                        value: item.qty,
-                    } as any);
-                    if (price) {
-                        details.push(
-                            ...([
-                                {
-                                    step: {
-                                        title: "Rate",
-                                    },
-                                    value: formatCurrency.format(
-                                        item.rate || 0
-                                    ),
-                                },
-                                ,
-                                {
-                                    step: {
-                                        title: "Total",
-                                    },
-                                    value: formatCurrency.format(
-                                        item.total || 0
-                                    ),
-                                },
-                                ,
-                            ] as any)
-                        );
-                    }
-                }
-                const isBifold = doorType == "Bifold";
-                const itemCells: NonNullable<typeof res.cells> = [...res.cells]
-                    .map((c) => {
-                        if (isBifold) {
-                            if (c.title == "Right Hand") {
-                                return null;
-                            }
-                            if (c.title == "Left Hand") {
-                                c.title = "Qty";
-                            }
-                        }
-                        return c;
-                    })
-                    .filter((c) => c != null) as any;
+                const details =
+                    isMoulding || isBifold
+                        ? []
+                        : [
+                              ...item.formSteps.filter(
+                                  (t) =>
+                                      !["Door","Door Type", "Moulding"].some(
+                                          (s) => s == t.step.title
+                                      )
+                              ),
+                          ];
+                // if (isMoulding) {
+                //     details.push({
+                //         step: {
+                //             title: "Qty",
+                //         },
+                //         value: item.qty,
+                //     } as any);
+                //     if (price) {
+                //         details.push(
+                //             ...([
+                //                 {
+                //                     step: {
+                //                         title: "Rate",
+                //                     },
+                //                     value: formatCurrency.format(
+                //                         item.rate || 0
+                //                     ),
+                //                 },
+                //                 ,
+                //                 {
+                //                     step: {
+                //                         title: "Total",
+                //                     },
+                //                     value: formatCurrency.format(
+                //                         item.total || 0
+                //                     ),
+                //                 },
+                //                 ,
+                //             ] as any)
+                //         );
+                //     }
+                // }
+                // const itemCells: NonNullable<typeof res.cells> = [...res.cells];
+                // .map((c) => {
+                //     if (isBifold) {
+                //         if (c.title == "Right Hand") {
+                //             return null;
+                //         }
+                //         if (c.title == "Left Hand") {
+                //             c.title = "Qty";
+                //         }
+                //     }
+                //     return c;
+                // })
+                // .filter((c) => c != null) as any;
                 const lines: any = [];
                 const _multies = data.order.items.filter(
                     (i) =>
@@ -278,56 +320,79 @@ function getDoorsTable(
                         (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
                 );
                 console.log(_multies.length);
-                _multies.map((m) => {
+                _multies.map((m,_) => {
+                    const getVal = (cell: Cell, door?: DykeSalesDoors,doorTitle?) => {
+                        switch (cell) {
+                            case "qty":
+                                return m.qty;
+                            case "door":
+                                return   doorTitle;
+                                // return item.formSteps.find(
+                                //     (s) => s.step.title == "Door"
+                                // )?.value;
+                            case "dimension":
+                                return door?.dimension?.replaceAll("in",'"');
+                            case "moulding":
+                                return m.housePackageTool?.molding?.title;
+                            case "unitPrice":
+                                return formatCurrency.format(m.rate as any);
+
+                            case "lineTotal":
+                            case "totalPrice":
+                                return formatCurrency.format(m.total as any);
+                            case "lhQty":
+                            case "rhQty":
+                                return door?.[cell as any];
+                        }
+                        return lines.length + 1;
+                    };
                     if (isMoulding) {
                         lines.push(
-                            itemCells.map((cell, _i) => {
-                                const getVal = () => {
-                                    switch (cell.cell) {
-                                        case "qty":
-                                            return m.qty;
-                                        case "door":
-                                            return m.housePackageTool?.molding
-                                                ?.title;
-                                        case "unitPrice":
-                                            return m.rate;
-                                        case "lineTotal":
-                                        case "totalPrice":
-                                            return m.total;
-                                    }
-                                    return null;
-                                };
+                            res.cells.map((cell, _i) => {
                                 const ret = {
                                     style: cell.cellStyle,
                                     colSpan: cell.colSpan,
-                                    value: getVal(),
+                                    value: getVal(cell.cell),
                                 };
 
-                                if (_i == 0) ret.value = lines.length + 1;
-                                const currency = ["Rate", "Total"].includes(
-                                    cell.title
-                                );
-                                if (ret.value && currency) {
-                                    ret.value = formatCurrency.format(
-                                        ret.value as any
-                                    );
-                                }
+                                // if (_i == 0) ret.value = lines.length + 1;
+                                // const currency = ["Rate", "Total"].includes(
+                                //     cell.title
+                                // );
+                                // if (ret.value && currency) {
+                                //     ret.value = formatCurrency.format(
+                                //         ret.value as any
+                                //     );
+                                // }
                                 return ret;
                             })
                         );
                     } else {
-                        lines.push();
+                        m.housePackageTool?.doors?.map((door, _doorI) => {
+                            lines.push(
+                                res.cells.map((cell, _cellId) => {
+                                    const ret = {
+                                        style: cell.cellStyle,
+                                        colSpan: cell.colSpan,
+                                        value: getVal(cell.cell, door,
+                                            _doorI > 0 ? "\t✔\t":m.housePackageTool?.door?.title),
+                                    };  
+                                    return ret;
+                                })
+                            );
+                        });
                     }
                 });
+                // console.log(lines.length);
                 return {
                     doorType: item.housePackageTool?.doorType as DykeDoorType,
                     details: details,
-                    itemCells,
+                    itemCells: res.cells,
                     lines: true
                         ? lines
                         : (isMoulding ? [] : item.housePackageTool?.doors)?.map(
                               (door, i) => {
-                                  return itemCells.map((cell, _i) => {
+                                  return res.cells.map((cell, _i) => {
                                       const ret = {
                                           style: cell.cellStyle,
                                           colSpan: cell.colSpan,

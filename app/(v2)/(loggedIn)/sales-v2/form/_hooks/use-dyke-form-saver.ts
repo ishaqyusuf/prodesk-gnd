@@ -114,7 +114,6 @@ export default function useDykeFormSaver(form) {
                         ...rest
                     } = clone.item.housePackageTool;
                     dykeDoorId = c.toolId;
-                    console.log(dykeDoorId);
 
                     clone.item.housePackageTool = {
                         ...rest,
