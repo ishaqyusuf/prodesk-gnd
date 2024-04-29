@@ -166,7 +166,7 @@ function getDoorsTable(
                             { position: "center" },
                             { position: "center" }
                         ),
-
+                        ...[isMoulding],
                         _cell(
                             "Door",
                             "door",
