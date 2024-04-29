@@ -192,13 +192,14 @@ async function CustomStepForm(
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });
     }
-    if (doorType == "Services") {
+    if ((doorType || productTitle) == "Services") {
         const customSteps = {
             "Door Type": "Line Item",
             //  Specie: "Moulding",
             //  Moulding: "Line Item",
             // "M Casing": "Line Item",
         };
+
         title = customSteps[stepTitle];
     }
     // console.log([doorType, productTitle]);
