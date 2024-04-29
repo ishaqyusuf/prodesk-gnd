@@ -24,21 +24,25 @@ export async function getDykeStepDoors({
     final = false,
 }: Props): Promise<{ result: IStepProducts }> {
     const isBifold = doorType == "Bifold";
+    console.log(doorType);
+
     if (!final) final = isBifold;
 
     const whereDoor: any = {
-        query: isBifold ? undefined : query,
+        query: isBifold || !query ? undefined : query,
     };
     // if (!isBifold)
-    whereDoor.OR = [
-        doorType &&
-            !isBifold && {
-                doorType: null,
+    if (doorType != "Custom Services")
+        whereDoor.OR = [
+            doorType &&
+                !isBifold && {
+                    doorType: null,
+                },
+            {
+                doorType,
             },
-        {
-            doorType,
-        },
-    ].filter(Boolean);
+        ].filter(Boolean);
+    // console.log(whereDoor);
 
     const _doors = await prisma.dykeDoors.findMany({
         where: whereDoor,
@@ -72,32 +76,34 @@ export async function getDykeStepDoors({
     }
     const where = {
         // doorType: doorType ? doorType : undefined,
-        AND: [
-            {
-                AND: q.map((w) => {
-                    if (Array.isArray(w))
-                        return {
-                            OR: w.map((_w) => ({
-                                title: { contains: _w },
-                            })),
-                        };
-                    return {
-                        title: {
-                            contains: w,
-                        },
-                    };
-                }),
-            },
-            {
-                AND: omit.map((w) => ({
-                    title: {
-                        not: {
-                            contains: w,
-                        },
-                    },
-                })),
-            },
-        ],
+        AND: !q
+            ? undefined
+            : [
+                  {
+                      AND: q.map((w) => {
+                          if (Array.isArray(w))
+                              return {
+                                  OR: w.map((_w) => ({
+                                      title: { contains: _w },
+                                  })),
+                              };
+                          return {
+                              title: {
+                                  contains: w,
+                              },
+                          };
+                      }),
+                  },
+                  {
+                      AND: omit.map((w) => ({
+                          title: {
+                              not: {
+                                  contains: w,
+                              },
+                          },
+                      })),
+                  },
+              ],
     };
     let doors = await prisma.dykeProducts.findMany({
         where,

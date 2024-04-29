@@ -192,7 +192,16 @@ async function CustomStepForm(
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });
     }
-    console.log([doorType, productTitle]);
+    if (doorType == "Custom Services") {
+        const customSteps = {
+            "Door Type": "Line Item",
+            //  Specie: "Moulding",
+            //  Moulding: "Line Item",
+            // "M Casing": "Line Item",
+        };
+        title = customSteps[stepTitle];
+    }
+    // console.log([doorType, productTitle]);
 
     if ((doorType || productTitle) == "Door Slabs Only") {
         // console.log(productTitle);
