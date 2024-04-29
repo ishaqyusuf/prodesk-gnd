@@ -139,9 +139,16 @@ function getDoorsTable(
         cells: [
             _cell("#", null, 1, { position: "center" }, { position: "center" }),
             _cell(
-                "Dimension",
+                "Door",
+                "door",
+                price ? 4 : isPacking ? 7 : 10,
+                { position: "left" },
+                { position: "left" }
+            ),
+            _cell(
+                "Size",
                 "dimension",
-                price ? 6 : isPacking ? 9 : 12,
+                2,
                 { position: "left" },
                 { position: "left" }
             ),
@@ -187,12 +194,21 @@ function getDoorsTable(
 
         doors: data.order.items
             .filter((item) => item.housePackageTool)
+            .filter(
+                (item) =>
+                    !item.multiDykeUid || (item.multiDykeUid && item.multiDyke)
+            )
             .map((item) => {
                 const doorType = item.housePackageTool
                     ?.doorType as DykeDoorType;
                 const isMoulding = doorType == "Moulding";
 
-                const details = [...item.formSteps];
+                const details = [
+                    ...item.formSteps.filter(
+                        (t) =>
+                            !["Door", "Moulding"].some((s) => s == t.step.title)
+                    ),
+                ];
                 if (isMoulding) {
                     details.push({
                         step: {

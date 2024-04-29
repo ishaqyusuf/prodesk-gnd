@@ -19,22 +19,25 @@ export default function useDykeFormSaver(form) {
         startTransition(async () => {
             // console.log(data.itemArray[0]?.item);
             // return;
-            const init = initializeMultiComponents(data);
-            console.log("INIT>", init);
-
-            const e = calculateSalesEstimate({
-                ...init,
-                itemArray: init.itemArray.map((_) => {
+            data = {
+                ...data,
+                itemArray: data.itemArray.map((_) => {
                     const _item = { ..._ };
                     const t = _item.item.formStepArray?.[0]?.item?.value;
-                    if (t == "Shelf Item") _item.item.shelfItemArray = [];
+                    _item.item.meta.doorType = t as any;
+                    if (_item.item.meta.doorType != "Shelf Item")
+                        _item.item.shelfItemArray = [];
                     return {
                         ..._item,
                     };
                 }),
-            });
-            console.log("SAVE FORM DATA", e);
+            };
+            const init = initializeMultiComponents(data);
+            console.log("INIT>", init);
 
+            const e = calculateSalesEstimate(init);
+            console.log("SAVE FORM DATA", e);
+            // return;
             // return;
             const { order: resp, createHpts } = await saveDykeSales(e);
             console.log(createHpts);
@@ -55,6 +58,8 @@ export default function useDykeFormSaver(form) {
             let items: DykeForm["itemArray"] = [];
             // if (!item?.multiComponent?.components) {
             if (item.item.shelfItemArray.length) {
+                console.log("shelf");
+
                 allItems.push(item);
                 return;
             }
