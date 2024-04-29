@@ -136,6 +136,23 @@ function hiddenSteps(title, doorType: DykeDoorType) {
             "cutdown height",
         ].includes(title?.toLowerCase());
     }
+    if (doorType == "Door Slabs Only" && !hidden) {
+        hidden = [
+            "door configuration",
+            "bore",
+            "jamb size",
+            "casing",
+            "jamb species",
+            "jamb type",
+            "cutdown height",
+            "casing y/n",
+            "hinge finish",
+            "door type",
+            "casing side choice",
+            "casing species",
+            "cutdown height",
+        ].includes(title?.toLowerCase());
+    }
     return hidden;
 }
 function isCustomStep(stepTitle, doorType: DykeDoorType) {
@@ -146,6 +163,7 @@ async function CustomStepForm(
     stepTitle,
     doorType: DykeDoorType
 ) {
+    stepTitle = stepTitle.trim();
     console.log({ stepTitle, doorType, productTitle });
 
     const customSteps = {
@@ -173,6 +191,27 @@ async function CustomStepForm(
         };
         title = customSteps[stepTitle];
         // console.log({ title, productTitle, stepTitle });
+    }
+    console.log([doorType, productTitle]);
+
+    if ((doorType || productTitle) == "Door Slabs Only") {
+        // console.log(productTitle);
+
+        const customSteps = {
+            // "Door Type": "Height",
+            // Height: "Door Type2",
+            // "Door Type2": "Door",
+            Door: "House Package Tool",
+            // "M Casing": "Line Item",
+        };
+        if (productTitle != "Door Slabs Only") {
+            customSteps["Height"] = "Door Type";
+            customSteps["Door Type"] = "Door";
+        } else {
+            customSteps["Door Type"] = "Height";
+        }
+        title = customSteps[stepTitle];
+        console.log(title);
     }
     // if(!title && stepTitle != 'Shelf')
     if (title) {

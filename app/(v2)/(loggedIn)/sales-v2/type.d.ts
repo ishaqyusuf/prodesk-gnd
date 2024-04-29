@@ -23,7 +23,9 @@ export type DykeDoorType =
     | "Shelf Items"
     | "Garage"
     | "Bifold"
-    | "Moulding";
+    | "Moulding"
+    | "Door Slabs Only"
+    | "Custom Services";
 type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
 // type IDykeStepForm = {
 //     data: DykeStepForm;

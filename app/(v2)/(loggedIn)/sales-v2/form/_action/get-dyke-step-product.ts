@@ -34,7 +34,21 @@ export async function getMouldingStepProduct(specie) {
         });
     return prods;
 }
-export async function getStepProduct(stepId) {
+export async function getSlabDoorTypes() {
+    const p = await prisma.dykeProducts.findFirst({
+        where: {
+            title: "HC Molded",
+        },
+        include: {
+            stepProducts: true,
+        },
+    });
+
+    return await getStepProduct(p?.stepProducts?.[0]?.dykeStepId);
+}
+export async function getStepProduct(stepId, doorType?) {
+    console.log(stepId);
+
     const tag = `dyke-step-product-${stepId}`;
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where: {

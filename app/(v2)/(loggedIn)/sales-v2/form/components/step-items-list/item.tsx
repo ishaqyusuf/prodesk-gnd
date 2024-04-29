@@ -13,6 +13,7 @@ import { env } from "@/env.mjs";
 import { Label } from "@/components/ui/label";
 import {
     getMouldingStepProduct,
+    getSlabDoorTypes,
     getStepProduct,
 } from "../../_action/get-dyke-step-product";
 import { toast } from "sonner";
@@ -47,14 +48,14 @@ export function StepProducts({
     const ctx = useDykeCtx();
 
     const load = async () => {
+        const doorType = item.get.doorType();
         if (stepForm?.item?.meta?.hidden) return;
         if (stepFormTitle == "Door") {
             const query = doorQueryBuilder(
                 item.get.getFormStepArray(),
                 item.get.doorType()
             );
-            console.log("QUERY>", query);
-
+            // console.log("QUERY>", query);
             const { result: prods } = await getDykeStepDoors(
                 { ...query, stepId: stepForm?.step?.id } as any
                 // query.q,
@@ -71,6 +72,14 @@ export function StepProducts({
             // console.log(prods);
 
             setStepProducts(prods);
+        } else if (
+            doorType == "Door Slabs Only" &&
+            stepFormTitle == "Door Type" &&
+            stepForm.item?.value != "Door Slabs Only"
+        ) {
+            console.log(stepForm);
+            setStepProducts(await getSlabDoorTypes());
+            // if(stepFormTitle == 'Height' )
         } else setStepProducts(await getStepProduct(stepForm?.step?.id));
     };
     useEffect(() => {
@@ -179,6 +188,7 @@ export function StepProducts({
                         case "Bifold":
                         case "Garage":
                         case "Moulding":
+                        case "Door Slabs Only":
                             // console.log(".");
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool.doorType`,

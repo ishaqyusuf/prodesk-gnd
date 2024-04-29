@@ -119,6 +119,9 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                             {shelf.prodArray.fields.map(
                                 (prodField, prodIndex) => (
                                     <ShellProductCells
+                                        onDelete={(index) => {
+                                            shelf.prodArray.remove(index);
+                                        }}
                                         shelfItemForm={shelfItemForm}
                                         key={prodField.id}
                                         index={prodIndex}
@@ -175,11 +178,13 @@ interface ShellProductCells {
     shelf: IUseShelfItem;
     index;
     field?;
+    onDelete;
     shelfItemForm;
 }
 function ShellProductCells({
     shelf,
     field: f,
+    onDelete,
     index,
     shelfItemForm,
 }: ShellProductCells) {
@@ -266,7 +271,8 @@ function ShellProductCells({
                 </Button>
                 <Button
                     onClick={() => {
-                        shelfItemForm(index);
+                        // shelfItemForm(index);
+                        onDelete(index);
                     }}
                     className="w-8 h-8"
                     size="icon"
