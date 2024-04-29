@@ -9,7 +9,7 @@ import RenderForm from "@/_v2/components/common/render-form";
 import { Button } from "@/components/ui/button";
 import { addDoorUnitAction } from "../_action/add-door-unit";
 import SalesMetaData from "./sales-meta-data";
-import HeaderSection from "./header-section";
+import HeaderSection from "./header/header-section";
 import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
 import { Icons } from "@/components/_v1/icons";
 interface Props {

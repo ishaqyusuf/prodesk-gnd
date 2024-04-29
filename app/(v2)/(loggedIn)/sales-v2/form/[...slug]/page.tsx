@@ -22,6 +22,13 @@ export default async function SalesForm({ params }) {
             <div className="sm:px-8 px-4">
                 <Breadcrumbs>
                     <BreadLink title={"Sales"} isFirst link={"/sales/orders"} />
+                    {slug && (
+                        <BreadLink
+                            title={slug}
+                            link={`/sales-v2/overview/${type}/${slug}`}
+                        />
+                    )}
+                    <BreadLink title={slug ? "Edit" : "New"} isLast />
                     {/* <BreadLink title={orderId ? "Edit" : "New"} isLast /> */}
                 </Breadcrumbs>
                 <SalesFormComponent defaultValues={form} />
