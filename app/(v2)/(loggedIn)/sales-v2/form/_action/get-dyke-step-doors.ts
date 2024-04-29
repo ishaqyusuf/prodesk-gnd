@@ -32,7 +32,7 @@ export async function getDykeStepDoors({
         query: isBifold || !query ? undefined : query,
     };
     // if (!isBifold)
-    if (doorType != "Custom Services")
+    if (doorType != "Door Slabs Only")
         whereDoor.OR = [
             doorType &&
                 !isBifold && {
