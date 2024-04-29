@@ -125,7 +125,7 @@ export default function useDykeFormSaver(form) {
                             createdAt,
                             deletedAt,
                             updatedAt,
-                            meta,
+                            // meta,
                             ...rest
                         } = clone.item;
                         return {

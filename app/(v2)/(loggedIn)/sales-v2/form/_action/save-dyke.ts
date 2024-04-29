@@ -71,6 +71,7 @@ export async function saveDykeSales(data: DykeForm) {
             };
             await Promise.all(
                 data.itemArray.map(async (arr, index) => {
+                    const isShelfItem = arr.item.meta.doorType == "Shelf Items";
                     let {
                         formStepArray,
                         shelfItemArray,
@@ -100,7 +101,7 @@ export async function saveDykeSales(data: DykeForm) {
                         });
                     }
                     ids.itemIds.push(itemId);
-                    if (shelfMode) {
+                    if (isShelfItem) {
                         await Promise.all(
                             shelfItemArray.map(
                                 async ({
