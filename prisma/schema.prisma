@@ -826,6 +826,16 @@ model CommissionPayment {
     usersId       Int?
 }
 
+model DykeSalesError {
+    id        Int       @unique @default(autoincrement())
+    errorId   String
+    userId    Int
+    meta      Json?     @db.Json
+    deletedAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt DateTime? @updatedAt
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesOrders {
     id                Int                          @unique @default(autoincrement())

@@ -6,6 +6,8 @@ import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { deepCopy } from "@/lib/deep-copy";
+import { _saveDykeError } from "../_action/error/save-error";
+import { generateRandomString } from "@/lib/utils";
 
 export default function useDykeFormSaver(form) {
     const [saving, startTransition] = useTransition();
@@ -17,36 +19,37 @@ export default function useDykeFormSaver(form) {
     ]);
     function save(data: DykeForm) {
         startTransition(async () => {
-            // console.log(data.itemArray[0]?.item);
-            // return;
-            data = {
-                ...data,
-                itemArray: data.itemArray.map((_) => {
-                    const _item = { ..._ };
-                    const t = _item.item.formStepArray?.[0]?.item?.value;
-                    _item.item.meta.doorType = t as any;
-                    if (_item.item.meta.doorType != "Shelf Items")
-                        _item.item.shelfItemArray = [];
-                    return {
-                        ..._item,
-                    };
-                }),
-            };
-            console.log("ITEMS>", data);
+            const errorData: any = {};
+            try {
+                data = {
+                    ...data,
+                    itemArray: data.itemArray.map((_) => {
+                        const _item = { ..._ };
+                        const t = _item.item.formStepArray?.[0]?.item?.value;
+                        _item.item.meta.doorType = t as any;
+                        if (_item.item.meta.doorType != "Shelf Items")
+                            _item.item.shelfItemArray = [];
+                        return {
+                            ..._item,
+                        };
+                    }),
+                };
+                errorData.errorId = data.order.slug || generateRandomString(5);
+                const init = initializeMultiComponents(data);
+                errorData.init = init;
+                const e = calculateSalesEstimate(init);
+                errorData.calculated = e;
 
-            const init = initializeMultiComponents(data);
-            console.log("INIT>", init);
-
-            const e = calculateSalesEstimate(init);
-            console.log("SAVE FORM DATA", e);
-
-            // return;
-            const { order: resp, createHpts } = await saveDykeSales(e);
-            console.log({ resp });
-
-            toast.success("Saved");
-            if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
-            else await _revalidate("salesV2Form");
+                const { order: resp, createHpts } = await saveDykeSales(e);
+                errorData.response = resp;
+                toast.success("Saved");
+                if (!id)
+                    router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
+                else await _revalidate("salesV2Form");
+            } catch (error) {
+                toast.error("Something went wrong");
+                await _saveDykeError(errorData.errorId, errorData);
+            }
         });
     }
     function initializeMultiComponents(data: DykeForm) {
