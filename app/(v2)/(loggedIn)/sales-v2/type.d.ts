@@ -101,6 +101,7 @@ export type MultiDyke = {
             unitPrice: number | null;
             totalPrice: number | null;
             hptId: number | null;
+            description?: string;
             doorTotalPrice: number | null;
             _doorForm: {
                 [dim in string]: DykeSalesDoors;

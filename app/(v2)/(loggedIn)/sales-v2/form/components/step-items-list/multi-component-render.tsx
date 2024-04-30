@@ -15,6 +15,7 @@ import {
 export default function MultiComponentRender({ Render, line = false }) {
     const mdf = useMultiDykeForm();
 
+    const item = useContext(DykeItemFormContext);
     useEffect(() => {
         mdf.initialize();
     }, []);
@@ -25,7 +26,11 @@ export default function MultiComponentRender({ Render, line = false }) {
                     <div className="h-[300px] px-8 -mx-8 overflow-auto">
                         <Table>
                             <TableHeader>
-                                <TableHead>Moulding</TableHead>
+                                <TableHead>
+                                    {item.get.doorType() == "Moulding"
+                                        ? "Moulding"
+                                        : "Description"}
+                                </TableHead>
                                 <TableHead>Qty</TableHead>
                                 <TableHead>Unit Price</TableHead>
                                 <TableHead>Line Total</TableHead>

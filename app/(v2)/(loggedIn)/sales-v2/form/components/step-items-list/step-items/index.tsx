@@ -34,7 +34,7 @@ export function StepProducts({
         <div className="">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {stepProducts
-                    .filter((p, i) => i < 20)
+                    // .filter((p, i) => i < 20)
                     ?.map((b, i) => (
                         <div className="relative p-4 group" key={i}>
                             <div className=" hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">

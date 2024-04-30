@@ -7,7 +7,7 @@ import { DykeFormStepMeta, MultiDyke, ShelfItemMeta } from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
-import { inToFt, safeFormText, sum } from "@/lib/utils";
+import { generateRandomString, inToFt, safeFormText, sum } from "@/lib/utils";
 import dayjs from "dayjs";
 import { DykeSalesDoors } from "@prisma/client";
 
@@ -229,14 +229,15 @@ export async function getDykeFormAction(type, slug) {
 
                     _comps.map((item) => {
                         // console.log(item.housePackageTool?.door);
-                        const formStep = item.formSteps.find(
-                            (d) =>
-                                d.step?.title == "Door" ||
-                                d.step?.title == "Moulding"
-                        );
-                        const component =
-                            item.housePackageTool?.door ||
-                            item.housePackageTool?.molding;
+                        // const formStep = item.formSteps.find(
+                        //     (d) =>
+                        //         d.step?.title == "Door" ||
+                        //         d.step?.title == "Moulding"
+                        // );
+                        const component = item.housePackageTool?.door ||
+                            item.housePackageTool?.molding || {
+                                title: generateRandomString(4),
+                            };
 
                         const isMoulding =
                             item.housePackageTool?.moldingId != null;
@@ -244,7 +245,7 @@ export async function getDykeFormAction(type, slug) {
                         let _dykeSizes: any = item.meta._dykeSizes;
                         if (!_dykeSizes) {
                             _dykeSizes = {};
-                            item.housePackageTool.doors?.map((door) => {
+                            item.housePackageTool?.doors?.map((door) => {
                                 const dim = door.dimension?.replaceAll(
                                     '"',
                                     "in"
@@ -260,8 +261,7 @@ export async function getDykeFormAction(type, slug) {
                             });
                         }
                         if (component) {
-                            console.log(item.housePackageTool.door);
-
+                            // console.log(item.housePackageTool.door);
                             // item.meta.doo
                             multiComponent.components[
                                 safeFormText(component.title)
@@ -270,6 +270,7 @@ export async function getDykeFormAction(type, slug) {
                                 heights: _dykeSizes,
                                 itemId: item.id,
                                 qty: item.qty,
+                                description: item.description as any,
                                 doorQty: item.qty,
                                 unitPrice: item.rate,
                                 totalPrice: item.total,

@@ -112,13 +112,13 @@ export default function useStepItems({
             return;
         }
         ctx.startLoadingStep(async () => {
-            await timeout(1000);
+            // await timeout(1000);
             const val = stepProd?.product?.title || stepProd?.product?.value;
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
             // form.getValues('order.id')
-
+            console.log(stepForm.step?.title);
             switch (stepForm.step?.title) {
                 case "Height":
                     form.setValue(
@@ -170,6 +170,9 @@ export default function useStepItems({
                     break;
                 case "Item Type":
                     switch (stepProd?.product?.title) {
+                        case "Services":
+                            await item.multi.initServices();
+                            break;
                         case "Shelf Items":
                             form.setValue(
                                 `itemArray.${item.rowIndex}.item.housePackageTool`,

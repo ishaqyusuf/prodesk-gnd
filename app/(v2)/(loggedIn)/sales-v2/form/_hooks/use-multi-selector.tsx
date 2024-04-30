@@ -2,13 +2,42 @@ import { toast } from "sonner";
 import { useDykeForm } from "./form-context";
 import SelectDoorHeightsModal from "../components/modals/select-door-heights";
 import { IStepProducts } from "../components/step-items-list/step-items";
-import { safeFormText } from "@/lib/utils";
+import { generateRandomString, safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
+import { timeout } from "@/lib/timeout";
 
 export function useMultiSelector(rowIndex, get) {
     const form = useDykeForm();
     const modal = useModal();
     const multi = {
+        async initServices() {
+            const [uid, multiDyke, components] = form.getValues([
+                `itemArray.${rowIndex}.multiComponent.uid`,
+                `itemArray.${rowIndex}.multiComponent.multiDyke`,
+                `itemArray.${rowIndex}.multiComponent.components`,
+            ]);
+            console.log([uid]);
+
+            if (!uid) {
+                form.setValue(
+                    `itemArray.${rowIndex}.multiComponent.uid`,
+                    generateRandomString(4)
+                );
+                form.setValue(
+                    `itemArray.${rowIndex}.multiComponent.multiDyke`,
+                    true
+                );
+                form.setValue(
+                    `itemArray.${rowIndex}.multiComponent.components`,
+                    {
+                        [generateRandomString(4)]: {
+                            checked: true,
+                        },
+                    } as any
+                );
+                await timeout(1000);
+            }
+        },
         watchMultiComponent() {
             return form.watch(
                 `itemArray.${rowIndex}.multiComponent.components`
@@ -25,7 +54,7 @@ export function useMultiSelector(rowIndex, get) {
             );
             // console.log(items);
             const checkedItems = Object.values(items || {}).filter(
-                (b) => b.checked
+                (b) => b?.checked
             );
             const isMoulding = stepFormTitle == "Moulding";
             const pkdId = get.packageToolId(
@@ -38,7 +67,7 @@ export function useMultiSelector(rowIndex, get) {
                 return false;
             }
             const checked = Object.entries(items)
-                .map(([k, v]) => v.checked && k)
+                .map(([k, v]) => v?.checked && k)
                 .filter(Boolean);
             const prods = products.filter((p) =>
                 checked.includes(safeFormText(p.product.title) as any)

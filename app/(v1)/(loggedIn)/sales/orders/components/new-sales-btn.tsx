@@ -11,9 +11,7 @@ export default function NewSalesBtn({}) {
         <>
             <Menu label="New" variant={"default"} Icon={Icons.add}>
                 <MenuItem href={"/sales/edit/order/new"}>Sales Form</MenuItem>
-                <MenuItem href={"/sales-v2/form/order"}>
-                    Sales Form 2 (Test Mode)
-                </MenuItem>
+                <MenuItem href={"/sales-v2/form/order"}>Sales Form 2</MenuItem>
             </Menu>
         </>
     );

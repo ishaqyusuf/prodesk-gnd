@@ -18,8 +18,18 @@ export default function LineItemSection({ componentTitle }: Props) {
     const rootKey = `itemArray.${item.rowIndex}.item`;
     return (
         <>
-            <TableCell>{componentTitle}</TableCell>
-            <TableCell>
+            <TableCell className="">
+                {item.get.doorType() == "Moulding" ? (
+                    componentTitle
+                ) : (
+                    <ControlledInput
+                        list
+                        control={form.control}
+                        name={`${componentItem.rootKey}.description` as any}
+                    />
+                )}
+            </TableCell>
+            <TableCell className="w-[100px]">
                 <ControlledInput
                     type="number"
                     list
@@ -27,7 +37,7 @@ export default function LineItemSection({ componentTitle }: Props) {
                     name={`${componentItem.rootKey}.qty` as any}
                 />
             </TableCell>
-            <TableCell>
+            <TableCell className="w-[100px]">
                 <ControlledInput
                     type="number"
                     list
@@ -35,7 +45,7 @@ export default function LineItemSection({ componentTitle }: Props) {
                     name={`${componentItem.rootKey}.unitPrice` as any}
                 />
             </TableCell>
-            <TableCell>
+            <TableCell className="w-[100px]">
                 <Money value={componentItem.totalPrice} />
             </TableCell>
         </>

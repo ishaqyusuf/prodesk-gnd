@@ -33,8 +33,8 @@ export default function useMultiDykeForm() {
             // [].findIndex()
             let currentItemIndex = formData.itemArray.findIndex((item) => {
                 const toolId =
-                    item.item.housePackageTool.doorId ||
-                    item.item.housePackageTool.moldingId;
+                    item.item.housePackageTool?.doorId ||
+                    item.item.housePackageTool?.moldingId;
                 return (
                     item.item.multiDykeUid == uid &&
                     (compData.itemId
@@ -53,6 +53,8 @@ export default function useMultiDykeForm() {
         // // find item index for each multiComponent
         // // setup minimal item to enable housepackage tool fill
         // // copy main item to children: ignore doorId, mouldingId, builtQty
+        console.log(itemData.multiComponent);
+
         const _tabs = Object.entries(itemData.multiComponent.components)
             .map(([productTitle, cData]) => {
                 if (!cData.checked) return null;
