@@ -237,11 +237,11 @@ export async function getDykeFormAction(type, slug) {
                         const component =
                             item.housePackageTool?.door ||
                             item.housePackageTool?.molding ||
-                            item.meta.doorType == "Services"
+                            (item.meta.doorType == "Services"
                                 ? {
                                       title: generateRandomString(4),
                                   }
-                                : null;
+                                : null);
 
                         const isMoulding =
                             item.housePackageTool?.moldingId != null;
