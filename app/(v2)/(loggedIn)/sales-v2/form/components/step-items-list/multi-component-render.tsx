@@ -14,7 +14,6 @@ import {
 
 export default function MultiComponentRender({ Render, line = false }) {
     const mdf = useMultiDykeForm();
-
     const item = useContext(DykeItemFormContext);
     useEffect(() => {
         mdf.initialize();

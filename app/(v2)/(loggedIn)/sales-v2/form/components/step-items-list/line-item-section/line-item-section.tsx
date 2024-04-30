@@ -29,7 +29,7 @@ export default function LineItemSection({ componentTitle }: Props) {
                     />
                 )}
             </TableCell>
-            <TableCell className="w-[100px]">
+            <TableCell className="w-[150px]">
                 <ControlledInput
                     type="number"
                     list
@@ -37,7 +37,7 @@ export default function LineItemSection({ componentTitle }: Props) {
                     name={`${componentItem.rootKey}.qty` as any}
                 />
             </TableCell>
-            <TableCell className="w-[100px]">
+            <TableCell className="w-[150px]">
                 <ControlledInput
                     type="number"
                     list
