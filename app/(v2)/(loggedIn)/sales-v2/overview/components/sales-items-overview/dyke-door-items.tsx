@@ -17,33 +17,52 @@ export default function MouldingItems() {
     return data.groupings.doors.map((moulding, index) => (
         <div key={index}>
             <div className="border-b uppercase p-2 bg-blue-50">
-                <Label>Doors: Section {index + 1}</Label>
+                <Label>
+                    {moulding.meta.doorType} Door: Section {index + 1}
+                </Label>
             </div>
             <Table>
                 <TableHeader>
                     <TableHead>#</TableHead>
                     <TableHead>Moulding</TableHead>
-                    <TableHead>Qty</TableHead>
+                    {moulding.isType.hasSwing ? (
+                        <>
+                            <TableHead>LH</TableHead>
+                            <TableHead>RH</TableHead>
+                        </>
+                    ) : (
+                        <TableHead>Qty</TableHead>
+                    )}
                     <TableHead>Rate</TableHead>
                     <TableHead>Total</TableHead>
                 </TableHeader>
-                <TableBody>
-                    {moulding.multiDykeComponents.map((com, cid) => (
-                        <TableRow key={com.id}>
-                            <TableCell>{cid + 1}</TableCell>
-                            <TableCell>
-                                {com.housePackageTool?.door?.title}
-                            </TableCell>
-                            <TableCell>{com.qty}</TableCell>
-                            <TableCell>
-                                <Money value={com.rate} />
-                            </TableCell>
-                            <TableCell>
-                                <Money value={com.total} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
+                {moulding.multiDykeComponents.map((com, cid) => (
+                    <TableBody key={com.id}>
+                        {com.housePackageTool?.doors.map((door) => (
+                            <TableRow key={door.id}>
+                                <TableCell>{cid + 1}</TableCell>
+                                <TableCell>
+                                    {com.housePackageTool?.door?.title}
+                                </TableCell>
+                                {moulding.isType.hasSwing ? (
+                                    <>
+                                        <TableHead>{door.lhQty}</TableHead>
+                                        <TableHead>{door.rhQty}</TableHead>
+                                    </>
+                                ) : (
+                                    <TableCell>{com.qty}</TableCell>
+                                )}
+
+                                <TableCell>
+                                    <Money value={com.rate} />
+                                </TableCell>
+                                <TableCell>
+                                    <Money value={com.total} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                ))}
             </Table>
         </div>
     ));

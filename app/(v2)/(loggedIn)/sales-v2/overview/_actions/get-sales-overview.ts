@@ -8,6 +8,7 @@ import {
 } from "@/types/sales";
 import { composeSalesItems } from "../../_utils/compose-sales-items";
 import { DykeDoorType } from "../../type";
+import { isComponentType } from "../is-component-type";
 
 export async function getSalesOverview({
     type,
@@ -104,6 +105,7 @@ export async function viewSale(type, slug) {
             );
             return {
                 multiDykeComponents: _multiDyke,
+                isType: isComponentType(item.meta.doorType),
                 ...item,
             };
         });
