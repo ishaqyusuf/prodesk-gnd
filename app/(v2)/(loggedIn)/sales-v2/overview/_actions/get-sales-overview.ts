@@ -77,22 +77,45 @@ export async function viewSale(type, slug) {
         },
     });
     if (!order) throw Error();
+    const items = order.items.map((item) => {
+        // console.log(item.meta);
+        return {
+            ...item,
+            housePackageTool: item.housePackageTool
+                ? {
+                      ...item.housePackageTool,
+                      doorType: item.housePackageTool.doorType as DykeDoorType,
+                  }
+                : null,
+            meta: item.meta as any as ISalesOrderItemMeta,
+        };
+    });
+    const _mergedItems = items
+        .filter(
+            (item) =>
+                (item.multiDyke && item.multiDykeUid) ||
+                (!item.multiDyke && !item.multiDykeUid)
+        )
+        .map((item) => {
+            const _multiDyke = items.filter(
+                (i) =>
+                    i.id == item.id ||
+                    (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
+            );
+            return {
+                multiDykeComponents: _multiDyke,
+                ...item,
+            };
+        });
+    const groupings = {
+        slabs: _mergedItems.filter((i) => i.meta.doorType == "Door Slabs Only"),
+        mouldings: _mergedItems.filter((i) => i.meta.doorType == "Moulding"),
+        services: _mergedItems.filter((i) => i.meta.doorType == "Services"),
+    };
     return {
         ...order,
         meta: order.meta as any as ISalesOrderMeta,
-        items: order.items.map((item) => {
-            // console.log(item.meta);
-            return {
-                ...item,
-                housePackageTool: item.housePackageTool
-                    ? {
-                          ...item.housePackageTool,
-                          doorType: item.housePackageTool
-                              .doorType as DykeDoorType,
-                      }
-                    : null,
-                meta: item.meta as any as ISalesOrderItemMeta,
-            };
-        }),
+        items,
+        groupings,
     };
 }
