@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 
 import { DykeDoorType } from "../../type";
-import { IStepProducts } from "../components/step-items-list/item";
+import { IStepProducts } from "../components/step-items-list/step-items";
 export interface SaveStepProductExtra {
     _meta: {
         isMoulding: boolean;

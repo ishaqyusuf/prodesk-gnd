@@ -11,27 +11,19 @@ import {
     useDykeCtx,
     useDykeForm,
 } from "../../_hooks/form-context";
-import { DykeDoorType, DykeForm, DykeStep } from "../../../type";
-import ShelfItemIndex from "../shelf-item";
-import Image from "next/image";
-import { env } from "@/env.mjs";
-import { Label } from "@/components/ui/label";
-import {
-    getMouldingStepProduct,
-    getStepProduct,
-} from "../../_action/get-dyke-step-product";
-import { toast } from "sonner";
-import { getNextDykeStepAction } from "../../_action/get-next-dyke-step";
+import { DykeStep } from "../../../type";
+import ShelfItemIndex from "./shelf-item";
+
 import { Icons } from "@/components/_v1/icons";
 import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 
-import LineItemSection from "../line-item-section/line-item-section";
-import { StepProducts } from "./item";
-import MultiComponentRender from "../multi-component-render";
-import HousePackageTool from "../house-package-tools";
+import LineItemSection from "./line-item-section/line-item-section";
+import { StepProducts } from "./step-items";
+import MultiComponentRender from "./multi-component-render";
+import HousePackageTool from "./house-package-tools";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;

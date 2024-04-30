@@ -3,8 +3,8 @@
 import { prisma } from "@/db";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeDoorType, DykeProductMeta } from "../../type";
-import { DykeDoors } from "@prisma/client";
-import { IStepProducts } from "../components/step-items-list/item";
+import { DykeDoors, Prisma } from "@prisma/client";
+import { IStepProducts } from "../components/step-items-list/step-items";
 interface Props {
     q;
     omit;
@@ -28,20 +28,20 @@ export async function getDykeStepDoors({
 
     if (!final) final = isBifold;
 
-    const whereDoor: any = {
+    const whereDoor: Prisma.DykeDoorsWhereInput = {
         query: isBifold || !query ? undefined : query,
     };
     // if (!isBifold)
-    if (doorType != "Door Slabs Only")
-        whereDoor.OR = [
-            doorType &&
-                !isBifold && {
-                    doorType: null,
-                },
-            {
-                doorType,
-            },
-        ].filter(Boolean);
+    // if (doorType != "Door Slabs Only")
+
+    whereDoor.OR =
+        doorType && !isBifold
+            ? undefined
+            : [
+                  {
+                      doorType,
+                  },
+              ];
     // console.log(whereDoor);
 
     const _doors = await prisma.dykeDoors.findMany({

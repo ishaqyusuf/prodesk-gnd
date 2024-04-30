@@ -17,7 +17,7 @@ import { saveStepProduct } from "../../_action/save-step-product";
 import { useModal } from "@/components/common/modal-old/provider";
 import { _getMouldingSpecies } from "./_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { IStepProducts } from "../step-items-list/item";
+import { IStepProducts } from "../step-items-list/step-items";
 
 interface Props {
     item: IStepProducts[0];
@@ -47,7 +47,6 @@ export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
     }, []);
     function onUpload(assetId) {
         // console.log(assetId);
-
         form.setValue("product.img", assetId);
     }
     const [saving, startSaving] = useTransition();

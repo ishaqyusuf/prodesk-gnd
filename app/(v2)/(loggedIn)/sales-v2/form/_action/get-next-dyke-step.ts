@@ -175,7 +175,7 @@ async function CustomStepForm(
         console.log(doorType);
 
         const customSteps = {
-            "Door Type": "Height",
+            "Item Type": "Height",
             Height: "Door",
             Door: "House Package Tool",
         };
@@ -184,7 +184,7 @@ async function CustomStepForm(
     }
     if (doorType == "Moulding") {
         const customSteps = {
-            "Door Type": "Specie",
+            "Item Type": "Specie",
             Specie: "Moulding",
             Moulding: "Line Item",
             // "M Casing": "Line Item",
@@ -194,12 +194,12 @@ async function CustomStepForm(
     }
     if ((doorType || productTitle) == "Services") {
         const customSteps = {
-            "Door Type": "Line Item",
+            "Item Type": "Line Item",
             //  Specie: "Moulding",
             //  Moulding: "Line Item",
             // "M Casing": "Line Item",
         };
-
+        console.log(stepTitle);
         title = customSteps[stepTitle];
     }
     // console.log([doorType, productTitle]);
@@ -208,18 +208,12 @@ async function CustomStepForm(
         // console.log(productTitle);
 
         const customSteps = {
-            // "Door Type": "Height",
-            // Height: "Door Type2",
-            // "Door Type2": "Door",
             Door: "House Package Tool",
-            // "M Casing": "Line Item",
+            "Item Type": "Height",
+            Height: "Door Type",
+            // "Door Type": "Door",
         };
-        if (productTitle != "Door Slabs Only") {
-            customSteps["Height"] = "Door Type";
-            customSteps["Door Type"] = "Door";
-        } else {
-            customSteps["Door Type"] = "Height";
-        }
+
         title = customSteps[stepTitle];
         console.log(title);
     }

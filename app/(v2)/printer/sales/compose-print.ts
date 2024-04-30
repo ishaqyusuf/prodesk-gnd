@@ -261,7 +261,7 @@ function getDoorsTable(
                         : [
                               ...item.formSteps.filter(
                                   (t) =>
-                                      !["Door", "Door Type", "Moulding"].some(
+                                      !["Door", "Item Type", "Moulding"].some(
                                           (s) => s == t.step.title
                                       )
                               ),

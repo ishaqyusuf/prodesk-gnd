@@ -37,20 +37,20 @@ export function Cmd() {
                         break;
                 }
             }
-            // if (e.key === "k" && (e.metaKey || e.altKey)) {
-            //     // console.log(route.pathname);
-            //     // console.log(path);
-            //     let sc = [];
-            //     e.preventDefault();
-            //     if (cmd.form) {
-            //         const k = `pageActions.${path}`;
-            //         const { commands } = cmd.form.getValues(k) || {};
-            //         sc = commands || [];
-            //         console.log(k);
-            //     }
-            //     setSpecialCmds(sc);
-            //     setOpen((open) => !open);
-            // }
+            if (e.key === "k" && (e.metaKey || e.altKey)) {
+                // console.log(route.pathname);
+                // console.log(path);
+                let sc = [];
+                e.preventDefault();
+                if (cmd.form) {
+                    const k = `pageActions.${path}`;
+                    const { commands } = cmd.form.getValues(k) || {};
+                    sc = commands || [];
+                    console.log(k);
+                }
+                setSpecialCmds(sc);
+                setOpen((open) => !open);
+            }
         };
         document.addEventListener("keydown", down);
         return () => document.removeEventListener("keydown", down);

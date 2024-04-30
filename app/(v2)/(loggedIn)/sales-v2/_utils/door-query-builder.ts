@@ -94,7 +94,7 @@ function toKeyValue(step: FormStepArray) {
     } = {} as any;
     step.map((s) => {
         let k: keyof typeof obj = camel(s.step.title as any) as any;
-        if (k == "doorType" && !obj.doorType0) k = "doorType0";
+        // if (k == "doorType" && !obj.doorType0) k = "doorType0";
         const v = (obj[k as any] = s.item.value as any);
         if (k == "doorConfiguration")
             obj.qty = v?.toLowerCase().includes("double");

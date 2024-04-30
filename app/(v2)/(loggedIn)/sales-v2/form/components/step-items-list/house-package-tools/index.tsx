@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMultiComponentItem } from "../../_hooks/use-multi-component-item";
+import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item";
 import {
     Table,
     TableBody,
@@ -11,7 +11,7 @@ import {
 import HousePackageSizeLineItem from "./size-line-item";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
-import SelectDoorHeightsModal from "../modals/select-door-heights";
+import SelectDoorHeightsModal from "../../modals/select-door-heights";
 import { useModal } from "@/components/common/modal/provider";
 export default function HousePackageTool({ componentTitle }) {
     const componentItem = useMultiComponentItem(componentTitle);

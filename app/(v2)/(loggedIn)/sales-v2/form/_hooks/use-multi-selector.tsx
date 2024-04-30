@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useDykeForm } from "./form-context";
 import SelectDoorHeightsModal from "../components/modals/select-door-heights";
-import { IStepProducts } from "../components/step-items-list/item";
+import { IStepProducts } from "../components/step-items-list/step-items";
 import { safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
 
