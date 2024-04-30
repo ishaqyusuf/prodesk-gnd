@@ -111,7 +111,16 @@ export async function viewSale(type, slug) {
         slabs: _mergedItems.filter((i) => i.meta.doorType == "Door Slabs Only"),
         mouldings: _mergedItems.filter((i) => i.meta.doorType == "Moulding"),
         services: _mergedItems.filter((i) => i.meta.doorType == "Services"),
+        doors: _mergedItems,
     };
+    const ids: any[] = [];
+    [groupings.slabs, groupings.mouldings, groupings.services].map((v) =>
+        v.map((c) => ids.push(c.id))
+    );
+
+    groupings.doors = _mergedItems?.filter((mi) =>
+        ids.every((id) => id != mi.id)
+    );
     return {
         ...order,
         meta: order.meta as any as ISalesOrderMeta,

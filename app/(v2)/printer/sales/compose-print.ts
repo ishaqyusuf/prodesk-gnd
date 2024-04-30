@@ -164,7 +164,7 @@ function getDoorsTable(
                 // console.log(doorType);
 
                 const isMoulding = doorType == "Moulding";
-                const isBifold = doorType == "Moulding";
+                const isBifold = doorType == "Bifold";
                 const isSlabs = doorType == "Door Slabs Only";
                 const isService = doorType == "Services";
                 const res = {
@@ -225,7 +225,9 @@ function getDoorsTable(
                                       ? [
                                             _cell(
                                                 "Qty",
-                                                isSlabs ? "lhQty" : "qty",
+                                                isSlabs || isBifold
+                                                    ? "lhQty"
+                                                    : "qty",
                                                 2,
                                                 { position: "center" },
                                                 { position: "center" }
@@ -363,7 +365,9 @@ function getDoorsTable(
 
                             case "lineTotal":
                             case "totalPrice":
-                                return formatCurrency.format(m.total as any);
+                                return formatCurrency.format(
+                                    door?.lineTotal || (m.total as any)
+                                );
                             case "lhQty":
                             case "rhQty":
                                 return door?.[cell as any];
