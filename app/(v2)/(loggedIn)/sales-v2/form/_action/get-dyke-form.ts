@@ -125,7 +125,7 @@ export async function getDykeFormAction(type, slug) {
                     id: d.id,
                 };
             });
-            console.log(item.housePackageTool?.dykeDoorId);
+            // console.log(item.housePackageTool?.dykeDoorId);
 
             return {
                 ...item,
@@ -234,10 +234,14 @@ export async function getDykeFormAction(type, slug) {
                         //         d.step?.title == "Door" ||
                         //         d.step?.title == "Moulding"
                         // );
-                        const component = item.housePackageTool?.door ||
-                            item.housePackageTool?.molding || {
-                                title: generateRandomString(4),
-                            };
+                        const component =
+                            item.housePackageTool?.door ||
+                            item.housePackageTool?.molding ||
+                            item.meta.doorType == "Services"
+                                ? {
+                                      title: generateRandomString(4),
+                                  }
+                                : null;
 
                         const isMoulding =
                             item.housePackageTool?.moldingId != null;
