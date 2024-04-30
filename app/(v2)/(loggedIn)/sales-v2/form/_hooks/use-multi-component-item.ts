@@ -10,8 +10,10 @@ export function useMultiComponentItem(componentTitle) {
     const rootKey = `itemArray.${item.rowIndex}.multiComponent.components.${componentTitle}`;
     const doorType = item.get.doorType();
     const isBifold = doorType == "Bifold";
+    const isSlab = doorType == "Door Slabs Only";
+
     const prices = (
-        doorType == "Bifold" ? ["Door"] : ["Door", "Jamb Size", "Casing"]
+        isBifold || isSlab ? ["Door"] : ["Door", "Jamb Size", "Casing"]
     ).map((title) => ({
         title,
         key: camel(`${title} price`),
@@ -94,9 +96,11 @@ export function useMultiComponentItem(componentTitle) {
         item,
         prices,
         isBifold,
+        isSlab,
         sizeList,
         qty,
         rootKey,
+        doorType,
         unitPrice,
         totalPrice,
         doorTotalPrice,

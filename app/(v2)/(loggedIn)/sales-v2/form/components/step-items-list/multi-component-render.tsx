@@ -11,6 +11,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
 
 export default function MultiComponentRender({ Render, line = false }) {
     const mdf = useMultiDykeForm();
@@ -43,6 +45,19 @@ export default function MultiComponentRender({ Render, line = false }) {
                                 ))}
                             </TableBody>
                         </Table>
+                        {!item._type?.isBifold() && (
+                            <div className="flex justify-end">
+                                <Button
+                                    onClick={() => {
+                                        mdf.addServiceLine();
+                                    }}
+                                    size={"sm"}
+                                >
+                                    <Icons.add className="w-4 h-4 mr-2" />
+                                    <span>Add</span>
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <Tabs

@@ -164,7 +164,7 @@ export async function getDykeFormAction(type, slug) {
         shippingAddress,
         billingAddress,
         order: orderData,
-
+        _rawData: order,
         itemArray: items
             ?.filter((item) => {
                 if (item.multiDykeUid) return item.multiDyke;

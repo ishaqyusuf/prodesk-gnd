@@ -5,7 +5,7 @@ import { DykeForm } from "../../type";
 import { lastId } from "@/lib/nextId";
 import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
 import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
-import { timeout } from "@/lib/timeout";
+
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export async function saveDykeSales(data: DykeForm) {
@@ -155,6 +155,8 @@ export async function saveDykeSales(data: DykeForm) {
                             doors,
                             door,
                             molding,
+                            salesOrderId,
+                            orderItemId,
                             _doorForm = {},
                             _doorFormDefaultValue,
                             ...hptData
@@ -174,7 +176,7 @@ export async function saveDykeSales(data: DykeForm) {
                             const newHpt = !hptId;
                             console.log([newHpt, hptId]);
 
-                            if (!hptId) hptId = ++lastHptId;
+                            if (!hptId && newHpt) hptId = ++lastHptId;
                             hptData.meta = hptData.meta || {};
                             if (newHpt) {
                                 createHpts.push({
@@ -184,6 +186,8 @@ export async function saveDykeSales(data: DykeForm) {
                                     orderItemId: itemId,
                                 });
                             } else {
+                                console.log({ hptData, hptId });
+
                                 await tx.housePackageTools.update({
                                     where: { id: hptId },
                                     data: {
@@ -196,7 +200,7 @@ export async function saveDykeSales(data: DykeForm) {
                                 (doors || [])?.map(async (door) => {
                                     if (!door.lhQty && !door.rhQty) return null;
                                     door.meta = door.meta || {};
-                                    console.log("YES DOOR");
+                                    // console.log("YES DOOR");
                                     door.salesOrderId = order.id;
                                     door.salesOrderItemId = itemId;
                                     let { id: doorId, ...doorData } = door;

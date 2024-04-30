@@ -4,6 +4,7 @@ import { useContext } from "react";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import Money from "@/components/_v1/money";
 import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 
 interface Props {
     componentTitle;
@@ -13,10 +14,11 @@ export default function LineItemSection({ componentTitle }: Props) {
     const item = useContext(DykeItemFormContext);
     const componentItem = useMultiComponentItem(componentTitle);
     const rootKey = `itemArray.${item.rowIndex}.item`;
+    const isMoulding = item.get.doorType() == "Moulding";
     return (
         <>
             <TableCell className="">
-                {item.get.doorType() == "Moulding" ? (
+                {isMoulding ? (
                     componentTitle
                 ) : (
                     <ControlledInput
@@ -44,6 +46,9 @@ export default function LineItemSection({ componentTitle }: Props) {
             </TableCell>
             <TableCell className="w-[100px]">
                 <Money value={componentItem.totalPrice} />
+            </TableCell>
+            <TableCell className="w-[100px]">
+                <ConfirmBtn />
             </TableCell>
         </>
     );

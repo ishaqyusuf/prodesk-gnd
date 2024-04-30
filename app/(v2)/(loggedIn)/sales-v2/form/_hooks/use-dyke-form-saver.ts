@@ -39,10 +39,10 @@ export default function useDykeFormSaver(form) {
 
             const e = calculateSalesEstimate(init);
             console.log("SAVE FORM DATA", e);
-            // return;
+
             // return;
             const { order: resp, createHpts } = await saveDykeSales(e);
-            console.log(createHpts);
+            console.log({ resp });
 
             toast.success("Saved");
             if (!id) router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
@@ -67,6 +67,8 @@ export default function useDykeFormSaver(form) {
             }
             // }
             const components = Object.values(item.multiComponent.components);
+            console.log(components);
+
             let parented =
                 components.find(
                     (c) => c.checked && c.itemId && c.itemId == item.item.id
@@ -79,22 +81,26 @@ export default function useDykeFormSaver(form) {
                 }
                 const isMoulding = item.item?.meta?.doorType == "Moulding";
                 const isService = item.item?.meta?.doorType == "Services";
-                console.log(item.item?.meta?.doorType);
+
                 let clone: DykeForm["itemArray"][0] = deepCopy(item);
                 clone.item.multiDyke = false;
                 if ((c.itemId && c.itemId == item.item.id) || !parented) {
                     clone.item.multiDyke = true;
                     console.log("parented");
                     parented = true;
+                } else {
+                    clone.item.formStepArray = [];
                 }
                 clone.item.multiDykeUid = item.multiComponent.uid as any;
                 if (clone.item.housePackageTool)
                     clone.item.housePackageTool.id = c.hptId as any;
+                clone.item.id = c.itemId as any;
+                console.log(c);
+
                 if (!isMoulding && !isService) {
                     if (!clone.item.multiDyke) {
                         clone.item.formStepArray = [];
                     }
-                    clone.item.id = c.itemId as any;
                     Object.keys(c._doorForm || {}).map((k) => {
                         const df = c._doorForm?.[k];
                         if (!c.heights?.[k]?.checked && df) {

@@ -36,7 +36,7 @@ export default function HousePackageTool({ componentTitle }) {
             <Table>
                 <TableHeader>
                     <TableHead>Width</TableHead>
-                    {componentItem.isBifold ? (
+                    {componentItem.isBifold || componentItem.isSlab ? (
                         <>
                             <TableHead className="w-[100px]">Qty</TableHead>
                         </>
@@ -49,7 +49,7 @@ export default function HousePackageTool({ componentTitle }) {
 
                     <TableHead>Unit Dimension</TableHead>
                     <TableHead className="">
-                        {componentItem.isBifold ? (
+                        {componentItem.isBifold || componentItem.isSlab ? (
                             <>Price</>
                         ) : (
                             <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
@@ -79,7 +79,11 @@ export default function HousePackageTool({ componentTitle }) {
                     ))}
                     <TableRow>
                         <TableCell
-                            colSpan={componentItem.isBifold ? 4 : 5}
+                            colSpan={
+                                componentItem.isBifold || componentItem.isSlab
+                                    ? 4
+                                    : 5
+                            }
                         ></TableCell>
                         <TableCell>
                             {/* <Money value={componentItem.unitPrice} /> */}

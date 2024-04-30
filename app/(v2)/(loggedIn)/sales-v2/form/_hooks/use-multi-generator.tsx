@@ -9,14 +9,29 @@ export default function useMultiDykeForm() {
     const [currentTab, setCurrentTab] = useState<string>();
     const [ready, setReady] = useState(false);
     const item = useContext(DykeItemFormContext);
-    const rowIndex = form.watch(
-        `itemArray.${item.rowIndex}.multiComponent.rowIndex` as any
-    );
+    // const rowIndex = form.watch(
+    //     `itemArray.${item.rowIndex}.multiComponent.rowIndex` as any
+    // );
     function setValue(key: keyof MultiDyke, value) {
         form.setValue(
             `itemArray.${item.rowIndex}.multiComponent.${key}` as any,
             value
         );
+    }
+    function addServiceLine() {
+        const n = generateRandomString();
+        setValue(`components.${n}` as any, {
+            checked: true,
+        });
+        setTabs((tabs) => {
+            return [
+                ...tabs,
+                {
+                    title: n,
+                    toolId: null,
+                },
+            ];
+        });
     }
     const generateMultiItems = () => {
         const formData = form.getValues();
@@ -66,11 +81,13 @@ export default function useMultiDykeForm() {
         setReady(true);
         generateMultiItems();
     };
+
     return {
         tabs,
         currentTab,
         setCurrentTab,
         ready,
         initialize,
+        addServiceLine,
     };
 }

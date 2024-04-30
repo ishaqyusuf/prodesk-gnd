@@ -56,9 +56,15 @@ export default function useDykeItem(rowIndex: number) {
     };
     const modal = useModal();
     const multi = useMultiSelector(rowIndex, get);
+    const _type = {
+        isService: () => get.doorType() == "Services",
+        isSlab: () => get.doorType() == "Door Slabs Only",
+        isBifold: () => get.doorType() == "Bifold",
+    };
     return {
         multi,
         get,
+        _type,
         opened,
         openedStepIndex,
         toggleStep(stepIndex) {
