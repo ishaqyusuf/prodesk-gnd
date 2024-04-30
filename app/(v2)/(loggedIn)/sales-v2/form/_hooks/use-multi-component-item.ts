@@ -51,8 +51,7 @@ export function useMultiComponentItem(componentTitle) {
     function initializeSizes() {
         const itemArray = item.get.itemArray();
         const current = itemArray.multiComponent.components?.[componentTitle];
-        console.log([current, componentTitle]);
-
+        // console.log([current, componentTitle]);
         if (current) _setSizeList(current.heights);
     }
     const keys = {

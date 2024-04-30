@@ -151,16 +151,21 @@ function getDoorsTable(
     const dt = {
         // ...res,
         doors: data.order.items
-            .filter((item) => item.housePackageTool)
+            .filter(
+                (item) =>
+                    item.housePackageTool || item?.meta?.doorType == "Services"
+            )
             .filter(
                 (item) =>
                     !item.multiDykeUid || (item.multiDykeUid && item.multiDyke)
             )
             .map((item) => {
-                const doorType = item.housePackageTool?.doorType;
-                // console.log(doorType);
+                const doorType = item.meta.doorType;
+                console.log(doorType);
+
                 const isMoulding = doorType == "Moulding";
                 const isBifold = doorType == "Moulding";
+                const isSlabs = doorType == "Door Slabs Only";
                 const res = {
                     cells: [
                         _cell(
@@ -203,11 +208,11 @@ function getDoorsTable(
                                       { position: "left" },
                                       { position: "left" }
                                   ),
-                                  ...(doorType == "Bifold"
+                                  ...(isBifold || isSlabs
                                       ? [
                                             _cell(
                                                 "Qty",
-                                                "qty",
+                                                isSlabs ? "lhQty" : "qty",
                                                 2,
                                                 { position: "center" },
                                                 { position: "center" }
@@ -395,7 +400,7 @@ function getDoorsTable(
                 });
                 // console.log(lines.length);
                 return {
-                    doorType: item.housePackageTool?.doorType as DykeDoorType,
+                    doorType: item.meta.doorType,
                     details: details,
                     itemCells: res.cells,
                     lines: true

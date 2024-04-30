@@ -225,7 +225,7 @@ export async function saveDykeSales(data: DykeForm) {
                                     ids.doorsIds.push(doorId);
                                 })
                             );
-                            ids.housePackageIds.push(hptId);
+                            if (hptId) ids.housePackageIds.push(hptId as any);
                         }
                     }
                     await Promise.all(
