@@ -161,11 +161,12 @@ function getDoorsTable(
             )
             .map((item) => {
                 const doorType = item.meta.doorType;
-                console.log(doorType);
+                // console.log(doorType);
 
                 const isMoulding = doorType == "Moulding";
                 const isBifold = doorType == "Moulding";
                 const isSlabs = doorType == "Door Slabs Only";
+                const isService = doorType == "Services";
                 const res = {
                     cells: [
                         _cell(
@@ -194,21 +195,33 @@ function getDoorsTable(
                                   ),
                               ]
                             : [
-                                  _cell(
-                                      "Door",
-                                      "door",
-                                      price ? 4 : isPacking ? 7 : 10,
-                                      { position: "left" },
-                                      { position: "left" }
-                                  ),
-                                  _cell(
-                                      "Size",
-                                      "dimension",
-                                      2,
-                                      { position: "left" },
-                                      { position: "left" }
-                                  ),
-                                  ...(isBifold || isSlabs
+                                  ...(isService
+                                      ? [
+                                            _cell(
+                                                "Description",
+                                                "description",
+                                                price ? 4 : isPacking ? 7 : 10,
+                                                { position: "left" },
+                                                { position: "left" }
+                                            ),
+                                        ]
+                                      : [
+                                            _cell(
+                                                "Door",
+                                                "door",
+                                                price ? 4 : isPacking ? 7 : 10,
+                                                { position: "left" },
+                                                { position: "left" }
+                                            ),
+                                            _cell(
+                                                "Size",
+                                                "dimension",
+                                                2,
+                                                { position: "left" },
+                                                { position: "left" }
+                                            ),
+                                        ]),
+                                  ...(isBifold || isSlabs || isService
                                       ? [
                                             _cell(
                                                 "Qty",
@@ -332,6 +345,8 @@ function getDoorsTable(
                         switch (cell) {
                             case "qty":
                                 return m.qty;
+                            case "description":
+                                return m.description;
                             case "door":
                                 return doorTitle;
                             // return item.formSteps.find(
@@ -355,7 +370,7 @@ function getDoorsTable(
                         }
                         return lines.length + 1;
                     };
-                    if (isMoulding) {
+                    if (isMoulding || isService) {
                         lines.push(
                             res.cells.map((cell, _i) => {
                                 const ret = {
@@ -363,16 +378,6 @@ function getDoorsTable(
                                     colSpan: cell.colSpan,
                                     value: getVal(cell.cell),
                                 };
-
-                                // if (_i == 0) ret.value = lines.length + 1;
-                                // const currency = ["Rate", "Total"].includes(
-                                //     cell.title
-                                // );
-                                // if (ret.value && currency) {
-                                //     ret.value = formatCurrency.format(
-                                //         ret.value as any
-                                //     );
-                                // }
                                 return ret;
                             })
                         );
@@ -398,6 +403,7 @@ function getDoorsTable(
                         });
                     }
                 });
+
                 // console.log(lines.length);
                 return {
                     doorType: item.meta.doorType,
