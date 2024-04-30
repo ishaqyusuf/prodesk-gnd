@@ -14,14 +14,23 @@ export async function _saveDykeError(errorId, data) {
     });
     // notify me.
     console.log("SENDING >>>>>");
-    await sendMessage({
-        body: `Dyke save error`,
-        subject: `GND: Dyke Save Error`,
-        to: `ishaqyusuf024@gmail.com`,
-        from: `Noreply <pcruz321@gndprodesk.com>`,
-        type: "error",
-        parentId: null,
-        attachOrder: false,
-    } as any);
-    console.log("SENT");
+    try {
+        await sendMessage({
+            body: `Dyke save error`,
+            subject: `GND: Dyke Save Error`,
+            to: `ishaqyusuf024@gmail.com`,
+            from: `Noreply <pcruz321@gndprodesk.com>`,
+            type: "error",
+            parentId: null,
+            attachOrder: false,
+        } as any);
+        console.log("SENT");
+    } catch (error) {}
+}
+export async function _deleteDykeError(errorId) {
+    await prisma.dykeSalesError.deleteMany({
+        where: {
+            errorId,
+        },
+    });
 }
