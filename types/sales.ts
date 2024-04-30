@@ -16,6 +16,7 @@ import { ICustomer } from "./customers";
 import { BaseQuery } from "./action";
 import { OmitMeta } from "./type";
 import { IInboundOrderItems } from "./sales-inbound";
+import { DykeDoorType } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 
 export type IPriority = "Low" | "High" | "Medium" | "Non";
@@ -125,13 +126,7 @@ export interface ISalesOrderItemMeta {
     isComponent: Boolean;
     components: WizardKvForm;
     // housePackageTool: HousePackageTool;
-    doorType:
-        | "Shelf Items"
-        | "Interior"
-        | "Exterior"
-        | "Garage"
-        | "Bifold"
-        | "Moulding";
+    doorType: DykeDoorType;
 
     _dykeSizes: { [size in string]: boolean };
     // _dykeMulti: { [item in string]: boolean };

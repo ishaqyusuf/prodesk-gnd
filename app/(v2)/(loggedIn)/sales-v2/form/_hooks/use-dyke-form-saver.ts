@@ -77,9 +77,9 @@ export default function useDykeFormSaver(form) {
                     trash.housePackageTools.push(c.hptId);
                     return;
                 }
-                const isMoulding = Object.values(c.heights || {}).every(
-                    (h) => !h.checked
-                );
+                const isMoulding = item.item?.meta?.doorType == "Moulding";
+                const isService = item.item?.meta?.doorType == "Services";
+                console.log(item.item?.meta?.doorType);
                 let clone: DykeForm["itemArray"][0] = deepCopy(item);
                 clone.item.multiDyke = false;
                 if ((c.itemId && c.itemId == item.item.id) || !parented) {
@@ -88,8 +88,9 @@ export default function useDykeFormSaver(form) {
                     parented = true;
                 }
                 clone.item.multiDykeUid = item.multiComponent.uid as any;
-                clone.item.housePackageTool.id = c.hptId as any;
-                if (!isMoulding) {
+                if (clone.item.housePackageTool)
+                    clone.item.housePackageTool.id = c.hptId as any;
+                if (!isMoulding && !isService) {
                     if (!clone.item.multiDyke) {
                         clone.item.formStepArray = [];
                     }
@@ -141,8 +142,11 @@ export default function useDykeFormSaver(form) {
                     clone.item.price = clone.item.rate = c.unitPrice;
                     clone.item.total = c.totalPrice;
                     clone.item.qty = c.qty;
-                    clone.item.housePackageTool.dykeDoorId = null;
-                    clone.item.housePackageTool.moldingId = c.toolId;
+                    clone.item.description = c.description as any;
+                    if (isMoulding) {
+                        clone.item.housePackageTool.dykeDoorId = null;
+                        clone.item.housePackageTool.moldingId = c.toolId;
+                    }
                 }
                 items.push(clone);
             });
