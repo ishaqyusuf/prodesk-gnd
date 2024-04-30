@@ -9,7 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { getShelfProducts } from "../../../_action/get-shelf-products.actions";
+import { getShelfProducts } from "../../../../_action/get-shelf-products.actions";
 import { Form, FormField } from "@/components/ui/form";
 import {
     Select,
@@ -19,15 +19,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { _getShelfCategories } from "../../../_action/get-shelf-categories";
+import { _getShelfCategories } from "../../../../_action/get-shelf-categories";
 import { DykeShelfCategories } from "@prisma/client";
-import useShelfItem, { IUseShelfItem } from "../../../_hooks/use-shelf-item";
+import useShelfItem, { IUseShelfItem } from "../../../../_hooks/use-shelf-item";
 import { Input } from "@/components/ui/input";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
-import ShelfItemModal from "../../modals/shelf-item-modal";
+import ShelfItemModal from "../../../modals/shelf-item-modal";
 import { toast } from "sonner";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 // import { ArrowDown } from "lucide-react";

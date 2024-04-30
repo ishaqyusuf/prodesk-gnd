@@ -2,7 +2,7 @@
 
 import { IStepProducts, StepProductProps } from ".";
 
-import { getMouldingStepProduct } from "../../../_action/get-dyke-step-product";
+import { getMouldingStepProduct } from "../../../../_action/get-dyke-step-product";
 
 import { cn, safeFormText } from "@/lib/utils";
 import { useContext, useEffect, useState } from "react";
@@ -10,27 +10,27 @@ import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../../_hooks/form-context";
-import { DykeStep } from "../../../../type";
+} from "../../../../_hooks/form-context";
+import { DykeStep } from "../../../../../type";
 import Image from "next/image";
 import { env } from "@/env.mjs";
 import { Label } from "@/components/ui/label";
 import {
     getSlabDoorTypes,
     getStepProduct,
-} from "../../../_action/get-dyke-step-product";
+} from "../../../../_action/get-dyke-step-product";
 import { toast } from "sonner";
-import { getNextDykeStepAction } from "../../../_action/get-next-dyke-step";
+import { getNextDykeStepAction } from "../../../../_action/get-next-dyke-step";
 import { Icons } from "@/components/_v1/icons";
 import { timeout } from "@/lib/timeout";
-import { getDykeStepDoors } from "../../../_action/get-dyke-step-doors";
-import { doorQueryBuilder } from "../../../../_utils/door-query-builder";
+import { getDykeStepDoors } from "../../../../_action/get-dyke-step-doors";
+import { doorQueryBuilder } from "../../../../../_utils/door-query-builder";
 
 import SVG from "react-inlinesvg";
 import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
-import EditStepItemModal from "../../modals/edit-step-item-modal";
-import { SaveStepProductExtra } from "../../../_action/save-step-product";
+import EditStepItemModal from "../../../modals/edit-step-item-modal";
+import { SaveStepProductExtra } from "../../../../_action/save-step-product";
 export default function useStepItems({
     stepForm,
     stepIndex,
@@ -55,7 +55,7 @@ export default function useStepItems({
             );
             // console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
-            console.log(_props);
+            // console.log(_props);
 
             const { result: prods } = await getDykeStepDoors(
                 _props as any
@@ -79,7 +79,12 @@ export default function useStepItems({
         ) {
             setStepProducts(await getSlabDoorTypes());
             // if(stepFormTitle == 'Height' )
-        } else setStepProducts(await getStepProduct(stepForm?.step?.id));
+        } else {
+            const _stepProds = await getStepProduct(stepForm?.step?.id);
+            console.log(_stepProds);
+
+            setStepProducts(_stepProds);
+        }
     };
     useEffect(() => {
         load();
@@ -169,6 +174,11 @@ export default function useStepItems({
                 case "Specie":
                     break;
                 case "Item Type":
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.multiComponent.components`,
+                        {}
+                    );
+
                     switch (stepProd?.product?.title) {
                         case "Services":
                             await item.multi.initServices();

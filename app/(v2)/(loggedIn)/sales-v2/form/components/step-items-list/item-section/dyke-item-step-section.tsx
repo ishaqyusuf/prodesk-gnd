@@ -10,8 +10,8 @@ import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../../_hooks/form-context";
-import { DykeStep } from "../../../type";
+} from "../../../_hooks/form-context";
+import { DykeStep } from "../../../../type";
 import ShelfItemIndex from "./shelf-item";
 
 import { Icons } from "@/components/_v1/icons";
@@ -20,9 +20,9 @@ import {
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 
-import LineItemSection from "./line-item-section/line-item-section";
+import LineItemSection from "../line-item-section/line-item-section";
 import { StepProducts } from "./step-items";
-import MultiComponentRender from "./multi-component-render";
+import MultiComponentRender from "../multi-component-render";
 import HousePackageTool from "./house-package-tools";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;

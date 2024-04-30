@@ -5,17 +5,19 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { DykeItemStepSection } from "./step-items-list/dyke-item-step-section";
+import { DykeItemStepSection } from "./dyke-item-step-section";
 
 import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
-} from "../_hooks/form-context";
-import useDykeItem, { IDykeItemFormContext } from "../_hooks/use-dyke-item";
+} from "../../../_hooks/form-context";
+import useDykeItem, {
+    IDykeItemFormContext,
+} from "../../../_hooks/use-dyke-item";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { _deleteDykeItem } from "../_action/delete-item";
+import { _deleteDykeItem } from "../../../_action/delete-item";
 
 interface Props {
     rowIndex;
@@ -32,7 +34,7 @@ export function DykeItemFormSection({ rowIndex }: Props) {
     } as IDykeItemFormContext;
     async function deleteSection() {
         const itemData = item.get.data();
-        console.log(itemData);
+        // console.log(itemData);
 
         await _deleteDykeItem(itemData?.item?.id);
         dykeCtx.itemArray.remove(rowIndex);

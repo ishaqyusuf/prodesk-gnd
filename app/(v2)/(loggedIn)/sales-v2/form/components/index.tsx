@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { DykeItemFormSection } from "./dyke-item-form-section";
+import { DykeItemFormSection } from "./step-items-list/item-section/item-section";
 import { DykeForm, IDykeFormContext } from "../../type";
 import { DykeFormContext } from "../_hooks/form-context";
 import RenderForm from "@/_v2/components/common/render-form";
@@ -16,7 +16,7 @@ interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    console.log(defaultValues);
+    // console.log(defaultValues);
 
     const form = useForm<DykeForm>({
         defaultValues: {
@@ -36,6 +36,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
         control: form.control,
         name: "itemArray",
     });
+
     const ctxValue = {
         // currentItemIndex,
         startLoadingStep,

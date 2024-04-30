@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { findDoorSvg } from "../../_utils/find-door-svg";
 import { DykeDoorType, DykeProductMeta } from "../../type";
 import { DykeDoors, Prisma } from "@prisma/client";
-import { IStepProducts } from "../components/step-items-list/step-items";
+import { IStepProducts } from "../components/step-items-list/item-section/step-items";
 interface Props {
     q;
     omit;

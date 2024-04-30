@@ -17,7 +17,7 @@ import { saveStepProduct } from "../../_action/save-step-product";
 import { useModal } from "@/components/common/modal-old/provider";
 import { _getMouldingSpecies } from "./_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { IStepProducts } from "../step-items-list/step-items";
+import { IStepProducts } from "../step-items-list/item-section/step-items";
 
 interface Props {
     item: IStepProducts[0];
@@ -70,8 +70,13 @@ export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
                 <div className="grid gap-4">
                     <ControlledInput
                         control={form.control}
-                        name="product.title"
+                        name="product.value"
                         label="Product Title"
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="product.title"
+                        label="System Title"
                     />
                     {moulding && (
                         <div className="grid grid-cols-2 gap-4">

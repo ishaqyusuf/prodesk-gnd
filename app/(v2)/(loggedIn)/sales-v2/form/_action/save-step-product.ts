@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 
 import { DykeDoorType } from "../../type";
-import { IStepProducts } from "../components/step-items-list/step-items";
+import { IStepProducts } from "../components/step-items-list/item-section/step-items";
 export interface SaveStepProductExtra {
     _meta: {
         isMoulding: boolean;
@@ -83,7 +83,7 @@ export async function saveStepProduct(data: Props) {
                     create: {
                         ...productData,
                         categoryId: undefined,
-                        value: productData.title as any,
+                        // value: productData.title as any,
                         meta: productData.meta as any,
                         category: !_meta?.isMoulding
                             ? undefined

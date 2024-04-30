@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useDykeForm } from "./form-context";
 import SelectDoorHeightsModal from "../components/modals/select-door-heights";
-import { IStepProducts } from "../components/step-items-list/step-items";
+import { IStepProducts } from "../components/step-items-list/item-section/step-items";
 import { generateRandomString, safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
 import { timeout } from "@/lib/timeout";
@@ -16,27 +16,23 @@ export function useMultiSelector(rowIndex, get) {
                 `itemArray.${rowIndex}.multiComponent.multiDyke`,
                 `itemArray.${rowIndex}.multiComponent.components`,
             ]);
-            console.log([uid]);
-
-            if (!uid) {
-                form.setValue(
-                    `itemArray.${rowIndex}.multiComponent.uid`,
-                    generateRandomString(4)
-                );
-                form.setValue(
-                    `itemArray.${rowIndex}.multiComponent.multiDyke`,
-                    true
-                );
-                form.setValue(
-                    `itemArray.${rowIndex}.multiComponent.components`,
-                    {
-                        [generateRandomString(4)]: {
-                            checked: true,
-                        },
-                    } as any
-                );
-                await timeout(1000);
-            }
+            // console.log([uid]);
+            // if (!uid) {
+            form.setValue(
+                `itemArray.${rowIndex}.multiComponent.uid`,
+                generateRandomString(4)
+            );
+            form.setValue(
+                `itemArray.${rowIndex}.multiComponent.multiDyke`,
+                true
+            );
+            form.setValue(`itemArray.${rowIndex}.multiComponent.components`, {
+                [generateRandomString(4)]: {
+                    checked: true,
+                },
+            } as any);
+            await timeout(1000);
+            // }
         },
         watchMultiComponent() {
             return form.watch(
