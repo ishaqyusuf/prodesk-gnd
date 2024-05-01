@@ -8,6 +8,7 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { deepCopy } from "@/lib/deep-copy";
 import { _saveDykeError } from "../_action/error/save-error";
 import { generateRandomString } from "@/lib/utils";
+import { isComponentType } from "../../overview/is-component-type";
 
 export default function useDykeFormSaver(form) {
     const [saving, startTransition] = useTransition();
@@ -84,8 +85,8 @@ export default function useDykeFormSaver(form) {
                     trash.housePackageTools.push(c.hptId);
                     return;
                 }
-                const isMoulding = item.item?.meta?.doorType == "Moulding";
-                const isService = item.item?.meta?.doorType == "Services";
+                // const cType  =
+                const type = isComponentType(item.item?.meta?.doorType);
 
                 let clone: DykeForm["itemArray"][0] = deepCopy(item);
                 clone.item.multiDyke = false;
@@ -101,8 +102,8 @@ export default function useDykeFormSaver(form) {
                     clone.item.housePackageTool.id = c.hptId as any;
                 clone.item.id = c.itemId as any;
                 console.log(c);
-
-                if (!isMoulding && !isService) {
+                if (type.garage) clone.item.swing = c.swing as any;
+                if (!type.moulding && !type.service) {
                     if (!clone.item.multiDyke) {
                         clone.item.formStepArray = [];
                     }
@@ -154,7 +155,7 @@ export default function useDykeFormSaver(form) {
                     clone.item.total = c.totalPrice;
                     clone.item.qty = c.qty;
                     clone.item.description = c.description as any;
-                    if (isMoulding) {
+                    if (type.moulding) {
                         clone.item.housePackageTool.dykeDoorId = null;
                         clone.item.housePackageTool.moldingId = c.toolId;
                     }

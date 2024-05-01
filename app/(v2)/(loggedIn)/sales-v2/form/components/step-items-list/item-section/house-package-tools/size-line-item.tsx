@@ -6,6 +6,7 @@ import {
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 
 interface Props {
     size: { dim; width };
@@ -21,6 +22,15 @@ export default function HousePackageSizeLineItem({
     return (
         <TableRow>
             <TableCell>{size.width}</TableCell>
+            {componentItem.isComponent.garage && (
+                <TableCell className="h-[180px]">
+                    <ControlledSelect
+                        options={["In Swing", "Out Swing"]}
+                        control={form.control}
+                        name={`${sizeRow.keys.swing}` as any}
+                    />
+                </TableCell>
+            )}
             <TableCell>
                 <ControlledInput
                     type="number"

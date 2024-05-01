@@ -16,6 +16,7 @@ import { formatCurrency } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { DykeDoorType } from "../../(loggedIn)/sales-v2/type";
+import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
@@ -184,6 +185,7 @@ type Cell =
     | "lineTotal"
     | "description"
     | "totalPrice"
+    | "swing"
     | "moulding"
     | null;
 function _cell<T>(
@@ -216,10 +218,7 @@ function getDoorsTable(
                 const doorType = item.meta.doorType;
                 // console.log(doorType);
 
-                const isMoulding = doorType == "Moulding";
-                const isBifold = doorType == "Bifold";
-                const isSlabs = doorType == "Door Slabs Only";
-                const isService = doorType == "Services";
+                const is = isComponentType(doorType);
                 const res = {
                     cells: [
                         _cell(
@@ -230,7 +229,7 @@ function getDoorsTable(
                             { position: "center" }
                         ),
 
-                        ...(isMoulding
+                        ...(is.moulding
                             ? [
                                   _cell(
                                       "Moulding",
@@ -248,7 +247,7 @@ function getDoorsTable(
                                   ),
                               ]
                             : [
-                                  ...(isService
+                                  ...(is.service
                                       ? [
                                             _cell(
                                                 "Description",
@@ -274,11 +273,14 @@ function getDoorsTable(
                                                 { position: "left" }
                                             ),
                                         ]),
-                                  ...(isBifold || isSlabs || isService
+                                  ...(is.garage
+                                      ? [_cell("Swing", "swing", 2, {}, {})]
+                                      : []),
+                                  ...(is.bifold || is.slab || is.service
                                       ? [
                                             _cell(
                                                 "Qty",
-                                                isSlabs || isBifold
+                                                is.slab || is.bifold
                                                     ? "lhQty"
                                                     : "qty",
                                                 2,
@@ -328,7 +330,7 @@ function getDoorsTable(
                 if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
 
                 const details =
-                    isMoulding || isBifold
+                    is.moulding || is.bifold
                         ? []
                         : [
                               ...item.formSteps.filter(
@@ -352,6 +354,8 @@ function getDoorsTable(
                         doorTitle?
                     ) => {
                         switch (cell) {
+                            case "swing":
+                                return door?.swing;
                             case "qty":
                                 return m.qty;
                             case "description":
@@ -381,7 +385,7 @@ function getDoorsTable(
                         }
                         return lines.length + 1;
                     };
-                    if (isMoulding || isService) {
+                    if (is.moulding || is.service) {
                         lines.push(
                             res.cells.map((cell, _i) => {
                                 const ret = {
@@ -424,28 +428,28 @@ function getDoorsTable(
                     itemCells: res.cells,
                     lines: true
                         ? lines
-                        : (isMoulding ? [] : item.housePackageTool?.doors)?.map(
-                              (door, i) => {
-                                  return res.cells.map((cell, _i) => {
-                                      const ret = {
-                                          style: cell.cellStyle,
-                                          colSpan: cell.colSpan,
-                                          value: door[cell.cell as any],
-                                      };
-                                      if (_i == 0) ret.value = i + 1;
-                                      const currency = [
-                                          "Rate",
-                                          "Total",
-                                      ].includes(cell.title);
-                                      if (ret.value && currency) {
-                                          ret.value = formatCurrency.format(
-                                              ret.value
-                                          );
-                                      }
-                                      return ret;
-                                  });
-                              }
-                          ),
+                        : (is.moulding
+                              ? []
+                              : item.housePackageTool?.doors
+                          )?.map((door, i) => {
+                              return res.cells.map((cell, _i) => {
+                                  const ret = {
+                                      style: cell.cellStyle,
+                                      colSpan: cell.colSpan,
+                                      value: door[cell.cell as any],
+                                  };
+                                  if (_i == 0) ret.value = i + 1;
+                                  const currency = ["Rate", "Total"].includes(
+                                      cell.title
+                                  );
+                                  if (ret.value && currency) {
+                                      ret.value = formatCurrency.format(
+                                          ret.value
+                                      );
+                                  }
+                                  return ret;
+                              });
+                          }),
                 };
             }),
     };

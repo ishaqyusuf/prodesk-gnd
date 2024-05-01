@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { DykeItemFormContext, useDykeForm } from "./form-context";
 import { camel, math, sum } from "@/lib/utils";
 import { SizeForm } from "../components/modals/select-door-heights";
+import { isComponentType } from "../../overview/is-component-type";
 
 type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
 export function useMultiComponentItem(componentTitle) {
@@ -9,6 +10,8 @@ export function useMultiComponentItem(componentTitle) {
     const item = useContext(DykeItemFormContext);
     const rootKey = `itemArray.${item.rowIndex}.multiComponent.components.${componentTitle}`;
     const doorType = item.get.doorType();
+    const isComponent = isComponentType(doorType);
+
     const isBifold = doorType == "Bifold";
     const isSlab = doorType == "Door Slabs Only";
 
@@ -99,6 +102,7 @@ export function useMultiComponentItem(componentTitle) {
         sizeList,
         qty,
         rootKey,
+        isComponent,
         doorType,
         unitPrice,
         totalPrice,
@@ -121,6 +125,7 @@ export function useMultiComponentSizeRow(
         lineTotal: `${sizeRootKey}.lineTotal`,
         doorPrice: `${sizeRootKey}.doorPrice`,
         jambSizePrice: `${sizeRootKey}.jambSizePrice`,
+        swing: `${sizeRootKey}.swing`,
         casingPrice: `${sizeRootKey}.casingPrice`,
     };
     // prices.map(p => keys[])

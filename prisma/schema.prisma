@@ -500,17 +500,38 @@ model ModelHasRoles {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model OrderItemProductionAssignments {
+    id           Int                          @unique @default(autoincrement())
+    itemId       Int
+    orderId      Int
+    assignedToId Int
+    assignedById Int
+    qtyAssigned  Int? // 0 means all qty
+    note         String?
+    dueDate      DateTime?                    @db.Timestamp(0)
+    deletedAt    DateTime?                    @db.Timestamp(0)
+    createdAt    DateTime?                    @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?                    @updatedAt
+    submissions  OrderProductionSubmissions[]
+    order        SalesOrders                  @relation(fields: [orderId], references: [id])
+    item         SalesOrderItems              @relation(fields: [itemId], references: [id])
+    assignedTo   Users                        @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
+    assignedBy   Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
+}
+
 model OrderProductionSubmissions {
-    id               Int              @unique @default(autoincrement())
+    id               Int                             @unique @default(autoincrement())
     salesOrderId     Int?
     salesOrderItemId Int?
     qty              Int
-    deletedAt        DateTime?        @db.Timestamp(0)
-    createdAt        DateTime?        @default(now()) @db.Timestamp(0)
-    updatedAt        DateTime?        @updatedAt
-    meta             Json?            @db.Json
-    order            SalesOrders?     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
-    item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
+    deletedAt        DateTime?                       @db.Timestamp(0)
+    createdAt        DateTime?                       @default(now()) @db.Timestamp(0)
+    updatedAt        DateTime?                       @updatedAt
+    assignmentId     Int?
+    meta             Json?                           @db.Json
+    order            SalesOrders?                    @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    item             SalesOrderItems?                @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
+    assignment       OrderItemProductionAssignments? @relation(fields: [assignmentId], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -838,26 +859,26 @@ model DykeSalesError {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model SalesOrders {
-    id                Int                          @unique @default(autoincrement())
-    title             String?                      @db.VarChar(255)
+    id                Int                              @unique @default(autoincrement())
+    title             String?                          @db.VarChar(255)
     customerId        Int?
     billingAddressId  Int?
     shippingAddressId Int?
     salesRepId        Int
     pickupId          Int?
     prodId            Int?
-    isDyke            Boolean?                     @default(false)
-    summary           String?                      @db.Text
-    instruction       String?                      @db.Text
-    meta              Json?                        @db.Json
-    status            String                       @db.VarChar(255)
-    inventoryStatus   String?                      @db.VarChar(255)
-    deletedAt         DateTime?                    @db.Timestamp(0)
-    createdAt         DateTime?                    @default(now()) @db.Timestamp(0)
-    updatedAt         DateTime?                    @updatedAt
-    orderId           String                       @unique @db.VarChar(255)
-    slug              String                       @db.VarChar(255)
-    type              String?                      @db.VarChar(255)
+    isDyke            Boolean?                         @default(false)
+    summary           String?                          @db.Text
+    instruction       String?                          @db.Text
+    meta              Json?                            @db.Json
+    status            String                           @db.VarChar(255)
+    inventoryStatus   String?                          @db.VarChar(255)
+    deletedAt         DateTime?                        @db.Timestamp(0)
+    createdAt         DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt         DateTime?                        @updatedAt
+    orderId           String                           @unique @db.VarChar(255)
+    slug              String                           @db.VarChar(255)
+    type              String?                          @db.VarChar(255)
     goodUntil         DateTime?
     paymentTerm       String?
     prodQty           Float?
@@ -868,21 +889,21 @@ model SalesOrders {
     taxPercentage     Float?
     grandTotal        Float?
     amountDue         Float?
-    invoiceStatus     String?                      @db.VarChar(255)
-    prodStatus        String?                      @db.VarChar(255)
-    prodDueDate       DateTime?                    @db.Timestamp(0)
+    invoiceStatus     String?                          @db.VarChar(255)
+    prodStatus        String?                          @db.VarChar(255)
+    prodDueDate       DateTime?                        @db.Timestamp(0)
     deliveredAt       DateTime?
     deliveryOption    String?
-    deliveryProgress  Float?                       @default(0)
-    customer          Customers?                   @relation(fields: [customerId], references: [id])
+    deliveryProgress  Float?                           @default(0)
+    customer          Customers?                       @relation(fields: [customerId], references: [id])
     items             SalesOrderItems[]
-    shippingAddress   AddressBooks?                @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
-    billingAddress    AddressBooks?                @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
-    producer          Users?                       @relation(name: "producer", fields: [prodId], references: [id])
-    salesRep          Users?                       @relation(name: "salesRep", fields: [salesRepId], references: [id])
-    payments          SalesPayments[]              @relation(name: "salesPayment")
+    shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
+    billingAddress    AddressBooks?                    @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
+    producer          Users?                           @relation(name: "producer", fields: [prodId], references: [id])
+    salesRep          Users?                           @relation(name: "salesRep", fields: [salesRepId], references: [id])
+    payments          SalesPayments[]                  @relation(name: "salesPayment")
     productions       OrderProductionSubmissions[]
-    pickup            SalesPickup?                 @relation(fields: [pickupId], references: [id])
+    pickup            SalesPickup?                     @relation(fields: [pickupId], references: [id])
     supplies          SalesItemSupply[]
     commisions        SalesCommision[]
     formSteps         DykeStepForm[]
@@ -891,26 +912,27 @@ model SalesOrders {
     itemDeliveries    OrderItemDelivery[]
     deliveries        OrderDelivery[]
     deliverProgresses OrderDeliveryProgress?
+    assignments       OrderItemProductionAssignments[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
 }
 
 model SalesOrderItems {
-    id                 Int                          @unique @default(autoincrement())
-    description        String?                      @db.VarChar(300)
-    dykeDescription    String?                      @db.VarChar(300)
+    id                 Int                              @unique @default(autoincrement())
+    description        String?                          @db.VarChar(300)
+    dykeDescription    String?                          @db.VarChar(300)
     productId          Int?
     supplier           String?
-    swing              String?                      @db.VarChar(255)
+    swing              String?                          @db.VarChar(255)
     price              Float?
     tax                Float?
     taxPercenatage     Float?
     discount           Float?
     discountPercentage Float?
-    meta               Json?                        @db.Json
-    createdAt          DateTime?                    @default(now()) @db.Timestamp(0)
-    updatedAt          DateTime?                    @updatedAt
-    deletedAt          DateTime?                    @db.Timestamp(0)
+    meta               Json?                            @db.Json
+    createdAt          DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt          DateTime?                        @updatedAt
+    deletedAt          DateTime?                        @db.Timestamp(0)
     qty                Float?
     prebuiltQty        Float?
     truckLoadQty       Float?
@@ -919,20 +941,21 @@ model SalesOrderItems {
     rate               Float?
     total              Float?
     salesPercentage    Float?
-    prodStatus         String?                      @db.VarChar(255)
-    prodStartedAt      DateTime?                    @db.Timestamp(0)
-    sentToProdAt       DateTime?                    @db.Timestamp(0)
-    prodCompletedAt    DateTime?                    @db.Timestamp(0)
-    multiDyke          Boolean                      @default(false)
+    prodStatus         String?                          @db.VarChar(255)
+    prodStartedAt      DateTime?                        @db.Timestamp(0)
+    sentToProdAt       DateTime?                        @db.Timestamp(0)
+    prodCompletedAt    DateTime?                        @db.Timestamp(0)
+    multiDyke          Boolean                          @default(false)
     multiDykeUid       String?
     supplies           SalesItemSupply[]
-    salesOrder         SalesOrders?                 @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+    salesOrder         SalesOrders?                     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     itemDeliveries     OrderItemDelivery[]
     productions        OrderProductionSubmissions[]
     shelfItems         DykeSalesShelfItem[]
     formSteps          DykeStepForm[]
     housePackageTool   HousePackageTools?
     salesDoors         DykeSalesDoors[]
+    assignments        OrderItemProductionAssignments[]
 
     @@index([createdAt, description, swing])
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
@@ -1016,6 +1039,7 @@ model HousePackageTools {
 model DykeSalesDoors {
     id                 Int               @unique @default(autoincrement())
     dimension          String
+    swing              String?
     housePackageToolId Int
     doorPrice          Float?
     jambSizePrice      Float?
@@ -1152,45 +1176,47 @@ model UserDocuments {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Users {
-    id                         Int                        @unique @default(autoincrement())
-    name                       String?                    @db.VarChar(255)
-    username                   String?                    @db.VarChar(255)
-    email                      String                     @db.VarChar(255)
-    phoneNo                    String?                    @db.VarChar(255)
-    phoneCode                  String?                    @db.VarChar(255)
-    country                    String?                    @db.VarChar(255)
-    emailVerifiedAt            DateTime?                  @db.Timestamp(0)
-    password                   String?                    @db.VarChar(255)
-    rememberToken              String?                    @db.VarChar(100)
-    meta                       Json?                      @db.Json
-    deletedAt                  DateTime?                  @db.Timestamp(0)
-    createdAt                  DateTime?                  @default(now()) @db.Timestamp(0)
-    updatedAt                  DateTime?                  @updatedAt
+    id                         Int                              @unique @default(autoincrement())
+    name                       String?                          @db.VarChar(255)
+    username                   String?                          @db.VarChar(255)
+    email                      String                           @db.VarChar(255)
+    phoneNo                    String?                          @db.VarChar(255)
+    phoneCode                  String?                          @db.VarChar(255)
+    country                    String?                          @db.VarChar(255)
+    emailVerifiedAt            DateTime?                        @db.Timestamp(0)
+    password                   String?                          @db.VarChar(255)
+    rememberToken              String?                          @db.VarChar(100)
+    meta                       Json?                            @db.Json
+    deletedAt                  DateTime?                        @db.Timestamp(0)
+    createdAt                  DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt                  DateTime?                        @updatedAt
     employeeProfileId          Int?
     workOrders                 WorkOrders[]
-    salesProductions           SalesOrders[]              @relation(name: "producer")
-    reppedProductions          SalesOrders[]              @relation(name: "salesRep")
+    salesProductions           SalesOrders[]                    @relation(name: "producer")
+    reppedProductions          SalesOrders[]                    @relation(name: "salesRep")
     roles                      ModelHasRoles[]
-    notifications              Notifications[]            @relation(name: "notifications")
-    sentNotifications          Notifications[]            @relation(name: "fromUser")
+    notifications              Notifications[]                  @relation(name: "notifications")
+    sentNotifications          Notifications[]                  @relation(name: "fromUser")
     inbox                      Inbox[]
-    jobs                       Jobs[]                     @relation(name: "installer")
-    coWorkerJobs               Jobs[]                     @relation(name: "co-worker")
-    myIssuedPayments           JobPayments[]              @relation(name: "payer")
-    payments                   JobPayments[]              @relation(name: "worker")
+    jobs                       Jobs[]                           @relation(name: "installer")
+    coWorkerJobs               Jobs[]                           @relation(name: "co-worker")
+    myIssuedPayments           JobPayments[]                    @relation(name: "payer")
+    payments                   JobPayments[]                    @relation(name: "worker")
     templateHistory            CommunityTemplateHistory[]
-    employeeProfile            EmployeeProfile?           @relation(fields: [employeeProfileId], references: [id])
+    employeeProfile            EmployeeProfile?                 @relation(fields: [employeeProfileId], references: [id])
     SalesPickup                SalesPickup[]
-    driverDeliveries           OrderDelivery[]            @relation(name: "driver")
-    createdDeliveries          OrderDelivery[]            @relation(name: "createdBy")
+    driverDeliveries           OrderDelivery[]                  @relation(name: "driver")
+    createdDeliveries          OrderDelivery[]                  @relation(name: "createdBy")
     assignedTasks              HomeTasks[]
     errors                     ErrorLog[]
     documents                  UserDocuments[]
     commissions                SalesCommision[]
-    commissionPayments         CommissionPayment[]        @relation(name: "payer")
-    myIssuedCommissionPayments CommissionPayment[]        @relation(name: "worker")
+    commissionPayments         CommissionPayment[]              @relation(name: "payer")
+    myIssuedCommissionPayments CommissionPayment[]              @relation(name: "worker")
     CommissionPayment          CommissionPayment[]
     blogs                      Blogs[]
+    orderItemAssignments       OrderItemProductionAssignments[] @relation(name: "orderItemAssignments")
+    orderItemAssignedByMe      OrderItemProductionAssignments[] @relation(name: "orderItemAssignedByMe")
 
     @@index([createdAt, deletedAt, name])
 }
