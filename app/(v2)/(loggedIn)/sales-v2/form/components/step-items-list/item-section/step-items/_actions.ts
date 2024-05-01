@@ -18,3 +18,4 @@ export async function _deleteStepItem(item: IStepProducts[0]) {
         },
     });
 }
+export async function _deleteDoorStep(item: IStepProducts[0]) {}

@@ -24,7 +24,7 @@ export async function getDykeStepDoors({
     final = false,
 }: Props): Promise<{ result: IStepProducts }> {
     const isBifold = doorType == "Bifold";
-    console.log(doorType);
+    // console.log(doorType);
 
     if (!final) final = isBifold;
 
@@ -47,12 +47,13 @@ export async function getDykeStepDoors({
     const _doors = await prisma.dykeDoors.findMany({
         where: whereDoor,
     });
-
+    // console.log(_doors.length);
     if (_doors.length || final) {
         const _fd = _doors.filter(
             (d, i) => i == _doors.findIndex((_) => _.title == d.title)
         );
-        // console.log(_doors.length, doorType);
+        console.log(_doors.length, doorType, query);
+
         // console.log(_fd.length);
         return response(_fd, stepId);
     }
@@ -64,6 +65,7 @@ export async function getDykeStepDoors({
                 doorType,
             },
         });
+
         await prisma.dykeDoors.createMany({
             data: hcDoors.map(({ id, query: _query, ...rest }) => ({
                 ...rest,

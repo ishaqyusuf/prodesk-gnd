@@ -13,21 +13,20 @@ export const metadata: Metadata = {
 export default async function SalesForm({ params }) {
     const [type, slug] = params.slug;
     const form = await getDykeFormAction(type, slug);
-    // form.itemArray[0]?.item.formStepArray[0]?.item.
-    // const d = await prisma.dykeSteps.findMany({
-    //     where: {
-    //         title: "Door Type",
+
+    // const _doors = await prisma.dykeDoors.findMany({
+    //     select: {
+    //         id: true,
+    //         title: true,
+
     //     },
     // });
-    // console.log(d);
-    await prisma.dykeSteps.update({
-        where: {
-            id: 1,
-        },
-        data: {
-            title: "Item Type",
-        },
-    });
+    // const unique = _doors.filter(
+    //     (d, i) => i == _doors.findIndex((_) => _.title == d.title)
+    // );
+    // console.log([_doors.length, unique.length]);
+    // let f = _doors.filter((d) => d.title == unique[0]?.title);
+    // console.log(f);
 
     metadata.title = `${slug ? "Edit " : "New "} ${form.order.type} ${
         slug && `| ${slug}`

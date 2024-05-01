@@ -1,11 +1,7 @@
 import { DykeItemStepSectionProps } from "../dyke-item-step-section";
 
-import { cn, safeFormText } from "@/lib/utils";
-import { useContext } from "react";
-import { DykeItemFormContext } from "../../../../_hooks/form-context";
-import Image from "next/image";
-import { env } from "@/env.mjs";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+
 import { getStepProduct } from "../../../../_action/get-dyke-step-product";
 
 import { Icons } from "@/components/_v1/icons";
@@ -31,6 +27,7 @@ export function StepProducts({
         selectProduct,
         ctx,
         deleteStepItem,
+        ...stepCtx
     } = useStepItems({
         stepForm,
         stepIndex,
@@ -69,6 +66,7 @@ export function StepProducts({
                                 select={selectProduct}
                                 loadingStep={ctx.loadingStep}
                                 item={b}
+                                isRoot={stepCtx.isRoot}
                             />
                         </div>
                     ))}

@@ -6,7 +6,13 @@ import { env } from "@/env.mjs";
 import SVG from "react-inlinesvg";
 import { Label } from "@/components/ui/label";
 
-export function StepItem({ item, select, loadingStep, isMultiSection }) {
+export function StepItem({
+    item,
+    select,
+    loadingStep,
+    isMultiSection,
+    isRoot,
+}) {
     const ctx = useContext(DykeItemFormContext);
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
@@ -35,7 +41,11 @@ export function StepItem({ item, select, loadingStep, isMultiSection }) {
             ) : item.product.meta?.url ? (
                 <object data={item.product.meta?.url} type={"image/svg+xml"} />
             ) : null}
-            <Label className="text-sm">{item.product.title}</Label>
+            <Label className="text-sm">
+                {isRoot
+                    ? item.product?.value || item.product.title
+                    : item.product.title}
+            </Label>
         </button>
     );
 }

@@ -23,8 +23,14 @@ interface Props {
     item: IStepProducts[0];
     onCreate(stepItem: IStepProducts[0]);
     moulding?: boolean;
+    root?: boolean;
 }
-export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
+export default function EditStepItemModal({
+    item,
+    onCreate,
+    moulding,
+    root,
+}: Props) {
     const { ...defaultValues } = item;
     if (!item.id) defaultValues.product.title = "";
     const form = useForm<IStepProducts[0]>({
@@ -54,6 +60,8 @@ export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
+            // if(!formData?.product?.title)
+            // formData?.product
             console.log(formData);
             // debugger;
             const reps = await saveStepProduct(formData);
@@ -65,19 +73,22 @@ export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
         <DialogContent>
             <RenderForm {...form}>
                 <DialogHeader>
-                    <DialogTitle>Copy Product</DialogTitle>
+                    <DialogTitle>Edit Product</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4">
-                    <ControlledInput
-                        control={form.control}
-                        name="product.value"
-                        label="Product Title"
-                    />
-                    <ControlledInput
-                        control={form.control}
-                        name="product.title"
-                        label="System Title"
-                    />
+                    {root ? (
+                        <ControlledInput
+                            control={form.control}
+                            name="product.value"
+                            label="Item Type"
+                        />
+                    ) : (
+                        <ControlledInput
+                            control={form.control}
+                            name="product.title"
+                            label="Product Title"
+                        />
+                    )}
                     {moulding && (
                         <div className="grid grid-cols-2 gap-4">
                             {species.map((s, i) => (

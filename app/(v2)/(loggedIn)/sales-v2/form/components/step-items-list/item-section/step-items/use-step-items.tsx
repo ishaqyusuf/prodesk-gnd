@@ -31,7 +31,7 @@ import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "../../../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../../../_action/save-step-product";
-import { _deleteStepItem } from "./_actions";
+import { _deleteDoorStep, _deleteStepItem } from "./_actions";
 export default function useStepItems({
     stepForm,
     stepIndex,
@@ -317,24 +317,35 @@ export default function useStepItems({
                   },
                   _meta,
               } as any);
+
         modal?.open(
             <EditStepItemModal
                 onCreate={onCreate}
+                root={isRoot}
                 moulding={isMoulding && stepFormTitle == "Moulding"}
                 item={_item}
             />
         );
     }
 
-    async function deleteStepItem(index, step: IStepProducts[0]) {
-        // if(!)
-        await _deleteStepItem(step);
+    async function deleteStepItem(index, stepProd: IStepProducts[0]) {
+        console.log(step);
+
+        switch (step) {
+            case "Door":
+                await _deleteDoorStep(stepProd);
+                break;
+            default:
+                await _deleteStepItem(stepProd);
+        }
         setStepProducts((current) => {
             return [...current.slice(0, index), ...current.slice(index)];
         });
     }
+    const isRoot = stepFormTitle == "Item Type";
     return {
         load,
+        isRoot,
         stepProducts,
         step,
         openStepForm,
