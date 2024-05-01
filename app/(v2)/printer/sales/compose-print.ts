@@ -59,8 +59,7 @@ export function composePrint(
             nonShelf: d,
         });
     });
-
-    ret.shelfItemsTable?.map((d) => {
+    (ret.shelfItemsTable as any)?.map((d) => {
         orderedPrinting.push({
             _index: d._index,
             shelf: d,
