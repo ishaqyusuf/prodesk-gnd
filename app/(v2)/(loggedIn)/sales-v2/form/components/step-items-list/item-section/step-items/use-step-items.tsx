@@ -31,6 +31,7 @@ import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "../../../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../../../_action/save-step-product";
+import { _deleteStepItem } from "./_actions";
 export default function useStepItems({
     stepForm,
     stepIndex,
@@ -44,11 +45,12 @@ export default function useStepItems({
     const isMoulding = doorType == "Moulding";
     const stepFormTitle = stepForm.step?.title;
     const ctx = useDykeCtx();
-
+    const [step, setStep] = useState<"Door" | "Moulding" | "Slab" | null>(null);
     const load = async () => {
         const doorType = item.get.doorType();
         if (stepForm?.item?.meta?.hidden) return;
         if (stepFormTitle == "Door") {
+            setStep("Door");
             const query = doorQueryBuilder(
                 item.get.getFormStepArray(),
                 item.get.doorType()
@@ -68,6 +70,7 @@ export default function useStepItems({
             // console.log(prods);
             setStepProducts(prods);
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
+            setStep("Moulding");
             const specie = item.get.getMouldingSpecie();
             const prods = await getMouldingStepProduct(specie);
             // console.log(prods);
@@ -77,6 +80,7 @@ export default function useStepItems({
             doorType == "Door Slabs Only" &&
             stepFormTitle == "Door Type"
         ) {
+            setStep("Slab");
             setStepProducts(await getSlabDoorTypes());
             // if(stepFormTitle == 'Height' )
         } else {
@@ -321,12 +325,22 @@ export default function useStepItems({
             />
         );
     }
+
+    async function deleteStepItem(index, step: IStepProducts[0]) {
+        // if(!)
+        await _deleteStepItem(step);
+        setStepProducts((current) => {
+            return [...current.slice(0, index), ...current.slice(index)];
+        });
+    }
     return {
         load,
         stepProducts,
+        step,
         openStepForm,
         isMultiSection,
         selectProduct,
+        deleteStepItem,
         ctx,
     };
 }

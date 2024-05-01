@@ -65,12 +65,12 @@ export async function getStepProduct(stepId, doorType?) {
                         p.product?.title == _.product?.title
                 ) == i
         )
-        .map((product) => {
+        .map((stepProduct) => {
             return {
-                ...product,
+                ...stepProduct,
                 product: {
-                    ...product.product,
-                    meta: (product.product.meta ||
+                    ...stepProduct.product,
+                    meta: (stepProduct.product.meta ||
                         {}) as any as DykeProductMeta,
                 },
             };

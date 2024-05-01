@@ -154,7 +154,11 @@ function shelfItemsTable(
     // if (!dt.items.length) return null;
     // return dt;
 }
-function composeShelfItem<T>(cells: T, shelfItem, itemIndex): T {
+function composeShelfItem<T>(
+    cells: T,
+    shelfItem,
+    itemIndex
+): { style; value; colSpan }[] {
     return (cells as any).map((cell, _i) => {
         const ret = {
             style: cell.cellStyle,

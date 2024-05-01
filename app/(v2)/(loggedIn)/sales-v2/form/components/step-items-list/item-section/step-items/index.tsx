@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 
 import useStepItems from "./use-step-items";
 import { StepItem } from "./step-item";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
 }
@@ -23,12 +24,18 @@ export function StepProducts({
     stepIndex,
     rowIndex,
 }: StepProductProps) {
-    const { stepProducts, openStepForm, isMultiSection, selectProduct, ctx } =
-        useStepItems({
-            stepForm,
-            stepIndex,
-            rowIndex,
-        });
+    const {
+        stepProducts,
+        openStepForm,
+        isMultiSection,
+        selectProduct,
+        ctx,
+        deleteStepItem,
+    } = useStepItems({
+        stepForm,
+        stepIndex,
+        rowIndex,
+    });
 
     return (
         <div className="">
@@ -37,7 +44,7 @@ export function StepProducts({
                     // .filter((p, i) => i < 20)
                     ?.map((b, i) => (
                         <div className="relative p-4 group" key={i}>
-                            <div className=" hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
+                            <div className="hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
                                 <Button
                                     size="icon"
                                     variant={"outline"}
@@ -48,6 +55,14 @@ export function StepProducts({
                                 >
                                     <Icons.edit className="w-4 h-4" />
                                 </Button>
+                                <ConfirmBtn
+                                    onClick={async () => {
+                                        await deleteStepItem(i, b);
+                                    }}
+                                    size="icon"
+                                    Icon={Icons.trash}
+                                    trash
+                                ></ConfirmBtn>
                             </div>
                             <StepItem
                                 isMultiSection={isMultiSection}
