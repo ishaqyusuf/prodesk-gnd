@@ -33,7 +33,7 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
     const data = React.use(action);
     const ctx = usePrintContext();
     const basePrint = useSalesPrintCtx();
-    console.log(data?.orderedPrinting);
+    // console.log(data?.orderedPrinting);
 
     useEffect(() => {
         if (data) ctx.pageReady(slug, data);

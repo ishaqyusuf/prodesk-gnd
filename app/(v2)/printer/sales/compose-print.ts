@@ -47,10 +47,10 @@ export function composePrint(
     };
     type RetType = NonNullable<typeof ret>;
     // console.log(ret.shelfItemsTable);
-
+    type ShelfType = RetType["shelfItemsTable"];
     let orderedPrinting: {
         _index;
-        shelf?: NonNullable<RetType>["shelfItemsTable"][0];
+        shelf?: NonNullable<RetType["shelfItemsTable"]>[0];
         nonShelf?: NonNullable<RetType["doorsTable"]>["doors"][0];
     }[] = [];
     ret.doorsTable?.doors.map((d) => {
@@ -151,8 +151,8 @@ function shelfItemsTable(
             );
         }),
     };
-    if (!dt.items.length) return null;
-    return dt;
+    // if (!dt.items.length) return null;
+    // return dt;
 }
 function composeShelfItem<T>(cells: T, shelfItem, itemIndex): T {
     return (cells as any).map((cell, _i) => {
