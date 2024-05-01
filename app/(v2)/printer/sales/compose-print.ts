@@ -419,7 +419,7 @@ function getDoorsTable(
                 return {
                     _index: item?.meta?.lineIndex,
                     doorType: item.meta.doorType,
-                    sectionTitle: item.meta.doorType,
+                    sectionTitle: item.sectionTitle || item.meta.doorType,
                     details: details,
                     itemCells: res.cells,
                     lines: true

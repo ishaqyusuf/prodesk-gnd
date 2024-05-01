@@ -21,7 +21,7 @@ export default function SalesPrintDoorItems({ index }) {
                             className="p-2 text-start uppercase text-base bg-slate-200"
                             colSpan={16}
                         >
-                            {doors?.doorType}
+                            {doors?.sectionTitle}
                         </th>
                     </thead>
                     <tbody className="">

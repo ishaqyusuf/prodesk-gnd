@@ -79,17 +79,40 @@ export async function viewSale(type, slug) {
         },
     });
     if (!order) throw Error();
+    const sectionTitles = await prisma.dykeSteps.findFirst({
+        where: {
+            title: "Item Type",
+        },
+        select: {
+            id: true,
+            stepProducts: {
+                select: {
+                    product: {
+                        select: {
+                            title: true,
+                            value: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    console.log(sectionTitles);
     const items = order.items.map((item) => {
         // console.log(item.meta);
+        const meta = item.meta as any as ISalesOrderItemMeta;
         return {
             ...item,
+            sectionTitle: sectionTitles?.stepProducts?.find(
+                (p) => p?.product?.title == meta?.doorType
+            )?.product?.value,
             housePackageTool: item.housePackageTool
                 ? {
                       ...item.housePackageTool,
                       doorType: item.housePackageTool.doorType as DykeDoorType,
                   }
                 : null,
-            meta: item.meta as any as ISalesOrderItemMeta,
+            meta,
         };
     });
     const _mergedItems = items
