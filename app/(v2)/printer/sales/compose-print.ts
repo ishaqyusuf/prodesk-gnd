@@ -305,7 +305,6 @@ function getDoorsTable(
                               ]),
                     ],
                 };
-
                 if (price) {
                     res.cells.push(
                         ...[
@@ -339,7 +338,6 @@ function getDoorsTable(
                                       )
                               ),
                           ];
-
                 const lines: any = [];
                 const _multies = data.order.items.filter(
                     (i) =>
@@ -421,6 +419,7 @@ function getDoorsTable(
                 return {
                     _index: item?.meta?.lineIndex,
                     doorType: item.meta.doorType,
+                    sectionTitle: item.meta.doorType,
                     details: details,
                     itemCells: res.cells,
                     lines: true

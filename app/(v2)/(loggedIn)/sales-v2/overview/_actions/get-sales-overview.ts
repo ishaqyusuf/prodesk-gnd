@@ -52,6 +52,7 @@ export async function viewSale(type, slug) {
                                 select: {
                                     id: true,
                                     title: true,
+                                    value: true,
                                 },
                             },
                         },

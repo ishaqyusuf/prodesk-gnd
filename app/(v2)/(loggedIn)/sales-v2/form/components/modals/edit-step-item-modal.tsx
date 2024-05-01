@@ -60,9 +60,14 @@ export default function EditStepItemModal({
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
+            const [pri, sec] = root ? ["value", "title"] : ["title", "value"];
+            // if (root) {
+            if (!formData.product[sec])
+                formData.product[sec] = formData.product[pri];
+            // }
             // if(!formData?.product?.title)
             // formData?.product
-            console.log(formData);
+            // console.log(formData);
             // debugger;
             const reps = await saveStepProduct(formData);
             onCreate(reps as any);

@@ -127,7 +127,7 @@ export default function useStepItems({
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
             // form.getValues('order.id')
-            console.log(stepForm.step?.title);
+            // console.log(stepForm.step?.title);
             switch (stepForm.step?.title) {
                 case "Height":
                     form.setValue(
@@ -217,7 +217,6 @@ export default function useStepItems({
                 case "Cutdown Height":
                     break;
             }
-
             const data: DykeStep["item"] = {
                 value: val,
                 // qty: stepProd?.product?.qty,
@@ -260,8 +259,7 @@ export default function useStepItems({
     }
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[0]) {
-        console.log(stepItem);
-
+        // console.log(stepItem);
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];
