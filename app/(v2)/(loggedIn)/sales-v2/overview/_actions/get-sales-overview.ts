@@ -123,6 +123,7 @@ export async function viewSale(type, slug) {
     groupings.doors = _mergedItems?.filter((mi) =>
         ids.every((id) => id != mi.id)
     );
+
     return {
         ...order,
         meta: order.meta as any as ISalesOrderMeta,

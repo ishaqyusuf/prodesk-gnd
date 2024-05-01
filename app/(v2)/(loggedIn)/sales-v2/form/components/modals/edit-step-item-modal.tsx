@@ -54,9 +54,9 @@ export default function EditStepItemModal({ item, onCreate, moulding }: Props) {
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
-            // console.log(formData);
+            console.log(formData);
             // debugger;
-            const reps = await saveStepProduct(form.getValues());
+            const reps = await saveStepProduct(formData);
             onCreate(reps as any);
             modal?.close();
         });

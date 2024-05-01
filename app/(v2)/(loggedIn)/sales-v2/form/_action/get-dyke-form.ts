@@ -156,6 +156,153 @@ export async function getDykeFormAction(type, slug) {
         ...orderData
     } = typedForm;
 
+    let itemArray = items
+        ?.filter((item) => {
+            if (item.multiDykeUid) return item.multiDyke;
+            return true;
+        })
+        .map(
+            (
+                { formSteps, shelfItems, housePackageTool, ...itemData },
+                itemIndex
+            ) => {
+                const shelfItemArray: {
+                    [k in string]: {
+                        productArray: {
+                            item: (typeof shelfItems)[0];
+                        }[];
+                        categoryIds: number[];
+                        categoryId: number;
+                    };
+                } = {};
+                shelfItems.map((s) => {
+                    const cid = s.categoryId?.toString();
+                    if (!shelfItemArray[cid])
+                        shelfItemArray[cid] = {
+                            productArray: [],
+                            categoryIds: s.meta.categoryIds,
+                            categoryId: s.categoryId,
+                        };
+                    if (shelfItemArray[cid])
+                        (shelfItemArray[cid] as any).productArray.push({
+                            item: s,
+                        });
+                });
+                // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
+                //                 categoryIds: number[]
+                //             }},
+                // itemData.meta;
+                const multiComponent: MultiDyke = {
+                    components: {},
+                    uid: itemData.multiDykeUid as any,
+                    multiDyke: itemData.multiDyke as any,
+                };
+                multiComponent.primary = ((multiComponent.uid &&
+                    multiComponent.multiDyke) ||
+                    (!multiComponent.multiDyke && multiComponent.uid)) as any;
+                if (multiComponent.primary) multiComponent.rowIndex = itemIndex;
+                const _comps = items.filter((item) => {
+                    if (item.id == itemData.id) {
+                        return true;
+                    }
+                    if (
+                        itemData.multiDyke &&
+                        itemData.multiDykeUid == item.multiDykeUid
+                    )
+                        return true;
+                    return false;
+                });
+                // console.log(
+                //     _comps.map((i) => i.housePackageTool.dykeDoorId)
+                // );
+
+                _comps.map((item) => {
+                    // console.log(item.housePackageTool?.door);
+                    // const formStep = item.formSteps.find(
+                    //     (d) =>
+                    //         d.step?.title == "Door" ||
+                    //         d.step?.title == "Moulding"
+                    // );
+                    const component =
+                        item.housePackageTool?.door ||
+                        item.housePackageTool?.molding ||
+                        (item.meta.doorType == "Services"
+                            ? {
+                                  title: generateRandomString(4),
+                              }
+                            : null);
+
+                    const isMoulding = item.housePackageTool?.moldingId != null;
+
+                    let _dykeSizes: any = item.meta._dykeSizes;
+                    if (!_dykeSizes) {
+                        _dykeSizes = {};
+                        item.housePackageTool?.doors?.map((door) => {
+                            const dim = door.dimension?.replaceAll('"', "in");
+
+                            _dykeSizes[dim] = {
+                                dim,
+                                width: inToFt(door.dimension.split(" x ")[0]),
+                                checked: true,
+                            };
+                        });
+                    }
+                    if (component) {
+                        // console.log(item.housePackageTool.door);
+                        // item.meta.doo
+                        multiComponent.components[
+                            safeFormText(component.title)
+                        ] = {
+                            checked: true,
+                            heights: _dykeSizes,
+                            itemId: item.id,
+                            qty: item.qty,
+                            description: item.description as any,
+                            doorQty: item.qty,
+                            unitPrice: item.rate,
+                            totalPrice: item.total,
+                            toolId: isMoulding
+                                ? item.housePackageTool.moldingId
+                                : item.housePackageTool.dykeDoorId,
+                            _doorForm: item.housePackageTool._doorForm || {},
+                            hptId: item.housePackageTool.id as any,
+                            doorTotalPrice: item?.housePackageTool
+                                ?.totalPrice as any,
+                        };
+                    }
+                });
+                // console.log(Object.keys(multiComponent.components));
+
+                const rItem = {
+                    opened: true,
+                    stepIndex: 0,
+                    multiComponent,
+                    stillChecked: true,
+                    item: {
+                        ...itemData,
+                        housePackageTool,
+                        formStepArray: formSteps.map(({ step, ...rest }) => ({
+                            step,
+                            item: rest,
+                        })),
+                        shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
+                        // productArray
+                        // })),
+                    },
+                };
+                rItem.stepIndex = rItem.item.formStepArray.length - 1;
+                return rItem;
+            }
+        );
+
+    if (itemArray?.every((item) => item?.item?.meta?.lineIndex > -1)) {
+        // console.log("sorting...");
+        itemArray = itemArray.sort(
+            (item, item2) =>
+                item.item.meta.lineIndex - item2.item.meta.lineIndex
+        );
+        // console.log(itemArray.map((item) => item.item.meta.lineIndex));
+    }
     return {
         // currentItemIndex: 0,
         // currentStepIndex: 0,
@@ -165,155 +312,7 @@ export async function getDykeFormAction(type, slug) {
         billingAddress,
         order: orderData,
         _rawData: order,
-        itemArray: items
-            ?.filter((item) => {
-                if (item.multiDykeUid) return item.multiDyke;
-                return true;
-            })
-            .map(
-                (
-                    { formSteps, shelfItems, housePackageTool, ...itemData },
-                    itemIndex
-                ) => {
-                    const shelfItemArray: {
-                        [k in string]: {
-                            productArray: {
-                                item: (typeof shelfItems)[0];
-                            }[];
-                            categoryIds: number[];
-                            categoryId: number;
-                        };
-                    } = {};
-                    shelfItems.map((s) => {
-                        const cid = s.categoryId?.toString();
-                        if (!shelfItemArray[cid])
-                            shelfItemArray[cid] = {
-                                productArray: [],
-                                categoryIds: s.meta.categoryIds,
-                                categoryId: s.categoryId,
-                            };
-                        if (shelfItemArray[cid])
-                            (shelfItemArray[cid] as any).productArray.push({
-                                item: s,
-                            });
-                    });
-                    // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
-                    //                 categoryIds: number[]
-                    //             }},
-                    // itemData.meta;
-                    const multiComponent: MultiDyke = {
-                        components: {},
-                        uid: itemData.multiDykeUid as any,
-                        multiDyke: itemData.multiDyke as any,
-                    };
-                    multiComponent.primary = ((multiComponent.uid &&
-                        multiComponent.multiDyke) ||
-                        (!multiComponent.multiDyke &&
-                            multiComponent.uid)) as any;
-                    if (multiComponent.primary)
-                        multiComponent.rowIndex = itemIndex;
-                    const _comps = items.filter((item) => {
-                        if (item.id == itemData.id) {
-                            return true;
-                        }
-                        if (
-                            itemData.multiDyke &&
-                            itemData.multiDykeUid == item.multiDykeUid
-                        )
-                            return true;
-                        return false;
-                    });
-                    // console.log(
-                    //     _comps.map((i) => i.housePackageTool.dykeDoorId)
-                    // );
-
-                    _comps.map((item) => {
-                        // console.log(item.housePackageTool?.door);
-                        // const formStep = item.formSteps.find(
-                        //     (d) =>
-                        //         d.step?.title == "Door" ||
-                        //         d.step?.title == "Moulding"
-                        // );
-                        const component =
-                            item.housePackageTool?.door ||
-                            item.housePackageTool?.molding ||
-                            (item.meta.doorType == "Services"
-                                ? {
-                                      title: generateRandomString(4),
-                                  }
-                                : null);
-
-                        const isMoulding =
-                            item.housePackageTool?.moldingId != null;
-
-                        let _dykeSizes: any = item.meta._dykeSizes;
-                        if (!_dykeSizes) {
-                            _dykeSizes = {};
-                            item.housePackageTool?.doors?.map((door) => {
-                                const dim = door.dimension?.replaceAll(
-                                    '"',
-                                    "in"
-                                );
-
-                                _dykeSizes[dim] = {
-                                    dim,
-                                    width: inToFt(
-                                        door.dimension.split(" x ")[0]
-                                    ),
-                                    checked: true,
-                                };
-                            });
-                        }
-                        if (component) {
-                            // console.log(item.housePackageTool.door);
-                            // item.meta.doo
-                            multiComponent.components[
-                                safeFormText(component.title)
-                            ] = {
-                                checked: true,
-                                heights: _dykeSizes,
-                                itemId: item.id,
-                                qty: item.qty,
-                                description: item.description as any,
-                                doorQty: item.qty,
-                                unitPrice: item.rate,
-                                totalPrice: item.total,
-                                toolId: isMoulding
-                                    ? item.housePackageTool.moldingId
-                                    : item.housePackageTool.dykeDoorId,
-                                _doorForm:
-                                    item.housePackageTool._doorForm || {},
-                                hptId: item.housePackageTool.id as any,
-                                doorTotalPrice: item?.housePackageTool
-                                    ?.totalPrice as any,
-                            };
-                        }
-                    });
-                    // console.log(Object.keys(multiComponent.components));
-
-                    const rItem = {
-                        opened: true,
-                        stepIndex: 0,
-                        multiComponent,
-                        stillChecked: true,
-                        item: {
-                            ...itemData,
-                            housePackageTool,
-                            formStepArray: formSteps.map(
-                                ({ step, ...rest }) => ({
-                                    step,
-                                    item: rest,
-                                })
-                            ),
-                            shelfItemArray: Object.values(shelfItemArray), //shelfItems.map((shelfItem) => ({
-                            // productArray
-                            // })),
-                        },
-                    };
-                    rItem.stepIndex = rItem.item.formStepArray.length - 1;
-                    return rItem;
-                }
-            ),
+        itemArray,
         data: ctx,
         paidAmount,
     };

@@ -34,7 +34,7 @@ export function composePrint(
         // heading: heading(data,),
         ...data,
     };
-    return {
+    const ret = {
         ...printData,
         lineItems: lineItems(data, {
             ...printData,
@@ -44,6 +44,33 @@ export function composePrint(
         heading: heading({ ...printData }),
         doorsTable: getDoorsTable({ ...printData }, data),
         shelfItemsTable: shelfItemsTable(printData, data),
+    };
+    type RetType = NonNullable<typeof ret>;
+    // console.log(ret.shelfItemsTable);
+
+    let orderedPrinting: {
+        _index;
+        shelf?: NonNullable<RetType>["shelfItemsTable"][0];
+        nonShelf?: NonNullable<RetType["doorsTable"]>["doors"][0];
+    }[] = [];
+    ret.doorsTable?.doors.map((d) => {
+        orderedPrinting.push({
+            _index: d._index,
+            nonShelf: d,
+        });
+    });
+
+    ret.shelfItemsTable?.map((d) => {
+        orderedPrinting.push({
+            _index: d._index,
+            shelf: d,
+        });
+    });
+    orderedPrinting = orderedPrinting.sort((a, b) => a._index - b._index);
+
+    return {
+        ...ret,
+        orderedPrinting,
     };
 }
 function shelfItemsTable(
@@ -98,28 +125,51 @@ function shelfItemsTable(
             ]
         );
     if (isPacking) res.cells.push(_cell<T>("Packed Qty", null, 3));
+    const newResp = data.order.items
+        .filter((item) => item.shelfItems.length)
+        .map((item) => {
+            return {
+                item,
+                cells: res.cells,
+                _index: item.meta.lineIndex,
+                _shelfItems: item.shelfItems.map((shelfItem, itemIndex) =>
+                    composeShelfItem<typeof res.cells>(
+                        res.cells,
+                        shelfItem,
+                        itemIndex
+                    )
+                ),
+            };
+        });
+    return newResp;
     const dt = {
         ...res,
         items: data.shelfItems.map((item, itemIndex) => {
-            return res.cells.map((cell, _i) => {
-                const ret = {
-                    style: cell.cellStyle,
-                    value:
-                        _i == 0
-                            ? itemIndex + 1
-                            : cell.cell == "description"
-                            ? item.description || item.shelfProduct?.title
-                            : item?.[cell.cell as any],
-                    colSpan: cell.colSpan,
-                };
-                if (_i > 2 && ret.value)
-                    ret.value = formatCurrency.format(ret.value);
-                return ret;
-            });
+            return composeShelfItem<typeof res.cells>(
+                res.cells,
+                item,
+                itemIndex
+            );
         }),
     };
     if (!dt.items.length) return null;
     return dt;
+}
+function composeShelfItem<T>(cells: T, shelfItem, itemIndex): T {
+    return (cells as any).map((cell, _i) => {
+        const ret = {
+            style: cell.cellStyle,
+            value:
+                _i == 0
+                    ? itemIndex + 1
+                    : cell.cell == "description"
+                    ? shelfItem.description || shelfItem.shelfProduct?.title
+                    : shelfItem?.[cell.cell as any],
+            colSpan: cell.colSpan,
+        };
+        if (_i > 2 && ret.value) ret.value = formatCurrency.format(ret.value);
+        return ret;
+    });
 }
 type Cell =
     | "door"
@@ -286,51 +336,7 @@ function getDoorsTable(
                                       )
                               ),
                           ];
-                // if (isMoulding) {
-                //     details.push({
-                //         step: {
-                //             title: "Qty",
-                //         },
-                //         value: item.qty,
-                //     } as any);
-                //     if (price) {
-                //         details.push(
-                //             ...([
-                //                 {
-                //                     step: {
-                //                         title: "Rate",
-                //                     },
-                //                     value: formatCurrency.format(
-                //                         item.rate || 0
-                //                     ),
-                //                 },
-                //                 ,
-                //                 {
-                //                     step: {
-                //                         title: "Total",
-                //                     },
-                //                     value: formatCurrency.format(
-                //                         item.total || 0
-                //                     ),
-                //                 },
-                //                 ,
-                //             ] as any)
-                //         );
-                //     }
-                // }
-                // const itemCells: NonNullable<typeof res.cells> = [...res.cells];
-                // .map((c) => {
-                //     if (isBifold) {
-                //         if (c.title == "Right Hand") {
-                //             return null;
-                //         }
-                //         if (c.title == "Left Hand") {
-                //             c.title = "Qty";
-                //         }
-                //     }
-                //     return c;
-                // })
-                // .filter((c) => c != null) as any;
+
                 const lines: any = [];
                 const _multies = data.order.items.filter(
                     (i) =>
@@ -410,6 +416,7 @@ function getDoorsTable(
 
                 // console.log(lines.length);
                 return {
+                    _index: item?.meta?.lineIndex,
                     doorType: item.meta.doorType,
                     details: details,
                     itemCells: res.cells,

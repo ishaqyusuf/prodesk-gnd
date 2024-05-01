@@ -1,5 +1,5 @@
 import { useDykeForm } from "./form-context";
-import { useFieldArray } from "react-hook-form";
+import { UseFieldArrayReturn, useFieldArray } from "react-hook-form";
 import { DykeDoorType, DykeForm, FormStepArray } from "../../type";
 import { useModal } from "@/components/common/modal/provider";
 
@@ -18,7 +18,10 @@ import { useMultiSelector } from "./use-multi-selector";
 // }
 
 export type IDykeItemFormContext = ReturnType<typeof useDykeItem>;
-export default function useDykeItem(rowIndex: number) {
+export default function useDykeItem(
+    rowIndex: number,
+    itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">
+) {
     const form = useDykeForm();
     const stepArrayName = `itemArray.${rowIndex}.item.formStepArray` as const;
     const itemKey = `itemArray.${rowIndex}.item` as any;
@@ -63,6 +66,10 @@ export default function useDykeItem(rowIndex: number) {
     };
     return {
         multi,
+
+        move(to) {
+            itemArray.move(rowIndex, to);
+        },
         get,
         _type,
         opened,

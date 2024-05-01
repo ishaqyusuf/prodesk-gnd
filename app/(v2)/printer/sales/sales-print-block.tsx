@@ -33,6 +33,8 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
     const data = React.use(action);
     const ctx = usePrintContext();
     const basePrint = useSalesPrintCtx();
+    console.log(data?.orderedPrinting);
+
     useEffect(() => {
         if (data) ctx.pageReady(slug, data);
     }, [data]);
@@ -49,8 +51,22 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
                         <SalesPrintHeader />
                         {data?.order?.id && (
                             <tbody>
-                                <SalesPrintDoorItems />
-                                <SalesPrintShelfItems />
+                                {data?.orderedPrinting?.map((p, i) =>
+                                    p.nonShelf ? (
+                                        <SalesPrintDoorItems
+                                            index={i}
+                                            key={"door" + i}
+                                        />
+                                    ) : (
+                                        <SalesPrintShelfItems
+                                            index={i}
+                                            key={"shelf" + i}
+                                        />
+                                    )
+                                )}
+                                {/* <SalesPrintDoorItems /> */}
+
+                                {/* <SalesPrintShelfItems /> */}
                                 <SalesPrintLineItems />
                             </tbody>
                         )}

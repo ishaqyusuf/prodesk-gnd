@@ -57,7 +57,11 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                     <SalesAddressSection />
                 </section>
                 {itemArray.fields.map((field, index) => (
-                    <DykeItemFormSection key={field.id} rowIndex={index} />
+                    <DykeItemFormSection
+                        itemArray={itemArray}
+                        key={field.id}
+                        rowIndex={index}
+                    />
                 ))}
                 <div className="flex justify-end space-x-2 mt-2">
                     <Button

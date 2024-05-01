@@ -5,9 +5,11 @@ import { useSalesBlockCtx } from "../sales-print-block";
 import Text from "../../components/print-text";
 import React from "react";
 
-export default function SalesPrintShelfItems() {
+export default function SalesPrintShelfItems({ index }) {
     const ctx = useSalesBlockCtx();
     const { sale } = ctx;
+    const shelf = ctx.sale.orderedPrinting?.[index]?.shelf;
+    if (!shelf) return <></>;
     if (!sale.shelfItemsTable) return <></>;
     return (
         <tr className="">
@@ -22,7 +24,7 @@ export default function SalesPrintShelfItems() {
                         </th>
                     </thead>
                     <thead id="topHeader">
-                        {sale.shelfItemsTable?.cells?.map((cell, i) => (
+                        {shelf?.cells?.map((cell, i) => (
                             <th
                                 className="border px-2"
                                 key={i}
@@ -33,7 +35,7 @@ export default function SalesPrintShelfItems() {
                         ))}
                     </thead>
                     <tbody>
-                        {sale.shelfItemsTable?.items?.map((cells, i) => (
+                        {shelf?._shelfItems?.map((cells, i) => (
                             <tr key={i}>
                                 {cells.map((cel, i) => (
                                     <td

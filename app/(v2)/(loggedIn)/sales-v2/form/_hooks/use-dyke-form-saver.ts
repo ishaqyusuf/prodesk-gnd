@@ -23,12 +23,14 @@ export default function useDykeFormSaver(form) {
             try {
                 data = {
                     ...data,
-                    itemArray: data.itemArray.map((_) => {
+                    itemArray: data.itemArray.map((_, index) => {
                         const _item = { ..._ };
                         const t = _item.item.formStepArray?.[0]?.item?.value;
                         _item.item.meta.doorType = t as any;
                         if (_item.item.meta.doorType != "Shelf Items")
                             _item.item.shelfItemArray = [];
+                        if (!_item.item?.meta) _item.item.meta = {} as any;
+                        _item.item.meta.lineIndex = index;
                         return {
                             ..._item,
                         };

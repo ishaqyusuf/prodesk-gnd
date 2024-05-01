@@ -18,27 +18,24 @@ import useDykeItem, {
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { _deleteDykeItem } from "../../../_action/delete-item";
+import ItemHeader from "./item-header";
 
 interface Props {
     rowIndex;
+    itemArray;
 }
-export function DykeItemFormSection({ rowIndex }: Props) {
+export function DykeItemFormSection({ rowIndex, itemArray }: Props) {
     const form = useDykeForm();
     // const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
 
-    const item = useDykeItem(rowIndex);
+    const item = useDykeItem(rowIndex, itemArray);
+    // item.rowIndex
     const dykeCtx = useDykeCtx();
     // dykeCtx.
     const ctx = {
         ...item,
     } as IDykeItemFormContext;
-    async function deleteSection() {
-        const itemData = item.get.data();
-        // console.log(itemData);
 
-        await _deleteDykeItem(itemData?.item?.id);
-        dykeCtx.itemArray.remove(rowIndex);
-    }
     return (
         <DykeItemFormContext.Provider value={ctx}>
             <Collapsible
@@ -46,22 +43,7 @@ export function DykeItemFormSection({ rowIndex }: Props) {
                 onOpenChange={item.openChange}
                 className={cn(rowIndex > 0 && "mt-4")}
             >
-                <div className="flex bg-accent p-2 px-4 justify-between">
-                    <CollapsibleTrigger>
-                        <Label className="text-base uppercase font-bold">
-                            Item {Number(rowIndex) + 1}
-                        </Label>
-                    </CollapsibleTrigger>
-                    <div className="flex items-center justify-between space-x-2">
-                        <Button
-                            onClick={deleteSection}
-                            className="p-0 h-6 w-6"
-                            variant={"destructive"}
-                        >
-                            <Icons.trash className="w-4 h-4" />
-                        </Button>
-                    </div>
-                </div>
+                <ItemHeader item={item} />
                 <CollapsibleContent className="">
                     <div className="grid sm:grid-cols-3">
                         <div className="sm:col-span-3">
