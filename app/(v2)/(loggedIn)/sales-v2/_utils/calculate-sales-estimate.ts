@@ -52,7 +52,7 @@ function taxEstimateAndUpdateTotal(
 
     (formData.order as any).subTotal += totalPrice;
     let tax = 0;
-    if (formData.order.taxPercentage && totalPrice) {
+    if (formData.order.taxPercentage && totalPrice && formData.order.meta.tax) {
         tax = formatMoney(totalPrice * (formData.order.taxPercentage / 100));
     }
     item.item.tax = tax;

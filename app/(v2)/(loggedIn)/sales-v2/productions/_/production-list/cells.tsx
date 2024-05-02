@@ -74,14 +74,11 @@ function AssignedTo({ item }: Props) {
 function Actions({ item }: Props) {
     return <></>;
 }
-export let ProductionCells = Object.assign(
-    {},
-    {
-        Order,
-        Actions,
-        SalesRep,
-        Status,
-        AssignedTo,
-        ProductionStatus,
-    }
-);
+export let ProductionCells = Object.assign(({}) => <></>, {
+    Order,
+    Actions,
+    SalesRep,
+    Status,
+    AssignedTo,
+    ProductionStatus,
+});
