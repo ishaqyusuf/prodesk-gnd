@@ -74,7 +74,10 @@ function AssignedTo({ item }: Props) {
 function Actions({ item }: Props) {
     return <></>;
 }
-export let ProductionCells = Object.assign(({}) => <></>, {
+function Base() {
+    return <></>;
+}
+export let ProductionCells = Object.assign(Base, {
     Order,
     Actions,
     SalesRep,
