@@ -14,12 +14,14 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 
 interface Props<T> {
     label?: string;
     description?: string;
     className?: string;
     placeholder?: string;
+    switchInput?: boolean;
 }
 export default function ControlledCheckbox<
     TFieldValues extends FieldValues = FieldValues,
@@ -30,6 +32,7 @@ export default function ControlledCheckbox<
     description,
     className,
     placeholder,
+    switchInput,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -43,10 +46,18 @@ export default function ControlledCheckbox<
                     )}
                 >
                     <FormControl className="mt-0.5">
-                        <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                        />
+                        {switchInput ? (
+                            <Switch
+                                color="green"
+                                checked={field.value as any}
+                                onCheckedChange={field.onChange}
+                            />
+                        ) : (
+                            <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
                     </FormControl>
                     <div className="space-y-1 leading-none">
                         {label && <FormLabel>{label}</FormLabel>}

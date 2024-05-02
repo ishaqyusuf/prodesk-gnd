@@ -507,7 +507,11 @@ model OrderItemProductionAssignments {
     assignedToId Int
     assignedById Int
     qtyAssigned  Int? // 0 means all qty
+    qtyCompleted Int?
+    lhQty        Int?
+    rhQty        Int?
     note         String?
+    doorId       Int?
     dueDate      DateTime?                    @db.Timestamp(0)
     deletedAt    DateTime?                    @db.Timestamp(0)
     createdAt    DateTime?                    @default(now()) @db.Timestamp(0)
@@ -517,6 +521,7 @@ model OrderItemProductionAssignments {
     item         SalesOrderItems              @relation(fields: [itemId], references: [id])
     assignedTo   Users                        @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
     assignedBy   Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
+    door         DykeSalesDoors?              @relation(fields: [doorId], references: [id])
 }
 
 model OrderProductionSubmissions {
@@ -524,6 +529,7 @@ model OrderProductionSubmissions {
     salesOrderId     Int?
     salesOrderItemId Int?
     qty              Int
+    leftHandle       Boolean?                        @default(false)
     deletedAt        DateTime?                       @db.Timestamp(0)
     createdAt        DateTime?                       @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?                       @updatedAt
@@ -914,7 +920,18 @@ model SalesOrders {
     deliverProgresses OrderDeliveryProgress?
     assignments       OrderItemProductionAssignments[]
 
+    productionStatus SalesProductionStatus?
+
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
+}
+
+model SalesProductionStatus {
+    id      Int         @unique @default(autoincrement())
+    orderId Int         @unique
+    status  String?
+    score   Float?
+    total   Float?
+    order   SalesOrders @relation(fields: [orderId], references: [id])
 }
 
 model SalesOrderItems {
@@ -1037,27 +1054,29 @@ model HousePackageTools {
 }
 
 model DykeSalesDoors {
-    id                 Int               @unique @default(autoincrement())
+    id                 Int                              @unique @default(autoincrement())
     dimension          String
     swing              String?
+    doorType           String?
     housePackageToolId Int
     doorPrice          Float?
     jambSizePrice      Float?
     casingPrice        Float?
     unitPrice          Float?
-    lhQty              Int               @default(0)
-    rhQty              Int               @default(0)
-    totalQty           Int               @default(0)
+    lhQty              Int                              @default(0)
+    rhQty              Int                              @default(0)
+    totalQty           Int                              @default(0)
     salesOrderId       Int
-    lineTotal          Float?            @default(0)
+    lineTotal          Float?                           @default(0)
     salesOrderItemId   Int?
-    meta               Json?             @db.Json
-    createdAt          DateTime?         @default(now()) @db.Timestamp(0)
-    updatedAt          DateTime?         @updatedAt
-    deletedAt          DateTime?         @db.Timestamp(0)
-    housePackageTool   HousePackageTools @relation(fields: [housePackageToolId], references: [id])
-    salesOrderItem     SalesOrderItems?  @relation(fields: [salesOrderItemId], references: [id])
-    order              SalesOrders?      @relation(fields: [salesOrderId], references: [id])
+    meta               Json?                            @db.Json
+    createdAt          DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt          DateTime?                        @updatedAt
+    deletedAt          DateTime?                        @db.Timestamp(0)
+    housePackageTool   HousePackageTools                @relation(fields: [housePackageToolId], references: [id])
+    salesOrderItem     SalesOrderItems?                 @relation(fields: [salesOrderItemId], references: [id])
+    order              SalesOrders?                     @relation(fields: [salesOrderId], references: [id])
+    productions        OrderItemProductionAssignments[]
 }
 
 model SalesPickup {

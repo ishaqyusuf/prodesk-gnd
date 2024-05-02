@@ -17,10 +17,10 @@ import { deleteDykeProductAtion } from "../_actions/delete-product-action";
 import { useModal } from "@/components/common/modal-old/provider";
 import EditProductModal from "../_modals/edit-product-modal";
 import Money from "@/components/_v1/money";
+import { ServerPromiseType } from "@/types";
 
-export type IDykeProduct = Awaited<
-    ReturnType<typeof getDykeProducts>
->["data"][0];
+export type IDykeProduct = ServerPromiseType<typeof getDykeProducts>["Item"];
+
 export default function ProductsTable({
     data,
     pageInfo,

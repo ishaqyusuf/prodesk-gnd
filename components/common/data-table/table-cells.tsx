@@ -9,13 +9,27 @@ import { toast } from "sonner";
 import { MenuItem } from "../../_v1/data-table/data-table-row-actions";
 import { DropdownMenuShortcut } from "../../ui/dropdown-menu";
 import Link from "next/link";
+import ProgressStatus from "@/components/_v1/progress-status";
+import { PrimitiveDivProps } from "@radix-ui/react-dialog";
 
 interface Props {
     children?;
-    className?;
+    className?: string;
 }
-function Cell({ children }) {
-    return <div>{children}</div>;
+function Cell({
+    children,
+    href,
+    ...rest
+}: { children?; href? } & PrimitiveDivProps) {
+    if (href)
+        return (
+            <div {...rest}>
+                <Link className="hover:underline" href={href}>
+                    {children}
+                </Link>
+            </div>
+        );
+    return <div {...rest}>{children}</div>;
 }
 function Primary({ children, className }: Props) {
     return <div className={cn("font-semibold", className)}>{children}</div>;
@@ -210,11 +224,13 @@ function BatchDelete({ table, action, selectedIds }) {
         </Button>
     );
 }
+
 export let TableCol = Object.assign(Cell, {
     Primary,
     NewBtn,
     Btn,
     Secondary,
+    Status: ProgressStatus,
     Money,
     Date,
     BatchDelete,

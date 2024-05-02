@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { SendEmailTemplateSection } from "./template-helper";
 import { useEffect, useState } from "react";
 import { getEmailData } from "../_actions/get-email-data";
-import { PromiseType } from "@/types";
+import { ServerPromiseType } from "@/types";
 import { useModal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { sendMessage } from "@/app/(v1)/_actions/email";
@@ -47,7 +47,7 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
     });
     const modal = useModal();
     const [emailData, setEmailData] = useState<
-        PromiseType<typeof getEmailData>["Response"]
+        ServerPromiseType<typeof getEmailData>["Response"]
     >(null as any);
     async function sendEmail() {
         const {

@@ -1,6 +1,6 @@
 "use client";
 
-import { PromiseType } from "@/types";
+import { ServerPromiseType } from "@/types";
 import { DeliveryOption } from "@/types/sales";
 import { getDispatchSales } from "../_actions/get-dispatch-sales";
 import React from "react";
@@ -8,7 +8,7 @@ import useDataTableColumn from "@/components/common/data-table/columns/use-data-
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 import { DispatchColumns } from "../_components/dispatch-cells";
 
-export type DispatchProm = PromiseType<typeof getDispatchSales>;
+export type DispatchProm = ServerPromiseType<typeof getDispatchSales>;
 interface Props {
     type: DeliveryOption;
     promise: DispatchProm["Promise"];

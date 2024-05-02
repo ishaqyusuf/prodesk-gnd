@@ -64,7 +64,7 @@ export type DataTableType<T extends (...args: any) => any> = Awaited<
 export type PromiseDataTable<T extends (...args: any) => any> = Promise<
     NonNullable<Awaited<ReturnType<T>>>
 >;
-export interface PromiseType<T extends (...args: any) => any> {
+export interface ServerPromiseType<T extends (...args: any) => any> {
     Promise: PromiseDataTable<T>;
     Response: Awaited<PromiseDataTable<T>>;
     Item: Awaited<PromiseDataTable<T>>["data"][0];

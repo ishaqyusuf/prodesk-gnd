@@ -1,13 +1,13 @@
 "use client";
 
-import { PromiseType } from "@/types";
+import { ServerPromiseType } from "@/types";
 import getPayablesAction from "./_actions/get-payables";
 import React from "react";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { PayableCells } from "./payable-cells";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 
-export type PayableProm = PromiseType<typeof getPayablesAction>;
+export type PayableProm = ServerPromiseType<typeof getPayablesAction>;
 interface Props {
     promise: PayableProm["Promise"];
 }

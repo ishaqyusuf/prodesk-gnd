@@ -86,6 +86,7 @@ export async function getDykeFormAction(type, slug) {
         meta: {
             sales_profile: ctx.defaultProfile?.title,
             sales_percentage: ctx.defaultProfile?.coefficient,
+            tax: true,
         },
         items: [
             {
@@ -110,9 +111,11 @@ export async function getDykeFormAction(type, slug) {
         createdAt: dayjs().toISOString() as any,
     }) as any as OrderType;
 
+    const meta = form.meta as any as ISalesOrderMeta;
+    if (!Object.keys(meta).includes("tax")) meta.tax = true;
     const typedForm = {
         ...form,
-        meta: form.meta as any as ISalesOrderMeta,
+        meta,
         items: form.items.map((item) => {
             let _doorForm: { [dimension in string]: DykeSalesDoors } = {};
             let _doorFormDefaultValue: {

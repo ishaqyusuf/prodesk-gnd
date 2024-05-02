@@ -268,7 +268,7 @@ export function ProdOrderCell(
 }
 export function DeliveryStatus({ order }: { order: ISalesOrder }) {}
 export function ProdStatusCell({ order }: { order: ISalesOrder }) {
-    const [progress, setProgress] = useState<Progressor>({} as any);
+    const [progress, setProgress] = useState<Progressor | null>({} as any);
     const [isLate, setIsLate] = useState<boolean>(false);
     useEffect(() => {
         setProgress(getProgress(order.builtQty, order.prodQty));
@@ -282,7 +282,7 @@ export function ProdStatusCell({ order }: { order: ISalesOrder }) {
     }, [order]);
     if (order.inventoryStatus == "Pending Items")
         return <StatusBadge status={order.inventoryStatus} />;
-    if (progress.score > 0)
+    if (progress?.score > 0)
         return (
             <ProgressStatus
                 score={order.builtQty}

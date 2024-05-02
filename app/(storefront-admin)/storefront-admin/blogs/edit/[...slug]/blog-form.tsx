@@ -1,6 +1,6 @@
 "use client";
 
-import { PromiseType } from "@/types";
+import { ServerPromiseType } from "@/types";
 import getBlogAction from "../../_actions/get-blog-action";
 import React, { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,7 @@ import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import MDXEdit from "@/components/common/mdx-editor";
 
-type Prom = PromiseType<typeof getBlogAction>;
+type Prom = ServerPromiseType<typeof getBlogAction>;
 interface Props {
     data: Prom["Item"];
     type;

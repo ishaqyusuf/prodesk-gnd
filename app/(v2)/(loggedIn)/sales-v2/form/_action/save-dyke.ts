@@ -168,6 +168,7 @@ export async function saveDykeSales(data: DykeForm) {
                                 doors?.push({
                                     ...doorData,
                                     dimension,
+                                    doorType: item?.meta?.doorType,
                                 });
                             }
                         );

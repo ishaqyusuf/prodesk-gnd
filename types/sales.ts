@@ -84,7 +84,7 @@ export type ISalesOrderMeta = {
     sales_job_id;
     truckLoadLocation;
     truck;
-
+    tax?: boolean;
     job: {
         status;
         estimated_cost;

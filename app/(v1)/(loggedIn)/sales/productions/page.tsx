@@ -12,8 +12,6 @@ import {
     ProductionsCrumb,
 } from "@/components/_v1/breadcrumbs/links";
 import { Metadata } from "next";
-import { formatDate } from "@/lib/use-day";
-import dayjs from "dayjs";
 import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {
     title: "Sales Production",

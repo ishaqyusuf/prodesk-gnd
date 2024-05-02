@@ -8,6 +8,9 @@ import { getCustomerProfileList } from "../_action/get-customer-profiles";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
 
 export default function SalesMetaData() {
     const form = useDykeForm();
@@ -64,6 +67,13 @@ export default function SalesMetaData() {
                     />
                 </InfoLine>
             )}
+            <InfoLine label="Tax">
+                <ControlledCheckbox
+                    switchInput
+                    className="h-8 min-w-[150px]"
+                    name="order.meta.tax"
+                />
+            </InfoLine>
         </div>
     );
 }
