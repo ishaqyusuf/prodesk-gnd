@@ -77,7 +77,7 @@ function Actions({ item }: Props) {
 function Base() {
     return <></>;
 }
-export let ProductionCells = Object.assign(Base, {
+export default Object.assign(Base, {
     Order,
     Actions,
     SalesRep,
