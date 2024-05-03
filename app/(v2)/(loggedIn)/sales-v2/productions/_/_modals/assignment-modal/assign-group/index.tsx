@@ -30,7 +30,7 @@ export default function AssignGroup({ index }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <div className="abc"></div>
+                <div className="w-[350px]">abc</div>
             </DropdownMenuContent>
         </DropdownMenu>
     );

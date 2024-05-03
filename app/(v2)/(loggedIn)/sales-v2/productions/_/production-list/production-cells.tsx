@@ -2,8 +2,7 @@
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { ProductionListItemType } from ".";
 import { Badge } from "@/components/ui/badge";
-import { useModal } from "@/components/common/modal/provider";
-import AssignmentModal from "../_modals/assignment-modal";
+
 import { useAssignment } from "../_modals/assignment-modal/use-assignment";
 
 interface Props {
@@ -77,7 +76,7 @@ function Actions({ item }: Props) {
 function Base() {
     return <></>;
 }
-export default Object.assign(Base, {
+export let ProductionCells = Object.assign(Base, {
     Order,
     Actions,
     SalesRep,
