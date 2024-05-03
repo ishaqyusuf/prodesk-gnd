@@ -42,21 +42,22 @@ export default function AssignGroup({ index }) {
         if (open) {
             const doors: any = {};
             group?.salesDoors?.map((s) => {
-                doors[s.salesDoor?.id?.toString()] = {
+                doors[s.salesDoor?.id] = {
                     qty: s.report.pendingAssignment,
                 };
             });
-            console.log(doors);
             form.reset({
                 doors,
             });
         }
     }, [open]);
-    if (!group) return null;
     const [saving, startSaving] = useTransition();
+    if (!group) return null;
+
     async function assign() {
         startSaving(async () => {
-            //
+            const selections = form.getValues();
+            Object.entries(selections).map(([id, d]) => {});
         });
     }
     return (
