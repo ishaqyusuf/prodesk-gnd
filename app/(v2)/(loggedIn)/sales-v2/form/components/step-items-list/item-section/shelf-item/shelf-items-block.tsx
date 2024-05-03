@@ -59,7 +59,10 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
     }
     const modal = useModal();
     function shelfItemForm(index?) {
-        const categoryIds = categories?.map((c) => c.id);
+        const catArray = shelf.catArray.fields;
+        const categoryIds = catArray?.map((c) => c.id);
+        console.log(categoryIds);
+
         const generatedProd: any = shelf.prodArray.fields[index];
         const prodId = generatedProd?.item?.id;
         let prod = shelf.products?.find(
