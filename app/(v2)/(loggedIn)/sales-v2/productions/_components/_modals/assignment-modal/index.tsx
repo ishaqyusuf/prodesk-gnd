@@ -2,7 +2,7 @@
 
 import Modal from "@/components/common/modal";
 import { ServerPromiseType } from "@/types";
-import { getOrderAssignmentData } from "./actions";
+import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { useDataPage } from "@/lib/data-page-context";
 import DoorGroupSection from "./door-group-section";

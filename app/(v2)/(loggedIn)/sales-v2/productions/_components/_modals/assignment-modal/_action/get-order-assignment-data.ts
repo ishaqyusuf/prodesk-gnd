@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { DykeDoorType } from "../../../../type";
+import { DykeDoorType } from "../../../../../type";
 import { ArrayMetaType, sum } from "@/lib/utils";
 import { ISalesOrderItemMeta } from "@/types/sales";
 

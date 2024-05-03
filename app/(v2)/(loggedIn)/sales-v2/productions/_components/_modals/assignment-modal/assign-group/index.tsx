@@ -56,8 +56,10 @@ export default function AssignGroup({ index }) {
 
     async function assign() {
         startSaving(async () => {
-            const selections = form.getValues();
-            Object.entries(selections).map(([id, d]) => {});
+            try {
+                const selections = form.getValues();
+                Object.entries(selections).map(([id, d]) => {});
+            } catch (error) {}
         });
     }
     return (
@@ -85,7 +87,7 @@ export default function AssignGroup({ index }) {
                                 <TableHeader>
                                     <TableHead>Door</TableHead>
                                     <TableHead>Qty</TableHead>
-                                    <TableHead>Assign</TableHead>
+                                    {/* <TableHead>Assign</TableHead> */}
                                 </TableHeader>
                                 <TableBody>
                                     {group.salesDoors
@@ -108,20 +110,31 @@ export default function AssignGroup({ index }) {
                                                         }
                                                     </TableCol.Secondary>
                                                 </TableCell>
-                                                <TableCell>
+                                                {/* <TableCell>
                                                     {
                                                         salesDoor.report
                                                             .pendingAssignment
                                                     }
-                                                </TableCell>
+                                                </TableCell> */}
                                                 <TableCell>
-                                                    <ControlledInput
-                                                        control={form.control}
-                                                        name={
-                                                            `doors.${salesDoor.salesDoor.id}.qty` as any
-                                                        }
-                                                        type="number"
-                                                    />
+                                                    <div className="flex space-x-2 items-center">
+                                                        <ControlledInput
+                                                            control={
+                                                                form.control
+                                                            }
+                                                            name={
+                                                                `doors.${salesDoor.salesDoor.id}.qty` as any
+                                                            }
+                                                            type="number"
+                                                        />
+                                                        <span>
+                                                            /{" "}
+                                                            {
+                                                                salesDoor.report
+                                                                    .pendingAssignment
+                                                            }
+                                                        </span>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
