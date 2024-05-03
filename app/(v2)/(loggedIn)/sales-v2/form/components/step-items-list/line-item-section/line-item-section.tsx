@@ -5,12 +5,15 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import Money from "@/components/_v1/money";
 import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import useMultiDykeForm from "../../../_hooks/use-multi-generator";
 
 interface Props {
     componentTitle;
+    mdf;
 }
-export default function LineItemSection({ componentTitle }: Props) {
+export default function LineItemSection({ componentTitle, mdf }: Props) {
     const form = useDykeForm();
+
     const item = useContext(DykeItemFormContext);
     const componentItem = useMultiComponentItem(componentTitle);
     const rootKey = `itemArray.${item.rowIndex}.item`;
@@ -48,7 +51,10 @@ export default function LineItemSection({ componentTitle }: Props) {
                 <Money value={componentItem.totalPrice} />
             </TableCell>
             <TableCell className="w-[100px]">
-                <ConfirmBtn />
+                <ConfirmBtn
+                    onClick={() => componentItem.removeLine(mdf.removeTab)}
+                    size="icon"
+                />
             </TableCell>
         </>
     );

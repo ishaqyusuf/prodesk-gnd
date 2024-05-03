@@ -42,7 +42,6 @@ export default function useMultiDykeForm() {
             uid = generateRandomString(5);
             setValue("uid", uid);
         }
-        console.log(multiComp.components);
 
         Object.entries(multiComp.components).map(([title, compData]) => {
             // [].findIndex()
@@ -68,7 +67,6 @@ export default function useMultiDykeForm() {
         // // find item index for each multiComponent
         // // setup minimal item to enable housepackage tool fill
         // // copy main item to children: ignore doorId, mouldingId, builtQty
-        console.log(itemData.multiComponent);
 
         const _tabs = Object.entries(itemData.multiComponent.components)
             .map(([productTitle, cData]) => {
@@ -85,6 +83,12 @@ export default function useMultiDykeForm() {
     return {
         tabs,
         currentTab,
+        removeTab(title) {
+            setTabs((_tabs) => {
+                console.log(_tabs);
+                return [..._tabs].filter((t) => t.title != title);
+            });
+        },
         setCurrentTab,
         ready,
         initialize,

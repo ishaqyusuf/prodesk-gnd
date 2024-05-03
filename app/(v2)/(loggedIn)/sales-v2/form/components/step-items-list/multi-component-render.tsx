@@ -40,12 +40,15 @@ export default function MultiComponentRender({ Render, line = false }) {
                             <TableBody>
                                 {mdf.tabs?.map((tab, index) => (
                                     <TableRow key={index}>
-                                        <Render componentTitle={tab.title} />
+                                        <Render
+                                            mdf={mdf}
+                                            componentTitle={tab.title}
+                                        />
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
-                        {!item._type?.isBifold() && (
+                        {item.isType.service && (
                             <div className="flex justify-end">
                                 <Button
                                     onClick={() => {

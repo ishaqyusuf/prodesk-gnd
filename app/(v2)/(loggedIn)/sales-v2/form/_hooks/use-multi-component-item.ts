@@ -3,6 +3,7 @@ import { DykeItemFormContext, useDykeForm } from "./form-context";
 import { camel, math, sum } from "@/lib/utils";
 import { SizeForm } from "../components/modals/select-door-heights";
 import { isComponentType } from "../../overview/is-component-type";
+import useMultiDykeForm from "./use-multi-generator";
 
 type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
 export function useMultiComponentItem(componentTitle) {
@@ -90,8 +91,14 @@ export function useMultiComponentItem(componentTitle) {
             }
         );
     }
+    function removeLine(removeTab) {
+        removeTab(componentTitle);
+        form.setValue(rootKey as any, null);
+        // console.log(componentTitle);
+    }
     return {
         initializeSizes,
+        removeLine,
         calculateSizeEstimate,
         componentTitle,
         form,

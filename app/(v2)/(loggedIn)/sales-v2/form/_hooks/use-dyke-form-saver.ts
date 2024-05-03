@@ -74,8 +74,10 @@ export default function useDykeFormSaver(form) {
                 return;
             }
             // }
-            const components = Object.values(item.multiComponent.components);
-            console.log(components);
+            const components = Object.values(
+                item.multiComponent.components
+            ).filter(Boolean);
+            // console.log(components);
 
             let parented =
                 components.find(

@@ -4,6 +4,7 @@ import { DykeDoorType, DykeForm, FormStepArray } from "../../type";
 import { useModal } from "@/components/common/modal/provider";
 
 import { useMultiSelector } from "./use-multi-selector";
+import { isComponentType } from "../../overview/is-component-type";
 
 // export interface IDykeItemFormContext {
 //     blocks: DykeBlock[];
@@ -66,7 +67,7 @@ export default function useDykeItem(
     };
     return {
         multi,
-
+        isType: isComponentType(get.doorType()),
         move(to) {
             itemArray.move(rowIndex, to);
         },
