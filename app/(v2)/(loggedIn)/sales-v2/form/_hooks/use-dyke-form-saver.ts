@@ -26,6 +26,7 @@ export default function useDykeFormSaver(form) {
                     ...data,
                     itemArray: data.itemArray.map((_, index) => {
                         const _item = { ..._ };
+                        if (_item.item.meta) _item.item.meta = {} as any;
                         const t = _item.item.formStepArray?.[0]?.item?.value;
                         _item.item.meta.doorType = t as any;
                         if (_item.item.meta.doorType != "Shelf Items")
@@ -37,6 +38,7 @@ export default function useDykeFormSaver(form) {
                         };
                     }),
                 };
+
                 errorData.errorId = data.order.slug || generateRandomString(5);
                 const init = initializeMultiComponents(data);
                 errorData.init = init;

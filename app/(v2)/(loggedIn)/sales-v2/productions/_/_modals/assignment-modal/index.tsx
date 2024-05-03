@@ -3,15 +3,21 @@
 import Modal from "@/components/common/modal";
 import { ServerPromiseType } from "@/types";
 import { getOrderAssignmentData } from "./actions";
-import { useForm } from "react-hook-form";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
+import { useDataPage } from "@/lib/data-page-context";
+import DoorGroupSection from "./door-group-section";
 
+export type OrderAssignmentData = ServerPromiseType<
+    typeof getOrderAssignmentData
+>["Response"];
 interface Props {
-    order: ServerPromiseType<typeof getOrderAssignmentData>["Response"];
+    order: OrderAssignmentData;
 }
+
+export const useAssignmentData = () => useDataPage<OrderAssignmentData>();
 export default function AssignmentModal({ order }: Props) {
     return (
-        <Modal.Content>
+        <Modal.Content size={"lg"}>
             <Modal.Header
                 title="Production Assignment"
                 subtitle={`${order.orderId} | ${
@@ -19,15 +25,11 @@ export default function AssignmentModal({ order }: Props) {
                 }`}
             />
             <div>
-                <Tabs>
-                    <TabsList>
-                        {order.items?.map((item) => (
-                            <TabsTrigger key={item.id} value={`${item.id}`}>
-                                {/* {item.} */}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                </Tabs>
+                <DataPageShell data={order}>
+                    {order.doorGroups.map((group, index) => (
+                        <DoorGroupSection index={index} key={index} />
+                    ))}
+                </DataPageShell>
             </div>
         </Modal.Content>
     );

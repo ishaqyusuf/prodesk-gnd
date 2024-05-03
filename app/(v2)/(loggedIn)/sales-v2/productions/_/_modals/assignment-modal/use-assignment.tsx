@@ -1,6 +1,6 @@
 import { useModal } from "@/components/common/modal/provider";
-import AssignmentModal from "../_modals/assignment-modal";
-import { getOrderAssignmentData } from "../_modals/assignment-modal/actions";
+import AssignmentModal from ".";
+import { getOrderAssignmentData } from "./actions";
 
 export function useAssignment() {
     const modal = useModal();

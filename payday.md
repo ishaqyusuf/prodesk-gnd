@@ -20,8 +20,11 @@ TODO: No more edit on dyke when production is started
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 02: 00.00 == 00.00
-    11:35-
+# MAY 03: 00.00 == 00.00
+    09:45-
+    06:30-08:00
+# MAY 02: 03.40 == 17.30
+    11:35-01:35
     08:50-09:50
     07:20-08:00
 # MAY 01: 03.55 == 13.50

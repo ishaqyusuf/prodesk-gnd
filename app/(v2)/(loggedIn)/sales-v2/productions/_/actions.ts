@@ -5,13 +5,14 @@ import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
 import { DykeDoorType } from "../../type";
 import { salesAssignmentIncludes } from "./utils";
+import { ISalesType } from "@/types/sales";
 
 export async function _getProductionList({ query }) {
     return prisma.$transaction(async (tx) => {
         const where: Prisma.SalesOrdersWhereInput = {
             isDyke: true,
+            type: "order" as ISalesType,
         };
-
         const { pageCount, skip, take } = await paginatedAction(
             query,
             tx.salesOrders,
@@ -52,7 +53,7 @@ export async function _getProductionList({ query }) {
                                 id: true,
                             },
                         },
-                        door: {
+                        salesDoor: {
                             select: {
                                 id: true,
                                 housePackageTool: {

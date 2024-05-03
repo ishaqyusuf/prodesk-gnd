@@ -4,7 +4,7 @@ import { ProductionListItemType } from ".";
 import { Badge } from "@/components/ui/badge";
 import { useModal } from "@/components/common/modal/provider";
 import AssignmentModal from "../_modals/assignment-modal";
-import { useAssignment } from "../utils/use-assignment";
+import { useAssignment } from "../_modals/assignment-modal/use-assignment";
 
 interface Props {
     item: ProductionListItemType;

@@ -9,15 +9,18 @@ export function Info({
     children,
     hidden,
     className = "",
+    value,
 }: Omit<PrimitiveDivProps, "hidden"> & {
     label?;
     hidden?: Boolean;
+    children?;
+    value?;
 }) {
     if (hidden) return <></>;
     return (
         <div className={cn("grid gap-1", className)}>
             <Label className="text-muted-foreground">{label}</Label>
-            <div className="">{children}</div>
+            <div className="">{children || value}</div>
             {/* <p className="text-muted-foreground">{order.orderId}</p> */}
         </div>
     );

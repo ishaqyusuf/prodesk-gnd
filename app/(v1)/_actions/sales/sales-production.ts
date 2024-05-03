@@ -67,7 +67,6 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     if (!order) throw Error("Order not found");
 
     order.items.map(async (item) => {
-        console.log(item.swing, item.qty, ">>>>");
         if (!item.swing || !item?.qty || !item) return;
         const meta: ISalesOrderItemMeta = item.meta as any;
         if (completed)

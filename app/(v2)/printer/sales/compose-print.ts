@@ -187,6 +187,7 @@ type Cell =
     | "totalPrice"
     | "swing"
     | "moulding"
+    | "packing"
     | null;
 function _cell<T>(
     title,
@@ -382,6 +383,8 @@ function getDoorsTable(
                             case "lhQty":
                             case "rhQty":
                                 return door?.[cell as any];
+                            case "packing":
+                                return null;
                         }
                         return lines.length + 1;
                     };

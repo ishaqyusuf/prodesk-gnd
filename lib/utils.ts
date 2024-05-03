@@ -99,11 +99,13 @@ export async function slugModel(value, model, c = 0) {
 }
 export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
     if (!array) return 0;
-    return array
-        .map((v) => (!key ? v : v?.[key]))
-        .map((v) => (v ? Number(v) : null))
-        .filter((v) => (v as any) > 0 && !isNaN(v as any))
-        .reduce((sum, val) => (sum || 0) + (val as number), 0);
+    return (
+        array
+            .map((v) => (!key ? v : v?.[key]))
+            .map((v) => (v ? Number(v) : null))
+            .filter((v) => (v as any) > 0 && !isNaN(v as any))
+            .reduce((sum, val) => (sum || 0) + (val as number), 0) || 0
+    );
 }
 export function toNumber(s) {
     s = Number(s);
@@ -404,3 +406,24 @@ export const math = {
         return est;
     },
 };
+export function ObjectMetaType<T, TMeta>(
+    data: T,
+    meta: TMeta
+): Omit<NonNullable<T>, "meta"> & { meta: TMeta } {
+    return {
+        ...data,
+        meta: data?.["meta"] as TMeta,
+    } as any;
+}
+export function ArrayMetaType<T, TMeta>(data: T[], meta: TMeta) {
+    return data.map((item) => ObjectMetaType(item, meta));
+}
+export function _ObjectMetaType<T, MetaType>(
+    data: T,
+    metaKey = "meta"
+): Omit<T, typeof metaKey> & { [key in typeof metaKey]: MetaType } {
+    return {
+        ...data,
+        [metaKey]: data[metaKey] as unknown as MetaType,
+    };
+}

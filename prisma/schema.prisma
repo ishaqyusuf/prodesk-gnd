@@ -511,7 +511,7 @@ model OrderItemProductionAssignments {
     lhQty        Int?
     rhQty        Int?
     note         String?
-    doorId       Int?
+    salesDoorId  Int?
     dueDate      DateTime?                    @db.Timestamp(0)
     deletedAt    DateTime?                    @db.Timestamp(0)
     createdAt    DateTime?                    @default(now()) @db.Timestamp(0)
@@ -521,7 +521,7 @@ model OrderItemProductionAssignments {
     item         SalesOrderItems              @relation(fields: [itemId], references: [id])
     assignedTo   Users                        @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
     assignedBy   Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
-    door         DykeSalesDoors?              @relation(fields: [doorId], references: [id])
+    salesDoor    DykeSalesDoors?              @relation(fields: [salesDoorId], references: [id])
 }
 
 model OrderProductionSubmissions {
