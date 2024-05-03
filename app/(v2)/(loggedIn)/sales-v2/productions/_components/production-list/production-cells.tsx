@@ -73,14 +73,20 @@ function AssignedTo({ item }: Props) {
 function Actions({ item }: Props) {
     return <></>;
 }
-function Base() {
-    return <></>;
-}
-export let ProductionCells = Object.assign(Base, {
+
+export let ProductionCells = {
     Order,
-    Actions,
     SalesRep,
     Status,
-    AssignedTo,
     ProductionStatus,
-});
+    AssignedTo,
+    Actions,
+};
+// export let ProductionCells = Object.assign(Base, {
+//     Order,
+//     Actions,
+//     SalesRep,
+//     Status,
+//     AssignedTo,
+//     ProductionStatus,
+// });
