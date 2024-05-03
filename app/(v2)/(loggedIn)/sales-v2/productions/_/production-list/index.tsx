@@ -5,7 +5,7 @@ import React from "react";
 import { _getProductionList } from "../actions";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
-import ProductionCells from "./production-cells";
+// import ProductionCells from "./production-cells";
 
 interface Props {
     promise;
@@ -18,12 +18,12 @@ export default function ProductionList({ promise }: Props) {
     const table = useDataTableColumn(
         data,
         (ctx) => [
-            ctx.Column("Order", ProductionCells.Order),
-            ctx.Column("Sales Rep", ProductionCells.SalesRep),
-            ctx.Column("Status", ProductionCells.Status),
-            ctx.Column("Production", ProductionCells.ProductionStatus),
-            ctx.Column("Assigned To", ProductionCells.AssignedTo),
-            ctx.ActionColumn(ProductionCells.Actions),
+            // ctx.Column("Order", ProductionCells.Order),
+            // ctx.Column("Sales Rep", ProductionCells.SalesRep),
+            // ctx.Column("Status", ProductionCells.Status),
+            // ctx.Column("Production", ProductionCells.ProductionStatus),
+            // ctx.Column("Assigned To", ProductionCells.AssignedTo),
+            // ctx.ActionColumn(ProductionCells.Actions),
         ],
         true,
         {

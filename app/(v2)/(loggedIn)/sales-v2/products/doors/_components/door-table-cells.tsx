@@ -74,6 +74,5 @@ function Options({ item }: Props) {
 }
 export let DoorCells = Object.assign(() => <></>, {
     Door,
-
     Options,
 });
