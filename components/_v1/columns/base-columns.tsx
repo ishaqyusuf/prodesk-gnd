@@ -2,16 +2,11 @@
 
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { Checkbox } from "../../ui/checkbox";
-import { Fragment, useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+
 import { formatDate } from "@/lib/use-day";
-import { typedMemo } from "@/lib/hocs/typed-memo";
-import { useRouter } from "next/navigation";
-import { useBool } from "@/lib/use-loader";
-import { toast } from "sonner";
-import { Icons } from "../icons";
-import { DropdownMenuItem, DropdownMenuShortcut } from "../../ui/dropdown-menu";
+
 import { Info, Trash } from "lucide-react";
 import LinkableNode from "../link-node";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
@@ -188,11 +183,11 @@ export function ProgressStatusCell({
     score;
     total;
 }) {
-    const [progress, setProgress] = useState<Progressor>(
+    const [progress, setProgress] = useState<Progressor | null>(
         getProgress(score, total)
     );
 
-    if (progress.score > 0)
+    if (progress?.score > 0)
         return <ProgressStatus score={score} total={total} status={status} />;
     return <StatusBadge status={status} />;
 }
