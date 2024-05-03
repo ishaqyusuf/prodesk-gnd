@@ -9,12 +9,13 @@ import { useState } from "react";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { Info } from "@/components/_v1/info";
 import { Button } from "@/components/ui/button";
+import AssignGroup from "./assign-group";
 
 export default function DoorGroupSection({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
-    if (!group) return null;
     const [open, onOpenChange] = useState(true);
+    if (!group) return null;
 
     return (
         <Collapsible className="mt-4" open={open}>
@@ -27,9 +28,7 @@ export default function DoorGroupSection({ index }) {
                         {group.sectionTitle}
                     </button>
                     <div>
-                        <Button size={"sm"}>
-                            Assign ({group.report.pendingAssignment})
-                        </Button>
+                        <AssignGroup index={index} />
                     </div>
                 </div>
             </CollapsibleTrigger>
