@@ -8,6 +8,7 @@ import {
 import { useAssignmentData } from "..";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AssignGroup({ index }) {
     const data = useAssignmentData();
@@ -30,7 +31,12 @@ export default function AssignGroup({ index }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <div className="w-[350px]">abc</div>
+                <Card className="w-[350px] border-transparent">
+                    <CardHeader>
+                        <CardTitle>Assign</CardTitle>
+                    </CardHeader>
+                    <CardContent></CardContent>
+                </Card>
             </DropdownMenuContent>
         </DropdownMenu>
     );
