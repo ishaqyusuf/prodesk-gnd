@@ -5,7 +5,7 @@ import React from "react";
 import { _getProductionList } from "../actions";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
-import { ProductionCells } from "./production-cells";
+import { ProductionCells } from "./sales-prod-cells";
 
 interface Props {
     promise;

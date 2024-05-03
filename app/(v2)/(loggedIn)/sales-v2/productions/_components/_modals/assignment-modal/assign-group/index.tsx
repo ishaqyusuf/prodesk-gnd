@@ -6,9 +6,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAssignmentData } from "..";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import {
     Table,
@@ -21,6 +27,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
+import Btn from "@/components/_v1/btn";
 
 export default function AssignGroup({ index }) {
     const data = useAssignmentData();
@@ -46,7 +53,12 @@ export default function AssignGroup({ index }) {
         }
     }, [open]);
     if (!group) return null;
-
+    const [saving, startSaving] = useTransition();
+    async function assign() {
+        startSaving(async () => {
+            //
+        });
+    }
     return (
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
             <DropdownMenuTrigger
@@ -104,7 +116,9 @@ export default function AssignGroup({ index }) {
                                                 <TableCell>
                                                     <ControlledInput
                                                         control={form.control}
-                                                        name={`doors.${salesDoor.salesDoor.id}`}
+                                                        name={
+                                                            `doors.${salesDoor.salesDoor.id}.qty` as any
+                                                        }
                                                         type="number"
                                                     />
                                                 </TableCell>
@@ -113,6 +127,13 @@ export default function AssignGroup({ index }) {
                                 </TableBody>
                             </Table>
                         </CardContent>
+                        <CardFooter>
+                            <div className="flex w-full justify-end">
+                                <Btn isLoading={saving} onClick={assign}>
+                                    Assign
+                                </Btn>
+                            </div>
+                        </CardFooter>
                     </Card>
                 </Form>
             </DropdownMenuContent>
