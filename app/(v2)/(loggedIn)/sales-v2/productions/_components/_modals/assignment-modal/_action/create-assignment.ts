@@ -5,9 +5,10 @@ import { prisma } from "@/db";
 
 export async function createProdAssignment() {
     const assignedById = await userId();
-    await prisma.orderItemProductionAssignments.create({
-        data: {
-            assignedById,
-        },
-    });
+    // await prisma.orderItemProductionAssignments.create({
+    //     data: {
+    //         assignedById,
+
+    //     } ,
+    // });
 }
