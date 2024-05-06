@@ -17,7 +17,7 @@ export async function sendMessage(data: EmailProps) {
     if (data.attachOrder && isProd) {
         const pdf = await _generateSalesPdf(
             data.data?.type == "order" ? "invoice" : "quote",
-            [data.data.id]
+            [data.data.slug]
         );
         attachments.push({
             content: pdf,

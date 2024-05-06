@@ -42,13 +42,15 @@ export async function _generateSalesPdf(mode: SalesPrintModes, ids) {
     console.log(">>>>>>");
     page = await browser.newPage();
     if (process.env.NODE_ENV == "production") {
-        url = `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
+        url = `https://gnd-prodesk.vercel.app/printer/sales?slugs=${ids}&mode=${mode}&preview=true`;
+        // url = `https://gnd-prodesk.vercel.app/print-sales?id=${ids}&mode=${mode}`;
     } else {
         //     browser = await puppeteer.launch({
         //         headless: "new"
         //     });
         //     page = await browser.newPage();
-        url = `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`;
+        // url = `http://localhost:3000/print-sales?id=${ids}&mode=${mode}`;
+        url = `http://localhost:3000/printer/sales?slugs=${ids}&mode=${mode}&preview=true`;
     }
     // const url =
     //     env.NODE_ENV !== "production"
