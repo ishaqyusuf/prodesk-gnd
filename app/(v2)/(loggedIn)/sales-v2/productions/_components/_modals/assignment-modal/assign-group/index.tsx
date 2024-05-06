@@ -44,6 +44,7 @@ export interface IAssignGroupForm {
 }
 export default function AssignGroup({ index }) {
     const data = useAssignmentData();
+    const modal = useAssignment();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(false);
     const form = useForm<IAssignGroupForm>({
@@ -85,7 +86,6 @@ export default function AssignGroup({ index }) {
             title: "RH",
         },
     ].filter((s) => s) as any;
-    const modal = useAssignment();
     async function assign() {
         startSaving(async () => {
             try {
