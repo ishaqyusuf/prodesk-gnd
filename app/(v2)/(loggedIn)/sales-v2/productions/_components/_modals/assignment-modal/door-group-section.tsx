@@ -9,7 +9,7 @@ import { useState } from "react";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { Info } from "@/components/_v1/info";
 import { Button } from "@/components/ui/button";
-import AssignGroup from "./assign-group";
+import { AssignGroup } from "./assign-group";
 import DoorAssignments from "./door-assignments";
 
 export default function DoorGroupSection({ index }) {

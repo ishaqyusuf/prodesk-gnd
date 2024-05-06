@@ -42,7 +42,7 @@ export interface IAssignGroupForm {
         [id in string]: OrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
     };
 }
-export default function AssignGroup({ index }) {
+export function AssignGroup({ index }) {
     const data = useAssignmentData();
     const modal = useAssignment();
     const group = data.data.doorGroups[index];
