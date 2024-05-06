@@ -60,7 +60,9 @@ function AssignedTo({ item }: Props) {
                         {assignedTo
                             ?.filter((_, i) => i < 2)
                             .map((user) => (
-                                <Badge>{user.assignedTo.name}</Badge>
+                                <Badge key={user.id}>
+                                    {user.assignedTo.name}
+                                </Badge>
                             ))}
                     </div>
                 ) : (
@@ -74,14 +76,14 @@ function Actions({ item }: Props) {
     return <></>;
 }
 
-// export let ProductionCells = {
-//     Order,
-//     SalesRep,
-//     Status,
-//     ProductionStatus,
-//     AssignedTo,
-//     Actions,
-// };
+export let ProductionCells = {
+    Order,
+    SalesRep,
+    Status,
+    ProductionStatus,
+    AssignedTo,
+    Actions,
+};
 // export let ProductionCells = Object.assign(Base, {
 //     Order,
 //     Actions,
