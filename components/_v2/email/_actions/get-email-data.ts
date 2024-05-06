@@ -29,6 +29,7 @@ export async function getEmailData(id, type: EmailTypes) {
                     amountDue: true,
                     grandTotal: true,
                     // meta: true,
+                    slug: true,
                     orderId: true,
                     status: true,
                     prodStatus: true,
