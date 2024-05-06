@@ -83,7 +83,6 @@ export async function _getProductionList({ query }) {
                             select: {
                                 id: true,
                                 qty: true,
-                                leftHandle: true,
                             },
                         },
                     },
