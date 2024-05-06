@@ -13,7 +13,8 @@ export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
     const u = await _dbUser();
     const attachments: any = [];
-    if (data.attachOrder) {
+    const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
+    if (data.attachOrder && isProd) {
         const pdf = await _generateSalesPdf(
             data.data?.type == "order" ? "invoice" : "quote",
             [data.data.id]
@@ -23,7 +24,6 @@ export async function sendMessage(data: EmailProps) {
             filename: `${data.data.orderId}.pdf`,
         });
     }
-    const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
 
     const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
     const _data = await resend.emails.send({

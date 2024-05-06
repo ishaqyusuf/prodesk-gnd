@@ -16,11 +16,12 @@ TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
----------------------------
+------------------------------
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
 # MAY 06: 00.00 == 00.00
+    04:10-
     08:40-11:00
     07:00-08:00
 -----------------------------

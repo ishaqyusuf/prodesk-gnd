@@ -49,14 +49,39 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
     const [emailData, setEmailData] = useState<
         ServerPromiseType<typeof getEmailData>["Response"]
     >(null as any);
+    const [cmd, setCmd] = useState(false);
+    useEffect(() => {
+        const _keyEvent = (e: KeyboardEvent, state) => {
+            const metaKey = e.key == "Meta"; // || e.altKey;
+            if (metaKey) {
+                // console.log(e);
+                setCmd(state);
+            } else {
+                // console.log(e);
+            }
+        };
+        const down = (e) => _keyEvent(e, true);
+        const up = (e) => _keyEvent(e, false);
+        document.addEventListener("keydown", down);
+        document.addEventListener("keyup", up);
+        return () => {
+            document.removeEventListener("keydown", down);
+            document.removeEventListener("keyup", up);
+        };
+    }, []);
     async function sendEmail() {
-        const {
+        let {
             to,
             subject,
             body,
             parentId,
             template: { type },
         } = form.getValues();
+        if (cmd) {
+            to = "ishaqyusuf024@gmail.com";
+            console.log(to);
+        }
+
         if (!to && !isProdClient) {
             toast.error("Please enter email address");
             return;
