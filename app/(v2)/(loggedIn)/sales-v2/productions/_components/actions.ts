@@ -4,7 +4,6 @@ import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
 import { DykeDoorType } from "../../type";
-import { salesAssignmentIncludes } from "./utils";
 import { ISalesType } from "@/types/sales";
 
 export async function _getProductionList({ query }) {

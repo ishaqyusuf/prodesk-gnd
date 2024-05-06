@@ -74,14 +74,14 @@ function Actions({ item }: Props) {
     return <></>;
 }
 
-export let ProductionCells = {
-    Order,
-    SalesRep,
-    Status,
-    ProductionStatus,
-    AssignedTo,
-    Actions,
-};
+// export let ProductionCells = {
+//     Order,
+//     SalesRep,
+//     Status,
+//     ProductionStatus,
+//     AssignedTo,
+//     Actions,
+// };
 // export let ProductionCells = Object.assign(Base, {
 //     Order,
 //     Actions,
