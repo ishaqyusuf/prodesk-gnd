@@ -10,6 +10,9 @@ import DoorGroupSection from "./door-group-section";
 export type OrderAssignmentData = ServerPromiseType<
     typeof getOrderAssignmentData
 >["Response"];
+export type OrderAssignmentDataGroup = OrderAssignmentData["doorGroups"][0];
+export type OrderAssignmentSalesDoor =
+    OrderAssignmentDataGroup["salesDoors"][0];
 interface Props {
     order: OrderAssignmentData;
 }

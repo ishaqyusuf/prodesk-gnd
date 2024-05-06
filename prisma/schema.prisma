@@ -529,7 +529,9 @@ model OrderProductionSubmissions {
     salesOrderId     Int?
     salesOrderItemId Int?
     qty              Int
-    leftHandle       Boolean?                        @default(false)
+    lhQty            Int?                            @default(0)
+    rhQty            Int?                            @default(0)
+    note             String?                         @db.Text
     deletedAt        DateTime?                       @db.Timestamp(0)
     createdAt        DateTime?                       @default(now()) @db.Timestamp(0)
     updatedAt        DateTime?                       @updatedAt

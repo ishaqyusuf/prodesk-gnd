@@ -91,7 +91,11 @@ export default function AssignGroup({ index }) {
             try {
                 const _data = validator.validate();
                 if (_data) {
-                    const r = await createProdAssignment(_data);
+                    const r = await createProdAssignment(
+                        _data,
+                        data.data.productionStatus?.id,
+                        data.data.totalQty
+                    );
                     toast.success("Production assigned");
                     modal.open(data.data.id);
                     onOpenChange(false);

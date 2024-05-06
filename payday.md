@@ -21,7 +21,7 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete
 # MAY 06: 00.00 == 00.00
-    08:40-
+    08:40-11:00
     07:00-08:00
 -----------------------------
 PAYMENT INVOICE  

@@ -11,13 +11,13 @@ import {
 import { useAssignmentData } from ".";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/use-day";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
+
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { _deleteAssignment } from "./_action/actions";
 import { useAssignment } from "./use-assignment";
+import SubmitDoorProduction from "./submit-production";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
 
 interface Props {
     groupIndex;
@@ -61,15 +61,16 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                     )}
                                 </div>
                             </TableCell>
-                            <TableCell className="flex gap-2">
+                            <TableCell className="flex gap-2 items-center">
                                 <ConfirmBtn
                                     trash
                                     size={"icon"}
                                     onClick={() => deleteAssignment(assignment)}
                                 />
-                                <Menu variant={"ghost"}>
-                                    <MenuItem>Delete</MenuItem>
-                                </Menu>
+
+                                {/* <SubmitDoorProduction
+                                    index={1}
+                                ></SubmitDoorProduction> */}
                             </TableCell>
                         </TableRow>
                     ))}

@@ -92,9 +92,31 @@ export async function getOrderAssignmentData(id) {
                             assignments: subItem.assignments
                                 .filter((a) => a.salesDoorId == salesDoor.id)
                                 .map((assignment) => {
-                                    return {
+                                    const r = {
                                         ...assignment,
+                                        submitted: {
+                                            lh: sum(
+                                                assignment.submissions
+                                                    // .filter((s) => s.)
+                                                    .map((s) => s.lhQty)
+                                            ),
+                                            rh: sum(
+                                                assignment.submissions.map(
+                                                    (s) => s.rhQty
+                                                )
+                                            ),
+                                        },
+                                        pending: {
+                                            lh: 0,
+                                            rh: 0,
+                                        },
                                     };
+                                    r.pending.lh =
+                                        (r.lhQty || 0) - r.submitted.lh;
+                                    r.pending.rh =
+                                        (r.rhQty || 0) - r.submitted.rh;
+
+                                    return r;
                                 }),
                             doorTitle: salesDoor.housePackageTool.door?.title,
                             report: {
@@ -123,8 +145,7 @@ export async function getOrderAssignmentData(id) {
                             ret.report.completed += a.qtyCompleted || 0;
 
                             a.submissions.map((s) => {
-                                if (s.leftHandle)
-                                    ret.report.lhCompleted += s.qty;
+                                if (s.lhQty) ret.report.lhCompleted += s.qty;
                                 else ret.report.rhCompleted += s.qty;
                             });
                         });
@@ -157,5 +178,6 @@ export async function getOrderAssignmentData(id) {
                 formSteps: item?.formSteps,
             };
         });
-    return { ...order, doorGroups };
+    const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
+    return { ...order, totalQty, doorGroups };
 }
