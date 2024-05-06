@@ -42,12 +42,12 @@ function ProductionStatus({ item }: Props) {
     );
 }
 function AssignedTo({ item }: Props) {
+    const assignment = useAssignment();
     const assignedTo = item.assignments?.filter(
         (a, i) =>
             i ==
             item.assignments.findIndex((b) => b.assignedToId == a.assignedToId)
     );
-    const assignment = useAssignment();
     return (
         <TableCol
             onClick={(e) => {

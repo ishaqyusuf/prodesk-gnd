@@ -108,6 +108,13 @@ export async function _getProductionList({ query }) {
             },
             // const productions =
         });
-        return { data, pageCount };
+        return {
+            data: data.map((order) => {
+                return {
+                    ...order,
+                };
+            }),
+            pageCount,
+        };
     });
 }
