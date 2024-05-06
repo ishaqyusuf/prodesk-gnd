@@ -40,9 +40,15 @@ export default function ControlledInput<
     return (
         <FormField
             {...(props as any)}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
                 <FormItem className={cn(className, "mx-1")}>
-                    {label && <FormLabel className="">{label}</FormLabel>}
+                    {label && (
+                        <FormLabel
+                            className={cn(fieldState.error && "border-red-400")}
+                        >
+                            {label}
+                        </FormLabel>
+                    )}
                     <FormControl>
                         <div
                             className={cn(
@@ -53,6 +59,9 @@ export default function ControlledInput<
                             {type == "textarea" ? (
                                 <Textarea
                                     placeholder={placeholder}
+                                    className={cn(
+                                        fieldState.error && "border-red-400"
+                                    )}
                                     {...(list
                                         ? {
                                               defaultValue: field.value,
@@ -67,6 +76,9 @@ export default function ControlledInput<
                                     placeholder={placeholder}
                                     // {...field}
                                     // value={""}
+                                    className={cn(
+                                        fieldState.error && "border-red-400"
+                                    )}
                                     {...(list
                                         ? {
                                               defaultValue: field.value,

@@ -1,6 +1,5 @@
-import { useJobCostList } from "@/_v2/hooks/use-static-data";
 import ProjectFormSection from "./project-form-section";
-import useSubmitJob, { useJobSubmitCtx } from "./use-submit-job";
+import { useJobSubmitCtx } from "./use-submit-job";
 import {
     Table,
     TableBody,
@@ -19,7 +18,6 @@ import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { useFormContext } from "react-hook-form";
 
 export default function TaskDetailsTab({}) {
     const ctx = useJobSubmitCtx();

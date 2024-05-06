@@ -5,7 +5,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAssignmentData } from "..";
+import { OrderAssignmentData, useAssignmentData } from "..";
 import { startTransition, useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,38 +28,77 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import Btn from "@/components/_v1/btn";
+import { useStaticProducers } from "@/_v2/hooks/use-static-data";
+import ControlledSelect from "@/components/common/controls/controlled-select";
+import { cn } from "@/lib/utils";
+import { useValidateAssignment } from "./validate-assignment";
+import { createProdAssignment } from "../_action/create-assignment";
+import { toast } from "sonner";
+import { useAssignment } from "../use-assignment";
 
+export interface IAssignGroupForm {
+    assignToId?: number;
+    doors: {
+        [id in string]: OrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
+    };
+}
 export default function AssignGroup({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(false);
-    const form = useForm({
+    const form = useForm<IAssignGroupForm>({
         defaultValues: {
             doors: {},
+            assignToId: -1,
         },
     });
+    const validator = useValidateAssignment(form);
+
     useEffect(() => {
         if (open) {
             const doors: any = {};
             group?.salesDoors?.map((s) => {
                 doors[s.salesDoor?.id] = {
-                    qty: s.report.pendingAssignment,
+                    // qty: s.report.pendingAssignment,
+                    ...s.report,
                 };
             });
+            console.log(doors);
             form.reset({
                 doors,
+                assignToId: -1,
             });
         }
     }, [open]);
+    const prodUsers = useStaticProducers();
     const [saving, startSaving] = useTransition();
     if (!group) return null;
-
+    let hands = [
+        {
+            qty: "lhQty",
+            pending: "lhPending",
+            title: !group.isType.garage ? "LH" : "Qty",
+        },
+        !group.isType.garage && {
+            qty: "rhQty",
+            pending: "rhPending",
+            title: "RH",
+        },
+    ].filter((s) => s) as any;
+    const modal = useAssignment();
     async function assign() {
         startSaving(async () => {
             try {
-                const selections = form.getValues();
-                Object.entries(selections).map(([id, d]) => {});
-            } catch (error) {}
+                const _data = validator.validate();
+                if (_data) {
+                    const r = await createProdAssignment(_data);
+                    toast.success("Production assigned");
+                    modal.open(data.data.id);
+                    onOpenChange(false);
+                }
+            } catch (error) {
+                console.log(error);
+            }
         });
     }
     return (
@@ -83,11 +122,32 @@ export default function AssignGroup({ index }) {
                             <CardTitle>Assign</CardTitle>
                         </CardHeader>
                         <CardContent>
+                            <div className="">
+                                <ControlledSelect
+                                    control={form.control}
+                                    options={prodUsers.data}
+                                    titleKey={"name"}
+                                    valueKey="id"
+                                    name="assignToId"
+                                    label={"Assign To"}
+                                />
+                            </div>
                             <Table>
                                 <TableHeader>
                                     <TableHead>Door</TableHead>
-                                    <TableHead>Qty</TableHead>
-                                    {/* <TableHead>Assign</TableHead> */}
+                                    {hands?.map((h) => (
+                                        <TableHead key={h.title}>
+                                            {h.title}
+                                        </TableHead>
+                                    ))}
+                                    {/* {group.isType.garage ? (
+                                        <TableHead>Qty</TableHead>
+                                    ) : (
+                                        <>
+                                            <TableHead>LH</TableHead>
+                                            <TableHead>RH</TableHead>
+                                        </>
+                                    )} */}
                                 </TableHeader>
                                 <TableBody>
                                     {group.salesDoors
@@ -110,32 +170,50 @@ export default function AssignGroup({ index }) {
                                                         }
                                                     </TableCol.Secondary>
                                                 </TableCell>
-                                                {/* <TableCell>
-                                                    {
-                                                        salesDoor.report
-                                                            .pendingAssignment
-                                                    }
-                                                </TableCell> */}
-                                                <TableCell>
-                                                    <div className="flex space-x-2 items-center">
-                                                        <ControlledInput
-                                                            control={
-                                                                form.control
-                                                            }
-                                                            name={
-                                                                `doors.${salesDoor.salesDoor.id}.qty` as any
-                                                            }
-                                                            type="number"
-                                                        />
-                                                        <span>
-                                                            /{" "}
-                                                            {
-                                                                salesDoor.report
-                                                                    .pendingAssignment
-                                                            }
-                                                        </span>
-                                                    </div>
-                                                </TableCell>
+
+                                                {hands.map((h) => (
+                                                    <TableCell key={h.title}>
+                                                        <div className="flex space-x-2 items-center">
+                                                            <ControlledInput
+                                                                disabled={
+                                                                    salesDoor
+                                                                        .report?.[
+                                                                        h
+                                                                            .pending
+                                                                    ] == 0
+                                                                }
+                                                                control={
+                                                                    form.control
+                                                                }
+                                                                className="w-[80px]"
+                                                                name={
+                                                                    `doors.${salesDoor.salesDoor.id}._assignForm.${h.qty}` as any
+                                                                }
+                                                                type="number"
+                                                            />
+                                                            <span
+                                                                className={cn(
+                                                                    "whitespace-nowrap",
+                                                                    salesDoor
+                                                                        .report?.[
+                                                                        h
+                                                                            .pending
+                                                                    ] == 0 &&
+                                                                        "text-muted-foreground cursor-not-allowed"
+                                                                )}
+                                                            >
+                                                                /{" "}
+                                                                {
+                                                                    salesDoor
+                                                                        .report?.[
+                                                                        h
+                                                                            .pending
+                                                                    ]
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </TableCell>
+                                                ))}
                                             </TableRow>
                                         ))}
                                 </TableBody>

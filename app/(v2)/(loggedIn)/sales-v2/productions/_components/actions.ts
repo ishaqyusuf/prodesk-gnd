@@ -8,10 +8,23 @@ import { salesAssignmentIncludes } from "./utils";
 import { ISalesType } from "@/types/sales";
 
 export async function _getProductionList({ query }) {
+    const productionTypes = ["Interior", "Garage"] as DykeDoorType[];
+
     return prisma.$transaction(async (tx) => {
         const where: Prisma.SalesOrdersWhereInput = {
             isDyke: true,
             type: "order" as ISalesType,
+            items: {
+                some: {
+                    salesDoors: {
+                        some: {
+                            doorType: {
+                                in: productionTypes,
+                            },
+                        },
+                    },
+                },
+            },
         };
         const { pageCount, skip, take } = await paginatedAction(
             query,
@@ -29,10 +42,7 @@ export async function _getProductionList({ query }) {
                         housePackageTool: {
                             door: {
                                 doorType: {
-                                    in: [
-                                        "Garage",
-                                        "Interior",
-                                    ] as DykeDoorType[],
+                                    in: productionTypes,
                                 },
                             },
                         },
@@ -46,6 +56,7 @@ export async function _getProductionList({ query }) {
                     },
                 },
                 assignments: {
+                    where: { deletedAt: null },
                     include: {
                         assignedTo: {
                             select: {

@@ -10,6 +10,7 @@ import { TableCol } from "@/components/common/data-table/table-cells";
 import { Info } from "@/components/_v1/info";
 import { Button } from "@/components/ui/button";
 import AssignGroup from "./assign-group";
+import DoorAssignments from "./door-assignments";
 
 export default function DoorGroupSection({ index }) {
     const data = useAssignmentData();
@@ -45,13 +46,14 @@ export default function DoorGroupSection({ index }) {
                             <Info label="Qty" value={sd.report.totalQty} />
                             <Info
                                 label="Assigned"
-                                value={`${sd.report.assigned} of ${sd.report.pendingAssignment}`}
+                                value={`${sd.report.assigned} of ${sd.report.totalQty}`}
                             />
                             <Info
                                 label="Completed"
                                 value={sd.report.completed}
                             />
                         </div>
+                        <DoorAssignments groupIndex={index} doorIndex={i} />
                     </div>
                 ))}
             </CollapsibleContent>

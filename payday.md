@@ -20,8 +20,14 @@ TODO: No more edit on dyke when production is started
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 03: 00.00 == 00.00
-    11:40-
+# MAY 06: 00.00 == 00.00
+    08:40-
+    07:00-08:00
+-----------------------------
+PAYMENT INVOICE  
+$771.67
+# MAY 03: 04.45 == 22.05
+    11:40-01:40
     09:45-11:00
     06:30-08:00
 # MAY 02: 03.40 == 17.30
