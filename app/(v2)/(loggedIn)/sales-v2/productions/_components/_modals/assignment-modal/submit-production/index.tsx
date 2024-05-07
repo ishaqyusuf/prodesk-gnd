@@ -26,12 +26,21 @@ import { useValidateAssignment } from "./validate-assignment";
 import { useAssignment } from "../use-assignment";
 import { OrderProductionSubmissions } from "@prisma/client";
 import ControlledInput from "@/components/common/controls/controlled-input";
+import ControlledSelect from "@/components/common/controls/controlled-select";
+import { cn } from "@/lib/utils";
+import { _submitProduction } from "../_action/actions";
+import { toast } from "sonner";
 
 interface Props {
     salesDoor: OrderAssignmentSalesDoor;
     assignment: OrderAssignmentSalesDoor["assignments"][0];
+    isGarage: boolean;
 }
-export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
+export default function SubmitDoorProduction({
+    salesDoor,
+    assignment,
+    isGarage,
+}: Props) {
     const data = useAssignmentData();
     const modal = useAssignment();
 
@@ -42,12 +51,40 @@ export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
             salesOrderId: assignment.orderId,
             salesOrderItemId: assignment.itemId,
             note: "",
+            lhQty: 0,
+            rhQty: 0,
             // leftHandle: false,
         },
     });
-    const validator = useValidateAssignment(form);
-
+    // assignment.pending
+    const [inputs, setInputs] = useState<
+        {
+            label?;
+            key?;
+            options?: string[];
+        }[]
+    >([]);
     useEffect(() => {
+        if (open) {
+            let opt = assignment.pending;
+            function _input(k) {
+                const v = opt[k?.toLowerCase()];
+                let label = k;
+                if (isGarage && k == "LH") label = "Qty";
+                // if(isGarage)
+                return {
+                    label,
+                    key: `${k?.toLowerCase()}Qty`,
+                    options: Array(v || 0)
+                        .fill(0)
+                        .map((s, i) => (i + 1).toString()),
+                };
+            }
+            const _inputs = [_input("LH"), _input("RH")];
+            // console.log(_inputs);
+
+            setInputs(_inputs);
+        }
         // if (open) {
         //     const doors: any = {};
         //     group?.salesDoors?.map((s) => {
@@ -63,9 +100,18 @@ export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
         //     });
         // }
     }, [open]);
-    const prodUsers = useStaticProducers();
     const [saving, startSaving] = useTransition();
-    async function submit() {}
+    async function submit() {
+        startSaving(async () => {
+            const data = form.getValues();
+            data.lhQty = Number(data.lhQty) || null;
+            data.rhQty = Number(data.rhQty) || null;
+            // console.log(data);
+            await _submitProduction(data);
+            onOpenChange(false);
+            toast.success("Submitted successfully");
+        });
+    }
 
     function toggleSubmitProduction() {
         onOpenChange(!open);
@@ -79,6 +125,8 @@ export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
                 <Button
                     onClick={toggleSubmitProduction}
                     // disabled={group.report.pendingAssignment == 0}
+
+                    disabled={assignment.qtyCompleted == assignment.qtyAssigned}
                     size={"sm"}
                     variant={"outline"}
                     className="p-2 h-6"
@@ -86,7 +134,7 @@ export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
                     Submit
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="mx-4">
+            <DropdownMenuContent side="left" className="mx-4">
                 <Form {...form}>
                     <Card className="w-[500px] border-transparent">
                         <CardHeader>
@@ -94,16 +142,26 @@ export default function SubmitDoorProduction({ salesDoor, assignment }: Props) {
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    {assignment.pending.rh ? (
-                                        <ControlledInput type="number" />
-                                    ) : (
-                                        <></>
-                                    )}
-                                </div>
+                                {inputs.map((i) => (
+                                    <div key={i.label} className={cn("")}>
+                                        <ControlledSelect
+                                            className={cn(
+                                                !i.options?.length && "hidden"
+                                            )}
+                                            disabled={i.options?.length == 0}
+                                            key={i.label}
+                                            control={form.control}
+                                            name={i.key}
+                                            options={i.options}
+                                            label={i.label}
+                                        />
+                                    </div>
+                                ))}
+
                                 <ControlledInput
                                     className="col-span-2"
-                                    type="text"
+                                    type="textarea"
+                                    label="Note"
                                     control={form.control}
                                     name="note"
                                 />

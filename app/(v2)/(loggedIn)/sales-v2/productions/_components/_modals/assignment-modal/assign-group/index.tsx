@@ -53,6 +53,8 @@ export function AssignGroup({ index }) {
             assignToId: -1,
         },
     });
+    // console.log(group.sal);
+
     const validator = useValidateAssignment(form);
 
     useEffect(() => {
@@ -64,7 +66,7 @@ export function AssignGroup({ index }) {
                     ...s.report,
                 };
             });
-            console.log(doors);
+
             form.reset({
                 doors,
                 assignToId: -1,
@@ -79,13 +81,16 @@ export function AssignGroup({ index }) {
             qty: "lhQty",
             pending: "lhPending",
             title: !group.isType.garage ? "LH" : "Qty",
+            handle: "lh",
         },
         !group.isType.garage && {
             qty: "rhQty",
             pending: "rhPending",
-            title: "RH",
+            title: group.isType.garage ? "" : "RH",
+            handle: "rh",
         },
     ].filter((s) => s) as any;
+
     async function assign() {
         startSaving(async () => {
             try {
@@ -119,7 +124,7 @@ export function AssignGroup({ index }) {
                     Assign ({group.report.pendingAssignment})
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="mx-4">
+            <DropdownMenuContent side="left" className="mx-4">
                 <Form {...form}>
                     <Card className="w-[500px] border-transparent">
                         <CardHeader>
@@ -181,9 +186,9 @@ export function AssignGroup({ index }) {
                                                             <ControlledInput
                                                                 disabled={
                                                                     salesDoor
-                                                                        .report?.[
-                                                                        h
-                                                                            .pending
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
                                                                     ] == 0
                                                                 }
                                                                 control={
@@ -199,9 +204,9 @@ export function AssignGroup({ index }) {
                                                                 className={cn(
                                                                     "whitespace-nowrap",
                                                                     salesDoor
-                                                                        .report?.[
-                                                                        h
-                                                                            .pending
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
                                                                     ] == 0 &&
                                                                         "text-muted-foreground cursor-not-allowed"
                                                                 )}
@@ -209,9 +214,9 @@ export function AssignGroup({ index }) {
                                                                 /{" "}
                                                                 {
                                                                     salesDoor
-                                                                        .report?.[
-                                                                        h
-                                                                            .pending
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
                                                                     ]
                                                                 }
                                                             </span>

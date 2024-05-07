@@ -91,9 +91,12 @@ export async function getOrderAssignmentData(id) {
                             },
                             assignments: subItem.assignments
                                 .filter((a) => a.salesDoorId == salesDoor.id)
+
                                 .map((assignment) => {
+                                    let status = "";
                                     const r = {
                                         ...assignment,
+                                        status,
                                         submitted: {
                                             lh: sum(
                                                 assignment.submissions
@@ -129,6 +132,14 @@ export async function getOrderAssignmentData(id) {
                                 rhCompleted: 0,
                                 rhPending: 0,
                                 lhPending: 0,
+                                _unassigned: {
+                                    lh: 0,
+                                    rh: 0,
+                                },
+                                _assigned: {
+                                    lh: 0,
+                                    rh: 0,
+                                },
                                 lhCompleted: 0,
                                 _assignForm: {
                                     lhQty: 0,
@@ -145,15 +156,21 @@ export async function getOrderAssignmentData(id) {
                             ret.report.completed += a.qtyCompleted || 0;
 
                             a.submissions.map((s) => {
-                                if (s.lhQty) ret.report.lhCompleted += s.qty;
-                                else ret.report.rhCompleted += s.qty;
+                                if (s.lhQty) ret.report.lhCompleted += s.lhQty;
+                                if (s.rhQty) ret.report.rhCompleted += s.rhQty;
+                                // else ret.report.rhCompleted += s.qty;
                             });
                         });
                         ret.report.rhPending =
                             ret.report.rhQty - ret.report.rhCompleted;
                         ret.report.lhPending =
                             ret.report.lhQty - ret.report.lhCompleted;
-
+                        ["lh", "rh"].map((k) => {
+                            const _qty = `${k}Qty`;
+                            ret.report._unassigned[k] =
+                                ret.report[_qty] -
+                                sum(ret.assignments.map((s) => s[_qty]));
+                        });
                         ret.report.totalQty += sum([
                             ret.salesDoor.lhQty,
                             ret.salesDoor.rhQty,

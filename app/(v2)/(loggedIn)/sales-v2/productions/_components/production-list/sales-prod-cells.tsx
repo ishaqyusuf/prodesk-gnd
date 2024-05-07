@@ -4,6 +4,7 @@ import { ProductionListItemType } from ".";
 import { Badge } from "@/components/ui/badge";
 
 import { useAssignment } from "../_modals/assignment-modal/use-assignment";
+import { sum } from "@/lib/utils";
 
 interface Props {
     item: ProductionListItemType;
@@ -11,10 +12,12 @@ interface Props {
 function Order({ item }: Props) {
     return (
         <TableCol href={`/sales-v2/production/${item.slug}`}>
-            <TableCol.Primary>
+            <TableCol.Primary className="line-clamp-1">
                 {item.customer?.businessName || item.customer?.name}
             </TableCol.Primary>
-            <TableCol.Secondary>{item.orderId}</TableCol.Secondary>
+            <TableCol.Secondary className="line-clamp-1">
+                {item.orderId}
+            </TableCol.Secondary>
         </TableCol>
     );
 }
@@ -27,17 +30,40 @@ function SalesRep({ item }: Props) {
 }
 function Status({ item }: Props) {
     let status = "Not Assigned";
+    let color = "red";
+    let total = sum(item.doors.map((d) => sum([d.lhQty, d.rhQty])));
+    let assigned = sum(item.assignments.map((a) => a.qtyAssigned));
 
+    if (assigned) {
+        status =
+            // assigned == total ? "Assigned" :
+            `${assigned} of ${total} assigned`;
+        color = assigned == total ? "green" : "yellow";
+    }
+
+    // if(item.assignments.length)
     return (
         <>
-            <TableCol.Status status={status} />
+            <TableCol.Status color={color} status={status} />
         </>
     );
 }
 function ProductionStatus({ item }: Props) {
+    const submitted = sum(
+        item.assignments.map((a) =>
+            sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
+        )
+    );
+    const totalDoors = sum(item.doors.map((d) => sum([d.rhQty, d.lhQty])));
+    // console.log({ totalDoors, submitted });
+
     return (
         <>
-            <TableCol.Status status={item.productionStatus?.status} />
+            <TableCol.Status
+                score={submitted}
+                total={totalDoors}
+                status={item.productionStatus?.status}
+            />
         </>
     );
 }
@@ -56,12 +82,18 @@ function AssignedTo({ item }: Props) {
         >
             <TableCol.Secondary className="hover:cursor-pointer">
                 {assignedTo.length ? (
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-2 items-center flex-wrap gap-1">
                         {assignedTo
                             ?.filter((_, i) => i < 2)
                             .map((user) => (
-                                <Badge key={user.id}>
-                                    {user.assignedTo.name}
+                                <Badge
+                                    variant={"outline"}
+                                    className="h-auto"
+                                    key={user.id}
+                                >
+                                    <span className="line-clamp-2 whitespace-nowrap max-w-[80px]">
+                                        {user.assignedTo.name}
+                                    </span>
                                 </Badge>
                             ))}
                     </div>

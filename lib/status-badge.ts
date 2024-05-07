@@ -2,10 +2,12 @@ export function getBadgeColor(status: string | null) {
     let color: Colors | undefined = status
         ? StatusColorMap[(status?.toLowerCase() || "").replace(" ", "_")]
         : "slate";
+    return _getStatusColor(color);
+}
+export function _getStatusColor(color) {
     if (!color) color = "slate";
     return `bg-${color}-500 hover:bg-${color}-600`;
 }
-
 let StatusColorMap: { [key: string]: Colors } = {
     queued: "orange",
     completed: "green",

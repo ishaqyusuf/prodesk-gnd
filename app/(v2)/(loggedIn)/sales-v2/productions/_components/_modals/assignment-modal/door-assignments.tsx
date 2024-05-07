@@ -18,6 +18,7 @@ import { useAssignment } from "./use-assignment";
 import SubmitDoorProduction from "./submit-production";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
+import { TableCol } from "@/components/common/data-table/table-cells";
 
 interface Props {
     groupIndex;
@@ -37,10 +38,10 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     return (
         <div className="mx-4 ml-10">
             <Table className="">
-                <TableHeader>
+                <TableHeader className="bg-slate-100">
                     <TableHead>Date</TableHead>
                     <TableHead>Assigned To</TableHead>
-                    <TableHead>Qty</TableHead>
+                    <TableHead>Completed</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead></TableHead>
                 </TableHeader>
@@ -51,13 +52,20 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                 {formatDate(assignment.createdAt)}
                             </TableCell>
                             <TableCell>{assignment.assignedTo?.name}</TableCell>
-                            <TableCell>{assignment.qtyAssigned}</TableCell>
+                            <TableCell>
+                                {assignment.qtyCompleted} of{" "}
+                                {assignment.qtyAssigned}
+                            </TableCell>
                             <TableCell>
                                 <div>
                                     {!assignment.submissions?.length ? (
-                                        <Badge>Pending</Badge>
+                                        <TableCol.Status />
                                     ) : (
-                                        <></>
+                                        <TableCol.Status
+                                            score={assignment.qtyCompleted}
+                                            total={assignment.qtyAssigned}
+                                            status={assignment.status}
+                                        />
                                     )}
                                 </div>
                             </TableCell>
@@ -68,9 +76,11 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                     onClick={() => deleteAssignment(assignment)}
                                 />
 
-                                {/* <SubmitDoorProduction
-                                    index={1}
-                                ></SubmitDoorProduction> */}
+                                <SubmitDoorProduction
+                                    isGarage={group.isType.garage}
+                                    assignment={assignment}
+                                    salesDoor={salesDoor}
+                                ></SubmitDoorProduction>
                             </TableCell>
                         </TableRow>
                     ))}

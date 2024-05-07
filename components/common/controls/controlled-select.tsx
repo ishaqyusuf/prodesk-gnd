@@ -115,6 +115,7 @@ export default function ControlledSelect<
                             />
                         ) : (
                             <Select
+                                disabled={props.disabled}
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
                             >

@@ -39,7 +39,9 @@ export default function HousePackageTool({ componentTitle }) {
                     {componentItem.isComponent.garage && (
                         <TableHead>Swing</TableHead>
                     )}
-                    {componentItem.isBifold || componentItem.isSlab ? (
+                    {componentItem.isBifold ||
+                    componentItem.isSlab ||
+                    componentItem.isComponent.garage ? (
                         <>
                             <TableHead className="w-[100px]">Qty</TableHead>
                         </>

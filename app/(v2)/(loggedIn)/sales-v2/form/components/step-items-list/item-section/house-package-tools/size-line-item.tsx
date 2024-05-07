@@ -39,7 +39,9 @@ export default function HousePackageSizeLineItem({
                     name={`${sizeRow.keys.lhQty}` as any}
                 />
             </TableCell>
-            {componentItem.isBifold || componentItem.isSlab ? (
+            {componentItem.isBifold ||
+            componentItem.isSlab ||
+            componentItem.isComponent.garage ? (
                 <></>
             ) : (
                 <>

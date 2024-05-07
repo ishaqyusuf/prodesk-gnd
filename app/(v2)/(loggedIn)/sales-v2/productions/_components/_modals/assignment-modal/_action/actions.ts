@@ -60,6 +60,8 @@ export async function _deleteAssignmentSubmissions(assignmentId, ids?) {
 export async function _submitProduction(
     data: Partial<OrderProductionSubmissions>
 ) {
+    const qty = sum([data.lhQty, data.rhQty]);
+    data.qty = qty;
     const s = await prisma.orderProductionSubmissions.create({
         data: {
             ...(data as any),
@@ -79,7 +81,7 @@ export async function _submitProduction(
         where: { id: data.assignmentId as any },
         data: {
             qtyCompleted: {
-                increment: data.qty,
+                increment: qty,
             },
         },
     });

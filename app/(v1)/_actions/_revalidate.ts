@@ -28,6 +28,7 @@ const _path = {
     "my-jobs": "tasks/installations",
     "invoice-estimate": "/sales/quote/[slug]/form",
     salesV2Form: "/sales-v2/form/[...slug]",
+    "sales-production-2": "/sales-v2/productions",
     payables: "/sales/accounting/payables",
     employees: "/hrm/employees",
 };

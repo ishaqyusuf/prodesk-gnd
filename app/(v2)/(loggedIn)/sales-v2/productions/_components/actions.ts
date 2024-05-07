@@ -38,11 +38,10 @@ export async function _getProductionList({ query }) {
                 productionStatus: true,
                 doors: {
                     where: {
+                        deletedAt: null,
                         housePackageTool: {
-                            door: {
-                                doorType: {
-                                    in: productionTypes,
-                                },
+                            doorType: {
+                                in: productionTypes,
                             },
                         },
                     },
@@ -83,6 +82,8 @@ export async function _getProductionList({ query }) {
                             select: {
                                 id: true,
                                 qty: true,
+                                rhQty: true,
+                                lhQty: true,
                             },
                         },
                     },
