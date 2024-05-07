@@ -16,8 +16,7 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { _deleteAssignment } from "./_action/actions";
 import { useAssignment } from "./use-assignment";
 import SubmitDoorProduction from "./submit-production";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
+
 import { TableCol } from "@/components/common/data-table/table-cells";
 
 interface Props {
@@ -70,11 +69,17 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                 </div>
                             </TableCell>
                             <TableCell className="flex gap-2 items-center">
-                                <ConfirmBtn
-                                    trash
-                                    size={"icon"}
-                                    onClick={() => deleteAssignment(assignment)}
-                                />
+                                {data.data.isProd ? (
+                                    <></>
+                                ) : (
+                                    <ConfirmBtn
+                                        trash
+                                        size={"icon"}
+                                        onClick={() =>
+                                            deleteAssignment(assignment)
+                                        }
+                                    />
+                                )}
 
                                 <SubmitDoorProduction
                                     isGarage={group.isType.garage}

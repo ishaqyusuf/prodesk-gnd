@@ -11,6 +11,7 @@ import { ProductionsCrumb } from "@/components/_v1/breadcrumbs/links";
 import { Metadata } from "next";
 import PageHeader from "@/components/_v1/page-header";
 import AuthGuard from "@/components/_v1/auth-guard";
+import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
 export const metadata: Metadata = {
     title: "Sales Production",
     description: "",
@@ -26,6 +27,7 @@ export default async function SalesProductionPage({ searchParams }) {
                 <Breadcrumbs>
                     <ProductionsCrumb isLast />
                 </Breadcrumbs>
+                <ProductionPageTabs prod />
                 <div className="space-y-4 px-8">
                     <PageHeader title="Due Today" />
 

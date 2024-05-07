@@ -6,13 +6,15 @@ import { ArrayMetaType, sum } from "@/lib/utils";
 import { ISalesOrderItemMeta } from "@/types/sales";
 import { isComponentType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/is-component-type";
 import { OrderItemProductionAssignments } from "@prisma/client";
+import { userId } from "@/app/(v1)/_actions/utils";
 
-export async function getOrderAssignmentData(id) {
+export async function getOrderAssignmentData(id, prod = false) {
     // await prisma.orderItemProductionAssignments.updateMany({
     //     data: {
     //         qtyAssigned: 1,
     //     },
     // });
+    const authId = await userId();
     const order = await prisma.salesOrders.findFirst({
         where: { id },
         include: {
@@ -51,7 +53,10 @@ export async function getOrderAssignmentData(id) {
                         },
                     },
                     assignments: {
-                        where: { deletedAt: null },
+                        where: {
+                            deletedAt: null,
+                            assignedToId: prod ? authId : undefined,
+                        },
                         include: {
                             assignedTo: true,
                             submissions: true,
@@ -184,7 +189,8 @@ export async function getOrderAssignmentData(id) {
                         return ret;
                     });
                 })
-                .flat();
+                .flat()
+                .filter((a) => (prod ? a.assignments?.length : true));
 
             return {
                 sectionTitle: item?.meta?.doorType as DykeDoorType,
@@ -196,5 +202,5 @@ export async function getOrderAssignmentData(id) {
             };
         });
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
-    return { ...order, totalQty, doorGroups };
+    return { ...order, totalQty, doorGroups, isProd: prod };
 }

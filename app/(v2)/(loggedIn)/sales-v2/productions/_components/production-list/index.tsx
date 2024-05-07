@@ -9,22 +9,33 @@ import { ProductionCells } from "./sales-prod-cells";
 
 interface Props {
     promise;
+    prod?: boolean;
 }
 type DataServerPromiseType = ServerPromiseType<typeof _getProductionList>;
 export type ProductionListItemType = DataServerPromiseType["Item"];
-export default function ProductionList({ promise }: Props) {
+export default function ProductionList({ promise, prod }: Props) {
     const { data, pageCount }: DataServerPromiseType["Response"] =
         React.use(promise);
     const table = useDataTableColumn(
         data,
-        (ctx) => [
-            ctx.Column("Order", ProductionCells.Order),
-            ctx.Column("Sales Rep", ProductionCells.SalesRep),
-            ctx.Column("Status", ProductionCells.Status),
-            ctx.Column("Production", ProductionCells.ProductionStatus),
-            ctx.Column("Assigned To", ProductionCells.AssignedTo),
-            ctx.ActionColumn(ProductionCells.Actions),
-        ],
+        (ctx) =>
+            prod
+                ? [
+                      ctx.Column("Order", ProductionCells.Order),
+                      ctx.Column("Sales Rep", ProductionCells.SalesRep),
+                      ctx.ActionColumn(ProductionCells.ProdActions),
+                  ]
+                : [
+                      ctx.Column("Order", ProductionCells.Order),
+                      ctx.Column("Sales Rep", ProductionCells.SalesRep),
+                      ctx.Column("Status", ProductionCells.Status),
+                      ctx.Column(
+                          "Production",
+                          ProductionCells.ProductionStatus
+                      ),
+                      ctx.Column("Assigned To", ProductionCells.AssignedTo),
+                      ctx.ActionColumn(ProductionCells.Actions),
+                  ],
         true,
         {
             filterCells: ["_q", "_date"],

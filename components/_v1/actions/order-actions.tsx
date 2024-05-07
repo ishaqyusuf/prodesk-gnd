@@ -128,7 +128,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                 )}
                 {!estimate ? (
                     <>
-                        <ProductionAction row={row} />
+                        {!row.isDyke ? <ProductionAction row={row} /> : <></>}
                         <MenuItem
                             Icon={Icons.delivery}
                             SubMenu={
@@ -156,21 +156,29 @@ export function OrderRowAction(props: IOrderRowProps) {
                         >
                             Delivery
                         </MenuItem>
-                        <MenuItem
-                            Icon={Icons.estimates}
-                            onClick={moveToEstimate}
-                        >
-                            Move to Estimate
-                        </MenuItem>
+                        {!row.isDyke ? (
+                            <MenuItem
+                                Icon={Icons.estimates}
+                                onClick={moveToEstimate}
+                            >
+                                Move to Estimate
+                            </MenuItem>
+                        ) : (
+                            <> </>
+                        )}
                     </>
                 ) : (
                     <>
-                        <MenuItem
-                            Icon={Icons.orders}
-                            onClick={moveEstimateToOrder}
-                        >
-                            Move to Order
-                        </MenuItem>
+                        {row.isDyke ? (
+                            <></>
+                        ) : (
+                            <MenuItem
+                                Icon={Icons.orders}
+                                onClick={moveEstimateToOrder}
+                            >
+                                Move to Order
+                            </MenuItem>
+                        )}
                     </>
                 )}
                 <CopyOrderMenuAction row={row} />

@@ -46,16 +46,16 @@ export async function _deleteAssignmentSubmissions(assignmentId, ids?) {
     });
     const salesOrderId = submissions[0]?.salesOrderId;
     const totalQty = await sum(submissions, "qty");
-    await prisma.salesProductionStatus.update({
-        where: {
-            orderId: salesOrderId as any,
-        },
-        data: {
-            score: {
-                decrement: totalQty,
-            },
-        },
-    });
+    // await prisma.salesProductionStatus.update({
+    //     where: {
+    //         orderId: salesOrderId as any,
+    //     },
+    //     data: {
+    //         score: {
+    //             decrement: totalQty,
+    //         },
+    //     },
+    // });
 }
 export async function _submitProduction(
     data: Partial<OrderProductionSubmissions>
@@ -67,16 +67,16 @@ export async function _submitProduction(
             ...(data as any),
         },
     });
-    await prisma.salesProductionStatus.update({
-        where: {
-            orderId: data.salesOrderId as any,
-        },
-        data: {
-            score: {
-                increment: data.qty,
-            },
-        },
-    });
+    // await prisma.salesProductionStatus.update({
+    //     where: {
+    //         orderId: data.salesOrderId as any,
+    //     },
+    //     data: {
+    //         score: {
+    //             increment: data.qty,
+    //         },
+    //     },
+    // });
     await prisma.orderItemProductionAssignments.update({
         where: { id: data.assignmentId as any },
         data: {

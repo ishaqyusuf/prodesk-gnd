@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { useAssignment } from "../_modals/assignment-modal/use-assignment";
 import { sum } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     item: ProductionListItemType;
@@ -107,13 +108,26 @@ function AssignedTo({ item }: Props) {
 function Actions({ item }: Props) {
     return <></>;
 }
-
+function ProdActions({ item }: Props) {
+    const assignment = useAssignment({ prod: true });
+    return (
+        <>
+            <Button
+                onClick={() => assignment.open(item.id)}
+                variant={"outline"}
+            >
+                View
+            </Button>
+        </>
+    );
+}
 export let ProductionCells = {
     Order,
     SalesRep,
     Status,
     ProductionStatus,
     AssignedTo,
+    ProdActions,
     Actions,
 };
 // export let ProductionCells = Object.assign(Base, {

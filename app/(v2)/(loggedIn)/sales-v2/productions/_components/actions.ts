@@ -5,14 +5,22 @@ import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
 import { DykeDoorType } from "../../type";
 import { ISalesType } from "@/types/sales";
+import { userId } from "@/app/(v1)/_actions/utils";
 
-export async function _getProductionList({ query }) {
+export async function _getProductionList({ query, production = false }) {
     const productionTypes = ["Interior", "Garage"] as DykeDoorType[];
-
+    const authId = await userId();
     return prisma.$transaction(async (tx) => {
         const where: Prisma.SalesOrdersWhereInput = {
             isDyke: true,
             type: "order" as ISalesType,
+            assignments: production
+                ? {
+                      some: {
+                          assignedToId: authId,
+                      },
+                  }
+                : undefined,
             items: {
                 some: {
                     salesDoors: {

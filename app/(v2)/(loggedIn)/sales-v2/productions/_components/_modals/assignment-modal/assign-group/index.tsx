@@ -75,7 +75,7 @@ export function AssignGroup({ index }) {
     }, [open]);
     const prodUsers = useStaticProducers();
     const [saving, startSaving] = useTransition();
-    if (!group) return null;
+    if (!group || data.data.isProd) return null;
     let hands = [
         {
             qty: "lhQty",
