@@ -12,7 +12,8 @@ interface Props {
 }
 function Order({ item }: Props) {
     return (
-        <TableCol href={`/sales-v2/production/${item.slug}`}>
+        <TableCol>
+            {/* //shref={`/sales-v2/production/${item.slug}`}> */}
             <TableCol.Primary className="line-clamp-1">
                 {item.customer?.businessName || item.customer?.name}
             </TableCol.Primary>

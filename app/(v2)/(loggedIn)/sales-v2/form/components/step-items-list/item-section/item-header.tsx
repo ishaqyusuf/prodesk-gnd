@@ -2,7 +2,7 @@
 
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { _deleteDykeItem } from "../../../_action/delete-item";
-import { useDykeCtx } from "../../../_hooks/form-context";
+import { useDykeCtx, useDykeForm } from "../../../_hooks/form-context";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
@@ -11,12 +11,14 @@ import {
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { IDykeItemFormContext } from "../../../_hooks/use-dyke-item";
+import ControlledInput from "@/components/common/controls/controlled-input";
 
 interface Props {
     item: IDykeItemFormContext;
 }
 export default function ItemHeader({ item }: Props) {
     const dykeCtx = useDykeCtx();
+    const form = useDykeForm();
     const rowIndex = item.rowIndex;
     async function deleteSection() {
         const itemData = item.get.data();
@@ -29,10 +31,23 @@ export default function ItemHeader({ item }: Props) {
     }
     return (
         <div className="flex bg-accent p-2 px-4 justify-between">
-            <CollapsibleTrigger>
-                <Label className="text-base uppercase font-bold">
+            <CollapsibleTrigger asChild>
+                <div
+                    className="w-[500px] "
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    <ControlledInput
+                        className="w-full"
+                        control={form.control}
+                        name={`itemArray.${item.rowIndex}.item.dykeDescription`}
+                        placeholder={` Item ${Number(item.rowIndex) + 1}`}
+                    />
+                </div>
+                {/* <Label className="text-base uppercase font-bold">
                     Item {Number(item.rowIndex) + 1}
-                </Label>
+                </Label> */}
             </CollapsibleTrigger>
             <div className="flex items-center justify-between space-x-2">
                 <Button
