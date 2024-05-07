@@ -232,15 +232,15 @@ export function nav(
                 // _route("Sales Jobs", Briefcase, "/sales/jobs"),
                 _route("Products", Icons.products, "/sales-v2/products"),
                 __can.viewOrderPayment &&
-                    _route(
-                        "Accounting",
-                        Icons.reciept,
-                        "/sales/accounting",
-                        true
-                    ),
+                    _route("Accounting", Icons.reciept, "/sales/accounting"),
                 _route("Catalogs", Icons.products, "/sales/catalogs"),
                 // _route("Productions", Construction, `/sales/productions${prodQuery}`),
-                _route("Productions", Icons.production, `/sales/productions`),
+                _route(
+                    "Productions",
+                    Icons.production,
+                    `/sales/productions`,
+                    true
+                ),
 
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),
             ].filter(Boolean) as any)

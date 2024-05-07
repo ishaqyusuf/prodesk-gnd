@@ -13,6 +13,7 @@ import {
 } from "@/components/_v1/breadcrumbs/links";
 import { Metadata } from "next";
 import AuthGuard from "@/components/_v1/auth-guard";
+import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
 export const metadata: Metadata = {
     title: "Sales Production",
     description: "",
@@ -30,7 +31,7 @@ export default async function SalesProductionPage({ searchParams }) {
                 <BreadLink isFirst title="Sales" />
                 <ProductionsCrumb isLast />
             </Breadcrumbs>
-
+            <ProductionPageTabs />
             <div className="space-y-4 px-8">
                 <div className="flex items-center justify-between space-y-2">
                     <div>
