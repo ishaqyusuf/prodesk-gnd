@@ -25,10 +25,8 @@ export const prisma =
                     if (!args) args = { where: {} };
                     if (!args.where) args.where = {};
 
-                    args.where = {
-                        deletedAt: null,
-                        ...args.where,
-                    };
+                    if (!Object.keys(args.where).includes("deletedAt"))
+                        args.where = { deletedAt: null, ...args.where };
                     // args.where = {};
                     // console.log(args.where);
                     return query(args);
@@ -37,7 +35,10 @@ export const prisma =
                     if (!args) args = { where: {} };
                     if (!args.where) args.where = {};
 
-                    args.where = { deletedAt: null, ...args.where };
+                    if (!Object.keys(args.where).includes("deletedAt"))
+                        args.where = { deletedAt: null, ...args.where };
+                    // args.where.deletedAt = null;
+
                     // args.where = {};
                     // console.log(args.where);
                     return query(args);

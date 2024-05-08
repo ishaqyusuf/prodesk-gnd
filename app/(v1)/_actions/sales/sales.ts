@@ -48,7 +48,9 @@ export async function whereSales(query: SalesQueryParams) {
     } = query;
     const inputQ = { contains: _q || undefined } as any;
     const where: Prisma.SalesOrdersWhereInput = {
-        deletedAt: null,
+        // deletedAt: {
+        //     not: null,
+        // },
         // isDyke,
         OR: !_q
             ? undefined
