@@ -42,7 +42,7 @@ export default function SubmitDoorProduction({
     isGarage,
 }: Props) {
     const data = useAssignmentData();
-    const modal = useAssignment();
+    const modal = useAssignment({ prod: data.data.isProd });
 
     const [open, onOpenChange] = useState(false);
     const form = useForm<Partial<OrderProductionSubmissions>>({
@@ -103,13 +103,14 @@ export default function SubmitDoorProduction({
     const [saving, startSaving] = useTransition();
     async function submit() {
         startSaving(async () => {
-            const data = form.getValues();
-            data.lhQty = Number(data.lhQty) || null;
-            data.rhQty = Number(data.rhQty) || null;
+            const _data = form.getValues();
+            _data.lhQty = Number(_data.lhQty) || null;
+            _data.rhQty = Number(_data.rhQty) || null;
             // console.log(data);
-            await _submitProduction(data);
+            await _submitProduction(_data);
             onOpenChange(false);
             toast.success("Submitted successfully");
+            modal.open(data.data.id);
         });
     }
 

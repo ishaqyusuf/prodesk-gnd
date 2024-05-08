@@ -44,7 +44,7 @@ export interface IAssignGroupForm {
 }
 export function AssignGroup({ index }) {
     const data = useAssignmentData();
-    const modal = useAssignment();
+    const modal = useAssignment({ prod: data.data.isProd });
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(false);
     const form = useForm<IAssignGroupForm>({

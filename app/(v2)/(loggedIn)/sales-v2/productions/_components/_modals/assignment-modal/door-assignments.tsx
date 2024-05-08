@@ -26,7 +26,7 @@ interface Props {
 export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[groupIndex];
-    const modal = useAssignment();
+    const modal = useAssignment({ prod: data.data.isProd });
     if (!group) return null;
     const salesDoor = group.salesDoors[doorIndex];
     if (!salesDoor || !salesDoor.assignments.length) return null;
