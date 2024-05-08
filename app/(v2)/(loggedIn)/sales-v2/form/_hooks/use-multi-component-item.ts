@@ -30,10 +30,18 @@ export function useMultiComponentItem(componentTitle) {
         `${rootKey}.doorTotalPrice`,
     ] as any);
     useEffect(() => {
-        form.setValue(
-            `${rootKey}.totalPrice` as any,
-            math.multiply(qty, unitPrice)
+        const _totalPrice = math.multiply(qty, unitPrice);
+        form.setValue(`${rootKey}.totalPrice` as any, _totalPrice);
+        const c = form.getValues(
+            `itemArray.${item.rowIndex}.multiComponent.components`
         );
+        let total = 0;
+        Object.entries(c).map(([title, data]) => {
+            total +=
+                componentTitle == title ? _totalPrice : data.totalPrice || 0;
+        });
+        form.setValue(`itemArray.${item.rowIndex}.sectionPrice`, total);
+        updateFooterPrice(total);
     }, [qty, unitPrice]);
     function calculateLineItem() {}
 
@@ -87,8 +95,16 @@ export function useMultiComponentItem(componentTitle) {
                     );
                     form.setValue(keys.sumTotal as any, totalPrice);
                     form.setValue(keys.sumQty as any, totalDoors);
+                    updateFooterPrice(totalPrice);
                 }
             }
+        );
+    }
+    function updateFooterPrice(price) {
+        const v = form.getValues("footer.footerPrices");
+        form.setValue(
+            "footer.footerPrices",
+            `${item.rowIndex}:${doorType}:${price}|${v}`
         );
     }
     function removeLine(removeTab) {

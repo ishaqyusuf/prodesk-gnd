@@ -169,6 +169,7 @@ export async function getDykeFormAction(type, slug) {
                 { formSteps, shelfItems, housePackageTool, ...itemData },
                 itemIndex
             ) => {
+                let sectionPrice = 0;
                 const shelfItemArray: {
                     [k in string]: {
                         productArray: {
@@ -187,9 +188,10 @@ export async function getDykeFormAction(type, slug) {
                             categoryId: s.categoryId,
                         };
                     if (shelfItemArray[cid])
-                        (shelfItemArray[cid] as any).productArray.push({
+                        (shelfItemArray[cid] as any).push({
                             item: s,
                         });
+                    sectionPrice += s.totalPrice || 0;
                 });
                 // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
                 //                 categoryIds: number[]
@@ -273,6 +275,10 @@ export async function getDykeFormAction(type, slug) {
                             doorTotalPrice: item?.housePackageTool
                                 ?.totalPrice as any,
                         };
+                        sectionPrice +=
+                            item?.housePackageTool?.totalPrice ||
+                            item.total ||
+                            0;
                     }
                 });
                 // console.log(Object.keys(multiComponent.components));
@@ -282,6 +288,7 @@ export async function getDykeFormAction(type, slug) {
                     stepIndex: 0,
                     multiComponent,
                     stillChecked: true,
+                    sectionPrice,
                     item: {
                         ...itemData,
                         housePackageTool,
@@ -307,6 +314,12 @@ export async function getDykeFormAction(type, slug) {
         );
         // console.log(itemArray.map((item) => item.item.meta.lineIndex));
     }
+    let footerPrices = ""; //index:type:price|
+    itemArray.map((a, i) => {
+        footerPrices += `${i}:${a.item.meta.doorType}:${a.sectionPrice}`;
+    });
+    console.log(footerPrices);
+
     return {
         // currentItemIndex: 0,
         // currentStepIndex: 0,
@@ -319,5 +332,8 @@ export async function getDykeFormAction(type, slug) {
         itemArray,
         data: ctx,
         paidAmount,
+        footer: {
+            footerPrices,
+        },
     };
 }

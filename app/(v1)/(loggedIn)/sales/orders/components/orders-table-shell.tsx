@@ -54,7 +54,7 @@ export default function OrdersTableShell<T>({
             action: () => console.log("special action"),
         },
     ]);
-
+    console.log(data);
     const table = SmartTable<ISalesOrder>(data);
     const isMobile = useMediaQuery(screens.xs);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(

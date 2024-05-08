@@ -7,19 +7,23 @@ import { cn } from "@/lib/utils";
 import {
     Table,
     TableBody,
+    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import Money from "@/components/_v1/money";
 
 export default function MultiComponentRender({ Render, line = false }) {
+    const form = useDykeForm();
     const mdf = useMultiDykeForm();
     const item = useContext(DykeItemFormContext);
     useEffect(() => {
         mdf.initialize();
     }, []);
+    const total = form.watch(`itemArray.${item.rowIndex}.sectionPrice`);
     if (mdf.ready)
         return (
             <div className="flex flex-col">
@@ -46,6 +50,15 @@ export default function MultiComponentRender({ Render, line = false }) {
                                         />
                                     </TableRow>
                                 ))}
+                                <TableRow>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell>
+                                        <Money value={total} />
+                                    </TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                         {item.isType.service && (

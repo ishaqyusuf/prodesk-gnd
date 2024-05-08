@@ -21,14 +21,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { SalesFormContext } from "../ctx";
-import { IPaymentOptions } from "@/types/sales";
 
 export default function EstimateFooter({}) {
     const [floatingFooter, setFloatingFooter] = useState(false);
     const hideFooter = useLoader();
     const tableRef = useRef(null);
     const form = useFormContext<ISalesForm>();
-    const grandTotal = form.watch("grandTotal");
+    // const grandTotal = form.watch("grandTotal");
     useEffect(() => {
         const handleIntersection = (entries) => {
             const [entry] = entries;

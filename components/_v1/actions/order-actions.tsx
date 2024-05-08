@@ -156,29 +156,22 @@ export function OrderRowAction(props: IOrderRowProps) {
                         >
                             Delivery
                         </MenuItem>
-                        {!row.isDyke ? (
-                            <MenuItem
-                                Icon={Icons.estimates}
-                                onClick={moveToEstimate}
-                            >
-                                Move to Estimate
-                            </MenuItem>
-                        ) : (
-                            <> </>
-                        )}
+
+                        <MenuItem
+                            Icon={Icons.estimates}
+                            onClick={moveToEstimate}
+                        >
+                            Move to Estimate
+                        </MenuItem>
                     </>
                 ) : (
                     <>
-                        {row.isDyke ? (
-                            <></>
-                        ) : (
-                            <MenuItem
-                                Icon={Icons.orders}
-                                onClick={moveEstimateToOrder}
-                            >
-                                Move to Order
-                            </MenuItem>
-                        )}
+                        <MenuItem
+                            Icon={Icons.orders}
+                            onClick={moveEstimateToOrder}
+                        >
+                            Move to Order
+                        </MenuItem>
                     </>
                 )}
                 <CopyOrderMenuAction row={row} />

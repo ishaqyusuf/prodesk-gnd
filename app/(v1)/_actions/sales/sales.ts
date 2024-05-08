@@ -109,6 +109,7 @@ export async function whereSales(query: SalesQueryParams) {
                 endsWith: "-bo",
             },
         };
+
     if (query.deliveryOption) where.deliveryOption = query.deliveryOption;
     if (prodId) where.prodId = prodId;
     if (status) {

@@ -9,9 +9,10 @@ import RenderForm from "@/_v2/components/common/render-form";
 import { Button } from "@/components/ui/button";
 import { addDoorUnitAction } from "../_action/add-door-unit";
 import SalesMetaData from "./sales-meta-data";
-import HeaderSection from "./header/header-section";
+import HeaderSection from "./dyke-sales-header-section";
 import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
 import { Icons } from "@/components/_v1/icons";
+import DykeSalesFooterSection from "./dyke-sales-footer-section";
 interface Props {
     defaultValues: any;
 }
@@ -79,6 +80,8 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                         <span>Add Item</span>
                     </Button>
                 </div>
+
+                <DykeSalesFooterSection />
             </RenderForm>
         </DykeFormContext.Provider>
     );
