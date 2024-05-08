@@ -130,7 +130,7 @@ export function AssignGroup({ index }) {
                         <CardHeader>
                             <CardTitle>Assign</CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="max-h-[50vh] overflow-auto">
                             <div className="">
                                 <ControlledSelect
                                     control={form.control}
