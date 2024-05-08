@@ -1,6 +1,7 @@
 import { textValue } from "@/lib/utils";
 
 export default {
+    paymentOptions: ["Cash", "Credit Card", "Check", "COD", "Zelle"],
     delivery: [
         textValue("Pickup", "pickup"),
         textValue("Delivery", "delivery"),

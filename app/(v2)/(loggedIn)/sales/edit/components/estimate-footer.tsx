@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { SalesFormContext } from "../ctx";
+import salesData from "../../sales-data";
 
 export default function EstimateFooter({}) {
     const [floatingFooter, setFloatingFooter] = useState(false);
@@ -116,17 +117,16 @@ function Footer({
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            {[
-                                                "Cash",
-                                                "Credit Card",
-                                                "Check",
-                                                "COD",
-                                                "Zelle",
-                                            ].map((opt, i) => (
-                                                <SelectItem value={opt} key={i}>
-                                                    {opt}
-                                                </SelectItem>
-                                            ))}
+                                            {salesData.paymentOptions.map(
+                                                (opt, i) => (
+                                                    <SelectItem
+                                                        value={opt}
+                                                        key={i}
+                                                    >
+                                                        {opt}
+                                                    </SelectItem>
+                                                )
+                                            )}
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
