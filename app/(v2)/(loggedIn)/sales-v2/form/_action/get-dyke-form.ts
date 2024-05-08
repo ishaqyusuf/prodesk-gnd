@@ -188,7 +188,7 @@ export async function getDykeFormAction(type, slug) {
                             categoryId: s.categoryId,
                         };
                     if (shelfItemArray[cid])
-                        (shelfItemArray[cid] as any).push({
+                        (shelfItemArray[cid] as any)?.productArray?.push({
                             item: s,
                         });
                     sectionPrice += s.totalPrice || 0;
