@@ -20,20 +20,20 @@ export default function HeaderSection({}) {
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
     return (
-        <div className="h-10">
+        <div className="h-12">
             <div
                 className={cn(
-                    "flex h-10 items-center",
+                    "flex h-12 items-center",
                     scroll.isScrolled &&
-                        "fixed top-0  right-0 left-0 grid lg:grid-cols-[240px_minmax(0,1fr)]"
+                        "fixed  top-0  right-0 left-0 grid  lg:grid-cols-[240px_minmax(0,1fr)]"
                 )}
             >
                 {scroll.isScrolled && <div></div>}
                 <div
                     className={cn(
-                        "flex justify-between  items-center",
+                        "flex justify-between flex-1  items-center",
                         scroll.isScrolled &&
-                            "bg-white   shadow-sm border-b px-8"
+                            "bg-white py-2   shadow-sm border-b px-8"
                     )}
                 >
                     {/* <div className=""></div> */}
