@@ -412,8 +412,9 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     orderData.amountDue = orderData.grandTotal;
     orderData.type = as;
     orderData.prodDueDate = null;
-    return await saveOrderAction({
+    const _ = await saveOrderAction({
         order: orderData as any,
+
         items: cItems?.map((i) => {
             const {
                 id,
@@ -431,6 +432,10 @@ export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
             };
         }) as any,
     });
+    return {
+        ..._,
+        link: `/sales/${as}/${_.orderId}/form`,
+    };
 }
 export async function salesPrintAction({
     ids,

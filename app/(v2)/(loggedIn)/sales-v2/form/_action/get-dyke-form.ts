@@ -11,7 +11,7 @@ import { generateRandomString, inToFt, safeFormText, sum } from "@/lib/utils";
 import dayjs from "dayjs";
 import { DykeSalesDoors } from "@prisma/client";
 
-export async function getDykeFormAction(type, slug) {
+export async function getDykeFormAction(type, slug, copy = false) {
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
@@ -187,6 +187,10 @@ export async function getDykeFormAction(type, slug) {
                             categoryIds: s.meta.categoryIds,
                             categoryId: s.categoryId,
                         };
+                    // if (copy) {
+                    //     delete s.id;
+                    //     delete itemData.id;
+                    // }
                     if (shelfItemArray[cid])
                         (shelfItemArray[cid] as any)?.productArray?.push({
                             item: s,

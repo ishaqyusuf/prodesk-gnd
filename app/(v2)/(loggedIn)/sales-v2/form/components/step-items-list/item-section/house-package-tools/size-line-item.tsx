@@ -17,7 +17,7 @@ export default function HousePackageSizeLineItem({
     componentItem,
 }: Props) {
     const sizeRow = useMultiComponentSizeRow(componentItem, size);
-    const { form, prices } = componentItem;
+    const { form, prices, doorConfig } = componentItem;
 
     return (
         <TableRow>
@@ -39,9 +39,7 @@ export default function HousePackageSizeLineItem({
                     name={`${sizeRow.keys.lhQty}` as any}
                 />
             </TableCell>
-            {componentItem.isBifold ||
-            componentItem.isSlab ||
-            componentItem.isComponent.garage ? (
+            {doorConfig.singleHandle ? (
                 <></>
             ) : (
                 <>

@@ -29,6 +29,7 @@ import QueryString from "qs";
 import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
+import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -313,15 +314,16 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const _copyOrder = useCallback(
         async (as: ISalesType = "order") => {
             startTransition(async () => {
-                const _ = await copyOrderAction({
-                    orderId: props.row.orderId,
-                    as,
-                });
+                const _ = props.row.isDyke
+                    ? await copyDykeSales(props.row.slug, as)
+                    : await copyOrderAction({
+                          orderId: props.row.orderId,
+                          as,
+                      });
                 toast.success(`${as} copied successfully`, {
                     action: {
                         label: "Open",
-                        onClick: () =>
-                            router.push(`/sales/${as}/${_.orderId}/form`),
+                        onClick: () => router.push(_.link),
                     },
                 });
             });
@@ -338,7 +340,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                             _copyOrder("quote");
                         }}
                     >
-                        Quotes
+                        Quote
                     </MenuItem>
                     <MenuItem
                         Icon={Icons.orders}
@@ -346,7 +348,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                             _copyOrder("order");
                         }}
                     >
-                        Orders
+                        Order
                     </MenuItem>
                 </>
             }

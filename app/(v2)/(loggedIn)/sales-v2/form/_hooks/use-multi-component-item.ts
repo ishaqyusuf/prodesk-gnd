@@ -4,6 +4,7 @@ import { camel, math, sum } from "@/lib/utils";
 import { SizeForm } from "../components/modals/select-door-heights";
 import { isComponentType } from "../../overview/is-component-type";
 import useMultiDykeForm from "./use-multi-generator";
+import getDoorConfig from "./use-door-config";
 
 type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
 export function useMultiComponentItem(componentTitle) {
@@ -112,7 +113,10 @@ export function useMultiComponentItem(componentTitle) {
         form.setValue(rootKey as any, null);
         // console.log(componentTitle);
     }
+
+    const doorConfig = getDoorConfig(doorType);
     return {
+        doorConfig,
         initializeSizes,
         removeLine,
         calculateSizeEstimate,

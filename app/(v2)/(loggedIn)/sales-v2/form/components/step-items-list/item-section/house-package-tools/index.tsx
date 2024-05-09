@@ -15,7 +15,7 @@ import SelectDoorHeightsModal from "../../../modals/select-door-heights";
 import { useModal } from "@/components/common/modal/provider";
 export default function HousePackageTool({ componentTitle }) {
     const componentItem = useMultiComponentItem(componentTitle);
-    const { item, form, _setSizeList } = componentItem;
+    const { item, form, _setSizeList, doorConfig } = componentItem;
 
     useEffect(() => {
         componentItem.initializeSizes();
@@ -39,9 +39,7 @@ export default function HousePackageTool({ componentTitle }) {
                     {componentItem.isComponent.garage && (
                         <TableHead>Swing</TableHead>
                     )}
-                    {componentItem.isBifold ||
-                    componentItem.isSlab ||
-                    componentItem.isComponent.garage ? (
+                    {doorConfig.singleHandle ? (
                         <>
                             <TableHead className="w-[100px]">Qty</TableHead>
                         </>
@@ -54,7 +52,7 @@ export default function HousePackageTool({ componentTitle }) {
 
                     <TableHead>Unit Dimension</TableHead>
                     <TableHead className="">
-                        {componentItem.isBifold || componentItem.isSlab ? (
+                        {doorConfig.multiPrice ? (
                             <>Price</>
                         ) : (
                             <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
@@ -84,11 +82,7 @@ export default function HousePackageTool({ componentTitle }) {
                     ))}
                     <TableRow>
                         <TableCell
-                            colSpan={
-                                componentItem.isBifold || componentItem.isSlab
-                                    ? 4
-                                    : 5
-                            }
+                            colSpan={doorConfig.singleHandle ? 4 : 5}
                         ></TableCell>
                         <TableCell>
                             {/* <Money value={componentItem.unitPrice} /> */}
