@@ -8,7 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useAssignmentData } from ".";
+import { OrderAssignmentSalesDoor, useAssignmentData } from ".";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/use-day";
 
@@ -31,7 +31,7 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     const salesDoor = group.salesDoors[doorIndex];
     if (!salesDoor || !salesDoor.assignments.length) return null;
     async function deleteAssignment(assignment) {
-        await _deleteAssignment(assignment.id);
+        await _deleteAssignment(assignment);
         modal.open(data.data.id);
     }
     return (

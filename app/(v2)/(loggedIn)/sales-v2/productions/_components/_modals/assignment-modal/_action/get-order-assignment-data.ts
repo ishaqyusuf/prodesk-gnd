@@ -166,7 +166,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                                     });
                                     return splitted;
                                 })
-                                .flat(),
+                                .flat()
+                                .filter((s) => s.__report.total > 0),
                             doorTitle: salesDoor.housePackageTool.door?.title,
                             report: {
                                 assigned: 0,

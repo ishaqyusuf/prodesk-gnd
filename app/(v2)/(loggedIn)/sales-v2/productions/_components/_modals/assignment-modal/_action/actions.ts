@@ -3,12 +3,31 @@
 import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
 import { OrderProductionSubmissions } from "@prisma/client";
+import { getOrderAssignmentData } from "./get-order-assignment-data";
+import { ServerPromiseType } from "@/types";
 
-export async function _deleteAssignment(id) {
+type Props = ServerPromiseType<
+    typeof getOrderAssignmentData
+>["Response"]["doorGroups"][0]["salesDoors"][0]["assignments"][0];
+
+export async function _deleteAssignment(data: Props) {
+    const isLeft = data.__report.handle == "LH";
+    const k = isLeft ? "lhQty" : "rhQty";
+
+    const { lhQty = 0, rhQty = 0 } = data;
+
+    const _delete = isLeft ? (rhQty || 0) == 0 : (lhQty || 0) == 0;
+    const updateData: any = {};
+    if (_delete) updateData.deletedAt = new Date();
+    else {
+        updateData[k] = 0;
+    }
+
     await prisma.orderItemProductionAssignments.update({
-        where: { id },
+        where: { id: data.id },
         data: {
-            deletedAt: new Date(),
+            ...updateData,
+            // deletedAt: new Date(),
             // submissions: {
             //     updateMany: {
             //         where: {
@@ -21,27 +40,30 @@ export async function _deleteAssignment(id) {
             // },
         },
     });
-    await _deleteAssignmentSubmissions(id);
+    await _deleteAssignmentSubmissions(data.id, k);
 }
-export async function _deleteAssignmentSubmissions(assignmentId, ids?) {
+export async function _deleteAssignmentSubmissions(
+    assignmentId,
+    k: "rhQty" | "lhQty"
+) {
     const submissions = await prisma.orderProductionSubmissions.findMany({
         where: {
-            id: ids
-                ? {
-                      in: ids,
-                  }
-                : undefined,
             assignmentId,
             deletedAt: null,
+            [k]: {
+                gt: 0,
+            },
         },
     });
     await prisma.orderProductionSubmissions.updateMany({
         where: {
-            id: { in: ids },
             assignmentId,
+            [k]: {
+                gt: 0,
+            },
         },
         data: {
-            deletedAt: new Date(0),
+            deletedAt: new Date(),
         },
     });
     const salesOrderId = submissions[0]?.salesOrderId;

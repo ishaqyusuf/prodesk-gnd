@@ -87,6 +87,9 @@ export async function _getProductionList({ query, production = false }) {
                             },
                         },
                         submissions: {
+                            where: {
+                                deletedAt: null,
+                            },
                             select: {
                                 id: true,
                                 qty: true,
