@@ -43,7 +43,14 @@ export default function DoorGroupSection({ index }) {
                             </TableCol.Secondary>
                         </div>
                         <div className="grid gap-4 p-2 grid-cols-3 sm:grid-cols-5">
-                            <Info label="Qty" value={sd.report.totalQty} />
+                            {group.doorConfig.singleHandle ? (
+                                <Info label="Qty" value={sd.report.totalQty} />
+                            ) : (
+                                <>
+                                    <Info label="LH" value={sd.report.lhQty} />
+                                    <Info label="RH" value={sd.report.rhQty} />
+                                </>
+                            )}
                             <Info
                                 label="Assigned"
                                 value={`${sd.report.assigned} of ${sd.report.totalQty}`}

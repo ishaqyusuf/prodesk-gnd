@@ -19,9 +19,6 @@ import {
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import Btn from "@/components/_v1/btn";
-import { useStaticProducers } from "@/_v2/hooks/use-static-data";
-
-import { useValidateAssignment } from "./validate-assignment";
 
 import { useAssignment } from "../use-assignment";
 import { OrderProductionSubmissions } from "@prisma/client";
@@ -30,21 +27,25 @@ import ControlledSelect from "@/components/common/controls/controlled-select";
 import { cn } from "@/lib/utils";
 import { _submitProduction } from "../_action/actions";
 import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     salesDoor: OrderAssignmentSalesDoor;
     assignment: OrderAssignmentSalesDoor["assignments"][0];
     isGarage: boolean;
+    groupIndex;
 }
 export default function SubmitDoorProduction({
     salesDoor,
     assignment,
     isGarage,
+    groupIndex,
 }: Props) {
     const data = useAssignmentData();
     const modal = useAssignment({ prod: data.data.isProd });
-
+    const group = data.data.doorGroups[groupIndex];
     const [open, onOpenChange] = useState(false);
+
     const form = useForm<Partial<OrderProductionSubmissions>>({
         defaultValues: {
             assignmentId: assignment.id,
@@ -56,34 +57,13 @@ export default function SubmitDoorProduction({
             // leftHandle: false,
         },
     });
-    // assignment.pending
-    const [inputs, setInputs] = useState<
-        {
-            label?;
-            key?;
-            options?: string[];
-        }[]
-    >([]);
+    const isLeft = assignment.__report.handle == "LH";
+    const qtyKey = isLeft ? "lhQty" : "rhQty";
+    const qty = form.watch(isLeft ? "lhQty" : "rhQty");
+
     useEffect(() => {
         if (open) {
-            let opt = assignment.pending;
-            function _input(k) {
-                const v = opt[k?.toLowerCase()];
-                let label = k;
-                if (isGarage && k == "LH") label = "Qty";
-                // if(isGarage)
-                return {
-                    label,
-                    key: `${k?.toLowerCase()}Qty`,
-                    options: Array(v || 0)
-                        .fill(0)
-                        .map((s, i) => (i + 1).toString()),
-                };
-            }
-            const _inputs = [_input("LH"), _input("RH")];
-            // console.log(_inputs);
-
-            setInputs(_inputs);
+            form.setValue(qtyKey, 0);
         }
         // if (open) {
         //     const doors: any = {};
@@ -104,9 +84,15 @@ export default function SubmitDoorProduction({
     async function submit() {
         startSaving(async () => {
             const _data = form.getValues();
-            _data.lhQty = Number(_data.lhQty) || null;
-            _data.rhQty = Number(_data.rhQty) || null;
-            // console.log(data);
+            if (!qty) {
+                toast.success("Invalid qty");
+                return;
+            }
+            // _data.lhQty = Number(_data.lhQty) || null;
+            // _data.rhQty = Number(_data.rhQty) || null;
+            // console.log(_data);
+            // return;
+
             await _submitProduction(_data);
             onOpenChange(false);
             toast.success("Submitted successfully");
@@ -143,7 +129,7 @@ export default function SubmitDoorProduction({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 gap-4">
-                                {inputs.map((i) => (
+                                {/* {inputs.map((i) => (
                                     <div key={i.label} className={cn("")}>
                                         <ControlledSelect
                                             className={cn(
@@ -157,8 +143,37 @@ export default function SubmitDoorProduction({
                                             label={i.label}
                                         />
                                     </div>
-                                ))}
-
+                                ))} */}
+                                {/* <div>{assignment.__report.handle}</div> */}
+                                <div className="grid gap-2 col-span-2">
+                                    <Label>Qty</Label>
+                                    <div className="flex gap-2 flex-wrap">
+                                        {Array(assignment.__report.pending)
+                                            .fill(0)
+                                            .map((_, i) => (
+                                                <Button
+                                                    size={"sm"}
+                                                    onClick={(e) => {
+                                                        form.setValue(
+                                                            isLeft
+                                                                ? "lhQty"
+                                                                : "rhQty",
+                                                            i + 1
+                                                        );
+                                                    }}
+                                                    variant={
+                                                        (qty || 0) >= i + 1
+                                                            ? "default"
+                                                            : "secondary"
+                                                    }
+                                                    className="w-10"
+                                                    key={i}
+                                                >
+                                                    {i + 1}
+                                                </Button>
+                                            ))}
+                                    </div>
+                                </div>
                                 <ControlledInput
                                     className="col-span-2"
                                     type="textarea"

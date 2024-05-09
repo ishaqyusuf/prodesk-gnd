@@ -10,7 +10,7 @@ export function useAssignment({ prod }: Props = {}) {
 
     async function open(id) {
         const data = await getOrderAssignmentData(id, prod);
-        modal.openSheet(
+        modal.openModal(
             <AssignmentModal isProd={prod || false} order={data} />
         );
     }

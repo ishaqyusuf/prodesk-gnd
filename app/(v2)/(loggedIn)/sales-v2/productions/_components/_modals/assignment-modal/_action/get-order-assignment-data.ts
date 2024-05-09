@@ -7,6 +7,7 @@ import { ISalesOrderItemMeta } from "@/types/sales";
 import { isComponentType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/is-component-type";
 import { OrderItemProductionAssignments } from "@prisma/client";
 import { userId } from "@/app/(v1)/_actions/utils";
+import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
 
 export async function getOrderAssignmentData(id, prod = false) {
     // await prisma.orderItemProductionAssignments.updateMany({
@@ -94,38 +95,78 @@ export async function getOrderAssignmentData(id, prod = false) {
                                 ...salesDoor,
                                 doorType: salesDoor.doorType as DykeDoorType,
                             },
+
                             assignments: subItem.assignments
                                 .filter((a) => a.salesDoorId == salesDoor.id)
-
                                 .map((assignment) => {
-                                    let status = "";
-                                    const r = {
-                                        ...assignment,
-                                        status,
-                                        submitted: {
-                                            lh: sum(
-                                                assignment.submissions
-                                                    // .filter((s) => s.)
-                                                    .map((s) => s.lhQty)
-                                            ),
-                                            rh: sum(
-                                                assignment.submissions.map(
-                                                    (s) => s.rhQty
-                                                )
-                                            ),
-                                        },
-                                        pending: {
-                                            lh: 0,
-                                            rh: 0,
-                                        },
-                                    };
-                                    r.pending.lh =
-                                        (r.lhQty || 0) - r.submitted.lh;
-                                    r.pending.rh =
-                                        (r.rhQty || 0) - r.submitted.rh;
+                                    // console.log([
+                                    //     assignment.lhQty,
+                                    //     assignment.rhQty,
+                                    // ]);
 
-                                    return r;
-                                }),
+                                    let splitted = [
+                                        assignment.lhQty,
+                                        assignment.rhQty,
+                                    ].map((q, i) => {
+                                        const isLeft = i == 0;
+
+                                        let status = "";
+                                        const r = {
+                                            ...assignment,
+                                            status,
+                                            __report: {
+                                                submissions:
+                                                    assignment.submissions?.filter(
+                                                        (s) =>
+                                                            isLeft
+                                                                ? s.lhQty
+                                                                : s.rhQty
+                                                    ),
+                                                submitted: sum(
+                                                    assignment.submissions.map(
+                                                        (s) =>
+                                                            isLeft
+                                                                ? s.lhQty
+                                                                : s.rhQty
+                                                    )
+                                                ),
+                                                pending: 0,
+                                                handle: isLeft ? "LH" : "RH",
+                                                total: 0,
+                                                isLeft,
+                                            },
+                                            submitted: {
+                                                lh: sum(
+                                                    assignment.submissions
+                                                        // .filter((s) => s.)
+                                                        .map((s) => s.lhQty)
+                                                ),
+                                                rh: sum(
+                                                    assignment.submissions.map(
+                                                        (s) => s.rhQty
+                                                    )
+                                                ),
+                                            },
+                                            pending: {
+                                                lh: 0,
+                                                rh: 0,
+                                            },
+                                        };
+                                        r.__report.pending =
+                                            ((isLeft ? r.lhQty : r.rhQty) ||
+                                                0) - r.__report.submitted;
+                                        r.pending.lh =
+                                            (r.lhQty || 0) - r.submitted.lh;
+                                        r.pending.rh =
+                                            (r.rhQty || 0) - r.submitted.rh;
+                                        r.__report.total =
+                                            r.__report.submitted +
+                                            r.__report.pending;
+                                        return r;
+                                    });
+                                    return splitted;
+                                })
+                                .flat(),
                             doorTitle: salesDoor.housePackageTool.door?.title,
                             report: {
                                 assigned: 0,
@@ -157,8 +198,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                         };
 
                         ret.assignments.map((a) => {
-                            ret.report.assigned += a.qtyAssigned || 0;
-                            ret.report.completed += a.qtyCompleted || 0;
+                            ret.report.assigned += a.__report.total || 0;
+                            ret.report.completed += a.__report.submitted || 0;
 
                             a.submissions.map((s) => {
                                 if (s.lhQty) ret.report.lhCompleted += s.lhQty;
@@ -176,6 +217,11 @@ export async function getOrderAssignmentData(id, prod = false) {
                                 ret.report[_qty] -
                                 sum(ret.assignments.map((s) => s[_qty]));
                         });
+                        ret.report._assignForm.lhQty =
+                            ret.report._unassigned.lh;
+                        ret.report._assignForm.rhQty =
+                            ret.report._unassigned.rh;
+
                         ret.report.totalQty += sum([
                             ret.salesDoor.lhQty,
                             ret.salesDoor.rhQty,
@@ -195,6 +241,7 @@ export async function getOrderAssignmentData(id, prod = false) {
             return {
                 sectionTitle: item?.meta?.doorType as DykeDoorType,
                 isType: isComponentType(item?.meta?.doorType),
+                doorConfig: getDoorConfig(item?.meta?.doorType),
                 item,
                 salesDoors,
                 report,

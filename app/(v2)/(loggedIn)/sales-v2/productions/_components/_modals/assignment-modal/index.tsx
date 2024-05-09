@@ -28,7 +28,7 @@ export default function AssignmentModal({ order, isProd }: Props) {
                     order.customer?.businessName || order.customer?.name
                 }`}
             />
-            <div className="overflow-auto h-screen -mr-6 pb-28">
+            <div className="overflow-auto h-[80vh] -mr-6 pb-28">
                 <DataPageShell data={order}>
                     {order.doorGroups.map((group, index) => (
                         <DoorGroupSection index={index} key={index} />

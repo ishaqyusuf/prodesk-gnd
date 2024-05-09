@@ -171,7 +171,6 @@ export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
         const employees = (await loadStatic1099Contractors()) as any;
         // console.log(employees);
         setEmployees(employees);
-
         form.reset();
         setPrevTab([]);
         setTasks([]);

@@ -374,7 +374,6 @@ function getDoorsTable(
                                 return formatCurrency.format(
                                     door ? door.unitPrice : (m.rate as any)
                                 );
-
                             case "lineTotal":
                             case "totalPrice":
                                 return formatCurrency.format(

@@ -18,7 +18,7 @@ import Link from "next/link";
 import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
-import SubmitJobModal from "@/app/(v1)/(loggedIn)/tasks/submit-job-modal";
+// import SubmitJobModal from "@/app/(v1)/(loggedIn)/tasks/submit-job-modal";
 import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {
     title: "Payment Portal",
@@ -79,7 +79,7 @@ export default async function PaymentPage({ params }) {
                 </div>
                 <JobOverviewSheet />
                 <EditJobModal />
-                <SubmitJobModal />
+                {/* <SubmitJobModal /> */}
             </TabbedLayout>
         </AuthGuard>
     );

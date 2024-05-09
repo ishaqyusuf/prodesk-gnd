@@ -6,7 +6,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { OrderAssignmentData, useAssignmentData } from "..";
-import { startTransition, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -61,11 +61,14 @@ export function AssignGroup({ index }) {
         if (open) {
             const doors: any = {};
             group?.salesDoors?.map((s) => {
-                doors[s.salesDoor?.id] = {
+                doors[s.salesDoor?.id?.toString()] = {
                     // qty: s.report.pendingAssignment,
                     ...s.report,
+                    lhQty: s.report._unassigned?.lh,
+                    rhQty: s.report._unassigned?.rh,
                 };
             });
+            // console.log(doors);
 
             form.reset({
                 doors,
@@ -76,17 +79,18 @@ export function AssignGroup({ index }) {
     const prodUsers = useStaticProducers();
     const [saving, startSaving] = useTransition();
     if (!group || data.data.isProd) return null;
+
     let hands = [
         {
             qty: "lhQty",
             pending: "lhPending",
-            title: !group.isType.garage ? "LH" : "Qty",
+            title: !group.doorConfig.singleHandle ? "LH" : "Qty",
             handle: "lh",
         },
-        !group.isType.garage && {
+        !group.doorConfig.singleHandle && {
             qty: "rhQty",
             pending: "rhPending",
-            title: group.isType.garage ? "" : "RH",
+            title: group.doorConfig.singleHandle ? "" : "RH",
             handle: "rh",
         },
     ].filter((s) => s) as any;

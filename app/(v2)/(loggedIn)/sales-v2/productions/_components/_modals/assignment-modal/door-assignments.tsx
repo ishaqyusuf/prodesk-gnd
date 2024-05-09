@@ -38,7 +38,10 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
         <div className="mx-4 ml-10">
             <Table className="">
                 <TableHeader className="bg-slate-100">
-                    <TableHead>Date</TableHead>
+                    {/* <TableHead>Date</TableHead> */}
+                    {!group.doorConfig.singleHandle && (
+                        <TableHead>Handle</TableHead>
+                    )}
                     <TableHead>Assigned To</TableHead>
                     <TableHead>Completed</TableHead>
                     <TableHead>Status</TableHead>
@@ -47,13 +50,18 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                 <TableBody>
                     {salesDoor?.assignments?.map((assignment) => (
                         <TableRow key={assignment.id} className="">
-                            <TableCell>
+                            {/* <TableCell>
                                 {formatDate(assignment.createdAt)}
-                            </TableCell>
+                            </TableCell> */}
+                            {!group.doorConfig.singleHandle && (
+                                <TableHead>
+                                    {assignment.__report.handle}
+                                </TableHead>
+                            )}
                             <TableCell>{assignment.assignedTo?.name}</TableCell>
                             <TableCell>
-                                {assignment.qtyCompleted} of{" "}
-                                {assignment.qtyAssigned}
+                                {assignment.__report.submitted} of{" "}
+                                {assignment.__report.total}
                             </TableCell>
                             <TableCell>
                                 <div>
@@ -61,8 +69,10 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                         <TableCol.Status />
                                     ) : (
                                         <TableCol.Status
-                                            score={assignment.qtyCompleted}
-                                            total={assignment.qtyAssigned}
+                                            score={
+                                                assignment.__report.submitted
+                                            }
+                                            total={assignment.__report.total}
                                             status={assignment.status}
                                         />
                                     )}
@@ -82,6 +92,7 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                 )}
 
                                 <SubmitDoorProduction
+                                    groupIndex={groupIndex}
                                     isGarage={group.isType.garage}
                                     assignment={assignment}
                                     salesDoor={salesDoor}

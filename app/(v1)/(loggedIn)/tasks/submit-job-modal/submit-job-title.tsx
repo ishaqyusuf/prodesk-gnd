@@ -11,6 +11,7 @@ export default function SubmitJobTitle({ data }) {
         <>Punchout Detail</>
     ) : (
         <div className="flex space-x-2 items-center">
+            <span>s</span>
             {prevTab?.length > 0 && (
                 <Button
                     onClick={() => {
