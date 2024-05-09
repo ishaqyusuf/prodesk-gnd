@@ -10,9 +10,12 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import SelectControl from "@/_v2/components/common/select-control";
+import { useStaticContractors } from "@/_v2/hooks/use-static-data";
 
 export default function GeneralInfoTab() {
     const ctx = useJobSubmitCtx();
+
+    const contractors = useStaticContractors();
     return (
         <div className="grid md:grid-cols-2 gap-4">
             <CustomInput
@@ -34,7 +37,7 @@ export default function GeneralInfoTab() {
             <div className="col-span-2">
                 <CustomInput label="Report" name="job.note" textarea />
             </div>
-            {/* <SelectControl
+            <SelectControl
                 name="job.coWorkerId"
                 options={[
                     ...contractors?.data?.map((c) => ({
@@ -43,7 +46,7 @@ export default function GeneralInfoTab() {
                     })),
                 ]}
                 label="Co Worker"
-            /> */}
+            />
         </div>
     );
 }
