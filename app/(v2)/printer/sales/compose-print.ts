@@ -589,10 +589,18 @@ function printFooter(data: PrintData, notPrintable) {
                       }
                   )
                 : null,
-            styled("Total", formatCurrency.format(data.order.grandTotal || 0), {
-                font: "bold",
-                size: "base",
-            }),
+            styled(
+                "Total Due",
+                formatCurrency.format(data.order.amountDue || 0),
+                {
+                    font: "bold",
+                    size: "base",
+                }
+            ),
+            // styled("Total", formatCurrency.format(data.order.grandTotal || 0), {
+            //     font: "bold",
+            //     size: "base",
+            // }),
         ].filter(Boolean),
     };
 }
@@ -622,6 +630,12 @@ function heading({ mode, isOrder, order, isEstimate }) {
     }
     if (isOrder) {
         h.lines.push(
+            styled("Invoice Total", formatCurrency.format(order?.grandTotal), {
+                size: "base",
+                font: "bold",
+            })
+        );
+        h.lines.push(
             styled(
                 "Invoice Status",
                 (order.amountDue || 0) > 0 ? "Pending" : "Paid",
@@ -631,12 +645,6 @@ function heading({ mode, isOrder, order, isEstimate }) {
                     text: "uppercase",
                 }
             )
-        );
-        h.lines.push(
-            styled("Amount Due", formatCurrency.format(order?.amountDue), {
-                size: "base",
-                font: "bold",
-            })
         );
         if (order?.amountDue > 0) {
             let { goodUntil, paymentTerm, createdAt } = order;

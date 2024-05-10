@@ -153,7 +153,7 @@ const Details = {
         const form = useDykeForm();
         return (
             <>
-                <TableHead className={cn()}>Payment Option</TableHead>
+                <TableHead className={cn()}>Payment</TableHead>
                 <CustomTableCell>
                     <ControlledSelect
                         control={form.control}
@@ -214,10 +214,43 @@ const Details = {
         );
     },
 };
-function Footer() {
-    return <></>;
-}
 function FloatingFooter() {
+    const _ctx = useContext(ctx);
+    return (
+        <div className="fixed bottom-0 left-0  right-0 md:grid md:grid-cols-[220px_minmax(0,1fr)]  lg:grid-cols-[240px_minmax(0,1fr)] mb-6">
+            <div className="hidden  md:block" />
+            <div className="lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px] mx-2">
+                {/* <Footer floatingFooter /> */}
+                <div className="flex rounded-lg border bg-white p-2 shadow">
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                {/* <Details.PaymentOptions />
+                                <Details.Labour /> <Details.Discount /> */}
+                                <Details.Line
+                                    title="Sub Total:"
+                                    valueKey="subTotal"
+                                />
+                                <Details.Line
+                                    title={`Tax (${
+                                        _ctx.orderTax ? _ctx.taxPercentage : 0
+                                    }%):`}
+                                    valueKey="tax"
+                                />
+                                <Details.Line title="C.C.C:" valueKey="ccc" />
+                                <Details.Line
+                                    title="Total:"
+                                    valueKey="grandTotal"
+                                />
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
+        </div>
+    );
+}
+function Footer() {
     const _ctx = useContext(ctx);
     return (
         <div className="flex  justify-end">
