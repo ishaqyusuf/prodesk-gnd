@@ -333,12 +333,14 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                           orderId: props.row.orderId,
                           as,
                       });
-                toast.success(`${as} copied successfully`, {
-                    action: {
-                        label: "Open",
-                        onClick: () => router.push(_.link),
-                    },
-                });
+                console.log(_);
+                if (_.link)
+                    toast.success(`${as} copied successfully`, {
+                        action: {
+                            label: "Open",
+                            onClick: () => router.push(_.link),
+                        },
+                    });
             });
         },
         [props.row]

@@ -87,7 +87,6 @@ export interface SubmitJobModalProps {
 }
 function ModalContent({ data }: SubmitJobModalProps) {
     const ctx = useJobSubmitCtx();
-    console.log("MODAL CONTENT");
 
     // useEffect(() => {
     // console.log(">...");

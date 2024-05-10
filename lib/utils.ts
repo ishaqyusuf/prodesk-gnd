@@ -427,3 +427,27 @@ export function _ObjectMetaType<T, MetaType>(
         [metaKey]: data[metaKey] as unknown as MetaType,
     };
 }
+export function removeKeys<T>(from: T, objectKeys: (keyof T)[]): T {
+    // Base case: if 'from' is not an object, return it as is
+    if (typeof from !== "object" || from === null) {
+        return from;
+    }
+
+    // If 'from' is an array, iterate through its elements
+    if (Array.isArray(from)) {
+        return from.map((item) => removeKeys(item, objectKeys)) as any;
+    }
+
+    // Iterate through each key in 'from'
+    for (let key in from) {
+        // If the current key is one of the keys to remove, delete it
+        if (objectKeys.includes(key)) {
+            delete from[key];
+        }
+        // If the current value is an object, recursively call removeKeys on it
+        // else if (typeof from[key] === "object") {
+        //     from[key] = removeKeys(from[key], objectKeys);
+        // }
+    }
+    return from;
+}
