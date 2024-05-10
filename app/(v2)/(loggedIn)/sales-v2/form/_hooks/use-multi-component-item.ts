@@ -5,6 +5,7 @@ import { SizeForm } from "../components/modals/select-door-heights";
 import { isComponentType } from "../../overview/is-component-type";
 import useMultiDykeForm from "./use-multi-generator";
 import getDoorConfig from "./use-door-config";
+import useFooterEstimate from "./use-footer-estimate";
 
 type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
 export function useMultiComponentItem(componentTitle) {
@@ -24,26 +25,37 @@ export function useMultiComponentItem(componentTitle) {
         key: camel(`${title} price`),
     }));
 
-    const [qty, unitPrice, totalPrice, doorTotalPrice] = form.watch([
+    const [qty, unitPrice, totalPrice, doorTotalPrice, uid, tax] = form.watch([
         `${rootKey}.qty`,
         `${rootKey}.unitPrice`,
         `${rootKey}.totalPrice`,
         `${rootKey}.doorTotalPrice`,
+        `${rootKey}.uid`,
+        `${rootKey}.tax`,
     ] as any);
+    const footerEstimate = useFooterEstimate();
     useEffect(() => {
         const _totalPrice = math.multiply(qty, unitPrice);
         form.setValue(`${rootKey}.totalPrice` as any, _totalPrice);
         const c = form.getValues(
             `itemArray.${item.rowIndex}.multiComponent.components`
         );
+        let taxxable = 0;
         let total = 0;
         Object.entries(c).map(([title, data]) => {
-            total +=
+            const p =
                 componentTitle == title ? _totalPrice : data.totalPrice || 0;
+            taxxable += data.tax ? p : 0;
+            total += p;
         });
         form.setValue(`itemArray.${item.rowIndex}.sectionPrice`, total);
-        updateFooterPrice(total);
-    }, [qty, unitPrice]);
+        footerEstimate.updateFooterPrice(uid, {
+            price: _totalPrice,
+            doorType: item.get.doorType(),
+            tax,
+        });
+        // updateFooterPrice(total, taxxable);
+    }, [qty, unitPrice, tax]);
     function calculateLineItem() {}
 
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
@@ -96,18 +108,29 @@ export function useMultiComponentItem(componentTitle) {
                     );
                     form.setValue(keys.sumTotal as any, totalPrice);
                     form.setValue(keys.sumQty as any, totalDoors);
-                    updateFooterPrice(totalPrice);
+                    footerEstimate.updateFooterPrice(cData.uid, {
+                        price: totalPrice,
+                        tax,
+                        doorType: item.get.doorType(),
+                    });
+                    // updateFooterPrice(totalPrice);
                 }
             }
         );
     }
-    function updateFooterPrice(price) {
-        const v = form.getValues("footer.footerPrices");
-        form.setValue(
-            "footer.footerPrices",
-            `${item.rowIndex}:${doorType}:${price}|${v}`
-        );
-    }
+    // function updateFooterPrice(price, tax) {
+    //     const footer = form.getValues("footer");
+    //     footer.footerPricesJson = JSON.parse(footer.footerPrices);
+    //     footer.footerPricesJson[item.get.uid()] = {
+    //         doorType,
+    //         price,
+    //         tax,
+    //     };
+    //     form.setValue(
+    //         "footer.footerPrices",
+    //         JSON.stringify(footer.footerPricesJson)
+    //     );
+    // }
     function removeLine(removeTab) {
         removeTab(componentTitle);
         form.setValue(rootKey as any, null);

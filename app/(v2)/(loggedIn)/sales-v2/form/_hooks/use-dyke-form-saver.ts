@@ -96,7 +96,7 @@ export default function useDykeFormSaver(form) {
                 clone.item.multiDyke = false;
                 if ((c.itemId && c.itemId == item.item.id) || !parented) {
                     clone.item.multiDyke = true;
-                    console.log("parented");
+
                     parented = true;
                 } else {
                     clone.item.formStepArray = [];
@@ -105,8 +105,14 @@ export default function useDykeFormSaver(form) {
                 if (clone.item.housePackageTool)
                     clone.item.housePackageTool.id = c.hptId as any;
                 clone.item.id = c.itemId as any;
-                console.log(c);
+
                 if (type.garage) clone.item.swing = c.swing as any;
+                if (type.service) {
+                    // console.log("service");
+                    clone.item.meta.tax = c.tax || false;
+                } else {
+                    clone.item.meta.tax = true;
+                }
                 if (!type.moulding && !type.service) {
                     if (!clone.item.multiDyke) {
                         clone.item.formStepArray = [];
@@ -120,6 +126,7 @@ export default function useDykeFormSaver(form) {
                     });
                     clone.item.housePackageTool._doorForm = c._doorForm;
                     clone.item.housePackageTool.totalDoors = c.doorQty;
+
                     let {
                         createdAt,
                         deletedAt,
@@ -157,6 +164,7 @@ export default function useDykeFormSaver(form) {
                 } else {
                     clone.item.price = clone.item.rate = c.unitPrice;
                     clone.item.total = c.totalPrice;
+
                     clone.item.qty = c.qty;
                     clone.item.description = c.description as any;
                     if (type.moulding) {

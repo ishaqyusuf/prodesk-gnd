@@ -3,12 +3,13 @@
 import React, { useContext, useEffect } from "react";
 import { useDykeForm } from "../_hooks/form-context";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import salesData from "../../../sales/sales-data";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
+import { formatMoney } from "@/lib/use-number";
 
 const defaultValues = {
     taxPercentage: null,
@@ -16,6 +17,7 @@ const defaultValues = {
     grandTotal: null,
     subTotal: null,
     ccc: null,
+    orderTax: null,
     floating: false,
 };
 const ctx = React.createContext(defaultValues);
@@ -25,6 +27,7 @@ export default function DykeSalesFooterSection({}) {
     const form = useDykeForm();
 
     const [
+        orderTax,
         footerPrices,
         laborCost,
         discount,
@@ -36,6 +39,7 @@ export default function DykeSalesFooterSection({}) {
         grandTotal,
         subTotal,
     ] = form.watch([
+        "order.meta.tax",
         "footer.footerPrices",
         "order.meta.labor_cost",
         "order.meta.discount",
@@ -47,7 +51,58 @@ export default function DykeSalesFooterSection({}) {
         "order.grandTotal",
         "order.subTotal",
     ]);
-    useEffect(() => {}, [footerPrices, paymentOption, laborCost, discount]);
+    useEffect(() => {
+        let footr = form.getValues("footer.footerPricesJson");
+        footr = JSON.parse(footerPrices);
+        // console.log(footr);
+        const items = form.getValues("itemArray");
+        let subTotal = 0;
+        let tax = 0;
+        let taxxable = 0;
+        items.map((item) => {
+            if (item.multiComponent)
+                Object.values(item.multiComponent.components)
+                    .filter(Boolean)
+                    .map((v) => {
+                        console.log(v);
+
+                        let f = footr[v.uid];
+
+                        if (!f?.price) f.price = 0;
+                        subTotal += f.price;
+                        if (orderTax && (f?.tax || f?.doorType != "Services")) {
+                            const iTax = ((taxPercentage || 0) / 100) * f.price;
+                            tax += iTax; //f?.price || 0;
+                            taxxable += f.price;
+                        }
+                    });
+
+            // if(item.item.shelfItemArray)
+            item.item.shelfItemArray?.map((shelfItem) => {
+                // shelfItem.uid
+            });
+        });
+        tax = formatMoney(tax);
+        console.log({ taxxable, tax });
+
+        let total = formatMoney(sum([subTotal, laborCost]));
+        let ccc = 0;
+        const cccP = Number(cccPercentage || 0);
+        if (paymentOption == "Credit Card") {
+            console.log(cccP);
+
+            ccc = formatMoney((cccP / 100) * (total + tax));
+        }
+        console.log({ tax, ccc, total, subTotal, laborCost, discount });
+
+        form.setValue("order.meta.ccc", formatMoney(ccc));
+        form.setValue("order.tax", formatMoney(tax));
+        form.setValue("order.subTotal", formatMoney(subTotal));
+        form.setValue(
+            "order.grandTotal",
+            formatMoney(tax + ccc + total - (discount || 0))
+        );
+    }, [footerPrices, paymentOption, laborCost, discount, orderTax]);
     const ctxValue = {
         // footerPrices,
         // laborCost,
@@ -57,6 +112,7 @@ export default function DykeSalesFooterSection({}) {
         ccc,
         // cccPercentage,
         grandTotal,
+        orderTax,
         subTotal,
         floating: false,
     } as any;
@@ -150,6 +206,7 @@ function Footer() {
     return <></>;
 }
 function FloatingFooter() {
+    const _ctx = useContext(ctx);
     return (
         <div className="flex  justify-end">
             <div>
@@ -171,7 +228,12 @@ function FloatingFooter() {
                             />
                         </TableRow>
                         <TableRow>
-                            <Details.Line title="Tax" valueKey="tax" />
+                            <Details.Line
+                                title={`Tax (${
+                                    _ctx.orderTax ? _ctx.taxPercentage : 0
+                                }%)`}
+                                valueKey="tax"
+                            />
                         </TableRow>
                         <TableRow>
                             <Details.Line title="C.C.C" valueKey="ccc" />

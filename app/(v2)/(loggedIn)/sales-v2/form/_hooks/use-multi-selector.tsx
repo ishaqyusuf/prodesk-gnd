@@ -11,11 +11,11 @@ export function useMultiSelector(rowIndex, get) {
     const modal = useModal();
     const multi = {
         async initServices() {
-            const [uid, multiDyke, components] = form.getValues([
-                `itemArray.${rowIndex}.multiComponent.uid`,
-                `itemArray.${rowIndex}.multiComponent.multiDyke`,
-                `itemArray.${rowIndex}.multiComponent.components`,
-            ]);
+            // const [uid, multiDyke, components] = form.getValues([
+            //     `itemArray.${rowIndex}.multiComponent.uid`,
+            //     `itemArray.${rowIndex}.multiComponent.multiDyke`,
+            //     `itemArray.${rowIndex}.multiComponent.components`,
+            // ]);
             // console.log([uid]);
             // if (!uid) {
             form.setValue(
@@ -29,6 +29,7 @@ export function useMultiSelector(rowIndex, get) {
             form.setValue(`itemArray.${rowIndex}.multiComponent.components`, {
                 [generateRandomString(4)]: {
                     checked: true,
+                    uid: generateRandomString(4),
                 },
             } as any);
             await timeout(1000);
@@ -95,10 +96,15 @@ export function useMultiSelector(rowIndex, get) {
         ) {
             const safeTitle = safeFormText(stepProd.product.title);
             const isMoulding = stepFormTitle == "Moulding";
-            form.setValue(
-                `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.toolId` as any,
-                stepProd.dykeProductId
-            );
+            const basePath =
+                `itemArray.${rowIndex}.multiComponent.components.${safeTitle}` as any;
+            const uid = form.getValues(`${basePath}.uid` as any);
+            form.setValue(`${basePath}.toolId` as any, stepProd.dykeProductId);
+            if (!uid)
+                form.setValue(
+                    `${basePath}.uid` as any,
+                    generateRandomString(4)
+                );
             if (!currentState && !isMoulding) {
                 modal.openModal(
                     <SelectDoorHeightsModal
@@ -109,10 +115,7 @@ export function useMultiSelector(rowIndex, get) {
                 );
                 return;
             }
-            form.setValue(
-                `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.checked` as any,
-                !currentState
-            );
+            form.setValue(`${basePath}.checked` as any, !currentState);
 
             // form.setValue(
             //     `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.height`,

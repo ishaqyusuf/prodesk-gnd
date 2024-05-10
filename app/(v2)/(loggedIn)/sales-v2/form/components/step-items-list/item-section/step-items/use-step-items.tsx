@@ -182,7 +182,10 @@ export default function useStepItems({
                         `itemArray.${item.rowIndex}.multiComponent.components`,
                         {}
                     );
-
+                    form.setValue(
+                        `itemArray.${item.rowIndex}.item.meta.doorType`,
+                        stepProd?.product?.title as any
+                    );
                     switch (stepProd?.product?.title) {
                         case "Services":
                             await item.multi.initServices();

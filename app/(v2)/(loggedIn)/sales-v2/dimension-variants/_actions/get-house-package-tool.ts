@@ -29,7 +29,9 @@ export async function getHousePackageTool(): Promise<HousePackageTool> {
 }
 export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
     const b = data.sizes.filter((b) => b.type == "Bifold");
+
     if (!b.length) {
+        console.log(b);
         //
         const sizes = bifold_door
             .map((d) => d.label)
@@ -46,9 +48,10 @@ export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
                     ftToIn(s);
                 // const fa = data.sizes.find((_) => _.ft == "8-0");
                 // console.log(fa);
-                if (
-                    !data.sizes.filter((s) => s.in == _in && s.type == "Bifold")
-                ) {
+                const foundB = data.sizes.filter(
+                    (s) => s.in == _in && s.type == "Bifold"
+                );
+                if (!foundB.length) {
                     data.sizes.push({
                         type: "Bifold",
                         width: true,
@@ -58,9 +61,12 @@ export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
                     });
                     return true;
                 }
+
                 return false;
             });
-        if (_.filter(Boolean).length)
+        if (_.filter(Boolean).length) {
+            console.log(data);
+
             await prisma.settings.update({
                 where: {
                     id,
@@ -69,6 +75,7 @@ export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
                     meta: data as any,
                 },
             });
+        }
     }
 
     return data;

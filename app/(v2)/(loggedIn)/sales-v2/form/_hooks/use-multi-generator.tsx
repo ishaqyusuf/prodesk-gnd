@@ -22,6 +22,7 @@ export default function useMultiDykeForm() {
         const n = generateRandomString();
         setValue(`components.${n}` as any, {
             checked: true,
+            tax: true,
         });
         setTabs((tabs) => {
             return [

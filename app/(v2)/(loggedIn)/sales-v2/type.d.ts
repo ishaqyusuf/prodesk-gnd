@@ -102,11 +102,13 @@ export type MultiDyke = {
             totalPrice: number | null;
             hptId: number | null;
             swing?: string | null;
+            tax?: boolean;
             description?: string;
             doorTotalPrice: number | null;
             _doorForm: {
                 [dim in string]: DykeSalesDoors;
             };
+            uid?;
         };
     };
     uid?: string;

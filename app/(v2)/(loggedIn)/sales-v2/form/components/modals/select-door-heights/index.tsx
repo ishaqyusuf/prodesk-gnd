@@ -64,6 +64,8 @@ export default function SelectDoorHeightsModal({
         (async () => {
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
+            console.log(_sizes, height, isBifold);
+
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
                 _defData[k] = {

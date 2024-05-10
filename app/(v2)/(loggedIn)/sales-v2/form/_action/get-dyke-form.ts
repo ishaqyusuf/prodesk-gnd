@@ -3,7 +3,12 @@
 import { prisma } from "@/db";
 import { getStepForm } from "./get-dyke-step";
 
-import { DykeFormStepMeta, MultiDyke, ShelfItemMeta } from "../../type";
+import {
+    DykeDoorType,
+    DykeFormStepMeta,
+    MultiDyke,
+    ShelfItemMeta,
+} from "../../type";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
@@ -158,7 +163,13 @@ export async function getDykeFormAction(type, slug, copy = false) {
         payments,
         ...orderData
     } = typedForm;
-
+    let footerPrices: {
+        [id in string]: {
+            doorType: DykeDoorType;
+            price: number;
+            tax?: boolean;
+        };
+    } = {};
     let itemArray = items
         ?.filter((item) => {
             if (item.multiDykeUid) return item.multiDyke;
@@ -177,15 +188,18 @@ export async function getDykeFormAction(type, slug, copy = false) {
                         }[];
                         categoryIds: number[];
                         categoryId: number;
+                        uid;
                     };
                 } = {};
                 shelfItems.map((s) => {
                     const cid = s.categoryId?.toString();
+                    const uid = generateRandomString(4);
                     if (!shelfItemArray[cid])
                         shelfItemArray[cid] = {
                             productArray: [],
                             categoryIds: s.meta.categoryIds,
                             categoryId: s.categoryId,
+                            uid,
                         };
                     // if (copy) {
                     //     delete s.id;
@@ -196,6 +210,11 @@ export async function getDykeFormAction(type, slug, copy = false) {
                             item: s,
                         });
                     sectionPrice += s.totalPrice || 0;
+                    footerPrices[uid] = {
+                        price: s.totalPrice || 0,
+                        doorType: itemData?.meta?.doorType,
+                        tax: itemData.meta?.tax,
+                    };
                 });
                 // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
                 //                 categoryIds: number[]
@@ -259,14 +278,17 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     if (component) {
                         // console.log(item.housePackageTool.door);
                         // item.meta.doo
-                        multiComponent.components[
+                        const uid = generateRandomString(4);
+                        const c = (multiComponent.components[
                             safeFormText(component.title)
                         ] = {
+                            uid,
                             checked: true,
                             heights: _dykeSizes,
                             itemId: item.id,
                             qty: item.qty,
                             description: item.description as any,
+                            tax: item.meta.tax,
                             // swing: item.swing as any,
                             doorQty: item.qty,
                             unitPrice: item.rate,
@@ -278,6 +300,11 @@ export async function getDykeFormAction(type, slug, copy = false) {
                             hptId: item.housePackageTool.id as any,
                             doorTotalPrice: item?.housePackageTool
                                 ?.totalPrice as any,
+                        });
+                        footerPrices[uid] = {
+                            price: c.totalPrice || 0,
+                            tax: c.tax,
+                            doorType: item.meta.doorType,
                         };
                         sectionPrice +=
                             item?.housePackageTool?.totalPrice ||
@@ -286,7 +313,6 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     }
                 });
                 // console.log(Object.keys(multiComponent.components));
-
                 const rItem = {
                     opened: true,
                     stepIndex: 0,
@@ -304,6 +330,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
                         // productArray
                         // })),
                     },
+                    uid: generateRandomString(4),
                 };
                 rItem.stepIndex = rItem.item.formStepArray.length - 1;
                 return rItem;
@@ -318,11 +345,15 @@ export async function getDykeFormAction(type, slug, copy = false) {
         );
         // console.log(itemArray.map((item) => item.item.meta.lineIndex));
     }
-    let footerPrices = ""; //index:type:price|
-    itemArray.map((a, i) => {
-        footerPrices += `${i}:${a.item.meta.doorType}:${a.sectionPrice}`;
-    });
-    console.log(footerPrices);
+    //index:type:price|
+    // itemArray.map((a, i) => {
+    //     // footerPrices += `${i}:${a.item.meta.doorType}:${a.sectionPrice}`;
+    //     footerPrices[a.uid] = {
+    //         doorType: a.item.meta.doorType,
+    //         price: a.sectionPrice,
+    //     };
+    // });
+    // console.log(footerPrices);
 
     return {
         // currentItemIndex: 0,
@@ -337,7 +368,8 @@ export async function getDykeFormAction(type, slug, copy = false) {
         data: ctx,
         paidAmount,
         footer: {
-            footerPrices,
+            footerPrices: JSON.stringify(footerPrices),
+            footerPricesJson: footerPrices,
         },
     };
 }

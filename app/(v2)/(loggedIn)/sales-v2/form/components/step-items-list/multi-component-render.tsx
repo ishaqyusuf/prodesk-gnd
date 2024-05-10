@@ -32,10 +32,13 @@ export default function MultiComponentRender({ Render, line = false }) {
                         <Table>
                             <TableHeader>
                                 <TableHead>
-                                    {item.get.doorType() == "Moulding"
+                                    {item.isType.moulding
                                         ? "Moulding"
                                         : "Description"}
                                 </TableHead>
+                                {item.isType.service && (
+                                    <TableHead>Tax</TableHead>
+                                )}
                                 <TableHead>Qty</TableHead>
                                 <TableHead>Unit Price</TableHead>
                                 <TableHead>Line Total</TableHead>
@@ -53,6 +56,9 @@ export default function MultiComponentRender({ Render, line = false }) {
                                 <TableRow>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
+                                    {item.isType.service && (
+                                        <TableCell></TableCell>
+                                    )}
                                     <TableCell></TableCell>
                                     <TableCell>
                                         <Money value={total} />
@@ -61,6 +67,7 @@ export default function MultiComponentRender({ Render, line = false }) {
                                 </TableRow>
                             </TableBody>
                         </Table>
+
                         {item.isType.service && (
                             <div className="flex justify-end">
                                 <Button

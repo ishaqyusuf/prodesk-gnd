@@ -40,9 +40,10 @@ export default function useDykeItem(
         );
     }
     function doorType(): DykeDoorType {
-        return form.getValues(`${itemKey}.housePackageTool.doorType` as any);
+        return form.getValues(`${itemKey}.meta.doorType` as any);
     }
     const get = {
+        uid: () => form.getValues(`itemArray.${rowIndex}.uid`),
         itemArray: (): DykeForm["itemArray"][0] =>
             form.getValues(`itemArray.${rowIndex}` as any),
         data: (): FormStepArray[0] => form.getValues(`${itemKey}` as any),

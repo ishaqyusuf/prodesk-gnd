@@ -6,6 +6,7 @@ import Money from "@/components/_v1/money";
 import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import useMultiDykeForm from "../../../_hooks/use-multi-generator";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 
 interface Props {
     componentTitle;
@@ -17,7 +18,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
     const item = useContext(DykeItemFormContext);
     const componentItem = useMultiComponentItem(componentTitle);
     const rootKey = `itemArray.${item.rowIndex}.item`;
-    const isMoulding = item.get.doorType() == "Moulding";
+    const isMoulding = item.isType.moulding;
     return (
         <>
             <TableCell className="">
@@ -31,6 +32,15 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     />
                 )}
             </TableCell>
+            {item.isType.service && (
+                <TableCell className="w-[50px]">
+                    <ControlledCheckbox
+                        control={form.control}
+                        switchInput
+                        name={`${componentItem.rootKey}.tax` as any}
+                    />
+                </TableCell>
+            )}
             <TableCell className="w-[150px]">
                 <ControlledInput
                     type="number"

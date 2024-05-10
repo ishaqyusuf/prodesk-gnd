@@ -1,5 +1,6 @@
 "use server";
 
+import { generateRandomString } from "@/lib/utils";
 import { DykeForm } from "../../type";
 import { getStepForm } from "./get-dyke-step";
 
@@ -10,6 +11,7 @@ export async function addDoorUnitAction(): Promise<
     return {
         opened: true,
         stepIndex: 0,
+        uid: generateRandomString(4),
         item: {
             meta: {},
             formStepArray: [
