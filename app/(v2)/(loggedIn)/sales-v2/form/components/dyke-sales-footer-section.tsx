@@ -2,7 +2,13 @@
 
 import React, { useContext, useEffect } from "react";
 import { useDykeForm } from "../_hooks/form-context";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@/components/ui/table";
 import { cn, sum } from "@/lib/utils";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import salesData from "../../../sales/sales-data";
@@ -10,7 +16,7 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
 import { formatMoney } from "@/lib/use-number";
-
+import "./style.css";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -135,23 +141,30 @@ export default function DykeSalesFooterSection({}) {
         </div>
     );
 }
+function CustomTableCell({ children }) {
+    return (
+        <TableCell align="right" className="flex w-full">
+            <div className="flex justify-end items-center ">{children}</div>
+        </TableCell>
+    );
+}
 const Details = {
     PaymentOptions() {
         const form = useDykeForm();
         return (
             <>
-                <TableCell className={cn()}>Payment Option</TableCell>
-                <TableCell>
+                <TableHead className={cn()}>Payment Option</TableHead>
+                <CustomTableCell>
                     <ControlledSelect
                         control={form.control}
-                        className={cn("w-[200px]")}
+                        className={cn("")}
                         onSelect={(e) => {
                             console.log(e);
                         }}
                         name={"order.meta.payment_option"}
                         options={salesData.paymentOptions}
                     />
-                </TableCell>
+                </CustomTableCell>
             </>
         );
     },
@@ -159,15 +172,15 @@ const Details = {
         const form = useDykeForm();
         return (
             <>
-                <TableCell className={cn()}>Discount</TableCell>
-                <TableCell>
+                <TableHead className={cn()}>Discount</TableHead>
+                <CustomTableCell>
                     <ControlledInput
                         type="number"
                         control={form.control}
-                        className={cn("w-[200px]")}
+                        className={cn("")}
                         name={"order.meta.discount"}
                     />
-                </TableCell>
+                </CustomTableCell>
             </>
         );
     },
@@ -175,15 +188,15 @@ const Details = {
         const form = useDykeForm();
         return (
             <>
-                <TableCell className={cn()}>Labour</TableCell>
-                <TableCell>
+                <TableHead className={cn()}>Labour</TableHead>
+                <CustomTableCell>
                     <ControlledInput
                         type="number"
                         control={form.control}
-                        className={cn("w-[200px]")}
+                        className={cn("")}
                         name={"order.meta.labor_cost"}
                     />
-                </TableCell>
+                </CustomTableCell>
             </>
         );
     },
@@ -191,12 +204,12 @@ const Details = {
         const _ctx = useContext(ctx);
         return (
             <>
-                <TableCell className={cn()}>{title}</TableCell>
-                <TableCell>
+                <TableHead className={cn()}>{title}</TableHead>
+                <CustomTableCell>
                     <Label>
                         <Money value={_ctx?.[valueKey]} />
                     </Label>
-                </TableCell>
+                </CustomTableCell>
             </>
         );
     },
@@ -209,7 +222,7 @@ function FloatingFooter() {
     return (
         <div className="flex  justify-end">
             <div className="" id="dykeFooter">
-                <Table className="w-[200px] border rounded">
+                <Table className=" border rounded">
                     <TableBody>
                         <TableRow>
                             <Details.PaymentOptions />
