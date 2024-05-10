@@ -93,7 +93,6 @@ export default function DykeSalesFooterSection({}) {
 
             ccc = formatMoney((cccP / 100) * (total + tax));
         }
-        console.log({ tax, ccc, total, subTotal, laborCost, discount });
 
         form.setValue("order.meta.ccc", formatMoney(ccc));
         form.setValue("order.tax", formatMoney(tax));
