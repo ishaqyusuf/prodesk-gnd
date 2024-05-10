@@ -693,16 +693,18 @@ function addressLine(
 ) {
     return {
         title,
-        lines: [
-            businessName || address?.name,
-            `${address?.phoneNo} ${
-                address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
-            }`,
-            address?.email,
-            address?.address1,
-            [address?.city, address?.state, address?.meta?.zip_code]
-                ?.filter(Boolean)
-                ?.join(" "),
-        ],
+        lines: address
+            ? [
+                  businessName || address?.name,
+                  `${address?.phoneNo} ${
+                      address?.phoneNo2 ? `(${address?.phoneNo2})` : ""
+                  }`,
+                  address?.email,
+                  address?.address1,
+                  [address?.city, address?.state, address?.meta?.zip_code]
+                      ?.filter(Boolean)
+                      ?.join(" "),
+              ].filter(Boolean)
+            : ["No Address"],
     };
 }
