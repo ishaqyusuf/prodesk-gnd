@@ -67,8 +67,8 @@ export default function DykeSalesFooterSection({}) {
                         console.log(v);
 
                         let f = footr[v.uid];
-
-                        if (!f?.price) f.price = 0;
+                        if (!f) return;
+                        if (!f.price) f.price = 0;
                         subTotal += f.price;
                         if (orderTax && (f?.tax || f?.doorType != "Services")) {
                             const iTax = ((taxPercentage || 0) / 100) * f.price;

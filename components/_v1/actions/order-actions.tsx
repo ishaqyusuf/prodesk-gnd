@@ -30,6 +30,7 @@ import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-pr
 import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
+import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -66,6 +67,7 @@ export function OrderRowAction(props: IOrderRowProps) {
         }
     }
     const modal = useModal();
+    const assignment = useAssignment();
     return (
         <AuthGuard can={["editOrders"]} className="">
             <RowActionMoreMenu>
@@ -129,7 +131,18 @@ export function OrderRowAction(props: IOrderRowProps) {
                 )}
                 {!estimate ? (
                     <>
-                        {!row.isDyke ? <ProductionAction row={row} /> : <></>}
+                        {!row.isDyke ? (
+                            <ProductionAction row={row} />
+                        ) : (
+                            <MenuItem
+                                Icon={Icons.production}
+                                onClick={() => {
+                                    assignment.open(row.id);
+                                }}
+                            >
+                                Production
+                            </MenuItem>
+                        )}
                         <MenuItem
                             Icon={Icons.delivery}
                             SubMenu={
