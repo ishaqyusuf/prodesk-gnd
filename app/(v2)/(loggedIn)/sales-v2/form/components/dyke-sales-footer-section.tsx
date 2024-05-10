@@ -54,36 +54,36 @@ export default function DykeSalesFooterSection({}) {
     useEffect(() => {
         let footr = form.getValues("footer.footerPricesJson");
         footr = JSON.parse(footerPrices);
-        // console.log(footr);
+        console.log(footr);
         const items = form.getValues("itemArray");
         let subTotal = 0;
         let tax = 0;
         let taxxable = 0;
+        function calculate(uid) {
+            let f = footr[uid];
+            if (!f) return;
+            if (!f.price) f.price = 0;
+            subTotal += f.price;
+            if (orderTax && (f?.tax || f?.doorType != "Services")) {
+                const iTax = ((taxPercentage || 0) / 100) * f.price;
+                tax += iTax; //f?.price || 0;
+                taxxable += f.price;
+            }
+        }
         items.map((item) => {
             if (item.multiComponent)
                 Object.values(item.multiComponent.components)
                     .filter(Boolean)
                     .map((v) => {
-                        console.log(v);
-
-                        let f = footr[v.uid];
-                        if (!f) return;
-                        if (!f.price) f.price = 0;
-                        subTotal += f.price;
-                        if (orderTax && (f?.tax || f?.doorType != "Services")) {
-                            const iTax = ((taxPercentage || 0) / 100) * f.price;
-                            tax += iTax; //f?.price || 0;
-                            taxxable += f.price;
-                        }
+                        calculate(v.uid);
                     });
 
             // if(item.item.shelfItemArray)
             item.item.shelfItemArray?.map((shelfItem) => {
-                // shelfItem.uid
+                calculate(shelfItem.uid);
             });
         });
         tax = formatMoney(tax);
-        console.log({ taxxable, tax });
 
         let total = formatMoney(sum([subTotal, laborCost]));
         let ccc = 0;
@@ -208,8 +208,8 @@ function FloatingFooter() {
     const _ctx = useContext(ctx);
     return (
         <div className="flex  justify-end">
-            <div>
-                <Table className="w-[200px]">
+            <div className="" id="dykeFooter">
+                <Table className="w-[200px] border rounded">
                     <TableBody>
                         <TableRow>
                             <Details.PaymentOptions />

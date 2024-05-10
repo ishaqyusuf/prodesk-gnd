@@ -4,6 +4,8 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { CategorizedShelfItem, IDykeShelfProducts } from "../../type";
 import { DykeShelfProducts } from "@prisma/client";
 import { getShelfProducts } from "../_action/get-shelf-products.actions";
+import { generateRandomString } from "@/lib/utils";
+import useFooterEstimate from "./use-footer-estimate";
 
 export default function useShelfItem(shelfIndex) {
     const form = useDykeForm();
@@ -47,7 +49,7 @@ export default function useShelfItem(shelfIndex) {
     const [products, setProducts] = useState<
         DykeShelfProducts[] | undefined | null
     >(null);
-
+    const footer = useFooterEstimate();
     const ctx = {
         categoryForm,
         catArray,
@@ -66,10 +68,15 @@ export default function useShelfItem(shelfIndex) {
                 //     lastId,
                 // });
                 const prodKey: any = `${configky}.productArray.${prodIndex}.item`;
+                const uid =
+                    form.getValues(`${configky}.uid` as any) ||
+                    generateRandomString(4);
+                form.setValue(`${configky}.uid` as any, uid);
                 form.setValue(`${prodKey}.categoryId` as any, lastId);
                 form.setValue(`${prodKey}.meta.categoryIds` as any, catIds);
                 form.setValue(`${prodKey}.productId` as any, prod.id);
                 form.setValue(`${prodKey}.unitPrice` as any, prod?.unitPrice);
+
                 form.setValue(`${prodKey}.description` as any, prod?.title);
                 // const qty = form.getValues(`${prodKey}.qty` as any);
                 // if(!qty)
@@ -104,6 +111,12 @@ export default function useShelfItem(shelfIndex) {
 
             form.setValue(unitPricePath, unitPrice);
             form.setValue(totalPath, totalPrice);
+            console.log(totalPrice);
+            footer.updateFooterPrice(form.getValues(`${configky}.uid` as any), {
+                price: totalPrice,
+                tax: true,
+                doorType: "Shelf Items",
+            });
         },
         watchProductEstimate(index) {
             return form.watch(

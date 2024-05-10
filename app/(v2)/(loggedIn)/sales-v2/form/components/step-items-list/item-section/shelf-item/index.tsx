@@ -14,6 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { generateRandomString } from "@/lib/utils";
 
 export default function ShelfItemIndex() {
     const item = useContext(DykeItemFormContext);
@@ -79,6 +80,7 @@ export default function ShelfItemIndex() {
                                                 item: {} as any,
                                             },
                                         ],
+                                        uid: generateRandomString(4),
                                         categoryId: null as any,
                                     });
                                 }}
