@@ -19,8 +19,8 @@ export default function DoorGroupSection({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(true);
-    if (!group) return null;
     const [showDetails, setShowDetails] = useState(false);
+    if (!group) return null;
     return (
         <Collapsible className="mt-4" open={open}>
             <CollapsibleTrigger asChild>
