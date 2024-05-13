@@ -14,7 +14,7 @@ export default function SalesItemsOverview() {
             </CardHeader>
             <CardContent>
                 <DykeDoorItems />
-                <MouldingItems />
+                {/* <MouldingItems /> */}
             </CardContent>
         </Card>
     );

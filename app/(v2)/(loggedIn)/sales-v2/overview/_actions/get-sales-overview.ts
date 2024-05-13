@@ -61,10 +61,18 @@ export async function viewSale(type, slug) {
                         where: { deletedAt: null },
                         include: {
                             casing: true,
-                            door: true,
+                            door: {
+                                where: {
+                                    deletedAt: null,
+                                },
+                            },
                             jambSize: true,
-                            doors: true,
-                            molding: true,
+                            doors: {
+                                where: { deletedAt: null },
+                            },
+                            molding: {
+                                where: { deletedAt: null },
+                            },
                         },
                     },
                 },
@@ -97,7 +105,7 @@ export async function viewSale(type, slug) {
             },
         },
     });
-    console.log(sectionTitles);
+    // console.log(sectionTitles);
     const items = order.items.map((item) => {
         // console.log(item.meta);
         const meta = item.meta as any as ISalesOrderItemMeta;
@@ -127,6 +135,11 @@ export async function viewSale(type, slug) {
                     i.id == item.id ||
                     (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
             );
+            if (item.meta.doorType == "Bifold") {
+                console.log(
+                    _multiDyke.map((d) => d.housePackageTool?.door?.title)
+                );
+            }
             return {
                 multiDykeComponents: _multiDyke,
                 isType: isComponentType(item.meta.doorType),
@@ -139,6 +152,8 @@ export async function viewSale(type, slug) {
         services: _mergedItems.filter((i) => i.meta.doorType == "Services"),
         doors: _mergedItems,
     };
+    // console.log(groupings.mouldings);
+
     const ids: any[] = [];
     [groupings.slabs, groupings.mouldings, groupings.services].map((v) =>
         v.map((c) => ids.push(c.id))

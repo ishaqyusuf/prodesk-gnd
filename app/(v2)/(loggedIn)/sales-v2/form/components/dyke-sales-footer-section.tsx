@@ -95,12 +95,13 @@ export default function DykeSalesFooterSection({}) {
         let ccc = 0;
         const cccP = Number(cccPercentage || 0);
         if (paymentOption == "Credit Card") {
-            console.log(cccP);
+            // console.log(cccP);
 
             ccc = formatMoney((cccP / 100) * (total + tax));
+            // console.log(ccc, [total + tax]);
         }
 
-        form.setValue("order.meta.ccc", formatMoney(ccc));
+        form.setValue("order.meta.ccc", ccc);
         form.setValue("order.tax", formatMoney(tax));
         form.setValue("order.subTotal", formatMoney(subTotal));
         form.setValue(

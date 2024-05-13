@@ -10,9 +10,12 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Money from "@/components/_v1/money";
+import { inToFt } from "@/lib/utils";
 
-export default function MouldingItems() {
+export default function DykeDoorItems() {
     const { data } = useDataPage<SalesOverviewType>();
+    console.log(data);
+
     if (!data.groupings.doors?.length) return <></>;
     return data.groupings.doors.map((moulding, index) => (
         <div key={index}>
@@ -39,10 +42,11 @@ export default function MouldingItems() {
                 {moulding.multiDykeComponents.map((com, cid) => (
                     <TableBody key={com.id}>
                         {com.housePackageTool?.doors.map((door) => (
-                            <TableRow key={door.id}>
+                            <TableRow id={`dyke-${cid}`} key={door.id}>
                                 <TableCell>{cid + 1}</TableCell>
                                 <TableCell>
                                     {com.housePackageTool?.door?.title}
+                                    <p>{inToFt(door?.dimension)}</p>
                                 </TableCell>
                                 {moulding.isType.hasSwing ? (
                                     <>
