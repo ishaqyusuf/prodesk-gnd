@@ -36,6 +36,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                             },
                         },
                     },
+                    deletedAt: null,
                 },
                 include: {
                     formSteps: true,
@@ -249,6 +250,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                 formSteps: item?.formSteps,
             };
         });
+    console.log(doorGroups);
+
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
     return { ...order, totalQty, doorGroups, isProd: prod };
 }
