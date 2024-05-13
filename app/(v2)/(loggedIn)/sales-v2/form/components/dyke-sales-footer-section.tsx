@@ -122,7 +122,7 @@ export default function DykeSalesFooterSection({}) {
         floating: false,
     } as any;
     return (
-        <div className="">
+        <div className="mb-16">
             <ctx.Provider
                 value={{
                     ...ctxValue,

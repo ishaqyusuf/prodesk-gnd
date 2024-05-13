@@ -323,17 +323,19 @@ export const PrintOrderMenuAction = typedMemo(
 export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
-
+    if (!props.row.id) return;
     const _copyOrder = useCallback(
         async (as: ISalesType = "order") => {
             startTransition(async () => {
-                const _ = props.row.isDyke
-                    ? await copyDykeSales(props.row.slug, as)
-                    : await copyOrderAction({
-                          orderId: props.row.orderId,
-                          as,
-                      });
-                console.log(_);
+                const _ = //props.row.isDyke
+                    // ? await //copyDykeSales(props.row.slug, as)
+                    // :
+
+                    await copyOrderAction({
+                        orderId: props.row.orderId,
+                        as,
+                    });
+                // console.log(_);
                 if (_.link)
                     toast.success(`${as} copied successfully`, {
                         action: {
@@ -345,11 +347,17 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
         },
         [props.row]
     );
+    function copyLink(as) {
+        if (!props.row.isDyke) return null;
+        return `/sales-v2/form/${as}?copy=${props.row.slug}`;
+    }
     return (
         <MenuItem
             SubMenu={
                 <>
                     <MenuItem
+                        _blank
+                        link={copyLink("quote")}
                         Icon={Icons.estimates}
                         onClick={() => {
                             _copyOrder("quote");
@@ -358,7 +366,9 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                         Quote
                     </MenuItem>
                     <MenuItem
+                        _blank
                         Icon={Icons.orders}
+                        link={copyLink("order")}
                         onClick={() => {
                             _copyOrder("order");
                         }}

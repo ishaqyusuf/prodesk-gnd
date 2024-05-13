@@ -24,7 +24,7 @@ export default function MouldingItems() {
             <Table>
                 <TableHeader>
                     <TableHead>#</TableHead>
-                    <TableHead>Moulding</TableHead>
+                    <TableHead>Item</TableHead>
                     {moulding.isType.hasSwing ? (
                         <>
                             <TableHead>LH</TableHead>

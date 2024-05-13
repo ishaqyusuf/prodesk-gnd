@@ -7,26 +7,8 @@ export function calculateSalesEstimate(data: DykeForm) {
     data.order.taxPercentage = +(data.order.taxPercentage || 0);
 
     data.itemArray.map((item) => {
-        // console.log(item.item.total);
-
-        // item.item.rate = item.item.total = 0;
-        // if (item.item?.housePackageTool?.doorType == "Moulding") {
-        // calculateLineItem(item);
-        // } else {
-        // item.item.rate =
-        //     item.item.price =
-        //     item.item.qty =
-        //     item.item.total =
-        //         0;
-        // calculateHousePackageTool(item);
         calculateShelfItems(item);
-        // }
-
         taxEstimateAndUpdateTotal(item, data);
-        // console.log(item.item.total);
-
-        // item = res.item;
-        // (data.order as any).subTotal += res.totalPrice;
     });
     const {
         subTotal,
@@ -41,7 +23,9 @@ export function calculateSalesEstimate(data: DykeForm) {
         ccc += formatMoney((cccPercentage / 100) * (total + tax));
     data.order.meta.ccc = ccc;
     data.order.meta.ccc_percentage = cccPercentage;
-    const dt = (data.order.grandTotal = ccc + tax + total - (discount || 0));
+    const dt = (data.order.grandTotal = formatMoney(
+        ccc + tax + total - (discount || 0)
+    ));
     data.order.amountDue = dt - (data.paidAmount || 0);
     console.log({ subTotal, total, ccc, labor_cost, tax, discount });
 
@@ -90,7 +74,6 @@ function calculateShelfItems(item: DykeForm["itemArray"][0]) {
             shelf.productArray
                 .filter((p) => p.item)
                 .map((prod) => {
-                    // product.item.totalPrice
                     sum.totalPrice += prod.item.totalPrice || 0;
                 });
         });

@@ -5,14 +5,19 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { prisma } from "@/db";
+import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 
 export const metadata: Metadata = {
     title: "Sales Form",
     description: "",
 };
-export default async function SalesForm({ params }) {
+export default async function SalesForm({ params, searchParams }) {
     const [type, slug] = params.slug;
-    const form = await getDykeFormAction(type, slug);
+    let copy = searchParams.copy;
+
+    const form = copy
+        ? await copyDykeSales(copy, type)
+        : await getDykeFormAction(type, slug);
 
     // const _doors = await prisma.dykeDoors.findMany({
     //     select: {
@@ -28,7 +33,7 @@ export default async function SalesForm({ params }) {
     // let f = _doors.filter((d) => d.title == unique[0]?.title);
     // console.log(f);
 
-    metadata.title = `${slug ? "Edit " : "New "} ${form.order.type} ${
+    metadata.title = `${slug ? "Edit " : "New "} ${form.order?.type} ${
         slug && `| ${slug}`
     }`;
     return (

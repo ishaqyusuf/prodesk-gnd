@@ -4,9 +4,8 @@ import { isComponentType } from "../overview/is-component-type";
 import { deepCopy } from "@/lib/deep-copy";
 import { calculateSalesEstimate } from "./calculate-sales-estimate";
 
-export default function initDykeSaving(data: DykeForm) {
+export default function initDykeSaving(data: DykeForm, noEstimate = false) {
     const errorData: any = {};
-
     data = {
         ...data,
         itemArray: data.itemArray.map((_, index) => {
@@ -25,13 +24,16 @@ export default function initDykeSaving(data: DykeForm) {
     };
 
     errorData.errorId = data.order.slug || generateRandomString(5);
-    const init = initializeMultiComponents(data);
+    const init = initializeMultiComponent(data);
+    console.log(data.itemArray.length);
+
+    // if (noEstimate) return data;
     errorData.init = init;
     const e = calculateSalesEstimate(init);
-    errorData.calculated = e;
-    return data;
+    // errorData.calculated = e;
+    return e;
 }
-function initializeMultiComponents(data: DykeForm) {
+function initializeMultiComponent(data: DykeForm) {
     let allItems: DykeForm["itemArray"] = [];
     let trash = {
         orderItems: [] as any,
@@ -146,6 +148,8 @@ function initializeMultiComponents(data: DykeForm) {
                     clone.item.housePackageTool.moldingId = c.toolId;
                 }
             }
+            console.log(clone.item.total);
+
             items.push(clone);
         });
         if (items.length == 1 && items?.[0]?.item) {

@@ -15,6 +15,7 @@ import BackOrderModal from "@/components/_v1/modals/sales/back-order-modal";
 import AssignProdModal from "@/components/_v1/modals/assign-prod-modal";
 import AuthGuard from "@/components/_v1/auth-guard";
 import NewSalesBtn from "./components/new-sales-btn";
+import CopyFn from "./components/copy-fn";
 
 export const metadata: Metadata = {
     title: "Sales Orders",
@@ -41,6 +42,7 @@ export default async function SalesOrdersPage({ searchParams }) {
                     Action={NewSalesBtn}
                     permissions={["editOrders"]}
                 />
+                <CopyFn />
                 <SalesOrderMobileMenuShell />
                 <OrdersTableShell<ISalesOrder>
                     searchParams={searchParams}

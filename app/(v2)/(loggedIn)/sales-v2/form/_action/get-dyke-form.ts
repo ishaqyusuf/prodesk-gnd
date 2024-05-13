@@ -240,6 +240,8 @@ export async function getDykeFormAction(type, slug, copy = false) {
                         return true;
                     return false;
                 });
+                console.log(_comps);
+
                 // console.log(
                 //     _comps.map((i) => i.housePackageTool.dykeDoorId)
                 // );

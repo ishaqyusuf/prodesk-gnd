@@ -3,7 +3,10 @@ import { useDykeForm } from "../_hooks/form-context";
 import Btn from "@/components/_v1/btn";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import useDykeFormSaver from "../_hooks/use-dyke-form-saver";
-import { PrintOrderMenuAction } from "@/components/_v1/actions/order-actions";
+import {
+    CopyOrderMenuAction,
+    PrintOrderMenuAction,
+} from "@/components/_v1/actions/order-actions";
 import { Icons } from "@/components/_v1/icons";
 import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
 import { useEffect, useState } from "react";
@@ -12,10 +15,11 @@ import useScroll from "@/hooks/use-scroll";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
-    const [orderId, id, type] = form.getValues([
+    const [orderId, id, type, slug] = form.getValues([
         "order.orderId",
         "order.id",
         "order.type",
+        "order.slug",
     ]);
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
@@ -61,6 +65,7 @@ export default function HeaderSection({}) {
                     >
                         Supply
                     </MenuItem> */}
+                            <CopyOrderMenuAction row={{ slug, id } as any} />
                             <PrintOrderMenuAction
                                 link
                                 row={

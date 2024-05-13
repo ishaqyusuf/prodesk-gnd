@@ -107,9 +107,11 @@ export function RowActionMenuItem({
                 <DropdownMenuSubContent>{SubMenu}</DropdownMenuSubContent>
             </DropdownMenuSub>
         );
-    const Node = link || href ? Link : Fragment;
     const Frag = () => (
-        <DropdownMenuItem {...props} onClick={onClick}>
+        <DropdownMenuItem
+            {...props}
+            onClick={link || href ? null : (onClick as any)}
+        >
             {Icon && (
                 <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             )}

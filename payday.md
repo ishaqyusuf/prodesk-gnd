@@ -21,7 +21,12 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete
 # MAY 13: 00.00 == 00.00
-    06:45-
+    10:40-11:00
+    08:35-09:10
+    06:45-08:05
+    
+AMOUNT DUE: $544.58 + 831.25
+$1373.83
 PAYMENT INVOICE
 $544.58
 # MAY 10: 03.30 == 15.35
