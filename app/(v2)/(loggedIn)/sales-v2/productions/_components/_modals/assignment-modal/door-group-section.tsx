@@ -63,44 +63,48 @@ export default function DoorGroupSection({ index }) {
                                 value={sd.report.completed}
                             />
                         </div>
-                        <Button
-                            onClick={() => {
-                                setShowDetails(!showDetails);
-                            }}
-                            variant={showDetails ? "outline" : "ghost"}
-                            size={"sm"}
-                            className="flex w-full justify-center h-8"
-                        >
-                            <span>
-                                {!showDetails ? "Show Details" : "Hide Details"}
-                            </span>
-                            {!showDetails ? (
-                                <Icons.chevronDown />
-                            ) : (
-                                <Icons.chevronUp />
-                            )}
-                        </Button>
-                        <div
-                            className={cn(
-                                showDetails ? "grid" : "hidden",
-                                " grid-cols-2"
-                            )}
-                        >
-                            {group.doorDetails
-                                .filter((d) => d.value)
-                                .map((detail) => (
-                                    <div
-                                        key={detail.title}
-                                        className="grid grid-cols-5 border-b border-r  gap-2"
-                                    >
-                                        <div className="font-bold col-span-2  border-r px-2 py-1">
-                                            {detail.title}
+                        <div className={cn("p-1", showDetails && "border")}>
+                            <Button
+                                onClick={() => {
+                                    setShowDetails(!showDetails);
+                                }}
+                                variant={showDetails ? "outline" : "ghost"}
+                                size={"sm"}
+                                className="flex w-full justify-center h-8"
+                            >
+                                <span>
+                                    {!showDetails
+                                        ? "Show Details"
+                                        : "Hide Details"}
+                                </span>
+                                {!showDetails ? (
+                                    <Icons.chevronDown />
+                                ) : (
+                                    <Icons.chevronUp />
+                                )}
+                            </Button>
+                            <div
+                                className={cn(
+                                    showDetails ? "grid" : "hidden",
+                                    " grid-cols-2"
+                                )}
+                            >
+                                {group.doorDetails
+                                    .filter((d) => d.value)
+                                    .map((detail) => (
+                                        <div
+                                            key={detail.title}
+                                            className="grid grid-cols-5 border-b border-r  gap-2"
+                                        >
+                                            <div className="font-bold col-span-2  border-r px-2 py-1">
+                                                {detail.title}
+                                            </div>
+                                            <div className=" col-span-3 px-2 py-1">
+                                                {detail.value}
+                                            </div>
                                         </div>
-                                        <div className=" col-span-3 px-2 py-1">
-                                            {detail.value}
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                            </div>
                         </div>
                         {/* {group.doorDetails} */}
                         <DoorAssignments groupIndex={index} doorIndex={i} />
