@@ -12,7 +12,7 @@ import {
     composeSalesItems,
 } from "../../(loggedIn)/sales-v2/_utils/compose-sales-items";
 import { SalesPrintProps } from "./page";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, inToFt } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { DykeDoorType } from "../../(loggedIn)/sales-v2/type";
@@ -367,7 +367,9 @@ function getDoorsTable(
                             //     (s) => s.step.title == "Door"
                             // )?.value;
                             case "dimension":
-                                return door?.dimension?.replaceAll("in", '"');
+                                return inToFt(
+                                    door?.dimension?.replaceAll("in", '"')
+                                );
                             case "moulding":
                                 return m.housePackageTool?.molding?.title;
                             case "unitPrice":

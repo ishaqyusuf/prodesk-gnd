@@ -376,7 +376,6 @@ export function inToFt(_in) {
             _ft = +_ft;
             const ft = Math.floor(_ft / 12);
             const rem = _ft % 12;
-            console.log([ft, rem, _in]);
 
             return `${ft}-${rem}`;
         }
