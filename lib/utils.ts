@@ -369,6 +369,12 @@ export function getLeafDotPaths<T>(obj: T, parentKey: string = ""): string[] {
 }
 export function inToFt(_in) {
     let _ft = _in;
+    const duo = _ft.split("x");
+    if (duo.length == 2) {
+        console.log(_ft);
+
+        return `${inToFt(duo[0]?.trim())} x ${inToFt(duo[1]?.trim())}`;
+    }
     try {
         _ft = +_in.split('"')?.[0]?.split("'")[0]?.split("in")?.[0];
 
