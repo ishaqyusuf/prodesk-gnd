@@ -13,17 +13,17 @@ export async function createJobAction(data: IJobs) {
     if (!data.userId) data.userId = await userId();
     // let amount = data.amount;
     // if (data.coWorkerId) amount /= 2;
-
+    // const unitJobs = await prisma
     const job = await prisma.jobs.create({
         data: {
             ...data,
-            ...(transformData({ meta: data.meta }) as any)
+            ...(transformData({ meta: data.meta }) as any),
             // amount
         },
         include: {
             user: true,
-            coWorker: true
-        }
+            coWorker: true,
+        },
     });
     _notifyAdminJobSubmitted(job as any);
     if (job.coWorkerId) {
@@ -33,19 +33,19 @@ export async function createJobAction(data: IJobs) {
                 ...(transformData({ meta: data.meta }) as any),
                 // amount,
                 userId: data.coWorkerId,
-                coWorkerId: data.userId
+                coWorkerId: data.userId,
             },
             include: {
                 user: true,
-                coWorker: true
-            }
+                coWorker: true,
+            },
         });
         _notifyAdminJobSubmitted(job2 as any);
     }
     const type: IJobType = data.type as any;
     if (data.homeId) {
         const where: Prisma.HomeTasksWhereInput = {
-            homeId: data.homeId
+            homeId: data.homeId,
         };
         if (type == "installation") where.installable = true;
         if (type == "Deco-Shutter") where.deco = true;
@@ -54,8 +54,8 @@ export async function createJobAction(data: IJobs) {
             where,
             data: {
                 status: "Completed",
-                statusDate: new Date()
-            }
+                statusDate: new Date(),
+            },
         });
     }
 }
@@ -71,34 +71,34 @@ export async function updateJobAction({ id, ...jdata }: IJobs) {
         where: { id },
         data: {
             ...jdata,
-            ...transformData({}, true)
+            ...transformData({}, true),
             // amount
-        } as any
+        } as any,
     });
     if (job.coWorkerId) {
         const job2 = await prisma.jobs.findFirst({
             where: {
                 coWorkerId: job.userId,
                 userId: job.coWorkerId,
-                title: job.title
-            }
+                title: job.title,
+            },
         });
         if (job2) {
             await prisma.jobs.update({
                 where: {
-                    id: job2.id
+                    id: job2.id,
                 },
                 data: {
                     ...jdata,
                     ...(transformData({ meta: jdata.meta }, true) as any),
                     // amount,
                     userId: jdata.coWorkerId,
-                    coWorkerId: jdata.userId
+                    coWorkerId: jdata.userId,
                 },
                 include: {
                     user: true,
-                    coWorker: true
-                }
+                    coWorker: true,
+                },
             });
         } else {
             const job2 = await prisma.jobs.create({
@@ -107,12 +107,12 @@ export async function updateJobAction({ id, ...jdata }: IJobs) {
                     ...(transformData({ meta: jdata.meta }) as any),
                     // amount,
                     userId: jdata.coWorkerId,
-                    coWorkerId: jdata.userId
+                    coWorkerId: jdata.userId,
                 },
                 include: {
                     user: true,
-                    coWorker: true
-                }
+                    coWorker: true,
+                },
             });
         }
         //  const job2 = await prisma.jobs.create({

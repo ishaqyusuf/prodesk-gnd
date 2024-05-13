@@ -20,7 +20,6 @@ export async function copyDykeSales(slug, as: ISalesType) {
             ...e,
             order: removeKeys(e.order, [
                 "id",
-                "id",
                 "slug",
                 "orderId",
                 "salesRepId",

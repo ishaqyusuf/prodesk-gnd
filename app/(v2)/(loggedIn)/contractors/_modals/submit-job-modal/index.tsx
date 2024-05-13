@@ -58,7 +58,7 @@ export default function SubmitJobModal() {
                     </DialogHeader>
                     <SubmitJobModalContent />
                     <DialogFooter>
-                        <SubmitJobModalFooter />{" "}
+                        <SubmitJobModalFooter />
                     </DialogFooter>
                 </JobSubmitContext.Provider>
             </Form>

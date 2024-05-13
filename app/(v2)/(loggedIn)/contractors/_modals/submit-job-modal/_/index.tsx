@@ -120,7 +120,9 @@ function ModalFooter({ data }: SubmitJobModalProps) {
     const ctx = useJobSubmitCtx();
     return (
         <div className="space-x-4 items-center flex">
-            <Btn onClick={ctx.nextTab}>Submit</Btn>
+            <Btn isLoading={ctx.isLoading} onClick={ctx.nextTab}>
+                Submit
+            </Btn>
         </div>
     );
 }

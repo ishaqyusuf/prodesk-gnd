@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { closeModal } from "@/lib/modal";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { useStaticProjects } from "@/_v2/hooks/use-static-data";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useTransition } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
 import { useModal } from "@/components/common/modal-old/provider";
 
@@ -51,26 +51,38 @@ export default function useSubmitJob(form) {
         control: form.control,
         name: "costList",
     });
-
+    const [isLoading, startTransition] = useTransition();
     async function submit() {
-        const { job } = form.getValues();
-        job.meta.taskCost = submitJobUtils.totalTaskCost(job.meta.costData);
-        // console.log(job.meta.taskCost);
-        // if(!job.id)
-        job.amount = 0;
-        [job.meta.addon, job.meta.taskCost, job.meta.additional_cost].map(
-            (n) => n > 0 && (job.amount += Number(n))
-        );
-        if (job.coWorkerId) job.amount /= 2;
-        if (!job.id) await createJobAction(job as any);
-        else await updateJobAction(job as any);
-        toast.message("Success!");
-        // closeModal();
-        modal?.close();
-        await _revalidate(isAdmin ? "jobs" : "my-jobs");
+        startTransition(async () => {
+            try {
+                const { job } = form.getValues();
+                job.meta.taskCost = submitJobUtils.totalTaskCost(
+                    job.meta.costData
+                );
+                // console.log(job.meta.taskCost);
+                // if(!job.id)
+                job.amount = 0;
+                [
+                    job.meta.addon,
+                    job.meta.taskCost,
+                    job.meta.additional_cost,
+                ].map((n) => n > 0 && (job.amount += Number(n)));
+                if (job.coWorkerId) job.amount /= 2;
+                if (!job.id) await createJobAction(job as any);
+                else await updateJobAction(job as any);
+                toast.message("Success!");
+                // closeModal();
+                modal?.close();
+                await _revalidate(isAdmin ? "jobs" : "my-jobs");
+            } catch (error) {
+                if (error instanceof Error) toast.error(error.message);
+            }
+        });
     }
     const [cost, setCosts] = useState([]);
     return {
+        isLoading,
+
         id,
         form,
         // costList2,
