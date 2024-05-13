@@ -124,7 +124,7 @@ function shelfItemsTable(
                 ),
             ]
         );
-    if (isPacking) res.cells.push(_cell<T>("Packed Qty", null, 3));
+    if (isPacking) res.cells.push(_cell<T>("Packed Qty", "packing", 3));
     const newResp = data.order.items
         .filter((item) => item.shelfItems.length)
         .map((item) => {
@@ -328,7 +328,8 @@ function getDoorsTable(
                         ]
                     );
                 }
-                if (isPacking) res.cells.push(_cell("Packed Qty", null, 3));
+                if (isPacking)
+                    res.cells.push(_cell("Packed Qty", "packing", 3));
 
                 const details =
                     is.moulding || is.bifold

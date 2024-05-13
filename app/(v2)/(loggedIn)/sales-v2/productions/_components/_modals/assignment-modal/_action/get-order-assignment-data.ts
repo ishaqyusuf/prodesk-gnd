@@ -52,6 +52,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                             doorType: {
                                 in: ["Garage", "Interior"] as DykeDoorType[],
                             },
+                            deletedAt: null,
                         },
                     },
                     assignments: {
