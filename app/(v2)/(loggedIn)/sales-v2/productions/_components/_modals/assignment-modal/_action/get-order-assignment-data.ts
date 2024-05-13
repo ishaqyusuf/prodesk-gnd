@@ -8,6 +8,7 @@ import { isComponentType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/is-comp
 import { OrderItemProductionAssignments } from "@prisma/client";
 import { userId } from "@/app/(v1)/_actions/utils";
 import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
+import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
 
 export async function getOrderAssignmentData(id, prod = false) {
     // await prisma.orderItemProductionAssignments.updateMany({
@@ -39,7 +40,11 @@ export async function getOrderAssignmentData(id, prod = false) {
                     deletedAt: null,
                 },
                 include: {
-                    formSteps: true,
+                    formSteps: {
+                        include: {
+                            step: true,
+                        },
+                    },
                     salesDoors: {
                         include: {
                             housePackageTool: {
@@ -249,6 +254,10 @@ export async function getOrderAssignmentData(id, prod = false) {
                 salesDoors,
                 report,
                 formSteps: item?.formSteps,
+                doorDetails: composeDoorDetails(
+                    item.formSteps as any,
+                    item as any
+                ),
             };
         });
     console.log(doorGroups);

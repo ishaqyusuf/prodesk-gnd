@@ -11,13 +11,16 @@ import { Info } from "@/components/_v1/info";
 
 import { AssignGroup } from "./assign-group";
 import DoorAssignments from "./door-assignments";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
 
 export default function DoorGroupSection({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(true);
     if (!group) return null;
-
+    const [showDetails, setShowDetails] = useState(false);
     return (
         <Collapsible className="mt-4" open={open}>
             <CollapsibleTrigger asChild>
@@ -60,6 +63,46 @@ export default function DoorGroupSection({ index }) {
                                 value={sd.report.completed}
                             />
                         </div>
+                        <Button
+                            onClick={() => {
+                                setShowDetails(!showDetails);
+                            }}
+                            variant={showDetails ? "outline" : "ghost"}
+                            size={"sm"}
+                            className="flex w-full justify-center h-8"
+                        >
+                            <span>
+                                {!showDetails ? "Show Details" : "Hide Details"}
+                            </span>
+                            {!showDetails ? (
+                                <Icons.chevronDown />
+                            ) : (
+                                <Icons.chevronUp />
+                            )}
+                        </Button>
+                        <div
+                            className={cn(
+                                showDetails ? "grid" : "hidden",
+                                " grid-cols-2"
+                            )}
+                        >
+                            {group.doorDetails
+                                .filter((d) => d.value)
+                                .map((detail) => (
+                                    <div
+                                        key={detail.title}
+                                        className="grid grid-cols-5 border-b border-r  gap-2"
+                                    >
+                                        <div className="font-bold col-span-2  border-r px-2 py-1">
+                                            {detail.title}
+                                        </div>
+                                        <div className=" col-span-3 px-2 py-1">
+                                            {detail.value}
+                                        </div>
+                                    </div>
+                                ))}
+                        </div>
+                        {/* {group.doorDetails} */}
                         <DoorAssignments groupIndex={index} doorIndex={i} />
                     </div>
                 ))}

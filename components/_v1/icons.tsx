@@ -70,6 +70,8 @@ import {
     Timer,
     Receipt,
     Calendar,
+    ChevronDown,
+    ChevronUp,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -139,6 +141,8 @@ export const Icons = {
     spinner: Loader2,
     chevronLeft: ChevronLeft,
     chevronRight: ChevronRight,
+    chevronDown: ChevronDown,
+    chevronUp: ChevronUp,
     trash: Trash,
     post: FileText,
     page: File,

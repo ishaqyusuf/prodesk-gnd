@@ -58,18 +58,26 @@ export function composeSalesItems(data: ViewSaleType) {
         doors: Object.values(housePakageTools),
     };
 }
+
 export function composeDoorDetails(
     steps: ViewSaleType["items"][0]["formSteps"],
     item: ViewSaleType["items"][0]
 ) {
     if (!steps) steps = [];
 
-    let _steps = steps.map((fs) => {
-        return {
-            title: fs.step.title,
-            value: fs.value,
-        };
-    });
+    let _steps = steps
+        .filter(
+            (s) =>
+                !["Door", "Item Type", "Moulding"].some(
+                    (k) => k == s.step.title
+                )
+        )
+        .map((fs) => {
+            return {
+                title: fs.step.title,
+                value: fs.value,
+            };
+        });
     // _steps.push({
     //     title: "----",
     //     value: "####",
