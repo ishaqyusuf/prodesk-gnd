@@ -69,11 +69,14 @@ export default function DykeSalesFooterSection({}) {
             let f = footr[uid];
             if (!f) return;
             if (!f.price) f.price = 0;
+            console.log(f);
+
             subTotal += f.price;
             if (orderTax && (f?.tax || f?.doorType != "Services")) {
                 const iTax = ((taxPercentage || 0) / 100) * f.price;
                 tax += iTax; //f?.price || 0;
                 taxxable += f.price;
+                // console.log(tax)
             }
         }
         items.map((item) => {
@@ -94,12 +97,15 @@ export default function DykeSalesFooterSection({}) {
         let total = formatMoney(sum([subTotal, laborCost]));
         let ccc = 0;
         const cccP = Number(cccPercentage || 0);
+        // console.log(cccP);
+
         if (paymentOption == "Credit Card") {
             // console.log(cccP);
 
             ccc = formatMoney((cccP / 100) * (total + tax));
             // console.log(ccc, [total + tax]);
         }
+        console.log(ccc);
 
         form.setValue("order.meta.ccc", ccc);
         form.setValue("order.tax", formatMoney(tax));
