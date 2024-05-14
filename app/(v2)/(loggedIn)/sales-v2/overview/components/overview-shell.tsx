@@ -8,9 +8,10 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import DetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/details-section";
 import CostBreakdown from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/cost-breakdown";
 import PaymentHistory from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/payment-history";
-import Timeline from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/timeline";
+
 import OverviewTabs from "./overview-tabs";
 import SalesItemsOverview from "./sales-items-overview";
+import TimelineSection from "./timeline";
 
 export type SalesOverviewType = Awaited<ReturnType<typeof getSalesOverview>>;
 interface Props {
@@ -32,7 +33,7 @@ export default function OverviewShell({ data }: Props) {
                 <div className="space-y-4 max-sm:divide-y">
                     <CostBreakdown />
                     {resp.type == "order" && <PaymentHistory />}
-                    <Timeline />
+                    <TimelineSection />
                 </div>
             </div>
         </DataPageShell>

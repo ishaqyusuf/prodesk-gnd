@@ -1,17 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useDataPage } from "@/lib/data-page-context";
-import { openModal } from "@/lib/modal";
+import { SalesOverviewType } from "../overview-shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useModal } from "@/components/common/modal/provider";
+import { Icons } from "@/components/_v1/icons";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/use-day";
-import { ISalesOrder } from "@/types/sales";
-import { Plus } from "lucide-react";
+import TimelineModal from "../_timeline-modal";
 
-export default function Timeline() {
-    const { data: order } = useDataPage<ISalesOrder>();
+export default function TimelineSection() {
+    const { data } = useDataPage<SalesOverviewType>();
 
+    const modal = useModal();
     return (
         <div className="col-span-1">
             <Card className="max-sm:border-none">
@@ -21,12 +23,19 @@ export default function Timeline() {
                         <div>
                             <Button
                                 onClick={() => {
-                                    openModal("salesTimeline", order);
+                                    modal.openModal(
+                                        <TimelineModal
+                                            parentId={data.id}
+                                            status={"Order Update"}
+                                            type={""}
+                                        />
+                                    );
+                                    //  openModal("salesTimeline", order);
                                 }}
                                 className="h-8 w-8 p-0"
                                 variant="outline"
                             >
-                                <Plus className="h-4 w-4" />
+                                <Icons.add className="h-4 w-4" />
                             </Button>
                         </div>
                     </CardTitle>
@@ -34,7 +43,7 @@ export default function Timeline() {
                 <CardContent className="">
                     <Table>
                         <TableBody>
-                            {order.progress?.map((item, key) => (
+                            {data.progress?.map((item, key) => (
                                 <TableRow key={key}>
                                     {/* <TableCell className="p-1">
                       <p>{item.createdAt as any}</p>

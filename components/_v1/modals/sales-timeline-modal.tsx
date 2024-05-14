@@ -90,6 +90,9 @@ export default function SalesTimelineModal({ isProd }: Props) {
                                     <SelectItem value="invoice">
                                         Invoice
                                     </SelectItem>
+                                    <SelectItem value="invoice">
+                                        Supply
+                                    </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

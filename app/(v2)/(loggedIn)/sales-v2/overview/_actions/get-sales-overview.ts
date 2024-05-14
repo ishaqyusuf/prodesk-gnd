@@ -9,6 +9,7 @@ import {
 import { composeSalesItems } from "../../_utils/compose-sales-items";
 import { DykeDoorType } from "../../type";
 import { isComponentType } from "../is-component-type";
+import { getProgress } from "@/app/(v1)/_actions/progress";
 
 export async function getSalesOverview({
     type,
@@ -87,6 +88,7 @@ export async function viewSale(type, slug) {
         },
     });
     if (!order) throw Error();
+
     const sectionTitles = await prisma.dykeSteps.findFirst({
         where: {
             title: "Item Type",
@@ -163,10 +165,27 @@ export async function viewSale(type, slug) {
         ids.every((id) => id != mi.id)
     );
 
+    const progress = await getProgress({
+        where: [
+            {
+                progressableId: order.id,
+                progressableType: "SalesOrder",
+                //    type: "production",
+            },
+            {
+                parentId: order.id,
+                progressableType: "SalesOrderItem",
+                //    type: isProd ? "production" : undefined,
+            },
+        ],
+    });
+    console.log(progress);
+
     return {
         ...order,
         meta: order.meta as any as ISalesOrderMeta,
         items,
         groupings,
+        progress,
     };
 }
