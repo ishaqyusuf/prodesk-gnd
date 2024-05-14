@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/table";
 import Money from "@/components/_v1/money";
 import { inToFt } from "@/lib/utils";
+import { TableCol } from "@/components/common/data-table/table-cells";
 
 export default function DykeDoorItems() {
     const { data } = useDataPage<SalesOverviewType>();
-    console.log(data);
-
+    // console.log(data);
     if (!data.groupings.doors?.length) return <></>;
     return data.groupings.doors.map((moulding, index) => (
         <div key={index}>
@@ -41,9 +41,54 @@ export default function DykeDoorItems() {
                 </TableHeader>
                 {moulding.multiDykeComponents.map((com, cid) => (
                     <TableBody key={com.id}>
+                        {com.meta.doorType == "Services" && (
+                            <TableRow>
+                                <TableCell>{cid + 1}</TableCell>
+                                <TableCell>{com.description}</TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        {com.qty}
+                                    </TableCol.Secondary>
+                                </TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        <Money value={com.rate} />
+                                    </TableCol.Secondary>
+                                </TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        <Money value={com.total} />
+                                    </TableCol.Secondary>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                        {com.meta.doorType == "Moulding" && (
+                            <TableRow>
+                                <TableCell>{cid + 1}</TableCell>
+                                <TableCell>
+                                    {com.housePackageTool?.molding?.title}
+                                </TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        {com.qty}
+                                    </TableCol.Secondary>
+                                </TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        <Money value={com.rate} />
+                                    </TableCol.Secondary>
+                                </TableCell>
+                                <TableCell>
+                                    <TableCol.Secondary>
+                                        <Money value={com.total} />
+                                    </TableCol.Secondary>
+                                </TableCell>
+                            </TableRow>
+                        )}
                         {com.housePackageTool?.doors.map((door) => (
                             <TableRow id={`dyke-${cid}`} key={door.id}>
                                 <TableCell>{cid + 1}</TableCell>
+
                                 <TableCell>
                                     {com.housePackageTool?.door?.title}
                                     <p>{inToFt(door?.dimension)}</p>

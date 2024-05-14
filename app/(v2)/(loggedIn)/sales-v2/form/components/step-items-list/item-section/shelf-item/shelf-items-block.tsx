@@ -129,7 +129,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
                                             shelf.prodArray.remove(index);
                                         }}
                                         shelfItemForm={shelfItemForm}
-                                        key={prodField.id}
+                                        key={prodField._id}
                                         index={prodIndex}
                                         field={prodField}
                                         shelf={shelf}
@@ -199,6 +199,8 @@ function ShellProductCells({
     //     shelf.prodArray.update(index, {});
     // }, []);
 
+    // console.log(shelf.products);
+    // if (!shelf.products?.length) return <></>;
     return (
         <div className="w-full flex items-center space-x-4">
             <div className="flex-1">
@@ -208,9 +210,11 @@ function ShellProductCells({
                     onValueChange={(productId) => {
                         // const productId = Number(v) || null;
                         // f.onChange(productId);
+                        console.log(productId);
+
                         shelf.productSelected(productId, index);
                     }}
-                    defaultValue={f.id}
+                    defaultValue={f.item?.productId}
                     placeholder={"Select Product"}
                     items={shelf.products?.map(
                         ({ title: label, id: value }) => ({

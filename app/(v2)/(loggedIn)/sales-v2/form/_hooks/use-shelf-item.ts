@@ -24,6 +24,7 @@ export default function useShelfItem(shelfIndex) {
     const prodArray = useFieldArray({
         control: form.control,
         name: categoryProdsKey as any,
+        keyName: "_id",
     });
     const catArray = useFieldArray({
         control: categoryForm.control,

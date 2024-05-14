@@ -95,6 +95,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
         },
         items: [
             {
+                expanded: true,
                 formSteps: [
                     {
                         ...rootProds.item,
@@ -319,7 +320,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     opened: true,
                     stepIndex: 0,
                     multiComponent,
-                    expanded: false,
+                    expanded: form.id ? false : true,
                     stillChecked: true,
                     sectionPrice,
                     item: {

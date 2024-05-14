@@ -135,29 +135,29 @@ export async function viewSale(type, slug) {
                     i.id == item.id ||
                     (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
             );
-            if (item.meta.doorType == "Bifold") {
-                console.log(
-                    _multiDyke.map((d) => d.housePackageTool?.door?.title)
-                );
-            }
+
             return {
                 multiDykeComponents: _multiDyke,
                 isType: isComponentType(item.meta.doorType),
                 ...item,
             };
         });
+
     const groupings = {
         slabs: _mergedItems.filter((i) => i.meta.doorType == "Door Slabs Only"),
         mouldings: _mergedItems.filter((i) => i.meta.doorType == "Moulding"),
         services: _mergedItems.filter((i) => i.meta.doorType == "Services"),
         doors: _mergedItems,
     };
+
     // console.log(groupings.mouldings);
 
     const ids: any[] = [];
-    [groupings.slabs, groupings.mouldings, groupings.services].map((v) =>
-        v.map((c) => ids.push(c.id))
-    );
+    // [
+    //     // groupings.slabs,
+    //     // groupings.mouldings,
+    //     // groupings.services,
+    // ].map((v) => v.map((c) => ids.push(c.id)));
 
     groupings.doors = _mergedItems?.filter((mi) =>
         ids.every((id) => id != mi.id)
