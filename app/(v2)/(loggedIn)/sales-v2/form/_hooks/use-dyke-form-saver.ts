@@ -32,6 +32,7 @@ export default function useDykeFormSaver(form) {
                 else await _revalidate("salesV2Form");
             } catch (error) {
                 toast.error("Something went wrong");
+                if (error instanceof Error) console.log(error.message);
                 await _saveDykeError(errorData.errorId, errorData);
             }
         });

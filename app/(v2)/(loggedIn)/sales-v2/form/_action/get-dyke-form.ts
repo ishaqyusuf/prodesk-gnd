@@ -91,12 +91,11 @@ export async function getDykeFormAction(type, slug, copy = false) {
         meta: {
             sales_profile: ctx.defaultProfile?.title,
             sales_percentage: ctx.defaultProfile?.coefficient,
-            ccc_percentage: ctx?.settings?.ccc,
+            ccc_percentage: +ctx?.settings?.ccc,
             tax: true,
         },
         items: [
             {
-                expanded: true,
                 formSteps: [
                     {
                         ...rootProds.item,

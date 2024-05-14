@@ -3,12 +3,13 @@
 import { sendMessage } from "@/app/(v1)/_actions/email";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
+import { generateRandomString } from "@/lib/utils";
 
 export async function _saveDykeError(errorId, data) {
     await prisma.dykeSalesError.create({
         data: {
             meta: data,
-            errorId,
+            errorId: errorId || generateRandomString(4),
             userId: await userId(),
         },
     });
