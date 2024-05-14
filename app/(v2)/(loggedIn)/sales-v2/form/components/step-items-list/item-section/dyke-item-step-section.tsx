@@ -10,6 +10,7 @@ import {
     DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
+    useDykeItemCtx,
 } from "../../../_hooks/form-context";
 import { DykeStep } from "../../../../type";
 import ShelfItemIndex from "./shelf-item";
@@ -33,13 +34,23 @@ export function DykeItemStepSection({
     stepIndex,
 }: DykeItemStepSectionProps) {
     const form = useDykeForm();
-    const item = useContext(DykeItemFormContext);
+    const item = useDykeItemCtx();
     const stepValue = form.watch(
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any
     );
     return (
         <Collapsible
-            className={cn(stepForm?.item?.meta?.hidden && "hidden")}
+            className={cn(
+                stepForm?.item?.meta?.hidden && "hidden",
+                !item.expanded &&
+                    ![
+                        "Item Type",
+                        "House Package Tool",
+                        "Line Item",
+                        "Shelf Items",
+                    ].includes(stepForm.step?.title as any) &&
+                    "hidden"
+            )}
             open={stepIndex == item.openedStepIndex}
             // onOpenChange={() => item.openBlock(stepIndex)}
         >

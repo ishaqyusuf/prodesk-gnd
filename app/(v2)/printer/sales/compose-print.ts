@@ -48,6 +48,7 @@ export function composePrint(
     };
     type RetType = NonNullable<typeof ret>;
     // console.log(ret.shelfItemsTable);
+
     type ShelfType = RetType["shelfItemsTable"];
     let orderedPrinting: {
         _index;

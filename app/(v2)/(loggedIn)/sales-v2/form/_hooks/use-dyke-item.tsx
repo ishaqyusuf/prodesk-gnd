@@ -30,9 +30,10 @@ export default function useDykeItem(
         control: form.control,
         name: stepArrayName,
     });
-    const [opened, openedStepIndex] = form.watch([
+    const [opened, openedStepIndex, expanded] = form.watch([
         `itemArray.${rowIndex}.opened`,
         `itemArray.${rowIndex}.stepIndex`,
+        `itemArray.${rowIndex}.expanded`,
     ]);
     function getFormStepArray(): FormStepArray {
         return form.getValues(
@@ -67,6 +68,10 @@ export default function useDykeItem(
         isBifold: () => get.doorType() == "Bifold",
     };
     return {
+        expanded,
+        toggleExpand() {
+            form.setValue(`itemArray.${rowIndex}.expanded`, !expanded);
+        },
         multi,
         isType: isComponentType(get.doorType()),
         move(to) {

@@ -17,7 +17,7 @@ interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    console.log(defaultValues);
+    // console.log(defaultValues);
     const form = useForm<DykeForm>({
         defaultValues: {
             ...defaultValues,
@@ -68,11 +68,8 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                         className=""
                         onClick={async () => {
                             const doorUnit = await addDoorUnitAction();
-                            // doorUnit.item.form
-                            // const lastIndex = itemArray.fields.length;
+
                             itemArray.append(doorUnit as any);
-                            // form.setValue("currentStepIndex", 0);
-                            // form.setValue("currentItemIndex", lastIndex);
                         }}
                     >
                         <Icons.add className="w-4 h-4 mr-2" />

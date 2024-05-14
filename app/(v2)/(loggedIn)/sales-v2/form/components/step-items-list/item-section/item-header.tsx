@@ -2,7 +2,11 @@
 
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { _deleteDykeItem } from "../../../_action/delete-item";
-import { useDykeCtx, useDykeForm } from "../../../_hooks/form-context";
+import {
+    useDykeCtx,
+    useDykeForm,
+    useDykeItemCtx,
+} from "../../../_hooks/form-context";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import {
@@ -17,6 +21,8 @@ interface Props {
 }
 export default function ItemHeader({ item }: Props) {
     const dykeCtx = useDykeCtx();
+    const itemCtx = useDykeItemCtx();
+    const { expanded, toggleExpand } = itemCtx;
     const form = useDykeForm();
     const rowIndex = item.rowIndex;
     async function deleteSection() {
@@ -49,6 +55,9 @@ export default function ItemHeader({ item }: Props) {
                 </Label> */}
             </CollapsibleTrigger>
             <div className="flex items-center justify-between space-x-2">
+                <Button onClick={toggleExpand} size={"sm"} className="h-8">
+                    {expanded ? "Collapse" : "Expand"}
+                </Button>
                 <Button
                     onClick={deleteSection}
                     className="p-0 h-6 w-6"

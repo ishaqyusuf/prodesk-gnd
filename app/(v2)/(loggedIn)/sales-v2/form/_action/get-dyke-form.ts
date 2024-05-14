@@ -319,6 +319,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     opened: true,
                     stepIndex: 0,
                     multiComponent,
+                    expanded: false,
                     stillChecked: true,
                     sectionPrice,
                     item: {

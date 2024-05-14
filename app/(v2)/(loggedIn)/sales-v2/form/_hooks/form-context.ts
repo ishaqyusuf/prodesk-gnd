@@ -10,3 +10,4 @@ export const DykeItemFormContext = createContext<IDykeItemFormContext>(
 
 export const useDykeForm = () => useFormContext<DykeForm>();
 export const useDykeCtx = () => useContext(DykeFormContext);
+export const useDykeItemCtx = () => useContext(DykeItemFormContext);
