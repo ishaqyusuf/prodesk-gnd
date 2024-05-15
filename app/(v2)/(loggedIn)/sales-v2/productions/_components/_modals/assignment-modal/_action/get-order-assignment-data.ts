@@ -30,13 +30,23 @@ export async function getOrderAssignmentData(id, prod = false) {
             productionStatus: true,
             items: {
                 where: {
-                    salesDoors: {
-                        some: {
-                            doorType: {
-                                in: ["Garage", "Interior"] as DykeDoorType[],
+                    OR: [
+                        {
+                            salesDoors: {
+                                some: {
+                                    doorType: {
+                                        in: [
+                                            "Garage",
+                                            "Interior",
+                                        ] as DykeDoorType[],
+                                    },
+                                },
                             },
                         },
-                    },
+                        {
+                            dykeProduction: true,
+                        },
+                    ],
                     deletedAt: null,
                 },
                 include: {
@@ -245,7 +255,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                 })
                 .flat()
                 .filter((a) => (prod ? a.assignments?.length : true));
-
+            if (item.dykeProduction) {
+            }
             return {
                 sectionTitle: item?.meta?.doorType as DykeDoorType,
                 isType: isComponentType(item?.meta?.doorType),

@@ -1,40 +1,39 @@
 "use client";
 
 import { IAddressBook, ISalesOrder } from "@/types/sales";
-import OrderFlag from "../sales/order-flag";
+import OrderFlag from "../../../../../../../components/_v1/sales/order-flag";
 import Link from "next/link";
 import { Fragment, useEffect, useState, useTransition } from "react";
 import { formatDate } from "@/lib/use-day";
-import { Customers } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { getBadgeColor } from "@/lib/status-badge";
-import { Badge } from "../../ui/badge";
+import { Badge } from "../../../../../../../components/ui/badge";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
+} from "../../../../../../../components/ui/dropdown-menu";
 import { priorities } from "@/lib/sales/order-priority";
 import { FlagIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { updateOrderPriorityActon } from "@/app/(v1)/_actions/sales/sales";
 import { toast } from "sonner";
-import { Icons } from "../icons";
-import { Progress } from "../../ui/progress";
+import { Icons } from "../../../../../../../components/_v1/icons";
+
 import {
     Cell,
     DateCellContent,
     PrimaryCellContent,
     SecondaryCellContent,
-} from "./base-columns";
+} from "../../../../../../../components/_v1/columns/base-columns";
 import { toFixed } from "@/lib/use-number";
 import { Progressor, getProgress } from "@/lib/status";
-import ProgressStatus from "../progress-status";
-import LinkableNode from "../link-node";
+import ProgressStatus from "../../../../../../../components/_v1/progress-status";
+import LinkableNode from "../../../../../../../components/_v1/link-node";
 import { ICustomer } from "@/types/customers";
 import dayjs from "dayjs";
-import StatusBadge from "../status-badge";
+import StatusBadge from "../../../../../../../components/_v1/status-badge";
 
 export const OrderPriorityFlagCell = (
     order: ISalesOrder,
@@ -222,16 +221,17 @@ export function OrderStatus({
         status = order?.status;
     if (!status) status = delivery ? "-" : order?.prodId ? "Prod Queued" : "";
     if (status == "Completed" && delivery) status = "Ready";
-    const color = getBadgeColor(order?.prodStatus || "");
+    const color = getBadgeColor(status || "");
     return (
         <div className="min-w-16">
             <Badge
                 variant={"secondary"}
-                className={`h-5 px-1 whitespace-nowrap  text-xs text-slate-100 ${color}`}
+                className={`h-5 px-1 whitespace-nowrap text-xs text-slate-100 ${color}`}
             >
                 {/* {order?.prodStatus || "-"} */}
                 {status || "no status"}
             </Badge>
+
             {delivery && order?.deliveredAt && (
                 <DateCellContent>{order.deliveredAt}</DateCellContent>
             )}

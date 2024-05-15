@@ -11,10 +11,13 @@ import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { ISalesType } from "@/types/sales";
 
-export const metadata: Metadata = {
-    title: "Sales Overview",
-    description: "",
-};
+export async function generateMetadata({ params, searchParams }) {
+    const [type, slug] = params.typeAndSlug;
+    const title = `${type} | ${slug}`;
+    return {
+        title,
+    };
+}
 
 export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
     const [type, slug]: [ISalesType, string] = typeAndSlug;

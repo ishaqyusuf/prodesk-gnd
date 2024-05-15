@@ -18,7 +18,7 @@ import {
     OrderProductionStatusCell,
     OrderStatus,
     SalesCustomerCell,
-} from "../../../../../../components/_v1/columns/sales-columns";
+} from "./cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../../../../../../components/_v1/actions/order-actions";
 import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
@@ -54,7 +54,6 @@ export default function OrdersTableShell<T>({
             action: () => console.log("special action"),
         },
     ]);
-    console.log(data);
     const table = SmartTable<ISalesOrder>(data);
     const isMobile = useMediaQuery(screens.xs);
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
@@ -77,21 +76,12 @@ export default function OrdersTableShell<T>({
                   ]
                 : [
                       table.checkColumn(),
-                      // CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
                       {
                           id: "flag",
                           maxSize: 10,
-                          // accessorKey: "flags",
                           cell: ({ row }) =>
                               OrderPriorityFlagCell(row.original, true),
                       },
-                      // table.simpleColumn("Order", data => ({
-                      //     link: `/sales/order/${data.slug}`,
-                      //     story: [
-                      //         table.primaryText(data.orderId),
-                      //         table.secondary(data.createdAt)
-                      //     ]
-                      // })),
                       {
                           accessorKey: "orderId",
                           cell: ({ row }) =>

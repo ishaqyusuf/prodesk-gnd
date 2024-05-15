@@ -8,7 +8,7 @@ import {
 import {
     OrderIdCell,
     OrderInvoiceCell,
-} from "@/components/_v1/columns/sales-columns";
+} from "@/app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import Money from "@/components/_v1/money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";

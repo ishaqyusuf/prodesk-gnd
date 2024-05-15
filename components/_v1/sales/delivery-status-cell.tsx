@@ -10,7 +10,7 @@ import {
 import { useState, useTransition } from "react";
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
-import { OrderStatus } from "../columns/sales-columns";
+import { OrderStatus } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { updateSalesDelivery } from "@/app/(v1)/_actions/sales/_sales-pickup";
 import { MenuItem } from "../data-table/data-table-row-actions";
 

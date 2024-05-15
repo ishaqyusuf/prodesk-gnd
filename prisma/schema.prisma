@@ -965,6 +965,7 @@ model SalesOrderItems {
     sentToProdAt       DateTime?                        @db.Timestamp(0)
     prodCompletedAt    DateTime?                        @db.Timestamp(0)
     multiDyke          Boolean                          @default(false)
+    dykeProduction     Boolean                          @default(false)
     multiDykeUid       String?
     supplies           SalesItemSupply[]
     salesOrder         SalesOrders?                     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)

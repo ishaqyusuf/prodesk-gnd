@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { convertToNumber } from "@/lib/use-number";
 import { ISalesOrderItem } from "@/types/sales";
 
-export async function _updateProdQty(salesOrderId) {
+export async function _updateProdQty(salesOrderId, isCompleted = false) {
     let prodQty = 0;
     let builtQty = 0;
     let order = await prisma.salesOrders.findUnique({
@@ -44,7 +44,8 @@ export async function _updateProdQty(salesOrderId) {
         prodStatus = "Queued";
     }
     if (started) prodStatus = "Started";
-    if (prodQty == builtQty && builtQty > 0) prodStatus = "Completed";
+    if (prodQty == builtQty && (builtQty > 0 || isCompleted))
+        prodStatus = "Completed";
     await prisma.salesOrders.update({
         where: {
             id: salesOrderId,

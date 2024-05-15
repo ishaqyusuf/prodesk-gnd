@@ -4,13 +4,16 @@ import { ISalesOrder } from "@/types/sales";
 import {
     DateCellContent,
     PrimaryCellContent,
-    SecondaryCellContent
+    SecondaryCellContent,
 } from "../../columns/base-columns";
-import { OrderInvoiceCell, OrderStatus } from "../../columns/sales-columns";
+import {
+    OrderInvoiceCell,
+    OrderStatus,
+} from "../../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import MobileMenuBtn from "../mobile-menu-btn";
 
 export default function SalesEstimateMobileCell({
-    order
+    order,
 }: {
     order: ISalesOrder;
 }) {

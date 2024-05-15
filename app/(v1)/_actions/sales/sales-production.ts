@@ -66,15 +66,17 @@ export async function markProduction(id, as: "completed" | "incomplete") {
     });
     if (!order) throw Error("Order not found");
 
+    const noSwings = order.items.every((i) => !i.swing);
+
     order.items.map(async (item) => {
-        if (!item.swing || !item?.qty || !item) return;
+        if (!noSwings) if (!item.swing || !item?.qty || !item) return;
         const meta: ISalesOrderItemMeta = item.meta as any;
         if (completed)
             prevProducedQty += (item.qty || 0) - (meta.produced_qty || 0);
         else prevProducedQty += meta.produced_qty || 0;
 
         meta.produced_qty = completed ? item.qty : 0;
-        console.log([meta.produced_qty]);
+        // console.log([meta.produced_qty]);
         await prisma.salesOrderItems.update({
             where: {
                 id: item.id,
@@ -96,7 +98,7 @@ export async function markProduction(id, as: "completed" | "incomplete") {
             userId: me.id,
         });
     }
-    await _updateProdQty(id);
+    await _updateProdQty(id, completed);
     if (order?.prodId && !completed) await _notifyProductionAssigned(order);
     _revalidate(order.type == "order" ? "orders" : "quotes");
 }

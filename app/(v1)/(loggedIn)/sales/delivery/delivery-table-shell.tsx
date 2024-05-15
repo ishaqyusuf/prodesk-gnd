@@ -18,7 +18,7 @@ import {
     OrderMemoCell,
     OrderPriorityFlagCell,
     OrderProductionStatusCell,
-} from "../../../../../components/_v1/columns/sales-columns";
+} from "../orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 

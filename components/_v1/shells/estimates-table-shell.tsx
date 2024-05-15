@@ -14,7 +14,7 @@ import {
     OrderIdCell,
     OrderInvoiceCell,
     OrderMemoCell,
-} from "../columns/sales-columns";
+} from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
 import { DataTable2 } from "../data-table/data-table-2";

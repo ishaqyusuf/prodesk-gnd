@@ -37,7 +37,10 @@ export default function MultiComponentRender({ Render, line = false }) {
                                         : "Description"}
                                 </TableHead>
                                 {item.isType.service && (
-                                    <TableHead>Tax</TableHead>
+                                    <>
+                                        <TableHead>Tax</TableHead>
+                                        <TableHead>Production</TableHead>
+                                    </>
                                 )}
                                 <TableHead>Qty</TableHead>
                                 <TableHead>Unit Price</TableHead>

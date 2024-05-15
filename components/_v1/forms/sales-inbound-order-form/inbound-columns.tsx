@@ -6,7 +6,7 @@ import {
     SecondaryCellContent,
     _FilterColumn,
 } from "@/components/_v1/columns/base-columns";
-import { OrderCustomerCell } from "@/components/_v1/columns/sales-columns";
+import { OrderCustomerCell } from "@/app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import {
     DeleteRowAction,
     RowActionCell,

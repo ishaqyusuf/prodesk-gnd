@@ -103,6 +103,7 @@ export type MultiDyke = {
             hptId: number | null;
             swing?: string | null;
             tax?: boolean;
+            production?: boolean;
             description?: string;
             doorTotalPrice: number | null;
             _doorForm: {

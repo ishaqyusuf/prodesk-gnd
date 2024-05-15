@@ -292,6 +292,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
                             qty: item.qty,
                             description: item.description as any,
                             tax: item.meta.tax,
+                            production: itemData?.dykeProduction,
                             // swing: item.swing as any,
                             doorQty: item.qty,
                             unitPrice: item.rate,

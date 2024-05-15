@@ -12,7 +12,7 @@ import {
     SecondaryCellContent,
 } from "../columns/base-columns";
 import { formatDate } from "@/lib/use-day";
-import { OrderInvoiceCell } from "../columns/sales-columns";
+import { OrderInvoiceCell } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { useDataPage } from "@/lib/data-page-context";
 
 interface Props {

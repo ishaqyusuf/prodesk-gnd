@@ -86,6 +86,7 @@ function initializeMultiComponent(data: DykeForm) {
             if (type.service) {
                 // console.log("service");
                 clone.item.meta.tax = c.tax || false;
+                clone.item.dykeProduction = c.production || false;
             } else {
                 clone.item.meta.tax = true;
             }

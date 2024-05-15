@@ -7,35 +7,22 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import { prisma } from "@/db";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 
-export const metadata: Metadata = {
-    title: "Sales Form",
-    description: "",
-};
+export async function generateMetadata({ params, searchParams }) {
+    const [type, slug] = params.slug;
+    const title = `${slug ? "Edit " : "New "} ${type} ${slug && `| ${slug}`}`;
+    return {
+        title,
+    };
+}
 export default async function SalesForm({ params, searchParams }) {
     const [type, slug] = params.slug;
     let copy = searchParams.copy;
+    // console.log(slug);
 
     const form = copy
         ? await copyDykeSales(copy, type)
         : await getDykeFormAction(type, slug);
 
-    // const _doors = await prisma.dykeDoors.findMany({
-    //     select: {
-    //         id: true,
-    //         title: true,
-
-    //     },
-    // });
-    // const unique = _doors.filter(
-    //     (d, i) => i == _doors.findIndex((_) => _.title == d.title)
-    // );
-    // console.log([_doors.length, unique.length]);
-    // let f = _doors.filter((d) => d.title == unique[0]?.title);
-    // console.log(f);
-
-    metadata.title = `${slug ? "Edit " : "New "} ${form.order?.type} ${
-        slug && `| ${slug}`
-    }`;
     return (
         <AuthGuard can={["editOrders"]}>
             <div className="sm:px-8 px-4">

@@ -11,17 +11,24 @@ TODO: Bifold and Interior: ability to setup up multiple doors with different siz
 TODO: Moulding set price (include price input in edit)
 TODO: Calculate
  Amount glitch, sometimes does not work.
-TODO: Price history
+TODO: Price history.
 TODO: Bifold doors as in unit template.
 TODO: Primed Lover are LL sizes (including 2/0)
 TODO: When door is selected, pop up window to show required sizes
 TODO: No more edit on dyke when production is started
-------------------------------
+OLD EDIT: SUPPLY AUTO DATE TODAY
+WORK ON TIMELINE
+ADD TIME LINE TO SALES EDIT
+AUTO-COMPLETE PRODUCTION WITH NO SWING
+CUSTOM SERVICES
+----------------------------------------
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 14: 01.15 == 03.45
-    11:50-
+# MAY 15: 00.00 == 00.00
+    06:30-07:00
+# MAY 14: 01.50 == 04.20
+    11:50-12:25
     10:15-11:00
     09:00-09:30
 # MAY 13: 02.30 == 02.30

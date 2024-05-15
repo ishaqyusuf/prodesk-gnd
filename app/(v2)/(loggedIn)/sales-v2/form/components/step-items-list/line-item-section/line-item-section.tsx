@@ -33,13 +33,22 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 )}
             </TableCell>
             {item.isType.service && (
-                <TableCell className="w-[50px]">
-                    <ControlledCheckbox
-                        control={form.control}
-                        switchInput
-                        name={`${componentItem.rootKey}.tax` as any}
-                    />
-                </TableCell>
+                <>
+                    <TableCell className="w-[50px]">
+                        <ControlledCheckbox
+                            control={form.control}
+                            switchInput
+                            name={`${componentItem.rootKey}.tax` as any}
+                        />
+                    </TableCell>
+                    <TableCell className="w-[50px]">
+                        <ControlledCheckbox
+                            control={form.control}
+                            switchInput
+                            name={`${componentItem.rootKey}.production` as any}
+                        />
+                    </TableCell>
+                </>
             )}
             <TableCell className="w-[150px]">
                 <ControlledInput
