@@ -10,7 +10,7 @@ export default function SalesNoteModal({ id, orderId }) {
     return (
         <Modal.Content>
             <Modal.Header title="Notes" subtitle={orderId} />
-            <SalesNotes salesId={orderId} />
+            <SalesNotes salesId={id} />
         </Modal.Content>
     );
 }

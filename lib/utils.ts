@@ -37,6 +37,9 @@ export function capitalizeFirstLetter(string) {
 export function labelValue(label, value, extras: any = {}) {
     return { label, value, ...extras };
 }
+export function toLabelValue(data) {
+    return data.map((d) => labelValue(d, d));
+}
 export function textValue(text, value?, extras: any = {}) {
     return { text, value: value || text, ...extras };
 }
