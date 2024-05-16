@@ -57,6 +57,17 @@ export default function HeaderSection({}) {
                             size="sm"
                             variant={"outline"}
                             onClick={() => {
+                                // modal.openSheet(
+                                //     <SalesNoteModal id={id} orderId={orderId} />
+                                // );
+                            }}
+                        >
+                            Payments
+                        </Btn>
+                        <Btn
+                            size="sm"
+                            variant={"outline"}
+                            onClick={() => {
                                 modal.openSheet(
                                     <SalesNoteModal id={id} orderId={orderId} />
                                 );
