@@ -188,7 +188,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                         </MenuItem>
                     </>
                 )}
-                {!row.isDyke && <CopyOrderMenuAction row={row} />}
+                {<CopyOrderMenuAction row={row} />}
                 <PrintOrderMenuAction link estimate={estimate} row={row} />
                 <PrintOrderMenuAction
                     mockup
