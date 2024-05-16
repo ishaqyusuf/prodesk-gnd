@@ -19,8 +19,9 @@ TODO: No more edit on dyke when production is started
 OLD EDIT: SUPPLY AUTO DATE TODAY
 WORK ON TIMELINE
 ADD TIME LINE TO SALES EDIT
-AUTO-COMPLETE PRODUCTION WITH NO SWING
-CUSTOM SERVICES
+Show Selected Door/Moulding
+<!-- AUTO-COMPLETE PRODUCTION WITH NO SWING -->
+<!-- CUSTOM SERVICES -->
 ----------------------------------------
 Shelf item search
 Shelf item auto pick when created

@@ -12,6 +12,8 @@ import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useScroll from "@/hooks/use-scroll";
+import { useModal } from "@/components/common/modal/provider";
+import SalesNoteModal from "../../components/_sales-note/_modal";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -23,6 +25,7 @@ export default function HeaderSection({}) {
     ]);
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
+    const modal = useModal();
     return (
         <div className="h-12">
             <div
@@ -50,6 +53,17 @@ export default function HeaderSection({}) {
                         </h2>
                     </div>
                     <div className="flex items-center space-x-2">
+                        <Btn
+                            size="sm"
+                            variant={"outline"}
+                            onClick={() => {
+                                modal.openSheet(
+                                    <SalesNoteModal id={id} orderId={orderId} />
+                                );
+                            }}
+                        >
+                            Notes
+                        </Btn>
                         <Btn
                             size="sm"
                             isLoading={saver.saving}
