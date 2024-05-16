@@ -115,148 +115,36 @@ export async function getOrderAssignmentData(id, prod = false) {
 
                             assignments: subItem.assignments
                                 .filter((a) => a.salesDoorId == salesDoor.id)
-                                .map((assignment) => {
-                                    // console.log([
-                                    //     assignment.lhQty,
-                                    //     assignment.rhQty,
-                                    // ]);
-
-                                    let splitted = [
-                                        assignment.lhQty,
-                                        assignment.rhQty,
-                                    ].map((q, i) => {
-                                        const isLeft = i == 0;
-
-                                        let status = "";
-                                        const r = {
-                                            ...assignment,
-                                            status,
-                                            __report: {
-                                                submissions:
-                                                    assignment.submissions?.filter(
-                                                        (s) =>
-                                                            isLeft
-                                                                ? s.lhQty
-                                                                : s.rhQty
-                                                    ),
-                                                submitted: sum(
-                                                    assignment.submissions.map(
-                                                        (s) =>
-                                                            isLeft
-                                                                ? s.lhQty
-                                                                : s.rhQty
-                                                    )
-                                                ),
-                                                pending: 0,
-                                                handle: isLeft ? "LH" : "RH",
-                                                total: 0,
-                                                isLeft,
-                                            },
-                                            submitted: {
-                                                lh: sum(
-                                                    assignment.submissions
-                                                        // .filter((s) => s.)
-                                                        .map((s) => s.lhQty)
-                                                ),
-                                                rh: sum(
-                                                    assignment.submissions.map(
-                                                        (s) => s.rhQty
-                                                    )
-                                                ),
-                                            },
-                                            pending: {
-                                                lh: 0,
-                                                rh: 0,
-                                            },
-                                        };
-                                        r.__report.pending =
-                                            ((isLeft ? r.lhQty : r.rhQty) ||
-                                                0) - r.__report.submitted;
-                                        r.pending.lh =
-                                            (r.lhQty || 0) - r.submitted.lh;
-                                        r.pending.rh =
-                                            (r.rhQty || 0) - r.submitted.rh;
-                                        r.__report.total =
-                                            r.__report.submitted +
-                                            r.__report.pending;
-                                        return r;
-                                    });
-                                    return splitted;
-                                })
+                                .map(composeAssignment)
                                 .flat()
                                 .filter((s) => s.__report.total > 0),
                             doorTitle: salesDoor.housePackageTool.door?.title,
-                            report: {
-                                assigned: 0,
-                                pendingAssignment: 0,
-                                completed: 0,
-                                totalQty: 0,
-                                rhQty: salesDoor.rhQty,
-                                lhQty: salesDoor.lhQty,
-                                rhCompleted: 0,
-                                rhPending: 0,
-                                lhPending: 0,
-                                _unassigned: {
-                                    lh: 0,
-                                    rh: 0,
-                                },
-                                _assigned: {
-                                    lh: 0,
-                                    rh: 0,
-                                },
-                                lhCompleted: 0,
-                                _assignForm: {
-                                    lhQty: 0,
-                                    rhQty: 0,
-                                    itemId: subItem.id,
-                                    salesDoorId: salesDoor.id,
-                                    orderId: subItem.salesOrderId,
-                                } as Partial<OrderItemProductionAssignments>,
-                            },
+                            report: initJobReport(subItem, salesDoor),
                         };
 
-                        ret.assignments.map((a) => {
-                            ret.report.assigned += a.__report.total || 0;
-                            ret.report.completed += a.__report.submitted || 0;
-
-                            a.submissions.map((s) => {
-                                if (s.lhQty) ret.report.lhCompleted += s.lhQty;
-                                if (s.rhQty) ret.report.rhCompleted += s.rhQty;
-                                // else ret.report.rhCompleted += s.qty;
-                            });
-                        });
-                        ret.report.rhPending =
-                            ret.report.rhQty - ret.report.rhCompleted;
-                        ret.report.lhPending =
-                            ret.report.lhQty - ret.report.lhCompleted;
-                        ["lh", "rh"].map((k) => {
-                            const _qty = `${k}Qty`;
-                            ret.report._unassigned[k] =
-                                ret.report[_qty] -
-                                sum(ret.assignments.map((s) => s[_qty]));
-                        });
-                        ret.report._assignForm.lhQty =
-                            ret.report._unassigned.lh;
-                        ret.report._assignForm.rhQty =
-                            ret.report._unassigned.rh;
-
-                        ret.report.totalQty += sum([
-                            ret.salesDoor.lhQty,
-                            ret.salesDoor.rhQty,
-                        ]);
-                        ret.report.pendingAssignment =
-                            ret.report.totalQty - ret.report.assigned;
-                        Object.entries(ret.report).map(
-                            ([k, v]) => (report[k] += v)
-                        );
-
-                        return ret;
+                        return analyseItem(ret, report);
                     });
                 })
                 .flat()
                 .filter((a) => (prod ? a.assignments?.length : true));
-            if (item.dykeProduction) {
-            }
+            // if (item.dykeProduction) {
+            _items.map((sItem) => {
+                if (sItem.dykeProduction) {
+                    const ret = {
+                        salesDoor: {
+                            lhQty: sItem.qty,
+                        } as any,
+                        assignments: sItem.assignments
+                            .filter((a) => a.itemId == sItem.id)
+                            .map(composeAssignment)
+                            .flat()
+                            .filter((s) => s.__report.total > 0),
+                        doorTitle: sItem.description as any,
+                        report: initJobReport(sItem, { lhQty: sItem.qty }),
+                    };
+                    salesDoors.push(analyseItem(ret, report));
+                }
+            });
             return {
                 sectionTitle: item?.meta?.doorType as DykeDoorType,
                 isType: isComponentType(item?.meta?.doorType),
@@ -276,3 +164,100 @@ export async function getOrderAssignmentData(id, prod = false) {
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
     return { ...order, totalQty, doorGroups, isProd: prod };
 }
+function analyseItem(ret, report) {
+    ret.assignments.map((a) => {
+        ret.report.assigned += a.__report.total || 0;
+        ret.report.completed += a.__report.submitted || 0;
+
+        a.submissions.map((s) => {
+            if (s.lhQty) ret.report.lhCompleted += s.lhQty;
+            if (s.rhQty) ret.report.rhCompleted += s.rhQty;
+            // else ret.report.rhCompleted += s.qty;
+        });
+    });
+    ret.report.rhPending = ret.report.rhQty - ret.report.rhCompleted;
+    ret.report.lhPending = ret.report.lhQty - ret.report.lhCompleted;
+    ["lh", "rh"].map((k) => {
+        const _qty = `${k}Qty`;
+        ret.report._unassigned[k] =
+            ret.report[_qty] - sum(ret.assignments.map((s) => s[_qty]));
+    });
+    ret.report._assignForm.lhQty = ret.report._unassigned.lh;
+    ret.report._assignForm.rhQty = ret.report._unassigned.rh;
+
+    ret.report.totalQty += sum([ret.salesDoor.lhQty, ret.salesDoor.rhQty]);
+    ret.report.pendingAssignment = ret.report.totalQty - ret.report.assigned;
+    Object.entries(ret.report).map(([k, v]) => (report[k] += v));
+    return ret;
+}
+function composeAssignment(assignment) {
+    let splitted = [assignment.lhQty, assignment.rhQty].map((q, i) => {
+        const isLeft = i == 0;
+
+        let status = "";
+        const r = {
+            ...assignment,
+            status,
+            __report: {
+                submissions: assignment.submissions?.filter((s) =>
+                    isLeft ? s.lhQty : s.rhQty
+                ),
+                submitted: sum(
+                    assignment.submissions.map((s) =>
+                        isLeft ? s.lhQty : s.rhQty
+                    )
+                ),
+                pending: 0,
+                handle: isLeft ? "LH" : "RH",
+                total: 0,
+                isLeft,
+            },
+            submitted: {
+                lh: sum(
+                    assignment.submissions
+                        // .filter((s) => s.)
+                        .map((s) => s.lhQty)
+                ),
+                rh: sum(assignment.submissions.map((s) => s.rhQty)),
+            },
+            pending: {
+                lh: 0,
+                rh: 0,
+            },
+        };
+        r.__report.pending =
+            ((isLeft ? r.lhQty : r.rhQty) || 0) - r.__report.submitted;
+        r.pending.lh = (r.lhQty || 0) - r.submitted.lh;
+        r.pending.rh = (r.rhQty || 0) - r.submitted.rh;
+        r.__report.total = r.__report.submitted + r.__report.pending;
+        return r;
+    });
+    return splitted;
+}
+const initJobReport = (item, sDoor) => ({
+    assigned: 0,
+    pendingAssignment: 0,
+    completed: 0,
+    totalQty: 0,
+    rhQty: sDoor.rhQty,
+    lhQty: sDoor.lhQty,
+    rhCompleted: 0,
+    rhPending: 0,
+    lhPending: 0,
+    _unassigned: {
+        lh: 0,
+        rh: 0,
+    },
+    _assigned: {
+        lh: 0,
+        rh: 0,
+    },
+    lhCompleted: 0,
+    _assignForm: {
+        lhQty: 0,
+        rhQty: 0,
+        itemId: item.id,
+        salesDoorId: sDoor.id,
+        orderId: item.salesOrderId,
+    } as Partial<OrderItemProductionAssignments>,
+});

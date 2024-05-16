@@ -7,7 +7,7 @@ export default function getDoorConfig(doorType: DykeDoorType) {
     const ctx = {
         doorType,
         multiPrice: ct.bifold || ct.slab,
-        singleHandle: ct.bifold || ct.slab,
+        singleHandle: ct.bifold || ct.slab || ct.service,
     };
 
     return ctx;

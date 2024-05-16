@@ -63,12 +63,18 @@ export default function DoorGroupSection({ index }) {
                                 value={sd.report.completed}
                             />
                         </div>
-                        <div className={cn("p-1", showDetails && "border")}>
+                        <div
+                            className={cn(
+                                "p-1",
+                                showDetails && "border",
+                                group.isType.service && "hidden"
+                            )}
+                        >
                             <Button
                                 onClick={() => {
                                     setShowDetails(!showDetails);
                                 }}
-                                variant={showDetails ? "outline" : "ghost"}
+                                variant={showDetails ? "outline" : "outline"}
                                 size={"sm"}
                                 className="flex w-full justify-center h-8"
                             >
@@ -78,9 +84,9 @@ export default function DoorGroupSection({ index }) {
                                         : "Hide Details"}
                                 </span>
                                 {!showDetails ? (
-                                    <Icons.chevronDown />
+                                    <Icons.chevronDown className="w-4 h-4" />
                                 ) : (
-                                    <Icons.chevronUp />
+                                    <Icons.chevronUp className="w-4 h-4" />
                                 )}
                             </Button>
                             <div
