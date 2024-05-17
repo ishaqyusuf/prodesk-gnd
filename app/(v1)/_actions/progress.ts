@@ -73,7 +73,7 @@ export async function updateTimelineAction(
     const authId = await userId();
     await saveProgress(progressableType, parentId, {
         headline: note,
-        userId,
+        userId: authId,
         type,
         status,
     });
