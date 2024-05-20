@@ -22,6 +22,8 @@ export async function copyDykeSales(slug, as: ISalesType) {
             "customerId",
             "shippingAddressId",
             "billingAddressId",
+            "createdAt",
+            "updatedAt",
         ]),
         itemArray: [
             ...data.itemArray.map((itemA) => {

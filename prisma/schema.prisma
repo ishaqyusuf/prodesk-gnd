@@ -135,6 +135,24 @@ model CommunityTemplateHistory {
     Users             Users            @relation(fields: [userId], references: [id])
 }
 
+model PageView {
+    id        Int       @id @default(autoincrement())
+    url       String
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    Users     Users?    @relation(fields: [usersId], references: [id])
+    usersId   Int?
+}
+
+model Event {
+    id        Int       @id @default(autoincrement())
+    type      String
+    data      Json
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    value     Float?    @default(1)
+    Users     Users?    @relation(fields: [usersId], references: [id])
+    usersId   Int?
+}
+
 model CommunityModelPivot {
     id              Int                  @unique @default(autoincrement())
     model           String               @db.VarChar(255)
@@ -1239,6 +1257,8 @@ model Users {
     blogs                      Blogs[]
     orderItemAssignments       OrderItemProductionAssignments[] @relation(name: "orderItemAssignments")
     orderItemAssignedByMe      OrderItemProductionAssignments[] @relation(name: "orderItemAssignedByMe")
+    events                     Event[]
+    pageView                   PageView[]
 
     @@index([createdAt, deletedAt, name])
 }
