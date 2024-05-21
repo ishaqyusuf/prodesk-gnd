@@ -6,7 +6,6 @@ import { ISalesType } from "@/types/sales";
 
 export async function copyDykeSales(slug, as: ISalesType) {
     const form = await getDykeFormAction(as, slug);
-
     // form.order.id;
     const data = removeKeys(form, []);
     // console.log(data.grandTotal);

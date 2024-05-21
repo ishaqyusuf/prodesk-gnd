@@ -32,7 +32,7 @@ export default function HeaderSection({}) {
                 className={cn(
                     "flex h-12 items-center",
                     scroll.isScrolled &&
-                        "fixed  top-0  right-0 left-0 grid  lg:grid-cols-[240px_minmax(0,1fr)]"
+                        "fixed  top-0  right-0 left-0 grid  lg:grid-cols-[240px_minmax(0,1fr)] z-10 "
                 )}
             >
                 {scroll.isScrolled && <div></div>}

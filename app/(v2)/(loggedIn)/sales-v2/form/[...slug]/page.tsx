@@ -9,7 +9,9 @@ import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sa
 
 export async function generateMetadata({ params, searchParams }) {
     const [type, slug] = params.slug;
-    const title = `${slug ? "Edit " : "New "} ${type} ${slug && `| ${slug}`}`;
+    const title = `${slug ? "Edit " : "New "} ${type} ${
+        slug ? `| ${slug}` : ""
+    }`;
     return {
         title,
     };

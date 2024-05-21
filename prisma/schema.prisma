@@ -1047,9 +1047,8 @@ model OrderItemDelivery {
 }
 
 model HousePackageTools {
-    id          Int @unique @default(autoincrement())
-    orderItemId Int @unique
-
+    id             Int                @unique @default(autoincrement())
+    orderItemId    Int                @unique
     height         String?
     doorType       String?
     doorId         Int?

@@ -7,7 +7,10 @@ import useMultiDykeForm from "./use-multi-generator";
 import getDoorConfig from "./use-door-config";
 import useFooterEstimate from "./use-footer-estimate";
 
-type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
+export type UseMultiComponentItem = ReturnType<typeof useMultiComponentItem>;
+export type UseMultiComponentSizeRow = ReturnType<
+    typeof useMultiComponentSizeRow
+>;
 export function useMultiComponentItem(componentTitle) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
@@ -118,23 +121,9 @@ export function useMultiComponentItem(componentTitle) {
             }
         );
     }
-    // function updateFooterPrice(price, tax) {
-    //     const footer = form.getValues("footer");
-    //     footer.footerPricesJson = JSON.parse(footer.footerPrices);
-    //     footer.footerPricesJson[item.get.uid()] = {
-    //         doorType,
-    //         price,
-    //         tax,
-    //     };
-    //     form.setValue(
-    //         "footer.footerPrices",
-    //         JSON.stringify(footer.footerPricesJson)
-    //     );
-    // }
     function removeLine(removeTab) {
         removeTab(componentTitle);
         form.setValue(rootKey as any, null);
-        // console.log(componentTitle);
     }
 
     const doorConfig = getDoorConfig(doorType);

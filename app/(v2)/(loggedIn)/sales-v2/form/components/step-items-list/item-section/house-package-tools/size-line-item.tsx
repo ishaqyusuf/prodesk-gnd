@@ -7,6 +7,7 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import ControlledSelect from "@/components/common/controls/controlled-select";
+import ItemPriceFinder from "../item-price-finder";
 
 interface Props {
     size: { dim; width };
@@ -18,7 +19,14 @@ export default function HousePackageSizeLineItem({
 }: Props) {
     const sizeRow = useMultiComponentSizeRow(componentItem, size);
     const { form, prices, doorConfig } = componentItem;
+    const itemData = componentItem.item.get.data();
 
+    const component =
+        itemData.multiComponent.components[componentItem.componentTitle];
+    // const doorForm = component?._doorForm?.[size.dim];
+    const hpt = itemData.item?.housePackageTool;
+    // console.log(component?._doorForm);
+    // component.too
     return (
         <TableRow>
             <TableCell>{size.width}</TableCell>
@@ -66,7 +74,6 @@ export default function HousePackageSizeLineItem({
                                             prices.length == 1 && "w-[80px]"
                                         )}
                                         control={form.control}
-                                        list
                                         name={
                                             `${
                                                 sizeRow.keys[p.key as any]
@@ -84,6 +91,16 @@ export default function HousePackageSizeLineItem({
             </TableCell>
             <TableCell>
                 <Money value={sizeRow.lineTotal} />
+            </TableCell>
+            <TableCell>
+                <ItemPriceFinder
+                    dykeDoorId={component?.toolId}
+                    casingId={hpt.casingId}
+                    dimension={size.dim}
+                    jambSizeId={hpt.jambSizeId}
+                    componentItem={componentItem}
+                    sizeRow={sizeRow}
+                />
             </TableCell>
         </TableRow>
     );

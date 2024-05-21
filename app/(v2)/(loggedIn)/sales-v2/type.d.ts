@@ -34,6 +34,7 @@ type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
 export interface DykeForm
     extends Awaited<ReturnType<typeof getDykeFormAction>> {}
 export type FormStepArray = DykeForm["itemArray"][0]["item"]["formStepArray"];
+export type DykeFormItem = DykeForm["itemArray"][0];
 // export interface DykeForm {
 //     items: { [index in string]: DykeItemForm };
 //     currentItemIndex: string | null;

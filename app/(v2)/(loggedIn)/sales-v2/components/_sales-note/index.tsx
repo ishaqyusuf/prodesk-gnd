@@ -13,29 +13,43 @@ import { Badge } from "@/components/ui/badge";
 import StatusBadge from "@/components/_v1/status-badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { CornerDownLeft } from "lucide-react";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Icons } from "@/components/_v1/icons";
+import { saveNote } from "./_actions/save-notes";
 
 export default function SalesNotes({ salesId }) {
     const { data } = useFn(() => getSalesNote(salesId));
     const form = useForm({
         defaultValues: {
-            noteId: "-1",
+            progressableId: "-1",
+            parentId: salesId,
+            progressableType: "SalesOrder",
             type: "all",
-            note: "",
+            description: "",
             headline: "",
             form: false,
         },
     });
     // const
-    const [noteId, type, formMode] = form.watch(["noteId", "type", "form"]);
+    const [noteId, type, formMode] = form.watch([
+        "progressableId",
+        "type",
+        "form",
+    ]);
     function searchProgress(progress: (typeof data)["progressList"][0]) {
         const nId = Number(noteId);
         return [
             nId > 0 ? progress.progressableId == nId : true,
             type == "all" ? true : progress.type?.toLowerCase() == type,
         ].every(Boolean);
+    }
+    async function save() {
+        const formData = form.getValues();
+        const { progressableId } = formData;
+        const pid = Number(progressableId);
+        formData.progressableId = (pid > 0 ? pid : null) as any;
+        if (pid > 0) formData.progressableType = "SalesOrderItem";
+        const res = await saveNote(formData);
     }
     if (!data) return null;
     return (
@@ -44,7 +58,7 @@ export default function SalesNotes({ salesId }) {
                 <div className="grid grid-cols-2 gap-4">
                     <ControlledSelect
                         options={data.items}
-                        name="noteId"
+                        name="progressableId"
                         control={form.control}
                         label={"Showing"}
                     />
@@ -69,7 +83,7 @@ export default function SalesNotes({ salesId }) {
                             Message
                         </Label>
                         <Textarea
-                            {...form.register("note")}
+                            {...form.register("description")}
                             id="message"
                             placeholder="Type here..."
                             className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
@@ -115,6 +129,7 @@ export default function SalesNotes({ salesId }) {
                                     {/* <CornerDownLeft className="size-3.5" /> */}
                                 </Button>
                                 <Button
+                                    onClick={save}
                                     type="submit"
                                     size="sm"
                                     className="ml-auto gap-1.5"

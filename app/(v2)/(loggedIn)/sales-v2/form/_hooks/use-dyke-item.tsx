@@ -1,6 +1,11 @@
 import { useDykeForm } from "./form-context";
 import { UseFieldArrayReturn, useFieldArray } from "react-hook-form";
-import { DykeDoorType, DykeForm, FormStepArray } from "../../type";
+import {
+    DykeDoorType,
+    DykeForm,
+    DykeFormItem,
+    FormStepArray,
+} from "../../type";
 import { useModal } from "@/components/common/modal/provider";
 
 import { useMultiSelector } from "./use-multi-selector";
@@ -47,7 +52,8 @@ export default function useDykeItem(
         uid: () => form.getValues(`itemArray.${rowIndex}.uid`),
         itemArray: (): DykeForm["itemArray"][0] =>
             form.getValues(`itemArray.${rowIndex}` as any),
-        data: (): FormStepArray[0] => form.getValues(`${itemKey}` as any),
+        data: (): DykeFormItem =>
+            form.getValues(`itemArray.${rowIndex}` as any),
         getFormStepArray,
         doorType,
         getMouldingSpecie() {

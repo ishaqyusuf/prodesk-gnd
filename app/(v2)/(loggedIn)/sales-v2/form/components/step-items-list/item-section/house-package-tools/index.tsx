@@ -71,6 +71,7 @@ export default function HousePackageTool({ componentTitle }) {
                     </TableHead>
                     <TableHead>Unit Price</TableHead>
                     <TableHead>Line Total</TableHead>
+                    <TableHead></TableHead>
                 </TableHeader>
                 <TableBody>
                     {componentItem.sizeList.map((row) => (
