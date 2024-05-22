@@ -469,6 +469,8 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
     const lineItems = data.order.items.filter(
         (item) => !item.housePackageTool || !item.shelfItems
     );
+    console.log(data.order.items.length);
+
     const maxIndex = Math.max(
         ...lineItems.map((item) => item.meta.uid).filter((d) => d > -1)
     );

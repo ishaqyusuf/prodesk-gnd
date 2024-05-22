@@ -14,7 +14,6 @@ import { getProgress } from "@/app/(v1)/_actions/progress";
 export async function getSalesOverview({
     type,
     slug,
-    dyke,
 }: {
     slug: string;
     type: ISalesType;
@@ -38,7 +37,7 @@ export async function viewSale(type, slug) {
         },
         include: {
             items: {
-                where: { deletedAt: null },
+                // where: { deletedAt: null },
                 include: {
                     shelfItems: {
                         where: { deletedAt: null },

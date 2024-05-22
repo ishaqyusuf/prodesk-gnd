@@ -106,13 +106,16 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
               },
           });
     if (id) {
-        await prisma.salesOrderItems.deleteMany({
+        await prisma.salesOrderItems.updateMany({
             where: {
                 id: {
                     lte: lastItemId,
                     notIn: updatedIds,
                 },
                 salesOrderId: sale_order.id,
+            },
+            data: {
+                deletedAt: new Date(),
             },
         });
     }

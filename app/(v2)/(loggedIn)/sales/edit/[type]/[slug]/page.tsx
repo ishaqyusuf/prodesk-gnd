@@ -18,6 +18,8 @@ export default async function EditSalesPage({ searchParams, params }) {
         orderId: slug,
         type,
     });
+    // console.log(resp.form.items[0]?.deletedAt);
+
     let title = [
         `${resp.form.id ? "Edit" : "New"} ${type}`,
         resp.form.id && slug,

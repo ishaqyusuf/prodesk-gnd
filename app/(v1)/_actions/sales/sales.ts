@@ -24,7 +24,7 @@ import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getProgress, saveProgress } from "../progress";
 import { fixSalesPaymentAction } from "./sales-payment";
-import { removeEmptyValues } from "@/lib/utils";
+import { ftToIn, removeEmptyValues } from "@/lib/utils";
 import { user, userId } from "../utils";
 import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
@@ -47,11 +47,33 @@ export async function whereSales(query: SalesQueryParams) {
         type = "order",
     } = query;
     const inputQ = { contains: _q || undefined } as any;
+    function parseSearchQuery(query) {
+        if (!query) return null;
+        const sizePattern = /\b(\d+-\d+)\s*x\s*(\d+-\d+)\b/;
+        const match = query.match(sizePattern);
+
+        let size = "";
+        let otherQuery = query;
+
+        if (match) {
+            size = match[0];
+            otherQuery = query.replace(sizePattern, "").trim();
+        }
+        const spl = size.trim().split(" ");
+        if (size && spl.length == 3) {
+            size = `${ftToIn(spl[0])} x ${ftToIn(spl[2])}`;
+        }
+        console.log(size);
+
+        return {
+            size: size,
+            otherQuery: otherQuery,
+            originalQuery: query,
+        };
+    }
+    const parsedQ = parseSearchQuery(_q);
+    // console.log(parsedQ);
     const where: Prisma.SalesOrdersWhereInput = {
-        // deletedAt: {
-        //     not: null,
-        // },
-        // isDyke,
         OR: !_q
             ? undefined
             : [
@@ -82,11 +104,49 @@ export async function whereSales(query: SalesQueryParams) {
                       },
                   },
                   {
-                      items: {
-                          some: {
-                              description: inputQ,
-                          },
-                      },
+                      items: !parsedQ
+                          ? undefined
+                          : {
+                                some: {
+                                    OR: !parsedQ.size
+                                        ? [{ description: inputQ }]
+                                        : [
+                                              {
+                                                  salesDoors: {
+                                                      some: {
+                                                          dimension:
+                                                              parsedQ.size
+                                                                  ? {
+                                                                        contains:
+                                                                            parsedQ.size,
+                                                                    }
+                                                                  : undefined,
+                                                      },
+                                                  },
+                                                  housePackageTool: {
+                                                      OR: [
+                                                          {
+                                                              door: {
+                                                                  title: {
+                                                                      contains:
+                                                                          parsedQ.otherQuery,
+                                                                  },
+                                                              },
+                                                          },
+                                                          {
+                                                              molding: {
+                                                                  title: {
+                                                                      contains:
+                                                                          parsedQ.otherQuery,
+                                                                  },
+                                                              },
+                                                          },
+                                                      ],
+                                                  },
+                                              },
+                                          ],
+                                },
+                            },
                   },
               ],
         type,

@@ -16,6 +16,8 @@ import AssignProdModal from "@/components/_v1/modals/assign-prod-modal";
 import AuthGuard from "@/components/_v1/auth-guard";
 import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
+import { prisma } from "@/db";
+import dayjs from "dayjs";
 
 export const metadata: Metadata = {
     title: "Sales Orders",
@@ -23,6 +25,16 @@ export const metadata: Metadata = {
 interface Props {}
 export default async function SalesOrdersPage({ searchParams }) {
     // await _restoreSalesOrder();
+
+    // const s = await prisma.salesOrderItems.findMany({
+    //     where: {
+    //         deletedAt: {
+    //             gt: dayjs().set("hours", 1).toISOString(),
+    //         },
+    //     },
+    // });
+    // console.log(s.length);
+
     const response = await getSalesOrder({
         ...queryParams(searchParams),
         _noBackOrder: true,

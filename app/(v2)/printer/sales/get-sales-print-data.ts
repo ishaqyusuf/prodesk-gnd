@@ -18,7 +18,7 @@ export async function getSalesPrintData(
     // salesitems.shelfItems
     // const billingMeta = order.billingAddress?.meta as any as IAddressMeta;
 
-    const estimate = order.type == "quote";
+    // console.log(order.items.length);
 
     return composePrint(
         {
