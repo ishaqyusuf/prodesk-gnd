@@ -20,7 +20,7 @@ export async function _deleteDykeItem(
         items = false
     ) {
         const where: any = items
-            ? { id: itemId }
+            ? { id: itemId, deletedAt: null }
             : {
                   salesOrderItem: {
                       id: itemId,
@@ -28,6 +28,7 @@ export async function _deleteDykeItem(
                   id: {
                       notIn: notIn || [],
                   },
+                  deletedAt: null,
               };
         // if (!items)
         //     where.id = {

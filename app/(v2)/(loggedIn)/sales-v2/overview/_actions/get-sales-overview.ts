@@ -37,7 +37,7 @@ export async function viewSale(type, slug) {
         },
         include: {
             items: {
-                // where: { deletedAt: null },
+                where: { deletedAt: null },
                 include: {
                     shelfItems: {
                         where: { deletedAt: null },

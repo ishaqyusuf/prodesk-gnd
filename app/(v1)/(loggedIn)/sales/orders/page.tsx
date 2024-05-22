@@ -18,6 +18,7 @@ import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
 import { prisma } from "@/db";
 import dayjs from "dayjs";
+import RestoreOrders from "./components/restore-items/restore-items";
 
 export const metadata: Metadata = {
     title: "Sales Orders",
@@ -43,6 +44,7 @@ export default async function SalesOrdersPage({ searchParams }) {
 
     return (
         <AuthGuard can={["viewOrders"]}>
+            {/* <RestoreOrders /> */}
             <SalesTabLayout query={searchParams}>
                 <Breadcrumbs>
                     <BreadLink isFirst title="Sales" />
