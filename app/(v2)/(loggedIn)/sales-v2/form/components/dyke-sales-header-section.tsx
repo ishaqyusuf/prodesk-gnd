@@ -14,14 +14,17 @@ import { cn } from "@/lib/utils";
 import useScroll from "@/hooks/use-scroll";
 import { useModal } from "@/components/common/modal/provider";
 import SalesNoteModal from "../../components/_sales-note/_modal";
+import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/_v1/date-range-picker";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
-    const [orderId, id, type, slug] = form.getValues([
+    const [orderId, id, type, slug, date] = form.getValues([
         "order.orderId",
         "order.id",
         "order.type",
         "order.slug",
+        "order.createdAt",
     ]);
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
@@ -53,6 +56,17 @@ export default function HeaderSection({}) {
                         </h2>
                     </div>
                     <div className="flex items-center space-x-2">
+                        <div className="inline-flex items-center space-x-2">
+                            <Label>Date:</Label>
+                            <DatePicker
+                                disabled={(date) => date > new Date()}
+                                setValue={(e) =>
+                                    form.setValue("order.createdAt", e)
+                                }
+                                className="w-auto h-8"
+                                value={date}
+                            />
+                        </div>
                         <Btn
                             size="sm"
                             variant={"outline"}

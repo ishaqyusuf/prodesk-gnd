@@ -11,7 +11,7 @@ import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
     Popover,
     PopoverContent,
-    PopoverTrigger
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import dayjs from "dayjs";
 import { DateFormats, formatDate } from "@/lib/use-day";
@@ -123,7 +123,7 @@ export function DatePicker({
                         mode={(range ? "range" : "single") as any}
                         defaultMonth={range ? from() : date}
                         selected={date}
-                        onSelect={v => {
+                        onSelect={(v) => {
                             setDate(v);
                             setValue?.(v);
                             setOpen(false);

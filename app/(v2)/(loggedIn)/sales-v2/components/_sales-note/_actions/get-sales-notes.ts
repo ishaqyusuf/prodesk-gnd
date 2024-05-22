@@ -4,22 +4,9 @@ import { getProgressTypes } from "@/app/(v1)/_actions/progress";
 import { prisma } from "@/db";
 
 export async function getSalesNote(salesId) {
-    const progressList = await prisma.progress.findMany({
-        where: {
-            OR: [{ parentId: salesId }, { progressableId: salesId }],
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
-    const progressTypes = await getProgressTypes(
-        "SalesOrder",
-        "SalesOrderItem"
-    );
     const items = (
         await prisma.salesOrderItems.findMany({
             where: { salesOrderId: salesId },
-
             include: {
                 housePackageTool: {
                     include: {
@@ -34,11 +21,36 @@ export async function getSalesNote(salesId) {
         let label = door?.title || molding?.title || item.description;
         return { label, value: item.id?.toString() };
     });
+    const progressList = (
+        await prisma.progress.findMany({
+            where: {
+                OR: [{ parentId: salesId }, { progressableId: salesId }],
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        })
+    ).map((progress) => {
+        // const progressableType:
+        return {
+            ...progress,
+            item: items?.find(
+                (item) =>
+                    parseInt(item.value) == progress.progressableId &&
+                    progress.progressableType == "SalesOrderItem"
+            )?.label,
+        };
+    });
+    const progressTypes = await getProgressTypes(
+        "SalesOrder",
+        "SalesOrderItem"
+    );
+
     items.unshift({
         label: "All Notes",
         value: "-1",
     });
-    console.log(progressTypes);
+    // console.log(progressTypes);
 
     return {
         items,

@@ -27,7 +27,7 @@ export default function SalesNotes({ salesId }) {
             progressableId: "-1",
             parentId: salesId,
             progressableType: "SalesOrder",
-            type: "all",
+            type: "All Types",
             description: "",
             headline: "",
             form: false,
@@ -174,6 +174,9 @@ export default function SalesNotes({ salesId }) {
                                     </div>
                                     <TableCol.Secondary>
                                         {progress.description}
+                                    </TableCol.Secondary>
+                                    <TableCol.Secondary>
+                                        {progress.item}
                                     </TableCol.Secondary>
                                 </div>
                             );
