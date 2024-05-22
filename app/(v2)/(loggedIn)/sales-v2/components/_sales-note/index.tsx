@@ -16,9 +16,12 @@ import { Button } from "@/components/ui/button";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Icons } from "@/components/_v1/icons";
 import { saveNote } from "./_actions/save-notes";
+import Btn from "@/components/_v1/btn";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 export default function SalesNotes({ salesId }) {
-    const { data } = useFn(() => getSalesNote(salesId));
+    const { data, refresh } = useFn(() => getSalesNote(salesId));
     const form = useForm({
         defaultValues: {
             progressableId: "-1",
@@ -40,16 +43,30 @@ export default function SalesNotes({ salesId }) {
         const nId = Number(noteId);
         return [
             nId > 0 ? progress.progressableId == nId : true,
-            type == "all" ? true : progress.type?.toLowerCase() == type,
+            type == "All Types" ? true : progress.type?.toLowerCase() == type,
         ].every(Boolean);
     }
+    const [saving, startSaving] = useTransition();
+
     async function save() {
-        const formData = form.getValues();
-        const { progressableId } = formData;
-        const pid = Number(progressableId);
-        formData.progressableId = (pid > 0 ? pid : null) as any;
-        if (pid > 0) formData.progressableType = "SalesOrderItem";
-        const res = await saveNote(formData);
+        startSaving(async () => {
+            try {
+                const formData = form.getValues();
+                const { progressableId } = formData;
+                const pid = Number(progressableId);
+                formData.progressableId = (pid > 0 ? pid : null) as any;
+                if (pid > 0) formData.progressableType = "SalesOrderItem";
+                if (formData.type == "all") throw Error("Select Progress Type");
+
+                const res = await saveNote(formData);
+                // console.log(res);
+                refresh();
+                toast.message("saved");
+                form.reset();
+            } catch (error) {
+                if (error instanceof Error) toast.error(error.message);
+            }
+        });
     }
     if (!data) return null;
     return (
@@ -63,7 +80,10 @@ export default function SalesNotes({ salesId }) {
                         label={"Showing"}
                     />
                     <ControlledSelect
-                        options={toLabelValue(["all", ...data.progressTypes])}
+                        options={toLabelValue([
+                            "All Types",
+                            ...data.progressTypes,
+                        ])}
                         name="type"
                         control={form.control}
                         label={"Type"}
@@ -89,36 +109,11 @@ export default function SalesNotes({ salesId }) {
                             className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
                         />
                         <div className="flex items-center p-3 pt-0">
-                            {/* <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button variant="ghost" size="icon">
-                                        <Paperclip className="size-4" />
-                                        <span className="sr-only">
-                                            Attach file
-                                        </span>
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top">
-                                    Attach File
-                                </TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button variant="ghost" size="icon">
-                                        <Mic className="size-4" />
-                                        <span className="sr-only">
-                                            Use Microphone
-                                        </span>
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top">
-                                    Use Microphone
-                                </TooltipContent>
-                            </Tooltip> */}
                             <div className="flex justify-end flex-1 space-x-2">
                                 <Button
                                     type="submit"
                                     size="sm"
+                                    disabled={saving}
                                     onClick={() => {
                                         form.setValue("form", false);
                                     }}
@@ -128,7 +123,8 @@ export default function SalesNotes({ salesId }) {
                                     Cancel
                                     {/* <CornerDownLeft className="size-3.5" /> */}
                                 </Button>
-                                <Button
+                                <Btn
+                                    isLoading={saving}
                                     onClick={save}
                                     type="submit"
                                     size="sm"
@@ -136,7 +132,7 @@ export default function SalesNotes({ salesId }) {
                                 >
                                     Save
                                     {/* <CornerDownLeft className="size-3.5" /> */}
-                                </Button>
+                                </Btn>
                             </div>
                         </div>
                     </div>
@@ -154,26 +150,35 @@ export default function SalesNotes({ salesId }) {
                         <Icons.add className="w-4 h-4 ml-4" />
                     </Button>
                 </div>
-                {data?.progressList?.filter(searchProgress).map((progress) => {
-                    return (
-                        <div
-                            className="text-sm border-b py-2"
-                            key={progress.id}
-                        >
-                            <div className="flex justify-between">
-                                <div className="">
-                                    <Label>{progress.status}</Label>
-                                    {"   "}
-                                    <StatusBadge>{progress.type}</StatusBadge>
+                <div className="flex flex-col overflow-auto max-h-[70vh] pb-20 -mr-6 pr-6">
+                    {data?.progressList
+                        ?.filter(searchProgress)
+                        .map((progress) => {
+                            return (
+                                <div
+                                    className="text-sm border-b py-2"
+                                    key={progress.id}
+                                >
+                                    <div className="flex justify-between">
+                                        <div className="">
+                                            <Label>
+                                                {progress.headline ||
+                                                    progress.status}
+                                            </Label>
+                                            {"   "}
+                                            <StatusBadge sm>
+                                                {progress.type}
+                                            </StatusBadge>
+                                        </div>
+                                        <p>{formatDate(progress.createdAt)}</p>
+                                    </div>
+                                    <TableCol.Secondary>
+                                        {progress.description}
+                                    </TableCol.Secondary>
                                 </div>
-                                <p>{formatDate(progress.createdAt)}</p>
-                            </div>
-                            <TableCol.Secondary>
-                                {progress.headline}
-                            </TableCol.Secondary>
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                </div>
             </div>
         </Form>
     );

@@ -24,4 +24,5 @@ export async function saveNote(data) {
             progressableId,
         },
     });
+    return d;
 }

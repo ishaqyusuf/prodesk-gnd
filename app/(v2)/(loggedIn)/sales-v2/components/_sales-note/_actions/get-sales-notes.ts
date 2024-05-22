@@ -8,6 +8,9 @@ export async function getSalesNote(salesId) {
         where: {
             OR: [{ parentId: salesId }, { progressableId: salesId }],
         },
+        orderBy: {
+            createdAt: "desc",
+        },
     });
     const progressTypes = await getProgressTypes(
         "SalesOrder",
@@ -16,6 +19,7 @@ export async function getSalesNote(salesId) {
     const items = (
         await prisma.salesOrderItems.findMany({
             where: { salesOrderId: salesId },
+
             include: {
                 housePackageTool: {
                     include: {

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 interface Props {
     status?;
     children?;
-    sm?: Boolean;
+    sm?: boolean;
     color?;
 }
 export default function StatusBadge({ status, color, children, sm }: Props) {

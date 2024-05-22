@@ -26,7 +26,7 @@ export function composePrint(
     query: SalesPrintProps["searchParams"]
 ) {
     const printData = {
-        isEstimate: query.mode == "estimate",
+        isEstimate: query.mode == "quote",
         isProd: query.mode == "production",
         isPacking: query.mode == "packing list",
         isOrder: query.mode == "order",
@@ -35,6 +35,8 @@ export function composePrint(
         // heading: heading(data,),
         ...data,
     };
+    // console.log(query);
+
     const ret = {
         ...printData,
         lineItems: lineItems(data, {

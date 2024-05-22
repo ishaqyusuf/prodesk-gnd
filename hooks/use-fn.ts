@@ -9,13 +9,20 @@ export default function useFn<T extends (...args: any) => Promise<any>>(fn: T) {
         null as any
     );
     useEffect(() => {
-        (async () => {
-            const resp = await (fn as any)();
-            setData(resp);
-        })();
+        // (async () => {
+        //     const resp = await (fn as any)();
+        //     setData(resp);
+        // })();
+        _action();
     }, []);
-
+    async function _action() {
+        const resp = await (fn as any)();
+        setData(resp);
+    }
     return {
         data,
+        refresh() {
+            _action();
+        },
     };
 }
