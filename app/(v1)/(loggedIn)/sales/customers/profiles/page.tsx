@@ -3,20 +3,18 @@ import { Metadata } from "next";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
-import { getProfiles } from "@/app/(v1)/_actions/hrm/employee-profiles";
-import EmployeeProfileTableShell from "@/components/_v1/shells/employee-profile-table-shell";
-
 import CustomersLayout from "@/components/_v1/tab-layouts/customers-layout";
-import CustomerProfileModal from "@/components/_v1/modals/customer-profile-modal";
-import { getCustomerProfiles } from "@/app/(v1)/_actions/sales/sales-customer-profiles";
-import CustomerProfileTableShell from "@/components/_v1/shells/customer-profile-table-shell";
+
+import CustomerProfileTableShell from "@/app/(v1)/(loggedIn)/sales/customers/profiles/_components/customer-profile-table-shell";
 import AuthGuard from "@/components/_v1/auth-guard";
+import PageAction from "./_components/page-actions";
+import { getCustomerProfiles } from "./_components/actions";
 
 export const metadata: Metadata = {
     title: "Employee Profiles",
 };
 export default async function CustomerProfilesPage({ searchParams }) {
-    const response = await getCustomerProfiles();
+    const response = getCustomerProfiles(searchParams);
     return (
         <AuthGuard can={["editSalesCustomers"]}>
             <CustomersLayout>
@@ -26,13 +24,13 @@ export default async function CustomerProfilesPage({ searchParams }) {
                 </Breadcrumbs>
                 <PageHeader
                     title="Customer Profiles"
-                    newDialog="customerProfile"
+                    // newDialog="customerProfile"
+                    Action={PageAction}
                 />
                 <CustomerProfileTableShell
                     searchParams={searchParams}
-                    {...response}
+                    promise={response}
                 />
-                <CustomerProfileModal />
             </CustomersLayout>
         </AuthGuard>
     );

@@ -32,6 +32,7 @@ const _path = {
     salesOverview: "/sales-v2/overview/[...typeAndSlug]",
     payables: "/sales/accounting/payables",
     employees: "/hrm/employees",
+    customerProfiles: "/sales/customers/profiles",
 };
 export type RevalidatePaths = keyof typeof _path;
 export async function _revalidate(pathName: RevalidatePaths) {
