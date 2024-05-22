@@ -106,7 +106,7 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
               },
           });
     if (id) {
-        await prisma.salesOrderItems.updateMany({
+        const resp = await prisma.salesOrderItems.updateMany({
             where: {
                 id: {
                     lte: lastItemId,
@@ -118,6 +118,7 @@ export async function saveOrderAction({ id, order, items }: ISaveOrder) {
                 deletedAt: new Date(),
             },
         });
+        console.log(resp.count);
     }
     await _updateProdQty(sale_order.id);
     if (id) va.track("sales updated", { type: sale_order.type });
