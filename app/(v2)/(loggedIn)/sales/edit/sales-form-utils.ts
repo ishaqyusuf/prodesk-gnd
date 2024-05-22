@@ -89,12 +89,13 @@ function formData(data, paidAmount): SaveOrderActionProps {
 }
 
 function _calculatePaymentTerm(paymentTerm, createdAt) {
-    const t = +paymentTerm?.replace("Net", "");
+    const t = parseInt(paymentTerm?.replace("Net", ""));
     let goodUntil: any = null;
     if (t) {
-        goodUntil = dayjs(createdAt).add(goodUntil, "days");
+        goodUntil = dayjs(createdAt).add(t, "days");
     }
     // form.setValue("goodUntil", goodUntil);
+    // console.log([paymentTerm, createdAt, t, goodUntil]);
     return goodUntil;
 }
 function initInvoiceItems(items: ISalesFormItem[] | undefined) {
