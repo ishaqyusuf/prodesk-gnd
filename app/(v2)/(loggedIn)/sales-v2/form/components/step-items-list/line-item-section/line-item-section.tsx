@@ -7,6 +7,7 @@ import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item"
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import useMultiDykeForm from "../../../_hooks/use-multi-generator";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import ItemPriceFinder from "../item-section/item-price-finder";
 
 interface Props {
     componentTitle;
@@ -19,6 +20,12 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
     const componentItem = useMultiComponentItem(componentTitle);
     const rootKey = `itemArray.${item.rowIndex}.item`;
     const isMoulding = item.isType.moulding;
+
+    const itemData = componentItem.item.get.data();
+    const component =
+        itemData.multiComponent.components[componentItem.componentTitle];
+    console.log(component);
+
     return (
         <>
             <TableCell className="">
@@ -69,11 +76,18 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
             <TableCell className="w-[100px]">
                 <Money value={componentItem.totalPrice} />
             </TableCell>
-            <TableCell className="w-[100px]">
+            <TableCell className="w-[100px] flex">
                 <ConfirmBtn
                     onClick={() => componentItem.removeLine(mdf.removeTab)}
                     size="icon"
                 />
+                {isMoulding && (
+                    <ItemPriceFinder
+                        moldingId={component?.toolId}
+                        componentTitle={componentTitle}
+                        componentItem={componentItem}
+                    />
+                )}
             </TableCell>
         </>
     );

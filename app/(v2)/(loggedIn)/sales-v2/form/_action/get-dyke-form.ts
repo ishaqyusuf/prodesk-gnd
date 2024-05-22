@@ -282,6 +282,20 @@ export async function getDykeFormAction(type, slug, copy = false) {
                         // console.log(item.housePackageTool.door);
                         // item.meta.doo
                         const uid = generateRandomString(4);
+                        function getMouldingId() {
+                            let mid = item.housePackageTool.moldingId;
+                            console.log(item.housePackageTool.molding?.title);
+
+                            const s = item.formSteps.find(
+                                (fs) => fs.step.title == "Moulding"
+                            );
+                            console.log(mid);
+
+                            if (s) console.log(s?.value);
+                            const svid = s?.step?.title;
+                            console.log(svid);
+                            return mid;
+                        }
                         const c = (multiComponent.components[
                             safeFormText(component.title)
                         ] = {
@@ -298,7 +312,7 @@ export async function getDykeFormAction(type, slug, copy = false) {
                             unitPrice: item.rate,
                             totalPrice: item.total,
                             toolId: isMoulding
-                                ? item.housePackageTool.moldingId
+                                ? getMouldingId()
                                 : item.housePackageTool.dykeDoorId,
                             _doorForm: item.housePackageTool._doorForm || {},
                             hptId: item.housePackageTool.id as any,

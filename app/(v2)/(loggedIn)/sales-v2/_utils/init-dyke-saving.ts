@@ -114,11 +114,14 @@ function initializeMultiComponent(data: DykeForm) {
                     moldingId,
                     ...rest
                 } = clone.item.housePackageTool;
-                dykeDoorId = c.toolId;
+                if (clone.item.meta.doorType == "Moulding")
+                    moldingId = c.toolId;
+                else moldingId = c.toolId;
 
                 clone.item.housePackageTool = {
                     ...rest,
                     dykeDoorId,
+                    moldingId,
                 };
                 const filterItems = () => {
                     const {

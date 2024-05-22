@@ -42,10 +42,11 @@ export default function ItemPriceFinder({
     function selectPrice(priceIndex) {
         const priceTab = priceChart?.priceTabs[tabIndex];
         const price = priceTab?.priceList?.[priceIndex];
-        // form.setValue
-
+        // if(priceTab == '')
         form?.setValue(
-            `${sizeRow?.sizeRootKey}.${priceTab?.priceKey}` as any,
+            !sizeRow
+                ? `${componentItem?.rootKey}.unitPrice`
+                : (`${sizeRow?.sizeRootKey}.${priceTab?.priceKey}` as any),
             price?.value
         );
     }
@@ -53,11 +54,14 @@ export default function ItemPriceFinder({
         async function fetch() {
             const resp = await getDoorPrices(props as any);
             setPriceChart(resp);
-            // console.log(resp);
-            // priceChart.
+            console.log(resp);
         }
         fetch();
     }, []);
+
+    const currentPriceList = () => priceChart?.priceTabs?.[tabIndex]?.priceList;
+    const emptyPriceList = () => currentPriceList()?.length == 0;
+
     return (
         <div>
             <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -72,23 +76,36 @@ export default function ItemPriceFinder({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <div className="flex">
-                        {priceChart?.priceTabs?.map((tab, i) => (
-                            <Button
-                                onClick={() => {
-                                    setTabIndex(i);
-                                }}
-                                key={tab.title}
-                                size={"sm"}
-                                variant={tabIndex == i ? "default" : "ghost"}
-                            >
-                                {tab.title}
-                            </Button>
-                        ))}
-                    </div>
-                    <div className="mt-4 min-h-[100px] max-h-[250vh] overflow-auto">
-                        {priceChart?.priceTabs?.[tabIndex]?.priceList?.map(
-                            (price, priceIndex) => (
+                    {(priceChart?.priceTabs as any)?.length > 1 ? (
+                        <div className="flex">
+                            {priceChart?.priceTabs?.map((tab, i) => (
+                                <Button
+                                    onClick={() => {
+                                        setTabIndex(i);
+                                    }}
+                                    key={tab.title}
+                                    size={"sm"}
+                                    variant={
+                                        tabIndex == i ? "default" : "ghost"
+                                    }
+                                >
+                                    {tab.title}
+                                </Button>
+                            ))}
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    <div className="mt-4 min-w-[200px] min-h-[100px] max-h-[25vh] overflow-auto">
+                        {emptyPriceList() ? (
+                            <div className="h-[100px] flex flex-col items-center justify-center space-y-4">
+                                <Icons.dollar className="w-10 h-10 text-muted-foreground text-opacity-25" />
+                                <TableCol.Secondary>
+                                    No Price History
+                                </TableCol.Secondary>
+                            </div>
+                        ) : (
+                            currentPriceList()?.map((price, priceIndex) => (
                                 <Button
                                     onClick={() => selectPrice(priceIndex)}
                                     className="w-full flex"
@@ -104,7 +121,7 @@ export default function ItemPriceFinder({
                                         </TableCol.Secondary>
                                     </div>
                                 </Button>
-                            )
+                            ))
                         )}
                     </div>
                 </DropdownMenuContent>
