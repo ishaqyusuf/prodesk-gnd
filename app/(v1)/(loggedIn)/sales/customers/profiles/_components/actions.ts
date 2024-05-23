@@ -28,14 +28,18 @@ export async function getCustomerProfiles(query = {}) {
 }
 export async function saveCustomerProfile(data: ICustomerProfile) {
     const { id, ...rest } = data;
+
+    const saveData = transformData(rest) as any;
+    console.log(saveData);
+
     if (!id)
         await prisma.customerTypes.create({
-            data: transformData(rest) as any,
+            data: saveData,
         });
     else
         await prisma.customerTypes.update({
             where: { id },
-            data: transformData(rest) as any,
+            data: saveData,
         });
 }
 export async function deleteCustomerProfile(id) {

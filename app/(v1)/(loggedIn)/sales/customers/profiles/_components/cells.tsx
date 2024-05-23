@@ -76,7 +76,7 @@ function NetTerms({ item }: Props) {
     return <>{item.meta?.net}</>;
 }
 function Quote({ item }: Props) {
-    return <>{item.meta?.goodUntil}</>;
+    return <>{item.meta?.goodUntil} days</>;
 }
 export let Cells = {
     ProfileName,

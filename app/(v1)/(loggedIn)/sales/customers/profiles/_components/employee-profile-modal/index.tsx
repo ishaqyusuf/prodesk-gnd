@@ -20,6 +20,8 @@ export default function CustomerProfileModal({
 }) {
     if (!defaultValues) defaultValues = {};
     if (!defaultValues.meta) defaultValues.meta = {} as any;
+    // console.log(defaultValues);
+
     const id = defaultValues.id;
     const form = useForm<ICustomerProfile>({
         defaultValues,
@@ -31,7 +33,7 @@ export default function CustomerProfileModal({
             data.coefficient = parseInt((data.coefficient as any) || 0);
             data.meta.goodUntil = parseInt(data.meta.goodUntil as any);
 
-            if (!data?.id) await saveCustomerProfile(data);
+            await saveCustomerProfile(data);
 
             toast.message("Success!");
             _revalidate("customerProfiles");

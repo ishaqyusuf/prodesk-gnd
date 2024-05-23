@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
 import { ISalesForm } from "../type";
-import AddressDispaly from "../../_components/address-display";
+import AddressDisplay from "../../_components/address-display";
 import { useModal } from "@/components/common/modal-old/provider";
 import SalesAddressModal from "./sales-address-modal";
 
@@ -32,8 +32,8 @@ export default function SalesAddressSection() {
                         <Icons.edit className="h-3.5 w-3.5 " />
                     </Button>
                 </div>
-                <AddressDispaly address={billing} customer={customer} />
-                <AddressDispaly
+                <AddressDisplay address={billing} customer={customer} />
+                <AddressDisplay
                     address={shipping}
                     type={"shipping"}
                     customer={customer}

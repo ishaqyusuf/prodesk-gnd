@@ -9,7 +9,11 @@ import {
     MultiDyke,
     ShelfItemMeta,
 } from "../../type";
-import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
+import {
+    ISalesOrder,
+    ISalesOrderItemMeta,
+    ISalesOrderMeta,
+} from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import { generateRandomString, inToFt, safeFormText, sum } from "@/lib/utils";
@@ -83,17 +87,23 @@ export async function getDykeFormAction(type, slug, copy = false) {
     const rootProds = await getStepForm(1);
     const ctx = await salesFormData(true);
     const session = await user();
-    const form = (order || {
+
+    const _meta: Partial<ISalesOrderMeta> = {
+        sales_profile: ctx.defaultProfile?.title,
+        sales_percentage: ctx.defaultProfile?.coefficient,
+        ccc_percentage: +ctx?.settings?.ccc,
+        tax: true,
+    };
+    console.log(ctx.defaultProfile);
+
+    const newOrderForm: Partial<OrderType> = {
         type,
         isDyke: true,
         status: "Active",
         taxPercentage: +ctx.settings?.tax_percentage,
-        meta: {
-            sales_profile: ctx.defaultProfile?.title,
-            sales_percentage: ctx.defaultProfile?.coefficient,
-            ccc_percentage: +ctx?.settings?.ccc,
-            tax: true,
-        },
+        paymentTerm: ctx.defaultProfile?.meta?.net,
+        goodUntil: ctx.defaultProfile?.goodUntil,
+        meta: _meta as any,
         items: [
             {
                 formSteps: [
@@ -108,14 +118,15 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     },
                 ],
                 meta: {},
-            },
+            } as any,
         ],
         salesRep: {
             name: session.name,
             id: session.id,
         },
         createdAt: dayjs().toISOString() as any,
-    }) as any as OrderType;
+    };
+    const form = (order || newOrderForm) as any as OrderType;
 
     const meta = form.meta as any as ISalesOrderMeta;
     if (!Object.keys(meta).includes("tax")) meta.tax = true;
@@ -364,19 +375,8 @@ export async function getDykeFormAction(type, slug, copy = false) {
         );
         // console.log(itemArray.map((item) => item.item.meta.lineIndex));
     }
-    //index:type:price|
-    // itemArray.map((a, i) => {
-    //     // footerPrices += `${i}:${a.item.meta.doorType}:${a.sectionPrice}`;
-    //     footerPrices[a.uid] = {
-    //         doorType: a.item.meta.doorType,
-    //         price: a.sectionPrice,
-    //     };
-    // });
-    // console.log(footerPrices);
 
     return {
-        // currentItemIndex: 0,
-        // currentStepIndex: 0,
         salesRep: salesRep,
         customer,
         shippingAddress,

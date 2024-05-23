@@ -8,7 +8,7 @@ interface Props {
     address: IAddressBook;
     customer?: ICustomer;
 }
-export default function AddressDispaly({
+export default function AddressDisplay({
     type = "billing",
     address,
     customer,

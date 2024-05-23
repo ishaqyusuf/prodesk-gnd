@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { composeBar } from "@/lib/chart";
 import { sum } from "@/lib/utils";
 import { ISalesDashboard } from "@/types/dashboard";
+import { ISalesType } from "@/types/sales";
 
 interface Props {}
 export async function salesDashboardAction(): Promise<ISalesDashboard> {
@@ -32,6 +33,9 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
             builtQty: true,
             prodStatus: true,
         },
+        // include: {
+        //     doors: true
+        // }
     });
     const payments = await prisma.salesPayments.findMany({
         where: {},
@@ -51,7 +55,11 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
         (s) => s.prodStatus != "Completed"
     ).length;
     response.pendingOrders = pendingCompletion;
-    response.totalOrders = await prisma.salesOrders.count({});
+    response.totalOrders = await prisma.salesOrders.count({
+        where: {
+            type: "order" as ISalesType,
+        },
+    });
     response.completedOrders = sales?.filter(
         (s) => s.prodStatus == "Completed"
     ).length;

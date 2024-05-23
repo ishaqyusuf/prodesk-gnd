@@ -14,15 +14,17 @@ import { Switch } from "@/components/ui/switch";
 
 export default function SalesMetaData() {
     const form = useDykeForm();
-
-    const [profiles, setProfiles] = useState([]);
+    const profiles = form.getValues("data.profiles");
+    // const onProfileSelect = (selection: (typeof profiles)[0]) => {
+    //     console.log("...");
+    // };
+    const profile = form.watch("order.meta.sales_profile");
     useEffect(() => {
-        async function initialize() {
-            setProfiles(await getCustomerProfileList());
-        }
-        initialize();
-    }, []);
-    const type = form.watch("order.type");
+        const p = profiles.find((p) => p.label == profile);
+        form.setValue("order.paymentTerm", p?.meta?.net as any);
+        form.setValue("order.goodUntil", p?.goodUntil);
+    }, [profile]);
+    const type = form.getValues("order.type");
     return (
         <div className="xl:col-span-3 grid gap-2 xl:grid-cols-2 xl:gap-x-4">
             <InfoLine label="Sales Rep:">
@@ -31,16 +33,24 @@ export default function SalesMetaData() {
             <InfoLine label="Profile">
                 <ControlledSelect
                     control={form.control}
+                    size="sm"
+                    className="min-w-[150px]"
                     name="order.meta.sales_profile"
                     options={profiles}
                 />
             </InfoLine>
             <InfoLine label="Q.B Order #">
-                <ControlledInput control={form.control} name="order.meta.qb" />
+                <ControlledInput
+                    size="sm"
+                    control={form.control}
+                    name="order.meta.qb"
+                />
             </InfoLine>
             <InfoLine label="Delivery">
                 <ControlledSelect
+                    size="sm"
                     control={form.control}
+                    className="min-w-[150px]"
                     name="order.deliveryOption"
                     options={salesData.delivery}
                 />
@@ -48,6 +58,8 @@ export default function SalesMetaData() {
             <InfoLine label="Mockup %">
                 <ControlledInput
                     control={form.control}
+                    type="number"
+                    size="sm"
                     name="order.meta.mockupPercentage"
                 />
             </InfoLine>
@@ -55,6 +67,8 @@ export default function SalesMetaData() {
                 <InfoLine label="Payment Term">
                     <ControlledSelect
                         control={form.control}
+                        size="sm"
+                        className="min-w-[150px]"
                         name="order.paymentTerm"
                         options={salesData.paymentTerms}
                     />
@@ -70,7 +84,7 @@ export default function SalesMetaData() {
             <InfoLine label="Tax">
                 <ControlledCheckbox
                     switchInput
-                    className="h-8 min-w-[150px]"
+                    className="h-8"
                     name="order.meta.tax"
                 />
             </InfoLine>

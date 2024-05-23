@@ -8,6 +8,7 @@ import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import dayjs from "dayjs";
 import { user } from "@/app/(v1)/_actions/utils";
+import { ICustomerProfile } from "../customers/profiles/_components/type";
 
 export interface ICreateOrderFormQuery {
     customerId?;
@@ -72,48 +73,53 @@ export async function salesFormData(dyke = false) {
         },
     });
     const meta: ISalesSettingMeta = setting?.meta as any;
-    const profiles = await prisma.customerTypes.findMany({
-        select: {
-            id: true,
-            coefficient: true,
-            defaultProfile: true,
-            title: true,
-        },
-    });
-    if (dyke)
+    const profiles = (
+        (await prisma.customerTypes.findMany({})) as any as ICustomerProfile[]
+    ).map((profile) => {
+        let goodUntil: any = null;
+        const goodDays = profile.meta?.goodUntil;
+        if (goodDays > 0) goodUntil = dayjs().add(goodDays, "days");
         return {
-            settings: meta,
-            profiles,
+            label: profile.title,
+            value: profile.title,
+            ...profile,
+            goodUntil,
         };
-    const extras = await prisma.posts.findMany({
-        where: {
-            type: {
-                in: [PostTypes.SUPPLIERS, PostTypes.SWINGS],
-            },
-        },
-        distinct: ["title"],
-        select: {
-            type: true,
-            title: true,
-        },
     });
 
-    const items = await prisma.salesOrderItems.findMany({
-        where: {},
-        distinct: "description",
-        orderBy: {
-            updatedAt: "desc",
-        },
-        select: {
-            description: true,
-            price: true,
-        },
-    });
+    const extras = dyke
+        ? []
+        : await prisma.posts.findMany({
+              where: {
+                  type: {
+                      in: [PostTypes.SUPPLIERS, PostTypes.SWINGS],
+                  },
+              },
+              distinct: ["title"],
+              select: {
+                  type: true,
+                  title: true,
+              },
+          });
+
+    const items = dyke
+        ? []
+        : await prisma.salesOrderItems.findMany({
+              where: {},
+              distinct: "description",
+              orderBy: {
+                  updatedAt: "desc",
+              },
+              select: {
+                  description: true,
+                  price: true,
+              },
+          });
     // console.log(items.length);
     return {
         settings: meta,
-        profiles: profiles as any,
-        defaultProfile: profiles.find((p) => p.defaultProfile) as any,
+        profiles,
+        defaultProfile: profiles.find((p) => p.defaultProfile),
         swings: extras
             .filter((e) => e.type == PostTypes.SWINGS)
             .map((e) => e.title),

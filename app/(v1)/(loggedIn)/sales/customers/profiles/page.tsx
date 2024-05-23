@@ -11,7 +11,7 @@ import PageAction from "./_components/page-actions";
 import { getCustomerProfiles } from "./_components/actions";
 
 export const metadata: Metadata = {
-    title: "Employee Profiles",
+    title: "customer profiles",
 };
 export default async function CustomerProfilesPage({ searchParams }) {
     const response = getCustomerProfiles(searchParams);

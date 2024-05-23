@@ -16,7 +16,7 @@ export async function restoreItems() {
         // take: 1000
     });
     const ids = rems
-        .filter(({ id }, index) => index < 1001)
+        .filter(({ id }, index) => index < 5001)
         .map(({ id }) => id);
     // return rems.length;
     const items = await prisma.salesOrderItems.updateMany({

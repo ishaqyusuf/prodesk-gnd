@@ -5,11 +5,13 @@ import { nextId } from "@/lib/nextId";
 import { ICustomer } from "@/types/customers";
 import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
+import { getCustomerProfileDac } from "./get-customer-profile.dac";
+import { ICustomerProfile } from "@/app/(v1)/(loggedIn)/sales/customers/profiles/_components/type";
 
 export async function _saveSalesAddress({
     billingAddress,
     shippingAddress,
-    profile,
+    // profile,
     sameAddress,
     customer: _customer,
 }: ISalesAddressForm) {
@@ -21,10 +23,7 @@ export async function _saveSalesAddress({
         shippingAddressId?;
         shippingAddress?;
         billingAddress?;
-        profileUpdate: {
-            profile: CustomerTypes;
-            customer: ICustomer;
-        };
+        profile: ICustomerProfile;
     } = {} as any;
     function setAddress(index, addr) {
         if (index == 0) {
@@ -160,13 +159,13 @@ export async function _saveSalesAddress({
                                     phoneNo2,
                                     businessName: _customer.businessName,
                                     email: address?.email,
-                                    profile: profile?.id
-                                        ? {
-                                              connect: {
-                                                  id: profile.id,
-                                              },
-                                          }
-                                        : undefined,
+                                    // profile: profile?.id
+                                    //     ? {
+                                    //           connect: {
+                                    //               id: profile.id,
+                                    //           },
+                                    //       }
+                                    //     : undefined,
                                 },
                             })) as any;
                         } else
@@ -188,17 +187,17 @@ export async function _saveSalesAddress({
                                 where: { id: customer.id },
                                 data: {
                                     profile: {
-                                        connect: profile.id as any,
+                                        // connect: profile.id as any,
                                     },
                                 },
                             });
                         } else {
-                            if (customer.customerTypeId != profile.id) {
-                                response.profileUpdate = {
-                                    profile,
-                                    customer,
-                                };
-                            }
+                            // if (customer.customerTypeId != profile.id) {
+                            //     response.profileUpdate = {
+                            //         profile,
+                            //         customer,
+                            //     };
+                            // }
                         }
                     }
                     customerId = address?.customerId;
@@ -222,6 +221,7 @@ export async function _saveSalesAddress({
             } else response.shippingAddressId = newId;
         })
     );
+    response.profile = await getCustomerProfileDac(response.customerId);
     // await prisma.addressBooks.deleteMany({
     //   where: {},
     // });

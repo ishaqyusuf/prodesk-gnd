@@ -45,6 +45,7 @@ model AddressBooks {
     shippingOrders SalesOrders[] @relation(name: "shippingAddress")
 
     @@index([createdAt, deletedAt, name, address1])
+    @@index([customerId])
 }
 
 model ErrorLog {
@@ -58,6 +59,8 @@ model ErrorLog {
     updatedAt DateTime?      @updatedAt
     Users     Users          @relation(fields: [userId], references: [id])
     tags      ErrorLogTags[]
+
+    @@index([userId])
 }
 
 model ErrorLogTags {
@@ -66,6 +69,9 @@ model ErrorLogTags {
     errorTagId Int
     errorLog   ErrorLog  @relation(fields: [errorLogId], references: [id])
     errorTags  ErrorTags @relation(fields: [errorTagId], references: [id])
+
+    @@index([errorLogId])
+    @@index([errorTagId])
 }
 
 model ErrorTags {
@@ -102,6 +108,8 @@ model CostCharts {
     createdAt DateTime?      @default(now()) @db.Timestamp(0)
     updatedAt DateTime?      @updatedAt
     template  HomeTemplates? @relation(fields: [parentId], references: [id])
+
+    @@index([parentId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -121,6 +129,9 @@ model CommunityModels {
     history CommunityTemplateHistory[]
     costs   CommunityModelCost[]
     pivot   CommunityModelPivot?       @relation(fields: [pivotId], references: [id])
+
+    @@index([pivotId])
+    @@index([projectId])
 }
 
 model CommunityTemplateHistory {
@@ -133,6 +144,9 @@ model CommunityTemplateHistory {
     model             CommunityModels? @relation(fields: [communityModelsId], references: [id])
     communityModelsId Int?
     Users             Users            @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@index([communityModelsId])
 }
 
 model PageView {
@@ -141,6 +155,8 @@ model PageView {
     createdAt DateTime? @default(now()) @db.Timestamp(0)
     Users     Users?    @relation(fields: [usersId], references: [id])
     usersId   Int?
+
+    @@index([usersId])
 }
 
 model Event {
@@ -151,6 +167,8 @@ model Event {
     value     Float?    @default(1)
     Users     Users?    @relation(fields: [usersId], references: [id])
     usersId   Int?
+
+    @@index([usersId])
 }
 
 model CommunityModelPivot {
@@ -181,6 +199,9 @@ model CommunityModelCost {
     deletedAt        DateTime?            @db.Timestamp(0)
     community        CommunityModels?     @relation(fields: [communityModelId], references: [id])
     pivot            CommunityModelPivot? @relation(fields: [pivotId], references: [id])
+
+    @@index([communityModelId])
+    @@index([pivotId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -208,6 +229,7 @@ model Customers {
     wallet         CustomerWallet?
 
     @@index([createdAt, deletedAt, name, email, phoneNo])
+    @@index([customerTypeId])
 }
 
 model CustomerWallet {
@@ -233,6 +255,8 @@ model CustomerTransaction {
     deletedAt     DateTime?       @db.Timestamp(0)
     wallet        CustomerWallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
     salesPayments SalesPayments[]
+
+    @@index([walletId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -285,6 +309,9 @@ model Homes {
     invoices            Invoices[]
 
     @@index([createdAt, deletedAt, modelName, search, projectId])
+    @@index([projectId])
+    @@index([homeTemplateId])
+    @@index([communityTemplateId])
 }
 
 model HomeTasks {
@@ -330,6 +357,9 @@ model HomeTasks {
 
     @@index([createdAt, deletedAt, produceable, billable, addon, deco, punchout, installable, taskName, projectId, jobId])
     @@index([homeId], name: "idx_HomeTasks_on_homeId")
+    @@index([projectId])
+    @@index([jobId])
+    @@index([assignedToId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -346,6 +376,8 @@ model HomeTemplates {
     builder   Builders?    @relation(fields: [builderId], references: [id])
     homes     Homes[]
     costs     CostCharts[]
+
+    @@index([builderId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -369,6 +401,9 @@ model SalesItemSupply {
     totalCost        Float?
     order            SalesOrders      @relation(fields: [salesOrderId], references: [id])
     item             SalesOrderItems? @relation(fields: [salesOrderItemId], references: [id])
+
+    @@index([salesOrderId])
+    @@index([salesOrderItemId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -399,6 +434,8 @@ model OrderInventory {
     deletedAt        DateTime?        @db.Timestamp(0)
     updatedAt        DateTime?        @updatedAt
     orderInventoryId Int?
+
+    @@index([parentId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -449,6 +486,9 @@ model Invoices {
     checkDate DateTime? @db.Timestamp(0)
     project   Projects? @relation(fields: [projectId], references: [id])
     home      Homes?    @relation(fields: [homeId], references: [id])
+
+    @@index([projectId])
+    @@index([homeId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -484,6 +524,8 @@ model Inbox {
     sentAt    DateTime? @db.Timestamp(0)
     createdAt DateTime? @default(now()) @db.Timestamp(0)
     sender    Users     @relation(fields: [senderId], references: [id])
+
+    @@index([senderId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -515,6 +557,7 @@ model ModelHasRoles {
     // @@index([createdAt,deletedAt,modelId, modelType], map: "model_has_roles_model_id_model_type_index")
 
     @@id([roleId, modelId, modelType])
+    @@index([modelId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -540,6 +583,12 @@ model OrderItemProductionAssignments {
     assignedTo   Users                        @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
     assignedBy   Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
     salesDoor    DykeSalesDoors?              @relation(fields: [salesDoorId], references: [id])
+
+    @@index([orderId])
+    @@index([itemId])
+    @@index([assignedToId])
+    @@index([assignedById])
+    @@index([salesDoorId])
 }
 
 model OrderProductionSubmissions {
@@ -558,6 +607,10 @@ model OrderProductionSubmissions {
     order            SalesOrders?                    @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     item             SalesOrderItems?                @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
     assignment       OrderItemProductionAssignments? @relation(fields: [assignmentId], references: [id])
+
+    @@index([salesOrderId])
+    @@index([salesOrderItemId])
+    @@index([assignmentId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -674,6 +727,8 @@ model ProductVariants {
     subCategory       String?           @db.VarChar(255)
     supplier          String?           @db.VarChar(255)
     product           InventoryProducts @relation(fields: [productId], references: [id])
+
+    @@index([productId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -713,6 +768,8 @@ model Projects {
     communityModels CommunityModels[]
     invoices        Invoices[]
     homeTasks       HomeTasks[]
+
+    @@index([builderId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -820,6 +877,10 @@ model DykeSalesShelfItem {
     salesOrderItem   SalesOrderItems?     @relation(fields: [salesOrderItemId], references: [id])
     shelfProduct     DykeShelfProducts?   @relation(fields: [productId], references: [id])
     category         DykeShelfCategories? @relation(fields: [categoryId], references: [id])
+
+    @@index([salesOrderItemId])
+    @@index([productId])
+    @@index([categoryId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -853,6 +914,11 @@ model SalesCommision {
     user                Users              @relation(fields: [userId], references: [id])
     orderPayment        SalesPayments      @relation(fields: [orderPaymentId], references: [id])
     commissionPayment   CommissionPayment? @relation(fields: [commissionPaymentId], references: [id])
+
+    @@index([orderId])
+    @@index([userId])
+    @@index([orderPaymentId])
+    @@index([commissionPaymentId])
 }
 
 model CommissionPayment {
@@ -871,6 +937,10 @@ model CommissionPayment {
     payer         Users?           @relation(name: "payer", fields: [paidBy], references: [id])
     Users         Users?           @relation(fields: [usersId], references: [id])
     usersId       Int?
+
+    @@index([userId])
+    @@index([paidBy])
+    @@index([usersId])
 }
 
 model DykeSalesError {
@@ -943,6 +1013,12 @@ model SalesOrders {
     productionStatus SalesProductionStatus?
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
+    @@index([customerId])
+    @@index([shippingAddressId])
+    @@index([billingAddressId])
+    @@index([prodId])
+    @@index([salesRepId])
+    @@index([pickupId])
 }
 
 model SalesProductionStatus {
@@ -985,15 +1061,15 @@ model SalesOrderItems {
     multiDyke          Boolean                          @default(false)
     dykeProduction     Boolean                          @default(false)
     multiDykeUid       String?
-    supplies           SalesItemSupply[]
     salesOrder         SalesOrders?                     @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
-    itemDeliveries     OrderItemDelivery[]
-    productions        OrderProductionSubmissions[]
     shelfItems         DykeSalesShelfItem[]
     formSteps          DykeStepForm[]
     housePackageTool   HousePackageTools?
     salesDoors         DykeSalesDoors[]
+    supplies           SalesItemSupply[]
     assignments        OrderItemProductionAssignments[]
+    productions        OrderProductionSubmissions[]
+    itemDeliveries     OrderItemDelivery[]
 
     @@index([createdAt, description, swing])
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
@@ -1028,6 +1104,11 @@ model OrderDelivery {
     createdBy               Users?                 @relation(name: "createdBy", fields: [createdById], references: [id])
     OrderDeliveryProgress   OrderDeliveryProgress? @relation(fields: [orderDeliveryProgressId], references: [id])
     orderDeliveryProgressId Int?
+
+    @@index([salesOrderId])
+    @@index([driverId])
+    @@index([createdById])
+    @@index([orderDeliveryProgressId])
 }
 
 model OrderItemDelivery {
@@ -1044,6 +1125,10 @@ model OrderItemDelivery {
     order           SalesOrders     @relation(fields: [orderId], references: [id])
     items           SalesOrderItems @relation(fields: [orderItemId], references: [id])
     delivery        OrderDelivery?  @relation(fields: [orderDeliveryId], references: [id])
+
+    @@index([orderId])
+    @@index([orderItemId])
+    @@index([orderDeliveryId])
 }
 
 model HousePackageTools {
@@ -1071,6 +1156,14 @@ model HousePackageTools {
     casing         DykeProducts?      @relation(name: "casing", fields: [casingId], references: [id])
     molding        DykeProducts?      @relation(name: "molding", fields: [moldingId], references: [id])
     doors          DykeSalesDoors[]
+
+    @@index([orderItemId])
+    @@index([salesOrderId])
+    @@index([dykeDoorId])
+    @@index([doorId])
+    @@index([jambSizeId])
+    @@index([casingId])
+    @@index([moldingId])
 }
 
 model DykeSalesDoors {
@@ -1097,6 +1190,10 @@ model DykeSalesDoors {
     salesOrderItem     SalesOrderItems?                 @relation(fields: [salesOrderItemId], references: [id])
     order              SalesOrders?                     @relation(fields: [salesOrderId], references: [id])
     productions        OrderItemProductionAssignments[]
+
+    @@index([housePackageToolId])
+    @@index([salesOrderItemId])
+    @@index([salesOrderId])
 }
 
 model SalesPickup {
@@ -1110,6 +1207,8 @@ model SalesPickup {
     deletedAt        DateTime?     @db.Timestamp(0)
     sales            SalesOrders[]
     approvedBy       Users         @relation(fields: [pickupApprovedBy], references: [id])
+
+    @@index([pickupApprovedBy])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1127,6 +1226,10 @@ model SalesPayments {
     customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
     commissions   SalesCommision[]
+
+    @@index([orderId])
+    @@index([customerId])
+    @@index([transactionId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1168,6 +1271,11 @@ model Jobs {
     homeTasks HomeTasks[]
 
     @@index([createdAt, homeId, type, status, userId])
+    @@index([paymentId])
+    @@index([homeId])
+    @@index([userId])
+    @@index([coWorkerId])
+    @@index([projectId])
 }
 
 model JobPayments {
@@ -1186,6 +1294,9 @@ model JobPayments {
     jobs          Jobs[]
     user          Users?    @relation(name: "worker", fields: [userId], references: [id])
     payer         Users?    @relation(name: "payer", fields: [paidBy], references: [id])
+
+    @@index([userId])
+    @@index([paidBy])
 }
 
 model EmployeeProfile {
@@ -1211,6 +1322,8 @@ model UserDocuments {
     updatedAt   DateTime? @updatedAt
     deletedAt   DateTime? @db.Timestamp(0)
     user        Users?    @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1260,6 +1373,7 @@ model Users {
     pageView                   PageView[]
 
     @@index([createdAt, deletedAt, name])
+    @@index([employeeProfileId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1298,6 +1412,8 @@ model WorkOrders {
     createdAt    DateTime? @default(now()) @db.Timestamp(0)
     updatedAt    DateTime? @updatedAt
     tech         Users?    @relation(fields: [techId], references: [id])
+
+    @@index([techId])
 }
 
 model Notifications {
@@ -1317,6 +1433,8 @@ model Notifications {
     deletedAt  DateTime?
 
     @@index([createdAt, deletedAt, userId, seenAt, archivedAt])
+    @@index([userId])
+    @@index([fromUserId])
 }
 
 // Dyke Edge Db
@@ -1352,6 +1470,9 @@ model DykeShelfProducts {
     housePackageTools HousePackageTools[]  @relation(name: "shelfProd")
 
     // @@fulltext([title])
+
+    @@index([categoryId])
+    @@index([parentCategoryId])
 }
 
 model Cache {
@@ -1373,6 +1494,8 @@ model Payday {
     updatedAt DateTime?      @updatedAt
     deletedAt DateTime?      @db.Timestamp(0)
     invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
+
+    @@index([invoiceId])
 }
 
 model PaydayInvoice {
@@ -1398,6 +1521,10 @@ model DykeStepForm {
     sales          SalesOrders?     @relation(fields: [salesId], references: [id])
     salesOrderItem SalesOrderItems? @relation(fields: [salesItemId], references: [id])
     step           DykeSteps        @relation(fields: [stepId], references: [id])
+
+    @@index([salesId])
+    @@index([salesItemId])
+    @@index([stepId])
 }
 
 model DykeSteps {
@@ -1415,6 +1542,10 @@ model DykeSteps {
     rootStepValue   DykeStepValues?    @relation(fields: [rootStepValueId], references: [id], name: "rootValue")
     stepValue       DykeStepValues?    @relation(fields: [stepValueId], references: [id], name: "stepValue")
     prevStepValue   DykeStepValues?    @relation(fields: [prevStepValueId], references: [id], name: "prevStepValue")
+
+    @@index([rootStepValueId])
+    @@index([stepValueId])
+    @@index([prevStepValueId])
 }
 
 model DykeStepValues {
@@ -1447,6 +1578,9 @@ model DykeStepProducts {
     deletedAt     DateTime?    @db.Timestamp(0)
     product       DykeProducts @relation(fields: [dykeProductId], references: [id])
     step          DykeSteps    @relation(fields: [dykeStepId], references: [id])
+
+    @@index([dykeStepId])
+    @@index([dykeProductId])
 }
 
 model DykeDoors {
@@ -1482,6 +1616,8 @@ model DykeProducts {
     jambHousePackageTools   HousePackageTools[] @relation(name: "jamb")
     casingHousePackageTools HousePackageTools[] @relation(name: "casing")
     moldingHousePkgTools    HousePackageTools[] @relation(name: "molding")
+
+    @@index([categoryId])
 }
 
 model DykeProductPrices {
@@ -1509,4 +1645,6 @@ model Blogs {
     updatedAt   DateTime? @updatedAt
     deletedAt   DateTime? @db.Timestamp(0)
     user        Users?    @relation(fields: [authorId], references: [id])
+
+    @@index([authorId])
 }

@@ -663,7 +663,7 @@ function heading({ mode, isOrder, order, isEstimate }) {
                 );
 
             h.lines.push(
-                styled("Good Until", goodUntil ? formatDate(goodUntil) : "-")
+                styled("Due Date", goodUntil ? formatDate(goodUntil) : "-")
             );
         }
     }

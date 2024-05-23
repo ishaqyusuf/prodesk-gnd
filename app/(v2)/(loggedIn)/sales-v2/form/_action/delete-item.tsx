@@ -43,14 +43,6 @@ export async function _deleteDykeItem(
     }
     return prisma.$transaction(async (tx) => {
         if (itemId) {
-            // await prisma.salesOrderItems.updateMany({
-            //     where: {
-            //         id,
-            //     },
-            //     data: {
-            //         deletedAt: new Date(),
-            //     },
-            // });
             await _deleteWhere(itemId, tx.dykeStepForm, stepFormIds);
 
             await _deleteWhere(itemId, tx.dykeSalesShelfItem, shelfIds);

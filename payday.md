@@ -1,4 +1,4 @@
-# TODO
+# TODO:
     -SET ORDER STATUS (PENDING,COMPLETED,DELIVERED,PICKED UP...)
     IF COMPLETED: PROMPT TO MARK UNCOMPLETED PRODUCTION AS COMPLETED!
     -AUTOCOMPLE SALES ITEM BUG
@@ -26,11 +26,14 @@ Show Selected Door/Moulding
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 23: 00.00 == 00.00
+# MAY 24: 00.00 == 00.00
+    08:35-
+    06:30-08:00
+# MAY 23: 04:10 == 06.35
     11:25-12:00
     09:00-11:00
     05:50-07:25
-# MAY 22: 00.00 == 00.00
+# MAY 22: 02.25 == 02.25
     11:25-12:00
     09:10-11:00
 ----------------------------------------

@@ -76,7 +76,6 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                         <span>Add Item</span>
                     </Button>
                 </div>
-
                 <DykeSalesFooterSection />
             </RenderForm>
         </DykeFormContext.Provider>

@@ -47,7 +47,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                 billingAddress, //: ,
                 shippingAddress, //: { customerId: scid, ...siad },
                 customer,
-                profile,
+                // profile,
                 ...formData
             } = deepCopy<any>(addressForm.getValues());
             if (!billingAddress?.name || !billingAddress.phoneNo) {
@@ -70,10 +70,9 @@ export default function SalesAddressModal({ form: mainForm }) {
             };
             // console.log(_form);
             const resp = await saveSalesAddressAction({ ..._form } as any);
-            // console.log(resp);
             if (resp) {
                 const {
-                    profileUpdate,
+                    profile,
                     customerId,
                     billingAddressId,
                     shippingAddressId,
@@ -82,30 +81,28 @@ export default function SalesAddressModal({ form: mainForm }) {
                     customer,
                     ...ext
                 } = resp;
-                const respData = isDyke
-                    ? {
-                          "order.customerId": customerId,
-                          "order.billingAddressId": billingAddressId,
-                          "order.shippingAddressId": shippingAddressId,
-                          shippingAddress,
-                          billingAddress,
-                          customer,
-                      }
-                    : {
-                          customerId,
-                          billingAddressId,
-                          shippingAddressId,
-                          billingAddress,
-                          shippingAddress,
-                          customer,
-                      };
-                // console.log(respData);
-                // console.log(respData);
-                // console.log(mainForm.getValues("customerId"));
-                // mainForm.reset(respData, {
-                //     keepValues: true,
+                const respData = {
+                    ...(isDyke
+                        ? {
+                              "order.meta.sales_profile": profile?.title,
+                              "order.customerId": customerId,
+                              "order.billingAddressId": billingAddressId,
+                              "order.shippingAddressId": shippingAddressId,
+                              shippingAddress,
+                              billingAddress,
+                              customer,
+                          }
+                        : {
+                              customerId,
+                              billingAddressId,
+                              shippingAddressId,
+                              billingAddress,
+                              shippingAddress,
+                              customer,
+                          }),
+                };
+                console.log(respData);
 
-                // });
                 Object.entries(respData).map(([k, v]) => {
                     mainForm.setValue(k as any, v, {
                         shouldDirty: true,

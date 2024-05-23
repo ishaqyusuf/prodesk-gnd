@@ -22,6 +22,7 @@ interface Props<T> {
     suffix?: string;
     type?: string;
     list?: boolean;
+    size?: "sm" | "default" | "xs";
     // defaultValue?:boolean
 }
 export default function ControlledInput<
@@ -35,6 +36,7 @@ export default function ControlledInput<
     suffix,
     type,
     list,
+    size = "default",
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -77,7 +79,8 @@ export default function ControlledInput<
                                     // {...field}
                                     // value={""}
                                     className={cn(
-                                        fieldState.error && "border-red-400"
+                                        fieldState.error && "border-red-400",
+                                        size == "sm" && "h-8"
                                     )}
                                     {...(list
                                         ? {

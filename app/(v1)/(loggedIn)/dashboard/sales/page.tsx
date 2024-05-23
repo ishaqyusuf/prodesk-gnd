@@ -1,4 +1,4 @@
-import { salesDashboardAction } from "@/app/(v1)/_actions/dashboard/sales-dashboard";
+import { salesDashboardAction } from "@/app/(v1)/(loggedIn)/dashboard/sales/_actions/sales-dashboard";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
