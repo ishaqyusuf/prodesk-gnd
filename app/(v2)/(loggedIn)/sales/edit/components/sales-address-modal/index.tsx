@@ -58,7 +58,6 @@ export default function SalesAddressModal({ form: mainForm }) {
             const {
                 customerId: scid,
                 search: ssea,
-
                 ...siad
             } = shippingAddress || {};
             const _form = {
@@ -93,6 +92,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                               customer,
                           }
                         : {
+                              "meta.sales_profile": profile?.title,
                               customerId,
                               billingAddressId,
                               shippingAddressId,

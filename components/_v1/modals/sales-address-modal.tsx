@@ -105,7 +105,8 @@ export function SalesCustomerModal({
 
             if (resp) {
                 // console.log(_form);
-                const { profileUpdate, ...ext } = resp;
+                const { profile, ...ext } = resp;
+
                 // console.log(ext);
                 Object.entries(ext).map(([k, v]) => {
                     form.setValue(k as any, v, { shouldDirty: true });
@@ -312,9 +313,7 @@ function OrderAddress({
                                         ..._address
                                     } = address;
                                     form.setValue(type, _address as any);
-                                    // Object.entries(_address).map(([k, v]) => {
-                                    //     form.setValue(`${type}.${k}`, v);
-                                    // });
+
                                     if (
                                         customer?.profile &&
                                         type == "billingAddress"
