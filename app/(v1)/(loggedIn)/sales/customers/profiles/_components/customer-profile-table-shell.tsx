@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React from "react";
 
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 
@@ -30,10 +30,6 @@ export default function CustomerProfileTableShell({
         true,
         { sn: false, filterCells: ["_q"] }
     );
-    const [isPending, startTransition] = useTransition();
-
-    const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-
     return (
         <DataTable2
             searchParams={searchParams}
@@ -46,8 +42,6 @@ export default function CustomerProfileTableShell({
                     title: "",
                 },
             ]}
-
-            //  deleteRowsAction={() => void deleteCustomerProfile()}
         />
     );
 }

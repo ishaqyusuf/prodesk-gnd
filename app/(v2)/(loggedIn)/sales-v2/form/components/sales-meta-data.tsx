@@ -4,20 +4,15 @@ import { InfoLine } from "../../../sales/edit/components/sales-details-section";
 import { useDykeForm } from "../_hooks/form-context";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { useEffect, useState } from "react";
-import { getCustomerProfileList } from "../_action/get-customer-profiles";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
 
 export default function SalesMetaData() {
     const form = useDykeForm();
     const profiles = form.getValues("data.profiles");
-    // const onProfileSelect = (selection: (typeof profiles)[0]) => {
-    //     console.log("...");
-    // };
+
     const profile = form.watch("order.meta.sales_profile");
     useEffect(() => {
         const p = profiles.find((p) => p.label == profile);
