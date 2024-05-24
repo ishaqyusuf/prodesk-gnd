@@ -6,8 +6,7 @@ import {
     queryFilter,
 } from "@/app/(v1)/_actions/action-utils";
 import { prisma } from "@/db";
-import { lastId, nextId } from "@/lib/nextId";
-import { convertToNumber } from "@/lib/use-number";
+
 import { TableApiResponse } from "@/types/action";
 import {
     CopyOrderActionProps,
@@ -32,7 +31,7 @@ import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 
 export async function whereSales(query: SalesQueryParams) {
-    const {
+    let {
         _q,
         _dateType = "createdAt",
         status,
@@ -46,6 +45,11 @@ export async function whereSales(query: SalesQueryParams) {
         // isDyke,
         type = "order",
     } = query;
+    let itemSearch = null;
+    if (_q?.startsWith("item:")) {
+        itemSearch = _q.split("item:")[1].trim();
+        _q = null;
+    }
     const inputQ = { contains: _q || undefined } as any;
     function parseSearchQuery(query) {
         if (!query) return null;
@@ -71,84 +75,85 @@ export async function whereSales(query: SalesQueryParams) {
             originalQuery: query,
         };
     }
-    const parsedQ = parseSearchQuery(_q);
-    // console.log(parsedQ);
+    const parsedQ = parseSearchQuery(itemSearch);
+    console.log(parsedQ);
     const where: Prisma.SalesOrdersWhereInput = {
-        OR: !_q
-            ? undefined
-            : [
-                  { orderId: inputQ },
-                  {
-                      customer: {
-                          OR: [
-                              {
-                                  name: inputQ,
-                              },
-                              {
-                                  email: inputQ,
-                              },
-                              {
-                                  phoneNo: inputQ,
-                              },
-                          ],
-                      },
-                  },
-                  {
-                      shippingAddress: {
-                          address1: inputQ,
-                      },
-                  },
-                  {
-                      producer: {
-                          name: inputQ,
-                      },
-                  },
-                  {
-                      items: !parsedQ
-                          ? undefined
-                          : {
-                                some: {
-                                    OR: !parsedQ.size
-                                        ? [{ description: inputQ }]
-                                        : [
-                                              {
-                                                  salesDoors: {
-                                                      some: {
-                                                          dimension:
-                                                              parsedQ.size
-                                                                  ? {
-                                                                        contains:
-                                                                            parsedQ.size,
-                                                                    }
-                                                                  : undefined,
+        OR:
+            itemSearch && parsedQ
+                ? [
+                      {
+                          items: {
+                              some: {
+                                  OR: [
+                                      { description: inputQ },
+                                      { description: parsedQ.otherQuery },
+                                      {
+                                          salesDoors: {
+                                              some: {
+                                                  dimension: parsedQ.size
+                                                      ? {
+                                                            contains:
+                                                                parsedQ.size,
+                                                        }
+                                                      : undefined,
+                                              },
+                                          },
+                                          housePackageTool: {
+                                              OR: [
+                                                  {
+                                                      door: {
+                                                          title: {
+                                                              contains:
+                                                                  parsedQ.otherQuery,
+                                                          },
                                                       },
                                                   },
-                                                  housePackageTool: {
-                                                      OR: [
-                                                          {
-                                                              door: {
-                                                                  title: {
-                                                                      contains:
-                                                                          parsedQ.otherQuery,
-                                                                  },
-                                                              },
+                                                  {
+                                                      molding: {
+                                                          title: {
+                                                              contains:
+                                                                  parsedQ.otherQuery,
                                                           },
-                                                          {
-                                                              molding: {
-                                                                  title: {
-                                                                      contains:
-                                                                          parsedQ.otherQuery,
-                                                                  },
-                                                              },
-                                                          },
-                                                      ],
+                                                      },
                                                   },
-                                              },
-                                          ],
-                                },
-                            },
-                  },
-              ],
+                                              ],
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      },
+                  ]
+                : !_q
+                ? undefined
+                : [
+                      { orderId: inputQ },
+                      {
+                          customer: {
+                              OR: [
+                                  {
+                                      name: inputQ,
+                                  },
+                                  {
+                                      email: inputQ,
+                                  },
+                                  {
+                                      phoneNo: inputQ,
+                                  },
+                              ],
+                          },
+                      },
+                      {
+                          shippingAddress: {
+                              address1: inputQ,
+                          },
+                      },
+                      {
+                          producer: {
+                              name: inputQ,
+                          },
+                      },
+                  ],
         type,
         ...dateQuery({ from, to, _dateType, date }),
     };

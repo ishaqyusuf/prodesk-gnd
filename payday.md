@@ -26,8 +26,12 @@ Show Selected Door/Moulding
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 24: 00.00 == 00.00
-    08:35-
+# MAY 25: 00.00 == 00.00
+    
+    05:40-08:10
+# MAY 24: 04.35 == 11.10
+    11:25-01:00
+    08:35-10:05
     06:30-08:00
 # MAY 23: 04:10 == 06.35
     11:25-12:00
@@ -59,7 +63,7 @@ AMOUNT DUE: $544.58 + 831.25
 $1373.83
 PAYMENT INVOICE
 $544.58
-# MAY 10: 03.30 == 15.35
+# MAY 10: 03.30 == 15.35 
     11:25-01:50
     10:00-11:05
 # MAY 09: 03.55 == 12.05

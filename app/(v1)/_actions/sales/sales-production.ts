@@ -218,9 +218,8 @@ export async function orderItemProductionAction({
             await prisma.orderProductionSubmissions.create({
                 data: {
                     qty,
-                    meta: {
-                        note,
-                    },
+                    note,
+                    meta: {},
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     salesOrderId: item.salesOrderId,
@@ -233,7 +232,6 @@ export async function orderItemProductionAction({
         case "Cancel":
             _update.meta.produced_qty = producedQty - qty;
             await updateProgress(item, qty, "Production Cancelled");
-
             break;
     }
     await prisma.salesOrderItems.update({

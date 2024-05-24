@@ -571,7 +571,7 @@ model OrderItemProductionAssignments {
     orderId      Int
     assignedToId Int
     assignedById Int
-    qtyAssigned  Int? // 0 means all qty
+    qtyAssigned  Int?
     qtyCompleted Int?
     lhQty        Int?
     rhQty        Int?

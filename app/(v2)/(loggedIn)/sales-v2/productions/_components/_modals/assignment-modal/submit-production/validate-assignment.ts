@@ -13,7 +13,6 @@ export function useValidateAssignment(
     return {
         validate() {
             const v = form.getValues();
-
             let schema: any = null;
             form.clearErrors();
             const assignments: Partial<OrderItemProductionAssignments>[] = [];
