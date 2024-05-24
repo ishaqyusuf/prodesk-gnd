@@ -197,7 +197,7 @@ export async function whereSales(query: SalesQueryParams) {
         } else
             where.prodStatus = {
                 equals: statusIsArray ? undefined : status,
-                in: statusIsArray ? status : undefined,
+                in: statusIsArray ? (status as any) : undefined,
             };
     }
     if (query.statusNot)
