@@ -9,7 +9,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuShortcut,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -95,15 +95,13 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
                                 </DropdownMenuGroup>
                             ))}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => {
-                                signOut();
-                            }}
-                        >
-                            <LogOut className="mr-2 h-4 w-4" />
-                            <span>Log out</span>
-                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                        </DropdownMenuItem>
+                        <Link href={`/signout`}>
+                            <DropdownMenuItem onClick={() => {}}>
+                                <LogOut className="mr-2 h-4 w-4" />
+                                <span>Log out</span>
+                                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                        </Link>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
