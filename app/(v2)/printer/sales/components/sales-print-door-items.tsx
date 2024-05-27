@@ -18,7 +18,7 @@ export default function SalesPrintDoorItems({ index }) {
                 <table className="table-fixed w-full border">
                     <thead id="topHeader">
                         <th
-                            className="p-2 text-start uppercase text-base bg-slate-200"
+                            className="p-1s text-start uppercase text-base bg-slate-200"
                             colSpan={16}
                         >
                             {doors?.sectionTitle}

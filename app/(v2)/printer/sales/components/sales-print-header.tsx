@@ -32,7 +32,7 @@ export default function SalesPrintHeader() {
                                 </td>
                                 <td colSpan={1}></td>
                                 <td valign="top" colSpan={9}>
-                                    <p className="text-black mb-2 text-end text-xl font-bold capitalize">
+                                    <p className="text-black mb-1 text-end text-xl font-bold capitalize">
                                         {sale?.mode}
                                     </p>
                                     <table className="w-full table-fixed">
