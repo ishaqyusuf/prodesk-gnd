@@ -4,7 +4,7 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { Shell } from "@/components/shell";
-import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
+
 import { _getProductionList } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/actions";
 import ProductionList from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-list";
 
@@ -16,7 +16,7 @@ export default function SalesProductionPage({ searchParams }) {
 
     return (
         <AuthGuard can={[]}>
-            <ProductionPageTabs prod />
+            {/* <ProductionPageTabs prod /> */}
             <Breadcrumbs>
                 <BreadLink isFirst title="Sales" />
                 <BreadLink title="Productions" isLast />

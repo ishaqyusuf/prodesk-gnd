@@ -14,12 +14,14 @@ import {
 import { Metadata } from "next";
 import AuthGuard from "@/components/_v1/auth-guard";
 import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
     title: "Sales Production",
     description: "",
 };
 interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
+    redirect(`/sales-v2/productions`);
     const response = await getSalesProductionsAction(
         queryParams(searchParams),
         true

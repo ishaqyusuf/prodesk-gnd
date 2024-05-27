@@ -23,7 +23,10 @@ export default function DoorGroupSection({ index }) {
     if (!group) return null;
     return (
         <Collapsible className="mt-4" open={open}>
-            <CollapsibleTrigger asChild>
+            <CollapsibleTrigger
+                className={cn(!group.isDyke && !group.sectionTitle && "hidden")}
+                asChild
+            >
                 <div className="p-2 rounded  bg-black-300/5  border  w-full flex">
                     <button
                         onClick={() => onOpenChange(!open)}
@@ -46,13 +49,16 @@ export default function DoorGroupSection({ index }) {
                             </TableCol.Secondary>
                         </div>
                         <div className="grid gap-4 p-2 grid-cols-3 sm:grid-cols-5">
-                            {group.doorConfig.singleHandle ? (
+                            {group.doorConfig.singleHandle || !group.isDyke ? (
                                 <Info label="Qty" value={sd.report.totalQty} />
                             ) : (
                                 <>
                                     <Info label="LH" value={sd.report.lhQty} />
                                     <Info label="RH" value={sd.report.rhQty} />
                                 </>
+                            )}
+                            {!group.isDyke && (
+                                <Info label="Handle" value={group.item.swing} />
                             )}
                             <Info
                                 label="Assigned"
@@ -67,7 +73,8 @@ export default function DoorGroupSection({ index }) {
                             className={cn(
                                 "p-1",
                                 showDetails && "border",
-                                group.isType.service && "hidden"
+                                (!group.isDyke || group.isType.service) &&
+                                    "hidden"
                             )}
                         >
                             <Button

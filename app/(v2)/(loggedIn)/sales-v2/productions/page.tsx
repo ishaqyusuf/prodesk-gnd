@@ -17,7 +17,7 @@ export default function SalesProductionPage({ searchParams }) {
 
     return (
         <AuthGuard can={["viewOrderProduction", "viewOrders"]}>
-            <ProductionPageTabs />
+            {/* <ProductionPageTabs /> */}
             <Breadcrumbs>
                 <BreadLink isFirst title="Sales" />
                 <BreadLink title="Productions" isLast />

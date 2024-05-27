@@ -9,9 +9,58 @@ import {
 } from "@prisma/client";
 
 export async function migrationProductions() {
+    // const _updates = {};
+    // (
+    //     await prisma.orderProductionSubmissions.findMany({
+    //         include: {
+    //             order: {
+    //                 select: {
+    //                     orderId: true,
+    //                 },
+    //             },
+    //         },
+    //     })
+    // ).map(async (item) => {
+    //     if (!item.lhQty && !item.rhQty && item.qty) {
+    //         const k = item.qty?.toString();
+    //         if (!_updates[k]) _updates[k] = [];
+    //         _updates[k].push(item.id);
+    //         // if (item.qty == 80) console.log(item.order);
+    //     }
+    // });
+
+    // await Promise.all(
+    //     Object.entries(_updates).map(async ([k, ids]) => {
+    //         await prisma.orderProductionSubmissions.updateMany({
+    //             where: {
+    //                 id: {
+    //                     in: ids as any,
+    //                 },
+    //             },
+    //             data: {
+    //                 lhQty: Number(k),
+    //             },
+    //         });
+    //     })
+    // );
+
+    // return _updates;
+    // return [];
+
     const notDeleted = {
         deletedAt: null,
     };
+    const count = await prisma.salesOrders.count({
+        where: {
+            isDyke: false,
+            prodId: {
+                not: null,
+            },
+            assignments: {
+                none: {},
+            },
+        },
+    });
     const orders = (
         await prisma.salesOrders.findMany({
             where: {
@@ -23,6 +72,7 @@ export async function migrationProductions() {
                     none: {},
                 },
             },
+            take: 15,
             include: {
                 items: {
                     where: notDeleted,
@@ -212,6 +262,7 @@ export async function migrationProductions() {
                             pendingSubmitQty > 0
                                 ? {
                                       qty: pendingSubmitQty,
+                                      lhQty: pendingSubmitQty,
                                       note: "Completed by admin",
                                       salesOrderId: order.id,
                                       salesOrderItemId: item.id,
@@ -221,7 +272,8 @@ export async function migrationProductions() {
                 }),
         });
     });
-    console.log(updateProds.length);
+    // console.log(updateProds.length);
+    // return;
     if (deleteProds.length)
         await prisma.orderProductionSubmissions.updateMany({
             where: {
@@ -250,7 +302,7 @@ export async function migrationProductions() {
     );
     await Promise.all(
         updateProds
-            .filter((a, i) => i < 50)
+            // .filter((a, i) => i < 20)
             .map((d) => d.items)
             .flat()
             .map(async (data) => {
@@ -284,6 +336,6 @@ export async function migrationProductions() {
             })
     );
     console.log(updateProds.length);
-
-    return { updateProds, deleteProds, updateSubmissions };
+    console.log(count);
+    return { updateProds, count, deleteProds, updateSubmissions };
 }

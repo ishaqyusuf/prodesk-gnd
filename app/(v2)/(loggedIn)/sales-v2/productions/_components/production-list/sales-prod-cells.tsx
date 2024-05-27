@@ -4,22 +4,37 @@ import { ProductionListItemType } from ".";
 import { Badge } from "@/components/ui/badge";
 
 import { useAssignment } from "../_modals/assignment-modal/use-assignment";
-import { sum } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Dot } from "lucide-react";
 
 interface Props {
     item: ProductionListItemType;
 }
 function Order({ item }: Props) {
     return (
-        <TableCol>
+        <TableCol className="flex">
             {/* //shref={`/sales-v2/production/${item.slug}`}> */}
-            <TableCol.Primary className="line-clamp-1">
-                {item.customer?.businessName || item.customer?.name}
-            </TableCol.Primary>
-            <TableCol.Secondary className="line-clamp-1">
-                {item.orderId}
-            </TableCol.Secondary>
+            {/* <div>
+                <Dot
+                    className={cn(
+                        item.isDyke ? "text-blue-300" : "text-transparent"
+                    )}
+                />
+            </div> */}
+            <div>
+                <TableCol.Primary className="line-clamp-1">
+                    {item.customer?.businessName || item.customer?.name}
+                </TableCol.Primary>
+                <TableCol.Secondary className="line-clamp-1">
+                    {item.orderId}{" "}
+                    {item.isDyke && (
+                        <span className="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline">
+                            v2
+                        </span>
+                    )}
+                </TableCol.Secondary>
+            </div>
         </TableCol>
     );
 }
@@ -31,15 +46,16 @@ function SalesRep({ item }: Props) {
     );
 }
 function Status({ item }: Props) {
-    let status = "Not Assigned";
+    let status = "not assigned";
     let color = "red";
-    let total = sum(item.doors.map((d) => sum([d.lhQty, d.rhQty])));
+    let total = item._meta.totalDoors;
     let assigned = sum(item.assignments.map((a) => a.qtyAssigned));
 
     if (assigned) {
         status =
             // assigned == total ? "Assigned" :
-            `${assigned} of ${total} assigned`;
+            // `${assigned}/${total} assigned`;
+            "assigned";
         color = assigned == total ? "green" : "yellow";
     }
 
@@ -56,7 +72,7 @@ function ProductionStatus({ item }: Props) {
             sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
         )
     );
-    const totalDoors = sum(item.doors.map((d) => sum([d.rhQty, d.lhQty])));
+    const totalDoors = item._meta.totalDoors;
     // console.log({ totalDoors, submitted });
 
     return (

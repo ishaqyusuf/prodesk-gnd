@@ -12,6 +12,6 @@ export function isComponentType(type: DykeDoorType) {
         moulding: type == "Moulding",
         hasSwing: false,
     };
-    resp.hasSwing = resp.interior || resp.exterior;
+    resp.hasSwing = resp.interior || resp.exterior || !type;
     return resp;
 }

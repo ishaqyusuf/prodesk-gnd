@@ -44,6 +44,18 @@ export async function getOrderAssignmentData(id, prod = false) {
                             },
                         },
                         {
+                            swing: {
+                                not: null,
+                            },
+                        },
+                        {
+                            qty: null,
+                            swing: null,
+                            salesOrder: {
+                                isDyke: false,
+                            },
+                        },
+                        {
                             dykeProduction: true,
                         },
                     ],
@@ -88,11 +100,14 @@ export async function getOrderAssignmentData(id, prod = false) {
     // const _item = order.items[0];
     const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta);
     let assignmentSummary = {};
-    const doorGroups = items
+    let doorGroups = items
         .filter(
-            (item) => item.multiDyke || (!item.multiDyke && !item.multiDykeUid)
+            (item) =>
+                !order.isDyke ||
+                (order.isDyke &&
+                    (item.multiDyke || (!item.multiDyke && !item.multiDykeUid)))
         )
-        .map((item) => {
+        .map((item, index) => {
             const _items = order.items.filter(
                 (i) =>
                     i.id == item.id ||
@@ -105,6 +120,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                 totalQty: 0,
             };
             const salesDoors = _items
+                .filter((s) => order.isDyke)
                 .map((subItem) => {
                     return subItem.salesDoors.map((salesDoor) => {
                         const ret = {
@@ -112,7 +128,6 @@ export async function getOrderAssignmentData(id, prod = false) {
                                 ...salesDoor,
                                 doorType: salesDoor.doorType as DykeDoorType,
                             },
-
                             assignments: subItem.assignments
                                 .filter((a) => a.salesDoorId == salesDoor.id)
                                 .map(composeAssignment)
@@ -145,7 +160,24 @@ export async function getOrderAssignmentData(id, prod = false) {
                     salesDoors.push(analyseItem(ret, report));
                 }
             });
+            if (!order.isDyke) {
+                const salesDoor = { lhQty: item.qty };
+                const ret = {
+                    salesDoor,
+                    assignments: item.assignments
+                        .filter((a) => a.itemId == item.id)
+                        .map(composeAssignment)
+                        .flat()
+                        .filter((s) => s.__report.total > 0),
+                    doorTitle: item.description?.toUpperCase(),
+                    report: initJobReport(item, salesDoor),
+                };
+                salesDoors.push(analyseItem(ret, report));
+            }
+            console.log(order.isDyke);
+
             return {
+                isDyke: order.isDyke,
                 sectionTitle: item?.meta?.doorType as DykeDoorType,
                 isType: isComponentType(item?.meta?.doorType),
                 doorConfig: getDoorConfig(item?.meta?.doorType),
@@ -158,8 +190,26 @@ export async function getOrderAssignmentData(id, prod = false) {
                     item as any
                 ),
             };
-        });
+        })
+        .sort(
+            order.isDyke
+                ? undefined
+                : (item, item2) =>
+                      item.item.meta.lineIndex - item2.item.meta.lineIndex
+        );
+    doorGroups = doorGroups
+        .map((group, index) => {
+            if (!order.isDyke) {
+                let title = doorGroups
+                    .findLast((g, i) => !g.item.qty && i < index)
+                    ?.item?.description?.replaceAll("*", "");
+                group.sectionTitle = title as any;
+            }
+            return group;
+        })
+        .filter((item) => order.isDyke || (!order.isDyke && item.item.qty));
     console.log(doorGroups);
+    console.log(order.items.length);
 
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
     return { ...order, totalQty, doorGroups, isProd: prod };

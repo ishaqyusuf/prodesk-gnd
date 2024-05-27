@@ -6,13 +6,14 @@ import { Prisma } from "@prisma/client";
 import { DykeDoorType } from "../../type";
 import { ISalesType } from "@/types/sales";
 import { userId } from "@/app/(v1)/_actions/utils";
+import { sum } from "@/lib/utils";
 
 export async function _getProductionList({ query, production = false }) {
     const productionTypes = ["Interior", "Garage"] as DykeDoorType[];
     const authId = await userId();
     return prisma.$transaction(async (tx) => {
         const where: Prisma.SalesOrdersWhereInput = {
-            isDyke: true,
+            // isDyke: true,
             type: "order" as ISalesType,
             assignments: production
                 ? {
@@ -21,15 +22,28 @@ export async function _getProductionList({ query, production = false }) {
                       },
                   }
                 : undefined,
+
             items: {
                 some: {
-                    salesDoors: {
-                        some: {
-                            doorType: {
-                                in: productionTypes,
+                    OR: [
+                        {
+                            salesDoors: {
+                                some: {
+                                    doorType: {
+                                        in: productionTypes,
+                                    },
+                                },
                             },
                         },
-                    },
+                        {
+                            swing: {
+                                not: null,
+                            },
+                        },
+                        {
+                            dykeProduction: true,
+                        },
+                    ],
                 },
             },
         };
@@ -43,6 +57,12 @@ export async function _getProductionList({ query, production = false }) {
             skip,
             take,
             include: {
+                items: {
+                    where: {
+                        deletedAt: null,
+                        swing: { not: null },
+                    },
+                },
                 productionStatus: true,
                 doors: {
                     where: {
@@ -122,6 +142,15 @@ export async function _getProductionList({ query, production = false }) {
             data: data.map((order) => {
                 return {
                     ...order,
+                    _meta: {
+                        totalDoors: sum(
+                            order.isDyke
+                                ? order.doors.map((d) =>
+                                      sum([d.lhQty, d.rhQty])
+                                  )
+                                : order.items.map((i) => i.qty)
+                        ),
+                    },
                 };
             }),
             pageCount,

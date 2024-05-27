@@ -16,9 +16,6 @@ import AssignProdModal from "@/components/_v1/modals/assign-prod-modal";
 import AuthGuard from "@/components/_v1/auth-guard";
 import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
-import { prisma } from "@/db";
-import dayjs from "dayjs";
-import RestoreOrders from "./components/restore-items/restore-items";
 
 export const metadata: Metadata = {
     title: "Sales Orders",

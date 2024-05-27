@@ -2,15 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { migrationProductions } from "./migrate-productions";
+import { toast } from "sonner";
+import { useTransition } from "react";
+import Btn from "@/components/_v1/btn";
 
 export default function ProdMigration() {
+    const [transition, startTransition] = useTransition();
     async function migrate() {
-        const resp = await migrationProductions();
-        console.log(resp);
+        startTransition(async () => {
+            const resp = await migrationProductions();
+            console.log(resp);
+            toast.message("done");
+            if (resp.count) migrate();
+        });
     }
     return (
         <div>
-            <Button onClick={migrate}>Migrate</Button>
+            <Btn isLoading={transition} onClick={migrate}>
+                Migrate
+            </Btn>
         </div>
     );
 }
