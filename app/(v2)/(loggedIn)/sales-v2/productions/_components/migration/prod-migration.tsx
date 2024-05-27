@@ -13,7 +13,7 @@ export default function ProdMigration() {
             const resp = await migrationProductions();
             console.log(resp);
             toast.message("done");
-            if (resp.count) migrate();
+            // if (resp.count) migrate();
         });
     }
     return (

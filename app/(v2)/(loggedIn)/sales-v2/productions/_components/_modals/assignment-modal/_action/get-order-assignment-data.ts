@@ -182,6 +182,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                 isType: isComponentType(item?.meta?.doorType),
                 doorConfig: getDoorConfig(item?.meta?.doorType),
                 item,
+                groupItemId: null as any,
                 salesDoors,
                 report,
                 formSteps: item?.formSteps,
@@ -200,14 +201,41 @@ export async function getOrderAssignmentData(id, prod = false) {
     doorGroups = doorGroups
         .map((group, index) => {
             if (!order.isDyke) {
-                let title = doorGroups
-                    .findLast((g, i) => !g.item.qty && i < index)
-                    ?.item?.description?.replaceAll("*", "");
+                const gItem = doorGroups.findLast(
+                    (g, i) => !g.item.qty && i < index
+                )?.item;
+                let title = gItem?.description?.replaceAll("*", "");
                 group.sectionTitle = title as any;
+                group.groupItemId = gItem?.id;
             }
             return group;
         })
         .filter((item) => order.isDyke || (!order.isDyke && item.item.qty));
+    if (doorGroups.filter((dg) => dg.groupItemId).length > 0) {
+        const ng = doorGroups.filter(
+            (_, i) =>
+                !_.groupItemId ||
+                (_.groupItemId &&
+                    i ==
+                        doorGroups.findIndex(
+                            (d) => d.groupItemId == _.groupItemId
+                        ))
+        );
+        // console.log(ng.length);
+        doorGroups = ng.map((n) => {
+            if (n.groupItemId) {
+                // n.salesDoors = [
+                //     ...n.salesDoors,
+                // ]
+                doorGroups
+                    .filter((g) => g.groupItemId == n.groupItemId)
+                    .map((g) => {
+                        n.salesDoors.push(...g.salesDoors);
+                    });
+            }
+            return n;
+        });
+    }
     console.log(doorGroups);
     console.log(order.items.length);
 
