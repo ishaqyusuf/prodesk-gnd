@@ -1,5 +1,7 @@
 "use client";
 
+import SalesNoteModal from "@/app/(v2)/(loggedIn)/sales-v2/components/_sales-note/_modal";
+import { useModal } from "@/components/common/modal/provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -11,17 +13,24 @@ import { Plus } from "lucide-react";
 
 export default function Timeline() {
     const { data: order } = useDataPage<ISalesOrder>();
-
+    const modal = useModal();
     return (
         <div className="col-span-1">
             <Card className="max-sm:border-none">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                        <span>Timeline</span>
+                        <span>Timelines</span>
                         <div>
                             <Button
                                 onClick={() => {
-                                    openModal("salesTimeline", order);
+                                    // openModal("salesTimeline", order);
+                                    modal.openSheet(
+                                        <SalesNoteModal
+                                            edit
+                                            id={order.id}
+                                            orderId={order.orderId}
+                                        />
+                                    );
                                 }}
                                 className="h-8 w-8 p-0"
                                 variant="outline"

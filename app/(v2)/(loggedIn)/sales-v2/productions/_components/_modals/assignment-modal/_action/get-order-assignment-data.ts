@@ -236,9 +236,8 @@ export async function getOrderAssignmentData(id, prod = false) {
             return n;
         });
     }
-    console.log(doorGroups);
-    console.log(order.items.length);
-
+    // console.log(doorGroups);
+    // console.log(order.items.length);
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
     return { ...order, totalQty, doorGroups, isProd: prod };
 }

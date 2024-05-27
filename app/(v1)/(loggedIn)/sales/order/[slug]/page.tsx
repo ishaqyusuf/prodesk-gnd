@@ -12,10 +12,8 @@ import PaymentHistory from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/
 import TabbedItemEmailOverview from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/tabbed-item-email-overview";
 import Timeline from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/timeline";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
-import { prisma } from "@/db";
-import { ISalesOrder, ISalesOrderMeta } from "@/types/sales";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { SalesOverview } from "./type";
 import AuthGuard from "@/components/_v1/auth-guard";
 
@@ -28,47 +26,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
     const order: SalesOverview = (await getOrderAction(slug)) as any;
     if (!order) return notFound();
     metadata.description = order.orderId;
-
-    // fix dissapered prices
-    // const fixOrders = await prisma.salesOrderItems.findMany({
-    //     where: {
-    //         total: 0,
-    //         qty: {
-    //             gt: 0,
-    //         },
-    //     },
-    //     include: {
-    //         salesOrder: {
-    //             select: {
-    //                 orderId: true,
-    //                 type: true,
-    //             },
-    //         },
-    //     },
-    // });
-    // const slugs = new Set<string[]>([]);
-    // await Promise.all(
-    //     fixOrders.map(async (item) => {
-    //         const meta: ISalesOrderMeta = item.meta as any;
-    //         if (meta.cost_price > 0) {
-    //             slugs.add(
-    //                 `${item.salesOrder?.type}/${item.salesOrder?.orderId}` as any
-    //             );
-    //             await prisma.salesOrderItems.update({
-    //                 where: {
-    //                     id: item.id,
-    //                 },
-    //                 data: {
-    //                     rate: meta.cost_price,
-    //                     price: meta.cost_price,
-    //                     total: Number(meta.cost_price) * (item.qty || 0),
-    //                 },
-    //             });
-    //         }
-    //     })
-    // );
-
-    // console.log(order.i);
+    if (order.isDyke) redirect(`/sales-v2/overview/order/${slug}`);
     return (
         <AuthGuard can={["editOrders"]}>
             <DataPageShell className="sm:px-8" data={order}>

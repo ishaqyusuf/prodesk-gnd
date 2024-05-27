@@ -317,12 +317,12 @@ export async function getOrderAction(orderId, isProd = false) {
         where: [
             {
                 progressableId: order.id,
-                progressableType: "SalesOrder",
-                type: "production",
+                // progressableType: "SalesOrder",
+                // type: "production",
             },
             {
                 parentId: order.id,
-                progressableType: "SalesOrderItem",
+                // progressableType: "SalesOrderItem",
                 type: isProd ? "production" : undefined,
             },
         ],

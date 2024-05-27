@@ -20,7 +20,13 @@ import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export default function SalesNotes({ salesId }) {
+export default function SalesNotes({
+    salesId,
+    edit,
+}: {
+    salesId;
+    edit?: boolean;
+}) {
     const { data, refresh } = useFn(() => getSalesNote(salesId));
     const form = useForm({
         defaultValues: {
@@ -30,7 +36,7 @@ export default function SalesNotes({ salesId }) {
             type: "All Types",
             description: "",
             headline: "",
-            form: false,
+            form: edit,
         },
     });
     // const
