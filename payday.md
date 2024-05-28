@@ -26,8 +26,10 @@ Show Selected Door/Moulding
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
+# MAY 28: 00.00 == 00.00
+    07:00-
 # MAY 27: 00.00 == 00.00
-    09:20-
+    09:20-10:50
     06:05-06:15
     04:40-05:40
 -------------------------------

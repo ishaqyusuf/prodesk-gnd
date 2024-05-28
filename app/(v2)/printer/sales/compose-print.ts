@@ -1,12 +1,10 @@
 import {
     AddressBooks,
-    DykeDoors,
     DykeSalesDoors,
     DykeSalesShelfItem,
 } from "@prisma/client";
 import { IAddressMeta } from "@/types/sales";
 import { formatDate } from "@/lib/use-day";
-import { formatMoney } from "@/lib/use-number";
 import {
     ViewSaleType,
     composeSalesItems,
@@ -15,7 +13,6 @@ import { SalesPrintProps } from "./page";
 import { formatCurrency, inToFt } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
-import { DykeDoorType } from "../../(loggedIn)/sales-v2/type";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;

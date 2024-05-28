@@ -11,10 +11,28 @@ import { sum } from "@/lib/utils";
 export async function _getProductionList({ query, production = false }) {
     const productionTypes = ["Interior", "Garage"] as DykeDoorType[];
     const authId = await userId();
+    const searchQuery = query?._q ? { contains: query?._q } : undefined;
     return prisma.$transaction(async (tx) => {
         const where: Prisma.SalesOrdersWhereInput = {
             // isDyke: true,
             type: "order" as ISalesType,
+
+            OR: searchQuery
+                ? [
+                      {
+                          orderId: searchQuery,
+                      },
+                      {
+                          assignments: {
+                              some: {
+                                  assignedTo: {
+                                      name: searchQuery,
+                                  },
+                              },
+                          },
+                      },
+                  ]
+                : undefined,
             assignments: production
                 ? {
                       some: {
