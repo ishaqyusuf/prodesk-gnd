@@ -78,7 +78,7 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             template: { type },
         } = form.getValues();
         if (cmd) {
-            to = "ishaqyusuf024@gmail.com";
+            // to = "ishaqyusuf024@gmail.com";
             console.log(to);
         }
 
