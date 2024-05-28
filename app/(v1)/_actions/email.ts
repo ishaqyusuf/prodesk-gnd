@@ -25,7 +25,10 @@ export async function sendMessage(data: EmailProps) {
         });
     }
 
-    const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
+    // const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
+    const to = data.to?.split(",");
+    console.log(to);
+
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
