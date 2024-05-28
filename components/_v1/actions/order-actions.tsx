@@ -75,33 +75,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                 >
                     Edit
                 </MenuItem>
-                <MenuItem
-                    Icon={Icons.Email}
-                    onClick={() => {
-                        const email =
-                            row.billingAddress?.email ||
-                            row.shippingAddress?.email ||
-                            row.customer?.email;
-
-                        modal?.openSheet(
-                            <SendEmailSheet
-                                data={{
-                                    parentId: row.id,
-                                    to: email as any,
-                                    type:
-                                        row.type == "order" ? "sales" : "quote",
-                                }}
-                                subtitle={`Sales Order | ${row.orderId}`}
-                            />
-                        );
-                        // openEmailComposer(row, {
-                        //     type: "sales",
-                        //     parentId: row.id,
-                        // });
-                    }}
-                >
-                    Email
-                </MenuItem>
+                <SendEmailMenuAction sales={row} />
                 {row.slug?.toLowerCase().endsWith("-bo") ? (
                     <MenuItem
                         Icon={Icons.close}
@@ -143,14 +117,6 @@ export function OrderRowAction(props: IOrderRowProps) {
                                             onClick={() =>
                                                 updateDeliveryMode(o.value)
                                             }
-                                            // Icon={
-                                            //     row.deliveryOption ==
-                                            //     o.value ? (
-                                            //         <Icons.check />
-                                            //     ) : (
-                                            //         <Icons.check />
-                                            //     )
-                                            // }
                                             key={o}
                                         >
                                             {o.text}
@@ -182,7 +148,37 @@ export function OrderRowAction(props: IOrderRowProps) {
         </AuthGuard>
     );
 }
+export const SendEmailMenuAction = ({ sales }: { sales: any }) => {
+    const modal = useModal();
+    return (
+        <MenuItem
+            Icon={Icons.Email}
+            onClick={() => {
+                const email =
+                    sales.billingAddress?.email ||
+                    sales.shippingAddress?.email ||
+                    sales.customer?.email;
 
+                modal?.openSheet(
+                    <SendEmailSheet
+                        data={{
+                            parentId: sales.id,
+                            to: email as any,
+                            type: sales.type == "order" ? "sales" : "quote",
+                        }}
+                        subtitle={`Sales Order | ${sales.orderId}`}
+                    />
+                );
+                // openEmailComposer(row, {
+                //     type: "sales",
+                //     parentId: row.id,
+                // });
+            }}
+        >
+            Email
+        </MenuItem>
+    );
+};
 export const PrintOrderMenuAction = typedMemo(
     (
         props: IOrderRowProps & {
