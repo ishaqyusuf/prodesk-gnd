@@ -167,11 +167,12 @@ export async function saveDykeSales(data: DykeForm) {
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
                             ([dimension, doorData]) => {
-                                doors?.push({
-                                    ...doorData,
-                                    dimension,
-                                    doorType: item?.meta?.doorType,
-                                });
+                                if (doorData && typeof doorData == "object")
+                                    doors?.push({
+                                        ...(doorData || {}),
+                                        dimension,
+                                        doorType: item?.meta?.doorType,
+                                    });
                             }
                         );
 
