@@ -7,6 +7,7 @@ import {
     CopyOrderMenuAction,
     MoveSalesMenuItem,
     PrintOrderMenuAction,
+    SendEmailMenuAction,
 } from "@/components/_v1/actions/order-actions";
 import { Icons } from "@/components/_v1/icons";
 import {
@@ -141,13 +142,23 @@ export default function HeaderSection({}) {
                                 }
                             />
                             {slug && (
-                                <MenuItem
-                                    href={`/sales-v2/form/${type}/${orderId}?restore=true`}
-                                    Icon={ArchiveRestore}
-                                    className="bg-red-500 text-white"
-                                >
-                                    Restore
-                                </MenuItem>
+                                <>
+                                    <MenuItem
+                                        href={`/sales-v2/form/${type}/${orderId}?restore=true`}
+                                        Icon={ArchiveRestore}
+                                        className="bg-red-500 text-white"
+                                    >
+                                        Restore
+                                    </MenuItem>
+                                    <SendEmailMenuAction
+                                        sales={{
+                                            id,
+                                            slug,
+                                            type,
+                                            ...form.getValues(),
+                                        }}
+                                    />
+                                </>
                             )}
                         </Menu>
                     </div>

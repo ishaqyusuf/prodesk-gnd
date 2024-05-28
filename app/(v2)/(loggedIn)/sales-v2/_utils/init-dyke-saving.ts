@@ -57,9 +57,9 @@ function initializeMultiComponent(data: DykeForm) {
 
         let parented =
             components.find(
-                (c) => c.checked && c.itemId && c.itemId == item.item.id
+                (c: any) => c.checked && c.itemId && c.itemId == item.item.id
             ) != null;
-        components.map((c) => {
+        components.map((c: any) => {
             if (!c.checked) {
                 trash.orderItems.push(c.itemId);
                 trash.housePackageTools.push(c.hptId);
