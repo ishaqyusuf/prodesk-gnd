@@ -9,13 +9,17 @@ import {
     PrintOrderMenuAction,
 } from "@/components/_v1/actions/order-actions";
 import { Icons } from "@/components/_v1/icons";
-import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
+import {
+    Menu,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
 import { cn } from "@/lib/utils";
 import useScroll from "@/hooks/use-scroll";
 import { useModal } from "@/components/common/modal/provider";
 import SalesNoteModal from "../../_components/_sales-note/_modal";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
+import { ArchiveRestore } from "lucide-react";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -136,6 +140,15 @@ export default function HeaderSection({}) {
                                     } as any
                                 }
                             />
+                            {slug && (
+                                <MenuItem
+                                    href={`/sales-v2/form/${type}/${orderId}?restore=true`}
+                                    Icon={ArchiveRestore}
+                                    className="bg-red-500 text-white"
+                                >
+                                    Restore
+                                </MenuItem>
+                            )}
                         </Menu>
                     </div>
                 </div>

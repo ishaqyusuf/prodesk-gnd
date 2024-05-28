@@ -16,14 +16,14 @@ export default function PageAnalytics() {
     >([]);
     useEffect(() => {
         const _history = deepCopy(history);
-        console.log(history.length);
+        // console.log(history.length);
         const data = _history.pop();
         const last = _history.pop();
         if (!data) {
-            console.log("no data", {
-                data,
-                last,
-            });
+            // console.log("no data", {
+            //     data,
+            //     last,
+            // });
             return;
         }
         const same = data?.path == last?.path;
@@ -31,12 +31,12 @@ export default function PageAnalytics() {
             (data?.searchParams == "" && last?.searchParams == "page=1") ||
             (data?.searchParams == "page=1" && last?.searchParams == "") ||
             data?.searchParams == last?.searchParams;
-        console.log({
-            same,
-            sameRoot,
-            data,
-            last,
-        });
+        // console.log({
+        //     same,
+        //     sameRoot,
+        //     data,
+        //     last,
+        // });
 
         if (!last || data?.path != last.path || (same && !sameRoot)) {
             console.log("PASSED", data);

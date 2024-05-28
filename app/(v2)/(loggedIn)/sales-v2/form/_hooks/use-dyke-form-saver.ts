@@ -1,6 +1,6 @@
 import { useTransition } from "react";
 import { DykeForm } from "../../type";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ export default function useDykeFormSaver(form) {
         "order.id",
         "order.type",
     ]);
+    const params = useSearchParams();
     function save(data: DykeForm) {
         startTransition(async () => {
             const errorData: any = {};
@@ -27,7 +28,7 @@ export default function useDykeFormSaver(form) {
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
                 toast.success("Saved");
-                if (!id)
+                if (!id || params.get("restore") == "true")
                     router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
                 else await _revalidate("salesV2Form");
             } catch (error) {

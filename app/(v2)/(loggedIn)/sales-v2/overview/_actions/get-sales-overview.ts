@@ -46,7 +46,7 @@ export async function viewSale(type, slug) {
                         },
                     },
                     formSteps: {
-                        where: { deletedAt: null },
+                        // where: { deletedAt: null },
                         include: {
                             step: {
                                 select: {
@@ -58,20 +58,20 @@ export async function viewSale(type, slug) {
                         },
                     },
                     housePackageTool: {
-                        where: { deletedAt: null },
+                        // where: { deletedAt: null },
                         include: {
                             casing: true,
                             door: {
                                 where: {
-                                    deletedAt: null,
+                                    // deletedAt: null,
                                 },
                             },
                             jambSize: true,
                             doors: {
-                                where: { deletedAt: null },
+                                // where: { deletedAt: null },
                             },
                             molding: {
-                                where: { deletedAt: null },
+                                // where: { deletedAt: null },
                             },
                         },
                     },

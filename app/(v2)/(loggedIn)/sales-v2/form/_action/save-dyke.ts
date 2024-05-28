@@ -96,6 +96,7 @@ export async function saveDykeSales(data: DykeForm) {
                             where: { id: itemId },
                             data: {
                                 ...item,
+                                deletedAt: null,
                                 updatedAt: new Date(),
                             } as any,
                         });
@@ -136,6 +137,7 @@ export async function saveDykeSales(data: DykeForm) {
                                                             },
                                                             data: {
                                                                 ...shelf,
+                                                                deletedAt: null,
                                                                 updatedAt:
                                                                     new Date(),
                                                             } as any,
@@ -193,6 +195,7 @@ export async function saveDykeSales(data: DykeForm) {
                                     where: { id: hptId },
                                     data: {
                                         ...(hptData as any),
+                                        deletedAt: null,
                                         updatedAt: new Date(),
                                     },
                                 });
@@ -219,6 +222,7 @@ export async function saveDykeSales(data: DykeForm) {
                                             where: { id: doorId },
                                             data: {
                                                 ...(doorData as any),
+                                                deletedAt: null,
                                                 updatedAt: new Date(),
                                             },
                                         });
@@ -245,6 +249,7 @@ export async function saveDykeSales(data: DykeForm) {
                                         where: { id: stepFormId },
                                         data: {
                                             ...(stepForm as any),
+                                            deletedAt: null,
                                             updatedAt: new Date(),
                                         },
                                     });

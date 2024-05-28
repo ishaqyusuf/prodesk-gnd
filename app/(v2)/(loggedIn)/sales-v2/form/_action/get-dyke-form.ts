@@ -16,11 +16,35 @@ import {
 } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
-import { generateRandomString, inToFt, safeFormText, sum } from "@/lib/utils";
+import {
+    generateRandomString,
+    inToFt,
+    removeKeys,
+    safeFormText,
+    sum,
+} from "@/lib/utils";
 import dayjs from "dayjs";
 import { DykeSalesDoors } from "@prisma/client";
 
-export async function getDykeFormAction(type, slug, copy = false) {
+export async function getDykeFormAction(type, slug, restore = false) {
+    console.log(restore);
+
+    const restoreQuery = restore
+        ? {
+              OR: [
+                  {
+                      deletedAt: null,
+                  },
+                  {
+                      deletedAt: {
+                          not: null,
+                      },
+                  },
+              ],
+          }
+        : {
+              deletedAt: null,
+          };
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
@@ -29,13 +53,13 @@ export async function getDykeFormAction(type, slug, copy = false) {
         include: {
             items: {
                 where: {
-                    deletedAt: null,
+                    ...restoreQuery,
                 },
 
                 include: {
                     formSteps: {
                         where: {
-                            deletedAt: null,
+                            ...restoreQuery,
                         },
                         include: {
                             step: {},
@@ -43,27 +67,27 @@ export async function getDykeFormAction(type, slug, copy = false) {
                     },
                     shelfItems: {
                         where: {
-                            deletedAt: null,
+                            ...restoreQuery,
                         },
                     },
                     housePackageTool: {
                         // where: {
-                        //     deletedAt: null,
+                        //     ...restoreQuery
                         // },
                         include: {
                             doors: {
                                 where: {
-                                    deletedAt: null,
+                                    ...restoreQuery,
                                 },
                             },
                             door: {
                                 where: {
-                                    deletedAt: null,
+                                    ...restoreQuery,
                                 },
                             },
                             molding: {
                                 where: {
-                                    deletedAt: null,
+                                    ...restoreQuery,
                                 },
                             },
                         },
@@ -130,42 +154,46 @@ export async function getDykeFormAction(type, slug, copy = false) {
 
     const meta = form.meta as any as ISalesOrderMeta;
     if (!Object.keys(meta).includes("tax")) meta.tax = true;
-    const typedForm = {
-        ...form,
-        meta,
-        items: form.items.map((item) => {
-            let _doorForm: { [dimension in string]: DykeSalesDoors } = {};
-            let _doorFormDefaultValue: {
-                [dimension in string]: { id: number };
-            } = {};
-            item.housePackageTool?.doors?.map((d) => {
-                let dim = d.dimension?.replaceAll('"', "in");
-                _doorForm[dim] = { ...d };
-                _doorFormDefaultValue[dim] = {
-                    id: d.id,
-                };
-            });
-            // console.log(item.housePackageTool?.dykeDoorId);
+    const typedForm = removeKeys(
+        {
+            ...form,
+            meta,
+            items: form.items.map((item) => {
+                let _doorForm: { [dimension in string]: DykeSalesDoors } = {};
+                let _doorFormDefaultValue: {
+                    [dimension in string]: { id: number };
+                } = {};
+                item.housePackageTool?.doors?.map((d) => {
+                    let dim = d.dimension?.replaceAll('"', "in");
+                    _doorForm[dim] = { ...d };
+                    _doorFormDefaultValue[dim] = {
+                        id: d.id,
+                    };
+                });
+                // console.log(item.housePackageTool?.dykeDoorId);
 
-            return {
-                ...item,
-                housePackageTool: {
-                    ...(item.housePackageTool || {}),
-                    _doorForm,
-                    _doorFormDefaultValue,
-                },
-                meta: item.meta as any as ISalesOrderItemMeta,
-                formSteps: item.formSteps.map((item) => ({
+                return {
                     ...item,
-                    meta: item.meta as any as DykeFormStepMeta,
-                })),
-                shelfItems: item.shelfItems.map((item) => ({
-                    ...item,
-                    meta: item.meta as any as ShelfItemMeta,
-                })),
-            };
-        }),
-    };
+                    housePackageTool: {
+                        ...(item.housePackageTool || {}),
+                        _doorForm,
+                        _doorFormDefaultValue,
+                    },
+                    meta: item.meta as any as ISalesOrderItemMeta,
+                    formSteps: item.formSteps.map((item) => ({
+                        ...item,
+                        meta: item.meta as any as DykeFormStepMeta,
+                    })),
+                    shelfItems: item.shelfItems.map((item) => ({
+                        ...item,
+                        meta: item.meta as any as ShelfItemMeta,
+                    })),
+                };
+            }),
+        },
+        ["deletedAt"] as any,
+        true
+    );
     const {
         items,
         salesRep,

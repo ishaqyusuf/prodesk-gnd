@@ -23,7 +23,7 @@ export default async function SalesForm({ params, searchParams }) {
 
     const form = copy
         ? await copyDykeSales(copy, type)
-        : await getDykeFormAction(type, slug);
+        : await getDykeFormAction(type, slug, searchParams.restore == "true");
 
     return (
         <AuthGuard can={["editOrders"]}>
