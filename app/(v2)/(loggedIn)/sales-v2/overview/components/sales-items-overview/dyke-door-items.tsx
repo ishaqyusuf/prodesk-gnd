@@ -103,7 +103,7 @@ export default function DykeDoorItems() {
                                 )}
 
                                 <TableCell>
-                                    <Money value={com.rate} />
+                                    <Money value={door.unitPrice} />
                                 </TableCell>
                                 <TableCell>
                                     <Money value={com.total} />
