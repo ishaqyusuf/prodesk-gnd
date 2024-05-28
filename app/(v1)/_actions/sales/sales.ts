@@ -293,6 +293,9 @@ export async function getOrderAction(orderId, isProd = false) {
                 // wallet: true
             },
             items: {
+                where: {
+                    deletedAt: null,
+                },
                 include: {},
                 // orderBy: {
                 //   swing: "desc",
