@@ -126,6 +126,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                         const ret = {
                             salesDoor: {
                                 ...salesDoor,
+                                itemId: subItem.id,
                                 doorType: salesDoor.doorType as DykeDoorType,
                             },
                             assignments: subItem.assignments
@@ -157,11 +158,12 @@ export async function getOrderAssignmentData(id, prod = false) {
                         doorTitle: sItem.description as any,
                         report: initJobReport(sItem, { lhQty: sItem.qty }),
                     };
+
                     salesDoors.push(analyseItem(ret, report));
                 }
             });
             if (!order.isDyke) {
-                const salesDoor = { lhQty: item.qty };
+                const salesDoor = { lhQty: item.qty, itemId: item.id };
                 const ret = {
                     salesDoor,
                     assignments: item.assignments
@@ -172,7 +174,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                     doorTitle: item.description?.toUpperCase(),
                     report: initJobReport(item, salesDoor),
                 };
-                salesDoors.push(analyseItem(ret, report));
+                salesDoors.push(analyseItem(ret, report) as any);
             }
             console.log(order.isDyke);
 
@@ -233,7 +235,20 @@ export async function getOrderAssignmentData(id, prod = false) {
                         n.salesDoors.push(...g.salesDoors);
                     });
             }
-            return n;
+            console.log(n);
+
+            return {
+                ...n,
+                salesDoors: n.salesDoors.filter(
+                    (s, i) =>
+                        i ==
+                        n.salesDoors.findIndex(
+                            (d) =>
+                                d.salesDoor.salesOrderItemId ==
+                                s.salesDoor.salesOrderItemId
+                        )
+                ),
+            };
         });
     }
     // console.log(doorGroups);
@@ -241,7 +256,8 @@ export async function getOrderAssignmentData(id, prod = false) {
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
     return { ...order, totalQty, doorGroups, isProd: prod };
 }
-function analyseItem(ret, report) {
+function analyseItem<T>(_ret: T, report): T {
+    let ret: any = { ..._ret };
     ret.assignments.map((a) => {
         ret.report.assigned += a.__report.total || 0;
         ret.report.completed += a.__report.submitted || 0;
@@ -265,6 +281,7 @@ function analyseItem(ret, report) {
     ret.report.totalQty += sum([ret.salesDoor.lhQty, ret.salesDoor.rhQty]);
     ret.report.pendingAssignment = ret.report.totalQty - ret.report.assigned;
     Object.entries(ret.report).map(([k, v]) => (report[k] += v));
+
     return ret;
 }
 function composeAssignment(assignment) {
