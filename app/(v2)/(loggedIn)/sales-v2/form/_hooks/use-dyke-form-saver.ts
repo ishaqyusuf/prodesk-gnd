@@ -26,6 +26,8 @@ export default function useDykeFormSaver(form) {
             };
             try {
                 const e = initDykeSaving(data);
+                console.log("init");
+
                 if (e.order.type == "order") {
                     e.order.paymentDueDate =
                         salesFormUtils._calculatePaymentTerm(

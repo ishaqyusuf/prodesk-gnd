@@ -40,7 +40,7 @@ function initializeMultiComponent(data: DykeForm) {
         housePackageTools: [] as any,
         doorForms: [] as any,
     };
-    data.itemArray.map((item) => {
+    data.itemArray.map((item, index) => {
         let items: DykeForm["itemArray"] = [];
         // if (!item?.multiComponent?.components) {
         if (item.item.shelfItemArray.length) {
@@ -92,7 +92,12 @@ function initializeMultiComponent(data: DykeForm) {
             }
             // console.log(type);
 
-            if (!type.moulding && !type.service) {
+            if (
+                !type.moulding &&
+                !type.service &&
+                clone.item.housePackageTool
+            ) {
+                console.log(index);
                 if (!clone.item.multiDyke) {
                     clone.item.formStepArray = [];
                 }
@@ -115,7 +120,7 @@ function initializeMultiComponent(data: DykeForm) {
                     dykeDoorId,
                     moldingId,
                     ...rest
-                } = clone.item.housePackageTool;
+                } = clone.item.housePackageTool || {};
 
                 if (clone.item.meta.doorType == "Moulding")
                     moldingId = c.toolId;
@@ -151,12 +156,13 @@ function initializeMultiComponent(data: DykeForm) {
                 clone.item.qty = c.qty;
                 clone.item.description = c.description as any;
 
-                if (type.moulding) {
-                    clone.item.housePackageTool.dykeDoorId = null;
-                    clone.item.housePackageTool.moldingId = c.toolId;
-                } else clone.item.housePackageTool.moldingId = null;
+                if (clone.item.housePackageTool) {
+                    if (type.moulding) {
+                        clone.item.housePackageTool.dykeDoorId = null;
+                        clone.item.housePackageTool.moldingId = c.toolId;
+                    } else clone.item.housePackageTool.moldingId = null;
+                }
             }
-            console.log(clone.item.total);
 
             items.push(clone);
         });

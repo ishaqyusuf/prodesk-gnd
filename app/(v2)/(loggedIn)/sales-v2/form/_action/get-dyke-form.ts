@@ -26,8 +26,20 @@ import {
 import dayjs from "dayjs";
 import { DykeSalesDoors } from "@prisma/client";
 
-export async function getDykeFormAction(type, slug, restore = false) {
-    console.log(restore);
+export async function getDykeFormAction(type, slug, query?) {
+    const restore = query?.restore == "true";
+    const errorId = query?.errorId;
+    if (errorId) {
+        const e = await prisma.dykeSalesError.findFirst({
+            where: {
+                errorId,
+            },
+        });
+        if (e) {
+            let meta = e.meta as any;
+            return meta?.data;
+        }
+    }
 
     const restoreQuery = restore
         ? {
