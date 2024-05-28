@@ -83,7 +83,9 @@ export default function DykeSalesFooterSection({}) {
             if (item.multiComponent)
                 Object.values(item.multiComponent.components)
                     .filter(Boolean)
+                    .filter((c) => c.checked)
                     .map((v) => {
+                        // console.log(v.uid);
                         calculate(v.uid);
                     });
 

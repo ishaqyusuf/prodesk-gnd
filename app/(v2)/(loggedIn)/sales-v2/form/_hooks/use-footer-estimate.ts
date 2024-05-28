@@ -15,6 +15,7 @@ export default function useFooterEstimate() {
     function updateFooterPrice(uid, { price, doorType, tax }: Props) {
         const footer = form.getValues("footer");
         footer.footerPricesJson = JSON.parse(footer.footerPrices);
+
         footer.footerPricesJson[uid] = {
             doorType,
             price,

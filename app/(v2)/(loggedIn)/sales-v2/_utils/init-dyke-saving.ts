@@ -90,6 +90,8 @@ function initializeMultiComponent(data: DykeForm) {
             } else {
                 clone.item.meta.tax = true;
             }
+            // console.log(type);
+
             if (!type.moulding && !type.service) {
                 if (!clone.item.multiDyke) {
                     clone.item.formStepArray = [];
@@ -114,9 +116,10 @@ function initializeMultiComponent(data: DykeForm) {
                     moldingId,
                     ...rest
                 } = clone.item.housePackageTool;
+
                 if (clone.item.meta.doorType == "Moulding")
                     moldingId = c.toolId;
-                else moldingId = c.toolId;
+                else dykeDoorId = c.toolId;
 
                 clone.item.housePackageTool = {
                     ...rest,
@@ -147,10 +150,11 @@ function initializeMultiComponent(data: DykeForm) {
 
                 clone.item.qty = c.qty;
                 clone.item.description = c.description as any;
+
                 if (type.moulding) {
                     clone.item.housePackageTool.dykeDoorId = null;
                     clone.item.housePackageTool.moldingId = c.toolId;
-                }
+                } else clone.item.housePackageTool.moldingId = null;
             }
             console.log(clone.item.total);
 
