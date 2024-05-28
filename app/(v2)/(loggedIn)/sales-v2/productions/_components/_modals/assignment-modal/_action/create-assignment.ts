@@ -7,7 +7,7 @@ import { math, sum } from "@/lib/utils";
 
 export async function createProdAssignment(
     data: Partial<OrderItemProductionAssignments>[],
-    productionStatusId?,
+    productionStatusId,
     allQty,
     prodDueDate
 ) {

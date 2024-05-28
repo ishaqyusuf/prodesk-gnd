@@ -45,7 +45,11 @@ export async function _getSalesFormAction(
                     deletedAt: null,
                 },
                 include: {
-                    supplies: true,
+                    supplies: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
                 },
             },
             salesRep: true,

@@ -577,6 +577,7 @@ model OrderItemProductionAssignments {
     rhQty        Int?
     note         String?
     salesDoorId  Int?
+    startedAt    DateTime?                    @db.Timestamp(0)
     dueDate      DateTime?                    @db.Timestamp(0)
     deletedAt    DateTime?                    @db.Timestamp(0)
     createdAt    DateTime?                    @default(now()) @db.Timestamp(0)
