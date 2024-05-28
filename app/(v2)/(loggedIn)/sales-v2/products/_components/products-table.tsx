@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
 import { ColumnDef } from "@tanstack/react-table";
 import { _FilterColumn } from "@/components/_v1/columns/base-columns";
-import { ProductCategoryFilter } from "../../components/filters/product-category-filter";
+import { ProductCategoryFilter } from "../../_components/filters/product-category-filter";
 import {
     DeleteRowAction,
     EditRowAction,

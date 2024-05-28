@@ -35,9 +35,12 @@ import { useValidateAssignment } from "./validate-assignment";
 import { createProdAssignment } from "../_action/create-assignment";
 import { toast } from "sonner";
 import { useAssignment } from "../use-assignment";
+import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/_v1/date-range-picker";
 
 export interface IAssignGroupForm {
     assignToId?: number;
+    prodDueDate;
     doors: {
         [id in string]: OrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
     };
@@ -54,7 +57,7 @@ export function AssignGroup({ index }) {
         },
     });
     // console.log(group.sal);
-
+    const prodDueDate = form.watch("prodDueDate");
     const validator = useValidateAssignment(form);
 
     useEffect(() => {
@@ -103,7 +106,8 @@ export function AssignGroup({ index }) {
                     const r = await createProdAssignment(
                         _data,
                         data.data.productionStatus?.id,
-                        data.data.totalQty
+                        data.data.totalQty,
+                        form.getValues("prodDueDate")
                     );
                     toast.success("Production assigned");
                     modal.open(data.data.id);
@@ -135,7 +139,7 @@ export function AssignGroup({ index }) {
                             <CardTitle>Assign</CardTitle>
                         </CardHeader>
                         <CardContent className="max-h-[50vh] overflow-auto">
-                            <div className="">
+                            <div className="grid grid-cols-2 gap-4">
                                 <ControlledSelect
                                     control={form.control}
                                     options={prodUsers.data}
@@ -144,6 +148,16 @@ export function AssignGroup({ index }) {
                                     name="assignToId"
                                     label={"Assign To"}
                                 />
+                                <div className="grid gap-4">
+                                    <Label>Due Date</Label>
+                                    <DatePicker
+                                        className="w-auto h-7s"
+                                        value={prodDueDate}
+                                        setValue={(v) => {
+                                            form.setValue("prodDueDate", v);
+                                        }}
+                                    />
+                                </div>
                             </div>
                             <Table>
                                 <TableHeader>

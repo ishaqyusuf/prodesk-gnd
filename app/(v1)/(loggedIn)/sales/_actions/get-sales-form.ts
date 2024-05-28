@@ -41,6 +41,9 @@ export async function _getSalesFormAction(
         include: {
             customer: true,
             items: {
+                where: {
+                    deletedAt: null,
+                },
                 include: {
                     supplies: true,
                 },

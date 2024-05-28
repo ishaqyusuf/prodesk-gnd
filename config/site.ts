@@ -1,7 +1,5 @@
 import type { FooterItem, MainNavItem } from "@/types";
 
-import slugify from "slugify";
-
 export type SiteConfig = typeof siteConfig;
 
 const links = {

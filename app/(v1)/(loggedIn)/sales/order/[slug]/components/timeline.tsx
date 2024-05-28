@@ -1,6 +1,6 @@
 "use client";
 
-import SalesNoteModal from "@/app/(v2)/(loggedIn)/sales-v2/components/_sales-note/_modal";
+import SalesNoteModal from "@/app/(v2)/(loggedIn)/sales-v2/_components/_sales-note/_modal";
 import { useModal } from "@/components/common/modal/provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

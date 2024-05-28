@@ -29,6 +29,7 @@ import { revalidatePath } from "next/cache";
 import { _revalidate } from "../_revalidate";
 import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.persistence";
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
+import { redirect } from "next/navigation";
 
 export async function whereSales(query: SalesQueryParams) {
     let {
@@ -551,5 +552,12 @@ export async function moveSales(id, type: ISalesType) {
         status: title,
         headline: `${title} by ${(await user()).name}`,
     });
-    _revalidate(type == "order" ? "orders" : "quotes");
+    // _revalidate(type == "order" ? "orders" : "quotes");
+
+    redirect(
+        order.isDyke
+            ? `/sales-v2/form/${order.type}/${order.slug}`
+            : `/sales/${type}/${order.slug}`
+    );
+    return order;
 }

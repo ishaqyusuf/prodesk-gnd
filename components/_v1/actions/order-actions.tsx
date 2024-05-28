@@ -45,16 +45,7 @@ export function OrderRowAction(props: IOrderRowProps) {
         ? `/sales-v2/overview/${row.type}/${row.slug}`
         : `/sales/${row.type}/${row.slug}`;
     const router = useRouter();
-    async function moveEstimateToOrder() {
-        await moveSales(row.id, "order");
-        toast.message("Estimate moved to order");
-        router.push(`/sales/order/${row.orderId}`);
-    }
-    async function moveToEstimate() {
-        await moveSales(row.id, "quote");
-        toast.message("Order moved to quote");
-        router.push(`/sales/quote/${row.orderId}`);
-    }
+
     async function updateDeliveryMode(delivery) {
         if (delivery != row.deliveryOption) {
             await updateDeliveryModeDac(
@@ -170,24 +161,12 @@ export function OrderRowAction(props: IOrderRowProps) {
                         >
                             Delivery
                         </MenuItem>
-
-                        <MenuItem
-                            Icon={Icons.estimates}
-                            onClick={moveToEstimate}
-                        >
-                            Move to Estimate
-                        </MenuItem>
                     </>
                 ) : (
-                    <>
-                        <MenuItem
-                            Icon={Icons.orders}
-                            onClick={moveEstimateToOrder}
-                        >
-                            Move to Order
-                        </MenuItem>
-                    </>
+                    <></>
                 )}
+                <MoveSalesMenuItem id={row.id} type={row.type} />
+
                 <CopyOrderMenuAction row={row} />
                 <PrintOrderMenuAction link estimate={estimate} row={row} />
                 <PrintOrderMenuAction
@@ -319,7 +298,27 @@ export const PrintOrderMenuAction = typedMemo(
         );
     }
 );
-
+export const MoveSalesMenuItem = ({ id, type }) => {
+    const estimate = type == "quote";
+    async function moveEstimateToOrder() {
+        await moveSales(id, "order");
+        toast.message("Estimate moved to order");
+        //  router.push(`/sales/order/${row.orderId}`);
+    }
+    async function moveToEstimate() {
+        await moveSales(id, "quote");
+        toast.message("Order moved to quote");
+        //  router.push(`/sales/quote/${row.orderId}`);
+    }
+    return (
+        <MenuItem
+            Icon={Icons.estimates}
+            onClick={estimate ? moveEstimateToOrder : moveToEstimate}
+        >
+            Move to {estimate ? "Sales" : "Quote"}
+        </MenuItem>
+    );
+};
 export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();

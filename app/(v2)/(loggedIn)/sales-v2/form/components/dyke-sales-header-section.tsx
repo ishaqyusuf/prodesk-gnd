@@ -5,15 +5,15 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import useDykeFormSaver from "../_hooks/use-dyke-form-saver";
 import {
     CopyOrderMenuAction,
+    MoveSalesMenuItem,
     PrintOrderMenuAction,
 } from "@/components/_v1/actions/order-actions";
 import { Icons } from "@/components/_v1/icons";
 import { Menu } from "@/components/_v1/data-table/data-table-row-actions";
-import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useScroll from "@/hooks/use-scroll";
 import { useModal } from "@/components/common/modal/provider";
-import SalesNoteModal from "../../components/_sales-note/_modal";
+import SalesNoteModal from "../../_components/_sales-note/_modal";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 
@@ -67,17 +67,22 @@ export default function HeaderSection({}) {
                                 value={date}
                             />
                         </div>
-                        <Btn
-                            size="sm"
-                            variant={"outline"}
-                            onClick={() => {
-                                // modal.openSheet(
-                                //     <SalesNoteModal id={id} orderId={orderId} />
-                                // );
-                            }}
-                        >
-                            Payments
-                        </Btn>
+                        {id && type == "order" && (
+                            <Btn
+                                size="sm"
+                                variant={"outline"}
+                                onClick={() => {
+                                    modal.openSheet(
+                                        <SalesNoteModal
+                                            id={id}
+                                            orderId={orderId}
+                                        />
+                                    );
+                                }}
+                            >
+                                Payment
+                            </Btn>
+                        )}
                         <Btn
                             size="sm"
                             variant={"outline"}
@@ -113,6 +118,7 @@ export default function HeaderSection({}) {
                                     } as any
                                 }
                             />
+                            {id && <MoveSalesMenuItem id={id} type={type} />}
                             <PrintOrderMenuAction
                                 mockup
                                 link
