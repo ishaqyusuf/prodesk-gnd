@@ -21,7 +21,9 @@ export default function useDykeFormSaver(form) {
     const params = useSearchParams();
     function save(data: DykeForm) {
         startTransition(async () => {
-            const errorData: any = {};
+            const errorData: any = {
+                data,
+            };
             try {
                 const e = initDykeSaving(data);
                 if (e.order.type == "order") {
