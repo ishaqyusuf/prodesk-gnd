@@ -437,7 +437,7 @@ export function _ObjectMetaType<T, MetaType>(
 }
 export function removeKeys<T>(
     from: T,
-    objectKeys: (keyof T)[],
+    objectKeys: (keyof T | any)[],
     deep = false
 ): T {
     // Base case: if 'from' is not an object, return it as is

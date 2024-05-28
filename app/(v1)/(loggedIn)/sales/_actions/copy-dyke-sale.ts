@@ -58,7 +58,7 @@ export async function copyDykeSales(slug, as: ISalesType) {
                             "salesOrderId",
                             "salesOrderItemId",
                             "housePackageToolId",
-                        ]);
+                        ] as any);
                     });
                 }
                 if (_doorFormDefaultValue) {
