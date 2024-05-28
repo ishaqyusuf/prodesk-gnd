@@ -86,6 +86,8 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             toast.error("Please enter email address");
             return;
         }
+        console.log(to);
+
         await sendMessage({
             to,
             subject,
@@ -97,6 +99,8 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             meta: {},
             attachOrder: true,
         } as any);
+        toast.success("sent");
+        modal.close();
     }
     useEffect(() => {
         getEmailData(data.parentId, data.type).then((resp) => {
