@@ -8,6 +8,7 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 import { _saveDykeError } from "../_action/error/save-error";
 import initDykeSaving from "../../_utils/init-dyke-saving";
+import salesFormUtils from "../../../sales/edit/sales-form-utils";
 
 export default function useDykeFormSaver(form) {
     const [saving, startTransition] = useTransition();
@@ -23,8 +24,16 @@ export default function useDykeFormSaver(form) {
             const errorData: any = {};
             try {
                 const e = initDykeSaving(data);
-                console.log(e);
+                if (e.order.type == "order") {
+                    e.order.paymentDueDate =
+                        salesFormUtils._calculatePaymentTerm(
+                            e.order.paymentTerm,
+                            e.order.createdAt
+                        );
+                }
+                // console.log(e);
                 // return;
+
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
                 toast.success("Saved");

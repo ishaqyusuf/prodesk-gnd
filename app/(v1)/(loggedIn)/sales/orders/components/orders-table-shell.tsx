@@ -34,6 +34,8 @@ import { _getSalesRep } from "../_actions/get-sales-rep.action";
 import { getSalesOrder } from "@/app/(v1)/_actions/sales/sales";
 import DeliveryCell from "./cells/delivery-cell";
 import { useCmd } from "@/components/cmd/provider";
+import { useSearchParams } from "next/navigation";
+import { TableCol } from "@/components/common/data-table/table-cells";
 
 export type SalesTableItem = Awaited<
     ReturnType<typeof getSalesOrder>
@@ -56,6 +58,7 @@ export default function OrdersTableShell<T>({
     ]);
     const table = SmartTable<ISalesOrder>(data);
     const isMobile = useMediaQuery(screens.xs);
+    // const paymentMode
     const columns = useMemo<ColumnDef<ISalesOrder, unknown>[]>(
         () =>
             isMobile
@@ -122,11 +125,26 @@ export default function OrdersTableShell<T>({
                           ),
                       },
                       {
-                          accessorKey: "production",
-                          header: ColumnHeader("Production"),
-                          cell: ({ row }) =>
-                              OrderProductionStatusCell(row.original),
+                          accessorKey: "paymentDueDate",
+                          header: ColumnHeader("Invoice Due"),
+                          cell: ({ row }) => (
+                              <>
+                                  <TableCol.Date>
+                                      {row.original.paymentDueDate}
+                                  </TableCol.Date>
+                              </>
+                          ),
                       },
+                      ...(searchParams?._dateType == "paymentDueDate"
+                          ? [
+                                {
+                                    accessorKey: "production",
+                                    header: ColumnHeader("Production"),
+                                    cell: ({ row }) =>
+                                        OrderProductionStatusCell(row.original),
+                                },
+                            ]
+                          : []),
                       {
                           accessorKey: "delivery",
                           header: ColumnHeader("Delivery"),
@@ -147,6 +165,7 @@ export default function OrdersTableShell<T>({
                           "_payment",
                           "_customerId",
                           "_salesRepId",
+                          "_dateType",
                           "_date"
                       ),
                       {
@@ -223,6 +242,22 @@ export default function OrdersTableShell<T>({
                 ]}
                 dateFilterColumns={[
                     {
+                        filter: {
+                            title: "Filter By",
+                            id: "_dateType" as any,
+                            defaultValue: "createdAt",
+                            single: true,
+                            options: [
+                                {
+                                    label: "Date Created",
+                                    value: "createdAt",
+                                },
+                                {
+                                    label: "Due Payments",
+                                    value: "paymentDueDate",
+                                },
+                            ],
+                        },
                         id: "_date" as any,
                         title: "Date",
                     },
