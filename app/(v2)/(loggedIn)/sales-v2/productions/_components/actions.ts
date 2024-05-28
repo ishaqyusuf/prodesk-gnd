@@ -31,6 +31,18 @@ export async function _getProductionList({ query, production = false }) {
                               },
                           },
                       },
+                      {
+                          customer: {
+                              OR: [
+                                  {
+                                      businessName: searchQuery,
+                                  },
+                                  {
+                                      name: searchQuery,
+                                  },
+                              ],
+                          },
+                      },
                   ]
                 : undefined,
             assignments: production
