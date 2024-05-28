@@ -29,17 +29,6 @@ import { DykeSalesDoors } from "@prisma/client";
 export async function getDykeFormAction(type, slug, query?) {
     const restore = query?.restore == "true";
     const errorId = query?.errorId;
-    if (errorId) {
-        const e = await prisma.dykeSalesError.findFirst({
-            where: {
-                errorId,
-            },
-        });
-        if (e) {
-            let meta = e.meta as any;
-            return meta?.data;
-        }
-    }
 
     const restoreQuery = restore
         ? {
@@ -120,6 +109,17 @@ export async function getDykeFormAction(type, slug, query?) {
     });
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
+    // if (errorId) {
+    //     const e = await prisma.dykeSalesError.findFirst({
+    //         where: {
+    //             errorId,
+    //         },
+    //     });
+    //     if (e) {
+    //         let meta = e.meta as any;
+    //         return meta?.data as OrderType;
+    //     }
+    // }
     const rootProds = await getStepForm(1);
     const ctx = await salesFormData(true);
     const session = await user();
