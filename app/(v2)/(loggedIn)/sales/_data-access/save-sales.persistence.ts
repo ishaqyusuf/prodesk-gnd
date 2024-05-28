@@ -135,21 +135,24 @@ export async function _saveSales(
                 id: true,
             },
         });
+
         if (ids.length > 0) {
             const _ids = ids.map((i) => i.id);
-            await prisma.orderProductionSubmissions.deleteMany({
+            await prisma.orderProductionSubmissions.updateMany({
                 where: {
                     salesOrderItemId: {
                         in: _ids,
                     },
                 },
+                data: { deletedAt: new Date() },
             });
-            await prisma.salesOrderItems.deleteMany({
+            await prisma.salesOrderItems.updateMany({
                 where: {
                     id: {
                         in: _ids,
                     },
                 },
+                data: { deletedAt: new Date() },
             });
         }
     }
