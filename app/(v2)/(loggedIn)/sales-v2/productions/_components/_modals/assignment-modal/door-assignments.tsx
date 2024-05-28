@@ -43,6 +43,7 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                         <TableHead>Handle</TableHead>
                     )}
                     <TableHead>Assigned To</TableHead>
+                    <TableHead>Due Date</TableHead>
                     <TableHead>Completed</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead></TableHead>
@@ -59,6 +60,11 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                 </TableHead>
                             )}
                             <TableCell>{assignment.assignedTo?.name}</TableCell>
+                            <TableCell>
+                                <TableCol.Date>
+                                    {assignment.dueDate}
+                                </TableCol.Date>
+                            </TableCell>
                             <TableCell>
                                 {assignment.__report.submitted} of{" "}
                                 {assignment.__report.total}
