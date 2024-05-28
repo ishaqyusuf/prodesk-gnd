@@ -176,7 +176,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                 };
                 salesDoors.push(analyseItem(ret, report) as any);
             }
-            console.log(order.isDyke);
+            // console.log(order.isDyke);
 
             return {
                 isDyke: order.isDyke,

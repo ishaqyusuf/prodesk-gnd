@@ -57,6 +57,12 @@ export default function DoorGroupSection({ index }) {
                                     <Info label="RH" value={sd.report.rhQty} />
                                 </>
                             )}
+                            {group.doorConfig.doorType == "Garage" && (
+                                <Info
+                                    label="Swing"
+                                    value={`${sd.salesDoor.swing}`}
+                                />
+                            )}
                             {!group.isDyke && (
                                 <Info label="Handle" value={group.item.swing} />
                             )}
