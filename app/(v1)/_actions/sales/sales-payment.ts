@@ -6,7 +6,7 @@ import { ISalesPayment } from "@/types/sales";
 import { getCustomerWallet } from "../customer-wallet/wallet";
 import {
     creditTransaction,
-    debitTransaction
+    debitTransaction,
 } from "../customer-wallet/transaction";
 import { sum } from "@/lib/utils";
 import { getSettingAction } from "../settings";
@@ -27,13 +27,13 @@ export interface ApplyPaymentProps {
     orders: PaymentOrderProps[];
     credit;
     debit;
-    balance;
+    balance?;
 }
 export async function applyPaymentAction({
     orders,
     credit,
     debit,
-    balance
+    balance,
 }: ApplyPaymentProps) {
     const settings: ISalesSetting = await getSettingAction("sales-settings");
 
@@ -43,11 +43,11 @@ export async function applyPaymentAction({
     const transaction = await debitTransaction(
         wallet.id,
         debit,
-        `Payment for order: ${orders.map(o => o.orderId)}`
+        `Payment for order: ${orders.map((o) => o.orderId)}`
     );
     let commissionPercentage = settings?.meta?.commission?.percentage || 0;
     await Promise.all(
-        orders.map(async o => {
+        orders.map(async (o) => {
             let commission =
                 commissionPercentage > 0
                     ? (commissionPercentage / 100) * o.grandTotal
@@ -66,7 +66,7 @@ export async function applyPaymentAction({
                     //   },
                     meta: {
                         paymentOption: o.paymentOption,
-                        checkNo: o.checkNo
+                        checkNo: o.checkNo,
                     },
                     commissions: commission
                         ? {
@@ -77,16 +77,16 @@ export async function applyPaymentAction({
                                   status: "",
                                   user: {
                                       connect: {
-                                          id: o.salesRepId
-                                      }
+                                          id: o.salesRepId,
+                                      },
                                   },
                                   order: {
-                                      connect: { id: o.id }
-                                  }
-                              }
+                                      connect: { id: o.id },
+                                  },
+                              },
                           }
-                        : undefined
-                }
+                        : undefined,
+                },
             });
         })
     );
@@ -94,12 +94,12 @@ export async function applyPaymentAction({
         orders.map(async ({ id, amountDue }) => {
             await prisma.salesOrders.update({
                 where: {
-                    id
+                    id,
                 },
                 data: {
                     amountDue,
-                    updatedAt: new Date()
-                }
+                    updatedAt: new Date(),
+                },
             });
         })
     );
@@ -110,22 +110,22 @@ export async function deleteSalesPayment({
     amount,
     orderId,
     amountDue,
-    refund
+    refund,
 }) {
     await prisma.salesPayments.delete({
-        where: { id }
+        where: { id },
     });
 
     const sales = await prisma.salesOrders.update({
         where: {
-            id: orderId
+            id: orderId,
         },
         data: {
-            amountDue
+            amountDue,
         },
         include: {
-            customer: true
-        }
+            customer: true,
+        },
     });
     const wallet = await getCustomerWallet(sales.customerId);
     await creditTransaction(
@@ -138,7 +138,7 @@ export async function deleteSalesPayment({
 }
 export async function fixPaymentAction({
     amountDue,
-    id
+    id,
 }: {
     id: number;
     amountDue: number;
@@ -146,28 +146,28 @@ export async function fixPaymentAction({
     await prisma.salesOrders.update({
         where: { id },
         data: {
-            amountDue
-        }
+            amountDue,
+        },
     });
 }
 export async function fixSalesPaymentAction(id) {
     const order = await prisma.salesOrders.findUnique({
         where: {
-            id
+            id,
         },
         include: {
-            payments: true
-        }
+            payments: true,
+        },
     });
     let totalPaid = 0;
-    order?.payments?.map(p => {
+    order?.payments?.map((p) => {
         totalPaid += p.amount || 0;
     });
 
     let amountDue = (order?.grandTotal || 0) - totalPaid;
     await fixPaymentAction({
         id,
-        amountDue: +toFixed(amountDue)
+        amountDue: +toFixed(amountDue),
     });
 }
 export async function updatePaymentTerm(id, paymentTerm, goodUntil) {
@@ -175,8 +175,8 @@ export async function updatePaymentTerm(id, paymentTerm, goodUntil) {
         where: { id },
         data: {
             paymentTerm,
-            goodUntil
-        }
+            goodUntil,
+        },
     });
     // const d = await prisma.salesOrders.findUnique({
     //   where: { id },

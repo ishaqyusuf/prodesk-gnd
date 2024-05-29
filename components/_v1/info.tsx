@@ -11,7 +11,7 @@ export function Info({
     className = "",
     value,
 }: Omit<PrimitiveDivProps, "hidden"> & {
-    label?;
+    label?: string;
     hidden?: Boolean;
     children?;
     value?;

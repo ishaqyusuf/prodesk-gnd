@@ -17,5 +17,5 @@ TODO:
     - Shelf Items: Product Title not display
     - Door Image In print and in invoice form
     - Production Status in Orders List and Order Overview
-    - 
+    - Production Auto Complete by Admin
     - 

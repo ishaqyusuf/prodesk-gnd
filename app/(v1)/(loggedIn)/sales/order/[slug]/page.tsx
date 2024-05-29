@@ -44,7 +44,7 @@ export default async function SalesOrderPage({ params: { slug } }) {
                     </div>
                     <div className="space-y-4 max-sm:divide-y">
                         <CostBreakdown />
-                        <PaymentHistory />
+                        {/* <PaymentHistory /> */}
                         <Timeline />
                     </div>
                 </div>

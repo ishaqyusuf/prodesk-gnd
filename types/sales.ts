@@ -291,13 +291,14 @@ export interface ProdActionProps {
 export interface ISalesPayment extends OmitMeta<SalesPayments> {
     customer: ICustomer;
     order: ISalesOrder;
-    meta: {
-        ccc;
-        ccc_percentage;
-        sub_total;
-        total_due;
-        payment_option;
-        paymentOption;
-        checkNo;
-    };
+    meta: ISalesPaymentMeta;
+}
+export interface ISalesPaymentMeta {
+    ccc;
+    ccc_percentage;
+    sub_total;
+    total_due;
+    payment_option;
+    paymentOption;
+    checkNo;
 }

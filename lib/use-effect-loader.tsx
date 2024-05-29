@@ -8,18 +8,25 @@ interface Props {
     onError?;
     transform?;
 }
-export default function useEffectLoader(fn, {}: Props) {
-    type DataType = ServerPromiseType<typeof fn>["Response"];
+export default function useEffectLoader<T extends (...args: any) => any>(
+    fn: T,
+    {}: Props
+) {
+    type DataType = Awaited<NonNullable<ReturnType<T>>>;
     const [data, setData] = useState<DataType>();
     const [ready, setReady] = useState(false);
     useEffect(() => {
-        fn().then((res) => {
+        load();
+    }, []);
+    function load() {
+        (fn as any)().then((res) => {
             setData(res);
             setReady(true);
         });
-    }, []);
+    }
     return {
         data,
         ready,
+        refresh: load,
     };
 }

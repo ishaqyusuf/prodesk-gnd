@@ -21,6 +21,7 @@ import SalesNoteModal from "../../_components/_sales-note/_modal";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 import { ArchiveRestore } from "lucide-react";
+import PaymentModal from "../../_components/_payments-modal";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -78,7 +79,7 @@ export default function HeaderSection({}) {
                                 variant={"outline"}
                                 onClick={() => {
                                     modal.openSheet(
-                                        <SalesNoteModal
+                                        <PaymentModal
                                             id={id}
                                             orderId={orderId}
                                         />
