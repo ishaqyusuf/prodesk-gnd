@@ -1,40 +1,16 @@
-# TODO:
-    -SET ORDER STATUS (PENDING,COMPLETED,DELIVERED,PICKED UP...)
-    IF COMPLETED: PROMPT TO MARK UNCOMPLETED PRODUCTION AS COMPLETED!
-    -AUTOCOMPLE SALES ITEM BUG
-    -MAKE DYKE SHELF TYPABLE
-    -EXPORT PDF IN ESTIMATE 
 
-TODO: House Package Tool Estimate.
-TODO: Door Image not replacing
-TODO: Bifold and Interior: ability to setup up multiple doors with different sizes and qty.
-TODO: Moulding set price (include price input in edit)
-TODO: Calculate
- Amount glitch, sometimes does not work.
-TODO: Price history.
-TODO: Bifold doors as in unit template.
-TODO: Primed Lover are LL sizes (including 2/0)
-TODO: When door is selected, pop up window to show required sizes
-TODO: No more edit on dyke when production is started
-OLD EDIT: SUPPLY AUTO DATE TODAY
-WORK ON TIMELINE
-ADD TIME LINE TO SALES EDIT
-Show Selected Door/Moulding
-<!-- AUTO-COMPLETE PRODUCTION WITH NO SWING -->
-<!-- CUSTOM SERVICES -->
 ----------------------------------------
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# MAY 29: 00.00 == 00.00
-    11:25-
-    08:30-10:55
-# MAY 28: 00.00 == 00.00
+# MAY 29: 02.25 == 07.45
+     08:30-10:55
+# MAY 28: 02.40 == 05.20
     11:35-12:10
     10:15-11:10
     09:30-09:40
     07:00-08:00
-# MAY 27: 00.00 == 00.00
+# MAY 27: 02.40 == 02.40
     09:20-10:50
     06:05-06:15
     04:40-05:40
