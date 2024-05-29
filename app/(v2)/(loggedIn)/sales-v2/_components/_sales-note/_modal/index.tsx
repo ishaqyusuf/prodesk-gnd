@@ -11,7 +11,6 @@ interface Props {
 }
 export default function SalesNoteModal({ id, orderId, edit }: Props) {
     const modal = useModal();
-
     return (
         <Modal.Content>
             <Modal.Header title="Notes" subtitle={orderId} />

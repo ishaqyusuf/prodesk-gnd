@@ -128,6 +128,7 @@ export function AssignGroup({ index }) {
                     onClick={() => onOpenChange(!open)}
                     disabled={group.report.pendingAssignment == 0}
                     size={"sm"}
+                    className="whitespace-nowrap"
                 >
                     Assign ({group.report.pendingAssignment})
                 </Button>

@@ -96,7 +96,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                 )}
                 {!estimate ? (
                     <>
-                        {!row.isDyke ? (
+                        {/* {!row.isDyke  ? (
                             <ProductionAction row={row} />
                         ) : (
                             <MenuItem
@@ -107,7 +107,15 @@ export function OrderRowAction(props: IOrderRowProps) {
                             >
                                 Production
                             </MenuItem>
-                        )}
+                        )} */}
+                        <MenuItem
+                            Icon={Icons.production}
+                            onClick={() => {
+                                assignment.open(row.id);
+                            }}
+                        >
+                            Production
+                        </MenuItem>
                         <MenuItem
                             Icon={Icons.delivery}
                             SubMenu={

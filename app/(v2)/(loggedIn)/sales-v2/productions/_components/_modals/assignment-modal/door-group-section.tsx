@@ -42,11 +42,24 @@ export default function DoorGroupSection({ index }) {
             <CollapsibleContent>
                 {group.salesDoors.map((sd, i) => (
                     <div className="text-sm p-2 border-b" key={i}>
-                        <div className="">
-                            <TableCol.Primary>{sd?.doorTitle}</TableCol.Primary>
-                            <TableCol.Secondary>
-                                {sd.salesDoor.dimension}
-                            </TableCol.Secondary>
+                        <div className="flex gap-4">
+                            <div className="">
+                                <TableCol.Primary>
+                                    {sd?.doorTitle}
+                                </TableCol.Primary>
+                                <TableCol.Secondary>
+                                    {sd.salesDoor.dimension}
+                                </TableCol.Secondary>
+                            </div>
+                            <div
+                                className={cn(
+                                    !group.isDyke && !group.sectionTitle
+                                        ? ""
+                                        : "hidden"
+                                )}
+                            >
+                                <AssignGroup index={index} />
+                            </div>
                         </div>
                         <div className="grid gap-4 p-2 grid-cols-3 sm:grid-cols-5">
                             {group.doorConfig.singleHandle || !group.isDyke ? (
