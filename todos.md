@@ -8,6 +8,9 @@ TODO:
     - Update footer on item delete, item check changed, etc.
     - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
     - Make production like old, add due today section
+    - Add username to note (by pablo)
+    - Door configuration: Exterior and Interior should have respective prefix.
+    - Note color.
     - Add payment, production to old invoice
     - Add color to timeline tag
     - Delete/Update Timeline

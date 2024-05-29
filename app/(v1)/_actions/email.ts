@@ -8,6 +8,7 @@ import { transformEmail } from "@/lib/email-transform";
 import { resend } from "@/lib/resend";
 import { _generateSalesPdf } from "./sales/save-pdf";
 import { env } from "@/env.mjs";
+import { ISalesType } from "@/types/sales";
 
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
@@ -16,7 +17,7 @@ export async function sendMessage(data: EmailProps) {
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     if (data.attachOrder && isProd) {
         const pdf = await _generateSalesPdf(
-            data.data?.type == "order" ? "invoice" : "quote",
+            (data.data?.type as ISalesType) == "order" ? "invoice" : "quote",
             [data.data.slug]
         );
         attachments.push({

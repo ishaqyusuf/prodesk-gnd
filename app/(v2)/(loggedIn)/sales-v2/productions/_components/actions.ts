@@ -7,9 +7,9 @@ import { DykeDoorType } from "../../type";
 import { ISalesType } from "@/types/sales";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
+import salesData from "../../../sales/sales-data";
 
 export async function _getProductionList({ query, production = false }) {
-    const productionTypes = ["Interior", "Garage"] as DykeDoorType[];
     const authId = await userId();
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
     return prisma.$transaction(async (tx) => {
@@ -60,7 +60,7 @@ export async function _getProductionList({ query, production = false }) {
                             salesDoors: {
                                 some: {
                                     doorType: {
-                                        in: productionTypes,
+                                        in: salesData.productionDoorTypes,
                                     },
                                 },
                             },
@@ -99,7 +99,7 @@ export async function _getProductionList({ query, production = false }) {
                         deletedAt: null,
                         housePackageTool: {
                             doorType: {
-                                in: productionTypes,
+                                in: salesData.productionDoorTypes,
                             },
                         },
                     },

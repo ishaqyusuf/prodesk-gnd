@@ -9,6 +9,7 @@ import { OrderItemProductionAssignments } from "@prisma/client";
 import { userId } from "@/app/(v1)/_actions/utils";
 import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
 import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
+import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 
 export async function getOrderAssignmentData(id, prod = false) {
     // await prisma.orderItemProductionAssignments.updateMany({
@@ -35,10 +36,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                             salesDoors: {
                                 some: {
                                     doorType: {
-                                        in: [
-                                            "Garage",
-                                            "Interior",
-                                        ] as DykeDoorType[],
+                                        in: salesData.productionDoorTypes,
                                     },
                                 },
                             },

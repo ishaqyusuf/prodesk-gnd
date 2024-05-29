@@ -1,4 +1,5 @@
 import { textValue } from "@/lib/utils";
+import { DykeDoorType } from "../sales-v2/type";
 
 export default {
     paymentOptions: ["Cash", "Credit Card", "Check", "COD", "Zelle"],
@@ -11,4 +12,5 @@ export default {
         { value: "billingAddress", name: "Billing" },
         { value: "shippingAddress", name: "Shipping" },
     ],
+    productionDoorTypes: ["Garage", "Interior", "Exterior"] as DykeDoorType[],
 };
