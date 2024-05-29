@@ -1,7 +1,7 @@
 TODO: 
     <!-- - Payment Modal in Invoice Edit -->
     <!-- - Add view button to production list -->
-    - Production navigation highlights products
+    <!-- - Production navigation highlights products -->
     - Update footer on item delete, item check changed, etc.
     - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
     - Add due date to production

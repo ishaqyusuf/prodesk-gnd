@@ -23,6 +23,8 @@ export default function ProductionList({ promise, prod }: Props) {
                 ? [
                       ctx.Column("Order", ProductionCells.Order),
                       ctx.Column("Sales Rep", ProductionCells.SalesRep),
+                      ctx.Column("Due Date", ProductionCells.DueDate),
+                      ctx.Column("Status", ProductionCells.ProductionStatus),
                       ctx.ActionColumn(ProductionCells.ProdActions),
                   ]
                 : [

@@ -151,6 +151,17 @@ function ProdActions({ item }: Props) {
         </>
     );
 }
+function DueDate({ item }: Props) {
+    const dueDate = item.assignments
+        .filter((a) => a.dueDate)
+        .sort((a, b) => (a as any).dueDate - (b as any).dueDate)?.[0]?.dueDate;
+    return (
+        <>
+            <TableCol.Date>{dueDate}</TableCol.Date>
+        </>
+    );
+}
+
 export let ProductionCells = {
     Order,
     SalesRep,
@@ -158,6 +169,7 @@ export let ProductionCells = {
     ProductionStatus,
     AssignedTo,
     ProdActions,
+    DueDate,
     Actions,
 };
 // export let ProductionCells = Object.assign(Base, {
