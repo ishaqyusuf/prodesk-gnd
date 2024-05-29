@@ -214,7 +214,7 @@ export function nav(
     } else {
         if (__can.viewOrderProduction)
             routes.Sales.push(
-                _route("Productions", Icons.production, `/sales/productions`)
+                _route("Productions", Icons.production, `/sales-v2/productions`)
             );
     }
 
@@ -238,7 +238,7 @@ export function nav(
                 _route(
                     "Productions",
                     Icons.production,
-                    `/sales/productions`,
+                    `/sales-v2/productions`,
                     true
                 ),
 
