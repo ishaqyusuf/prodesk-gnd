@@ -51,7 +51,7 @@ function Status({ item }: Props) {
     let total = item._meta.totalDoors;
     let assigned = sum(item.assignments.map((a) => a.qtyAssigned));
 
-    if (assigned) {
+    if (assigned > 0) {
         status =
             // assigned == total ? "Assigned" :
             // `${assigned}/${total} assigned`;
@@ -123,7 +123,7 @@ function AssignedTo({ item }: Props) {
     );
 }
 function Actions({ item }: Props) {
-    const assignment = useAssignment({ prod: true });
+    const assignment = useAssignment({});
     return (
         <>
             <Button

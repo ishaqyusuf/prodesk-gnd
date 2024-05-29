@@ -112,7 +112,12 @@ export async function _getProductionList({ query, production = false }) {
                     },
                 },
                 assignments: {
-                    where: { deletedAt: null },
+                    where: {
+                        deletedAt: null,
+                        item: {
+                            deletedAt: null,
+                        },
+                    },
                     include: {
                         assignedTo: {
                             select: {
