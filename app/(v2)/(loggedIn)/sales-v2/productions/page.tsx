@@ -5,7 +5,6 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { Shell } from "@/components/shell";
-import ProdMigration from "./_components/migration/prod-migration";
 import DevOnly from "@/_v2/components/common/dev-only";
 
 export const metadata: Metadata = {
@@ -22,9 +21,6 @@ export default function SalesProductionPage({ searchParams }) {
                 <BreadLink title="Productions" isLast />
             </Breadcrumbs>
             <Shell className="px-8">
-                <DevOnly>
-                    <ProdMigration />
-                </DevOnly>
                 <div className="flex items-center justify-between space-y-2">
                     <div>
                         <h2 className="text-2xl font-bold tracking-tight">

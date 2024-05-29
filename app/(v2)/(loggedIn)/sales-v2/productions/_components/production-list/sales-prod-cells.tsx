@@ -123,7 +123,20 @@ function AssignedTo({ item }: Props) {
     );
 }
 function Actions({ item }: Props) {
-    return <></>;
+    const assignment = useAssignment({ prod: true });
+    return (
+        <>
+            <Button
+                onClick={() => {
+                    assignment.open(item.id);
+                }}
+                size={"sm"}
+                variant={"outline"}
+            >
+                View
+            </Button>
+        </>
+    );
 }
 function ProdActions({ item }: Props) {
     const assignment = useAssignment({ prod: true });
