@@ -55,6 +55,19 @@ export default function ProductionList({ promise, prod }: Props) {
                         title: "products",
                     },
                 ]}
+                filterableColumns={[
+                    {
+                        id: "status",
+                        title: "Status",
+                        single: true,
+                        options: [
+                            { label: "Started", value: "Started" },
+                            { label: "Queued", value: "Queued" },
+                            { label: "Completed", value: "Completed" },
+                            { label: "Late", value: "Late" },
+                        ],
+                    },
+                ]}
                 pageCount={pageCount}
             ></DataTable2>
         </div>

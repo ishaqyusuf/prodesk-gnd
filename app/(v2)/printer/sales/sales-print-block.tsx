@@ -72,6 +72,22 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
                         )}
                         <SalesPrintFooter />
                     </table>
+                    {data.isPacking && (
+                        <div className="flex px-4 justify-between">
+                            {[
+                                "Employee Sig. & Date",
+                                "Customer Sig. & Date",
+                            ].map((s) => (
+                                <div
+                                    key={s}
+                                    className="w-1/4 italic text-sm font-semibold"
+                                >
+                                    <div className="border-b h-10 border-dashed border-muted-foreground"></div>
+                                    <div className="m-1">{s}</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </section>
             </div>
         </SalesBlockCtx.Provider>
