@@ -7,12 +7,19 @@ import { Shell } from "@/components/shell";
 
 import { _getProductionList } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/actions";
 import ProductionList from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-list";
+import PageHeader from "@/components/_v1/page-header";
 
 export const metadata: Metadata = {
     title: "Sales Productions",
 };
 export default function SalesProductionPage({ searchParams }) {
     const p = _getProductionList({ query: searchParams, production: true });
+    const dueToday = _getProductionList({
+        query: {
+            dueToday: true,
+        },
+        production: true,
+    });
 
     return (
         <AuthGuard can={[]}>
@@ -22,14 +29,9 @@ export default function SalesProductionPage({ searchParams }) {
                 <BreadLink title="Productions" isLast />
             </Breadcrumbs>
             <Shell className="px-8">
-                <div className="flex items-center justify-between space-y-2">
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight">
-                            Productions
-                        </h2>
-                    </div>
-                    <div className="flex items-center space-x-2"></div>
-                </div>
+                <PageHeader title="Due Today" />
+                <ProductionList prod simple promise={dueToday} />
+                <PageHeader title="Productions" />
                 <ProductionList prod promise={p} />
             </Shell>
         </AuthGuard>

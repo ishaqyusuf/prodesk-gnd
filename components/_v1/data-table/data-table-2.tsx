@@ -358,7 +358,7 @@ export function DataTable2<TData, TValue>({
             {!hideFooter && pageInfo && (
                 <DataTablePagination pageInfo={pageInfo} table={table} />
             )}
-            {!pageInfo && <DTPagination table={table} />}
+            {!pageInfo && !hideFooter && <DTPagination table={table} />}
         </div>
     );
 }

@@ -19,6 +19,12 @@ export function queryParams(searchParams, _baseQuery = {}) {
 export function fixDbTime(date: dayjs.Dayjs, h = 0, m = 0, s = 0) {
     return date.set("hours", h).set("minutes", m).set("seconds", s);
 }
+export function dateEquals(date) {
+    return {
+        gte: fixDbTime(dayjs(date)).toISOString(),
+        lte: fixDbTime(dayjs(date), 23, 59, 59).toISOString(),
+    };
+}
 export function dateQuery({
     date,
     from,

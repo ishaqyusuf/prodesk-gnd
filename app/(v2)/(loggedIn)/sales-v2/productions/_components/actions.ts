@@ -3,80 +3,101 @@
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { DykeDoorType } from "../../type";
 import { ISalesType } from "@/types/sales";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
-
-export async function _getProductionList({ query, production = false }) {
+import { dateEquals } from "@/app/(v1)/_actions/action-utils";
+import dayjs from "dayjs";
+interface Props {
+    production?: boolean;
+    query?: {
+        _q?: string;
+        dueToday?: boolean;
+    };
+}
+export async function _getProductionList({ query, production = false }: Props) {
     const authId = await userId();
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
+    const dueDate = query?.dueToday ? dateEquals(dayjs()) : undefined;
+    // console.log(dueDate);
+
     return prisma.$transaction(async (tx) => {
-        const where: Prisma.SalesOrdersWhereInput = {
-            // isDyke: true,
-            type: "order" as ISalesType,
-
-            OR: searchQuery
-                ? [
-                      {
-                          orderId: searchQuery,
-                      },
-                      {
-                          assignments: {
-                              some: {
-                                  assignedTo: {
-                                      name: searchQuery,
-                                  },
-                              },
-                          },
-                      },
-                      {
-                          customer: {
-                              OR: [
-                                  {
-                                      businessName: searchQuery,
-                                  },
-                                  {
-                                      name: searchQuery,
-                                  },
-                              ],
-                          },
-                      },
-                  ]
-                : undefined,
-            assignments: production
-                ? {
-                      some: {
-                          assignedToId: authId,
-                      },
-                  }
-                : undefined,
-
-            items: {
-                some: {
-                    OR: [
-                        {
-                            salesDoors: {
-                                some: {
-                                    doorType: {
-                                        in: salesData.productionDoorTypes,
-                                    },
+        const itemsFilter: Prisma.SalesOrderItemsListRelationFilter = {
+            some: {
+                OR: [
+                    {
+                        salesDoors: {
+                            some: {
+                                doorType: {
+                                    in: salesData.productionDoorTypes,
                                 },
                             },
                         },
-                        {
-                            swing: {
-                                not: null,
-                            },
+                    },
+                    {
+                        swing: {
+                            not: null,
                         },
-                        {
-                            dykeProduction: true,
-                        },
-                    ],
-                },
+                    },
+                    {
+                        dykeProduction: true,
+                    },
+                ],
             },
         };
+        const where: Prisma.SalesOrdersWhereInput = query?.dueToday
+            ? {
+                  items: itemsFilter,
+                  assignments: {
+                      some: {
+                          assignedToId: authId,
+                          dueDate,
+                      },
+                  },
+              }
+            : {
+                  // isDyke: true,
+                  type: "order" as ISalesType,
+                  OR: searchQuery
+                      ? [
+                            {
+                                orderId: searchQuery,
+                            },
+                            {
+                                assignments: {
+                                    some: {
+                                        assignedTo: {
+                                            name: searchQuery,
+                                        },
+                                    },
+                                },
+                            },
+                            {
+                                customer: {
+                                    OR: [
+                                        {
+                                            businessName: searchQuery,
+                                        },
+                                        {
+                                            name: searchQuery,
+                                        },
+                                    ],
+                                },
+                            },
+                        ]
+                      : undefined,
+                  assignments: production
+                      ? {
+                            some: {
+                                assignedToId: authId,
+                                dueDate,
+                            },
+                        }
+                      : undefined,
+
+                  items: itemsFilter,
+              };
         const { pageCount, skip, take } = await paginatedAction(
             query,
             tx.salesOrders,
@@ -173,6 +194,7 @@ export async function _getProductionList({ query, production = false }) {
             },
             // const productions =
         });
+        // console.log(data[0]);
         return {
             data: data.map((order) => {
                 return {

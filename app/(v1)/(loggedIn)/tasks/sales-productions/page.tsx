@@ -39,8 +39,8 @@ export default async function SalesProductionPage({ searchParams }) {
                         {...todaysProd}
                         myProd
                     />
-                    <PageHeader title="Productions" />
 
+                    <PageHeader title="Productions" />
                     <SalesProductionTableShell<ISalesOrder>
                         myProd
                         searchParams={searchParams}

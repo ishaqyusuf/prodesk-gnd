@@ -10,10 +10,11 @@ import { ProductionCells } from "./sales-prod-cells";
 interface Props {
     promise;
     prod?: boolean;
+    simple?: boolean;
 }
 type DataServerPromiseType = ServerPromiseType<typeof _getProductionList>;
 export type ProductionListItemType = DataServerPromiseType["Item"];
-export default function ProductionList({ promise, prod }: Props) {
+export default function ProductionList({ promise, prod, simple }: Props) {
     const { data, pageCount }: DataServerPromiseType["Response"] =
         React.use(promise);
     const table = useDataTableColumn(
@@ -63,12 +64,17 @@ export default function ProductionList({ promise, prod }: Props) {
                         options: [
                             { label: "Started", value: "Started" },
                             { label: "Queued", value: "Queued" },
-                            { label: "Completed", value: "Completed" },
+                            {
+                                label: "Completed",
+                                value: "Completed",
+                            },
                             { label: "Late", value: "Late" },
                         ],
                     },
                 ]}
                 pageCount={pageCount}
+                hideHeader={simple}
+                hideFooter={simple}
             ></DataTable2>
         </div>
     );
