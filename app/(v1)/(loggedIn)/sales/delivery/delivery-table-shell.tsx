@@ -32,6 +32,7 @@ import {
     RowActionMoreMenu,
 } from "../../../../../components/_v1/data-table/data-table-row-actions";
 import useQueryParams from "@/lib/use-query-params";
+import { TableCol } from "@/components/common/data-table/table-cells";
 
 export default function DeliveryTableShell<T>({
     data,
@@ -60,6 +61,17 @@ export default function DeliveryTableShell<T>({
                 accessorKey: "customer",
                 header: ColumnHeader("Customer"),
                 cell: ({ row }) => OrderCustomerCell(row.original.customer),
+            },
+            {
+                accessorKey: "salesRep",
+                header: ColumnHeader("Sales Rep"),
+                cell: ({ row }) => (
+                    <>
+                        <TableCol.Primary>
+                            {row.original.salesRep?.name}
+                        </TableCol.Primary>
+                    </>
+                ),
             },
             {
                 accessorKey: "memo",

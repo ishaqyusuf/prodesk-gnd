@@ -6,15 +6,20 @@ TODO:
     <!-- - Add due date to production -->
     <!-- - Customer Signature and Employee signature on Packing Slip -->
     - .
-    - 
-    - Update footer on item delete, item check changed, etc.
-    - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
-    - Make production like old, add due today section
-    - Add username to note (by pablo)
+    - Production Due today not showing.
     - Door configuration: Exterior and Interior should have respective prefix.
     - Note color.
-    - Add payment, production to old invoice
     - Add color to timeline tag
+    - Update footer on item delete, item check changed, etc.
+    - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
+    - Add username to note (by pablo)
+    - Show door fully in selection (some door cuts off).
+    - Embed door images to invoice pdf at last page, display doors and mouldings in grid format.
+    - 
+    - Make production like old, add due today section
+    - Sales Overview: display all item information in preview.
+    - Production Assignment (Mark and and assign all feature.)
+    - Add payment, production to old invoice
     - Delete/Update Timeline
     - List Submissions in prod assignment, allow delete submission, edit assignment
     - Notification for Assignments, Started, and Submission.
