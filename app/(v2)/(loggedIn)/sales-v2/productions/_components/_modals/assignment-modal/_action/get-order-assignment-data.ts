@@ -75,7 +75,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                         },
                         where: {
                             doorType: {
-                                in: ["Garage", "Interior"] as DykeDoorType[],
+                                in: salesData.productionDoorTypes,
                             },
                             deletedAt: null,
                         },
@@ -98,6 +98,7 @@ export async function getOrderAssignmentData(id, prod = false) {
     // const _item = order.items[0];
     const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta);
     let assignmentSummary = {};
+
     let doorGroups = items
         .filter(
             (item) =>
@@ -111,6 +112,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                     i.id == item.id ||
                     (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
             );
+            // console.log(_items.length);
             const report = {
                 assigned: 0,
                 pendingAssignment: 0,
@@ -120,6 +122,7 @@ export async function getOrderAssignmentData(id, prod = false) {
             const salesDoors = _items
                 .filter((s) => order.isDyke)
                 .map((subItem) => {
+                    console.log(subItem.id);
                     return subItem.salesDoors.map((salesDoor) => {
                         const ret = {
                             salesDoor: {
@@ -135,7 +138,6 @@ export async function getOrderAssignmentData(id, prod = false) {
                             doorTitle: salesDoor.housePackageTool.door?.title,
                             report: initJobReport(subItem, salesDoor),
                         };
-
                         return analyseItem(ret, report);
                     });
                 })
