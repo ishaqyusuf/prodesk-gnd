@@ -60,7 +60,9 @@ export function AssignGroup({ index }) {
     // console.log(group.sal);
     const prodDueDate = form.watch("prodDueDate");
     const validator = useValidateAssignment(form);
-
+    useEffect(() => {
+        console.log(prodDueDate);
+    }, [prodDueDate]);
     useEffect(() => {
         if (open) {
             const doors: any = {};
@@ -104,10 +106,11 @@ export function AssignGroup({ index }) {
             try {
                 const _data = validator.validate();
                 let dueDate = form.getValues("prodDueDate");
-                // console.log(dueDate);
+
                 if (dueDate instanceof Date) {
                     dueDate = dayjs(dueDate).toISOString();
                 }
+                console.log(dueDate);
                 if (_data) {
                     const r = await createProdAssignment(
                         _data,
