@@ -14,6 +14,7 @@ import {
     OrderIdCell,
     OrderInvoiceCell,
     OrderMemoCell,
+    SalesCustomerCell,
 } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
 import { OrderRowAction } from "../actions/order-actions";
@@ -64,11 +65,13 @@ export default function EstimatesTableShell<T>({
                       {
                           accessorKey: "customer",
                           header: ColumnHeader("Customer"),
-                          cell: ({ row }) =>
-                              OrderCustomerCell(
-                                  row.original.customer,
-                                  "/sales/customer/slug"
-                              ),
+                          cell: ({ row }) => (
+                              <SalesCustomerCell order={row.original} />
+                          ),
+                          //   OrderCustomerCell(
+                          //       row.original.customer,
+                          //       "/sales/customer/slug"
+                          //   ),
                       },
                       {
                           accessorKey: "memo",
