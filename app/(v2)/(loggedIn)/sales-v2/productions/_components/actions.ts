@@ -13,7 +13,7 @@ interface Props {
     production?: boolean;
     query?: {
         _q?: string;
-        dueToday?: boolean;
+        dueToday?;
     };
 }
 export async function _getProductionList({ query, production = false }: Props) {
