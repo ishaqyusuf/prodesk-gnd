@@ -42,10 +42,46 @@ export async function _deleteAssignment(data: Props) {
     });
     await _deleteAssignmentSubmissions(data.id, k);
 }
+export async function _deleteAssignmentSubmission(submissionId) {
+    const submissions = await prisma.orderProductionSubmissions.updateMany({
+        where: {
+            id: submissionId,
+            deletedAt: null,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+    // await prisma.orderProductionSubmissions.updateMany({
+    //     where: {
+    //         assignmentId,
+    //         [k]: {
+    //             gt: 0,
+    //         },
+    //     },
+    //     data: {
+    //         deletedAt: new Date(),
+    //     },
+    // });
+    // const salesOrderId = submissions[0]?.salesOrderId;
+    // const totalQty = await sum(submissions, "qty");
+    // await prisma.salesProductionStatus.update({
+    //     where: {
+    //         orderId: salesOrderId as any,
+    //     },
+    //     data: {
+    //         score: {
+    //             decrement: totalQty,
+    //         },
+    //     },
+    // });
+}
 export async function _deleteAssignmentSubmissions(
     assignmentId,
     k: "rhQty" | "lhQty"
 ) {
+    console.log(assignmentId, k);
+
     const submissions = await prisma.orderProductionSubmissions.findMany({
         where: {
             assignmentId,

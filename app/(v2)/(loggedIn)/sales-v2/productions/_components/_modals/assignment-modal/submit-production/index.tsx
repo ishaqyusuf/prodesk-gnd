@@ -64,6 +64,7 @@ export default function SubmitDoorProduction({
     useEffect(() => {
         if (open) {
             form.setValue(qtyKey, 0);
+            console.log(assignment.__report);
         }
         // if (open) {
         //     const doors: any = {};
@@ -113,7 +114,7 @@ export default function SubmitDoorProduction({
                     onClick={toggleSubmitProduction}
                     // disabled={group.report.pendingAssignment == 0}
 
-                    disabled={assignment.qtyCompleted == assignment.qtyAssigned}
+                    disabled={assignment.__report?.pending == 0}
                     size={"sm"}
                     variant={"outline"}
                     className="p-2 h-6"

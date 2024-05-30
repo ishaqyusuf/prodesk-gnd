@@ -21,14 +21,17 @@ interface Props {
 export const useAssignmentData = () => useDataPage<OrderAssignmentData>();
 export default function AssignmentModal({ order, isProd }: Props) {
     return (
-        <Modal.Content size={"lg"}>
+        <Modal.Content size={"xl"}>
             <Modal.Header
                 title="Production Assignment"
                 subtitle={`${order.orderId} | ${
                     order.customer?.businessName || order.customer?.name
                 }`}
             />
-            <div className="overflow-auto max-h-[80vh] -mr-6 spb-28">
+            <div
+                id="assignmentModal"
+                className="overflow-auto max-h-[80vh] -mr-6 spb-28"
+            >
                 <DataPageShell data={order}>
                     {order.doorGroups.map((group, index) => (
                         <DoorGroupSection index={index} key={index} />

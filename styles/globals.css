@@ -96,3 +96,13 @@ table#invoiceFooter tr {
 .printly th {
     @apply border-slate-300 min-h-[20px];
 }
+
+#assignmentModal th {
+    @apply h-8 px-2;
+}
+#assignmentModal td {
+    @apply p-2;
+}
+#assignmentModal tr {
+    @apply hover:bg-transparent;
+}

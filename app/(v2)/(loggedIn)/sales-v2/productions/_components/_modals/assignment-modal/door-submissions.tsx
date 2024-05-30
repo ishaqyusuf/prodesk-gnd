@@ -1,0 +1,105 @@
+"use client";
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { OrderAssignmentSalesDoor, useAssignmentData } from ".";
+import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/use-day";
+
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import {
+    _deleteAssignment,
+    _deleteAssignmentSubmission,
+    _deleteAssignmentSubmissions,
+} from "./_action/actions";
+import { useAssignment } from "./use-assignment";
+import SubmitDoorProduction from "./submit-production";
+
+import { TableCol } from "@/components/common/data-table/table-cells";
+
+interface Props {
+    groupIndex;
+    doorIndex;
+}
+export default function DoorSubmissions({ doorIndex, groupIndex }: Props) {
+    const data = useAssignmentData();
+    const group = data.data.doorGroups[groupIndex];
+    const modal = useAssignment({ prod: data.data.isProd });
+    if (!group) return null;
+
+    const salesDoor = group.salesDoors[doorIndex];
+    const submissions = salesDoor?.submissions;
+    if (!submissions?.length) return null;
+
+    async function deleteSubmission(submission) {
+        await _deleteAssignmentSubmission(submission.id);
+        modal.open(data.data.id);
+    }
+    return (
+        <div className="mx-4 ml-10">
+            <Table className="">
+                <TableHeader className="bg-slate-100">
+                    <TableHead>Submission</TableHead>
+
+                    <TableHead>Qty</TableHead>
+
+                    <TableHead>Note</TableHead>
+
+                    <TableHead></TableHead>
+                </TableHeader>
+                <TableBody>
+                    {submissions?.map((submission) => (
+                        <TableRow key={submission.id} className="">
+                            <TableCell>
+                                {!data.data.isProd ? (
+                                    <></>
+                                ) : (
+                                    <p>{submission.assignedTo.name}</p>
+                                )}
+                                <TableCol.Date>
+                                    {submission.createdAt}
+                                </TableCol.Date>
+                            </TableCell>
+
+                            <TableCell>
+                                <TableCol.Primary>
+                                    {submission.qty ||
+                                        submission.lhQty ||
+                                        submission.rhQty}
+                                    {group.doorConfig.singleHandle ||
+                                    !group.isDyke
+                                        ? ""
+                                        : submission.rhQty
+                                        ? " RH"
+                                        : " LH"}
+                                </TableCol.Primary>
+                            </TableCell>
+
+                            <TableCell>{submission.note || "-"}</TableCell>
+
+                            <TableCell className="flex gap-2 justify-end items-center">
+                                {data.data.isProd ? (
+                                    <></>
+                                ) : (
+                                    <ConfirmBtn
+                                        trash
+                                        size={"icon"}
+                                        onClick={() =>
+                                            deleteSubmission(submission)
+                                        }
+                                    />
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
+    );
+}

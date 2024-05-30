@@ -54,7 +54,7 @@ export function useValidateAssignment(form: UseFormReturn<IAssignGroupForm>) {
                     return assignments;
                 } catch (error) {
                     (error as any).issues.map((e) => {
-                        console.log(e);
+                        // console.log(e);
 
                         form.setError(e.path.join("."), {
                             ...e,

@@ -5,7 +5,7 @@ import { DykeDoorType } from "../../../../../type";
 import { ArrayMetaType, sum } from "@/lib/utils";
 import { ISalesOrderItemMeta } from "@/types/sales";
 import { isComponentType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/is-component-type";
-import { OrderItemProductionAssignments } from "@prisma/client";
+import { OrderItemProductionAssignments, Users } from "@prisma/client";
 import { userId } from "@/app/(v1)/_actions/utils";
 import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
 import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
@@ -87,7 +87,11 @@ export async function getOrderAssignmentData(id, prod = false) {
                         },
                         include: {
                             assignedTo: true,
-                            submissions: true,
+                            submissions: {
+                                where: {
+                                    deletedAt: null,
+                                },
+                            },
                         },
                     },
                 },
@@ -98,7 +102,8 @@ export async function getOrderAssignmentData(id, prod = false) {
     // const _item = order.items[0];
     const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta);
     let assignmentSummary = {};
-
+    type AssignmentType = (typeof order)["items"][0]["assignments"];
+    type SubmissionType = AssignmentType[0]["submissions"][0];
     let doorGroups = items
         .filter(
             (item) =>
@@ -185,7 +190,26 @@ export async function getOrderAssignmentData(id, prod = false) {
                 doorConfig: getDoorConfig(item?.meta?.doorType),
                 item,
                 groupItemId: null as any,
-                salesDoors,
+                salesDoors: salesDoors.map((sd) => {
+                    const submissions = sd.assignments
+                        .map((a) =>
+                            (a.submissions as SubmissionType[]).map((s) => {
+                                return {
+                                    ...s,
+                                    assignedTo: a.assignedTo as Users,
+                                };
+                            })
+                        )
+                        .flat();
+                    return {
+                        ...sd,
+                        submissions: submissions.filter(
+                            (s, i) =>
+                                submissions.findIndex((sq) => sq.id == s.id) ==
+                                i
+                        ),
+                    };
+                }),
                 report,
                 formSteps: item?.formSteps,
                 doorDetails: composeDoorDetails(
@@ -284,7 +308,8 @@ function analyseItem<T>(_ret: T, report): T {
 
     return ret;
 }
-function composeAssignment(assignment) {
+function composeAssignment<T>(data: T) {
+    const assignment: any = data;
     let splitted = [assignment.lhQty, assignment.rhQty].map((q, i) => {
         const isLeft = i == 0;
 

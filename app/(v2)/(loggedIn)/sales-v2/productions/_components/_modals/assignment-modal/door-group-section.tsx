@@ -14,12 +14,12 @@ import DoorAssignments from "./door-assignments";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import DoorSubmissions from "./door-submissions";
 
 export default function DoorGroupSection({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(true);
-    const [showDetails, setShowDetails] = useState(false);
     if (!group) return null;
     return (
         <Collapsible className="mt-4" open={open}>
@@ -88,61 +88,63 @@ export default function DoorGroupSection({ index }) {
                                 value={sd.report.completed}
                             />
                         </div>
-                        <div
-                            className={cn(
-                                "p-1",
-                                showDetails && "border",
-                                (!group.isDyke || group.isType.service) &&
-                                    "hidden"
-                            )}
-                        >
-                            <Button
-                                onClick={() => {
-                                    setShowDetails(!showDetails);
-                                }}
-                                variant={showDetails ? "outline" : "outline"}
-                                size={"sm"}
-                                className="flex w-full justify-center h-8"
-                            >
-                                <span>
-                                    {!showDetails
-                                        ? "Show Details"
-                                        : "Hide Details"}
-                                </span>
-                                {!showDetails ? (
-                                    <Icons.chevronDown className="w-4 h-4" />
-                                ) : (
-                                    <Icons.chevronUp className="w-4 h-4" />
-                                )}
-                            </Button>
-                            <div
-                                className={cn(
-                                    showDetails ? "grid" : "hidden",
-                                    " grid-cols-2"
-                                )}
-                            >
-                                {group.doorDetails
-                                    .filter((d) => d.value)
-                                    .map((detail) => (
-                                        <div
-                                            key={detail.title}
-                                            className="grid grid-cols-5 border-b border-r  gap-2"
-                                        >
-                                            <div className="font-bold col-span-2  border-r px-2 py-1">
-                                                {detail.title}
-                                            </div>
-                                            <div className=" col-span-3 px-2 py-1">
-                                                {detail.value}
-                                            </div>
+                        <DetailsBlock group={group}>
+                            {group.doorDetails
+                                .filter((d) => d.value)
+                                .map((detail) => (
+                                    <div
+                                        key={detail.title}
+                                        className="grid grid-cols-5 border-b border-r  gap-2"
+                                    >
+                                        <div className="font-bold col-span-2  border-r px-2 py-1">
+                                            {detail.title}
                                         </div>
-                                    ))}
-                            </div>
-                        </div>
+                                        <div className=" col-span-3 px-2 py-1">
+                                            {detail.value}
+                                        </div>
+                                    </div>
+                                ))}
+                        </DetailsBlock>
+
                         {/* {group.doorDetails} */}
                         <DoorAssignments groupIndex={index} doorIndex={i} />
+                        <DoorSubmissions groupIndex={index} doorIndex={i} />
                     </div>
                 ))}
             </CollapsibleContent>
         </Collapsible>
+    );
+}
+function DetailsBlock({ children, group }) {
+    const [showDetails, setShowDetails] = useState(false);
+    return (
+        <div
+            className={cn(
+                "p-1",
+                showDetails && "border",
+                (!group.isDyke || group.isType.service) && "hidden"
+            )}
+        >
+            <Button
+                onClick={() => {
+                    setShowDetails(!showDetails);
+                }}
+                variant={showDetails ? "ghost" : "secondary"}
+                size={"sm"}
+                className="flex w-full justify-center h-8"
+            >
+                <span>{!showDetails ? "Show Details" : "Hide Details"}</span>
+                {!showDetails ? (
+                    <Icons.chevronDown className="w-4 h-4" />
+                ) : (
+                    <Icons.chevronUp className="w-4 h-4" />
+                )}
+            </Button>
+            <div
+                className={cn(showDetails ? "grid" : "hidden", " grid-cols-2")}
+            >
+                {children}
+            </div>
+        </div>
     );
 }

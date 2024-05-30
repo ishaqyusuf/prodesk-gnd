@@ -84,7 +84,13 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                     )}
                                 </div>
                             </TableCell>
-                            <TableCell className="flex gap-2 items-center">
+                            <TableCell className="flex gap-2 justify-end items-center">
+                                <SubmitDoorProduction
+                                    groupIndex={groupIndex}
+                                    isGarage={group.isType.garage}
+                                    assignment={assignment}
+                                    salesDoor={salesDoor}
+                                ></SubmitDoorProduction>
                                 {data.data.isProd ? (
                                     <></>
                                 ) : (
@@ -96,13 +102,6 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                         }
                                     />
                                 )}
-
-                                <SubmitDoorProduction
-                                    groupIndex={groupIndex}
-                                    isGarage={group.isType.garage}
-                                    assignment={assignment}
-                                    salesDoor={salesDoor}
-                                ></SubmitDoorProduction>
                             </TableCell>
                         </TableRow>
                     ))}

@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { useAssignment } from "../use-assignment";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
+import dayjs from "dayjs";
 
 export interface IAssignGroupForm {
     assignToId?: number;
@@ -102,12 +103,17 @@ export function AssignGroup({ index }) {
         startSaving(async () => {
             try {
                 const _data = validator.validate();
+                let dueDate = form.getValues("prodDueDate");
+                // console.log(dueDate);
+                if (dueDate instanceof Date) {
+                    dueDate = dayjs(dueDate).toISOString();
+                }
                 if (_data) {
                     const r = await createProdAssignment(
                         _data,
                         data.data.productionStatus?.id,
                         data.data.totalQty,
-                        form.getValues("prodDueDate")
+                        dueDate
                     );
                     toast.success("Production assigned");
                     modal.open(data.data.id);
@@ -137,7 +143,7 @@ export function AssignGroup({ index }) {
                 <Form {...form}>
                     <Card className="w-[500px] border-transparent">
                         <CardHeader>
-                            <CardTitle>Assign</CardTitle>
+                            <CardTitle>Assign to Production</CardTitle>
                         </CardHeader>
                         <CardContent className="max-h-[50vh] overflow-auto">
                             <div className="grid grid-cols-2 gap-4">
@@ -247,9 +253,13 @@ export function AssignGroup({ index }) {
                                 </TableBody>
                             </Table>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className="">
                             <div className="flex w-full justify-end">
-                                <Btn isLoading={saving} onClick={assign}>
+                                <Btn
+                                    size="sm"
+                                    isLoading={saving}
+                                    onClick={assign}
+                                >
                                     Assign
                                 </Btn>
                             </div>
