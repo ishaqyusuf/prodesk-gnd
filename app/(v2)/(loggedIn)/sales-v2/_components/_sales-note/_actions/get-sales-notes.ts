@@ -29,6 +29,9 @@ export async function getSalesNote(salesId) {
             orderBy: {
                 createdAt: "desc",
             },
+            include: {
+                user: true,
+            },
         })
     ).map((progress) => {
         // const progressableType:

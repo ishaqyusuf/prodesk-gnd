@@ -19,6 +19,7 @@ import { saveNote } from "./_actions/save-notes";
 import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import Note from "./note";
 
 export default function SalesNotes({
     salesId,
@@ -160,34 +161,9 @@ export default function SalesNotes({
                 <div className="flex flex-col overflow-auto max-h-[70vh] pb-20 -mr-6 pr-6">
                     {data?.progressList
                         ?.filter(searchProgress)
-                        .map((progress) => {
-                            return (
-                                <div
-                                    className="text-sm border-b py-2"
-                                    key={progress.id}
-                                >
-                                    <div className="flex justify-between">
-                                        <div className="">
-                                            <Label>
-                                                {progress.headline ||
-                                                    progress.status}
-                                            </Label>
-                                            {"   "}
-                                            <StatusBadge sm>
-                                                {progress.type}
-                                            </StatusBadge>
-                                        </div>
-                                        <p>{formatDate(progress.createdAt)}</p>
-                                    </div>
-                                    <TableCol.Secondary>
-                                        {progress.description}
-                                    </TableCol.Secondary>
-                                    <TableCol.Secondary>
-                                        {progress.item}
-                                    </TableCol.Secondary>
-                                </div>
-                            );
-                        })}
+                        .map((progress) => (
+                            <Note key={progress.id} note={progress} />
+                        ))}
                 </div>
             </div>
         </Form>

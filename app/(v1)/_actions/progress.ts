@@ -28,6 +28,9 @@ export async function getProgress({ where: _where }: IProp) {
         orderBy: {
             createdAt: "desc",
         },
+        include: {
+            user: true,
+        },
     });
     return progress;
 }

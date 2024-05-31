@@ -5,9 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/components/common/modal/provider";
 import { Icons } from "@/components/_v1/icons";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { formatDate } from "@/lib/use-day";
 import SalesNoteModal from "../../../_components/_sales-note/_modal";
+import Note from "../../../_components/_sales-note/note";
 
 export default function TimelineSection() {
     const { data } = useDataPage<SalesOverviewType>();
@@ -39,31 +38,9 @@ export default function TimelineSection() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="">
-                    <Table>
-                        <TableBody>
-                            {data.progress?.map((item, key) => (
-                                <TableRow key={key}>
-                                    {/* <TableCell className="p-1">
-                      <p>{item.createdAt as any}</p>
-                  </TableCell> */}
-
-                                    <TableCell className="p-1 space-y-1">
-                                        <div className="flex justify-between space-x-2">
-                                            <p className="font-medium">
-                                                {item.status}
-                                            </p>
-                                            <p className="text-muted-foreground font-semibold">
-                                                {formatDate(item.createdAt)}
-                                            </p>
-                                        </div>
-                                        <p className="text-muted-foreground">
-                                            {item.headline}
-                                        </p>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    {data.progress?.map((progress) => (
+                        <Note key={progress.id} note={progress} />
+                    ))}
                 </CardContent>
             </Card>
         </div>

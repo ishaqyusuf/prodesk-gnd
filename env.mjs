@@ -6,7 +6,7 @@ import { z } from "zod";
  */
 const server = z.object({
     DATABASE_URL: z.string().url(),
-    POSTGRESS_URL: z.string().url(),
+    POSTGRESS_URL: z.string().url().optional(),
     RESEND_API_KEY: z.string(),
     BLESS_TOKEN: z.string(),
     CLOUDINARY_CLOUD_NAME: z.string(),

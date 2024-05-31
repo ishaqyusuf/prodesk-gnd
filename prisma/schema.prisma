@@ -752,6 +752,9 @@ model Progress {
     deletedAt        DateTime? @db.Timestamp(0)
     createdAt        DateTime? @default(now()) @db.Timestamp(0)
     updatedAt        DateTime? @updatedAt
+    user             Users?    @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1377,6 +1380,7 @@ model Users {
     orderItemAssignedByMe      OrderItemProductionAssignments[] @relation(name: "orderItemAssignedByMe")
     events                     Event[]
     pageView                   PageView[]
+    notes                      Progress[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])
