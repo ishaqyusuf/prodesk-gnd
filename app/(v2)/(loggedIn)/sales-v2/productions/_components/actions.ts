@@ -23,6 +23,7 @@ export async function _getProductionList({ query, production = false }: Props) {
     const dueDate = query?.dueToday
         ? dateEquals(formatDate(dayjs(), "YYYY-MM-DD"))
         : undefined;
+
     // console.log(dueDate);
 
     return prisma.$transaction(async (tx) => {
@@ -54,7 +55,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                   items: itemsFilter,
                   assignments: {
                       some: {
-                          assignedToId: authId,
+                          assignedToId: !production ? undefined : authId,
                           dueDate,
                       },
                   },
