@@ -274,6 +274,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                 ),
             };
         });
+        // .filter((dg) => dg.salesDoors.length);
     }
     // console.log(doorGroups);
     // console.log(order.items.length);
