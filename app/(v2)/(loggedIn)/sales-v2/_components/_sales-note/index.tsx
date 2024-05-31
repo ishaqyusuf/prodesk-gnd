@@ -62,7 +62,8 @@ export default function SalesNotes({
                 const pid = Number(progressableId);
                 formData.progressableId = (pid > 0 ? pid : null) as any;
                 if (pid > 0) formData.progressableType = "SalesOrderItem";
-                if (formData.type == "all") throw Error("Select Progress Type");
+                if (formData.type == "All Types")
+                    throw Error("Select Progress Type");
 
                 const res = await saveNote(formData);
                 // console.log(res);

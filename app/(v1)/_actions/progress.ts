@@ -79,6 +79,16 @@ export async function updateTimelineAction(
     });
 }
 export async function getProgressTypes(...types: ProgressableType[]) {
+    await prisma.progress.updateMany({
+        where: {
+            type: {
+                in: ["All Types"],
+            },
+        },
+        data: {
+            type: "sales",
+        },
+    });
     const _types = await prisma.progress.findMany({
         distinct: "type",
         where: {
@@ -88,5 +98,12 @@ export async function getProgressTypes(...types: ProgressableType[]) {
         },
     });
 
-    return _types.map((t) => t.type)?.filter(Boolean);
+    const typeList = _types.map((t) => t.type)?.filter(Boolean);
+    const ls = typeList.filter(
+        (t, i) =>
+            typeList.findIndex(
+                (t1) => t1?.toLowerCase()?.trim() == t?.toLowerCase()?.trim()
+            ) == i
+    );
+    return ls;
 }
