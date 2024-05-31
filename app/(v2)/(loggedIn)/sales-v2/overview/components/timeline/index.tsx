@@ -9,6 +9,7 @@ import { Icons } from "@/components/_v1/icons";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/use-day";
 import TimelineModal from "../_timeline-modal";
+import SalesNoteModal from "../../../_components/_sales-note/_modal";
 
 export default function TimelineSection() {
     const { data } = useDataPage<SalesOverviewType>();
@@ -23,14 +24,13 @@ export default function TimelineSection() {
                         <div>
                             <Button
                                 onClick={() => {
-                                    modal.openModal(
-                                        <TimelineModal
-                                            parentId={data.id}
-                                            status={"Order Update"}
-                                            type={""}
+                                    modal.openSheet(
+                                        <SalesNoteModal
+                                            edit
+                                            id={data.id}
+                                            orderId={data.orderId}
                                         />
                                     );
-                                    //  openModal("salesTimeline", order);
                                 }}
                                 className="h-8 w-8 p-0"
                                 variant="outline"

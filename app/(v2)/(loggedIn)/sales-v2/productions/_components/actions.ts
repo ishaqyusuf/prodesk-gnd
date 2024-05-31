@@ -61,7 +61,6 @@ export async function _getProductionList({ query, production = false }: Props) {
                   },
               }
             : {
-                  // isDyke: true,
                   type: "order" as ISalesType,
                   OR: searchQuery
                       ? [

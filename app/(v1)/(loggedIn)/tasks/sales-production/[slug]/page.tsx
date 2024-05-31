@@ -1,24 +1,19 @@
 import { getOrderAction } from "@/app/(v1)/_actions/sales/sales";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
-import {
-    BreadLink,
-    EstimatesCrumb,
-    OrderViewCrumb,
-    OrdersCrumb,
-} from "@/components/_v1/breadcrumbs/links";
+import { BreadLink, OrderViewCrumb } from "@/components/_v1/breadcrumbs/links";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/_v1/modals/sales-prod-submit-modal";
-import SalesTimelineModal from "@/components/_v1/modals/sales-timeline-modal";
+
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import OverviewDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/details-section";
 import ItemDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/item-details";
-import PaymentHistory from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/payment-history";
-import Timeline from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/timeline";
+
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AuthGuard from "@/components/_v1/auth-guard";
+import TimelineSection from "@/app/(v2)/(loggedIn)/sales-v2/overview/components/timeline";
 
 export const metadata: Metadata = {
     title: "Order Overview",
@@ -50,13 +45,12 @@ export default async function SalesProductionPage({ params: { slug } }) {
                         <ItemDetailsSection />
                     </div>
                     <div className="space-y-4">
-                        {/* <PaymentHistory /> */}
-                        <Timeline />
+                        <TimelineSection />
                     </div>
                 </div>
                 {/* <ProductionAssignDialog />
                  */}
-                <SalesTimelineModal />
+
                 <SalesPaymentModal />
                 <OrderPrinter />
                 <SalesProdSubmitModal />

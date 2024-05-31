@@ -5,8 +5,8 @@ TODO:
     <!-- - Payment Due Date Filter -->
     <!-- - Add due date to production -->
     <!-- - Customer Signature and Employee signature on Packing Slip -->
+    <!-- - Production Due today not showing. -->
     - .
-    - Production Due today not showing.
     - Door configuration: Exterior and Interior should have respective prefix.
     - Note color.
     - Add color to timeline tag
@@ -31,6 +31,7 @@ TODO:
     - Production Status in Orders List and Order Overview
     - Production Auto Complete by Admin
     - Product List Re-arrange (arrange based on most picked)
+    - Mobile responsive for invoice edit
     <!-- - Price history. -->
 
 

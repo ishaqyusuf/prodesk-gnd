@@ -4,7 +4,7 @@ import OverviewShell from "../components/overview-shell";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesProductionModal from "@/components/_v1/modals/sales-production-modal";
-import SalesTimelineModal from "@/components/_v1/modals/sales-timeline-modal";
+
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
@@ -34,7 +34,7 @@ export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
                 <OverviewShell data={data} />
                 {/*  */}
                 <SalesProductionModal />
-                <SalesTimelineModal />
+
                 <SalesPaymentModal />
                 <OrderPrinter />
                 <DeletePaymentPrompt />
