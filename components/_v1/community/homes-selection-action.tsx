@@ -7,7 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import { PrintOrderMenuAction } from "../actions/order-actions";
+import { PrintOrderMenuAction } from "../actions/sales-menu-actions";
 import { dispatchSlice } from "@/store/slicers";
 import { deepCopy } from "@/lib/deep-copy";
 

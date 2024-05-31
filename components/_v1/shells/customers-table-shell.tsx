@@ -12,7 +12,7 @@ import {
     SecondaryCellContent,
 } from "../columns/base-columns";
 
-import { PrintOrderMenuAction } from "../actions/order-actions";
+import { PrintOrderMenuAction } from "../actions/sales-menu-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import {
     DropdownMenu,

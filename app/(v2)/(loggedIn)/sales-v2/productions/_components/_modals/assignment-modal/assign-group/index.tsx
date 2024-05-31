@@ -38,6 +38,7 @@ import { useAssignment } from "../use-assignment";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 import dayjs from "dayjs";
+import { serverDate } from "../_action/actions";
 
 export interface IAssignGroupForm {
     assignToId?: number;
@@ -60,9 +61,8 @@ export function AssignGroup({ index }) {
     // console.log(group.sal);
     const prodDueDate = form.watch("prodDueDate");
     const validator = useValidateAssignment(form);
-    useEffect(() => {
-        console.log(prodDueDate);
-    }, [prodDueDate]);
+    // async function ÷
+
     useEffect(() => {
         if (open) {
             const doors: any = {};
@@ -106,11 +106,6 @@ export function AssignGroup({ index }) {
             try {
                 const _data = validator.validate();
                 let dueDate = form.getValues("prodDueDate");
-
-                if (dueDate instanceof Date) {
-                    dueDate = dayjs(dueDate).toISOString();
-                }
-                console.log(dueDate);
                 if (_data) {
                     const r = await createProdAssignment(
                         _data,

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "../../ui/button";
 import { Pencil } from "lucide-react";
-import { OrderRowAction } from "./order-actions";
+import { OrderRowAction } from "./sales-menu-actions";
 import { ISalesOrder } from "@/types/sales";
 import { useAppSelector } from "@/store";
 import UpdateSalesDate from "../sales/update-sales-date";

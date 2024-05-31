@@ -7,7 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import { PrintOrderMenuAction } from "../actions/order-actions";
+import { PrintOrderMenuAction } from "../actions/sales-menu-actions";
 
 export function SalesBatchAction({ items }) {
     return (

@@ -8,7 +8,7 @@ import {
     MoveSalesMenuItem,
     PrintOrderMenuAction,
     SendEmailMenuAction,
-} from "@/components/_v1/actions/order-actions";
+} from "@/components/_v1/actions/sales-menu-actions";
 import { Icons } from "@/components/_v1/icons";
 import {
     Menu,

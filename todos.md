@@ -10,6 +10,7 @@ TODO:
     - Door configuration: Exterior and Interior should have respective prefix.
     - Note color.
     - Add color to timeline tag
+    - Production Assignment notifcation: email and in-notification
     - Update footer on item delete, item check changed, etc.
     - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
     - Add username to note (by pablo)

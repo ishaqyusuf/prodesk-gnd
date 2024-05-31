@@ -17,7 +17,7 @@ import {
     OrderProductionStatusCell,
 } from "../orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../../../../../components/_v1/actions/order-actions";
+import { OrderRowAction } from "../../../../../components/_v1/actions/sales-menu-actions";
 import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
 import { SalesBatchAction } from "../../../../../components/_v1/list-selection-action/sales-selection-action";

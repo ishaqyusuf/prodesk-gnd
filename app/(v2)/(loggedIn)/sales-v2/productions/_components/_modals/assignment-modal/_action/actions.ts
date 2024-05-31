@@ -5,11 +5,16 @@ import { sum } from "@/lib/utils";
 import { OrderProductionSubmissions } from "@prisma/client";
 import { getOrderAssignmentData } from "./get-order-assignment-data";
 import { ServerPromiseType } from "@/types";
+import dayjs from "dayjs";
 
 type Props = ServerPromiseType<
     typeof getOrderAssignmentData
 >["Response"]["doorGroups"][0]["salesDoors"][0]["assignments"][0];
 
+export async function serverDate(date) {
+    // dayjs.locale(ILOca)
+    return date;
+}
 export async function _deleteAssignment(data: Props) {
     const isLeft = data.__report.handle == "LH";
     const k = isLeft ? "lhQty" : "rhQty";

@@ -17,7 +17,7 @@ import {
     SalesCustomerCell,
 } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/order-actions";
+import { OrderRowAction } from "../actions/sales-menu-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
 import { SalesCustomerFilter } from "../../../app/(v1)/(loggedIn)/sales/orders/components/sales-customer-filter";

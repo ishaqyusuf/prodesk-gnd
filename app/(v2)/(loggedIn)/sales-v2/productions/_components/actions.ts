@@ -9,6 +9,7 @@ import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
 import { dateEquals } from "@/app/(v1)/_actions/action-utils";
 import dayjs from "dayjs";
+import { formatDate } from "@/lib/use-day";
 interface Props {
     production?: boolean;
     query?: {
@@ -19,7 +20,9 @@ interface Props {
 export async function _getProductionList({ query, production = false }: Props) {
     const authId = await userId();
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
-    const dueDate = query?.dueToday ? dateEquals(dayjs()) : undefined;
+    const dueDate = query?.dueToday
+        ? dateEquals(formatDate(dayjs(), "YYYY-MM-DD"))
+        : undefined;
     // console.log(dueDate);
 
     return prisma.$transaction(async (tx) => {

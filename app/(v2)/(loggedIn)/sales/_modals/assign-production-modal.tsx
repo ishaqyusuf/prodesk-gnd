@@ -10,9 +10,7 @@ import { ISalesOrder } from "@/types/sales";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
 import React, { useEffect, useTransition } from "react";
-import { useAppSelector } from "@/store";
 
-import { dispatchSlice } from "@/store/slicers";
 import {
     Table,
     TableBody,
@@ -64,6 +62,7 @@ export default function AssignProductionModal({ order }: Props) {
 
     const modal = useModal();
     async function save() {
+        return;
         startTransition(async () => {
             await assignProductionAction({
                 id: order.id,

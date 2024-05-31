@@ -13,7 +13,7 @@ import { Icons } from "@/components/_v1/icons";
 import useSaveSalesHook from "../hooks/use-save-sales";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { PrintOrderMenuAction } from "@/components/_v1/actions/order-actions";
+import { PrintOrderMenuAction } from "@/components/_v1/actions/sales-menu-actions";
 
 export default function SalesFormAction() {
     const ctx = useContext(SalesFormContext);

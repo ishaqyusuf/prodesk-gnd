@@ -16,7 +16,7 @@ import {
 import {
     OrderRowAction,
     PrintOrderMenuAction,
-} from "../../../../../components/_v1/actions/order-actions";
+} from "../../../../../components/_v1/actions/sales-menu-actions";
 import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
 import { BuilderFilter } from "../../../../../components/_v1/filters/builder-filter";

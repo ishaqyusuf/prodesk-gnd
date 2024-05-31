@@ -13,7 +13,10 @@ import {
     _FilterColumn,
 } from "../columns/base-columns";
 
-import { OrderRowAction, PrintOrderMenuAction } from "../actions/order-actions";
+import {
+    OrderRowAction,
+    PrintOrderMenuAction,
+} from "../actions/sales-menu-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import { BuilderFilter } from "../filters/builder-filter";

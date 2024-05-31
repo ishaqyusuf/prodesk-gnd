@@ -17,7 +17,7 @@ import {
     OrderRowAction,
     PrintOrderMenuAction,
     ProductionAction,
-} from "../actions/order-actions";
+} from "../actions/sales-menu-actions";
 import { DataTable2 } from "../data-table/data-table-2";
 
 import {

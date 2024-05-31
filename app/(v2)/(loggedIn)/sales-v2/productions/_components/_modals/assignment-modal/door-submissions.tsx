@@ -8,9 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { OrderAssignmentSalesDoor, useAssignmentData } from ".";
-import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/use-day";
+import { useAssignmentData } from ".";
 
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import {
@@ -19,7 +17,6 @@ import {
     _deleteAssignmentSubmissions,
 } from "./_action/actions";
 import { useAssignment } from "./use-assignment";
-import SubmitDoorProduction from "./submit-production";
 
 import { TableCol } from "@/components/common/data-table/table-cells";
 

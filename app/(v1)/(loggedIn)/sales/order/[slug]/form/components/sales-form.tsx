@@ -2,7 +2,7 @@
 import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
 import { ISalesOrder, ISaveOrder } from "@/types/sales";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { PrintOrderMenuAction } from "@/components/_v1/actions/order-actions";
+import { PrintOrderMenuAction } from "@/components/_v1/actions/sales-menu-actions";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";

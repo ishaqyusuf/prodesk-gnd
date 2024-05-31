@@ -10,7 +10,7 @@ import {
 import { Button } from "../../ui/button";
 import { MoreHorizontal, View } from "lucide-react";
 import Link from "next/link";
-import { PrintOrderMenuAction } from "./order-actions";
+import { PrintOrderMenuAction } from "./sales-menu-actions";
 import { RowActionMenuItem } from "../data-table/data-table-row-actions";
 import { _updateOrderInventoryStatus } from "@/app/(v1)/_actions/sales/sales-inventory";
 import { toast } from "sonner";
