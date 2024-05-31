@@ -3,11 +3,9 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink, OrderViewCrumb } from "@/components/_v1/breadcrumbs/links";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/_v1/modals/sales-prod-submit-modal";
-
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import OverviewDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/details-section";
 import ItemDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/item-details";
-
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
 import { Metadata } from "next";
@@ -48,9 +46,6 @@ export default async function SalesProductionPage({ params: { slug } }) {
                         <TimelineSection />
                     </div>
                 </div>
-                {/* <ProductionAssignDialog />
-                 */}
-
                 <SalesPaymentModal />
                 <OrderPrinter />
                 <SalesProdSubmitModal />

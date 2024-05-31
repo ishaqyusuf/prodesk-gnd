@@ -1,5 +1,4 @@
 "use client";
-
 import { useDataPage } from "@/lib/data-page-context";
 import { SalesOverviewType } from "../overview-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +7,6 @@ import { useModal } from "@/components/common/modal/provider";
 import { Icons } from "@/components/_v1/icons";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/use-day";
-import TimelineModal from "../_timeline-modal";
 import SalesNoteModal from "../../../_components/_sales-note/_modal";
 
 export default function TimelineSection() {
