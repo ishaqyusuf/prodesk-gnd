@@ -192,10 +192,17 @@ export async function getDykeFormAction(type, slug, query?) {
                         _doorFormDefaultValue,
                     },
                     meta: item.meta as any as ISalesOrderItemMeta,
-                    formSteps: item.formSteps.map((item) => ({
-                        ...item,
-                        meta: item.meta as any as DykeFormStepMeta,
-                    })),
+                    formSteps: item.formSteps
+                        .map((item) => ({
+                            ...item,
+                            meta: item.meta as any as DykeFormStepMeta,
+                        }))
+                        .filter(
+                            (f, fi) =>
+                                item.formSteps.findIndex(
+                                    (p) => p.stepId == f.stepId
+                                ) == fi
+                        ),
                     shelfItems: item.shelfItems.map((item) => ({
                         ...item,
                         meta: item.meta as any as ShelfItemMeta,
@@ -415,7 +422,22 @@ export async function getDykeFormAction(type, slug, query?) {
         );
         // console.log(itemArray.map((item) => item.item.meta.lineIndex));
     }
+    const fsids = form.items.map((i) => i.formSteps.map((f) => f.id)).flat();
+    const ids = itemArray
+        .map((a) => a.item.formStepArray.map((f) => f.item.id))
+        .flat();
 
+    const deleteSteps = fsids.filter((id) => ids.indexOf(id) < 0);
+
+    if (deleteSteps.length)
+        await prisma.dykeStepForm.updateMany({
+            where: {
+                id: { in: deleteSteps },
+            },
+            data: {
+                deletedAt: new Date(),
+            },
+        });
     return {
         salesRep: salesRep,
         customer,
