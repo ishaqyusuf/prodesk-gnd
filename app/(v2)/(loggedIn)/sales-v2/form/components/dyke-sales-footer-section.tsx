@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
 import { formatMoney } from "@/lib/use-number";
 import "./style.css";
+import { TableCol } from "@/components/common/data-table/table-cells";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -152,10 +153,13 @@ export default function DykeSalesFooterSection({}) {
 }
 function CustomTableCell({ children }) {
     return (
-        <TableCell align="right" className="flex w-full">
+        <TableCell align="right" className="flex w-full p-1">
             <div className="flex justify-end items-center ">{children}</div>
         </TableCell>
     );
+}
+function XTableHead({ children }) {
+    return <TableHead className="p-1 h-auto">{children}</TableHead>;
 }
 const Details = {
     PaymentOptions() {
@@ -211,9 +215,21 @@ const Details = {
     },
     Line({ title, valueKey }: { title?; valueKey: CtxKeys }) {
         const _ctx = useContext(ctx);
+        if (_ctx.floating)
+            return (
+                <TableCell className="p-1">
+                    <div className="flex items-center space-x-2">
+                        <TableCol.Secondary>{title}</TableCol.Secondary>
+
+                        <Label>
+                            <Money value={_ctx?.[valueKey]} />
+                        </Label>
+                    </div>
+                </TableCell>
+            );
         return (
             <>
-                <TableHead className={cn()}>{title}</TableHead>
+                <XTableHead>{title}</XTableHead>
                 <CustomTableCell>
                     <Label>
                         <Money value={_ctx?.[valueKey]} />
@@ -226,11 +242,11 @@ const Details = {
 function FloatingFooter() {
     const _ctx = useContext(ctx);
     return (
-        <div className="fixed bottom-0 left-0  right-0 md:grid md:grid-cols-[220px_minmax(0,1fr)]  lg:grid-cols-[240px_minmax(0,1fr)] mb-6">
+        <div className="fixed bottom-0 left-0  right-0 md:grid smd:grid-cols-[220px_minmax(0,1fr)]  lg:grid-cols-[240px_minmax(0,1fr)] mb-6">
             <div className="hidden  md:block" />
             <div className="lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px] mx-2">
                 {/* <Footer floatingFooter /> */}
-                <div className="flex rounded-lg border bg-white p-2 shadow">
+                <div className="flex rounded-lg border bg-white p-1 shadow">
                     <Table>
                         <TableBody>
                             <TableRow>

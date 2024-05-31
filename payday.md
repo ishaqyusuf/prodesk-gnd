@@ -4,7 +4,8 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete
 # MAY 31: 00.00 == 00.00
-    10:30-
+    11:30-
+    10:30-11:05
     06:20-06:55
 # MAY 30: 03.00 == 10.45
     04:35-05:00

@@ -69,8 +69,12 @@ export default function HousePackageTool({ componentTitle }) {
                             </div>
                         )}
                     </TableHead>
-                    <TableHead>Unit Price</TableHead>
-                    <TableHead>Line Total</TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                        Unit Price
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                        Line Total
+                    </TableHead>
                     <TableHead></TableHead>
                 </TableHeader>
                 <TableBody>
@@ -83,7 +87,12 @@ export default function HousePackageTool({ componentTitle }) {
                     ))}
                     <TableRow>
                         <TableCell
+                            className="hidden lg:table-cell"
                             colSpan={doorConfig.singleHandle ? 4 : 5}
+                        ></TableCell>
+                        <TableCell
+                            className="lg:hidden"
+                            colSpan={doorConfig.singleHandle ? 3 : 4}
                         ></TableCell>
                         <TableCell>
                             {/* <Money value={componentItem.unitPrice} /> */}
