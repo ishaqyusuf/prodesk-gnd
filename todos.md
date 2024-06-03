@@ -9,6 +9,7 @@ TODO:
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
     - Door configuration: Exterior and Interior should have respective prefix.
+    - When attachment not able to be generated, include print link for customer.
     - Note color.
     - Add color to timeline tag
     - Production Assignment notifcation: email and in-notification

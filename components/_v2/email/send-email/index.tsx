@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { sendMessage } from "@/app/(v1)/_actions/email";
 import { EmailTypes } from "../types";
 import { isProdClient } from "@/lib/is-prod";
+import { Toaster } from "@/components/ui/toaster";
 
 interface Props {
     // subject?: string;
@@ -87,20 +88,23 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
             return;
         }
         console.log(to);
-
-        await sendMessage({
-            to,
-            subject,
-            body,
-            parentId,
-            type,
-            data: emailData.data,
-            from: emailData.from,
-            meta: {},
-            attachOrder: true,
-        } as any);
-        toast.success("sent");
-        modal.close();
+        try {
+            await sendMessage({
+                to,
+                subject,
+                body,
+                parentId,
+                type,
+                data: emailData.data,
+                from: emailData.from,
+                meta: {},
+                attachOrder: true,
+            } as any);
+            toast.success("sent");
+            modal.close();
+        } catch (error) {
+            if (error instanceof Error) toast.error(error.message);
+        }
     }
     useEffect(() => {
         getEmailData(data.parentId, data.type).then((resp) => {

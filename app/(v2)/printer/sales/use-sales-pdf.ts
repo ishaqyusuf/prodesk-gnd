@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 export default function useSalesPdf() {
     async function print(query: SalesPrintProps["searchParams"]) {
+        console.log(query);
+
         const pdf = await salesPdf(query);
         const link = document.createElement("a");
         link.href = pdf.uri;

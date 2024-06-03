@@ -9,6 +9,7 @@ import { resend } from "@/lib/resend";
 import { _generateSalesPdf } from "./sales/save-pdf";
 import { env } from "@/env.mjs";
 import { ISalesType } from "@/types/sales";
+import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
@@ -16,14 +17,26 @@ export async function sendMessage(data: EmailProps) {
     const attachments: any = [];
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     if (data.attachOrder && isProd) {
-        const pdf = await _generateSalesPdf(
-            (data.data?.type as ISalesType) == "order" ? "invoice" : "quote",
-            [data.data.slug]
-        );
-        attachments.push({
-            content: pdf,
-            filename: `${data.data.orderId}.pdf`,
-        });
+        try {
+            const pdf = await salesPdf({
+                slugs: data.data.slug,
+                mode: data.data?.type,
+                mockup: "no",
+                pdf: true,
+                preview: true,
+            });
+            attachments.push({
+                content: pdf,
+                filename: `${data.data.orderId}.pdf`,
+            });
+        } catch (error) {
+            if (error instanceof Error) console.log(error.message);
+            throw Error("Unable to generate pdf");
+        }
+        // const pdf = await _generateSalesPdf(
+        //     (data.data?.type as ISalesType) == "order" ? "invoice" : "quote",
+        //     [data.data.slug]
+        // );
     }
 
     // const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
