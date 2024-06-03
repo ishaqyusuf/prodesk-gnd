@@ -37,39 +37,37 @@ export function StepProducts({
     return (
         <div className="">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {stepProducts
-                    // .filter((p, i) => i < 20)
-                    ?.map((b, i) => (
-                        <div className="relative p-4 group" key={i}>
-                            <div className="hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
-                                <Button
-                                    size="icon"
-                                    variant={"outline"}
-                                    className="w-8 h-8"
-                                    onClick={() => {
-                                        openStepForm(b);
-                                    }}
-                                >
-                                    <Icons.edit className="w-4 h-4" />
-                                </Button>
-                                <ConfirmBtn
-                                    onClick={async () => {
-                                        await deleteStepItem(i, b);
-                                    }}
-                                    size="icon"
-                                    Icon={Icons.trash}
-                                    trash
-                                ></ConfirmBtn>
-                            </div>
-                            <StepItem
-                                isMultiSection={isMultiSection}
-                                select={selectProduct}
-                                loadingStep={ctx.loadingStep}
-                                item={b}
-                                isRoot={stepCtx.isRoot}
-                            />
+                {stepProducts?.map((b, i) => (
+                    <div className="relative p-4 group" key={i}>
+                        <div className="hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
+                            <Button
+                                size="icon"
+                                variant={"outline"}
+                                className="w-8 h-8"
+                                onClick={() => {
+                                    openStepForm(b);
+                                }}
+                            >
+                                <Icons.edit className="w-4 h-4" />
+                            </Button>
+                            <ConfirmBtn
+                                onClick={async () => {
+                                    await deleteStepItem(i, b);
+                                }}
+                                size="icon"
+                                Icon={Icons.trash}
+                                trash
+                            ></ConfirmBtn>
                         </div>
-                    ))}
+                        <StepItem
+                            isMultiSection={isMultiSection}
+                            select={selectProduct}
+                            loadingStep={ctx.loadingStep}
+                            item={b}
+                            isRoot={stepCtx.isRoot}
+                        />
+                    </div>
+                ))}
                 <div className="p-4">
                     <button
                         onClick={() => {

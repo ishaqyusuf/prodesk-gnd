@@ -9,6 +9,7 @@ import { Icons } from "../icons";
 import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
 import { useModal } from "@/components/common/modal-old/provider";
+import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 
 const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
     const [options, setOptions] = useState<any[]>([]);
@@ -17,13 +18,14 @@ const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
         setTab("main");
     }, []);
     const modal = useModal();
+    const pdf = useSalesPdf();
     return (
         <BaseSheet
             onOpen={(data) => {
                 setTab("main");
                 setOptions(
                     optionBuilder.toMobile(
-                        sales.salesMenuOption(data as any, modal)
+                        sales.salesMenuOption(data as any, modal, pdf)
                     )
                 );
             }}

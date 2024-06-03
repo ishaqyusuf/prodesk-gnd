@@ -13,7 +13,6 @@ import optionBuilder from "../option-builder";
 import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
-import { dispatchSlice } from "@/store/slicers";
 import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export const sales = {
@@ -64,7 +63,7 @@ export const sales = {
         toast.message("Production Completed");
         closeModal();
     },
-    salesMenuOption(row: ISalesOrder, modal) {
+    salesMenuOption(row: ISalesOrder, modal, pdf) {
         const estimate = row.type == "quote";
         const _linkDir = `/sales/${row.type}/${row.slug}`;
         const mb = optionBuilder;
@@ -141,59 +140,76 @@ export const sales = {
                 ],
                 Icons.copy
             ),
-            this.printMenu(row, "Print", false, "main"),
-            this.printMenu(row, "Print Mockup", true, "main"),
-            this.printMenu(row, "Pdf", false, "pdf"),
+            this.printMenu(row, "Print", false, "main", pdf),
+            this.printMenu(row, "Print Mockup", true, "main", pdf),
+            this.printMenu(row, "Pdf", false, "pdf", pdf),
             // {delete: true,action: _delete}
         ].filter(Boolean);
     },
     //    ids, mode: IOrderPrintMode, mockup, print = true
-    print(props: {
-        ids;
-        mode: IOrderPrintMode;
-        mockup?: boolean;
-        prints?: boolean;
-        pdf?: boolean;
-    }) {
+    print(
+        props: {
+            ids;
+            mode: IOrderPrintMode;
+            mockup?: boolean;
+            prints?: boolean;
+            pdf?: boolean;
+        },
+        pdf
+    ) {
         if (props.pdf) {
-            const { mode, ids } = props;
-            dispatchSlice("printOrders", {
-                mode,
-                pdf: props.pdf,
-                mockup: props.mockup,
-                ids,
-                isClient: !["production", "packing list"].includes(mode),
-                showInvoice: ["order", "quote", "invoice"].includes(mode),
-                packingList: mode == "packing list",
-                isProd: mode == "production",
+            // const { mode, ids } = props;
+            // dispatchSlice("printOrders", {
+            //     mode,
+            //     pdf: props.pdf,
+            //     mockup: props.mockup,
+            //     ids,
+            //     isClient: !["production", "packing list"].includes(mode),
+            //     showInvoice: ["order", "quote", "invoice"].includes(mode),
+            //     packingList: mode == "packing list",
+            //     isProd: mode == "production",
+            // });
+            // return;
+            pdf.print({
+                slugs: props.ids.join(","),
+                mode: props.mode as any,
+                mockup: props.mockup ? "yes" : "no",
+                preview: false,
+                pdf: true,
             });
-
             return;
         }
+        const query = {
+            slugs: props.ids.join(","),
+            mode: props.mode as any,
+            mockup: props.mockup ? "yes" : "no",
+            preview: false,
+        };
         const link = document.createElement("a");
-        const prod = env.NEXT_PUBLIC_NODE_ENV == "production";
-        let base = prod
-            ? `https://gnd-prodesk.vercel.app`
-            : "http://localhost:3000";
-        const href = (link.href = `${base}/print-sales?${QueryString.stringify(
-            props
-        )}`);
+
+        let base = env.NEXT_PUBLIC_APP_URL;
+        const href =
+            (link.href = `${base}/printer/sales?${QueryString.stringify(
+                query
+            )}`);
         QueryString.stringify(props);
-        console.log(href);
+        // console.log(href);
         link.target = "_blank";
         link.click();
     },
-    printMenu(row, title, mockup, type) {
+    printMenu(row, title, mockup, type, pdf) {
         const mb = optionBuilder;
         function _print(mode: IOrderPrintMode) {
-            printOrder({
-                ids: [row.id],
-                mode,
-                mockup,
-                pdf: type == "pdf",
-                prints: true,
-            });
-            console.log("PRINT:", mode);
+            printOrder(
+                {
+                    ids: [row.slug],
+                    mode,
+                    mockup,
+                    pdf: type == "pdf",
+                    prints: true,
+                },
+                pdf
+            );
             closeModal();
         }
         return optionBuilder.more(

@@ -6,6 +6,7 @@ TODO:
     <!-- - Add due date to production -->
     <!-- - Customer Signature and Employee signature on Packing Slip -->
     <!-- - Production Due today not showing. -->
+    <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
     - Door configuration: Exterior and Interior should have respective prefix.
     - Note color.
@@ -22,7 +23,6 @@ TODO:
     - Production Assignment (Mark and and assign all feature.)
     - Add payment, production to old invoice
     - Delete/Update Timeline
-    - List Submissions in prod assignment, allow delete submission, edit assignment
     - Notification for Assignments, Started, and Submission.
     - Delivery: TODO
     - Order pdf not downloading on mobile
