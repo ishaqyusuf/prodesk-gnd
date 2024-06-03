@@ -18,6 +18,7 @@ export async function sendMessage(data: EmailProps) {
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     if (data.attachOrder && isProd) {
         try {
+            console.log("GETTING PDF");
             const pdf = await salesPdf({
                 slugs: data.data.slug,
                 mode: data.data?.type,
@@ -25,6 +26,8 @@ export async function sendMessage(data: EmailProps) {
                 pdf: true,
                 preview: true,
             });
+            console.log(pdf);
+            if (!pdf) throw new Error("pdf not generated.");
             attachments.push({
                 content: pdf,
                 filename: `${data.data.orderId}.pdf`,
