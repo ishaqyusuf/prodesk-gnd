@@ -29,7 +29,7 @@ export async function sendMessage(data: EmailProps) {
             console.log(pdf);
             if (!pdf) throw new Error("pdf not generated.");
             attachments.push({
-                content: pdf,
+                content: pdf.uri,
                 filename: `${data.data.orderId}.pdf`,
             });
         } catch (error) {
