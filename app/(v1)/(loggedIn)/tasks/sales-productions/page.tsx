@@ -14,13 +14,14 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
 import { redirect } from "next/navigation";
 import { isProduction } from "@/lib/is-prod";
+import { env } from "@/env.mjs";
 export const metadata: Metadata = {
     title: "Sales Production",
     description: "",
 };
 interface Props {}
 export default async function SalesProductionPage({ searchParams }) {
-    if (await isProduction()) redirect(`/tasks/sales-productions-2`);
+    if (env.NODE_ENV == "production") redirect(`/tasks/sales-productions-2`);
     const response = await getSalesProductionsAction(queryParams(searchParams));
 
     const todaysProd = await prodsDueToday();

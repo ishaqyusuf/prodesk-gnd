@@ -10,7 +10,8 @@ import { _generateSalesPdf } from "./sales/save-pdf";
 import { env } from "@/env.mjs";
 import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 import { Resend } from "resend";
-import MailComposer from "@/components/_v1/emails/mail-composer";
+
+import { resend } from "@/lib/resend";
 
 // export const resend = new Resend(env.RESEND_API_KEY);
 export async function sendMessage(data: EmailProps) {
@@ -47,7 +48,7 @@ export async function sendMessage(data: EmailProps) {
     // const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
     const to = data.to?.split(",");
     console.log(to);
-    const resend = new Resend(env.RESEND_API_KEY);
+    // const resend = new Resend(env.RESEND_API_KEY);
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",

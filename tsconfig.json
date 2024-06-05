@@ -5,7 +5,7 @@
         "allowJs": true,
         "checkJs": true,
         "skipLibCheck": true,
-        "strict": true,
+        "strict": false,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "esModuleInterop": true,
@@ -17,7 +17,7 @@
         "incremental": true,
         "noUncheckedIndexedAccess": true,
         "baseUrl": ".",
-        "noImplicitAny": false,
+
         "plugins": [
             {
                 "name": "next"
