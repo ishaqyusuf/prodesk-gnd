@@ -5,12 +5,14 @@ import { _email } from "./_email";
 import { prisma } from "@/db";
 import { _dbUser, userId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
-import { resend } from "@/lib/resend";
+// import { resend } from "@/lib/resend";
 import { _generateSalesPdf } from "./sales/save-pdf";
 import { env } from "@/env.mjs";
-import { ISalesType } from "@/types/sales";
 import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
+import { Resend } from "resend";
+import MailComposer from "@/components/_v1/emails/mail-composer";
 
+// export const resend = new Resend(env.RESEND_API_KEY);
 export async function sendMessage(data: EmailProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
     const u = await _dbUser();
@@ -45,7 +47,7 @@ export async function sendMessage(data: EmailProps) {
     // const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
     const to = data.to?.split(",");
     console.log(to);
-
+    const resend = new Resend(env.RESEND_API_KEY);
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
@@ -55,7 +57,7 @@ export async function sendMessage(data: EmailProps) {
         subject: trs.subject,
         html: trs.body, //?.split("\n").join("<br/>"),
         attachments,
-        //  react: MailComposer({ firstName: "John" }),
+        // react: MailComposer({ body: trs.body }),
     });
     // return;
     //   await _email({
