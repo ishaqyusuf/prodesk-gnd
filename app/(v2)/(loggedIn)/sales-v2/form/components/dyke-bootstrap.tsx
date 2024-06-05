@@ -4,7 +4,6 @@ import {
     dykeInteriors,
     dykeStepValues,
 } from "@/lib/data/dyke-interiors";
-import { dykeBootstrapAction } from "../_action/dyke-bootstrap";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/upload-file";
 import { dykeExteriorBootstrap } from "../_action/dyke-exterior-bootstrap";
@@ -37,7 +36,6 @@ export default function DykeBootstrap() {
             </Button>
             <Button
                 onClick={async () => {
-                    await dykeBootstrapAction();
                     toast.success("DONE");
                 }}
             >

@@ -10,22 +10,22 @@ export interface SalesQueryParams extends BaseQuery {
     type: ISalesType;
 }
 export async function getSalesAction(query: SalesQueryParams) {
-    return prisma.$transaction(async (tx) => {
-        const where: Prisma.SalesOrdersWhereInput = {};
-        const { pageCount, skip, take } = await paginatedAction(
-            query,
-            tx.salesOrders,
-            where
-        );
-        const data = await tx.salesOrders.findMany({
-            where,
-            skip,
-            take,
-            include: {},
-        });
-        return {
-            data,
-            pageCount,
-        };
+    // return prisma.$transaction(async (tx) => {
+    const where: Prisma.SalesOrdersWhereInput = {};
+    const { pageCount, skip, take } = await paginatedAction(
+        query,
+        prisma.salesOrders,
+        where
+    );
+    const data = await prisma.salesOrders.findMany({
+        where,
+        skip,
+        take,
+        include: {},
     });
+    return {
+        data,
+        pageCount,
+    };
+    // });
 }

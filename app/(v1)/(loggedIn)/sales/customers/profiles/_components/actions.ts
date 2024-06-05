@@ -8,23 +8,23 @@ import { paginatedAction } from "@/app/_actions/get-action-utils";
 
 export async function getCustomerProfiles(query = {}) {
     //    const where = wheresalesPayments(query);
-    return prisma.$transaction(async (tx) => {
-        const where = {};
-        const { pageCount, skip, take } = await paginatedAction(
-            query,
-            tx.customerTypes,
-            where
-        );
-        const data = await tx.customerTypes.findMany({
-            where,
-            skip,
-            take,
-        });
-        return {
-            data: data as any as ICustomerProfile[],
-            pageCount,
-        };
+    // return prisma.$transaction(async (tx) => {
+    const where = {};
+    const { pageCount, skip, take } = await paginatedAction(
+        query,
+        prisma.customerTypes,
+        where
+    );
+    const data = await prisma.customerTypes.findMany({
+        where,
+        skip,
+        take,
     });
+    return {
+        data: data as any as ICustomerProfile[],
+        pageCount,
+    };
+    // });
 }
 export async function saveCustomerProfile(data: ICustomerProfile) {
     const { id, ...rest } = data;

@@ -26,7 +26,7 @@ export async function saveDykeSales(data: DykeForm) {
                 return id && { connect: { id } };
             }
             const order = data.order.id
-                ? await tx.salesOrders.update({
+                ? await prisma.salesOrders.update({
                       where: { id: data.order.id },
                       data: {
                           ...rest,
@@ -40,7 +40,7 @@ export async function saveDykeSales(data: DykeForm) {
                           //   shippingAddress: connect(shippingAddressId),
                       } as any,
                   })
-                : await tx.salesOrders.create({
+                : await prisma.salesOrders.create({
                       data: {
                           ...(rest as any),
                           //   salesRepId: data.salesRep?.id,
@@ -92,7 +92,7 @@ export async function saveDykeSales(data: DykeForm) {
                             salesOrderId: order.id,
                         });
                     } else {
-                        await tx.salesOrderItems.update({
+                        await prisma.salesOrderItems.update({
                             where: { id: itemId },
                             data: {
                                 ...item,
@@ -130,7 +130,7 @@ export async function saveDykeSales(data: DykeForm) {
                                                         ...shelf,
                                                     });
                                                 } else {
-                                                    await tx.dykeSalesShelfItem.update(
+                                                    await prisma.dykeSalesShelfItem.update(
                                                         {
                                                             where: {
                                                                 id: prodId,
@@ -192,7 +192,7 @@ export async function saveDykeSales(data: DykeForm) {
                             } else {
                                 console.log({ hptData, hptId });
 
-                                await tx.housePackageTools.update({
+                                await prisma.housePackageTools.update({
                                     where: { id: hptId },
                                     data: {
                                         ...(hptData as any),
@@ -219,7 +219,7 @@ export async function saveDykeSales(data: DykeForm) {
                                         });
                                     else {
                                         // console.log(doorId);
-                                        await tx.dykeSalesDoors.update({
+                                        await prisma.dykeSalesDoors.update({
                                             where: { id: doorId },
                                             data: {
                                                 ...(doorData as any),
@@ -308,19 +308,19 @@ export async function saveDykeSales(data: DykeForm) {
             await Promise.all(
                 [
                     {
-                        t: tx.salesOrderItems,
+                        t: prisma.salesOrderItems,
                         data: createItems,
                         ids: ids.itemIds,
                         where: { salesOrderId: order.id },
                     },
                     {
-                        t: tx.dykeStepForm,
+                        t: prisma.dykeStepForm,
                         data: createStepForms,
                         ids: ids.stepFormsIds,
                         where: { salesId: order.id },
                     },
                     {
-                        t: tx.dykeSalesShelfItem,
+                        t: prisma.dykeSalesShelfItem,
                         data: createShelfItems,
                         ids: ids.shelfIds,
                         where: {
@@ -330,7 +330,7 @@ export async function saveDykeSales(data: DykeForm) {
                         },
                     },
                     {
-                        t: tx.housePackageTools,
+                        t: prisma.housePackageTools,
                         data: createHpts,
                         ids: ids.housePackageIds,
                         where: {
@@ -340,7 +340,7 @@ export async function saveDykeSales(data: DykeForm) {
                         },
                     },
                     {
-                        t: tx.dykeSalesDoors,
+                        t: prisma.dykeSalesDoors,
                         data: createDoors,
                         ids: ids.doorsIds,
                         where: {

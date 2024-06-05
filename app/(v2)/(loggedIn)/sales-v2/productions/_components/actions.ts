@@ -26,194 +26,192 @@ export async function _getProductionList({ query, production = false }: Props) {
 
     // console.log(dueDate);
 
-    return prisma.$transaction(async (tx) => {
-        const itemsFilter: Prisma.SalesOrderItemsListRelationFilter = {
-            some: {
-                OR: [
-                    {
-                        salesDoors: {
-                            some: {
-                                doorType: {
-                                    in: salesData.productionDoorTypes,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        swing: {
-                            not: null,
-                        },
-                    },
-                    {
-                        dykeProduction: true,
-                    },
-                ],
-            },
-        };
-        const where: Prisma.SalesOrdersWhereInput = query?.dueToday
-            ? {
-                  items: itemsFilter,
-                  assignments: {
-                      some: {
-                          assignedToId: !production ? undefined : authId,
-                          dueDate,
-                      },
-                  },
-              }
-            : {
-                  type: "order" as ISalesType,
-                  OR: searchQuery
-                      ? [
-                            {
-                                orderId: searchQuery,
-                            },
-                            {
-                                assignments: {
-                                    some: {
-                                        assignedTo: {
-                                            name: searchQuery,
-                                        },
-                                    },
-                                },
-                            },
-                            {
-                                customer: {
-                                    OR: [
-                                        {
-                                            businessName: searchQuery,
-                                        },
-                                        {
-                                            name: searchQuery,
-                                        },
-                                    ],
-                                },
-                            },
-                        ]
-                      : undefined,
-                  assignments: production
-                      ? {
-                            some: {
-                                assignedToId: authId,
-                                dueDate,
-                            },
-                        }
-                      : undefined,
-
-                  items: itemsFilter,
-              };
-        const { pageCount, skip, take } = await paginatedAction(
-            query,
-            tx.salesOrders,
-            where
-        );
-        const data = await tx.salesOrders.findMany({
-            where,
-            skip,
-            take,
-            include: {
-                items: {
-                    where: {
-                        deletedAt: null,
-                        swing: { not: null },
-                    },
-                },
-                productionStatus: true,
-                doors: {
-                    where: {
-                        deletedAt: null,
-                        housePackageTool: {
+    // return prisma.$transaction(async (tx) => {
+    const itemsFilter: Prisma.SalesOrderItemsListRelationFilter = {
+        some: {
+            OR: [
+                {
+                    salesDoors: {
+                        some: {
                             doorType: {
                                 in: salesData.productionDoorTypes,
                             },
                         },
                     },
-                    select: {
-                        id: true,
-                        doorType: true,
-                        lhQty: true,
-                        rhQty: true,
-                        totalQty: true,
+                },
+                {
+                    swing: {
+                        not: null,
                     },
                 },
-                assignments: {
-                    where: {
-                        deletedAt: null,
-                        item: {
-                            deletedAt: null,
+                {
+                    dykeProduction: true,
+                },
+            ],
+        },
+    };
+    const where: Prisma.SalesOrdersWhereInput = query?.dueToday
+        ? {
+              items: itemsFilter,
+              assignments: {
+                  some: {
+                      assignedToId: !production ? undefined : authId,
+                      dueDate,
+                  },
+              },
+          }
+        : {
+              type: "order" as ISalesType,
+              OR: searchQuery
+                  ? [
+                        {
+                            orderId: searchQuery,
                         },
-                    },
-                    include: {
-                        assignedTo: {
-                            select: {
-                                name: true,
-                                id: true,
+                        {
+                            assignments: {
+                                some: {
+                                    assignedTo: {
+                                        name: searchQuery,
+                                    },
+                                },
                             },
                         },
-                        salesDoor: {
-                            select: {
-                                id: true,
-                                housePackageTool: {
-                                    select: {
-                                        door: {
-                                            select: {
-                                                id: true,
-                                                title: true,
-                                                img: true,
-                                            },
+                        {
+                            customer: {
+                                OR: [
+                                    {
+                                        businessName: searchQuery,
+                                    },
+                                    {
+                                        name: searchQuery,
+                                    },
+                                ],
+                            },
+                        },
+                    ]
+                  : undefined,
+              assignments: production
+                  ? {
+                        some: {
+                            assignedToId: authId,
+                            dueDate,
+                        },
+                    }
+                  : undefined,
+
+              items: itemsFilter,
+          };
+    const { pageCount, skip, take } = await paginatedAction(
+        query,
+        prisma.salesOrders,
+        where
+    );
+    const data = await prisma.salesOrders.findMany({
+        where,
+        skip,
+        take,
+        include: {
+            items: {
+                where: {
+                    deletedAt: null,
+                    swing: { not: null },
+                },
+            },
+            productionStatus: true,
+            doors: {
+                where: {
+                    deletedAt: null,
+                    housePackageTool: {
+                        doorType: {
+                            in: salesData.productionDoorTypes,
+                        },
+                    },
+                },
+                select: {
+                    id: true,
+                    doorType: true,
+                    lhQty: true,
+                    rhQty: true,
+                    totalQty: true,
+                },
+            },
+            assignments: {
+                where: {
+                    deletedAt: null,
+                    item: {
+                        deletedAt: null,
+                    },
+                },
+                include: {
+                    assignedTo: {
+                        select: {
+                            name: true,
+                            id: true,
+                        },
+                    },
+                    salesDoor: {
+                        select: {
+                            id: true,
+                            housePackageTool: {
+                                select: {
+                                    door: {
+                                        select: {
+                                            id: true,
+                                            title: true,
+                                            img: true,
                                         },
                                     },
                                 },
                             },
                         },
-                        submissions: {
-                            where: {
-                                deletedAt: null,
-                            },
-                            select: {
-                                id: true,
-                                qty: true,
-                                rhQty: true,
-                                lhQty: true,
-                            },
+                    },
+                    submissions: {
+                        where: {
+                            deletedAt: null,
+                        },
+                        select: {
+                            id: true,
+                            qty: true,
+                            rhQty: true,
+                            lhQty: true,
                         },
                     },
                 },
-                customer: {
-                    select: {
-                        id: true,
-                        businessName: true,
-                        name: true,
-                    },
-                },
-                salesRep: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
+            },
+            customer: {
+                select: {
+                    id: true,
+                    businessName: true,
+                    name: true,
                 },
             },
-            orderBy: {
-                createdAt: "desc",
+            salesRep: {
+                select: {
+                    id: true,
+                    name: true,
+                },
             },
-            // const productions =
-        });
-        // console.log(data[0]);
-        return {
-            data: data.map((order) => {
-                return {
-                    ...order,
-                    _meta: {
-                        totalDoors: sum(
-                            order.isDyke
-                                ? order.doors.map((d) =>
-                                      sum([d.lhQty, d.rhQty])
-                                  )
-                                : order.items.map((i) => i.qty)
-                        ),
-                    },
-                };
-            }),
-            pageCount,
-        };
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        // const productions =
     });
+    // console.log(data[0]);
+    return {
+        data: data.map((order) => {
+            return {
+                ...order,
+                _meta: {
+                    totalDoors: sum(
+                        order.isDyke
+                            ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
+                            : order.items.map((i) => i.qty)
+                    ),
+                },
+            };
+        }),
+        pageCount,
+    };
+    // });
 }

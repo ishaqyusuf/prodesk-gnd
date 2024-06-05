@@ -15,6 +15,7 @@ export function composeSalesItems(data: ViewSaleType) {
     } = {};
     const shelfItems: NonNullable<ViewSaleType["items"][0]["shelfItems"]> = [];
     let totalDoors = 0;
+    // console.log(data.items.length);
 
     data.items.map((item) => {
         if (item.housePackageTool) {

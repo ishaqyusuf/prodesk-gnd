@@ -11,29 +11,29 @@ export async function dykeExteriorBootstrap() {
     // const data = generate();
     // return data;
     // let data = data;
-    await prisma.$transaction(async (tx) => {
-        // await tx.dykeStepValues.createMany({
-        //     data: data.stepValues.filter((c) => c.id),
-        // });
-        // await tx.dykeCategories.createMany({
-        //     data: data.categories.filter((c) => c.id),
-        // });
-        // await tx.dykeProducts.createMany({
-        //     data: data.products.map((product) => {
-        //         return product;
-        //     }),
-        // });
-        // await tx.dykeSteps.createMany({
-        //     data: data.steps.map((s) => {
-        //         return s;
-        //     }),
-        // });
-        await tx.dykeStepProducts.createMany({
-            data: data.stepProducts.map((prod) => {
-                return prod;
-            }),
-        });
+    // await prisma.$transaction(async (tx) => {
+    // await prisma.dykeStepValues.createMany({
+    //     data: data.stepValues.filter((c) => c.id),
+    // });
+    // await prisma.dykeCategories.createMany({
+    //     data: data.categories.filter((c) => c.id),
+    // });
+    // await prisma.dykeProducts.createMany({
+    //     data: data.products.map((product) => {
+    //         return product;
+    //     }),
+    // });
+    // await prisma.dykeSteps.createMany({
+    //     data: data.steps.map((s) => {
+    //         return s;
+    //     }),
+    // });
+    await prisma.dykeStepProducts.createMany({
+        data: data.stepProducts.map((prod) => {
+            return prod;
+        }),
     });
+    // });
 }
 
 export async function generate() {

@@ -130,7 +130,7 @@ export async function viewSale(type, slug) {
                 (item.multiDyke && item.multiDykeUid) ||
                 (!item.multiDyke && !item.multiDykeUid)
         )
-        .map((item) => {
+        .map((item, index) => {
             const _multiDyke = items.filter(
                 (i) =>
                     i.id == item.id ||
@@ -143,6 +143,7 @@ export async function viewSale(type, slug) {
                 ...item,
             };
         });
+    // console.log(_mergedItems.length);
 
     const groupings = {
         slabs: _mergedItems.filter((i) => i.meta.doorType == "Door Slabs Only"),

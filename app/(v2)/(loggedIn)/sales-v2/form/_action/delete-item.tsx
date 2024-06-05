@@ -41,16 +41,16 @@ export async function _deleteDykeItem(
             },
         });
     }
-    return prisma.$transaction(async (tx) => {
-        if (itemId) {
-            await _deleteWhere(itemId, tx.dykeStepForm, stepFormIds);
+    // return prisma.$transaction(async (tx) => {
+    if (itemId) {
+        await _deleteWhere(itemId, prisma.dykeStepForm, stepFormIds);
 
-            await _deleteWhere(itemId, tx.dykeSalesShelfItem, shelfIds);
+        await _deleteWhere(itemId, prisma.dykeSalesShelfItem, shelfIds);
 
-            await _deleteWhere(itemId, tx.dykeSalesDoors, doorsIds);
+        await _deleteWhere(itemId, prisma.dykeSalesDoors, doorsIds);
 
-            await _deleteWhere(itemId, tx.housePackageTools, housePackageIds);
-            await _deleteWhere(itemId, tx.salesOrderItems, itemIds, true);
-        }
-    });
+        await _deleteWhere(itemId, prisma.housePackageTools, housePackageIds);
+        await _deleteWhere(itemId, prisma.salesOrderItems, itemIds, true);
+    }
+    // });
 }
