@@ -3,7 +3,6 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink, OrderViewCrumb } from "@/components/_v1/breadcrumbs/links";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
-import SalesProductionModal from "@/components/_v1/modals/sales-production-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import CostBreakdown from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/cost-breakdown";
 import OverviewDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/details-section";
@@ -47,7 +46,6 @@ export default async function SalesOrderPage({ params: { slug } }) {
                         <TimelineSection />
                     </div>
                 </div>
-                <SalesProductionModal />
 
                 <SalesPaymentModal />
                 <OrderPrinter />
