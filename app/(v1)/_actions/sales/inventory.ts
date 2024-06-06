@@ -37,16 +37,17 @@ export async function searchOrderInventoryAction(query: ISearchQuery) {
     //   distinct: "name",
     // });
     // await prisma.orderInventory.groupBy({});
-    const prods = await prisma.orderInventory.groupBy({
+    const groupByArgs = {
         by: ["name"],
         orderBy: {
             name: "asc",
         },
         take: 10,
         where,
-    });
+    } satisfies Prisma.OrderInventoryGroupByArgs;
+    // const prods = await prisma.orderInventory.groupBy(groupByArgs);
     // console.log(prods);
-    return prods;
+    return [];
 }
 interface getComponentCostHistoryQuery {
     title;

@@ -31,8 +31,7 @@ import { ArrowLeft } from "lucide-react";
 import Btn from "../btn";
 import { updateInventoryComponentTitleAction } from "@/app/(v1)/_actions/sales/inventory";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
-import { DataTableFacetedFilter2 } from "../data-table/data-table-faceted-filter-2";
-import { productCategories } from "@/data/product-category";
+
 import { CatalogCommandDialog } from "../sales/command";
 
 interface Props {
