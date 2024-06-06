@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 const _path = {
     communityTasks: "/contractor/assign-tasks",
     communityTemplates: "/settings/community/community-templates",
+    communityTemplate: "/settings/community/community-template/[slug]",
     customers: "/sales/customers",
     "contractor-overview": "/contractors/overview/[contractorId]",
     delivery: "/sales/delivery",

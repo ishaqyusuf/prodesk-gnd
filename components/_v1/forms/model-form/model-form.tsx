@@ -25,6 +25,7 @@ import { loadStaticList } from "@/store/slicers";
 import { getHomeTemplateSuggestions } from "@/app/(v1)/_actions/community/home-template-suggestion";
 import ImportModelTemplateSheet from "@/components/_v1/sheets/import-model-template-sheet";
 import { useDataPage } from "@/lib/data-page-context";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 interface Props {
     data: IHomeTemplate;
@@ -71,6 +72,7 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
                 design: form.getValues(),
             });
             toast.success("Saved successfully!");
+            _revalidate("communityTemplate");
         });
     }
     return (

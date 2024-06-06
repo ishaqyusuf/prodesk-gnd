@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 
 export default async function CommunityModelTemplatePage({ params }) {
     const response: any = await getCommunityTemplate(params.slug);
-    // console.log({ ...(response.meta.design ?? {}) });
+    console.log({ ...(response.meta.design ?? {}) });
+
     if (response.meta?.design) {
         response.meta.design = transformCommunityTemplate(response.meta.design);
     }

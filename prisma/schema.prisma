@@ -17,9 +17,10 @@ datasource db {
 // }
 
 model AutoCompletes {
-    id        Int    @unique @default(autoincrement())
+    id        Int       @unique @default(autoincrement())
     type      String
     fieldName String
+    deletedAt DateTime?
     value     String
 }
 
