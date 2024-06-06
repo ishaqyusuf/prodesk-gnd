@@ -106,7 +106,7 @@ export async function saveStepProduct(data: Props) {
                         //           },
                         //       }
                         //     : undefined,
-                    },
+                    } as any,
                 },
                 step: {
                     connect: {

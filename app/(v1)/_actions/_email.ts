@@ -2,7 +2,7 @@
 
 import { env } from "@/env.mjs";
 import { resend } from "@/lib/resend";
-import { Resend } from "resend";
+// import { Resend } from "resend";
 
 interface Props {
     from;

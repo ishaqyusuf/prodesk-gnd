@@ -66,7 +66,7 @@ export async function _saveSalesAddress({
                 include: {
                     customer: true,
                 },
-            })) as IAddressBook | null;
+            })) as any as IAddressBook | null;
 
             if (eAddr) {
                 console.log(eAddr);

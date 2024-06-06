@@ -79,6 +79,7 @@ export async function saveDykeSales(data: DykeForm) {
                         housePackageTool,
                         ...item
                     } = arr.item;
+                    if (!housePackageTool) housePackageTool = {} as any;
                     // arr.item.shelfItemArray[0].
                     const newItem = !itemId;
 
@@ -162,7 +163,7 @@ export async function saveDykeSales(data: DykeForm) {
                             _doorForm = {},
                             _doorFormDefaultValue,
                             ...hptData
-                        } = housePackageTool || {};
+                        } = housePackageTool; // || ({} as any as typeof<housePackageTool>);
 
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
@@ -172,11 +173,11 @@ export async function saveDykeSales(data: DykeForm) {
                                         ...(doorData || {}),
                                         dimension,
                                         doorType: item?.meta?.doorType,
-                                    });
+                                    } as any);
                             }
                         );
 
-                        if (doors?.length || hptData.doorType == "Moulding") {
+                        if (doors?.length || hptData?.doorType == "Moulding") {
                             const newHpt = !hptId;
                             console.log([newHpt, hptId]);
 

@@ -130,7 +130,7 @@ function initializeMultiComponent(data: DykeForm) {
                     ...rest,
                     dykeDoorId,
                     moldingId,
-                };
+                } as any;
                 const filterItems = () => {
                     const {
                         createdAt,

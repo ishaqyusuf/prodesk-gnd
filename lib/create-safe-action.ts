@@ -24,7 +24,7 @@ export const createSafeAction = <TInput = any, TOutput = any>(
             : { data, success: true, error: [] as any };
         if (!validationResult.success) {
             return Err({
-                fields: validationResult.error.flatten()
+                fields: (validationResult as any).error.flatten()
                     .fieldErrors as FieldErrors<TInput>,
             });
         }

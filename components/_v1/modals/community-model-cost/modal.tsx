@@ -32,9 +32,10 @@ export default function CommunityModelCostModal() {
         );
     }
     async function onOpen(data: ICommunityTemplate) {
-        const costs = deepCopy<ICommunityCosts[]>(
-            data?.pivot?.modelCosts || [{ meta: {} }]
-        ).map((c) => {
+        let modelCosts = data?.pivot?.modelCosts;
+        if (!modelCosts || !modelCosts.length)
+            modelCosts = [{ meta: {} } as any];
+        const costs = deepCopy<ICommunityCosts[]>(modelCosts).map((c) => {
             (c as any)._id = c.id;
             return c;
         });
