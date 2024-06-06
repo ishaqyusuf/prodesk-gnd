@@ -53,6 +53,7 @@ export async function saveDykeSales(data: DykeForm) {
                       },
                   });
             let lastItemId = await lastId(tx.salesOrderItems);
+            let latOldItemId = lastItemId;
             let lastHptId = await lastId(tx.housePackageTools);
             let lastDoorId = await lastId(tx.dykeSalesDoors);
             let lastShelfItemId = await lastId(tx.dykeSalesShelfItem);
@@ -69,6 +70,7 @@ export async function saveDykeSales(data: DykeForm) {
                 doorsIds: [] as number[],
                 housePackageIds: [] as number[],
             };
+            const itemIds = [];
             await Promise.all(
                 data.itemArray.map(async (arr, index) => {
                     const isShelfItem = arr.item.meta.doorType == "Shelf Items";
@@ -85,6 +87,9 @@ export async function saveDykeSales(data: DykeForm) {
 
                     item.meta.lineIndex = index;
                     if (!itemId) itemId = ++lastItemId;
+                    else {
+                        itemIds.push(itemId);
+                    }
                     const shelfMode = !housePackageTool?.doorType;
                     if (newItem) {
                         createItems.push({
@@ -267,8 +272,24 @@ export async function saveDykeSales(data: DykeForm) {
                     );
                 })
             );
-            console.log(ids.doorsIds);
+            // console.log(ids.doorsIds);
             // console.log({ createDoors });
+            const _items = await prisma.salesOrderItems.findMany({
+                where: {
+                    salesOrderId: order.id,
+                    deletedAt: {
+                        not: null,
+                    },
+
+                    // id: {
+                    //     notIn: itemIds,
+                    // },
+                },
+            });
+            console.log(itemIds);
+            console.log(order.id);
+
+            console.log(_items.length);
 
             async function _deleteWhere(
                 t,
@@ -304,7 +325,7 @@ export async function saveDykeSales(data: DykeForm) {
             await _deleteWhere(tx.housePackageTools, ids.housePackageIds);
 
             await _deleteWhere(tx.salesOrderItems, ids.itemIds, true);
-            console.log("INSERTING>>>>>>");
+            // console.log("INSERTING>>>>>>");
 
             await Promise.all(
                 [

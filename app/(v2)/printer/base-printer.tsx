@@ -38,7 +38,7 @@ export default function BasePrinter({ slugs, children, preview, pdf }) {
         // }
         // console.log(params.get("preview"));
         const slugs = Object.keys(pages);
-        console.log(pages);
+        // console.log(pages);
 
         if (Object.values(pages).every((p) => p.ready) && !preview && !pdf) {
             // console.log("ADJUSTING WATERMARKS");
