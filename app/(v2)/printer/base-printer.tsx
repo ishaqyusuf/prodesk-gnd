@@ -38,9 +38,10 @@ export default function BasePrinter({ slugs, children, preview, pdf }) {
         // }
         // console.log(params.get("preview"));
         const slugs = Object.keys(pages);
+        console.log(pages);
+
         if (Object.values(pages).every((p) => p.ready) && !preview && !pdf) {
             // console.log("ADJUSTING WATERMARKS");
-
             // adjustWatermark(slugs);
             (async () => {
                 await timeout(900);
@@ -51,8 +52,10 @@ export default function BasePrinter({ slugs, children, preview, pdf }) {
         // console.log(pages);
     }, [pages]);
     function pageReady(slug, pageData) {
-        form.setValue(`${slug}.ready`, true);
-        form.setValue(`${slug}.data`, pageData);
+        setTimeout(() => {
+            form.setValue(`${slug}.ready`, true);
+            form.setValue(`${slug}.data`, pageData);
+        }, 500);
     }
     function getData(slug) {
         return form.getValues(slug);
