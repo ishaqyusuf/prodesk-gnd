@@ -26,7 +26,7 @@ import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 import QueryString from "qs";
-import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
+
 import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
@@ -391,7 +391,7 @@ export const ProductionAction = typedMemo(({ row }: IOrderRowProps) => {
     const router = useRouter();
     const modal = useModal();
     function openAssignProd(order) {
-        modal?.openModal(<AssignProductionModal order={order} />);
+        // modal?.openModal(<AssignProductionModal order={order} />);
     }
     return (
         <MenuItem

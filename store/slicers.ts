@@ -91,7 +91,6 @@ export interface ISlicer {
 }
 
 export type ModalName =
-    | "assignProduction"
     | "assignTask"
     | "activateProduction"
     | "backOrder"

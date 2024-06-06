@@ -12,7 +12,7 @@ import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order
 import { _restoreSalesOrder } from "@/app/(v1)/_actions/fix/restore-sales-order";
 import { _mergeConflictCustomers } from "@/app/(v1)/_actions/fix/merge-conflict-customer";
 import BackOrderModal from "@/components/_v1/modals/sales/back-order-modal";
-import AssignProdModal from "@/components/_v1/modals/assign-prod-modal";
+
 import AuthGuard from "@/components/_v1/auth-guard";
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export default async function BackOrdersPage({ searchParams }) {
                 />
             </AuthGuard>
             <OrderPrinter />
-            <AssignProdModal />
+
             <BackOrderModal />
         </SalesTabLayout>
     );

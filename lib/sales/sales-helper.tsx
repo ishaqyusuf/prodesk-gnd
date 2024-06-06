@@ -13,7 +13,6 @@ import optionBuilder from "../option-builder";
 import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
-import AssignProductionModal from "@/app/(v2)/(loggedIn)/sales/_modals/assign-production-modal";
 
 export const sales = {
     async move(order, to: ISalesType, router?) {
@@ -29,25 +28,8 @@ export const sales = {
             orderId: order.orderId,
             as,
         });
-        toast.success(`${as} copied successfully`, {
-            // action: {
-            //     label: "Open"
-            //     // onClick: () =>
-            //     // router.push(`/sales/${as}/${_.orderId}/form`)
-            // }
-        });
+        toast.success(`${as} copied successfully`, {});
     },
-    // productionModal(order,modal) {
-    //     // const { id, orderId, prodDueDate, prodId } = order;
-
-    //     // openModal("assignProduction", {
-    //     //     id,
-    //     //     orderId,
-    //     //     prodDueDate,
-    //     //     prodId,
-    //     // });
-    //     // modal.open(<AssignProductionModa order={order}/>)
-    // },
     async markIncomplete(row) {
         await markProductionIncompleteAction(row.id);
         toast.message("Production Marked as Incomplete");
@@ -92,10 +74,11 @@ export const sales = {
                         ),
                         mb.simple(
                             row?.prodId ? "Update Assignment" : "Assign",
-                            () =>
-                                modal.open(
-                                    <AssignProductionModal order={row} />
-                                ),
+                            () => {
+                                //  modal.open(
+                                //      <AssignProductionModal order={row} />
+                                //  );
+                            },
                             Icons.flag
                         ),
                         ...(prodCompleted

@@ -3,7 +3,6 @@ import { getSalesOverview } from "../_actions/get-sales-overview";
 import OverviewShell from "../components/overview-shell";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import SalesProductionModal from "@/components/_v1/modals/sales-production-modal";
 
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
@@ -32,8 +31,6 @@ export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
                     <BreadLink title="Orders" link="/sales/orders" />
                 </Breadcrumbs>
                 <OverviewShell data={data} />
-                {/*  */}
-                <SalesProductionModal />
 
                 <SalesPaymentModal />
                 <OrderPrinter />

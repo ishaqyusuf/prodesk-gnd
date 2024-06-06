@@ -86,7 +86,6 @@ export async function viewSale(type, slug) {
             payments: true,
         },
     });
-    console.log(order.items.length);
 
     if (!order) throw Error();
 
