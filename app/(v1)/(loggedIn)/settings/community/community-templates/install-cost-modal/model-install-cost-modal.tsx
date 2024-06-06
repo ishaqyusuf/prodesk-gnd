@@ -90,7 +90,7 @@ export default function ModelInstallCostModal({ community = false }) {
                     }
                     console.log(cd.pivot?.meta);
                     let pMeta = cd.pivot?.meta || {};
-                    pMeta.installCost = cost?.costings;
+                    (pMeta as any).installCost = cost?.costings;
                     console.log(data);
                     console.log(pMeta);
 

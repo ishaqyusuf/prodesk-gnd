@@ -61,4 +61,5 @@ export const prisma =
 //     }
 // })
 // prisma.$extends(softDelete)
-if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+if (env.NODE_ENV !== "production") (globalForPrisma as any).prisma = prisma;

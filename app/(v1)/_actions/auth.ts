@@ -6,7 +6,7 @@ import { prisma } from "@/db";
 import { randomInt } from "crypto";
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
-import PasswordResetRequestEmail from "@/components/_v1/emails/password-reset-request-email";
+// import PasswordResetRequestEmail from "@/components/_v1/emails/password-reset-request-email";
 import { _email } from "./_email";
 import { FROM_EMAILS } from "@/enums/email";
 import va from "@/lib/va";
@@ -32,15 +32,15 @@ export async function resetPasswordRequest({
             token: token.toString(),
         },
     });
-    await _email({
-        user: user,
-        from: FROM_EMAILS.ohno,
-        react: PasswordResetRequestEmail({
-            firstName: user?.name ?? undefined,
-            token,
-        }),
-        subject: "Security Alert: Forgot Password OTP",
-    });
+    // await _email({
+    //     user: user,
+    //     from: FROM_EMAILS.ohno,
+    //     react: PasswordResetRequestEmail({
+    //         firstName: user?.name ?? undefined,
+    //         token,
+    //     }),
+    //     subject: "Security Alert: Forgot Password OTP",
+    // });
     va.track("Password Reset");
     // await resend.emails.send({
     //   from: "GND-Prodesk<ohno@gndprodesk.com>",

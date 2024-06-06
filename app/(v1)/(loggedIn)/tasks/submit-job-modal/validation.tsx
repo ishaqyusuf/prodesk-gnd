@@ -24,7 +24,7 @@ export function validateTaskQty(maxQty, form) {
             v &&
                 typeof (v as any)?.qty === "string" &&
                 (costData[k] = {
-                    ...v,
+                    ...(v as any),
                     qty: Number((v as any).qty),
                 });
             // k == "undefined" && delete formData.meta.costData[k];

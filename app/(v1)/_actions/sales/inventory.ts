@@ -36,6 +36,7 @@ export async function searchOrderInventoryAction(query: ISearchQuery) {
     //   where,
     //   distinct: "name",
     // });
+    // await prisma.orderInventory.groupBy({});
     const prods = await prisma.orderInventory.groupBy({
         by: ["name"],
         orderBy: {
