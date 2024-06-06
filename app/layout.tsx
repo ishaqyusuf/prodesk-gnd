@@ -17,6 +17,7 @@ import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
 import { isProduction } from "@/lib/is-prod";
 import { Cmd } from "@/components/cmd";
 import PageAnalytics from "@/lib/analytics/page-analytics";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "GND-PRODESK",
@@ -38,7 +39,9 @@ export default async function RootLayout({
                 <div className="print:hidden">
                     <AppProvider>
                         {children}
-                        <PageAnalytics />
+                        <Suspense>
+                            <PageAnalytics />
+                        </Suspense>
                     </AppProvider>
                     <div
                         className={cn(
