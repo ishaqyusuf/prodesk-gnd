@@ -3,8 +3,8 @@
 Shelf item search
 Shelf item auto pick when created
 shelf item delete
-# JUN 03: 00.00 == 00.00
-    
+# JUN 06: 00.00 == 00.00
+    11:30-
 -----------------------------
 PAYMENT INVOICE  
 $455

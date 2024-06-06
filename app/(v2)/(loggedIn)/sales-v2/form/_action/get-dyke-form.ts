@@ -46,8 +46,7 @@ export async function getDykeFormAction(type, slug, query?) {
         : {
               deletedAt: null,
           };
-    console.log(restoreQuery);
-
+    // console.log(restoreQuery);
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
@@ -109,7 +108,6 @@ export async function getDykeFormAction(type, slug, query?) {
             billingAddress: true,
         },
     });
-    console.log(order.items.length);
 
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
