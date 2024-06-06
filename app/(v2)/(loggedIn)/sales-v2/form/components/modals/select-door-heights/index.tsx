@@ -1,5 +1,5 @@
 import Modal from "@/components/common/modal";
-import { IStepProducts } from "../../step-items-list/item-section/step-items";
+
 import { DykeForm } from "../../../../type";
 import { UseFormReturn, useFieldArray, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";

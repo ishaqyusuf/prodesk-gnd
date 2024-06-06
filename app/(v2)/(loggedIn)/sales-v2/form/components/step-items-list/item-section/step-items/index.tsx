@@ -80,6 +80,9 @@ export function StepProducts({
                         <Icons.add />
                     </button>
                 </div>
+                {
+                    // stepForm.step.title = 'Jamb Size'
+                }
             </div>
             {isMultiSection && (
                 <div className="flex justify-end">

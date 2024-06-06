@@ -55,7 +55,6 @@ export function DykeItemFormSection({ rowIndex, itemArray }: Props) {
                                 />
                             ))}
                         </div>
-                        {/* <div></div> */}
                     </div>
                 </CollapsibleContent>
             </Collapsible>

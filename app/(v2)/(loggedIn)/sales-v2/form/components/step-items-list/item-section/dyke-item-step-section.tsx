@@ -70,7 +70,7 @@ export function DykeItemStepSection({
                         <span>{stepValue}</span>
                     </button>
                     <div className="px-2">
-                        <Menu Icon={Icons.more}>
+                        {/* <Menu Icon={Icons.more}>
                             <MenuItem
                                 SubMenu={
                                     <>
@@ -81,7 +81,7 @@ export function DykeItemStepSection({
                             >
                                 New Step
                             </MenuItem>
-                        </Menu>
+                        </Menu> */}
                     </div>
                 </div>
             </CollapsibleTrigger>

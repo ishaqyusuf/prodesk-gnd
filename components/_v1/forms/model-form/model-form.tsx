@@ -41,7 +41,7 @@ export interface DesignTemplateForm extends HomeTemplateDesign {
     };
 }
 export default function ModelForm({ data, title = "Edit Model" }: Props) {
-    // console.log(data);
+    console.log(data);
 
     const {
         data: { community },

@@ -155,6 +155,9 @@ export async function getHomeTemplate(slug) {
 export async function getCommunityTemplate(slug) {
     const homeTemplate = await prisma.communityModels.findUnique({
         where: { slug },
+        include: {
+            history: true,
+        },
     });
     if (!homeTemplate) throw new Error("Home template not found");
     return homeTemplate;
