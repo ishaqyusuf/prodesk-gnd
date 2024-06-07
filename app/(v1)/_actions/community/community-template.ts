@@ -227,13 +227,24 @@ export async function _deleteCommunitModel(id) {
             communityTemplateId: null,
         },
     });
-    await prisma.communityModels.delete({
+    await prisma.communityModels.update({
         where: {
             id,
         },
-        include: {
-            costs: true,
+        data: {
+            deletedAt: new Date(),
+            costs: {
+                updateMany: {
+                    where: {},
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                },
+            },
         },
+        // include: {
+        //     costs: true,
+        // },
     });
     revalidatePath("/settings/community/community-templates");
 }

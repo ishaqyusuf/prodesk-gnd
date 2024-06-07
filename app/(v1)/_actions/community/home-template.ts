@@ -41,6 +41,9 @@ export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
 }
 export async function getCommunityTemplates(query: HomeTemplatesQueryParams) {
     const where = whereCommunityTemplate(query);
+    // where.deletedAt = {
+    //     not: null,
+    // };
     const _items = await prisma.communityModels.findMany({
         where,
         include: {

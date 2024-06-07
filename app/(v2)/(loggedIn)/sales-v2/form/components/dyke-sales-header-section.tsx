@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
 import { ArchiveRestore } from "lucide-react";
 import PaymentModal from "../../_components/_payments-modal";
+import DykeSettingsModal from "./modals/dyke-settings";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -161,6 +162,20 @@ export default function HeaderSection({}) {
                                     />
                                 </>
                             )}
+                            <MenuItem
+                                onClick={() => {
+                                    modal.openSheet(
+                                        <DykeSettingsModal
+                                            data={form.getValues(
+                                                "data.settings"
+                                            )}
+                                        />
+                                    );
+                                }}
+                                Icon={Icons.settings}
+                            >
+                                Settings
+                            </MenuItem>
                         </Menu>
                     </div>
                 </div>

@@ -11,25 +11,25 @@ import {
     DateCellContent,
     SecondaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../../components/_v1/columns/base-columns";
 
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
+import { BuilderFilter } from "../../../../../../components/_v1/filters/builder-filter";
 
 import { ICommunityTemplate } from "@/types/community";
-import InstallCostCell from "../community/install-cost-cell";
-import { ProjectsFilter } from "../filters/projects-filter";
+import InstallCostCell from "../../../../../../components/_v1/community/install-cost-cell";
+import { ProjectsFilter } from "../../../../../../components/_v1/filters/projects-filter";
 import ModelCostCell, {
     CommunityModelCostCell,
-} from "../community/model-cost-cell";
+} from "../../../../../../components/_v1/community/model-cost-cell";
 import {
     DeleteRowAction,
     EditRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
+} from "../../../../../../components/_v1/data-table/data-table-row-actions";
 import {
     _deleteCommunitModel,
     _importModelCost,

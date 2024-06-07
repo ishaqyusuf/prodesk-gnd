@@ -8,8 +8,8 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
-    - 
-    - Custom Input for Jamb Size.
+    - Create history lane for dyke, implement community template history for ability to go back in time.
+    - Custom Input for Jamb Size. (Settings Panel for dyke)
     - Door configuration: Exterior and Interior should have respective prefix.
     - When attachment not able to be generated, include print link for customer.
     - Note color.

@@ -113,6 +113,7 @@ export async function viewSale(type, slug) {
         const meta = item.meta as any as ISalesOrderItemMeta;
         return {
             ...item,
+
             sectionTitle: sectionTitles?.stepProducts?.find(
                 (p) => p?.product?.title == meta?.doorType
             )?.product?.value,

@@ -28,6 +28,11 @@ export default function DykeDoorItems() {
                 <TableHeader>
                     <TableHead>#</TableHead>
                     <TableHead>Item</TableHead>
+                    {moulding.isType.garage && (
+                        <>
+                            <TableHead>Swing</TableHead>
+                        </>
+                    )}
                     {moulding.isType.hasSwing ? (
                         <>
                             <TableHead>LH</TableHead>
@@ -45,6 +50,7 @@ export default function DykeDoorItems() {
                             <TableRow>
                                 <TableCell>{cid + 1}</TableCell>
                                 <TableCell>{com.description}</TableCell>
+
                                 <TableCell>
                                     <TableCol.Secondary>
                                         {com.qty}
@@ -93,6 +99,13 @@ export default function DykeDoorItems() {
                                     {com.housePackageTool?.door?.title}
                                     <p>{inToFt(door?.dimension)}</p>
                                 </TableCell>
+                                {moulding.isType.garage && (
+                                    <TableCell>
+                                        <TableCol.Secondary>
+                                            {door.swing}
+                                        </TableCol.Secondary>
+                                    </TableCell>
+                                )}
                                 {moulding.isType.hasSwing ? (
                                     <>
                                         <TableHead>{door.lhQty}</TableHead>
