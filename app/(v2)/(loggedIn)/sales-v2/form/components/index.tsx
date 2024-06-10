@@ -2,7 +2,6 @@
 
 import { useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { DykeItemFormSection } from "./step-items-list/item-section/item-section";
 import { DykeForm, IDykeFormContext } from "../../type";
 import { DykeFormContext } from "../_hooks/form-context";
 import RenderForm from "@/_v2/components/common/render-form";
@@ -13,11 +12,12 @@ import HeaderSection from "./dyke-sales-header-section";
 import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
 import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
+import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
 interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    console.log(defaultValues);
+    // console.log(defaultValues);
     const form = useForm<DykeForm>({
         defaultValues: {
             ...defaultValues,
@@ -57,7 +57,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                     <SalesAddressSection />
                 </section>
                 {itemArray.fields.map((field, index) => (
-                    <DykeItemFormSection
+                    <DykeInvoiceItemSection
                         itemArray={itemArray}
                         key={field.id}
                         rowIndex={index}

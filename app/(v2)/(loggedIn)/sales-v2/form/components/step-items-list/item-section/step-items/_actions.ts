@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { IStepProducts } from ".";
 
 export async function _deleteStepItem(item: IStepProducts[0]) {
-    await prisma.dykeStepProducts.update({
+    const resp = await prisma.dykeStepProducts.update({
         where: {
             id: item.id,
         },
@@ -16,6 +16,10 @@ export async function _deleteStepItem(item: IStepProducts[0]) {
                 },
             },
         },
+        include: {
+            product: true,
+        },
     });
+    // console.log(resp?.deletedAt);
 }
 export async function _deleteDoorStep(item: IStepProducts[0]) {}

@@ -5,7 +5,6 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { DykeItemStepSection } from "./dyke-item-step-section";
 
 import {
     DykeItemFormContext,
@@ -19,12 +18,13 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { _deleteDykeItem } from "../../../_action/delete-item";
 import ItemHeader from "./item-header";
+import { DykeInvoiceItemStepSection } from "./invoice-item-step-section";
 
 interface Props {
     rowIndex;
     itemArray;
 }
-export function DykeItemFormSection({ rowIndex, itemArray }: Props) {
+export function DykeInvoiceItemSection({ rowIndex, itemArray }: Props) {
     const form = useDykeForm();
     // const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
 
@@ -48,7 +48,7 @@ export function DykeItemFormSection({ rowIndex, itemArray }: Props) {
                     <div className="grid sm:grid-cols-3">
                         <div className="sm:col-span-3">
                             {item.formStepArray.map((formStep, bIndex) => (
-                                <DykeItemStepSection
+                                <DykeInvoiceItemStepSection
                                     stepForm={formStep as any}
                                     stepIndex={bIndex}
                                     key={bIndex}

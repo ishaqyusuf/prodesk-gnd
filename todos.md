@@ -1,3 +1,8 @@
+- JUN 10:
+  - Delete section items
+  - custom section input
+
+
 TODO: 
     <!-- - Payment Modal in Invoice Edit -->
     <!-- - Add view button to production list -->

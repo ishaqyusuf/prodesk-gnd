@@ -3,9 +3,7 @@ import { DykeForm } from "../../../../type";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import ControlledSelect, {
-    ControlledCombox,
-} from "@/components/common/controls/controlled-select";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { updateSettingsMeta } from "@/app/(v1)/_actions/settings";

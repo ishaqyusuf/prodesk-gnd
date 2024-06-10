@@ -4,7 +4,9 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete
 # JUN 10: 00.00 == 00.00
-    03:40-
+    11:30-
+    10:45-11:05
+    08:40-10:00
 -----------------------------
 TOTAL: $554.17
 PAYMENT INVOICE: $99.17

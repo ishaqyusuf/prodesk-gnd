@@ -92,6 +92,7 @@ export default function useStepItems({
     };
     useEffect(() => {
         load();
+        allowsCustom();
         // console.log(">>>>>>");
     }, []);
     const t = stepForm?.step?.title;
@@ -330,8 +331,6 @@ export default function useStepItems({
     }
 
     async function deleteStepItem(index, stepProd: IStepProducts[0]) {
-        console.log(step);
-
         switch (step) {
             case "Door":
                 await _deleteDoorStep(stepProd);
@@ -340,12 +339,37 @@ export default function useStepItems({
                 await _deleteStepItem(stepProd);
         }
         setStepProducts((current) => {
-            return [...current.slice(0, index), ...current.slice(index)];
+            const prods = [
+                ...current.slice(0, index),
+                ...current.slice(index + 1),
+            ];
+            console.log(prods.length, index);
+
+            return prods;
         });
     }
     const isRoot = stepFormTitle == "Item Type";
+    const [allowCustom, setAllowCustom] = useState(false);
+    const customsChanged = form.watch(
+        "data.settings.dyke.customInputSection.changed"
+    );
+    useEffect(() => {
+        allowsCustom();
+    }, [customsChanged]);
+    function allowsCustom() {
+        const settings = form.getValues(
+            "data.settings.dyke.customInputSection.sections"
+        );
+        const title = stepForm.step.title;
+        setAllowCustom(
+            settings?.findIndex(
+                (s) => s.name?.toLowerCase() == title?.toLowerCase()
+            ) > -1
+        );
+    }
     return {
         load,
+        allowCustom,
         isRoot,
         stepProducts,
         step,

@@ -29,7 +29,7 @@ export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
 }
-export function DykeItemStepSection({
+export function DykeInvoiceItemStepSection({
     stepForm,
     stepIndex,
 }: DykeItemStepSectionProps) {

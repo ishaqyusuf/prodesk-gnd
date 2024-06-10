@@ -1,4 +1,4 @@
-import { DykeItemStepSectionProps } from "../dyke-item-step-section";
+import { DykeItemStepSectionProps } from "../invoice-item-step-section";
 
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,9 @@ import { Button } from "@/components/ui/button";
 import useStepItems from "./use-step-items";
 import { StepItem } from "./step-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import ControlledInput from "@/components/common/controls/controlled-input";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
 }
@@ -27,6 +30,7 @@ export function StepProducts({
         selectProduct,
         ctx,
         deleteStepItem,
+        allowCustom,
         ...stepCtx
     } = useStepItems({
         stepForm,
@@ -80,10 +84,13 @@ export function StepProducts({
                         <Icons.add />
                     </button>
                 </div>
-                {
-                    // stepForm.step.title = 'Jamb Size'
-                }
+                {allowCustom && (
+                    <>
+                        <CustomInput />
+                    </>
+                )}
             </div>
+
             {isMultiSection && (
                 <div className="flex justify-end">
                     <Button onClick={() => selectProduct(false)}>
@@ -97,5 +104,28 @@ export function StepProducts({
                 )}
             </div>
         </div>
+    );
+}
+function CustomInput({}) {
+    const inputForm = useForm({
+        defaultValues: {
+            value: "",
+        },
+    });
+    return (
+        <Form {...inputForm}>
+            <div className="grid gap-2">
+                <ControlledInput
+                    name="value"
+                    control={inputForm.control}
+                    label="Custom"
+                />
+                <div className="flex justify-end">
+                    <Button size="sm" onClick={() => {}}>
+                        Continue
+                    </Button>
+                </div>
+            </div>
+        </Form>
     );
 }
