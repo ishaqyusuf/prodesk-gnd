@@ -129,6 +129,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                 .map((subItem) => {
                     console.log(subItem.id);
                     return subItem.salesDoors.map((salesDoor) => {
+                        // console.log(salesDoor.rhQty);
+
                         const ret = {
                             salesDoor: {
                                 ...salesDoor,
@@ -168,7 +170,17 @@ export async function getOrderAssignmentData(id, prod = false) {
                 }
             });
             if (!order.isDyke) {
-                const salesDoor = { lhQty: item.qty, itemId: item.id };
+                const salesDoor = {
+                    // lhQty: item.qty,
+                    swing: item.swing,
+                    itemId: item.id,
+                    salesOrderItemId: item.id,
+                    id: item.id,
+                };
+                if (item.swing?.toLowerCase() == "lh")
+                    salesDoor["lhQty"] = item.qty;
+                else salesDoor["rhQty"] = item.qty;
+
                 const ret = {
                     salesDoor,
                     assignments: item.assignments
@@ -231,6 +243,8 @@ export async function getOrderAssignmentData(id, prod = false) {
                     (g, i) => !g.item.qty && i < index
                 )?.item;
                 let title = gItem?.description?.replaceAll("*", "");
+                // console.log(title);
+
                 group.sectionTitle = title as any;
                 group.groupItemId = gItem?.id;
             }
@@ -253,13 +267,14 @@ export async function getOrderAssignmentData(id, prod = false) {
                 // n.salesDoors = [
                 //     ...n.salesDoors,
                 // ]
-                doorGroups
+                let grps = doorGroups
                     .filter((g) => g.groupItemId == n.groupItemId)
                     .map((g) => {
                         n.salesDoors.push(...g.salesDoors);
+                        g;
                     });
             }
-            console.log(n);
+            // console.log(n.salesDoors);
 
             return {
                 ...n,

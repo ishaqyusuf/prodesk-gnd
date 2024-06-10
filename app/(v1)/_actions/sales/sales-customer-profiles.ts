@@ -7,10 +7,12 @@ import { getPageInfo } from "../action-utils";
 import { _cache } from "../_cache/load-data";
 
 export async function staticCustomerProfilesAction() {
-    return await _cache(
+    const d = await _cache(
         "customer.types",
         async () => await prisma.customerTypes.findMany({})
     );
+    console.log(d);
+    return d;
 }
 
 export async function saveCustomerProfile(data: CustomerTypes) {

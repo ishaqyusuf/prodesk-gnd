@@ -34,15 +34,13 @@ export default function DoorGroupSection({ index }) {
                     >
                         {group.sectionTitle}
                     </button>
-                    <div>
-                        <AssignGroup index={index} />
-                    </div>
+                    <div>{group.isDyke && <AssignGroup index={index} />}</div>
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent>
-                {group.salesDoors.map((sd, i) => (
-                    <div className="text-sm p-2 border-b" key={i}>
-                        <div className="flex gap-4">
+                {group.salesDoors.map((sd, si) => (
+                    <div className="text-sm p-2 border-b" key={si}>
+                        <div className="flex gap-4 justify-between items-center">
                             <div className="">
                                 <TableCol.Primary>
                                     {sd?.doorTitle}
@@ -51,14 +49,11 @@ export default function DoorGroupSection({ index }) {
                                     {sd.salesDoor.dimension}
                                 </TableCol.Secondary>
                             </div>
-                            <div
-                                className={cn(
-                                    !group.isDyke && !group.sectionTitle
-                                        ? ""
-                                        : "hidden"
-                                )}
-                            >
-                                <AssignGroup index={index} />
+                            <div className={cn(!group.isDyke)}>
+                                <AssignGroup
+                                    salesDoorIndex={si}
+                                    index={index}
+                                />
                             </div>
                         </div>
                         <div className="grid gap-4 p-2 grid-cols-3 sm:grid-cols-5">
@@ -70,15 +65,16 @@ export default function DoorGroupSection({ index }) {
                                     <Info label="RH" value={sd.report.rhQty} />
                                 </>
                             )}
-                            {group.doorConfig.doorType == "Garage" && (
+                            {(group.doorConfig.doorType == "Garage" ||
+                                !group.isDyke) && (
                                 <Info
                                     label="Swing"
                                     value={`${sd.salesDoor.swing}`}
                                 />
                             )}
-                            {!group.isDyke && (
+                            {/* {!group.isDyke && (
                                 <Info label="Handle" value={group.item.swing} />
-                            )}
+                            )} */}
                             <Info
                                 label="Assigned"
                                 value={`${sd.report.assigned} of ${sd.report.totalQty}`}
@@ -107,8 +103,8 @@ export default function DoorGroupSection({ index }) {
                         </DetailsBlock>
 
                         {/* {group.doorDetails} */}
-                        <DoorAssignments groupIndex={index} doorIndex={i} />
-                        <DoorSubmissions groupIndex={index} doorIndex={i} />
+                        <DoorAssignments groupIndex={index} doorIndex={si} />
+                        <DoorSubmissions groupIndex={index} doorIndex={si} />
                     </div>
                 ))}
             </CollapsibleContent>

@@ -43,11 +43,16 @@ import { serverDate } from "../_action/actions";
 export interface IAssignGroupForm {
     assignToId?: number;
     prodDueDate;
+
     doors: {
         [id in string]: OrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
     };
 }
-export function AssignGroup({ index }) {
+interface Props {
+    index;
+    salesDoorIndex?;
+}
+export function AssignGroup({ index, salesDoorIndex = -1 }: Props) {
     const data = useAssignmentData();
     const modal = useAssignment({ prod: data.data.isProd });
     const group = data.data.doorGroups[index];
@@ -66,16 +71,26 @@ export function AssignGroup({ index }) {
     useEffect(() => {
         if (open) {
             const doors: any = {};
-            group?.salesDoors?.map((s) => {
-                doors[s.salesDoor?.id?.toString()] = {
-                    // qty: s.report.pendingAssignment,
-                    ...s.report,
-                    lhQty: s.report._unassigned?.lh,
-                    rhQty: s.report._unassigned?.rh,
-                };
-            });
-            // console.log(doors);
+            group?.salesDoors?.map((s, si) => {
+                if (
+                    (salesDoorIndex >= 0 && si == salesDoorIndex) ||
+                    salesDoorIndex < 0
+                ) {
+                    console.log(
+                        [salesDoorIndex, s.salesDoor.salesOrderItemId],
+                        si
+                    );
 
+                    // console.log(s.salesDoor?.id?.toString());
+
+                    doors[s.salesDoor?.id?.toString()] = {
+                        // qty: s.report.pendingAssignment,
+                        ...s.report,
+                        lhQty: s.report._unassigned?.lh,
+                        rhQty: s.report._unassigned?.rh,
+                    };
+                }
+            });
             form.reset({
                 doors,
                 assignToId: -1,
@@ -126,15 +141,30 @@ export function AssignGroup({ index }) {
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
             <DropdownMenuTrigger
                 asChild
-                disabled={group.report.pendingAssignment == 0}
+                disabled={
+                    salesDoorIndex >= 0
+                        ? group.salesDoors[salesDoorIndex]?.report
+                              ?.pendingAssignment == 0
+                        : group.report.pendingAssignment == 0
+                }
             >
                 <Button
                     onClick={() => onOpenChange(!open)}
-                    disabled={group.report.pendingAssignment == 0}
+                    disabled={
+                        salesDoorIndex >= 0
+                            ? group.salesDoors[salesDoorIndex]?.report
+                                  ?.pendingAssignment == 0
+                            : group.report.pendingAssignment == 0
+                    }
                     size={"sm"}
-                    className="whitespace-nowrap"
+                    className="whitespace-nowrap p-2 h-8"
                 >
-                    Assign ({group.report.pendingAssignment})
+                    Assign (
+                    {salesDoorIndex >= 0
+                        ? group.salesDoors[salesDoorIndex]?.report
+                              ?.pendingAssignment
+                        : group.report.pendingAssignment}
+                    )
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="left" className="mx-4">
