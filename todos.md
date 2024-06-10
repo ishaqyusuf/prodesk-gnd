@@ -17,6 +17,9 @@ TODO:
     - NEW REQUEST: Custom sales report: print statement button in customer overview either passed due, or paid, by date.
     - Sales settings; profile select
     - Assign to production (NaN 24-0603-1668)
+    - Job addon on no unit.
+    - Unable to edit submmited job
+    - Delete old submit job modal
     - Price tag to section items. Add calculated price column, and additional price column to house-package tool and others.
     - 
     - Create history lane for dyke, implement community template history for ability to go back in time.

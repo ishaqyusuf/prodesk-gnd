@@ -9,7 +9,6 @@ import { getMyJobs } from "@/app/(v1)/_actions/hrm-jobs/get-jobs";
 import JobTableShell from "@/components/_v1/shells/job-table-shell";
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
-// import SubmitJobModal from "@/app/(v1)/(loggedIn)/tasks/submit-job-modal";
 import TaskAction from "@/components/_v1/tasks/task-action";
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
