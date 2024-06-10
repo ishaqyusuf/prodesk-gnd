@@ -24,7 +24,6 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
     const itemData = componentItem.item.get.data();
     const component =
         itemData.multiComponent.components[componentItem.componentTitle];
-    console.log(component);
 
     return (
         <>

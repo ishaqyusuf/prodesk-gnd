@@ -166,9 +166,10 @@ export default function HeaderSection({}) {
                                 onClick={() => {
                                     modal.openSheet(
                                         <DykeSettingsModal
-                                            data={form.getValues(
-                                                "data.settings"
-                                            )}
+                                            // data={form.getValues(
+                                            //     "data.settings"
+                                            // )}
+                                            form={form}
                                         />
                                     );
                                 }}

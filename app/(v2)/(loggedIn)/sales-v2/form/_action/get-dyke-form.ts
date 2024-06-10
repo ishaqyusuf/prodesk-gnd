@@ -132,7 +132,6 @@ export async function getDykeFormAction(type, slug, query?) {
         ccc_percentage: +ctx?.settings?.ccc,
         tax: true,
     };
-    console.log(ctx.defaultProfile);
 
     const newOrderForm: Partial<OrderType> = {
         type,
@@ -344,16 +343,13 @@ export async function getDykeFormAction(type, slug, query?) {
                         const uid = generateRandomString(4);
                         function getMouldingId() {
                             let mid = item.housePackageTool.moldingId;
-                            console.log(item.housePackageTool.molding?.title);
 
                             const s = item.formSteps.find(
                                 (fs) => fs.step.title == "Moulding"
                             );
-                            console.log(mid);
 
-                            if (s) console.log(s?.value);
                             const svid = s?.step?.title;
-                            console.log(svid);
+
                             return mid;
                         }
                         const c = (multiComponent.components[

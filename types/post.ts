@@ -3,7 +3,7 @@ import { Settings } from "@prisma/client";
 export const PostTypes = {
     SALES_SETTINGS: "sales-settings",
     SWINGS: "swings",
-    SUPPLIERS: "suppliers"
+    SUPPLIERS: "suppliers",
 };
 export type PostType = "sales-settings" | "swings" | "suppliers";
 export type ISalesSetting = Settings & {
@@ -26,6 +26,13 @@ export interface ISalesSettingMeta {
     };
     manualEstimate: Boolean;
     wizard: ISalesWizard;
+    dyke: {
+        customInputSection: {
+            changed: string;
+            sections: { name: string }[];
+            _sectionSelect;
+        };
+    };
 }
 export interface ISalesWizard {
     titleMarkdown; //@Door | @Qty | @xyz | @

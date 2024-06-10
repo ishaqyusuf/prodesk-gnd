@@ -80,6 +80,14 @@ export async function salesFormData(dyke = false) {
         },
     });
     const meta: ISalesSettingMeta = setting?.meta as any;
+    console.log(meta.dyke);
+
+    if (!meta.dyke)
+        meta.dyke = {
+            customInputSection: {
+                sections: [],
+            } as any,
+        };
     const profiles = (
         (await prisma.customerTypes.findMany({})) as any as ICustomerProfile[]
     ).map((profile) => {

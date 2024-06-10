@@ -8,6 +8,8 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - Price tag to section items. Add calculated price column, and additional price column to house-package tool and others.
+    - 
     - Create history lane for dyke, implement community template history for ability to go back in time.
     - Custom Input for Jamb Size. (Settings Panel for dyke)
     - Door configuration: Exterior and Interior should have respective prefix.
@@ -17,7 +19,7 @@ TODO:
     - Production Assignment notifcation: email and in-notification
     - Update footer on item delete, item check changed, etc.
     - Create delete queue for formValues, items: on formValueChange: add formIds,housePackageIds etc to delete queue.
-    - Add username to note (by pablo)
+    <!-- - Add username to note (by pablo) -->
     - Show door fully in selection (some door cuts off).
     - Embed door images to invoice pdf at last page, display doors and mouldings in grid format.
     - 

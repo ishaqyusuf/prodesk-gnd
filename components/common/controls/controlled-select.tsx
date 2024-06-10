@@ -100,6 +100,7 @@ export default function ControlledSelect<
                     <FormControl>
                         {type == "combo" ? (
                             <ControlledCombox
+                                size={size}
                                 field={field}
                                 placeholder={placeholder}
                                 onSelect={(s) => {
@@ -162,6 +163,7 @@ export function ControlledCombox({
     onSelect,
     options,
     itemText,
+    size,
     itemValue,
 }) {
     const [show, setShow] = useState(false);
@@ -176,8 +178,9 @@ export function ControlledCombox({
                         variant="outline"
                         role="combobox"
                         className={cn(
+                            size == "sm" && "h-8",
                             "w-full justify-between",
-                            !field.value && "text-muted-foreground"
+                            !field?.value && "text-muted-foreground"
                         )}
                     >
                         {/* {field.value
@@ -187,10 +190,10 @@ export function ControlledCombox({
                     : "Select language"} */}
                         {/* <span>{options.length}</span> */}
                         <span className="">
-                            {field.value
+                            {field?.value
                                 ? itemText(
                                       options.find(
-                                          (o) => itemValue(o) == field.value
+                                          (o) => itemValue(o) == field?.value
                                       )
                                   )
                                 : placeholder}
@@ -224,7 +227,7 @@ export function ControlledCombox({
                                 <CheckIcon
                                     className={cn(
                                         "ml-auto h-4 w-4",
-                                        itemValue(opt) === field.value
+                                        itemValue(opt) === field?.value
                                             ? "opacity-100"
                                             : "opacity-0"
                                     )}
