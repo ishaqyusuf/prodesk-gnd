@@ -5,7 +5,7 @@ import { getCustomersAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-c
 import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import CustomerModal from "@/components/_v1/modals/customer-modal";
+
 import PageHeader from "@/components/_v1/page-header";
 import CustomersLayout from "@/components/_v1/tab-layouts/customers-layout";
 import { Metadata } from "next";
@@ -30,7 +30,6 @@ export default async function CustomersPage({ searchParams }) {
                     searchParams={searchParams}
                     promise={response}
                 />
-                <CustomerModal />
             </CustomersLayout>
         </AuthGuard>
     );

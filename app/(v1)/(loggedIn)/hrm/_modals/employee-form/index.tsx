@@ -31,7 +31,6 @@ export default function EmployeeForm({ defaultData }: Props) {
     const modal = useModal();
     const roles = useStaticRoles();
     async function submit() {
-        // if(!form.getValues)
         try {
             const isValid = employeeSchema.parse(form.getValues());
             if (!defaultData?.id)

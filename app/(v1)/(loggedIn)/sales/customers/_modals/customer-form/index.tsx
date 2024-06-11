@@ -35,9 +35,10 @@ export default function CustomerFormModal({ defaultData }: Props) {
             ...defaultData,
         },
     });
-    const watchProfileId = form.watch("customerTypeId");
+    // const watchProfileId = form.watch("customerTypeId");
     const modal = useModal();
     const profiles = useCustomerProfiles();
+
     async function submit() {
         try {
             // const isValid = emailSchema.parse(form.getValues());
@@ -63,72 +64,72 @@ export default function CustomerFormModal({ defaultData }: Props) {
         <Form {...form}>
             <Modal.Content>
                 <Modal.Header title="Customer Form" />
-                <div className="grid gap-4">
+                <div className="grid gap-2 sm:grid-cols-2">
                     <ControlledInput
                         control={form.control}
                         name="businessName"
                         size="sm"
+                        className="sm:col-span-2"
                         label="Business Name"
                     />
                     <ControlledInput
                         control={form.control}
                         name="name"
+                        className="sm:col-span-2"
                         size="sm"
                         label="Name"
                     />
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <ControlledInput
-                            control={form.control}
-                            name="email"
-                            size="sm"
-                            label="Email"
-                        />
-                        <ControlledInput
-                            control={form.control}
-                            name="phoneNo"
-                            size="sm"
-                            label="Phone No"
-                        />
+                    <ControlledInput
+                        control={form.control}
+                        name="email"
+                        size="sm"
+                        label="Email"
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="phoneNo"
+                        size="sm"
+                        label="Phone No"
+                    />
 
-                        <ControlledSelect
-                            className="sm:col-span-2"
-                            control={form.control}
-                            name="customerTypeId"
-                            size="sm"
-                            label="Profile"
-                            options={[
-                                ...profiles?.data?.map((d) => ({
-                                    label: d.title,
-                                    value: d.id,
-                                })),
-                            ]}
-                        />
-                        <ControlledInput
-                            control={form.control}
-                            name="primaryAddress.address1"
-                            label="Address"
-                            size="sm"
-                        />
-                        <ControlledInput
-                            control={form.control}
-                            name="primaryAddress.state"
-                            label="State"
-                            size="sm"
-                        />
-                        <ControlledInput
-                            control={form.control}
-                            name="primaryAddress.city"
-                            label="City"
-                            size="sm"
-                        />
-                        <ControlledInput
-                            control={form.control}
-                            name="primaryAddress.meta.zip_code"
-                            label="Zip code"
-                            size="sm"
-                        />
-                    </div>
+                    <ControlledSelect
+                        className="sm:col-span-2"
+                        control={form.control}
+                        name="customerTypeId"
+                        size="sm"
+                        label="Profile"
+                        options={[
+                            ...profiles?.data?.map((d) => ({
+                                label: d.title,
+                                value: d.id,
+                            })),
+                        ]}
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="primaryAddress.address1"
+                        label="Address"
+                        size="sm"
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="primaryAddress.state"
+                        label="State"
+                        size="sm"
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="primaryAddress.city"
+                        label="City"
+                        size="sm"
+                    />
+                    <ControlledInput
+                        control={form.control}
+                        name="primaryAddress.meta.zip_code"
+                        label="Zip code"
+                        size="sm"
+                    />
                 </div>
                 <Modal.Footer onSubmit={submit} />
             </Modal.Content>
