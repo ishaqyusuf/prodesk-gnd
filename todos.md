@@ -13,11 +13,12 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - NEW REQUEST: Order delivery date, set date and manage delivery date.
     - 
     - NEW REQUEST: Custom sales report: print statement button in customer overview either passed due, or paid, by date.
     - Sales settings; profile select
     - Assign to production (NaN 24-0603-1668)
-    - Job addon on no unit.
+    <!-- - Job addon on no unit. -->
     - Unable to edit submmited job
     - Delete old submit job modal
     - Price tag to section items. Add calculated price column, and additional price column to house-package tool and others.

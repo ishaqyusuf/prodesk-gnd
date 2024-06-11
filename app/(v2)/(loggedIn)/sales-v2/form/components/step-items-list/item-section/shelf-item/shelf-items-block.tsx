@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -31,7 +31,22 @@ import ShelfItemModal from "../../../modals/shelf-item-modal";
 import { toast } from "sonner";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 // import { ArrowDown } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 interface Props {
     shelfIndex;
     deleteItem;
@@ -211,7 +226,7 @@ function ShellProductCells({
                     onValueChange={(productId) => {
                         // const productId = Number(v) || null;
                         // f.onChange(productId);
-                        console.log(productId);
+                        console.log("value changed:", productId);
 
                         shelf.productSelected(productId, index);
                     }}
@@ -349,6 +364,26 @@ function ShelfSelect({
     items,
     defaultValue,
 }: ShelfSelectProps) {
+    return (
+        <FormField
+            control={control}
+            name={keyName}
+            render={({ field }) => (
+                <>
+                    <ComboboxDemo
+                        defaultValue={defaultValue}
+                        placeholder={placeholder}
+                        options={items}
+                        transformValue={(v) => (v ? Number(v) : null)}
+                        onSelect={(value) => {
+                            onValueChange(value);
+                        }}
+                    />
+                </>
+            )}
+        />
+    );
+
     // return (
     //     <ControlledSelect
     //         control={control}
@@ -394,5 +429,77 @@ function ShelfSelect({
                 </>
             )}
         />
+    );
+}
+
+interface ComboboxDemoProps {
+    options;
+    transformValue;
+    placeholder;
+    onSelect;
+    defaultValue;
+}
+function ComboboxDemo({
+    options,
+    onSelect,
+    transformValue,
+    placeholder,
+    defaultValue,
+}: ComboboxDemoProps) {
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState(defaultValue?.toString());
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-[200px] justify-between"
+                >
+                    {value
+                        ? options.find((framework) => framework.value === value)
+                              ?.label
+                        : placeholder}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+                <Command>
+                    <CommandInput placeholder={placeholder} />
+                    <CommandList>
+                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandGroup>
+                            {options.map((framework) => (
+                                <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={(currentValue) => {
+                                        setValue(
+                                            currentValue === value
+                                                ? ""
+                                                : currentValue
+                                        );
+                                        setOpen(false);
+                                        onSelect(currentValue);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            value === framework.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                        )}
+                                    />
+                                    {framework.label}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
     );
 }
