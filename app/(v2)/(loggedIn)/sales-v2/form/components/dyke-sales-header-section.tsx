@@ -23,6 +23,8 @@ import { DatePicker } from "@/components/_v1/date-range-picker";
 import { ArchiveRestore } from "lucide-react";
 import PaymentModal from "../../_components/_payments-modal";
 import DykeSettingsModal from "./modals/dyke-settings";
+import { useEffect } from "react";
+import { SaveMode } from "../../type";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -36,6 +38,10 @@ export default function HeaderSection({}) {
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
     const modal = useModal();
+
+    async function save(and: SaveMode = "default") {
+        form.handleSubmit((data) => saver.save(data, and))();
+    }
     return (
         <div className="h-12">
             <div
@@ -101,7 +107,29 @@ export default function HeaderSection({}) {
                         >
                             Notes
                         </Btn>
-                        <Btn
+                        <Menu
+                            variant={"secondary"}
+                            disabled={saver.saving}
+                            label={"Save"}
+                            Icon={null}
+                        >
+                            <MenuItem onClick={() => save()} Icon={Icons.save}>
+                                Save
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => save("close")}
+                                Icon={Icons.saveAndClose}
+                            >
+                                Save & Close
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => save("new")}
+                                Icon={Icons.add}
+                            >
+                                Save & New
+                            </MenuItem>
+                        </Menu>
+                        {/* <Btn
                             size="sm"
                             isLoading={saver.saving}
                             onClick={() => {
@@ -109,7 +137,7 @@ export default function HeaderSection({}) {
                             }}
                         >
                             Save
-                        </Btn>
+                        </Btn> */}
                         <Menu Icon={Icons.more}>
                             {/* <MenuItem
                         onClick={() => {

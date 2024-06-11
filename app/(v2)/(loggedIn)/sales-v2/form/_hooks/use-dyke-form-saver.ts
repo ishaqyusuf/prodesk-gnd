@@ -1,5 +1,5 @@
 import { useTransition } from "react";
-import { DykeForm } from "../../type";
+import { DykeForm, SaveMode } from "../../type";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { saveDykeSales } from "../_action/save-dyke";
@@ -19,7 +19,7 @@ export default function useDykeFormSaver(form) {
         "order.type",
     ]);
     const params = useSearchParams();
-    function save(data: DykeForm) {
+    function save(data: DykeForm, mode: SaveMode) {
         startTransition(async () => {
             const errorData: any = {
                 data,
@@ -40,9 +40,21 @@ export default function useDykeFormSaver(form) {
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
                 toast.success("Saved");
-                if (!id || params.get("restore") == "true")
-                    router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
-                else await _revalidate("salesV2Form");
+                switch (mode) {
+                    case "close":
+                        router.push(`/sales/${type}s`);
+                        break;
+                    case "default":
+                        if (!id || params.get("restore") == "true")
+                            router.push(
+                                `/sales-v2/form/${resp.type}/${resp.slug}`
+                            );
+                        else await _revalidate("salesV2Form");
+                        break;
+                    case "new":
+                        router.push(`/sales-v2/form/${resp.type}`);
+                        break;
+                }
             } catch (error) {
                 toast.error("Something went wrong");
                 if (error instanceof Error) console.log(error.message);

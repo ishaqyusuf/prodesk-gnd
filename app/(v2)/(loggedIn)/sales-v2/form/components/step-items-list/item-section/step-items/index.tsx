@@ -14,6 +14,7 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
+import { toast } from "sonner";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
 }
@@ -85,7 +86,21 @@ export function StepProducts({
                 </div>
                 {allowCustom && (
                     <>
-                        <CustomInput />
+                        <CustomInput
+                            currentValue={stepForm.item.value}
+                            onProceed={(value) => {
+                                selectProduct(
+                                    true,
+                                    {
+                                        product: {
+                                            title: value,
+                                        } as any,
+                                        dykeStepId: stepForm.step.id,
+                                    } as any,
+                                    true
+                                );
+                            }}
+                        />
                     </>
                 )}
             </div>
@@ -105,24 +120,35 @@ export function StepProducts({
         </div>
     );
 }
-function CustomInput({}) {
+function CustomInput({ onProceed, currentValue }) {
     const inputForm = useForm({
         defaultValues: {
-            value: "",
+            value: currentValue,
         },
     });
     return (
         <Form {...inputForm}>
-            <div className="grid gap-2">
-                <ControlledInput
-                    name="value"
-                    control={inputForm.control}
-                    label="Custom"
-                />
-                <div className="flex justify-end">
-                    <Button size="sm" onClick={() => {}}>
-                        Continue
-                    </Button>
+            <div className="flex">
+                <div className="grid gap-2">
+                    <ControlledInput
+                        name="value"
+                        control={inputForm.control}
+                        label="Custom"
+                    />
+                    <div className="flex justify-end">
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                const value = inputForm
+                                    .getValues("value")
+                                    ?.trim();
+                                if (!value) toast.error("Invalid value");
+                                else onProceed(value);
+                            }}
+                        >
+                            Continue
+                        </Button>
+                    </div>
                 </div>
             </div>
         </Form>

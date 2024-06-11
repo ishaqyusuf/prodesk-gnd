@@ -38,6 +38,7 @@ import Link from "next/link";
 import { isProdClient } from "@/lib/is-prod";
 import RenderForm from "@/_v2/components/common/render-form";
 import { useDataPage } from "@/lib/data-page-context";
+import { SaveMode } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 
 interface Props {
     data: SalesFormResponse;
@@ -126,15 +127,11 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
     const watchOrderId = form.watch("orderId");
     const [isSaving, startTransition] = useTransition();
 
-    async function save(and: "close" | "new" | "default" = "default") {
+    async function save(and: SaveMode = "default") {
         // form.handleSubmit
         form.handleSubmit((data) => onSubmit(data, and))();
     }
-    async function onSubmit(
-        data,
-        and: "close" | "new" | "default" = "default",
-        autoSave = false
-    ) {
+    async function onSubmit(data, and: SaveMode = "default", autoSave = false) {
         // console.log("SAVING....");
         // return;
         try {

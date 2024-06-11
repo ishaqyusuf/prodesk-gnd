@@ -4,7 +4,6 @@ import { IStepProducts, StepProductProps } from ".";
 
 import { getMouldingStepProduct } from "../../../../_action/get-dyke-step-product";
 
-import { cn, safeFormText } from "@/lib/utils";
 import { useContext, useEffect, useState } from "react";
 import {
     DykeItemFormContext,
@@ -12,21 +11,15 @@ import {
     useDykeForm,
 } from "../../../../_hooks/form-context";
 import { DykeStep } from "../../../../../type";
-import Image from "next/image";
-import { env } from "@/env.mjs";
-import { Label } from "@/components/ui/label";
 import {
     getSlabDoorTypes,
     getStepProduct,
 } from "../../../../_action/get-dyke-step-product";
 import { toast } from "sonner";
 import { getNextDykeStepAction } from "../../../../_action/get-next-dyke-step";
-import { Icons } from "@/components/_v1/icons";
-import { timeout } from "@/lib/timeout";
 import { getDykeStepDoors } from "../../../../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../../../../_utils/door-query-builder";
 
-import SVG from "react-inlinesvg";
 import { useModal } from "@/components/common/modal-old/provider";
 import { Button } from "@/components/ui/button";
 import EditStepItemModal from "../../../modals/edit-step-item-modal";
@@ -97,7 +90,11 @@ export default function useStepItems({
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";
-    async function selectProduct(currentState, stepProd?: IStepProducts[0]) {
+    async function selectProduct(
+        currentState,
+        stepProd?: IStepProducts[0],
+        custom = false
+    ) {
         // return;
         let proceed = !stepProd;
         if (isMultiSection && !proceed && stepProd) {
@@ -221,13 +218,17 @@ export default function useStepItems({
                 case "Cutdown Height":
                     break;
             }
-            const data: DykeStep["item"] = {
+            const data: Partial<DykeStep["item"]> = {
                 value: val,
                 // qty: stepProd?.product?.qty,
                 // price: stepProd?.product?.price,
                 stepId: stepProd?.dykeStepId,
+                meta: {
+                    custom,
+                } as any,
                 // title: stepProd?.product?.description,
-            } as any;
+            };
+            console.log(data);
 
             form.setValue(
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
