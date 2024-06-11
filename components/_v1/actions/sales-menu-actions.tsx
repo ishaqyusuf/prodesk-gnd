@@ -10,7 +10,7 @@ import {
     copyOrderAction,
     deleteOrderAction,
     moveSales,
-} from "@/app/(v1)/_actions/sales/sales";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
 import {

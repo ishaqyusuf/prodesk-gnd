@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteSalesPayment } from "@/app/(v1)/_actions/sales/sales-payment";
+import { deleteSalesPayment } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";

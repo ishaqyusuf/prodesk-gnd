@@ -21,12 +21,12 @@ import {
 } from "@/types/sales";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
-import { getProgress, saveProgress } from "../progress";
+import { getProgress, saveProgress } from "../../../_actions/progress";
 import { fixSalesPaymentAction } from "./sales-payment";
 import { ftToIn, removeEmptyValues } from "@/lib/utils";
-import { user, userId } from "../utils";
+import { user, userId } from "../../../_actions/utils";
 import { revalidatePath } from "next/cache";
-import { _revalidate } from "../_revalidate";
+import { _revalidate } from "../../../_actions/_revalidate";
 import { _saveSales } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales.persistence";
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
 import { redirect } from "next/navigation";

@@ -1,4 +1,4 @@
-import { getSalesEstimates } from "@/app/(v1)/_actions/sales/sales";
+import { getSalesEstimates } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";

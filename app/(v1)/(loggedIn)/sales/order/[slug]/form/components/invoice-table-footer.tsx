@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { store, useAppSelector } from "@/store";
 import { IPaymentOptions, ISalesOrderForm } from "@/types/sales";
-import { SalesFormCtx } from "@/app/(v1)/_actions/sales/sales-form";
+import { SalesFormCtx } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import Money from "@/components/_v1/money";
 import { cn } from "@/lib/utils";
 import { calculateSalesInvoice } from "../sales-invoice-calculator";

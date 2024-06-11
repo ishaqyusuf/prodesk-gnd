@@ -1,7 +1,7 @@
 import {
     SalesFormResponse,
     salesFormAction,
-} from "@/app/(v1)/_actions/sales/sales-form";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import {
     BreadLink,

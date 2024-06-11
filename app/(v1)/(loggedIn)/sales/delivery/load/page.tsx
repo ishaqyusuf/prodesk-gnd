@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import DeliveryTableShell from "@/app/(v1)/(loggedIn)/sales/delivery/delivery-table-shell";
-import { getSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/sales-delivery";
+import { getSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/sales-delivery";
 import { Metadata } from "next";
 import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import { prisma } from "@/db";

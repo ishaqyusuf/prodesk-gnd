@@ -11,7 +11,7 @@ import { useState, useTransition } from "react";
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
 import { OrderStatus } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
-import { updateSalesDelivery } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { updateSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
 import { MenuItem } from "../data-table/data-table-row-actions";
 
 export function DeliveryStatusCell({ order }: { order }) {

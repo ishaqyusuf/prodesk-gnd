@@ -1,7 +1,7 @@
 "use server";
 
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
-import { deleteOrderAction } from "@/app/(v1)/_actions/sales/sales";
+import { deleteOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { prisma } from "@/db";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 

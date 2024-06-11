@@ -2,42 +2,44 @@
 
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { getPageInfo, queryFilter } from "../../../_actions/action-utils";
 import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { whereQuery } from "@/lib/db-utils";
-import { _cache } from "../_cache/load-data";
+import { _cache } from "../../../_actions/_cache/load-data";
+import { paginatedAction } from "@/app/_actions/get-action-utils";
+import { SalesOverviewType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/components/overview-shell";
+import { ISalesType } from "@/types/sales";
 
 export interface IGetCustomerActionQuery extends BaseQuery {}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
-    const qb = whereQuery<Prisma.CustomersWhereInput>(query);
-    qb.searchQuery("name", "address");
-    // qb.raw({})
-    const q = { contains: query._q || undefined };
+    // const qb = whereQuery<Prisma.CustomersWhereInput>(query);
+    // qb.searchQuery("name", "address");
+    // // qb.raw({})
+    // const q = { contains: query._q || undefined };
+    const where: Prisma.CustomersWhereInput = {};
+    if (query._q)
+        where.OR = [
+            {
+                name: { contains: query._q },
+            },
+            {
+                businessName: { contains: query._q },
+            },
+        ];
 
-    // console.log(qb.get().OR[0]);
+    const { pageCount, skip, take } = await paginatedAction(
+        query,
+        prisma.customers,
+        where
+    );
 
-    // const where: Prisma.CustomersWhereInput = {
-    //     OR: [
-    //         {
-    //             name: q,
-    //         },
-    //         {
-    //             address: q,
-    //         },
-    //     ],
-    //     deletedAt: null,
-
-    // };
     const _items = await prisma.customers.findMany({
-        where: qb.get(),
-        // where: {
-        //     name: q,
-        // },
-        ...(await queryFilter(query)),
+        where,
+        skip,
+        take,
         orderBy: {
-            // businessName: "asc",
             name: "asc",
         },
         include: {
@@ -53,12 +55,22 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                     },
                 },
             },
+            salesOrders: {
+                where: {
+                    type: "order" as ISalesType,
+                    amountDue: {
+                        gt: 0,
+                    },
+                },
+                select: {
+                    amountDue: true,
+                },
+            },
         },
     });
 
-    const pageInfo = await getPageInfo(query, qb.get(), prisma.customers);
     return {
-        pageInfo,
+        pageCount,
         data: _items.map((customer) => {
             let primaryAddress = customer.addressBooks.find(
                 (a) => a.id == customer.addressId
@@ -68,8 +80,9 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
             return {
                 ...customer,
                 primaryAddress,
+                amountDue: sum(customer.salesOrders.map((s) => s.amountDue)),
             };
-        }) as any,
+        }),
     };
 }
 export interface ICustomerOverview {

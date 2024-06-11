@@ -25,7 +25,7 @@ import { SalesBatchAction } from "../list-selection-action/sales-selection-actio
 import { SalesCustomerFilter } from "../../../app/(v1)/(loggedIn)/sales/orders/components/sales-customer-filter";
 import Money from "../money";
 import { DeleteRowAction } from "../data-table/data-table-row-actions";
-import { deleteSalesPayment } from "@/app/(v1)/_actions/sales/sales-payment";
+import { deleteSalesPayment } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { openModal } from "@/lib/modal";
 
 export default function SalesPaymentTableShell({

@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 import {
     applyPaymentAction,
     deleteSalesPayment,
-} from "@/app/(v1)/_actions/sales/sales-payment";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { toast } from "sonner";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 

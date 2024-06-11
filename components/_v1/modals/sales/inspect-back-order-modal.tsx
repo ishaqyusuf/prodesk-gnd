@@ -23,8 +23,8 @@ import {
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Btn from "@/components/_v1/btn";
-import { _startSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/start-sales-delivery";
-import { _readyForDelivery } from "@/app/(v1)/_actions/sales/delivery/ready-for-delivery";
+import { _startSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/start-sales-delivery";
+import { _readyForDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/ready-for-delivery";
 import { _createBackorder } from "@/app/(v2)/(loggedIn)/sales/_actions/create-back-order";
 
 export default function InspectBackOrderModal() {

@@ -1,8 +1,8 @@
 "use client";
 
 import { openMergeDuplicatesModal } from "@/app/(v2)/(loggedIn)/sales/_modals/merge-customer-modal/open";
-import Btn from "../../btn";
-import { Icons } from "../../icons";
+import Btn from "../../../../../../components/_v1/btn";
+import { Icons } from "../../../../../../components/_v1/icons";
 
 export default function CustomersBatchAction({ items }: { items }) {
     async function mergeDuplicates() {

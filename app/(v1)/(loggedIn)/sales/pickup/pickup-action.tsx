@@ -7,7 +7,7 @@ import { useTransition } from "react";
 import { ISalesOrder } from "@/types/sales";
 
 import { toast } from "sonner";
-import { _cancelSalesPickup } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { _cancelSalesPickup } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
 import { useModal } from "@/components/common/modal/provider";
 import PickupModal from "./pickup-modal";
 

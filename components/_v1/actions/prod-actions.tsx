@@ -12,7 +12,7 @@ import { MoreHorizontal, View } from "lucide-react";
 import Link from "next/link";
 import { PrintOrderMenuAction } from "./sales-menu-actions";
 import { RowActionMenuItem } from "../data-table/data-table-row-actions";
-import { _updateOrderInventoryStatus } from "@/app/(v1)/_actions/sales/sales-inventory";
+import { _updateOrderInventoryStatus } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-inventory";
 import { toast } from "sonner";
 
 export interface IOrderRowProps {

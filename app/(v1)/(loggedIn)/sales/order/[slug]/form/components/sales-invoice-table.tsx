@@ -13,7 +13,7 @@ import { useLoader } from "@/lib/use-loader";
 import { ISalesOrderForm } from "@/types/sales";
 import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
-import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
+import { SalesFormResponse } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import SalesComponentModal from "@/components/_v1/modals/sales-component-modal";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";

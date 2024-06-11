@@ -30,7 +30,7 @@ import {
     RowActionMenuItem,
     RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
-import { _updateOrderInventoryStatus } from "@/app/(v1)/_actions/sales/sales-inventory";
+import { _updateOrderInventoryStatus } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-inventory";
 import { toast } from "sonner";
 
 export default function InboundOrdersTableShell<T>({

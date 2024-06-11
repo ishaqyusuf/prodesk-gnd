@@ -8,7 +8,6 @@ import BaseModal from "@/components/_v1/modals/base-modal";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { ICustomer } from "@/types/customers";
-import { useEffect } from "react";
 import { mergeCustomerModal } from "./open";
 import { useFormContext } from "react-hook-form";
 import MergeCustomerModalFooter from "./footer";

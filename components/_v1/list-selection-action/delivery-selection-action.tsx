@@ -6,7 +6,7 @@ import useQueryParams from "@/lib/use-query-params";
 import { RowActionMoreMenu } from "../data-table/data-table-row-actions";
 
 import { DropdownMenuItem } from "../../ui/dropdown-menu";
-import { updateSalesDelivery } from "@/app/(v1)/_actions/sales/delivery/sales-delivery";
+import { updateSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/sales-delivery";
 
 export function DeliveryBatchAction({ items }) {
     const { queryParams, setQueryParams } = useQueryParams<any>();

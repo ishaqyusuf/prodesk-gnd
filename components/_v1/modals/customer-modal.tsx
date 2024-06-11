@@ -17,7 +17,7 @@ import { Label } from "../../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { ICustomer } from "@/types/customers";
 import { CustomerTypes } from "@prisma/client";
-import { saveCustomer } from "@/app/(v1)/_actions/sales/sales-customers";
+import { saveCustomer } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customers";
 import {
     Select,
     SelectContent,
@@ -29,8 +29,8 @@ import {
 import { Button } from "../../ui/button";
 import { ArrowLeft } from "lucide-react";
 
-import { updateCustomerAction } from "@/app/(v1)/_actions/sales/customer.crud";
-import { staticCustomerProfilesAction } from "@/app/(v1)/_actions/sales/sales-customer-profiles";
+import { updateCustomerAction } from "@/app/(v1)/(loggedIn)/sales/_actions/customer.crud";
+import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customer-profiles";
 import refresh from "@/lib/refresh";
 
 export default function CustomerModal() {

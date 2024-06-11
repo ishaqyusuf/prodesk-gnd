@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { _email } from "../_email";
+import { _email } from "../../../_actions/_email";
 
 import { _saveSalesAddress } from "@/app/(v2)/(loggedIn)/sales/_data-access/save-sales-address.dac";
 

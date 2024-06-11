@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label";
 import { ISalesOrderForm } from "@/types/sales";
 import { SalesCustomerProfileInput } from "./customer-profile-input";
-import { SalesFormResponse } from "@/app/(v1)/_actions/sales/sales-form";
+import { SalesFormResponse } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -18,7 +18,7 @@ import { formatDate } from "@/lib/use-day";
 import { useCallback, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import dayjs from "dayjs";
-import { updatePaymentTerm } from "@/app/(v1)/_actions/sales/sales-payment";
+import { updatePaymentTerm } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import {
     Tooltip,
     TooltipContent,

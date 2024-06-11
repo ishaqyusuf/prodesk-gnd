@@ -6,7 +6,7 @@ import {
     getStaticCategories,
     getStaticProducts,
 } from "@/app/(v1)/_actions/sales-products/statics";
-import { staticCustomerProfilesAction } from "@/app/(v1)/_actions/sales/sales-customer-profiles";
+import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customer-profiles";
 import { getContractorsAction } from "@/app/(v2)/(loggedIn)/contractors/_actions/get-job-employees";
 import { getJobCostList } from "@/app/(v2)/(loggedIn)/contractors/_actions/job-cost-list";
 import { getStaticProductionUsersAction } from "@/app/(v2)/(loggedIn)/sales/_actions/static/get-static-production-users-action";

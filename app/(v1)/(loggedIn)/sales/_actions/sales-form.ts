@@ -7,7 +7,7 @@ import { ISalesType, ISalesOrder } from "@/types/sales";
 import { getServerSession } from "next-auth";
 import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
-import { user } from "../utils";
+import { user } from "../../../_actions/utils";
 import dayjs from "dayjs";
 
 export interface ICreateOrderFormQuery {

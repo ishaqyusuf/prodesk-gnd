@@ -1,6 +1,6 @@
 "use client";
 
-import { SalesFormCtx } from "@/app/(v1)/_actions/sales/sales-form";
+import { SalesFormCtx } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
     IProduct,
@@ -21,7 +21,7 @@ import {
 } from "../../ui/command";
 import { cn, keyValue } from "@/lib/utils";
 import Money from "../money";
-import { loadCatalog } from "@/app/(v1)/_actions/sales/catalog";
+import { loadCatalog } from "@/app/(v1)/(loggedIn)/sales/_actions/catalog";
 import { Skeleton } from "../../ui/skeleton";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
@@ -29,7 +29,7 @@ import { useForm } from "react-hook-form";
 import { DialogFooter, DialogTitle } from "../../ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import Btn from "../btn";
-import { updateInventoryComponentTitleAction } from "@/app/(v1)/_actions/sales/inventory";
+import { updateInventoryComponentTitleAction } from "@/app/(v1)/(loggedIn)/sales/_actions/inventory";
 import { openComponentModal } from "@/lib/sales/sales-invoice-form";
 
 import { CatalogCommandDialog } from "../sales/command";

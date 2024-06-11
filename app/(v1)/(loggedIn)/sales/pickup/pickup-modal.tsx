@@ -15,7 +15,7 @@ import { Label } from "../../../../../components/ui/label";
 import SignaturePad from "react-signature-pad-wrapper";
 import refresh from "@/lib/refresh";
 import { ISalesOrder, ISalesPickup } from "@/types/sales";
-import { _createPickup } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { _createPickup } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
 import { DatePicker } from "../../../../../components/_v1/date-range-picker";
 import Modal from "@/components/common/modal";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";

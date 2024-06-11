@@ -5,7 +5,7 @@ import SalesProductionTableShell from "@/app/(v1)/(loggedIn)/sales/productions/s
 import {
     getSalesProductionsAction,
     prodsDueToday,
-} from "@/app/(v1)/_actions/sales/sales-production";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-production";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import {
     BreadLink,

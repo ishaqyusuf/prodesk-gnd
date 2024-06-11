@@ -1,7 +1,7 @@
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
 import { getOrderableItemsCount } from "@/app/(v1)/_actions/sales-inbound/get-orderable-items";
-import { _getInboundOrders } from "@/app/(v1)/_actions/sales/sales";
+import { _getInboundOrders } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import PageHeader from "@/components/_v1/page-header";

@@ -1,6 +1,6 @@
 "use client";
 
-import { fixPaymentAction } from "@/app/(v1)/_actions/sales/sales-payment";
+import { fixPaymentAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import Btn from "@/components/_v1/btn";
 import Money from "@/components/_v1/money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

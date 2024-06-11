@@ -1,4 +1,4 @@
-import { getSalesOrder } from "@/app/(v1)/_actions/sales/sales";
+import { getSalesOrder } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import OrdersTableShell from "@/app/(v1)/(loggedIn)/sales/orders/components/orders-table-shell";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { ISalesOrder } from "@/types/sales";

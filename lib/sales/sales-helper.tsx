@@ -1,6 +1,9 @@
 "use client";
 
-import { copyOrderAction, moveSales } from "@/app/(v1)/_actions/sales/sales";
+import {
+    copyOrderAction,
+    moveSales,
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
 import { closeModal, openEmailComposer, openModal } from "../modal";
 import { ISalesOrder, ISalesType, IOrderPrintMode } from "@/types/sales";
@@ -8,7 +11,7 @@ import {
     adminCompleteProductionAction,
     cancelProductionAssignmentAction,
     markProductionIncompleteAction,
-} from "@/app/(v1)/_actions/sales/sales-production";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-production";
 import optionBuilder from "../option-builder";
 import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";

@@ -6,7 +6,7 @@ import BasePrinter from "../base-printer";
 import { useState } from "react";
 import { WaterMark } from "./water-mark";
 import { adjustWatermark } from "@/lib/adjust-watermark";
-import { salesPrintAction } from "@/app/(v1)/_actions/sales/sales";
+import { salesPrintAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { ISalesOrder } from "@/types/sales";
 import { OrderPrintHeader } from "./order-print-header";
 import { OrderPrintInvoiceLines } from "./order-print-invoice-lines";
@@ -17,7 +17,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { timeout } from "@/lib/timeout";
 import "@/styles/sales.css";
-import { printSalesPdf } from "@/app/(v1)/_actions/sales/save-pdf";
+import { printSalesPdf } from "@/app/(v1)/(loggedIn)/sales/_actions/save-pdf";
 import { createPortal } from "react-dom";
 import { toast } from "sonner";
 interface Props {

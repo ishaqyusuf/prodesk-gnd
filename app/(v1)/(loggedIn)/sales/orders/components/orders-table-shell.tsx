@@ -31,7 +31,7 @@ import { screens } from "@/lib/responsive";
 import SalesOrderMobileCell from "../../../../../../components/_v1/mobile/sales/sales-order-mobile-cell";
 import { DynamicFilter } from "@/components/_v1/data-table/data-table-dynamic-filter";
 import { _getSalesRep } from "../_actions/get-sales-rep.action";
-import { getSalesOrder } from "@/app/(v1)/_actions/sales/sales";
+import { getSalesOrder } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import DeliveryCell from "./cells/delivery-cell";
 import { useCmd } from "@/components/cmd/provider";
 import { useSearchParams } from "next/navigation";

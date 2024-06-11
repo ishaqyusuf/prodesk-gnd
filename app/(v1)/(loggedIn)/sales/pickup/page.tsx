@@ -7,7 +7,7 @@ import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 
 import { Metadata } from "next";
 import PickupTableShell from "@/app/(v1)/(loggedIn)/sales/pickup/pickup-table-shell";
-import { _getSalesPickup } from "@/app/(v1)/_actions/sales/_sales-pickup";
+import { _getSalesPickup } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
 import UpgradeBtn from "./components/upgrade-btn";
 import AuthGuard from "@/components/_v1/auth-guard";
 export const metadata: Metadata = {

@@ -17,7 +17,7 @@ import {
 import { priorities } from "@/lib/sales/order-priority";
 import { FlagIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { updateOrderPriorityActon } from "@/app/(v1)/_actions/sales/sales";
+import { updateOrderPriorityActon } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
 import { Icons } from "../../../../../../../components/_v1/icons";
 

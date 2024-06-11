@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { deleteOrderAction } from "../sales/sales";
+import { deleteOrderAction } from "../../(loggedIn)/sales/_actions/sales";
 
 // return;
 export async function _restoreSalesOrder() {
@@ -22,20 +22,20 @@ export async function _restoreSalesOrder() {
             items: {
                 createMany: {
                     data: [...items],
-                    skipDuplicates: true
-                }
+                    skipDuplicates: true,
+                },
             },
             payments: {
                 createMany: {
-                    data: [...payments]
-                }
+                    data: [...payments],
+                },
             },
             productions: {
                 createMany: {
-                    data: [...productions]
-                }
-            }
-        }
+                    data: [...productions],
+                },
+            },
+        },
     });
     // const sales = await prisma.salesOrders.findFirst({
     //     where: {
@@ -94,8 +94,8 @@ const saleObj = {
             meta: {},
             deletedAt: null,
             createdAt: new Date("2023-11-06T20:23:54.000Z"),
-            updatedAt: new Date("2023-11-06T20:23:54.000Z")
-        }
+            updatedAt: new Date("2023-11-06T20:23:54.000Z"),
+        },
     ],
     items: [
         {
@@ -114,7 +114,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 0,
                 produced_qty: 1,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -128,7 +128,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15070,
@@ -146,7 +146,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 1,
                 produced_qty: 1,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -160,7 +160,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15071,
@@ -178,7 +178,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 2,
                 produced_qty: 2,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -192,7 +192,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15072,
@@ -210,7 +210,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 3,
                 produced_qty: 2,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -224,7 +224,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15073,
@@ -242,7 +242,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 4,
                 produced_qty: 1,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -256,7 +256,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15074,
@@ -273,7 +273,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 5,
                 produced_qty: 2,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -287,7 +287,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15075,
@@ -304,7 +304,7 @@ const saleObj = {
                 tax: "Tax",
                 uid: 6,
                 produced_qty: 1,
-                sales_margin: "Default"
+                sales_margin: "Default",
             },
             createdAt: new Date("2023-10-23T23:46:47.000Z"),
             updatedAt: new Date("2023-11-06T21:23:23.000Z"),
@@ -318,7 +318,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15076,
@@ -344,7 +344,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15077,
@@ -370,7 +370,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15078,
@@ -396,7 +396,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15079,
@@ -422,7 +422,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15503,
@@ -448,7 +448,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15504,
@@ -474,7 +474,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15505,
@@ -501,7 +501,7 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
+            prodCompletedAt: null,
         },
         {
             id: 15507,
@@ -528,8 +528,8 @@ const saleObj = {
             prodStatus: null,
             prodStartedAt: null,
             sentToProdAt: null,
-            prodCompletedAt: null
-        }
+            prodCompletedAt: null,
+        },
     ],
     productions: [
         {
@@ -540,7 +540,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T14:53:22.000Z"),
             updatedAt: new Date("2023-11-03T14:53:22.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1494,
@@ -550,7 +550,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T14:58:22.000Z"),
             updatedAt: new Date("2023-11-03T14:58:22.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1495,
@@ -560,7 +560,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T15:01:18.000Z"),
             updatedAt: new Date("2023-11-03T15:01:18.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1496,
@@ -570,7 +570,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T15:01:22.000Z"),
             updatedAt: new Date("2023-11-03T15:01:22.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1497,
@@ -580,7 +580,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T15:01:25.000Z"),
             updatedAt: new Date("2023-11-03T15:01:25.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1498,
@@ -590,7 +590,7 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T15:13:25.000Z"),
             updatedAt: new Date("2023-11-03T15:13:25.000Z"),
-            meta: { note: "" }
+            meta: { note: "" },
         },
         {
             id: 1499,
@@ -600,7 +600,8 @@ const saleObj = {
             deletedAt: null,
             createdAt: new Date("2023-11-03T15:13:31.000Z"),
             updatedAt: new Date("2023-11-03T15:13:31.000Z"),
-            meta: { note: "" }
-        }
-    ]
+            meta: { note: "" },
+        },
+    ],
 };
+

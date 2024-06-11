@@ -22,7 +22,7 @@ import ItemCell from "./item-cell";
 import QtyCostCell from "./qty-cost-cell";
 import { Label } from "@/components/ui/label";
 import { updateFooterInfo } from "@/store/invoice-item-component-slice";
-import { SalesFormCtx } from "@/app/(v1)/_actions/sales/sales-form";
+import { SalesFormCtx } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import InvoiceTableRowAction from "./invoice-table-row-action";
 import SwingCell from "./swing-cell";
 import AutoComplete2 from "@/components/_v1/auto-complete-tw";

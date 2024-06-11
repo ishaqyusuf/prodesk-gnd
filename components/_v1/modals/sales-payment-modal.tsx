@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import {
     PaymentOrderProps,
     applyPaymentAction,
-} from "@/app/(v1)/_actions/sales/sales-payment";
+} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { Checkbox } from "../../ui/checkbox";
 import { deepCopy } from "@/lib/deep-copy";
 import { Info } from "../info";

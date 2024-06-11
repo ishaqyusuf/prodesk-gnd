@@ -1,4 +1,4 @@
-import { getOrderAction } from "@/app/(v1)/_actions/sales/sales";
+import { getOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink, OrderViewCrumb } from "@/components/_v1/breadcrumbs/links";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";

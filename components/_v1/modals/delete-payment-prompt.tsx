@@ -39,7 +39,7 @@ import Money from "../money";
 import { sum } from "@/lib/utils";
 import { ScrollArea } from "../../ui/scroll-area";
 import { ICustomer } from "@/types/customers";
-import { deleteSalesPayment } from "@/app/(v1)/_actions/sales/sales-payment";
+import { deleteSalesPayment } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { Button } from "../../ui/button";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { ISalesPayment } from "@/types/sales";

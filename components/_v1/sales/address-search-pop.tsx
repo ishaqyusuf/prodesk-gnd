@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useDebounce } from "@/hooks/use-debounce";
 import { AddressType, IAddressBook, ISalesAddressForm } from "@/types/sales";
-import { findAddressAction } from "@/app/(v1)/_actions/sales/sales-address";
+import { findAddressAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-address";
 
 export default function AddressSearchPop({
     type,

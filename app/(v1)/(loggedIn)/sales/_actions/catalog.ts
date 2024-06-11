@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { getPageInfo, queryFilter } from "../../../_actions/action-utils";
 
 interface Props {
     page?;

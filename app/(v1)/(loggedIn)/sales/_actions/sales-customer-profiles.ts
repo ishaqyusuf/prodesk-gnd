@@ -3,8 +3,8 @@
 import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
 import { CustomerTypes } from "@prisma/client";
-import { getPageInfo } from "../action-utils";
-import { _cache } from "../_cache/load-data";
+import { getPageInfo } from "../../../_actions/action-utils";
+import { _cache } from "../../../_actions/_cache/load-data";
 
 export async function staticCustomerProfilesAction() {
     const d = await _cache(

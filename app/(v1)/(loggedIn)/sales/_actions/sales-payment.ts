@@ -3,13 +3,13 @@
 import { prisma } from "@/db";
 import { toFixed } from "@/lib/use-number";
 import { ISalesPayment } from "@/types/sales";
-import { getCustomerWallet } from "../customer-wallet/wallet";
+import { getCustomerWallet } from "../../../_actions/customer-wallet/wallet";
 import {
     creditTransaction,
     debitTransaction,
-} from "../customer-wallet/transaction";
+} from "../../../_actions/customer-wallet/transaction";
 import { sum } from "@/lib/utils";
-import { getSettingAction } from "../settings";
+import { getSettingAction } from "../../../_actions/settings";
 import { ISalesSetting } from "@/types/post";
 
 export interface PaymentOrderProps {
