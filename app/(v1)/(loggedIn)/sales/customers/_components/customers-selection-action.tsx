@@ -1,12 +1,14 @@
 "use client";
 
-import { openMergeDuplicatesModal } from "@/app/(v2)/(loggedIn)/sales/_modals/merge-customer-modal/open";
+import { toast } from "sonner";
 import Btn from "../../../../../../components/_v1/btn";
 import { Icons } from "../../../../../../components/_v1/icons";
+import { mergeCustomersAction } from "../_actions/merge-customers-action";
 
 export default function CustomersBatchAction({ items }: { items }) {
     async function mergeDuplicates() {
-        openMergeDuplicatesModal(items);
+        await mergeCustomersAction(items.map((item) => item.id));
+        toast.success("Merge complete");
     }
     return (
         <>

@@ -4,14 +4,13 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { prisma } from "@/db";
 import { Customers } from "@prisma/client";
 
-export async function mergeCustomersAction(
-    { id: customerId }: Customers,
-    customerIds
-) {
-    const duplicateIds = customerIds.filter((id) => id != customerId);
+export async function mergeCustomersAction(customerIds) {
+    const mergeToCustomerId = customerIds.sort((a, b) => a - b)?.[0];
+
+    const duplicateIds = customerIds.filter((id) => id != mergeToCustomerId);
 
     let customer = await prisma.customers.findFirst({
-        where: { id: customerId },
+        where: { id: mergeToCustomerId },
         include: {
             wallet: true,
         },
@@ -24,18 +23,17 @@ export async function mergeCustomersAction(
                 meta: {},
                 customer: {
                     connect: {
-                        id: customerId,
+                        id: mergeToCustomerId,
                     },
                 },
             },
         }));
     if (!customer || !wallet) throw Error();
-    console.log(wallet);
-    console.log(customer);
+
     const where = { customerId: { in: duplicateIds } };
     const update = {
         where,
-        data: { customerId, updateAt: new Date() },
+        data: { customerId: mergeToCustomerId, updateAt: new Date() },
     };
     const getIds = async (table) => {
         return (await table.findMany({ where })).map(({ id }) => id);
@@ -44,7 +42,7 @@ export async function mergeCustomersAction(
         const ids = await getIds(table);
         await table.updateMany({
             where: { id: { in: ids } },
-            data: { customerId, updatedAt: new Date() },
+            data: { customerId: mergeToCustomerId, updatedAt: new Date() },
         });
     };
     await updateCustomerId(prisma.addressBooks);
@@ -93,9 +91,11 @@ export async function mergeCustomersAction(
             walletId: { in: dupWalIds },
         },
     });
-    // await prisma.customerWallet.deleteMany({
-    //     where: { id: { in: dupWalIds } },
-    // });
-    await prisma.customers.deleteMany({ where: { id: { in: duplicateIds } } });
+    await prisma.customers.updateMany({
+        where: { id: { in: duplicateIds } },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
     _revalidate("customers");
 }

@@ -6,7 +6,6 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
-import PageHeader from "@/components/_v1/page-header";
 import CustomersLayout from "@/components/_v1/tab-layouts/customers-layout";
 import { Metadata } from "next";
 import CustomersTableShell from "./_components/customers-table-shell";
