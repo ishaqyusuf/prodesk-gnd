@@ -1,0 +1,45 @@
+#reportTableHeader {
+    @apply border;
+}
+#reportTableHeader th {
+    @apply border-x p-0.5;
+}
+
+#reportBody {
+    @apply border;
+}
+#reportBody td {
+    @apply border-x px-2;
+}
+tfoot thead {
+    @apply border border-t-transparent border-x-transparent;
+}
+tfoot thead th {
+    @apply text-sm font-semibold border-x;
+}
+tfoot body {
+}
+tfoot td {
+    @apply border-x border-b p-0.5 text-sm;
+}
+#customer {
+    @apply border;
+}
+#customer thead {
+    @apply border text-base p-2;
+}
+#customer tbody td {
+    @apply text-base p-2;
+}
+#subHeader {
+    @apply border;
+}
+#subHeader thead {
+    @apply border p-2 text-base font-semibold px-4;
+}
+#subHeader thead th {
+    @apply font-semibold px-4;
+}
+#subHeader tbody td {
+    @apply font-semibold p-4;
+}

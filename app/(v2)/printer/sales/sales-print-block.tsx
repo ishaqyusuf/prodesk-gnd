@@ -64,9 +64,6 @@ export default function SalesPrintBlock({ action, slug, className }: Props) {
                                         />
                                     )
                                 )}
-                                {/* <SalesPrintDoorItems /> */}
-
-                                {/* <SalesPrintShelfItems /> */}
                                 <SalesPrintLineItems />
                             </tbody>
                         )}

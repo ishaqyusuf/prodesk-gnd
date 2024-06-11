@@ -31,6 +31,7 @@ import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
+import { openLink } from "@/lib/open-link";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -178,10 +179,6 @@ export const SendEmailMenuAction = ({ sales }: { sales: any }) => {
                         subtitle={`Sales Order | ${sales.orderId}`}
                     />
                 );
-                // openEmailComposer(row, {
-                //     type: "sales",
-                //     parentId: row.id,
-                // });
             }}
         >
             Email
@@ -207,16 +204,7 @@ export const PrintOrderMenuAction = typedMemo(
                 preview: false,
             };
             if (props.link) {
-                const link = document.createElement("a");
-                let base = env.NEXT_PUBLIC_APP_URL;
-                link.target = "_blank";
-                link.href = `${base}/printer/sales?${QueryString.stringify(
-                    query
-                )}`;
-                // link.href = `${base}/print-sales?id=${ids}&mode=${mode}&prints=true&mockup=${props.mockup}`;
-                // link.download = "file.pdf";
-                // document.body.appendChild(link);
-                link.click();
+                openLink("printer/sales", query, true);
             } else {
                 pdf.print({
                     slugs: ids.join(","),
@@ -225,16 +213,6 @@ export const PrintOrderMenuAction = typedMemo(
                     preview: false,
                     pdf: true,
                 });
-                // dispatchSlice("printOrders", {
-                //     mode,
-                //     pdf: props.pdf,
-                //     mockup: props.mockup,
-                //     ids,
-                //     isClient: !["production", "packing list"].includes(mode),
-                //     showInvoice: ["order", "quote", "invoice"].includes(mode),
-                //     packingList: mode == "packing list",
-                //     isProd: mode == "production",
-                // });
             }
         }
         function PrintOptions() {

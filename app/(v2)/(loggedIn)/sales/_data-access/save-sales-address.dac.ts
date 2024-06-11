@@ -142,8 +142,6 @@ export async function _saveSalesAddress({
                         customer = (await prisma.customers.findFirst({
                             where: {
                                 name: name,
-                                // phoneNo,
-                                // phoneNo2
                             },
                             include: {
                                 profile: true,
@@ -153,19 +151,11 @@ export async function _saveSalesAddress({
                         if (!customer) {
                             customer = (await prisma.customers.create({
                                 data: {
-                                    // id: await nextId(prisma.customers),
                                     name,
                                     phoneNo,
                                     phoneNo2,
                                     businessName: _customer.businessName,
                                     email: address?.email,
-                                    // profile: profile?.id
-                                    //     ? {
-                                    //           connect: {
-                                    //               id: profile.id,
-                                    //           },
-                                    //       }
-                                    //     : undefined,
                                 },
                             })) as any;
                         } else

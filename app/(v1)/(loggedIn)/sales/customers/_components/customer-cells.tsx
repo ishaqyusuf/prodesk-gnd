@@ -14,6 +14,7 @@ import {
 import AuthGuard from "@/components/_v1/auth-guard";
 import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
+import { openLink } from "@/lib/open-link";
 
 interface Props {
     item: GetCustomers["data"][0];
@@ -55,7 +56,15 @@ export let Cells = {
                             }}
                         />
                         <Button
-                            onClick={() => {}}
+                            onClick={() => {
+                                openLink(
+                                    "printer/customer-report",
+                                    {
+                                        slugs: `${item.id}`,
+                                    },
+                                    true
+                                );
+                            }}
                             size="sm"
                             className="h-8"
                             variant="secondary"
