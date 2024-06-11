@@ -26,7 +26,6 @@ export default function useDykeFormSaver(form) {
             };
             try {
                 const e = initDykeSaving(data);
-                console.log("init");
 
                 if (e.order.type == "order") {
                     e.order.paymentDueDate =
@@ -38,12 +37,13 @@ export default function useDykeFormSaver(form) {
                 // console.log(e);
                 // return;
 
-                const { order: resp } = await saveDykeSales(e);
-                errorData.response = resp;
+                // const { order: resp } = await saveDykeSales(e);
+                // errorData.response = resp;
+                console.log("init");
                 toast.success("Saved");
-                if (!id || params.get("restore") == "true")
-                    router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
-                else await _revalidate("salesV2Form");
+                // if (!id || params.get("restore") == "true")
+                // router.push(`/sales-v2/form/${resp.type}/${resp.slug}`);
+                // else await _revalidate("salesV2Form");
             } catch (error) {
                 toast.error("Something went wrong");
                 if (error instanceof Error) console.log(error.message);

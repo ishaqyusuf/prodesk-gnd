@@ -95,6 +95,7 @@ export default function ShelfItemsBlock({ shelfIndex, deleteItem }: Props) {
         // shelf.prodArray.remove(index);
     }
     if (!shelf.categoryForm) return <></>;
+
     return (
         <Form {...categoryForm}>
             <TableRow>
@@ -348,20 +349,20 @@ function ShelfSelect({
     items,
     defaultValue,
 }: ShelfSelectProps) {
-    return (
-        <ControlledSelect
-            control={control}
-            name={keyName}
-            options={items}
-            type="combo"
-            titleKey={"label"}
-            valueKey="value"
-            transformValue={(v) => (v ? Number(v) : null)}
-            onSelect={(value) => {
-                onValueChange(value);
-            }}
-        />
-    );
+    // return (
+    //     <ControlledSelect
+    //         control={control}
+    //         name={keyName}
+    //         options={items}
+    //         type="combo"
+    //         titleKey={"label"}
+    //         valueKey="value"
+    //         transformValue={(v) => (v ? Number(v) : null)}
+    //         onSelect={(value) => {
+    //             onValueChange(value);
+    //         }}
+    //     />
+    // );
     return (
         <FormField
             control={control}

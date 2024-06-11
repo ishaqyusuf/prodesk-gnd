@@ -104,7 +104,9 @@ export default function HeaderSection({}) {
                         <Btn
                             size="sm"
                             isLoading={saver.saving}
-                            onClick={() => form.handleSubmit(saver.save)()}
+                            onClick={() => {
+                                form.handleSubmit(saver.save)();
+                            }}
                         >
                             Save
                         </Btn>

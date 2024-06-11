@@ -54,7 +54,6 @@ export default function ItemPriceFinder({
         async function fetch() {
             const resp = await getDoorPrices(props as any);
             setPriceChart(resp);
-            console.log(resp);
         }
         fetch();
     }, []);
