@@ -15,10 +15,6 @@ export interface IGetCustomerActionQuery extends BaseQuery {
     _having: ShowCustomerHaving;
 }
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
-    // const qb = whereQuery<Prisma.CustomersWhereInput>(query);
-    // qb.searchQuery("name", "address");
-    // // qb.raw({})
-    // const q = { contains: query._q || undefined };
     const where: Prisma.CustomersWhereInput = {};
     if (query._q)
         where.OR = [

@@ -1,3 +1,4 @@
+import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
 import {
     Form,
     FormControl,
@@ -24,10 +25,10 @@ export default function GeneralSettings({
 }: {
     form: UseFormReturn<ISalesSetting>;
 }) {
-    const profiles = useAppSelector(
-        (state) => state.slicers.staticCustomerProfiles
-    );
-
+    // const profiles = useAppSelector(
+    //     (state) => state.slicers.staticCustomerProfiles
+    // );
+    const profiles = useCustomerProfiles();
     return (
         <div className="space-y-6">
             <div>
@@ -89,14 +90,18 @@ export default function GeneralSettings({
                                         </FormControl>
                                         <SelectContent>
                                             <SelectGroup>
-                                                {profiles?.map((profile, _) => (
-                                                    <SelectItem
-                                                        key={_}
-                                                        value={profile.title}
-                                                    >
-                                                        {profile.title}
-                                                    </SelectItem>
-                                                ))}
+                                                {profiles.data?.map(
+                                                    (profile, _) => (
+                                                        <SelectItem
+                                                            key={_}
+                                                            value={
+                                                                profile.title
+                                                            }
+                                                        >
+                                                            {profile.title}
+                                                        </SelectItem>
+                                                    )
+                                                )}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
