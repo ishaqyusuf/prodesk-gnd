@@ -8,7 +8,6 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import CustomerModal from "@/components/_v1/modals/customer-modal";
 import PageHeader from "@/components/_v1/page-header";
 import CustomersLayout from "@/components/_v1/tab-layouts/customers-layout";
-import { ICustomer } from "@/types/customers";
 import { Metadata } from "next";
 import CustomersTableShell from "./_components/customers-table-shell";
 
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 };
 interface Props {}
 export default async function CustomersPage({ searchParams }) {
-    // await _mergeConflictCustomers();
     const response = getCustomersAction(queryParams(searchParams));
 
     return (

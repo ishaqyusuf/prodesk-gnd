@@ -2,17 +2,18 @@
 
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { getPageInfo, queryFilter } from "../../../_actions/action-utils";
 import { ICustomer } from "@/types/customers";
 import { sum, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
-import { whereQuery } from "@/lib/db-utils";
 import { _cache } from "../../../_actions/_cache/load-data";
 import { paginatedAction } from "@/app/_actions/get-action-utils";
-import { SalesOverviewType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/components/overview-shell";
-import { ISalesType } from "@/types/sales";
 
-export interface IGetCustomerActionQuery extends BaseQuery {}
+import { ISalesType } from "@/types/sales";
+import { ShowCustomerHaving } from "../type";
+
+export interface IGetCustomerActionQuery extends BaseQuery {
+    _having: ShowCustomerHaving;
+}
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
     // const qb = whereQuery<Prisma.CustomersWhereInput>(query);
     // qb.searchQuery("name", "address");
@@ -28,7 +29,28 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                 businessName: { contains: query._q },
             },
         ];
-
+    switch (query._having) {
+        case "Pending Invoice":
+            where.salesOrders = {
+                every: {
+                    type: "order" as ISalesType,
+                },
+                some: {
+                    amountDue: {
+                        gt: 0,
+                    },
+                },
+            };
+            break;
+        case "No Pending Invoice":
+            where.salesOrders = {
+                every: {
+                    amountDue: 0,
+                    type: "order" as ISalesType,
+                },
+            };
+            break;
+    }
     const { pageCount, skip, take } = await paginatedAction(
         query,
         prisma.customers,

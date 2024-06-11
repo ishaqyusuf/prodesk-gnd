@@ -13,6 +13,7 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { openModal } from "@/lib/modal";
+import { Icons } from "@/components/_v1/icons";
 
 interface Props {
     item: GetCustomers["data"][0];
@@ -47,11 +48,22 @@ export let Cells = {
         return (
             <RowActionCell>
                 <AuthGuard can={["editOrders"]}>
-                    <EditRowAction
-                        onClick={(e) => {
-                            openModal("customerForm", item);
-                        }}
-                    />
+                    <div className="flex gap-4">
+                        <EditRowAction
+                            onClick={(e) => {
+                                openModal("customerForm", item);
+                            }}
+                        />
+                        <Button
+                            onClick={() => {}}
+                            size="sm"
+                            className="h-8"
+                            variant="secondary"
+                        >
+                            {/* <Icons.reciept className="w-4 h-4 mr-2" /> */}
+                            Report
+                        </Button>
+                    </div>
                 </AuthGuard>
             </RowActionCell>
         );

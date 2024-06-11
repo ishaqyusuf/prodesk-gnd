@@ -16,13 +16,13 @@ import { toast } from "sonner";
 
 import CustomersBatchAction from "./customers-selection-action";
 import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
-import { GetCustomers } from "../../type";
+import { GetCustomers, ShowCustomerHaving } from "../../type";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { Cells } from "./customer-cells";
 
 export default function CustomersTableShell({ promise, searchParams }) {
     const { data, pageCount }: GetCustomers = React.use(promise);
-    const [isPending, startTransition] = useTransition();
+
     const profiles = useCustomerProfiles();
     useEffect(() => {
         setDefaultProfile(profiles.data?.find((p) => p.defaultProfile) as any);
@@ -54,7 +54,7 @@ export default function CustomersTableShell({ promise, searchParams }) {
             ctx.ActionColumn(Cells.Action),
         ],
         true,
-        { sn: false, filterCells: ["_q"] }
+        { sn: false, filterCells: ["_q", "_having"] }
     );
 
     return (
@@ -64,7 +64,23 @@ export default function CustomersTableShell({ promise, searchParams }) {
             pageCount={pageCount}
             data={data}
             BatchAction={({ items }) => <CustomersBatchAction items={items} />}
-            filterableColumns={[]}
+            filterableColumns={[
+                {
+                    id: "_having",
+                    title: "Having",
+                    single: true,
+                    options: [
+                        {
+                            label: "Pending Invoice",
+                            value: "Pending Invoice" as ShowCustomerHaving,
+                        },
+                        {
+                            label: "No Pending Invoice",
+                            value: "No Pending Invoice" as ShowCustomerHaving,
+                        },
+                    ],
+                },
+            ]}
             searchableColumns={[
                 {
                     id: "_q" as any,
