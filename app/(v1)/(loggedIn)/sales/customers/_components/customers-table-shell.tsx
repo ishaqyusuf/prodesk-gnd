@@ -19,6 +19,9 @@ import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
 import { GetCustomers, ShowCustomerHaving } from "../../type";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { Cells } from "./customer-cells";
+import PageHeader from "@/components/_v1/page-header";
+import CustomerFormModal from "../_modals/customer-form";
+import { useModal } from "@/components/common/modal/provider";
 
 export default function CustomersTableShell({ promise, searchParams }) {
     const { data, pageCount }: GetCustomers = React.use(promise);
@@ -56,37 +59,48 @@ export default function CustomersTableShell({ promise, searchParams }) {
         true,
         { sn: false, filterCells: ["_q", "_having"] }
     );
-
+    const modal = useModal();
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={table.columns}
-            pageCount={pageCount}
-            data={data}
-            BatchAction={({ items }) => <CustomersBatchAction items={items} />}
-            filterableColumns={[
-                {
-                    id: "_having",
-                    title: "Having",
-                    single: true,
-                    options: [
-                        {
-                            label: "Pending Invoice",
-                            value: "Pending Invoice" as ShowCustomerHaving,
-                        },
-                        {
-                            label: "No Pending Invoice",
-                            value: "No Pending Invoice" as ShowCustomerHaving,
-                        },
-                    ],
-                },
-            ]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "customer, phone, address",
-                },
-            ]}
-        />
+        <>
+            <PageHeader
+                title="Customers"
+                permissions={["editOrders"]}
+                newAction={() => {
+                    modal.openModal(<CustomerFormModal />);
+                }}
+            />
+            <DataTable2
+                searchParams={searchParams}
+                columns={table.columns}
+                pageCount={pageCount}
+                data={data}
+                BatchAction={({ items }) => (
+                    <CustomersBatchAction items={items} />
+                )}
+                filterableColumns={[
+                    {
+                        id: "_having",
+                        title: "Having",
+                        single: true,
+                        options: [
+                            {
+                                label: "Pending Invoice",
+                                value: "Pending Invoice" as ShowCustomerHaving,
+                            },
+                            {
+                                label: "No Pending Invoice",
+                                value: "No Pending Invoice" as ShowCustomerHaving,
+                            },
+                        ],
+                    },
+                ]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "customer, phone, address",
+                    },
+                ]}
+            />
+        </>
     );
 }

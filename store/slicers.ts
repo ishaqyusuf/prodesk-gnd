@@ -97,7 +97,6 @@ export type ModalName =
     | "builder"
     | "customerServices"
     | "catalog"
-    | "customerForm"
     | "customerProfile"
     | "communityTemplate"
     | "communityModelCost"
