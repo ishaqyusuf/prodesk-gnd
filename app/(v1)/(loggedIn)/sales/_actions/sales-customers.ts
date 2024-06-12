@@ -29,10 +29,11 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
     switch (query._having) {
         case "Pending Invoice":
             where.salesOrders = {
-                every: {
-                    type: "order" as ISalesType,
-                },
+                // every: {
+                //     type: "order" as ISalesType,
+                // },
                 some: {
+                    type: "order" as ISalesType,
                     amountDue: {
                         gt: 0,
                     },
@@ -83,6 +84,13 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                 },
                 select: {
                     amountDue: true,
+                    billingAddress: {
+                        select: {
+                            phoneNo: true,
+                            phoneNo2: true,
+                            address1: true,
+                        },
+                    },
                 },
             },
         },
