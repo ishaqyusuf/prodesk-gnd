@@ -20,6 +20,9 @@ export async function generateCustomerPrintReport(id) {
             salesOrders: {
                 where: {
                     type: "order",
+                    amountDue: {
+                        gt: 0,
+                    },
                 },
                 include: {
                     payments: {
