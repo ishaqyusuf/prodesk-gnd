@@ -7,6 +7,7 @@ import { GeneratCustomerPrintReport } from "../type";
 import Money from "@/components/_v1/money";
 import { Icons } from "@/components/_v1/icons";
 import "./style.css";
+import Header from "./_components/header";
 interface Props {
     action;
     slug;
@@ -26,7 +27,9 @@ export default function ReportCtx({ action, slug, className }: Props) {
     const data = use<GeneratCustomerPrintReport>(action);
     const ctx = usePrintContext();
     useEffect(() => {
-        if (data) ctx.pageReady(slug, data);
+        if (data) {
+            // ctx && ctx?.pageReady(slug, data);
+        }
     }, [data]);
 
     return (
@@ -39,95 +42,7 @@ export default function ReportCtx({ action, slug, className }: Props) {
         >
             <div id={`customerReport-${slug}`} className="p-4 print:p-0">
                 <table id="main" className="w-full">
-                    <thead id="topHeader">
-                        <tr className="">
-                            <td colSpan={16}>
-                                <table className="w-full  table-fixed text-xs">
-                                    <tbody>
-                                        <tr className="">
-                                            <td colSpan={9} valign="top">
-                                                <Icons.PrintLogo />
-                                            </td>
-                                            <td valign="top" colSpan={5}>
-                                                <div className="text-xs font-semibold text-black-900">
-                                                    <p>13285 SW 131 ST</p>
-                                                    <p>Miami, Fl 33186</p>
-                                                    <p>Phone: 305-278-6555</p>
-
-                                                    <p>
-                                                        support@gndmillwork.com
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td colSpan={1}></td>
-                                            <td
-                                                valign="top"
-                                                className="flex justify-center flex-col"
-                                                colSpan={9}
-                                            >
-                                                <p className="text-black mb-1 text-end text-xl font-bold capitalize">
-                                                    Statement
-                                                </p>
-                                                <table>
-                                                    <thead>
-                                                        <th>Date</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{data.date}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr className="">
-                                            <td colSpan={10}>
-                                                <table id="customer">
-                                                    <thead>
-                                                        <th>To</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        {data.customer.map(
-                                                            (c) => (
-                                                                <tr key={c}>
-                                                                    <td>{c}</td>
-                                                                </tr>
-                                                            )
-                                                        )}
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                            <td colSpan={6}>
-                                                <table
-                                                    id="subHeader"
-                                                    className=""
-                                                >
-                                                    <thead>
-                                                        <th>Amount Due</th>
-                                                        <th>Amount Enc</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <Money
-                                                                    value={
-                                                                        data
-                                                                            .reportFooter
-                                                                            .current
-                                                                    }
-                                                                />
-                                                            </td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </thead>
+                    <Header />
                     <thead id="reportTableHeader">
                         <th colSpan={1}>U/M</th>
                         <th colSpan={1}>Date</th>
@@ -166,8 +81,8 @@ export default function ReportCtx({ action, slug, className }: Props) {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan={16}>
-                                <table className="w-full">
+                            <td className="p-0" colSpan={16}>
+                                <table id="footerTable" className="w-full">
                                     <thead>
                                         <th>CURRENT</th>
                                         <th>

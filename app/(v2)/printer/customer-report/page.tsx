@@ -18,6 +18,13 @@ export default async function CustomerReportPage({
         slug: id,
         action: generateCustomerPrintReport(id),
     }));
+    // return (
+    //     <>
+    //         {actions.map((action) => (
+    //             <ReportCtx key={action.slug} {...action} />
+    //         ))}
+    //     </>
+    // );
     return (
         <BasePrinter {...value} slugs={ids}>
             {actions.map((action) => (
