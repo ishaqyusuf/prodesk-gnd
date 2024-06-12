@@ -25,6 +25,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                 businessName: { contains: query._q },
             },
         ];
+
     switch (query._having) {
         case "Pending Invoice":
             where.salesOrders = {

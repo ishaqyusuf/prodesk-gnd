@@ -36,6 +36,14 @@ export default function Header() {
                                         <p className="text-sm">{data.date}</p>
                                     </td>
                                 </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr className="">
+                    <td colSpan={16} className="pt-10">
+                        <table className="w-full text-xs">
+                            <tbody className="">
                                 <tr className="">
                                     <td colSpan={6} className="">
                                         <table className="w-full" id="customer">
