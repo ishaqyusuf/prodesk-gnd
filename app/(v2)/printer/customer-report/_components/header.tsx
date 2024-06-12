@@ -36,8 +36,8 @@ export default function Header() {
                                         <p className="text-sm">{data.date}</p>
                                     </td>
                                 </tr>
-                                <tr className="pt-5">
-                                    <td colSpan={6}>
+                                <tr className="">
+                                    <td colSpan={6} className="">
                                         <table className="w-full" id="customer">
                                             <thead>
                                                 <th
