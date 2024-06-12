@@ -28,7 +28,7 @@ export default function ReportCtx({ action, slug, className }: Props) {
     const ctx = usePrintContext();
     useEffect(() => {
         if (data) {
-            // ctx && ctx?.pageReady(slug, data);
+            ctx?.pageReady(slug, data);
         }
     }, [data]);
 
