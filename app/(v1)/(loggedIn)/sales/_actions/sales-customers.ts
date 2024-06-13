@@ -9,12 +9,16 @@ import { _cache } from "../../../_actions/_cache/load-data";
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 
 import { ISalesType } from "@/types/sales";
-import { ShowCustomerHaving } from "../type";
+import { InvoicePastDue, ShowCustomerHaving } from "../type";
+import dayjs from "dayjs";
+import { dateQuery } from "@/app/(v1)/_actions/action-utils";
 
 export interface IGetCustomerActionQuery extends BaseQuery {
     _having: ShowCustomerHaving;
+    _due: InvoicePastDue;
 }
 export async function getCustomersAction(query: IGetCustomerActionQuery) {
+    // dateQuery
     const where: Prisma.CustomersWhereInput = {};
     if (query._q)
         where.OR = [
@@ -25,18 +29,53 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                 businessName: { contains: query._q },
             },
         ];
+    let to;
+    let from = null;
+    switch (query._due) {
+        case "1-30":
+            to = dayjs();
+            from = dayjs().subtract(30, "days");
+            break;
+        case "31-60":
+            to = dayjs().subtract(31, "days");
+            from = dayjs().subtract(60, "days");
+        case "61-90":
+            to = dayjs().subtract(61, "days");
+            from = dayjs().subtract(90, "days");
+            break;
+        case ">90":
+            to = dayjs().subtract(90, "days");
+            from = dayjs().subtract(10, "years");
+            break;
+    }
+    console.log([to, from]);
+    const _dateType = "paymentDueDate";
+    let dueDateQuery =
+        from && to
+            ? dateQuery({
+                  from,
+                  to,
+                  _dateType,
+              })
+            : null;
+    if (dueDateQuery)
+        where.salesOrders = {
+            some: {
+                ...dueDateQuery,
+            },
+        };
+    if (!dueDateQuery) dueDateQuery = {};
+    if (dueDateQuery) query._having = "Pending Invoice";
 
     switch (query._having) {
         case "Pending Invoice":
             where.salesOrders = {
-                // every: {
-                //     type: "order" as ISalesType,
-                // },
                 some: {
                     type: "order" as ISalesType,
                     amountDue: {
                         gt: 0,
                     },
+                    ...dueDateQuery,
                 },
             };
             break;
@@ -45,10 +84,12 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                 every: {
                     amountDue: 0,
                     type: "order" as ISalesType,
+                    // ...dueDateQuery,
                 },
             };
             break;
     }
+
     const { pageCount, skip, take } = await paginatedAction(
         query,
         prisma.customers,
@@ -71,6 +112,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                         where: {
                             deletedAt: null,
                             type: "order",
+                            ...dueDateQuery,
                         },
                     },
                 },
@@ -81,6 +123,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
                     amountDue: {
                         gt: 0,
                     },
+                    ...dueDateQuery,
                 },
                 select: {
                     amountDue: true,

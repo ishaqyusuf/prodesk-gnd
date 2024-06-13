@@ -39,6 +39,8 @@ export default function useSaveSalesHook() {
             //     return;
             // }
             _data.autoSave = autoSave;
+            console.log(">>>>>>>>");
+
             if (_data.order.type == "order") {
                 _data.order.paymentDueDate =
                     salesFormUtils._calculatePaymentTerm(

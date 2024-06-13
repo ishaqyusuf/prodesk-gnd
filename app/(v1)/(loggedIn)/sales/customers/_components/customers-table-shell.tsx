@@ -22,6 +22,7 @@ import { Cells } from "./customer-cells";
 import PageHeader from "@/components/_v1/page-header";
 import CustomerFormModal from "../_modals/customer-form";
 import { useModal } from "@/components/common/modal/provider";
+import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 
 export default function CustomersTableShell({ promise, searchParams }) {
     const { data, pageCount }: GetCustomers = React.use(promise);
@@ -57,9 +58,10 @@ export default function CustomersTableShell({ promise, searchParams }) {
             ctx.ActionColumn(Cells.Action),
         ],
         true,
-        { sn: false, filterCells: ["_q", "_having"] }
+        { sn: false, filterCells: ["_q", "_having", "_due"] }
     );
     const modal = useModal();
+
     return (
         <>
             <PageHeader
@@ -82,16 +84,13 @@ export default function CustomersTableShell({ promise, searchParams }) {
                         id: "_having",
                         title: "Having",
                         single: true,
-                        options: [
-                            {
-                                label: "Pending Invoice",
-                                value: "Pending Invoice" as ShowCustomerHaving,
-                            },
-                            {
-                                label: "No Pending Invoice",
-                                value: "No Pending Invoice" as ShowCustomerHaving,
-                            },
-                        ],
+                        options: salesData.filters.invoiceHaving,
+                    },
+                    {
+                        id: "_due",
+                        title: "Due",
+                        single: true,
+                        options: salesData.filters.due,
                     },
                 ]}
                 searchableColumns={[

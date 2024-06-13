@@ -33,6 +33,12 @@ export default function useDykeFormSaver(form) {
                             e.order.paymentTerm,
                             e.order.createdAt
                         );
+                    const { paymentDueDate, paymentTerm, createdAt } = e.order;
+                    console.log({
+                        paymentDueDate,
+                        paymentTerm,
+                        createdAt,
+                    });
                 }
                 // console.log(e);
                 // return;

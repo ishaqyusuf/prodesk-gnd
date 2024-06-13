@@ -22,11 +22,12 @@ export default function initDykeSaving(data: DykeForm, noEstimate = false) {
             };
         }),
     };
+    if (!data.order.paymentTerm)
+        data.order.paymentTerm = data._rawData.paymentTerm;
 
     errorData.errorId = data.order.slug || generateRandomString(5);
     const init = initializeMultiComponent(data);
-    console.log(data.itemArray.length);
-
+    // console.log(data.itemArray.length);
     // if (noEstimate) return data;
     errorData.init = init;
     const e = calculateSalesEstimate(init);
