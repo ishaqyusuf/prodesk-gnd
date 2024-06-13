@@ -173,25 +173,7 @@ export default function HeaderSection({}) {
                                     } as any
                                 }
                             />
-                            {slug && (
-                                <>
-                                    <MenuItem
-                                        href={`/sales-v2/form/${type}/${orderId}?restore=true`}
-                                        Icon={ArchiveRestore}
-                                        className="bg-red-500 text-white"
-                                    >
-                                        Restore
-                                    </MenuItem>
-                                    <SendEmailMenuAction
-                                        sales={{
-                                            id,
-                                            slug,
-                                            type,
-                                            ...form.getValues(),
-                                        }}
-                                    />
-                                </>
-                            )}
+
                             <MenuItem
                                 onClick={() => {
                                     modal.openSheet(
@@ -207,6 +189,25 @@ export default function HeaderSection({}) {
                             >
                                 Settings
                             </MenuItem>
+                            {slug && (
+                                <>
+                                    <SendEmailMenuAction
+                                        sales={{
+                                            id,
+                                            slug,
+                                            type,
+                                            ...form.getValues(),
+                                        }}
+                                    />
+                                    <MenuItem
+                                        href={`/sales-v2/form/${type}/${orderId}?restore=true`}
+                                        Icon={ArchiveRestore}
+                                        className="bg-red-500 text-white"
+                                    >
+                                        Restore
+                                    </MenuItem>
+                                </>
+                            )}
                         </Menu>
                     </div>
                 </div>

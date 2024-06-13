@@ -34,15 +34,7 @@ export default function useDykeFormSaver(form) {
                             e.order.createdAt
                         );
                     const { paymentDueDate, paymentTerm, createdAt } = e.order;
-                    console.log({
-                        paymentDueDate,
-                        paymentTerm,
-                        createdAt,
-                    });
                 }
-                // console.log(e);
-                // return;
-
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
                 toast.success("Saved");
