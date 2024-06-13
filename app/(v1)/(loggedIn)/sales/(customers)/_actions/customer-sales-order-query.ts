@@ -44,7 +44,8 @@ export default function customerSalesOrderQuery({ _having, _due }: Props) {
             },
         };
     if (!dueDateQuery) dueDateQuery = {};
-    if (dueDateQuery) query._having = "Pending Invoice";
+    if (dueDateQuery) _having = "Pending Invoice";
+
     switch (_having) {
         case "Pending Invoice":
             query.salesOrders = {
