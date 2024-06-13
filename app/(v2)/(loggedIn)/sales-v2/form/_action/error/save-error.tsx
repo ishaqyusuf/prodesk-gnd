@@ -17,7 +17,13 @@ export async function _saveDykeError(errorId, data) {
     console.log("SENDING >>>>>");
     try {
         await sendMessage({
-            body: `Dyke save error`,
+            body: [
+                `Dyke save error`,
+                "------- DATA ------",
+                JSON.stringify(data),
+            ]
+                .filter(Boolean)
+                .join("\n"),
             subject: `GND: Dyke Save Error`,
             to: `ishaqyusuf024@gmail.com`,
             from: `Noreply <pcruz321@gndprodesk.com>`,

@@ -55,7 +55,10 @@ export default function useDykeFormSaver(form) {
                 }
             } catch (error) {
                 toast.error("Something went wrong");
-                if (error instanceof Error) console.log(error.message);
+                if (error instanceof Error) {
+                    console.log(error.message);
+                    errorData.message = error.message;
+                }
                 await _saveDykeError(errorData.errorId, errorData);
             }
         });
