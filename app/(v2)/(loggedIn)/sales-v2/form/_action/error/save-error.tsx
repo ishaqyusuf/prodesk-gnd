@@ -13,8 +13,6 @@ export async function _saveDykeError(errorId, data) {
             userId: await userId(),
         },
     });
-    // notify me.
-    console.log("SENDING >>>>>");
     try {
         await sendMessage({
             body: [
@@ -31,7 +29,6 @@ export async function _saveDykeError(errorId, data) {
             parentId: null,
             attachOrder: false,
         } as any);
-        console.log("SENT");
     } catch (error) {}
 }
 export async function _deleteDykeError(errorId) {

@@ -19,7 +19,6 @@ export async function sendMessage(data: EmailProps) {
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     if (data.attachOrder && isProd) {
         try {
-            console.log("GETTING PDF");
             const pdf = await salesPdf({
                 slugs: data.data.slug,
                 mode: data.data?.type,
@@ -27,7 +26,7 @@ export async function sendMessage(data: EmailProps) {
                 pdf: true,
                 preview: true,
             });
-            console.log(pdf);
+
             if (!pdf) throw new Error("pdf not generated.");
             attachments.push({
                 content: pdf.uri,
@@ -37,36 +36,23 @@ export async function sendMessage(data: EmailProps) {
             if (error instanceof Error) console.log(error.message);
             throw Error("Unable to generate pdf");
         }
-        // const pdf = await _generateSalesPdf(
-        //     (data.data?.type as ISalesType) == "order" ? "invoice" : "quote",
-        //     [data.data.slug]
-        // );
     }
 
-    // const to = isProd ? data.to?.split(",") : ["ishaqyusuf024@gmail.com"];
     const to = data.to?.split(",");
-    console.log(to);
-    // const resend = new Resend(env.RESEND_API_KEY);
+
+    // console.log(trs);
+
     const _data = await resend.emails.send({
         reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
         to,
-        // to:["pcruz321@gmail.com", "ishaqyusuf024@gmail.com"],
         subject: trs.subject,
-        html: trs.body, //?.split("\n").join("<br/>"),
+        html: trs.body,
         attachments,
-        // react: MailComposer({ body: trs.body }),
     });
-    // return;
-    //   await _email({
-    //     from: data.from,
-    //     user: { email: data.to as any },
-    //     subject: trs.subject,
-    //     react: MailComposer({
-    //       body: trs.body,
-    //     }),
-    //   });
+    // console.log(_data);
+
     await prisma.inbox.create({
         data: {
             from: data.from,
@@ -80,7 +66,4 @@ export async function sendMessage(data: EmailProps) {
             createdAt: new Date(),
         },
     });
-    // va.track("new email", {
-    //     type: data.type,
-    // });
 }
