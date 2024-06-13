@@ -24,12 +24,13 @@ export async function generateCustomerPrintReport(
                 },
             },
             salesOrders: {
-                where: salesQuery.salesOrders || {
-                    type: "order",
-                    amountDue: {
-                        gt: 0,
+                where: salesQuery.salesOrders?.some ||
+                    salesQuery.salesOrders?.every || {
+                        type: "order",
+                        amountDue: {
+                            gt: 0,
+                        },
                     },
-                },
                 include: {
                     payments: {
                         orderBy: {
