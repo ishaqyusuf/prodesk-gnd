@@ -14,26 +14,7 @@ import { useForm } from "react-hook-form";
 
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { emailSchema } from "@/lib/validations/email";
-import { ICustomer } from "@/types/customers";
-import { CustomerTypes } from "@prisma/client";
-import { saveCustomer } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customers";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "../../ui/select";
-import { Button } from "../../ui/button";
-import { ArrowLeft } from "lucide-react";
-import { IProject } from "@/types/community";
-import { useAppSelector } from "@/store";
-import { loadStaticList } from "@/store/slicers";
-import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
-import { projectSchema } from "@/lib/validations/community-validations";
-import { saveProject } from "@/app/(v1)/_actions/community/projects";
+
 import { IUser } from "@/types/hrm";
 import AutoComplete2 from "../auto-complete-tw";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";

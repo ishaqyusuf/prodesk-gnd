@@ -17,7 +17,6 @@ import { Label } from "../../ui/label";
 import { emailSchema } from "@/lib/validations/email";
 import { ICustomer } from "@/types/customers";
 import { CustomerTypes } from "@prisma/client";
-import { saveCustomer } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customers";
 import {
     Select,
     SelectContent,
