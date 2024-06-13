@@ -131,7 +131,7 @@ function Actions({ item }: Props) {
                     assignment.open(item.id);
                 }}
                 size={"sm"}
-                variant={"outline"}
+                variant={"default"}
             >
                 View
             </Button>
