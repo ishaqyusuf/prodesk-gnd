@@ -9,11 +9,11 @@ export default function SalesTab() {
     useEffect(() => {
         tab.reset();
         tab.registerTab("Orders", "/sales/orders");
-        tab.registerTab(
-            "Back Orders",
-            "/sales/back-orders",
-            tab.can("viewOrders")
-        );
+        // tab.registerTab(
+        //     "Back Orders",
+        //     "/sales/back-orders",
+        //     tab.can("viewOrders")
+        // );
         tab.registerTab("Quotes", "/sales/quotes");
         tab.registerTab(
             "Delivery",

@@ -19,10 +19,10 @@ export default function CommissionsLayout({
     const [tabs, setTabs] = useState(
         [
             can?.viewOrders && { title: "Orders", path: "/sales/orders" },
-            can?.viewOrders && {
-                title: "Back Orders",
-                path: "/sales/back-orders",
-            },
+            // can?.viewOrders && {
+            //     title: "Back Orders",
+            //     path: "/sales/back-orders",
+            // },
             can?.viewOrders && { title: "Estimates", path: "/sales/quotes" },
             can?.viewInboundOrder && {
                 title: "Inbounds",
