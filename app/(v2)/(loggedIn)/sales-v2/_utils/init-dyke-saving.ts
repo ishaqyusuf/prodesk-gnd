@@ -22,7 +22,7 @@ export default function initDykeSaving(data: DykeForm, noEstimate = false) {
             };
         }),
     };
-    if (!data.order.paymentTerm)
+    if (!data.order.paymentTerm && data._rawData?.paymentTerm)
         data.order.paymentTerm = data._rawData.paymentTerm;
 
     errorData.errorId = data.order.slug || generateRandomString(5);
