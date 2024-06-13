@@ -788,6 +788,7 @@ model RoleHasPermissions {
     roleId       Int
     permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
     role         Roles       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_role_id_foreign")
+    deletedAt    DateTime?   @db.Timestamp(0)
 
     @@id([permissionId, roleId])
     @@index([roleId], map: "role_has_permissions_role_id_foreign")
