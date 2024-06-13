@@ -1,4 +1,3 @@
-import { getCustomerAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customers";
 import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
@@ -9,6 +8,7 @@ import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import { ICustomer } from "@/types/customers";
 import { Metadata } from "next";
+import { getCustomerAction } from "../../_actions/sales-customers";
 
 export const metadata: Metadata = {
     title: "Customer Overview",
