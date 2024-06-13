@@ -1,8 +1,9 @@
 "use server";
 import { prisma } from "@/db";
 import { ICustomer } from "@/types/customers";
-import { getCustomerProfileId } from "./sales-customers";
+
 import { transformData } from "@/lib/utils";
+import { getCustomerProfileId } from "../(customers)/_actions/sales-customers";
 
 export async function updateCustomerAction(data: ICustomer) {
     // const { id, primaryAddress, profile, addressBooks } = data;
@@ -15,8 +16,8 @@ export async function updateCustomerAction(data: ICustomer) {
         const addr = await prisma.addressBooks.create({
             data: transformData({
                 ...primaryAddress,
-                customerId: data.id
-            }) as any
+                customerId: data.id,
+            }) as any,
         });
         primaryAddressId = addr.id;
     } else {
@@ -27,16 +28,16 @@ export async function updateCustomerAction(data: ICustomer) {
                     {
                         ...primaryAddress,
                         name: businessName || name,
-                        phoneNo
+                        phoneNo,
                     },
                     true
-                ) as any)
-            }
+                ) as any),
+            },
         });
     }
     await prisma.customers.update({
         where: {
-            id: data.id
+            id: data.id,
         },
         data: {
             ...transformData({
@@ -46,16 +47,15 @@ export async function updateCustomerAction(data: ICustomer) {
                 businessName,
                 meta,
                 address: primaryAddress.address1,
-                phoneNo
+                phoneNo,
             }),
             profile: customerTypeId
                 ? {
                       connect: {
-                          id: Number(customerTypeId)
-                      }
+                          id: Number(customerTypeId),
+                      },
                   }
-                : undefined
-        }
+                : undefined,
+        },
     });
 }
-

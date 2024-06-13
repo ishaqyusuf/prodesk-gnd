@@ -2,8 +2,8 @@ import { getCustomerAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-cu
 import AuthGuard from "@/components/_v1/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import CustomerMenu from "@/app/(v1)/(loggedIn)/sales/customers/_components/customer-menu";
-import RecentPayments from "@/app/(v1)/(loggedIn)/sales/customers/_components/recent-payments";
+import CustomerMenu from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/_components/customer-menu";
+import RecentPayments from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/_components/recent-payments";
 import RecentSalesCard from "@/components/_v1/sales/recent-sales-card";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";

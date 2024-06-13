@@ -8,7 +8,7 @@ import { CustomerTypes } from "@prisma/client";
 import { sum } from "@/lib/utils";
 import dayjs from "dayjs";
 import { user } from "@/app/(v1)/_actions/utils";
-import { ICustomerProfile } from "../customers/profiles/_components/type";
+import { ICustomerProfile } from "../(customers)/customers/profiles/_components/type";
 
 export interface ICreateOrderFormQuery {
     customerId?;

@@ -1,10 +1,9 @@
 "use server";
 
+import { _cache } from "@/app/(v1)/_actions/_cache/load-data";
 import { prisma } from "@/db";
 import { transformData } from "@/lib/utils";
 import { CustomerTypes } from "@prisma/client";
-import { getPageInfo } from "../../../_actions/action-utils";
-import { _cache } from "../../../_actions/_cache/load-data";
 
 export async function staticCustomerProfilesAction() {
     const d = await _cache(

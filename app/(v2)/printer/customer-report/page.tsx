@@ -14,17 +14,15 @@ export default async function CustomerReportPage({
     const value = {
         ...searchParams,
     };
+    const { _having, _due } = searchParams;
     const actions = ids?.map((id) => ({
         slug: id,
-        action: generateCustomerPrintReport(id),
+        action: generateCustomerPrintReport(id, {
+            _having,
+            _due,
+        }),
     }));
-    // return (
-    //     <>
-    //         {actions.map((action) => (
-    //             <ReportCtx key={action.slug} {...action} />
-    //         ))}
-    //     </>
-    // );
+
     return (
         <BasePrinter {...value} slugs={ids}>
             {actions.map((action) => (

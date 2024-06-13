@@ -16,7 +16,7 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { CustomerTypes } from "@prisma/client";
 
-import { saveCustomerProfile } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customer-profiles";
+import { saveCustomerProfile } from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/_actions/sales-customer-profiles";
 
 export default function CustomerProfileModal() {
     const route = useRouter();

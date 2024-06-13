@@ -6,7 +6,7 @@ import { ICustomer } from "@/types/customers";
 import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
 import { getCustomerProfileDac } from "./get-customer-profile.dac";
-import { ICustomerProfile } from "@/app/(v1)/(loggedIn)/sales/customers/profiles/_components/type";
+import { ICustomerProfile } from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/profiles/_components/type";
 
 export async function _saveSalesAddress({
     billingAddress,

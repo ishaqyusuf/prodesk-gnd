@@ -7,14 +7,9 @@ import {
     DykeDoorType,
     DykeFormStepMeta,
     MultiDyke,
-    SaveMode,
     ShelfItemMeta,
 } from "../../type";
-import {
-    ISalesOrder,
-    ISalesOrderItemMeta,
-    ISalesOrderMeta,
-} from "@/types/sales";
+import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import {

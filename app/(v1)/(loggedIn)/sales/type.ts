@@ -1,5 +1,5 @@
-import { getCustomersAction } from "./_actions/sales-customers";
-import { getCustomerReport } from "./customers/_actions/customer-report";
+import { getCustomerReport } from "./(customers)/_actions/customer-report";
+import { getCustomersAction } from "./(customers)/_actions/sales-customers";
 
 export type GetCustomers = Awaited<ReturnType<typeof getCustomersAction>>;
 export type GetCustomerReport = Awaited<ReturnType<typeof getCustomerReport>>;

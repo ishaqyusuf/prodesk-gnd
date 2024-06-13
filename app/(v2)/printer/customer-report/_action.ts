@@ -1,12 +1,18 @@
 "use server";
 
+import customerSalesOrderQuery from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/customer-sales-order-query";
+import { IGetCustomerActionQuery } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customers";
 import { prisma } from "@/db";
 import { formatDate } from "@/lib/use-day";
 import { ICustomer } from "@/types/customers";
 import { IAddressMeta } from "@/types/sales";
 import dayjs from "dayjs";
 
-export async function generateCustomerPrintReport(id) {
+export async function generateCustomerPrintReport(
+    id,
+    query: IGetCustomerActionQuery
+) {
+    const salesQuery = customerSalesOrderQuery(query);
     let _customer = await prisma.customers.findFirstOrThrow({
         where: {
             id,
@@ -18,7 +24,7 @@ export async function generateCustomerPrintReport(id) {
                 },
             },
             salesOrders: {
-                where: {
+                where: salesQuery.salesOrders || {
                     type: "order",
                     amountDue: {
                         gt: 0,

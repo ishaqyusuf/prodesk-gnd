@@ -4,25 +4,23 @@ import { TableShellProps } from "@/types/data-table";
 // import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useEffect, useMemo, useState, useTransition } from "react";
-import { ColumnHeader } from "../../../../../../components/_v1/columns/base-columns";
 
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
-import { Printer } from "lucide-react";
-import { ICustomer } from "@/types/customers";
-import { setCustomerProfileAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-customer-profiles";
+
 import { CustomerTypes } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import CustomersBatchAction from "./customers-selection-action";
 import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
-import { GetCustomers, ShowCustomerHaving } from "../../type";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { Cells } from "./customer-cells";
 import PageHeader from "@/components/_v1/page-header";
 import CustomerFormModal from "../_modals/customer-form";
 import { useModal } from "@/components/common/modal/provider";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
+import { GetCustomers } from "../../../type";
+import { setCustomerProfileAction } from "../../_actions/sales-customer-profiles";
 
 export default function CustomersTableShell({ promise, searchParams }) {
     const { data, pageCount }: GetCustomers = React.use(promise);
@@ -97,7 +95,7 @@ export default function CustomersTableShell({ promise, searchParams }) {
                     {
                         id: "_q" as any,
                         title: "customer, phone, address",
-                    },
+                    } as any,
                 ]}
             />
         </>

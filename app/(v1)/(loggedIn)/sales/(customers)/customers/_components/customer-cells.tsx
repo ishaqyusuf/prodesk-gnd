@@ -1,5 +1,5 @@
 import { TableCol } from "@/components/common/data-table/table-cells";
-import { GetCustomers } from "../../type";
+import { GetCustomers } from "../../../type";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,6 +15,7 @@ import AuthGuard from "@/components/_v1/auth-guard";
 import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
 import { openLink } from "@/lib/open-link";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
     item: GetCustomers["data"][0];
@@ -46,6 +47,7 @@ export let Cells = {
     },
     Action({ item }: Props) {
         // const modal = useModal
+        const search = useSearchParams();
         return (
             <RowActionCell>
                 <AuthGuard can={["editOrders"]}>
@@ -57,10 +59,17 @@ export let Cells = {
                         />
                         <Button
                             onClick={() => {
+                                const [_having, _due] = [
+                                    search.get("_having"),
+                                    search.get("_due"),
+                                ];
+
                                 openLink(
                                     "printer/customer-report",
                                     {
                                         slugs: `${item.id}`,
+                                        _having,
+                                        _due,
                                     },
                                     true
                                 );

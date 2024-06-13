@@ -21,10 +21,10 @@ import { employeeSchema } from "@/lib/validations/hrm";
 import { IUser } from "@/types/hrm";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { saveCustomer } from "../../../_actions/sales-customers";
-import { updateCustomerAction } from "../../../_actions/customer.crud";
+import { updateCustomerAction } from "../../../../_actions/customer.crud";
 import { ICustomer } from "@/types/customers";
 import ControlledSelect from "@/components/common/controls/controlled-select";
+import { saveCustomer } from "../../../_actions/sales-customers";
 
 interface Props {
     defaultData?;
