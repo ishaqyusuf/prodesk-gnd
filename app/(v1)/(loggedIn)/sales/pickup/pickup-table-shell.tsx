@@ -31,7 +31,7 @@ export default function PickupTableShell<T>({
     data,
     pageInfo,
     searchParams,
-}: TableShellProps<ISalesOrder>) {
+}: TableShellProps) {
     const [isPending, startTransition] = useTransition();
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);

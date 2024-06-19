@@ -37,7 +37,7 @@ export default function InboundOrdersTableShell<T>({
     data,
     pageInfo,
     searchParams,
-}: TableShellProps<ISalesOrder>) {
+}: TableShellProps) {
     const [isPending, startTransition] = useTransition();
     async function setInventoryStatus(item, status) {
         await _updateOrderInventoryStatus(item.id, status, "/sales/inbounds");
