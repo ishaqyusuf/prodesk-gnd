@@ -8,7 +8,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { useEffect } from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
     SubmitJobForm,
     SubmitJobModalContent,
@@ -22,7 +22,7 @@ import useSubmitJob, { JobSubmitContext } from "./_/use-submit-job";
 import { SubmitJobModalSubtitle, SubmitJobModalTitle } from "./_/heading";
 import { Form } from "@/components/ui/form";
 
-export default function SubmitJobModal() {
+export default function SubmitJobModal({ data = {} }) {
     const modal = useModal();
     const defaultValues = {
         // initialized: false,

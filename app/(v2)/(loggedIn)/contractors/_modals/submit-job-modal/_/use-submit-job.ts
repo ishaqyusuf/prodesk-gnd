@@ -10,7 +10,7 @@ import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import { getUnitJobs } from "../../../_actions/get-unit-jobs";
 import { useValidateTaskQty } from "./use-validate-task-qty";
-import submitJobUtils from "@/app/(v1)/(loggedIn)/tasks/submit-job-modal/submit-job-utils";
+
 import {
     createJobAction,
     updateJobAction,
@@ -22,6 +22,7 @@ import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 import { createContext, useContext, useState, useTransition } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
 import { useModal } from "@/components/common/modal-old/provider";
+import submitJobUtils from "./submit-job-utils";
 
 export const JobSubmitContext = createContext<any>({});
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);

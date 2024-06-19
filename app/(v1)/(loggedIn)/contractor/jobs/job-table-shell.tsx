@@ -39,7 +39,7 @@ import { Badge } from "../../../../../components/ui/badge";
 import JobType from "../../../../../components/_v1/hrm/job-type";
 import { Button } from "../../../../../components/ui/button";
 import { useModal } from "@/components/common/modal/provider";
-import SubmitJobModal from "../../tasks/submit-job-modal";
+import SubmitJobModal from "@/app/(v2)/(loggedIn)/contractors/_modals/submit-job-modal";
 
 export default function JobTableShell<T>({
     data,
