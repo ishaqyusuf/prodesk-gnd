@@ -32,7 +32,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                             <span>
                                 {estimate ? "Quote " : "Order "} Information
                             </span>
-                            <OrderPriorityFlagCell order={order as any} />
+                            {/* <OrderPriorityFlagCell order={order as any} /> */}
                             <StatusBadge
                                 status={order?.prodStatus || "no status"}
                             />
