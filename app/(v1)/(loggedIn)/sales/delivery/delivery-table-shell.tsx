@@ -34,11 +34,11 @@ import {
 import useQueryParams from "@/lib/use-query-params";
 import { TableCol } from "@/components/common/data-table/table-cells";
 
-export default function DeliveryTableShell<T>({
+export default function DeliveryTableShell({
     data,
     pageInfo,
     searchParams,
-}: TableShellProps<ISalesOrder>) {
+}: TableShellProps) {
     const [isPending, startTransition] = useTransition();
 
     const { queryParams, setQueryParams } = useQueryParams<any>();

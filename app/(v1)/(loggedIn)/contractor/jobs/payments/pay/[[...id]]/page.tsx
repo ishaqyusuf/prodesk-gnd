@@ -17,7 +17,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
-import EditJobModal from "@/components/_v1/modals/edit-job";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import JobTableShell from "../../../job-table-shell";
 export const metadata: Metadata = {
@@ -78,8 +77,6 @@ export default async function PaymentPage({ params }) {
                     </div>
                 </div>
                 <JobOverviewSheet />
-                <EditJobModal />
-                {/* <SubmitJobModal /> */}
             </TabbedLayout>
         </AuthGuard>
     );

@@ -8,7 +8,6 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getMyJobs } from "@/app/(v1)/_actions/hrm-jobs/get-jobs";
 
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
-import EditJobModal from "@/components/_v1/modals/edit-job";
 import TaskAction from "@/components/_v1/tasks/task-action";
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
@@ -30,8 +29,6 @@ export default async function PunchoutPage({ searchParams }) {
                 <PageHeader title="Jobs" Action={SubmitJobBtn} />
                 <JobTableShell searchParams={searchParams} {...response} />
                 <JobOverviewSheet />
-                <EditJobModal />
-                {/* <SubmitJobModal /> */}
             </div>
         </AuthGuard>
     );

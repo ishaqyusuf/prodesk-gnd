@@ -39,45 +39,7 @@ export interface SubmitJobForm {
     // initialized: boolean;
 }
 export const useSubmitJobForm = () => useFormContext<SubmitJobForm>();
-export default function SubmitJobModal({}) {
-    const defaultValues = {
-        // initialized: false,
-        costList: [],
-    };
-    const form = useForm<SubmitJobForm>({
-        defaultValues,
-    });
-    const contractors = useStaticContractors();
-    const projects = useStaticProjects();
 
-    const ctx = {
-        ...useSubmitJob(form),
-        contractors,
-        projects,
-    };
-
-    return (
-        <JobSubmitContext.Provider value={ctx}>
-            {/* <FormProvider {...form}> */}
-            <BaseModal
-                className="sm:max-w-[550px]"
-                modalName="submitJobModal"
-                Content={memo(ModalContent)}
-                Footer={ModalFooter}
-                Title={SubmitJobModalTitle}
-                Subtitle={SubmitJobModalSubtitle}
-                onOpen={(e) => {
-                    ctx.initialize(e);
-                    // form.reset({
-                    //     tabHistory: [],
-                    //     tab: "tasks",
-                    // });
-                }}
-            />
-            {/* </FormProvider> */}
-        </JobSubmitContext.Provider>
-    );
-}
 export interface SubmitJobModalDataProps {
     data: IJobs;
     action: JobFormAction;

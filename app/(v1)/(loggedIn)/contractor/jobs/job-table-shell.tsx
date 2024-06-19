@@ -204,14 +204,11 @@ export default function JobTableShell<T>({
                                         disabled={row.original.paymentId}
                                         onClick={() => {
                                             modal.openModal(
-                                                <SubmitJobModal
-                                                    data={row.original}
-                                                />
+                                                <SubmitJobModal />,
+                                                {
+                                                    data: row.original,
+                                                } as any
                                             );
-                                            // openModal("submitJob", {
-                                            //     data: row.original,
-                                            //     defaultTab: "tasks",
-                                            // });
                                         }}
                                         Icon={Icons.edit}
                                     >

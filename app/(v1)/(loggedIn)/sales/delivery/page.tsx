@@ -103,10 +103,7 @@ export default async function SalesDeliveryPage({ searchParams }) {
                         ))}
                     </div>
                 </div>
-                <DeliveryTableShell<ISalesOrder>
-                    searchParams={searchParams}
-                    {...response}
-                />
+                <DeliveryTableShell searchParams={searchParams} {...response} />
                 <OrderPrinter />
             </SalesTabLayout>
         </AuthGuard>
