@@ -25,7 +25,7 @@ import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-
 export async function getSalesProductionsAction(
     query: SalesQueryParams,
     admin = false
-): TableApiResponse<ISalesOrder> {
+) {
     const sessionId = await userId();
     query._page = "production";
     if (!admin) query.prodId = sessionId || -1;
