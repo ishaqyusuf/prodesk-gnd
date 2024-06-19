@@ -86,7 +86,9 @@ export default function useSaveSalesHook() {
         autoSave = false,
         data: any = null
     ) {
-        form.handleSubmit(() => submit(and, autoSave, data))();
+        setTimeout(() => {
+            form.handleSubmit(() => submit(and, autoSave, data))();
+        }, 500);
     }
     const debouncedSave = useCallback(
         debounce(() => {

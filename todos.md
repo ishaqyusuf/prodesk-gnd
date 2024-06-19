@@ -4,7 +4,7 @@
 TODO: JUN 19
     -  Jobs edit
     -  Role edit flicker
-    -  
+    -  Delivery & Pickup
 
 TODO: 
     <!-- - Payment Modal in Invoice Edit -->

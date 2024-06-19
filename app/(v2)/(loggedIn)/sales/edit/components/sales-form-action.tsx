@@ -35,16 +35,7 @@ export default function SalesFormAction() {
                 </h2>
             </div>
 
-            <div className="flex-1 px-4">
-                <Button asChild size="sm">
-                    <Link
-                        href={`/sales/${ctx.data.form.type}/${ctx.data.form.slug}/form`}
-                    >
-                        {/* <Icons.Rocket /> */}
-                        Switch to V1
-                    </Link>
-                </Button>
-            </div>
+            <div className="flex-1 px-4"></div>
             <div className="flex space-x-2">
                 {(ctx.mockupPercentage || 0) > 0 && (
                     <div className="inline-flex items-center space-x-2">
