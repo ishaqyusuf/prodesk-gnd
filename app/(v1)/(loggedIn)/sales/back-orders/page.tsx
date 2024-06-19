@@ -38,10 +38,7 @@ export default async function BackOrdersPage({ searchParams }) {
             />
             <SalesOrderMobileMenuShell />
             <AuthGuard can={["editOrders"]}>
-                <OrdersTableShell<ISalesOrder>
-                    searchParams={searchParams}
-                    {...response}
-                />
+                {/* <OrdersTableShell searchParams={searchParams} {...response} /> */}
             </AuthGuard>
             <OrderPrinter />
 

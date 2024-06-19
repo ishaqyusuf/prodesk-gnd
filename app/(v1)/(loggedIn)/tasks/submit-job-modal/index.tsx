@@ -78,13 +78,21 @@ interface ModalInterface {
     defaultTab?;
     changeWorker?: Boolean;
 }
-export default function SubmitJobModal({ admin }: { admin?: Boolean }) {
+export default function SubmitJobModal({
+    admin,
+    data = {
+        meta: {},
+    },
+}: {
+    admin?: Boolean;
+    data?;
+}) {
     const route = useRouter();
     // const isPunchout = type == "punchout";
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IJobs>({
         defaultValues: {
-            meta: {},
+            ...data,
         },
     });
     const id = form.watch("id");

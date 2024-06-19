@@ -11,33 +11,35 @@ import {
     DateCellContent,
     SecondaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
 import {
     DeleteRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
-import { Icons } from "../icons";
+} from "../../../../../components/_v1/data-table/data-table-row-actions";
+import { Icons } from "../../../../../components/_v1/icons";
 import { openModal } from "@/lib/modal";
 import { IJobs } from "@/types/hrm";
 import { Briefcase, CheckCheck, Unlink, X } from "lucide-react";
 import { toast } from "sonner";
-import Money from "../money";
+import Money from "../../../../../components/_v1/money";
 import {
     approveJob,
     rejectJob,
 } from "@/app/(v1)/_actions/hrm-jobs/job-actions";
 import { labelValue, truthy } from "@/lib/utils";
-import { ProjectsFilter } from "../filters/projects-filter";
-import { PayableEmployees } from "../filters/employee-filter";
+import { ProjectsFilter } from "../../../../../components/_v1/filters/projects-filter";
+import { PayableEmployees } from "../../../../../components/_v1/filters/employee-filter";
 import { deleteJobAction } from "@/app/(v1)/_actions/hrm-jobs/delete-job";
-import { Badge } from "../../ui/badge";
-import JobType from "../hrm/job-type";
-import { Button } from "../../ui/button";
+import { Badge } from "../../../../../components/ui/badge";
+import JobType from "../../../../../components/_v1/hrm/job-type";
+import { Button } from "../../../../../components/ui/button";
+import { useModal } from "@/components/common/modal/provider";
+import SubmitJobModal from "../../tasks/submit-job-modal";
 
 export default function JobTableShell<T>({
     data,
@@ -52,6 +54,7 @@ export default function JobTableShell<T>({
     const [isPending, startTransition] = useTransition();
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const modal = useModal();
     const columns = useMemo<ColumnDef<IJobs, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
@@ -200,10 +203,15 @@ export default function JobTableShell<T>({
                                     <RowActionMenuItem
                                         disabled={row.original.paymentId}
                                         onClick={() => {
-                                            openModal("submitJob", {
-                                                data: row.original,
-                                                defaultTab: "tasks",
-                                            });
+                                            modal.openModal(
+                                                <SubmitJobModal
+                                                    data={row.original}
+                                                />
+                                            );
+                                            // openModal("submitJob", {
+                                            //     data: row.original,
+                                            //     defaultTab: "tasks",
+                                            // });
                                         }}
                                         Icon={Icons.edit}
                                     >
