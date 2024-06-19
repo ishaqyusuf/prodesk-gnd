@@ -1,7 +1,10 @@
 - JUN 10:
   - Delete section items
   - custom section input
-
+TODO: JUN 19
+    -  Jobs edit
+    -  Role edit flicker
+    -  
 
 TODO: 
     <!-- - Payment Modal in Invoice Edit -->

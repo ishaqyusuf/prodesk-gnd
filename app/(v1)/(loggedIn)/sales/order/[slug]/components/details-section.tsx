@@ -4,13 +4,14 @@ import { useAppSelector } from "@/store";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import OrderFlag from "../../../../../../../components/_v1/sales/order-flag";
+
 import { Info } from "../../../../../../../components/_v1/info";
 import OrderOverviewActions from "../../../../../../../components/_v1/actions/order-overview-actions";
 import Money from "@/components/_v1/money";
 import StatusBadge from "@/components/_v1/status-badge";
 import { formatDate } from "@/lib/use-day";
 import { useDataPage } from "@/lib/data-page-context";
+import { OrderPriorityFlagCell } from "../../../orders/components/cells/sales-columns";
 // import ProductionDueDate from "../../../../../../../components/_v1/sales/prod-due-date";
 
 interface Props {
@@ -31,7 +32,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                             <span>
                                 {estimate ? "Quote " : "Order "} Information
                             </span>
-                            <OrderFlag order={order} />
+                            <OrderPriorityFlagCell order={order as any} />
                             <StatusBadge
                                 status={order?.prodStatus || "no status"}
                             />

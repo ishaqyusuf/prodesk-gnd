@@ -5,7 +5,6 @@ import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { Shell } from "@/components/shell";
-import DevOnly from "@/_v2/components/common/dev-only";
 import PageHeader from "@/components/_v1/page-header";
 
 export const metadata: Metadata = {
