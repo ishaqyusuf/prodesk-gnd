@@ -13,7 +13,6 @@ import PageHeader from "@/components/_v1/page-header";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
 import { redirect } from "next/navigation";
-import { isProduction } from "@/lib/is-prod";
 import { env } from "@/env.mjs";
 export const metadata: Metadata = {
     title: "Sales Production",
@@ -35,14 +34,10 @@ export default async function SalesProductionPage({ searchParams }) {
                 <div className="space-y-4 px-8">
                     <PageHeader title="Due Today" />
 
-                    <SalesProductionTableShell<ISalesOrder>
-                        simple
-                        {...todaysProd}
-                        myProd
-                    />
+                    <SalesProductionTableShell simple {...todaysProd} myProd />
 
                     <PageHeader title="Productions" />
-                    <SalesProductionTableShell<ISalesOrder>
+                    <SalesProductionTableShell
                         myProd
                         searchParams={searchParams}
                         {...response}

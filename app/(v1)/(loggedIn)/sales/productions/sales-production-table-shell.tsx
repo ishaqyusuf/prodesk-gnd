@@ -24,11 +24,11 @@ import { SmartTable } from "../../../../../components/_v1/data-table/smart-table
 import { getProgress } from "@/lib/status";
 import StatusBadge from "../../../../../components/_v1/status-badge";
 
-interface Props extends TableShellProps<ISalesOrder> {
+interface Props extends TableShellProps<any> {
     myProd?: Boolean;
     simple?: Boolean;
 }
-export default function SalesProductionTableShell<T>({
+export default function SalesProductionTableShell({
     data,
     pageInfo,
     searchParams,
