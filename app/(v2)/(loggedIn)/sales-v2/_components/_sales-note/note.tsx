@@ -26,7 +26,7 @@ export default function Note({ note }: Props) {
             </TableCol.Secondary>
             <TableCol.Secondary>{note.item}</TableCol.Secondary>
             <div className="flex justify-end">
-                - <TableCol.Secondary>{note.user.name}</TableCol.Secondary>
+                - <TableCol.Secondary>{note?.user?.name}</TableCol.Secondary>
             </div>
         </div>
     );
