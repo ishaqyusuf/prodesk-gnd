@@ -4,12 +4,12 @@ import { useAppSelector } from "@/store";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import OrderFlag from "../../../../../../../components/_v1/sales/order-flag";
 import { Info } from "../../../../../../../components/_v1/info";
 import { AddressBooks } from "@prisma/client";
 import OrderOverviewActions from "../../../../../../../components/_v1/actions/order-overview-actions";
 import { convertToNumber } from "@/lib/use-number";
 import { useDataPage } from "@/lib/data-page-context";
+import { SalesCells } from "../../../orders/components/cells";
 
 interface Props {
     isProd?: Boolean;
@@ -24,7 +24,7 @@ export default function SalesEmailSection({}: Props) {
                     <CardTitle className="flex items-center justify-between">
                         <div className="inline-flex items-center space-x-2">
                             <span>Order Information</span>
-                            <OrderFlag order={order} />
+                            <SalesCells.Flag item={order} />
                         </div>
                         {isProd ? <></> : <OrderOverviewActions />}
                     </CardTitle>
