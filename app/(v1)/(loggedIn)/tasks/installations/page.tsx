@@ -6,13 +6,14 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
 import { getMyJobs } from "@/app/(v1)/_actions/hrm-jobs/get-jobs";
-import JobTableShell from "@/components/_v1/shells/job-table-shell";
+
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
 
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import JobTableShell from "../../contractor/jobs/job-table-shell";
 
 export const metadata: Metadata = {
     title: "Installations",

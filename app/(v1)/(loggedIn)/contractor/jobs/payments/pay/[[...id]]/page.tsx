@@ -10,7 +10,7 @@ import JobPaymentForm from "@/components/_v1/forms/job-payment-form";
 import HrmLayout from "@/components/_v1/tab-layouts/hrm-layout";
 import Money from "@/components/_v1/money";
 import PageHeader from "@/components/_v1/page-header";
-import JobTableShell from "@/components/_v1/shells/job-table-shell";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
@@ -19,6 +19,7 @@ import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import JobTableShell from "../../../job-table-shell";
 export const metadata: Metadata = {
     title: "Payment Portal",
 };
