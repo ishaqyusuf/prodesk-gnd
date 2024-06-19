@@ -1,7 +1,6 @@
 "use client";
 
 import { DateCellContent } from "@/components/_v1/columns/base-columns";
-import { SalesCellProps } from "../orders-table-shell";
 import StatusBadge from "@/components/_v1/status-badge";
 import {
     Menu,
@@ -11,7 +10,7 @@ import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/
 import { toast } from "sonner";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 
-export default function DeliveryCell({ item }: SalesCellProps) {
+export default function DeliveryCell({ item }: any) {
     const date =
         item.pickup?.pickupAt || item.pickup?.createdAt || item.deliveredAt;
     function Content() {
