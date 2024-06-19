@@ -12,7 +12,7 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { _getRoles } from "@/app/(v1)/_actions/hrm/roles.crud";
 import RolesTableShell from "@/components/_v1/shells/roles-table-shell";
 import RoleModal from "@/components/_v1/modals/role-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Roles",

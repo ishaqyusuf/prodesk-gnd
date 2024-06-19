@@ -8,7 +8,7 @@ import PageHeader from "@/components/_v1/page-header";
 import { Metadata } from "next";
 import { getPayableAnalyticsStats } from "./_actions/analytics";
 import { StatCards } from "@/components/common/stat-cards";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Payables",

@@ -10,7 +10,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order-mobile-menu";
 import NewEstimateBtn from "./new-sales-btn";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Metadata } from "next";
 import { prisma } from "@/db";
 

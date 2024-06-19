@@ -1,7 +1,7 @@
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { _mergeConflictCustomers } from "@/app/(v1)/_actions/fix/merge-conflict-customer";
 
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 

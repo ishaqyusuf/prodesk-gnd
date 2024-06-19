@@ -3,7 +3,7 @@ import SalesFormComponent from "../components";
 import { getDykeFormAction } from "../_action/get-dyke-form";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { prisma } from "@/db";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 

@@ -7,7 +7,7 @@ import BuildersTableShell from "@/components/_v1/shells/builders-table-shell";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getBuildersAction } from "@/app/(v1)/_actions/community/builders";
 import BuilderModal from "@/components/_v1/modals/builder-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Builders",

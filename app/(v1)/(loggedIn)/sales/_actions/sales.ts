@@ -265,15 +265,11 @@ export async function whereSales(query: SalesQueryParams) {
     if (query._salesRepId) where.salesRepId = +query._salesRepId;
     return where;
 }
-export async function getSalesOrder(
-    query: SalesQueryParams
-): TableApiResponse<ISalesOrder> {
+export async function getSalesOrder(query: SalesQueryParams) {
     query.type = "order";
     return await getSales(query);
 }
-export async function _getInboundOrders(
-    query: SalesQueryParams
-): TableApiResponse<ISalesOrder> {
+export async function _getInboundOrders(query: SalesQueryParams) {
     //   query.type = "order";
     return await getSales(query);
 }
@@ -340,9 +336,7 @@ export async function getOrderAction(orderId, isProd = false) {
         progress,
     };
 }
-export async function getSalesEstimates(
-    query: SalesQueryParams
-): TableApiResponse<ISalesOrder> {
+export async function getSalesEstimates(query: SalesQueryParams) {
     query.type = "quote";
     return await getSales(query);
 }
@@ -378,7 +372,8 @@ export async function getSales(query: SalesQueryParams) {
     const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
     return {
         pageInfo,
-        data: _items as any,
+        pageCount: pageInfo.pageCount,
+        data: _items,
     };
 }
 export async function saveOrderAction({
@@ -424,29 +419,6 @@ export async function deleteOrderAction(id) {
         where: { id },
     });
 }
-
-export async function updateOrderPriorityActon({
-    priority,
-    orderId,
-}: UpdateOrderPriorityProps) {
-    const { id, meta } = (
-        await prisma.salesOrders.findMany({
-            where: {
-                orderId,
-            },
-        })
-    )[0] as any as ISalesOrder;
-    meta.priority = priority;
-    await prisma.salesOrders.update({
-        where: {
-            id,
-        },
-        data: {
-            meta: meta as any,
-        },
-    });
-}
-
 export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     const items = [];
     const _cloneData: ISalesOrder = (await prisma.salesOrders.findFirst({

@@ -6,7 +6,7 @@ import PageHeader from "@/components/_v1/page-header";
 import SalesPaymentTableShell from "@/components/_v1/shells/sales-payment-table-shell";
 import { getsalesPayments } from "@/app/(v1)/_actions/sales-payment/crud";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export default async function SalesAccountingPage(props) {
     const response = await getsalesPayments(queryParams(props.searchParams));

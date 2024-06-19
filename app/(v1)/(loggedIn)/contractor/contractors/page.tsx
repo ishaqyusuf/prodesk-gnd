@@ -8,7 +8,7 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getEmployees } from "@/app/(v1)/_actions/hrm/get-employess";
 import EmployeeModal from "@/components/_v1/modals/employee-modal";
 import ContractorsTableShell from "@/components/_v1/shells/contractors-table-shell";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Documents",

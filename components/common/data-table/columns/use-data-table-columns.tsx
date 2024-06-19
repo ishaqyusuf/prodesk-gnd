@@ -9,9 +9,16 @@ import { RowActionCell } from "@/components/_v1/data-table/data-table-row-action
 import { TableCol } from "../table-cells";
 
 type CellValueType<T> = ((item: T) => any) | keyof T;
+interface ColumnArgs {
+    noTitle?: boolean;
+}
 type CtxType<T> = {
     PrimaryColumn(title, value: CellValueType<T>): ColumnDef<T, unknown>;
-    Column(title, Column: ({ item }: { item: T }) => React.ReactElement);
+    Column(
+        title,
+        Column: ({ item }: { item: T }, args: ColumnArgs) => React.ReactElement,
+        args?: ColumnArgs
+    );
     ActionColumn(Column: ({ item }: { item: T }) => React.ReactElement);
     Primary({ children });
     Secondary({ children });
@@ -41,11 +48,18 @@ export default function useDataTableColumn<T>(
         addColumns(...__columns) {
             // _setColumns(__columns);
         },
-        Column(title, Column: ({ item }: { item: T }) => React.ReactElement) {
+        Column(
+            title,
+            Column: ({ item }: { item: T }) => React.ReactElement,
+            args?: ColumnArgs
+        ) {
             return {
                 accessorKey: title.toLowerCase(),
                 header: ({ column }) => (
-                    <DataTableColumnHeader column={column} title={title} />
+                    <DataTableColumnHeader
+                        column={column}
+                        title={args?.noTitle ? "" : title}
+                    />
                 ),
                 cell: ({ cell }) => <Column item={cell.row.original} />,
             };

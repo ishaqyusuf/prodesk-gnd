@@ -11,7 +11,7 @@ import { getBuildersAction } from "@/app/(v1)/_actions/community/builders";
 import { getHomeTemplates } from "@/app/(v1)/_actions/community/home-template";
 import HomeTemplatesTableShell from "@/components/_v1/shells/home-templates-table-shell";
 import ModelTemplateModal from "@/components/_v1/modals/model-template-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Builders",

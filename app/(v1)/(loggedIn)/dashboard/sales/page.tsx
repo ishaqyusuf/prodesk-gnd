@@ -1,5 +1,5 @@
 import { salesDashboardAction } from "@/app/(v1)/(loggedIn)/dashboard/sales/_actions/sales-dashboard";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import BarChartComponent from "@/components/_v1/charts/bar-chart";

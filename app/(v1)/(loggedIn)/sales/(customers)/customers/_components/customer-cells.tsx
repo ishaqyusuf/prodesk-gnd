@@ -11,7 +11,7 @@ import {
     EditRowAction,
     RowActionCell,
 } from "@/components/_v1/data-table/data-table-row-actions";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
 import { openLink } from "@/lib/open-link";

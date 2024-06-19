@@ -8,7 +8,7 @@ import SelectSalesPaymentCustomerModal from "@/components/_v1/modals/select-sale
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
 import { Metadata } from "next";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Sales Payment",

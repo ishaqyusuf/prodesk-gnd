@@ -1,5 +1,5 @@
 import { getHomeTemplate } from "@/app/(v1)/_actions/community/home-template";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import ModelForm from "@/components/_v1/forms/model-form/model-form";

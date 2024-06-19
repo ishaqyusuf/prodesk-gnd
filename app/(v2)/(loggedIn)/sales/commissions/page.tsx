@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import PageHeader from "@/components/_v1/page-header";
 import CommissionsTable from "./commissions-table";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Sales Commissions",
 };

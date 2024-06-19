@@ -8,7 +8,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { getCustomerServices } from "@/app/(v1)/_actions/customer-services/customer-services";
 import CustomerServiceTableShell from "@/components/_v1/shells/customer-service-table-shell";
 import CustomerServiceModal from "@/components/_v1/modals/customer-service-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Customer Services",

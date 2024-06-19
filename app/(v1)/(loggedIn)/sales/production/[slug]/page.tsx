@@ -17,7 +17,7 @@ import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { ISalesOrder } from "@/types/sales";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import TimelineSection from "@/app/(v2)/(loggedIn)/sales-v2/overview/components/timeline";
 
 export const metadata: Metadata = {

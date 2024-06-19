@@ -3,7 +3,7 @@ import { getSettingAction } from "@/app/(v1)/_actions/settings";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesSettings from "./SalesSettings";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata = {
     title: "Sales Settings",

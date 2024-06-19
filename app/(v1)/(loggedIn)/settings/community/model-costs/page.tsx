@@ -8,7 +8,7 @@ import { getHomeTemplates } from "@/app/(v1)/_actions/community/home-template";
 import ModelCostTableShell from "@/components/_v1/shells/model-costs-table-shell";
 import ModelCostModal from "@/components/_v1/modals/model-cost-modal";
 import ModelInstallCostModal from "@/app/(v1)/(loggedIn)/settings/community/community-templates/install-cost-modal/model-install-cost-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Model Costs",

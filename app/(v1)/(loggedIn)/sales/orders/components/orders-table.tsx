@@ -199,9 +199,9 @@ export default function OrdersTableShell({ promise, searchParams }) {
         <>
             <DataTable2
                 searchParams={searchParams}
-                columns={_table.columns}
-                // pageInfo={pageInfo}
-                pageCount={pageCount}
+                columns={columns}
+                pageInfo={pageInfo}
+                // pageCount={pageCount}
                 mobile
                 data={data as any}
                 BatchAction={SalesBatchAction}

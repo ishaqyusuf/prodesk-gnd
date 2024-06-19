@@ -1,7 +1,7 @@
 "use client";
 
 import { IAddressBook, ISalesOrder } from "@/types/sales";
-import OrderFlag from "../../../../../../../components/_v1/sales/order-flag";
+
 import Link from "next/link";
 import { Fragment, useEffect, useState, useTransition } from "react";
 import { formatDate } from "@/lib/use-day";
@@ -14,10 +14,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../../../../../../../components/ui/dropdown-menu";
-import { priorities } from "@/lib/sales/order-priority";
 import { FlagIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { updateOrderPriorityActon } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
+
 import { toast } from "sonner";
 import { Icons } from "../../../../../../../components/_v1/icons";
 
@@ -44,10 +43,10 @@ export const OrderPriorityFlagCell = (
     const Update = async (priority) => {
         startTransition(async () => {
             try {
-                await updateOrderPriorityActon({
-                    orderId: order.orderId,
-                    priority,
-                });
+                // await updateOrderPriorityActon({
+                //     orderId: order.orderId,
+                //     priority,
+                // });
                 toast.success("Priority updated!");
                 router.refresh();
             } catch (error) {
@@ -58,7 +57,8 @@ export const OrderPriorityFlagCell = (
     return (
         <div className="w-4">
             {!editable ? (
-                <OrderFlag order={order} />
+                // <OrderFlag order={order} />
+                <></>
             ) : (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -69,12 +69,12 @@ export const OrderPriorityFlagCell = (
                             />
                         ) : (
                             <button className="focus:outline-none">
-                                <OrderFlag order={order} />
+                                {/* <OrderFlag order={order} /> */}
                             </button>
                         )}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-[185px]">
-                        {priorities.map((p, _) => (
+                        {/* {priorities.map((p, _) => (
                             <DropdownMenuItem
                                 key={_}
                                 onClick={() => Update(p.title)}
@@ -84,7 +84,7 @@ export const OrderPriorityFlagCell = (
                                 />
                                 {p.title}
                             </DropdownMenuItem>
-                        ))}
+                        ))} */}
                     </DropdownMenuContent>
                 </DropdownMenu>
             )}

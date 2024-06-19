@@ -1,5 +1,5 @@
 import { getCustomerService } from "@/app/(v1)/_actions/customer-services/crud";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";

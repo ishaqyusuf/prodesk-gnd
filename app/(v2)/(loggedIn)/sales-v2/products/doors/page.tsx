@@ -9,7 +9,7 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { getShelfItems } from "../_actions/get-shelf-items";
 import DykeDoorsTable from "./_components/dyke-doors-table";
 import { _getDykeDoors } from "../_actions/dyke-doors";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Shelf Items | GND",
 };

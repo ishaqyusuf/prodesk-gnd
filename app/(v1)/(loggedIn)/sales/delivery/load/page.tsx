@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import LoadDelivery from "@/components/_v1/sales/load-delivery/load-delivery";
 import InspectBackOrderModal from "@/components/_v1/modals/sales/inspect-back-order-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Truck Loading",
 };

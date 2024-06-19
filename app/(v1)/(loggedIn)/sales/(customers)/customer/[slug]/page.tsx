@@ -1,4 +1,4 @@
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import CustomerMenu from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/_components/customer-menu";

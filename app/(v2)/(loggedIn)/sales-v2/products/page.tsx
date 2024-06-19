@@ -6,7 +6,7 @@ import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import ProductsTable from "./_components/products-table";
 import { Metadata } from "next";
 import { Shell } from "@/components/shell";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Door Components | GND",

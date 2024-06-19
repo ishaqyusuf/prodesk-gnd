@@ -74,7 +74,6 @@ function ProductionStatus({ item }: Props) {
     );
     const totalDoors = item._meta.totalDoors;
     // console.log({ totalDoors, submitted });
-
     return (
         <>
             <TableCol.Status

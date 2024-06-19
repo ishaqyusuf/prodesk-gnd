@@ -5,7 +5,7 @@ import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import UploadDocumentModal from "@/components/_v2/contractor/modals/upload-document";
 import ImgModal from "@/components/_v1/modals/img-modal";
 import ContractorDocuments from "../documents";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export default async function ContractorOverviewPage({ searchParams, params }) {
     const userId = +params.contractorId;

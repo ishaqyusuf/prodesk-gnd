@@ -11,7 +11,7 @@ import { getProjectHomesAction } from "@/app/(v1)/_actions/community/home";
 import HomesTableShell from "@/components/_v1/shells/homes-table-shell";
 import HomeModal from "@/components/_v1/modals/home-modal";
 import { openModal } from "@/lib/modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Projects",

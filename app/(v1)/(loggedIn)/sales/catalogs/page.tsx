@@ -7,7 +7,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { getLegacyProducts } from "@/app/(v1)/_actions/sales-products/crud";
 import ProductsTableShell from "@/components/_v1/shells/products-table-shell";
 import ProductCatalogModal from "@/components/_v1/modals/product-catalog-modal";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 interface Props {}
 export default async function SalesCatalogsPage({ searchParams }) {

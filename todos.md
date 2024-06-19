@@ -15,8 +15,10 @@ TODO:
     - .
     - NEW REQUEST: Order delivery date, set date and manage delivery date.
     - Production status on orders page.
+    - roles form upgrade
     <!-- - NEW REQUEST: Custom sales report: print statement button in customer overview either passed due, or paid, by date. -->
     - Sales settings; profile select
+    - Production auto-complete
     - Assign to production (NaN 24-0603-1668)
     <!-- - Job addon on no unit. -->
     - Unable to edit submmited job

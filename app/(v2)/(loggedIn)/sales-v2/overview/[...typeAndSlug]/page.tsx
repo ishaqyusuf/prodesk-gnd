@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import { getSalesOverview } from "../_actions/get-sales-overview";
 import OverviewShell from "../components/overview-shell";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
@@ -7,7 +6,7 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import DeletePaymentPrompt from "@/components/_v1/modals/delete-payment-prompt";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { ISalesType } from "@/types/sales";
 
 export async function generateMetadata({ params, searchParams }) {

@@ -10,7 +10,7 @@ import { getSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/
 import { Metadata } from "next";
 import { StartCard } from "@/components/_v1/stat-card";
 import { prisma } from "@/db";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Order Delivery",
 };

@@ -10,7 +10,7 @@ import HomesTableShell from "@/components/_v1/shells/homes-table-shell";
 import HomeModal from "@/components/_v1/modals/home-modal";
 import ActivateProductionModal from "@/components/_v1/modals/activate-production-modal";
 import { _addLotBlocks } from "@/app/(v1)/_actions/community/units/_add-lotblocks";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "All Units",

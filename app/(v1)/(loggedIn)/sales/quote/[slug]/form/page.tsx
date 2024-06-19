@@ -12,7 +12,7 @@ import SalesForm from "@/app/(v1)/(loggedIn)/sales/order/[slug]/form/components/
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Edit Invoice",

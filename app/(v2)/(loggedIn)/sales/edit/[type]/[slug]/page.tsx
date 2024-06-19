@@ -8,7 +8,7 @@ import {
 } from "@/components/_v1/breadcrumbs/links";
 import EditSalesForm from "../../components/form";
 import { Metadata } from "next";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Edit Sales",
 };

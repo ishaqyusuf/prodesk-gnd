@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { ProductionsCrumb } from "@/components/_v1/breadcrumbs/links";
 import { Metadata } from "next";
 import PageHeader from "@/components/_v1/page-header";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import ProductionPageTabs from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/production-page-tabs";
 import { redirect } from "next/navigation";
 import { isProduction } from "@/lib/is-prod";

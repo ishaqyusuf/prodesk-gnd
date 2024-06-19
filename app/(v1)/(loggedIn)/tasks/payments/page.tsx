@@ -12,7 +12,7 @@ import {
     getMyPayments,
 } from "@/app/(v1)/_actions/hrm-jobs/get-payments";
 import JobPaymentTableShell from "@/components/_v1/shells/job-payment-table-shell";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Employees",

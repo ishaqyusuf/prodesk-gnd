@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 // import PasswordResetRequestEmail from "@/components/_v1/emails/password-reset-request-email";
 import { _email } from "./_email";
-import { FROM_EMAILS } from "@/enums/email";
 import va from "@/lib/va";
 import { Prisma } from "@prisma/client";
 import { ICan } from "@/types/auth";

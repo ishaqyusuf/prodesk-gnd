@@ -9,7 +9,7 @@ import CommunityProductionsTableShell from "@/components/_v1/shells/community-pr
 import { getProductions } from "@/app/(v1)/_actions/community-production/get-productions";
 import { _taskNames } from "@/app/(v1)/_actions/community/_task-names";
 import { prisma } from "@/db";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Unit Productions",

@@ -9,7 +9,7 @@ import { Metadata } from "next";
 import PickupTableShell from "@/app/(v1)/(loggedIn)/sales/pickup/pickup-table-shell";
 import { _getSalesPickup } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
 import UpgradeBtn from "./components/upgrade-btn";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 export const metadata: Metadata = {
     title: "Order Pickup",
 };

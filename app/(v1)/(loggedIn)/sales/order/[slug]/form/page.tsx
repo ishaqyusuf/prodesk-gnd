@@ -14,7 +14,7 @@ import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { Metadata } from "next";
 import { _getSalesFormAction } from "../../../_actions/get-sales-form";
 import { redirect } from "next/navigation";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Edit Invoice",

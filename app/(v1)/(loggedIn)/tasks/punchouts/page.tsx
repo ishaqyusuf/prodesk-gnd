@@ -11,7 +11,7 @@ import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import EditJobModal from "@/components/_v1/modals/edit-job";
 import TaskAction from "@/components/_v1/tasks/task-action";
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
-import AuthGuard from "@/components/_v1/auth-guard";
+import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
     title: "Installations",

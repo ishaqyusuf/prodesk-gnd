@@ -5,7 +5,9 @@ import { openModal } from "@/lib/modal";
 import { ModalName } from "@/store/slicers";
 import LinkableNode from "./link-node";
 import { Icons } from "./icons";
-import AuthGuard, { AuthPermissions } from "./auth-guard";
+import AuthGuard, {
+    AuthPermissions,
+} from "../../app/(v2)/(loggedIn)/_components/auth-guard";
 
 interface Props {
     title;
