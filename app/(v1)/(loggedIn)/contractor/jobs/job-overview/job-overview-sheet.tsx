@@ -32,6 +32,7 @@ import { Button } from "../../../../../../components/ui/button";
 import { openModal } from "@/lib/modal";
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
+import SubmitJobModal from "@/app/(v2)/(loggedIn)/contractors/_modals/submit-job-modal";
 
 interface Props {
     admin?: boolean;
@@ -52,12 +53,7 @@ export default function JobOverviewSheet({ admin, job }: Props) {
                         <span>{job.subtitle}</span>
                         <Button
                             onClick={() => {
-                                // modal.openModal();
-                                // <SubmitJob
-                                // openModal("submitJob", {
-                                //     data: data,
-                                //     defaultTab: "tasks",
-                                // });
+                                modal.openModal(<SubmitJobModal job={job} />);
                             }}
                             variant={"default"}
                             className="px-2 h-6"
