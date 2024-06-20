@@ -82,6 +82,37 @@ export default function useSubmitJob(form) {
         });
     }
     const [cost, setCosts] = useState([]);
+
+    function _initialize(
+        _job: IJobs,
+        // form: UseFormReturn<SubmitJobForm>,
+        { isAdmin, action }
+    ) {
+        let job: IJobs = {
+            ..._job,
+        } as any;
+        const tabHistory = [];
+
+        let tab: SubmitJobTabs = "general";
+        if ((isAdmin && !_job?.id) || action == "change-worker") tab = "user";
+        else {
+            if (!_job?.id) tab = "tasks";
+        }
+        if (_job.id) {
+            if (tab != "user") tabHistory.unshift({ title: "user" });
+            if (tab == "general") tabHistory.unshift({ title: "tasks" });
+        }
+
+        form.reset({
+            tabHistory,
+            // costList: [],
+            ..._job,
+            job: job,
+            tab,
+            // initialized: true,
+        });
+    }
+
     return {
         isLoading,
 
@@ -100,9 +131,9 @@ export default function useSubmitJob(form) {
         setValue: form.setValue,
         homes,
         type,
-        async initialize(_data: SubmitJobModalDataProps, _form: any = null) {
-            initialize(_data, _form || form, isAdmin);
-            const _costs = await getJobCostList(_data?.data?.type);
+        async initialize(_data: IJobs, action) {
+            _initialize(_data, { isAdmin, action });
+            const _costs = await getJobCostList(_data?.type);
             // console.log(_data);
             setCosts(_costs as any);
         },
@@ -136,27 +167,4 @@ export default function useSubmitJob(form) {
         },
         homeChanged() {},
     };
-}
-function initialize(
-    data: SubmitJobModalDataProps,
-    form: UseFormReturn<SubmitJobForm>,
-    isAdmin
-) {
-    let job: IJobs = {
-        ...data.data,
-    } as any;
-    let tab: SubmitJobTabs = "general";
-    if ((isAdmin && !data?.data?.id) || data.action == "change-worker")
-        tab = "user";
-    else {
-        if (!data?.data?.id) tab = "tasks";
-    }
-    form.reset({
-        tabHistory: [],
-        // costList: [],
-        ...data,
-        job: job,
-        tab,
-        // initialized: true,
-    });
 }

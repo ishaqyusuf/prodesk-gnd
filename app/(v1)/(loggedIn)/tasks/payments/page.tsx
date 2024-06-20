@@ -6,7 +6,6 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
 import HrmLayout from "@/components/_v1/tab-layouts/hrm-layout";
-import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import {
     getJobPayments,
     getMyPayments,
@@ -33,7 +32,6 @@ export default async function MyJobPaymentsPage({ searchParams }) {
                     searchParams={searchParams}
                     {...response}
                 />
-                <JobOverviewSheet admin={true} />
             </div>
         </AuthGuard>
     );

@@ -17,11 +17,6 @@ import { DataTable2 } from "../data-table/data-table-2";
 import { BuilderFilter } from "../filters/builder-filter";
 import { openModal } from "@/lib/modal";
 import { IJobPayment, IUser } from "@/types/hrm";
-import { CheckCheck, Key, X } from "lucide-react";
-import {
-    approveJob,
-    rejectJob,
-} from "@/app/(v1)/_actions/hrm-jobs/job-actions";
 import Money from "../money";
 import {
     DeleteRowAction,
@@ -29,7 +24,7 @@ import {
 } from "../data-table/data-table-row-actions";
 import { _deleteJobPayment } from "@/app/(v1)/_actions/hrm-jobs/payment.crud";
 
-export default function JobPaymentTableShell<T>({
+export default function JobPaymentTableShell({
     data,
     pageInfo,
     searchParams,

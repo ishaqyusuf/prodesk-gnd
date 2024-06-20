@@ -13,7 +13,11 @@ export function SubmitJobModalTitle({ data }: SubmitJobModalProps) {
     return (
         <div className="flex space-x-2 items-center">
             {ctx.tabHistory.fields.length > 0 && (
-                <Button variant={"ghost"} className="h-8 w-8" onClick={goBack}>
+                <Button
+                    variant={"ghost"}
+                    className="h-8 w-8 p-0"
+                    onClick={goBack}
+                >
                     <Icons.arrowLeft className="h-4 w-4" />
                 </Button>
             )}

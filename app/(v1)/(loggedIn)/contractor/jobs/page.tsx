@@ -6,7 +6,6 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
 import { getJobs } from "@/app/(v1)/_actions/hrm-jobs/get-jobs";
-import JobOverviewSheet from "@/components/_v1/sheets/job-overview-sheet";
 import TabbedLayout from "@/components/_v1/tab-layouts/tabbed-layout";
 import SubmitJobBtn from "@/app/(v2)/(loggedIn)/contractors/_components/submit-job-btn";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
@@ -32,7 +31,6 @@ export default async function ContractorJobsPage({ searchParams }) {
                     {...response}
                 />
             </AuthGuard>
-            <JobOverviewSheet />
         </TabbedLayout>
     );
 }

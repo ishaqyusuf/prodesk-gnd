@@ -40,6 +40,7 @@ import JobType from "../../../../../components/_v1/hrm/job-type";
 import { Button } from "../../../../../components/ui/button";
 import { useModal } from "@/components/common/modal/provider";
 import SubmitJobModal from "@/app/(v2)/(loggedIn)/contractors/_modals/submit-job-modal";
+import JobOverviewSheet from "./job-overview/job-overview-sheet";
 
 export default function JobTableShell<T>({
     data,
@@ -48,8 +49,8 @@ export default function JobTableShell<T>({
     payment,
     adminMode,
 }: TableShellProps<IJobs> & {
-    payment?: Boolean;
-    adminMode?: Boolean;
+    payment?: boolean;
+    adminMode?: boolean;
 }) {
     const [isPending, startTransition] = useTransition();
 
@@ -79,7 +80,14 @@ export default function JobTableShell<T>({
                 cell: ({ row }) => (
                     <Cell
                         className="cursor-pointer"
-                        onClick={() => openModal("jobOverview", row.original)}
+                        onClick={() => {
+                            modal.openSheet(
+                                <JobOverviewSheet
+                                    job={row.original}
+                                    admin={payment}
+                                />
+                            );
+                        }}
                     >
                         <PrimaryCellContent>
                             {row.original.title || "-"}{" "}
@@ -204,10 +212,9 @@ export default function JobTableShell<T>({
                                         disabled={row.original.paymentId}
                                         onClick={() => {
                                             modal.openModal(
-                                                <SubmitJobModal />,
-                                                {
-                                                    data: row.original,
-                                                } as any
+                                                <SubmitJobModal
+                                                    job={row.original}
+                                                />
                                             );
                                         }}
                                         Icon={Icons.edit}

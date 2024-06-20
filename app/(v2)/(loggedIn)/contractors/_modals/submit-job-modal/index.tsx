@@ -21,8 +21,13 @@ import {
 import useSubmitJob, { JobSubmitContext } from "./_/use-submit-job";
 import { SubmitJobModalSubtitle, SubmitJobModalTitle } from "./_/heading";
 import { Form } from "@/components/ui/form";
+import { IJobs } from "@/types/hrm";
 
-export default function SubmitJobModal({ data = {} }) {
+interface Props {
+    job?: IJobs;
+    action?: "change-worker" | "";
+}
+export default function SubmitJobModal({ job, action }: Props) {
     const modal = useModal();
     const defaultValues = {
         // initialized: false,
@@ -40,7 +45,7 @@ export default function SubmitJobModal({ data = {} }) {
         projects,
     };
     useEffect(() => {
-        ctx.initialize(modal?.data);
+        ctx.initialize(job as any, action);
     }, []);
     return (
         // <Dialog open={modal?.opened} onOpenChange={modal?.setShowModal}>

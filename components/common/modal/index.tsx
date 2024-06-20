@@ -112,8 +112,8 @@ function Content({ children, size, ...props }: ContentProps) {
 }
 
 interface HeaderProps {
-    title?: string;
-    subtitle?: string;
+    title?: string | any;
+    subtitle?: string | any;
     onBack?;
     icon?: keyof typeof Icons;
 }

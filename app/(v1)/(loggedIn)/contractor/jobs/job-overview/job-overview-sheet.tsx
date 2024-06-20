@@ -6,15 +6,15 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
-import BaseSheet from "./base-sheet";
+import BaseSheet from "../../../../../../components/_v1/sheets/base-sheet";
 import { IJobs } from "@/types/hrm";
-import { Info } from "../info";
+import { Info } from "../../../../../../components/_v1/info";
 import {
     DateCellContent,
     PrimaryCellContent,
     SecondaryCellContent,
-} from "../columns/base-columns";
-import Money from "../money";
+} from "../../../../../../components/_v1/columns/base-columns";
+import Money from "../../../../../../components/_v1/money";
 import {
     Table,
     TableBody,
@@ -22,21 +22,59 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "../../ui/table";
+} from "../../../../../../components/ui/table";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Input } from "../../ui/input";
-import { ScrollArea } from "../../ui/scroll-area";
+import { Input } from "../../../../../../components/ui/input";
+import { ScrollArea } from "../../../../../../components/ui/scroll-area";
 import { getSettingAction } from "@/app/(v1)/_actions/settings";
 import { InstallCostLine, InstallCostSettings } from "@/types/settings";
-import { Button } from "../../ui/button";
+import { Button } from "../../../../../../components/ui/button";
 import { openModal } from "@/lib/modal";
+import Modal from "@/components/common/modal";
+import { useModal } from "@/components/common/modal/provider";
 
-export default function JobOverviewSheet({ admin = false }) {
+interface Props {
+    admin?: boolean;
+    job: IJobs;
+}
+export default function JobOverviewSheet({ admin, job }: Props) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
 
     async function init(data) {}
-
+    const modal = useModal();
+    return (
+        <Modal.Content>
+            <Modal.Header
+                title={job.title}
+                subtitle={
+                    <div className="flex justify-between">
+                        <span>{job.subtitle}</span>
+                        <Button
+                            onClick={() => {
+                                // modal.openModal();
+                                // <SubmitJob
+                                // openModal("submitJob", {
+                                //     data: data,
+                                //     defaultTab: "tasks",
+                                // });
+                            }}
+                            variant={"default"}
+                            className="px-2 h-6"
+                            size={"sm"}
+                        >
+                            <span>Edit</span>
+                        </Button>
+                    </div>
+                }
+            ></Modal.Header>
+            <ScrollArea className="h-screen ">
+                <div className="grid grid-cols-2 items-start gap-4 text-sm mt-6 mb-28">
+                    <Content data={job as any} />
+                </div>
+            </ScrollArea>
+        </Modal.Content>
+    );
     return (
         <BaseSheet<IJobs>
             className="w-full sm:max-w-[550px]"
