@@ -16,6 +16,8 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - Multi component step ability to traverse back to final stage when rechecked changed. (eg: doors)
+    - Job edit not showing unit and task list
     - NEW REQUEST: Order delivery date, set date and manage delivery date.
     - Production status on orders page.
     - roles form upgrade

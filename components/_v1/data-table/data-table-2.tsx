@@ -326,7 +326,8 @@ export function DataTable2<TData, TValue>({
                                                     <TableCell
                                                         className={cn(
                                                             mobile &&
-                                                                "max-sm:p-0"
+                                                                "max-sm:p-0",
+                                                            "p-2 px-4"
                                                         )}
                                                         key={cell.id}
                                                     >

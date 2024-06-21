@@ -1,21 +1,22 @@
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
-import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import DeliveryTableShell from "@/app/(v1)/(loggedIn)/sales/delivery/delivery-table-shell";
-import { getSalesDelivery } from "@/app/(v1)/(loggedIn)/sales/_actions/delivery/sales-delivery";
+import { getSalesDelivery } from "./sales-delivery";
 import { Metadata } from "next";
 import { StartCard } from "@/components/_v1/stat-card";
 import { prisma } from "@/db";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
     title: "Order Delivery",
 };
 interface Props {}
 export default async function SalesDeliveryPage({ searchParams }) {
+    redirect("/sales-v2/dispatch/delivery");
     const response = await getSalesDelivery({
         _deliveryStatus: "queued",
         ...queryParams(searchParams),

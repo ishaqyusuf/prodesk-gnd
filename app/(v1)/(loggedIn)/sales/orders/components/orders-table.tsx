@@ -159,7 +159,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                           : []),
                       {
                           accessorKey: "delivery",
-                          header: ColumnHeader("Delivery"),
+                          header: ColumnHeader("Dispatch"),
                           cell: ({ row }) => (
                               <DeliveryCell item={row.original as any} />
                           ),

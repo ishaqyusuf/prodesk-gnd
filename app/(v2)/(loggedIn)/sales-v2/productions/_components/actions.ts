@@ -3,18 +3,25 @@
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { ISalesType } from "@/types/sales";
+import {
+    DeliveryOption,
+    IAddressBook,
+    IAddressMeta,
+    ISalesType,
+} from "@/types/sales";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
 import { dateEquals } from "@/app/(v1)/_actions/action-utils";
 import dayjs from "dayjs";
 import { formatDate } from "@/lib/use-day";
+import { ICustomer } from "@/types/customers";
 interface Props {
     production?: boolean;
     query?: {
         _q?: string;
         dueToday?;
+        deliveryOption?: DeliveryOption;
     };
 }
 export async function _getProductionList({ query, production = false }: Props) {
@@ -25,7 +32,6 @@ export async function _getProductionList({ query, production = false }: Props) {
         : undefined;
 
     // console.log(dueDate);
-
     // return prisma.$transaction(async (tx) => {
     const itemsFilter: Prisma.SalesOrderItemsListRelationFilter = {
         some: {
@@ -185,6 +191,24 @@ export async function _getProductionList({ query, production = false }: Props) {
                     name: true,
                 },
             },
+            billingAddress: {
+                select: {
+                    id: true,
+                    name: true,
+                    address1: true,
+                    meta: true,
+                },
+            },
+            shippingAddress: {
+                select: {
+                    id: true,
+                    name: true,
+                    phoneNo: true,
+
+                    meta: true,
+                    address1: true,
+                },
+            },
             salesRep: {
                 select: {
                     id: true,
@@ -208,6 +232,16 @@ export async function _getProductionList({ query, production = false }: Props) {
                             ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
                             : order.items.map((i) => i.qty)
                     ),
+                },
+                customer: {
+                    ...order.customer,
+                    meta: {
+                        // ...(order.meta)
+                    },
+                },
+                shippingAddress: {
+                    ...order.shippingAddress,
+                    meta: order.shippingAddress?.meta as any as IAddressMeta,
                 },
             };
         }),

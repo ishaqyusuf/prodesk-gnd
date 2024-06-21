@@ -31,8 +31,31 @@ interface Props<T> {
     snIdFn?(item: T);
     snDate?: string;
     snTitle?: string;
+    checkable?: boolean;
     filterCells?: string[];
 }
+export function useDataTableColumn3<T>(data: T) {
+    const ctx = {
+        _props: {},
+        cells: null,
+        props(c: Props<T>) {
+            ctx._props = c;
+            return ctx;
+        },
+        table() {
+            // return useDataTableColumn2(data,ctx._props,ctx.cells);
+        },
+    };
+    return ctx;
+}
+export function useDataTableColumn2<T>(
+    data: T[],
+    props: Props<T>,
+    cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[]
+) {
+    return useDataTableColumn(data, cells, props?.checkable, props);
+}
+
 export default function useDataTableColumn<T>(
     data: T[],
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[],

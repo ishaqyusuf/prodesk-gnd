@@ -1,11 +1,9 @@
 import { useTransition } from "react";
 import { DykeForm, SaveMode } from "../../type";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
-
 import { _saveDykeError } from "../_action/error/save-error";
 import initDykeSaving from "../../_utils/init-dyke-saving";
 import salesFormUtils from "../../../sales/edit/sales-form-utils";
@@ -26,9 +24,10 @@ export default function useDykeFormSaver(form) {
                 data,
             };
             try {
-                // toast.success(`$${estimate.grandTotal}`);
+                const estimate = calculateFooterEstimate(data, null);
+                console.log(estimate.grandTotal);
+
                 const e = initDykeSaving(data);
-                // console.log([estimate.grandTotal, data.order.grandTotal]);
 
                 if (e.order.type == "order") {
                     e.order.paymentDueDate =
@@ -72,3 +71,4 @@ export default function useDykeFormSaver(form) {
         save,
     };
 }
+

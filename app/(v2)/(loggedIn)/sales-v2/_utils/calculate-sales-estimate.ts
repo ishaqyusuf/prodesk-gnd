@@ -1,8 +1,14 @@
 import { sum as _sum, sum } from "@/lib/utils";
 import { DykeForm } from "../type";
 import { formatMoney } from "@/lib/use-number";
+import { calculateFooterEstimate } from "../form/footer-estimate";
 
 export function calculateSalesEstimate(data: DykeForm) {
+    const estimate = calculateFooterEstimate(data, null);
+    data.order.grandTotal = estimate.grandTotal;
+    data.order.amountDue = estimate.grandTotal - (data.paidAmount || 0);
+    data.order.meta.ccc = estimate.ccc;
+    return data;
     data.order.grandTotal = data.order.subTotal = data.order.tax = 0;
     data.order.taxPercentage = +(data.order.taxPercentage || 0);
 

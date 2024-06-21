@@ -18,6 +18,7 @@ import Money from "@/components/_v1/money";
 import { formatMoney } from "@/lib/use-number";
 import "./style.css";
 import { TableCol } from "@/components/common/data-table/table-cells";
+import { calculateFooterEstimate } from "../footer-estimate";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -59,64 +60,19 @@ export default function DykeSalesFooterSection({}) {
         "order.subTotal",
     ]);
     useEffect(() => {
-        let footr = form.getValues("footer.footerPricesJson");
-        footr = JSON.parse(footerPrices);
-        console.log(footr);
-        const items = form.getValues("itemArray");
-        let subTotal = 0;
-        let tax = 0;
-        let taxxable = 0;
-        function calculate(uid) {
-            let f = footr[uid];
-            if (!f) return;
-            if (!f.price) f.price = 0;
-            console.log(f);
-
-            subTotal += f.price;
-            if (orderTax && (f?.tax || f?.doorType != "Services")) {
-                const iTax = ((taxPercentage || 0) / 100) * f.price;
-                tax += iTax; //f?.price || 0;
-                taxxable += f.price;
-                // console.log(tax)
-            }
-        }
-        items.map((item) => {
-            if (item.multiComponent)
-                Object.values(item.multiComponent.components)
-                    .filter(Boolean)
-                    .filter((c) => c.checked)
-                    .map((v) => {
-                        // console.log(v.uid);
-                        calculate(v.uid);
-                    });
-
-            // if(item.item.shelfItemArray)
-            item.item.shelfItemArray?.map((shelfItem) => {
-                calculate(shelfItem.uid);
-            });
+        const estimate = calculateFooterEstimate(form.getValues(), {
+            cccPercentage,
+            footerPrices,
+            laborCost,
+            paymentOption,
+            discount,
         });
-        tax = formatMoney(tax);
 
-        let total = formatMoney(sum([subTotal, laborCost]));
-        let ccc = 0;
-        const cccP = Number(cccPercentage || 0);
-        // console.log(cccP);
+        form.setValue("order.meta.ccc", estimate.ccc);
+        form.setValue("order.tax", formatMoney(estimate.tax));
+        form.setValue("order.subTotal", formatMoney(estimate.subTotal));
 
-        if (paymentOption == "Credit Card") {
-            // console.log(cccP);
-
-            ccc = formatMoney((cccP / 100) * (total + tax));
-            // console.log(ccc, [total + tax]);
-        }
-        console.log(ccc);
-
-        form.setValue("order.meta.ccc", ccc);
-        form.setValue("order.tax", formatMoney(tax));
-        form.setValue("order.subTotal", formatMoney(subTotal));
-        form.setValue(
-            "order.grandTotal",
-            formatMoney(tax + ccc + total - (discount || 0))
-        );
+        form.setValue("order.grandTotal", estimate.grandTotal);
     }, [footerPrices, paymentOption, laborCost, discount, orderTax]);
     const ctxValue = {
         // footerPrices,

@@ -26,9 +26,12 @@ export default function SalesTabLayout({
             can?.viewOrders && { title: "Quotes", path: "/sales/quotes" },
             can?.viewDelivery && {
                 title: "Delivery",
-                path: "/sales/delivery?_deliveryStatus=queued",
+                path: "/sales-v2/dispatch/delivery",
             },
-            can?.viewDelivery && { title: "Pickup", path: "/sales/pickup" },
+            can?.viewDelivery && {
+                title: "Pickup",
+                path: "/sales-v2/dispatch/pickup",
+            },
         ].filter(Boolean)
     );
     return <TabbedLayout tabs={tabs as any}>{children}</TabbedLayout>;
