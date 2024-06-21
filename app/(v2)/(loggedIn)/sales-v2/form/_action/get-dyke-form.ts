@@ -348,6 +348,16 @@ export async function getDykeFormAction(type, slug, query?) {
 
                             return mid;
                         }
+                        const price =
+                            item?.housePackageTool?.totalPrice ||
+                            item.total ||
+                            0;
+                        console.log({
+                            price,
+                            itemPrice: item.price,
+                            hpPrice:
+                                item.housePackageTool.doors?.[0]?.lineTotal,
+                        });
                         const c = (multiComponent.components[
                             safeFormText(component.title)
                         ] = {
@@ -362,24 +372,21 @@ export async function getDykeFormAction(type, slug, query?) {
                             // swing: item.swing as any,
                             doorQty: item.qty,
                             unitPrice: item.rate,
-                            totalPrice: item.total,
+                            totalPrice: price,
                             toolId: isMoulding
                                 ? getMouldingId()
                                 : item.housePackageTool.dykeDoorId,
                             _doorForm: item.housePackageTool._doorForm || {},
                             hptId: item.housePackageTool.id as any,
-                            doorTotalPrice: item?.housePackageTool
-                                ?.totalPrice as any,
+                            doorTotalPrice: price,
                         });
+                        // if(!c.totalPrice)
                         footerPrices[uid] = {
                             price: c.totalPrice || 0,
                             tax: c.tax,
                             doorType: item.meta.doorType,
                         };
-                        sectionPrice +=
-                            item?.housePackageTool?.totalPrice ||
-                            item.total ||
-                            0;
+                        sectionPrice += price;
                     }
                 });
                 // console.log(Object.keys(multiComponent.components));
