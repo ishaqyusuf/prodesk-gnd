@@ -432,19 +432,20 @@ export async function getDykeFormAction(type, slug, query?) {
                 deletedAt: new Date(),
             },
         });
+    const footer = {
+        footerPrices: JSON.stringify(footerPrices),
+        footerPricesJson: footerPrices,
+    };
     return {
         salesRep: salesRep,
         customer,
         shippingAddress,
         billingAddress,
         order: orderData,
-        _rawData: order,
+        _rawData: { ...order, footer },
         itemArray,
         data: ctx,
         paidAmount,
-        footer: {
-            footerPrices: JSON.stringify(footerPrices),
-            footerPricesJson: footerPrices,
-        },
+        footer,
     };
 }

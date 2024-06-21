@@ -25,17 +25,20 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
     footr = JSON.parse(footerPrices);
     const orderTax = data.order.tax;
     const taxPercentage = data.order.taxPercentage;
-
     console.log(footr);
+
+    // console.log(footr);
     const items = data.itemArray;
     let subTotal = 0;
     let tax = 0;
     let taxxable = 0;
     function calculate(uid) {
         let f = footr[uid];
+        console.log("RAW:", data._rawData.footer.footerPricesJson[uid]);
+        console.log(uid, f);
         if (!f) return;
         if (!f.price) f.price = 0;
-        console.log(f);
+        // console.log(f);
 
         subTotal += f.price;
         if (orderTax && (f?.tax || f?.doorType != "Services")) {

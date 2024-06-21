@@ -4,10 +4,14 @@ import { formatMoney } from "@/lib/use-number";
 import { calculateFooterEstimate } from "../form/footer-estimate";
 
 export function calculateSalesEstimate(data: DykeForm) {
-    const estimate = calculateFooterEstimate(data, null);
-    data.order.grandTotal = estimate.grandTotal;
-    data.order.amountDue = estimate.grandTotal - (data.paidAmount || 0);
-    data.order.meta.ccc = estimate.ccc;
+    // const estimate = calculateFooterEstimate(data, null);
+    // data.order.grandTotal = estimate.grandTotal;
+    // console.log(estimate.grandTotal);
+    data.order.amountDue =
+        data.order.type == "order"
+            ? data.order.grandTotal - (data.paidAmount || 0)
+            : data.order.grandTotal;
+    // data.order.meta.ccc = estimate.ccc;
     return data;
     data.order.grandTotal = data.order.subTotal = data.order.tax = 0;
     data.order.taxPercentage = +(data.order.taxPercentage || 0);

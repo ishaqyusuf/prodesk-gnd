@@ -32,12 +32,20 @@ export default function CostBreakdown() {
             <Money value={order?.meta?.ccc || 0} />
         ),
         keyValue(`Total`, <Money value={order?.grandTotal} />),
-        keyValue(
-            `Paid`,
-            <Money value={(order.grandTotal || 0) - (order.amountDue || 0)} />
-        ),
-        keyValue(`Pending`, <Money value={order.amountDue || 0} />),
     ];
+    if (order.type == "order") {
+        data.push(
+            ...[
+                keyValue(
+                    `Paid`,
+                    <Money
+                        value={(order.grandTotal || 0) - (order.amountDue || 0)}
+                    />
+                ),
+                keyValue(`Pending`, <Money value={order.amountDue || 0} />),
+            ]
+        );
+    }
     const [isPending, startTransaction] = useTransition();
     const router = useRouter();
     async function fixPayment() {
@@ -71,7 +79,7 @@ export default function CostBreakdown() {
                             ))}
                         </TableBody>
                     </Table>
-                    {offsetPayment != 0 && (
+                    {offsetPayment != 0 && order.type == "order" && (
                         <div className="mt-4 space-y-2">
                             <p className="text-red-500 text-sm font-semibold">
                                 Due amount does not correspond with the payment
