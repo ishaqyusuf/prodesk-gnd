@@ -34,7 +34,9 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     <ControlledInput
                         list
                         control={form.control}
-                        name={`${componentItem.rootKey}.description` as any}
+                        name={
+                            `${componentItem.multiComponentComponentTitleKey}.description` as any
+                        }
                     />
                 )}
             </TableCell>
@@ -44,14 +46,18 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                         <ControlledCheckbox
                             control={form.control}
                             switchInput
-                            name={`${componentItem.rootKey}.tax` as any}
+                            name={
+                                `${componentItem.multiComponentComponentTitleKey}.tax` as any
+                            }
                         />
                     </TableCell>
                     <TableCell className="w-[50px]">
                         <ControlledCheckbox
                             control={form.control}
                             switchInput
-                            name={`${componentItem.rootKey}.production` as any}
+                            name={
+                                `${componentItem.multiComponentComponentTitleKey}.production` as any
+                            }
                         />
                     </TableCell>
                 </>
@@ -61,7 +67,9 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     type="number"
                     list
                     control={form.control}
-                    name={`${componentItem.rootKey}.qty` as any}
+                    name={
+                        `${componentItem.multiComponentComponentTitleKey}.qty` as any
+                    }
                 />
             </TableCell>
             <TableCell className="w-[150px]">
@@ -69,7 +77,9 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     type="number"
                     list
                     control={form.control}
-                    name={`${componentItem.rootKey}.unitPrice` as any}
+                    name={
+                        `${componentItem.multiComponentComponentTitleKey}.unitPrice` as any
+                    }
                 />
             </TableCell>
             <TableCell className="w-[100px]">

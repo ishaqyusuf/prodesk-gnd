@@ -14,7 +14,7 @@ export type UseMultiComponentSizeRow = ReturnType<
 export function useMultiComponentItem(componentTitle) {
     const form = useDykeForm();
     const item = useContext(DykeItemFormContext);
-    const rootKey = `itemArray.${item.rowIndex}.multiComponent.components.${componentTitle}`;
+    const multiComponentComponentTitleKey = `itemArray.${item.rowIndex}.multiComponent.components.${componentTitle}`;
     const doorType = item.get.doorType();
     const isComponent = isComponentType(doorType);
 
@@ -29,17 +29,20 @@ export function useMultiComponentItem(componentTitle) {
     }));
 
     const [qty, unitPrice, totalPrice, doorTotalPrice, uid, tax] = form.watch([
-        `${rootKey}.qty`,
-        `${rootKey}.unitPrice`,
-        `${rootKey}.totalPrice`,
-        `${rootKey}.doorTotalPrice`,
-        `${rootKey}.uid`,
-        `${rootKey}.tax`,
+        `${multiComponentComponentTitleKey}.qty`,
+        `${multiComponentComponentTitleKey}.unitPrice`,
+        `${multiComponentComponentTitleKey}.totalPrice`,
+        `${multiComponentComponentTitleKey}.doorTotalPrice`,
+        `${multiComponentComponentTitleKey}.uid`,
+        `${multiComponentComponentTitleKey}.tax`,
     ] as any);
     const footerEstimate = useFooterEstimate();
     useEffect(() => {
         const _totalPrice = math.multiply(qty, unitPrice);
-        form.setValue(`${rootKey}.totalPrice` as any, _totalPrice);
+        form.setValue(
+            `${multiComponentComponentTitleKey}.totalPrice` as any,
+            _totalPrice
+        );
         const c = form.getValues(
             `itemArray.${item.rowIndex}.multiComponent.components`
         );
@@ -83,9 +86,9 @@ export function useMultiComponentItem(componentTitle) {
         if (current) _setSizeList(current.heights);
     }
     const keys = {
-        sumQty: `${rootKey}.doorQty`,
-        sumUnitPrice: `${rootKey}.unitPrice`,
-        sumTotal: `${rootKey}.doorTotalPrice`,
+        sumQty: `${multiComponentComponentTitleKey}.doorQty`,
+        sumUnitPrice: `${multiComponentComponentTitleKey}.unitPrice`,
+        sumTotal: `${multiComponentComponentTitleKey}.doorTotalPrice`,
     };
     function calculateSizeEstimate(dim?, qty?, _totalLinePrice?) {
         const itemData = item.get.itemArray();
@@ -123,7 +126,7 @@ export function useMultiComponentItem(componentTitle) {
     }
     function removeLine(removeTab) {
         removeTab(componentTitle);
-        form.setValue(rootKey as any, null);
+        form.setValue(multiComponentComponentTitleKey as any, null);
     }
 
     const doorConfig = getDoorConfig(doorType);
@@ -140,7 +143,7 @@ export function useMultiComponentItem(componentTitle) {
         isSlab,
         sizeList,
         qty,
-        rootKey,
+        multiComponentComponentTitleKey,
         isComponent,
         doorType,
         unitPrice,
@@ -154,8 +157,9 @@ export function useMultiComponentSizeRow(
     componentItem: UseMultiComponentItem,
     size: { dim; width }
 ) {
-    const { form, rootKey, prices, item } = componentItem;
-    const sizeRootKey = `${rootKey}._doorForm.${size.dim}`;
+    const { form, multiComponentComponentTitleKey, prices, item } =
+        componentItem;
+    const sizeRootKey = `${multiComponentComponentTitleKey}._doorForm.${size.dim}`;
 
     const keys = {
         lhQty: `${sizeRootKey}.lhQty`,
