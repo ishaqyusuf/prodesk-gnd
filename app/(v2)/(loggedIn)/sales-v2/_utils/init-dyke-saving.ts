@@ -150,6 +150,7 @@ function initializeMultiComponent(data: DykeForm) {
                     clone.item.price =
                     clone.item.total =
                         c.doorTotalPrice;
+                console.log("DOOR TOTAL PRICE", c.doorTotalPrice);
             } else {
                 clone.item.price = clone.item.rate = c.unitPrice;
                 clone.item.total = c.totalPrice;
