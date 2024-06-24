@@ -5,6 +5,15 @@ import { getServerSession } from "next-auth";
 import bcrypt from "bcrypt";
 import { prisma } from "@/db";
 import { IUser } from "@/types/hrm";
+export async function serverSession() {
+    const data = await getServerSession(authOptions);
+    if (!data) throw new Error();
+    return data;
+}
+export async function getSessionPermissions() {
+    const session = await serverSession();
+    return session.can;
+}
 export async function user() {
     const data = await getServerSession(authOptions);
     if (!data) throw new Error();

@@ -150,24 +150,26 @@ export function AssignGroup({ index, salesDoorIndex = -1 }: Props) {
                         : group.report.pendingAssignment == 0
                 }
             >
-                <Button
-                    onClick={() => onOpenChange(!open)}
-                    disabled={
-                        salesDoorIndex >= 0
+                {!data.data.readOnly && (
+                    <Button
+                        onClick={() => onOpenChange(!open)}
+                        disabled={
+                            salesDoorIndex >= 0
+                                ? group.salesDoors[salesDoorIndex]?.report
+                                      ?.pendingAssignment == 0
+                                : group.report.pendingAssignment == 0
+                        }
+                        size={"sm"}
+                        className="whitespace-nowrap p-2 h-8"
+                    >
+                        Assign (
+                        {salesDoorIndex >= 0
                             ? group.salesDoors[salesDoorIndex]?.report
-                                  ?.pendingAssignment == 0
-                            : group.report.pendingAssignment == 0
-                    }
-                    size={"sm"}
-                    className="whitespace-nowrap p-2 h-8"
-                >
-                    Assign (
-                    {salesDoorIndex >= 0
-                        ? group.salesDoors[salesDoorIndex]?.report
-                              ?.pendingAssignment
-                        : group.report.pendingAssignment}
-                    )
-                </Button>
+                                  ?.pendingAssignment
+                            : group.report.pendingAssignment}
+                        )
+                    </Button>
+                )}
             </DropdownMenuTrigger>
             <DropdownMenuContent side="left" className="mx-4">
                 <Form {...form}>

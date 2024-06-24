@@ -9,13 +9,12 @@ import {
     IAddressMeta,
     ISalesType,
 } from "@/types/sales";
-import { userId } from "@/app/(v1)/_actions/utils";
+import { serverSession } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
 import { dateEquals } from "@/app/(v1)/_actions/action-utils";
 import dayjs from "dayjs";
 import { formatDate } from "@/lib/use-day";
-import { ICustomer } from "@/types/customers";
 interface Props {
     production?: boolean;
     query?: {
@@ -25,7 +24,10 @@ interface Props {
     };
 }
 export async function _getProductionList({ query, production = false }: Props) {
-    const authId = await userId();
+    const session = await serverSession();
+    const authId = session.user.id;
+    const { can } = session;
+    production = can.editOrderProduction && !can.viewOrderProduction;
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
     const dueDate = query?.dueToday
         ? dateEquals(formatDate(dayjs(), "YYYY-MM-DD"))

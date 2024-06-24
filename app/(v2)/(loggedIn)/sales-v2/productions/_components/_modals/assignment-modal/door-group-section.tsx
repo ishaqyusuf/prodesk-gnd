@@ -34,7 +34,11 @@ export default function DoorGroupSection({ index }) {
                     >
                         {group.sectionTitle}
                     </button>
-                    <div>{group.isDyke && <AssignGroup index={index} />}</div>
+                    <div>
+                        {group.isDyke && !data.data.readOnly && (
+                            <AssignGroup index={index} />
+                        )}
+                    </div>
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent>

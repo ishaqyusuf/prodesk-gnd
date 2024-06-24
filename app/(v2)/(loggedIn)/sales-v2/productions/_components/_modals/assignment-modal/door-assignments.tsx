@@ -98,6 +98,7 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                                 ) : (
                                     <ConfirmBtn
                                         trash
+                                        disabled={data.data.readOnly}
                                         size={"icon"}
                                         onClick={() =>
                                             deleteAssignment(assignment)

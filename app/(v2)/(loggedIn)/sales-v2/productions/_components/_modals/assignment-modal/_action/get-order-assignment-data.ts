@@ -6,7 +6,7 @@ import { ArrayMetaType, sum } from "@/lib/utils";
 import { ISalesOrderItemMeta } from "@/types/sales";
 import { isComponentType } from "@/app/(v2)/(loggedIn)/sales-v2/overview/is-component-type";
 import { OrderItemProductionAssignments, Users } from "@prisma/client";
-import { userId } from "@/app/(v1)/_actions/utils";
+import { serverSession, userId } from "@/app/(v1)/_actions/utils";
 import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
 import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
@@ -22,6 +22,10 @@ export async function getOrderAssignmentData(id, mode) {
     //     },
     // });
     const authId = await userId();
+    const session = await serverSession();
+    const { can } = session;
+    const readOnly = can.viewOrderProduction && !can.editOrderProduction;
+
     const order = await prisma.salesOrders.findFirst({
         where: { id },
         include: {
@@ -298,7 +302,14 @@ export async function getOrderAssignmentData(id, mode) {
     // console.log(doorGroups);
     // console.log(order.items.length);
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
-    return { ...order, totalQty, doorGroups, isProd: mode.prod, mode };
+    return {
+        ...order,
+        totalQty,
+        doorGroups,
+        isProd: mode.prod,
+        mode,
+        readOnly,
+    };
 }
 function analyseItem<T>(_ret: T, report): T {
     let ret: any = { ..._ret };

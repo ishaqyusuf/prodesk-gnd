@@ -116,7 +116,9 @@ export default function SubmitDoorProduction({
                     onClick={toggleSubmitProduction}
                     // disabled={group.report.pendingAssignment == 0}
 
-                    disabled={assignment.__report?.pending == 0}
+                    disabled={
+                        assignment.__report?.pending == 0 || data.data.readOnly
+                    }
                     size={"sm"}
                     variant={"outline"}
                     className="p-2 h-6"
