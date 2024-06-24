@@ -1,7 +1,7 @@
 "use client";
 
 import { ServerPromiseType } from "@/types";
-import { getDispatchSales } from "./action";
+import { getDispatchSales } from "../action";
 import React from "react";
 import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";

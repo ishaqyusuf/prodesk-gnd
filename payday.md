@@ -3,8 +3,12 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete.
 # JUN 24: 00.00 == 00.00
-    10:10-
+    11:40-
+    10:10-11:00
 -----------------------------
+
+TOTAL: $536.67
+Zelle marzuqisiaka@gmail.com
 PAYMENT INVOICE: $166.25
 # JUN 21: 01.50 == 04.45
     04:30-05:00

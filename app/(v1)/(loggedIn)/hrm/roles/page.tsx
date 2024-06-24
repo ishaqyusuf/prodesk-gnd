@@ -10,9 +10,8 @@ import EmployeeProfileTableShell from "@/components/_v1/shells/employee-profile-
 import EmployeeProfileModal from "@/components/_v1/modals/employee-profile-modal";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 import { _getRoles } from "@/app/(v1)/_actions/hrm/roles.crud";
-import RolesTableShell from "@/components/_v1/shells/roles-table-shell";
-import RoleModal from "@/components/_v1/modals/role-modal";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import RolesTableShell from "./roles-table-shell";
 
 export const metadata: Metadata = {
     title: "Roles",
@@ -26,9 +25,7 @@ export default async function EmployeeRolesPage({ searchParams }) {
                     <BreadLink isFirst title="Hrm" />
                     <BreadLink isLast title="Roles" />
                 </Breadcrumbs>
-                <PageHeader title="Roles" newDialog="role" />
                 <RolesTableShell searchParams={searchParams} {...response} />
-                <RoleModal />
             </HrmLayout>
         </AuthGuard>
     );

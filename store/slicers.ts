@@ -130,7 +130,6 @@ export type ModalName =
     | "salesPaymentCustomer"
     | "salesMobileOption"
     | "verifyTaskJobs"
-    | "role"
     | "uploadDoc"
     | undefined;
 const initialState: ISlicer = {

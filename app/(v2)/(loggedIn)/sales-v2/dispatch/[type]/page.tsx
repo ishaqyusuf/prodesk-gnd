@@ -3,7 +3,7 @@ import AuthGuard from "../../../_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import DispatchTable from "./dispatch-table";
-import { getDispatchSales } from "./action";
+import { getDispatchSales } from "../action";
 import PageHeader from "@/components/_v1/page-header";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 

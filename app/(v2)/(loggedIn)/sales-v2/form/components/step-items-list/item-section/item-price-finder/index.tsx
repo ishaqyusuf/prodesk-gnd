@@ -45,7 +45,7 @@ export default function ItemPriceFinder({
         // if(priceTab == '')
         form?.setValue(
             !sizeRow
-                ? `${componentItem?.rootKey}.unitPrice`
+                ? `${componentItem?.multiComponentComponentTitleKey}.unitPrice`
                 : (`${sizeRow?.sizeRootKey}.${priceTab?.priceKey}` as any),
             price?.value
         );
