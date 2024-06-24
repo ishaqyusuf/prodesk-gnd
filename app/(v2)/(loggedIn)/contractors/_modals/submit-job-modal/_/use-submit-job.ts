@@ -134,7 +134,7 @@ export default function useSubmitJob(form) {
         async initialize(_data: IJobs, action) {
             _initialize(_data, { isAdmin, action });
             const _costs = await getJobCostList(_data?.type);
-            // console.log(_data);
+            // console.log(_data?.type, _costs);
             setCosts(_costs as any);
         },
         nextTab() {
@@ -159,7 +159,7 @@ export default function useSubmitJob(form) {
             // console.log(projectId);
             form.setValue("job.homeId", null as any);
             const unitJobs = await getUnitJobs(projectId, type);
-            // console.log(unitJobs);
+            console.log(unitJobs);
 
             if (type == "installation" && !id)
                 form.setValue("job.meta.addon", (unitJobs?.addon || 0) as any);

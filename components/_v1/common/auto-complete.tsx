@@ -103,7 +103,7 @@ export default function AutoComplete({
         let text = value;
         if (itemText != itemValue) {
             const ls = list || allItems;
-            console.log(ls);
+            // console.log(ls);
 
             let v = ls.find(
                 (item) =>
@@ -114,7 +114,7 @@ export default function AutoComplete({
             else text = v?.title;
             // if (props.id == "unit") console.log([v, text]);
         }
-        console.log(text);
+        // console.log(text);
 
         setInputValue(text);
     }

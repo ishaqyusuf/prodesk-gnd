@@ -31,10 +31,13 @@ export default function SubmitJobBtn({}) {
     const modal = useModal();
     function open(_type) {
         let type = _type?.toLowerCase();
+        console.log(type);
         // let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
         // if (type == "punchout") defaultTab = "tasks";
         // openModal("submitJobModal", { data: { type } });
-        modal?.open(<SubmitJobModal />, { data: { type } });
+        modal?.open(<SubmitJobModal job={{ type } as any} />, {
+            data: { type },
+        });
     }
     if (actions.length == 1)
         return (

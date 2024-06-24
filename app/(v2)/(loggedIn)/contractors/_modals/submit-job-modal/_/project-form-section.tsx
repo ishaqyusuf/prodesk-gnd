@@ -11,6 +11,7 @@ import { deepCopy } from "@/lib/deep-copy";
 import { InstallCostLine } from "@/types/settings";
 import { useJobSubmitCtx } from "./use-submit-job";
 import { useEffect } from "react";
+import ControlledAutoComplete from "@/components/common/controls/controlled-auto-complete";
 export default function ProjectFormSection({}) {
     const ctx = useJobSubmitCtx();
 
@@ -21,7 +22,8 @@ export default function ProjectFormSection({}) {
     ]);
 
     async function projectSelected(e) {
-        // console.log(e);
+        console.log(e);
+
         let project: Projects = e.data as any;
         // console.log("REMOVE COST LISTS");
         ctx.costList.remove();
@@ -39,7 +41,7 @@ export default function ProjectFormSection({}) {
     }
     async function homeSelected(e) {
         const home: HomeJobList = e.data as any;
-        // console.log(home);
+        console.log(home);
         const cData = {};
         let cl = deepCopy<InstallCostLine[]>(
             ctx?.cost
@@ -103,6 +105,9 @@ export default function ProjectFormSection({}) {
                     </FormItem>
                 )}
             />
+            {/* <ControlledAutoComplete label={'Unit'} control={ctx.form.control}
+
+            /> */}
             <FormField
                 name="job.homeId"
                 control={ctx.form.control}
@@ -111,7 +116,10 @@ export default function ProjectFormSection({}) {
                         <FormLabel>Unit</FormLabel>
                         <FormControl>
                             <AutoComplete
-                                {...field}
+                                // {...field}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
                                 itemText={"name"}
                                 perPage={9999}
                                 id={"unit"}

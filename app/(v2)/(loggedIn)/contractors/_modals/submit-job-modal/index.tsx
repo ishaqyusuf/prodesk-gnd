@@ -27,7 +27,7 @@ interface Props {
     job?: IJobs;
     action?: "change-worker" | "";
 }
-export default function SubmitJobModal({ job, action }: Props) {
+export default function SubmitJobModal({ job = {} as any, action }: Props) {
     const modal = useModal();
     const defaultValues = {
         // initialized: false,

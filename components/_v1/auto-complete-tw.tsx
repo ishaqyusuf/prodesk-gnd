@@ -67,7 +67,7 @@ function AutoComplete2({
             (async () => {
                 const ls = await loader();
                 setItems(transformItems(ls));
-                console.log(ls);
+                // console.log(ls);
             })();
         } else setItems(transformItems(options || []));
     }, [options]);
@@ -150,7 +150,7 @@ function AutoComplete2({
         return uniqueBy(filteredOptions, "name")?.filter((_, i) => i < perPage); //.filter((a, i) => i < 25);
     };
     function valueChange(e) {
-        console.log(e);
+        // console.log(e);
         setSelect(true);
         setSelected(e);
         if (form && formKey) {
