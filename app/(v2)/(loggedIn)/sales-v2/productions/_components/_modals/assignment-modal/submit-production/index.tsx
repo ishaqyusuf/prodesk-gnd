@@ -42,7 +42,9 @@ export default function SubmitDoorProduction({
     groupIndex,
 }: Props) {
     const data = useAssignmentData();
-    const modal = useAssignment({ prod: data.data.isProd });
+    const modal = useAssignment(
+        data.data.isProd ? { type: "prod" } : undefined
+    );
     const group = data.data.doorGroups[groupIndex];
     const [open, onOpenChange] = useState(false);
 

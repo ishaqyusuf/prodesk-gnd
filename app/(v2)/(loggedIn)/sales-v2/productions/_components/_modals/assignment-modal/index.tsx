@@ -15,11 +15,10 @@ export type OrderAssignmentSalesDoor =
     OrderAssignmentDataGroup["salesDoors"][0];
 interface Props {
     order: OrderAssignmentData;
-    isProd: boolean;
 }
 
 export const useAssignmentData = () => useDataPage<OrderAssignmentData>();
-export default function AssignmentModal({ order, isProd }: Props) {
+export default function AssignmentModal({ order }: Props) {
     return (
         <Modal.Content size={"xl"}>
             <Modal.Header

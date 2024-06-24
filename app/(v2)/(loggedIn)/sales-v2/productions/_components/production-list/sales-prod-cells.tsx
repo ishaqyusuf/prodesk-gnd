@@ -73,7 +73,8 @@ function ProductionStatus({ item }: Props) {
         )
     );
     const totalDoors = item._meta.totalDoors;
-    // console.log({ totalDoors, submitted });
+    // console.log(item.productionStatus?.status);
+    if (submitted == totalDoors) return <TableCol.Status status="Completed" />;
     return (
         <>
             <TableCol.Status
@@ -122,7 +123,7 @@ function AssignedTo({ item }: Props) {
     );
 }
 function Actions({ item }: Props) {
-    const assignment = useAssignment({});
+    const assignment = useAssignment();
     return (
         <>
             <Button
@@ -138,7 +139,7 @@ function Actions({ item }: Props) {
     );
 }
 function ProdActions({ item }: Props) {
-    const assignment = useAssignment({ prod: true });
+    const assignment = useAssignment({ type: "prod" });
     return (
         <>
             <Button

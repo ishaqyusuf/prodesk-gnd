@@ -11,7 +11,11 @@ import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-c
 import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 
-export async function getOrderAssignmentData(id, prod = false) {
+interface mode {
+    prod: boolean;
+    dispatch: boolean;
+}
+export async function getOrderAssignmentData(id, mode) {
     // await prisma.orderItemProductionAssignments.updateMany({
     //     data: {
     //         qtyAssigned: 1,
@@ -83,7 +87,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                     assignments: {
                         where: {
                             deletedAt: null,
-                            assignedToId: prod ? authId : undefined,
+                            assignedToId: mode.prod ? authId : undefined,
                         },
                         include: {
                             assignedTo: true,
@@ -149,7 +153,7 @@ export async function getOrderAssignmentData(id, prod = false) {
                     });
                 })
                 .flat()
-                .filter((a) => (prod ? a.assignments?.length : true));
+                .filter((a) => (mode.prod ? a.assignments?.length : true));
             // if (item.dykeProduction) {
             _items.map((sItem) => {
                 if (sItem.dykeProduction) {
@@ -294,7 +298,7 @@ export async function getOrderAssignmentData(id, prod = false) {
     // console.log(doorGroups);
     // console.log(order.items.length);
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
-    return { ...order, totalQty, doorGroups, isProd: prod };
+    return { ...order, totalQty, doorGroups, isProd: mode.prod, mode };
 }
 function analyseItem<T>(_ret: T, report): T {
     let ret: any = { ..._ret };

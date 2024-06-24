@@ -3,18 +3,21 @@ import AssignmentModal from ".";
 import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
 
 interface Props {
-    prod?: boolean;
+    // prod?: boolean;
+    type?: "prod" | "dispatch" | undefined;
+    // dispatch?: boolean
 }
-export function useAssignment({ prod }: Props = {}) {
+export function useAssignment({ type }: Props = {}) {
     const modal = useModal();
-
     async function open(id) {
-        const data = await getOrderAssignmentData(id, prod);
+        const mode = {
+            prod: type == "prod",
+            dispatch: type == "dispatch",
+        };
+        const data = await getOrderAssignmentData(id, mode);
         // console.log(data);
 
-        modal.openModal(
-            <AssignmentModal isProd={prod || false} order={data} />
-        );
+        modal.openModal(<AssignmentModal order={data} />);
     }
     return {
         open,

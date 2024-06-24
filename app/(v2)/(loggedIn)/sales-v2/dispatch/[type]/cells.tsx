@@ -1,5 +1,8 @@
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { DispatchPromiseResponse } from "./dispatch-table";
+import { ProductionCells } from "../../productions/_components/production-list/sales-prod-cells";
+import { useAssignment } from "../../productions/_components/_modals/assignment-modal/use-assignment";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     item: DispatchPromiseResponse["Item"];
@@ -27,8 +30,26 @@ function Customer({ item }: Props) {
         </TableCol>
     );
 }
-// function
+const ProductionStatus = ProductionCells.ProductionStatus;
+
+function Actions({ item }: Props) {
+    const assignment = useAssignment({ type: "dispatch" });
+    return (
+        <>
+            <Button
+                size="sm"
+                onClick={() => assignment.open(item.id)}
+                variant={"outline"}
+            >
+                View
+            </Button>
+        </>
+    );
+}
+
 export let DispatchCells = {
     Order,
     Customer,
+    ProductionStatus,
+    Actions,
 };

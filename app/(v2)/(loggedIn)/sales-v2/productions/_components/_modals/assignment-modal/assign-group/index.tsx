@@ -54,7 +54,9 @@ interface Props {
 }
 export function AssignGroup({ index, salesDoorIndex = -1 }: Props) {
     const data = useAssignmentData();
-    const modal = useAssignment({ prod: data.data.isProd });
+    const modal = useAssignment(
+        data.data.isProd ? { type: "prod" } : undefined
+    );
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(false);
     const form = useForm<IAssignGroupForm>({

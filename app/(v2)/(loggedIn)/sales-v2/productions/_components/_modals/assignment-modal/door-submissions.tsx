@@ -27,7 +27,9 @@ interface Props {
 export default function DoorSubmissions({ doorIndex, groupIndex }: Props) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[groupIndex];
-    const modal = useAssignment({ prod: data.data.isProd });
+    const modal = useAssignment(
+        data.data.isProd ? { type: "prod" } : undefined
+    );
     if (!group) return null;
 
     const salesDoor = group.salesDoors[doorIndex];
