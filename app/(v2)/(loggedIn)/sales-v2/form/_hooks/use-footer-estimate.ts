@@ -1,7 +1,9 @@
 "use client";
 
+import { omit } from "lodash";
 import { DykeDoorType } from "../../type";
 import { useDykeForm } from "./form-context";
+import { UseMultiComponentItem } from "./use-multi-component-item";
 
 interface Props {
     price?;
@@ -26,5 +28,29 @@ export default function useFooterEstimate() {
             JSON.stringify(footer.footerPricesJson)
         );
     }
-    return { updateFooterPrice };
+    return {
+        updateFooterPrice,
+        lineItemDeleted(ctx: UseMultiComponentItem) {
+            const itemData = ctx.item.get.itemArray();
+            Object.entries(itemData.multiComponent.components).map(
+                ([title, cData]) => {
+                    if (title == ctx.componentTitle) {
+                        const footer = form.getValues("footer");
+                        footer.footerPricesJson = JSON.parse(
+                            footer.footerPrices
+                        );
+                        // console.log(footer.footerPricesJson);
+                        // footer.footerPricesJson[cData.uid] = {};
+                        // footer.footerPricesJson=
+                        omit(footer.footerPricesJson, [cData.uid]);
+                        // console.log(footer.footerPricesJson[cData.uid]);
+                        form.setValue(
+                            "footer.footerPrices",
+                            JSON.stringify(footer.footerPricesJson)
+                        );
+                    }
+                }
+            );
+        },
+    };
 }

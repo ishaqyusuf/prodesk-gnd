@@ -127,10 +127,11 @@ export function useMultiComponentItem(componentTitle) {
     function removeLine(removeTab) {
         removeTab(componentTitle);
         form.setValue(multiComponentComponentTitleKey as any, null);
+        footerEstimate.lineItemDeleted(ctx);
     }
 
     const doorConfig = getDoorConfig(doorType);
-    return {
+    const ctx = {
         doorConfig,
         initializeSizes,
         removeLine,
@@ -151,6 +152,7 @@ export function useMultiComponentItem(componentTitle) {
         doorTotalPrice,
         _setSizeList,
     };
+    return ctx;
 }
 
 export function useMultiComponentSizeRow(

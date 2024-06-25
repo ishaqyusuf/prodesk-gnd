@@ -79,16 +79,16 @@ export async function generateCustomerPrintReport(
                 };
             });
             if (orderDue > 0) {
-                reportFooter.current -= orderDue;
+                reportFooter.current += orderDue;
                 if (order.paymentDueDate) {
                     const days = dayjs().diff(order.paymentDueDate, "days");
-                    if (days > 90) reportFooter.over3 -= orderDue;
+                    if (days > 90) reportFooter.over3 += orderDue;
                     else if (days > 60 && days <= 90)
-                        reportFooter.past3 -= orderDue;
+                        reportFooter.past3 += orderDue;
                     else if (days > 30 && days <= 60)
-                        reportFooter.past2 -= orderDue;
-                    else if (days > 1 && days <= 30)
-                        reportFooter.past1 -= orderDue;
+                        reportFooter.past2 += orderDue;
+                    else if (days >= 1 && days <= 30)
+                        reportFooter.past1 += orderDue;
                     console.log({
                         days,
                         orderDue,

@@ -5,7 +5,7 @@ import { ServerPromiseType } from "@/types";
 import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { useDataPage } from "@/lib/data-page-context";
-import DoorGroupSection from "./door-group-section";
+import SectionedItems from "./sectioned-items";
 
 export type OrderAssignmentData = ServerPromiseType<
     typeof getOrderAssignmentData
@@ -33,7 +33,7 @@ export default function AssignmentModal({ order }: Props) {
             >
                 <DataPageShell data={order}>
                     {order.doorGroups.map((group, index) => (
-                        <DoorGroupSection index={index} key={index} />
+                        <SectionedItems index={index} key={index} />
                     ))}
                 </DataPageShell>
             </div>

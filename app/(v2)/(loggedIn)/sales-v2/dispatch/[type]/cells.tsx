@@ -46,10 +46,11 @@ function Actions({ item }: Props) {
         </>
     );
 }
-
+function DeliveryStatus({ item }: Props) {}
 export let DispatchCells = {
     Order,
     Customer,
     ProductionStatus,
+    DeliveryStatus,
     Actions,
 };

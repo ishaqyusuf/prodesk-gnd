@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import DoorSubmissions from "./door-submissions";
 
-export default function DoorGroupSection({ index }) {
+export default function SectionedItems({ index }) {
     const data = useAssignmentData();
     const group = data.data.doorGroups[index];
     const [open, onOpenChange] = useState(true);

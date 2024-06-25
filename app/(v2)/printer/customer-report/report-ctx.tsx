@@ -101,7 +101,7 @@ export default function ReportCtx({ action, slug, className }: Props) {
                                             DUE
                                         </th>
                                         <th>OVER 90 DAYS PAST DUE</th>
-                                        <th>Credit on Account</th>
+                                        <th>Amount Due</th>
                                     </thead>
                                     <tbody>
                                         <tr>

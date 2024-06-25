@@ -1169,7 +1169,7 @@ model HousePackageTools {
     molding        DykeProducts?      @relation(name: "molding", fields: [moldingId], references: [id])
     doors          DykeSalesDoors[]
 
-    @@index([orderItemId])
+    // @@index([orderItemId])
     @@index([salesOrderId])
     @@index([dykeDoorId])
     @@index([doorId])
