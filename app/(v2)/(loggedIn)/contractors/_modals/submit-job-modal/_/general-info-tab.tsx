@@ -40,7 +40,7 @@ export default function GeneralInfoTab() {
             <SelectControl
                 name="job.coWorkerId"
                 options={[
-                    ...contractors?.data?.map((c) => ({
+                    ...(contractors?.data || [])?.map((c) => ({
                         text: c.name,
                         value: c.id,
                     })),
