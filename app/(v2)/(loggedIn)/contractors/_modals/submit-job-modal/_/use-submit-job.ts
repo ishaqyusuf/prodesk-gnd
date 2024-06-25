@@ -90,6 +90,8 @@ export default function useSubmitJob(form) {
         // form: UseFormReturn<SubmitJobForm>,
         { isAdmin, action }
     ) {
+        const _costs = await getJobCostList(_job?.type);
+        setCosts(_costs as any);
         let job: IJobs = {
             ..._job,
         } as any;
@@ -104,7 +106,11 @@ export default function useSubmitJob(form) {
             if (tab != "user") tabHistory.unshift({ title: "user" });
             if (tab == "general") tabHistory.unshift({ title: "tasks" });
         }
-        const unitJobs = await getUnitJobs(_job.projectId, type);
+        const unitJobs = await getUnitJobs(
+            _job.projectId,
+            type,
+            _job.homeId ? false : true
+        );
 
         const homes = unitJobs.homeList;
 
@@ -116,11 +122,20 @@ export default function useSubmitJob(form) {
             job: job,
             tab,
         });
-        updateCostList(homes.find((h) => h.id == _job.homeId));
+        // console.log(_job.homeId);
+        // console.log(homes);
+
+        updateCostList(
+            _costs,
+            homes.find((h) => h.id == _job.homeId)
+        );
     }
-    function updateCostList(home: HomeJobList, updateCostData = false) {
+    async function updateCostList(
+        cost,
+        home: HomeJobList,
+        updateCostData = false
+    ) {
         const cData = {};
-        // console.log(cost.length);
 
         let cl = deepCopy<InstallCostLine[]>(
             cost
@@ -135,6 +150,7 @@ export default function useSubmitJob(form) {
                 })
                 .filter(Boolean) || []
         );
+        console.log(cost, cl.length, home);
         if (updateCostData) form.setValue("job.meta.costData", cData as any);
         costList.append(cl as any);
     }
@@ -144,7 +160,7 @@ export default function useSubmitJob(form) {
         form.setValue("home", home);
 
         form.setValue("job.subtitle", home.name);
-        updateCostList(home, true);
+        updateCostList(cost, home, true);
     }
     return {
         isLoading,
@@ -165,8 +181,6 @@ export default function useSubmitJob(form) {
         homes,
         type,
         async initialize(_data: IJobs, action) {
-            const _costs = await getJobCostList(_data?.type);
-            setCosts(_costs as any);
             await _initialize(_data, { isAdmin, action });
             // console.log(_data?.type, _costs);
         },

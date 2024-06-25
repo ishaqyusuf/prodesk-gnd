@@ -133,6 +133,9 @@ export async function whereSales(query: SalesQueryParams) {
                           customer: {
                               OR: [
                                   {
+                                      businessName: inputQ,
+                                  },
+                                  {
                                       name: inputQ,
                                   },
                                   {
