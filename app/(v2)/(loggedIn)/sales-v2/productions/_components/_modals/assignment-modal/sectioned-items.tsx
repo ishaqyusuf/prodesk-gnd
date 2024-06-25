@@ -9,7 +9,7 @@ import { useState } from "react";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { Info } from "@/components/_v1/info";
 
-import { AssignGroup } from "./assign-group";
+import { SectionedItemAssignForm } from "./sectioned-item-assign-form";
 import DoorAssignments from "./door-assignments";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,7 @@ export default function SectionedItems({ index }) {
                     </button>
                     <div>
                         {group.isDyke && !data.data.readOnly && (
-                            <AssignGroup index={index} />
+                            <SectionedItemAssignForm index={index} />
                         )}
                     </div>
                 </div>
@@ -54,7 +54,7 @@ export default function SectionedItems({ index }) {
                                 </TableCol.Secondary>
                             </div>
                             <div className={cn(!group.isDyke)}>
-                                <AssignGroup
+                                <SectionedItemAssignForm
                                     salesDoorIndex={si}
                                     index={index}
                                 />

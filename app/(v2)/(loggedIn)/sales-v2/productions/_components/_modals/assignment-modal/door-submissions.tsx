@@ -34,6 +34,12 @@ export default function DoorSubmissions({ doorIndex, groupIndex }: Props) {
 
     const salesDoor = group.salesDoors[doorIndex];
     const submissions = salesDoor?.submissions;
+    if (!submissions?.length && salesDoor?.assignments?.length)
+        return (
+            <div className="flex justify-center text-red-500 py-2 bg-slate-50">
+                Assignments pending submission
+            </div>
+        );
     if (!submissions?.length) return null;
 
     async function deleteSubmission(submission) {

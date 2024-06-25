@@ -52,7 +52,7 @@ interface Props {
     index;
     salesDoorIndex?;
 }
-export function AssignGroup({ index, salesDoorIndex = -1 }: Props) {
+export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
     const data = useAssignmentData();
     const modal = useAssignment(
         data.data.isProd ? { type: "prod" } : undefined

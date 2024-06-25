@@ -8,9 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { OrderAssignmentSalesDoor, useAssignmentData } from ".";
-import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/use-day";
+import { useAssignmentData } from ".";
 
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { _deleteAssignment } from "./_action/actions";
@@ -31,7 +29,12 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     );
     if (!group) return null;
     const salesDoor = group.salesDoors[doorIndex];
-    if (!salesDoor || !salesDoor.assignments.length) return null;
+    if (!salesDoor || !salesDoor.assignments.length)
+        return (
+            <div className="flex justify-center text-red-500 py-2 bg-slate-50">
+                Items not assigned
+            </div>
+        );
     async function deleteAssignment(assignment) {
         await _deleteAssignment(assignment);
         modal.open(data.data.id);

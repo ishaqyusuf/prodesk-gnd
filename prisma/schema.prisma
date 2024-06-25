@@ -614,6 +614,7 @@ model OrderProductionSubmissions {
     order            SalesOrders?                    @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
     item             SalesOrderItems?                @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
     assignment       OrderItemProductionAssignments? @relation(fields: [assignmentId], references: [id])
+    itemDeliveries   OrderItemDelivery[]
 
     @@index([salesOrderId])
     @@index([salesOrderItemId])
@@ -1124,20 +1125,24 @@ model OrderDelivery {
 }
 
 model OrderItemDelivery {
-    id              Int             @unique @default(autoincrement())
-    orderItemId     Int
-    orderId         Int
-    qty             Int             @default(0)
-    pendingQty      Int             @default(0)
-    meta            Json?           @db.Json
-    createdAt       DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt       DateTime        @updatedAt
-    deletedAt       DateTime?       @db.Timestamp(0)
-    orderDeliveryId Int?
-    order           SalesOrders     @relation(fields: [orderId], references: [id])
-    items           SalesOrderItems @relation(fields: [orderItemId], references: [id])
-    delivery        OrderDelivery?  @relation(fields: [orderDeliveryId], references: [id])
+    id                          Int                         @unique @default(autoincrement())
+    orderItemId                 Int
+    orderId                     Int
+    lhQty                       Int?                        @default(0)
+    rhQty                       Int?                        @default(0)
+    qty                         Int                         @default(0)
+    meta                        Json?                       @db.Json
+    createdAt                   DateTime?                   @default(now()) @db.Timestamp(0)
+    updatedAt                   DateTime                    @updatedAt
+    deletedAt                   DateTime?                   @db.Timestamp(0)
+    orderDeliveryId             Int?
+    order                       SalesOrders                 @relation(fields: [orderId], references: [id])
+    items                       SalesOrderItems             @relation(fields: [orderItemId], references: [id])
+    delivery                    OrderDelivery?              @relation(fields: [orderDeliveryId], references: [id])
+    orderProductionSubmissionId Int?
+    submission                  OrderProductionSubmissions? @relation(fields: [orderProductionSubmissionId], references: [id])
 
+    @@index([orderProductionSubmissionId])
     @@index([orderId])
     @@index([orderItemId])
     @@index([orderDeliveryId])
