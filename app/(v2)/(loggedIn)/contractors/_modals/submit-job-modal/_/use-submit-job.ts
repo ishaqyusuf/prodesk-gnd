@@ -1,4 +1,4 @@
-import { IJobs } from "@/types/hrm";
+import { HomeJobList, IJobs } from "@/types/hrm";
 import {
     SubmitJobForm,
     SubmitJobTabs,
@@ -23,6 +23,8 @@ import { createContext, useContext, useState, useTransition } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
 import { useModal } from "@/components/common/modal-old/provider";
 import submitJobUtils from "./submit-job-utils";
+import { InstallCostLine } from "@/types/settings";
+import { deepCopy } from "@/lib/deep-copy";
 
 export const JobSubmitContext = createContext<any>({});
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);
@@ -83,7 +85,7 @@ export default function useSubmitJob(form) {
     }
     const [cost, setCosts] = useState([]);
 
-    function _initialize(
+    async function _initialize(
         _job: IJobs,
         // form: UseFormReturn<SubmitJobForm>,
         { isAdmin, action }
@@ -102,17 +104,48 @@ export default function useSubmitJob(form) {
             if (tab != "user") tabHistory.unshift({ title: "user" });
             if (tab == "general") tabHistory.unshift({ title: "tasks" });
         }
+        const unitJobs = await getUnitJobs(_job.projectId, type);
+
+        const homes = unitJobs.homeList;
 
         form.reset({
             tabHistory,
-            // costList: [],
+            homes,
+
             ..._job,
             job: job,
             tab,
-            // initialized: true,
         });
+        updateCostList(homes.find((h) => h.id == _job.homeId));
     }
+    function updateCostList(home: HomeJobList, updateCostData = false) {
+        const cData = {};
+        // console.log(cost.length);
 
+        let cl = deepCopy<InstallCostLine[]>(
+            cost
+                ?.map((c) => {
+                    if (type == "punchout" || home?.costing?.[c.uid]) {
+                        cData[c.uid] = {
+                            cost: c.cost,
+                        };
+                        return c;
+                    }
+                    return null;
+                })
+                .filter(Boolean) || []
+        );
+        if (updateCostData) form.setValue("job.meta.costData", cData as any);
+        costList.append(cl as any);
+    }
+    async function homeSelected(e) {
+        const home: HomeJobList = e.data as any;
+
+        form.setValue("home", home);
+
+        form.setValue("job.subtitle", home.name);
+        updateCostList(home, true);
+    }
     return {
         isLoading,
 
@@ -132,10 +165,10 @@ export default function useSubmitJob(form) {
         homes,
         type,
         async initialize(_data: IJobs, action) {
-            _initialize(_data, { isAdmin, action });
             const _costs = await getJobCostList(_data?.type);
-            // console.log(_data?.type, _costs);
             setCosts(_costs as any);
+            await _initialize(_data, { isAdmin, action });
+            // console.log(_data?.type, _costs);
         },
         nextTab() {
             let nextTab: SubmitJobTabs = null as any;
@@ -159,12 +192,12 @@ export default function useSubmitJob(form) {
             // console.log(projectId);
             form.setValue("job.homeId", null as any);
             const unitJobs = await getUnitJobs(projectId, type);
-            console.log(unitJobs);
 
             if (type == "installation" && !id)
                 form.setValue("job.meta.addon", (unitJobs?.addon || 0) as any);
             form.setValue("homes", unitJobs.homeList);
         },
         homeChanged() {},
+        homeSelected,
     };
 }

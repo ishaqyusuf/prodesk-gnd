@@ -167,21 +167,19 @@ export async function viewSale(type, slug) {
         ids.every((id) => id != mi.id)
     );
 
-    const progress = await getProgress({
-        where: [
-            {
-                progressableId: order.id,
-                progressableType: "SalesOrder",
-                //    type: "production",
-            },
-            {
-                parentId: order.id,
-                progressableType: "SalesOrderItem",
-                //    type: isProd ? "production" : undefined,
-            },
-        ],
+    const progress = await prisma.progress.findMany({
+        where: {
+            OR: [
+                {
+                    parentId: order.id,
+                },
+                {
+                    progressableId: order.id,
+                },
+            ],
+        },
     });
-    console.log(progress);
+    // console.log(progress);
 
     return {
         ...order,
