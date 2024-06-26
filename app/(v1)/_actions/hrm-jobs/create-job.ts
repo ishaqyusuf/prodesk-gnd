@@ -60,20 +60,31 @@ export async function createJobAction(data: IJobs) {
     }
 }
 export async function updateJobAction({ id, ...jdata }: IJobs) {
-    // let amount = jdata.amount;
-    // if (jdata.coWorkerId) amount /= 2;
-    // const status = jdata.status;
-    // if()
     if (jdata.status?.toLowerCase() == "assigned") {
         jdata.status = "Submitted";
     }
+    const {
+        meta,
+        adminNote,
+        amount,
+        coWorkerId,
+        description,
+        status,
+        note,
+        type,
+        userId,
+    } = jdata;
     const job = await prisma.jobs.update({
         where: { id },
         data: {
-            ...jdata,
-            ...transformData({}, true),
-            // amount
-        } as any,
+            meta: meta as any,
+            adminNote,
+            amount,
+            coWorkerId,
+            description,
+            userId,
+            note,
+        },
     });
     if (job.coWorkerId) {
         const job2 = await prisma.jobs.findFirst({
@@ -89,9 +100,11 @@ export async function updateJobAction({ id, ...jdata }: IJobs) {
                     id: job2.id,
                 },
                 data: {
-                    ...jdata,
-                    ...(transformData({ meta: jdata.meta }, true) as any),
-                    // amount,
+                    meta: meta as any,
+                    adminNote,
+                    amount,
+                    description,
+                    note,
                     userId: jdata.coWorkerId,
                     coWorkerId: jdata.userId,
                 },
@@ -103,11 +116,15 @@ export async function updateJobAction({ id, ...jdata }: IJobs) {
         } else {
             const job2 = await prisma.jobs.create({
                 data: {
-                    ...jdata,
-                    ...(transformData({ meta: jdata.meta }) as any),
-                    // amount,
+                    meta: meta as any,
+                    adminNote,
+                    amount,
+                    description,
+                    note,
                     userId: jdata.coWorkerId,
                     coWorkerId: jdata.userId,
+                    status,
+                    type,
                 },
                 include: {
                     user: true,

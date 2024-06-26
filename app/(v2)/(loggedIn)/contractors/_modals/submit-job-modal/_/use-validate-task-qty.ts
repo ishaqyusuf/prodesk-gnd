@@ -8,6 +8,7 @@ export function useValidateTaskQty(form) {
         validate() {
             if (form.getValues("job.type") == "installation") {
                 const maxQty = form.getValues("home.costing") || {};
+                console.log(maxQty);
                 const costData = form.getValues("job.meta.costData") || {};
                 const schem = {};
                 Object.entries(costData).map(([k, v]) => {

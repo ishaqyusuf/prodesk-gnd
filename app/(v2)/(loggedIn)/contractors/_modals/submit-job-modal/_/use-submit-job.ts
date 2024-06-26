@@ -21,10 +21,10 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 import { createContext, useContext, useState, useTransition } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
-import { useModal } from "@/components/common/modal-old/provider";
 import submitJobUtils from "./submit-job-utils";
 import { InstallCostLine } from "@/types/settings";
 import { deepCopy } from "@/lib/deep-copy";
+import { useModal } from "@/components/common/modal/provider";
 
 export const JobSubmitContext = createContext<any>({});
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);
@@ -77,7 +77,8 @@ export default function useSubmitJob(form) {
                 toast.message("Success!");
                 // closeModal();
                 modal?.close();
-                await _revalidate(isAdmin ? "jobs" : "my-jobs");
+                await _revalidate("jobs");
+                await _revalidate("contractorJobs");
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
             }
@@ -113,22 +114,17 @@ export default function useSubmitJob(form) {
         );
 
         const homes = unitJobs.homeList;
-
+        const home = homes.find((h) => h.id == _job.homeId);
         form.reset({
             tabHistory,
             homes,
-
+            home,
             ..._job,
             job: job,
             tab,
         });
-        // console.log(_job.homeId);
-        // console.log(homes);
 
-        updateCostList(
-            _costs,
-            homes.find((h) => h.id == _job.homeId)
-        );
+        updateCostList(_costs, home);
     }
     async function updateCostList(
         cost,

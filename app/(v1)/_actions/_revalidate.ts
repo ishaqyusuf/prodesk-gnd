@@ -14,6 +14,7 @@ const _path = {
     communityTemplates: "/settings/community/community-templates",
     communityTemplate: "/settings/community/community-template/[slug]",
     customers: "/sales/customers",
+    contractorJobs: "/jobs/[type]",
     "contractor-overview": "/contractors/overview/[contractorId]",
     delivery: "/sales/delivery",
     quotes: "/sales/quotes",
