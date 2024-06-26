@@ -128,7 +128,7 @@ export function nav(
     if (!isAdmin) {
         if (viewInstallation) {
             routes.Services.push(
-                _route("Installations", Icons.tasks, "/jobs/installations")
+                _route("Installations", Icons.tasks, "/tasks/installations")
             );
             routes.Services.push(
                 _route("Payments", Icons.payment, "/payments")
