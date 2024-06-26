@@ -59,21 +59,21 @@ export default function JobTableShell<T>({
     const columns = useMemo<ColumnDef<IJobs, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-            {
-                maxSize: 10,
-                id: "id",
-                header: ColumnHeader("#/Date"),
-                cell: ({ row }) => (
-                    <Cell>
-                        <PrimaryCellContent>
-                            {row.original.id}
-                        </PrimaryCellContent>
-                        <DateCellContent>
-                            {row.original.createdAt}
-                        </DateCellContent>
-                    </Cell>
-                ),
-            },
+            // {
+            //     maxSize: 10,
+            //     id: "id",
+            //     header: ColumnHeader("#/Date"),
+            //     cell: ({ row }) => (
+            //         <Cell>
+            //             <PrimaryCellContent>
+            //                 {row.original.id}
+            //             </PrimaryCellContent>
+            //             <DateCellContent>
+            //                 {row.original.createdAt}
+            //             </DateCellContent>
+            //         </Cell>
+            //     ),
+            // },
             {
                 id: "job",
                 header: ColumnHeader("Job"),

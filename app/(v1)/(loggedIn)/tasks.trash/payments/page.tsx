@@ -14,7 +14,7 @@ import JobPaymentTableShell from "@/components/_v1/shells/job-payment-table-shel
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 
 export const metadata: Metadata = {
-    title: "Employees",
+    title: "My Payments",
 };
 export default async function MyJobPaymentsPage({ searchParams }) {
     const response = await getMyPayments(queryParams(searchParams));

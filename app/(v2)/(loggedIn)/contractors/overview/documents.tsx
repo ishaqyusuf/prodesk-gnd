@@ -1,7 +1,6 @@
 "use client";
 
 import { ContractorOverview } from "./type";
-
 import { _deleteContractorDoc } from "@/app/(v2)/(loggedIn)/contractors/overview/_actions/delete-contractor-doc";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Button } from "@/components/ui/button";
