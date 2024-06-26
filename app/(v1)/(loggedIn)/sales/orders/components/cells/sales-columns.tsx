@@ -128,7 +128,12 @@ export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
     return (
         <div className="w-full">
             <LinkableNode href={link} className={cn("hover:underline")}>
-                <div className="font-medium uppercase line-clamp-1">
+                <div
+                    className={cn(
+                        "font-medium uppercase line-clamp-1s",
+                        order?.customer?.businessName && "text-blue-700"
+                    )}
+                >
                     {order?.customer?.businessName || order?.customer?.name}
                 </div>
                 <span className="text-muted-foreground">
