@@ -128,7 +128,7 @@ export function nav(
     if (!isAdmin) {
         if (viewInstallation) {
             routes.Services.push(
-                _route("Installations", Icons.tasks, "/tasks/installations")
+                _route("Installations", Icons.tasks, "/jobs/installations")
             );
             routes.Services.push(
                 _route("Payments", Icons.payment, "/payments")
@@ -136,7 +136,7 @@ export function nav(
         }
         if (__can.viewTech) {
             routes.Services.push(
-                _route("Punchout", Icons.punchout, "/tasks/punchouts")
+                _route("Punchout", Icons.punchout, "/jobs/punchouts")
             );
             routes.Services.push(
                 _route("Payments", Icons.payment, "/payments")
@@ -144,7 +144,7 @@ export function nav(
         }
         if (__can.viewDecoShutterInstall) {
             routes.Services.push(
-                _route("Installations", Icons.tasks, "/tasks/installations")
+                _route("Installations", Icons.tasks, "/jobs/installations")
             );
             routes.Services.push(
                 _route("Payments", Icons.payment, "/payments")
