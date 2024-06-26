@@ -96,6 +96,9 @@ export async function getOrderAssignmentData(id, mode) {
                         include: {
                             assignedTo: true,
                             submissions: {
+                                include: {
+                                    itemDeliveries: true,
+                                },
                                 where: {
                                     deletedAt: null,
                                 },

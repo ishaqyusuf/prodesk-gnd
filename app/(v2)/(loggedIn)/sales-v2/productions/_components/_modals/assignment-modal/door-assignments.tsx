@@ -13,10 +13,8 @@ import { useAssignmentData } from ".";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { _deleteAssignment } from "./_action/actions";
 import { useAssignment } from "./use-assignment";
-import SubmitDoorProduction from "./submit-production";
-
+import SubmitDoorProduction from "./submit-form";
 import { TableCol } from "@/components/common/data-table/table-cells";
-
 interface Props {
     groupIndex;
     doorIndex;

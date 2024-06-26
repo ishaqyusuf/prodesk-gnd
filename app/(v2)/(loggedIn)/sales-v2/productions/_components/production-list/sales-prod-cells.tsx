@@ -7,6 +7,10 @@ import { useAssignment } from "../_modals/assignment-modal/use-assignment";
 import { cn, sum } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dot } from "lucide-react";
+import {
+    MenuItem,
+    RowActionMoreMenu,
+} from "@/components/_v1/data-table/data-table-row-actions";
 
 interface Props {
     item: ProductionListItemType;
@@ -124,6 +128,7 @@ function AssignedTo({ item }: Props) {
 }
 function Actions({ item }: Props) {
     const assignment = useAssignment();
+
     return (
         <>
             <Button
@@ -131,10 +136,14 @@ function Actions({ item }: Props) {
                     assignment.open(item.id);
                 }}
                 size={"sm"}
+                className="h-8"
                 variant={"default"}
             >
                 View
             </Button>
+            <RowActionMoreMenu>
+                <MenuItem>Mark as Completed</MenuItem>
+            </RowActionMoreMenu>
         </>
     );
 }

@@ -17,10 +17,10 @@ TODO:
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
     - Multi component step ability to traverse back to final stage when rechecked changed. (eg: doors)
-    - Job edit not showing unit and task list
+    <!-- - Job edit not showing unit and task list -->
     - NEW REQUEST: Order delivery date, set date and manage delivery date.
     - Production status on orders page.
-    - roles form upgrade
+    <!-- - roles form upgrade -->
     <!-- - NEW REQUEST: Custom sales report: print statement button in customer overview either passed due, or paid, by date. -->
     - Sales settings; profile select
     - Production auto-complete
