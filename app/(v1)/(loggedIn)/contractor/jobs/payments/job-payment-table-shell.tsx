@@ -10,25 +10,28 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-} from "../columns/base-columns";
+} from "../../../../../../components/_v1/columns/base-columns";
 
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
+import { BuilderFilter } from "../../../../../../components/_v1/filters/builder-filter";
 import { openModal } from "@/lib/modal";
 import { IJobPayment, IUser } from "@/types/hrm";
-import Money from "../money";
+import Money from "../../../../../../components/_v1/money";
 import {
     DeleteRowAction,
     RowActionCell,
-} from "../data-table/data-table-row-actions";
+} from "../../../../../../components/_v1/data-table/data-table-row-actions";
 import { _deleteJobPayment } from "@/app/(v1)/_actions/hrm-jobs/payment.crud";
 
 export default function JobPaymentTableShell({
     data,
     pageInfo,
     searchParams,
-}: TableShellProps<IJobPayment>) {
+    admin,
+}: TableShellProps<IJobPayment> & {
+    admin?: boolean;
+}) {
     const [isPending, startTransition] = useTransition();
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
@@ -124,10 +127,12 @@ export default function JobPaymentTableShell({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
-                        <DeleteRowAction
-                            row={row.original}
-                            action={_deleteJobPayment}
-                        />
+                        {admin && (
+                            <DeleteRowAction
+                                row={row.original}
+                                action={_deleteJobPayment}
+                            />
+                        )}
                     </RowActionCell>
                 ),
             },

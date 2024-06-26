@@ -6,19 +6,23 @@ import { revalidatePath } from "next/cache";
 export async function _deleteJobPayment(paymentId) {
     const u = await prisma.jobs.updateMany({
         where: {
-            paymentId
+            paymentId,
         },
         data: {
             status: "Payment Cancelled",
             paymentId: null,
-            statusDate: new Date()
-        }
+            statusDate: new Date(),
+        },
     });
 
-    await prisma.jobPayments.delete({
+    await prisma.jobPayments.update({
         where: {
-            id: paymentId
-        }
+            id: paymentId,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
     });
-    revalidatePath("/contractor/jobs/payments", "page");
+    // revalidatePath("/contractor/jobs/payments", "page");
 }
+

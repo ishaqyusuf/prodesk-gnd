@@ -131,7 +131,7 @@ export function nav(
                 _route("Installations", Icons.tasks, "/tasks/installations")
             );
             routes.Services.push(
-                _route("Payments", Icons.payment, "/tasks/payments")
+                _route("Payments", Icons.payment, "/payments")
             );
         }
         if (__can.viewTech) {
@@ -139,7 +139,7 @@ export function nav(
                 _route("Punchout", Icons.punchout, "/tasks/punchouts")
             );
             routes.Services.push(
-                _route("Payments", Icons.payment, "/tasks/payments")
+                _route("Payments", Icons.payment, "/payments")
             );
         }
         if (__can.viewDecoShutterInstall) {
@@ -147,7 +147,7 @@ export function nav(
                 _route("Installations", Icons.tasks, "/tasks/installations")
             );
             routes.Services.push(
-                _route("Payments", Icons.payment, "/tasks/payments")
+                _route("Payments", Icons.payment, "/payments")
             );
         }
     }
