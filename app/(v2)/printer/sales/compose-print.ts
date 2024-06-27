@@ -463,13 +463,24 @@ function getDoorsTable(
 }
 
 function lineItems(data: PrintData, { isProd, isPacking }) {
-    const lineItems = data.order.items.filter(
-        (item) => !item.housePackageTool || !item.shelfItems
-    );
-    console.log(data.order.items.length);
+    const lineItems = data.order.items
+        .filter((item) => !item.housePackageTool || !item.shelfItems)
+        .map((item) => {
+            if (!!item.meta.uid && item.meta.line_index >= 0)
+                item.meta.uid = item.meta.line_index;
+            return item;
+        });
+    console.log("line items:", data.order.items.length);
 
     const maxIndex = Math.max(
-        ...lineItems.map((item) => item.meta.uid).filter((d) => d > -1)
+        ...lineItems
+            .map((item) => {
+                // console.log(item.meta);
+                let uid = item.meta.uid;
+
+                return uid; //  || item.meta.line_index;
+            })
+            .filter((d) => d > -1)
     );
     const totalLines = maxIndex ? maxIndex + 1 : lineItems?.length;
     if (totalLines < 0) return null;
