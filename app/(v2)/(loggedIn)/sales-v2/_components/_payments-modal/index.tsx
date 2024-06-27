@@ -65,8 +65,8 @@ export default function PaymentModal({
             const order = ctx.data;
             if (!order) return;
             const amountPaid = Number(formData.amount);
-            let totalPaid = order.amountDue + amountPaid;
             const amountDue = (order.amountDue || 0) - amountPaid;
+            let totalPaid = order.grandTotal - amountDue;
             await applyPaymentAction({
                 orders: [
                     {
@@ -93,6 +93,7 @@ export default function PaymentModal({
             await _revalidate("salesOverview");
             await _revalidate("salesOverview1");
             if (salesForm) salesForm.setValue("paidAmount", totalPaid);
+            console.log(totalPaid);
         });
     }
     async function deletePayment(payment) {
