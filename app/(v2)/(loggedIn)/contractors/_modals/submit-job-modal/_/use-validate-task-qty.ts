@@ -8,16 +8,21 @@ export function useValidateTaskQty(form) {
         validate() {
             if (form.getValues("job.type") == "installation") {
                 const maxQty = form.getValues("home.costing") || {};
-                console.log(maxQty);
+
                 const costData = form.getValues("job.meta.costData") || {};
+                // console.log(costData);
                 const schem = {};
+                let hasCost = false;
                 Object.entries(costData).map(([k, v]) => {
                     let maxQ = maxQty[k] || 0;
                     if (typeof maxQ == "string") maxQ = Number(maxQ);
-                    if ((v as any)?.qty > 0)
+
+                    if ((v as any)?.qty > 0) {
+                        hasCost = true;
                         schem[k] = z.object({
                             qty: z.number({}).max(maxQ).min(0),
                         });
+                    }
                 });
                 const schema = z.object({
                     job: z.object({
@@ -29,6 +34,7 @@ export function useValidateTaskQty(form) {
                     }),
                 });
                 try {
+                    console.log(costData);
                     Object.entries(costData).map(([k, v]) => {
                         v &&
                             typeof (v as any)?.qty === "string" &&
@@ -38,8 +44,7 @@ export function useValidateTaskQty(form) {
                             });
                         // k == "undefined" && delete formData.meta.costData[k];
                     });
-                    console.log(costData);
-                    schema.parse(form.getValues());
+                    if (hasCost) schema.parse(form.getValues());
                 } catch (error) {
                     (error as any).issues.map((e) => {
                         form.setError(e.path.join("."), {

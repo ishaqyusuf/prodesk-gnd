@@ -57,31 +57,29 @@ export default function useSubmitJob(form) {
     const [isLoading, startTransition] = useTransition();
     async function submit() {
         startTransition(async () => {
-            try {
-                const { job } = form.getValues();
-                job.meta.taskCost = submitJobUtils.totalTaskCost(
-                    job.meta.costData
-                );
-                // console.log(job.meta.taskCost);
-                // if(!job.id)
-                job.amount = 0;
-                if (!job.homeId) job.meta.addon = 0;
-                [
-                    job.meta.addon,
-                    job.meta.taskCost,
-                    job.meta.additional_cost,
-                ].map((n) => n > 0 && (job.amount += Number(n)));
-                if (job.coWorkerId) job.amount /= 2;
-                if (!job.id) await createJobAction(job as any);
-                else await updateJobAction(job as any);
-                toast.message("Success!");
-                // closeModal();
-                modal?.close();
-                await _revalidate("jobs");
-                await _revalidate("contractorJobs");
-            } catch (error) {
-                if (error instanceof Error) toast.error(error.message);
-            }
+            // try {
+            const { job } = form.getValues();
+            job.meta.taskCost = submitJobUtils.totalTaskCost(job.meta.costData);
+            // console.log(job.meta.taskCost);
+            // if(!job.id)
+            job.amount = 0;
+            if (!job.homeId) job.meta.addon = 0;
+            [job.meta.addon, job.meta.taskCost, job.meta.additional_cost].map(
+                (n) => n > 0 && (job.amount += Number(n))
+            );
+            if (job.coWorkerId) job.amount /= 2;
+            if (!job.id) await createJobAction(job as any);
+            else await updateJobAction(job as any);
+            toast.message("Success!");
+            // closeModal();
+            modal?.close();
+            await _revalidate("jobs");
+            await _revalidate("contractorJobs");
+            // } catch (error) {
+            //     console.log(error);
+
+            //     if (error instanceof Error) toast.error(error.message);
+            // }
         });
     }
     const [cost, setCosts] = useState([]);
