@@ -32,6 +32,7 @@ import {
 } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
 import { toast } from "sonner";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 interface Props {
     id;
@@ -82,6 +83,8 @@ export default function PaymentModal({ id, orderId, edit }: Props) {
                 data: {},
             });
             ctx.refresh();
+            await _revalidate("salesOverview");
+            await _revalidate("salesOverview1");
         });
     }
     async function deletePayment(payment) {

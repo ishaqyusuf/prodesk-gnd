@@ -1,8 +1,10 @@
 "use client";
 
 import { deleteSalesPayment } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-payment";
+import PaymentModal from "@/app/(v2)/(loggedIn)/sales-v2/_components/_payments-modal";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import Money from "@/components/_v1/money";
+import { useModal } from "@/components/common/modal/provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -15,7 +17,7 @@ import { Plus } from "lucide-react";
 
 export default function PaymentHistory() {
     const { data: order } = useDataPage<ISalesOrder>();
-
+    const modal = useModal();
     return (
         <div className="col-span-1">
             <Card className="max-sm:border-none">
@@ -25,10 +27,16 @@ export default function PaymentHistory() {
                         <div>
                             <Button
                                 onClick={() => {
-                                    openModal("salesPayment", {
-                                        ...order.customer,
-                                        salesOrders: [order],
-                                    });
+                                    modal.openSheet(
+                                        <PaymentModal
+                                            id={order.id}
+                                            orderId={order.orderId}
+                                        />
+                                    );
+                                    // openModal("salesPayment", {
+                                    //     ...order.customer,
+                                    //     salesOrders: [order],
+                                    // });
                                 }}
                                 className="h-8 w-8 p-0"
                                 variant="outline"

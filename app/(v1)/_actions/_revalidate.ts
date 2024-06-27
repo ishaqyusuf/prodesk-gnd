@@ -32,6 +32,7 @@ const _path = {
     salesV2Form: "/sales-v2/form/[...slug]",
     "sales-production-2": "/sales-v2/productions",
     salesOverview: "/sales-v2/overview/[...typeAndSlug]",
+    salesOverview1: "sales/order/[slug]",
     payables: "/sales/accounting/payables",
     employees: "/hrm/employees",
     customerProfiles: "/sales/customers/profiles",
