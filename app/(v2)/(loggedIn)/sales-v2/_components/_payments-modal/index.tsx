@@ -38,8 +38,14 @@ interface Props {
     id;
     orderId;
     edit?: boolean;
+    form?;
 }
-export default function PaymentModal({ id, orderId, edit }: Props) {
+export default function PaymentModal({
+    id,
+    orderId,
+    edit,
+    form: salesForm,
+}: Props) {
     const modal = useModal();
     const ctx = useEffectLoader(async () => await getSalesPayments(id), {});
     const form = useForm({
@@ -59,6 +65,7 @@ export default function PaymentModal({ id, orderId, edit }: Props) {
             const order = ctx.data;
             if (!order) return;
             const amountPaid = Number(formData.amount);
+            let totalPaid = order.amountDue + amountPaid;
             const amountDue = (order.amountDue || 0) - amountPaid;
             await applyPaymentAction({
                 orders: [
@@ -85,6 +92,7 @@ export default function PaymentModal({ id, orderId, edit }: Props) {
             ctx.refresh();
             await _revalidate("salesOverview");
             await _revalidate("salesOverview1");
+            if (salesForm) salesForm.setValue("paidAmount", totalPaid);
         });
     }
     async function deletePayment(payment) {

@@ -89,6 +89,7 @@ export default function HeaderSection({}) {
                                         <PaymentModal
                                             id={id}
                                             orderId={orderId}
+                                            form={form}
                                         />
                                     );
                                 }}
