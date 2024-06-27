@@ -476,10 +476,9 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
 
     const uids = lineItems
         .map((item) => {
-            // console.log(item.meta);
             let uid = item.meta.uid;
 
-            return uid; //  || item.meta.line_index;
+            return uid;
         })
         .filter((d) => d > -1);
 

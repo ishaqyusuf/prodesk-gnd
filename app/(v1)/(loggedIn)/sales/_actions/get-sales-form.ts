@@ -65,10 +65,17 @@ export async function _getSalesFormAction(
     });
     if (!order) return await newSalesFormAction(query);
     const { payments, ..._order } = order;
+
     const ctx = await salesFormData();
     let paidAmount = sum(payments, "amount");
     return {
-        form: _order as any,
+        form: {
+            ...(_order as any),
+            items: _order.items.map((item) => {
+                if (!item.price && item.rate) item.price = item.rate;
+                return item;
+            }),
+        },
         ctx: ctx as any,
         paidAmount: paidAmount as any,
     };

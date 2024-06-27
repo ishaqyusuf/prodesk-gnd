@@ -24,6 +24,8 @@ interface Props {
 let renderCount = 0;
 export default function EditSalesForm({ data }: Props) {
     const _formData: any = data?.form || { meta: {} };
+    // console.log(_formData);
+
     const { _items, footer } = salesFormUtils.initInvoiceItems(
         data?.form?.items
     );
