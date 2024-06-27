@@ -14,6 +14,7 @@ import { formatCurrency, inToFt } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
+import ContactUsPage from "@/app/(storefront)/storefront/contact-us/page";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
@@ -466,23 +467,26 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
     const lineItems = data.order.items
         .filter((item) => !item.housePackageTool || !item.shelfItems)
         .map((item) => {
-            if (!!item.meta.uid && item.meta.line_index >= 0)
+            if (!item.meta.uid && item.meta.line_index >= 0) {
+                console.log(">");
                 item.meta.uid = item.meta.line_index;
+            }
             return item;
         });
-    console.log("line items:", data.order.items.length);
 
-    const maxIndex = Math.max(
-        ...lineItems
-            .map((item) => {
-                // console.log(item.meta);
-                let uid = item.meta.uid;
+    const uids = lineItems
+        .map((item) => {
+            // console.log(item.meta);
+            let uid = item.meta.uid;
 
-                return uid; //  || item.meta.line_index;
-            })
-            .filter((d) => d > -1)
-    );
+            return uid; //  || item.meta.line_index;
+        })
+        .filter((d) => d > -1);
+
+    const maxIndex = Math.max(...uids);
     const totalLines = maxIndex ? maxIndex + 1 : lineItems?.length;
+    console.log([totalLines, maxIndex, lineItems.length]);
+
     if (totalLines < 0) return null;
     const heading = [
         header("#", 1),
