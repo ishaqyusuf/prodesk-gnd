@@ -16,11 +16,6 @@ interface mode {
     dispatch: boolean;
 }
 export async function getOrderAssignmentData(id, mode) {
-    // await prisma.orderItemProductionAssignments.updateMany({
-    //     data: {
-    //         qtyAssigned: 1,
-    //     },
-    // });
     const authId = await userId();
     const session = await serverSession();
     const { can } = session;
@@ -110,7 +105,6 @@ export async function getOrderAssignmentData(id, mode) {
         },
     });
     if (!order) throw Error("Not found");
-    // const _item = order.items[0];
     const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta);
     let assignmentSummary = {};
     type AssignmentType = (typeof order)["items"][0]["assignments"];
@@ -302,9 +296,8 @@ export async function getOrderAssignmentData(id, mode) {
         });
         // .filter((dg) => dg.salesDoors.length);
     }
-    // console.log(doorGroups);
-    // console.log(order.items.length);
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
+
     return {
         ...order,
         totalQty,

@@ -296,3 +296,5 @@ export const Icons = {
         </svg>
     ),
 };
+
+export type IconKeys = keyof typeof Icons;

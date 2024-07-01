@@ -141,9 +141,9 @@ function Actions({ item }: Props) {
             >
                 View
             </Button>
-            <RowActionMoreMenu>
+            {/* <RowActionMoreMenu>
                 <MenuItem>Mark as Completed</MenuItem>
-            </RowActionMoreMenu>
+            </RowActionMoreMenu> */}
         </>
     );
 }

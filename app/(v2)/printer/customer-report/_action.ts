@@ -27,6 +27,7 @@ export async function generateCustomerPrintReport(
                 where: salesQuery.salesOrders?.some ||
                     salesQuery.salesOrders?.every || {
                         type: "order",
+                        deletedAt: null,
                         amountDue: {
                             gt: 0,
                         },

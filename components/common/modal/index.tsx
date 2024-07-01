@@ -116,8 +116,9 @@ interface HeaderProps {
     subtitle?: string | any;
     onBack?;
     icon?: keyof typeof Icons;
+    children?;
 }
-function Header({ title, icon, subtitle, onBack }: HeaderProps) {
+function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
     const modal = useModal();
     const isModal = modal?.data?.type == "modal";
     const [Header, Title, Subtitle] = isModal
@@ -126,25 +127,28 @@ function Header({ title, icon, subtitle, onBack }: HeaderProps) {
     const Icon = Icons[icon] || undefined;
     return (
         <Header>
-            <div className={cn(onBack && "flex space-x-4")}>
-                {onBack && (
-                    <div>
-                        <Button
-                            onClick={onBack}
-                            variant={"secondary"}
-                            size={"icon"}
-                        >
-                            <Icons.chevronLeft className="w-4 h-4" />
-                        </Button>
+            <div className="flex">
+                <div className={cn(onBack && "flex space-x-4")}>
+                    {onBack && (
+                        <div>
+                            <Button
+                                onClick={onBack}
+                                variant={"secondary"}
+                                size={"icon"}
+                            >
+                                <Icons.chevronLeft className="w-4 h-4" />
+                            </Button>
+                        </div>
+                    )}
+                    <div className="flex-1">
+                        <div className="flex items-center">
+                            {Icon && <Icon className="w-4 h-4 mr-4" />}
+                            {title && <Title>{title}</Title>}
+                        </div>
+                        {subtitle && <Subtitle>{subtitle}</Subtitle>}
                     </div>
-                )}
-                <div className="flex-1">
-                    <div className="flex items-center">
-                        {Icon && <Icon className="w-4 h-4 mr-4" />}
-                        {title && <Title>{title}</Title>}
-                    </div>
-                    {subtitle && <Subtitle>{subtitle}</Subtitle>}
                 </div>
+                {children}
             </div>
         </Header>
     );

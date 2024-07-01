@@ -63,10 +63,11 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
             salesOrders: {
                 where: salesQuery.salesOrders?.some ||
                     salesQuery.salesOrders?.every || {
+                        deletedAt: null,
                         type: "order" as ISalesType,
-                        amountDue: {
-                            gt: 0,
-                        },
+                        // amountDue: {
+                        //     gt: 0,
+                        // },
                     },
                 select: {
                     amountDue: true,

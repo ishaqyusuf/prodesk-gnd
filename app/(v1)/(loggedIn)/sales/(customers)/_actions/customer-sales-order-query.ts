@@ -44,7 +44,8 @@ export default function customerSalesOrderQuery({ _having, _due }: Props) {
             },
         };
     if (!dueDateQuery) dueDateQuery = {};
-    if (dueDateQuery) _having = "Pending Invoice";
+    // if (dueDateQuery)
+    else _having = "Pending Invoice";
 
     switch (_having) {
         case "Pending Invoice":
@@ -55,6 +56,8 @@ export default function customerSalesOrderQuery({ _having, _due }: Props) {
                         gt: 0,
                     },
                     ...dueDateQuery,
+
+                    deletedAt: null,
                 },
             };
             break;
@@ -63,10 +66,19 @@ export default function customerSalesOrderQuery({ _having, _due }: Props) {
                 every: {
                     amountDue: 0,
                     type: "order" as ISalesType,
+                    deletedAt: null,
                     // ...dueDateQuery,
                 },
             };
             break;
+        // default:
+        // query.salesDoors = {
+        //     type: "order",
+        //     deletedAt: null,
+        //     amountDue: {
+        //         gt: 0,
+        //     },
+        // };
     }
     return query;
 }

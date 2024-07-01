@@ -571,7 +571,7 @@ model OrderItemProductionAssignments {
     id           Int                          @unique @default(autoincrement())
     itemId       Int
     orderId      Int
-    assignedToId Int
+    assignedToId Int?
     assignedById Int
     qtyAssigned  Int?
     qtyCompleted Int?
@@ -587,7 +587,7 @@ model OrderItemProductionAssignments {
     submissions  OrderProductionSubmissions[]
     order        SalesOrders                  @relation(fields: [orderId], references: [id])
     item         SalesOrderItems              @relation(fields: [itemId], references: [id])
-    assignedTo   Users                        @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
+    assignedTo   Users?                       @relation(name: "orderItemAssignments", fields: [assignedToId], references: [id])
     assignedBy   Users                        @relation(name: "orderItemAssignedByMe", fields: [assignedById], references: [id])
     salesDoor    DykeSalesDoors?              @relation(fields: [salesDoorId], references: [id])
 
@@ -1092,6 +1092,7 @@ model OrderDeliveryProgress {
     id           Int             @unique @default(autoincrement())
     deliveredQty Int             @default(0)
     pendingQty   Int             @default(0)
+    percentage   Float           @default(0)
     orderId      Int             @unique
     order        SalesOrders     @relation(fields: [orderId], references: [id])
     deliveries   OrderDelivery[]

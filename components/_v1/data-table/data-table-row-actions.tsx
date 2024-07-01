@@ -1,7 +1,7 @@
 "use client";
 
 import { Info, MoreHorizontal, Trash } from "lucide-react";
-import { Button } from "../../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,7 +18,7 @@ import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useRouter } from "next/navigation";
 import { useBool } from "@/lib/use-loader";
 
-import { Icons } from "../icons";
+import { IconKeys, Icons } from "../icons";
 import { toast } from "sonner";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
 import LinkableNode from "../link-node";
@@ -28,6 +28,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { VariantProps } from "class-variance-authority";
 
 export function RowActionCell({ children }: { children? }) {
     return (
@@ -36,21 +37,24 @@ export function RowActionCell({ children }: { children? }) {
         </div>
     );
 }
+interface RowActionMoreMenuProps {
+    children;
+    disabled?: boolean;
+    label?;
+    Icon?;
+    Trigger?;
+    noSize?: boolean;
+    variant?: VariantProps<typeof buttonVariants>["variant"];
+}
 export function RowActionMoreMenu({
     children,
     Icon = MoreHorizontal,
     label,
     disabled,
     Trigger,
+    noSize,
     variant = "outline",
-}: {
-    children;
-    disabled?: boolean;
-    label?;
-    Icon?;
-    Trigger?;
-    variant?;
-}) {
+}: RowActionMoreMenuProps) {
     // const [open,onOpenChange] =
     return (
         <DropdownMenu>
@@ -62,8 +66,11 @@ export function RowActionMoreMenu({
                         disabled={disabled}
                         variant={variant}
                         className={cn(
-                            "flex h-8 space-x-4 data-[state=open]:bg-muted",
-                            !label && "w-8 p-0"
+                            "flex h-8 space-x-4 ",
+                            !label && "w-8 p-0",
+                            variant == "default"
+                                ? "data-[state=open]:bg-muted-foreground"
+                                : "data-[state=open]:bg-muted"
                         )}
                     >
                         {Icon && <Icon className="h-4 w-4" />}
@@ -71,13 +78,21 @@ export function RowActionMoreMenu({
                     </Button>
                 )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[185px]">
+            <DropdownMenuContent align="end" className={!noSize && "w-[185px]"}>
                 {children}
             </DropdownMenuContent>
         </DropdownMenu>
     );
 }
 export const Menu = RowActionMoreMenu;
+type MenuItemProps = {
+    link?;
+    href?;
+    Icon?;
+    SubMenu?;
+    _blank?: Boolean;
+    icon?: IconKeys;
+} & DropdownMenuItemProps; // PrimitiveDivProps &
 export function RowActionMenuItem({
     link,
     href,
@@ -86,15 +101,10 @@ export function RowActionMenuItem({
     SubMenu,
     onClick,
     _blank,
+    icon,
     ...props
-}: {
-    link?;
-    href?;
-    Icon?;
-    SubMenu?;
-    _blank?: Boolean;
-} & PrimitiveDivProps &
-    DropdownMenuItemProps) {
+}: MenuItemProps) {
+    if (!Icon && icon) Icon = Icons[icon];
     if (SubMenu)
         return (
             <DropdownMenuSub {...props}>
