@@ -10,12 +10,20 @@ import { serverSession, userId } from "@/app/(v1)/_actions/utils";
 import getDoorConfig from "@/app/(v2)/(loggedIn)/sales-v2/form/_hooks/use-door-config";
 import { composeDoorDetails } from "@/app/(v2)/(loggedIn)/sales-v2/_utils/compose-sales-items";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
+import { ServerPromiseType } from "@/types";
+import { unstable_noStore } from "next/cache";
+import { IAssignGroupForm } from "../sectioned-item-assign-form";
 
 interface mode {
     prod: boolean;
     dispatch: boolean;
 }
-export async function getOrderAssignmentData(id, mode) {
+export type GetOrderAssignmentData = ServerPromiseType<
+    typeof getOrderAssignmentData
+>["Response"];
+export async function getOrderAssignmentData(id, mode?: mode) {
+    unstable_noStore();
+    if (!mode) mode = {} as any;
     const authId = await userId();
     const session = await serverSession();
     const { can } = session;
@@ -241,7 +249,7 @@ export async function getOrderAssignmentData(id, mode) {
                 : (item, item2) =>
                       item.item.meta.lineIndex - item2.item.meta.lineIndex
         );
-    doorGroups = doorGroups
+    let _doorGroups = doorGroups
         .map((group, index) => {
             if (!order.isDyke) {
                 const gItem = doorGroups.findLast(
@@ -253,9 +261,32 @@ export async function getOrderAssignmentData(id, mode) {
                 group.sectionTitle = title as any;
                 group.groupItemId = gItem?.id;
             }
-            return group;
+            const _doors: any = {};
+            group?.salesDoors?.map((s, si) => {
+                //  if (
+                //      (salesDoorIndex >= 0 && si == salesDoorIndex) ||
+                //      salesDoorIndex < 0
+                //  ) {
+                _doors[s.salesDoor?.id?.toString()] = {
+                    ...s.report,
+                    lhQty: s.report._unassigned?.lh,
+                    rhQty: s.report._unassigned?.rh,
+                };
+                //  }
+            });
+            const assignmentForm = {
+                doors: _doors,
+                assignToId: -1,
+            } as IAssignGroupForm;
+            const ng = {
+                ...group,
+                assignmentForm,
+            };
+            // ng.assignmentForm.
+            return ng;
         })
         .filter((item) => order.isDyke || (!order.isDyke && item.item.qty));
+    // doorGroups[0].assi
     if (doorGroups.filter((dg) => dg.groupItemId).length > 0) {
         const ng = doorGroups.filter(
             (_, i) =>
@@ -297,11 +328,11 @@ export async function getOrderAssignmentData(id, mode) {
         // .filter((dg) => dg.salesDoors.length);
     }
     const totalQty = sum(doorGroups.map((d) => d.report.totalQty));
-
+    // doorGroups[0].
     return {
         ...order,
         totalQty,
-        doorGroups,
+        doorGroups: _doorGroups,
         isProd: mode.prod,
         mode,
         readOnly,

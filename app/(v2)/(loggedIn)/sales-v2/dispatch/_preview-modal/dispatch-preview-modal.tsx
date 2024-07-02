@@ -1,13 +1,10 @@
 "use client";
 
 import { useDataPage } from "@/lib/data-page-context";
-import { getDispatchPreviewAction } from "../action";
-import { ServerPromiseType } from "@/types";
 import Modal from "@/components/common/modal";
+import { GetOrderAssignmentData } from "../../productions/_components/_modals/assignment-modal/_action/get-order-assignment-data";
 
-export type OrderAssignmentData = ServerPromiseType<
-    typeof getDispatchPreviewAction
->["Response"];
+export type OrderAssignmentData = GetOrderAssignmentData;
 export const useData = () => useDataPage<OrderAssignmentData>();
 
 export default function DispatchPreviewModal() {

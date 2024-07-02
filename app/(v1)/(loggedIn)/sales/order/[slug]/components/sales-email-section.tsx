@@ -1,6 +1,5 @@
 "use client";
 
-import { useAppSelector } from "@/store";
 import { IAddressBook, ISalesOrder } from "@/types/sales";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

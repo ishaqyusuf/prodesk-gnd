@@ -4,8 +4,10 @@ Shelf item auto pick when created
 shelf item delete.
 
 ----------------------------
+# JUL 02: 00.00 == 00.00
+    03:15-
 # JUL 01: 00.00 == 00.00
-    
+    09:25-10:25
 TOTAL: $245
 Zelle marzuqisiaka@gmail.com
 # JUN 28: 01.00 == 07.00

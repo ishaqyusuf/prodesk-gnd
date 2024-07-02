@@ -5,7 +5,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OrderAssignmentData, useAssignmentData } from "..";
+import { useAssignmentData } from "..";
 import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,15 +37,15 @@ import { toast } from "sonner";
 import { useAssignment } from "../use-assignment";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/_v1/date-range-picker";
-import dayjs from "dayjs";
-import { serverDate } from "../_action/actions";
+
+import { GetOrderAssignmentData } from "../_action/get-order-assignment-data";
 
 export interface IAssignGroupForm {
     assignToId?: number;
     prodDueDate;
 
     doors: {
-        [id in string]: OrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
+        [id in string]: GetOrderAssignmentData["doorGroups"][0]["salesDoors"][0]["report"];
     };
 }
 interface Props {
@@ -78,15 +78,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                     (salesDoorIndex >= 0 && si == salesDoorIndex) ||
                     salesDoorIndex < 0
                 ) {
-                    console.log(
-                        [salesDoorIndex, s.salesDoor.salesOrderItemId],
-                        si
-                    );
-
-                    // console.log(s.salesDoor?.id?.toString());
-
                     doors[s.salesDoor?.id?.toString()] = {
-                        // qty: s.report.pendingAssignment,
                         ...s.report,
                         lhQty: s.report._unassigned?.lh,
                         rhQty: s.report._unassigned?.rh,
@@ -122,13 +114,13 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
         startSaving(async () => {
             try {
                 const _data = validator.validate();
-                let dueDate = form.getValues("prodDueDate");
+                // let dueDate = form.getValues("prodDueDate");
                 if (_data) {
                     const r = await createProdAssignment(
                         _data,
                         data.data.productionStatus?.id,
                         data.data.totalQty,
-                        dueDate
+                        prodDueDate
                     );
                     toast.success("Production assigned");
                     modal.open(data.data.id);

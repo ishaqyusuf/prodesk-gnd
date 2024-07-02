@@ -8,8 +8,8 @@ export interface SalesPrintProps {
     searchParams: {
         slugs: string;
         mode: "order" | "quote" | "production" | "packing list";
-        mockup: "yes" | "no";
-        preview: boolean;
+        mockup?: "yes" | "no";
+        preview?: boolean;
         pdf: boolean;
     };
 }

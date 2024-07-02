@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import { OrderItemProductionAssignments } from "@prisma/client";
 import { IAssignGroupForm } from "./index";
 
-export function useValidateAssignment(form: UseFormReturn<IAssignGroupForm>) {
+export function useValidateAssignment(form?: UseFormReturn<IAssignGroupForm>) {
     return {
-        validate() {
-            const v = form.getValues();
+        validate(values?) {
+            const v = form?.getValues();
 
             let schema: any = null;
             form.clearErrors();

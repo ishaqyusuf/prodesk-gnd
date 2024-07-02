@@ -3,13 +3,10 @@
 import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
 import { OrderProductionSubmissions } from "@prisma/client";
-import { getOrderAssignmentData } from "./get-order-assignment-data";
-import { ServerPromiseType } from "@/types";
-import dayjs from "dayjs";
+import { GetOrderAssignmentData } from "./get-order-assignment-data";
 
-type Props = ServerPromiseType<
-    typeof getOrderAssignmentData
->["Response"]["doorGroups"][0]["salesDoors"][0]["assignments"][0];
+type Props =
+    GetOrderAssignmentData["doorGroups"][0]["salesDoors"][0]["assignments"][0];
 
 export async function serverDate(date) {
     // dayjs.locale(ILOca)

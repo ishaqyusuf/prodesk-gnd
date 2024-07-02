@@ -12,7 +12,7 @@ import { getEmailData } from "../_actions/get-email-data";
 import { ServerPromiseType } from "@/types";
 import { useModal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
-import { sendMessage } from "@/app/(v1)/_actions/email";
+import { DownloadProps, sendMessage } from "@/app/(v1)/_actions/email";
 import { EmailTypes } from "../types";
 import { isProdClient } from "@/lib/is-prod";
 import { Toaster } from "@/components/ui/toaster";
@@ -30,8 +30,9 @@ interface Props {
         parentId: number;
         type: EmailTypes;
     };
+    download?: DownloadProps;
 }
-export default function SendEmailSheet({ subtitle, data }: Props) {
+export default function SendEmailSheet({ subtitle, data, download }: Props) {
     const form = useForm({
         defaultValues: {
             subject: "",
@@ -89,17 +90,20 @@ export default function SendEmailSheet({ subtitle, data }: Props) {
         }
         console.log(to);
         try {
-            await sendMessage({
-                to,
-                subject,
-                body,
-                parentId,
-                type,
-                data: emailData.data,
-                from: emailData.from,
-                meta: {},
-                attachOrder: true,
-            } as any);
+            await sendMessage(
+                {
+                    to,
+                    subject,
+                    body,
+                    parentId,
+                    type,
+                    data: emailData.data,
+                    from: emailData.from,
+                    meta: {},
+                    attachOrder: true,
+                } as any,
+                download
+            );
             toast.success("sent");
             modal.close();
         } catch (error) {

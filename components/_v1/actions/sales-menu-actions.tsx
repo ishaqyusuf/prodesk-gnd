@@ -32,6 +32,7 @@ import SendEmailSheet from "@/components/_v2/email/send-email";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { openLink } from "@/lib/open-link";
+import dayjs from "dayjs";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -175,6 +176,11 @@ export const SendEmailMenuAction = ({ sales }: { sales: any }) => {
                             parentId: sales.id,
                             to: email as any,
                             type: sales.type == "order" ? "sales" : "quote",
+                        }}
+                        download={{
+                            slug: sales.orderId,
+                            date: sales.createdAt,
+                            path: "sales",
                         }}
                         subtitle={`Sales Order | ${sales.orderId}`}
                     />

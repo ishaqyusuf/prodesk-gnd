@@ -23,7 +23,7 @@ export const PrintCtx = React.createContext<Props>({
     // pages: {},
 } as any);
 export const usePrintContext = () => React.useContext<Props>(PrintCtx);
-export default function BasePrinter({ slugs, children, preview, pdf }) {
+export default function BasePrinter({ slugs, children, preview = false, pdf }) {
     const defaultValues = {};
     slugs.map((s) => (defaultValues[s] = { ready: false }));
     // const [pages,setPages] = useState(defaultValues)

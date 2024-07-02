@@ -4,6 +4,8 @@ import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
+import { useModal } from "@/components/common/modal/provider";
+import SelectItemsCompletedBy from "./_components/_modals/select-completed-by";
 
 export default function useAssignmentActionsBuilder(
     order: AssignmentModalProps["order"]
@@ -14,13 +16,18 @@ export default function useAssignmentActionsBuilder(
         unassignAll: false,
         unsubmitAll: false,
     };
-    const menuActions = [
-        _createAction(
-            "Mark all as Submitted",
-            //  "markAllAsSubmitted",
-            null,
-            "check"
-        ),
+    const modal = useModal();
+    const menuActions: ReturnType<typeof _createAction>[] = [
+        {
+            title: "Mark all as Submitted",
+            fn: () => {
+                modal.openModal(
+                    <SelectItemsCompletedBy orderId={order.id} order={order} />
+                );
+            },
+            icon: "check",
+            active: false,
+        },
     ];
     return {
         actions,
@@ -31,6 +38,7 @@ export default function useAssignmentActionsBuilder(
                         className="whitespace-nowrap"
                         icon={action.icon}
                         key={action.icon}
+                        onClick={action.fn}
                     >
                         {action.title}
                     </MenuItem>
@@ -44,5 +52,6 @@ function _createAction(title, fn?, icon?: IconKeys) {
         title,
         fn,
         icon,
+        active: false,
     };
 }
