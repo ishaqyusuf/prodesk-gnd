@@ -38,7 +38,7 @@ export default function useAssignmentActionsBuilder(
                         className="whitespace-nowrap"
                         icon={action.icon}
                         key={action.icon}
-                        onClick={action.fn}
+                        // onClick={action.fn}
                     >
                         {action.title}
                     </MenuItem>
