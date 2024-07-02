@@ -26,7 +26,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
     const token = dayjs(download.date).format("HH:mm:ss")?.split(":").join("");
     trs.body = `${trs.body} </br>
-    <a href="download.gndprodesk.com/${download.path}/ptok-${token}/${download.slug}" >Download</a>
+    <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
     `;
     if (data.attachOrder && isProd && download) {
         // try {
