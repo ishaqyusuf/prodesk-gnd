@@ -11,7 +11,7 @@ export default async function DownloadPage({ params }) {
             orderId: slug?.toString(),
         },
     });
-    console.log(order.type);
+    // console.log(order.type);
     // return <></>;
-    return <SalesDownload id={order.id} mode={order.type} />;
+    return <SalesDownload id={order.orderId} mode={order.type} />;
 }
