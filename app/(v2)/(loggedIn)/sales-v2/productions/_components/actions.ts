@@ -12,14 +12,15 @@ import {
 import { serverSession } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
-import { dateEquals } from "@/app/(v1)/_actions/action-utils";
+import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
 import dayjs from "dayjs";
 import { formatDate } from "@/lib/use-day";
 interface Props {
     production?: boolean;
     query?: {
         _q?: string;
-        dueToday?;
+        dueToday?: boolean;
+        pastDue?: boolean;
         deliveryOption?: DeliveryOption;
     };
 }
@@ -31,6 +32,10 @@ export async function _getProductionList({ query, production = false }: Props) {
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
     const dueDate = query?.dueToday
         ? dateEquals(formatDate(dayjs(), "YYYY-MM-DD"))
+        : query?.pastDue
+        ? {
+              lt: fixDbTime(dayjs()).toISOString(),
+          }
         : undefined;
 
     // console.log(dueDate);
@@ -224,29 +229,46 @@ export async function _getProductionList({ query, production = false }: Props) {
         // const productions =
     });
     // console.log(data[0]);
+    let orders = data.map((order) => {
+        const resp = {
+            ...order,
+            _meta: {
+                totalDoors: sum(
+                    order.isDyke
+                        ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
+                        : order.items.map((i) => i.qty)
+                ),
+            },
+            customer: {
+                ...order.customer,
+                meta: {
+                    // ...(order.meta)
+                },
+            },
+            shippingAddress: {
+                ...order.shippingAddress,
+                meta: order.shippingAddress?.meta as any as IAddressMeta,
+            },
+        };
+        const totalDoors = resp._meta.totalDoors;
+        const submitted = sum(
+            resp.assignments.map((a) =>
+                sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
+            )
+        );
+
+        return {
+            ...resp,
+            totalDoors,
+            submitted,
+            completed: totalDoors == submitted,
+        };
+    });
+    console.log(orders.length);
     return {
-        data: data.map((order) => {
-            return {
-                ...order,
-                _meta: {
-                    totalDoors: sum(
-                        order.isDyke
-                            ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
-                            : order.items.map((i) => i.qty)
-                    ),
-                },
-                customer: {
-                    ...order.customer,
-                    meta: {
-                        // ...(order.meta)
-                    },
-                },
-                shippingAddress: {
-                    ...order.shippingAddress,
-                    meta: order.shippingAddress?.meta as any as IAddressMeta,
-                },
-            };
-        }),
+        data: orders.filter((a) =>
+            query.pastDue || query.dueToday ? !a.completed : undefined
+        ),
         pageCount,
     };
     // });

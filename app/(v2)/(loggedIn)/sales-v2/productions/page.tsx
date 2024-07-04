@@ -17,6 +17,11 @@ export default function SalesProductionPage({ searchParams }) {
             dueToday: true,
         },
     });
+    const pastDue = _getProductionList({
+        query: {
+            pastDue: true,
+        },
+    });
     return (
         <AuthGuard can={["viewOrderProduction"]}>
             {/* <ProductionPageTabs /> */}
@@ -26,7 +31,17 @@ export default function SalesProductionPage({ searchParams }) {
             </Breadcrumbs>
             <Shell className="px-8">
                 <PageHeader title="Due Today" />
-                <ProductionList simple promise={dueToday} />
+                <ProductionList
+                    emptyText="No Production due today"
+                    simple
+                    promise={dueToday}
+                />
+                <PageHeader title="Productions Past Due" />
+                <ProductionList
+                    emptyText="No Production past due"
+                    simple
+                    promise={pastDue}
+                />
                 <PageHeader title="Productions" />
                 <ProductionList promise={p} />
             </Shell>
