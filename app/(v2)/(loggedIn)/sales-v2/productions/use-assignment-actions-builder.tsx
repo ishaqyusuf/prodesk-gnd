@@ -6,6 +6,7 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { useModal } from "@/components/common/modal/provider";
 import SelectItemsCompletedBy from "./_components/_modals/select-completed-by";
+import { markAsSubmittedAction } from "./_actions/production-batch-actions";
 
 export default function useAssignmentActionsBuilder(
     order: AssignmentModalProps["order"]
@@ -22,10 +23,46 @@ export default function useAssignmentActionsBuilder(
             title: "Mark all as Submitted",
             fn: () => {
                 modal.openModal(
-                    <SelectItemsCompletedBy orderId={order.id} order={order} />
+                    <SelectItemsCompletedBy
+                        action="submitted"
+                        orderId={order.id}
+                        order={order}
+                    />
                 );
             },
             icon: "check",
+            active: false,
+        },
+        {
+            title: "Submit All Assignments",
+            fn: async () => {
+                let resp_ = await markAsSubmittedAction({
+                    orderId: order.id,
+                    submitAction: "only-assigned",
+                });
+                // modal.openModal(
+                //     <SelectItemsCompletedBy
+                //         action={"assign"}
+                //         orderId={order.id}
+                //         order={order}
+                //     />
+                // );
+            },
+            icon: "user",
+            active: false,
+        },
+        {
+            title: "Assign All To",
+            fn: () => {
+                modal.openModal(
+                    <SelectItemsCompletedBy
+                        action={"assign"}
+                        orderId={order.id}
+                        order={order}
+                    />
+                );
+            },
+            icon: "user",
             active: false,
         },
     ];
@@ -38,7 +75,7 @@ export default function useAssignmentActionsBuilder(
                         className="whitespace-nowrap"
                         icon={action.icon}
                         key={action.icon}
-                        // onClick={action.fn}
+                        onClick={action.fn}
                     >
                         {action.title}
                     </MenuItem>

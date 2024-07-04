@@ -9,42 +9,9 @@ export function useValidateAssignment(form?: UseFormReturn<IAssignGroupForm>) {
         validate(values?) {
             const v = form?.getValues();
 
-            let schema: any = null;
             form.clearErrors();
-            const assignments: Partial<OrderItemProductionAssignments>[] = [];
-            Object.entries(v.doors).map(([title, door]) => {
-                let _assignValidator: any = null;
-                ["lh", "rh"].map((k) => {
-                    const qtyKey = `${k}Qty`;
+            const { assignments, schema } = composeAssignments(v);
 
-                    const qty = parseFloat(door._assignForm[qtyKey]);
-                    console.log(qty);
-
-                    if (!isNaN(qty) && qty > 0) {
-                        (v.doors[title] as any)._assignForm[qtyKey] =
-                            qty as any;
-
-                        if (!_assignValidator) _assignValidator = {};
-                        const pending = Number(door?.[`${k}Pending`]) || 0;
-                        _assignValidator[qtyKey] = z
-                            .number({})
-                            .max(pending)
-                            .min(0);
-                        console.log({ qty, pending });
-                    }
-                });
-                if (_assignValidator) {
-                    assignments.push({
-                        ...v.doors?.[title]?._assignForm,
-                        assignedToId: v.assignToId,
-                    });
-
-                    if (!schema) schema = {};
-                    schema[title] = z.object({
-                        _assignForm: z.object(_assignValidator),
-                    });
-                }
-            });
             if (schema) {
                 try {
                     z.object({
@@ -67,4 +34,39 @@ export function useValidateAssignment(form?: UseFormReturn<IAssignGroupForm>) {
             return false;
         },
     };
+}
+export function composeAssignments(form: IAssignGroupForm) {
+    const doors = form.doors;
+    let schema: any = null;
+    const assignments: Partial<OrderItemProductionAssignments>[] = [];
+    Object.entries(doors).map(([title, door]) => {
+        let _assignValidator: any = null;
+        ["lh", "rh"].map((k) => {
+            const qtyKey = `${k}Qty`;
+
+            const qty = parseFloat((door as any)?._assignForm?.[qtyKey]);
+            console.log(qty);
+
+            if (!isNaN(qty) && qty > 0) {
+                (form.doors[title] as any)._assignForm[qtyKey] = qty as any;
+
+                if (!_assignValidator) _assignValidator = {};
+                const pending = Number(door?.[`${k}Pending`]) || 0;
+                _assignValidator[qtyKey] = z.number({}).max(pending).min(0);
+                console.log({ qty, pending });
+            }
+        });
+        if (_assignValidator) {
+            assignments.push({
+                ...form.doors?.[title]?._assignForm,
+                assignedToId: form.assignToId,
+            });
+
+            if (!schema) schema = {};
+            schema[title] = z.object({
+                _assignForm: z.object(_assignValidator),
+            });
+        }
+    });
+    return { assignments, schema };
 }

@@ -1,12 +1,6 @@
 import { HomeJobList, IJobs } from "@/types/hrm";
-import {
-    SubmitJobForm,
-    SubmitJobTabs,
-    SubmitJobModalProps,
-    useSubmitJobForm,
-    SubmitJobModalDataProps,
-} from ".";
-import { UseFormReturn, useFieldArray } from "react-hook-form";
+import { SubmitJobTabs } from ".";
+import { useFieldArray } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import { getUnitJobs } from "../../../_actions/get-unit-jobs";
 import { useValidateTaskQty } from "./use-validate-task-qty";
@@ -16,9 +10,7 @@ import {
     updateJobAction,
 } from "@/app/(v1)/_actions/hrm-jobs/create-job";
 import { toast } from "sonner";
-import { closeModal } from "@/lib/modal";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
-import { useStaticProjects } from "@/_v2/hooks/use-static-data";
 import { createContext, useContext, useState, useTransition } from "react";
 import { getJobCostList } from "../../../_actions/job-cost-list";
 import submitJobUtils from "./submit-job-utils";

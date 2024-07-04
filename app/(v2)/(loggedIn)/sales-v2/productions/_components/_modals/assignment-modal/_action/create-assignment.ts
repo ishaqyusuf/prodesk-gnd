@@ -13,7 +13,7 @@ export async function createProdAssignment(
 ) {
     const assignedById = await userId();
     let score = 0;
-    console.log(prodDueDate);
+    // console.log(prodDueDate);
 
     await prisma.orderItemProductionAssignments.createMany({
         data: data.map((d) => {

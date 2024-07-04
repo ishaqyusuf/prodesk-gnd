@@ -12,8 +12,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useModal } from "@/components/common/modal-old/provider";
+
 import SubmitJobModal from "../_modals/submit-job-modal";
+import { useModal } from "@/components/common/modal/provider";
 
 export default function SubmitJobBtn({}) {
     const { data: session } = useSession({
@@ -31,13 +32,12 @@ export default function SubmitJobBtn({}) {
     const modal = useModal();
     function open(_type) {
         let type = _type?.toLowerCase();
-        console.log(type);
+
         // let defaultTab = path?.includes("/contractor") ? "user" : "tasks";
         // if (type == "punchout") defaultTab = "tasks";
         // openModal("submitJobModal", { data: { type } });
-        modal?.open(<SubmitJobModal job={{ type } as any} />, {
-            data: { type },
-        });
+
+        modal?.openModal(<SubmitJobModal job={{ type } as any} />);
     }
     if (actions.length == 1)
         return (
