@@ -31,7 +31,6 @@ import { deleteBuilderAction } from "@/app/(v1)/(loggedIn)/settings/community/bu
 import { Icons } from "../../../../../../components/_v1/icons";
 import { openModal } from "@/lib/modal";
 import PageHeader from "@/components/_v1/page-header";
-import { useModal } from "@/components/common/modal/provider";
 import { useBuilderModal } from "./builder-modal";
 
 export default function BuildersTableShell<T>({
@@ -42,6 +41,7 @@ export default function BuildersTableShell<T>({
     const [isPending, startTransition] = useTransition();
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+
     const columns = useMemo<ColumnDef<IBuilder, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
@@ -110,10 +110,7 @@ export default function BuildersTableShell<T>({
                                     <>
                                         <RowActionMenuItem
                                             onClick={() => {
-                                                openModal("builder", {
-                                                    type: "main",
-                                                    data: row.original,
-                                                });
+                                                modal.edit(row.original);
                                             }}
                                             Icon={Icons.edit}
                                         >
@@ -121,10 +118,7 @@ export default function BuildersTableShell<T>({
                                         </RowActionMenuItem>
                                         <RowActionMenuItem
                                             onClick={() => {
-                                                openModal("builder", {
-                                                    type: "tasks",
-                                                    data: row.original,
-                                                });
+                                                modal.editTasks(row.original);
                                             }}
                                             Icon={Icons.edit}
                                         >

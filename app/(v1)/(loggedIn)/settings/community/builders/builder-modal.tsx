@@ -37,6 +37,12 @@ export const useBuilderModal = () => {
         create(type: Props["type"] = "main") {
             modal.openModal(<BuilderModal type={type} />);
         },
+        edit(data) {
+            modal.openModal(<BuilderModal type={"main"} data={data} />);
+        },
+        editTasks(data) {
+            modal.openModal(<BuilderModal type={"tasks"} data={data} />);
+        },
     };
 };
 interface Props {
@@ -122,7 +128,7 @@ export default function BuilderModal({ type, data = {} }: Props) {
         });
     }
     return (
-        <Modal.Content>
+        <Modal.Content size={type == "main" ? "sm" : "xl"}>
             <Modal.Header title={data?.name || "Builder Form"} />
             <Form {...form}>
                 <div className="grid md:grid-cols-2 gap-4">
