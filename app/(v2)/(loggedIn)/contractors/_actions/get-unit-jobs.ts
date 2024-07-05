@@ -59,14 +59,17 @@ export async function getUnitJobs(
 
     project?.homes?.map((unit) => {
         const isTestUnit = unit.lot == "1118";
-        const _count = unit.jobs.filter((j) => j.type == jobType).length;
+        const _count = unit.jobs.filter(
+            (j) => j.type?.toLowerCase() == jobType?.toLowerCase()
+        ).length;
         if (_count > 0 && byAvailability) {
             return;
         }
         if (
             jobType == "punchout" &&
-            unit.jobs.filter((j) => j.type == ("installation" as IJobType))
-                .length == 0
+            unit.jobs.filter(
+                (j) => j.type?.toLowerCase() == ("installation" as IJobType)
+            ).length == 0
         )
             return;
 
