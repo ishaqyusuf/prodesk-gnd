@@ -24,7 +24,7 @@ import {
 import { Icons } from "../../../../../components/_v1/icons";
 import { openModal } from "@/lib/modal";
 import { IJobs } from "@/types/hrm";
-import { Briefcase, CheckCheck, Unlink, X } from "lucide-react";
+import { Briefcase, CheckCheck, X } from "lucide-react";
 import { toast } from "sonner";
 import Money from "../../../../../components/_v1/money";
 import {
@@ -59,21 +59,6 @@ export default function JobTableShell<T>({
     const columns = useMemo<ColumnDef<IJobs, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
-            // {
-            //     maxSize: 10,
-            //     id: "id",
-            //     header: ColumnHeader("#/Date"),
-            //     cell: ({ row }) => (
-            //         <Cell>
-            //             <PrimaryCellContent>
-            //                 {row.original.id}
-            //             </PrimaryCellContent>
-            //             <DateCellContent>
-            //                 {row.original.createdAt}
-            //             </DateCellContent>
-            //         </Cell>
-            //     ),
-            // },
             {
                 id: "job",
                 header: ColumnHeader("Job"),
@@ -134,9 +119,6 @@ export default function JobTableShell<T>({
                                           }
                                       />
                                   </SecondaryCellContent>
-                                  {/* <SecondaryCellContent className="line-clamp-1">
-                    {row.original?.description}
-                  </SecondaryCellContent> */}
                               </Cell>
                           ),
                       },
