@@ -7,6 +7,8 @@ import {
 import { useModal } from "@/components/common/modal/provider";
 import SelectItemsCompletedBy from "./_components/_modals/select-completed-by";
 import { markAsSubmittedAction } from "./_actions/production-batch-actions";
+import { toast } from "sonner";
+import { useAssignment } from "./_components/_modals/assignment-modal/use-assignment";
 
 export default function useAssignmentActionsBuilder(
     order: AssignmentModalProps["order"]
@@ -18,6 +20,7 @@ export default function useAssignmentActionsBuilder(
         unsubmitAll: false,
     };
     const modal = useModal();
+    const assignmentCtx = useAssignment();
     const menuActions: ReturnType<typeof _createAction>[] = [
         {
             title: "Mark all as Submitted",
@@ -40,6 +43,8 @@ export default function useAssignmentActionsBuilder(
                     orderId: order.id,
                     submitAction: "only-assigned",
                 });
+                toast.success("Success");
+                assignmentCtx.refresh();
                 // modal.openModal(
                 //     <SelectItemsCompletedBy
                 //         action={"assign"}

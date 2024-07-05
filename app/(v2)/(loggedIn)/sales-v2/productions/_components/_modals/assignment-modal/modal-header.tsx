@@ -2,10 +2,7 @@
 
 import Modal from "@/components/common/modal";
 import { AssignmentModalProps } from ".";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
+
 import useAssignmentActionsBuilder from "../../../use-assignment-actions-builder";
 
 export default function ModalHeader({ order }: AssignmentModalProps) {

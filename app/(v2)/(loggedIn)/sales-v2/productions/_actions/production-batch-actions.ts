@@ -1,5 +1,6 @@
 "use server";
 
+import { _submitProduction } from "../_components/_modals/assignment-modal/_action/actions";
 import { createProdAssignment } from "../_components/_modals/assignment-modal/_action/create-assignment";
 import { getOrderAssignmentData } from "../_components/_modals/assignment-modal/_action/get-order-assignment-data";
 import { composeAssignments } from "../_components/_modals/assignment-modal/sectioned-item-assign-form/validate-assignment";
@@ -14,11 +15,27 @@ export async function markAsSubmittedAction(props: Props) {
     if (props.submitAction != "only-assigned") await assignAllAction(props);
     const order = await getOrderAssignmentData(props.orderId);
     await Promise.all(
-        order.doorGroups.map(async (g) => {
-            g.salesDoors.map((s) => {
-                s.assignments.map((a) => {});
-            });
-        })
+        order.doorGroups
+            .map((dg) => dg.salesDoors)
+            .flat()
+            .map((s) => s.assignments)
+            .flat()
+            .map(async (assignment) => {
+                const isLeft = assignment.__report.handle == "LH";
+                const qtyKey = isLeft ? "lhQty" : "rhQty";
+                const pending = assignment.__report.pending;
+                if (pending) {
+                    await _submitProduction({
+                        assignmentId: assignment.id,
+                        salesOrderId: assignment.orderId,
+                        salesOrderItemId: assignment.itemId,
+                        note: "",
+                        lhQty: 0,
+                        rhQty: 0,
+                        [qtyKey]: pending,
+                    });
+                }
+            })
     );
 }
 

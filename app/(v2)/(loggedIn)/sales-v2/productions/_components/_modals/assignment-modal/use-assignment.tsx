@@ -1,5 +1,5 @@
 import { useModal } from "@/components/common/modal/provider";
-import AssignmentModal from ".";
+import AssignmentModal, { useAssignmentData } from ".";
 import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 }
 export function useAssignment({ type }: Props = {}) {
     const modal = useModal();
+    const data = useAssignmentData();
     async function open(id) {
         const mode = {
             prod: type == "prod",
@@ -21,5 +22,9 @@ export function useAssignment({ type }: Props = {}) {
     }
     return {
         open,
+        refresh() {
+            open(data.data.id);
+            console.log(data);
+        },
     };
 }

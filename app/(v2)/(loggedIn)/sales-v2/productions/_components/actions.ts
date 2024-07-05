@@ -62,6 +62,7 @@ export async function _getProductionList({ query, production = false }: Props) {
     const where: Prisma.SalesOrdersWhereInput =
         query?.dueToday || query.pastDue
             ? {
+                  type: "order" as ISalesType,
                   items: itemsFilter,
                   assignments: {
                       some: {
@@ -100,14 +101,14 @@ export async function _getProductionList({ query, production = false }: Props) {
                             },
                         ]
                       : undefined,
-                  assignments: production
-                      ? {
-                            some: {
+                  assignments: {
+                      some: production
+                          ? {
                                 assignedToId: authId,
-                                dueDate,
-                            },
-                        }
-                      : undefined,
+                                // dueDate,
+                            }
+                          : {},
+                  },
 
                   items: itemsFilter,
               };
@@ -263,7 +264,7 @@ export async function _getProductionList({ query, production = false }: Props) {
     });
     return {
         data: orders.filter((a) =>
-            query.pastDue || query.dueToday ? !a.completed : undefined
+            query.pastDue || query.dueToday ? !a.completed : true
         ),
         pageCount,
     };

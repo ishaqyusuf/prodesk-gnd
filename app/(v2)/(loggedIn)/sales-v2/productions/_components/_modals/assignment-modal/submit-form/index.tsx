@@ -65,21 +65,8 @@ export default function SubmitDoorProduction({
     useEffect(() => {
         if (open) {
             form.setValue(qtyKey, 0);
-            console.log(assignment.__report);
+            // console.log(assignment.__report);
         }
-        // if (open) {
-        //     const doors: any = {};
-        //     group?.salesDoors?.map((s) => {
-        //         doors[s.salesDoor?.id] = {
-        //             // qty: s.report.pendingAssignment,
-        //             ...s.report,
-        //         };
-        //     });
-        //     console.log(doors);
-        //     form.reset({
-        //         doors,
-        //         assignToId: -1,
-        //     });
         // }
     }, [open]);
     const [saving, startSaving] = useTransition();
@@ -133,22 +120,6 @@ export default function SubmitDoorProduction({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 gap-4">
-                                {/* {inputs.map((i) => (
-                                    <div key={i.label} className={cn("")}>
-                                        <ControlledSelect
-                                            className={cn(
-                                                !i.options?.length && "hidden"
-                                            )}
-                                            disabled={i.options?.length == 0}
-                                            key={i.label}
-                                            control={form.control}
-                                            name={i.key}
-                                            options={i.options}
-                                            label={i.label}
-                                        />
-                                    </div>
-                                ))} */}
-                                {/* <div>{assignment.__report.handle}</div> */}
                                 <div className="grid gap-2 col-span-2">
                                     <Label>Qty</Label>
                                     <div className="flex gap-2 flex-wrap">
