@@ -1003,7 +1003,6 @@ model SalesOrders {
     paymentDueDate    DateTime?                        @db.Timestamp(0)
     deliveredAt       DateTime?
     deliveryOption    String?
-    deliveryProgress  Float?                           @default(0)
     customer          Customers?                       @relation(fields: [customerId], references: [id])
     items             SalesOrderItems[]
     shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
@@ -1020,7 +1019,7 @@ model SalesOrders {
     doors             DykeSalesDoors[]
     itemDeliveries    OrderItemDelivery[]
     deliveries        OrderDelivery[]
-    deliverProgresses OrderDeliveryProgress?
+    deliveryProgress  OrderDeliveryProgress?
     assignments       OrderItemProductionAssignments[]
 
     productionStatus SalesProductionStatus?
