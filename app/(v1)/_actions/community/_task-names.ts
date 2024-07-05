@@ -22,8 +22,8 @@ export async function _taskNames(_where: TaskNameWhere) {
                 (await prisma.builders.findMany()) as any;
             let taskNames: string[] = [];
             builders.map((b) => {
-                b.meta.tasks
-                    .filter((f) => {
+                b.meta?.tasks
+                    ?.filter((f) => {
                         let _show = true;
                         Object.entries(_where).map(([k, v]) => {
                             if (f[k] != v) _show = false;

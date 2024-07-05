@@ -59,57 +59,58 @@ export async function _getProductionList({ query, production = false }: Props) {
             ],
         },
     };
-    const where: Prisma.SalesOrdersWhereInput = query?.dueToday
-        ? {
-              items: itemsFilter,
-              assignments: {
-                  some: {
-                      assignedToId: !production ? undefined : authId,
-                      dueDate,
+    const where: Prisma.SalesOrdersWhereInput =
+        query?.dueToday || query.pastDue
+            ? {
+                  items: itemsFilter,
+                  assignments: {
+                      some: {
+                          assignedToId: !production ? undefined : authId,
+                          dueDate,
+                      },
                   },
-              },
-          }
-        : {
-              type: "order" as ISalesType,
-              OR: searchQuery
-                  ? [
-                        {
-                            orderId: searchQuery,
-                        },
-                        {
-                            assignments: {
-                                some: {
-                                    assignedTo: {
-                                        name: searchQuery,
+              }
+            : {
+                  type: "order" as ISalesType,
+                  OR: searchQuery
+                      ? [
+                            {
+                                orderId: searchQuery,
+                            },
+                            {
+                                assignments: {
+                                    some: {
+                                        assignedTo: {
+                                            name: searchQuery,
+                                        },
                                     },
                                 },
                             },
-                        },
-                        {
-                            customer: {
-                                OR: [
-                                    {
-                                        businessName: searchQuery,
-                                    },
-                                    {
-                                        name: searchQuery,
-                                    },
-                                ],
+                            {
+                                customer: {
+                                    OR: [
+                                        {
+                                            businessName: searchQuery,
+                                        },
+                                        {
+                                            name: searchQuery,
+                                        },
+                                    ],
+                                },
                             },
-                        },
-                    ]
-                  : undefined,
-              assignments: production
-                  ? {
-                        some: {
-                            assignedToId: authId,
-                            dueDate,
-                        },
-                    }
-                  : undefined,
+                        ]
+                      : undefined,
+                  assignments: production
+                      ? {
+                            some: {
+                                assignedToId: authId,
+                                dueDate,
+                            },
+                        }
+                      : undefined,
 
-              items: itemsFilter,
-          };
+                  items: itemsFilter,
+              };
     const { pageCount, skip, take } = await paginatedAction(
         query,
         prisma.salesOrders,

@@ -49,7 +49,14 @@ interface Props {
     data?;
     type: "main" | "tasks" | "installations";
 }
-export default function BuilderModal({ type, data = {} }: Props) {
+export default function BuilderModal({
+    type,
+    data = {
+        meta: {
+            tasks: [],
+        },
+    },
+}: Props) {
     const route = useRouter();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<IBuilder>({
