@@ -4,8 +4,13 @@ Shelf item auto pick when created
 shelf item delete.
 
 ----------------------------
-# JUL 05: 00.00 == 00.00
-    11:35-
+ $245+183.75
+TOTAL: 428.75
+Zelle marzuqisiaka@gmail.com
+PAYMENT INVOICE 
+TOTAL: $183.75
+# JUL 05: 02.30 == 05.15
+    11:35-01:35
     10:30-11:00
 # JUL 04: 00.30 == 02.45
     12:15-12:45

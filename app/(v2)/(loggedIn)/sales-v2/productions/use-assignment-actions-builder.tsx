@@ -9,6 +9,7 @@ import SelectItemsCompletedBy from "./_components/_modals/select-completed-by";
 import { markAsSubmittedAction } from "./_actions/production-batch-actions";
 import { toast } from "sonner";
 import { useAssignment } from "./_components/_modals/assignment-modal/use-assignment";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export default function useAssignmentActionsBuilder(
     order: AssignmentModalProps["order"]
@@ -45,6 +46,7 @@ export default function useAssignmentActionsBuilder(
                 });
                 toast.success("Success");
                 assignmentCtx.refresh();
+                await _revalidate("delivery");
                 // modal.openModal(
                 //     <SelectItemsCompletedBy
                 //         action={"assign"}

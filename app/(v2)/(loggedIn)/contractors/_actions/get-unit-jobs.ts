@@ -35,15 +35,21 @@ export async function getUnitJobs(
                 // where: {},
                 include: {
                     homeTemplate: true,
-                    _count: {
+                    jobs: {
                         select: {
-                            jobs: {
-                                where: {
-                                    type: jobType,
-                                },
-                            },
+                            id: true,
+                            type: true,
                         },
                     },
+                    // _count: {
+                    //     select: {
+                    //         jobs: {
+                    //             // where: {
+                    //             //     type: jobType,
+                    //             // },
+                    //         },
+                    //     },
+                    // },
                 },
             },
         },
@@ -53,10 +59,17 @@ export async function getUnitJobs(
 
     project?.homes?.map((unit) => {
         const isTestUnit = unit.lot == "1118";
-
-        if (unit._count.jobs > 0 && byAvailability) {
+        const _count = unit.jobs.filter((j) => j.type == jobType).length;
+        if (_count > 0 && byAvailability) {
             return;
         }
+        if (
+            jobType == "punchout" &&
+            unit.jobs.filter((j) => j.type == ("installation" as IJobType))
+                .length == 0
+        )
+            return;
+
         // if (isTestUnit) console.log(unit);
         let template: IHomeTemplate = unit.homeTemplate as any;
         let communityTemplate: ICommunityTemplate =
