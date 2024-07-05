@@ -15,7 +15,7 @@ export async function getDispatchSales(
         query: {
             deliveryOption,
         },
-        production: false,
+        // production: false,
     });
     const where: Prisma.SalesOrdersWhereInput = {
         deliveryOption,

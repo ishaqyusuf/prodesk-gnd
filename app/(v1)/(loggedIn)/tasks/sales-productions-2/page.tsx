@@ -20,7 +20,12 @@ export default function SalesProductionPage({ searchParams }) {
         },
         production: true,
     });
-
+    const pastDue = _getProductionList({
+        query: {
+            pastDue: true,
+        },
+        production: true,
+    });
     return (
         <AuthGuard can={[]}>
             {/* <ProductionPageTabs prod /> */}
@@ -31,6 +36,13 @@ export default function SalesProductionPage({ searchParams }) {
             <Shell className="px-8">
                 <PageHeader title="Due Today" />
                 <ProductionList prod simple promise={dueToday} />
+                <PageHeader title="Past Due" />
+                <ProductionList
+                    emptyText="No Production past due"
+                    simple
+                    prod
+                    promise={pastDue}
+                />
                 <PageHeader title="Productions" />
                 <ProductionList prod promise={p} />
             </Shell>

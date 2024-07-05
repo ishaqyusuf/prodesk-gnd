@@ -36,7 +36,7 @@ export default function SalesProductionPage({ searchParams }) {
                     simple
                     promise={dueToday}
                 />
-                <PageHeader title="Productions Past Due" />
+                <PageHeader title="Past Due" />
                 <ProductionList
                     emptyText="No Production past due"
                     simple

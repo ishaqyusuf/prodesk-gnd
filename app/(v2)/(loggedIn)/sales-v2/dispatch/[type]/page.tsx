@@ -9,7 +9,7 @@ import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 
 export async function generateMetadata({ searchParams, params }) {
     return {
-        title: `${capitalizeFirstLetter(params.type)}`,
+        title: `gndprodesk - ${capitalizeFirstLetter(params.type)}`,
     };
 }
 

@@ -3,18 +3,14 @@
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import {
-    DeliveryOption,
-    IAddressBook,
-    IAddressMeta,
-    ISalesType,
-} from "@/types/sales";
+import { DeliveryOption, IAddressMeta, ISalesType } from "@/types/sales";
 import { serverSession } from "@/app/(v1)/_actions/utils";
 import { sum } from "@/lib/utils";
 import salesData from "../../../sales/sales-data";
 import { dateEquals, fixDbTime } from "@/app/(v1)/_actions/action-utils";
 import dayjs from "dayjs";
 import { formatDate } from "@/lib/use-day";
+import { unstable_noStore } from "next/cache";
 interface Props {
     production?: boolean;
     query?: {
@@ -25,6 +21,7 @@ interface Props {
     };
 }
 export async function _getProductionList({ query, production = false }: Props) {
+    // unstable_noStore();
     const session = await serverSession();
     const authId = session.user.id;
     const { can } = session;
@@ -264,7 +261,6 @@ export async function _getProductionList({ query, production = false }: Props) {
             completed: totalDoors == submitted,
         };
     });
-    console.log(orders.length);
     return {
         data: orders.filter((a) =>
             query.pastDue || query.dueToday ? !a.completed : undefined

@@ -10,26 +10,29 @@ import {
     PrimaryCellContent,
     DateCellContent,
     SecondaryCellContent,
-} from "../columns/base-columns";
+} from "../../../../../../components/_v1/columns/base-columns";
 
 import {
     OrderRowAction,
     PrintOrderMenuAction,
-} from "../actions/sales-menu-actions";
-import { DataTable2 } from "../data-table/data-table-2";
+} from "../../../../../../components/_v1/actions/sales-menu-actions";
+import { DataTable2 } from "../../../../../../components/_v1/data-table/data-table-2";
 
-import { BuilderFilter } from "../filters/builder-filter";
-import { HomeProductionStatus } from "../columns/community-columns";
+import { BuilderFilter } from "../../../../../../components/_v1/filters/builder-filter";
+import { HomeProductionStatus } from "../../../../../../components/_v1/columns/community-columns";
 import { IBuilder, IProject } from "@/types/community";
 import {
     DeleteRowAction,
     RowActionCell,
     RowActionMenuItem,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
-import { deleteBuilderAction } from "@/app/(v1)/_actions/community/builders";
-import { Icons } from "../icons";
+} from "../../../../../../components/_v1/data-table/data-table-row-actions";
+import { deleteBuilderAction } from "@/app/(v1)/(loggedIn)/settings/community/builders/action";
+import { Icons } from "../../../../../../components/_v1/icons";
 import { openModal } from "@/lib/modal";
+import PageHeader from "@/components/_v1/page-header";
+import { useModal } from "@/components/common/modal/provider";
+import { useBuilderModal } from "./builder-modal";
 
 export default function BuildersTableShell<T>({
     data,
@@ -156,21 +159,28 @@ export default function BuildersTableShell<T>({
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
+    const modal = useBuilderModal();
+    function createBuilder() {
+        modal.create();
+    }
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={columns}
-            pageInfo={pageInfo}
-            data={data}
-            filterableColumns={[BuilderFilter]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "title, builder",
-                },
-            ]}
+        <>
+            <PageHeader title="Builders" newAction={createBuilder} />
+            <DataTable2
+                searchParams={searchParams}
+                columns={columns}
+                pageInfo={pageInfo}
+                data={data}
+                filterableColumns={[BuilderFilter]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "title, builder",
+                    },
+                ]}
 
-            //  deleteRowsAction={() => void deleteSelectedRows()}
-        />
+                //  deleteRowsAction={() => void deleteSelectedRows()}
+            />
+        </>
     );
 }

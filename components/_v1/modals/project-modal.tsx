@@ -30,7 +30,7 @@ import { ArrowLeft } from "lucide-react";
 import { IProject } from "@/types/community";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
-import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
+import { staticBuildersAction } from "@/app/(v1)/(loggedIn)/settings/community/builders/action";
 import { projectSchema } from "@/lib/validations/community-validations";
 import { saveProject } from "@/app/(v1)/_actions/community/projects";
 import { useBuilders } from "@/_v2/hooks/use-static-data";

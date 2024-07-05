@@ -22,7 +22,7 @@ import {
     saveBuilderInstallations,
     saveBuilderTasks,
     staticBuildersAction,
-} from "@/app/(v1)/_actions/community/builders";
+} from "@/app/(v1)/(loggedIn)/settings/community/builders/action";
 import { ModalName, loadStaticList } from "@/store/slicers";
 import { CommunityModels } from "@prisma/client";
 import { useAppSelector } from "@/store";

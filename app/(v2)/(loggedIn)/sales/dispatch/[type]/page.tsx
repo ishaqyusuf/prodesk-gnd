@@ -7,7 +7,6 @@ import SalesTab from "../../_components/sales-tab";
 import PageHeader from "@/components/_v1/page-header";
 import { getDispatchSales } from "../_actions/get-dispatch-sales";
 import DispatchTableShell from "./dispatch-table-shell";
-import { Button } from "@/components/ui/button";
 import PageAction from "../_components/page-action";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 

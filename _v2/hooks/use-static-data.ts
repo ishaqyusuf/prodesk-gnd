@@ -1,5 +1,5 @@
 import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customer-profiles";
-import { staticBuildersAction } from "@/app/(v1)/_actions/community/builders";
+import { staticBuildersAction } from "@/app/(v1)/(loggedIn)/settings/community/builders/action";
 import { staticProjectsAction } from "@/app/(v1)/_actions/community/projects";
 import { getStaticEmployeeProfiles } from "@/app/(v1)/_actions/hrm/employee-profiles";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";

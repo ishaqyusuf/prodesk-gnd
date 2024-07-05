@@ -3,12 +3,13 @@
 import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { getPageInfo, queryFilter } from "../../../../_actions/action-utils";
 import { IBuilder, IBuilderTasks, IHomeTask } from "@/types/community";
 import { revalidatePath } from "next/cache";
 import { transformData } from "@/lib/utils";
 import { composeBuilderTasks } from "@/app/(v2)/(loggedIn)/community-settings/builders/compose-builder-tasks";
-import { _cache } from "../_cache/load-data";
+import { _cache } from "../../../../_actions/_cache/load-data";
+import slugify from "slugify";
 export interface BuildersQueryParams extends BaseQuery {}
 export async function getBuildersAction(query: BuildersQueryParams) {
     const where = whereBuilder(query);
@@ -60,7 +61,19 @@ export async function staticBuildersAction() {
 }
 export async function deleteBuilderAction(id) {}
 export async function saveBuilder(data: IBuilder) {
-    // data.createdAt = data.
+    if (
+        (await prisma.builders.count({
+            where: { name: data.name },
+        })) > 0
+    )
+        throw new Error("Builder name already exists");
+    await prisma.builders.create({
+        data: {
+            name: data.name,
+            meta: data.meta as any,
+            slug: slugify(data.name),
+        },
+    });
 }
 export async function saveBuilderTasks(data: IBuilder, deleteIds, newTaskIds) {
     await prisma.builders.update({

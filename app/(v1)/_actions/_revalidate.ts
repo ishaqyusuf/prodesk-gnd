@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 //     | "communityTasks"
 //     | "communityTemplates";
 const _path = {
+    builders: "/settings/community/builders",
     communityTasks: "/contractor/assign-tasks",
     communityTemplates: "/settings/community/community-templates",
     communityTemplate: "/settings/community/community-template/[slug]",
