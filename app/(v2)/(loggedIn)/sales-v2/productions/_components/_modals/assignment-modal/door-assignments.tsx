@@ -11,10 +11,13 @@ import {
 import { useAssignmentData } from ".";
 
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { _deleteAssignment } from "./_action/actions";
+import { _changeAssignmentDueDate, _deleteAssignment } from "./_action/actions";
 import { useAssignment } from "./use-assignment";
 import SubmitDoorProduction from "./submit-form";
 import { TableCol } from "@/components/common/data-table/table-cells";
+import { DatePicker } from "@/components/_v1/date-range-picker";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 interface Props {
     groupIndex;
     doorIndex;
@@ -64,9 +67,10 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                             )}
                             <TableCell>{assignment.assignedTo?.name}</TableCell>
                             <TableCell>
-                                <TableCol.Date>
+                                {/* <TableCol.Date className="border rounded p-0.5 px-1 shadow-sm">
                                     {assignment.dueDate}
-                                </TableCol.Date>
+                                </TableCol.Date> */}
+                                <DueDate assignment={assignment} />
                             </TableCell>
                             <TableCell>
                                 {assignment.__report.submitted} of{" "}
@@ -112,5 +116,28 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
                 </TableBody>
             </Table>
         </div>
+    );
+}
+
+function DueDate({ assignment }) {
+    const data = useAssignmentData();
+    const [dueDate, setDueDate] = useState(assignment.dueDate);
+
+    async function selectDate(e) {
+        setDueDate(e);
+        await _changeAssignmentDueDate(assignment.id, e);
+        toast.success("Date Changed");
+    }
+    if (data.data.isProd)
+        return <TableCol.Date>{assignment.dueDate}</TableCol.Date>;
+    return (
+        <>
+            <DatePicker
+                value={dueDate}
+                setValue={selectDate}
+                hideIcon
+                className="w-28 px-1 h-7"
+            />
+        </>
     );
 }

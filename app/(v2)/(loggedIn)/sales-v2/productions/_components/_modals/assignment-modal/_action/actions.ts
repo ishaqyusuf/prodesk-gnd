@@ -29,20 +29,19 @@ export async function _deleteAssignment(data: Props) {
         where: { id: data.id },
         data: {
             ...updateData,
-            // deletedAt: new Date(),
-            // submissions: {
-            //     updateMany: {
-            //         where: {
-            //             deletedAt: null,
-            //         },
-            //         data: {
-            //             deletedAt: new Date(),
-            //         },
-            //     },
-            // },
         },
     });
     await _deleteAssignmentSubmissions(data.id, k);
+}
+export async function _changeAssignmentDueDate(assignmentId, date) {
+    await prisma.orderItemProductionAssignments.update({
+        where: {
+            id: assignmentId,
+        },
+        data: {
+            dueDate: date,
+        },
+    });
 }
 export async function _deleteAssignmentSubmission(submissionId) {
     const submissions = await prisma.orderProductionSubmissions.updateMany({

@@ -44,8 +44,6 @@ export function DatePicker({
     //     ? { form: null, to: null }
     //     : null
     useEffect(() => {
-        console.log(value);
-
         setDate(
             value
                 ? typeof value == "string"
@@ -126,8 +124,6 @@ export function DatePicker({
                         defaultMonth={range ? from() : date}
                         selected={date}
                         onSelect={(v) => {
-                            console.log(v);
-
                             setDate(v);
                             setValue?.(v);
                             setOpen(false);
