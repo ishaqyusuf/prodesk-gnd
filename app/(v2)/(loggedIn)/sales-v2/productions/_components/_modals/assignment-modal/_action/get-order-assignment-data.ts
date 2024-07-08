@@ -311,7 +311,6 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     });
             }
             // console.log(n.salesDoors);
-
             return {
                 ...n,
                 salesDoors: n.salesDoors.filter(

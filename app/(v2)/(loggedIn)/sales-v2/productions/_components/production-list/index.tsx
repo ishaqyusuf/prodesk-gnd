@@ -26,26 +26,18 @@ export default function ProductionList({
         React.use(promise);
     const table = useDataTableColumn(
         data,
-        (ctx) =>
-            prod
-                ? [
-                      ctx.Column("Order", ProductionCells.Order),
-                      ctx.Column("Sales Rep", ProductionCells.SalesRep),
-                      ctx.Column("Due Date", ProductionCells.DueDate),
-                      ctx.Column("Status", ProductionCells.ProductionStatus),
-                      ctx.ActionColumn(ProductionCells.ProdActions),
-                  ]
+        (ctx) => [
+            ctx.Column("Order", ProductionCells.Order),
+            ctx.Column("Sales Rep", ProductionCells.SalesRep),
+            ctx.Column("Due Date", ProductionCells.DueDate),
+            ctx.Column("Status", ProductionCells.ProductionStatus),
+            ...(prod
+                ? [ctx.ActionColumn(ProductionCells.ProdActions)]
                 : [
-                      ctx.Column("Order", ProductionCells.Order),
-                      ctx.Column("Sales Rep", ProductionCells.SalesRep),
-                      ctx.Column("Status", ProductionCells.Status),
-                      ctx.Column(
-                          "Production",
-                          ProductionCells.ProductionStatus
-                      ),
                       ctx.Column("Assigned To", ProductionCells.AssignedTo),
                       ctx.ActionColumn(ProductionCells.Actions),
-                  ],
+                  ]),
+        ],
         true,
         {
             filterCells: ["_q", "_date"],
