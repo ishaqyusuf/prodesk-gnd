@@ -3,6 +3,8 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete.
 
+# JUL 08: 00.00 == 00.00
+    05:10-
 ----------------------------
  $245+183.75
 TOTAL: 428.75

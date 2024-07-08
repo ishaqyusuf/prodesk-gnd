@@ -154,7 +154,7 @@ function initJobData(
         id: unit.id,
         name,
         costing,
-        disabled: (unit as any)._count.jobs > 0,
+        disabled: (unit as any)._count?.jobs > 0,
     } as any;
     // }
     return null as any;
