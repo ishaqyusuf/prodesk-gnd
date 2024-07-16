@@ -36,6 +36,7 @@ async function saveDykeDoor(data: Props) {
             where: { id: data.id },
             data: {
                 title: data.product.title as any,
+                price: data.product.price,
                 doorType: data._meta?.doorType,
                 query: data._meta?.doorQuery,
                 img: data.product.img,

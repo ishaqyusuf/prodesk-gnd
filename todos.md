@@ -16,6 +16,12 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - Public Dealer site to create cart and generate quotation
+    - Price tags on components
+      - In dyke settings: create a componentCosting to store how item cost will be calculated by componentCosting, for example: {Door: [{multiplier: 2, where: {Door_Configuration: ['Exterior Door Unit - Double']}},{multiplier: 1.25, where: {Height: '7-0'}}],Jamb_Size: [{multiplier: 3, where: {Door_Configuration: ['Exterior Door Unit - Double']}}]}
+      - Component settings: {hidePublic: false}
+      - Section Settings: {allowCustomInPublic: false}
+      - Production Past Due: check if past due and not my productions are submitted so as not to show if it's others' production pending.
     - Multi component step ability to traverse back to final stage when rechecked changed. (eg: doors)
     <!-- - Job edit not showing unit and task list -->
     - NEW REQUEST: Order delivery date, set date and manage delivery date.

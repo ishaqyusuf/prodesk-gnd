@@ -106,3 +106,6 @@ table#invoiceFooter tr {
 #assignmentModal tr {
     @apply hover:bg-transparent;
 }
+section.content {
+    @apply p-4 sm:p-8;
+}

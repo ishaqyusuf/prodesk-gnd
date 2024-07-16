@@ -9,7 +9,9 @@ import { cn } from "@/lib/utils";
 export type AuthPermissions = (keyof ICan | (keyof ICan)[])[];
 interface Props {
     can?: AuthPermissions;
+    // somePermissions?: AuthPermissions;
     roles?: string[];
+    permissionType?: "every" | "some" | "none";
     children?;
     className?;
 }
@@ -17,6 +19,7 @@ export default function AuthGuard({
     can = [],
     className,
     children,
+    permissionType = "every",
     roles = [],
 }: Props) {
     const { data: session } = useSession({
@@ -28,13 +31,16 @@ export default function AuthGuard({
 
     const [visible, setVisible] = useState(false);
     useEffect(() => {
-        const permission =
-            !can.length ||
-            can?.every((v) =>
-                Array.isArray(v)
-                    ? v.some((p) => session?.can?.[p])
-                    : session?.can?.[v]
-            );
+        const gn = (v) =>
+            Array.isArray(v)
+                ? v.some((p) => session?.can?.[p])
+                : session?.can?.[v];
+        const fn = permissionType == "every" ? can?.every(gn) : can?.some(gn);
+        console.log(can?.length);
+
+        let res = !can?.length ? true : fn;
+        if (permissionType == "none") res = !res;
+        const permission = !can.length || res;
         const rolePermission =
             !roles.length || roles?.some((r) => r == session?.role?.name);
 

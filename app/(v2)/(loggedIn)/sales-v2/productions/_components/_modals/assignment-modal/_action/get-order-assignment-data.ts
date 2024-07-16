@@ -72,6 +72,9 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                 },
                 include: {
                     formSteps: {
+                        where: {
+                            deletedAt: null,
+                        },
                         include: {
                             step: true,
                         },

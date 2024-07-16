@@ -5,6 +5,7 @@ import Image from "next/image";
 import { env } from "@/env.mjs";
 import SVG from "react-inlinesvg";
 import { Label } from "@/components/ui/label";
+import Money from "@/components/_v1/money";
 
 export function StepItem({
     item,
@@ -46,6 +47,11 @@ export function StepItem({
                     ? item.product?.value || item.product.title
                     : item.product.title}
             </Label>
+            <div className="text-xs font-bold">
+                {item.product?.meta?.priced && (
+                    <Money value={item.product.price} />
+                )}
+            </div>
         </button>
     );
 }

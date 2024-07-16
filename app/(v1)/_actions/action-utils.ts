@@ -45,7 +45,7 @@ export function dateQuery({
         };
         where[_dateType] = _whereDate;
     }
-    if (from && to) {
+    if (from || to) {
         where[_dateType] = {
             gte: !from ? undefined : fixDbTime(dayjs(from)).toISOString(),
             lte: !to

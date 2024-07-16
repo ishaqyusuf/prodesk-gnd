@@ -1,12 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import React, { ReactElement, useState } from "react";
+import React from "react";
 import { useDatableCheckbox } from "./checkbox";
 import { DataTableColumnHeader } from "@/components/common/data-table/data-table-column-header";
 import { toast } from "sonner";
-import { RowActionCell } from "@/components/_v1/data-table/data-table-row-actions";
 import { TableCol } from "../table-cells";
+import { TableCellProps } from "@/app/_components/data-table/table-cells";
 
 type CellValueType<T> = ((item: T) => any) | keyof T;
 interface ColumnArgs {
@@ -33,6 +33,8 @@ interface Props<T> {
     snTitle?: string;
     checkable?: boolean;
     filterCells?: string[];
+    pageCount?;
+    cellVariants?: TableCellProps;
 }
 export function useDataTableColumn3<T>(data: T) {
     const ctx = {
@@ -185,6 +187,12 @@ export default function useDataTableColumn<T>(
                     },
                 }
             );
+        },
+        props: {
+            columns,
+            data,
+            pageCount: props?.pageCount,
+            cellVariants: props?.cellVariants,
         },
     };
 }

@@ -51,16 +51,7 @@ export default function useStepItems({
             // console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
             // console.log(_props);
-
-            const { result: prods } = await getDykeStepDoors(
-                _props as any
-                // query.q,
-                // query.omit,
-                // query.qty,
-                // stepForm?.step?.id,
-                // query.query
-            );
-            // console.log(prods);
+            const { result: prods } = await getDykeStepDoors(_props as any);
             setStepProducts(prods);
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");
@@ -78,8 +69,7 @@ export default function useStepItems({
             // if(stepFormTitle == 'Height' )
         } else {
             const _stepProds = await getStepProduct(stepForm?.step?.id);
-            console.log(_stepProds);
-
+            // console.log(_stepProds);
             setStepProducts(_stepProds);
         }
     };
@@ -221,14 +211,13 @@ export default function useStepItems({
             const data: Partial<DykeStep["item"]> = {
                 value: val,
                 // qty: stepProd?.product?.qty,
-                // price: stepProd?.product?.price,
+                price: stepProd?.product?.price,
                 stepId: stepProd?.dykeStepId,
                 meta: {
                     custom,
                 } as any,
                 // title: stepProd?.product?.description,
             };
-            console.log(data);
 
             form.setValue(
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
@@ -242,10 +231,11 @@ export default function useStepItems({
                 [],
                 doorType
             );
-            // console.log({ stepForm, nextStep });
+
             if (nextSteps) {
                 for (let i = item.formStepArray.length - 1; i > stepIndex; i--)
                     item.removeStep(i);
+
                 item.appendStep(nextSteps as any);
                 item.toggleStep(item.openedStepIndex + nextSteps.length);
             } else toast.error("Next step not found");

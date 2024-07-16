@@ -78,7 +78,9 @@ export interface DykeFormStepMeta {
 export interface DykeProductMeta {
     svg;
     url;
+    priced?: boolean;
     mouldingSpecies: { [id in string]: boolean };
+    doorPrice?: { [size in string]: number };
 }
 export interface DykeShelfItemForm extends Omit<DykeSalesShelfItem, "meta"> {
     meta: {

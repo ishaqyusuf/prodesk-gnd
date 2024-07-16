@@ -1088,16 +1088,22 @@ model SalesOrderItems {
 }
 
 model OrderDeliveryProgress {
-    id           Int             @unique @default(autoincrement())
-    deliveredQty Int             @default(0)
-    pendingQty   Int             @default(0)
-    percentage   Float           @default(0)
-    orderId      Int             @unique
-    order        SalesOrders     @relation(fields: [orderId], references: [id])
-    deliveries   OrderDelivery[]
-    createdAt    DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt    DateTime        @updatedAt
-    deletedAt    DateTime?       @db.Timestamp(0)
+    id              Int             @unique @default(autoincrement())
+    deliveredQty    Int             @default(0)
+    pendingQty      Int             @default(0)
+    percentage      Float           @default(0)
+    orderId         Int             @unique
+    status          String?
+    deliveryDueDate DateTime?       @db.Timestamp(0)
+    order           SalesOrders     @relation(fields: [orderId], references: [id])
+    deliveries      OrderDelivery[]
+    createdAt       DateTime?       @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime        @updatedAt
+    deletedAt       DateTime?       @db.Timestamp(0)
+}
+
+model OrderProductionProgress {
+    id Int @unique @default(autoincrement())
 }
 
 model OrderDelivery {
@@ -1606,6 +1612,7 @@ model DykeDoors {
     doorType          String? //GARAGE DOOR
     title             String
     img               String?
+    price             Float?
     meta              Json?               @db.Json
     createdAt         DateTime?           @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?           @updatedAt

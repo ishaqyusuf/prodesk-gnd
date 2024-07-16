@@ -234,7 +234,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                 totalDoors: sum(
                     order.isDyke
                         ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
-                        : order.items.map((i) => i.qty)
+                        : order.items?.filter((i) => i.swing).map((i) => i.qty)
                 ),
             },
             customer: {

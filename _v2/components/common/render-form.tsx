@@ -22,12 +22,13 @@ export default function RenderForm({
         <>
             <div
                 className={cn(
+                    "flex",
                     isProd
                         ? "hidden"
                         : "fixed top-0 right-[50%] bg-red-500 rounded-full p-1 text-white text-xs  font-semibold px-2 leading-none z-[9999]"
                 )}
             >
-                <p>Render: {reRender}</p>
+                {/* <p>Render: {reRender}</p> */}
                 <p>
                     Dirty Fields:{" "}
                     {Object.keys(form.formState.dirtyFields)?.length}
@@ -47,6 +48,7 @@ function ContextRenderForm({ children, ...props }) {
         <FormProvider {...(props as any)}>
             <div
                 className={cn(
+                    "flex space-x-2",
                     isProd && "hidden",
                     "fixed top-0 right-[50%] bg-red-500 rounded-full p-1 text-white text-xs  font-semibold px-2 leading-none z-[9999]"
                 )}

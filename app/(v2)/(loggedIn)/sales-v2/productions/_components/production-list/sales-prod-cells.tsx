@@ -162,7 +162,12 @@ function ProdActions({ item }: Props) {
 }
 function DueDate({ item }: Props) {
     const dueDate = item.assignments
-        .filter((a) => a.dueDate)
+        .filter(
+            (a) =>
+                a.dueDate &&
+                a.submissions.map((s) => s.qty).reduce((a, b) => a + b, 0) !=
+                    a.qtyAssigned
+        )
         .sort((a, b) => (a as any).dueDate - (b as any).dueDate)?.[0]?.dueDate;
     return (
         <>

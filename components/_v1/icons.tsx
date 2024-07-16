@@ -78,11 +78,13 @@ import logo from "@/public/logo_mini.png";
 import logo2 from "@/public/logo.png";
 import Link from "next/link";
 import { LineChart } from "recharts";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
     reciept: Receipt,
+    X: Cross2Icon,
     calendar: Calendar,
     logoLg: ({ width = 120 }) => (
         <Link href="/">

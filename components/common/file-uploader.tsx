@@ -98,7 +98,7 @@ export function FileUploader({
                     <>
                         <div className="w-full max-w-md flex items-center justify-center">
                             <label
-                                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-800 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-100"
+                                className="flex items-center gap-2 px-4 py-1 bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-800 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-100"
                                 htmlFor="file-upload"
                             >
                                 <UploadIcon className="h-5 w-5" />

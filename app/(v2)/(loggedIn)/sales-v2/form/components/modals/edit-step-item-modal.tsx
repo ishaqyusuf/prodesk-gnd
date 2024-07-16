@@ -7,7 +7,6 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,8 @@ import { useModal } from "@/components/common/modal-old/provider";
 import { _getMouldingSpecies } from "./_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { IStepProducts } from "../step-items-list/item-section/step-items";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Modal from "@/components/common/modal";
 
 interface Props {
     item: IStepProducts[0];
@@ -65,6 +66,7 @@ export default function EditStepItemModal({
             if (!formData.product[sec])
                 formData.product[sec] = formData.product[pri];
             // }
+            formData.product.meta.priced = formData.product.price > 0;
             // if(!formData?.product?.title)
             // formData?.product
             // console.log(formData);
@@ -75,52 +77,72 @@ export default function EditStepItemModal({
         });
     }
     return (
-        <DialogContent>
-            <RenderForm {...form}>
-                <DialogHeader>
-                    <DialogTitle>Edit Product</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4">
-                    {root ? (
-                        <ControlledInput
-                            control={form.control}
-                            name="product.value"
-                            label="Item Type"
-                        />
-                    ) : (
-                        <ControlledInput
-                            control={form.control}
-                            name="product.title"
-                            label="Product Title"
-                        />
-                    )}
-                    {moulding && (
-                        <div className="grid grid-cols-2 gap-4">
-                            {species.map((s, i) => (
-                                <ControlledCheckbox
-                                    key={i}
-                                    label={s}
-                                    control={form.control}
-                                    name={`product.meta.mouldingSpecies.${s}`}
+        <RenderForm {...form}>
+            <Modal.Content>
+                <Modal.Header
+                    title="Edit Product"
+                    subtitle={item.product?.title}
+                />
+                <div>
+                    <Tabs defaultValue="general">
+                        <TabsList className="">
+                            <TabsTrigger value="general">General</TabsTrigger>
+                            <TabsTrigger value="price">Price</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="general">
+                            <div className="grid gap-4">
+                                {root ? (
+                                    <ControlledInput
+                                        control={form.control}
+                                        name="product.value"
+                                        label="Item Type"
+                                    />
+                                ) : (
+                                    <>
+                                        <ControlledInput
+                                            control={form.control}
+                                            name="product.title"
+                                            label="Product Title"
+                                        />
+                                    </>
+                                )}
+                                {moulding && (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {species.map((s, i) => (
+                                            <ControlledCheckbox
+                                                key={i}
+                                                label={s}
+                                                control={form.control}
+                                                name={`product.meta.mouldingSpecies.${s}`}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                <FileUploader
+                                    width={50}
+                                    height={50}
+                                    onUpload={onUpload}
+                                    label="Product Image"
+                                    folder="dyke"
+                                    src={src}
                                 />
-                            ))}
-                        </div>
-                    )}
-                    <FileUploader
-                        onUpload={onUpload}
-                        label="Product Image"
-                        folder="dyke"
-                        src={src}
-                    />
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="price">
+                            <div className="grid grid-cols-2 gap-2">
+                                <ControlledInput
+                                    control={form.control}
+                                    name="product.price"
+                                    label="Base Price"
+                                    type="number"
+                                    className="col-span-2"
+                                />
+                            </div>
+                        </TabsContent>
+                    </Tabs>
                 </div>
-                <DialogFooter>
-                    <div className="flex justify-end">
-                        <Button disabled={saving} onClick={save}>
-                            Save
-                        </Button>
-                    </div>
-                </DialogFooter>
-            </RenderForm>
-        </DialogContent>
+                <Modal.Footer submitText="Save" onSubmit={save} />
+            </Modal.Content>
+        </RenderForm>
     );
 }

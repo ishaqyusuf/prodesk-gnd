@@ -41,6 +41,11 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
                 >
                     <Icons.logo />
                 </div>
+                <div
+                    id="headerTitleSlot"
+                    className="flex items-center space-x-1"
+                />
+                <div id="headerNav" className="flex items-center space-x-1" />
                 <div id="breadCrumb" className="flex items-center space-x-1">
                     {/* <Breadcrumbs segments={navs} /> */}
                 </div>

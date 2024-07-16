@@ -209,6 +209,7 @@ export function nav(
                 ), //employees,roles
                 _route("Orders", Icons.orders, `/sales/orders`), //employees,roles
                 _route("Customers", Icons.user, "/sales/customers"),
+                _route("Dispatch", Icons.delivery, "/sales-v2/dispatch", true),
             ]
         );
     } else {
@@ -218,14 +219,14 @@ export function nav(
             );
     }
 
-    if (viewDelivery && !viewOrders)
+    if ((viewDelivery || viewPickup) && !viewOrders)
         routes.Sales.push(
-            _route("Order Delivery", Icons.delivery, "/sales/delivery")
+            _route("Order Dispatch", Icons.delivery, "/sales-v2/dispatch", true)
         );
-    if (viewPickup && !viewOrders)
-        routes.Sales.push(
-            _route("Order Pickup", Icons.delivery, "/sales/pickup")
-        );
+    // if (viewPickup && !viewOrders)
+    //     routes.Sales.push(
+    //         _route("Order Pickup", Icons.delivery, "/sales/pickup")
+    //     );
     if (editOrders)
         routes.Sales.push(
             ...([
@@ -234,12 +235,10 @@ export function nav(
                 __can.viewOrderPayment &&
                     _route("Accounting", Icons.reciept, "/sales/accounting"),
                 _route("Catalogs", Icons.products, "/sales/catalogs"),
-                // _route("Productions", Construction, `/sales/productions${prodQuery}`),
                 _route(
                     "Productions",
                     Icons.production,
-                    `/sales-v2/productions`,
-                    true
+                    `/sales-v2/productions`
                 ),
 
                 // _route("Pending Stocks", CircleDot, "/sales/pending-stocks"),

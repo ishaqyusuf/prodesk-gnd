@@ -5,11 +5,13 @@ import { getDispatchSales } from "../action";
 import React from "react";
 import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
 import { DataTable2 } from "@/components/_v1/data-table/data-table-2";
-import { DispatchCells } from "./cells";
+import { DispatchCells } from "../[type]/cells";
 
 export type DispatchPromiseResponse = ServerPromiseType<
     typeof getDispatchSales
 >;
+
+interface Props {}
 
 export default function DispatchTable({ promise, params }) {
     const isPickup = params.type == "pickup";
