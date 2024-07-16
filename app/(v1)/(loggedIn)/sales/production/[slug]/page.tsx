@@ -6,7 +6,6 @@ import {
     OrderViewCrumb,
     ProductionsCrumb,
 } from "@/components/_v1/breadcrumbs/links";
-import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import SalesProdSubmitModal from "@/components/_v1/modals/sales-prod-submit-modal";
 
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
@@ -55,7 +54,6 @@ export default async function SalesProductionPage({ params: { slug } }) {
                 {/* <ProductionAssignDialog />
                  */}
 
-                <SalesPaymentModal />
                 <OrderPrinter />
                 <SalesProdSubmitModal />
             </DataPageShell>

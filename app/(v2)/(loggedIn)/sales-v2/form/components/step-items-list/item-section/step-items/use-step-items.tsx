@@ -264,7 +264,7 @@ export default function useStepItems({
             return ret;
         });
     }
-    function openStepForm(item?) {
+    function openStepForm(itm?) {
         const {
             id,
             product: {
@@ -280,7 +280,7 @@ export default function useStepItems({
             },
             dykeProductId,
             ...stepProd
-        } = item ||
+        } = itm ||
         stepProducts.filter((s) => (s.product as any).query)[0] ||
         stepProducts[0] ||
         ({
@@ -297,9 +297,9 @@ export default function useStepItems({
             doorQuery: query,
         };
 
-        const _item = item
+        const _item = itm
             ? {
-                  ...item,
+                  ...itm,
                   _meta,
               }
             : ({
@@ -315,6 +315,9 @@ export default function useStepItems({
             <EditStepItemModal
                 onCreate={onCreate}
                 root={isRoot}
+                stepTitle={stepFormTitle}
+                mainForm={form}
+                rowIndex={item.rowIndex}
                 moulding={isMoulding && stepFormTitle == "Moulding"}
                 item={_item}
             />

@@ -41,7 +41,7 @@ export default function SelectDoorHeightsModal({
         form.getValues(
             `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.heights`
         );
-    console.log({ heights, safeTitle });
+    // console.log({ heights, safeTitle });
 
     const height = form.watch(
         `itemArray.${rowIndex}.item.housePackageTool.height`
@@ -64,7 +64,7 @@ export default function SelectDoorHeightsModal({
         (async () => {
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
-            console.log(_sizes, height, isBifold);
+            // console.log(_sizes, height, isBifold);
 
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));

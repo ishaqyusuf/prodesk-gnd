@@ -5,11 +5,10 @@ import { getHousePackageTool } from "./get-house-package-tool";
 
 export async function getDimensionSizeList(height, _bifold) {
     const d = await getHousePackageTool();
-    console.log(d);
-
     const list: {
         dim: string;
         width: string;
+        dimFt: string;
     }[] = [];
     const heightIn =
         d.data.sizes.find((s) => s.ft == height && s.height)?.in ||
@@ -24,6 +23,7 @@ export async function getDimensionSizeList(height, _bifold) {
             if (size.width && size.ft)
                 list.push({
                     dim: `${size.in} x ${heightIn}`.replaceAll('"', "in"),
+                    dimFt: `${size.ft} x ${height}`.replaceAll('"', ""),
                     width: size.ft,
                 });
         });

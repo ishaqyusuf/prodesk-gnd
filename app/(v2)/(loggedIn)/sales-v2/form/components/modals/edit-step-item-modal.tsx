@@ -6,7 +6,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { Button } from "@/components/ui/button";
@@ -19,17 +19,25 @@ import ControlledCheckbox from "@/components/common/controls/controlled-checkbox
 import { IStepProducts } from "../step-items-list/item-section/step-items";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Modal from "@/components/common/modal";
+import { DykeForm } from "../../../type";
+import { getDimensionSizeList } from "../../../dimension-variants/_actions/get-size-list";
 
 interface Props {
     item: IStepProducts[0];
     onCreate(stepItem: IStepProducts[0]);
     moulding?: boolean;
     root?: boolean;
+    rowIndex;
+    mainForm: UseFormReturn<DykeForm>;
+    stepTitle?: string;
 }
 export default function EditStepItemModal({
     item,
     onCreate,
     moulding,
+    rowIndex,
+    mainForm,
+    stepTitle,
     root,
 }: Props) {
     const { ...defaultValues } = item;
@@ -38,10 +46,22 @@ export default function EditStepItemModal({
         defaultValues,
     });
     const src = form.watch("product.img");
+    const invoiceItem = mainForm.getValues(`itemArray.${rowIndex}`);
+    const doorType = invoiceItem.item.meta.doorType;
+    const isBifold = doorType == "Bifold";
+    const height = mainForm.watch(
+        `itemArray.${rowIndex}.item.housePackageTool.height`
+    );
     const [species, setSpecies] = useState<string[]>([]);
+    const [heights, setHeight] = useState({
+        "6-8": [],
+        "7-0": [],
+        "8-0": [],
+    });
+
     useEffect(() => {
-        if (moulding) {
-            (async () => {
+        (async () => {
+            if (moulding) {
                 const _species = await _getMouldingSpecies();
                 setSpecies(_species as any);
                 const def: any = {};
@@ -49,11 +69,29 @@ export default function EditStepItemModal({
                 if (!item.id) {
                     form.setValue(`product.meta.mouldingSpecies`, def);
                 }
-            })();
-        }
+            }
+            // if door section
+            if (stepTitle == "Door") {
+                let d: any = {};
+                let _tab = null;
+                await Promise.all(
+                    Object.keys(heights).map(async (height) => {
+                        if (!_tab) _tab = height;
+                        const _sizes = await getDimensionSizeList(
+                            height,
+                            isBifold
+                        );
+                        console.log(_sizes);
+                        d[height] = _sizes.map((s) => s.dimFt);
+                    })
+                );
+                // console.log(d);
+                setHeight(d);
+                setTab(_tab);
+            }
+        })();
     }, []);
     function onUpload(assetId) {
-        // console.log(assetId);
         form.setValue("product.img", assetId);
     }
     const [saving, startSaving] = useTransition();
@@ -76,6 +114,9 @@ export default function EditStepItemModal({
             modal?.close();
         });
     }
+    const heightList = () => Object.keys(heights);
+    const sizeList = (h) => heights[h] || [];
+    const [tab, setTab] = useState();
     return (
         <RenderForm {...form}>
             <Modal.Content>
@@ -130,13 +171,53 @@ export default function EditStepItemModal({
                         </TabsContent>
                         <TabsContent value="price">
                             <div className="grid grid-cols-2 gap-2">
-                                <ControlledInput
-                                    control={form.control}
-                                    name="product.price"
-                                    label="Base Price"
-                                    type="number"
-                                    className="col-span-2"
-                                />
+                                {stepTitle == "Door" ? (
+                                    <div className="col-span-2">
+                                        <Tabs
+                                            className="w-full "
+                                            onValueChange={setTab}
+                                            value={tab}
+                                        >
+                                            <TabsList>
+                                                {heightList().map((h) => (
+                                                    <TabsTrigger
+                                                        key={h}
+                                                        value={h}
+                                                    >
+                                                        {h}
+                                                    </TabsTrigger>
+                                                ))}
+                                            </TabsList>
+                                            {heightList().map((h) => (
+                                                <TabsContent key={h} value={h}>
+                                                    <div className="grid  grid-cols-4 gap-4">
+                                                        {sizeList(h).map(
+                                                            (size) => (
+                                                                <ControlledInput
+                                                                    key={size}
+                                                                    control={
+                                                                        form.control
+                                                                    }
+                                                                    name={`product.meta.doorPrice.${size}`}
+                                                                    label={size}
+                                                                    type="number"
+                                                                />
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </TabsContent>
+                                            ))}
+                                        </Tabs>
+                                    </div>
+                                ) : (
+                                    <ControlledInput
+                                        control={form.control}
+                                        name="product.price"
+                                        label="Base Price"
+                                        type="number"
+                                        className="col-span-2"
+                                    />
+                                )}
                             </div>
                         </TabsContent>
                     </Tabs>

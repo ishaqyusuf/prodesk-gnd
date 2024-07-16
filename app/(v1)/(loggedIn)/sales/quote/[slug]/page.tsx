@@ -5,7 +5,6 @@ import {
     OrderViewCrumb,
     OrdersCrumb,
 } from "@/components/_v1/breadcrumbs/links";
-import SalesPaymentModal from "@/components/_v1/modals/sales-payment-modal";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 import OverviewDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/details-section";
 import ItemDetailsSection from "@/app/(v1)/(loggedIn)/sales/order/[slug]/components/item-details";
@@ -45,7 +44,6 @@ export default async function EstimateViewPage({ params: { slug } }) {
                 {/* <ProductionAssignDialog />
                  */}
 
-                <SalesPaymentModal />
                 <OrderPrinter />
             </DataPageShell>
         </AuthGuard>

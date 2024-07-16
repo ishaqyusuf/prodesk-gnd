@@ -18,5 +18,6 @@
         "titleBar.inactiveBackground": "#540c7c99",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#540c7c"
+    "peacock.color": "#540c7c",
+    "workbench.panel.defaultLocation": "right"
 }

@@ -83,7 +83,6 @@ export interface ISlicer {
     staticInstallers: Users[];
     staticSalesCustomers: Customers[];
     staticProducts: InventoryProducts[];
-    salesPaymentCustomers: ICustomer[];
     staticProductCategories: string[];
     staticList: any[];
     refreshToken: string | undefined;
@@ -123,11 +122,9 @@ export type ModalName =
     | "project"
     | "salesAddressForm"
     | "salesComponent"
-    | "salesPayment"
     | "salesTimeline"
     | "salesSupply"
     | "submitJob"
-    | "salesPaymentCustomer"
     | "salesMobileOption"
     | "verifyTaskJobs"
     | "uploadDoc"

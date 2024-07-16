@@ -186,6 +186,7 @@ export default function PaymentModal({
                     <Button
                         onClick={() => {
                             form.setValue("showForm", true);
+                            form.setValue("data.amount", ctx.data?.amountDue);
                         }}
                         className={cn("w-full", showForm && "hidden")}
                         disabled={!ctx?.data?.amountDue}

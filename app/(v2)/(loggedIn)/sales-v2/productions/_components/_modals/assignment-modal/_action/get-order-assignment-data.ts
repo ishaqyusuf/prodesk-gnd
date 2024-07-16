@@ -128,6 +128,8 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     (item.multiDyke || (!item.multiDyke && !item.multiDykeUid)))
         )
         .map((item, index) => {
+            const metaKeys = Object.keys(item.meta);
+            // if (metaKeys.includes("uid")) item.meta.lineIndex = item.meta.uid;
             const _items = order.items.filter(
                 (i) =>
                     i.id == item.id ||
@@ -250,7 +252,8 @@ export async function getOrderAssignmentData(id, mode?: mode) {
             order.isDyke
                 ? undefined
                 : (item, item2) =>
-                      item.item.meta.lineIndex - item2.item.meta.lineIndex
+                      (item.item.meta.lineIndex || item.item.meta.uid) -
+                      (item2.item.meta.lineIndex || item2.item.meta.lineIndex)
         );
     let _doorGroups = doorGroups
         .map((group, index) => {
@@ -259,7 +262,17 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     (g, i) => !g.item.qty && i < index
                 )?.item;
                 let title = gItem?.description?.replaceAll("*", "");
-                // console.log(title);
+                // console.log({
+                //     title,
+                //     index,
+                //     dg: doorGroups.map(
+                //         ({ item: { description: d, qty: q, meta } }) => ({
+                //             d,
+                //             q,
+                //             ...meta,
+                //         })
+                //     ),
+                // });
 
                 group.sectionTitle = title as any;
                 group.groupItemId = gItem?.id;
