@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import ControlledInput from "@/components/common/controls/controlled-input";
-import { cn } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import ItemPriceFinder from "../../item-price-finder";
@@ -62,6 +62,14 @@ export default function HousePackageSizeLineItem({
                 </>
             )}
             <TableCell>{size.dim?.replaceAll("in", '"')}</TableCell>
+            <TableCell className="hidden lg:table-cell">
+                <Money
+                    value={sum([
+                        sizeRow.jambSizePrice,
+                        sizeRow.componentsTotal,
+                    ])}
+                />
+            </TableCell>
             <TableCell className="">
                 <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
                     <div className="flex pt-1 justify-between">
@@ -86,9 +94,7 @@ export default function HousePackageSizeLineItem({
                     </div>
                 </div>
             </TableCell>
-            {/* <TableCell className="hidden lg:table-cell">
-                <Money value={sizeRow.unitPrice} />
-            </TableCell> */}
+
             <TableCell className="hidden lg:table-cell">
                 <Money value={sizeRow.lineTotal} />
             </TableCell>

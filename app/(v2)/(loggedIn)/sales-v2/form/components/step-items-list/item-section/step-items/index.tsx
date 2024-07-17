@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
+import { useEffect } from "react";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
 }
@@ -38,6 +39,7 @@ export function StepProducts({
         stepIndex,
         rowIndex,
     });
+    // useEffect(() => {},[])
     return (
         <div className="">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

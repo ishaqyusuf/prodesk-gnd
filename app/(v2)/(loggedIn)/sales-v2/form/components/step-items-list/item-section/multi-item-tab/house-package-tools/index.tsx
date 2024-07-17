@@ -51,28 +51,10 @@ export default function HousePackageTool({ componentTitle }) {
                     )}
 
                     <TableHead>Unit Dimension</TableHead>
-                    <TableHead className="">
-                        Unit Price
-                        {/* {doorConfig.multiPrice ? (
-                            <>Price</>
-                        ) : (
-                            <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
-                                <div className="flex pb-1 justify-center">
-                                    <p>Price</p>
-                                </div>
-                                <div className="flex pt-1 justify-between">
-                                    {componentItem.prices.map((p) => (
-                                        <div className="flex-1" key={p.title}>
-                                            {p.title}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )} */}
+                    <TableHead className="hidden lg:table-cell">
+                        Estimate
                     </TableHead>
-                    {/* <TableHead className="hidden lg:table-cell">
-                        Unit Price
-                    </TableHead> */}
+                    <TableHead className="">Addon</TableHead>
                     <TableHead className="hidden lg:table-cell">
                         Line Total
                     </TableHead>

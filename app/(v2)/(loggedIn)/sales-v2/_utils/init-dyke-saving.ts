@@ -118,7 +118,8 @@ function initializeMultiComponent(data: DykeForm) {
                 if (clone.item.meta.doorType == "Moulding")
                     moldingId = c.toolId;
                 else dykeDoorId = c.toolId;
-
+                c.priceTags.components =
+                    item.item.housePackageTool?.meta?.priceTags?.components;
                 clone.item.housePackageTool = {
                     ...rest,
                     dykeDoorId,

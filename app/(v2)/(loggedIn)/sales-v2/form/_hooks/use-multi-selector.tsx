@@ -106,16 +106,24 @@ export function useMultiSelector(rowIndex, get) {
                     `${basePath}.toolId` as any,
                     stepProd.dykeProductId
                 );
-                const priceTags = {
-                    mouldingPriceTag: stepProd.product.meta?.priced
-                        ? stepProd.product.price
-                        : 0,
-                } as HousePackageToolMeta["priceTags"];
+                const componentPrice = stepProd.product.meta?.priced
+                    ? stepProd.product.price
+                    : 0;
+                const priceTags = (
+                    isMoulding
+                        ? {
+                              moulding: {
+                                  price: componentPrice,
+                                  addon: 0,
+                              },
+                              components: 0,
+                          }
+                        : {
+                              doorSizePriceTag: {},
+                              components: 0,
+                          }
+                ) as HousePackageToolMeta["priceTags"];
                 form.setValue(`${basePath}.priceTags` as any, priceTags);
-                form.setValue(
-                    `${basePath}.unitPrice` as any,
-                    priceTags.mouldingPriceTag
-                );
             }
             if (!uid)
                 form.setValue(

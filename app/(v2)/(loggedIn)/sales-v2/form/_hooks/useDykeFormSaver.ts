@@ -25,10 +25,11 @@ export default function useDykeFormSaver(form) {
             };
             try {
                 const estimate = calculateFooterEstimate(data, null);
-                console.log(estimate.grandTotal);
+                // console.log(estimate.grandTotal);
 
                 const e = initDykeSaving(data);
-
+                // console.log(e);
+                // return;
                 if (e.order.type == "order") {
                     e.order.paymentDueDate =
                         salesFormUtils._calculatePaymentTerm(
@@ -71,4 +72,3 @@ export default function useDykeFormSaver(form) {
         save,
     };
 }
-

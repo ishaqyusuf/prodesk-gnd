@@ -13,7 +13,6 @@ interface Props {
 export default function useFooterEstimate() {
     const form = useDykeForm();
 
-    // form.getValues('')
     function updateFooterPrice(uid, { price, doorType, tax }: Props) {
         const footer = form.getValues("footer");
         footer.footerPricesJson = JSON.parse(footer.footerPrices);

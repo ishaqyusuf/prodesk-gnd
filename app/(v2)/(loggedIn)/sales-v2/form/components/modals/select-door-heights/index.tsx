@@ -111,7 +111,7 @@ export default function SelectDoorHeightsModal({
                 };
                 if (d.price) priceTags.doorSizePriceTag[d.dimFt] = d.price;
                 form.setValue(
-                    `${baseKey}._doorForm.${d.dim}.doorPrice` as any,
+                    `${baseKey}._doorForm.${d.dim}.jambSizePrice` as any,
                     d.price || 0
                 );
             }

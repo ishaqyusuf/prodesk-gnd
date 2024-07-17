@@ -83,13 +83,13 @@ export default function SalesMetaData() {
                     name="order.meta.tax"
                 />
             </InfoLine>
-            <InfoLine label="Component Price">
+            {/* <InfoLine label="Component Price">
                 <ControlledCheckbox
                     switchInput
                     className="h-8"
                     name="order.meta.calculatedPrice"
                 />
-            </InfoLine>
+            </InfoLine> */}
         </div>
     );
 }

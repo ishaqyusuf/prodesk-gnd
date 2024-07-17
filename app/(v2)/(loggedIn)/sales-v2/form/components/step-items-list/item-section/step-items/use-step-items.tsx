@@ -10,7 +10,7 @@ import {
     useDykeCtx,
     useDykeForm,
 } from "../../../../_hooks/form-context";
-import { DykeStep } from "../../../../../type";
+import { DykeDoorType, DykeStep } from "../../../../../type";
 import {
     getSlabDoorTypes,
     getStepProduct,
@@ -25,15 +25,16 @@ import { Button } from "@/components/ui/button";
 import EditStepItemModal from "../../../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../../../_action/save-step-product";
 import { _deleteDoorStep, _deleteStepItem } from "./_actions";
+import { calculateComponentPrices } from "./calculate-prices";
 export default function useStepItems({
     stepForm,
     stepIndex,
 }: StepProductProps) {
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     const form = useDykeForm();
-    // stepProducts[0].
 
     const item = useContext(DykeItemFormContext);
+
     let doorType = item.get.doorType();
     const isMoulding = doorType == "Moulding";
     const stepFormTitle = stepForm.step?.title;
@@ -76,7 +77,7 @@ export default function useStepItems({
     useEffect(() => {
         load();
         allowsCustom();
-        // console.log(">>>>>>");
+        calculateComponentPrices(form, item.rowIndex);
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";
@@ -113,15 +114,25 @@ export default function useStepItems({
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
-            switch (stepForm.step?.title) {
+            const stepTitle = stepForm.step?.title;
+            let price = 0;
+            if (
+                stepProd?.product?.meta.priced &&
+                !isMultiSection &&
+                stepTitle !== "Moulding"
+            )
+                price = stepProd?.product?.price;
+
+            switch (stepTitle) {
                 case "Height":
+                    const _doorType: DykeDoorType = hpt.doorType as any;
                     form.setValue(
                         `itemArray.${item.rowIndex}.item.housePackageTool`,
                         {
                             height: val,
                             totalDoors: 0,
                             totalPrice: 0,
-                            doorType: hpt.doorType,
+                            doorType: _doorType,
                             _doorForm: {
                                 ...(hpt._doorFormDefaultValue as any),
                             },
@@ -129,10 +140,19 @@ export default function useStepItems({
                                 ...hpt._doorFormDefaultValue,
                             },
                             meta: {
-                                priceTags: {
-                                    mouldingPriceTag: null,
-                                    doorSizePriceTag: {},
-                                },
+                                priceTags:
+                                    _doorType == "Moulding"
+                                        ? {
+                                              moulding: {
+                                                  price: 0,
+                                                  addon: 0,
+                                              },
+                                              components: 0,
+                                          }
+                                        : {
+                                              components: 0,
+                                              doorSizePriceTag: {},
+                                          },
                             },
                         }
                     );
@@ -159,12 +179,6 @@ export default function useStepItems({
                         //
                     }
                     break;
-                // case "Moulding":
-                //     form.setValue(
-                //         `itemArray.${item.rowIndex}.item.housePackageTool.moldingId`,
-                //         stepProd?.dykeProductId
-                //     );
-                //     break;
                 case "Specie":
                     break;
                 case "Item Type":
@@ -213,22 +227,17 @@ export default function useStepItems({
             const data: Partial<DykeStep["item"]> = {
                 value: val,
                 // qty: stepProd?.product?.qty,
-                price:
-                    stepProd?.product?.meta.priced && !isMultiSection
-                        ? stepProd?.product?.price
-                        : 0,
+                price,
                 stepId: stepProd?.dykeStepId,
                 meta: {
                     custom,
                 } as any,
                 // title: stepProd?.product?.description,
             };
-
             form.setValue(
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
-
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
                 stepProd?.product as any,

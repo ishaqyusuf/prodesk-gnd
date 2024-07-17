@@ -64,10 +64,6 @@ export default function useMultiDykeForm() {
         const formData = form.getValues();
         const itemData = item.get.itemArray();
         setValue("rowIndex", item.rowIndex);
-        // // when door is selected, set the multi uid and primary
-        // // find item index for each multiComponent
-        // // setup minimal item to enable housepackage tool fill
-        // // copy main item to children: ignore doorId, mouldingId, builtQty
 
         const _tabs = Object.entries(itemData.multiComponent.components)
             .map(([productTitle, cData]) => {

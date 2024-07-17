@@ -152,8 +152,12 @@ export interface HousePackageTool {
 }
 export interface HousePackageToolMeta {
     priceTags?: {
-        mouldingPriceTag?: number | undefined;
-        doorSizePriceTag: { [size in string]: number };
+        moulding?: {
+            price?: number | undefined;
+            addon?: number | undefined;
+        };
+        components?: number | undefined;
+        doorSizePriceTag?: { [size in string]: number };
     };
 }
 export type IPaymentOptions =

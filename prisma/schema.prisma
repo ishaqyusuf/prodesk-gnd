@@ -1194,8 +1194,8 @@ model DykeSalesDoors {
     swing              String?
     doorType           String?
     housePackageToolId Int
-    doorPrice          Float?
-    jambSizePrice      Float?
+    doorPrice          Float? // addon price.
+    jambSizePrice      Float? // total door price
     casingPrice        Float?
     unitPrice          Float?
     lhQty              Int                              @default(0)

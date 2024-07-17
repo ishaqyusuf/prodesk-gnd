@@ -111,6 +111,7 @@ export function useMultiComponentItem(componentTitle) {
                             totalPrice += _linePrice || 0;
                         }
                     );
+
                     form.setValue(keys.sumTotal as any, totalPrice);
                     form.setValue(keys.sumQty as any, totalDoors);
                     footerEstimate.updateFooterPrice(cData.uid, {
@@ -171,6 +172,7 @@ export function useMultiComponentSizeRow(
         jambSizePrice: `${sizeRootKey}.jambSizePrice`,
         swing: `${sizeRootKey}.swing`,
         casingPrice: `${sizeRootKey}.casingPrice`,
+        componentsTotal: `${multiComponentComponentTitleKey}.priceTags.components`,
     };
     // prices.map(p => keys[])
     const [
@@ -181,6 +183,8 @@ export function useMultiComponentSizeRow(
         casingPrice,
         lineTotal,
         unitPrice,
+        componentsTotal,
+        ,
     ] = form.watch([
         keys.lhQty,
         keys.rhQty,
@@ -189,11 +193,13 @@ export function useMultiComponentSizeRow(
         keys.casingPrice,
         keys.lineTotal,
         keys.unitPrice,
+        keys.componentsTotal,
     ] as any);
 
     useEffect(() => {
         const qty = sum([lhQty, rhQty]);
-        const _unitPrice = sum([jambSizePrice, casingPrice, doorPrice]);
+        // const calculatedPriceTotal = sum([componentsTotal, jambSizePrice]);
+        const _unitPrice = sum([jambSizePrice, componentsTotal, doorPrice]);
         const _totalLinePrice = math.multiply(qty, _unitPrice);
         form.setValue(`${keys.unitPrice}` as any, _unitPrice);
         form.setValue(`${keys.lineTotal}` as any, _totalLinePrice);
@@ -204,5 +210,7 @@ export function useMultiComponentSizeRow(
         keys,
         unitPrice,
         lineTotal,
+        jambSizePrice,
+        componentsTotal,
     };
 }
