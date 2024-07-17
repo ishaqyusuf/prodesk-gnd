@@ -175,8 +175,7 @@ export default function EditStepItemModal({
                                     <div className="col-span-2">
                                         <Tabs
                                             className="w-full "
-                                            onChange={setTab}
-                                            value={tab}
+                                            defaultValue={tab}
                                         >
                                             <TabsList>
                                                 {heightList().map((h) => (
