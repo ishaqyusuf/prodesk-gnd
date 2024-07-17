@@ -176,6 +176,7 @@ export default function EditStepItemModal({
                                         <Tabs
                                             className="w-full "
                                             defaultValue={tab}
+                                            //
                                         >
                                             <TabsList>
                                                 {heightList().map((h) => (
