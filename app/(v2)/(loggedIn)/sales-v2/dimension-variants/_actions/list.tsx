@@ -19,19 +19,18 @@ import Btn from "@/components/_v1/btn";
 import { saveSettingAction } from "@/app/(v1)/_actions/settings";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { generateRandomString } from "@/lib/utils";
-import { HousePackageTool } from "../type";
 import { saveHousePackageTool } from "./save-house-package-tool";
+import { HousePackageToolSettings } from "../type";
 
 export type ResetPasswordFormInputs = z.infer<typeof resetPasswordSchema>;
 
-export function DimensionList({ data }: { data: HousePackageTool }) {
+export function DimensionList({ data }: { data: HousePackageToolSettings }) {
     // console.log(data);
     const router = useRouter();
     const [isPending, startTransition] = React.useTransition();
 
     // react-hook-form
-    const form = useForm<HousePackageTool>({
+    const form = useForm<HousePackageToolSettings>({
         defaultValues: {
             ...data,
         },
