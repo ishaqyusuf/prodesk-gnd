@@ -5,6 +5,7 @@ import { IStepProducts } from "../components/step-items-list/item-section/step-i
 import { generateRandomString, safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
 import { timeout } from "@/lib/timeout";
+import { HousePackageToolMeta } from "@/types/sales";
 
 export function useMultiSelector(rowIndex, get) {
     const form = useDykeForm();
@@ -100,11 +101,22 @@ export function useMultiSelector(rowIndex, get) {
                 `itemArray.${rowIndex}.multiComponent.components.${safeTitle}` as any;
             const uid = form.getValues(`${basePath}.uid` as any);
             form.setValue(`${basePath}.toolId` as any, stepProd.dykeProductId);
-            if (isMoulding)
+            if (isMoulding) {
                 form.setValue(
-                    `${basePath}.mouldingPrice` as any,
-                    stepProd.product?.meta?.priced ? stepProd.product?.price : 0
+                    `${basePath}.toolId` as any,
+                    stepProd.dykeProductId
                 );
+                const priceTags = {
+                    mouldingPriceTag: stepProd.product.meta?.priced
+                        ? stepProd.product.price
+                        : 0,
+                } as HousePackageToolMeta["priceTags"];
+                form.setValue(`${basePath}.priceTags` as any, priceTags);
+                form.setValue(
+                    `${basePath}.unitPrice` as any,
+                    priceTags.mouldingPriceTag
+                );
+            }
             if (!uid)
                 form.setValue(
                     `${basePath}.uid` as any,

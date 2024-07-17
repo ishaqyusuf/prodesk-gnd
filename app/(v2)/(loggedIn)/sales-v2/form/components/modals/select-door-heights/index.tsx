@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { _addSize } from "../../../../dimension-variants/_actions/add-size";
 import { IStepProducts } from "../../step-items-list/item-section/step-items";
 import Money from "@/components/_v1/money";
+import { HousePackageToolMeta } from "@/types/sales";
 
 export type SizeForm = {
     [id in string]: {
@@ -32,6 +33,8 @@ interface Props {
     rowIndex;
     onSubmit?(heights: SizeForm);
 }
+type ComponentHeight =
+    DykeForm["itemArray"][0]["multiComponent"]["components"]["heights"];
 
 export default function SelectDoorHeightsModal({
     form,
@@ -42,13 +45,10 @@ export default function SelectDoorHeightsModal({
 }: Props) {
     const safeTitle = safeFormText(productTitle);
     const item = form.getValues(`itemArray.${rowIndex}`);
-    const heightsKey = `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.heights`;
-    const heights: DykeForm["itemArray"][0]["multiComponent"]["components"]["heights"] =
-        form.getValues(
-            `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.heights`
-        );
-    // console.log({ heights, safeTitle });
+    const baseKey = `itemArray.${rowIndex}.multiComponent.components.${safeTitle}`;
+    const heightsKey = `${baseKey}.heights`;
 
+    const heights: ComponentHeight = form.getValues(heightsKey as any);
     const height = form.watch(
         `itemArray.${rowIndex}.item.housePackageTool.height`
     );
@@ -67,21 +67,14 @@ export default function SelectDoorHeightsModal({
             sizes: {},
         },
     });
-
     useEffect(() => {
         (async () => {
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
-            // console.log(_sizes, height, isBifold);
-            // console.log(heights);
             const heightPrices = stepProd?.product?.meta?.doorPrice || {};
-            console.log(heightPrices);
-
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
-                console.log(heightPrices[s?.dimFt]);
                 _defData[k] = {
-                    // checked: s != null,
                     ...(v || {}),
                     dim: s?.dim,
                     width: s?.width,
@@ -89,7 +82,6 @@ export default function SelectDoorHeightsModal({
                     price: heightPrices[s?.dimFt],
                 };
             });
-
             sizeForm.reset({
                 sizes: _defData,
             });
@@ -106,6 +98,10 @@ export default function SelectDoorHeightsModal({
     const modal = useModal();
     function _onSubmit() {
         const sizesData = sizeForm.getValues("sizes");
+        const priceTags: HousePackageToolMeta["priceTags"] = {
+            doorSizePriceTag: {},
+        };
+        // console.log(sizesData);
         Object.entries(sizesData || {}).map(([size, d]) => {
             const _d = sizes.find((_) => size == _.dim) || {};
             if (d.checked && _d) {
@@ -113,20 +109,19 @@ export default function SelectDoorHeightsModal({
                     checked: true,
                     ..._d,
                 };
+                if (d.price) priceTags.doorSizePriceTag[d.dimFt] = d.price;
+                form.setValue(
+                    `${baseKey}._doorForm.${d.dim}.doorPrice` as any,
+                    d.price || 0
+                );
             }
         });
         const checked = (Object.values(sizesData).filter((s) => s.checked)
             ?.length > 0) as any;
-
-        // console.log(checked, safeTitle);
-
-        // console.log(sizesData);
         form.setValue(heightsKey as any, sizesData);
         onSubmit && onSubmit(sizesData);
-        form.setValue(
-            `itemArray.${rowIndex}.multiComponent.components.${safeTitle}.checked` as any,
-            checked
-        );
+        form.setValue(`${baseKey}.checked` as any, checked);
+        form.setValue(`${baseKey}.priceTags` as any, priceTags);
         modal.close();
     }
     async function createNewSize() {

@@ -3,7 +3,6 @@ import { DykeItemFormContext, useDykeForm } from "./form-context";
 import { camel, math, sum } from "@/lib/utils";
 import { SizeForm } from "../components/modals/select-door-heights";
 import { isComponentType } from "../../overview/is-component-type";
-import useMultiDykeForm from "./use-multi-generator";
 import getDoorConfig from "./use-door-config";
 import useFooterEstimate from "./use-footer-estimate";
 
@@ -21,12 +20,12 @@ export function useMultiComponentItem(componentTitle) {
     const isBifold = doorType == "Bifold";
     const isSlab = doorType == "Door Slabs Only";
 
-    const prices = (
-        isBifold || isSlab ? ["Door"] : ["Door", "Jamb Size", "Casing"]
-    ).map((title) => ({
-        title,
-        key: camel(`${title} price`),
-    }));
+    const prices =
+        // isBifold || isSlab ? ["Door"] : ["Door", "Jamb Size", "Casing"]
+        ["Door"].map((title) => ({
+            title,
+            key: camel(`${title} price`),
+        }));
 
     const [qty, unitPrice, totalPrice, doorTotalPrice, uid, tax] = form.watch([
         `${multiComponentComponentTitleKey}.qty`,

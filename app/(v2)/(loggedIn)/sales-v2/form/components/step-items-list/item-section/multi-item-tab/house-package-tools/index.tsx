@@ -52,7 +52,8 @@ export default function HousePackageTool({ componentTitle }) {
 
                     <TableHead>Unit Dimension</TableHead>
                     <TableHead className="">
-                        {doorConfig.multiPrice ? (
+                        Unit Price
+                        {/* {doorConfig.multiPrice ? (
                             <>Price</>
                         ) : (
                             <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
@@ -67,11 +68,11 @@ export default function HousePackageTool({ componentTitle }) {
                                     ))}
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </TableHead>
-                    <TableHead className="hidden lg:table-cell">
+                    {/* <TableHead className="hidden lg:table-cell">
                         Unit Price
-                    </TableHead>
+                    </TableHead> */}
                     <TableHead className="hidden lg:table-cell">
                         Line Total
                     </TableHead>

@@ -29,11 +29,12 @@ export async function getSalesOverview({
     };
     return resp;
 }
-export async function viewSale(type, slug) {
+export async function viewSale(type, slug, deletedAt?) {
     const order = await prisma.salesOrders.findFirst({
         where: {
             type: type ? type : undefined,
             slug,
+            deletedAt,
         },
         include: {
             items: {

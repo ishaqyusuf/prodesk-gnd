@@ -29,10 +29,9 @@ import QueryString from "qs";
 
 import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
-import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
+
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { openLink } from "@/lib/open-link";
-import dayjs from "dayjs";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -209,6 +208,8 @@ export const PrintOrderMenuAction = typedMemo(
                 mockup: props.mockup ? "yes" : "no",
                 preview: false,
             };
+            if (props.row.deletedAt)
+                (query as any).deletedAt = props.row.deletedAt;
             if (props.link) {
                 openLink("printer/sales", query, true);
             } else {

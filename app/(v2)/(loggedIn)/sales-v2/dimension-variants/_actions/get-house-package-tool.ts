@@ -1,11 +1,11 @@
 "use server";
 
 import { prisma } from "@/db";
-import { HousePackageTool, HousePackageToolMeta } from "../type";
 import { bifold_door } from "@/lib/community/home-template-builder";
 import { ftToIn } from "@/lib/utils";
+import { HousePackageToolSettings } from "../type";
 
-export async function getHousePackageTool(): Promise<HousePackageTool> {
+export async function getHousePackageTool(): Promise<HousePackageToolSettings> {
     const s =
         (await prisma.settings.findFirst({
             where: {
@@ -27,7 +27,10 @@ export async function getHousePackageTool(): Promise<HousePackageTool> {
         data: await verifyBifoldDoors(s.id, s.meta as any),
     };
 }
-export async function verifyBifoldDoors(id, data: HousePackageTool["data"]) {
+export async function verifyBifoldDoors(
+    id,
+    data: HousePackageToolSettings["data"]
+) {
     const b = data.sizes.filter((b) => b.type == "Bifold");
 
     if (!b.length) {

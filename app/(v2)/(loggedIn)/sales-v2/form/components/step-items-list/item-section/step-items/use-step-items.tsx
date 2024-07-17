@@ -109,13 +109,10 @@ export default function useStepItems({
             return;
         }
         ctx.startLoadingStep(async () => {
-            // await timeout(1000);
             const val = stepProd?.product?.title || stepProd?.product?.value;
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
-            // form.getValues('order.id')
-            // console.log(stepForm.step?.title);
             switch (stepForm.step?.title) {
                 case "Height":
                     form.setValue(
@@ -125,12 +122,17 @@ export default function useStepItems({
                             totalDoors: 0,
                             totalPrice: 0,
                             doorType: hpt.doorType,
-                            // doors: {},
                             _doorForm: {
                                 ...(hpt._doorFormDefaultValue as any),
                             },
                             _doorFormDefaultValue: {
                                 ...hpt._doorFormDefaultValue,
+                            },
+                            meta: {
+                                priceTags: {
+                                    mouldingPriceTag: null,
+                                    doorSizePriceTag: {},
+                                },
                             },
                         }
                     );
@@ -211,7 +213,10 @@ export default function useStepItems({
             const data: Partial<DykeStep["item"]> = {
                 value: val,
                 // qty: stepProd?.product?.qty,
-                price: stepProd?.product?.price,
+                price:
+                    stepProd?.product?.meta.priced && !isMultiSection
+                        ? stepProd?.product?.price
+                        : 0,
                 stepId: stepProd?.dykeStepId,
                 meta: {
                     custom,

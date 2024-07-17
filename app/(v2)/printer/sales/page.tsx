@@ -11,6 +11,7 @@ export interface SalesPrintProps {
         mockup?: "yes" | "no";
         preview?: boolean;
         pdf: boolean;
+        deletedAt?;
     };
 }
 export default async function PrintOrderPage({

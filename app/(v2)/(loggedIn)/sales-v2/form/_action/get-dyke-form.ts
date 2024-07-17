@@ -6,10 +6,16 @@ import { getStepForm } from "./get-dyke-step";
 import {
     DykeDoorType,
     DykeFormStepMeta,
+    DykeSalesDoor,
     MultiDyke,
     ShelfItemMeta,
 } from "../../type";
-import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
+import {
+    HousePackageTool,
+    HousePackageToolMeta,
+    ISalesOrderItemMeta,
+    ISalesOrderMeta,
+} from "@/types/sales";
 import { user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import {
@@ -168,23 +174,23 @@ export async function getDykeFormAction(type, slug, query?) {
             ...form,
             meta,
             items: form.items.map((item) => {
-                let _doorForm: { [dimension in string]: DykeSalesDoors } = {};
+                let _doorForm: { [dimension in string]: DykeSalesDoor } = {};
                 let _doorFormDefaultValue: {
                     [dimension in string]: { id: number };
                 } = {};
                 item.housePackageTool?.doors?.map((d) => {
                     let dim = d.dimension?.replaceAll('"', "in");
-                    _doorForm[dim] = { ...d };
+                    _doorForm[dim] = { ...d } as any;
                     _doorFormDefaultValue[dim] = {
                         id: d.id,
                     };
                 });
-                // console.log(item.housePackageTool?.dykeDoorId);
-
                 return {
                     ...item,
                     housePackageTool: {
                         ...(item.housePackageTool || {}),
+                        meta: (item?.housePackageTool?.meta ||
+                            {}) as any as HousePackageToolMeta,
                         _doorForm,
                         _doorFormDefaultValue,
                     },
@@ -325,7 +331,6 @@ export async function getDykeFormAction(type, slug, query?) {
                         _dykeSizes = {};
                         item.housePackageTool?.doors?.map((door) => {
                             const dim = door.dimension?.replaceAll('"', "in");
-
                             _dykeSizes[dim] = {
                                 dim,
                                 width: inToFt(door.dimension.split(" x ")[0]),
@@ -334,16 +339,12 @@ export async function getDykeFormAction(type, slug, query?) {
                         });
                     }
                     if (component) {
-                        // console.log(item.housePackageTool.door);
-                        // item.meta.doo
                         const uid = generateRandomString(4);
                         function getMouldingId() {
                             let mid = item.housePackageTool.moldingId;
-
                             const s = item.formSteps.find(
                                 (fs) => fs.step.title == "Moulding"
                             );
-
                             const svid = s?.step?.title;
 
                             return mid;
@@ -352,15 +353,9 @@ export async function getDykeFormAction(type, slug, query?) {
                             item?.housePackageTool?.totalPrice ||
                             item.total ||
                             0;
-                        console.log({
-                            price,
-                            itemPrice: item.price,
-                            hpPrice:
-                                item.housePackageTool.doors?.[0]?.lineTotal,
-                        });
-                        const c = (multiComponent.components[
-                            safeFormText(component.title)
-                        ] = {
+
+                        const safeTitle = safeFormText(component.title);
+                        const c = (multiComponent.components[safeTitle] = {
                             uid,
                             checked: true,
                             heights: _dykeSizes,
@@ -369,20 +364,18 @@ export async function getDykeFormAction(type, slug, query?) {
                             description: item.description as any,
                             tax: item.meta.tax,
                             production: itemData?.dykeProduction,
-                            // swing: item.swing as any,
                             doorQty: item.qty,
                             unitPrice: item.rate,
                             totalPrice: price,
                             toolId: isMoulding
                                 ? getMouldingId()
                                 : item.housePackageTool.dykeDoorId,
-                            // mouldingPrice: item.housePackageTool.meta.
-
                             _doorForm: item.housePackageTool._doorForm || {},
                             hptId: item.housePackageTool.id as any,
                             doorTotalPrice: price,
+                            priceTags: item.housePackageTool.meta?.priceTags,
                         });
-                        // if(!c.totalPrice)
+
                         footerPrices[uid] = {
                             price: c.totalPrice || 0,
                             tax: c.tax,

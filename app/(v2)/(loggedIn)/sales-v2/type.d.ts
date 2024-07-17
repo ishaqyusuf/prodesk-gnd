@@ -6,6 +6,7 @@ import {
 } from "@prisma/client";
 import { getStepForm } from "./form/_action/get-dyke-step";
 import { getDykeFormAction } from "./form/_action/get-dyke-form";
+import { HousePackageToolMeta } from "@/types/sales";
 
 export interface IDykeSalesItem {
     meta: {
@@ -91,13 +92,10 @@ export type MultiDyke = {
     components: {
         [doorTitle in string]: {
             checked?: boolean;
-            heights: {
-                [height in string]: {
-                    checked?: boolean;
-                    dim?: string;
-                    width?: string;
-                };
-            };
+
+            _componentsTotalPrice?: number | null;
+            _mouldingPriceTag?: number | null;
+
             toolId?;
             itemId?;
             qty: number | null;
@@ -110,10 +108,18 @@ export type MultiDyke = {
             production?: boolean;
             description?: string;
             doorTotalPrice: number | null;
+            heights: {
+                [dim in string]: {
+                    checked?: boolean;
+                    dim?: string;
+                    width?: string;
+                };
+            };
             _doorForm: {
-                [dim in string]: DykeSalesDoors;
+                [dim in string]: DykeSalesDoor;
             };
             uid?;
+            priceTags?: HousePackageToolMeta["priceTags"];
         };
     };
     uid?: string;
@@ -121,6 +127,13 @@ export type MultiDyke = {
     primary?: boolean;
     rowIndex?;
 };
+
+export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
+    meta: DykeSalesDoorMeta;
+};
+export interface DykeSalesDoorMeta {
+    _doorPrice: number | null;
+}
 export interface IDykeFormContext {
     startLoadingStep;
     loadingStep: boolean;

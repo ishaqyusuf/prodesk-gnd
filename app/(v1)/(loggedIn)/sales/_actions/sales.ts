@@ -1,6 +1,7 @@
 "use server";
 
 import {
+    anyDateQuery,
     dateQuery,
     getPageInfo,
     queryFilter,
@@ -43,6 +44,7 @@ export async function whereSales(query: SalesQueryParams) {
         _payment,
         _deliveryStatus,
         deliveryOption,
+        _withDeleted,
         // isDyke,
         type = "order",
     } = query;
@@ -68,7 +70,6 @@ export async function whereSales(query: SalesQueryParams) {
         if (size && spl.length == 3) {
             size = `${ftToIn(spl[0])} x ${ftToIn(spl[2])}`;
         }
-        console.log(size);
 
         return {
             size: size,
@@ -161,6 +162,9 @@ export async function whereSales(query: SalesQueryParams) {
         type,
         ...dateQuery({ from, to, _dateType, date }),
     };
+    if (_withDeleted) {
+        where.deletedAt = anyDateQuery();
+    }
     if (_q && Number(_q) > 0) {
         // console.log(_q)
         where.OR?.push({

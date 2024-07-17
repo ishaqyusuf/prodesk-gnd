@@ -150,7 +150,12 @@ export interface HousePackageTool {
         };
     };
 }
-
+export interface HousePackageToolMeta {
+    priceTags?: {
+        mouldingPriceTag?: number | undefined;
+        doorSizePriceTag: { [size in string]: number };
+    };
+}
 export type IPaymentOptions =
     | "Cash"
     | "Credit Card"
@@ -200,7 +205,7 @@ export interface SalesQueryParams extends BaseQuery {
     _q?;
     _backOrder?: boolean;
     _noBackOrder?: boolean;
-
+    _withDeleted?: boolean;
     sort?: "customer" | "status" | "prodDueDate";
     sort_order?: "asc" | "desc" | undefined;
 

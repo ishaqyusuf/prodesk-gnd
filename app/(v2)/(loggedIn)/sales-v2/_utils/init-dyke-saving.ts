@@ -3,6 +3,7 @@ import { DykeForm } from "../type";
 import { isComponentType } from "../overview/is-component-type";
 import { deepCopy } from "@/lib/deep-copy";
 import { calculateSalesEstimate } from "./calculate-sales-estimate";
+import { HousePackageToolMeta } from "@/types/sales";
 
 export default function initDykeSaving(data: DykeForm, noEstimate = false) {
     const errorData: any = {};
@@ -54,26 +55,22 @@ function initializeMultiComponent(data: DykeForm) {
         const components = Object.values(item.multiComponent.components).filter(
             Boolean
         );
-        // console.log(components);
-
         let parented =
             components.find(
                 (c: any) => c.checked && c.itemId && c.itemId == item.item.id
             ) != null;
-        components.map((c: any) => {
+        components.map((c) => {
             if (!c.checked) {
                 trash.orderItems.push(c.itemId);
                 trash.housePackageTools.push(c.hptId);
                 return;
             }
-            // const cType  =
             const type = isComponentType(item.item?.meta?.doorType);
 
             let clone: DykeForm["itemArray"][0] = deepCopy(item);
             clone.item.multiDyke = false;
             if ((c.itemId && c.itemId == item.item.id) || !parented) {
                 clone.item.multiDyke = true;
-
                 parented = true;
             } else {
                 clone.item.formStepArray = [];
@@ -85,20 +82,16 @@ function initializeMultiComponent(data: DykeForm) {
 
             if (type.garage) clone.item.swing = c.swing as any;
             if (type.service) {
-                // console.log("service");
                 clone.item.meta.tax = c.tax || false;
                 clone.item.dykeProduction = c.production || false;
             } else {
                 clone.item.meta.tax = true;
             }
-            // console.log(type);
-
             if (
                 !type.moulding &&
                 !type.service &&
                 clone.item.housePackageTool
             ) {
-                console.log(index);
                 if (!clone.item.multiDyke) {
                     clone.item.formStepArray = [];
                 }
@@ -111,7 +104,6 @@ function initializeMultiComponent(data: DykeForm) {
                 });
                 clone.item.housePackageTool._doorForm = c._doorForm;
                 clone.item.housePackageTool.totalDoors = c.doorQty;
-
                 let {
                     createdAt,
                     deletedAt,
@@ -131,6 +123,9 @@ function initializeMultiComponent(data: DykeForm) {
                     ...rest,
                     dykeDoorId,
                     moldingId,
+                    meta: {
+                        priceTags: c.priceTags,
+                    } as HousePackageToolMeta,
                 } as any;
                 const filterItems = () => {
                     const {
@@ -150,7 +145,6 @@ function initializeMultiComponent(data: DykeForm) {
                     clone.item.price =
                     clone.item.total =
                         c.doorTotalPrice;
-                console.log("DOOR TOTAL PRICE", c.doorTotalPrice);
             } else {
                 clone.item.price = clone.item.rate = c.unitPrice;
                 clone.item.total = c.totalPrice;

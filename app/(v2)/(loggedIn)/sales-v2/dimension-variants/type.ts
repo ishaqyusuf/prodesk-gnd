@@ -1,6 +1,6 @@
 import { DykeDoorType } from "../type";
 
-export interface HousePackageToolMeta {
+export interface HousePackageToolSettingsMeta {
     sizes: {
         ft: string;
         in: string;
@@ -9,8 +9,8 @@ export interface HousePackageToolMeta {
         height: boolean;
     }[];
 }
-export interface HousePackageTool {
+export interface HousePackageToolSettings {
     id: number;
     type: string;
-    data: HousePackageToolMeta;
+    data: HousePackageToolSettingsMeta;
 }
