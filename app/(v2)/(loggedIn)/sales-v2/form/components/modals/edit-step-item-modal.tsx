@@ -81,7 +81,7 @@ export default function EditStepItemModal({
                             height,
                             isBifold
                         );
-                        console.log(_sizes);
+                        // console.log(_sizes);
                         d[height] = _sizes.map((s) => s.dimFt);
                     })
                 );
@@ -175,7 +175,7 @@ export default function EditStepItemModal({
                                     <div className="col-span-2">
                                         <Tabs
                                             className="w-full "
-                                            onValueChange={setTab}
+                                            onChange={setTab}
                                             value={tab}
                                         >
                                             <TabsList>

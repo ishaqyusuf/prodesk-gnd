@@ -6,18 +6,32 @@ import { env } from "@/env.mjs";
 import SVG from "react-inlinesvg";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
+import { IStepProducts } from ".";
+import { Icons } from "@/components/_v1/icons";
 
+interface Props {
+    item: IStepProducts[number];
+    select;
+    loadingStep;
+    isMultiSection;
+    isRoot;
+    stepTitle?;
+}
 export function StepItem({
     item,
     select,
     loadingStep,
     isMultiSection,
+    stepTitle,
     isRoot,
-}) {
+}: Props) {
     const ctx = useContext(DykeItemFormContext);
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
+    const doorPriceCount = Object.keys(
+        item.product.meta.doorPrice || {}
+    ).length;
     return (
         <button
             disabled={loadingStep}
@@ -47,9 +61,17 @@ export function StepItem({
                     ? item.product?.value || item.product.title
                     : item.product.title}
             </Label>
-            <div className="text-xs font-bold">
-                {item.product?.meta?.priced && (
+            <div className="text-xs absolute top-0 right-0 p-4 px-8 font-bold">
+                {item.product?.meta?.priced && item.product.price > 0 && (
                     <Money value={item.product.price} />
+                )}
+                {stepTitle == "Door" && doorPriceCount ? (
+                    <span className="inline-flex space-x-1 text-muted-foreground">
+                        <Icons.dollar className="w-4 h-4" />
+                        <span>{doorPriceCount}</span>
+                    </span>
+                ) : (
+                    <></>
                 )}
             </div>
         </button>

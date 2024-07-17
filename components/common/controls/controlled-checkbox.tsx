@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 
 interface Props<T> {
-    label?: string;
+    label?: string | any;
     description?: string;
     className?: string;
     placeholder?: string;

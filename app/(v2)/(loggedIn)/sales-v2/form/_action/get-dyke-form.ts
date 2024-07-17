@@ -376,6 +376,8 @@ export async function getDykeFormAction(type, slug, query?) {
                             toolId: isMoulding
                                 ? getMouldingId()
                                 : item.housePackageTool.dykeDoorId,
+                            // mouldingPrice: item.housePackageTool.meta.
+
                             _doorForm: item.housePackageTool._doorForm || {},
                             hptId: item.housePackageTool.id as any,
                             doorTotalPrice: price,

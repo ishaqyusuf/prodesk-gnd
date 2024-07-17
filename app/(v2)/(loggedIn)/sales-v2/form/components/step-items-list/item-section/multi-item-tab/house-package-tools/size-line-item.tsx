@@ -1,13 +1,13 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import {
-    useMultiComponentItem,
-    useMultiComponentSizeRow,
-} from "../../../../_hooks/use-multi-component-item";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import ControlledSelect from "@/components/common/controls/controlled-select";
-import ItemPriceFinder from "../item-price-finder";
+import ItemPriceFinder from "../../item-price-finder";
+import {
+    useMultiComponentItem,
+    useMultiComponentSizeRow,
+} from "../../../../../_hooks/use-multi-component-item";
 
 interface Props {
     size: { dim; width };

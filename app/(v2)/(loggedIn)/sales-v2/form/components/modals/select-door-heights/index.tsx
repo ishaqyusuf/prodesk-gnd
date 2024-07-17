@@ -8,21 +8,26 @@ import { getDimensionSizeList } from "../../../../dimension-variants/_actions/ge
 import { Form } from "@/components/ui/form";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { useModal } from "@/components/common/modal/provider";
-import { ftToIn, safeFormText } from "@/lib/utils";
+import { cn, ftToIn, safeFormText } from "@/lib/utils";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
 import { _addSize } from "../../../../dimension-variants/_actions/add-size";
+import { IStepProducts } from "../../step-items-list/item-section/step-items";
+import Money from "@/components/_v1/money";
 
 export type SizeForm = {
     [id in string]: {
         checked?: boolean;
         dim?: string;
         width?: string;
+        dimFt?: string;
+        price?: number;
     };
 };
 interface Props {
     form: UseFormReturn<DykeForm>;
     // stepProd: IStepProducts[0];
+    stepProd?: IStepProducts[0];
     productTitle: string;
     rowIndex;
     onSubmit?(heights: SizeForm);
@@ -33,6 +38,7 @@ export default function SelectDoorHeightsModal({
     rowIndex,
     onSubmit,
     productTitle,
+    stepProd,
 }: Props) {
     const safeTitle = safeFormText(productTitle);
     const item = form.getValues(`itemArray.${rowIndex}`);
@@ -50,7 +56,9 @@ export default function SelectDoorHeightsModal({
 
     const doorType = item.item.meta.doorType;
     const isBifold = doorType == "Bifold";
-    const [sizes, setSizes] = useState<{ dim: string; width: string }[]>([]);
+    const [sizes, setSizes] = useState<
+        { dim: string; width: string; dimFt: string; price? }[]
+    >([]);
     const sizeForm = useForm<{
         sizes: SizeForm;
         size: "";
@@ -65,20 +73,34 @@ export default function SelectDoorHeightsModal({
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
             // console.log(_sizes, height, isBifold);
+            // console.log(heights);
+            const heightPrices = stepProd?.product?.meta?.doorPrice || {};
+            console.log(heightPrices);
 
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
+                console.log(heightPrices[s?.dimFt]);
                 _defData[k] = {
                     // checked: s != null,
                     ...(v || {}),
                     dim: s?.dim,
                     width: s?.width,
+                    title: s?.dimFt,
+                    price: heightPrices[s?.dimFt],
                 };
             });
+
             sizeForm.reset({
                 sizes: _defData,
             });
-            setSizes(_sizes);
+            setSizes(
+                _sizes.map((s) => {
+                    return {
+                        ...s,
+                        price: heightPrices[s?.dimFt],
+                    };
+                })
+            );
         })();
     }, []);
     const modal = useModal();
@@ -129,7 +151,7 @@ export default function SelectDoorHeightsModal({
                         dim: `${r.in} x ${hIn}`,
                         width: r.ft,
                     },
-                ];
+                ] as any;
             });
         } catch (error) {
             // console.log(error.message);
@@ -140,14 +162,26 @@ export default function SelectDoorHeightsModal({
         <Modal.Content>
             <Modal.Header title="Select Sizes" subtitle={productTitle || ""} />
             <Form {...sizeForm}>
-                <div className="grid gap-2 grid-cols-3">
+                <div className="grid gap-3 grid-cols-3">
                     {sizes.map((size, index) => {
                         return (
                             <div className="" key={index}>
                                 <ControlledCheckbox
                                     control={sizeForm.control}
                                     name={`sizes.${size.dim}.checked` as any}
-                                    label={size.dim}
+                                    label={
+                                        <div className="grid gap-1">
+                                            <p>{size.dimFt}</p>
+                                            <div
+                                                className={cn(
+                                                    "text-muted-foreground",
+                                                    !size.price && "hidden"
+                                                )}
+                                            >
+                                                {<Money value={size.price} />}
+                                            </div>
+                                        </div>
+                                    }
                                 />
                             </div>
                         );

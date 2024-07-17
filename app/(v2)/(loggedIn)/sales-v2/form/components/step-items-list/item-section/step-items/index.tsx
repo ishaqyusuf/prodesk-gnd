@@ -64,6 +64,7 @@ export function StepProducts({
                             ></ConfirmBtn>
                         </div>
                         <StepItem
+                            stepTitle={stepForm.step.title}
                             isMultiSection={isMultiSection}
                             select={selectProduct}
                             loadingStep={ctx.loadingStep}

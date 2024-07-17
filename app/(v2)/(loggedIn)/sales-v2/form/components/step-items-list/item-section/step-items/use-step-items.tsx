@@ -240,17 +240,6 @@ export default function useStepItems({
                 item.toggleStep(item.openedStepIndex + nextSteps.length);
             } else toast.error("Next step not found");
         });
-        // if(val == 'Shelf Items') {
-        //     item.appendStep({
-        //         step: {
-        //             title: 'Shelf Items'
-        //         }
-        //     })
-        // }
-        // console.log(form.getValues());
-        // console.log([item.rowIndex, stepIndex]);
-        // toast.success("selected");
-        //get next step
     }
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[0]) {

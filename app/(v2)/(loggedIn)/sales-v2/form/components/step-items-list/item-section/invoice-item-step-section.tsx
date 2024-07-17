@@ -5,9 +5,7 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 
-import { useContext, useEffect, useState } from "react";
 import {
-    DykeItemFormContext,
     useDykeCtx,
     useDykeForm,
     useDykeItemCtx,
@@ -15,16 +13,10 @@ import {
 import { DykeStep } from "../../../../type";
 import ShelfItemIndex from "./shelf-item";
 
-import { Icons } from "@/components/_v1/icons";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
-
-import LineItemSection from "../line-item-section/line-item-section";
+import LineItemSection from "./multi-item-tab/line-item-section/line-item-section";
 import { StepProducts } from "./step-items";
-import MultiComponentRender from "../multi-component-render";
-import HousePackageTool from "./house-package-tools";
+import MultiComponentRender from "./multi-item-tab/multi-component-render";
+import HousePackageTool from "./multi-item-tab/house-package-tools";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -90,7 +82,6 @@ export function DykeInvoiceItemStepSection({
                     // <HousePackageTool />
                     <>
                         <MultiComponentRender Render={HousePackageTool} />
-                        {/* <MultiComponentRender Render={HousePackageToolOld} /> */}
                     </>
                 ) : stepForm?.step?.title == "Shelf Items" ? (
                     <>
@@ -99,7 +90,6 @@ export function DykeInvoiceItemStepSection({
                 ) : stepForm?.step?.title == "Line Item" ? (
                     <>
                         <MultiComponentRender line Render={LineItemSection} />
-                        {/* <LineItemSection /> */}
                     </>
                 ) : (
                     <StepProducts

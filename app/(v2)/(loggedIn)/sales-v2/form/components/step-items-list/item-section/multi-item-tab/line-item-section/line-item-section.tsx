@@ -1,13 +1,16 @@
 import { TableCell } from "@/components/ui/table";
-import { DykeItemFormContext, useDykeForm } from "../../../_hooks/form-context";
+import {
+    DykeItemFormContext,
+    useDykeForm,
+} from "../../../../../_hooks/form-context";
 import { useContext } from "react";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import Money from "@/components/_v1/money";
-import { useMultiComponentItem } from "../../../_hooks/use-multi-component-item";
+import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import useMultiDykeForm from "../../../_hooks/use-multi-generator";
+import useMultiDykeForm from "../../../../../_hooks/use-multi-generator";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import ItemPriceFinder from "../item-section/item-price-finder";
+import ItemPriceFinder from "../../item-price-finder";
 
 interface Props {
     componentTitle;

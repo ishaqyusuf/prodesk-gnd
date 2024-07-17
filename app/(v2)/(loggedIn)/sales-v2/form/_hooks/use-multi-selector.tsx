@@ -100,6 +100,11 @@ export function useMultiSelector(rowIndex, get) {
                 `itemArray.${rowIndex}.multiComponent.components.${safeTitle}` as any;
             const uid = form.getValues(`${basePath}.uid` as any);
             form.setValue(`${basePath}.toolId` as any, stepProd.dykeProductId);
+            if (isMoulding)
+                form.setValue(
+                    `${basePath}.mouldingPrice` as any,
+                    stepProd.product?.meta?.priced ? stepProd.product?.price : 0
+                );
             if (!uid)
                 form.setValue(
                     `${basePath}.uid` as any,
@@ -109,6 +114,7 @@ export function useMultiSelector(rowIndex, get) {
                 modal.openModal(
                     <SelectDoorHeightsModal
                         form={form}
+                        stepProd={stepProd}
                         productTitle={stepProd?.product?.title as any}
                         rowIndex={rowIndex}
                     />
@@ -116,11 +122,6 @@ export function useMultiSelector(rowIndex, get) {
                 return;
             }
             form.setValue(`${basePath}.checked` as any, !currentState);
-
-            // form.setValue(
-            //     `itemArray.${rowIndex}.multiComponent.${stepProd.product.title}.height`,
-            //     {} as any
-            // );
         },
         isChecked(stepProd) {
             const safeTitle = safeFormText(stepProd.product.title);

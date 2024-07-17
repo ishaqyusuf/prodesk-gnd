@@ -72,6 +72,7 @@ import {
     Calendar,
     ChevronDown,
     ChevronUp,
+    DollarSign,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -86,6 +87,7 @@ export const Icons = {
     reciept: Receipt,
     X: Cross2Icon,
     calendar: Calendar,
+    dollarSign: DollarSign,
     logoLg: ({ width = 120 }) => (
         <Link href="/">
             <Image alt="" src={logo2} width={width} />
