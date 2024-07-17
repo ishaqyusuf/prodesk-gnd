@@ -60,6 +60,15 @@ export function OrderRowAction(props: IOrderRowProps) {
     }
     const modal = useModal();
     const assignment = useAssignment();
+    if (row.deletedAt)
+        return (
+            <AuthGuard can={["editOrders"]} className="">
+                <RowActionMoreMenu>
+                    <PrintOrderMenuAction link estimate={estimate} row={row} />
+                    <PrintOrderMenuAction pdf estimate={estimate} row={row} />
+                </RowActionMoreMenu>
+            </AuthGuard>
+        );
     return (
         <AuthGuard can={["editOrders"]} className="">
             <RowActionMoreMenu>
