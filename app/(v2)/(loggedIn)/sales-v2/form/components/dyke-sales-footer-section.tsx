@@ -66,6 +66,7 @@ export default function DykeSalesFooterSection({}) {
             laborCost,
             paymentOption,
             discount,
+            orderTax,
         });
 
         form.setValue("order.meta.ccc", estimate.ccc);

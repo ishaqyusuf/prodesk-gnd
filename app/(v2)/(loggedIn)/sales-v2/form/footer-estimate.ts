@@ -8,6 +8,7 @@ interface Props {
     cccPercentage;
     paymentOption;
     discount;
+    orderTax;
 }
 export function calculateFooterEstimate(data: DykeForm, args: Props) {
     if (!args) {
@@ -17,15 +18,20 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
             cccPercentage: data.order.meta.ccc_percentage,
             paymentOption: data.order.meta.payment_option,
             discount: data.order.meta.discount,
+            orderTax: data.order.meta.tax,
         };
     }
-    const { footerPrices, laborCost, cccPercentage, paymentOption, discount } =
-        args;
+    const {
+        footerPrices,
+        laborCost,
+        cccPercentage,
+        paymentOption,
+        discount,
+        orderTax,
+    } = args;
     let footr = data.footer.footerPricesJson;
     footr = JSON.parse(footerPrices);
-    const orderTax = data.order.tax;
     const taxPercentage = data.order.taxPercentage;
-    console.log(footr);
 
     const items = data.itemArray;
     let subTotal = 0;
@@ -37,7 +43,11 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
         if (!f.price) f.price = 0;
 
         subTotal += f.price;
-        if (taxPercentage && (f?.tax || f?.doorType != "Services")) {
+        if (
+            taxPercentage &&
+            (f?.tax || f?.doorType != "Services") &&
+            orderTax
+        ) {
             const iTax = ((taxPercentage || 0) / 100) * f.price;
             tax += iTax;
             taxxable += f.price;

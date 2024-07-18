@@ -11,7 +11,6 @@ import {
     ShelfItemMeta,
 } from "../../type";
 import {
-    HousePackageTool,
     HousePackageToolMeta,
     ISalesOrderItemMeta,
     ISalesOrderMeta,
@@ -26,12 +25,9 @@ import {
     sum,
 } from "@/lib/utils";
 import dayjs from "dayjs";
-import { DykeSalesDoors } from "@prisma/client";
 
 export async function getDykeFormAction(type, slug, query?) {
     const restore = query?.restore == "true";
-    const errorId = query?.errorId;
-
     const restoreQuery = restore
         ? {
               OR: [
@@ -59,7 +55,6 @@ export async function getDykeFormAction(type, slug, query?) {
                 where: {
                     ...restoreQuery,
                 },
-
                 include: {
                     formSteps: {
                         where: {
@@ -133,6 +128,7 @@ export async function getDykeFormAction(type, slug, query?) {
         sales_percentage: ctx.defaultProfile?.coefficient,
         ccc_percentage: +ctx?.settings?.ccc,
         tax: true,
+        calculatedPriceMode: true,
     };
 
     const newOrderForm: Partial<OrderType> = {
@@ -278,10 +274,7 @@ export async function getDykeFormAction(type, slug, query?) {
                         tax: itemData.meta?.tax,
                     };
                 });
-                // item: shelfItem as Omit<DykeSalesShelfItem,'meta'> & {meta: {
-                //                 categoryIds: number[]
-                //             }},
-                // itemData.meta;
+
                 const multiComponent: MultiDyke = {
                     components: {},
                     uid: itemData.multiDykeUid as any,
@@ -355,6 +348,19 @@ export async function getDykeFormAction(type, slug, query?) {
                             0;
 
                         const safeTitle = safeFormText(component.title);
+                        let priceTags = item.housePackageTool.meta?.priceTags;
+                        if (!priceTags) {
+                            priceTags = {};
+                            if (isMoulding) {
+                                // console.log(item.rate);
+                                priceTags = {
+                                    moulding: {
+                                        price: 0,
+                                        addon: item.rate,
+                                    },
+                                };
+                            }
+                        }
                         const c = (multiComponent.components[safeTitle] = {
                             uid,
                             checked: true,
@@ -373,7 +379,7 @@ export async function getDykeFormAction(type, slug, query?) {
                             _doorForm: item.housePackageTool._doorForm || {},
                             hptId: item.housePackageTool.id as any,
                             doorTotalPrice: price,
-                            priceTags: item.housePackageTool.meta?.priceTags,
+                            priceTags,
                         });
 
                         footerPrices[uid] = {

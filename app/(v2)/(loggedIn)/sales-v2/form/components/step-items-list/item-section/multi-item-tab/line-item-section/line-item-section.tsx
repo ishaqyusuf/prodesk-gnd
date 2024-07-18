@@ -11,6 +11,7 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import useMultiDykeForm from "../../../../../_hooks/use-multi-generator";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import ItemPriceFinder from "../../item-price-finder";
+import { sum } from "@/lib/utils";
 
 interface Props {
     componentTitle;
@@ -75,13 +76,27 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     }
                 />
             </TableCell>
+            {isMoulding && componentItem.calculatedPriceMode && (
+                <TableCell className="w-[100px]">
+                    <Money
+                        value={sum([
+                            componentItem.mouldingPrice,
+                            componentItem.componentsTotal,
+                        ])}
+                    />
+                </TableCell>
+            )}
             <TableCell className="w-[150px]">
                 <ControlledInput
                     type="number"
                     list
                     control={form.control}
                     name={
-                        `${componentItem.multiComponentComponentTitleKey}.unitPrice` as any
+                        `${componentItem.multiComponentComponentTitleKey}.${
+                            isMoulding
+                                ? "priceTags.moulding.addon"
+                                : "unitPrice"
+                        }` as any
                     }
                 />
             </TableCell>
@@ -93,13 +108,13 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     onClick={() => componentItem.removeLine(mdf.removeTab)}
                     size="icon"
                 />
-                {isMoulding && (
+                {/* {isMoulding && (
                     <ItemPriceFinder
                         moldingId={component?.toolId}
                         componentTitle={componentTitle}
                         componentItem={componentItem}
                     />
-                )}
+                )} */}
             </TableCell>
         </>
     );

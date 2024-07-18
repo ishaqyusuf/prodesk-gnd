@@ -46,8 +46,26 @@ export default function MultiComponentRender({ Render, line = false }) {
                                     </>
                                 )}
                                 <TableHead>Qty</TableHead>
-                                <TableHead>Unit Price</TableHead>
-                                <TableHead>Line Total</TableHead>
+                                {item.isType.moulding ? (
+                                    <>
+                                        {item.calculatedPriceMode ? (
+                                            <>
+                                                <TableHead>Estimate</TableHead>
+                                                <TableHead>Addon</TableHead>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <TableHead>Price</TableHead>
+                                            </>
+                                        )}
+                                        <TableHead>Line Total</TableHead>
+                                    </>
+                                ) : (
+                                    <>
+                                        <TableHead>Unit Price</TableHead>
+                                        <TableHead>Line Total</TableHead>
+                                    </>
+                                )}
                                 <TableHead></TableHead>
                             </TableHeader>
                             <TableBody>
@@ -63,7 +81,15 @@ export default function MultiComponentRender({ Render, line = false }) {
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
                                     {item.isType.service && (
-                                        <TableCell></TableCell>
+                                        <>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                        </>
+                                    )}
+                                    {item.isType.moulding && (
+                                        <>
+                                            <TableCell></TableCell>
+                                        </>
                                     )}
                                     <TableCell></TableCell>
                                     <TableCell>

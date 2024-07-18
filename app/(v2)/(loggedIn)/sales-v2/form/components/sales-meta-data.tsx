@@ -76,20 +76,22 @@ export default function SalesMetaData() {
                     />
                 </InfoLine>
             )}
-            <InfoLine label="Tax">
-                <ControlledCheckbox
-                    switchInput
-                    className="h-8"
-                    name="order.meta.tax"
-                />
-            </InfoLine>
-            {/* <InfoLine label="Component Price">
-                <ControlledCheckbox
-                    switchInput
-                    className="h-8"
-                    name="order.meta.calculatedPrice"
-                />
-            </InfoLine> */}
+            <div className="grid grid-cols-2 gap-2 items-center xl:col-span-2">
+                <InfoLine label="Tax">
+                    <ControlledCheckbox
+                        switchInput
+                        className="h-8"
+                        name="order.meta.tax"
+                    />
+                </InfoLine>
+                <InfoLine label="Component Price">
+                    <ControlledCheckbox
+                        switchInput
+                        className="h-8"
+                        name="order.meta.calculatedPriceMode"
+                    />
+                </InfoLine>
+            </div>
         </div>
     );
 }

@@ -23,7 +23,6 @@ import { DatePicker } from "@/components/_v1/date-range-picker";
 import { ArchiveRestore } from "lucide-react";
 import PaymentModal from "../../_components/_payments-modal";
 import DykeSettingsModal from "./modals/dyke-settings";
-import { useEffect } from "react";
 import { SaveMode } from "../../type";
 
 export default function HeaderSection({}) {

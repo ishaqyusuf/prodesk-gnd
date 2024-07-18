@@ -51,10 +51,20 @@ export default function HousePackageTool({ componentTitle }) {
                     )}
 
                     <TableHead>Unit Dimension</TableHead>
-                    <TableHead className="hidden lg:table-cell">
-                        Estimate
-                    </TableHead>
-                    <TableHead className="">Addon</TableHead>
+                    {componentItem.calculatedPriceMode ? (
+                        <>
+                            <TableHead className="hidden lg:table-cell">
+                                Estimate
+                            </TableHead>
+                            <TableHead className="">Addon</TableHead>
+                        </>
+                    ) : (
+                        <>
+                            <TableHead className="hidden lg:table-cell">
+                                Price
+                            </TableHead>
+                        </>
+                    )}
                     <TableHead className="hidden lg:table-cell">
                         Line Total
                     </TableHead>

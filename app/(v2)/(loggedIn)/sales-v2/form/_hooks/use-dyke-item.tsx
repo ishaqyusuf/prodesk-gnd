@@ -35,11 +35,14 @@ export default function useDykeItem(
         control: form.control,
         name: stepArrayName,
     });
-    const [opened, openedStepIndex, expanded] = form.watch([
-        `itemArray.${rowIndex}.opened`,
-        `itemArray.${rowIndex}.stepIndex`,
-        `itemArray.${rowIndex}.expanded`,
-    ]);
+    const [opened, openedStepIndex, expanded, calculatedPriceMode] = form.watch(
+        [
+            `itemArray.${rowIndex}.opened`,
+            `itemArray.${rowIndex}.stepIndex`,
+            `itemArray.${rowIndex}.expanded`,
+            `order.meta.calculatedPriceMode`,
+        ]
+    );
     function getFormStepArray(): FormStepArray {
         return form.getValues(
             `itemArray.${rowIndex}.item.formStepArray` as any
@@ -78,6 +81,7 @@ export default function useDykeItem(
         toggleExpand() {
             form.setValue(`itemArray.${rowIndex}.expanded`, !expanded);
         },
+        calculatedPriceMode,
         multi,
         isType: isComponentType(get.doorType()),
         move(to) {

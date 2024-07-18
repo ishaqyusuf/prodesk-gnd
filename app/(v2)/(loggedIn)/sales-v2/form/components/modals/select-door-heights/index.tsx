@@ -110,10 +110,10 @@ export default function SelectDoorHeightsModal({
                     ..._d,
                 };
                 if (d.price) priceTags.doorSizePriceTag[d.dimFt] = d.price;
-                form.setValue(
-                    `${baseKey}._doorForm.${d.dim}.jambSizePrice` as any,
-                    d.price || 0
-                );
+                const jamPath =
+                    `${baseKey}._doorForm.${d.dim}.jambSizePrice` as any;
+                form.setValue(jamPath, d.price || 0);
+                console.log({ jamPath, price: d.price });
             }
         });
         const checked = (Object.values(sizesData).filter((s) => s.checked)

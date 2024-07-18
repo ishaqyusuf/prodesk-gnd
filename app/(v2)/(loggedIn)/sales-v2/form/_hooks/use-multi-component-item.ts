@@ -27,17 +27,36 @@ export function useMultiComponentItem(componentTitle) {
             key: camel(`${title} price`),
         }));
 
-    const [qty, unitPrice, totalPrice, doorTotalPrice, uid, tax] = form.watch([
+    const [
+        qty,
+        unitPrice,
+        totalPrice,
+        doorTotalPrice,
+        uid,
+        tax,
+        componentsTotal,
+        mouldingPrice,
+        addonPrice,
+        calculatedPriceMode,
+    ] = form.watch([
         `${multiComponentComponentTitleKey}.qty`,
         `${multiComponentComponentTitleKey}.unitPrice`,
         `${multiComponentComponentTitleKey}.totalPrice`,
         `${multiComponentComponentTitleKey}.doorTotalPrice`,
         `${multiComponentComponentTitleKey}.uid`,
         `${multiComponentComponentTitleKey}.tax`,
+        `${multiComponentComponentTitleKey}.priceTags.components`,
+        `${multiComponentComponentTitleKey}.priceTags.moulding.price`,
+        `${multiComponentComponentTitleKey}.priceTags.moulding.addon`,
+        `order.meta.calculatedPriceMode`,
     ] as any);
     const footerEstimate = useFooterEstimate();
     useEffect(() => {
         const _totalPrice = math.multiply(qty, unitPrice);
+        form.setValue(
+            `${multiComponentComponentTitleKey}.unitPrice` as any,
+            unitPrice
+        );
         form.setValue(
             `${multiComponentComponentTitleKey}.totalPrice` as any,
             _totalPrice
@@ -59,8 +78,20 @@ export function useMultiComponentItem(componentTitle) {
             doorType: item.get.doorType(),
             tax,
         });
-        // updateFooterPrice(total, taxxable);
-    }, [qty, unitPrice, tax]);
+    }, [qty, calculatedPriceMode, unitPrice, tax]);
+    useEffect(() => {
+        if (doorType != "Moulding") return;
+        const _unitPrice = sum(
+            calculatedPriceMode
+                ? [mouldingPrice, componentsTotal, addonPrice]
+                : [addonPrice]
+        );
+        form.setValue(
+            `${multiComponentComponentTitleKey}.unitPrice` as any,
+            _unitPrice
+        );
+        console.log("CALCULATED PRICE TOGGLED: MOULDING");
+    }, [componentsTotal, mouldingPrice, calculatedPriceMode, addonPrice]);
     function calculateLineItem() {}
 
     const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
@@ -140,6 +171,7 @@ export function useMultiComponentItem(componentTitle) {
         form,
         item,
         prices,
+        componentsTotal,
         isBifold,
         isSlab,
         sizeList,
@@ -150,6 +182,9 @@ export function useMultiComponentItem(componentTitle) {
         unitPrice,
         totalPrice,
         doorTotalPrice,
+        mouldingPrice,
+        calculatedPriceMode,
+        addonPrice,
         _setSizeList,
     };
     return ctx;
@@ -169,6 +204,7 @@ export function useMultiComponentSizeRow(
         unitPrice: `${sizeRootKey}.unitPrice`,
         lineTotal: `${sizeRootKey}.lineTotal`,
         doorPrice: `${sizeRootKey}.doorPrice`,
+        // jambSizePrice: `${sizeRootKey}.jambSizePrice`,
         jambSizePrice: `${sizeRootKey}.jambSizePrice`,
         swing: `${sizeRootKey}.swing`,
         casingPrice: `${sizeRootKey}.casingPrice`,
@@ -184,7 +220,7 @@ export function useMultiComponentSizeRow(
         lineTotal,
         unitPrice,
         componentsTotal,
-        ,
+        calculatedPriceMode,
     ] = form.watch([
         keys.lhQty,
         keys.rhQty,
@@ -194,17 +230,39 @@ export function useMultiComponentSizeRow(
         keys.lineTotal,
         keys.unitPrice,
         keys.componentsTotal,
+        `order.meta.calculatedPriceMode`,
     ] as any);
 
     useEffect(() => {
         const qty = sum([lhQty, rhQty]);
-        // const calculatedPriceTotal = sum([componentsTotal, jambSizePrice]);
-        const _unitPrice = sum([jambSizePrice, componentsTotal, doorPrice]);
+
+        const _unitPrice = sum(
+            calculatedPriceMode
+                ? [jambSizePrice, componentsTotal, doorPrice]
+                : [doorPrice]
+        );
         const _totalLinePrice = math.multiply(qty, _unitPrice);
         form.setValue(`${keys.unitPrice}` as any, _unitPrice);
         form.setValue(`${keys.lineTotal}` as any, _totalLinePrice);
         componentItem.calculateSizeEstimate(size.dim, qty, _totalLinePrice);
-    }, [lhQty, rhQty, doorPrice, jambSizePrice, casingPrice]);
+        console.log("CALCULATED PRICE TOGGLED: DOORS");
+        console.log({
+            jambSizePrice,
+            casingPrice,
+            componentsTotal,
+            _: form.getValues(
+                `itemArray.${item.rowIndex}.multiComponent.components`
+            ),
+        });
+    }, [
+        lhQty,
+        rhQty,
+        doorPrice,
+        jambSizePrice,
+        casingPrice,
+        componentsTotal,
+        calculatedPriceMode,
+    ]);
     return {
         sizeRootKey,
         keys,
@@ -212,5 +270,6 @@ export function useMultiComponentSizeRow(
         lineTotal,
         jambSizePrice,
         componentsTotal,
+        calculatedPriceMode,
     };
 }

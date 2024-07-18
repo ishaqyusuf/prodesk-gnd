@@ -62,14 +62,21 @@ export default function HousePackageSizeLineItem({
                 </>
             )}
             <TableCell>{size.dim?.replaceAll("in", '"')}</TableCell>
-            <TableCell className="hidden lg:table-cell">
-                <Money
-                    value={sum([
-                        sizeRow.jambSizePrice,
-                        sizeRow.componentsTotal,
-                    ])}
-                />
-            </TableCell>
+            {componentItem.calculatedPriceMode ? (
+                <>
+                    <TableCell className="hidden lg:table-cell">
+                        <Money
+                            value={sum([
+                                sizeRow.jambSizePrice,
+                                sizeRow.componentsTotal,
+                            ])}
+                        />
+                    </TableCell>
+                </>
+            ) : (
+                <></>
+            )}
+
             <TableCell className="">
                 <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
                     <div className="flex pt-1 justify-between">
@@ -99,14 +106,14 @@ export default function HousePackageSizeLineItem({
                 <Money value={sizeRow.lineTotal} />
             </TableCell>
             <TableCell>
-                <ItemPriceFinder
+                {/* <ItemPriceFinder
                     dykeDoorId={component?.toolId}
                     casingId={hpt.casingId}
                     dimension={size.dim}
                     jambSizeId={hpt.jambSizeId}
                     componentItem={componentItem}
                     sizeRow={sizeRow}
-                />
+                /> */}
             </TableCell>
         </TableRow>
     );
