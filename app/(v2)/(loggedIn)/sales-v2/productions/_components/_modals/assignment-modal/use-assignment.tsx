@@ -16,7 +16,7 @@ export function useAssignment({ type }: Props = {}) {
             dispatch: type == "dispatch",
         };
         const data = await getOrderAssignmentData(id, mode);
-        // console.log(data);
+        console.log(data);
 
         modal.openModal(<AssignmentModal order={data} />);
     }

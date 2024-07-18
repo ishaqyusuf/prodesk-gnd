@@ -237,10 +237,10 @@ export const PrintOrderMenuAction = typedMemo(
                     <MenuItem
                         Icon={Icons.estimates}
                         onClick={() => {
-                            _print("quote");
+                            _print("order-packing");
                         }}
                     >
-                        Estimates
+                        Order & Packing
                     </MenuItem>
 
                     <MenuItem
@@ -274,7 +274,7 @@ export const PrintOrderMenuAction = typedMemo(
                 </>
             );
         }
-        if (props.ids) {
+        if (props.ids && !props.estimate) {
             return <PrintOptions />;
         }
         return props.myProd || props.estimate ? (

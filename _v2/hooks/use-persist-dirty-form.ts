@@ -20,7 +20,7 @@ export default function usePersistDirtyForm() {
             const alert = confirm(
                 "You may have some unsaved changes, Are you sure you want to proceed?"
             );
-            console.log(e.target);
+
             if (alert) router.push(e.target.getAttribute("href"));
 
             // window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -31,11 +31,10 @@ export default function usePersistDirtyForm() {
             link.removeEventListener("click", handleClick);
         });
         if (dirtyCount) {
-            console.log("DIRTY.....");
             links.forEach((link) => {
                 link.addEventListener("click", handleClick);
             });
-        } else console.log("NOT DIRTY....");
+        }
         return () => {
             links.forEach((link) => {
                 link.removeEventListener("click", handleClick);

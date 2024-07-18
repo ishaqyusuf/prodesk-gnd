@@ -22,7 +22,12 @@ export type ISalesOrderForm = UseFormReturn<ISalesOrder>;
 export type IPriority = "Low" | "High" | "Medium" | "Non";
 export type ProdStatus = "In Production" | "Completed" | "Queued";
 export type ISalesType = "order" | "quote";
-export type IOrderPrintMode = "quote" | "order" | "production" | "packing list";
+export type IOrderPrintMode =
+    | "quote"
+    | "order"
+    | "production"
+    | "packing list"
+    | "order-packing";
 
 export interface IBackOrderForm {
     backOrder: {

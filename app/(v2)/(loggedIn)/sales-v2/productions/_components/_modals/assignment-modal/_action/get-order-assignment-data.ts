@@ -120,13 +120,14 @@ export async function getOrderAssignmentData(id, mode?: mode) {
     let assignmentSummary = {};
     type AssignmentType = (typeof order)["items"][0]["assignments"];
     type SubmissionType = AssignmentType[0]["submissions"][0];
-    let doorGroups = items
-        .filter(
-            (item) =>
-                !order.isDyke ||
-                (order.isDyke &&
-                    (item.multiDyke || (!item.multiDyke && !item.multiDykeUid)))
-        )
+    const fItems = items.filter(
+        (item) =>
+            (!order.isDyke && item.swing) ||
+            (order.isDyke &&
+                (item.multiDyke || (!item.multiDyke && !item.multiDykeUid)))
+    );
+    console.log("ITEMS:", fItems.length);
+    let doorGroups = fItems
         .map((item, index) => {
             const metaKeys = Object.keys(item.meta);
             // if (metaKeys.includes("uid")) item.meta.lineIndex = item.meta.uid;
@@ -187,6 +188,8 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     salesDoors.push(analyseItem(ret, report));
                 }
             });
+
+            // old school invoice
             if (!order.isDyke) {
                 const salesDoor = {
                     // lhQty: item.qty,
@@ -209,7 +212,12 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     doorTitle: item.description?.toUpperCase(),
                     report: initJobReport(item, salesDoor),
                 };
-                salesDoors.push(analyseItem(ret, report) as any);
+                if (
+                    salesDoors.findIndex(
+                        (s) => s.salesDoor.salesOrderId == item.id
+                    ) == -1
+                )
+                    salesDoors.push(analyseItem(ret, report) as any);
             }
             // console.log(order.isDyke);
 
@@ -262,33 +270,17 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     (g, i) => !g.item.qty && i < index
                 )?.item;
                 let title = gItem?.description?.replaceAll("*", "");
-                // console.log({
-                //     title,
-                //     index,
-                //     dg: doorGroups.map(
-                //         ({ item: { description: d, qty: q, meta } }) => ({
-                //             d,
-                //             q,
-                //             ...meta,
-                //         })
-                //     ),
-                // });
 
                 group.sectionTitle = title as any;
                 group.groupItemId = gItem?.id;
             }
             const _doors: any = {};
             group?.salesDoors?.map((s, si) => {
-                //  if (
-                //      (salesDoorIndex >= 0 && si == salesDoorIndex) ||
-                //      salesDoorIndex < 0
-                //  ) {
                 _doors[s.salesDoor?.id?.toString()] = {
                     ...s.report,
                     lhQty: s.report._unassigned?.lh,
                     rhQty: s.report._unassigned?.rh,
                 };
-                //  }
             });
             const assignmentForm = {
                 doors: _doors,

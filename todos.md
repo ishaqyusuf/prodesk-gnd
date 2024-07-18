@@ -21,11 +21,11 @@ TODO:
     - move items/sort components in specific order, delete for section make all components section based.
     - fix image cutting at the top (moulding as an example)
     - make footer floated by the right.
-    - add total paid in printing footer.
+    <!-- - add total paid in printing footer. -->
     - select size: show selectable size table with lh, rh etc, price updated form.
     - estimate hover to show breakdown.
     - moulding unit: pcs, lf.
-    - print order + pack & slip.
+    <!-- - print order + pack & slip. -->
     - Price tags on components.
       - In dyke settings: create a componentCosting to store how item cost will be calculated by componentCosting, for example: {Door: [{multiplier: 2, where: {Door_Configuration: ['Exterior Door Unit - Double']}},{multiplier: 1.25, where: {Height: '7-0'}}],Jamb_Size: [{multiplier: 3, where: {Door_Configuration: ['Exterior Door Unit - Double']}}]}
       - Component settings: {hidePublic: false}
