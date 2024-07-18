@@ -56,7 +56,7 @@ export default function HousePackageTool({ componentTitle }) {
                             <TableHead className="hidden lg:table-cell">
                                 Estimate
                             </TableHead>
-                            <TableHead className="">Addon</TableHead>
+                            <TableHead className="">Addon/Qty</TableHead>
                         </>
                     ) : (
                         <>

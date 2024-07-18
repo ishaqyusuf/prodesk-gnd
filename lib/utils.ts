@@ -106,7 +106,7 @@ export function sum<T>(array?: T[], key: keyof T | undefined = undefined) {
         array
             .map((v) => (!key ? v : v?.[key]))
             .map((v) => (v ? Number(v) : null))
-            .filter((v) => (v as any) > 0 && !isNaN(v as any))
+            .filter((v) => Number.isInteger(v) && !isNaN(v as any))
             .reduce((sum, val) => (sum || 0) + (val as number), 0) || 0
     );
 }

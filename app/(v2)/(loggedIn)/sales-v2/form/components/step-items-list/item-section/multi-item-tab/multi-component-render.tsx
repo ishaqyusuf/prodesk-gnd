@@ -51,7 +51,7 @@ export default function MultiComponentRender({ Render, line = false }) {
                                         {item.calculatedPriceMode ? (
                                             <>
                                                 <TableHead>Estimate</TableHead>
-                                                <TableHead>Addon</TableHead>
+                                                <TableHead>Addon/Qty</TableHead>
                                             </>
                                         ) : (
                                             <>
