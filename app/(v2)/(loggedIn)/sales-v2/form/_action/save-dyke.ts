@@ -194,6 +194,7 @@ export async function saveDykeSales(data: DykeForm) {
                                     id: hptId,
                                     salesOrderId: order.id,
                                     orderItemId: itemId,
+                                    meta: hptData.meta as any,
                                 });
                             } else {
                                 console.log({ hptData, hptId });
