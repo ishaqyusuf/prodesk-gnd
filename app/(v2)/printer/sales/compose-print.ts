@@ -10,7 +10,7 @@ import {
     composeSalesItems,
 } from "../../(loggedIn)/sales-v2/_utils/compose-sales-items";
 import { SalesPrintProps } from "./page";
-import { formatCurrency, inToFt } from "@/lib/utils";
+import { formatCurrency, inToFt, sum } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
@@ -576,6 +576,9 @@ function header(title, colSpan = 1) {
 }
 function printFooter(data: PrintData, notPrintable) {
     if (notPrintable) return null;
+    const totalPaid = sum(
+        data.order.payments.filter((p) => !p.deletedAt).map((p) => p.amount)
+    );
     return {
         lines: [
             styled(
@@ -603,6 +606,15 @@ function printFooter(data: PrintData, notPrintable) {
                 ? styled(
                       "C.C.C",
                       formatCurrency.format(data.order.meta.ccc || 0),
+                      {
+                          font: "bold",
+                      }
+                  )
+                : null,
+            totalPaid > 0
+                ? styled(
+                      "Total Paid",
+                      `(${formatCurrency.format(totalPaid || 0)})`,
                       {
                           font: "bold",
                       }

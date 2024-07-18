@@ -180,7 +180,6 @@ async function CustomStepForm(
             Door: "House Package Tool",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
-        console.log(title);
     }
     if (doorType == "Moulding") {
         const customSteps = {
