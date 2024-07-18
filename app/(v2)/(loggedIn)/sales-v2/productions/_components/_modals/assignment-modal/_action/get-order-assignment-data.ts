@@ -116,7 +116,13 @@ export async function getOrderAssignmentData(id, mode?: mode) {
         },
     });
     if (!order) throw Error("Not found");
-    const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta);
+    const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta).map(
+        (item) => {
+            const metaKeys = Object.keys(item.meta);
+            if (metaKeys.includes("uid")) item.meta.lineIndex = item.meta.uid;
+            return item;
+        }
+    );
     let assignmentSummary = {};
     type AssignmentType = (typeof order)["items"][0]["assignments"];
     type SubmissionType = AssignmentType[0]["submissions"][0];
@@ -129,14 +135,11 @@ export async function getOrderAssignmentData(id, mode?: mode) {
     console.log("ITEMS:", fItems.length);
     let doorGroups = fItems
         .map((item, index) => {
-            const metaKeys = Object.keys(item.meta);
-            // if (metaKeys.includes("uid")) item.meta.lineIndex = item.meta.uid;
             const _items = order.items.filter(
                 (i) =>
                     i.id == item.id ||
                     (item.multiDyke && item.multiDykeUid == i.multiDykeUid)
             );
-            // console.log(_items.length);
             const report = {
                 assigned: 0,
                 pendingAssignment: 0,
@@ -212,6 +215,17 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     doorTitle: item.description?.toUpperCase(),
                     report: initJobReport(item, salesDoor),
                 };
+                const title = items
+                    .find(
+                        (_item) =>
+                            _item.meta.lineIndex < item.meta.lineIndex &&
+                            !_item.qty &&
+                            _item.description.includes("**")
+                    )
+                    ?.description?.replaceAll("*", "")
+                    ?.toUpperCase();
+                if (title) ret.doorTitle = `${ret.doorTitle}  [${title}]`;
+
                 if (
                     salesDoors.findIndex(
                         (s) => s.salesDoor.salesOrderId == item.id
