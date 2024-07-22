@@ -62,16 +62,19 @@ export function StepItem({
                     : item.product.title}
             </Label>
             <div className="text-xs absolute top-0 right-0 p-4 px-8 font-bold">
-                {item.product?.meta?.priced && item.product.price > 0 && (
-                    <Money value={item.product.price} />
-                )}
-                {stepTitle == "Door" && doorPriceCount ? (
+                {stepTitle == "Door" ? (
                     <span className="inline-flex space-x-1 text-muted-foreground">
-                        <Icons.dollar className="w-4 h-4" />
-                        <span>{doorPriceCount}</span>
+                        {doorPriceCount > 0 && (
+                            <>
+                                <Icons.dollar className="w-4 h-4" />
+                                <span>{doorPriceCount}</span>
+                            </>
+                        )}
                     </span>
                 ) : (
-                    <></>
+                    item._estimate.price > 0 && (
+                        <Money value={item._estimate.price} />
+                    )
                 )}
             </div>
         </button>

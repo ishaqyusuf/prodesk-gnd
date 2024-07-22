@@ -30,6 +30,9 @@ export async function getMouldingStepProduct(specie) {
                     ...sp.product,
                     meta: (sp.product.meta || {}) as any as DykeProductMeta,
                 },
+                _estimate: {
+                    price: null,
+                },
             };
         });
     return prods;
@@ -72,6 +75,9 @@ export async function getStepProduct(stepId, doorType?) {
                     ...stepProduct.product,
                     meta: (stepProduct.product.meta ||
                         {}) as any as DykeProductMeta,
+                },
+                _estimate: {
+                    price: null,
                 },
             };
         });

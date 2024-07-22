@@ -18,15 +18,18 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
+    stepProducts: IStepProducts;
+    setStepProducts;
 }
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
 export function StepProducts({
     stepForm,
     stepIndex,
     rowIndex,
+    stepProducts,
+    setStepProducts,
 }: StepProductProps) {
     const {
-        stepProducts,
         openStepForm,
         isMultiSection,
         selectProduct,
@@ -36,6 +39,8 @@ export function StepProducts({
         ...stepCtx
     } = useStepItems({
         stepForm,
+        stepProducts,
+        setStepProducts,
         stepIndex,
         rowIndex,
     });

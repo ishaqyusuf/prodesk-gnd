@@ -96,7 +96,6 @@ export default function ControlledSelect<
             render={({ field }) => (
                 <FormItem className={cn(className, "mx-1")}>
                     {label && <FormLabel>{label}</FormLabel>}
-
                     <FormControl>
                         {type == "combo" ? (
                             <ControlledCombox

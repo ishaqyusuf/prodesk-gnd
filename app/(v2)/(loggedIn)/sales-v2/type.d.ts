@@ -76,6 +76,15 @@ export type IDykeShelfProductsForm = IDykeShelfProducts & {
 export interface DykeFormStepMeta {
     hidden?: boolean;
 }
+export interface DykeStepMeta {
+    priceConditions?: {
+        formula: string;
+        rules: {
+            stepId?: number;
+            value?: string;
+        }[];
+    }[];
+}
 export interface DykeProductMeta {
     svg;
     url;

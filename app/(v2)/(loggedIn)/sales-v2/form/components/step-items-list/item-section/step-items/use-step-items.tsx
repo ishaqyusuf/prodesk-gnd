@@ -26,11 +26,13 @@ import EditStepItemModal from "../../../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../../../_action/save-step-product";
 import { _deleteDoorStep, _deleteStepItem } from "./_actions";
 import { calculateComponentPrices } from "./calculate-prices";
+import calculateComponentPrice from "./calculate-component-price";
 export default function useStepItems({
     stepForm,
     stepIndex,
+    stepProducts,
+    setStepProducts,
 }: StepProductProps) {
-    const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     const form = useDykeForm();
 
     const item = useContext(DykeItemFormContext);
@@ -43,6 +45,7 @@ export default function useStepItems({
     const load = async () => {
         const doorType = item.get.doorType();
         if (stepForm?.item?.meta?.hidden) return;
+        let _stepProducts: IStepProducts = [];
         if (stepFormTitle == "Door") {
             setStep("Door");
             const query = doorQueryBuilder(
@@ -53,14 +56,15 @@ export default function useStepItems({
             const _props = { ...query, stepId: stepForm?.step?.id };
             // console.log(_props);
             const { result: prods } = await getDykeStepDoors(_props as any);
-            setStepProducts(prods);
+            _stepProducts = prods;
+            // setStepProducts(prods);
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");
             const specie = item.get.getMouldingSpecie();
             const prods = await getMouldingStepProduct(specie);
             // console.log(prods);
-
-            setStepProducts(prods);
+            _stepProducts = prods;
+            // setStepProducts(prods);
         } else if (
             doorType == "Door Slabs Only" &&
             stepFormTitle == "Door Type"
@@ -71,9 +75,21 @@ export default function useStepItems({
         } else {
             const _stepProds = await getStepProduct(stepForm?.step?.id);
             // console.log(_stepProds);
-            setStepProducts(_stepProds);
+            // setStepProducts(_stepProds);
+            _stepProducts = _stepProds;
         }
+        if (_stepProducts)
+            setStepProducts(
+                calculateComponentPrice({
+                    stepProducts: _stepProducts,
+                    stepForm,
+                    stepArray: item.get.getFormStepArray(),
+                    stepIndex,
+                })
+            );
     };
+    const uid = item.get.uid();
+
     useEffect(() => {
         load();
         allowsCustom();

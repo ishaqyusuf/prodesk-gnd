@@ -9,7 +9,6 @@ import {
 import { useForm, UseFormReturn } from "react-hook-form";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
-import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/common/file-uploader";
 import { useEffect, useState, useTransition } from "react";
 import { saveStepProduct } from "../../_action/save-step-product";

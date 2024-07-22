@@ -444,6 +444,11 @@ export async function getDykeFormAction(type, slug, query?) {
         footerPrices: JSON.stringify(footerPrices),
         footerPricesJson: footerPrices,
     };
+    const _refresher: {
+        [token in string]: {
+            components: string;
+        };
+    } = {};
     return {
         salesRep: salesRep,
         customer,
@@ -455,5 +460,6 @@ export async function getDykeFormAction(type, slug, query?) {
         data: ctx,
         paidAmount,
         footer,
+        _refresher,
     };
 }

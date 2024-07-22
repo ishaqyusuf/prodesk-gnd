@@ -1561,6 +1561,7 @@ model DykeSteps {
     rootStepValueId Int?
     prevStepValueId Int?
     stepForms       DykeStepForm[]
+    meta            Json?              @db.Json
     deletedAt       DateTime?          @db.Timestamp(0)
     rootStepValue   DykeStepValues?    @relation(fields: [rootStepValueId], references: [id], name: "rootValue")
     stepValue       DykeStepValues?    @relation(fields: [stepValueId], references: [id], name: "stepValue")
