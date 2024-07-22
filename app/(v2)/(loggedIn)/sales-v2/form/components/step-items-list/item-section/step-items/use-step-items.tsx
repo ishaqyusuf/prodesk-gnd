@@ -137,7 +137,7 @@ export default function useStepItems({
                 !isMultiSection &&
                 stepTitle !== "Moulding"
             )
-                price = stepProd?.product?.price;
+                price = stepProd?._estimate.price;
 
             switch (stepTitle) {
                 case "Height":
