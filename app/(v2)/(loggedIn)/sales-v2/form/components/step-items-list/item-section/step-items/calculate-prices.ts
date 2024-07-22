@@ -16,8 +16,6 @@ export function calculateComponentPrices(
             })
             .filter((s) => s > 0)
             .reduce((a, b) => a + b, 0);
-        // console.log(total);
-        // item.item.housePackageTool.meta.priceTags.components
         form.setValue(
             `itemArray.${itemIndex}.item.housePackageTool.meta.priceTags.components`,
             total

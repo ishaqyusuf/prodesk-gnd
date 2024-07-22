@@ -90,7 +90,6 @@ export function useMultiComponentItem(componentTitle) {
             `${multiComponentComponentTitleKey}.unitPrice` as any,
             _unitPrice
         );
-        console.log("CALCULATED PRICE TOGGLED: MOULDING");
     }, [componentsTotal, mouldingPrice, calculatedPriceMode, addonPrice]);
     function calculateLineItem() {}
 
@@ -245,15 +244,6 @@ export function useMultiComponentSizeRow(
         form.setValue(`${keys.unitPrice}` as any, _unitPrice);
         form.setValue(`${keys.lineTotal}` as any, _totalLinePrice);
         componentItem.calculateSizeEstimate(size.dim, qty, _totalLinePrice);
-        console.log("CALCULATED PRICE TOGGLED: DOORS");
-        console.log({
-            jambSizePrice,
-            casingPrice,
-            componentsTotal,
-            _: form.getValues(
-                `itemArray.${item.rowIndex}.multiComponent.components`
-            ),
-        });
     }, [
         lhQty,
         rhQty,

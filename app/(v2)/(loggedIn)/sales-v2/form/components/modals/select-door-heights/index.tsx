@@ -98,22 +98,27 @@ export default function SelectDoorHeightsModal({
     const modal = useModal();
     function _onSubmit() {
         const sizesData = sizeForm.getValues("sizes");
-        const priceTags: HousePackageToolMeta["priceTags"] = {
+        const priceTags: HousePackageToolMeta["priceTags"] = form.getValues(
+            `${baseKey}.priceTags` as any
+        ) || {
             doorSizePriceTag: {},
         };
+        priceTags.doorSizePriceTag = {};
+        delete priceTags.moulding;
         // console.log(sizesData);
         Object.entries(sizesData || {}).map(([size, d]) => {
-            const _d = sizes.find((_) => size == _.dim) || {};
+            const _d = sizes.find((_) => size == _.dim);
             if (d.checked && _d) {
                 sizesData[size] = {
                     checked: true,
                     ..._d,
                 };
-                if (d.price) priceTags.doorSizePriceTag[d.dimFt] = d.price;
+                const price = (priceTags.doorSizePriceTag[d.dimFt] =
+                    _d.price || 0);
                 const jamPath =
                     `${baseKey}._doorForm.${d.dim}.jambSizePrice` as any;
-                form.setValue(jamPath, d.price || 0);
-                console.log({ jamPath, price: d.price });
+                form.setValue(jamPath, price);
+                console.log({ jamPath, price: price });
             }
         });
         const checked = (Object.values(sizesData).filter((s) => s.checked)
@@ -121,6 +126,8 @@ export default function SelectDoorHeightsModal({
         form.setValue(heightsKey as any, sizesData);
         onSubmit && onSubmit(sizesData);
         form.setValue(`${baseKey}.checked` as any, checked);
+        console.log(priceTags);
+
         form.setValue(`${baseKey}.priceTags` as any, priceTags);
         modal.close();
     }

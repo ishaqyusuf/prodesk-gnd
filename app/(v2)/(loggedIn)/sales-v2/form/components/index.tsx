@@ -13,6 +13,7 @@ import SalesAddressSection from "../../../sales/edit/components/sales-address-se
 import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
+import DevOnly from "@/_v2/components/common/dev-only";
 interface Props {
     defaultValues: any;
 }
@@ -27,6 +28,9 @@ export default function SalesFormComponent({ defaultValues }: Props) {
             currentStepIndex: 0,
         },
     });
+    const jambPrice = form.watch(
+        "itemArray.1.multiComponent.components.HC 1PNL SHAKER (MADISON) 1-3/8 DOOR SLAB._doorForm.16in x 80in.jambSizePrice"
+    );
     const s: DykeForm = {} as any;
 
     // const [currentItemIndex, currentStepIndex] = form.watch([
@@ -48,6 +52,9 @@ export default function SalesFormComponent({ defaultValues }: Props) {
     } as IDykeFormContext;
     return (
         <DykeFormContext.Provider value={ctxValue}>
+            <div className="fixed bg-emerald-950 text-white bottom-0 left-[1/2]">
+                <DevOnly>{jambPrice}</DevOnly>
+            </div>
             <RenderForm {...form}>
                 <HeaderSection />
                 {/* <DykeBootstrap /> */}
