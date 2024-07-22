@@ -28,6 +28,7 @@ export default function useDykeFormSaver(form) {
                 // console.log(estimate.grandTotal);
 
                 const e = initDykeSaving(data);
+                // return;
                 // console.log(e);
                 // return;
                 if (e.order.type == "order") {
@@ -40,7 +41,7 @@ export default function useDykeFormSaver(form) {
                 }
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
-                toast.success("Saved");
+                toast.success("Saved!");
                 switch (mode) {
                     case "close":
                         router.push(`/sales/${type}s`);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { DykeForm, IDykeFormContext } from "../../type";
 import { DykeFormContext } from "../_hooks/form-context";
@@ -17,7 +17,9 @@ interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    // console.log(defaultValues);
+    useEffect(() => {
+        console.log(defaultValues);
+    }, []);
     const form = useForm<DykeForm>({
         defaultValues: {
             ...defaultValues,

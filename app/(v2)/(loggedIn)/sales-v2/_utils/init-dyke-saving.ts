@@ -46,8 +46,6 @@ function initializeMultiComponent(data: DykeForm) {
         let items: DykeForm["itemArray"] = [];
         // if (!item?.multiComponent?.components) {
         if (item.item.shelfItemArray.length) {
-            console.log("shelf");
-
             allItems.push(item);
             return;
         }
@@ -118,8 +116,10 @@ function initializeMultiComponent(data: DykeForm) {
                 if (clone.item.meta.doorType == "Moulding")
                     moldingId = c.toolId;
                 else dykeDoorId = c.toolId;
-                c.priceTags.components =
-                    item.item.housePackageTool?.meta?.priceTags?.components;
+                // c.priceTags.components =
+                // item.item.housePackageTool?.meta?.priceTags?.components;
+                // console.log(c.priceTags);
+
                 clone.item.housePackageTool = {
                     ...rest,
                     dykeDoorId,
@@ -155,6 +155,9 @@ function initializeMultiComponent(data: DykeForm) {
 
                 if (clone.item.housePackageTool) {
                     if (type.moulding) {
+                        console.log(c.priceTags);
+                        clone.item.housePackageTool.meta.priceTags =
+                            c.priceTags;
                         clone.item.housePackageTool.dykeDoorId = null;
                         clone.item.housePackageTool.moldingId = c.toolId;
                     } else clone.item.housePackageTool.moldingId = null;

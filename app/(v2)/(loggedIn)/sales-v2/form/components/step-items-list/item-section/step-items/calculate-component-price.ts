@@ -26,7 +26,6 @@ export default function calculateComponentPrice({
         }));
     let priceCondition: DykeStepMeta["priceConditions"][number];
     // console.log(stepForm.step.meta?.priceConditions);
-    console.log(formData);
 
     stepForm.step.meta?.priceConditions?.map((c) => {
         if (
@@ -41,7 +40,6 @@ export default function calculateComponentPrice({
             priceCondition = c;
         }
     });
-    console.log(priceCondition);
 
     stepProducts = stepProducts.map((product) => {
         let basePrice = product.product.meta?.priced
