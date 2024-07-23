@@ -176,7 +176,7 @@ export default function SelectDoorHeightsModal({
 
     function CheckControl({ size }) {
         const [show, setShow] = useState(false);
-        const [price, setPrice] = useState();
+        const [price, setPrice] = useState(size.price);
         const [newPrice, setNewPrice] = useState(size.price);
         async function updatePrice() {
             console.log(newPrice);

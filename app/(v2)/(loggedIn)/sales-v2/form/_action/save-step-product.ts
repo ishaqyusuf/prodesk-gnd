@@ -65,6 +65,7 @@ export async function saveStepProduct(data: Props) {
         dykeStepId,
         id,
         _meta,
+        _estimate,
         ...stepData
     } = data;
     console.log(productData);
