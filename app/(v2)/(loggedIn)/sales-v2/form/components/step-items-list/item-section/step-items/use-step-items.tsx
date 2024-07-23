@@ -265,7 +265,6 @@ export default function useStepItems({
             if (nextSteps) {
                 for (let i = item.formStepArray.length - 1; i > stepIndex; i--)
                     item.removeStep(i);
-
                 item.appendStep(nextSteps as any);
                 item.toggleStep(item.openedStepIndex + nextSteps.length);
             } else toast.error("Next step not found");

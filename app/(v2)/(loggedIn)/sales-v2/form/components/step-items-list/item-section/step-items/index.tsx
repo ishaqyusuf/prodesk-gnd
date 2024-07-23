@@ -48,13 +48,14 @@ export function StepProducts({
     });
     const { isVisible, elementRef } = useIsVisible({});
     useEffect(() => {
+        console.log(isVisible);
         setTimeout(() => {
             if (!isVisible && elementRef.current) {
                 const offset = -150; // Adjust this value to your desired offset
                 const elementPosition =
                     elementRef.current.getBoundingClientRect().top +
                     window.scrollY;
-                console.log({ elementPosition });
+                // console.log({ elementPosition });
 
                 const offsetPosition = elementPosition + offset;
                 // elementRef.current.scrollIntoView({
@@ -67,7 +68,7 @@ export function StepProducts({
                 });
             }
         }, 300);
-    }, [isVisible]);
+    }, []);
     // useEffect(() => {},[])
     return (
         <motion.div
@@ -126,14 +127,20 @@ export function StepProducts({
                     <>
                         <CustomInput
                             currentValue={stepForm.item.value}
-                            onProceed={(value) => {
+                            onProceed={async (value) => {
                                 selectProduct(
                                     true,
                                     {
                                         product: {
                                             title: value,
-                                        } as any,
+                                            meta: {
+                                                custom: true,
+                                            },
+                                        },
                                         dykeStepId: stepForm.step.id,
+                                        _estimate: {
+                                            price: 0,
+                                        },
                                     } as any,
                                     true
                                 );
