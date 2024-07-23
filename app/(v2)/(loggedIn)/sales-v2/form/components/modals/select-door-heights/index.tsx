@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export type SizeForm = {
     [id in string]: {
@@ -74,11 +76,15 @@ export default function SelectDoorHeightsModal({
             sizes: {},
         },
     });
+    if (!stepProd.product.meta.doorPrice) stepProd.product.meta.doorPrice = {};
+    const [heightPrices, setHeightPrices] = useState(
+        stepProd.product.meta.doorPrice
+    );
     useEffect(() => {
         (async () => {
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
-            const heightPrices = stepProd?.product?.meta?.doorPrice || {};
+
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
                 _defData[k] = {
@@ -167,10 +173,27 @@ export default function SelectDoorHeightsModal({
             toast.error((error as any).message);
         }
     }
+
     function CheckControl({ size }) {
         const [show, setShow] = useState(false);
+        const [price, setPrice] = useState();
+        const [newPrice, setNewPrice] = useState(size.price);
+        async function updatePrice() {
+            console.log(newPrice);
+            setPrice(newPrice);
+            setHeightPrices((pr) => {
+                return {
+                    ...pr,
+                    [size.dimFt]: newPrice,
+                };
+            });
+            setShow(false);
+        }
+        useEffect(() => {
+            // if (show) setNewPrice(price);
+        }, [show]);
         return (
-            <div className="flex border justify-between p-3 group gap-2 items-start">
+            <div className="flex border justify-between p-3 py-2 group items-start">
                 <ControlledCheckbox
                     control={sizeForm.control}
                     name={`sizes.${size.dim}.checked` as any}
@@ -178,7 +201,7 @@ export default function SelectDoorHeightsModal({
                         <div className="grid gap-1">
                             <p>{size.dimFt}</p>
                             <div className={cn("text-muted-foreground")}>
-                                {<Money value={size.price} />}
+                                {<Money value={price} />}
                             </div>
                         </div>
                     }
@@ -197,7 +220,23 @@ export default function SelectDoorHeightsModal({
                             <Icons.edit className="w-4 h-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent></DropdownMenuContent>
+                    <DropdownMenuContent>
+                        <CardHeader>
+                            <CardTitle>Edit Price</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Input
+                                value={newPrice}
+                                onChange={(e) => setNewPrice(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key == "Enter") {
+                                        updatePrice();
+                                    }
+                                }}
+                                type="number"
+                            />
+                        </CardContent>
+                    </DropdownMenuContent>
                 </DropdownMenu>
             </div>
         );

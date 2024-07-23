@@ -30,7 +30,6 @@ async function saveDykeDoor(data: Props) {
                 meta: {},
             },
         });
-        console.log(door);
     } else {
         door = await prisma.dykeDoors.update({
             where: { id: data.id },
