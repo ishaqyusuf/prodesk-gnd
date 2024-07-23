@@ -52,9 +52,6 @@ export async function getDykeStepDoors({
         const _fd = _doors.filter(
             (d, i) => i == _doors.findIndex((_) => _.title == d.title)
         );
-        console.log(_doors.length, doorType, query);
-
-        // console.log(_fd.length);
         return response(_fd, stepId);
     }
     if (query == "SC Molded") {
@@ -127,7 +124,6 @@ export async function getDykeStepDoors({
             );
             if (_index != index) return null;
 
-            // return null;
             return {
                 title: door.title,
                 img: door.img,
@@ -146,7 +142,6 @@ export async function getDykeStepDoors({
     return await getDykeStepDoors({ q, omit, qty, stepId, query, final: true });
 }
 function response(_doors: DykeDoors[], stepId) {
-    // _doors[0].q
     return {
         result: _doors.map((door: any) => {
             return {
@@ -156,7 +151,6 @@ function response(_doors: DykeDoors[], stepId) {
                 product: {
                     ...door,
                     value: door.title,
-
                     meta: {
                         ...findDoorSvg(door.title, door.img),
                         ...((door.meta as any) || {}),
@@ -165,4 +159,11 @@ function response(_doors: DykeDoors[], stepId) {
             };
         }) as any,
     };
+}
+export async function getDykeStepDoorByProductId(stepId, productId) {
+    const door = await prisma.dykeDoors.findFirst({
+        where: { id: productId },
+    });
+    if (!door) throw Error();
+    return response([door], stepId).result[0];
 }

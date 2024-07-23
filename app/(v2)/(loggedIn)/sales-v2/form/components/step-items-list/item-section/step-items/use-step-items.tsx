@@ -54,9 +54,9 @@ export default function useStepItems({
             );
             // console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
-            // console.log(_props);
             const { result: prods } = await getDykeStepDoors(_props as any);
             _stepProducts = prods;
+            console.log(prods);
             // setStepProducts(prods);
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");

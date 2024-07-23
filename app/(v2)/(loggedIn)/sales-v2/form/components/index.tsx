@@ -14,6 +14,7 @@ import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
 import DevOnly from "@/_v2/components/common/dev-only";
+import { ScrollArea } from "@/components/ui/scroll-area";
 interface Props {
     defaultValues: any;
 }
@@ -28,11 +29,11 @@ export default function SalesFormComponent({ defaultValues }: Props) {
             currentStepIndex: 0,
         },
     });
-    const jambPrice = form.watch(
-        "itemArray.1.multiComponent.components.HC 1PNL SHAKER (MADISON) 1-3/8 DOOR SLAB._doorForm.16in x 80in.jambSizePrice"
-    );
+    const components = form.watch("itemArray.1.multiComponent.components");
     const s: DykeForm = {} as any;
-
+    useEffect(() => {
+        console.log({ components });
+    }, [components]);
     // const [currentItemIndex, currentStepIndex] = form.watch([
     //     "currentItemIndex",
     //     "currentStepIndex",
@@ -52,9 +53,11 @@ export default function SalesFormComponent({ defaultValues }: Props) {
     } as IDykeFormContext;
     return (
         <DykeFormContext.Provider value={ctxValue}>
-            <div className="fixed bg-emerald-950 text-white bottom-0 left-[1/2]">
-                <DevOnly>{jambPrice}</DevOnly>
-            </div>
+            {/* <div className="fixed bg-emerald-950 text-white right-0 h-[45vh] w-1/4 p-2 text-muted  bottom-0 left-[1/2]">
+                <ScrollArea>
+                    <DevOnly>{JSON.stringify(components)}</DevOnly>
+                </ScrollArea>
+            </div> */}
             <RenderForm {...form}>
                 <HeaderSection />
                 {/* <DykeBootstrap /> */}

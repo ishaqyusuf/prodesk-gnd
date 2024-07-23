@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useModal } from "@/components/common/modal/provider";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 import SelectDoorHeightsModal from "../../../../modals/select-door-heights";
+import { getDykeStepDoorByProductId } from "../../../../../_action/get-dyke-step-doors";
 export default function HousePackageTool({ componentTitle }) {
     const componentItem = useMultiComponentItem(componentTitle);
     const { item, form, _setSizeList, doorConfig } = componentItem;
@@ -21,11 +22,23 @@ export default function HousePackageTool({ componentTitle }) {
         componentItem.initializeSizes();
     }, []);
     const modal = useModal();
-    function editSize() {
+    async function editSize() {
+        const i = item.get.data();
+        const formStep = i.item.formStepArray.find(
+            (s) => s.step.title == "Door"
+        );
+        const dykeProductId = i.item.housePackageTool.dykeDoorId;
+        console.log({ dykeProductId, formStep });
+        const stepProd = await getDykeStepDoorByProductId(
+            formStep.step.id,
+            dykeProductId
+        );
+        // console.log(stepProd);
         modal.openModal(
             <SelectDoorHeightsModal
                 form={form}
                 rowIndex={item.rowIndex}
+                stepProd={stepProd}
                 productTitle={componentTitle}
                 onSubmit={_setSizeList}
             />
@@ -35,7 +48,7 @@ export default function HousePackageTool({ componentTitle }) {
         <>
             <Table>
                 <TableHeader>
-                    <TableHead>Width</TableHead>
+                    <TableHead>Dimension</TableHead>
                     {componentItem.isComponent.garage && (
                         <TableHead>Swing</TableHead>
                     )}
@@ -50,7 +63,7 @@ export default function HousePackageTool({ componentTitle }) {
                         </>
                     )}
 
-                    <TableHead>Unit Dimension</TableHead>
+                    {/* <TableHead>Unit Dimension</TableHead> */}
                     {componentItem.calculatedPriceMode ? (
                         <>
                             <TableHead className="hidden lg:table-cell">

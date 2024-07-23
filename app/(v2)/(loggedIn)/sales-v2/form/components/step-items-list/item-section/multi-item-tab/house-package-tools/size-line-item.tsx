@@ -8,9 +8,10 @@ import {
     useMultiComponentItem,
     useMultiComponentSizeRow,
 } from "../../../../../_hooks/use-multi-component-item";
+import { SizeForm } from "../../../../modals/select-door-heights";
 
 interface Props {
-    size: { dim; width };
+    size: SizeForm[string];
     componentItem: ReturnType<typeof useMultiComponentItem>;
 }
 export default function HousePackageSizeLineItem({
@@ -29,10 +30,11 @@ export default function HousePackageSizeLineItem({
     // component.too
     return (
         <TableRow>
-            <TableCell>{size.width}</TableCell>
+            <TableCell>{size.dimFt}</TableCell>
             {componentItem.isComponent.garage && (
                 <TableCell className="h-[180px]">
                     <ControlledSelect
+                        size="sm"
                         options={["In Swing", "Out Swing"]}
                         control={form.control}
                         name={`${sizeRow.keys.swing}` as any}
@@ -43,6 +45,7 @@ export default function HousePackageSizeLineItem({
                 <ControlledInput
                     type="number"
                     list
+                    size="sm"
                     control={form.control}
                     name={`${sizeRow.keys.lhQty}` as any}
                 />
@@ -53,6 +56,7 @@ export default function HousePackageSizeLineItem({
                 <>
                     <TableCell>
                         <ControlledInput
+                            size="sm"
                             type="number"
                             list
                             control={form.control}
@@ -61,7 +65,7 @@ export default function HousePackageSizeLineItem({
                     </TableCell>
                 </>
             )}
-            <TableCell>{size.dim?.replaceAll("in", '"')}</TableCell>
+            {/* <TableCell>{size.dimFt?.replaceAll("in", '"')}</TableCell> */}
             {componentItem.calculatedPriceMode ? (
                 <>
                     <TableCell className="hidden lg:table-cell">
@@ -84,6 +88,7 @@ export default function HousePackageSizeLineItem({
                             <div className="flex-1" key={p.title}>
                                 <div className="mx-1">
                                     <ControlledInput
+                                        size="sm"
                                         type="number"
                                         className={cn(
                                             prices.length == 1 && "w-[80px]"

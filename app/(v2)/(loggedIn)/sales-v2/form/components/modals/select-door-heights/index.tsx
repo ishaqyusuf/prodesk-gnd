@@ -106,17 +106,17 @@ export default function SelectDoorHeightsModal({
         priceTags.doorSizePriceTag = {};
         delete priceTags.moulding;
         // console.log(sizesData);
-        Object.entries(sizesData || {}).map(([size, d]) => {
-            const _d = sizes.find((_) => size == _.dim);
-            if (d.checked && _d) {
-                sizesData[size] = {
+        Object.entries(sizesData || {}).map(([dim, { checked }]) => {
+            const size = sizes.find((_) => dim == _.dim);
+            if (checked && size) {
+                sizesData[dim] = {
                     checked: true,
-                    ..._d,
+                    ...size,
                 };
-                const price = (priceTags.doorSizePriceTag[d.dimFt] =
-                    _d.price || 0);
+                const price = (priceTags.doorSizePriceTag[size.dimFt] =
+                    size.price || 0);
                 const jamPath =
-                    `${baseKey}._doorForm.${d.dim}.jambSizePrice` as any;
+                    `${baseKey}._doorForm.${size.dim}.jambSizePrice` as any;
                 form.setValue(jamPath, price);
                 console.log({ jamPath, price: price });
             }

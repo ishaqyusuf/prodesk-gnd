@@ -93,9 +93,7 @@ export function useMultiComponentItem(componentTitle) {
     }, [componentsTotal, mouldingPrice, calculatedPriceMode, addonPrice]);
     function calculateLineItem() {}
 
-    const [sizeList, setSizeList] = useState<{ dim: string; width: string }[]>(
-        []
-    );
+    const [sizeList, setSizeList] = useState<SizeForm[string][]>([]);
     function _setSizeList(heights: SizeForm) {
         const ls = Object.values(heights || {})
             .filter((i) => i.checked)
@@ -191,7 +189,7 @@ export function useMultiComponentItem(componentTitle) {
 
 export function useMultiComponentSizeRow(
     componentItem: UseMultiComponentItem,
-    size: { dim; width }
+    size: SizeForm[string]
 ) {
     const { form, multiComponentComponentTitleKey, prices, item } =
         componentItem;

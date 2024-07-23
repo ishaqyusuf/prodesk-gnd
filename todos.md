@@ -16,6 +16,9 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - 
+    - edit size in package tool
+    - on section open: scroll to screen
     - Public Dealer site to create cart and generate quotation
     - set price unit for each component each: /unit
     - move items/sort components in specific order, delete for section make all components section based.

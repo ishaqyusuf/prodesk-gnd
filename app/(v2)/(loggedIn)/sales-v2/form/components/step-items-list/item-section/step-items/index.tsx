@@ -16,6 +16,8 @@ import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { useIsVisible } from "@/hooks/use-is-visible";
+import { motion } from "framer-motion";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -44,9 +46,37 @@ export function StepProducts({
         stepIndex,
         rowIndex,
     });
+    const { isVisible, elementRef } = useIsVisible({});
+    useEffect(() => {
+        setTimeout(() => {
+            if (!isVisible && elementRef.current) {
+                const offset = -150; // Adjust this value to your desired offset
+                const elementPosition =
+                    elementRef.current.getBoundingClientRect().top +
+                    window.scrollY;
+                console.log({ elementPosition });
+
+                const offsetPosition = elementPosition + offset;
+                // elementRef.current.scrollIntoView({
+                //     behavior: "smooth",
+                //     block: "start",
+                // });
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth",
+                });
+            }
+        }, 300);
+    }, [isVisible]);
     // useEffect(() => {},[])
     return (
-        <div className="">
+        <motion.div
+            ref={elementRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0 }}
+            transition={{ duration: 1 }}
+            style={{}}
+        >
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {stepProducts?.map((b, i) => (
                     <div className="relative p-4 group" key={i}>
@@ -125,7 +155,7 @@ export function StepProducts({
                     <Icons.spinner className="h-8 w-8 animate-spin" />
                 )}
             </div>
-        </div>
+        </motion.div>
     );
 }
 function CustomInput({ onProceed, currentValue }) {
