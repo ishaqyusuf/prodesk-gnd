@@ -272,8 +272,7 @@ export default function useStepItems({
         });
     }
     const modal = useModal();
-    function onCreate(stepItem: IStepProducts[0]) {
-        // console.log(stepItem);
+    function onCreate(stepItem: IStepProducts[number]) {
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];
@@ -356,8 +355,6 @@ export default function useStepItems({
                 ...current.slice(0, index),
                 ...current.slice(index + 1),
             ];
-            console.log(prods.length, index);
-
             return prods;
         });
     }

@@ -15,6 +15,13 @@ import { _addSize } from "../../../../dimension-variants/_actions/add-size";
 import { IStepProducts } from "../../step-items-list/item-section/step-items";
 import Money from "@/components/_v1/money";
 import { HousePackageToolMeta } from "@/types/sales";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
 
 export type SizeForm = {
     [id in string]: {
@@ -160,33 +167,48 @@ export default function SelectDoorHeightsModal({
             toast.error((error as any).message);
         }
     }
+    function CheckControl({ size }) {
+        const [show, setShow] = useState(false);
+        return (
+            <div className="flex border justify-between p-3 group gap-2 items-start">
+                <ControlledCheckbox
+                    control={sizeForm.control}
+                    name={`sizes.${size.dim}.checked` as any}
+                    label={
+                        <div className="grid gap-1">
+                            <p>{size.dimFt}</p>
+                            <div className={cn("text-muted-foreground")}>
+                                {<Money value={size.price} />}
+                            </div>
+                        </div>
+                    }
+                />
+                <DropdownMenu open={show} onOpenChange={setShow}>
+                    <DropdownMenuTrigger
+                        className={cn(
+                            !show && "opacity-0 group-hover:opacity-100"
+                        )}
+                    >
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-8 w-8 p-1"
+                        >
+                            <Icons.edit className="w-4 h-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent></DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        );
+    }
     return (
-        <Modal.Content>
+        <Modal.Content size="lg">
             <Modal.Header title="Select Sizes" subtitle={productTitle || ""} />
             <Form {...sizeForm}>
-                <div className="grid gap-3 grid-cols-3">
+                <div className="grid sgap-3  grid-cols-3">
                     {sizes.map((size, index) => {
-                        return (
-                            <div className="" key={index}>
-                                <ControlledCheckbox
-                                    control={sizeForm.control}
-                                    name={`sizes.${size.dim}.checked` as any}
-                                    label={
-                                        <div className="grid gap-1">
-                                            <p>{size.dimFt}</p>
-                                            <div
-                                                className={cn(
-                                                    "text-muted-foreground",
-                                                    !size.price && "hidden"
-                                                )}
-                                            >
-                                                {<Money value={size.price} />}
-                                            </div>
-                                        </div>
-                                    }
-                                />
-                            </div>
-                        );
+                        return <CheckControl size={size} key={index} />;
                     })}
                 </div>
                 <form
