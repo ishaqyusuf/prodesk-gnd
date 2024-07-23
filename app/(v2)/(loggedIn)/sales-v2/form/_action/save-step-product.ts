@@ -68,7 +68,7 @@ export async function saveStepProduct(data: Props) {
         _estimate,
         ...stepData
     } = data;
-    console.log(productData);
+    _estimate.price = productData.price;
     if (!id) {
         if (_meta?.isMoulding && !_meta.mouldingCategoryId) {
             // const d = await prisma.dykeCategories.create({
@@ -79,7 +79,7 @@ export async function saveStepProduct(data: Props) {
             // _meta.mouldingCategoryId = d.id;
         }
 
-        return await prisma.dykeStepProducts.create({
+        const s = await prisma.dykeStepProducts.create({
             data: {
                 ...stepData,
                 product: {
@@ -124,8 +124,9 @@ export async function saveStepProduct(data: Props) {
                 product: true,
             },
         });
-    } else
-        return await prisma.dykeStepProducts.update({
+        return { ...s, _estimate };
+    } else {
+        const _ss = await prisma.dykeStepProducts.update({
             where: { id: id },
             data: {
                 ...stepData,
@@ -147,4 +148,6 @@ export async function saveStepProduct(data: Props) {
                 product: true,
             },
         });
+        return { ..._ss, _estimate };
+    }
 }

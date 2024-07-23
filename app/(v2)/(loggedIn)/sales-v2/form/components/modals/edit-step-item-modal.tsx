@@ -109,6 +109,7 @@ export default function EditStepItemModal({
             // console.log(formData);
             // debugger;
             const reps = await saveStepProduct(formData);
+
             onCreate(reps as any);
             modal?.close();
         });
