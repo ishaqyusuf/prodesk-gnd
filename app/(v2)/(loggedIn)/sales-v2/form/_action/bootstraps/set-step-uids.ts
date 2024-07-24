@@ -16,6 +16,7 @@ export async function setStepsUids() {
     });
     // console.log([steps[0], steps.length, stepProducts.length]);
 
+    // return [steps.length, stepProducts.length];
     await Promise.all(
         steps.map(async (s) => {
             await prisma.dykeSteps.update({

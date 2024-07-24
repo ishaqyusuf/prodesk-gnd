@@ -83,6 +83,8 @@ export function StepItem({
     const dependenciesUid = uids.length ? uids.join("-") : null;
     async function savePrice() {
         startSaving(async () => {
+            // console.log(item.uid);
+
             await updateStepItemPrice({
                 stepProductUid: item.uid,
                 price: Number(price),
