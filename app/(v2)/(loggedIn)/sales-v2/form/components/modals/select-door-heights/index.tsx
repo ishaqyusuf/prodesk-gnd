@@ -131,7 +131,6 @@ export default function SelectDoorHeightsModal({
                 const jamPath =
                     `${baseKey}._doorForm.${size.dim}.jambSizePrice` as any;
                 form.setValue(jamPath, price);
-                console.log({ jamPath, price: price });
             }
         });
         const checked = (Object.values(sizesData).filter((s) => s.checked)

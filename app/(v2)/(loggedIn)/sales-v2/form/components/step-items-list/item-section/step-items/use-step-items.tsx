@@ -93,7 +93,7 @@ export default function useStepItems({
     useEffect(() => {
         load();
         allowsCustom();
-        // calculateComponentPrices(form, item.rowIndex);
+        calculateComponentPrices(form, item.rowIndex);
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";

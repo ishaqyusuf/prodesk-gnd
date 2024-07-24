@@ -184,7 +184,6 @@ export async function saveDykeSales(data: DykeForm) {
 
                         if (doors?.length || hptData?.doorType == "Moulding") {
                             const newHpt = !hptId;
-                            console.log([newHpt, hptId]);
 
                             if (!hptId && newHpt) hptId = ++lastHptId;
                             hptData.meta = hptData.meta || {};
