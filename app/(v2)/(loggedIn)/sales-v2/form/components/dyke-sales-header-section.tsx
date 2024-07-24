@@ -151,6 +151,7 @@ export default function HeaderSection({}) {
                                 link
                                 row={
                                     {
+                                        type,
                                         slug: form.getValues("order.slug"),
                                     } as any
                                 }
@@ -162,6 +163,7 @@ export default function HeaderSection({}) {
                                 row={
                                     {
                                         slug: form.getValues("order.slug"),
+                                        type: type,
                                     } as any
                                 }
                             />
@@ -170,6 +172,7 @@ export default function HeaderSection({}) {
                                 row={
                                     {
                                         slug: form.getValues("order.slug"),
+                                        type,
                                     } as any
                                 }
                             />
