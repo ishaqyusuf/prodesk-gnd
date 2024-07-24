@@ -1613,7 +1613,7 @@ model DykeStepProducts {
 model DykePricingSystem {
     id              Int        @unique @default(autoincrement())
     dykeStepId      Int
-    dependenciesUid String //"isdu-ewr-423-dfr23" depencies uid = stepProductUids
+    dependenciesUid String? //"isdu-ewr-423-dfr23" depencies uid = stepProductUids
     stepProductUid  String
     price           Float
     createdAt       DateTime?  @default(now()) @db.Timestamp(0)

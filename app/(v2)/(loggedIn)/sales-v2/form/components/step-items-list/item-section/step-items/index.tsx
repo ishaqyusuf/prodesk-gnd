@@ -94,8 +94,10 @@ export function StepProducts({
                         deleteStepItem={async () => {
                             await deleteStepItem(i, b);
                         }}
+                        setStepProducts={setStepProducts}
                         openStepForm={openStepForm}
                         isRoot={stepCtx.isRoot}
+                        stepIndex={stepIndex}
                     />
                 ))}
                 <div className="p-4">

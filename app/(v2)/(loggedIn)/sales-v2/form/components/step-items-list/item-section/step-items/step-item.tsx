@@ -35,7 +35,9 @@ interface Props {
     isMultiSection;
     isRoot;
     stepForm: DykeStep;
+    stepIndex;
     openStepForm;
+    setStepProducts;
     deleteStepItem;
 }
 export function StepItem({
@@ -45,7 +47,9 @@ export function StepItem({
     isMultiSection,
     deleteStepItem,
     stepForm,
+    stepIndex,
     openStepForm,
+    setStepProducts,
     isRoot,
 }: Props) {
     const ctx = useContext(DykeItemFormContext);
@@ -62,20 +66,34 @@ export function StepItem({
         if (!menuOpen) setEditPrice(false);
     }, [menuOpen]);
     const [price, setPrice] = useState();
-    const [info, setInfo] = useState([]);
     const [saving, startSaving] = useTransition();
-    const dependenciesUid = "";
-    ctx.formStepArray;
+
+    const dependecies = ctx.formStepArray
+        .map((s) => ({
+            uid: s.step.uid,
+            label: s.step.title,
+            value: s.item.value,
+        }))
+        .filter(
+            (_, i) =>
+                i < stepIndex && stepForm.step.meta?.priceDepencies?.[_.uid]
+        );
+    const uids = dependecies.map((s) => s.uid);
+    const dependenciesUid = uids.length ? uids.join("-") : null;
     async function savePrice() {
         startSaving(async () => {
-            console.log(ctx.formStepArray);
-            return;
-            // menuOpenChange(false);
             await updateStepItemPrice({
-                stepProductUid: stepForm.step.uid,
-                price,
+                stepProductUid: item.uid,
+                price: Number(price),
                 dykeStepId: stepForm.step.id,
                 dependenciesUid,
+            });
+            menuOpenChange(false);
+            setStepProducts((prods) => {
+                return [...prods].map((prod, index) => {
+                    prod._estimate.price = Number(price);
+                    return prod;
+                });
             });
         });
     }
@@ -95,11 +113,19 @@ export function StepItem({
                 <Menu open={menuOpen} onOpenChanged={menuOpenChange}>
                     {editPrice ? (
                         <div className="p-2 grid gap-2">
-                            {info.map((i) => (
-                                <Info key={i.label} label={i.label}>
-                                    {i.title}
-                                </Info>
-                            ))}
+                            <div
+                                className={cn(
+                                    "grid",
+                                    dependecies.length && "border-b pt-2",
+                                    dependecies.length > 1 ? "grid-cols-2" : ""
+                                )}
+                            >
+                                {dependecies.map((i) => (
+                                    <Info key={i.label} label={i.label}>
+                                        {i.value}
+                                    </Info>
+                                ))}
+                            </div>
                             <div className="grid gap-2">
                                 <Label>Price</Label>
                                 <Input
