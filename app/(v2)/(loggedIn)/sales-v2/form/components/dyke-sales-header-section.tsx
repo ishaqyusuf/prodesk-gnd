@@ -147,35 +147,60 @@ export default function HeaderSection({}) {
                         Supply
                     </MenuItem> */}
                             <CopyOrderMenuAction row={{ slug, id } as any} />
-                            <PrintOrderMenuAction
-                                link
-                                row={
-                                    {
-                                        type,
-                                        slug: form.getValues("order.slug"),
-                                    } as any
-                                }
-                            />
+                            {type == "quote" ? (
+                                <>
+                                    <PrintOrderMenuAction
+                                        link
+                                        estimate
+                                        row={
+                                            {
+                                                type,
+                                                slug: form.getValues(
+                                                    "order.slug"
+                                                ),
+                                            } as any
+                                        }
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <PrintOrderMenuAction
+                                        link
+                                        row={
+                                            {
+                                                type,
+                                                slug: form.getValues(
+                                                    "order.slug"
+                                                ),
+                                            } as any
+                                        }
+                                    />
+                                    <PrintOrderMenuAction
+                                        mockup
+                                        link
+                                        row={
+                                            {
+                                                slug: form.getValues(
+                                                    "order.slug"
+                                                ),
+                                                type: type,
+                                            } as any
+                                        }
+                                    />
+                                    <PrintOrderMenuAction
+                                        pdf
+                                        row={
+                                            {
+                                                slug: form.getValues(
+                                                    "order.slug"
+                                                ),
+                                                type,
+                                            } as any
+                                        }
+                                    />
+                                </>
+                            )}
                             {id && <MoveSalesMenuItem id={id} type={type} />}
-                            <PrintOrderMenuAction
-                                mockup
-                                link
-                                row={
-                                    {
-                                        slug: form.getValues("order.slug"),
-                                        type: type,
-                                    } as any
-                                }
-                            />
-                            <PrintOrderMenuAction
-                                pdf
-                                row={
-                                    {
-                                        slug: form.getValues("order.slug"),
-                                        type,
-                                    } as any
-                                }
-                            />
 
                             <MenuItem
                                 onClick={() => {
