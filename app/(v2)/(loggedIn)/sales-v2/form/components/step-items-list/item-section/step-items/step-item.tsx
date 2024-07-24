@@ -89,7 +89,6 @@ export function StepItem({
                 dykeStepId: stepForm.step.id,
                 dependenciesUid,
             });
-            menuOpenChange(false);
             setStepProducts((prods) => {
                 return [...prods].map((prod, index) => {
                     if (prod.uid == item.uid)
@@ -97,6 +96,7 @@ export function StepItem({
                     return prod;
                 });
             });
+            menuOpenChange(false);
         });
     }
     const onEditPrice = async (e) => {

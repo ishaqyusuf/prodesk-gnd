@@ -132,12 +132,10 @@ export default function useStepItems({
             );
             const stepTitle = stepForm.step?.title;
             let price = 0;
-            if (
-                stepProd?.product?.meta.priced &&
-                !isMultiSection &&
-                stepTitle !== "Moulding"
-            )
-                price = stepProd?._estimate.price;
+            if (!isMultiSection && stepTitle !== "Moulding") {
+                price = stepProd._estimate?.price || 0;
+                console.log({ price });
+            }
 
             switch (stepTitle) {
                 case "Height":

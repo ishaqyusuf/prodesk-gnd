@@ -62,7 +62,7 @@ export function RowActionMoreMenu({
     const [_open, _onOpenChanged] = useState(open);
     return (
         <DropdownMenu
-            open={_open}
+            open={onOpenChanged ? open : _open}
             onOpenChange={(e) => {
                 _onOpenChanged(e);
                 onOpenChanged?.(e);
