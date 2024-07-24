@@ -30,6 +30,7 @@ export default function PricingDependenciesModal({
     const stepArray = form.getValues(
         `itemArray.${rowIndex}.item.formStepArray`
     );
+
     const deps = {};
     if (!stepForm.step.meta.priceDepencies)
         stepForm.step.meta.priceDepencies = {};

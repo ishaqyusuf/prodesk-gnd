@@ -195,6 +195,10 @@ export async function getDykeFormAction(type, slug, query?) {
                         .map((item) => ({
                             ...item,
                             meta: item.meta as any as DykeFormStepMeta,
+                            step: {
+                                ...item.step,
+                                meta: item.step.meta || {},
+                            },
                         }))
                         .filter(
                             (f, fi) =>

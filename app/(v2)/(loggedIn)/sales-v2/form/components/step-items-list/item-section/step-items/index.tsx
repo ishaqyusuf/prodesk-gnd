@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 
 import useStepItems from "./use-step-items";
 import { StepItem } from "./step-item";
-import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
@@ -18,10 +17,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
+
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -83,23 +79,25 @@ export function StepProducts({
             style={{}}
         >
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {stepProducts?.map((b, i) => (
-                    <StepItem
-                        key={b.uid}
-                        stepForm={stepForm}
-                        isMultiSection={isMultiSection}
-                        select={selectProduct}
-                        loadingStep={ctx.loadingStep}
-                        item={b}
-                        deleteStepItem={async () => {
-                            await deleteStepItem(i, b);
-                        }}
-                        setStepProducts={setStepProducts}
-                        openStepForm={openStepForm}
-                        isRoot={stepCtx.isRoot}
-                        stepIndex={stepIndex}
-                    />
-                ))}
+                {stepProducts
+                    ?.filter((s) => !s.custom)
+                    ?.map((b, i) => (
+                        <StepItem
+                            key={b.uid}
+                            stepForm={stepForm}
+                            isMultiSection={isMultiSection}
+                            select={selectProduct}
+                            loadingStep={ctx.loadingStep}
+                            item={b}
+                            deleteStepItem={async () => {
+                                await deleteStepItem(i, b);
+                            }}
+                            setStepProducts={setStepProducts}
+                            openStepForm={openStepForm}
+                            isRoot={stepCtx.isRoot}
+                            stepIndex={stepIndex}
+                        />
+                    ))}
                 <div className="p-4">
                     <button
                         onClick={() => {
@@ -115,24 +113,25 @@ export function StepProducts({
                 {allowCustom && (
                     <>
                         <CustomInput
-                            currentValue={stepForm.item.value}
+                            currentValue={
+                                (stepForm.item.meta as any)?.custom
+                                    ? stepForm.item.value
+                                    : ""
+                            }
                             onProceed={async (value) => {
-                                selectProduct(
-                                    true,
-                                    {
-                                        product: {
-                                            title: value,
-                                            meta: {
-                                                custom: true,
-                                            },
+                                selectProduct(true, {
+                                    custom: true,
+                                    product: {
+                                        title: value,
+                                        meta: {
+                                            custom: true,
                                         },
-                                        dykeStepId: stepForm.step.id,
-                                        _estimate: {
-                                            price: 0,
-                                        },
-                                    } as any,
-                                    true
-                                );
+                                    },
+                                    dykeStepId: stepForm.step.id,
+                                    _estimate: {
+                                        price: 0,
+                                    },
+                                } as any);
                             }}
                         />
                     </>
@@ -162,8 +161,8 @@ function CustomInput({ onProceed, currentValue }) {
     });
     return (
         <Form {...inputForm}>
-            <div className="flex">
-                <div className="grid gap-2">
+            <div className="flex ">
+                <div className="flex flex-col gap-2">
                     <ControlledInput
                         name="value"
                         control={inputForm.control}

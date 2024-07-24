@@ -1598,6 +1598,7 @@ model DykeCategories {
 model DykeStepProducts {
     id            Int          @unique @default(autoincrement())
     uid           String?      @unique
+    custom        Boolean?     @default(false)
     dykeProductId Int
     dykeStepId    Int
     nextStepId    Int?
