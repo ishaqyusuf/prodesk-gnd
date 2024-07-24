@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 
 import { DykeDoorType } from "../../type";
 import { IStepProducts } from "../components/step-items-list/item-section/step-items";
+import { generateRandomString } from "@/lib/utils";
 export interface SaveStepProductExtra {
     _meta: {
         isMoulding: boolean;
@@ -82,6 +83,7 @@ export async function saveStepProduct(data: Props) {
         const s = await prisma.dykeStepProducts.create({
             data: {
                 ...stepData,
+                uid: generateRandomString(5),
                 product: {
                     create: {
                         ...productData,

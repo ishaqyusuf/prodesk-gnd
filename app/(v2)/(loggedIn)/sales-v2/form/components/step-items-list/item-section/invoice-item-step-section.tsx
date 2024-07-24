@@ -19,9 +19,9 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
-import PriceConditionModal from "../../modals/price-condition";
 import { useState } from "react";
 import EditStepComponentPrice from "../../modals/edit-step-component-price";
+import PricingDependenciesModal from "../../modals/pricing-dependecies";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -41,7 +41,7 @@ export function DykeInvoiceItemStepSection({
 
     function pricingCondition() {
         modal.openModal(
-            <PriceConditionModal
+            <PricingDependenciesModal
                 stepIndex={stepIndex}
                 rowIndex={item.rowIndex}
                 stepForm={stepForm}
@@ -94,7 +94,7 @@ export function DykeInvoiceItemStepSection({
                     <div className="px-2">
                         <Menu Icon={Icons.more}>
                             <MenuItem onClick={pricingCondition}>
-                                Pricing Condition
+                                Pricing Dependencies
                             </MenuItem>
                             <MenuItem onClick={componentPrice}>
                                 Component Price

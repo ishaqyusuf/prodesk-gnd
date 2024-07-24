@@ -18,6 +18,10 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
+import {
+    Menu,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -80,36 +84,19 @@ export function StepProducts({
         >
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {stepProducts?.map((b, i) => (
-                    <div className="relative p-4 group" key={i}>
-                        <div className="hidden group-hover:flex absolute top-0 right-0  flex-col space-y-2 p-1 rounded-lg shadow-xl -m-2 bg-white z-10 border">
-                            <Button
-                                size="icon"
-                                variant={"outline"}
-                                className="w-8 h-8"
-                                onClick={() => {
-                                    openStepForm(b);
-                                }}
-                            >
-                                <Icons.edit className="w-4 h-4" />
-                            </Button>
-                            <ConfirmBtn
-                                onClick={async () => {
-                                    await deleteStepItem(i, b);
-                                }}
-                                size="icon"
-                                Icon={Icons.trash}
-                                trash
-                            ></ConfirmBtn>
-                        </div>
-                        <StepItem
-                            stepTitle={stepForm.step.title}
-                            isMultiSection={isMultiSection}
-                            select={selectProduct}
-                            loadingStep={ctx.loadingStep}
-                            item={b}
-                            isRoot={stepCtx.isRoot}
-                        />
-                    </div>
+                    <StepItem
+                        key={b.uid}
+                        stepForm={stepForm}
+                        isMultiSection={isMultiSection}
+                        select={selectProduct}
+                        loadingStep={ctx.loadingStep}
+                        item={b}
+                        deleteStepItem={async () => {
+                            await deleteStepItem(i, b);
+                        }}
+                        openStepForm={openStepForm}
+                        isRoot={stepCtx.isRoot}
+                    />
                 ))}
                 <div className="p-4">
                     <button

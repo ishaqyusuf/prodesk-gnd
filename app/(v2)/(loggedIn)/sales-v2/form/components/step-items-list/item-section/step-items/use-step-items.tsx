@@ -26,7 +26,7 @@ import EditStepItemModal from "../../../modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../../../../_action/save-step-product";
 import { _deleteDoorStep, _deleteStepItem } from "./_actions";
 import { calculateComponentPrices } from "./calculate-prices";
-import calculateComponentPrice from "./calculate-component-price";
+import { fetchStepComponentsPrice } from "./calculate-component-price";
 export default function useStepItems({
     stepForm,
     stepIndex,
@@ -80,7 +80,7 @@ export default function useStepItems({
         }
         if (_stepProducts)
             setStepProducts(
-                calculateComponentPrice({
+                await fetchStepComponentsPrice({
                     stepProducts: _stepProducts,
                     stepForm,
                     stepArray: item.get.getFormStepArray(),
@@ -93,7 +93,7 @@ export default function useStepItems({
     useEffect(() => {
         load();
         allowsCustom();
-        calculateComponentPrices(form, item.rowIndex);
+        // calculateComponentPrices(form, item.rowIndex);
     }, []);
     const t = stepForm?.step?.title;
     const isMultiSection = t == "Moulding" || t == "Door";
@@ -313,7 +313,6 @@ export default function useStepItems({
             stepTitle: stepFormTitle,
             doorQuery: query,
         };
-
         const _item = itm
             ? {
                   ...itm,

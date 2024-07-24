@@ -1,12 +1,13 @@
 "use server";
 
 import { prisma } from "@/db";
+import { DykeStepMeta } from "../../../../type";
 
-export async function savePriceConditionAction(id, meta) {
+export async function savePriceDepencies(id, meta: DykeStepMeta) {
     const resp = await prisma.dykeSteps.update({
         where: { id },
         data: {
-            meta,
+            meta: meta as any,
             updatedAt: new Date(),
         },
     });

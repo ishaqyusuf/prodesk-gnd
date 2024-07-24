@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { dykeFull } from "@/lib/data/dyke-full";
 import { imgSrc } from "@/lib/data/dyke-interiors";
 import { uploadFile } from "@/lib/upload-file";
+import { generateRandomString } from "@/lib/utils";
 
 export async function dykeExteriorBootstrap() {
     // const data = dykeFull;
@@ -29,7 +30,8 @@ export async function dykeExteriorBootstrap() {
     //     }),
     // });
     await prisma.dykeStepProducts.createMany({
-        data: data.stepProducts.map((prod) => {
+        data: data.stepProducts.map((prod: any) => {
+            if (!prod.uid) prod.uid = generateRandomString(5);
             return prod;
         }),
     });

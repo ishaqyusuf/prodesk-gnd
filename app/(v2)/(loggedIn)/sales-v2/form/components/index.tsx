@@ -15,6 +15,7 @@ import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { setStepsUids } from "../_action/bootstraps/set-step-uids";
 interface Props {
     defaultValues: any;
 }
@@ -58,6 +59,15 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                     <DevOnly>{JSON.stringify(components)}</DevOnly>
                 </ScrollArea>
             </div> */}
+            <DevOnly>
+                <Button
+                    onClick={async () => {
+                        console.log(await setStepsUids());
+                    }}
+                >
+                    Bootstrap uids
+                </Button>
+            </DevOnly>
             <RenderForm {...form}>
                 <HeaderSection />
                 {/* <DykeBootstrap /> */}

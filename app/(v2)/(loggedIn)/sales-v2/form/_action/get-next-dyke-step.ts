@@ -5,6 +5,7 @@ import { prisma } from "@/db";
 import { getStepForm } from "./get-dyke-step";
 import { createDoorSpecies } from "./create-door-species";
 import { DykeDoorType } from "../../type";
+import { generateRandomString } from "@/lib/utils";
 
 export async function getNextDykeStepAction(
     step: DykeSteps,
@@ -23,7 +24,6 @@ export async function getNextDykeStepAction(
     }
     if (product) {
         const customStep = await CustomStepForm(product, step.title, doorType);
-        console.log({ customStep, product, step, doorType });
 
         if (customStep) return [..._steps, customStep];
     }
@@ -227,6 +227,7 @@ async function CustomStepForm(
         if (!step)
             step = await prisma.dykeSteps.create({
                 data: {
+                    uid: generateRandomString(5),
                     title,
                 },
             });

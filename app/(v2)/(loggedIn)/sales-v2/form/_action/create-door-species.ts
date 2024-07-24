@@ -4,6 +4,7 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { prisma } from "@/db";
 import { lastId } from "@/lib/nextId";
 import { uploadFile } from "@/lib/upload-file";
+import { generateRandomString } from "@/lib/utils";
 import { DykeStepProducts, DykeSteps } from "@prisma/client";
 
 export async function createDoorSpecies(
@@ -65,6 +66,7 @@ export async function createDoorSpecies(
             prevStepValueId: step.stepValueId,
             rootStepValueId: step.rootStepValueId,
             stepValueId: s.id,
+            uid: generateRandomString(5),
             stepProducts: {
                 createMany: {
                     data: items.map((item) => ({

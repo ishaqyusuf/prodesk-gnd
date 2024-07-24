@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import ControlledInput from "@/components/common/controls/controlled-input";
-import { cn, sum } from "@/lib/utils";
+import { cn, inToFt, sum } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import ItemPriceFinder from "../../item-price-finder";

@@ -13,7 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import Link from "next/link";
-import { Fragment, useTransition } from "react";
+import { Fragment, useState, useTransition } from "react";
 import { typedMemo } from "@/lib/hocs/typed-memo";
 import { useRouter } from "next/navigation";
 import { useBool } from "@/lib/use-loader";
@@ -45,6 +45,8 @@ interface RowActionMoreMenuProps {
     Trigger?;
     noSize?: boolean;
     variant?: VariantProps<typeof buttonVariants>["variant"];
+    open?;
+    onOpenChanged?;
 }
 export function RowActionMoreMenu({
     children,
@@ -53,11 +55,19 @@ export function RowActionMoreMenu({
     disabled,
     Trigger,
     noSize,
+    open,
+    onOpenChanged,
     variant = "outline",
 }: RowActionMoreMenuProps) {
-    // const [open,onOpenChange] =
+    const [_open, _onOpenChanged] = useState(open);
     return (
-        <DropdownMenu>
+        <DropdownMenu
+            open={_open}
+            onOpenChange={(e) => {
+                _onOpenChanged(e);
+                onOpenChanged?.(e);
+            }}
+        >
             <DropdownMenuTrigger asChild>
                 {Trigger ? (
                     Trigger

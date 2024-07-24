@@ -11,7 +11,7 @@ interface Props {
     stepArray: FormStepArray;
     stepIndex;
 }
-export default function calculateComponentPrice({
+export async function fetchStepComponentsPrice({
     stepProducts,
     stepForm,
     stepArray,
@@ -23,38 +23,37 @@ export default function calculateComponentPrice({
             title: s.step.title,
             stepId: s.step.id,
             value: s.item.value,
+            uid: s.step.uid,
         }));
-    let priceCondition: DykeStepMeta["priceConditions"][number];
-    // console.log(stepForm.step.meta?.priceConditions);
 
-    stepForm.step.meta?.priceConditions?.map((c) => {
-        if (
-            c.rules.length &&
-            c.formula &&
-            c.rules.every((r) => {
-                const sf = formData.find((fd) => fd.stepId == r.stepId);
-                console.log(sf, r);
-                return sf?.value == r.value;
-            })
-        ) {
-            priceCondition = c;
-        }
-    });
+    // stepForm.step.meta?.priceConditions?.map((c) => {
+    //     if (
+    //         c.rules.length &&
+    //         c.formula &&
+    //         c.rules.every((r) => {
+    //             const sf = formData.find((fd) => fd.stepId == r.stepId);
+    //             console.log(sf, r);
+    //             return sf?.value == r.value;
+    //         })
+    //     ) {
+    //         priceCondition = c;
+    //     }
+    // });
 
     stepProducts = stepProducts.map((product) => {
         let basePrice = product.product.meta?.priced
             ? product.product.price
             : 0;
-        if (priceCondition?.formula) {
-            let _basePrice = eval(
-                priceCondition.formula?.replace("basePrice", basePrice as any)
-            );
-            console.log(priceCondition?.formula, basePrice, _basePrice);
-            basePrice = _basePrice;
-        }
-        if (!product._estimate) product._estimate = {} as any;
+        // if (priceCondition?.formula) {
+        //     let _basePrice = eval(
+        //         priceCondition.formula?.replace("basePrice", basePrice as any)
+        //     );
+        //     console.log(priceCondition?.formula, basePrice, _basePrice);
+        //     basePrice = _basePrice;
+        // }
+        // if (!product._estimate) product._estimate = {} as any;
 
-        product._estimate.price = basePrice;
+        // product._estimate.price = basePrice;
         return product;
     });
     return stepProducts;

@@ -77,13 +77,7 @@ export interface DykeFormStepMeta {
     hidden?: boolean;
 }
 export interface DykeStepMeta {
-    priceConditions?: {
-        formula: string;
-        rules: {
-            stepId?: number;
-            value?: string;
-        }[];
-    }[];
+    priceDepencies?: { [itemId: string]: boolean };
 }
 export interface DykeProductMeta {
     svg;
