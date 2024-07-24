@@ -22,7 +22,7 @@ export async function fetchStepComponentsPrice({
     const depUid = getDepsUid(stepIndex, stepArray, stepForm);
 
     const pricings = await getStepPricings(depUid, stepForm.step.id);
-    console.log({ pricings });
+    console.log({ pricings, depUid });
 
     stepProducts = stepProducts.map((product) => {
         if (product._estimate)

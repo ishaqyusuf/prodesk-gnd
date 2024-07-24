@@ -73,12 +73,13 @@ export function StepItem({
             uid: s.step.uid,
             label: s.step.title,
             value: s.item.value,
+            prodUid: s.item.prodUid,
         }))
         .filter(
             (_, i) =>
                 i < stepIndex && stepForm.step.meta?.priceDepencies?.[_.uid]
         );
-    const uids = dependecies.map((s) => s.uid);
+    const uids = dependecies.map((s) => s.prodUid);
     const dependenciesUid = uids.length ? uids.join("-") : null;
     async function savePrice() {
         startSaving(async () => {
@@ -91,7 +92,8 @@ export function StepItem({
             menuOpenChange(false);
             setStepProducts((prods) => {
                 return [...prods].map((prod, index) => {
-                    prod._estimate.price = Number(price);
+                    if (prod.uid == item.uid)
+                        prod._estimate.price = Number(price);
                     return prod;
                 });
             });

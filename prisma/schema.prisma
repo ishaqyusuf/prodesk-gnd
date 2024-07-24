@@ -1534,6 +1534,7 @@ model DykeStepForm {
     value          String?
     qty            Int?             @default(0)
     price          Float?           @default(0)
+    prodUid        String?
     salesId        Int?
     salesItemId    Int?
     stepId         Int

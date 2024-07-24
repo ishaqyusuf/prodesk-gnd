@@ -245,6 +245,7 @@ export default function useStepItems({
                 // qty: stepProd?.product?.qty,
                 price,
                 stepId: stepProd?.dykeStepId,
+                prodUid: stepProd.uid,
                 meta: {
                     custom,
                 } as any,
