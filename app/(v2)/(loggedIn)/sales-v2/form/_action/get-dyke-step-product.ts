@@ -4,8 +4,6 @@ import { prisma } from "@/db";
 import { DykeProductMeta } from "../../type";
 
 export async function getMouldingStepProduct(specie) {
-    console.log(specie);
-
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where: {
             product: {
@@ -59,7 +57,7 @@ export async function getStepProduct(stepId, doorType?) {
             product: true,
         },
     });
-    const prods = stepProducts
+    let prods = stepProducts
         .filter(
             (_, i) =>
                 stepProducts.findIndex(
@@ -69,6 +67,7 @@ export async function getStepProduct(stepId, doorType?) {
                 ) == i
         )
         .map((stepProduct) => {
+            // stepProduct.
             return {
                 ...stepProduct,
                 product: {
@@ -81,8 +80,8 @@ export async function getStepProduct(stepId, doorType?) {
                 },
             };
         });
-
+    if (prods.filter((s) => s.sortIndex >= 0).length)
+        prods = prods.sort((a, b) => a.sortIndex - b.sortIndex);
     // console.log(prods);
-
     return prods;
 }

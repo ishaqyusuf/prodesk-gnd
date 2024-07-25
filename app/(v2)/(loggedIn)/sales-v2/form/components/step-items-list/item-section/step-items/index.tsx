@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import { Sortable, SortableItem } from "@/components/ui/sortable";

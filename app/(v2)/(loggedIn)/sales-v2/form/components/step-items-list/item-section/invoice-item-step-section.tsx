@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import EditStepComponentPrice from "../../modals/edit-step-component-price";
 import PricingDependenciesModal from "../../modals/pricing-dependecies";
 import { Button } from "@/components/ui/button";
+import { sortComponents } from "../../../_action/sort-components";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -64,7 +65,17 @@ export function DykeInvoiceItemStepSection({
     const [sortMode, setSortMode] = useState(false);
     useEffect(() => {
         if (!sortMode) {
-            console.log("saving sort...");
+            (async () => {
+                await sortComponents(
+                    stepProducts.map((prod, index) => {
+                        return {
+                            id: prod.id,
+                            sortIndex: index,
+                        };
+                    })
+                );
+            })();
+            // console.log("saving sort...");
         }
     }, [sortMode]);
     return (
