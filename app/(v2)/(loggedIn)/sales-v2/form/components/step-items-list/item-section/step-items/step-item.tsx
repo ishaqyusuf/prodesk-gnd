@@ -118,7 +118,7 @@ export function StepItem({
                 loadingStep ? "cursor-not-allowed" : "cursor-pointer"
             )}
             onClick={() => {
-                if (!loadingStep) select(selected, item);
+                if (!loadingStep && !menuOpen) select(selected, item);
             }}
         >
             <div
