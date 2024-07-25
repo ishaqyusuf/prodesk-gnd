@@ -16,9 +16,13 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - emails plssssss
+    - download/print button in customer page for sales
     - print quote in invoice edit
     - mobile responsive.
     - custom : price tag
+    - shipping option: in quote.
+    - add shipping option.
     - garage: when saved, house package tool dissapears.
     - component sorting, component hidden state, search component, custom (priceRequired in steps, so that when price not found in selected component, it will prompt admin for price and will not display total price for customer, admin get notified and enter the required price.)
     - edit size in package tool

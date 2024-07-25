@@ -1,10 +1,4 @@
-import {
-    startTransition,
-    useContext,
-    useEffect,
-    useState,
-    useTransition,
-} from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { DykeItemFormContext } from "../../../../_hooks/form-context";
 import { cn, safeFormText } from "@/lib/utils";
 import Image from "next/image";
@@ -21,13 +15,20 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
 import { DykeStep } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { Info } from "@/components/_v1/info";
 import { updateStepItemPrice } from "./_actions";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { PlaceholderImage } from "@/components/placeholder-image";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -39,6 +40,7 @@ interface Props {
     openStepForm;
     setStepProducts;
     deleteStepItem;
+    className?: string;
 }
 export function StepItem({
     item,
@@ -50,6 +52,7 @@ export function StepItem({
     stepIndex,
     openStepForm,
     setStepProducts,
+    className,
     isRoot,
 }: Props) {
     const ctx = useContext(DykeItemFormContext);
@@ -107,7 +110,17 @@ export function StepItem({
         setEditPrice(true);
     };
     return (
-        <div className="relative p-4 group">
+        <Card
+            className={cn(
+                "size-full overflow-hiddens rounded-lg relative border-muted-foreground/10 flex flex-col flex-1",
+                className,
+                selected ? "hover:border-green-500 border-green-500" : "",
+                loadingStep ? "cursor-not-allowed" : "cursor-pointer"
+            )}
+            onClick={() => {
+                if (!loadingStep) select(selected, item);
+            }}
+        >
             <div
                 className={cn(
                     !menuOpen && "hidden",
@@ -170,10 +183,108 @@ export function StepItem({
                     )}
                 </Menu>
             </div>
+            <CardHeader className="border-b flex-1 p-0 py-4">
+                <motion.div
+                    className="flex flex-1  h-full flex-col items-center space-y-2 justify-center relative "
+                    whileHover={{ scale: 1.01 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                >
+                    {item.product.img ? (
+                        <AspectRatio ratio={4 / 2}>
+                            <Image
+                                src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
+                                alt={item.product.title}
+                                className="object-contain"
+                                sizes="(min-width: 1024px) 10vw"
+                                fill
+                                loading="lazy"
+                            />
+                        </AspectRatio>
+                    ) : (item.product.meta as any)?.svg ? (
+                        <AspectRatio ratio={4 / 2}>
+                            <SVG className="" src={item.product.meta?.svg} />
+                        </AspectRatio>
+                    ) : item.product.meta?.url ? (
+                        <AspectRatio ratio={4 / 2}>
+                            <object
+                                data={item.product.meta?.url}
+                                type={"image/svg+xml"}
+                            />
+                        </AspectRatio>
+                    ) : (
+                        <PlaceholderImage className="rounded-none" asChild />
+                    )}
+                </motion.div>
+            </CardHeader>
+            <span className="sr-only">
+                {isRoot
+                    ? item.product?.value || item.product.title
+                    : item.product.title}
+            </span>
+
+            <CardContent className="space-y-1.5 p-4">
+                <CardTitle className="line-clamp-1 text-sm">
+                    {isRoot
+                        ? item.product?.value || item.product.title
+                        : item.product.title}
+                </CardTitle>
+                <CardDescription className="line-clamp-1">
+                    {/* {formatPrice(product.price)} */}
+                    {stepForm.step.title == "Door" ? (
+                        <span className="inline-flex space-x-1 text-muted-foreground">
+                            {doorPriceCount > 0 && (
+                                <>
+                                    <Icons.dollar className="w-4 h-4" />
+                                    <span>{doorPriceCount}</span>
+                                </>
+                            )}
+                        </span>
+                    ) : (
+                        item._estimate.price > 0 && (
+                            <Money value={item._estimate.price} />
+                        )
+                    )}
+                </CardDescription>
+            </CardContent>
+        </Card>
+    );
+    return (
+        <Card className="relative border-muted-foreground/10 hover:border-muted-foreground  borno group ">
             <button
                 disabled={loadingStep}
                 className={cn(
-                    "w-full  border-2 border-muted-foreground/10 hover:border-muted-foreground rounded  flex h-[180px] overflow-hidden ",
+                    "w-full rounded  flex h-[220px] overflow-hidden ",
+                    selected ? "hover:border-green-500 border-green-500" : ""
+                )}
+                onClick={() => {
+                    select(selected, item);
+                }}
+            >
+                <div className="text-xs absolute top-0 right-0 p-4 px-8 font-bold mt-2">
+                    {stepForm.step.title == "Door" ? (
+                        <span className="inline-flex space-x-1 text-muted-foreground">
+                            {doorPriceCount > 0 && (
+                                <>
+                                    <Icons.dollar className="w-4 h-4" />
+                                    <span>{doorPriceCount}</span>
+                                </>
+                            )}
+                        </span>
+                    ) : (
+                        item._estimate.price > 0 && (
+                            <Money value={item._estimate.price} />
+                        )
+                    )}
+                </div>
+            </button>
+        </Card>
+    );
+    return (
+        <Card className="relative border-muted-foreground/10 hover:border-muted-foreground  borno group">
+            <button
+                disabled={loadingStep}
+                className={cn(
+                    "w-full     rounded  flex h-[180px] overflow-hidden ",
                     selected ? "hover:border-green-500 border-green-500" : ""
                 )}
                 onClick={() => {
@@ -224,6 +335,6 @@ export function StepItem({
                     )}
                 </div>
             </button>
-        </div>
+        </Card>
     );
 }

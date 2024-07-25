@@ -73,6 +73,7 @@ import {
     ChevronDown,
     ChevronUp,
     DollarSign,
+    ImageIcon,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -84,6 +85,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 export type Icon = LucideIcon;
 
 export const Icons = {
+    placeholder: ImageIcon,
     reciept: Receipt,
     X: Cross2Icon,
     calendar: Calendar,

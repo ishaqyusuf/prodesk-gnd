@@ -14,14 +14,17 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
-
+import { Sortable, SortableItem } from "@/components/ui/sortable";
+import { closestCorners } from "@dnd-kit/core";
+import { Card } from "@/components/ui/card";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
     setStepProducts;
+    sortMode?: boolean;
 }
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
 export function StepProducts({
@@ -29,6 +32,7 @@ export function StepProducts({
     stepIndex,
     rowIndex,
     stepProducts,
+    sortMode,
     setStepProducts,
 }: StepProductProps) {
     const {
@@ -48,7 +52,6 @@ export function StepProducts({
     });
     const { isVisible, elementRef } = useIsVisible({});
     useEffect(() => {
-        console.log(isVisible);
         setTimeout(() => {
             if (!isVisible && elementRef.current) {
                 const offset = -150; // Adjust this value to your desired offset
@@ -69,7 +72,7 @@ export function StepProducts({
             }
         }, 300);
     }, []);
-    // useEffect(() => {},[])
+
     return (
         <motion.div
             ref={elementRef}
@@ -78,65 +81,86 @@ export function StepProducts({
             transition={{ duration: 1 }}
             style={{}}
         >
-            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {stepProducts
-                    ?.filter((s) => !s.custom)
-                    ?.map((b, i) => (
-                        <StepItem
-                            key={b.uid}
-                            stepForm={stepForm}
-                            isMultiSection={isMultiSection}
-                            select={selectProduct}
-                            loadingStep={ctx.loadingStep}
-                            item={b}
-                            deleteStepItem={async () => {
-                                await deleteStepItem(i, b);
+            <Sortable
+                orientation="mixed"
+                collisionDetection={closestCorners}
+                value={stepProducts}
+                onValueChange={setStepProducts}
+                overlay={<div className="size-full rounded-md bg-primary/10" />}
+            >
+                <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {stepProducts
+                        ?.filter((s) => !s.custom)
+                        ?.map((item, i) => (
+                            <SortableItem
+                                key={item.id}
+                                value={item.id}
+                                asTrigger={sortMode}
+                                asChild
+                            >
+                                <Card className="border-none flex flex-col h-full bg-red-50">
+                                    <StepItem
+                                        className={cn(
+                                            "relative border-muted-foreground/10  borno group",
+                                            !sortMode &&
+                                                "hover:border-muted-foreground"
+                                        )}
+                                        stepForm={stepForm}
+                                        isMultiSection={isMultiSection}
+                                        select={selectProduct}
+                                        loadingStep={ctx.loadingStep}
+                                        item={item}
+                                        deleteStepItem={async () => {
+                                            await deleteStepItem(i, item);
+                                        }}
+                                        setStepProducts={setStepProducts}
+                                        openStepForm={openStepForm}
+                                        isRoot={stepCtx.isRoot}
+                                        stepIndex={stepIndex}
+                                    />
+                                </Card>
+                            </SortableItem>
+                        ))}
+                    <div className="p-4">
+                        <button
+                            onClick={() => {
+                                openStepForm();
                             }}
-                            setStepProducts={setStepProducts}
-                            openStepForm={openStepForm}
-                            isRoot={stepCtx.isRoot}
-                            stepIndex={stepIndex}
-                        />
-                    ))}
-                <div className="p-4">
-                    <button
-                        onClick={() => {
-                            openStepForm();
-                        }}
-                        className={cn(
-                            "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
-                        )}
-                    >
-                        <Icons.add />
-                    </button>
-                </div>
-                {allowCustom && (
-                    <>
-                        <CustomInput
-                            currentValue={
-                                (stepForm.item.meta as any)?.custom
-                                    ? stepForm.item.value
-                                    : ""
-                            }
-                            onProceed={async (value) => {
-                                selectProduct(true, {
-                                    custom: true,
-                                    product: {
-                                        title: value,
-                                        meta: {
-                                            custom: true,
+                            className={cn(
+                                "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                            )}
+                        >
+                            <Icons.add />
+                        </button>
+                    </div>
+                    {allowCustom && (
+                        <>
+                            <CustomInput
+                                currentValue={
+                                    (stepForm.item.meta as any)?.custom
+                                        ? stepForm.item.value
+                                        : ""
+                                }
+                                onProceed={async (value) => {
+                                    selectProduct(true, {
+                                        custom: true,
+                                        product: {
+                                            title: value,
+                                            meta: {
+                                                custom: true,
+                                            },
                                         },
-                                    },
-                                    dykeStepId: stepForm.step.id,
-                                    _estimate: {
-                                        price: 0,
-                                    },
-                                } as any);
-                            }}
-                        />
-                    </>
-                )}
-            </div>
+                                        dykeStepId: stepForm.step.id,
+                                        _estimate: {
+                                            price: 0,
+                                        },
+                                    } as any);
+                                }}
+                            />
+                        </>
+                    )}
+                </div>
+            </Sortable>
 
             {isMultiSection && (
                 <div className="flex justify-end">

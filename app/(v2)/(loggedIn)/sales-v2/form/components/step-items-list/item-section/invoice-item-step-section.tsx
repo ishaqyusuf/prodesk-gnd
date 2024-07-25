@@ -19,9 +19,10 @@ import {
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditStepComponentPrice from "../../modals/edit-step-component-price";
 import PricingDependenciesModal from "../../modals/pricing-dependecies";
+import { Button } from "@/components/ui/button";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -60,6 +61,12 @@ export function DykeInvoiceItemStepSection({
             />
         );
     }
+    const [sortMode, setSortMode] = useState(false);
+    useEffect(() => {
+        if (!sortMode) {
+            console.log("saving sort...");
+        }
+    }, [sortMode]);
     return (
         <Collapsible
             className={cn(
@@ -99,21 +106,18 @@ export function DykeInvoiceItemStepSection({
                             <MenuItem onClick={componentPrice}>
                                 Component Price
                             </MenuItem>
-                            {/* <MenuItem
-                                SubMenu={
-                                    <>
-                                        <MenuItem>Before</MenuItem>
-                                        <MenuItem>After</MenuItem>
-                                    </>
-                                }
+                            <MenuItem
+                                onClick={() => {
+                                    setSortMode(!sortMode);
+                                }}
                             >
-                                New Step
-                            </MenuItem> */}
+                                {sortMode ? "Finish Sort" : "Sort"}
+                            </MenuItem>
                         </Menu>
                     </div>
                 </div>
             </CollapsibleTrigger>
-            <CollapsibleContent className="p-8 border">
+            <CollapsibleContent className="p-8 border ">
                 {stepForm?.step?.title == "House Package Tool" ? (
                     // <HousePackageTool />
                     <>
@@ -132,9 +136,22 @@ export function DykeInvoiceItemStepSection({
                         stepForm={stepForm}
                         stepIndex={stepIndex}
                         rowIndex={item.rowIndex}
+                        sortMode={sortMode}
                         stepProducts={stepProducts}
                         setStepProducts={setStepProducts}
                     />
+                )}
+                {sortMode && (
+                    <div className="fixed shadow-xl  z-10 mb-16 bottom-0 left-1/2">
+                        <Button
+                            onClick={() => {
+                                setSortMode(false);
+                            }}
+                            size="sm"
+                        >
+                            Finish Sort
+                        </Button>
+                    </div>
                 )}
             </CollapsibleContent>
         </Collapsible>
