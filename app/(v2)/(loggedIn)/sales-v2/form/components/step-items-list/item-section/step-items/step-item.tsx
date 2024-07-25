@@ -201,7 +201,7 @@ export function StepItem({
                             />
                         </AspectRatio>
                     ) : (item.product.meta as any)?.svg ? (
-                        <AspectRatio ratio={4 / 2}>
+                        <AspectRatio ratio={1}>
                             <SVG className="" src={item.product.meta?.svg} />
                         </AspectRatio>
                     ) : item.product.meta?.url ? (
