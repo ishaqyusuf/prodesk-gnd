@@ -86,6 +86,7 @@ export interface DykeStepItemMeta {
 export interface DykeProductMeta {
     svg;
     url;
+    sortIndex?;
     priced?: boolean;
     mouldingSpecies: { [id in string]: boolean };
     doorPrice?: { [size in string]: number };

@@ -56,15 +56,11 @@ export default function useStepItems({
             const _props = { ...query, stepId: stepForm?.step?.id };
             const { result: prods } = await getDykeStepDoors(_props as any);
             _stepProducts = prods;
-            console.log(prods);
-            // setStepProducts(prods);
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");
             const specie = item.get.getMouldingSpecie();
             const prods = await getMouldingStepProduct(specie);
-            // console.log(prods);
             _stepProducts = prods;
-            // setStepProducts(prods);
         } else if (
             doorType == "Door Slabs Only" &&
             stepFormTitle == "Door Type"
@@ -74,8 +70,6 @@ export default function useStepItems({
             // if(stepFormTitle == 'Height' )
         } else {
             const _stepProds = await getStepProduct(stepForm?.step?.id);
-            // console.log(_stepProds);
-            // setStepProducts(_stepProds);
             _stepProducts = _stepProds;
         }
         if (_stepProducts)

@@ -2,15 +2,19 @@
 
 import { prisma } from "@/db";
 
-export async function sortComponents(components: { id; sortIndex }[]) {
+export async function sortComponents(components: { id; data }[]) {
     await Promise.all(
         components.map(async (c) => {
-            await prisma.dykeStepProducts.update({
+            const updateFn = c.data.meta
+                ? prisma.dykeDoors.update
+                : prisma.dykeStepProducts.update;
+            await updateFn({
                 where: {
                     id: c.id,
                 },
                 data: {
-                    sortIndex: c.sortIndex,
+                    ...c.data,
+                    updatedAt: new Date(),
                 },
             });
         })

@@ -137,24 +137,26 @@ export async function getDykeStepDoors({
         skipDuplicates: true,
         data: result as any,
     });
-    console.log(res.count);
 
     return await getDykeStepDoors({ q, omit, qty, stepId, query, final: true });
 }
 function response(_doors: DykeDoors[], stepId) {
     return {
         result: _doors.map((door: any) => {
+            const meta = {
+                ...findDoorSvg(door.title, door.img),
+                ...((door.meta as any) || {}),
+            } as DykeProductMeta;
             return {
                 dykeStepId: stepId,
                 dykeProductId: door.id,
                 id: door.id,
+                isDoor: true,
+                sortIndex: meta.sortIndex || null,
                 product: {
                     ...door,
                     value: door.title,
-                    meta: {
-                        ...findDoorSvg(door.title, door.img),
-                        ...((door.meta as any) || {}),
-                    } as DykeProductMeta,
+                    meta,
                 },
             };
         }) as any,
