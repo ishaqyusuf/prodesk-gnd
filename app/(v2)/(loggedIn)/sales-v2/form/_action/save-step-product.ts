@@ -84,6 +84,7 @@ export async function saveStepProduct(data: Props) {
             data: {
                 ...stepData,
                 uid: generateRandomString(5),
+                meta: stepData.meta as any,
                 product: {
                     create: {
                         ...productData,
@@ -132,6 +133,7 @@ export async function saveStepProduct(data: Props) {
             where: { id: id },
             data: {
                 ...stepData,
+                meta: stepData.meta as any,
                 updatedAt: new Date(),
                 product: {
                     update: {
