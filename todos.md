@@ -16,6 +16,7 @@ TODO:
     <!-- - Production Due today not showing. -->
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
+    - FIX:  input number type unable to delete zero
     - display all doors in door slab section.
     - display price, show component price, override price.
     - go straight from door slab door to line item, not lh and rh

@@ -7,6 +7,7 @@ import {
     DykeDoorType,
     DykeFormStepMeta,
     DykeSalesDoor,
+    ItemStepSequence,
     MultiDyke,
     ShelfItemMeta,
 } from "../../type";
@@ -263,10 +264,6 @@ export async function getDykeFormAction(type, slug, query?) {
                             categoryId: s.categoryId,
                             uid,
                         };
-                    // if (copy) {
-                    //     delete s.id;
-                    //     delete itemData.id;
-                    // }
                     if (shelfItemArray[cid])
                         (shelfItemArray[cid] as any)?.productArray?.push({
                             item: s,
@@ -278,7 +275,6 @@ export async function getDykeFormAction(type, slug, query?) {
                         tax: itemData.meta?.tax,
                     };
                 });
-
                 const multiComponent: MultiDyke = {
                     components: {},
                     uid: itemData.multiDykeUid as any,
@@ -299,19 +295,7 @@ export async function getDykeFormAction(type, slug, query?) {
                         return true;
                     return false;
                 });
-                // console.log(_comps);
-
-                // console.log(
-                //     _comps.map((i) => i.housePackageTool.dykeDoorId)
-                // );
-
                 _comps.map((item) => {
-                    // console.log(item.housePackageTool?.door);
-                    // const formStep = item.formSteps.find(
-                    //     (d) =>
-                    //         d.step?.title == "Door" ||
-                    //         d.step?.title == "Moulding"
-                    // );
                     const component =
                         item.housePackageTool?.door ||
                         item.housePackageTool?.molding ||
@@ -415,6 +399,7 @@ export async function getDykeFormAction(type, slug, query?) {
                         // })),
                     },
                     uid: generateRandomString(4),
+                    stepSequence: {} as ItemStepSequence,
                 };
                 rItem.stepIndex = rItem.item.formStepArray.length - 1;
                 return rItem;

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { PlaceholderImage } from "@/components/placeholder-image";
+import { Dot } from "lucide-react";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -184,7 +185,14 @@ export function StepItem({
                     )}
                 </Menu>
             </div>
-            <CardHeader className="border-b flex-1 p-0 py-4">
+            <CardHeader className="border-b realtive flex-1 p-0 py-4">
+                {item.meta.stepSequence?.length ? (
+                    <div className="absolute top-0 right-0">
+                        <Dot className="w-8 h-8 text-cyan-600" />
+                    </div>
+                ) : (
+                    <></>
+                )}
                 <motion.div
                     className="flex flex-1  h-full flex-col items-center space-y-2 justify-center relative "
                     whileHover={{ scale: 1.01 }}

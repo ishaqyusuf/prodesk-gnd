@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/tooltip";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { Icons } from "@/components/_v1/icons";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     item: IStepProducts[0];
@@ -114,6 +116,18 @@ export default function EditStepItemModal({
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
+            const stepSequence = formData.meta.stepSequence.filter((s) => s.id);
+            try {
+                stepSequence.map((s, i) => {
+                    if (stepSequence.filter((f) => f.id == s.id).length > 1)
+                        throw Error("Step cannot be repeated");
+                });
+            } catch (error) {
+                if (error instanceof Error) toast.error(error.message);
+                return;
+            }
+            formData.meta.stepSequence = stepSequence;
+            // return;
             const [pri, sec] = root ? ["value", "title"] : ["title", "value"];
 
             if (!formData.product[sec])
@@ -238,10 +252,10 @@ export default function EditStepItemModal({
                             </div>
                         </TabsContent>
                         <TabsContent value="step">
-                            <div className="flex gap-1 flex-wrap">
+                            <div className="flex gap-2 flex-wrap">
                                 {stepS.fields.map((f, fieldIndex) => (
                                     <div
-                                        className="inline-flex items-center"
+                                        className="inline-flex relative items-center group"
                                         key={f.id}
                                     >
                                         {fieldIndex != 0 && (
@@ -256,19 +270,15 @@ export default function EditStepItemModal({
                                             className=""
                                             size="sm"
                                             onSelect={(e) => {
-                                                const index =
-                                                    stepS.fields.findIndex(
-                                                        (f) =>
-                                                            f.id == (e as any)
+                                                const empties =
+                                                    stepS.fields.filter(
+                                                        (f, fi) =>
+                                                            !f.id &&
+                                                            fi != fieldIndex
                                                     );
                                                 const emptyLength =
-                                                    stepS.fields.filter(
-                                                        (f) => !f.id
-                                                    ).length > 0;
-                                                console.log({
-                                                    emptyLength,
-                                                });
-
+                                                    empties.length <= 0;
+                                                console.log({ empties });
                                                 if (emptyLength)
                                                     stepS.append({});
                                             }}
@@ -279,6 +289,18 @@ export default function EditStepItemModal({
                                                 })) || []
                                             }
                                         />
+                                        <div className="absolute right-0  -mt-4 -mr-2 hidden group-hover:block">
+                                            <Button
+                                                onClick={() => {
+                                                    stepS.remove(fieldIndex);
+                                                }}
+                                                className="p-1 w-6 h-6"
+                                                size="sm"
+                                                variant="destructive"
+                                            >
+                                                <Icons.trash className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

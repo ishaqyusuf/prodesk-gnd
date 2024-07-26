@@ -42,7 +42,7 @@ export default function CustomersTableShell({ promise, searchParams }) {
     const table = useDataTableColumn(
         data,
         (ctx) => [
-            ctx.Column("Profile Name", Cells.Customer),
+            ctx.Column("Customer", Cells.Customer),
             ctx.Column("Profile Name", ({ item }) => (
                 <Cells.Profile
                     item={item}

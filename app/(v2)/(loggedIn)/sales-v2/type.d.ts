@@ -86,6 +86,12 @@ export interface DykeStepItemMeta {
 export interface StepProdctMeta {
     stepSequence: { id?: number }[];
 }
+export type ItemStepSequence = {
+    [id in number]: {
+        stepIndex?;
+        sequence: StepProdctMeta["stepSequence"];
+    };
+};
 export interface DykeProductMeta {
     svg;
     url;

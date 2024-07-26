@@ -119,6 +119,8 @@ export default function useStepItems({
             return;
         }
         ctx.startLoadingStep(async () => {
+            const seq = stepProd.meta.stepSequence;
+
             const val = stepProd?.product?.title || stepProd?.product?.value;
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
@@ -127,7 +129,6 @@ export default function useStepItems({
             let price = 0;
             if (!isMultiSection && stepTitle !== "Moulding") {
                 price = stepProd._estimate?.price || 0;
-                console.log({ price });
             }
 
             switch (stepTitle) {
