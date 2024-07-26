@@ -5,9 +5,10 @@ import { prisma } from "@/db";
 export async function sortComponents(components: { id; data }[]) {
     await Promise.all(
         components.map(async (c) => {
-            const updateFn = c.data.meta
-                ? prisma.dykeDoors.update
-                : prisma.dykeStepProducts.update;
+            let updateFn;
+            if (c?.data?.meta) updateFn = prisma.dykeDoors.update;
+            else updateFn = prisma.dykeStepProducts.update;
+
             await updateFn({
                 where: {
                     id: c.id,
