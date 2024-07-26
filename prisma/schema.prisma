@@ -1603,6 +1603,7 @@ model DykeStepProducts {
     dykeProductId Int
     dykeStepId    Int
     nextStepId    Int?
+    meta          Json?        @db.Json
     createdAt     DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?    @updatedAt
     deletedAt     DateTime?    @db.Timestamp(0)

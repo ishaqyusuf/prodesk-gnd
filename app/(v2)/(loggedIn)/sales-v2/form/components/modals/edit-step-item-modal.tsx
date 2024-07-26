@@ -6,7 +6,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { FileUploader } from "@/components/common/file-uploader";
@@ -44,13 +44,16 @@ export default function EditStepItemModal({
     const form = useForm<IStepProducts[0]>({
         defaultValues,
     });
+    const stepS = useFieldArray({
+        control: form.control,
+        keyName: "_id",
+        name: "meta.stepSequence",
+    });
     const src = form.watch("product.img");
     const invoiceItem = mainForm.getValues(`itemArray.${rowIndex}`);
     const doorType = invoiceItem.item.meta.doorType;
     const isBifold = doorType == "Bifold";
-    const height = mainForm.watch(
-        `itemArray.${rowIndex}.item.housePackageTool.height`
-    );
+
     const [species, setSpecies] = useState<string[]>([]);
     const [heights, setHeight] = useState({
         "6-8": [],
@@ -99,15 +102,12 @@ export default function EditStepItemModal({
         startSaving(async () => {
             const formData = form.getValues();
             const [pri, sec] = root ? ["value", "title"] : ["title", "value"];
-            // if (root) {
+
             if (!formData.product[sec])
                 formData.product[sec] = formData.product[pri];
-            // }
+
             formData.product.meta.priced = formData.product.price > 0;
-            // if(!formData?.product?.title)
-            // formData?.product
-            // console.log(formData);
-            // debugger;
+
             const reps = await saveStepProduct(formData);
 
             onCreate(reps as any);
@@ -128,7 +128,12 @@ export default function EditStepItemModal({
                     <Tabs defaultValue="general">
                         <TabsList className="">
                             <TabsTrigger value="general">General</TabsTrigger>
-                            <TabsTrigger value="price">Price</TabsTrigger>
+                            {stepTitle == "Door" && (
+                                <TabsTrigger value="price">Price</TabsTrigger>
+                            )}
+                            <TabsTrigger value="step">
+                                Component Step
+                            </TabsTrigger>
                         </TabsList>
                         <TabsContent value="general">
                             <div className="grid gap-4">
@@ -218,6 +223,9 @@ export default function EditStepItemModal({
                                     />
                                 )}
                             </div>
+                        </TabsContent>
+                        <TabsContent value="step">
+                            <div className="grid grid-cols-2 gap-2"></div>
                         </TabsContent>
                     </Tabs>
                 </div>

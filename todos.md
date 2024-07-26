@@ -17,6 +17,7 @@ TODO:
     <!-- - List Submissions in prod assignment, allow delete submission, edit assignment -->
     - .
     - display all doors in door slab section.
+    - display price, show component price, override price.
     - go straight from door slab door to line item, not lh and rh
     - emails plssssss
     - download/print button in customer page for sales

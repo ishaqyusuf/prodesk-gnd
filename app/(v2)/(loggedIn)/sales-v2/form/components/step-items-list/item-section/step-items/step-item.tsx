@@ -171,6 +171,7 @@ export function StepItem({
                             >
                                 Edit
                             </MenuItem>
+
                             <MenuItem onClick={onEditPrice} Icon={Icons.dollar}>
                                 Change Price
                             </MenuItem>

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { DykeProductMeta } from "../../type";
+import { DykeProductMeta, StepProdctMeta } from "../../type";
 
 export async function getMouldingStepProduct(specie) {
     const stepProducts = await prisma.dykeStepProducts.findMany({
@@ -70,6 +70,9 @@ export async function getStepProduct(stepId, doorType?) {
             // stepProduct.
             return {
                 ...stepProduct,
+                meta: (stepProduct.meta || {
+                    stepSequence: [],
+                }) as any as StepProdctMeta,
                 product: {
                     ...stepProduct.product,
                     meta: (stepProduct.product.meta ||

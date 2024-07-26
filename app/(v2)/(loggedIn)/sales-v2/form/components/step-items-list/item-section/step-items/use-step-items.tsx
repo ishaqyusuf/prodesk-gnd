@@ -59,7 +59,7 @@ export default function useStepItems({
             setStep("Moulding");
             const specie = item.get.getMouldingSpecie();
             const prods = await getMouldingStepProduct(specie);
-            _stepProducts = prods;
+            _stepProducts = prods as any;
         } else if (
             doorType == "Door Slabs Only" &&
             stepFormTitle == "Door Type"

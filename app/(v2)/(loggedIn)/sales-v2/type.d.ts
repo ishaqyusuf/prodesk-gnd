@@ -83,6 +83,9 @@ export interface DykeStepMeta {
 export interface DykeStepItemMeta {
     custom?: boolean;
 }
+export interface StepProdctMeta {
+    stepSequence: any[];
+}
 export interface DykeProductMeta {
     svg;
     url;

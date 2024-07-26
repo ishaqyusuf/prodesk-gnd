@@ -24,6 +24,7 @@ import EditStepComponentPrice from "../../modals/edit-step-component-price";
 import PricingDependenciesModal from "../../modals/pricing-dependecies";
 import { Button } from "@/components/ui/button";
 import { sortComponents } from "../../../_action/sort-components";
+import { toast } from "sonner";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -63,29 +64,26 @@ export function DykeInvoiceItemStepSection({
         );
     }
     const [sortMode, setSortMode] = useState(false);
-    useEffect(() => {
-        if (!sortMode) {
-            (async () => {
-                await sortComponents(
-                    stepProducts.map((prod, index) => {
-                        const data = (prod as any)?.isDoor
-                            ? {
-                                  meta: {
-                                      ...(prod?.product?.meta || {}),
-                                      sortIndex: index,
-                                  },
-                              }
-                            : { sortIndex: index };
-                        return {
-                            id: prod.id,
-                            data,
-                        };
-                    })
-                );
-            })();
-            // console.log("saving sort...");
-        }
-    }, [sortMode]);
+    const finishSort = async () => {
+        setSortMode(false);
+        await sortComponents(
+            stepProducts.map((prod, index) => {
+                const data = (prod as any)?.isDoor
+                    ? {
+                          meta: {
+                              ...(prod?.product?.meta || {}),
+                              sortIndex: index,
+                          },
+                      }
+                    : { sortIndex: index };
+                return {
+                    id: prod.id,
+                    data,
+                };
+            })
+        );
+        await toast.success("Saved.");
+    };
     return (
         <Collapsible
             className={cn(
@@ -126,9 +124,11 @@ export function DykeInvoiceItemStepSection({
                                 Component Price
                             </MenuItem>
                             <MenuItem
-                                onClick={() => {
-                                    setSortMode(!sortMode);
-                                }}
+                                onClick={
+                                    sortMode
+                                        ? finishSort
+                                        : () => setSortMode(true)
+                                }
                             >
                                 {sortMode ? "Finish Sort" : "Sort"}
                             </MenuItem>
@@ -162,12 +162,7 @@ export function DykeInvoiceItemStepSection({
                 )}
                 {sortMode && (
                     <div className="fixed shadow-xl  z-10 mb-16 bottom-0 left-1/2">
-                        <Button
-                            onClick={() => {
-                                setSortMode(false);
-                            }}
-                            size="sm"
-                        >
+                        <Button onClick={finishSort} size="sm">
                             Finish Sort
                         </Button>
                     </div>
