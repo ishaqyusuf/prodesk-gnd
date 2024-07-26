@@ -51,7 +51,7 @@ export default function useStepItems({
                 item.get.getFormStepArray(),
                 item.get.doorType()
             );
-            // console.log("QUERY>", query);
+            console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
             const { result: prods } = await getDykeStepDoors(_props as any);
             _stepProducts = prods;
@@ -65,7 +65,8 @@ export default function useStepItems({
             stepFormTitle == "Door Type"
         ) {
             setStep("Slab");
-            setStepProducts(await getSlabDoorTypes());
+            _stepProducts = await getSlabDoorTypes();
+            // setStepProducts(await getSlabDoorTypes());
             // if(stepFormTitle == 'Height' )
         } else {
             const _stepProds = await getStepProduct(stepForm?.step?.id);
