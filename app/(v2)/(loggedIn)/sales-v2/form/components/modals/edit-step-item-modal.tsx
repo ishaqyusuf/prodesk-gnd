@@ -20,6 +20,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Modal from "@/components/common/modal";
 import { DykeForm } from "../../../type";
 import { getDimensionSizeList } from "../../../dimension-variants/_actions/get-size-list";
+import useFn from "@/hooks/use-fn";
+import { getDykeSections } from "../../../_actions/dyke-settings/get-dyke-sections";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import ControlledSelect from "@/components/common/controls/controlled-select";
+import { Icons } from "@/components/_v1/icons";
 
 interface Props {
     item: IStepProducts[0];
@@ -41,7 +51,9 @@ export default function EditStepItemModal({
 }: Props) {
     const { ...defaultValues } = item;
     if (!item.id) defaultValues.product.title = "";
-    const form = useForm<IStepProducts[0]>({
+    if (!defaultValues.meta.stepSequence?.length)
+        defaultValues.meta.stepSequence = [{}] as any;
+    const form = useForm({
         defaultValues,
     });
     const stepS = useFieldArray({
@@ -93,6 +105,7 @@ export default function EditStepItemModal({
             }
         })();
     }, []);
+    const sections = useFn(getDykeSections);
     function onUpload(assetId) {
         form.setValue("product.img", assetId);
     }
@@ -225,7 +238,51 @@ export default function EditStepItemModal({
                             </div>
                         </TabsContent>
                         <TabsContent value="step">
-                            <div className="grid grid-cols-2 gap-2"></div>
+                            <div className="flex gap-1 flex-wrap">
+                                {stepS.fields.map((f, fieldIndex) => (
+                                    <div
+                                        className="inline-flex items-center"
+                                        key={f.id}
+                                    >
+                                        {fieldIndex != 0 && (
+                                            <>
+                                                <Icons.chevronRight className="w-4 h-4" />
+                                            </>
+                                        )}
+                                        <ControlledSelect
+                                            control={form.control}
+                                            type="combo"
+                                            name={`meta.stepSequence.${fieldIndex}.id`}
+                                            className=""
+                                            size="sm"
+                                            onSelect={(e) => {
+                                                const index =
+                                                    stepS.fields.findIndex(
+                                                        (f) =>
+                                                            f.id == (e as any)
+                                                    );
+                                                const emptyLength =
+                                                    stepS.fields.filter(
+                                                        (f) => !f.id
+                                                    ).length > 0;
+                                                console.log({
+                                                    emptyLength,
+                                                });
+
+                                                if (emptyLength)
+                                                    stepS.append({});
+                                            }}
+                                            options={
+                                                sections?.data?.map((d) => ({
+                                                    label: d.title,
+                                                    value: d.id,
+                                                })) || []
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="w-28"></div>
                         </TabsContent>
                     </Tabs>
                 </div>
