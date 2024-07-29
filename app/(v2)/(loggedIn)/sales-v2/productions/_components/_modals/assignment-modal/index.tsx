@@ -17,12 +17,12 @@ export interface AssignmentModalProps {
 export const useAssignmentData = () => useDataPage<GetOrderAssignmentData>();
 export default function AssignmentModal({ order }: AssignmentModalProps) {
     return (
-        <Modal.Content size={"xl"}>
+        <Modal.Content size={"xl"} className="">
             <DataPageShell data={order}>
                 <ModalHeader order={order} />
                 <div
                     id="assignmentModal"
-                    className="overflow-auto max-h-[80vh] -mr-6 spb-28"
+                    className="overflow-auto  max-h-[80vh] pr-2 -mr-6 spb-28"
                 >
                     {order.doorGroups.map((group, index) => (
                         <SectionedItems index={index} key={index} />

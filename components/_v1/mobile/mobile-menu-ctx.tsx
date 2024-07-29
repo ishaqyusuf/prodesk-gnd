@@ -10,71 +10,65 @@ import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
 import { useModal } from "@/components/common/modal-old/provider";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
+import Modal from "@/components/common/modal";
+import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 
-const MobileMenuContext = ({ Title, Subtitle }: { Title; Subtitle? }) => {
-    const [options, setOptions] = useState<any[]>([]);
+interface Props {
+    item;
+}
+const MobileMenuContext = ({ item }: Props) => {
     const [tab, setTab] = useState<string>("main");
-    useEffect(() => {
-        setTab("main");
-    }, []);
+
     const modal = useModal();
     const pdf = useSalesPdf();
+
+    const assignment = useAssignment();
+    const [options, setOptions] = useState<any[]>(
+        optionBuilder.toMobile(
+            sales.salesMenuOption(item as any, modal, pdf, assignment)
+        )
+    );
+
     return (
-        <BaseSheet
-            onOpen={(data) => {
-                setTab("main");
-                setOptions(
-                    optionBuilder.toMobile(
-                        sales.salesMenuOption(data as any, modal, pdf)
-                    )
-                );
-            }}
-            Title={({ data }) => (
-                <div className="w-full text-start flex items-center space-x-2">
-                    {tab != "main" && (
-                        <Button
-                            onClick={() => setTab("main")}
-                            className="p-0 w-8 h-8"
-                            variant="ghost"
-                        >
-                            <Icons.arrowLeft className="w-4 h-4" />
-                        </Button>
-                    )}
-                    <Title data={data} />
-                </div>
-            )}
-            side="bottom"
-            modalName="salesMobileOption"
-            Content={({ data }) => (
-                <div className="-mx-4">
-                    <Tabs defaultValue={tab} className="">
-                        {options.map((opt, i) => (
-                            <TabsContent key={i} value={opt.name}>
-                                <MobileMenu>
-                                    {opt.items?.map((item, j) => {
-                                        return (
-                                            <MobileOption
-                                                key={j}
-                                                {...item}
-                                                more={item.more?.length}
-                                                onClick={() => {
-                                                    // console.log(item.);
-                                                    if (item.more) {
-                                                        setTab(item.label);
-                                                    } else
-                                                        item.onClick &&
-                                                            item.onClick();
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                </MobileMenu>
-                            </TabsContent>
-                        ))}
-                    </Tabs>
-                </div>
-            )}
-        />
+        <Modal.Content size="sm" className="h-auto" side="bottom">
+            <Modal.Header
+                onBack={
+                    tab != "main"
+                        ? () => {
+                              setTab("main");
+                          }
+                        : null
+                }
+                title={item.orderId}
+            />
+            <div className="-mx-4">
+                <Tabs defaultValue={tab} className="">
+                    {options.map((opt, i) => (
+                        <TabsContent key={i} value={opt.name}>
+                            <MobileMenu>
+                                {opt.items?.map((item, j) => {
+                                    return (
+                                        <MobileOption
+                                            key={j}
+                                            {...item}
+                                            more={item.more?.length}
+                                            onClick={() => {
+                                                // console.log(item.);
+                                                if (item.more) {
+                                                    setTab(item.label);
+                                                } else
+                                                    item.onClick &&
+                                                        item.onClick();
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </MobileMenu>
+                        </TabsContent>
+                    ))}
+                </Tabs>
+            </div>
+        </Modal.Content>
     );
 };
 export default memo(MobileMenuContext);

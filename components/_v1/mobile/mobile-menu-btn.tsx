@@ -5,16 +5,18 @@ import { Button } from "../../ui/button";
 import { MenuIcon, MoreHorizontal } from "lucide-react";
 import { openModal } from "@/lib/modal";
 import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
+import { useModal } from "@/components/common/modal/provider";
+import MobileMenuCtx from "./mobile-menu-ctx";
 
 interface Props {
-    modal: ModalName;
     data;
 }
-export default function MobileMenuBtn({ modal, data }: Props) {
+export default function MobileMenuBtn({ data }: Props) {
+    const modal = useModal();
     return (
         <Button
             onClick={() => {
-                openModal(modal, data);
+                modal.openSheet(<MobileMenuCtx item={data} />);
             }}
             size="icon"
             className="p-0 h-5 w-5"

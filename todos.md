@@ -5,7 +5,7 @@ TODO: JUN 19
     -  Jobs edit
     -  Role edit flicker
     -  Delivery & Pickup
-
+    -  
 TODO: 
     <!-- - Payment Modal in Invoice Edit -->
     <!-- - Add view button to production list -->
@@ -21,7 +21,7 @@ TODO:
     - display price, show component price, override price.
     - go straight from door slab door to line item, not lh and rh
     - emails plssssss
-    - download/print button in customer page for sales
+    - download/print button in customer page for sales, send invoice to customer via email
     - print quote in invoice edit
     - mobile responsive.
     - custom : price tag

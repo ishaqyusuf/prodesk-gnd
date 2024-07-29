@@ -11,7 +11,7 @@ export default function ModalHeader({ order }: AssignmentModalProps) {
         <Modal.Header
             title="Production Assignment"
             subtitle={`${order.orderId} | ${
-                order.customer?.businessName || order.customer?.name
+                order.customer?.businessName || order.customer?.name || ""
             }`}
         >
             <div className="flex-1"></div>

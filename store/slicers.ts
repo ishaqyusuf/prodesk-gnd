@@ -125,7 +125,6 @@ export type ModalName =
     | "salesTimeline"
     | "salesSupply"
     | "submitJob"
-    | "salesMobileOption"
     | "verifyTaskJobs"
     | "uploadDoc"
     | undefined;

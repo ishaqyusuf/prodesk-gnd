@@ -8,7 +8,6 @@ import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
-import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order-mobile-menu";
 import { _restoreSalesOrder } from "@/app/(v1)/_actions/fix/restore-sales-order";
 import { _mergeConflictCustomers } from "@/app/(v1)/_actions/fix/merge-conflict-customer";
 import BackOrderModal from "@/components/_v1/modals/sales/back-order-modal";
@@ -44,7 +43,6 @@ export default async function SalesOrdersPage({ searchParams }) {
                     permissions={["editOrders"]}
                 />
                 <CopyFn />
-                <SalesOrderMobileMenuShell />
                 <OrdersTable searchParams={searchParams} promise={response} />
                 <OrderPrinter />
 

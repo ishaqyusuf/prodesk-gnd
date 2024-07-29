@@ -76,7 +76,11 @@ export default function useAssignmentActionsBuilder(
     return {
         actions,
         GeneralAction: () => (
-            <Menu noSize variant={"default"} label={"Action"}>
+            <Menu
+                noSize
+                variant={"default"}
+                label={<div className="hidden sm:block">Action</div>}
+            >
                 {menuActions.map((action) => (
                     <MenuItem
                         className="whitespace-nowrap"

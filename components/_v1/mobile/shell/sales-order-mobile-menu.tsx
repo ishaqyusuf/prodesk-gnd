@@ -10,12 +10,6 @@ import { TabsContent } from "@/components/ui/tabs";
 import MobileMenuCtx from "../mobile-menu-ctx";
 import { useModal } from "@/components/common/modal-old/provider";
 
-export default function SalesOrderMobileMenuShell() {
-    const router = useRouter();
-    const [currentTab, setCurrentTab] = useState("main");
-    const [tab, setTab] = useState("main");
-    return <MobileMenuCtx Title={({ data }) => data?.orderId} />;
-}
 export function SalesProductionMobileMenu({ data }) {
     const modal = useModal();
     function openAssignProd(order) {

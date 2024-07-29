@@ -121,7 +121,7 @@ export function StepProducts({
                                 </Card>
                             </SortableItem>
                         ))}
-                    <div className="p-4">
+                    {/* <div className="p-4">
                         <button
                             onClick={() => {
                                 openStepForm();
@@ -132,8 +132,8 @@ export function StepProducts({
                         >
                             <Icons.add />
                         </button>
-                    </div>
-                    {allowCustom && (
+                    </div> */}
+                    {stepForm.step?.meta?.allowCustom && (
                         <>
                             <CustomInput
                                 currentValue={

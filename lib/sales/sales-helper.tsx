@@ -48,14 +48,19 @@ export const sales = {
         toast.message("Production Completed");
         closeModal();
     },
-    salesMenuOption(row: ISalesOrder, modal, pdf) {
+    salesMenuOption(row: ISalesOrder, modal, pdf, assignment) {
         const estimate = row.type == "quote";
-        const _linkDir = `/sales/${row.type}/${row.slug}`;
+        const _linkDir = row.isDyke
+            ? `/sales-v2/overview/${row.type}/${row.slug}`
+            : `/sales/${row.type}/${row.slug}`;
+        const editHref = row.isDyke
+            ? `/sales-v2/form/${row.type}/${row.slug}`
+            : `${_linkDir}/form`;
         const mb = optionBuilder;
         const prodCompleted = row?.prodStatus == "Completed";
         return [
             mb.href("View", _linkDir, Icons.view),
-            mb.href("Edit", `${_linkDir}/form`, Icons.edit),
+            mb.href("Edit", editHref, Icons.edit),
             mb.simple(
                 "Email",
                 () => {
@@ -67,38 +72,11 @@ export const sales = {
                 Icons.Email
             ),
             !estimate &&
-                mb.more(
+                mb.simple(
                     "Production",
-                    [
-                        mb.href(
-                            "Open",
-                            `/sales/production/${row?.slug}`,
-                            Icons.open
-                        ),
-                        mb.simple(
-                            row?.prodId ? "Update Assignment" : "Assign",
-                            () => {
-                                //  modal.open(
-                                //      <AssignProductionModal order={row} />
-                                //  );
-                            },
-                            Icons.flag
-                        ),
-                        ...(prodCompleted
-                            ? [
-                                  mb.simple(
-                                      "Clear Assign",
-                                      () => this._clearAssignment(row),
-                                      Icons.close
-                                  ),
-                                  mb.simple(
-                                      "Mark as Completed",
-                                      () => this.completeProduction(row),
-                                      Icons.check
-                                  ),
-                              ]
-                            : []),
-                    ],
+                    () => {
+                        assignment.open(row.id);
+                    },
                     Icons.production
                 ),
             mb.simple(
@@ -129,10 +107,8 @@ export const sales = {
             this.printMenu(row, "Print", false, "main", pdf),
             this.printMenu(row, "Print Mockup", true, "main", pdf),
             this.printMenu(row, "Pdf", false, "pdf", pdf),
-            // {delete: true,action: _delete}
         ].filter(Boolean);
     },
-    //    ids, mode: IOrderPrintMode, mockup, print = true
     print(
         props: {
             ids;

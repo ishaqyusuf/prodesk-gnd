@@ -8,7 +8,6 @@ import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
-import SalesOrderMobileMenuShell from "@/components/_v1/mobile/shell/sales-order-mobile-menu";
 import NewEstimateBtn from "./new-sales-btn";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Metadata } from "next";
@@ -38,7 +37,6 @@ export default async function SalesEstimatesPage({ searchParams }) {
                     searchParams={searchParams}
                     {...response}
                 />
-                <SalesOrderMobileMenuShell />
                 <OrderPrinter />
             </SalesTabLayout>
         </AuthGuard>

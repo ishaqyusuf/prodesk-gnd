@@ -77,10 +77,10 @@ function BaseModal({
 const contentVariants = cva(``, {
     variants: {
         size: {
-            sm: "w-[350px]",
-            md: "w-[500px]",
-            lg: "w-[700px]",
-            xl: "w-[900px]",
+            sm: "w-full sm:w-[350px]",
+            md: "w-full sm:w-[500px]",
+            lg: "w-full sm:w-[700px]",
+            xl: "w-full sm:w-[900px]",
             "2xl": "",
         },
     },
@@ -128,7 +128,7 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
     return (
         <Header>
             <div className="flex">
-                <div className={cn(onBack && "flex space-x-4")}>
+                <div className={cn(onBack && "flex sm:space-x-4")}>
                     {onBack && (
                         <div>
                             <Button
@@ -140,7 +140,7 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
                             </Button>
                         </div>
                     )}
-                    <div className="flex-1">
+                    <div className="flex-1 whitespace-nowrap flex-col justify-start">
                         <div className="flex items-center">
                             {Icon && <Icon className="w-4 h-4 mr-4" />}
                             {title && <Title>{title}</Title>}

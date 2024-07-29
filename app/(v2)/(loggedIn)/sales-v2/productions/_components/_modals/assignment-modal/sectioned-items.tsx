@@ -141,7 +141,10 @@ function DetailsBlock({ children, group }) {
                 )}
             </Button>
             <div
-                className={cn(showDetails ? "grid" : "hidden", " grid-cols-2")}
+                className={cn(
+                    showDetails ? "grid" : "hidden",
+                    " sm:grid-cols-2"
+                )}
             >
                 {children}
             </div>

@@ -45,7 +45,7 @@ export default function SalesEstimateMobileCell({
             </div>
             <div className="border-t flex pt-1 justify-between">
                 <DateCellContent>{order.createdAt}</DateCellContent>
-                <MobileMenuBtn modal="salesMobileOption" data={order} />
+                <MobileMenuBtn data={order} />
             </div>
         </div>
     );

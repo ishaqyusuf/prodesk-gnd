@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { sortComponents } from "../../../_action/sort-components";
 import { toast } from "sonner";
 import DevOnly from "@/_v2/components/common/dev-only";
+import { updateDykeStepMeta } from "../../../_action/dyke-step-setting";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -39,6 +40,10 @@ export function DykeInvoiceItemStepSection({
     const stepValue = form.watch(
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any
     );
+    const [allowAdd, allowCustom] = form.watch([
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.meta.allowAdd`,
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.meta.allowCustom`,
+    ] as any);
     const modal = useModal();
 
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
@@ -85,6 +90,18 @@ export function DykeInvoiceItemStepSection({
         );
         await toast.success("Saved.");
     };
+
+    async function toggleStepSetting(key: keyof typeof stepForm.step.meta) {
+        const meta = stepForm.step.meta || {};
+        const state = ((meta as any)[key] = !meta[key]);
+        console.log(meta);
+        await updateDykeStepMeta(stepForm.step.id, meta);
+        form.setValue(
+            `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.${key}` as any,
+            state
+        );
+    }
+
     return (
         <Collapsible
             className={cn(
@@ -111,7 +128,7 @@ export function DykeInvoiceItemStepSection({
                             item.toggleStep(stepIndex);
                         }}
                     >
-                        <DevOnly>{stepForm.step.id} </DevOnly>
+                        {/* <DevOnly>{stepForm.step.id} </DevOnly> */}
                         <span className="font-semibold">
                             {stepForm?.step?.title}:
                         </span>
@@ -133,6 +150,18 @@ export function DykeInvoiceItemStepSection({
                                 }
                             >
                                 {sortMode ? "Finish Sort" : "Sort"}
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => toggleStepSetting("allowCustom")}
+                            >
+                                {allowCustom ? "Disable " : "Enable "}
+                                Custom
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => toggleStepSetting("allowAdd")}
+                            >
+                                {allowAdd ? "Disable " : "Enable "}
+                                Add
                             </MenuItem>
                         </Menu>
                     </div>

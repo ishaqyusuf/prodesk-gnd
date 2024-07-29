@@ -79,6 +79,8 @@ export interface DykeFormStepMeta {
 export interface DykeStepMeta {
     priceDepencies?: { [itemId: string]: boolean };
     custom?: boolean;
+    allowCustom?: boolean;
+    allowAdd?: boolean;
 }
 export interface DykeStepItemMeta {
     custom?: boolean;
