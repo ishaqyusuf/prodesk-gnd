@@ -41,80 +41,87 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
         modal.open(data.data.id);
     }
     return (
-        <div className="mx-4 ml-10">
-            <Table className="">
-                <TableHeader className="bg-slate-100">
-                    {/* <TableHead>Date</TableHead> */}
-                    {!group.doorConfig.singleHandle && (
-                        <TableHead>Handle</TableHead>
-                    )}
-                    <TableHead>Assigned To</TableHead>
-                    <TableHead>Due Date</TableHead>
-                    <TableHead>Completed</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead></TableHead>
-                </TableHeader>
-                <TableBody>
-                    {salesDoor?.assignments?.map((assignment) => (
-                        <TableRow key={assignment.id} className="">
-                            {/* <TableCell>
+        <div className="">
+            <div className="mx-4 ml-10 shidden sm:block">
+                <Table className="">
+                    <TableHeader className="bg-slate-100">
+                        {/* <TableHead>Date</TableHead> */}
+                        {!group.doorConfig.singleHandle && (
+                            <TableHead>Handle</TableHead>
+                        )}
+                        <TableHead>Assigned To</TableHead>
+                        <TableHead>Due Date</TableHead>
+                        <TableHead>Completed</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead></TableHead>
+                    </TableHeader>
+                    <TableBody>
+                        {salesDoor?.assignments?.map((assignment) => (
+                            <TableRow key={assignment.id} className="">
+                                {/* <TableCell>
                                 {formatDate(assignment.createdAt)}
                             </TableCell> */}
-                            {!group.doorConfig.singleHandle && (
-                                <TableHead>
-                                    {assignment.__report.handle}
-                                </TableHead>
-                            )}
-                            <TableCell>{assignment.assignedTo?.name}</TableCell>
-                            <TableCell>
-                                {/* <TableCol.Date className="border rounded p-0.5 px-1 shadow-sm">
+                                {!group.doorConfig.singleHandle && (
+                                    <TableHead>
+                                        {assignment.__report.handle}
+                                    </TableHead>
+                                )}
+                                <TableCell>
+                                    {assignment.assignedTo?.name}
+                                </TableCell>
+                                <TableCell>
+                                    {/* <TableCol.Date className="border rounded p-0.5 px-1 shadow-sm">
                                     {assignment.dueDate}
                                 </TableCol.Date> */}
-                                <DueDate assignment={assignment} />
-                            </TableCell>
-                            <TableCell>
-                                {assignment.__report.submitted} of{" "}
-                                {assignment.__report.total}
-                            </TableCell>
-                            <TableCell>
-                                <div>
-                                    {!assignment.submissions?.length ? (
-                                        <TableCol.Status />
+                                    <DueDate assignment={assignment} />
+                                </TableCell>
+                                <TableCell>
+                                    {assignment.__report.submitted} of{" "}
+                                    {assignment.__report.total}
+                                </TableCell>
+                                <TableCell>
+                                    <div>
+                                        {!assignment.submissions?.length ? (
+                                            <TableCol.Status />
+                                        ) : (
+                                            <TableCol.Status
+                                                score={
+                                                    assignment.__report
+                                                        .submitted
+                                                }
+                                                total={
+                                                    assignment.__report.total
+                                                }
+                                                status={assignment.status}
+                                            />
+                                        )}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="flex gap-2 justify-end items-center">
+                                    <SubmitDoorProduction
+                                        groupIndex={groupIndex}
+                                        isGarage={group.isType.garage}
+                                        assignment={assignment}
+                                        salesDoor={salesDoor}
+                                    ></SubmitDoorProduction>
+                                    {data.data.isProd ? (
+                                        <></>
                                     ) : (
-                                        <TableCol.Status
-                                            score={
-                                                assignment.__report.submitted
+                                        <ConfirmBtn
+                                            trash
+                                            disabled={data.data.readOnly}
+                                            size={"icon"}
+                                            onClick={() =>
+                                                deleteAssignment(assignment)
                                             }
-                                            total={assignment.__report.total}
-                                            status={assignment.status}
                                         />
                                     )}
-                                </div>
-                            </TableCell>
-                            <TableCell className="flex gap-2 justify-end items-center">
-                                <SubmitDoorProduction
-                                    groupIndex={groupIndex}
-                                    isGarage={group.isType.garage}
-                                    assignment={assignment}
-                                    salesDoor={salesDoor}
-                                ></SubmitDoorProduction>
-                                {data.data.isProd ? (
-                                    <></>
-                                ) : (
-                                    <ConfirmBtn
-                                        trash
-                                        disabled={data.data.readOnly}
-                                        size={"icon"}
-                                        onClick={() =>
-                                            deleteAssignment(assignment)
-                                        }
-                                    />
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     );
 }

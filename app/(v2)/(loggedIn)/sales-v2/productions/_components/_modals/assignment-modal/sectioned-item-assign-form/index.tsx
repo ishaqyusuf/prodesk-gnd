@@ -40,6 +40,8 @@ import { DatePicker } from "@/components/_v1/date-range-picker";
 
 import { GetOrderAssignmentData } from "../_action/get-order-assignment-data";
 import { Icons } from "@/components/_v1/icons";
+import { useMediaQuery } from "react-responsive";
+import { screens } from "@/lib/responsive";
 
 export interface IAssignGroupForm {
     assignToId?: number;
@@ -71,6 +73,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
     const validator = useValidateAssignment(form);
     // async function ÷
 
+    const isMobile = useMediaQuery(screens.xs);
     useEffect(() => {
         if (open) {
             const doors: any = {};
@@ -132,127 +135,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
             }
         });
     }
-    function AssignForm() {
-        return (
-            <Form {...form}>
-                <Card className="w-[100vw] sm:w-[500px] border-transparent">
-                    <CardHeader>
-                        <CardTitle>Assign to Production</CardTitle>
-                    </CardHeader>
-                    <CardContent className="sm:max-h-[50vh] overflow-auto">
-                        <div className="grid sm:grid-cols-2 gap-4">
-                            <ControlledSelect
-                                control={form.control}
-                                options={prodUsers.data}
-                                titleKey={"name"}
-                                valueKey="id"
-                                name="assignToId"
-                                label={"Assign To"}
-                            />
-                            <div className="grid gap-4">
-                                <Label>Due Date</Label>
-                                <DatePicker
-                                    className="w-auto h-7s"
-                                    value={prodDueDate}
-                                    setValue={(v) => {
-                                        form.setValue("prodDueDate", v);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <Table>
-                            <TableHeader>
-                                <TableHead>Door</TableHead>
-                                {hands?.map((h) => (
-                                    <TableHead key={h.title}>
-                                        {h.title}
-                                    </TableHead>
-                                ))}
-                                {/* {group.isType.garage ? (
-                                        <TableHead>Qty</TableHead>
-                                    ) : (
-                                        <>
-                                            <TableHead>LH</TableHead>
-                                            <TableHead>RH</TableHead>
-                                        </>
-                                    )} */}
-                            </TableHeader>
-                            <TableBody>
-                                {group.salesDoors
-                                    ?.filter((s) => s.report?.pendingAssignment)
-                                    .map((salesDoor) => (
-                                        <TableRow
-                                            className=""
-                                            key={salesDoor.salesDoor.id}
-                                        >
-                                            <TableCell>
-                                                <TableCol.Primary>
-                                                    {salesDoor.doorTitle}
-                                                </TableCol.Primary>
-                                                <TableCol.Secondary>
-                                                    {
-                                                        salesDoor.salesDoor
-                                                            .dimension
-                                                    }
-                                                </TableCol.Secondary>
-                                            </TableCell>
 
-                                            {hands.map((h) => (
-                                                <TableCell key={h.title}>
-                                                    <div className="flex space-x-2 items-center">
-                                                        <ControlledInput
-                                                            disabled={
-                                                                salesDoor.report
-                                                                    ._unassigned[
-                                                                    h.handle
-                                                                ] == 0
-                                                            }
-                                                            control={
-                                                                form.control
-                                                            }
-                                                            className="w-[80px]"
-                                                            name={
-                                                                `doors.${salesDoor.salesDoor.id}._assignForm.${h.qty}` as any
-                                                            }
-                                                            type="number"
-                                                        />
-                                                        <span
-                                                            className={cn(
-                                                                "whitespace-nowrap",
-                                                                salesDoor.report
-                                                                    ._unassigned[
-                                                                    h.handle
-                                                                ] == 0 &&
-                                                                    "text-muted-foreground cursor-not-allowed"
-                                                            )}
-                                                        >
-                                                            /{" "}
-                                                            {
-                                                                salesDoor.report
-                                                                    ._unassigned[
-                                                                    h.handle
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    </div>
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                    <CardFooter className="">
-                        <div className="flex w-full justify-end">
-                            <Btn size="sm" isLoading={saving} onClick={assign}>
-                                Assign
-                            </Btn>
-                        </div>
-                    </CardFooter>
-                </Card>
-            </Form>
-        );
-    }
     return (
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
             <DropdownMenuTrigger
@@ -289,11 +172,173 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                     </Button>
                 )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" className="sm:hidden">
-                <AssignForm />
-            </DropdownMenuContent>
-            <DropdownMenuContent side="left" className="mx-4 hidden sm:block">
-                <AssignForm />
+            <DropdownMenuContent
+                side={isMobile ? "bottom" : "left"}
+                className="sm:hidden"
+            >
+                <Form {...form}>
+                    <Card className="w-[100vw]  sm:w-[500px] border-transparent">
+                        <CardHeader>
+                            <CardTitle>Assign to Production</CardTitle>
+                        </CardHeader>
+                        <CardContent className="sm:max-h-[50vh] overflow-auto">
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                <ControlledSelect
+                                    control={form.control}
+                                    options={prodUsers.data}
+                                    titleKey={"name"}
+                                    valueKey="id"
+                                    name="assignToId"
+                                    label={"Assign To"}
+                                />
+                                <div className="grid gap-4">
+                                    <Label>Due Date</Label>
+                                    <DatePicker
+                                        className="w-auto h-7s"
+                                        value={prodDueDate}
+                                        setValue={(v) => {
+                                            form.setValue("prodDueDate", v);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="sm:hidden mt-4">
+                                <div className="">Sections</div>
+                                {group.salesDoors
+                                    ?.filter((s) => s.report?.pendingAssignment)
+                                    .map((salesDoor, index) => (
+                                        <div
+                                            className={cn(
+                                                "py-2 grid grid-cols-2 gap-2",
+                                                index > 0 && "border-t"
+                                            )}
+                                            key={salesDoor.salesDoor.id}
+                                        >
+                                            <TableCol.Primary className="col-span-2">
+                                                {salesDoor.doorTitle}
+                                            </TableCol.Primary>
+                                            {hands.map((h) => (
+                                                <div
+                                                    className="flex items-end"
+                                                    key={h.title}
+                                                >
+                                                    <ControlledInput
+                                                        disabled={
+                                                            salesDoor.report
+                                                                ._unassigned[
+                                                                h.handle
+                                                            ] == 0
+                                                        }
+                                                        control={form.control}
+                                                        label={`${h.title} (${
+                                                            salesDoor.report
+                                                                ._unassigned[
+                                                                h.handle
+                                                            ]
+                                                        })`}
+                                                        className=""
+                                                        name={
+                                                            `doors.${salesDoor.salesDoor.id}._assignForm.${h.qty}` as any
+                                                        }
+                                                        type="number"
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ))}
+                            </div>
+                            <Table className="hidden sm:table">
+                                <TableHeader>
+                                    <TableHead>Door</TableHead>
+                                    {hands?.map((h) => (
+                                        <TableHead key={h.title}>
+                                            {h.title}
+                                        </TableHead>
+                                    ))}
+                                </TableHeader>
+                                <TableBody>
+                                    {group.salesDoors
+                                        ?.filter(
+                                            (s) => s.report?.pendingAssignment
+                                        )
+                                        .map((salesDoor) => (
+                                            <TableRow
+                                                className=""
+                                                key={salesDoor.salesDoor.id}
+                                            >
+                                                <TableCell>
+                                                    <TableCol.Primary>
+                                                        {salesDoor.doorTitle}
+                                                    </TableCol.Primary>
+                                                    <TableCol.Secondary>
+                                                        {
+                                                            salesDoor.salesDoor
+                                                                .dimension
+                                                        }
+                                                    </TableCol.Secondary>
+                                                </TableCell>
+
+                                                {hands.map((h) => (
+                                                    <TableCell key={h.title}>
+                                                        <div className="flex space-x-2 items-center">
+                                                            <ControlledInput
+                                                                disabled={
+                                                                    salesDoor
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
+                                                                    ] == 0
+                                                                }
+                                                                control={
+                                                                    form.control
+                                                                }
+                                                                className="w-[80px]"
+                                                                name={
+                                                                    `doors.${salesDoor.salesDoor.id}._assignForm.${h.qty}` as any
+                                                                }
+                                                                type="number"
+                                                            />
+                                                            <span
+                                                                className={cn(
+                                                                    "whitespace-nowrap",
+                                                                    salesDoor
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
+                                                                    ] == 0 &&
+                                                                        "text-muted-foreground cursor-not-allowed"
+                                                                )}
+                                                            >
+                                                                /{" "}
+                                                                {
+                                                                    salesDoor
+                                                                        .report
+                                                                        ._unassigned[
+                                                                        h.handle
+                                                                    ]
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                        <CardFooter className="">
+                            <div className="flex w-full justify-end">
+                                <Btn
+                                    size="sm"
+                                    isLoading={saving}
+                                    onClick={assign}
+                                >
+                                    Assign
+                                </Btn>
+                            </div>
+                        </CardFooter>
+                    </Card>
+                </Form>
             </DropdownMenuContent>
         </DropdownMenu>
     );
