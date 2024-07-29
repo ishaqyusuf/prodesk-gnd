@@ -29,7 +29,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
 
     return (
         <>
-            <TableCell className="">
+            <TableCell className="w-[400px]">
                 {isMoulding ? (
                     componentTitle
                 ) : (
@@ -98,10 +98,10 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     }
                 />
             </TableCell>
-            <TableCell className="w-[100px]">
+            <TableCell className="w-[150px]">
                 <Money value={componentItem.totalPrice} />
             </TableCell>
-            <TableCell className="w-[100px] flex">
+            <TableCell className="w-[50px] flex">
                 <ConfirmBtn
                     onClick={() => componentItem.removeLine(mdf.removeTab)}
                     size="icon"

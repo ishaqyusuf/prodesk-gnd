@@ -3,7 +3,7 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete.
 - JUL 29: 00.00 == 00.00
-  - 05:10-
+  - 10:00-
 --------------------------------
 PAYMENT INVOICE FOR LAST WEEK
 TOTAL: $679.58
