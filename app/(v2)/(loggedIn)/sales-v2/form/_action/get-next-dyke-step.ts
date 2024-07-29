@@ -24,10 +24,8 @@ export async function getNextDykeStepAction(
     }
     if (product) {
         const customStep = await CustomStepForm(product, step.title, doorType);
-
         if (customStep) return [..._steps, customStep];
     }
-    // if (step.title == 'House')
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
     if (!nextStepId) {
         // const path = await prisma.
@@ -54,14 +52,12 @@ export async function getNextDykeStepAction(
 
         if (nextSteps.length > 1) {
             // console.log(nextSteps);
-            nextSteps.map((s) => {
-                if (
+            const matchedStep = nextSteps.filter(
+                (s) =>
                     (product?.title && s.value?.endsWith(product.title)) ||
                     (s.title == "Hand" && s.id == 22)
-                ) {
-                    nextStepId = s.id;
-                }
-            });
+            )[0];
+            if (matchedStep) nextStepId = matchedStep.id;
         }
     }
     if (nextStepId) {
@@ -105,7 +101,6 @@ export async function getNextDykeStepAction(
             }
         }
         return [..._steps, stepForm];
-    } else {
     }
     return null;
 }
@@ -164,7 +159,6 @@ async function CustomStepForm(
     doorType: DykeDoorType
 ) {
     stepTitle = stepTitle.trim();
-    console.log({ stepTitle, doorType, productTitle });
 
     const customSteps = {
         "Shelf Items": "Shelf Items",
@@ -214,9 +208,7 @@ async function CustomStepForm(
         };
 
         title = customSteps[stepTitle];
-        console.log(title);
     }
-    // if(!title && stepTitle != 'Shelf')
     if (title) {
         let step = await prisma.dykeSteps.findFirst({
             where: {

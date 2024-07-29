@@ -53,7 +53,7 @@ export default function useStepItems({
             );
             console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
-            const { result: prods } = await getDykeStepDoors(_props as any);
+            const prods = await getDykeStepDoors(_props as any);
             _stepProducts = prods;
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");
@@ -120,8 +120,6 @@ export default function useStepItems({
             return;
         }
         ctx.startLoadingStep(async () => {
-            const seq = stepProd.meta.stepSequence;
-
             const val = stepProd?.product?.title || stepProd?.product?.value;
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
@@ -244,19 +242,59 @@ export default function useStepItems({
                 } as any,
                 // title: stepProd?.product?.description,
             };
+
+            const formSteps = form.getValues(
+                `itemArray.${item.rowIndex}.item.formStepArray`
+            );
+            formSteps[stepIndex].item = data as any;
             form.setValue(
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
+            const seq =
+                form.getValues(`itemArray.${item.rowIndex}.stepSequence`) || {};
+            const stepSeq = stepProd.meta.stepSequence;
+            if (stepSeq?.length) {
+                console.log(stepProd);
+                seq[stepProd.uid] = stepSeq;
+                form.setValue(
+                    `itemArray.${item.rowIndex}.stepSequence.${stepProd.uid}`,
+                    stepSeq as any
+                );
+            }
+            let nextStepId = null;
+            for (let si = stepIndex; si > -1; si--) {
+                if (nextStepId) continue;
+                const formStep = formSteps[si];
+                const formSeq = seq[formStep.item.prodUid];
+                if (formSeq) {
+                    formSeq.map(({ id: fsId }) => {
+                        const existingStep = formSteps.find(
+                            (f) => f.step.id == fsId
+                        );
+
+                        if (!existingStep && !nextStepId) nextStepId = fsId;
+                    });
+                }
+            }
+            if (nextStepId) {
+                stepProd.nextStepId = nextStepId;
+            }
             const nextSteps = await getNextDykeStepAction(
                 stepForm.step as any,
-                stepProd?.product as any,
+                nextStepId ? null : (stepProd?.product as any),
                 stepProd,
                 [],
                 doorType
             );
-
-            if (nextSteps) {
+            if (nextSteps.length) {
+                const currentNextStep = item.formStepArray[stepIndex + 1];
+                if (currentNextStep) {
+                    if (currentNextStep.step?.id == nextSteps[0]?.step?.id) {
+                        item.toggleStep(item.openedStepIndex + 1);
+                        return;
+                    }
+                }
                 for (let i = item.formStepArray.length - 1; i > stepIndex; i--)
                     item.removeStep(i);
                 item.appendStep(nextSteps as any);

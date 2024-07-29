@@ -1,7 +1,15 @@
 "use server";
 
 import { prisma } from "@/db";
-import { DykeProductMeta, StepProdctMeta } from "../../type";
+import {
+    DykeProductMeta,
+    DykeStepItemMeta,
+    DykeStepMeta,
+    StepProdctMeta,
+} from "../../type";
+import { DykeDoors, DykeProducts, DykeStepProducts } from "@prisma/client";
+import { findDoorSvg } from "../../_utils/find-door-svg";
+import { sortStepProducts, transformStepProducts } from "../../dyke-utils";
 
 export async function getMouldingStepProduct(specie) {
     const stepProducts = await prisma.dykeStepProducts.findMany({
@@ -21,19 +29,8 @@ export async function getMouldingStepProduct(specie) {
             let meta = s.product.meta as any as DykeProductMeta;
             return meta?.mouldingSpecies?.[specie] || false;
         })
-        .map((sp) => {
-            return {
-                ...sp,
-                product: {
-                    ...sp.product,
-                    meta: (sp.product.meta || {}) as any as DykeProductMeta,
-                },
-                _estimate: {
-                    price: null,
-                },
-            };
-        });
-    return prods;
+        .map(transformStepProducts);
+    return sortStepProducts(prods);
 }
 export async function getSlabDoorTypes() {
     const p = await prisma.dykeProducts.findFirst({
@@ -48,7 +45,6 @@ export async function getSlabDoorTypes() {
     return await getStepProduct(p?.stepProducts?.[0]?.dykeStepId);
 }
 export async function getStepProduct(stepId, doorType?) {
-    const tag = `dyke-step-product-${stepId}`;
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where: {
             dykeStepId: stepId,
@@ -66,25 +62,8 @@ export async function getStepProduct(stepId, doorType?) {
                         p.product?.title == _.product?.title
                 ) == i
         )
-        .map((stepProduct) => {
-            // stepProduct.
-            return {
-                ...stepProduct,
-                meta: (stepProduct.meta || {
-                    stepSequence: [],
-                }) as any as StepProdctMeta,
-                product: {
-                    ...stepProduct.product,
-                    meta: (stepProduct.product.meta ||
-                        {}) as any as DykeProductMeta,
-                },
-                _estimate: {
-                    price: null,
-                },
-            };
-        });
-    if (prods.filter((s) => s.sortIndex >= 0).length)
-        prods = prods.sort((a, b) => a.sortIndex - b.sortIndex);
-    // console.log(prods);
-    return prods;
+        .map(transformStepProducts);
+    // prods[0].meta.
+    let sorted = sortStepProducts(prods);
+    return sorted;
 }

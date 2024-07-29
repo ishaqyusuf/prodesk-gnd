@@ -100,7 +100,7 @@ export function useMultiSelector(rowIndex, get) {
             const basePath =
                 `itemArray.${rowIndex}.multiComponent.components.${safeTitle}` as any;
             const uid = form.getValues(`${basePath}.uid` as any);
-            form.setValue(`${basePath}.toolId` as any, stepProd.dykeProductId);
+            form.setValue(`${basePath}.toolId` as any, stepProd.doorId);
             if (isMoulding) {
                 form.setValue(
                     `${basePath}.toolId` as any,

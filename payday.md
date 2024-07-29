@@ -2,6 +2,17 @@
 Shelf item search
 Shelf item auto pick when created
 shelf item delete.
+- JUL 29: 00.00 == 00.00
+  - 05:10-
+--------------------------------
+PAYMENT INVOICE FOR LAST WEEK
+TOTAL: $679.58
+- JUL 28: 01.00 == 19.25 
+  - 09:00-10:00
+- JUL 27: 02.40 == 18.25
+  - 11:40-01:00
+  - 10:00-11:00
+  - 07:20-07:40
 - JUL 26: 01:25 == 15.45
   - 11:45-01:10
 - JUL 25: 02.50 == 14.20

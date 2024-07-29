@@ -25,7 +25,7 @@ export function findDoorSvg(title, img) {
         svg: doorSvgsById[item.id],
         url: item.url,
     };
-    console.log(resp);
+    // console.log(resp);
 
     return resp;
 }

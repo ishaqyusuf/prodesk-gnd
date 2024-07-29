@@ -7,9 +7,9 @@ import {
     DykeDoorType,
     DykeFormStepMeta,
     DykeSalesDoor,
-    ItemStepSequence,
     MultiDyke,
     ShelfItemMeta,
+    StepProdctMeta,
 } from "../../type";
 import {
     HousePackageToolMeta,
@@ -29,6 +29,7 @@ import dayjs from "dayjs";
 
 export async function getDykeFormAction(type, slug, query?) {
     const restore = query?.restore == "true";
+
     const restoreQuery = restore
         ? {
               OR: [
@@ -62,7 +63,9 @@ export async function getDykeFormAction(type, slug, query?) {
                             ...restoreQuery,
                         },
                         include: {
-                            step: {},
+                            step: {
+                                include: {},
+                            },
                         },
                     },
                     shelfItems: {
@@ -109,17 +112,25 @@ export async function getDykeFormAction(type, slug, query?) {
 
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
-    // if (errorId) {
-    //     const e = await prisma.dykeSalesError.findFirst({
-    //         where: {
-    //             errorId,
-    //         },
-    //     });
-    //     if (e) {
-    //         let meta = e.meta as any;
-    //         return meta?.data as OrderType;
-    //     }
-    // }
+
+    const stepProdsUid = order?.items
+        ?.map((item) => item.formSteps.map((fs) => fs.prodUid))
+        .flat()
+        .filter(Boolean);
+    const stepProds = (
+        await prisma.dykeStepProducts.findMany({
+            where: {
+                uid: {
+                    in: Array.from(new Set(stepProdsUid)),
+                },
+            },
+        })
+    ).map((prod) => {
+        return {
+            ...prod,
+            meta: prod.meta as any as StepProdctMeta,
+        };
+    });
     const rootProds = await getStepForm(1);
     const ctx = await salesFormData(true);
     const session = await user();
@@ -380,6 +391,15 @@ export async function getDykeFormAction(type, slug, query?) {
                     }
                 });
                 // console.log(Object.keys(multiComponent.components));
+                const stepSequence: {
+                    [uid in string]: StepProdctMeta["stepSequence"];
+                } = {};
+                formSteps.map((s, i) => {
+                    const seq = stepProds.find((sq) => sq.uid == s.prodUid);
+                    if (seq?.meta?.stepSequence) {
+                        stepSequence[seq.uid] = seq.meta?.stepSequence;
+                    }
+                });
                 const rItem = {
                     opened: true,
                     stepIndex: 0,
@@ -399,7 +419,7 @@ export async function getDykeFormAction(type, slug, query?) {
                         // })),
                     },
                     uid: generateRandomString(4),
-                    stepSequence: {} as ItemStepSequence,
+                    stepSequence,
                 };
                 rItem.stepIndex = rItem.item.formStepArray.length - 1;
                 return rItem;
@@ -445,7 +465,7 @@ export async function getDykeFormAction(type, slug, query?) {
         shippingAddress,
         billingAddress,
         order: orderData,
-        _rawData: { ...order, footer },
+        _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
         paidAmount,

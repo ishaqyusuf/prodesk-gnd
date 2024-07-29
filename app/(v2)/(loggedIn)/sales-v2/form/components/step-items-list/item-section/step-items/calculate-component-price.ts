@@ -20,9 +20,7 @@ export async function fetchStepComponentsPrice({
     stepIndex,
 }: Props) {
     const depUid = getDepsUid(stepIndex, stepArray, stepForm);
-
     const pricings = await getStepPricings(depUid, stepForm.step.id);
-
     stepProducts = stepProducts.map((product) => {
         if (product._estimate)
             product._estimate.price = pricings.pricesByUid[product.uid];

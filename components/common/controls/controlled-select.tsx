@@ -43,6 +43,7 @@ interface Props<T> {
     type?: "select" | "combo";
     transformValue?(value?);
     size?: "sm" | "default" | "xs";
+    listMode?: boolean;
 }
 export default function ControlledSelect<
     TFieldValues extends FieldValues = FieldValues,
@@ -62,6 +63,7 @@ export default function ControlledSelect<
     Item,
     transformValue,
     size = "default",
+    listMode,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     const [list, setList] = useState<any>([]);
@@ -119,7 +121,13 @@ export default function ControlledSelect<
                             <Select
                                 disabled={props.disabled}
                                 onValueChange={field.onChange}
-                                value={field.value}
+                                {...(listMode
+                                    ? {
+                                          defaultValue: field.value,
+                                      }
+                                    : {
+                                          value: field.value,
+                                      })}
                             >
                                 <SelectTrigger
                                     className={cn(size == "sm" && "h-8")}

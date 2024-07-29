@@ -1,4 +1,3 @@
-import { itemFormBlocks } from "./form/item-form-blocks";
 import { DykeItemForm } from "./type";
 
 export default {

@@ -25,6 +25,7 @@ import PricingDependenciesModal from "../../modals/pricing-dependecies";
 import { Button } from "@/components/ui/button";
 import { sortComponents } from "../../../_action/sort-components";
 import { toast } from "sonner";
+import DevOnly from "@/_v2/components/common/dev-only";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -110,6 +111,7 @@ export function DykeInvoiceItemStepSection({
                             item.toggleStep(stepIndex);
                         }}
                     >
+                        <DevOnly>{stepForm.step.id} </DevOnly>
                         <span className="font-semibold">
                             {stepForm?.step?.title}:
                         </span>

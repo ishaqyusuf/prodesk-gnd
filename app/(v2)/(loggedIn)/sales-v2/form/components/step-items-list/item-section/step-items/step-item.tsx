@@ -186,7 +186,7 @@ export function StepItem({
                 </Menu>
             </div>
             <CardHeader className="border-b realtive flex-1 p-0 py-4">
-                {item.meta.stepSequence?.length ? (
+                {item.meta?.stepSequence?.length ? (
                     <div className="absolute top-0 right-0">
                         <Dot className="w-8 h-8 text-cyan-600" />
                     </div>

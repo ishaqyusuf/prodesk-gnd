@@ -67,6 +67,8 @@ export async function saveStepProduct(data: Props) {
         id,
         _meta,
         _estimate,
+        doorId,
+        isDoor,
         ...stepData
     } = data;
     _estimate.price = productData.price;
@@ -122,7 +124,7 @@ export async function saveStepProduct(data: Props) {
                 //         ...productData as any
                 //     }
                 //  }
-            },
+            } as any,
             include: {
                 product: true,
             },
@@ -147,7 +149,7 @@ export async function saveStepProduct(data: Props) {
                         },
                     },
                 },
-            },
+            } as any,
             include: {
                 product: true,
             },

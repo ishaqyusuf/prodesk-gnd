@@ -117,6 +117,8 @@ export default function EditStepItemModal({
         startSaving(async () => {
             const formData = form.getValues();
             const stepSequence = formData.meta.stepSequence.filter((s) => s.id);
+            // console.log(stepSequence);
+            // return;
             try {
                 stepSequence.map((s, i) => {
                     if (stepSequence.filter((f) => f.id == s.id).length > 1)
@@ -252,22 +254,23 @@ export default function EditStepItemModal({
                             </div>
                         </TabsContent>
                         <TabsContent value="step">
-                            <div className="flex gap-2 flex-wrap">
+                            <div className="flex gap-2 flex-col">
                                 {stepS.fields.map((f, fieldIndex) => (
                                     <div
-                                        className="inline-flex relative items-center group"
-                                        key={f.id}
+                                        className="flex flex-col relative items-center group"
+                                        key={f._id}
                                     >
                                         {fieldIndex != 0 && (
                                             <>
-                                                <Icons.chevronRight className="w-4 h-4" />
+                                                <Icons.chevronDown className="w-4 h-4" />
                                             </>
                                         )}
                                         <ControlledSelect
                                             control={form.control}
+                                            listMode
                                             type="combo"
                                             name={`meta.stepSequence.${fieldIndex}.id`}
-                                            className=""
+                                            className="w-full"
                                             size="sm"
                                             onSelect={(e) => {
                                                 const empties =
@@ -278,7 +281,6 @@ export default function EditStepItemModal({
                                                     );
                                                 const emptyLength =
                                                     empties.length <= 0;
-                                                console.log({ empties });
                                                 if (emptyLength)
                                                     stepS.append({});
                                             }}
