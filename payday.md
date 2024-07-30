@@ -2,7 +2,9 @@
 Shelf item search
 Shelf item auto pick when created
 shelf item delete.
-- JUL 29: 00.00 == 00.00
+- JUL 30: 00.00 == 00.00
+  - 08:00-
+- JUL 29: 01.45 == 01.45
   - 11:45-01:30
 --------------------------------
 PAYMENT INVOICE FOR LAST WEEK

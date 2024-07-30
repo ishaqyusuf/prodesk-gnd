@@ -37,12 +37,11 @@ export function DykeInvoiceItemStepSection({
 }: DykeItemStepSectionProps) {
     const form = useDykeForm();
     const item = useDykeItemCtx();
-    const stepValue = form.watch(
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value` as any
-    );
-    const [allowAdd, allowCustom] = form.watch([
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.meta.allowAdd`,
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.meta.allowCustom`,
+
+    const [stepValue, allowAdd, allowCustom] = form.watch([
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowAdd`,
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowCustom`,
     ] as any);
     const modal = useModal();
 
@@ -88,7 +87,6 @@ export function DykeInvoiceItemStepSection({
                 };
             })
         );
-        await toast.success("Saved.");
     };
 
     async function toggleStepSetting(key: keyof typeof stepForm.step.meta) {
@@ -168,6 +166,7 @@ export function DykeInvoiceItemStepSection({
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="p-8 border ">
+                {JSON.stringify({ allowAdd, allowCustom })}
                 {stepForm?.step?.title == "House Package Tool" ? (
                     // <HousePackageTool />
                     <>
@@ -183,6 +182,8 @@ export function DykeInvoiceItemStepSection({
                     </>
                 ) : (
                     <StepProducts
+                        allowAdd={allowAdd}
+                        allowCustom={allowCustom}
                         stepForm={stepForm}
                         stepIndex={stepIndex}
                         rowIndex={item.rowIndex}

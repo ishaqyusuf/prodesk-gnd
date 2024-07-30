@@ -47,8 +47,6 @@ export default function PricingDependenciesModal({
             return s.step;
         });
 
-    // console.log(steps);
-
     stepForm.step.meta.priceDepencies = deps;
     const _form = useForm({
         defaultValues: {

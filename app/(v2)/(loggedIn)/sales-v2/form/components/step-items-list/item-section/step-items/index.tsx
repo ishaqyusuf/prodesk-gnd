@@ -24,6 +24,8 @@ export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
     setStepProducts;
+    allowAdd;
+    allowCustom;
     sortMode?: boolean;
 }
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
@@ -31,6 +33,8 @@ export function StepProducts({
     stepForm,
     stepIndex,
     rowIndex,
+    allowAdd,
+    allowCustom,
     stepProducts,
     sortMode,
     setStepProducts,
@@ -41,7 +45,7 @@ export function StepProducts({
         selectProduct,
         ctx,
         deleteStepItem,
-        allowCustom,
+        // allowCustom,
         ...stepCtx
     } = useStepItems({
         stepForm,
@@ -49,7 +53,7 @@ export function StepProducts({
         setStepProducts,
         stepIndex,
         rowIndex,
-    });
+    } as any);
     const { isVisible, elementRef } = useIsVisible({});
     useEffect(() => {
         setTimeout(() => {
@@ -121,19 +125,21 @@ export function StepProducts({
                                 </Card>
                             </SortableItem>
                         ))}
-                    {/* <div className="p-4">
-                        <button
-                            onClick={() => {
-                                openStepForm();
-                            }}
-                            className={cn(
-                                "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
-                            )}
-                        >
-                            <Icons.add />
-                        </button>
-                    </div> */}
-                    {stepForm.step?.meta?.allowCustom && (
+                    {allowAdd && (
+                        <div className="p-4">
+                            <button
+                                onClick={() => {
+                                    openStepForm();
+                                }}
+                                className={cn(
+                                    "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                                )}
+                            >
+                                <Icons.add />
+                            </button>
+                        </div>
+                    )}
+                    {allowCustom && (
                         <>
                             <CustomInput
                                 currentValue={

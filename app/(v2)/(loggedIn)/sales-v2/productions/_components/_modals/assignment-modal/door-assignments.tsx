@@ -42,8 +42,8 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     }
     return (
         <div className="">
-            <div className="mx-4 ml-10 shidden sm:block">
-                <Table className="">
+            <div className="sm:mx-4 sm:ml-10 shidden sm:block">
+                <Table className="max-w-[80vw]">
                     <TableHeader className="bg-slate-100">
                         {/* <TableHead>Date</TableHead> */}
                         {!group.doorConfig.singleHandle && (
