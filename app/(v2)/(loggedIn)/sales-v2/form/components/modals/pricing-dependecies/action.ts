@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 import { DykeStepMeta } from "../../../../type";
 
-export async function savePriceDepencies(id, meta: DykeStepMeta) {
+export async function saveDykeMeta(id, meta: DykeStepMeta) {
     const resp = await prisma.dykeSteps.update({
         where: { id },
         data: {

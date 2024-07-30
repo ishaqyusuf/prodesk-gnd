@@ -6,7 +6,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { useDykeForm, useDykeItemCtx } from "../../../_hooks/form-context";
-import { DykeStep } from "../../../../type";
+import { DykeStep, DykeStepMeta } from "../../../../type";
 import ShelfItemIndex from "./shelf-item";
 
 import LineItemSection from "./multi-item-tab/line-item-section/line-item-section";
@@ -47,11 +47,12 @@ export function DykeInvoiceItemStepSection({
 
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
 
-    function pricingCondition() {
+    function conditionSettings(settingKey: keyof DykeStepMeta) {
         modal.openModal(
             <PricingDependenciesModal
                 stepIndex={stepIndex}
                 rowIndex={item.rowIndex}
+                settingKey={settingKey}
                 stepForm={stepForm}
                 form={form}
                 setStepProducts={setStepProducts}
@@ -134,8 +135,17 @@ export function DykeInvoiceItemStepSection({
                     </button>
                     <div className="px-2">
                         <Menu Icon={Icons.more}>
-                            <MenuItem onClick={pricingCondition}>
+                            <MenuItem
+                                onClick={() =>
+                                    conditionSettings("priceDepencies")
+                                }
+                            >
                                 Pricing Dependencies
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => conditionSettings("stateDeps")}
+                            >
+                                Component Dependencies
                             </MenuItem>
                             <MenuItem onClick={componentPrice}>
                                 Component Price
@@ -166,7 +176,6 @@ export function DykeInvoiceItemStepSection({
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="p-8 border ">
-                {JSON.stringify({ allowAdd, allowCustom })}
                 {stepForm?.step?.title == "House Package Tool" ? (
                     // <HousePackageTool />
                     <>

@@ -9,6 +9,7 @@ export function transformStepProducts(
     if (!prod.meta)
         meta = {
             stepSequence: [],
+            deleted: {},
         };
     let prodMeta: DykeProductMeta =
         prod.product?.meta || prod.door?.meta || ({} as any);
@@ -38,8 +39,9 @@ export function transformStepProducts(
                   description: prod.door.title,
                   meta: prodMeta,
               },
-        _estimate: {
+        _metaData: {
             price: null,
+            hidden: false,
         },
     };
 }

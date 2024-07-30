@@ -5,6 +5,7 @@ import { prisma } from "@/db";
 import { DykeDoorType } from "../../type";
 import { IStepProducts } from "../components/step-items-list/item-section/step-items";
 import { generateRandomString } from "@/lib/utils";
+import { transformStepProducts } from "../../dyke-utils";
 export interface SaveStepProductExtra {
     _meta: {
         isMoulding: boolean;
@@ -59,27 +60,22 @@ async function saveDykeDoor(data: Props) {
 }
 export async function saveStepProduct(data: Props) {
     // if (!data.product.value) data.product.value = data.product.title as any;
-    if (data._meta?.stepTitle == "Door") return await saveDykeDoor(data);
+    const doorMode = data._meta?.stepTitle == "Door";
+    // if (data._meta?.stepTitle == "Door") return await saveDykeDoor(data);
     const {
         product: { id: prodId, ...productData },
         dykeProductId,
         dykeStepId,
         id,
         _meta,
-        _estimate,
+        _metaData,
         doorId,
         isDoor,
         ...stepData
     } = data;
-    _estimate.price = productData.price;
+    _metaData.price = productData.price;
     if (!id) {
         if (_meta?.isMoulding && !_meta.mouldingCategoryId) {
-            // const d = await prisma.dykeCategories.create({
-            //     data: {
-            //         title: "Moulding",
-            //     },
-            // });
-            // _meta.mouldingCategoryId = d.id;
         }
 
         const s = await prisma.dykeStepProducts.create({
@@ -87,49 +83,47 @@ export async function saveStepProduct(data: Props) {
                 ...stepData,
                 uid: generateRandomString(5),
                 meta: stepData.meta as any,
-                product: {
-                    create: {
-                        ...productData,
-                        categoryId: undefined,
-                        // value: productData.title as any,
-                        meta: productData.meta as any,
-                        category: !_meta?.isMoulding
-                            ? undefined
-                            : {
-                                  connectOrCreate: {
-                                      where: {
-                                          title: "Moulding",
-                                      },
-                                      create: {
-                                          title: "Moulding",
-                                      },
-                                  },
-                              },
-                        // category: _meta?.mouldingCategoryId
-                        //     ? {
-                        //           connect: {
-                        //               id: _meta?.mouldingCategoryId as any,
-                        //           },
-                        //       }
-                        //     : undefined,
-                    } as any,
-                },
+                product: doorMode
+                    ? undefined
+                    : {
+                          create: {
+                              ...productData,
+                              categoryId: undefined,
+                              meta: productData.meta as any,
+                              category: !_meta?.isMoulding
+                                  ? undefined
+                                  : {
+                                        connectOrCreate: {
+                                            where: {
+                                                title: "Moulding",
+                                            },
+                                            create: {
+                                                title: "Moulding",
+                                            },
+                                        },
+                                    },
+                          } as any,
+                      },
+                door: doorMode
+                    ? {
+                          title: data.product.title as any,
+                          doorType: data._meta?.doorType,
+                          query: data._meta?.doorQuery,
+                          img: data.product.img,
+                          meta: productData.meta as any,
+                      }
+                    : undefined,
                 step: {
                     connect: {
                         id: dykeStepId,
                     },
                 },
-                //  product: {
-                //     create: {
-                //         ...productData as any
-                //     }
-                //  }
             } as any,
             include: {
                 product: true,
             },
         });
-        return { ...s, _estimate };
+        return { ...s, _metaData };
     } else {
         const _ss = await prisma.dykeStepProducts.update({
             where: { id: id },
@@ -137,23 +131,41 @@ export async function saveStepProduct(data: Props) {
                 ...stepData,
                 meta: stepData.meta as any,
                 updatedAt: new Date(),
-                product: {
-                    update: {
-                        where: {
-                            id: prodId,
-                        },
-                        data: {
-                            ...productData,
-                            // value: productData.title as any,
-                            meta: productData.meta as any,
-                        },
-                    },
-                },
+                product: doorMode
+                    ? undefined
+                    : {
+                          update: {
+                              where: {
+                                  id: prodId,
+                              },
+                              data: {
+                                  ...productData,
+                                  // value: productData.title as any,
+                                  meta: productData.meta as any,
+                              },
+                          },
+                      },
+                door: doorMode
+                    ? {
+                          update: {
+                              where: { id: prodId },
+                              data: {
+                                  title: productData.title as any,
+                                  price: productData.price,
+                                  doorType: data._meta?.doorType,
+                                  query: data._meta?.doorQuery,
+                                  img: productData.img,
+                                  meta: productData.meta as any,
+                              },
+                          },
+                      }
+                    : undefined,
             } as any,
             include: {
                 product: true,
+                door: true,
             },
         });
-        return { ..._ss, _estimate };
+        return { ...transformStepProducts({ ..._ss }), _metaData };
     }
 }

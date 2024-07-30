@@ -78,6 +78,7 @@ export interface DykeFormStepMeta {
 }
 export interface DykeStepMeta {
     priceDepencies?: { [itemId: string]: boolean };
+    stateDeps?: { [itemId: string]: boolean };
     custom?: boolean;
     allowCustom?: boolean;
     allowAdd?: boolean;
@@ -87,6 +88,7 @@ export interface DykeStepItemMeta {
 }
 export interface StepProdctMeta {
     stepSequence: { id?: number }[];
+    deleted: { [uid in string]: boolean };
 }
 export type ItemStepSequence = {
     [id in number]: {

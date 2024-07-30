@@ -28,6 +28,7 @@ export async function getStepForm(id) {
             ...step,
             meta: (step.meta || {
                 priceDepencies: {},
+                stateDeps: {},
             }) as DykeStepMeta,
         },
         item: {

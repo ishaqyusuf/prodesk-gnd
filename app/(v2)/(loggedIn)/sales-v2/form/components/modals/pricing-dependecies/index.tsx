@@ -2,14 +2,14 @@
 
 import Modal from "@/components/common/modal";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { DykeForm, DykeStep } from "../../../../type";
+import { DykeForm, DykeStep, DykeStepMeta } from "../../../../type";
 import { Form } from "@/components/ui/form";
 
 import { useModal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { savePriceDepencies } from "./action";
-import { fetchStepComponentsPrice } from "../../step-items-list/item-section/step-items/calculate-component-price";
+import { saveDykeMeta } from "./action";
+import { initStepComponents } from "../../step-items-list/item-section/step-items/init-step-components";
 
 interface Props {
     form: UseFormReturn<DykeForm>;
@@ -18,12 +18,14 @@ interface Props {
     rowIndex;
     stepProducts;
     setStepProducts;
+    settingKey: keyof DykeStepMeta;
 }
 export default function PricingDependenciesModal({
     form,
     stepForm,
     stepIndex,
     rowIndex,
+    settingKey,
     stepProducts,
     setStepProducts,
 }: Props) {
@@ -32,8 +34,8 @@ export default function PricingDependenciesModal({
     );
 
     const deps = {};
-    if (!stepForm.step.meta.priceDepencies)
-        stepForm.step.meta.priceDepencies = {};
+    if (!stepForm.step.meta[settingKey])
+        stepForm.step.meta[settingKey] = {} as any;
     const steps = stepArray
         .filter(
             (_, i) =>
@@ -42,7 +44,7 @@ export default function PricingDependenciesModal({
                 ["Door", "Moulding"].every((s) => s != _.step.title)
         )
         .map((s) => {
-            const checked = stepForm.step.meta.priceDepencies[s.step.uid];
+            const checked = stepForm.step.meta[settingKey][s.step.uid];
             if (checked) deps[s.step.uid] = true;
             return s.step;
         });
@@ -54,18 +56,15 @@ export default function PricingDependenciesModal({
         },
     });
     async function save() {
-        stepForm.step.meta.priceDepencies = _form.getValues("deps");
-        delete (stepForm.step.meta as any).priceConditions;
-        const _ = await savePriceDepencies(
-            stepForm.step.id,
-            stepForm.step.meta
-        );
+        stepForm.step.meta[settingKey] = _form.getValues("deps") as any;
+        // delete (stepForm.step.meta as any)[settingKey];
+        const _ = await saveDykeMeta(stepForm.step.id, stepForm.step.meta);
         form.setValue(
             `itemArray.${rowIndex}.item.formStepArray.${stepIndex}` as any,
             stepForm
         );
         setStepProducts(
-            await fetchStepComponentsPrice({
+            await initStepComponents({
                 stepForm,
                 stepProducts,
                 stepIndex,
@@ -79,7 +78,11 @@ export default function PricingDependenciesModal({
         <Form {..._form}>
             <Modal.Content size="sm">
                 <Modal.Header
-                    title={`Price Variation Dependencies`}
+                    title={
+                        settingKey == "priceDepencies"
+                            ? `Price Variation Dependencies`
+                            : `Component Dependencies`
+                    }
                     subtitle={stepForm.step.title}
                 />
                 <Table>

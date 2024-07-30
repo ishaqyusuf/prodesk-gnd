@@ -20,6 +20,9 @@ import { motion } from "framer-motion";
 import { Sortable, SortableItem } from "@/components/ui/sortable";
 import { closestCorners } from "@dnd-kit/core";
 import { Card } from "@/components/ui/card";
+import { useModal } from "@/components/common/modal/provider";
+import DeleteItemModal from "../../../modals/delete-item-modal";
+import { useDykeForm } from "../../../../_hooks/form-context";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -54,6 +57,8 @@ export function StepProducts({
         stepIndex,
         rowIndex,
     } as any);
+
+    const form = useDykeForm();
     const { isVisible, elementRef } = useIsVisible({});
     useEffect(() => {
         setTimeout(() => {
@@ -76,7 +81,7 @@ export function StepProducts({
             }
         }, 300);
     }, []);
-
+    const modal = useModal();
     return (
         <motion.div
             ref={elementRef}
@@ -115,7 +120,16 @@ export function StepProducts({
                                         loadingStep={ctx.loadingStep}
                                         item={item}
                                         deleteStepItem={async () => {
-                                            await deleteStepItem(i, item);
+                                            // await deleteStepItem(i, item);
+                                            modal.openModal(
+                                                <DeleteItemModal
+                                                    lineItemIndex={rowIndex}
+                                                    stepIndex={stepIndex}
+                                                    invoiceForm={form}
+                                                    stepForm={stepForm}
+                                                    stepItem={item}
+                                                />
+                                            );
                                         }}
                                         setStepProducts={setStepProducts}
                                         openStepForm={openStepForm}
@@ -157,7 +171,7 @@ export function StepProducts({
                                             },
                                         },
                                         dykeStepId: stepForm.step.id,
-                                        _estimate: {
+                                        _metaData: {
                                             price: 0,
                                         },
                                     } as any);

@@ -98,7 +98,7 @@ export function StepItem({
             setStepProducts((prods) => {
                 return [...prods].map((prod, index) => {
                     if (prod.uid == item.uid)
-                        prod._estimate.price = Number(price);
+                        prod._metaData.price = Number(price);
                     return prod;
                 });
             });
@@ -107,7 +107,7 @@ export function StepItem({
     }
     const onEditPrice = async (e) => {
         e.preventDefault();
-        setPrice(item._estimate.price);
+        setPrice(item._metaData.price);
         setEditPrice(true);
     };
     return (
@@ -178,6 +178,7 @@ export function StepItem({
                             </MenuItem>
                             <DeleteRowAction
                                 menu
+                                noToast
                                 row={item}
                                 action={deleteStepItem}
                             />
@@ -249,8 +250,8 @@ export function StepItem({
                             )}
                         </span>
                     ) : (
-                        item._estimate.price > 0 && (
-                            <Money value={item._estimate.price} />
+                        item._metaData.price > 0 && (
+                            <Money value={item._metaData.price} />
                         )
                     )}
                 </CardDescription>

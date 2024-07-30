@@ -7,6 +7,11 @@ TODO: JUN 19
     -  Delivery & Pickup
     -  
 TODO: 
+    - delete door not working
+    - zero not deleting
+    - custom
+    - door size with qty and swing
+    - door not saving price.
     <!-- - Payment Modal in Invoice Edit -->
     <!-- - Add view button to production list -->
     <!-- - Production navigation highlights products -->
