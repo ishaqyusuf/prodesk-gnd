@@ -106,11 +106,13 @@ export async function saveStepProduct(data: Props) {
                       },
                 door: doorMode
                     ? {
-                          title: data.product.title as any,
-                          doorType: data._meta?.doorType,
-                          query: data._meta?.doorQuery,
-                          img: data.product.img,
-                          meta: productData.meta as any,
+                          create: {
+                              title: data.product.title as any,
+                              doorType: data._meta?.doorType,
+                              query: data._meta?.doorQuery,
+                              img: data.product.img,
+                              meta: productData.meta as any,
+                          },
                       }
                     : undefined,
                 step: {

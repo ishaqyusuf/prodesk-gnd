@@ -53,7 +53,7 @@ export default function DeleteItemModal({
     const modal = useModal();
     async function submit() {
         const d = form.getValues("deletables");
-        console.log(d);
+
         const stepItemMeta = stepItem.meta;
         const stateDeps = {};
         Object.entries({ ...stepItemMeta.deleted, ...d }).map(
