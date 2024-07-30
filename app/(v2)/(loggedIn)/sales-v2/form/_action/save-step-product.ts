@@ -123,6 +123,7 @@ export async function saveStepProduct(data: Props) {
             } as any,
             include: {
                 product: true,
+                door: true,
             },
         });
         return { ...s, _metaData };

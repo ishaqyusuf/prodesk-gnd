@@ -304,6 +304,8 @@ export default function useStepItems({
     }
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[number]) {
+        if (stepItem.door) stepItem.product = stepItem.door as any;
+        console.log(stepItem);
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];
@@ -316,6 +318,11 @@ export default function useStepItems({
     function openStepForm(itm?) {
         const {
             id,
+            uid,
+            custom,
+            sortIndex,
+            doorId,
+
             product: {
                 id: prodId,
                 createdAt,

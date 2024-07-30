@@ -84,7 +84,6 @@ export default function SelectDoorHeightsModal({
         (async () => {
             const _sizes = await getDimensionSizeList(height, isBifold);
             let _defData: any = {};
-
             Object.entries(heights || {}).map(([k, v]) => {
                 const s = _sizes.find((s) => s.dim == (k as any));
                 _defData[k] = {
@@ -118,7 +117,6 @@ export default function SelectDoorHeightsModal({
         };
         priceTags.doorSizePriceTag = {};
         delete priceTags.moulding;
-        // console.log(sizesData);
         Object.entries(sizesData || {}).map(([dim, { checked }]) => {
             const size = sizes.find((_) => dim == _.dim);
             if (checked && size) {
