@@ -74,14 +74,7 @@ export function DykeInvoiceItemStepSection({
         setSortMode(false);
         await sortComponents(
             stepProducts.map((prod, index) => {
-                const data = (prod as any)?.isDoor
-                    ? {
-                          meta: {
-                              ...(prod?.product?.meta || {}),
-                              sortIndex: index,
-                          },
-                      }
-                    : { sortIndex: index };
+                const data = { sortIndex: index };
                 return {
                     id: prod.id,
                     data,
