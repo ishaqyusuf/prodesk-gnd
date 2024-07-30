@@ -92,7 +92,7 @@ export default function DeleteItemModal({
                                     <TableRow>
                                         <TableCell>
                                             <Button
-                                                onSubmit={deleteItem}
+                                                onClick={deleteItem}
                                                 className="w-full"
                                                 variant="destructive"
                                             >
