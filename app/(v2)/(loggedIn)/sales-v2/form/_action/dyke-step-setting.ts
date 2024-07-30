@@ -11,3 +11,12 @@ export async function updateDykeStepMeta(id, meta) {
         },
     });
 }
+export async function updateDykeStepProductMeta(id, meta) {
+    await prisma.dykeStepProducts.update({
+        where: { id },
+        data: {
+            meta,
+            updatedAt: new Date(0),
+        },
+    });
+}

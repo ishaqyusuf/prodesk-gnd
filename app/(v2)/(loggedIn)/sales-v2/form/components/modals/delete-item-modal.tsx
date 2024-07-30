@@ -8,7 +8,13 @@ import {
     getDykeStepState,
     getFormSteps,
 } from "../step-items-list/item-section/step-items/init-step-components";
-import { Table, TableBody, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import {
+    updateDykeStepMeta,
+    updateDykeStepProductMeta,
+} from "../../_action/dyke-step-setting";
+import { useModal } from "@/components/common/modal/provider";
 
 interface Props {
     lineItemIndex: number;
@@ -16,6 +22,7 @@ interface Props {
     invoiceForm: UseFormReturn<DykeForm>;
     stepItem: IStepProducts[number];
     stepForm: DykeStep;
+    onComplete;
 }
 export default function DeleteItemModal({
     lineItemIndex,
@@ -23,6 +30,7 @@ export default function DeleteItemModal({
     invoiceForm,
     stepForm,
     stepItem,
+    onComplete,
 }: Props) {
     const form = useForm({
         defaultValues: {
@@ -39,10 +47,26 @@ export default function DeleteItemModal({
         );
         const _depFormSteps = getFormSteps(formArray, stepIndex);
         const stateDeps = getDykeStepState(_depFormSteps, stepForm);
-        console.log({ stateDeps, stepForm });
+        console.log({ stateDeps, stepItem, stepForm });
         setDeletables(stateDeps);
     }, []);
-    async function submit() {}
+    const modal = useModal();
+    async function submit() {
+        const d = form.getValues("deletables");
+        console.log(d);
+        const stepItemMeta = stepItem.meta;
+        const stateDeps = {};
+        Object.entries({ ...stepItemMeta.deleted, ...d }).map(
+            ([a, b]) => b && (stateDeps[a] = true)
+        );
+        stepItemMeta.deleted = stateDeps;
+        await updateDykeStepProductMeta(stepItem.id, stepItemMeta);
+        stepItem._metaData.hidden = true;
+        stepItem.meta = stepItemMeta;
+        console.log(stepItemMeta);
+        onComplete && onComplete(stepItem);
+        modal.close();
+    }
     return (
         <Form {...form}>
             <Modal.Content>
@@ -58,7 +82,19 @@ export default function DeleteItemModal({
                             <Table>
                                 <TableBody>
                                     {deletables?.map((d, i) => (
-                                        <TableRow key={i}></TableRow>
+                                        <TableRow key={i}>
+                                            <TableCell>
+                                                <ControlledCheckbox
+                                                    control={form.control}
+                                                    name={
+                                                        `deletables.${d.key}` as any
+                                                    }
+                                                    label={d.steps
+                                                        .map((s) => s.value)
+                                                        .join(" & ")}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>

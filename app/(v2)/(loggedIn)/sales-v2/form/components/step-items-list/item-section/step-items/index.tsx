@@ -82,6 +82,14 @@ export function StepProducts({
         }, 300);
     }, []);
     const modal = useModal();
+    const onDeleteItem = (stepItem) => {
+        setStepProducts((prods) => {
+            let _prods = [...prods];
+            let prodIndex = _prods.findIndex((p) => p.uid == stepItem.uid);
+            if (prodIndex >= 0) _prods[prodIndex] = stepItem;
+            return _prods;
+        });
+    };
     return (
         <motion.div
             ref={elementRef}
@@ -99,7 +107,7 @@ export function StepProducts({
             >
                 <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {stepProducts
-                        ?.filter((s) => !s.custom)
+                        ?.filter((s) => !s.custom && !s._metaData?.hidden)
                         ?.map((item, i) => (
                             <SortableItem
                                 key={item.id}
@@ -120,13 +128,13 @@ export function StepProducts({
                                         loadingStep={ctx.loadingStep}
                                         item={item}
                                         deleteStepItem={async () => {
-                                            // await deleteStepItem(i, item);
                                             modal.openModal(
                                                 <DeleteItemModal
                                                     lineItemIndex={rowIndex}
                                                     stepIndex={stepIndex}
                                                     invoiceForm={form}
                                                     stepForm={stepForm}
+                                                    onComplete={onDeleteItem}
                                                     stepItem={item}
                                                 />
                                             );

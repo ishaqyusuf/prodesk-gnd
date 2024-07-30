@@ -11,7 +11,8 @@ TODO:
     - zero not deleting
     - custom
     - door size with qty and swing
-    - door not saving price.
+    <!-- - door not saving price. -->
+    <!--  -->
     <!-- - Payment Modal in Invoice Edit -->
     <!-- - Add view button to production list -->
     <!-- - Production navigation highlights products -->
