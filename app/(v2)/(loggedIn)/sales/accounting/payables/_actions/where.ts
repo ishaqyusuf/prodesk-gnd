@@ -27,12 +27,15 @@ export function wherePayableSalesOrders(query) {
                 [numS]: numSearch,
             };
         } else {
+            const _query = { contains: query._q };
             where.OR = [
                 {
-                    orderId: query._q,
+                    orderId: _query,
                 },
                 {
-                    amountDue: {},
+                    customer: {
+                        OR: [{ businessName: _query }, { name: _query }],
+                    },
                 },
             ];
         }
