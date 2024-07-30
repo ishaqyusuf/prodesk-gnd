@@ -253,7 +253,7 @@ export default function useStepItems({
             );
             const seq =
                 form.getValues(`itemArray.${item.rowIndex}.stepSequence`) || {};
-            const stepSeq = stepProd.meta.stepSequence;
+            const stepSeq = stepProd.meta?.stepSequence;
             if (stepSeq?.length) {
                 console.log(stepProd);
                 seq[stepProd.uid] = stepSeq;

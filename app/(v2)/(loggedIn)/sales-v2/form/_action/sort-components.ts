@@ -8,7 +8,6 @@ export async function sortComponents(components: { id; data }[]) {
             let updateFn;
             if (c?.data?.meta) updateFn = prisma.dykeDoors.update;
             else updateFn = prisma.dykeStepProducts.update;
-
             await updateFn({
                 where: {
                     id: c.id,
