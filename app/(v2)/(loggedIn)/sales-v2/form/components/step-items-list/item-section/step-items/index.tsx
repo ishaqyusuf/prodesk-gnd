@@ -86,8 +86,9 @@ export function StepProducts({
         setStepProducts((prods) => {
             let _prods = [...prods];
             let prodIndex = _prods.findIndex((p) => p.uid == stepItem.uid);
-            if (prodIndex >= 0) _prods[prodIndex] = stepItem;
-            return _prods;
+            if (prodIndex >= 0)
+                _prods[prodIndex] = stepItem.deletedAt ? null : stepItem;
+            return _prods.filter(Boolean);
         });
     };
     return (

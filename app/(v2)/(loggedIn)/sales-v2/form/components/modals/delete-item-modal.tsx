@@ -15,6 +15,8 @@ import {
     updateDykeStepProductMeta,
 } from "../../_action/dyke-step-setting";
 import { useModal } from "@/components/common/modal/provider";
+import { _deleteStepItem } from "../step-items-list/item-section/step-items/_actions";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     lineItemIndex: number;
@@ -67,6 +69,12 @@ export default function DeleteItemModal({
         onComplete && onComplete(stepItem);
         modal.close();
     }
+    async function deleteItem() {
+        await _deleteStepItem(stepItem);
+        stepItem.deletedAt = new Date();
+        onComplete && onComplete(stepItem);
+        modal.close();
+    }
     return (
         <Form {...form}>
             <Modal.Content>
@@ -81,6 +89,17 @@ export default function DeleteItemModal({
                         <div className="">
                             <Table>
                                 <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Button
+                                                onSubmit={deleteItem}
+                                                className="w-full"
+                                                variant="destructive"
+                                            >
+                                                Delete From System
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
                                     {deletables?.map((d, i) => (
                                         <TableRow key={i}>
                                             <TableCell>
@@ -117,7 +136,7 @@ export default function DeleteItemModal({
                         <Modal.Footer
                             submitText="Delete"
                             cancelText="Cancel"
-                            onSubmit={submit}
+                            onSubmit={deleteItem}
                         />
                     </>
                 )}

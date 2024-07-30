@@ -11,11 +11,12 @@ export async function _deleteStepItem(item: IStepProducts[0]) {
         },
         data: {
             deletedAt: new Date(),
-            product: {
-                update: {
-                    deletedAt: new Date(),
-                },
-            },
+            // product: {
+            //     // update: {
+            //     //     deletedAt: new Date(),
+            //     // },
+            // },
+            // door: {},
         },
         include: {
             product: true,
