@@ -322,7 +322,7 @@ export default function useStepItems({
             custom,
             sortIndex,
             doorId,
-
+            door: { query },
             product: {
                 id: prodId,
                 createdAt,
@@ -331,21 +331,20 @@ export default function useStepItems({
                 description,
                 img,
                 meta,
-                query,
+                // query,
                 ...prod
             },
             dykeProductId,
             ...stepProd
-        } = itm ||
-        stepProducts.filter((s) => (s.product as any).query)[0] ||
-        stepProducts[0] ||
-        ({
-            dykeStepId: stepForm.step?.id,
-            nextStepId: null,
-            product: {
-                meta: {},
-            },
-        } as IStepProducts[0]);
+        }: IStepProducts[0] = itm ||
+            stepProducts.filter((s) => !s._metaData.hidden)[0] || {
+                dykeStepId: stepForm.step?.id,
+                nextStepId: null,
+                product: {
+                    meta: {},
+                },
+            };
+        if (!itm) stepProd.meta.deleted = {};
         let _meta: SaveStepProductExtra["_meta"] = {
             isMoulding: doorType == "Moulding",
             doorType: doorType,
