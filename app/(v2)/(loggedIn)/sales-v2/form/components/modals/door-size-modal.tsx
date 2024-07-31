@@ -60,6 +60,7 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
     useEffect(() => {
         const _values = {};
         const doors = form.getValues(`${basePath}._doorForm` as any);
+        console.log({ doors });
         Object.entries(doors || {}).map(([size, doorForm]) => {
             const { swing, jambSizePrice, lhQty, rhQty } = doorForm as any;
             _values[size] = {
@@ -74,6 +75,7 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
     const modal = useModal();
     function onSubmit() {
         const doors = form.getValues(`${basePath}._doorForm` as any) || {};
+
         const priceTags: HousePackageToolMeta["priceTags"] = form.getValues(
             `${basePath}.priceTags` as any
         ) || {
@@ -96,9 +98,11 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                 };
             }
         );
+        // console.log({ newDoorForm });
+        // return;
         form.setValue(`${basePath}._doorForm` as any, newDoorForm);
         form.setValue(`${basePath}.checked` as any, true);
-        console.log(_formData);
+        // console.log(_formData);
         modal.close();
     }
     function onCancel() {

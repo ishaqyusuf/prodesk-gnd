@@ -31,7 +31,7 @@ export default function HousePackageSizeLineItem({
     return (
         <TableRow>
             <TableCell>{size.dimFt}</TableCell>
-            {componentItem.isComponent.garage && (
+            {componentItem.isComponent.hasSwing && (
                 <TableCell className="h-[180px]">
                     <ControlledSelect
                         size="sm"

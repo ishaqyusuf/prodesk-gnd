@@ -95,7 +95,8 @@ function initializeMultiComponent(data: DykeForm) {
                 }
                 Object.keys(c._doorForm || {}).map((k) => {
                     const df = c._doorForm?.[k];
-                    if (!c.heights?.[k]?.checked && df) {
+                    // !c.heights?.[k]?.checked && df
+                    if (df?.id && !df?.lhQty && !df?.rhQty) {
                         trash.doorForms.push(df.id);
                         delete c._doorForm?.[k];
                     }

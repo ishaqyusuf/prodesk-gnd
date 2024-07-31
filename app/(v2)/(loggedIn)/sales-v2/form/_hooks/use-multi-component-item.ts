@@ -127,8 +127,9 @@ export function useMultiComponentItem(componentTitle) {
                     let totalPrice = 0;
                     Object.entries(cData._doorForm).map(
                         ([_size, _doorForm]) => {
-                            if (!cData.heights?.[_size]?.checked) return;
+                            // if (!cData.heights?.[_size]?.checked) return;
                             let _qty = sum([_doorForm.lhQty, _doorForm.rhQty]);
+                            if (!_qty) return;
                             let _linePrice = _doorForm.lineTotal;
 
                             if (_size == dim) {

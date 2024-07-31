@@ -14,6 +14,7 @@ import { useModal } from "@/components/common/modal/provider";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 import SelectDoorHeightsModal from "../../../../modals/select-door-heights";
 import { getDykeStepDoorByProductId } from "../../../../../_action/get-dyke-step-doors";
+import { useDoorSizes } from "../../../../../_hooks/use-door-size";
 export default function HousePackageTool({ componentTitle }) {
     const componentItem = useMultiComponentItem(componentTitle);
     const { item, form, _setSizeList, doorConfig } = componentItem;
@@ -22,6 +23,7 @@ export default function HousePackageTool({ componentTitle }) {
         componentItem.initializeSizes();
     }, []);
     const modal = useModal();
+    const { sizes, isType } = useDoorSizes(form, item.rowIndex, componentTitle);
     async function editSize() {
         const i = item.get.data();
         const formStep = i.item.formStepArray.find(
@@ -84,7 +86,7 @@ export default function HousePackageTool({ componentTitle }) {
                     <TableHead></TableHead>
                 </TableHeader>
                 <TableBody>
-                    {componentItem.sizeList.map((row) => (
+                    {sizes.map((row) => (
                         <HousePackageSizeLineItem
                             size={row}
                             componentItem={componentItem}
@@ -109,11 +111,11 @@ export default function HousePackageTool({ componentTitle }) {
                     </TableRow>
                 </TableBody>
             </Table>
-            <div className="flex justify-end gap-4">
+            {/* <div className="flex justify-end gap-4">
                 <Button onClick={editSize} type="button" variant={"outline"}>
                     Edit Size
                 </Button>
-            </div>
+            </div> */}
         </>
     );
 }

@@ -34,7 +34,7 @@ export function useDoorSizes(
                 _sizes.map((s) => {
                     return {
                         ...s,
-                        price: doorPrice[s.dimFt],
+                        price: doorPrice?.[s.dimFt],
                     };
                 })
             );
