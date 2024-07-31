@@ -231,6 +231,7 @@ export function useMultiComponentSizeRow(
         keys.lineTotal,
         keys.unitPrice,
         keys.componentsTotal,
+        `order.meta.calculatedPriceMode`,
         keys.overridePrice,
     ] as any);
 
@@ -239,9 +240,13 @@ export function useMultiComponentSizeRow(
 
         const _unitPrice = sum(
             calculatedPriceMode
-                ? overridePrice
-                    ? [overridePrice]
-                    : [jambSizePrice, componentsTotal, doorPrice]
+                ? [jambSizePrice, componentsTotal, doorPrice]
+                : [doorPrice]
+        );
+        console.log(
+            { _unitPrice },
+            calculatedPriceMode
+                ? [jambSizePrice, componentsTotal, doorPrice]
                 : [doorPrice]
         );
         const _totalLinePrice = math.multiply(qty, _unitPrice);
