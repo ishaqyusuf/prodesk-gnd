@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import DevOnly from "@/_v2/components/common/dev-only";
 
 interface Props {
     size: SizeForm[string];
@@ -76,7 +77,7 @@ export default function HousePackageSizeLineItem({
             {componentItem.calculatedPriceMode ? (
                 <>
                     <TableCell className="hidden lg:table-cell">
-                        {sizeRow.overridePrice || "-"}
+                        <DevOnly>{sizeRow.overridePrice || "-"}</DevOnly>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button size="sm" variant="outline">
@@ -122,7 +123,7 @@ export default function HousePackageSizeLineItem({
                                                     </div>
                                                 </div>
                                             ))}
-                                        <ControlledInput
+                                        {/* <ControlledInput
                                             control={form.control}
                                             label={"Edit Price"}
                                             type="number"
@@ -130,7 +131,7 @@ export default function HousePackageSizeLineItem({
                                                 sizeRow.keys
                                                     .overridePrice as any
                                             }
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
                             </PopoverContent>
