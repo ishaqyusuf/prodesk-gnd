@@ -6,6 +6,7 @@ import { getStepForm } from "./get-dyke-step";
 import {
     DykeDoorType,
     DykeFormStepMeta,
+    DykeProductMeta,
     DykeSalesDoor,
     MultiDyke,
     ShelfItemMeta,
@@ -78,6 +79,11 @@ export async function getDykeFormAction(type, slug, query?) {
                         //     ...restoreQuery
                         // },
                         include: {
+                            stepProduct: {
+                                include: {
+                                    door: true,
+                                },
+                            },
                             doors: {
                                 where: {
                                     ...restoreQuery,
@@ -195,13 +201,30 @@ export async function getDykeFormAction(type, slug, query?) {
                 });
                 return {
                     ...item,
-                    housePackageTool: {
-                        ...(item.housePackageTool || {}),
-                        meta: (item?.housePackageTool?.meta ||
-                            {}) as any as HousePackageToolMeta,
-                        _doorForm,
-                        _doorFormDefaultValue,
-                    },
+                    housePackageTool: item.housePackageTool
+                        ? {
+                              ...(item.housePackageTool || {}),
+                              meta: (item?.housePackageTool?.meta ||
+                                  {}) as any as HousePackageToolMeta,
+                              _doorForm,
+                              _doorFormDefaultValue,
+                              stepProduct: item.housePackageTool.stepProduct
+                                  ? {
+                                        ...(item.housePackageTool.stepProduct ||
+                                            {}),
+                                        meta: item.housePackageTool.stepProduct
+                                            ?.meta as StepProdctMeta,
+                                        door: {
+                                            ...(item.housePackageTool
+                                                .stepProduct.door || {}),
+                                            meta: item.housePackageTool
+                                                ?.stepProduct?.door
+                                                ?.meta as any as DykeProductMeta,
+                                        },
+                                    }
+                                  : undefined,
+                          }
+                        : undefined,
                     meta: item.meta as any as ISalesOrderItemMeta,
                     formSteps: item.formSteps
                         .map((item) => ({
@@ -380,6 +403,9 @@ export async function getDykeFormAction(type, slug, query?) {
                             hptId: item.housePackageTool.id as any,
                             doorTotalPrice: price,
                             priceTags,
+                            stepProductId: item.housePackageTool.stepProductId,
+                            stepProduct: item.housePackageTool
+                                .stepProduct as any,
                         });
 
                         footerPrices[uid] = {

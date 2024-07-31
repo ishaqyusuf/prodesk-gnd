@@ -52,7 +52,6 @@ export default function EditStepItemModal({
     root,
 }: Props) {
     const { ...defaultValues } = item;
-    console.log(defaultValues);
     if (!item.id) defaultValues.product.title = "";
     if (!defaultValues.meta.stepSequence?.length)
         defaultValues.meta.stepSequence = [{}] as any;

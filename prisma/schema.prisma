@@ -1155,22 +1155,24 @@ model OrderItemDelivery {
 }
 
 model HousePackageTools {
-    id             Int                @unique @default(autoincrement())
-    orderItemId    Int                @unique
-    height         String?
-    doorType       String?
-    doorId         Int?
-    dykeDoorId     Int?
-    jambSizeId     Int?
-    casingId       Int?
-    moldingId      Int?
-    totalPrice     Float?             @default(0)
-    totalDoors     Int?               @default(0)
-    meta           Json?              @db.Json
-    salesOrderId   Int
-    createdAt      DateTime?          @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?          @updatedAt
-    deletedAt      DateTime?          @db.Timestamp(0)
+    id            Int       @unique @default(autoincrement())
+    orderItemId   Int       @unique
+    height        String?
+    doorType      String?
+    doorId        Int?
+    dykeDoorId    Int?
+    jambSizeId    Int?
+    casingId      Int?
+    moldingId     Int?
+    stepProductId Int?
+    totalPrice    Float?    @default(0)
+    totalDoors    Int?      @default(0)
+    meta          Json?     @db.Json
+    salesOrderId  Int
+    createdAt     DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt     DateTime? @updatedAt
+    deletedAt     DateTime? @db.Timestamp(0)
+
     order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
     salesOrderItem SalesOrderItems    @relation(fields: [orderItemId], references: [id])
     door           DykeDoors?         @relation(name: "door", fields: [dykeDoorId], references: [id])
@@ -1179,7 +1181,9 @@ model HousePackageTools {
     casing         DykeProducts?      @relation(name: "casing", fields: [casingId], references: [id])
     molding        DykeProducts?      @relation(name: "molding", fields: [moldingId], references: [id])
     doors          DykeSalesDoors[]
+    stepProduct    DykeStepProducts?  @relation(fields: [stepProductId], references: [id])
 
+    @@index([stepProductId])
     @@index([salesOrderId])
     @@index([dykeDoorId])
     @@index([doorId])
@@ -1596,21 +1600,22 @@ model DykeCategories {
 }
 
 model DykeStepProducts {
-    id            Int           @unique @default(autoincrement())
-    uid           String?       @unique
-    custom        Boolean?      @default(false)
-    sortIndex     Int?
-    dykeProductId Int?
-    doorId        Int?
-    dykeStepId    Int
-    nextStepId    Int?
-    meta          Json?         @db.Json
-    createdAt     DateTime?     @default(now()) @db.Timestamp(0)
-    updatedAt     DateTime?     @updatedAt
-    deletedAt     DateTime?     @db.Timestamp(0)
-    product       DykeProducts? @relation(fields: [dykeProductId], references: [id])
-    door          DykeDoors?    @relation(fields: [doorId], references: [id])
-    step          DykeSteps     @relation(fields: [dykeStepId], references: [id])
+    id                Int                 @unique @default(autoincrement())
+    uid               String?             @unique
+    custom            Boolean?            @default(false)
+    sortIndex         Int?
+    dykeProductId     Int?
+    doorId            Int?
+    dykeStepId        Int
+    nextStepId        Int?
+    housePackageTools HousePackageTools[]
+    meta              Json?               @db.Json
+    createdAt         DateTime?           @default(now()) @db.Timestamp(0)
+    updatedAt         DateTime?           @updatedAt
+    deletedAt         DateTime?           @db.Timestamp(0)
+    product           DykeProducts?       @relation(fields: [dykeProductId], references: [id])
+    door              DykeDoors?          @relation(fields: [doorId], references: [id])
+    step              DykeSteps           @relation(fields: [dykeStepId], references: [id])
 
     @@index([dykeStepId])
     @@index([dykeProductId])

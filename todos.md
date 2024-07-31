@@ -11,7 +11,7 @@ TODO:
     - zero not deleting
     - custom
     - door size with qty and swing
-    - search on payables
+    <!-- - search on payables. -->
     - batch delete item.
     <!-- - door not saving price. -->
     <!--  -->

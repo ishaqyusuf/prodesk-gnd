@@ -161,6 +161,7 @@ export default function useStepItems({
                                               doorSizePriceTag: {},
                                           },
                             },
+                            stepProduct: null as any,
                         }
                     );
                     break;
@@ -175,16 +176,6 @@ export default function useStepItems({
                         `itemArray.${item.rowIndex}.item.housePackageTool.dykeDoorId`,
                         stepProd?.dykeProductId
                     );
-                    break;
-                case "Casing":
-                    if (doorType != "Moulding")
-                        form.setValue(
-                            `itemArray.${item.rowIndex}.item.housePackageTool.casingId`,
-                            stepProd?.dykeProductId
-                        );
-                    else {
-                        //
-                    }
                     break;
                 case "Specie":
                     break;

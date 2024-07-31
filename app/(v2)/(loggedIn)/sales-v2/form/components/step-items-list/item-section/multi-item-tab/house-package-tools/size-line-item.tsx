@@ -110,16 +110,7 @@ export default function HousePackageSizeLineItem({
             <TableCell className="hidden lg:table-cell">
                 <Money value={sizeRow.lineTotal} />
             </TableCell>
-            <TableCell>
-                {/* <ItemPriceFinder
-                    dykeDoorId={component?.toolId}
-                    casingId={hpt.casingId}
-                    dimension={size.dim}
-                    jambSizeId={hpt.jambSizeId}
-                    componentItem={componentItem}
-                    sizeRow={sizeRow}
-                /> */}
-            </TableCell>
+            <TableCell></TableCell>
         </TableRow>
     );
 }

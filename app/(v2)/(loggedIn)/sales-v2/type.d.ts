@@ -7,6 +7,7 @@ import {
 import { getStepForm } from "./form/_action/get-dyke-step";
 import { getDykeFormAction } from "./form/_action/get-dyke-form";
 import { HousePackageToolMeta } from "@/types/sales";
+import { getStepProduct } from "./form/_action/get-dyke-step-product";
 
 export interface IDykeSalesItem {
     meta: {
@@ -28,6 +29,7 @@ export type DykeDoorType =
     | "Door Slabs Only"
     | "Services";
 type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
+type DykeStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
 // type IDykeStepForm = {
 //     data: DykeStepForm;
 //     step: Awaited<ReturnType<typeof getStepForm>>;
@@ -129,6 +131,8 @@ export type MultiDyke = {
             production?: boolean;
             description?: string;
             doorTotalPrice: number | null;
+            stepProductId?: number | null;
+            stepProduct?: DykeStepProducts[number];
             heights: {
                 [dim in string]: {
                     checked?: boolean;
