@@ -27,6 +27,7 @@ import {
     sum,
 } from "@/lib/utils";
 import dayjs from "dayjs";
+import { isComponentType } from "../../overview/is-component-type";
 
 export async function getDykeFormAction(type, slug, query?) {
     const restore = query?.restore == "true";
@@ -192,9 +193,15 @@ export async function getDykeFormAction(type, slug, query?) {
                 let _doorFormDefaultValue: {
                     [dimension in string]: { id: number };
                 } = {};
+                const isType = isComponentType(
+                    item.housePackageTool?.doorType as any
+                );
                 item.housePackageTool?.doors?.map((d) => {
+                    if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
                     let dim = d.dimension?.replaceAll('"', "in");
+
                     _doorForm[dim] = { ...d } as any;
+                    // if(item.housePackageTool.)
                     _doorFormDefaultValue[dim] = {
                         id: d.id,
                     };
