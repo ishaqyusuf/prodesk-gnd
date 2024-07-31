@@ -50,7 +50,7 @@ export async function copyDykeSales(slug, as: ISalesType) {
                 }
                 const _doorForm = itemA.item.housePackageTool?._doorForm;
                 const _doorFormDefaultValue =
-                    itemA.item.housePackageTool._doorFormDefaultValue;
+                    itemA.item.housePackageTool?._doorFormDefaultValue;
                 if (_doorForm) {
                     Object.entries(_doorForm).map(([k, v]) => {
                         _doorForm[k] = removeKeys(v, [
