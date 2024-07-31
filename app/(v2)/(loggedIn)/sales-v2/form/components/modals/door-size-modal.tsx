@@ -19,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { HousePackageToolMeta } from "@/types/sales";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 
 interface Props {
     rowIndex;
@@ -147,11 +148,20 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                                         </TableCell>
                                         {isType.garage && (
                                             <TableCell colSpan={3}>
-                                                <ControlledInput
+                                                <ControlledSelect
+                                                    size="sm"
+                                                    options={[
+                                                        "In Swing",
+                                                        "Out Swing",
+                                                    ]}
+                                                    control={_form.control}
+                                                    name={`${size.dim}.swing`}
+                                                />
+                                                {/* <ControlledInput
                                                     control={_form.control}
                                                     className="w-full"
                                                     name={`${size.dim}.swing`}
-                                                />
+                                                /> */}
                                             </TableCell>
                                         )}
                                         <TableCell colSpan={2}>

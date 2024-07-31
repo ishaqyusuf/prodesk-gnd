@@ -50,7 +50,7 @@ export default function HousePackageSizeLineItem({
                     name={`${sizeRow.keys.lhQty}` as any}
                 />
             </TableCell>
-            {doorConfig.singleHandle ? (
+            {!componentItem.isComponent.multiHandles ? (
                 <></>
             ) : (
                 <>

@@ -51,10 +51,10 @@ export default function HousePackageTool({ componentTitle }) {
             <Table>
                 <TableHeader>
                     <TableHead>Dimension</TableHead>
-                    {componentItem.isComponent.garage && (
+                    {componentItem.isComponent.hasSwing && (
                         <TableHead>Swing</TableHead>
                     )}
-                    {doorConfig.singleHandle ? (
+                    {!componentItem.isComponent.multiHandles ? (
                         <>
                             <TableHead className="w-[100px]">Qty</TableHead>
                         </>
