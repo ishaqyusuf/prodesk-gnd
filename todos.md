@@ -14,6 +14,8 @@ TODO:
     <!-- - search on payables. -->
     - batch delete item.
     - moulding line item delete not updating footer price.
+    - saving takes long
+    - component price details.
     <!-- - door not saving price. -->
     <!--  -->
     <!-- - Payment Modal in Invoice Edit -->

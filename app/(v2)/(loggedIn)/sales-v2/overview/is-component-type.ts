@@ -14,7 +14,7 @@ export function isComponentType(type: DykeDoorType) {
         multiHandles: false,
     };
     resp.hasSwing = resp.garage;
-    resp.multiHandles = resp.interior || resp.exterior;
+    resp.multiHandles = resp.interior || resp.exterior || resp.garage;
     // resp.interior || resp.exterior || resp.garage || !type;
     return resp;
 }
