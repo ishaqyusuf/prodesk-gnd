@@ -48,7 +48,7 @@ export async function copyDykeSales(slug, as: ISalesType) {
                         (multiComponent.components[k] as any)._doorForm = df;
                     });
                 }
-                const _doorForm = itemA.item.housePackageTool._doorForm;
+                const _doorForm = itemA.item.housePackageTool?._doorForm;
                 const _doorFormDefaultValue =
                     itemA.item.housePackageTool._doorFormDefaultValue;
                 if (_doorForm) {
