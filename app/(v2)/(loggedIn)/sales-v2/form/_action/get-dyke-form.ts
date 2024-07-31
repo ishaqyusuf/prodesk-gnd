@@ -371,7 +371,7 @@ export async function getDykeFormAction(type, slug, query?) {
                             0;
 
                         const safeTitle = safeFormText(component.title);
-                        let priceTags = item.housePackageTool.meta?.priceTags;
+                        let priceTags = item.housePackageTool?.meta?.priceTags;
                         if (!priceTags) {
                             priceTags = {};
                             if (isMoulding) {
@@ -398,14 +398,14 @@ export async function getDykeFormAction(type, slug, query?) {
                             totalPrice: price,
                             toolId: isMoulding
                                 ? getMouldingId()
-                                : item.housePackageTool.dykeDoorId,
-                            _doorForm: item.housePackageTool._doorForm || {},
-                            hptId: item.housePackageTool.id as any,
+                                : item.housePackageTool?.dykeDoorId,
+                            _doorForm: item.housePackageTool?._doorForm || {},
+                            hptId: item.housePackageTool?.id as any,
                             doorTotalPrice: price,
                             priceTags,
-                            stepProductId: item.housePackageTool.stepProductId,
+                            stepProductId: item.housePackageTool?.stepProductId,
                             stepProduct: item.housePackageTool
-                                .stepProduct as any,
+                                ?.stepProduct as any,
                         });
 
                         footerPrices[uid] = {
