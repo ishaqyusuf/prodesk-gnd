@@ -76,6 +76,7 @@ export default function HousePackageSizeLineItem({
             {componentItem.calculatedPriceMode ? (
                 <>
                     <TableCell className="hidden lg:table-cell">
+                        {sizeRow.overridePrice || "-"}
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button size="sm" variant="outline">
@@ -103,7 +104,6 @@ export default function HousePackageSizeLineItem({
                                         </p>
                                     </div>
                                     <div className="grid gap-2">
-                                        <div className="grid grid-cols-3 items-center gap-4"></div>
                                         {itemData.item.formStepArray
                                             .filter((a) => a.item.price)
                                             .map((a) => (

@@ -155,13 +155,19 @@ function initializeMultiComponent(data: DykeForm) {
                 clone.item.description = c.description as any;
 
                 if (clone.item.housePackageTool) {
+                    clone.item.housePackageTool.stepProductId = c.stepProductId;
+
                     if (type.moulding) {
-                        console.log(c.priceTags);
+                        // console.log(c.priceTags);
                         clone.item.housePackageTool.meta.priceTags =
                             c.priceTags;
                         clone.item.housePackageTool.dykeDoorId = null;
                         clone.item.housePackageTool.moldingId = c.toolId;
-                    } else clone.item.housePackageTool.moldingId = null;
+                    } else {
+                        clone.item.housePackageTool.moldingId = null;
+                        clone.item.housePackageTool.dykeDoorId =
+                            c.stepProduct?.doorId;
+                    }
                 }
             }
 
