@@ -123,6 +123,21 @@ export default function HousePackageSizeLineItem({
                                                     </div>
                                                 </div>
                                             ))}
+                                        <div>
+                                            <div className="grid grid-cols-2 items-center gap-4">
+                                                <Label htmlFor="maxWidth">
+                                                    Door Price
+                                                </Label>
+                                                <div className="text-left">
+                                                    <Money
+                                                        value={
+                                                            sizeRow.jambSizePrice
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         {/* <ControlledInput
                                             control={form.control}
                                             label={"Edit Price"}
