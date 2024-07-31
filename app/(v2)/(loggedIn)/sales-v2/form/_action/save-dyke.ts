@@ -167,6 +167,8 @@ export async function saveDykeSales(data: DykeForm) {
                             orderItemId,
                             _doorForm = {},
                             _doorFormDefaultValue,
+                            doorId,
+                            stepProduct,
                             ...hptData
                         } = housePackageTool; // || ({} as any as typeof<housePackageTool>);
 
