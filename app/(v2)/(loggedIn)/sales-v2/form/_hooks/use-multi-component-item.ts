@@ -208,7 +208,7 @@ export function useMultiComponentSizeRow(
         swing: `${sizeRootKey}.swing`,
         casingPrice: `${sizeRootKey}.casingPrice`,
         componentsTotal: `${multiComponentComponentTitleKey}.priceTags.components`,
-        overridePrice: `${sizeRootKey}.overridePrice`,
+        overridePrice: `${sizeRootKey}.meta.overridePrice`,
     };
     // prices.map(p => keys[])
     const [
@@ -240,7 +240,9 @@ export function useMultiComponentSizeRow(
 
         const _unitPrice = sum(
             calculatedPriceMode
-                ? [jambSizePrice, componentsTotal, doorPrice]
+                ? overridePrice
+                    ? [overridePrice]
+                    : [jambSizePrice, componentsTotal, doorPrice]
                 : [doorPrice]
         );
         console.log(

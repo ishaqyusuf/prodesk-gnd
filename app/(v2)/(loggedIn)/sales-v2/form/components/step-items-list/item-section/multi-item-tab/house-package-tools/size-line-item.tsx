@@ -138,7 +138,7 @@ export default function HousePackageSizeLineItem({
                                             </div>
                                         </div>
 
-                                        {/* <ControlledInput
+                                        <ControlledInput
                                             control={form.control}
                                             label={"Edit Price"}
                                             type="number"
@@ -146,7 +146,7 @@ export default function HousePackageSizeLineItem({
                                                 sizeRow.keys
                                                     .overridePrice as any
                                             }
-                                        /> */}
+                                        />
                                     </div>
                                 </div>
                             </PopoverContent>
