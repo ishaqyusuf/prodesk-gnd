@@ -208,6 +208,7 @@ export function useMultiComponentSizeRow(
         swing: `${sizeRootKey}.swing`,
         casingPrice: `${sizeRootKey}.casingPrice`,
         componentsTotal: `${multiComponentComponentTitleKey}.priceTags.components`,
+        overridePrice: `${sizeRootKey}.overridePrice`,
     };
     // prices.map(p => keys[])
     const [
@@ -220,6 +221,7 @@ export function useMultiComponentSizeRow(
         unitPrice,
         componentsTotal,
         calculatedPriceMode,
+        overridePrice,
     ] = form.watch([
         keys.lhQty,
         keys.rhQty,
@@ -229,7 +231,7 @@ export function useMultiComponentSizeRow(
         keys.lineTotal,
         keys.unitPrice,
         keys.componentsTotal,
-        `order.meta.calculatedPriceMode`,
+        keys.overridePrice,
     ] as any);
 
     useEffect(() => {
@@ -237,7 +239,9 @@ export function useMultiComponentSizeRow(
 
         const _unitPrice = sum(
             calculatedPriceMode
-                ? [jambSizePrice, componentsTotal, doorPrice]
+                ? overridePrice
+                    ? [overridePrice]
+                    : [jambSizePrice, componentsTotal, doorPrice]
                 : [doorPrice]
         );
         const _totalLinePrice = math.multiply(qty, _unitPrice);
@@ -252,6 +256,7 @@ export function useMultiComponentSizeRow(
         casingPrice,
         componentsTotal,
         calculatedPriceMode,
+        overridePrice,
     ]);
     return {
         sizeRootKey,
@@ -261,5 +266,6 @@ export function useMultiComponentSizeRow(
         jambSizePrice,
         componentsTotal,
         calculatedPriceMode,
+        overridePrice,
     };
 }
