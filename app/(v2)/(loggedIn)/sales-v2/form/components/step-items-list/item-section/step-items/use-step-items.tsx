@@ -313,7 +313,7 @@ export default function useStepItems({
             custom,
             sortIndex,
             doorId,
-            door: { query },
+            door: { query } = {} as any,
             product: {
                 id: prodId,
                 createdAt,
