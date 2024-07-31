@@ -16,6 +16,7 @@ TODO:
     - moulding line item delete not updating footer price.
     - saving takes long
     - component price details.
+    - confirm (jamb size, casing etc stepProductId for garage, interior etc. unify and make them always fetch from common step to avoid repeating price details)
     <!-- - door not saving price. -->
     <!--  -->
     <!-- - Payment Modal in Invoice Edit -->

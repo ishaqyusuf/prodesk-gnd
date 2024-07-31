@@ -40,7 +40,7 @@ export default function HousePackageSizeLineItem({
         <TableRow>
             <TableCell>{size.dimFt}</TableCell>
             {componentItem.isComponent.hasSwing && (
-                <TableCell className="h-[180px]">
+                <TableCell className="w-[180px]">
                     <ControlledSelect
                         size="sm"
                         options={["In Swing", "Out Swing"]}
@@ -77,7 +77,6 @@ export default function HousePackageSizeLineItem({
             {componentItem.calculatedPriceMode ? (
                 <>
                     <TableCell className="hidden lg:table-cell">
-                        <DevOnly>{sizeRow.overridePrice || "-"}</DevOnly>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button size="sm" variant="outline">
