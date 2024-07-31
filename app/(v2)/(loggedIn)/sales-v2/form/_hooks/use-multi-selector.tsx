@@ -6,10 +6,13 @@ import { generateRandomString, safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
 import { timeout } from "@/lib/timeout";
 import { HousePackageToolMeta } from "@/types/sales";
+import { useDoorSizeModal } from "../components/modals/door-size-modal";
 
 export function useMultiSelector(rowIndex, get) {
     const form = useDykeForm();
     const modal = useModal();
+
+    const sizeModal = useDoorSizeModal(form, rowIndex);
     const multi = {
         async initServices() {
             // const [uid, multiDyke, components] = form.getValues([
@@ -101,6 +104,8 @@ export function useMultiSelector(rowIndex, get) {
                 `itemArray.${rowIndex}.multiComponent.components.${safeTitle}` as any;
             const uid = form.getValues(`${basePath}.uid` as any);
             form.setValue(`${basePath}.toolId` as any, stepProd.doorId);
+            form.setValue(`${basePath}.stepProductId` as any, stepProd.id);
+            form.setValue(`${basePath}.stepProduct` as any, stepProd);
             if (isMoulding) {
                 form.setValue(
                     `${basePath}.toolId` as any,
@@ -130,18 +135,19 @@ export function useMultiSelector(rowIndex, get) {
                     `${basePath}.uid` as any,
                     generateRandomString(4)
                 );
-            if (!currentState && !isMoulding) {
-                modal.openModal(
-                    <SelectDoorHeightsModal
-                        form={form}
-                        stepProd={stepProd}
-                        productTitle={stepProd?.product?.title as any}
-                        rowIndex={rowIndex}
-                    />
-                );
+            if (!isMoulding) {
+                // form.setValue(`${basePath}.checked` as any, true);
+                sizeModal.open(safeTitle);
+                // modal.openModal(
+                //     <SelectDoorHeightsModal
+                //         form={form}
+                //         stepProd={stepProd}
+                //         productTitle={stepProd?.product?.title as any}
+                //         rowIndex={rowIndex}
+                //     />
+                // );
                 return;
-            }
-            form.setValue(`${basePath}.checked` as any, !currentState);
+            } else form.setValue(`${basePath}.checked` as any, !currentState);
         },
         isChecked(stepProd) {
             const safeTitle = safeFormText(stepProd.product.title);

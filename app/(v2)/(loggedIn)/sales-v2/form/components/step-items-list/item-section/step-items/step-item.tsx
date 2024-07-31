@@ -200,7 +200,7 @@ export function StepItem({
                     transition={{ type: "spring", stiffness: 300 }}
                 >
                     {item.product.img ? (
-                        <AspectRatio ratio={4 / 2}>
+                        <AspectRatio ratio={item.isDoor ? 4 / 4 : 4 / 2}>
                             <Image
                                 src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
                                 alt={item.product.title}

@@ -11,7 +11,10 @@ export function isComponentType(type: DykeDoorType) {
         interior: type == "Interior",
         moulding: type == "Moulding",
         hasSwing: false,
+        multiHandles: false,
     };
-    resp.hasSwing = resp.interior || resp.exterior || resp.garage || !type;
+    resp.hasSwing = resp.garage;
+    resp.multiHandles = resp.interior || resp.exterior;
+    // resp.interior || resp.exterior || resp.garage || !type;
     return resp;
 }

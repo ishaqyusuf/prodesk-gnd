@@ -83,12 +83,19 @@ export default function ControlledInput<
                                               //   onChange: field.onChange,
                                           }
                                         : field)}
+                                    // onChange={field.onChange}
                                     // defaultValue={field.value}
                                     onChange={(e) => {
                                         if (type == "number")
-                                            field.onChange(
-                                                Number(e.target.value)
-                                            );
+                                            e.target.value
+                                                ? field.onChange(
+                                                      e.target.value
+                                                          ? Number(
+                                                                e.target.value
+                                                            )
+                                                          : null
+                                                  )
+                                                : field.onChange(null);
                                         else field.onChange(e);
                                     }}
                                 />

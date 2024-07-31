@@ -8,7 +8,7 @@ TODO: JUN 19
     -  
 TODO: 
     <!-- - delete door not working -->
-    - zero not deleting
+    <!-- - zero not deleting -->
     - custom
     - door size with qty and swing
     <!-- - search on payables. -->

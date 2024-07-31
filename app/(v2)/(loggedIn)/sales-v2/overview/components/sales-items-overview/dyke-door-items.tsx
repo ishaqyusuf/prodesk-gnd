@@ -28,12 +28,12 @@ export default function DykeDoorItems() {
                 <TableHeader>
                     <TableHead>#</TableHead>
                     <TableHead>Item</TableHead>
-                    {moulding.isType.garage && (
+                    {moulding.isType.hasSwing && (
                         <>
                             <TableHead>Swing</TableHead>
                         </>
                     )}
-                    {moulding.isType.hasSwing ? (
+                    {moulding.isType.multiHandles ? (
                         <>
                             <TableHead>LH</TableHead>
                             <TableHead>RH</TableHead>

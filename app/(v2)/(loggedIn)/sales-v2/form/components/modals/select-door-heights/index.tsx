@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export type SizeForm = {
@@ -58,7 +58,7 @@ export default function SelectDoorHeightsModal({
     const heightsKey = `${baseKey}.heights`;
 
     const heights: ComponentHeight = form.getValues(heightsKey as any);
-    const height = form.watch(
+    const height = form.getValues(
         `itemArray.${rowIndex}.item.housePackageTool.height`
     );
     let hIn = ftToIn(height);
