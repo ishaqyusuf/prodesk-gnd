@@ -109,3 +109,7 @@ table#invoiceFooter tr {
 section.content {
     @apply p-4 sm:p-8;
 }
+#housePackageTable td,
+#housePackageTable th {
+    @apply p-1;
+}

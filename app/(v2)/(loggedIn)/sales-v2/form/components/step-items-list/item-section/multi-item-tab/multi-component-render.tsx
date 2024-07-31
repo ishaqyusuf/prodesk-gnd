@@ -32,7 +32,7 @@ export default function MultiComponentRender({ Render, line = false }) {
             <div className="flex flex-col">
                 {line ? (
                     <div className="h-[300px] px-8 -mx-8 overflow-auto">
-                        <Table>
+                        <Table id="housePackageTable">
                             <TableHeader>
                                 <TableHead>
                                     {item.isType.moulding

@@ -48,7 +48,7 @@ export default function HousePackageTool({ componentTitle }) {
     }
     return (
         <>
-            <Table>
+            <Table id="housePackageTable">
                 <TableHeader>
                     <TableHead>Dimension</TableHead>
                     {componentItem.isComponent.hasSwing && (
@@ -64,8 +64,6 @@ export default function HousePackageTool({ componentTitle }) {
                             <TableHead className="w-[100px]">RH</TableHead>
                         </>
                     )}
-
-                    {/* <TableHead>Unit Dimension</TableHead> */}
                     {componentItem.calculatedPriceMode ? (
                         <>
                             <TableHead className="hidden lg:table-cell">
