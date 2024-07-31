@@ -106,7 +106,7 @@ export function StepProducts({
                 onValueChange={setStepProducts}
                 overlay={<div className="size-full rounded-md bg-primary/10" />}
             >
-                <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                     {stepProducts
                         ?.filter((s) => !s.custom && !s._metaData?.hidden)
                         ?.map((item, i) => (

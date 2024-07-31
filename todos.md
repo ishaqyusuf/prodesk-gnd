@@ -13,6 +13,7 @@ TODO:
     - door size with qty and swing
     <!-- - search on payables. -->
     - batch delete item.
+    - moulding line item delete not updating footer price.
     <!-- - door not saving price. -->
     <!--  -->
     <!-- - Payment Modal in Invoice Edit -->

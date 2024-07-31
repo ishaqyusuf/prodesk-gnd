@@ -31,6 +31,7 @@ export default function useFooterEstimate() {
         updateFooterPrice,
         lineItemDeleted(ctx: UseMultiComponentItem) {
             const itemData = ctx.item.get.itemArray();
+            console.log(itemData.multiComponent.components);
             Object.entries(itemData.multiComponent.components).map(
                 ([title, cData]) => {
                     if (title == ctx.componentTitle) {

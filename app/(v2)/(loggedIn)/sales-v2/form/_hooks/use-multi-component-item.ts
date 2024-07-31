@@ -67,6 +67,7 @@ export function useMultiComponentItem(componentTitle) {
         let taxxable = 0;
         let total = 0;
         Object.entries(c).map(([title, data]) => {
+            if (!data) return;
             const p =
                 componentTitle == title ? _totalPrice : data.totalPrice || 0;
             taxxable += data.tax ? p : 0;
@@ -155,8 +156,8 @@ export function useMultiComponentItem(componentTitle) {
     }
     function removeLine(removeTab) {
         removeTab(componentTitle);
-        form.setValue(multiComponentComponentTitleKey as any, null);
         footerEstimate.lineItemDeleted(ctx);
+        form.setValue(multiComponentComponentTitleKey as any, null);
     }
 
     const doorConfig = getDoorConfig(doorType);
