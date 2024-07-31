@@ -41,7 +41,7 @@ export default function useFooterEstimate() {
                         // console.log(footer.footerPricesJson);
                         // footer.footerPricesJson[cData.uid] = {};
                         // footer.footerPricesJson=
-                        omit(footer.footerPricesJson, [cData.uid]);
+                        omit(footer.footerPricesJson, [cData?.uid]);
                         // console.log(footer.footerPricesJson[cData.uid]);
                         form.setValue(
                             "footer.footerPrices",
