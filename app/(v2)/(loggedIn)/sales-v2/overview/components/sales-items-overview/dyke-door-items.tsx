@@ -99,14 +99,14 @@ export default function DykeDoorItems() {
                                     {com.housePackageTool?.door?.title}
                                     <p>{inToFt(door?.dimension)}</p>
                                 </TableCell>
-                                {moulding.isType.garage && (
+                                {moulding.isType.hasSwing && (
                                     <TableCell>
                                         <TableCol.Secondary>
                                             {door.swing}
                                         </TableCol.Secondary>
                                     </TableCell>
                                 )}
-                                {moulding.isType.hasSwing ? (
+                                {moulding.isType.multiHandles ? (
                                     <>
                                         <TableHead>{door.lhQty}</TableHead>
                                         <TableHead>{door.rhQty}</TableHead>
