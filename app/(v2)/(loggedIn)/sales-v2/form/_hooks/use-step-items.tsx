@@ -270,6 +270,8 @@ export default function useStepItems({
                     });
                 }
             }
+            console.log({ stepsIds: formSteps.map((s) => s.step.id) });
+
             if (nextStepId) {
                 stepProd.nextStepId = nextStepId;
             }
@@ -280,6 +282,7 @@ export default function useStepItems({
                 [],
                 doorType
             );
+            console.log({ nextSteps, nextStepId });
             if (nextSteps.length) {
                 const currentNextStep = item.formStepArray[stepIndex + 1];
                 if (currentNextStep) {

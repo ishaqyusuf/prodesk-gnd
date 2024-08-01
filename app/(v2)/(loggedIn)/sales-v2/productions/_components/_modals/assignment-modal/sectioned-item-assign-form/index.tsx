@@ -174,7 +174,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 side={isMobile ? "bottom" : "left"}
-                className="sm:hidden"
+                className=""
             >
                 <Form {...form}>
                     <Card className="w-[100vw]  sm:w-[500px] border-transparent">

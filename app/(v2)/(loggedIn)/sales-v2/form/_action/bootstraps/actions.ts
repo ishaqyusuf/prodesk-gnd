@@ -114,3 +114,19 @@ export async function bootstrapHousePackageTools() {
         },
     };
 }
+export async function bootstrapDykeStepDuplicates() {
+    const steps = await prisma.dykeSteps.findMany({});
+
+    let _counts = [];
+    steps.map((s, i) => {
+        const duplicates = steps.filter((si) => si.title == s.title);
+        if (duplicates[0]?.id == s.id) {
+            _counts.push({
+                title: s.title,
+                count: duplicates.length,
+                ids: duplicates.map((a) => a.id),
+            });
+        }
+    });
+    return { _counts };
+}

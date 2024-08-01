@@ -96,6 +96,8 @@ export function DykeInvoiceItemStepSection({
 
     return (
         <Collapsible
+            id={stepForm.step.title}
+            data-value={stepForm.item?.value}
             className={cn(
                 stepForm?.item?.meta?.hidden && "hidden",
                 !item.expanded &&
