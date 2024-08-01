@@ -1,31 +1,33 @@
 "use client";
 
-import { IStepProducts, StepProductProps } from ".";
+import {
+    IStepProducts,
+    StepProductProps,
+} from "../components/step-items-list/item-section/step-items";
 
-import { getMouldingStepProduct } from "../../../../_action/get-dyke-step-product";
+import { getMouldingStepProduct } from "../_action/get-dyke-step-product";
 
 import { useContext, useEffect, useState } from "react";
-import {
-    DykeItemFormContext,
-    useDykeCtx,
-    useDykeForm,
-} from "../../../../_hooks/form-context";
-import { DykeDoorType, DykeStep } from "../../../../../type";
+import { DykeItemFormContext, useDykeCtx, useDykeForm } from "./form-context";
+import { DykeDoorType, DykeStep } from "../../type";
 import {
     getSlabDoorTypes,
     getStepProduct,
-} from "../../../../_action/get-dyke-step-product";
+} from "../_action/get-dyke-step-product";
 import { toast } from "sonner";
-import { getNextDykeStepAction } from "../../../../_action/get-next-dyke-step";
-import { getDykeStepDoors } from "../../../../_action/get-dyke-step-doors";
-import { doorQueryBuilder } from "../../../../../_utils/door-query-builder";
+import { getNextDykeStepAction } from "../_action/get-next-dyke-step";
+import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
+import { doorQueryBuilder } from "../../_utils/door-query-builder";
 
 import { useModal } from "@/components/common/modal-old/provider";
-import EditStepItemModal from "../../../modals/edit-step-item-modal";
-import { SaveStepProductExtra } from "../../../../_action/save-step-product";
-import { _deleteDoorStep, _deleteStepItem } from "./_actions";
-import { calculateComponentPrices } from "./calculate-prices";
-import { initStepComponents } from "./init-step-components";
+import EditStepItemModal from "../components/modals/edit-step-item-modal";
+import { SaveStepProductExtra } from "../_action/save-step-product";
+import {
+    _deleteDoorStep,
+    _deleteStepItem,
+} from "../components/step-items-list/item-section/step-items/_actions";
+import { calculateComponentPrices } from "../components/step-items-list/item-section/step-items/calculate-prices";
+import { initStepComponents } from "../components/step-items-list/item-section/step-items/init-step-components";
 export default function useStepItems({
     stepForm,
     stepIndex,

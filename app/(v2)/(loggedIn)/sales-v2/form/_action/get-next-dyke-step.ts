@@ -6,6 +6,7 @@ import { getStepForm } from "./get-dyke-step";
 import { createDoorSpecies } from "./create-door-species";
 import { DykeDoorType } from "../../type";
 import { generateRandomString } from "@/lib/utils";
+import { includeStepPriceCount } from "../../dyke-utils";
 
 export async function getNextDykeStepAction(
     step: DykeSteps,
@@ -27,6 +28,7 @@ export async function getNextDykeStepAction(
         if (customStep) return [..._steps, customStep];
     }
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
+
     if (!nextStepId) {
         // const path = await prisma.
         let nextSteps = await prisma.dykeSteps.findMany({
@@ -37,6 +39,9 @@ export async function getNextDykeStepAction(
                 rootStepValueId: rootStepValueId || 1,
                 prevStepValueId: !stepValueId ? null : stepValueId,
             },
+            include: {
+                _count: includeStepPriceCount,
+            },
         });
         if (!nextSteps.length && step.title == "Door Species") {
             nextSteps = await prisma.dykeSteps.findMany({
@@ -45,6 +50,9 @@ export async function getNextDykeStepAction(
                         contains: "Interior_",
                     },
                     title: "Door",
+                },
+                include: {
+                    _count: includeStepPriceCount,
                 },
             });
         }

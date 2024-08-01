@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import DevOnly from "@/_v2/components/common/dev-only";
+import PriceBreakDownCell from "../price-breakdown-cell";
 
 interface Props {
     size: SizeForm[string];
@@ -75,83 +76,10 @@ export default function HousePackageSizeLineItem({
             )}
             {/* <TableCell>{size.dimFt?.replaceAll("in", '"')}</TableCell> */}
             {componentItem.calculatedPriceMode ? (
-                <>
-                    <TableCell className="hidden lg:table-cell">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button size="sm" variant="outline">
-                                    <Money
-                                        value={
-                                            sizeRow.overridePrice
-                                                ? sizeRow.overridePrice
-                                                : sum([
-                                                      sizeRow.jambSizePrice,
-                                                      sizeRow.componentsTotal,
-                                                  ])
-                                        }
-                                    />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="">
-                                <div className="grid gap-4">
-                                    <div className="space-y-2">
-                                        <h4 className="font-medium leading-none">
-                                            Price Breakdown
-                                        </h4>
-                                        <p className="text-sm text-muted-foreground">
-                                            Price breakdown based on selected
-                                            components
-                                        </p>
-                                    </div>
-                                    <div className="grid gap-2">
-                                        {itemData.item.formStepArray
-                                            .filter((a) => a.item.price)
-                                            .map((a) => (
-                                                <div key={a.step.id}>
-                                                    <div className="grid grid-cols-2 items-center gap-4">
-                                                        <Label htmlFor="maxWidth">
-                                                            {a.step.title}
-                                                        </Label>
-                                                        <div className="text-left">
-                                                            <Money
-                                                                value={
-                                                                    a.item.price
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        <div>
-                                            <div className="grid grid-cols-2 items-center gap-4">
-                                                <Label htmlFor="maxWidth">
-                                                    Door Price
-                                                </Label>
-                                                <div className="text-left">
-                                                    <Money
-                                                        value={
-                                                            sizeRow.jambSizePrice
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <ControlledInput
-                                            control={form.control}
-                                            label={"Edit Price"}
-                                            type="number"
-                                            name={
-                                                sizeRow.keys
-                                                    .overridePrice as any
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-                    </TableCell>
-                </>
+                <PriceBreakDownCell
+                    componentItem={componentItem}
+                    sizeRow={sizeRow}
+                />
             ) : (
                 <></>
             )}

@@ -35,7 +35,6 @@ export async function updateSettingsMeta(meta, id?) {
     const settings = await getSettingAction<any>("sales-settings");
     if (!settings?.id) throw Error("Setting not found");
     else id = settings.id;
-    console.log(id);
     await prisma.settings.update({
         where: { id },
         data: {

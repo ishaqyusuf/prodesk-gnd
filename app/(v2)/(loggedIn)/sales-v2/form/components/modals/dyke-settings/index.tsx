@@ -33,9 +33,7 @@ export default function DykeSettingsModal({ form }: Props) {
         startTransition(async () => {
             const data = form.getValues("data.settings");
             // console.log(data);
-
             await updateSettingsMeta(data);
-
             toast.message("Saved");
             modal.close();
         });
@@ -46,7 +44,7 @@ export default function DykeSettingsModal({ form }: Props) {
             <Modal.Content>
                 <Modal.Header title="Settings" />
                 <div className="grid gap-4">
-                    <div className="flex flex-wrap items-center">
+                    <div className="sflex hidden flex-wrap items-center">
                         <Label>Custom Input Sections:</Label>
                         {fields.map((f, index) => (
                             <div className="m-1.5" key={f.id}>

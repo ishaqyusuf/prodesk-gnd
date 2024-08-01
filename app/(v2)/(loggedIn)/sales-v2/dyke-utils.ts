@@ -50,3 +50,12 @@ export function sortStepProducts<T>(prods: T[]) {
         prods = prods.sort((a: any, b: any) => a.sortIndex - b.sortIndex);
     return prods;
 }
+export const includeStepPriceCount = {
+    select: {
+        priceSystem: {
+            where: {
+                deletedAt: null,
+            },
+        },
+    },
+};

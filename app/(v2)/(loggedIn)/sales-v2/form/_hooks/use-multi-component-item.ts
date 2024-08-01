@@ -26,6 +26,12 @@ export function useMultiComponentItem(componentTitle) {
             title,
             key: camel(`${title} price`),
         }));
+    const keys = {
+        sumQty: `${multiComponentComponentTitleKey}.doorQty`,
+        sumUnitPrice: `${multiComponentComponentTitleKey}.unitPrice`,
+        sumTotal: `${multiComponentComponentTitleKey}.doorTotalPrice`,
+        overridePrice: `${multiComponentComponentTitleKey}.priceTags.moulding.overridPrice`,
+    };
 
     const [
         qty,
@@ -37,6 +43,7 @@ export function useMultiComponentItem(componentTitle) {
         componentsTotal,
         mouldingPrice,
         addonPrice,
+        overridePrice,
         calculatedPriceMode,
     ] = form.watch([
         `${multiComponentComponentTitleKey}.qty`,
@@ -48,6 +55,7 @@ export function useMultiComponentItem(componentTitle) {
         `${multiComponentComponentTitleKey}.priceTags.components`,
         `${multiComponentComponentTitleKey}.priceTags.moulding.price`,
         `${multiComponentComponentTitleKey}.priceTags.moulding.addon`,
+        keys.overridePrice,
         `order.meta.calculatedPriceMode`,
     ] as any);
     const footerEstimate = useFooterEstimate();
@@ -84,14 +92,22 @@ export function useMultiComponentItem(componentTitle) {
         if (doorType != "Moulding") return;
         const _unitPrice = sum(
             calculatedPriceMode
-                ? [mouldingPrice, componentsTotal, addonPrice]
+                ? overridePrice
+                    ? [overridePrice]
+                    : [mouldingPrice, componentsTotal, addonPrice]
                 : [addonPrice]
         );
         form.setValue(
             `${multiComponentComponentTitleKey}.unitPrice` as any,
             _unitPrice
         );
-    }, [componentsTotal, mouldingPrice, calculatedPriceMode, addonPrice]);
+    }, [
+        componentsTotal,
+        mouldingPrice,
+        calculatedPriceMode,
+        overridePrice,
+        addonPrice,
+    ]);
     function calculateLineItem() {}
 
     const [sizeList, setSizeList] = useState<SizeForm[string][]>([]);
@@ -113,11 +129,7 @@ export function useMultiComponentItem(componentTitle) {
         // console.log([current, componentTitle]);
         if (current) _setSizeList(current.heights);
     }
-    const keys = {
-        sumQty: `${multiComponentComponentTitleKey}.doorQty`,
-        sumUnitPrice: `${multiComponentComponentTitleKey}.unitPrice`,
-        sumTotal: `${multiComponentComponentTitleKey}.doorTotalPrice`,
-    };
+
     function calculateSizeEstimate(dim?, qty?, _totalLinePrice?) {
         const itemData = item.get.itemArray();
         Object.entries(itemData.multiComponent.components).map(
@@ -185,6 +197,8 @@ export function useMultiComponentItem(componentTitle) {
         calculatedPriceMode,
         addonPrice,
         _setSizeList,
+        overridePrice,
+        keys,
     };
     return ctx;
 }

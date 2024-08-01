@@ -8,7 +8,7 @@ import { Icons } from "@/components/_v1/icons";
 
 import { Button } from "@/components/ui/button";
 
-import useStepItems from "./use-step-items";
+import useStepItems from "../../../../_hooks/use-step-items";
 import { StepItem } from "./step-item";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";

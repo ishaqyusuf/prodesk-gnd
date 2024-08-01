@@ -28,6 +28,7 @@ import {
 } from "@/lib/utils";
 import dayjs from "dayjs";
 import { isComponentType } from "../../overview/is-component-type";
+import { includeStepPriceCount } from "../../dyke-utils";
 
 export async function getDykeFormAction(type, slug, query?) {
     const restore = query?.restore == "true";
@@ -66,7 +67,9 @@ export async function getDykeFormAction(type, slug, query?) {
                         },
                         include: {
                             step: {
-                                include: {},
+                                include: {
+                                    _count: includeStepPriceCount,
+                                },
                             },
                         },
                     },
