@@ -216,10 +216,16 @@ export async function saveDykeSales(data: DykeForm) {
                                     // console.log("YES DOOR");
                                     door.salesOrderId = order.id;
                                     door.salesOrderItemId = itemId;
-                                    let { id: doorId, ...doorData } = door;
+                                    let {
+                                        id: doorId,
+                                        housePackageToolId,
+                                        ...doorData
+                                    } = door;
                                     let newDoor = !doorId;
                                     if (newDoor) doorId = ++lastDoorId;
                                     // console.log({ doorId, newDoor });
+                                    // if (!doorData.lhQty) doorData.lhQty = 0;
+                                    // if (!doorData.rhQty) doorData.rhQty = 0;
                                     if (newDoor)
                                         createDoors.push({
                                             ...doorData,

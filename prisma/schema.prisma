@@ -1202,8 +1202,8 @@ model DykeSalesDoors {
     jambSizePrice      Float? // total door price
     casingPrice        Float?
     unitPrice          Float?
-    lhQty              Int                              @default(0)
-    rhQty              Int                              @default(0)
+    lhQty              Int?                             @default(0)
+    rhQty              Int?                             @default(0)
     totalQty           Int                              @default(0)
     salesOrderId       Int
     lineTotal          Float?                           @default(0)

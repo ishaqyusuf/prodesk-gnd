@@ -39,7 +39,9 @@ export default function HeaderSection({}) {
     const modal = useModal();
 
     async function save(and: SaveMode = "default") {
-        form.handleSubmit((data) => saver.save(data, and))();
+        setTimeout(() => {
+            form.handleSubmit((data) => saver.save(data, and))();
+        }, 100);
     }
     return (
         <div className="h-12">
