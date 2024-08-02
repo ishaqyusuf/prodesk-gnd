@@ -59,7 +59,7 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
                             </div>
                             <div className="grid gap-2">
                                 {itemData.item.formStepArray
-                                    .filter((a) => a.step._count.priceSystem)
+                                    .filter((a) => a.step._count?.priceSystem)
                                     .map((a) => (
                                         <div
                                             key={a.step.id}
