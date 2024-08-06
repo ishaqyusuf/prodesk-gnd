@@ -18,6 +18,7 @@ interface Props<T> {
     type?: string;
     list?: boolean;
     size?: "sm" | "default" | "xs";
+    prefix?: string;
     // defaultValue?:boolean
 }
 export default function ControlledInput<
@@ -31,6 +32,7 @@ export default function ControlledInput<
     suffix,
     type,
     list,
+    prefix,
     size = "default",
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
@@ -49,10 +51,21 @@ export default function ControlledInput<
                     <FormControl>
                         <div
                             className={cn(
-                                suffix && "flex items-center space-x-1",
+                                (suffix || prefix) &&
+                                    "flex items-center space-x-1",
                                 ""
                             )}
                         >
+                            {prefix && (
+                                <Button
+                                    type="button"
+                                    size={size as any}
+                                    variant={"outline"}
+                                    className={size == "sm" && "h-8"}
+                                >
+                                    {prefix}
+                                </Button>
+                            )}
                             {type == "textarea" ? (
                                 <Textarea
                                     placeholder={placeholder}
@@ -101,7 +114,12 @@ export default function ControlledInput<
                                 />
                             )}
                             {suffix && (
-                                <Button type="button" variant={"outline"}>
+                                <Button
+                                    type="button"
+                                    size={size as any}
+                                    variant={"outline"}
+                                    className={size == "sm" && "h-8"}
+                                >
                                     {suffix}
                                 </Button>
                             )}

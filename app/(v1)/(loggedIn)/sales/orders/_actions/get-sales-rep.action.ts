@@ -9,6 +9,11 @@ export async function _getSalesRep() {
         async () => {
             const users = await prisma.users.findMany({
                 where: {
+                    roles: {
+                        some: {
+                            roleId: { not: null },
+                        },
+                    },
                     reppedProductions: {
                         some: {
                             id: { gt: 0 },

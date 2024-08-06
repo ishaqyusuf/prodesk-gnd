@@ -42,7 +42,7 @@ export default async function middleware(req: NextRequest) {
     // console.log([hostname, env.NEXT_PUBLIC_ROOT_DOMAIN]);
 
     // rewrites for app pages
-    if (hostname == `storefront.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+    if (hostname == `shop.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
         // const session = await getToken({ req });
         // if (!session && path !== "/login") {
         // return NextResponse.redirect(new URL("/login", req.url));
@@ -51,10 +51,10 @@ export default async function middleware(req: NextRequest) {
         // }
         // console.log("=====SAAS=====", path);
         return NextResponse.rewrite(
-            new URL(`/storefront${path === "/" ? "" : path}`, req.url)
+            new URL(`/shop${path === "/" ? "" : path}`, req.url)
         );
     }
-    if (hostname == `storefront-admin.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+    if (hostname == `shop-admin.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
         // const session = await getToken({ req });
         // if (!session && path !== "/login") {
         // return NextResponse.redirect(new URL("/login", req.url));
@@ -63,7 +63,7 @@ export default async function middleware(req: NextRequest) {
         // }
         // console.log("=====SAAS=====", path);
         return NextResponse.rewrite(
-            new URL(`/storefront-admin${path === "/" ? "" : path}`, req.url)
+            new URL(`/shop-admin${path === "/" ? "" : path}`, req.url)
         );
     }
     if (hostname == `print.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {

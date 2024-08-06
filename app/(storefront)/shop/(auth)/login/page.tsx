@@ -28,7 +28,7 @@ export default function CustomerLoginPage() {
         defaultValues: {
             email: "",
             password: "",
-            type: "storefront",
+            type: "shop",
         },
     });
     async function submit(data) {}

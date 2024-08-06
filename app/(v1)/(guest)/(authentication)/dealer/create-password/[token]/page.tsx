@@ -9,28 +9,33 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { isProduction } from "@/lib/is-prod";
-import QuickLogin from "@/components/_v1/quick-login";
-import { SignInForm } from "./signin-form";
+import Form from "./form";
+import { verifyToken } from "./action";
 export const metadata: Metadata = {
-    title: "Sign In - GND Prodesk",
+    title: "Sign Up - GND Prodesk",
     description: "",
 };
 
-export default async function SigninPage() {
-    const isProd = await isProduction();
+export default async function CreatePasswordPage({ params }) {
+    const token = params.token;
+    const ver = verifyToken(token);
+
     return (
-        <Shell className="sm:max-w-lg">
+        <Shell className="sm:max-w-2xl">
             <Card>
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl">Sign in</CardTitle>
+                    <CardTitle className="text-2xl">
+                        Create Your Password
+                    </CardTitle>
                     <CardDescription>
-                        Enter your email & password to continue
+                        To complete your account setup, please create a secure
+                        password. Your password helps protect your account and
+                        ensures that only you can access your personal
+                        information and services.
                     </CardDescription>
-                    {!isProd && <QuickLogin />}
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                    <SignInForm />
+                    <Form val={ver} />
                 </CardContent>
                 <CardFooter className="flex flex-wrap items-center space-x-4 justify-between gap-2">
                     <Link
@@ -38,16 +43,9 @@ export default async function SigninPage() {
                         href="/dealer/signup"
                         className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
                     >
-                        Signup as Dealer
+                        Back to signin
                     </Link>
                     <div className="text-sm text-muted-foreground"></div>
-                    <Link
-                        aria-label="Reset password"
-                        href="/login/password-reset"
-                        className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
-                    >
-                        Reset password
-                    </Link>
                 </CardFooter>
             </Card>
         </Shell>

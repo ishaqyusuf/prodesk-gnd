@@ -20,7 +20,7 @@ import { signIn, useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { redirect, useRouter } from "next/navigation";
 import { ILogin, loginSchema } from "@/lib/validations/auth";
-import { PasswordInput } from "../password-input";
+import { PasswordInput } from "../../../../../components/_v1/password-input";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 

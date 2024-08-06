@@ -28,7 +28,7 @@ export async function saveRealtimeMdx(type, slug, content) {
             createdAt: new Date(),
         },
     });
-    revalidatePath("/storefront-admin/blogs/edit/[...slug]");
+    revalidatePath("/shop-admin/blogs/edit/[...slug]");
 }
 export async function deleteRealtimeMdx(slug) {
     await prisma.posts.deleteMany({

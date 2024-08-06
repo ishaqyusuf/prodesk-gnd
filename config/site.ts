@@ -42,7 +42,7 @@ export const siteConfig = {
         },
         {
             title: "Shipping & Delivery",
-            href: "/blog",
+            href: "/shipping",
         },
         {
             title: "Shopping",

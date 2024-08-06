@@ -212,30 +212,69 @@ model CommunityModelCost {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Customers {
-    id             Int             @unique @default(autoincrement())
+    id             Int     @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-    slug           String?         @unique @db.VarChar(255)
-    walletId       Int?            @unique
-    name           String          @db.VarChar(255)
-    businessName   String?         @db.VarChar(255)
-    email          String?         @db.VarChar(255)
-    phoneNo        String?         @db.VarChar(255)
-    phoneNo2       String?         @db.VarChar(255)
-    address        String?         @db.Text
-    meta           Json?           @db.Json
-    deletedAt      DateTime?       @db.Timestamp(0)
-    createdAt      DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?       @updatedAt
-    salesOrders    SalesOrders[]
-    profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
-    // primaryAddress        AddressBooks?  @relation(name: "primaryAddress",fields: [id], references: [id])
-    addressBooks   AddressBooks[]  @relation(name: "addressBooks")
-    payments       SalesPayments[] @relation()
-    wallet         CustomerWallet?
+    slug           String? @unique @db.VarChar(255)
+    walletId       Int?    @unique
+    name           String  @db.VarChar(255)
+    businessName   String? @db.VarChar(255)
+    email          String? @db.VarChar(255)
+    phoneNo        String? @db.VarChar(255)
+    phoneNo2       String? @db.VarChar(255)
+    address        String? @db.Text
+    meta           Json?   @db.Json
+
+    deletedAt    DateTime?       @db.Timestamp(0)
+    createdAt    DateTime?       @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?       @updatedAt
+    salesOrders  SalesOrders[]
+    profile      CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
+    addressBooks AddressBooks[]  @relation(name: "addressBooks")
+    payments     SalesPayments[] @relation()
+    wallet       CustomerWallet?
+    auth         DealerAuth?
 
     @@index([createdAt, deletedAt, name, email, phoneNo])
     @@index([customerTypeId])
+}
+
+model DealerAuth {
+    id              Int       @unique @default(autoincrement())
+    dealerId        Int       @unique
+    createdAt       DateTime? @default(now()) @db.Timestamp(0)
+    email           String    @unique
+    password        String?   @db.VarChar(255)
+    emailVerifiedAt DateTime? @db.Timestamp(0)
+    approvedAt      DateTime? @db.Timestamp(0)
+    rejectedAt      DateTime? @db.Timestamp(0)
+    restricted      Boolean?
+    updatedAt       DateTime? @updatedAt
+    deletedAt       DateTime? @db.Timestamp(0)
+    dealer          Customers @relation(fields: [dealerId], references: [id])
+
+    status DealerStatus[]
+    token  DealerToken[]
+}
+
+model DealerStatus {
+    id        Int         @unique @default(autoincrement())
+    dealerId  Int
+    status    String // pending-approval, approved, rejected, restricted
+    authorId  Int
+    createdAt DateTime?   @default(now()) @db.Timestamp(0)
+    deletedAt DateTime?   @db.Timestamp(0)
+    auth      DealerAuth? @relation(fields: [dealerId], references: [id])
+    author    Users       @relation(fields: [authorId], references: [id])
+}
+
+model DealerToken {
+    dealerId   Int
+    token      String      @unique
+    expiredAt  DateTime?   @db.Timestamp(0)
+    consumedAt DateTime?   @db.Timestamp(0)
+    deletedAt  DateTime?   @db.Timestamp(0)
+    auth       DealerAuth? @relation(fields: [dealerId], references: [id])
 }
 
 model CustomerWallet {
@@ -1398,6 +1437,7 @@ model Users {
     events                     Event[]
     pageView                   PageView[]
     notes                      Progress[]
+    dealerStatus               DealerStatus[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])

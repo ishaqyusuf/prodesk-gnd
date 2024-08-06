@@ -151,7 +151,7 @@ export function nav(
             );
         }
     }
-    if (viewCustomerService)
+    if (viewCustomerService) {
         routes.Services.push(
             _route(
                 "Customer Service",
@@ -159,6 +159,7 @@ export function nav(
                 "/customer-services"
             )
         );
+    }
     if (__can.viewCommission)
         routes.Singles.push(
             _route("Sales Commission", Icons.percent, "/sales/commissions")
@@ -207,8 +208,9 @@ export function nav(
                     `/sales/quotes`
                     // `/sales/estimates?_salesRepId=${session.user.id}`
                 ), //employees,roles
-                _route("Orders", Icons.orders, `/sales/orders`), //employees,roles
+                _route("Orders", Icons.orders, `/sales/orders`),
                 _route("Customers", Icons.user, "/sales/customers"),
+                _route("Dealers", Icons.delivery, "/sales-v2/dealers", true),
                 _route("Dispatch", Icons.delivery, "/sales-v2/dispatch", true),
             ]
         );

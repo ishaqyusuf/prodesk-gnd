@@ -36,5 +36,5 @@ export async function saveBlogAction(data: Blogs) {
                 publishedAt: data.publishedAt,
             },
         });
-    revalidatePath("/storefront-admin/blogs/edit/[...slug]");
+    revalidatePath("/shop-admin/blogs/edit/[...slug]");
 }

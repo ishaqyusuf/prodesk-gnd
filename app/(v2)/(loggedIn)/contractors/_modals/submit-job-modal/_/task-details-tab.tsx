@@ -26,7 +26,7 @@ export default function TaskDetailsTab({}) {
     // const form = useFormContext();
     // useEffect(() => {},[])
     return (
-        <ScrollArea className="h-[350px] pr-4 grid gap-2">
+        <ScrollArea className="h-[400px] pr-4 grid gap-2">
             <ProjectFormSection />
             {/* {ctx.costList?.fields?.length} */}
             <div className={cn(!ctx.costList?.fields?.length && "hidden")}>

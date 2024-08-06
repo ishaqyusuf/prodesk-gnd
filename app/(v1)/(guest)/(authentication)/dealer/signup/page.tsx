@@ -9,28 +9,30 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { isProduction } from "@/lib/is-prod";
-import QuickLogin from "@/components/_v1/quick-login";
-import { SignInForm } from "./signin-form";
+import SignupForm from "./signup-form";
 export const metadata: Metadata = {
-    title: "Sign In - GND Prodesk",
+    title: "Sign Up - GND Prodesk",
     description: "",
 };
 
-export default async function SigninPage() {
-    const isProd = await isProduction();
+export default async function SignupPage() {
     return (
-        <Shell className="sm:max-w-lg">
+        <Shell className="sm:max-w-2xl">
             <Card>
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl">Sign in</CardTitle>
+                    <CardTitle className="text-2xl">Become a dealer</CardTitle>
                     <CardDescription>
-                        Enter your email & password to continue
+                        As a premier wholesale distributor, GND Millwork
+                        utilizes state-of-the-art warehouses, advanced
+                        production facilities, and an efficient logistics
+                        network to deliver top-quality products and unmatched
+                        expertise to our dealer partners. If {"you're"}
+                        interested in becoming a dealer partner with us, please
+                        reach out for more information.
                     </CardDescription>
-                    {!isProd && <QuickLogin />}
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                    <SignInForm />
+                    <SignupForm />
                 </CardContent>
                 <CardFooter className="flex flex-wrap items-center space-x-4 justify-between gap-2">
                     <Link
@@ -38,16 +40,9 @@ export default async function SigninPage() {
                         href="/dealer/signup"
                         className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
                     >
-                        Signup as Dealer
+                        Back to signin
                     </Link>
                     <div className="text-sm text-muted-foreground"></div>
-                    <Link
-                        aria-label="Reset password"
-                        href="/login/password-reset"
-                        className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
-                    >
-                        Reset password
-                    </Link>
                 </CardFooter>
             </Card>
         </Shell>
