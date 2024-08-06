@@ -1,4 +1,4 @@
-import { mdxComponents } from "@/app/(shop-admin)/shop-admin/blogs/mdx-components";
+import { mdxComponents } from "@/app/(storefront-admin)/storefront-admin/blogs/mdx-components";
 import { userId } from "@/app/(v1)/_actions/utils";
 import MDX from "@/components/common/mdx";
 import { Shell } from "@/components/shell";

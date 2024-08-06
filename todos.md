@@ -10,6 +10,7 @@ TODO:
     <!-- - delete door not working -->
     <!-- - zero not deleting -->
     - custom
+    - check pricing data breakdown
     - door size with qty and swing
     <!-- - search on payables. -->
     - batch delete item.
