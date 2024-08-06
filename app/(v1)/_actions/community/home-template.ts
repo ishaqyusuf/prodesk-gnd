@@ -98,7 +98,12 @@ function whereCommunityTemplate(query: HomeTemplatesQueryParams) {
         project: { title: where.q },
     });
     where.orWhere("projectId", +query._projectId);
-    if (query._builderId) where.raw({});
+    if (query._builderId)
+        where.raw({
+            project: {
+                builderId: +query._builderId,
+            },
+        });
     return where.get();
     // const where: Prisma.CommunityModelsWhereInput = {
     //   modelName: q,
