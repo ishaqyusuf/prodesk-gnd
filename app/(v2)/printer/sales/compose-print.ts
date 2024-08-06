@@ -14,7 +14,6 @@ import { formatCurrency, inToFt, sum } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
-import ContactUsPage from "@/app/(shop)/shop/contact-us/page";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
