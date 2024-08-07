@@ -14,12 +14,12 @@ import { ISalesOrderForm } from "@/types/sales";
 import { SalesInvoiceTr } from "./sales-invoice-tr";
 import InvoiceTableFooter from "./invoice-table-footer";
 import { SalesFormResponse } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
-import SalesComponentModal from "@/components/_v1/modals/sales-component-modal";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
 import { cn } from "@/lib/utils";
 import salesUtils from "../sales-utils";
 import usePersistDirtyForm from "@/_v2/hooks/use-persist-dirty-form";
+import SalesComponentModal from "@/lib/sales/sales-component-modal";
 export default function SalesInvoiceTable({
     form,
     data,
