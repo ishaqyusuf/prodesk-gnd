@@ -33,10 +33,6 @@ export default function PaymentHistory() {
                                             orderId={order.orderId}
                                         />
                                     );
-                                    // openModal("salesPayment", {
-                                    //     ...order.customer,
-                                    //     salesOrders: [order],
-                                    // });
                                 }}
                                 className="h-8 w-8 p-0"
                                 variant="outline"

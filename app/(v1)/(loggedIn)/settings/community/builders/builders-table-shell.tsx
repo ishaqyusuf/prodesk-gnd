@@ -124,17 +124,6 @@ export default function BuildersTableShell<T>({
                                         >
                                             Tasks
                                         </RowActionMenuItem>
-                                        {/* <RowActionMenuItem
-                      onClick={() => {
-                        openModal("builder", {
-                          type: "installations",
-                          data: row.original,
-                        });
-                      }}
-                      Icon={Icons.edit}
-                    >
-                      Tasks
-                    </RowActionMenuItem> */}
                                     </>
                                 }
                                 Icon={Icons.edit}

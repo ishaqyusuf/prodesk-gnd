@@ -6,11 +6,11 @@ import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
 import { getHomesAction } from "@/app/(v1)/_actions/community/home";
-import HomesTableShell from "@/components/_v1/shells/homes-table-shell";
-import HomeModal from "@/components/_v1/modals/home-modal";
 import ActivateProductionModal from "@/components/_v1/modals/activate-production-modal";
 import { _addLotBlocks } from "@/app/(v1)/_actions/community/units/_add-lotblocks";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import HomesTableShell from "./homes-table-shell";
+import AddBtn from "./add-button";
 
 export const metadata: Metadata = {
     title: "All Units",
@@ -36,14 +36,13 @@ export default async function CommunityUnitsPage({ searchParams, params }) {
                         isLast
                     />
                 </Breadcrumbs>
-                <PageHeader title={"Units"} subtitle={``} newDialog="home" />
+                <PageHeader title={"Units"} subtitle={``} Action={AddBtn} />
                 <HomesTableShell<ExtendedHome>
                     projectView={false}
                     data={response.data as any}
                     searchParams={searchParams}
                     pageInfo={response.pageInfo}
                 />
-                <HomeModal />
                 <ActivateProductionModal />
             </div>
         </AuthGuard>

@@ -79,13 +79,6 @@ export default function SalesFormAction() {
                     </MenuItem>
                 </Menu>
                 <Menu Icon={Icons.more}>
-                    {/* <MenuItem
-                        onClick={() => {
-                            // openModal("salesSupply");
-                        }}
-                    >
-                        Supply
-                    </MenuItem> */}
                     <PrintOrderMenuAction
                         link
                         row={{ slug: form.getValues("slug") } as any}

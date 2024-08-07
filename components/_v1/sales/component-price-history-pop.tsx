@@ -21,7 +21,7 @@ import {
 import { Icons } from "@/components/_v1/icons";
 import { UseFormReturn } from "react-hook-form";
 import { ISalesWizardForm } from "@/types/post";
-import { IComponentForm } from "../modals/sales-component-modal";
+import { IComponentForm } from "../../../lib/sales/sales-component-modal";
 import { IOrderInventory } from "@/types/inventory";
 import { getComponentCostHistoryAction } from "@/app/(v1)/(loggedIn)/sales/_actions/inventory";
 

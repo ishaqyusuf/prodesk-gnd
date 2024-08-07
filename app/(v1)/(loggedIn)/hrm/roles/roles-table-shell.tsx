@@ -75,8 +75,6 @@ export default function RolesTableShell({
                     <RowActionCell>
                         <EditRowAction
                             onClick={(e) => {
-                                // openModal("role", row.original);
-                                // modal.openModal();
                                 modal.open(row.original.id);
                             }}
                         />

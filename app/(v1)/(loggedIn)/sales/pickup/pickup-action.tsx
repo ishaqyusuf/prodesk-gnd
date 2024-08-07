@@ -24,7 +24,6 @@ export const PickupAction = ({ item }: IProp) => {
                     <Btn
                         icon
                         onClick={() => {
-                            // openModal("pickup", { order: item });
                             modal.openModal(<PickupModal order={item} />);
                         }}
                         isLoading={isPending}

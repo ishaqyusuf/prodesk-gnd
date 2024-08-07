@@ -24,7 +24,7 @@ import { ProjectsFilter } from "../filters/projects-filter";
 import { labelValue } from "@/lib/utils";
 import { openModal } from "@/lib/modal";
 
-export default function HomesTableShell<T>({
+export default function CommunityInvoiceTableShell<T>({
     data,
     pageInfo,
     searchParams,

@@ -4,7 +4,7 @@ import {
     InventoryComponentCategory,
     WizardKvForm,
 } from "@/types/sales";
-import BaseModal from "./base-modal";
+import BaseModal from "../../components/_v1/modals/base-modal";
 import {
     Table,
     TableBody,
@@ -13,7 +13,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "../../ui/table";
+} from "../../components/ui/table";
 import { ISalesWizardForm } from "@/types/post";
 import {
     Dispatch,
@@ -22,32 +22,42 @@ import {
     useState,
     useTransition,
 } from "react";
-import Combobox from "../combo-box";
+import Combobox from "../../components/_v1/combo-box";
 import { OrderInventory } from "@prisma/client";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { searchOrderInventoryAction } from "@/app/(v1)/(loggedIn)/sales/_actions/inventory";
-import { Input } from "../../ui/input";
+import { Input } from "../../components/ui/input";
 import { convertToNumber } from "@/lib/use-number";
-import { ComponentPriceHistory } from "../sales/component-price-history-pop";
-import { ToolTip } from "../tool-tip";
-import { Button } from "../../ui/button";
+import { ComponentPriceHistory } from "../../components/_v1/sales/component-price-history-pop";
+import { ToolTip } from "../../components/_v1/tool-tip";
+import { Button } from "../../components/ui/button";
 import { Eraser } from "lucide-react";
 import { SalesFormCtx } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-form";
 import { ISalesComponentModal } from "@/types/modal";
-import Btn from "../btn";
+import Btn from "../../components/_v1/btn";
 import { deepCopy } from "@/lib/deep-copy";
 import { saveSalesComponentAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-components";
 import { composeItemDescription } from "@/lib/sales/sales-invoice-form";
 import { closeModal } from "@/lib/modal";
 import { store } from "@/store";
 import { itemQuoteUpdated } from "@/store/invoice-item-component-slice";
-import AutoComplete2 from "../auto-complete-tw";
-import ReRender from "../re-render";
+import AutoComplete2 from "../../components/_v1/auto-complete-tw";
+import ReRender from "../../components/_v1/re-render";
+import Modal from "@/components/common/modal";
+import { useModal } from "@/components/common/modal/provider";
 
 export interface IComponentForm {
     components: WizardKvForm;
     swing;
 }
+export const useSalesComponentModal = () => {
+    const modal = useModal();
+    return {
+        open() {
+            // modal.openModal(<SalesComponentModal />)
+        },
+    };
+};
 export default function SalesComponentModal({
     form,
     ctx,
@@ -162,6 +172,7 @@ export default function SalesComponentModal({
             if (swingChanged) startTransition2(() => {});
         });
     }
+    // return <Modal.Content size="xl"></Modal.Content>;
     return (
         <BaseModal<ISalesComponentModal>
             className="sm:max-w-[600px] lg:max-w-[700px]"

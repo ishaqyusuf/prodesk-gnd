@@ -11,28 +11,28 @@ import {
     DateCellContent,
     SecondaryCellContent,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 
-import { DataTable2 } from "../data-table/data-table-2";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
 
 import { ExtendedHome } from "@/types/community";
 import {
     HomeInstallationStatus,
     HomeProductionStatus,
-} from "../columns/community-columns";
+} from "../../../../../components/_v1/columns/community-columns";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { Button } from "../../ui/button";
+} from "../../../../../components/ui/dropdown-menu";
+import { Button } from "../../../../../components/ui/button";
 import { MoreHorizontal, Printer, View } from "lucide-react";
 import Link from "next/link";
 import { deleteHome } from "@/app/(v1)/_actions/community/home";
 import { dispatchSlice } from "@/store/slicers";
-import { HomesBatchAction } from "../community/homes-selection-action";
-import HomePrinter from "../print/home/home-printer";
+import { HomesBatchAction } from "../../../../../components/_v1/community/homes-selection-action";
+import HomePrinter from "../../../../../components/_v1/print/home/home-printer";
 import { deepCopy } from "@/lib/deep-copy";
 import {
     DeleteRowAction,
@@ -40,16 +40,17 @@ import {
     MenuItem,
     RowActionCell,
     RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
-import { ProjectsFilter } from "../filters/projects-filter";
+} from "../../../../../components/_v1/data-table/data-table-row-actions";
+import { ProjectsFilter } from "../../../../../components/_v1/filters/projects-filter";
 import { labelValue } from "@/lib/utils";
-import { Icons } from "../icons";
+import { Icons } from "../../../../../components/_v1/icons";
 import { getUnitTemplateLink } from "@/app/(v1)/_actions/community/get-unit-template";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { HomeBatchAction } from "../community/home-selection-action";
+import { HomeBatchAction } from "../../../../../components/_v1/community/home-selection-action";
 import { openModal } from "@/lib/modal";
 import { deactivateProduction } from "@/app/(v1)/_actions/community/activate-production";
+import { useHomeModal } from "./home-modal";
 
 export default function HomesTableShell<T>({
     data,
@@ -62,6 +63,7 @@ export default function HomesTableShell<T>({
     const [isPending, startTransition] = useTransition();
     const route = useRouter();
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+    const modal = useHomeModal();
     const columns = useMemo<ColumnDef<ExtendedHome, unknown>[]>(
         () => [
             CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
@@ -229,7 +231,8 @@ export default function HomesTableShell<T>({
 
                             <DropdownMenuItem
                                 onClick={(e) => {
-                                    openModal("home", row.original);
+                                    // openModal("home", row.original);
+                                    modal.open(row.original);
                                 }}
                             >
                                 <Icons.edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -285,6 +288,7 @@ export default function HomesTableShell<T>({
         ], //.filter(Boolean) as any,
         [data, isPending]
     );
+
     return (
         <>
             <HomePrinter />
