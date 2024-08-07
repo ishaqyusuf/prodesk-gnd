@@ -174,7 +174,7 @@ async function CustomStepForm(
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
     if (doorType == "Bifold") {
-        console.log(doorType);
+        // console.log(doorType);
 
         const customSteps = {
             "Item Type": "Height",
@@ -200,7 +200,7 @@ async function CustomStepForm(
             //  Moulding: "Line Item",
             // "M Casing": "Line Item",
         };
-        console.log(stepTitle);
+        // console.log(stepTitle);
         title = customSteps[stepTitle];
     }
     // console.log([doorType, productTitle]);
@@ -222,6 +222,9 @@ async function CustomStepForm(
             where: {
                 title,
             },
+            include: {
+                _count: includeStepPriceCount,
+            },
         });
 
         if (!step)
@@ -229,6 +232,9 @@ async function CustomStepForm(
                 data: {
                     uid: generateRandomString(5),
                     title,
+                },
+                include: {
+                    _count: includeStepPriceCount,
                 },
             });
         return await getStepForm(step.id);

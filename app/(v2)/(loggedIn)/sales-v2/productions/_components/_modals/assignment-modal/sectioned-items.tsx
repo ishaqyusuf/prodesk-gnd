@@ -27,7 +27,7 @@ export default function SectionedItems({ index }) {
                 className={cn(!group.isDyke && !group.sectionTitle && "hidden")}
                 asChild
             >
-                <div className="p-2 rounded  bg-black-300/5  border  w-full flex">
+                <div className="p-2   rounded  bg-black-300/5  border  w-full flex">
                     <button
                         onClick={() => onOpenChange(!open)}
                         className="uppercase flex-1 font-semibold text-start"
@@ -45,7 +45,7 @@ export default function SectionedItems({ index }) {
                 {group.salesDoors.map((sd, si) => (
                     <div className="text-sm p-2 border-b" key={si}>
                         <div className="flex gap-4 justify-between items-center">
-                            <div className="">
+                            <div className="text-lg">
                                 <TableCol.Primary>
                                     {sd?.doorTitle}
                                 </TableCol.Primary>
@@ -60,7 +60,7 @@ export default function SectionedItems({ index }) {
                                 />
                             </div>
                         </div>
-                        <div className="grid gap-4 p-2 grid-cols-3 sm:grid-cols-5">
+                        <div className="grid text-base gap-4 p-2 grid-cols-3 sm:grid-cols-5">
                             {group.doorConfig.singleHandle || !group.isDyke ? (
                                 <Info label="Qty" value={sd.report.totalQty} />
                             ) : (

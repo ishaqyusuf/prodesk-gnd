@@ -30,6 +30,7 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { PlaceholderImage } from "@/components/placeholder-image";
 import { Dot } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -61,9 +62,13 @@ export function StepItem({
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
-    const doorPriceCount = Object.keys(
+    const itemData = ctx.get.itemArray();
+
+    const doorPriceCount = Object.entries(
         item.product.meta.doorPrice || {}
-    ).length;
+    ).filter(([k, v]) => {
+        return v > 0 && k?.endsWith(itemData.item?.housePackageTool?.height);
+    }).length;
     const [menuOpen, menuOpenChange] = useState(false);
     const [editPrice, setEditPrice] = useState(false);
     useEffect(() => {
@@ -232,8 +237,8 @@ export function StepItem({
                     : item.product.title}
             </span>
 
-            <CardContent className="space-y-1.5 p-4">
-                <CardTitle className="line-clamp-1 text-sm">
+            <CardContent className="space-y-1.5 inline-flex items-center justify-between p-4">
+                <CardTitle className="line-clamp-1s text-sm">
                     {isRoot
                         ? item.product?.value || item.product.title
                         : item.product.title}
@@ -242,16 +247,16 @@ export function StepItem({
                     {/* {formatPrice(product.price)} */}
                     {stepForm.step.title == "Door" ? (
                         <span className="inline-flex space-x-1 text-muted-foreground">
-                            {doorPriceCount > 0 && (
-                                <>
-                                    <Icons.dollar className="w-4 h-4" />
-                                    <span>{doorPriceCount}</span>
-                                </>
-                            )}
+                            {/* <Icons.dollar className="w-4 h-4" /> */}
+                            <span>
+                                {doorPriceCount} {" price found"}
+                            </span>
                         </span>
                     ) : (
                         item._metaData.price > 0 && (
-                            <Money value={item._metaData.price} />
+                            <Badge>
+                                <Money value={item._metaData.price} />
+                            </Badge>
                         )
                     )}
                 </CardDescription>

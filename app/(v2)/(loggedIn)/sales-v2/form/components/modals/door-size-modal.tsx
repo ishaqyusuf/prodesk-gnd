@@ -20,6 +20,8 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { HousePackageToolMeta } from "@/types/sales";
 import ControlledSelect from "@/components/common/controls/controlled-select";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
     rowIndex;
@@ -117,7 +119,7 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                     subtitle={productTitle}
                 />
                 <div className="">
-                    <Table className="table-fixed">
+                    <Table className="table-fixed size-sm">
                         <TableHeader>
                             <TableRow>
                                 <TableHead colSpan={4}>Size</TableHead>
@@ -134,17 +136,31 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                         </TableHeader>
                     </Table>
                     <ScrollArea className="max-h-[45vh] overflow-auto">
-                        <Table className="table-fixed">
+                        <Table className="table-fixed size-sm">
                             <TableBody>
                                 {sizes.map((size) => (
                                     <TableRow key={size.dim}>
                                         <TableCell colSpan={4}>
-                                            <TableCol.Primary>
-                                                {size.dimFt}
-                                            </TableCol.Primary>
-                                            <TableCol.Secondary>
-                                                <Money value={size.price} />
-                                            </TableCol.Secondary>
+                                            <div className="flex justify-between">
+                                                <TableCol.Primary>
+                                                    {size.dimFt}
+                                                </TableCol.Primary>
+                                                <TableCol.Secondary
+                                                    className={cn("")}
+                                                >
+                                                    <Badge
+                                                        variant={
+                                                            size.price > 0
+                                                                ? "default"
+                                                                : "secondary"
+                                                        }
+                                                    >
+                                                        <Money
+                                                            value={size.price}
+                                                        />
+                                                    </Badge>
+                                                </TableCol.Secondary>
+                                            </div>
                                         </TableCell>
                                         {isType.garage && (
                                             <TableCell colSpan={3}>
@@ -167,6 +183,7 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                                         <TableCell colSpan={2}>
                                             <ControlledInput
                                                 type="number"
+                                                size="sm"
                                                 className="w-full"
                                                 control={_form.control}
                                                 name={`${size.dim}.lhQty`}
@@ -175,6 +192,7 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                                         {isType.multiHandles && (
                                             <TableCell colSpan={2}>
                                                 <ControlledInput
+                                                    size="sm"
                                                     type="number"
                                                     className="w-full"
                                                     control={_form.control}

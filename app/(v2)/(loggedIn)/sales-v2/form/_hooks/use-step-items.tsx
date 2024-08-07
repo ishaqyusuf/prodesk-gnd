@@ -53,7 +53,6 @@ export default function useStepItems({
                 item.get.getFormStepArray(),
                 item.get.doorType()
             );
-            console.log("QUERY>", query);
             const _props = { ...query, stepId: stepForm?.step?.id };
             const prods = await getDykeStepDoors(_props as any);
             _stepProducts = prods;
@@ -244,11 +243,14 @@ export default function useStepItems({
                 `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
                 data
             );
+            // form.setValue(
+            //     `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item` as any,
+            //     stepProd
+            // );
             const seq =
                 form.getValues(`itemArray.${item.rowIndex}.stepSequence`) || {};
             const stepSeq = stepProd.meta?.stepSequence;
             if (stepSeq?.length) {
-                console.log(stepProd);
                 seq[stepProd.uid] = stepSeq;
                 form.setValue(
                     `itemArray.${item.rowIndex}.stepSequence.${stepProd.uid}`,
@@ -270,7 +272,7 @@ export default function useStepItems({
                     });
                 }
             }
-            console.log({ stepsIds: formSteps.map((s) => s.step.id) });
+            // console.log({ stepsIds: formSteps.map((s) => s.step.id) });
 
             if (nextStepId) {
                 stepProd.nextStepId = nextStepId;
@@ -282,7 +284,7 @@ export default function useStepItems({
                 [],
                 doorType
             );
-            console.log({ nextSteps, nextStepId });
+            // console.log({ nextSteps, nextStepId });
             if (nextSteps.length) {
                 const currentNextStep = item.formStepArray[stepIndex + 1];
                 if (currentNextStep) {
@@ -301,7 +303,7 @@ export default function useStepItems({
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[number]) {
         if (stepItem.door) stepItem.product = stepItem.door as any;
-        console.log(stepItem);
+        // console.log(stepItem);
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];

@@ -113,3 +113,6 @@ section.content {
 #housePackageTable th {
     @apply p-1;
 }
+table.size-sm td {
+    @apply p-2;
+}

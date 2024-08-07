@@ -13,6 +13,7 @@ import { sum } from "@/lib/utils";
 import { useMultiComponentItem } from "../../../../_hooks/use-multi-component-item";
 import { Form } from "@/components/ui/form";
 import { TableCol } from "@/components/common/data-table/table-cells";
+import { useState } from "react";
 
 interface Props {
     sizeRow?;
@@ -21,7 +22,6 @@ interface Props {
 export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
     const form = useDykeForm();
     const itemData = componentItem.item.get.data();
-
     return (
         <TableCell className="hidden lg:table-cell">
             <Popover>
@@ -59,17 +59,17 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
                             </div>
                             <div className="grid gap-2">
                                 {itemData.item.formStepArray
-                                    .filter((a) => a.step._count?.priceSystem)
+                                    .filter((a) => a.item?.price)
                                     .map((a) => (
                                         <div
                                             key={a.step.id}
                                             className="border-b"
                                         >
-                                            <div className="grid grid-cols-2  gap-4">
+                                            <div className="grid grid-cols-3  gap-2">
                                                 <Label htmlFor="maxWidth">
                                                     {a.step.title}
                                                 </Label>
-                                                <div className="text-left">
+                                                <div className="text-left col-span-2">
                                                     <Money
                                                         value={a.item.price}
                                                     />
@@ -96,17 +96,19 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
                                         </div>
                                     </div>
                                 )}
-
-                                <ControlledInput
-                                    control={form.control}
-                                    label={"Edit Price"}
-                                    type="number"
-                                    name={
-                                        sizeRow
-                                            ? sizeRow.keys.overridePrice
-                                            : componentItem.keys.overridePrice
-                                    }
-                                />
+                                <div className="pt-2 border-t">
+                                    <ControlledInput
+                                        control={form.control}
+                                        label={"Edit Price"}
+                                        type="number"
+                                        name={
+                                            sizeRow
+                                                ? sizeRow.keys.overridePrice
+                                                : componentItem.keys
+                                                      .overridePrice
+                                        }
+                                    />
+                                </div>
                             </div>
                         </div>
                     </PopoverContent>
