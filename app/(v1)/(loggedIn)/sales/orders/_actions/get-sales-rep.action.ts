@@ -11,7 +11,9 @@ export async function _getSalesRep() {
                 where: {
                     roles: {
                         some: {
-                            roleId: { not: null },
+                            roleId: {
+                                gt: 0,
+                            },
                         },
                     },
                     reppedProductions: {

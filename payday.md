@@ -4,6 +4,7 @@ Shelf item auto pick when created
 shelf item delete.
 ---------------------------------
 - AUG 07: 00.00 == 00.00
+  - 09:10-
   - 06:45-07:10
 - AUG 06: 03.20 == 03.20
   - 04:30-05:10
