@@ -28,7 +28,7 @@ import {
 import { PrimitiveDivProps } from "@radix-ui/react-dialog";
 import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
 import { Icons } from "@/components/_v1/icons";
 
@@ -159,6 +159,8 @@ interface FooterProps extends PrimitiveDivProps {
     submitText?: string;
     cancelBtn?: boolean;
     cancelText?: string;
+    cancelVariant?: ButtonProps["variant"];
+    submitVariant?: ButtonProps["variant"];
 }
 function Footer({
     children,
@@ -167,6 +169,8 @@ function Footer({
     submitText = "Submit",
     cancelBtn,
     cancelText = "Cancel",
+    cancelVariant = "secondary",
+    submitVariant = "default",
 }: FooterProps) {
     const modal = useModal();
     const isModal = modal?.data?.type == "modal";
@@ -178,7 +182,7 @@ function Footer({
                 <div className="flex justify-end space-x-4">
                     {cancelBtn && (
                         <Button
-                            variant={"secondary"}
+                            variant={cancelVariant}
                             onClick={() => {
                                 onCancel ? onCancel() : modal?.close();
                             }}
@@ -188,6 +192,7 @@ function Footer({
                     )}
                     {onSubmit && (
                         <Btn
+                            variant={submitVariant}
                             isLoading={modal?.loading}
                             onClick={() => modal?.startTransition(onSubmit)}
                         >

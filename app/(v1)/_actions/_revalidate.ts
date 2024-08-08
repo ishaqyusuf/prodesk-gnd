@@ -18,6 +18,7 @@ const _path = {
     contractorJobs: "/jobs/[type]",
     "contractor-overview": "/contractors/overview/[contractorId]",
     delivery: "/sales-v2/dispatch/delivery",
+    dealers: "/sales-v2/dealers",
     quotes: "/sales/quotes",
     homes: "/community/units",
     jobs: "/contractor/jobs",

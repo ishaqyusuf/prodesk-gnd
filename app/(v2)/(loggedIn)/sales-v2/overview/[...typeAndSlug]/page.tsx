@@ -29,7 +29,6 @@ export default async function SalesOverviewPage({ params: { typeAndSlug } }) {
                     <BreadLink title="Orders" link="/sales/orders" />
                 </Breadcrumbs>
                 <OverviewShell data={data} />
-
                 <OrderPrinter />
                 <DeletePaymentPrompt />
             </div>

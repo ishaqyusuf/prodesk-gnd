@@ -20,7 +20,7 @@ export function Info({
     return (
         <div className={cn("grid gap-1", className)}>
             <Label className="text-muted-foreground">{label}</Label>
-            <div className="">{children || value}</div>
+            <div className="">{children || value || "-"}</div>
             {/* <p className="text-muted-foreground">{order.orderId}</p> */}
         </div>
     );

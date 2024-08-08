@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { useRouter } from "next/navigation";
-import { ILogin } from "@/lib/validations/auth";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { RegisterSchema, registerSchema } from "./validation";
 import { toast } from "sonner";
@@ -32,7 +31,6 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
     const router = useRouter();
     async function onSubmit() {
         const data = form.getValues();
-        console.log(data);
 
         startTransition(async () => {
             setError(null);

@@ -1,9 +1,5 @@
 "use client";
 
-import {
-    saveCommunityTemplateDesign,
-    saveHomeTemplateDesign,
-} from "@/app/(v1)/_actions/community/home-template";
 import Btn from "@/components/_v1/btn";
 import PageHeader from "@/components/_v1/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,10 +18,15 @@ import {
 import { toast } from "sonner";
 import { useAppSelector } from "@/store";
 import { loadStaticList } from "@/store/slicers";
-import { getHomeTemplateSuggestions } from "@/app/(v1)/_actions/community/home-template-suggestion";
+
 import ImportModelTemplateSheet from "@/components/_v1/sheets/import-model-template-sheet";
 import { useDataPage } from "@/lib/data-page-context";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import { getHomeTemplateSuggestions } from "@/app/(v1)/_actions/community/home-template-suggestion";
+import {
+    saveCommunityTemplateDesign,
+    saveHomeTemplateDesign,
+} from "../home-template";
 
 interface Props {
     data: IHomeTemplate;
@@ -41,8 +42,6 @@ export interface DesignTemplateForm extends HomeTemplateDesign {
     };
 }
 export default function ModelForm({ data, title = "Edit Model" }: Props) {
-    // console.log(data);
-
     const {
         data: { community },
     } = useDataPage();
@@ -62,9 +61,6 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
     }, []);
     async function save() {
         startTransition(async () => {
-            // await timeout(1000);
-            // console.log(form.getValues());
-            // return;
             await (community
                 ? saveCommunityTemplateDesign
                 : saveHomeTemplateDesign)(data.slug, {

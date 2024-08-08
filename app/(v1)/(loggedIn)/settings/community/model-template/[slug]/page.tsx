@@ -1,11 +1,11 @@
-import { getHomeTemplate } from "@/app/(v1)/_actions/community/home-template";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import ModelForm from "@/components/_v1/forms/model-form/model-form";
-import PageHeader from "@/components/_v1/page-header";
+
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { Metadata } from "next";
+import ModelForm from "../../_components/model-form/model-form";
+import { getHomeTemplate } from "../../_components/home-template";
 
 export const metadata: Metadata = {
     title: "Edit Model Template",

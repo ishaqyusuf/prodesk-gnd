@@ -25,9 +25,10 @@ import {
     RowActionMenuItem,
     RowActionMoreMenu,
 } from "../data-table/data-table-row-actions";
-import { deleteHomeTemplateAction } from "@/app/(v1)/_actions/community/home-template";
+
 import ModelCostCell from "../community/model-cost-cell";
 import InstallCostCell from "../community/install-cost-cell";
+import { deleteHomeTemplateAction } from "@/app/(v1)/(loggedIn)/settings/community/_components/home-template";
 
 export default function ModelCostTableShell<T>({
     data,

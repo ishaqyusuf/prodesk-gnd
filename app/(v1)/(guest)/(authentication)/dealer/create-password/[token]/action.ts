@@ -18,6 +18,8 @@ export async function verifyToken(token) {
             auth: true,
         },
     });
+    // if(!t)
+    // redirect(`/dealer/create-password/${token}/expired`)
     return t;
 }
 export async function createDealerPassword(data: CreateDealerPasswordSchema) {

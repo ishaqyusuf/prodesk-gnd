@@ -10,9 +10,9 @@ TODO:
     <!-- - delete door not working -->
     <!-- - zero not deleting -->
     - custom
-    - show number of door prices for selected heights.
-    - check pricing data breakdown
-    - create unit form flickers (need update)
+    <!-- - show number of door prices for selected heights. -->
+    <!-- - check pricing data breakdown -->
+    <!-- - create unit form flickers (need update) -->
     - door size with qty and swing
     <!-- - search on payables. -->
     - batch delete item.

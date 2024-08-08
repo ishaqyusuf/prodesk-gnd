@@ -27,7 +27,7 @@ import { ScrollArea } from "../../ui/scroll-area";
 import { Button } from "../../ui/button";
 import { Import } from "lucide-react";
 import { cn, labelValue } from "@/lib/utils";
-import { ModelFormProps } from "../forms/model-form/model-form";
+import { ModelFormProps } from "../../../app/(v1)/(loggedIn)/settings/community/_components/model-form/model-form";
 import { closeModal, openModal } from "@/lib/modal";
 import { searchImport } from "@/app/(v1)/_actions/community/_template-import";
 import { Command, CommandInput, CommandList } from "../../ui/command";

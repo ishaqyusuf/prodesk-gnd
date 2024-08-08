@@ -4,7 +4,6 @@ import { Metadata } from "next";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
-import { getCommunityTemplates } from "@/app/(v1)/_actions/community/home-template";
 
 import ModelTemplateModal from "@/components/_v1/modals/model-template-modal";
 import ModelInstallCostModal from "@/app/(v1)/(loggedIn)/settings/community/community-templates/install-cost-modal/model-install-cost-modal";
@@ -18,6 +17,7 @@ import CommunityModelCostModal from "@/components/_v1/modals/community-model-cos
 import CommunityInstallCostModal from "@/components/_v1/modals/community-install-cost";
 import { _synchronizePivot } from "@/app/(v2)/(loggedIn)/community-settings/community-templates/_actions/synchronize-pivots";
 import CommunityTemplateTableShell from "./community-templates-table-shell";
+import { getCommunityTemplates } from "../_components/home-template";
 
 export const metadata: Metadata = {
     title: "Community Templates",

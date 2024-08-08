@@ -10,7 +10,7 @@ import {
     InteriorDoorForm,
     LockHardwareForm,
     ProjectHeaderForm,
-} from "@/components/_v1/forms/model-form/model-sections";
+} from "@/app/(v1)/(loggedIn)/settings/community/_components/model-form/model-sections";
 import { ExtendedHome, HomeTemplateDesign, IHome } from "@/types/community";
 import { useForm } from "react-hook-form";
 

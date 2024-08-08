@@ -22,6 +22,7 @@ export async function signupDealerAction(data: RegisterSchema) {
     const auth = await prisma.dealerAuth.create({
         data: {
             email: data.email,
+            status: "Pending Approval",
             dealer: {
                 create: {
                     name: data.name,

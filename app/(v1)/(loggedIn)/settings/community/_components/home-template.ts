@@ -4,12 +4,12 @@ import { prisma } from "@/db";
 import { removeEmptyValues, transformData } from "@/lib/utils";
 import { BaseQuery } from "@/types/action";
 import { Prisma } from "@prisma/client";
-import { getPageInfo, queryFilter } from "../action-utils";
+import { getPageInfo, queryFilter } from "../../../../_actions/action-utils";
 import { whereQuery } from "@/lib/db-utils";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 import { ICommunityTemplateMeta } from "@/types/community";
-import { userId } from "../utils";
+import { userId } from "../../../../_actions/utils";
 
 export interface HomeTemplatesQueryParams extends BaseQuery {}
 export async function getHomeTemplates(query: HomeTemplatesQueryParams) {

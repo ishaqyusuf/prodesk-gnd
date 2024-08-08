@@ -49,38 +49,41 @@ const useCtx = () => {
             const newSearchParams = new URLSearchParams(query?.toString());
             newSearchParams.delete("_page");
             newSearchParams.delete(v.qk);
+            let tabName = v.tabName || v.children;
             if (v.qk) {
                 const qv = query.get(v.qk);
                 if (qv == v.qv) {
-                    cTab = v.children;
+                    cTab = tabName;
                 }
                 newSearchParams.set(v.qk, v.qv);
                 newSearchParams.set(v.qk, v.qv || null);
             } else {
-                defaultTab = v.children;
+                defaultTab = tabName;
             }
             const url = `${pathname}?${!v.qk ? "" : newSearchParams.toString()}`
                 ?.split("?")
                 ?.filter(Boolean)
                 ?.join("?");
 
-            tabData[v.children] = {
-                current: cTab == v.children,
+            tabData[tabName] = {
+                current: cTab == tabName,
                 url,
             };
         });
         if (!cTab && defaultTab) {
             tabData[defaultTab].current = true;
         }
-
         form.setValue("tabData", tabData);
     }, [query, tabs]);
     return {
         register(props: TabProps) {
-            if (props.children)
-                form.setValue(`tabs.${props.children}` as any, {
-                    ...props,
-                });
+            if (props.tabName || props.children)
+                form.setValue(
+                    `tabs.${props.tabName || props.children}` as any,
+                    {
+                        ...props,
+                    }
+                );
         },
         tabs,
         tabData,
@@ -100,7 +103,8 @@ function _FPageTabs({ children }: Props) {
 }
 
 interface TabProps {
-    children?: string;
+    children?: any;
+    tabName?: string;
     href?: string;
     query?: {
         k?: string;
@@ -119,14 +123,17 @@ function Tab(props: TabProps) {
             variant={"ghost"}
             size="sm"
             className={cn(
-                ct.tabData?.[props.children]?.current
+                ct.tabData?.[props.tabName || props.children]?.current
                     ? "border-b-2 border-blue-600 rounded-none"
                     : "text-muted-foreground"
             )}
             asChild
-            disabled={ct.tabData?.[props.children]?.current}
+            disabled={ct.tabData?.[props.tabName || props.children]?.current}
         >
-            <Link href={ct.tabData?.[props.children]?.url || ""}>
+            <Link
+                className={cn("inline-flex items-center space-x-2")}
+                href={ct.tabData?.[props.tabName || props.children]?.url || ""}
+            >
                 {props.children}
             </Link>
         </Button>

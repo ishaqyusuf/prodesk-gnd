@@ -23,12 +23,12 @@ import {
     IHome,
     IHomeTemplate,
 } from "@/types/community";
-import { printHomesAction } from "@/app/(v1)/_actions/community/home-template";
 import HomePrintData from "./home-print-data";
 import { openModal } from "@/lib/modal";
 import { getHomeProductionStatus } from "@/lib/community/community-utils";
 import { toast } from "sonner";
 import { transformCommunityTemplate } from "@/lib/community/community-template";
+import { printHomesAction } from "@/app/(v1)/(loggedIn)/settings/community/_components/home-template";
 interface Props {
     id?;
 }
@@ -64,6 +64,7 @@ export default function HomePrinter({ id }: Props) {
             }))
         )) as any;
         console.log(printer.homes);
+        console.log({ _templates, communityPrints });
         setHomes(
             printer.homes.map((home) => {
                 const communityDesign = communityPrints.find(

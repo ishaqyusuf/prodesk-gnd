@@ -7,9 +7,9 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
 
-import { getHomeTemplates } from "@/app/(v1)/_actions/community/home-template";
 import HomeTemplatesTableShell from "@/components/_v1/shells/home-templates-table-shell";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import { getHomeTemplates } from "../_components/home-template";
 
 export const metadata: Metadata = {
     title: "Builders",

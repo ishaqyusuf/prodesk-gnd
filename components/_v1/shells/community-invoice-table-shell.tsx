@@ -165,8 +165,6 @@ export default function CommunityInvoiceTableShell<T>({
     );
     return (
         <>
-            {/* <DatePicker /> */}
-            {/* <HomePrinter /> */}
             <DataTable2
                 searchParams={searchParams}
                 columns={columns}

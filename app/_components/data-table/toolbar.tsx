@@ -35,7 +35,7 @@ function Search({ k = "_q", placeholder }: SearchProps) {
     const col = table.getColumn(String(k));
     return (
         <Input
-            placeholder={`Filter ${placeholder}...`}
+            placeholder={`Filter ${placeholder || ""}...`}
             value={(col?.getFilterValue() as string) ?? ""}
             onChange={(event) => col?.setFilterValue(event.target.value)}
             className="h-8 w-[150px] lg:w-[250px]"

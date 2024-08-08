@@ -44,14 +44,7 @@ import Link from "next/link";
 import { deleteHome } from "@/app/(v1)/_actions/community/home";
 import { dispatchSlice } from "@/store/slicers";
 import { HomesBatchAction } from "../community/homes-selection-action";
-import HomePrinter from "../print/home/home-printer";
-import { deepCopy } from "@/lib/deep-copy";
-import {
-    ActionButton,
-    DeleteRowAction,
-    RowActionCell,
-    RowActionMoreMenu,
-} from "../data-table/data-table-row-actions";
+import { RowActionCell } from "../data-table/data-table-row-actions";
 import Money from "../money";
 import { sum } from "@/lib/utils";
 import { Icons } from "../icons";

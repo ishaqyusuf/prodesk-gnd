@@ -1,11 +1,12 @@
-import { getCommunityTemplate } from "@/app/(v1)/_actions/community/home-template";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import ModelForm from "@/components/_v1/forms/model-form/model-form";
+
 import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { transformCommunityTemplate } from "@/lib/community/community-template";
 import { Metadata } from "next";
+import ModelForm from "../../_components/model-form/model-form";
+import { getCommunityTemplate } from "../../_components/home-template";
 
 export const metadata: Metadata = {
     title: "Edit Community Template",
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function CommunityModelTemplatePage({ params }) {
     const response: any = await getCommunityTemplate(params.slug);
-    console.log({ ...(response.meta.design ?? {}) });
 
     if (response.meta?.design) {
         response.meta.design = transformCommunityTemplate(response.meta.design);
