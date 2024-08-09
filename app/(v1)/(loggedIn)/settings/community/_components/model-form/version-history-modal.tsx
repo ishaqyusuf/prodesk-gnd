@@ -12,7 +12,7 @@ export default function TemplateHistoryModal({ data }: Props) {
             <div className="">
                 <span>{data.history.length}</span>
                 {data.history?.map((history) => (
-                    <div>
+                    <div key={history.id}>
                         <span>
                             {"Date: "}{" "}
                             <TableCol.Date>{history.createdAt}</TableCol.Date>

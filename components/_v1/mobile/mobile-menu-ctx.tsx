@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState } from "react";
-import { Tabs, TabsContent } from "../../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { MobileMenu, MobileOption } from "./mobile-menu-item";
 import BaseSheet from "../sheets/base-sheet";
 import { Button } from "../../ui/button";
@@ -42,7 +42,7 @@ const MobileMenuContext = ({ item }: Props) => {
                 title={item.orderId}
             />
             <div className="-mx-4">
-                <Tabs defaultValue={tab} className="">
+                <Tabs defaultValue={tab} onValueChange={setTab} className="">
                     {options.map((opt, i) => (
                         <TabsContent key={i} value={opt.name}>
                             <MobileMenu>
@@ -52,9 +52,9 @@ const MobileMenuContext = ({ item }: Props) => {
                                             key={j}
                                             {...item}
                                             more={item.more?.length}
-                                            onClick={() => {
-                                                // console.log(item.);
+                                            onClick={(e) => {
                                                 if (item.more) {
+                                                    e.preventDefault();
                                                     setTab(item.label);
                                                 } else
                                                     item.onClick &&
