@@ -32,13 +32,25 @@ export async function getDealersAction(query: GetDealersQuery) {
         where,
         include: {
             dealer: true,
+            token: {
+                where: {
+                    consumedAt: null,
+                    expiredAt: {
+                        lt: new Date(),
+                    },
+                },
+            },
         },
     });
     return {
         data: data.map((data) => {
+            let status = data.status as DealerStatus;
+            let tokenExpired = status == "Approved" && data.token.length;
+
             return {
                 ...data,
-                status: data.status as DealerStatus,
+                status,
+                tokenExpired,
             };
         }),
         pageCount,
@@ -86,7 +98,20 @@ function _where(query: GetDealersQuery) {
     };
     return where;
 }
-
+export async function resendApprovalTokenAction(id) {
+    await prisma.dealerAuth.update({
+        where: { id },
+        data: {
+            token: {
+                create: {
+                    token: generateRandomString(16),
+                    expiredAt: dayjs().add(4, "hours").toISOString(),
+                },
+            },
+        },
+    });
+    _revalidate("dealers");
+}
 export async function dealershipApprovalAction(
     id,
     status: DealerStatus,

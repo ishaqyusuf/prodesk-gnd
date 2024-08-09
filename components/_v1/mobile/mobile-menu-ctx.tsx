@@ -1,11 +1,8 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
+import { memo, useState } from "react";
+import { Tabs, TabsContent } from "../../ui/tabs";
 import { MobileMenu, MobileOption } from "./mobile-menu-item";
-import BaseSheet from "../sheets/base-sheet";
-import { Button } from "../../ui/button";
-import { Icons } from "../icons";
 import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
 import { useModal } from "@/components/common/modal-old/provider";

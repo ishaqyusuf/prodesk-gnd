@@ -6,6 +6,7 @@ import {
     dealershipApprovalAction,
     DealerStatus,
     GetDealersAction,
+    resendApprovalTokenAction,
 } from "./action";
 import { Info } from "@/components/_v1/info";
 import StatusBadge from "@/components/_v1/status-badge";
@@ -38,7 +39,11 @@ export default function DealerOverviewSheet({ dealer }: Props) {
         modal.close();
         toast.success(`Dealership ${status}!`);
     }
-
+    async function _resendToken() {
+        await resendApprovalTokenAction(dealer.id);
+        modal.close();
+        toast.success("New Token Sent.");
+    }
     function cancelReason() {
         setReason("");
         setReject(false);
@@ -64,6 +69,16 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                         }
                     />
                 </div>
+            </div>
+            <div className={cn(dealer.tokenExpired ? "" : "hidden")}>
+                <Modal.Footer
+                    submitText="Reject"
+                    onSubmit={() => _action("Rejected")}
+                    cancelText="Cancel"
+                    cancelBtn
+                    submitVariant="destructive"
+                    onCancel={cancelReason}
+                />
             </div>
             <div
                 className={cn(

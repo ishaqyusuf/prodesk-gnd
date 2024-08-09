@@ -1,6 +1,6 @@
 "use client";
 
-import { DesignTemplateForm } from "@/components/_v1/forms/model-form/model-form";
+import { DesignTemplateForm } from "@/app/(v1)/(loggedIn)/settings/community/_components/model-form/model-form";
 import {
     BifoldDoorForm,
     DecoForm,

@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import Form from "./form";
 import { verifyToken } from "./action";
+import dayjs from "dayjs";
 export const metadata: Metadata = {
     title: "Sign Up - GND Prodesk",
     description: "",
@@ -18,8 +19,17 @@ export const metadata: Metadata = {
 
 export default async function CreatePasswordPage({ params }) {
     const token = params.token;
-    const ver = verifyToken(token);
-
+    const ver = await verifyToken(token);
+    let msg = null;
+    if (!ver) msg = "Invalid Token";
+    if (ver.consumedAt) msg = "Token already used";
+    if (dayjs().diff(ver.expiredAt, "m") > 0) msg = "Token Expired";
+    if (msg)
+        return (
+            <div>
+                <span>{msg}</span>
+            </div>
+        );
     return (
         <Shell className="sm:max-w-2xl">
             <Card>

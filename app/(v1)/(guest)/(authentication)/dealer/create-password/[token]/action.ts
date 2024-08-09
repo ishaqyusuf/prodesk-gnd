@@ -10,14 +10,15 @@ export async function verifyToken(token) {
     const t = await prisma.dealerToken.findFirst({
         where: {
             token,
-            expiredAt: {
-                gt: new Date(),
-            },
+            // expiredAt: {
+            //     gt: new Date(),
+            // },
         },
         include: {
             auth: true,
         },
     });
+
     // if(!t)
     // redirect(`/dealer/create-password/${token}/expired`)
     return t;
