@@ -29,7 +29,7 @@ export default function MultiComponentRender({ Render, line = false }) {
     const total = form.watch(`itemArray.${item.rowIndex}.sectionPrice`);
     if (mdf.ready)
         return (
-            <div className="flex flex-col">
+            <div className="flex flex-col w-[200vw] md:w-auto">
                 {line ? (
                     <div className="h-[300px] px-8 -mx-8 overflow-auto">
                         <Table id="housePackageTable">

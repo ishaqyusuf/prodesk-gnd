@@ -23,7 +23,7 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
     const form = useDykeForm();
     const itemData = componentItem.item.get.data();
     return (
-        <TableCell className="hidden lg:table-cell">
+        <TableCell className="shidden lg:table-cell">
             <Popover>
                 <PopoverTrigger asChild>
                     <Button size="sm" variant="outline">
