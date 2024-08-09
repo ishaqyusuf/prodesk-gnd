@@ -24,16 +24,21 @@ import { useDataPage } from "@/lib/data-page-context";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { getHomeTemplateSuggestions } from "@/app/(v1)/_actions/community/home-template-suggestion";
 import {
+    GetCommunityTemplate,
     saveCommunityTemplateDesign,
     saveHomeTemplateDesign,
 } from "../home-template";
+import { removeEmptyValues } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useModal } from "@/components/common/modal/provider";
+import TemplateHistoryModal from "./version-history-modal";
 
 interface Props {
-    data: IHomeTemplate;
+    data: GetCommunityTemplate;
     title?;
 }
 export interface ModelFormProps {
-    data?: IHomeTemplate;
+    data?: GetCommunityTemplate;
     form: UseFormReturn<DesignTemplateForm, any, undefined>;
 }
 export interface DesignTemplateForm extends HomeTemplateDesign {
@@ -61,16 +66,18 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
     }, []);
     async function save() {
         startTransition(async () => {
-            await (community
-                ? saveCommunityTemplateDesign
-                : saveHomeTemplateDesign)(data.slug, {
+            const _meta = {
                 ...((data?.meta || {}) as any),
                 design: form.getValues(),
-            });
+            };
+            await (community
+                ? saveCommunityTemplateDesign
+                : saveHomeTemplateDesign)(data.slug, _meta);
             toast.success("Saved successfully!");
             _revalidate("communityTemplate");
         });
     }
+    const modal = useModal();
     return (
         <div id="unitModelForm">
             <PageHeader
@@ -78,15 +85,16 @@ export default function ModelForm({ data, title = "Edit Model" }: Props) {
                 subtitle={``}
                 Action={() => (
                     <>
-                        {/* <Btn
-                            size="sm"
-                            variant="outline"
+                        <Button
                             onClick={() => {
-                                openModal("importModelTemplate");
+                                modal.openSheet(
+                                    <TemplateHistoryModal data={data} />
+                                );
                             }}
+                            size="sm"
                         >
-                            Import
-                        </Btn> */}
+                            History
+                        </Button>
                         <ImportModelTemplateSheet data={data} form={form} />
                         <Btn size="sm" isLoading={isSaving} onClick={save}>
                             Save

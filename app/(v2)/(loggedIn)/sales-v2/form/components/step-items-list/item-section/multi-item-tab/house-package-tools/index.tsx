@@ -66,19 +66,19 @@ export default function HousePackageTool({ componentTitle }) {
                     )}
                     {componentItem.calculatedPriceMode ? (
                         <>
-                            <TableHead className="hidden lg:table-cell">
+                            <TableHead className="shidden lg:table-cell">
                                 Estimate
                             </TableHead>
                             <TableHead className="">Addon/Qty</TableHead>
                         </>
                     ) : (
                         <>
-                            <TableHead className="hidden lg:table-cell">
+                            <TableHead className="shidden lg:table-cell">
                                 Price
                             </TableHead>
                         </>
                     )}
-                    <TableHead className="hidden lg:table-cell">
+                    <TableHead className="shidden lg:table-cell">
                         Line Total
                     </TableHead>
                     <TableHead></TableHead>
@@ -93,13 +93,13 @@ export default function HousePackageTool({ componentTitle }) {
                     ))}
                     <TableRow>
                         <TableCell
-                            className="hidden lg:table-cell"
+                            className="shidden lg:table-cell"
                             colSpan={doorConfig.singleHandle ? 4 : 5}
                         ></TableCell>
-                        <TableCell
+                        {/* <TableCell
                             className="lg:hidden"
                             colSpan={doorConfig.singleHandle ? 3 : 4}
-                        ></TableCell>
+                        ></TableCell> */}
                         <TableCell>
                             {/* <Money value={componentItem.unitPrice} /> */}
                         </TableCell>

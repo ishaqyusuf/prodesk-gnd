@@ -109,7 +109,7 @@ export default function HousePackageSizeLineItem({
                 </div>
             </TableCell>
 
-            <TableCell className="hidden lg:table-cell">
+            <TableCell className="shidden lg:table-cell">
                 <Money value={sizeRow.lineTotal} />
             </TableCell>
             <TableCell></TableCell>

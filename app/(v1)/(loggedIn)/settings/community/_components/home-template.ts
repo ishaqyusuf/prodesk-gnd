@@ -8,10 +8,11 @@ import { getPageInfo, queryFilter } from "../../../../_actions/action-utils";
 import { whereQuery } from "@/lib/db-utils";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
-import { ICommunityTemplateMeta } from "@/types/community";
+import { HomeTemplateMeta, ICommunityTemplateMeta } from "@/types/community";
 import { userId } from "../../../../_actions/utils";
 
 export interface HomeTemplatesQueryParams extends BaseQuery {}
+export type GetHomeTemplates = Awaited<ReturnType<typeof getHomeTemplates>>;
 export async function getHomeTemplates(query: HomeTemplatesQueryParams) {
     const where = whereHomeTemplate(query);
     const _items = await prisma.homeTemplates.findMany({
@@ -161,6 +162,9 @@ export async function getHomeTemplate(slug) {
     if (!homeTemplate) throw new Error("Home template not found");
     return homeTemplate;
 }
+export type GetCommunityTemplate = Awaited<
+    ReturnType<typeof getCommunityTemplate>
+>;
 export async function getCommunityTemplate(slug) {
     const homeTemplate = await prisma.communityModels.findUnique({
         where: { slug },
@@ -169,7 +173,10 @@ export async function getCommunityTemplate(slug) {
         },
     });
     if (!homeTemplate) throw new Error("Home template not found");
-    return homeTemplate;
+    return {
+        ...homeTemplate,
+        meta: homeTemplate.meta as any as HomeTemplateMeta,
+    };
 }
 export async function saveHomeTemplateDesign(slug, meta) {
     await prisma.homeTemplates.update({
