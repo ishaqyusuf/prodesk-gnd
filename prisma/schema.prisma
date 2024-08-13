@@ -1599,26 +1599,26 @@ model Cache {
     deletedAt DateTime? @db.Timestamp(0)
 }
 
-model Payday {
-    id        Int            @unique @default(autoincrement())
-    invoiceId Int?
-    startedAt DateTime?      @db.Timestamp(0)
-    endTime   DateTime?      @db.Timestamp(0)
-    createdAt DateTime?      @default(now()) @db.Timestamp(0)
-    updatedAt DateTime?      @updatedAt
-    deletedAt DateTime?      @db.Timestamp(0)
-    invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
+// model Payday {
+//     id        Int            @unique @default(autoincrement())
+//     invoiceId Int?
+//     startedAt DateTime?      @db.Timestamp(0)
+//     endTime   DateTime?      @db.Timestamp(0)
+//     createdAt DateTime?      @default(now()) @db.Timestamp(0)
+//     updatedAt DateTime?      @updatedAt
+//     deletedAt DateTime?      @db.Timestamp(0)
+//     invoice   PaydayInvoice? @relation(fields: [invoiceId], references: [id])
 
-    @@index([invoiceId])
-}
+//     @@index([invoiceId])
+// }
 
-model PaydayInvoice {
-    id        Int       @unique @default(autoincrement())
-    payments  Payday[]
-    createdAt DateTime? @default(now()) @db.Timestamp(0)
-    deletedAt DateTime? @db.Timestamp(0)
-    updatedAt DateTime? @updatedAt
-}
+// model PaydayInvoice {
+//     id        Int       @unique @default(autoincrement())
+//     payments  Payday[]
+//     createdAt DateTime? @default(now()) @db.Timestamp(0)
+//     deletedAt DateTime? @db.Timestamp(0)
+//     updatedAt DateTime? @updatedAt
+// }
 
 model DykeStepForm {
     id             Int              @unique @default(autoincrement())

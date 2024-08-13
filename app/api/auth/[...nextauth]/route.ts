@@ -30,32 +30,32 @@ declare module "next-auth" {
 //         role: Roles;
 //     }
 // }
-export const nextAuthOptions = {
-    adapter: PrismaAdapter(prisma as any),
-    session: {
-        strategy: "jwt",
-    },
-    secret: process.env.SECRET,
-    providers: [
-        CredentialsProvider({
-            name: "Sign in",
-            credentials: {
-                email: {
-                    label: "Email",
-                    type: "email",
-                    placeholder: "example@example.com",
-                },
-                password: { label: "Password", type: "password" },
-            },
-            async authorize(credentials) {
-                if (!credentials) {
-                    return null;
-                }
-                const login = await loginAction(credentials);
-                return login;
-            },
-        }),
-    ],
-};
+// export const nextAuthOptions = {
+//     adapter: PrismaAdapter(prisma as any),
+//     session: {
+//         strategy: "jwt",
+//     },
+//     secret: process.env.SECRET,
+//     providers: [
+//         CredentialsProvider({
+//             name: "Sign in",
+//             credentials: {
+//                 email: {
+//                     label: "Email",
+//                     type: "email",
+//                     placeholder: "example@example.com",
+//                 },
+//                 password: { label: "Password", type: "password" },
+//             },
+//             async authorize(credentials) {
+//                 if (!credentials) {
+//                     return null;
+//                 }
+//                 const login = await loginAction(credentials);
+//                 return login;
+//             },
+//         }),
+//     ],
+// };
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
