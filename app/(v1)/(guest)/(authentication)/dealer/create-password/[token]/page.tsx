@@ -50,7 +50,7 @@ export default async function CreatePasswordPage({ params }) {
                 <CardFooter className="flex flex-wrap items-center space-x-4 justify-between gap-2">
                     <Link
                         aria-label="Reset password"
-                        href="/dealer/signup"
+                        href="/login"
                         className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
                     >
                         Back to signin

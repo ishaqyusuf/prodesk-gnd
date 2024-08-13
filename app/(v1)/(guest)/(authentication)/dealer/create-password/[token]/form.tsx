@@ -42,8 +42,6 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
 
     const router = useRouter();
     async function onSubmit(e) {
-        console.log(">>>>");
-
         const data = form.getValues();
         startTransition(async () => {
             setError(null);
@@ -51,6 +49,7 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
                 const resp = await createDealerPassword(data);
                 console.log(resp);
                 toast.success("Password created");
+                // router.forward("success");
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
             }
