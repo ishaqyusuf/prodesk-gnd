@@ -24,7 +24,8 @@ export async function _getProductionList({ query, production = false }: Props) {
     const session = await serverSession();
     const authId = session.user.id;
     const { can } = session;
-    production = can.editOrderProduction && !can.viewOrderProduction;
+    production =
+        production || (can.editOrderProduction && !can.viewOrderProduction);
     const searchQuery = query?._q ? { contains: query?._q } : undefined;
     const dueDate = query?.dueToday
         ? dateEquals(formatDate(dayjs(), "YYYY-MM-DD"))
@@ -59,6 +60,7 @@ export async function _getProductionList({ query, production = false }: Props) {
             ],
         },
     };
+    console.log();
     const where: Prisma.SalesOrdersWhereInput =
         query?.dueToday || query.pastDue
             ? {
@@ -66,6 +68,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                   items: itemsFilter,
                   assignments: {
                       some: {
+                          deletedAt: null,
                           assignedToId: !production ? undefined : authId,
                           dueDate,
                       },
@@ -104,6 +107,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                   assignments: {
                       some: production
                           ? {
+                                deletedAt: null,
                                 assignedToId: authId,
                                 // dueDate,
                             }

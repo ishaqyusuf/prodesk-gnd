@@ -16,8 +16,9 @@ import {
     HousePackageToolMeta,
     ISalesOrderItemMeta,
     ISalesOrderMeta,
+    ISalesType,
 } from "@/types/sales";
-import { user } from "@/app/(v1)/_actions/utils";
+import { serverSession, user, userId } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import {
     generateRandomString,
@@ -30,8 +31,10 @@ import dayjs from "dayjs";
 import { isComponentType } from "../../overview/is-component-type";
 import { includeStepPriceCount } from "../../dyke-utils";
 
-export async function getDykeFormAction(type, slug, query?) {
+export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
+    const auth = await serverSession();
+    const dealerMode = auth.role?.name == "Dealer";
 
     const restoreQuery = restore
         ? {

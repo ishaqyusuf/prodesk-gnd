@@ -13,9 +13,6 @@ import SalesAddressSection from "../../../sales/edit/components/sales-address-se
 import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
-import DevOnly from "@/_v2/components/common/dev-only";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { setStepsUids } from "../_action/bootstraps/set-step-uids";
 import Bootstrap from "../_action/bootstraps";
 interface Props {
     defaultValues: any;
