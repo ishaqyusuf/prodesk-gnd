@@ -55,7 +55,7 @@ export default function HeaderSection({}) {
                 {scroll.isScrolled && <div></div>}
                 <div
                     className={cn(
-                        "flex justify-between flex-1  items-center",
+                        "flex justify-between flex-1  sm:items-center flex-col sm:flex-row",
                         scroll.isScrolled &&
                             "bg-white py-2   shadow-sm border-b px-8"
                     )}

@@ -50,10 +50,11 @@ export default function HousePackageSizeLineItem({
                     />
                 </TableCell>
             )}
-            <TableCell>
+            <TableCell className="w-[200px]">
                 <ControlledInput
                     type="number"
                     list
+                    className="w-[75px] sm:w-auto"
                     size="sm"
                     control={form.control}
                     name={`${sizeRow.keys.lhQty}` as any}
@@ -68,6 +69,7 @@ export default function HousePackageSizeLineItem({
                             size="sm"
                             type="number"
                             list
+                            className="w-[75px] sm:w-auto"
                             control={form.control}
                             name={`${sizeRow.keys.rhQty}` as any}
                         />

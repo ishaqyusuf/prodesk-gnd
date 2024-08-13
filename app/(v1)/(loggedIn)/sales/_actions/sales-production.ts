@@ -10,7 +10,6 @@ import {
     SalesQueryParams,
 } from "@/types/sales";
 import dayjs from "dayjs";
-import { getSales } from "./sales";
 import { saveProgress } from "../../../_actions/progress";
 import { userId, user } from "../../../_actions/utils";
 import {
@@ -21,6 +20,7 @@ import {
 import { formatDate } from "@/lib/use-day";
 import { _revalidate } from "../../../_actions/_revalidate";
 import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-prod-qty.dac";
+import { getSales } from "@/data-acces/sales";
 
 export async function getSalesProductionsAction(
     query: SalesQueryParams,

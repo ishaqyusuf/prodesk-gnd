@@ -12,6 +12,7 @@ interface GetDealersQuery {
     status;
 }
 export type DealerStatus =
+    | "Verified"
     | "Approved"
     | "Pending Approval"
     | "Rejected"
@@ -46,7 +47,6 @@ export async function getDealersAction(query: GetDealersQuery) {
         data: data.map((data) => {
             let status = data.status as DealerStatus;
             let tokenExpired = status == "Approved" && data.token.length;
-
             return {
                 ...data,
                 status,
@@ -94,7 +94,9 @@ export async function getDealersPageTabAction() {
 }
 function _where(query: GetDealersQuery) {
     const where: Prisma.DealerAuthWhereInput = {
-        status: query.status || "Approved",
+        status: query.status || {
+            in: ["Approved", "Verified"] as DealerStatus[],
+        },
     };
     return where;
 }

@@ -13,8 +13,7 @@ export default function AuthPage({}) {
     // console.log(session)
     useEffect(() => {
         let sb = nav(session);
-        console.log(sb?.homeRoute);
-        console.log(session?.can);
+        console.log(session);
         if (sb) redirect(sb.homeRoute);
         // else signOut();
     }, [session]);

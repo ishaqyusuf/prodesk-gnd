@@ -24,12 +24,12 @@ export default async function CreatePasswordPage({ params }) {
     if (!ver) msg = "Invalid Token";
     if (ver.consumedAt) msg = "Token already used";
     if (dayjs().diff(ver.expiredAt, "m") > 0) msg = "Token Expired";
-    if (msg)
-        return (
-            <div>
-                <span>{msg}</span>
-            </div>
-        );
+    // if (msg)
+    //     return (
+    //         <div>
+    //             <span>{msg}</span>
+    //         </div>
+    //     );
     return (
         <Shell className="sm:max-w-2xl">
             <Card>

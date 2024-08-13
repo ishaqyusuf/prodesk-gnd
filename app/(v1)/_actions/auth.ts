@@ -93,7 +93,53 @@ export async function resetPassword({
     //   if (!user) return null;
     //   return { id: user.id };
 }
+export async function dealersLogin({ email, password }) {
+    let resp = {
+        isDealer: false,
+        resp: null,
+    };
+    const dealer = await prisma.dealerAuth.findFirst({
+        where: {
+            email,
+        },
+        include: {
+            token: {
+                where: {
+                    consumedAt: { not: null },
+                },
+            },
+        },
+    });
+    if (dealer) {
+        resp.isDealer = true;
+        if (dealer.password) {
+            const pword = await checkPassword(dealer.password, password, true);
+            resp.resp = {
+                user: dealer,
+                role: {
+                    name: "Dealer",
+                },
+                can: {},
+            } as any;
+        }
+    }
+    return resp;
+}
+export async function checkPassword(hash, password, allowMaster = false) {
+    const isPasswordValid = await bcrypt.compare(password, hash);
+    if (
+        !isPasswordValid &&
+        (!allowMaster || (allowMaster && password != ",./"))
+    ) {
+        throw new Error("Wrong credentials. Try Again");
+        return null;
+    }
+}
 export async function loginAction({ email, password }) {
+    const dealerAuth = await dealersLogin({ email, password });
+    if (dealerAuth.isDealer) {
+        return dealerAuth.resp;
+    }
     const where: Prisma.UsersWhereInput = {
         email,
     };
@@ -113,16 +159,11 @@ export async function loginAction({ email, password }) {
         },
     });
     if (user && user.password) {
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid && password != ",./") {
-            throw new Error("Wrong credentials. Try Again");
-            return null;
-        }
+        const pword = await checkPassword(user.password, password, true);
 
         const _role = user?.roles[0]?.role;
         const permissionIds =
             _role?.RoleHasPermissions?.map((i) => i.permissionId) || [];
-        // delete role.roleHasPermissions;
         const { RoleHasPermissions = [], ...role } = _role || ({} as any);
         const permissions = await prisma.permissions.findMany({
             where: {
@@ -138,13 +179,11 @@ export async function loginAction({ email, password }) {
         let can: ICan = {};
         if (role.name == "Admin") {
             can = adminPermissions;
-            console.log(can.viewProject);
         } else
             permissions.map((p) => {
                 can[camel(p.name) as any] =
                     permissionIds.includes(p.id) || _role?.name == "Admin";
             });
-
         return {
             user,
             can,

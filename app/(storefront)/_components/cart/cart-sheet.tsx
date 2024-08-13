@@ -28,7 +28,6 @@ export function CartSheet() {
         (total, item) => total + item.quantity * Number(item.price),
         0
     );
-
     return (
         <Sheet>
             <SheetTrigger asChild>

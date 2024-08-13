@@ -1,9 +1,9 @@
 "use server";
 
 import { SalesQueryParams } from "@/types/sales";
-import { getSales } from "../_actions/sales";
 import { prisma } from "@/db";
 import { _revalidate } from "../../../_actions/_revalidate";
+import { getSales } from "@/data-acces/sales";
 
 export async function getSalesDelivery(query: SalesQueryParams) {
     query.deliveryOption = "delivery";

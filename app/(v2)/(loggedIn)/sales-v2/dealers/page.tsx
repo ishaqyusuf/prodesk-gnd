@@ -1,6 +1,3 @@
-import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
-import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import AuthGuard from "../../_components/auth-guard";
 import FPage from "@/app/_components/fikr-ui/f-page";
 import PageClient from "./page-client";
 import { getDealersAction } from "./action";

@@ -57,7 +57,6 @@ export const authOptions: NextAuthOptions = {
         },
         session({ session, user, token }) {
             // console.log("Session");
-
             if (session.user) {
                 session.user = token.user;
                 session.role = token.role;

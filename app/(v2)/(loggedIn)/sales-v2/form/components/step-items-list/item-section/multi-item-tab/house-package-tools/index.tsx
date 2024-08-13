@@ -48,7 +48,7 @@ export default function HousePackageTool({ componentTitle }) {
     }
     return (
         <>
-            <Table id="housePackageTable">
+            <Table className="" id="housePackageTable">
                 <TableHeader>
                     <TableHead>Dimension</TableHead>
                     {componentItem.isComponent.hasSwing && (
@@ -60,8 +60,8 @@ export default function HousePackageTool({ componentTitle }) {
                         </>
                     ) : (
                         <>
-                            <TableHead className="w-[100px]">LH</TableHead>
-                            <TableHead className="w-[100px]">RH</TableHead>
+                            <TableHead className="w-[200px]">LH</TableHead>
+                            <TableHead className="w-[200px]">RH</TableHead>
                         </>
                     )}
                     {componentItem.calculatedPriceMode ? (

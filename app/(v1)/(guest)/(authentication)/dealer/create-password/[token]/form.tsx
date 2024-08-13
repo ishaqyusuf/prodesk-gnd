@@ -18,11 +18,11 @@ import {
 } from "./validation";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
-    val;
+    val: VerifyToken;
 }
 
 export default function ClientForm({ className, ...props }: SignInFormProps) {
-    const resp: VerifyToken = React.use(props.val);
+    const resp = props.val;
     React.useEffect(() => {
         console.log(resp);
     }, [resp]);
@@ -30,6 +30,9 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
     const [error, setError] = React.useState<any>("");
     const form = useForm<CreateDealerPasswordSchema>({
         resolver: zodResolver(createDealerPasswordSchema),
+        defaultValues: {
+            token: resp.token,
+        },
     });
     const { data: session } = useSession();
 
@@ -38,14 +41,16 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
     const [submitted, setSubmitted] = React.useState(false);
 
     const router = useRouter();
-    async function onSubmit() {
-        const data = form.getValues();
-        console.log(data);
+    async function onSubmit(e) {
+        console.log(">>>>");
 
+        const data = form.getValues();
         startTransition(async () => {
             setError(null);
             try {
                 const resp = await createDealerPassword(data);
+                console.log(resp);
+                toast.success("Password created");
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
             }
@@ -53,21 +58,27 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
     }
     return (
         <Form {...form}>
-            <form className="grid gap-4">
+            <form
+                onSubmit={(...args) =>
+                    void form.handleSubmit(onSubmit)(...args)
+                }
+                className="grid gap-4"
+            >
                 <ControlledInput
                     size="sm"
                     control={form.control}
                     name="password"
-                    label="Name"
+                    type="password"
+                    label="Password"
                 />
                 <ControlledInput
                     size="sm"
                     control={form.control}
                     name="confirmPassword"
+                    type="password"
                     label="Comfirm Password"
                 />
-
-                <Button onClick={onSubmit} disabled={isPending}>
+                <Button type="submit" disabled={isPending}>
                     {isPending && (
                         <Icons.spinner
                             className="mr-2 h-4 w-4 animate-spin"

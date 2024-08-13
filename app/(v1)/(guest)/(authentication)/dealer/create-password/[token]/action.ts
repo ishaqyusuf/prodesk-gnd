@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { hashPassword } from "@/app/(v1)/_actions/utils";
 import { CreateDealerPasswordSchema } from "./validation";
 import { redirect } from "next/navigation";
+import { DealerStatus } from "@/app/(v2)/(loggedIn)/sales-v2/dealers/action";
 
 export type VerifyToken = Awaited<ReturnType<typeof verifyToken>>;
 export async function verifyToken(token) {
@@ -32,14 +33,17 @@ export async function createDealerPassword(data: CreateDealerPasswordSchema) {
             },
             data: {
                 password: await hashPassword(data.password),
+                status: "Verified" as DealerStatus,
+                emailVerifiedAt: new Date(),
             },
         });
-        await prisma.dealerToken.update({
+        const u = await prisma.dealerToken.update({
             where: { token: data.token },
             data: {
-                consumedAt: new Date(0),
+                consumedAt: new Date(),
             },
         });
+        return u;
     }
-    redirect(`/dealer/create-password/${data.token}/success`);
+    // redirect(`/dealer/`);
 }

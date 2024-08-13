@@ -45,8 +45,6 @@ export default async function SalesOrdersPage({ searchParams }) {
                 <CopyFn />
                 <OrdersTable searchParams={searchParams} promise={response} />
                 <OrderPrinter />
-
-                <BackOrderModal />
             </SalesTabLayout>
         </AuthGuard>
     );

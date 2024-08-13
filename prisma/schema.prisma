@@ -212,18 +212,19 @@ model CommunityModelCost {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Customers {
-    id             Int     @unique @default(autoincrement())
+    id             Int  @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-    slug           String? @unique @db.VarChar(255)
-    walletId       Int?    @unique
-    name           String  @db.VarChar(255)
-    businessName   String? @db.VarChar(255)
-    email          String? @db.VarChar(255)
-    phoneNo        String? @db.VarChar(255)
-    phoneNo2       String? @db.VarChar(255)
-    address        String? @db.Text
-    meta           Json?   @db.Json
+
+    slug         String? @unique @db.VarChar(255)
+    walletId     Int?    @unique
+    name         String  @db.VarChar(255)
+    businessName String? @db.VarChar(255)
+    email        String? @db.VarChar(255)
+    phoneNo      String? @db.VarChar(255)
+    phoneNo2     String? @db.VarChar(255)
+    address      String? @db.Text
+    meta         Json?   @db.Json
 
     deletedAt    DateTime?       @db.Timestamp(0)
     createdAt    DateTime?       @default(now()) @db.Timestamp(0)
@@ -1080,6 +1081,7 @@ model SalesOrders {
     assignments       OrderItemProductionAssignments[]
 
     productionStatus SalesProductionStatus?
+    requests         DealerSalesRequest[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerId])
@@ -1088,6 +1090,22 @@ model SalesOrders {
     @@index([prodId])
     @@index([salesRepId])
     @@index([pickupId])
+}
+
+model DealerSalesRequest {
+    id           Int         @unique @default(autoincrement())
+    createdAt    DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?   @updatedAt
+    salesId      Int
+    request      String
+    status       String
+    deletedAt    DateTime?   @db.Timestamp(0)
+    approvedById Int?
+    sale         SalesOrders @relation(fields: [salesId], references: [id])
+    approvedBy   Users?      @relation(fields: [approvedById], references: [id])
+
+    @@index([salesId])
+    @@index([approvedById])
 }
 
 model SalesProductionStatus {
@@ -1457,9 +1475,19 @@ model Users {
     notes                       Progress[]
     approvedDealerStatusHistory DealerStatusHistory[]
     mailEvents                  MailEventTrigger[]
+    sessions                    Session[]
+    approvedRequests            DealerSalesRequest[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique @map("session_token")
+    userId       Int
+    expires      DateTime
+    user         Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

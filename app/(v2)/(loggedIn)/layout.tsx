@@ -17,6 +17,7 @@ export default function AccountLayout({ children }: any) {
     });
 
     if (!session?.user) return <></>;
+    if (session.role?.name == "Dealer") redirect("/orders");
     let sb = nav(session);
     if (!sb) return;
     return (
