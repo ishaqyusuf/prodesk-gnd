@@ -115,7 +115,7 @@ export function DykeInvoiceItemStepSection({
             <CollapsibleTrigger asChild>
                 <div className="flex bg-accent">
                     <button
-                        className="flex  w-full p-2 px-4 border space-x-2"
+                        className="flex  w-full p-1 px-4 border space-x-2"
                         onClick={(e) => {
                             e.preventDefault();
                             if (stepForm?.item?.meta?.hidden) return;

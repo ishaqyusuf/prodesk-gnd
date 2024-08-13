@@ -45,6 +45,7 @@ export default function ItemHeader({ item }: Props) {
                 >
                     <ControlledInput
                         className="w-full"
+                        size="sm"
                         control={form.control}
                         name={`itemArray.${item.rowIndex}.item.dykeDescription`}
                         placeholder={` Item ${Number(item.rowIndex) + 1}`}

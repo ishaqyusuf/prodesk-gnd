@@ -14,7 +14,6 @@ import {
 import useDykeItem, {
     IDykeItemFormContext,
 } from "../../../_hooks/use-dyke-item";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { _deleteDykeItem } from "../../../_action/delete-item";
 import ItemHeader from "./item-header";
@@ -45,7 +44,7 @@ export function DykeInvoiceItemSection({ rowIndex, itemArray }: Props) {
             >
                 <ItemHeader item={item} />
                 <CollapsibleContent className="">
-                    <div className="grid sm:grid-cols-3">
+                    <div className="grid sm:grid-cols-3 overflow-auto max-h-[110vh]">
                         <div className="sm:col-span-3">
                             {item.formStepArray.map((formStep, bIndex) => (
                                 <DykeInvoiceItemStepSection
@@ -55,6 +54,7 @@ export function DykeInvoiceItemSection({ rowIndex, itemArray }: Props) {
                                 />
                             ))}
                         </div>
+                        {/* <div className="hidden sm:col-span-1"></div> */}
                     </div>
                 </CollapsibleContent>
             </Collapsible>

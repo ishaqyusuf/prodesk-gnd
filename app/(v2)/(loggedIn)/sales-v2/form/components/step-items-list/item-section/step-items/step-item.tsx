@@ -237,7 +237,7 @@ export function StepItem({
                     : item.product.title}
             </span>
 
-            <CardContent className="space-y-1.5 inline-flex items-center justify-between p-4">
+            <CardContent className="space-y-1.5 inline-flex items-center justify-between p-2">
                 <CardTitle className="line-clamp-1s text-sm">
                     {isRoot
                         ? item.product?.value || item.product.title
