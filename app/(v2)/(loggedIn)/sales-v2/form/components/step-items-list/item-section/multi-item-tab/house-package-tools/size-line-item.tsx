@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import ControlledInput from "@/components/common/controls/controlled-input";
-import { cn, inToFt, sum } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import ItemPriceFinder from "../../item-price-finder";
@@ -9,14 +9,7 @@ import {
     useMultiComponentSizeRow,
 } from "../../../../../_hooks/use-multi-component-item";
 import { SizeForm } from "../../../../modals/select-door-heights";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import DevOnly from "@/_v2/components/common/dev-only";
+
 import PriceBreakDownCell from "../price-breakdown-cell";
 
 interface Props {
@@ -41,7 +34,7 @@ export default function HousePackageSizeLineItem({
         <TableRow>
             <TableCell>{size.dimFt}</TableCell>
             {componentItem.isComponent.hasSwing && (
-                <TableCell className="w-[180px]">
+                <TableCell className="">
                     <ControlledSelect
                         size="sm"
                         options={["In Swing", "Out Swing"]}
@@ -50,7 +43,7 @@ export default function HousePackageSizeLineItem({
                     />
                 </TableCell>
             )}
-            <TableCell className="w-[200px]">
+            <TableCell className="">
                 <ControlledInput
                     type="number"
                     list

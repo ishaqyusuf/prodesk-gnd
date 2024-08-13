@@ -1,12 +1,12 @@
 "use server";
 
 import { SalesQueryParams } from "@/types/sales";
-import { whereSales } from "./sales";
 import { prisma } from "@/db";
 import { _revalidate } from "../../../_actions/_revalidate";
 import { getPageInfo, queryFilter } from "../../../_actions/action-utils";
 import { userId } from "../../../_actions/utils";
 import { saveProgress } from "../../../_actions/progress";
+import { whereSales } from "@/data-acces/sales";
 
 export async function _getSalesPickup(query: SalesQueryParams) {
     query.deliveryOption = "pickup";

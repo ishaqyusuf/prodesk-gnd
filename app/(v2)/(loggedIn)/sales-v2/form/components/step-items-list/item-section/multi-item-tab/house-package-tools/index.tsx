@@ -52,16 +52,16 @@ export default function HousePackageTool({ componentTitle }) {
                 <TableHeader>
                     <TableHead>Dimension</TableHead>
                     {componentItem.isComponent.hasSwing && (
-                        <TableHead>Swing</TableHead>
+                        <TableHead className="sm:w-[100px]">Swing</TableHead>
                     )}
                     {!componentItem.isComponent.multiHandles ? (
                         <>
-                            <TableHead className="w-[100px]">Qty</TableHead>
+                            <TableHead className="sm:w-[100px]">Qty</TableHead>
                         </>
                     ) : (
                         <>
-                            <TableHead className="w-[200px]">LH</TableHead>
-                            <TableHead className="w-[200px]">RH</TableHead>
+                            <TableHead className="sm:w-[100px]">LH</TableHead>
+                            <TableHead className="sm:w-[100px]">RH</TableHead>
                         </>
                     )}
                     {componentItem.calculatedPriceMode ? (
