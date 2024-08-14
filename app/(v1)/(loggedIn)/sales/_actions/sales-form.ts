@@ -152,7 +152,7 @@ async function newSalesFormAction(
         if (customer) {
             form.customerId = customer.id;
             form.meta.sales_profile =
-                customer.profile?.title || ctx.settings?.sales_profile;
+                customer.profile?.title || ctx.defaultProfile?.title;
             form.meta.sales_percentage =
                 customer.profile?.coefficient || ctx?.settings?.sales_margin;
             const addr = {

@@ -166,14 +166,18 @@ export async function sendDealerApprovalEmail(id) {
         where: { id },
         include: {
             dealer: true,
-            token: true,
+            token: {
+                orderBy: {
+                    expiredAt: "desc",
+                },
+            },
         },
     });
-    const token = dealer.token.filter((s) => !s.consumedAt && !s.expiredAt)[0]
-        ?.token;
+    const token = dealer.token.filter((s) => !s.consumedAt)[0]?.token;
     await sendMessage({
         subject: `Dealership Approved`,
-        body: `https://localhost:3000/dealer/create-password/${token}`,
+        body: `http://localhost:3000/dealer/create-password/${token}`,
         from: `Ishaq Yusuf From GND Millwork<ishaqyusuf@gndprodesk.com>`,
+        type: "Dealers",
     } as any);
 }
