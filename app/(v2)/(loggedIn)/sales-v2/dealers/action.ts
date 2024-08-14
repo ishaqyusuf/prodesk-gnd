@@ -28,7 +28,6 @@ export async function getDealersAction(query: GetDealersQuery) {
         prisma.dealerAuth,
         where
     );
-
     const data = await prisma.dealerAuth.findMany({
         where,
         include: {

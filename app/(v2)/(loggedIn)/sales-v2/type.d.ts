@@ -162,6 +162,7 @@ export interface DykeSalesDoorMeta {
 export interface IDykeFormContext {
     startLoadingStep;
     loadingStep: boolean;
+    dealerMode: boolean;
     itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">;
 }
 export interface DykeBlock {

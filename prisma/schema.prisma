@@ -44,6 +44,8 @@ model AddressBooks {
     customer       Customers?    @relation(fields: [customerId], references: [id], name: "addressBooks", onDelete: Cascade)
     billingOrders  SalesOrders[] @relation(name: "billingAddress")
     shippingOrders SalesOrders[] @relation(name: "shippingAddress")
+    dealerBilling  DealerAuth[]  @relation(name: "primaryBillingAddress")
+    dealerShipping DealerAuth[]  @relation(name: "primaryShippingAddress")
 
     @@index([createdAt, deletedAt, name, address1])
     @@index([customerId])
@@ -212,19 +214,18 @@ model CommunityModelCost {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Customers {
-    id             Int  @unique @default(autoincrement())
+    id             Int     @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-
-    slug         String? @unique @db.VarChar(255)
-    walletId     Int?    @unique
-    name         String  @db.VarChar(255)
-    businessName String? @db.VarChar(255)
-    email        String? @db.VarChar(255)
-    phoneNo      String? @db.VarChar(255)
-    phoneNo2     String? @db.VarChar(255)
-    address      String? @db.Text
-    meta         Json?   @db.Json
+    slug           String? @unique @db.VarChar(255)
+    walletId       Int?    @unique
+    name           String  @db.VarChar(255)
+    businessName   String? @db.VarChar(255)
+    email          String? @db.VarChar(255)
+    phoneNo        String? @db.VarChar(255)
+    phoneNo2       String? @db.VarChar(255)
+    address        String? @db.Text
+    meta           Json?   @db.Json
 
     deletedAt    DateTime?       @db.Timestamp(0)
     createdAt    DateTime?       @default(now()) @db.Timestamp(0)
@@ -241,21 +242,25 @@ model Customers {
 }
 
 model DealerAuth {
-    id              Int                   @unique @default(autoincrement())
-    dealerId        Int                   @unique
-    createdAt       DateTime?             @default(now()) @db.Timestamp(0)
-    email           String                @unique
-    password        String?               @db.VarChar(255)
-    emailVerifiedAt DateTime?             @db.Timestamp(0)
-    approvedAt      DateTime?             @db.Timestamp(0)
-    rejectedAt      DateTime?             @db.Timestamp(0)
-    restricted      Boolean?
-    updatedAt       DateTime?             @updatedAt
-    deletedAt       DateTime?             @db.Timestamp(0)
-    dealer          Customers             @relation(fields: [dealerId], references: [id])
-    status          String?
-    statusHistory   DealerStatusHistory[]
-    token           DealerToken[]
+    id                       Int                   @unique @default(autoincrement())
+    dealerId                 Int                   @unique
+    createdAt                DateTime?             @default(now()) @db.Timestamp(0)
+    email                    String                @unique
+    password                 String?               @db.VarChar(255)
+    emailVerifiedAt          DateTime?             @db.Timestamp(0)
+    approvedAt               DateTime?             @db.Timestamp(0)
+    rejectedAt               DateTime?             @db.Timestamp(0)
+    restricted               Boolean?
+    updatedAt                DateTime?             @updatedAt
+    deletedAt                DateTime?             @db.Timestamp(0)
+    status                   String?
+    primaryBillingAddressId  Int?
+    primaryShippingAddressId Int?
+    dealer                   Customers             @relation(fields: [dealerId], references: [id])
+    statusHistory            DealerStatusHistory[]
+    token                    DealerToken[]
+    primaryBillingAddress    AddressBooks?         @relation(name: "primaryBillingAddress", fields: [primaryBillingAddressId], references: [id])
+    primaryShippingAddress   AddressBooks?         @relation(name: "primaryShippingAddress", fields: [primaryShippingAddressId], references: [id])
 }
 
 model DealerStatusHistory {
@@ -1030,7 +1035,7 @@ model SalesOrders {
     customerId        Int?
     billingAddressId  Int?
     shippingAddressId Int?
-    salesRepId        Int
+    salesRepId        Int?
     pickupId          Int?
     prodId            Int?
     isDyke            Boolean?                         @default(false)

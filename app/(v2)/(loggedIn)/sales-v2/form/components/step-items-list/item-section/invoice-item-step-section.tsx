@@ -5,7 +5,11 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 
-import { useDykeForm, useDykeItemCtx } from "../../../_hooks/form-context";
+import {
+    useDykeCtx,
+    useDykeForm,
+    useDykeItemCtx,
+} from "../../../_hooks/form-context";
 import { DykeStep, DykeStepMeta } from "../../../../type";
 import ShelfItemIndex from "./shelf-item";
 
@@ -44,7 +48,7 @@ export function DykeInvoiceItemStepSection({
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowCustom`,
     ] as any);
     const modal = useModal();
-
+    const ctx = useDykeCtx();
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
 
     function conditionSettings(settingKey: keyof DykeStepMeta) {
@@ -128,7 +132,7 @@ export function DykeInvoiceItemStepSection({
                         </span>
                         <span>{stepValue}</span>
                     </button>
-                    <div className="px-2">
+                    <div className={cn("px-2", ctx.dealerMode && "hidden")}>
                         <Menu Icon={Icons.more}>
                             <MenuItem
                                 onClick={() =>

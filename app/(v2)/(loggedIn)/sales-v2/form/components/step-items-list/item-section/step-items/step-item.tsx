@@ -1,5 +1,9 @@
 import { useContext, useEffect, useState, useTransition } from "react";
-import { DykeItemFormContext } from "../../../../_hooks/form-context";
+import {
+    DykeItemFormContext,
+    useDykeCtx,
+    useDykeItemCtx,
+} from "../../../../_hooks/form-context";
 import { cn, safeFormText } from "@/lib/utils";
 import Image from "next/image";
 import { env } from "@/env.mjs";
@@ -57,8 +61,8 @@ export function StepItem({
     className,
     isRoot,
 }: Props) {
-    const ctx = useContext(DykeItemFormContext);
-
+    const ctx = useDykeItemCtx();
+    const formCtx = useDykeCtx();
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
@@ -130,7 +134,8 @@ export function StepItem({
             <div
                 className={cn(
                     !menuOpen && "hidden",
-                    " group-hover:flex absolute top-0 right-0  rounded-lg shadow-xl -m-2 bg-white z-10"
+                    "absolute top-0 right-0  rounded-lg shadow-xl -m-2 bg-white z-10",
+                    formCtx.dealerMode ? "hidden" : "group-hover:flex"
                 )}
             >
                 <Menu open={menuOpen} onOpenChanged={menuOpenChange}>

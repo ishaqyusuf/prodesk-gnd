@@ -18,7 +18,7 @@ import {
     ISalesOrderMeta,
     ISalesType,
 } from "@/types/sales";
-import { serverSession, user, userId } from "@/app/(v1)/_actions/utils";
+import { serverSession, user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import {
     generateRandomString,
@@ -36,6 +36,23 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const auth = await serverSession();
     const dealerMode = auth.role?.name == "Dealer";
 
+    const dealer = dealerMode
+        ? await prisma.dealerAuth.findFirst({
+              where: {
+                  id: auth.user.id,
+              },
+              include: {
+                  dealer: {
+                      include: {
+                          addressBooks: true,
+                      },
+                  },
+              },
+          })
+        : null;
+    if (dealer) {
+        // return null;
+    }
     const restoreQuery = restore
         ? {
               OR: [
@@ -52,7 +69,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         : {
               deletedAt: null,
           };
-    // console.log(restoreQuery);
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
@@ -122,7 +138,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             billingAddress: true,
         },
     });
-
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
 
@@ -501,6 +516,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
     return {
         salesRep: salesRep,
         customer,
+        dealerMode,
         shippingAddress,
         billingAddress,
         order: orderData,

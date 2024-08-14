@@ -139,7 +139,10 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                         <Table className="table-fixed size-sm">
                             <TableBody>
                                 {sizes.map((size) => (
-                                    <TableRow key={size.dim}>
+                                    <TableRow
+                                        className={cn(!size.price && "hidden")}
+                                        key={size.dim}
+                                    >
                                         <TableCell colSpan={4}>
                                             <div className="flex justify-between">
                                                 <TableCol.Primary>
@@ -155,9 +158,15 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                                                                 : "secondary"
                                                         }
                                                     >
-                                                        <Money
-                                                            value={size.price}
-                                                        />
+                                                        {!size.price ? (
+                                                            <>-</>
+                                                        ) : (
+                                                            <Money
+                                                                value={
+                                                                    size.price
+                                                                }
+                                                            />
+                                                        )}
                                                     </Badge>
                                                 </TableCol.Secondary>
                                             </div>

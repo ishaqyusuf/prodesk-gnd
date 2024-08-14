@@ -1,5 +1,5 @@
 "use client";
-import { useDykeForm } from "../_hooks/form-context";
+import { useDykeCtx, useDykeForm } from "../_hooks/form-context";
 import Btn from "@/components/_v1/btn";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import useDykeFormSaver from "../_hooks/useDykeFormSaver";
@@ -37,7 +37,7 @@ export default function HeaderSection({}) {
     const saver = useDykeFormSaver(form);
     const scroll = useScroll((scrollY) => scrollY > 200);
     const modal = useModal();
-
+    const { dealerMode } = useDykeCtx();
     async function save(and: SaveMode = "default") {
         setTimeout(() => {
             form.handleSubmit((data) => saver.save(data, and))();
@@ -60,7 +60,6 @@ export default function HeaderSection({}) {
                             "bg-white py-2   shadow-sm border-b px-8"
                     )}
                 >
-                    {/* <div className=""></div> */}
                     <div className="">
                         <h2 className="text-2xl font-bold tracking-tight">
                             {orderId && id && type == "order"
@@ -69,7 +68,13 @@ export default function HeaderSection({}) {
                             {orderId || "New"}
                         </h2>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div
+                        className={cn(
+                            dealerMode
+                                ? "hidden"
+                                : "flex items-center space-x-2"
+                        )}
+                    >
                         <div className="inline-flex items-center space-x-2">
                             <Label>Date:</Label>
                             <DatePicker
@@ -131,23 +136,7 @@ export default function HeaderSection({}) {
                                 Save & New
                             </MenuItem>
                         </Menu>
-                        {/* <Btn
-                            size="sm"
-                            isLoading={saver.saving}
-                            onClick={() => {
-                                form.handleSubmit(saver.save)();
-                            }}
-                        >
-                            Save
-                        </Btn> */}
                         <Menu Icon={Icons.more}>
-                            {/* <MenuItem
-                        onClick={() => {
-                            openModal("salesSupply");
-                        }}
-                    >
-                        Supply
-                    </MenuItem> */}
                             <CopyOrderMenuAction row={{ slug, id } as any} />
                             {type == "quote" ? (
                                 <>
@@ -207,12 +196,7 @@ export default function HeaderSection({}) {
                             <MenuItem
                                 onClick={() => {
                                     modal.openSheet(
-                                        <DykeSettingsModal
-                                            // data={form.getValues(
-                                            //     "data.settings"
-                                            // )}
-                                            form={form}
-                                        />
+                                        <DykeSettingsModal form={form} />
                                     );
                                 }}
                                 Icon={Icons.settings}

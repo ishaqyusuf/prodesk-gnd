@@ -43,7 +43,7 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
     }
     return (
         <Form {...form}>
-            <form className="grid gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
                 <ControlledInput
                     size="sm"
                     control={form.control}
@@ -76,9 +76,21 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
                         label="Phone"
                         prefix="+1"
                     />
-                </div>
 
-                <Button onClick={onSubmit} disabled={isPending}>
+                    <ControlledInput
+                        size="sm"
+                        control={form.control}
+                        name="state"
+                        label="State"
+                    />
+                    <ControlledInput
+                        size="sm"
+                        control={form.control}
+                        name="city"
+                        label="City"
+                    />
+                </div>
+                <Button disabled={isPending}>
                     {isPending && (
                         <Icons.spinner
                             className="mr-2 h-4 w-4 animate-spin"

@@ -66,9 +66,9 @@ export default function ItemHeader({ item }: Props) {
                 >
                     <Icons.trash className="w-4 h-4" />
                 </Button>
+
                 <Menu variant={"ghost"}>
                     <MenuItem
-                        disabled
                         SubMenu={
                             <div className="grid grid-cols-5 gap-1">
                                 {Array(dykeCtx.itemArray.fields.length)

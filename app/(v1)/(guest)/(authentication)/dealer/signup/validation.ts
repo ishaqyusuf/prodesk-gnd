@@ -6,6 +6,8 @@ export const registerSchema = z.object({
     businessName: z.string().optional(),
     address: z.string().min(1),
     email: z.string().email().min(1),
+    state: z.string().email().min(1),
+    city: z.string().email().min(1),
     phoneNo: z.string().regex(usPhoneNumberRegex, {
         message: "Invalid phone number",
     }),

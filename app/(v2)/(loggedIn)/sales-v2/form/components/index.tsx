@@ -28,15 +28,12 @@ export default function SalesFormComponent({ defaultValues }: Props) {
             currentStepIndex: 0,
         },
     });
-    const components = form.watch("itemArray.1.multiComponent.components");
+    const [components, dealerMode] = form.watch([
+        "itemArray.1.multiComponent.components",
+        "dealerMode",
+    ]);
     const s: DykeForm = {} as any;
-    useEffect(() => {
-        console.log({ components });
-    }, [components]);
-    // const [currentItemIndex, currentStepIndex] = form.watch([
-    //     "currentItemIndex",
-    //     "currentStepIndex",
-    // ]);
+
     const [loadingStep, startLoadingStep] = useTransition();
     const itemArray = useFieldArray({
         control: form.control,
@@ -44,20 +41,15 @@ export default function SalesFormComponent({ defaultValues }: Props) {
     });
 
     const ctxValue = {
-        // currentItemIndex,
         startLoadingStep,
         loadingStep,
-        // currentStepIndex,
         itemArray,
+        dealerMode,
     } as IDykeFormContext;
+
     return (
         <DykeFormContext.Provider value={ctxValue}>
-            {/* <div className="fixed bg-emerald-950 text-white right-0 h-[45vh] w-1/4 p-2 text-muted  bottom-0 left-[1/2]">
-                <ScrollArea>
-                    <DevOnly>{JSON.stringify(components)}</DevOnly>
-                </ScrollArea>
-            </div> */}
-            <Bootstrap />
+            {/* <Bootstrap /> */}
             <RenderForm {...form}>
                 <HeaderSection />
                 {/* <DykeBootstrap /> */}
@@ -65,7 +57,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                     id="detailsSection"
                     className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
                 >
-                    <SalesMetaData />
+                    {!dealerMode && <SalesMetaData />}
                     <SalesAddressSection />
                 </section>
                 {itemArray.fields.map((field, index) => (
@@ -80,7 +72,6 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                         className=""
                         onClick={async () => {
                             const doorUnit = await addDoorUnitAction();
-
                             itemArray.append(doorUnit as any);
                         }}
                     >

@@ -23,6 +23,28 @@ export async function signupDealerAction(data: RegisterSchema) {
         data: {
             email: data.email,
             status: "Pending Approval",
+            primaryBillingAddress: {
+                create: {
+                    address1: data.address,
+                    city: data.city,
+                    state: data.state,
+                    meta: {},
+                    email: data.email,
+                    name: data.name,
+                    phoneNo: data.phoneNo,
+                },
+            },
+            primaryShippingAddress: {
+                create: {
+                    address1: data.address,
+                    city: data.city,
+                    state: data.state,
+                    meta: {},
+                    email: data.email,
+                    name: data.name,
+                    phoneNo: data.phoneNo,
+                },
+            },
             dealer: {
                 create: {
                     name: data.name,
@@ -30,6 +52,7 @@ export async function signupDealerAction(data: RegisterSchema) {
                     email: data.email,
                     businessName: data.businessName,
                     meta: {},
+                    phoneNo: data.phoneNo,
                 },
             },
         },
