@@ -146,6 +146,18 @@ export async function dealershipApprovalAction(
                     : undefined,
         },
     });
-
     _revalidate("dealers");
+}
+
+export async function updateDealerProfileAction(id, profileId) {
+    await prisma.dealerAuth.update({
+        where: { id },
+        data: {
+            dealer: {
+                update: {
+                    customerTypeId: profileId,
+                },
+            },
+        },
+    });
 }

@@ -6,12 +6,7 @@ import { transformData } from "@/lib/utils";
 import { CustomerTypes } from "@prisma/client";
 
 export async function staticCustomerProfilesAction() {
-    const d = await _cache(
-        "customer.types",
-        async () => await prisma.customerTypes.findMany({})
-    );
-    console.log(d);
-    return d;
+    return await prisma.customerTypes.findMany({});
 }
 
 export async function saveCustomerProfile(data: CustomerTypes) {

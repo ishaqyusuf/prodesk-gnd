@@ -7,6 +7,7 @@ import {
     DealerStatus,
     GetDealersAction,
     resendApprovalTokenAction,
+    updateDealerProfileAction,
 } from "./action";
 import { Info } from "@/components/_v1/info";
 import StatusBadge from "@/components/_v1/status-badge";
@@ -24,6 +25,9 @@ import {
     getSalesSettingAction,
     getSettingAction,
 } from "@/app/(v1)/_actions/settings";
+import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customer-profiles";
+import { Form } from "@/components/ui/form";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 
 export function useDealerSheet() {
     const modal = useModal();
@@ -42,12 +46,16 @@ export default function DealerOverviewSheet({ dealer }: Props) {
     const [reason, setReason] = useState("");
     const modal = useModal();
 
-    const profiles = useEffectLoader(async () => getCustomerProfileList());
-    const settings = useEffectLoader(getSalesSettingAction);
+    const profiles = useEffectLoader(staticCustomerProfilesAction);
     async function _action(status: DealerStatus) {
         await dealershipApprovalAction(dealer.id, status);
         modal.close();
         toast.success(`Dealership ${status}!`);
+        if (status == "Approved")
+            await updateDealerProfileAction(
+                dealer.id,
+                +form.getValues("profileId")
+            );
     }
     async function _resendToken() {
         await resendApprovalTokenAction(dealer.id);
@@ -64,12 +72,12 @@ export default function DealerOverviewSheet({ dealer }: Props) {
         },
     });
     useEffect(() => {
-        const profileId = settings.data.meta?.salesProfileId;
-        if (!dealer.dealer.customerTypeId)
+        const profileId = profiles.data?.find((p) => p.defaultProfile)?.id;
+        if (!dealer.dealer.customerTypeId && profileId)
             form.reset({
                 profileId,
             });
-    }, [settings.data]);
+    }, [profiles.data]);
     return (
         <Modal.Content>
             <Modal.Header title={"Dealer Overview"} />
@@ -95,7 +103,7 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                     />
                 </div>
             </div>
-            <div className=""></div>
+
             <div className={cn(dealer.tokenExpired ? "" : "hidden")}>
                 <Modal.Footer
                     submitText="Reject"
@@ -131,16 +139,30 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                         />
                     </>
                 ) : (
-                    <Modal.Footer
-                        submitText="Approve"
-                        onSubmit={() => _action("Approved")}
-                        cancelText="Reject"
-                        cancelBtn
-                        cancelVariant="destructive"
-                        onCancel={() => {
-                            setReject(true);
-                        }}
-                    />
+                    <>
+                        <div className={cn("mt-3")}>
+                            <Form {...form}>
+                                <ControlledSelect
+                                    label="Dealer Profile"
+                                    control={form.control}
+                                    name="profileId"
+                                    options={profiles.data || []}
+                                    titleKey="title"
+                                    valueKey="id"
+                                />
+                            </Form>
+                        </div>
+                        <Modal.Footer
+                            submitText="Approve"
+                            onSubmit={() => _action("Approved")}
+                            cancelText="Reject"
+                            cancelBtn
+                            cancelVariant="destructive"
+                            onCancel={() => {
+                                setReject(true);
+                            }}
+                        />
+                    </>
                 )}
                 {/* <div className="flex justify-end space-x-4">
                     <Button variant="destructive">Reject</Button>
