@@ -122,7 +122,6 @@ async function newSalesFormAction(
     const session = await user();
     const form = {
         taxPercentage: ctx?.settings?.tax_percentage,
-        // salesRepId: query.salesRepId,
         type: query.type,
         status: "Active",
         meta: {
@@ -135,7 +134,6 @@ async function newSalesFormAction(
         },
         createdAt: dayjs().toISOString() as any,
     } as ISalesOrder;
-    console.log(query);
     if (query.customerId) {
         const customer = await prisma.customers.findFirst({
             where: { id: { equals: +query.customerId } },
@@ -162,7 +160,6 @@ async function newSalesFormAction(
             form.billingAddress = form.shippingAddress = addr;
         }
     }
-    console.log(form);
     return {
         form,
         ctx,

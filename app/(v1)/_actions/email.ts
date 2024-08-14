@@ -5,11 +5,8 @@ import { _email } from "./_email";
 import { prisma } from "@/db";
 import { _dbUser, userId } from "./utils";
 import { transformEmail } from "@/lib/email-transform";
-// import { resend } from "@/lib/resend";
 import { _generateSalesPdf } from "../(loggedIn)/sales/_actions/save-pdf";
 import { env } from "@/env.mjs";
-import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
-
 import { resend } from "@/lib/resend";
 import dayjs from "dayjs";
 
