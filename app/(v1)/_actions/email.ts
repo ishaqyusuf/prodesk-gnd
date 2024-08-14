@@ -21,14 +21,16 @@ export interface DownloadProps {
 export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
     const u = await _dbUser();
-    const attachments: any = [];
-
     const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
-    const token = dayjs(download.date).format("HH:mm:ss")?.split(":").join("");
-    trs.body = `${trs.body} </br>
-    <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
-    `;
+
     if (data.attachOrder && isProd && download) {
+        const token = dayjs(download.date)
+            .format("HH:mm:ss")
+            ?.split(":")
+            .join("");
+        trs.body = `${trs.body} </br>
+        <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
+        `;
         // try {
         //     const pdf = await salesPdf({
         //         slugs: data.data.slug,
@@ -48,7 +50,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         // }
     }
 
-    const to = data.to?.split(",");
+    const to = !isProd ? [`ishaqyusuf024@gmail.com`] : data.to?.split(",");
 
     // console.log(trs);
 

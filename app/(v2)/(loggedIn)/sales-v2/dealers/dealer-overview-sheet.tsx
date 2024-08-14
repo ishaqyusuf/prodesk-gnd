@@ -7,6 +7,7 @@ import {
     DealerStatus,
     GetDealersAction,
     resendApprovalTokenAction,
+    sendDealerApprovalEmail,
     updateDealerProfileAction,
 } from "./action";
 import { Info } from "@/components/_v1/info";
@@ -51,11 +52,13 @@ export default function DealerOverviewSheet({ dealer }: Props) {
         await dealershipApprovalAction(dealer.id, status);
         modal.close();
         toast.success(`Dealership ${status}!`);
-        if (status == "Approved")
+        if (status == "Approved") {
             await updateDealerProfileAction(
                 dealer.id,
                 +form.getValues("profileId")
             );
+            await sendDealerApprovalEmail(dealer.id);
+        }
     }
     async function _resendToken() {
         await resendApprovalTokenAction(dealer.id);

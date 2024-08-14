@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { DownloadProps, sendMessage } from "@/app/(v1)/_actions/email";
 import { EmailTypes } from "../types";
 import { isProdClient } from "@/lib/is-prod";
-import { Toaster } from "@/components/ui/toaster";
 
 interface Props {
     // subject?: string;
@@ -38,7 +37,6 @@ export default function SendEmailSheet({ subtitle, data, download }: Props) {
             subject: "",
             body: "",
             ...data,
-
             template: {
                 title: "",
                 id: null,
@@ -81,14 +79,13 @@ export default function SendEmailSheet({ subtitle, data, download }: Props) {
         } = form.getValues();
         if (cmd) {
             // to = "ishaqyusuf024@gmail.com";
-            console.log(to);
+            // console.log(to);
         }
 
         if (!to && !isProdClient) {
             toast.error("Please enter email address");
             return;
         }
-        console.log(to);
         try {
             await sendMessage(
                 {

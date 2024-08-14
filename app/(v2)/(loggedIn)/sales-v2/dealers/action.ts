@@ -1,6 +1,7 @@
 "use server";
 
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import { sendMessage } from "@/app/(v1)/_actions/email";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
@@ -148,7 +149,6 @@ export async function dealershipApprovalAction(
     });
     _revalidate("dealers");
 }
-
 export async function updateDealerProfileAction(id, profileId) {
     await prisma.dealerAuth.update({
         where: { id },
@@ -160,4 +160,20 @@ export async function updateDealerProfileAction(id, profileId) {
             },
         },
     });
+}
+export async function sendDealerApprovalEmail(id) {
+    const dealer = await prisma.dealerAuth.findFirst({
+        where: { id },
+        include: {
+            dealer: true,
+            token: true,
+        },
+    });
+    const token = dealer.token.filter((s) => !s.consumedAt && !s.expiredAt)[0]
+        ?.token;
+    await sendMessage({
+        subject: `Dealership Approved`,
+        body: `https://localhost:3000/dealer/create-password/${token}`,
+        from: `Ishaq Yusuf From GND Millwork<ishaqyusuf@gndprodesk.com>`,
+    } as any);
 }
