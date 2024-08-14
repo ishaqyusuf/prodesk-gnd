@@ -6,12 +6,12 @@ export const registerSchema = z.object({
     businessName: z.string().optional(),
     address: z.string().min(1),
     email: z.string().email().min(1),
-    state: z.string().email().min(1),
-    city: z.string().email().min(1),
+    state: z.string().min(1),
+    city: z.string().min(1),
     phoneNo: z.string().regex(usPhoneNumberRegex, {
         message: "Invalid phone number",
     }),
-    password: z.string().min(1),
+    // password: z.string().min(1),
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

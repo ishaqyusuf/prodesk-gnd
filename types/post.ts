@@ -14,8 +14,7 @@ export interface ISalesSettingMeta {
     ccc;
     production_event;
     sales_margin;
-    sales_profile;
-    sales_profile_id;
+    salesProfileId;
     tax_percentage;
     defaultFrame;
     defaultHinge;

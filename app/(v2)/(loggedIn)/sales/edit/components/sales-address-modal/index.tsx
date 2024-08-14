@@ -19,6 +19,7 @@ import { useModal } from "@/components/common/modal-old/provider";
 import { usePathname } from "next/navigation";
 import { DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { updateSalesAddress } from "../../../_actions/update-sales-address";
+import ControlledInput from "@/components/common/controls/controlled-input";
 
 export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();
@@ -101,7 +102,6 @@ export default function SalesAddressModal({ form: mainForm }) {
                               customer,
                           }),
                 };
-                console.log(respData);
 
                 Object.entries(respData).map(([k, v]) => {
                     mainForm.setValue(k as any, v, {
@@ -131,6 +131,7 @@ export default function SalesAddressModal({ form: mainForm }) {
             setCustomers((await _getCustomerSearchList()).items as any);
         })();
     }, []);
+
     return (
         <DialogContent>
             <Form {...addressForm}>
@@ -170,50 +171,6 @@ export default function SalesAddressModal({ form: mainForm }) {
                         </Btn>
                     </div>
                 </DialogFooter>
-                {/* <BaseModal
-                className="sm:max-w-[550px]"
-                modalName="salesAddressForm"
-                Title={({ data }) => <div></div>}
-                Subtitle={({ data }) => <div></div>}
-                Content={({ data }) => (
-                    <Tabs defaultValue={tab} className="">
-                        <TabsList className="grid w-full grid-cols-2">
-                            {tabs.map((t) => (
-                                <TabsTrigger
-                                    key={t.name}
-                                    onClick={() => setTab("billingAddress")}
-                                    value={t.value}
-                                    disabled={
-                                        checked && t.value == "shippingAddress"
-                                    }
-                                >
-                                    {t.name}
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                        {tabs.map((t) => (
-                            <TabsContent value={t.value} key={t.name}>
-                                <AddressForm
-                                    customers={customers}
-                                    formKey={t.value as any}
-                                />
-                            </TabsContent>
-                        ))}
-                    </Tabs>
-                )}
-                Footer={({ data }) => (
-                    <div className="flex-1 flex items-center justify-between">
-                        <InputControl
-                            label="Same as Shipping"
-                            check
-                            name="sameAddress"
-                        />
-                        <Btn onClick={save} isLoading={saving} size="sm">
-                            Save
-                        </Btn>
-                    </div>
-                )}
-            /> */}
             </Form>
         </DialogContent>
     );
@@ -225,7 +182,7 @@ function AddressForm({
     formKey: "billingAddress" | "shippingAddress";
     customers;
 }) {
-    const form = useFormContext();
+    const form = useFormContext<ISalesAddressForm>();
     const addressSelected = (e) => {
         const { data: address } = e as any;
         const { customer, businessName, search, ..._address } = address;
@@ -234,7 +191,7 @@ function AddressForm({
             form.setValue("profile", customer.profile);
     };
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2">
             <div className="col-span-2">
                 <div className="grid gap-2">
                     <Label>Search</Label>
@@ -248,44 +205,62 @@ function AddressForm({
                 </div>
             </div>
             <div className="col-span-2">
-                <InputControl<ISalesAddressForm>
+                <ControlledInput
+                    control={form.control}
+                    size="sm"
                     name="customer.businessName"
                     label="Business Name"
                 />
             </div>
             <div className="col-span-2">
-                <InputControl<ISalesAddressForm>
+                <ControlledInput
+                    control={form.control}
+                    size="sm"
                     name={`${formKey}.name`}
                     label="Name"
                 />
             </div>
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.phoneNo`}
                 label="Phone (Primary)"
             />
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.email`}
                 label="Email"
             />
             <div className="col-span-2">
-                <InputControl<ISalesAddressForm>
+                <ControlledInput
+                    control={form.control}
+                    size="sm"
                     name={`${formKey}.address1`}
                     label="Address"
                 />
             </div>
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.phoneNo2`}
                 label="Phone (Secondary)"
             />
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.city`}
                 label="City"
             />
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.state`}
                 label="State"
             />
-            <InputControl<ISalesAddressForm>
+            <ControlledInput
+                control={form.control}
+                size="sm"
                 name={`${formKey}.meta.zip_code`}
                 label="Zip Code"
             />

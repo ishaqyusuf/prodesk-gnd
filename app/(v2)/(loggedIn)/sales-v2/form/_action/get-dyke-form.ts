@@ -42,6 +42,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                   id: auth.user.id,
               },
               include: {
+                  primaryBillingAddress: true,
+                  primaryShippingAddress: true,
                   dealer: {
                       include: {
                           addressBooks: true,
@@ -174,6 +176,10 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const newOrderForm: Partial<OrderType> = {
         type,
         isDyke: true,
+        customerId: dealer?.dealerId,
+        shippingAddress: dealer?.primaryShippingAddress || ({} as any),
+        billingAddress: dealer?.primaryBillingAddress || ({} as any),
+
         status: "Active",
         taxPercentage: +ctx.settings?.tax_percentage,
         paymentTerm: ctx.defaultProfile?.meta?.net,

@@ -32,6 +32,7 @@ export async function getDealersAction(query: GetDealersQuery) {
         where,
         include: {
             dealer: true,
+            primaryBillingAddress: true,
             token: {
                 where: {
                     consumedAt: null,

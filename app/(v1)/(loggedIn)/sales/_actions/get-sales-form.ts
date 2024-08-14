@@ -172,7 +172,6 @@ async function newSalesFormAction(
         },
         createdAt: dayjs().toISOString() as any,
     } as ISalesOrder;
-    console.log(query);
     if (query.customerId) {
         const customer = await prisma.customers.findFirst({
             where: { id: { equals: +query.customerId } },
@@ -189,7 +188,7 @@ async function newSalesFormAction(
         if (customer) {
             form.customerId = customer.id;
             form.meta.sales_profile =
-                customer.profile?.title || ctx.settings?.sales_profile;
+                customer.profile?.title || ctx.defaultProfile?.title;
             form.meta.sales_percentage =
                 customer.profile?.coefficient || ctx?.settings?.sales_margin;
             const addr = {
@@ -199,7 +198,6 @@ async function newSalesFormAction(
             form.billingAddress = form.shippingAddress = addr;
         }
     }
-    console.log(form);
     return {
         form,
         ctx: ctx as any,

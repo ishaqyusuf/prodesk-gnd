@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/db";
-import { SettingType } from "@/types/settings";
+import { ISalesSetting } from "@/types/post";
+import { InstallCostSettings, SettingType } from "@/types/settings";
 
 export async function getSettingAction<T>(type: SettingType) {
     // const type: PostType = "sales-settings";
@@ -19,6 +20,12 @@ export async function getSettingAction<T>(type: SettingType) {
         return newSetting as T;
     }
     return setting as T;
+}
+export async function getInstallCostSettingAction() {
+    return await getSettingAction<InstallCostSettings>("install-price-chart");
+}
+export async function getSalesSettingAction() {
+    return await getSettingAction<ISalesSetting>("sales-settings");
 }
 export async function saveSettingAction(id, data): Promise<any> {
     // const type: PostType = "sales-settings";

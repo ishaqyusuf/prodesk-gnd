@@ -40,3 +40,18 @@ export async function setCustomerProfileAction(id, profileId) {
         },
     });
 }
+export async function setDefaultCustomerProfile(id) {
+    if (!id) return;
+    await prisma.customerTypes.updateMany({
+        where: {
+            defaultProfile: true,
+        },
+        data: {
+            defaultProfile: false,
+        },
+    });
+    await prisma.customerTypes.update({
+        where: { id },
+        data: { defaultProfile: true },
+    });
+}

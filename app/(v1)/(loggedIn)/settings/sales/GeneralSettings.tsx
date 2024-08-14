@@ -1,4 +1,6 @@
 import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
+import ControlledInput from "@/components/common/controls/controlled-input";
+import ControlledSelect from "@/components/common/controls/controlled-select";
 import {
     Form,
     FormControl,
@@ -25,9 +27,6 @@ export default function GeneralSettings({
 }: {
     form: UseFormReturn<ISalesSetting>;
 }) {
-    // const profiles = useAppSelector(
-    //     (state) => state.slicers.staticCustomerProfiles
-    // );
     const profiles = useCustomerProfiles();
     return (
         <div className="space-y-6">
@@ -40,74 +39,25 @@ export default function GeneralSettings({
             <Separator />
             <Form {...form}>
                 <div className="grid grid-cols-2 gap-4">
-                    <FormField
+                    <ControlledInput
+                        type="number"
                         control={form.control}
                         name="meta.tax_percentage"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tax Percentage (%)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        className=""
-                                        type="number"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
+                        label="Tax Percentage (%)"
                     />
-                    <FormField
+                    <ControlledInput
+                        type="number"
                         control={form.control}
                         name="meta.ccc"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>C.C.C (%)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        className=""
-                                        type="number"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
+                        label="C.C.C (%)"
                     />
-                    <FormField
+                    <ControlledSelect
+                        options={profiles.data || []}
+                        titleKey="title"
+                        valueKey="id"
                         control={form.control}
-                        name="meta.sales_profile"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Default Customer Profile</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {profiles.data?.map(
-                                                    (profile, _) => (
-                                                        <SelectItem
-                                                            key={_}
-                                                            value={
-                                                                profile.title
-                                                            }
-                                                        >
-                                                            {profile.title}
-                                                        </SelectItem>
-                                                    )
-                                                )}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                            </FormItem>
-                        )}
+                        name="meta.salesProfileId"
+                        label="Default Customer Profile"
                     />
                 </div>
             </Form>

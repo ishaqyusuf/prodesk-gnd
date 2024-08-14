@@ -11,12 +11,19 @@ import {
 import { Info } from "@/components/_v1/info";
 import StatusBadge from "@/components/_v1/status-badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { TableCol } from "@/components/common/data-table/table-cells";
+import useEffectLoader from "@/lib/use-effect-loader";
+import { getCustomerProfileList } from "../form/_action/get-customer-profiles";
+import { useForm } from "react-hook-form";
+import {
+    getSalesSettingAction,
+    getSettingAction,
+} from "@/app/(v1)/_actions/settings";
 
 export function useDealerSheet() {
     const modal = useModal();
@@ -34,6 +41,9 @@ export default function DealerOverviewSheet({ dealer }: Props) {
     const [reject, setReject] = useState(false);
     const [reason, setReason] = useState("");
     const modal = useModal();
+
+    const profiles = useEffectLoader(async () => getCustomerProfileList());
+    const settings = useEffectLoader(getSalesSettingAction);
     async function _action(status: DealerStatus) {
         await dealershipApprovalAction(dealer.id, status);
         modal.close();
@@ -48,6 +58,18 @@ export default function DealerOverviewSheet({ dealer }: Props) {
         setReason("");
         setReject(false);
     }
+    const form = useForm({
+        defaultValues: {
+            profileId: dealer.dealer.customerTypeId,
+        },
+    });
+    useEffect(() => {
+        const profileId = settings.data.meta?.salesProfileId;
+        if (!dealer.dealer.customerTypeId)
+            form.reset({
+                profileId,
+            });
+    }, [settings.data]);
     return (
         <Modal.Content>
             <Modal.Header title={"Dealer Overview"} />
@@ -56,7 +78,10 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                 <Info label="Company Name" value={dealer.dealer.businessName} />
                 <Info label="Email" value={dealer.dealer.email} />
                 <Info label="Phone" value={dealer.dealer.phoneNo} />
-                <Info label="Address" value={dealer.dealer.address} />
+                <Info
+                    label="Address"
+                    value={`${dealer.dealer.address}, ${dealer.primaryBillingAddress.city}, ${dealer.primaryBillingAddress.state}`}
+                />
                 <div className="grid grid-cols-2 gap-4">
                     <Info
                         label="Status"
@@ -70,6 +95,7 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                     />
                 </div>
             </div>
+            <div className=""></div>
             <div className={cn(dealer.tokenExpired ? "" : "hidden")}>
                 <Modal.Footer
                     submitText="Reject"

@@ -1,13 +1,25 @@
 "use server";
 
+import { serverSession } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 
 export async function _getCustomerSearchList() {
+    const auth = await serverSession();
+    const isDealer = auth.role.name == "Dealer";
+
     let items = (
         await prisma.addressBooks.findMany({
             // take: 5,
             distinct: ["name", "address1", "phoneNo"],
-            where: {},
+            where: isDealer
+                ? {
+                      customer: {
+                          auth: {
+                              id: auth.user.id,
+                          },
+                      },
+                  }
+                : undefined,
             include: {
                 customer: {
                     include: {

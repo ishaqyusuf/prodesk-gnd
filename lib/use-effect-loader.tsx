@@ -10,7 +10,7 @@ interface Props {
 }
 export default function useEffectLoader<T extends (...args: any) => any>(
     fn: T,
-    {}: Props
+    {}: Props = {}
 ) {
     type DataType = Awaited<NonNullable<ReturnType<T>>>;
     const [data, setData] = useState<DataType>();
