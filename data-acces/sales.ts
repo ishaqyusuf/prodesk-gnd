@@ -208,7 +208,7 @@ export async function whereSales(query: SalesQueryParams) {
     if (dealerId)
         where.customer = {
             auth: {
-                dealerId,
+                id: dealerId,
             },
         };
     if (_withDeleted) {

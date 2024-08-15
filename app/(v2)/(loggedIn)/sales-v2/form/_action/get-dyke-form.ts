@@ -201,10 +201,12 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                 meta: {},
             } as any,
         ],
-        salesRep: {
-            name: session.name,
-            id: session.id,
-        },
+        salesRep: dealerMode
+            ? ({} as any)
+            : {
+                  name: session.name,
+                  id: session.id,
+              },
         createdAt: dayjs().toISOString() as any,
     };
     const form = (order || newOrderForm) as any as OrderType;

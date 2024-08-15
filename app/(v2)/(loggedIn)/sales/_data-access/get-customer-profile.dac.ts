@@ -4,6 +4,7 @@ import { ICustomerProfile } from "@/app/(v1)/(loggedIn)/sales/(customers)/custom
 import { prisma } from "@/db";
 
 export async function getCustomerProfileDac(customerId) {
+    if (!customerId) return {} as any;
     let profile;
     const customer = await prisma.customers.findUnique({
         where: {
@@ -38,4 +39,3 @@ export async function getCustomerProfileDac(customerId) {
     }
     return profile as any as ICustomerProfile;
 }
-

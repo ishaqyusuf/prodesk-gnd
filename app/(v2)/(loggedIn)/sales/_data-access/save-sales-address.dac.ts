@@ -7,6 +7,7 @@ import { IAddressBook, ISalesAddressForm } from "@/types/sales";
 import { CustomerTypes, Prisma } from "@prisma/client";
 import { getCustomerProfileDac } from "./get-customer-profile.dac";
 import { ICustomerProfile } from "@/app/(v1)/(loggedIn)/sales/(customers)/customers/profiles/_components/type";
+import { sessionIsDealerMode, user } from "@/app/(v1)/_actions/utils";
 
 export async function _saveSalesAddress({
     billingAddress,
@@ -15,6 +16,7 @@ export async function _saveSalesAddress({
     sameAddress,
     customer: _customer,
 }: ISalesAddressForm) {
+    const dealer = await sessionIsDealerMode();
     let customerId: number | null;
     const response: {
         customerId?;
@@ -35,41 +37,52 @@ export async function _saveSalesAddress({
     }
     await Promise.all(
         [billingAddress, shippingAddress].map(async (_address, index) => {
-            // delete (address as any)?.["id"];
             if (sameAddress && index == 1) return;
-            console.log(index);
             let { id, ...address } = _address;
-            // delete _address.customerId as any;
             let newId = null;
 
-            const { phoneNo, phoneNo2, name, address1 } = address as any;
+            const { phoneNo, phoneNo2, email, name, address1 } = address as any;
+            function _or(k: keyof Prisma.AddressBooksWhereInput, value) {
+                return {
+                    OR: [
+                        {
+                            [k]: value,
+                        },
+                        {
+                            [k]: null,
+                        },
+                    ],
+                };
+            }
             const where: Prisma.AddressBooksWhereInput = {
                 name,
-                phoneNo,
-                OR: [
-                    {
-                        address1,
-                    },
-                    {
-                        address1: null,
-                    },
+                AND: [
+                    _or("phoneNo", phoneNo),
+                    _or("email", email),
+                    _or("address1", address1),
                 ],
-                customerId: {
-                    gt: 0,
-                },
-                // address1: {
-                //   in: [address1, ""],
-                // },
+                customer: dealer
+                    ? {
+                          auth: {
+                              id: dealer.id,
+                          },
+                      }
+                    : {
+                          isNot: null,
+                      },
             };
             let eAddr = (await prisma.addressBooks.findFirst({
                 where,
                 include: {
-                    customer: true,
+                    customer: {
+                        include: {
+                            auth: true,
+                        },
+                    },
                 },
             })) as any as IAddressBook | null;
 
             if (eAddr) {
-                console.log(eAddr);
                 let _update: any = null;
                 const columns: (keyof IAddressBook)[] = [
                     "email",
@@ -77,19 +90,14 @@ export async function _saveSalesAddress({
                     "state",
                     "address1",
                 ];
-                console.log(index);
                 if (
                     eAddr.address1 &&
                     address.address1 &&
                     eAddr.address1 != address.address1
                 ) {
-                    console.log(index);
                     eAddr = null;
-                    console.log("NULL....");
                 } else {
-                    console.log(index);
                     columns.map((c) => {
-                        // let eac = eAddr[c];
                         let nac = address?.[c];
                         if (nac) {
                             if (!_update) _update = {};
@@ -101,25 +109,19 @@ export async function _saveSalesAddress({
                             ...(eAddr.meta ?? {}),
                             zip_code: address?.meta?.zip_code,
                         };
-                    console.log(index);
                     setAddress(index, eAddr);
                     if (_update) {
-                        console.log(index);
                         const _adr = await prisma.addressBooks.update({
                             where: {
                                 id: eAddr.id,
                             },
                             data: _update,
                         });
-                        console.log(index);
                         setAddress(index, _adr);
                     }
                     newId = eAddr.id as any;
                     if (index == 0 && eAddr.customerId) {
-                        console.log(index);
-                        console.log(index);
                         customerId = eAddr.customerId;
-                        console.log(eAddr.customerId);
 
                         const __customer = await prisma.customers.update({
                             where: { id: eAddr.customerId as any },
@@ -127,13 +129,10 @@ export async function _saveSalesAddress({
                                 businessName: _customer.businessName,
                             },
                         });
-                        console.log(index);
                         address.customerId = eAddr?.customerId;
                         response.customer = __customer;
                     }
                 }
-                console.log(index);
-                // return eAddr;
             }
             if (eAddr == null) {
                 if (index == 0) {
@@ -145,6 +144,7 @@ export async function _saveSalesAddress({
                             },
                             include: {
                                 profile: true,
+                                auth: true,
                             },
                         })) as any;
 
@@ -153,9 +153,19 @@ export async function _saveSalesAddress({
                                 data: {
                                     name,
                                     phoneNo,
+                                    auth: dealer
+                                        ? {
+                                              connect: {
+                                                  id: dealer.id,
+                                              },
+                                          }
+                                        : undefined,
                                     phoneNo2,
                                     businessName: _customer.businessName,
                                     email: address?.email,
+                                },
+                                include: {
+                                    auth: true,
                                 },
                             })) as any;
                         } else
@@ -166,38 +176,27 @@ export async function _saveSalesAddress({
                                 },
                                 include: {
                                     profile: true,
+                                    auth: true,
                                 },
                             })) as any;
                         address.customerId = customer?.id as any;
                         response.customer = customer;
-                        console.log(response);
                     } else {
                         if (!customer?.profile) {
                             await prisma.customers.update({
                                 where: { id: customer.id },
                                 data: {
-                                    profile: {
-                                        // connect: profile.id as any,
-                                    },
+                                    profile: {},
                                 },
                             });
                         } else {
-                            // if (customer.customerTypeId != profile.id) {
-                            //     response.profileUpdate = {
-                            //         profile,
-                            //         customer,
-                            //     };
-                            // }
                         }
                     }
                     customerId = address?.customerId;
                 } else address.customerId = customerId;
-
-                // address.customerId = "1" as any;
                 const addr = await prisma.addressBooks.create({
                     data: {
                         ...(address as any),
-                        // id: await nextId(prisma.addressBooks),
                     },
                 });
                 newId = addr.id as any;
@@ -212,8 +211,5 @@ export async function _saveSalesAddress({
         })
     );
     response.profile = await getCustomerProfileDac(response.customerId);
-    // await prisma.addressBooks.deleteMany({
-    //   where: {},
-    // });
     return response;
 }

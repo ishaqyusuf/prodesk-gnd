@@ -41,17 +41,25 @@ export default function useDykeFormSaver(form) {
                 toast.success("Saved!");
                 switch (mode) {
                     case "close":
-                        router.push(`/sales/${type}s`);
+                        router.push(
+                            data.dealerMode ? `/quotes` : `/sales/${type}s`
+                        );
                         break;
                     case "default":
                         if (!id || params.get("restore") == "true")
                             router.push(
-                                `/sales-v2/form/${resp.type}/${resp.slug}`
+                                data.dealerMode
+                                    ? `/edit-quote/${resp.slug}`
+                                    : `/sales-v2/form/${resp.type}/${resp.slug}`
                             );
                         else await _revalidate("salesV2Form");
                         break;
                     case "new":
-                        router.push(`/sales-v2/form/${resp.type}`);
+                        router.push(
+                            data.dealerMode
+                                ? `/create-quote`
+                                : `/sales-v2/form/${resp.type}`
+                        );
                         break;
                 }
             } catch (error) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { TableCol } from "@/components/common/data-table/table-cells";
+import { TableCell } from "@/app/_components/data-table/table-cells";
 import { GetSales } from "@/data-acces/sales";
 
 interface CellProps {
@@ -9,9 +9,9 @@ interface CellProps {
 
 function Order({ item }: CellProps) {
     return (
-        <TableCol>
-            <TableCol.Primary>{item.orderId}</TableCol.Primary>
-        </TableCol>
+        <TableCell>
+            <TableCell.Primary>{item.orderId}</TableCell.Primary>
+        </TableCell>
     );
 }
 

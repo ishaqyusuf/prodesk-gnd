@@ -15,7 +15,10 @@ import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component
 import SelectDoorHeightsModal from "../../../../modals/select-door-heights";
 import { getDykeStepDoorByProductId } from "../../../../../_action/get-dyke-step-doors";
 import { useDoorSizes } from "../../../../../_hooks/use-door-size";
+import { cn } from "@/lib/utils";
+import { useDykeCtx } from "../../../../../_hooks/form-context";
 export default function HousePackageTool({ componentTitle }) {
+    const ctx = useDykeCtx();
     const componentItem = useMultiComponentItem(componentTitle);
     const { item, form, _setSizeList, doorConfig } = componentItem;
 
@@ -30,7 +33,7 @@ export default function HousePackageTool({ componentTitle }) {
             (s) => s.step.title == "Door"
         );
         const dykeProductId = i.item.housePackageTool.dykeDoorId;
-        console.log({ dykeProductId, formStep });
+
         const stepProd = await getDykeStepDoorByProductId(
             formStep.step.id,
             dykeProductId
@@ -69,7 +72,11 @@ export default function HousePackageTool({ componentTitle }) {
                             <TableHead className="shidden lg:table-cell">
                                 Estimate
                             </TableHead>
-                            <TableHead className="">Addon/Qty</TableHead>
+                            <TableHead
+                                className={cn(ctx.dealerMode && "hidden")}
+                            >
+                                Addon/Qty
+                            </TableHead>
                         </>
                     ) : (
                         <>
@@ -84,13 +91,15 @@ export default function HousePackageTool({ componentTitle }) {
                     <TableHead></TableHead>
                 </TableHeader>
                 <TableBody>
-                    {sizes.map((row) => (
-                        <HousePackageSizeLineItem
-                            size={row}
-                            componentItem={componentItem}
-                            key={row.dim}
-                        ></HousePackageSizeLineItem>
-                    ))}
+                    {sizes
+                        // .filter((row) => row.price)
+                        .map((row) => (
+                            <HousePackageSizeLineItem
+                                size={row}
+                                componentItem={componentItem}
+                                key={row.dim}
+                            ></HousePackageSizeLineItem>
+                        ))}
                     <TableRow>
                         <TableCell
                             className="shidden lg:table-cell"

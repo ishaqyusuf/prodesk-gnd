@@ -68,7 +68,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                 // sameAddress: checked as any,
                 customer,
             };
-            // console.log(_form);
+            console.log({ _form });
             const resp = await saveSalesAddressAction({ ..._form } as any);
             if (resp) {
                 const {
@@ -121,6 +121,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                 // closeModal();
                 modal?.close();
             }
+            console.log({ resp });
         });
     }
     // const [checked, setChecked] = useState<boolean>(true);

@@ -50,3 +50,11 @@ export async function streamlineMeta(meta: any = null) {
 export async function hashPassword(pwrd) {
     return await bcrypt.hash(pwrd, 10);
 }
+export async function sessionIsDealerMode() {
+    const s = await serverSession();
+    let isDealerMode = s.role.name == "Dealer";
+    if (!isDealerMode) return null;
+    return {
+        id: s.user.id,
+    };
+}

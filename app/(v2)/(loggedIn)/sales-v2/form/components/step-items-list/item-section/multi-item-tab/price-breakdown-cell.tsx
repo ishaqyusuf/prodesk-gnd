@@ -8,8 +8,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { TableCell } from "@/components/ui/table";
-import { useDykeForm } from "../../../../_hooks/form-context";
-import { sum } from "@/lib/utils";
+import { useDykeCtx, useDykeForm } from "../../../../_hooks/form-context";
+import { cn, sum } from "@/lib/utils";
 import { useMultiComponentItem } from "../../../../_hooks/use-multi-component-item";
 import { Form } from "@/components/ui/form";
 import { TableCol } from "@/components/common/data-table/table-cells";
@@ -21,6 +21,8 @@ interface Props {
 }
 export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
     const form = useDykeForm();
+    const ctx = useDykeCtx();
+
     const itemData = componentItem.item.get.data();
     return (
         <TableCell className="shidden lg:table-cell">
@@ -96,7 +98,12 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
                                         </div>
                                     </div>
                                 )}
-                                <div className="pt-2 border-t">
+                                <div
+                                    className={cn(
+                                        "pt-2 border-t",
+                                        ctx.dealerMode && "hidden"
+                                    )}
+                                >
                                     <ControlledInput
                                         control={form.control}
                                         label={"Edit Price"}

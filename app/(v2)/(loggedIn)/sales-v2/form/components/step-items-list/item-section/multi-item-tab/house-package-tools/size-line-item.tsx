@@ -11,6 +11,7 @@ import {
 import { SizeForm } from "../../../../modals/select-door-heights";
 
 import PriceBreakDownCell from "../price-breakdown-cell";
+import { useDykeCtx } from "../../../../../_hooks/form-context";
 
 interface Props {
     size: SizeForm[string];
@@ -20,16 +21,12 @@ export default function HousePackageSizeLineItem({
     size,
     componentItem,
 }: Props) {
+    const ctx = useDykeCtx();
     const sizeRow = useMultiComponentSizeRow(componentItem, size);
     const { form, prices, doorConfig } = componentItem;
     const itemData = componentItem.item.get.data();
 
-    // const component =
-    // itemData.multiComponent.components[componentItem.componentTitle];
-    // const doorForm = component?._doorForm?.[size.dim];
     const hpt = itemData.item?.housePackageTool;
-    // console.log(component?._doorForm);
-    // component.too
     return (
         <TableRow>
             <TableCell>{size.dimFt}</TableCell>
@@ -78,7 +75,7 @@ export default function HousePackageSizeLineItem({
             ) : (
                 <></>
             )}
-            <TableCell className="">
+            <TableCell className={cn(ctx.dealerMode && "hidden")}>
                 <div className="flex max-w-[300px] flex-col justify-center items-stretch divide-y">
                     <div className="flex pt-1 justify-between">
                         {prices.map((p) => (

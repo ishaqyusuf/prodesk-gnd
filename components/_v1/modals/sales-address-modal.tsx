@@ -98,16 +98,13 @@ export function SalesCustomerModal({
                 sameAddress: checked as any,
                 customer,
             };
-            console.log(_form);
+            console.log({ _form });
             const resp = await saveSalesAddressAction(_form as any);
 
-            console.log(resp);
+            console.log({ resp });
 
             if (resp) {
-                // console.log(_form);
                 const { profile, ...ext } = resp;
-
-                // console.log(ext);
                 Object.entries(ext).map(([k, v]) => {
                     form.setValue(k as any, v, { shouldDirty: true });
                 });

@@ -23,7 +23,7 @@ export default function ClientPage({ promise, quote }: Props) {
             pageCount,
             checkable: false,
             cellVariants: {
-                size: "sm",
+                // size: "sm",
             },
         },
         (ctx) => [ctx.Column("Order", Cells.Order)]

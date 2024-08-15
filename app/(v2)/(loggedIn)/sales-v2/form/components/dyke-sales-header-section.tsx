@@ -43,6 +43,29 @@ export default function HeaderSection({}) {
             form.handleSubmit((data) => saver.save(data, and))();
         }, 100);
     }
+    function SaveBtn() {
+        return (
+            <Menu
+                variant={"secondary"}
+                disabled={saver.saving}
+                label={"Save"}
+                Icon={null}
+            >
+                <MenuItem onClick={() => save()} Icon={Icons.save}>
+                    Save
+                </MenuItem>
+                <MenuItem
+                    onClick={() => save("close")}
+                    Icon={Icons.saveAndClose}
+                >
+                    Save & Close
+                </MenuItem>
+                <MenuItem onClick={() => save("new")} Icon={Icons.add}>
+                    Save & New
+                </MenuItem>
+            </Menu>
+        );
+    }
     return (
         <div className="h-12">
             <div
@@ -114,28 +137,7 @@ export default function HeaderSection({}) {
                         >
                             Notes
                         </Btn>
-                        <Menu
-                            variant={"secondary"}
-                            disabled={saver.saving}
-                            label={"Save"}
-                            Icon={null}
-                        >
-                            <MenuItem onClick={() => save()} Icon={Icons.save}>
-                                Save
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => save("close")}
-                                Icon={Icons.saveAndClose}
-                            >
-                                Save & Close
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => save("new")}
-                                Icon={Icons.add}
-                            >
-                                Save & New
-                            </MenuItem>
-                        </Menu>
+                        <SaveBtn />
                         <Menu Icon={Icons.more}>
                             <CopyOrderMenuAction row={{ slug, id } as any} />
                             {type == "quote" ? (
@@ -223,6 +225,9 @@ export default function HeaderSection({}) {
                                 </>
                             )}
                         </Menu>
+                    </div>
+                    <div className={cn(dealerMode ? "" : "hidden")}>
+                        <SaveBtn />
                     </div>
                 </div>
             </div>
