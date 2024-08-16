@@ -9,7 +9,7 @@ import { _generateSalesPdf } from "../(loggedIn)/sales/_actions/save-pdf";
 import { env } from "@/env.mjs";
 import { resend } from "@/lib/resend";
 import dayjs from "dayjs";
-import { __isProd } from "@/lib/is-prod";
+import { __isProd } from "@/lib/is-prod-server";
 
 export interface DownloadProps {
     slug: string;

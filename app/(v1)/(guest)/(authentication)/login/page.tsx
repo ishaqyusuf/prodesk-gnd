@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import QuickLogin from "@/components/_v1/quick-login";
 import { SignInForm } from "./signin-form";
-import { __isProd } from "@/lib/is-prod";
+import { __isProd } from "@/lib/is-prod-server";
 export const metadata: Metadata = {
     title: "Sign In - GND Prodesk",
     description: "",
