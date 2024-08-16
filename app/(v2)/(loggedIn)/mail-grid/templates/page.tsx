@@ -1,6 +1,13 @@
 import FPage from "@/app/_components/fikr-ui/f-page";
-import AuthGuard from "../../_components/auth-guard";
+import ClientPage from "./client-page";
+import { getMailGridAction } from "./actions";
 
 export default async function MailGridPage() {
-    return <FPage title="Mail Templates" roles={["Admin"]}></FPage>;
+    const p = getMailGridAction();
+
+    return (
+        <FPage title="Mail Templates" roles={["Admin"]}>
+            <ClientPage response={p} />
+        </FPage>
+    );
 }

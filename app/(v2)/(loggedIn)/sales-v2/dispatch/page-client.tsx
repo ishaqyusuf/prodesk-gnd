@@ -7,7 +7,6 @@ import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-
 import { DataTable } from "@/app/_components/data-table";
 import { TableToolbar } from "@/app/_components/data-table/toolbar";
 import { Cells } from "./_components/dispatch-cells";
-import FPageContent from "@/app/_components/fikr-ui/f-page-content";
 
 interface Props {
     response;

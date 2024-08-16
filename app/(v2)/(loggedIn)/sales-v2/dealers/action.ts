@@ -5,6 +5,7 @@ import { sendMessage } from "@/app/(v1)/_actions/email";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { prisma } from "@/db";
+import { env } from "@/env.mjs";
 import { generateRandomString } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
@@ -176,8 +177,10 @@ export async function sendDealerApprovalEmail(id) {
     const token = dealer.token.filter((s) => !s.consumedAt)[0]?.token;
     await sendMessage({
         subject: `Dealership Approved`,
-        body: `http://localhost:3000/dealer/create-password/${token}`,
+        body: `${env.NEXT_PUBLIC_ROOT_DOMAIN}/dealer/create-password/${token}`,
         from: `Ishaq Yusuf From GND Millwork<ishaqyusuf@gndprodesk.com>`,
         type: "Dealers",
+        to: dealer.email,
     } as any);
 }
+// http://localhost:3000
