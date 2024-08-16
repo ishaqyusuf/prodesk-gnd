@@ -14,7 +14,7 @@ import Upgrader from "@/components/_v1/upgrader";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
-import { isProduction } from "@/lib/is-prod";
+import { __isProd, isProduction } from "@/lib/is-prod";
 import { Cmd } from "@/components/cmd";
 import PageAnalytics from "@/lib/analytics/page-analytics";
 import { Suspense } from "react";
@@ -30,7 +30,6 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const isProd = await isProduction();
     const prodDB = env.DATABASE_URL?.includes("pscale");
     // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
@@ -45,7 +44,7 @@ export default async function RootLayout({
                     </AppProvider>
                     <div
                         className={cn(
-                            isProd
+                            __isProd
                                 ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
                                 : "fixed bottom-0 right-0 mb-2"
                         )}
@@ -55,7 +54,7 @@ export default async function RootLayout({
                     <Toaster />
                     <Analytics />
                     <TailwindIndicator />
-                    {prodDB && !isProd && (
+                    {prodDB && !__isProd && (
                         <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
                             Production Database
                         </div>
