@@ -1,8 +1,6 @@
 "use server";
 
 import { prisma } from "@/db";
-import { isProduction } from "@/lib/is-prod";
-import { IProjectMeta } from "@/types/community";
 import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
 
 export async function salesSuppliers() {
@@ -27,19 +25,6 @@ export async function salesSuppliers() {
     return await Promise.all(
         Object.entries(inserts)
             .map<any>(async ([k, v]) => {
-                // if (!isProduction) {
-                // await prisma.salesOrderItems.updateMany({
-                //   where: {
-                //     id: {
-                //       in: v as number[],
-                //     },
-                //   },
-                //   data: {
-                //     supplier: k,
-                //   },
-                // });
-                // }
-
                 return `UPDATE SalesOrderItems SET supplier="${k}" WHERE id in (${(
                     v as any
                 ).join(",")});`;
@@ -58,4 +43,3 @@ export async function fixSales() {
     });
     console.log(p.length);
 }
-

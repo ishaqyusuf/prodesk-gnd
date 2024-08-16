@@ -296,10 +296,6 @@ export async function saveDykeSales(data: DykeForm) {
                     // },
                 },
             });
-            console.log(itemIds);
-            console.log(order.id);
-
-            console.log(_items.length);
 
             async function _deleteWhere(
                 t,
