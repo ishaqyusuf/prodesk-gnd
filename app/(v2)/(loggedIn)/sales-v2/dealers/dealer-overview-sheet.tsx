@@ -107,6 +107,23 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                 </div>
             </div>
 
+            <div className={cn(dealer.pendingVerification ? "" : "hidden")}>
+                <Modal.Footer
+                    submitText="Resend Verification Token"
+                    onSubmit={_resendToken}
+                    submitVariant="default"
+                />
+            </div>
+            <div className={cn(dealer.tokenExpired ? "" : "hidden")}>
+                <Modal.Footer
+                    submitText="Reject"
+                    onSubmit={() => _action("Rejected")}
+                    cancelText="Cancel"
+                    cancelBtn
+                    submitVariant="destructive"
+                    onCancel={cancelReason}
+                />
+            </div>
             <div className={cn(dealer.tokenExpired ? "" : "hidden")}>
                 <Modal.Footer
                     submitText="Reject"

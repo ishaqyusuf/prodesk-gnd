@@ -25,7 +25,7 @@ export type GetDealersPageTabAction = Awaited<
 export type GetDealersAction = Awaited<ReturnType<typeof getDealersAction>>;
 export async function getDealersAction(query: GetDealersQuery) {
     const where = _where(query);
-    const { pageCount, skip, take } = await paginatedAction(
+    const { pageCount } = await paginatedAction(
         query,
         prisma.dealerAuth,
         where
@@ -49,10 +49,12 @@ export async function getDealersAction(query: GetDealersQuery) {
         data: data.map((data) => {
             let status = data.status as DealerStatus;
             let tokenExpired = status == "Approved" && data.token.length;
+            let pendingVerification = status == "Approved";
             return {
                 ...data,
                 status,
                 tokenExpired,
+                pendingVerification,
             };
         }),
         pageCount,
@@ -103,17 +105,18 @@ function _where(query: GetDealersQuery) {
     return where;
 }
 export async function resendApprovalTokenAction(id) {
-    await prisma.dealerAuth.update({
-        where: { id },
-        data: {
-            token: {
-                create: {
-                    token: generateRandomString(16),
-                    expiredAt: dayjs().add(4, "hours").toISOString(),
-                },
-            },
-        },
-    });
+    // await prisma.dealerAuth.update({
+    //     where: { id },
+    //     data: {
+    //         token: {
+    //             create: {
+    //                 token: generateRandomString(16),
+    //                 expiredAt: dayjs().add(4, "hours").toISOString(),
+    //             },
+    //         },
+    //     },
+    // });
+    await sendDealerApprovalEmail(id);
     _revalidate("dealers");
 }
 export async function dealershipApprovalAction(
