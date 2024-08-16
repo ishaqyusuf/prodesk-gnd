@@ -10,6 +10,8 @@ TODO:
     <!-- - delete door not working -->
     <!-- - zero not deleting -->
     - custom
+    - work on component: batch delete for, copy for, create for
+    - 
     <!-- - show number of door prices for selected heights. -->
     <!-- - check pricing data breakdown -->
     <!-- - create unit form flickers (need update) -->

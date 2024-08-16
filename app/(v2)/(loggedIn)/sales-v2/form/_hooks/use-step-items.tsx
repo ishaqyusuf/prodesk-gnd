@@ -338,6 +338,8 @@ export default function useStepItems({
             stepProducts.filter((s) => !s._metaData.hidden)[0] || {
                 dykeStepId: stepForm.step?.id,
                 nextStepId: null,
+                meta: {},
+                _metaData: {},
                 product: {
                     meta: {},
                 },

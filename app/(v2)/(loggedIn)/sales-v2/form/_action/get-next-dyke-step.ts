@@ -59,7 +59,6 @@ export async function getNextDykeStepAction(
         nextStepId = nextSteps[0]?.id;
 
         if (nextSteps.length > 1) {
-            // console.log(nextSteps);
             const matchedStep = nextSteps.filter(
                 (s) =>
                     (product?.title && s.value?.endsWith(product.title)) ||
@@ -84,9 +83,6 @@ export async function getNextDykeStepAction(
                     doorType
                 );
             }
-
-            // console.log(stepForm.step?.stepProducts.length);
-            // console.log(stepForm.step?.stepProducts);
             let stepProds = stepForm.step?.stepProducts || [];
             stepProds = stepProds.filter(
                 (p, i) =>
@@ -183,6 +179,14 @@ async function CustomStepForm(
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
     }
+    // if (doorType == "Exterior") {
+    //     // console.log(doorType);
+
+    //     const customSteps = {
+    //         Bore: "House Package Tool",
+    //     };
+    //     title = customSteps[productTitle] || customSteps[stepTitle];
+    // }
     if (doorType == "Moulding") {
         const customSteps = {
             "Item Type": "Specie",
