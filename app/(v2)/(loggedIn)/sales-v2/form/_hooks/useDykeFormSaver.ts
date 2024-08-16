@@ -42,14 +42,16 @@ export default function useDykeFormSaver(form) {
                 switch (mode) {
                     case "close":
                         router.push(
-                            data.dealerMode ? `/quotes` : `/sales/${type}s`
+                            data.dealerMode
+                                ? `/${resp.type}s`
+                                : `/sales/${type}s`
                         );
                         break;
                     case "default":
                         if (!id || params.get("restore") == "true")
                             router.push(
                                 data.dealerMode
-                                    ? `/edit-quote/${resp.slug}`
+                                    ? `/sales-form/${resp.type}/${resp.slug}`
                                     : `/sales-v2/form/${resp.type}/${resp.slug}`
                             );
                         else await _revalidate("salesV2Form");

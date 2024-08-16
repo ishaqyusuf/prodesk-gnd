@@ -36,7 +36,7 @@ export default function ClientPage({ promise, quote }: Props) {
             <section className="content space-y-4">
                 <div className="">
                     <PageHeader
-                        newLink={quote ? "/create-quote" : undefined}
+                        newLink={`/sales-form/${quote ? "quote" : "order"}`}
                         title={quote ? "My Quotes" : "My Orders"}
                     />
                 </div>

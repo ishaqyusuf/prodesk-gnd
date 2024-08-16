@@ -139,7 +139,7 @@ export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
                         address?.name}
                 </div>
                 <span className="text-muted-foreground">
-                    {address?.phoneNo}
+                    {address?.phoneNo || order?.customer?.phoneNo}
                 </span>
             </LinkableNode>
         </div>
