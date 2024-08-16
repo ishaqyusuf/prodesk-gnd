@@ -32,16 +32,6 @@ export default function DealerHeader() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <Link legacyBehavior passHref href="/orders">
-                                    <NavigationMenuLink
-                                        className={cn(
-                                            navigationMenuTriggerStyle(),
-                                            "h-auto"
-                                        )}
-                                    >
-                                        Orders
-                                    </NavigationMenuLink>
-                                </Link>
                                 <Link legacyBehavior passHref href="/quotes">
                                     <NavigationMenuLink
                                         className={cn(
@@ -50,6 +40,16 @@ export default function DealerHeader() {
                                         )}
                                     >
                                         Quotes
+                                    </NavigationMenuLink>
+                                </Link>
+                                <Link legacyBehavior passHref href="/orders">
+                                    <NavigationMenuLink
+                                        className={cn(
+                                            navigationMenuTriggerStyle(),
+                                            "h-auto"
+                                        )}
+                                    >
+                                        Orders
                                     </NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>

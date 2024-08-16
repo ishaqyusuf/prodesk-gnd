@@ -123,7 +123,7 @@ export function OrderIdCell(
 export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
     let address: IAddressBook = (order?.shippingAddress ||
         order?.billingAddress) as any;
-    if (!order?.shippingAddress) return <></>;
+    if (!address && !order.customer) return <></>;
     const link = "/sales/customer/" + order.customer?.id;
     return (
         <div className="w-full">
@@ -134,7 +134,9 @@ export function SalesCustomerCell({ order }: { order: ISalesOrder }) {
                         order?.customer?.businessName && "text-blue-700"
                     )}
                 >
-                    {order?.customer?.businessName || order?.customer?.name}
+                    {order?.customer?.businessName ||
+                        order?.customer?.name ||
+                        address?.name}
                 </div>
                 <span className="text-muted-foreground">
                     {address?.phoneNo}
