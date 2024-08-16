@@ -13,6 +13,7 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { RegisterSchema, registerSchema } from "./validation";
 import { toast } from "sonner";
 import { signupDealerAction } from "./action";
+import { signupSuccess } from "@/app/(v2)/(loggedIn)/sales-v2/dealers/email-actions";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
