@@ -180,7 +180,7 @@ export async function sendDealerApprovalEmail(id) {
     const token = dealer.token.filter((s) => !s.consumedAt)[0]?.token;
     await sendMessage({
         subject: `Dealership Approved`,
-        body: `${env.NEXT_PUBLIC_ROOT_DOMAIN}/dealer/create-password/${token}`,
+        body: `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/dealer/create-password/${token}`,
         from: `Pablo From GND Millwork<pcruz321@gndprodesk.com>`,
         type: "Dealers",
         to: dealer.email,
