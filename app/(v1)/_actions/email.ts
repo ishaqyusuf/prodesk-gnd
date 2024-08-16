@@ -9,6 +9,7 @@ import { _generateSalesPdf } from "../(loggedIn)/sales/_actions/save-pdf";
 import { env } from "@/env.mjs";
 import { resend } from "@/lib/resend";
 import dayjs from "dayjs";
+import { __isProd, isProdClient, isProduction } from "@/lib/is-prod";
 
 export interface DownloadProps {
     slug: string;
@@ -17,9 +18,9 @@ export interface DownloadProps {
 }
 export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
-    const u = await _dbUser();
-    const isProd = env.NEXT_PUBLIC_NODE_ENV === "production";
-
+    // const u = await _dbUser();
+    const isProd = __isProd;
+    console.log({ isProd, ...data });
     if (data.attachOrder && isProd && download) {
         const token = dayjs(download.date)
             .format("HH:mm:ss")
@@ -52,7 +53,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     // console.log(trs);
 
     const _data = await resend.emails.send({
-        reply_to: u?.meta?.emailRespondTo || u?.email,
+        // reply_to: u?.meta?.emailRespondTo || u?.email,
         from: data.from, //"Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
         to,
@@ -61,7 +62,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         // attachments,
     });
     // console.log(_data);
-
+    return;
     await prisma.inbox.create({
         data: {
             from: data.from,

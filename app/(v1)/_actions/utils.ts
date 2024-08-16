@@ -16,11 +16,12 @@ export async function getSessionPermissions() {
 }
 export async function user() {
     const data = await getServerSession(authOptions);
-    if (!data) throw new Error();
+    if (!data) return null;
+    // throw new Error();
     return data.user;
 }
 export async function userId() {
-    return (await user()).id;
+    return (await user())?.id;
 }
 export async function _dbUser() {
     return (await prisma.users.findUnique({

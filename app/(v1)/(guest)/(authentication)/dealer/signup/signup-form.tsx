@@ -13,7 +13,6 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { RegisterSchema, registerSchema } from "./validation";
 import { toast } from "sonner";
 import { signupDealerAction } from "./action";
-import { signupSuccess } from "@/app/(v2)/(loggedIn)/sales-v2/dealers/email-actions";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -23,18 +22,14 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
     const form = useForm<RegisterSchema>({
         resolver: zodResolver(registerSchema),
     });
-    const { data: session } = useSession();
 
     const [isPending, startTransition] = React.useTransition();
-    const { register, handleSubmit } = form;
-    const [submitted, setSubmitted] = React.useState(false);
 
     const router = useRouter();
     async function onSubmit() {
         const data = form.getValues();
 
         startTransition(async () => {
-            setError(null);
             try {
                 const resp = await signupDealerAction(data);
             } catch (error) {

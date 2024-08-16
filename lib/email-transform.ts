@@ -8,9 +8,9 @@ export function transformEmail(subject, body, data) {
     return { subject, body };
 }
 const transform = (template, data) =>
-    template.replace(/@([a-zA-Z0-9._-]+)/g, (match, key) => {
+    template?.replace(/@([a-zA-Z0-9._-]+)/g, (match, key) => {
         const keys = key.split(".");
-        let value = data;
+        let value = data || {};
 
         for (const k of keys) {
             if (value && value.hasOwnProperty(k)) {
