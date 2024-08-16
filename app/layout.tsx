@@ -14,7 +14,7 @@ import Upgrader from "@/components/_v1/upgrader";
 import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/_v1/tailwind-indicator";
-import { __isProd, isProduction } from "@/lib/is-prod";
+import { __isProd } from "@/lib/is-prod";
 import { Cmd } from "@/components/cmd";
 import PageAnalytics from "@/lib/analytics/page-analytics";
 import { Suspense } from "react";
