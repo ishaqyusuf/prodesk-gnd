@@ -61,7 +61,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         html: trs.body,
         // attachments,
     });
-    // console.log(_data);
+    console.log(_data);
     return;
     await prisma.inbox.create({
         data: {

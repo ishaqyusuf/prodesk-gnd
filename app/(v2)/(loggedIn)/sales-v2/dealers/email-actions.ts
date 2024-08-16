@@ -29,7 +29,8 @@ export async function signupSuccess(id) {
         where: { id },
     });
     await dealerEmail({
-        body: `Your dealership request has been submitted successful. We will review and get back to you`,
+        subject: "Signup successful",
+        body: `Your dealership request has been submitted successfully. We will review and get back to you`,
         to: auth.email,
     });
 }
