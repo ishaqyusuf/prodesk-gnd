@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { ISalesOrderItemMeta, ISalesOrderMeta } from "@/types/sales";
+import { ISalesOrderItemMeta } from "@/types/sales";
 
 export async function salesSuppliers() {
     const salsItems = await prisma.salesOrderItems.findMany({
@@ -9,7 +9,6 @@ export async function salesSuppliers() {
             supplier: null,
         },
     });
-
     const inserts: any = {};
     await Promise.all(
         salsItems.map(async (i) => {
