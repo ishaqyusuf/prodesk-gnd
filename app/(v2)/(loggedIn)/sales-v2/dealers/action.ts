@@ -178,7 +178,7 @@ export async function sendDealerApprovalEmail(id) {
     await sendMessage({
         subject: `Dealership Approved`,
         body: `${env.NEXT_PUBLIC_ROOT_DOMAIN}/dealer/create-password/${token}`,
-        from: `Ishaq Yusuf From GND Millwork<ishaqyusuf@gndprodesk.com>`,
+        from: `Pablo From GND Millwork<pcruz321@gndprodesk.com>`,
         type: "Dealers",
         to: dealer.email,
     } as any);
