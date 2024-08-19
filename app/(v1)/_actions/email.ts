@@ -50,7 +50,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
 
     const to = !isProd ? [`ishaqyusuf024@gmail.com`] : data.to?.split(",");
 
-    // console.log(trs);
+    console.log(to);
 
     const _data = await resend.emails.send({
         // reply_to: u?.meta?.emailRespondTo || u?.email,
@@ -62,6 +62,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         // attachments,
     });
     console.log(_data);
+    if (_data.error?.message) throw new Error(_data.error?.message);
     return;
     await prisma.inbox.create({
         data: {

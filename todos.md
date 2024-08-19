@@ -10,7 +10,11 @@ TODO:
     <!-- - delete door not working -->
     <!-- - zero not deleting -->
     - custom
-    - work on component: batch delete for, copy for, create for
+    - side bar toggle.
+    - customer overview: show company information.
+    - customer overview: print sales / download pdf
+    - show hidden option: list hidden components and toggle it to show them.
+    - work on component: batch delete for, copy for, create for.
     - 
     <!-- - show number of door prices for selected heights. -->
     <!-- - check pricing data breakdown -->

@@ -17,6 +17,15 @@ interface Props {
     doorType?: DykeDoorType;
     final?: boolean;
 }
+
+export async function _deleteDuplicateDoorSteps(ids) {
+    await prisma.dykeStepProducts.updateMany({
+        where: { id: { in: ids } },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+}
 export async function getDykeStepDoors({
     q,
     omit,
@@ -32,31 +41,14 @@ export async function getDykeStepDoors({
     if (!final) final = isBifold;
 
     const whereDoor: Prisma.DykeDoorsWhereInput = {
-        query: isBifold || !query ? undefined : query,
+        // query: isBifold || !query ? undefined : query,
     };
-    whereDoor.OR =
-        doorType && !isBifold
-            ? undefined
-            : [
-                  {
-                      doorType,
-                  },
-              ];
-    // await prisma.dykeStepProducts.updateMany({
-    //     where: {
-    //         door: {
-    //             ...whereDoor,
-    //         },
-    //     },
-    //     data: {
-    //         deletedAt: new Date(),
-    //     },
-    // });
     async function _load() {
         const stepProds = await prisma.dykeStepProducts.findMany({
             where: {
                 door: {
                     ...whereDoor,
+                    deletedAt: null,
                 },
             },
             include: {
@@ -64,14 +56,15 @@ export async function getDykeStepDoors({
                 product: true,
             },
         });
-        if (stepProds.length) {
-            const _response = stepProds.map(transformStepProducts);
-            return sortStepProducts(_response);
-        }
+        // if (stepProds.length) {
+        const _response = stepProds.map(transformStepProducts);
+        return sortStepProducts(_response);
+        // }
         return null;
     }
     const _data = await _load();
-    if (_data) return _data;
+    // if (_data)
+    return _data;
     const _doors = await prisma.dykeDoors.findMany({
         where: whereDoor,
     });

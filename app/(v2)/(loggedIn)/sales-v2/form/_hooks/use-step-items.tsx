@@ -16,7 +16,10 @@ import {
 } from "../_action/get-dyke-step-product";
 import { toast } from "sonner";
 import { getNextDykeStepAction } from "../_action/get-next-dyke-step";
-import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
+import {
+    _deleteDuplicateDoorSteps,
+    getDykeStepDoors,
+} from "../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../_utils/door-query-builder";
 
 import EditStepItemModal from "../components/modals/edit-step-item-modal";
@@ -61,8 +64,46 @@ export default function useStepItems({
                 item.get.doorType()
             );
             const _props = { ...query, stepId: stepForm?.step?.id };
-            const prods = await getDykeStepDoors(_props as any);
-            _stepProducts = prods;
+            async function _loadDoors() {
+                const prods = await getDykeStepDoors(_props as any);
+                let sample: any = null;
+                let _deleteDoorIds = [];
+                let dups = prods.filter((p, i) => {
+                    let _key = null;
+                    ["productCode", "description", "title"].map(
+                        (k) => !_key && p.product?.[k] && (_key = k)
+                    );
+                    let isUnique = !_key
+                        ? true
+                        : prods.findIndex(
+                              (ps) => ps?.product?.[_key] == p.product?.[_key]
+                          ) == i;
+                    if (!isUnique && !sample) {
+                        sample = {
+                            ls: prods.filter(
+                                (ps) => ps?.product?.[_key] == p.product?.[_key]
+                            ),
+                            _key,
+                        };
+                    }
+                    if (!isUnique) _deleteDoorIds.push(p.id);
+                    return isUnique;
+                });
+                console.log({
+                    dups,
+                    len: dups.length,
+                    _deleteDoorIds,
+                    prodsLen: prods.length,
+                });
+                if (_deleteDoorIds.length)
+                    await _deleteDuplicateDoorSteps(_deleteDoorIds);
+                return dups; //[];
+            }
+            _stepProducts = await _loadDoors();
+
+            // console.log({ sample });
+            // console.log(dups.length);
+            // _stepProducts = prods;
         } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
             setStep("Moulding");
             const specie = item.get.getMouldingSpecie();

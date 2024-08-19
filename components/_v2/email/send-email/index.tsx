@@ -101,7 +101,8 @@ export default function SendEmailSheet({ subtitle, data, download }: Props) {
                 } as any,
                 download
             );
-            toast.success("sent");
+            console.log(to);
+            toast.success("sent", {});
             modal.close();
         } catch (error) {
             if (error instanceof Error) toast.error(error.message);
