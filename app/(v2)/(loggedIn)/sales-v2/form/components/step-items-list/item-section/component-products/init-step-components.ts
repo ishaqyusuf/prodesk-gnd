@@ -26,9 +26,13 @@ export async function initStepComponents({
     stepProducts = stepProducts.map((product) => {
         if (product._metaData)
             product._metaData.price = pricings.pricesByUid[product.uid];
-        product._metaData.hidden = stateDeps.some(
-            (s) => product.meta.deleted?.[s.key]
-        );
+        const shows = product.meta?.show || {};
+        let hasShow = Object.keys(shows).filter(Boolean).length;
+        let showThis = stateDeps.some((s) => shows?.[s.key]);
+
+        product._metaData.hidden = hasShow
+            ? !showThis
+            : stateDeps.some((s) => product.meta.deleted?.[s.key]);
         return product;
     });
     return stepProducts;
