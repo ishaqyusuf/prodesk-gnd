@@ -25,7 +25,7 @@ export function calculateComponentPrices(
                 ([safeTitle, component]) => {
                     const basePath =
                         `itemArray.${itemIndex}.multiComponent.components.${safeTitle}` as any;
-                    console.log({ total, component, safeTitle });
+                    // console.log({ total, component, safeTitle });
                     form.setValue(
                         `${basePath}.priceTags.components` as any,
                         total

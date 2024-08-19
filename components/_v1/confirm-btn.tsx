@@ -11,6 +11,7 @@ import { Icons } from "./icons";
 interface Props extends ButtonProps {
     Icon?;
     trash?: Boolean;
+    variant?: ButtonProps["variant"];
 }
 
 export default function ConfirmBtn({
@@ -19,6 +20,7 @@ export default function ConfirmBtn({
     size,
     onClick,
     trash,
+    variant = "ghost",
     children,
     ...props
 }: Props) {
@@ -45,13 +47,13 @@ export default function ConfirmBtn({
         ? Icons.spinner
         : size == "icon"
         ? Trash
-        : null;
+        : Icon;
     return (
         <Button
             size={size}
             disabled={isPending}
             onClick={_onClick}
-            variant="ghost"
+            variant={variant}
             className={cn(
                 className,
                 size == "icon" && "h-8 w-8 p-0",
@@ -66,7 +68,7 @@ export default function ConfirmBtn({
                     }`}
                 />
             )}
-            <div className="">{children}</div>
+            {children && <div className={cn(Icone && "ml-2")}>{children}</div>}
         </Button>
     );
 }

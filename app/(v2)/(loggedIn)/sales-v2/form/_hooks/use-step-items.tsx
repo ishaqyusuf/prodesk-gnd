@@ -3,11 +3,11 @@
 import {
     IStepProducts,
     StepProductProps,
-} from "../components/step-items-list/item-section/step-items";
+} from "../components/step-items-list/item-section/component-products";
 
 import { getMouldingStepProduct } from "../_action/get-dyke-step-product";
 
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { DykeItemFormContext, useDykeCtx, useDykeForm } from "./form-context";
 import { DykeDoorType, DykeStep } from "../../type";
 import {
@@ -19,15 +19,22 @@ import { getNextDykeStepAction } from "../_action/get-next-dyke-step";
 import { getDykeStepDoors } from "../_action/get-dyke-step-doors";
 import { doorQueryBuilder } from "../../_utils/door-query-builder";
 
-import { useModal } from "@/components/common/modal-old/provider";
 import EditStepItemModal from "../components/modals/edit-step-item-modal";
 import { SaveStepProductExtra } from "../_action/save-step-product";
 import {
     _deleteDoorStep,
     _deleteStepItem,
-} from "../components/step-items-list/item-section/step-items/_actions";
-import { calculateComponentPrices } from "../components/step-items-list/item-section/step-items/calculate-prices";
-import { initStepComponents } from "../components/step-items-list/item-section/step-items/init-step-components";
+} from "../components/step-items-list/item-section/component-products/_actions";
+import { calculateComponentPrices } from "../components/step-items-list/item-section/component-products/calculate-prices";
+import { initStepComponents } from "../components/step-items-list/item-section/component-products/init-step-components";
+import { generateRandomString } from "@/lib/utils";
+import DeleteItemModal from "../components/modals/delete-item-modal";
+import { useModal } from "@/components/common/modal/provider";
+
+export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(
+    {} as any
+);
+export const useStepItemCtx = () => useContext(StepItemCtx);
 export default function useStepItems({
     stepForm,
     stepIndex,
@@ -83,9 +90,9 @@ export default function useStepItems({
                 })
             );
     };
-    const uid = item.get.uid();
-
+    const [__uid, setUid] = useState<string>();
     useEffect(() => {
+        setUid(generateRandomString(4));
         load();
         allowsCustom();
         calculateComponentPrices(form, item.rowIndex);
@@ -365,35 +372,38 @@ export default function useStepItems({
                   _meta,
               } as any);
 
-        modal?.open(
+        modal.openModal(
             <EditStepItemModal
                 onCreate={onCreate}
+                stepIndex={stepIndex}
+                stepForm={stepForm}
                 root={isRoot}
                 stepTitle={stepFormTitle}
                 mainForm={form}
                 rowIndex={item.rowIndex}
                 moulding={isMoulding && stepFormTitle == "Moulding"}
                 item={_item}
+                products={stepProducts}
             />
         );
     }
 
-    async function deleteStepItem(index, stepProd: IStepProducts[0]) {
-        switch (step) {
-            case "Door":
-                await _deleteDoorStep(stepProd);
-                break;
-            default:
-                await _deleteStepItem(stepProd);
-        }
-        setStepProducts((current) => {
-            const prods = [
-                ...current.slice(0, index),
-                ...current.slice(index + 1),
-            ];
-            return prods;
-        });
-    }
+    // async function deleteStepItem(index, stepProd: IStepProducts[0]) {
+    //     switch (step) {
+    //         case "Door":
+    //             await _deleteDoorStep(stepProd);
+    //             break;
+    //         default:
+    //             await _deleteStepItem(stepProd);
+    //     }
+    //     setStepProducts((current) => {
+    //         const prods = [
+    //             ...current.slice(0, index),
+    //             ...current.slice(index + 1),
+    //         ];
+    //         return prods;
+    //     });
+    // }
     const isRoot = stepFormTitle == "Item Type";
     const [allowCustom, setAllowCustom] = useState(false);
     const customsChanged = form.watch(
@@ -413,16 +423,44 @@ export default function useStepItems({
             ) > -1
         );
     }
+    const onDeleteItem = (stepItems) => {
+        setStepProducts((prods) => {
+            let _prods = [...prods];
+            stepItems.map((stepItem) => {
+                let prodIndex = _prods.findIndex((p) => p.uid == stepItem.uid);
+                if (prodIndex >= 0)
+                    _prods[prodIndex] = stepItem.deletedAt ? null : stepItem;
+            });
+            return _prods.filter(Boolean);
+        });
+        setUid(generateRandomString(4));
+    };
     return {
         load,
+        onDeleteItem,
+        async deleteStepItemModal(items) {
+            modal.openModal(
+                <DeleteItemModal
+                    lineItemIndex={item.rowIndex}
+                    stepIndex={stepIndex}
+                    invoiceForm={form}
+                    stepForm={stepForm}
+                    onComplete={onDeleteItem}
+                    stepItems={items}
+                />
+            );
+        },
+        stepIndex,
+        __uid,
         allowCustom,
         isRoot,
         stepProducts,
         step,
         openStepForm,
+        stepForm,
         isMultiSection,
         selectProduct,
-        deleteStepItem,
+        // deleteStepItem,
         ctx,
     };
 }

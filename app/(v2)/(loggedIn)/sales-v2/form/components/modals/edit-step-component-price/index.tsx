@@ -1,5 +1,5 @@
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
-import { IStepProducts } from "../../step-items-list/item-section/step-items";
+import { IStepProducts } from "../../step-items-list/item-section/component-products";
 import Modal from "@/components/common/modal";
 import { Form } from "@/components/ui/form";
 import {

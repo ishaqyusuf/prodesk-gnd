@@ -91,6 +91,7 @@ export interface DykeStepItemMeta {
 export interface StepProdctMeta {
     stepSequence?: { id?: number }[];
     deleted?: { [uid in string]: boolean };
+    show?: { [uid in string]: boolean };
 }
 export type ItemStepSequence = {
     [id in number]: {

@@ -3,35 +3,33 @@ import { Form } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { DykeForm, DykeStep } from "../../../type";
 import { useEffect, useState } from "react";
-import { IStepProducts } from "../step-items-list/item-section/step-items";
+import { IStepProducts } from "../step-items-list/item-section/component-products";
 import {
     getDykeStepState,
     getFormSteps,
-} from "../step-items-list/item-section/step-items/init-step-components";
+} from "../step-items-list/item-section/component-products/init-step-components";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import {
-    updateDykeStepMeta,
-    updateDykeStepProductMeta,
-} from "../../_action/dyke-step-setting";
+import { updateDykeStepProductMeta } from "../../_action/dyke-step-setting";
 import { useModal } from "@/components/common/modal/provider";
-import { _deleteStepItem } from "../step-items-list/item-section/step-items/_actions";
+import { _deleteStepItem } from "../step-items-list/item-section/component-products/_actions";
 import { Button } from "@/components/ui/button";
 
 interface Props {
     lineItemIndex: number;
     stepIndex;
     invoiceForm: UseFormReturn<DykeForm>;
-    stepItem: IStepProducts[number];
+    // stepItem?: IStepProducts[number];
+    stepItems: IStepProducts;
     stepForm: DykeStep;
     onComplete;
 }
 export default function DeleteItemModal({
     lineItemIndex,
     stepIndex,
+    stepItems,
     invoiceForm,
     stepForm,
-    stepItem,
     onComplete,
 }: Props) {
     const form = useForm({
@@ -49,30 +47,44 @@ export default function DeleteItemModal({
         );
         const _depFormSteps = getFormSteps(formArray, stepIndex);
         const stateDeps = getDykeStepState(_depFormSteps, stepForm);
-        console.log({ stateDeps, stepItem, stepForm });
         setDeletables(stateDeps);
     }, []);
     const modal = useModal();
     async function submit() {
         const d = form.getValues("deletables");
-
-        const stepItemMeta = stepItem.meta;
-        const stateDeps = {};
-        Object.entries({ ...stepItemMeta.deleted, ...d }).map(
-            ([a, b]) => b && (stateDeps[a] = true)
+        const _stepItems = await Promise.all(
+            stepItems.map(async (stepItem) => {
+                const stepItemMeta = stepItem.meta;
+                const stateDeps = {};
+                Object.entries({ ...stepItemMeta.deleted, ...d }).map(
+                    ([a, b]) => {
+                        if (b) {
+                            stateDeps[a] = true;
+                            delete stepItemMeta.show?.[a];
+                        }
+                    }
+                );
+                stepItemMeta.deleted = stateDeps;
+                await updateDykeStepProductMeta(stepItem.id, stepItemMeta);
+                stepItem._metaData.hidden = true;
+                stepItem.meta = stepItemMeta;
+                // console.log(stepItemMeta);
+                return stepItem;
+            })
         );
-        stepItemMeta.deleted = stateDeps;
-        await updateDykeStepProductMeta(stepItem.id, stepItemMeta);
-        stepItem._metaData.hidden = true;
-        stepItem.meta = stepItemMeta;
-        console.log(stepItemMeta);
-        onComplete && onComplete(stepItem);
+        onComplete && onComplete(_stepItems);
         modal.close();
     }
     async function deleteItem() {
-        await _deleteStepItem(stepItem);
-        stepItem.deletedAt = new Date();
-        onComplete && onComplete(stepItem);
+        await _deleteStepItem(stepItems);
+        // stepItem.deletedAt = new Date();
+        onComplete &&
+            onComplete(
+                stepItems.map((s) => {
+                    s.deletedAt = new Date();
+                    return s;
+                })
+            );
         modal.close();
     }
     return (

@@ -4,10 +4,12 @@ import { prisma } from "@/db";
 import { IStepProducts } from ".";
 import dayjs from "dayjs";
 
-export async function _deleteStepItem(item: IStepProducts[0]) {
-    const resp = await prisma.dykeStepProducts.update({
+export async function _deleteStepItem(items: IStepProducts) {
+    const resp = await prisma.dykeStepProducts.updateMany({
         where: {
-            id: item.id,
+            id: {
+                in: items.map((i) => i.id),
+            },
         },
         data: {
             deletedAt: new Date(),
@@ -18,9 +20,9 @@ export async function _deleteStepItem(item: IStepProducts[0]) {
             // },
             // door: {},
         },
-        include: {
-            product: true,
-        },
+        // include: {
+        //     product: true,
+        // },
     });
     // console.log(resp?.deletedAt);
 }

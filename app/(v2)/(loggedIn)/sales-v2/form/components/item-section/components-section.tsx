@@ -4,33 +4,34 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-
 import {
     useDykeCtx,
     useDykeForm,
     useDykeItemCtx,
-} from "../../../_hooks/form-context";
-import { DykeStep, DykeStepMeta } from "../../../../type";
-import ShelfItemIndex from "./shelf-item";
+} from "../../_hooks/form-context";
+import { DykeStep, DykeStepMeta } from "../../../type";
+import ShelfItemIndex from "../step-items-list/item-section/shelf-item";
 
-import LineItemSection from "./multi-item-tab/line-item-section/line-item-section";
-import { IStepProducts, StepProducts } from "./step-items";
-import MultiComponentRender from "./multi-item-tab/multi-component-render";
-import HousePackageTool from "./multi-item-tab/house-package-tools";
+import LineItemSection from "../step-items-list/item-section/multi-item-tab/line-item-section/line-item-section";
+import {
+    IStepProducts,
+    StepProducts,
+} from "../step-items-list/item-section/component-products";
+import MultiComponentRender from "../step-items-list/item-section/multi-item-tab/multi-component-render";
+import HousePackageTool from "../step-items-list/item-section/multi-item-tab/house-package-tools";
 import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
-import { useEffect, useState } from "react";
-import EditStepComponentPrice from "../../modals/edit-step-component-price";
-import PricingDependenciesModal from "../../modals/pricing-dependecies";
+import { useState } from "react";
+import EditStepComponentPrice from "../modals/edit-step-component-price";
+import PricingDependenciesModal from "../modals/pricing-dependecies";
 import { Button } from "@/components/ui/button";
-import { sortComponents } from "../../../_action/sort-components";
-import { toast } from "sonner";
-import DevOnly from "@/_v2/components/common/dev-only";
-import { updateDykeStepMeta } from "../../../_action/dyke-step-setting";
+import { sortComponents } from "../../_action/sort-components";
+
+import { updateDykeStepMeta } from "../../_action/dyke-step-setting";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -86,18 +87,15 @@ export function DykeInvoiceItemStepSection({
             })
         );
     };
-
     async function toggleStepSetting(key: keyof typeof stepForm.step.meta) {
         const meta = stepForm.step.meta || {};
         const state = ((meta as any)[key] = !meta[key]);
-        console.log(meta);
         await updateDykeStepMeta(stepForm.step.id, meta);
         form.setValue(
             `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.${key}` as any,
             state
         );
     }
-
     return (
         <Collapsible
             id={stepForm.step.title}
@@ -126,7 +124,6 @@ export function DykeInvoiceItemStepSection({
                             item.toggleStep(stepIndex);
                         }}
                     >
-                        {/* <DevOnly>{stepForm.step.id} </DevOnly> */}
                         <span className="font-semibold">
                             {stepForm?.step?.title}:
                         </span>
@@ -139,12 +136,12 @@ export function DykeInvoiceItemStepSection({
                                     conditionSettings("priceDepencies")
                                 }
                             >
-                                Pricing Dependencies
+                                Pricing Deps
                             </MenuItem>
                             <MenuItem
                                 onClick={() => conditionSettings("stateDeps")}
                             >
-                                Component Dependencies
+                                Component Deps
                             </MenuItem>
                             <MenuItem onClick={componentPrice}>
                                 Component Price

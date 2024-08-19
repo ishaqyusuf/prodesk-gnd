@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 
 import { DykeDoorType } from "../../type";
-import { IStepProducts } from "../components/step-items-list/item-section/step-items";
+import { IStepProducts } from "../components/step-items-list/item-section/component-products";
 import { generateRandomString } from "@/lib/utils";
 import { transformStepProducts } from "../../dyke-utils";
 export interface SaveStepProductExtra {
@@ -81,7 +81,7 @@ export async function saveStepProduct(data: Props) {
         const s = await prisma.dykeStepProducts.create({
             data: {
                 ...stepData,
-                uid: generateRandomString(5),
+                // uid: generateRandomString(5),
                 meta: stepData.meta as any,
                 product: doorMode
                     ? undefined

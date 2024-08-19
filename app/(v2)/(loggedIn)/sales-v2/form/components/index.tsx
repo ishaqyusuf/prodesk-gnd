@@ -12,7 +12,7 @@ import HeaderSection from "./dyke-sales-header-section";
 import SalesAddressSection from "../../../sales/edit/components/sales-address-section";
 import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
-import { DykeInvoiceItemSection } from "./step-items-list/item-section/invoice-item-section";
+import { DykeInvoiceItemSection } from "./item-section/item-section";
 import Bootstrap from "../_action/bootstraps";
 interface Props {
     defaultValues: any;

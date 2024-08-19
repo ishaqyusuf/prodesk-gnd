@@ -521,6 +521,13 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             components: string;
         };
     } = {};
+    const batchSetting: {
+        [token in string]: {
+            selections: {
+                [token in string]: boolean;
+            };
+        };
+    } = {};
     return {
         salesRep: salesRep,
         customer,
@@ -534,5 +541,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         paidAmount,
         footer,
         _refresher,
+        batchSetting,
     };
 }

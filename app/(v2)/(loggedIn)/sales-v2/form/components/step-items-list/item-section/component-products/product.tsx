@@ -35,6 +35,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { PlaceholderImage } from "@/components/placeholder-image";
 import { Dot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -119,6 +120,7 @@ export function StepItem({
         setPrice(item._metaData.price);
         setEditPrice(true);
     };
+    const batchCtx = useProdBatchAction();
     return (
         <Card
             className={cn(
@@ -127,10 +129,9 @@ export function StepItem({
                 selected ? "hover:border-green-500 border-green-500" : "",
                 loadingStep ? "cursor-not-allowed" : "cursor-pointer"
             )}
-            onClick={() => {
-                if (!loadingStep && !menuOpen) select(selected, item);
-            }}
         >
+            <batchCtx.CheckBox uid={item.uid} />
+
             <div
                 className={cn(
                     !menuOpen && "hidden",
@@ -196,7 +197,12 @@ export function StepItem({
                     )}
                 </Menu>
             </div>
-            <CardHeader className="border-b realtive flex-1 p-0 py-4">
+            <CardHeader
+                onClick={() => {
+                    if (!loadingStep && !menuOpen) select(selected, item);
+                }}
+                className="border-b realtive flex-1 p-0 py-4"
+            >
                 {item.meta?.stepSequence?.length ? (
                     <div className="absolute top-0 right-0">
                         <Dot className="w-8 h-8 text-cyan-600" />
@@ -204,37 +210,7 @@ export function StepItem({
                 ) : (
                     <></>
                 )}
-                <motion.div
-                    className="flex flex-1  h-full flex-col items-center space-y-2 justify-center relative "
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                >
-                    {item.product.img ? (
-                        <AspectRatio ratio={item.isDoor ? 4 / 4 : 4 / 2}>
-                            <Image
-                                src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
-                                alt={item.product.title}
-                                className="object-contain"
-                                sizes="(min-width: 1024px) 10vw"
-                                fill
-                                loading="lazy"
-                            />
-                        </AspectRatio>
-                    ) : (item.product.meta as any)?.svg ? (
-                        <AspectRatio ratio={1}>
-                            <SVG className="" src={item.product.meta?.svg} />
-                        </AspectRatio>
-                    ) : item.product.meta?.url ? (
-                        <AspectRatio ratio={4 / 2}>
-                            <object
-                                data={item.product.meta?.url}
-                                type={"image/svg+xml"}
-                            />
-                        </AspectRatio>
-                    ) : (
-                        <PlaceholderImage className="rounded-none" asChild />
-                    )}
-                </motion.div>
+                <ProductImage item={item} />
             </CardHeader>
             <span className="sr-only">
                 {isRoot
@@ -242,7 +218,12 @@ export function StepItem({
                     : item.product.title}
             </span>
 
-            <CardContent className="space-y-1.5 inline-flex items-center justify-between p-2">
+            <CardContent
+                onClick={() => {
+                    if (!loadingStep && !menuOpen) select(selected, item);
+                }}
+                className="space-y-1.5 inline-flex items-center justify-between p-2"
+            >
                 <CardTitle className="line-clamp-1s text-sm">
                     {isRoot
                         ? item.product?.value || item.product.title
@@ -267,5 +248,44 @@ export function StepItem({
                 </CardDescription>
             </CardContent>
         </Card>
+    );
+}
+interface ProductImageProps {
+    item?;
+    aspectRatio?;
+}
+export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
+    return (
+        <motion.div
+            className="flex flex-1 h-full flex-col items-center space-y-2 justify-center relative "
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 300 }}
+        >
+            {item.product.img ? (
+                <AspectRatio ratio={item.isDoor ? 4 / 4 : aspectRatio}>
+                    <Image
+                        src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
+                        alt={item.product.title}
+                        className="object-contain"
+                        // sizes="(min-width: 1024px) 10vw"
+                        fill
+                        loading="lazy"
+                    />
+                </AspectRatio>
+            ) : (item.product.meta as any)?.svg ? (
+                <AspectRatio ratio={1}>
+                    <SVG className="" src={item.product.meta?.svg} />
+                </AspectRatio>
+            ) : item.product.meta?.url ? (
+                <AspectRatio ratio={4 / 2}>
+                    <object
+                        data={item.product.meta?.url}
+                        type={"image/svg+xml"}
+                    />
+                </AspectRatio>
+            ) : (
+                <PlaceholderImage className="rounded-none" asChild />
+            )}
+        </motion.div>
     );
 }

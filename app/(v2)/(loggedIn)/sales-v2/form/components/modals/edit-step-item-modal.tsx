@@ -1,37 +1,30 @@
 "use client";
 
-import {
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { FileUploader } from "@/components/common/file-uploader";
 import { useEffect, useState, useTransition } from "react";
 import { saveStepProduct } from "../../_action/save-step-product";
-import { useModal } from "@/components/common/modal-old/provider";
 import { _getMouldingSpecies } from "./_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { IStepProducts } from "../step-items-list/item-section/step-items";
+import { IStepProducts } from "../step-items-list/item-section/component-products";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Modal from "@/components/common/modal";
 import { DykeForm } from "../../../type";
 import { getDimensionSizeList } from "../../../dimension-variants/_actions/get-size-list";
 import useFn from "@/hooks/use-fn";
 import { getDykeSections } from "../../../_actions/dyke-settings/get-dyke-sections";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { Icons } from "@/components/_v1/icons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ProductImage } from "../step-items-list/item-section/component-products/product";
+import Modal from "@/components/common/modal";
+import { useModal } from "@/components/common/modal/provider";
+import SaveProductForModal from "./save-product-for-modal";
+import { generateRandomString } from "@/lib/utils";
 
 interface Props {
     item: IStepProducts[0];
@@ -41,6 +34,9 @@ interface Props {
     rowIndex;
     mainForm: UseFormReturn<DykeForm>;
     stepTitle?: string;
+    products?: IStepProducts;
+    stepIndex;
+    stepForm;
 }
 export default function EditStepItemModal({
     item,
@@ -49,6 +45,9 @@ export default function EditStepItemModal({
     rowIndex,
     mainForm,
     stepTitle,
+    products,
+    stepIndex,
+    stepForm,
     root,
 }: Props) {
     const { ...defaultValues } = item;
@@ -74,8 +73,15 @@ export default function EditStepItemModal({
         "7-0": [],
         "8-0": [],
     });
+    const [deletedProds, setDeletedProds] = useState<IStepProducts>([]);
 
     useEffect(() => {
+        setDeletedProds(
+            products.filter(
+                (p) =>
+                    (p._metaData.hidden && p.product.img) || p.product.meta?.svg
+            )
+        );
         (async () => {
             if (moulding) {
                 const _species = await _getMouldingSpecies();
@@ -108,44 +114,78 @@ export default function EditStepItemModal({
         })();
     }, []);
     const sections = useFn(getDykeSections);
-    function onUpload(assetId) {
-        form.setValue("product.img", assetId);
+    function onUpload(
+        assetId,
+        path: "product.img" | "product.meta.svg" = "product.img"
+    ) {
+        form.setValue(path, assetId);
     }
     const [saving, startSaving] = useTransition();
     const modal = useModal();
+    function copyProduct(product: IStepProducts[number]) {
+        if (product.product?.img) onUpload(product.product?.img);
+        else if (product.product?.meta?.svg)
+            onUpload(product.product?.meta?.svg, "product.meta.svg");
+        form.setValue(
+            root ? "product.value" : "product.title",
+            root ? product?.product?.value : product?.product?.title
+        );
+        setTab("general");
+    }
+    async function onComplete(formData) {
+        const stepSequence = formData.meta.stepSequence.filter((s) => s.id);
+        // console.log(stepSequence);
+        // return;
+        try {
+            stepSequence.map((s, i) => {
+                if (stepSequence.filter((f) => f.id == s.id).length > 1)
+                    throw Error("Step cannot be repeated");
+            });
+        } catch (error) {
+            if (error instanceof Error) toast.error(error.message);
+            return;
+        }
+        formData.meta.stepSequence = stepSequence;
+        // return;
+        const [pri, sec] = root ? ["value", "title"] : ["title", "value"];
+
+        if (!formData.product[sec])
+            formData.product[sec] = formData.product[pri];
+
+        formData.product.meta.priced = formData.product.price > 0;
+
+        const reps = await saveStepProduct(formData);
+        onCreate(reps as any);
+    }
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
-            const stepSequence = formData.meta.stepSequence.filter((s) => s.id);
-            // console.log(stepSequence);
-            // return;
-            try {
-                stepSequence.map((s, i) => {
-                    if (stepSequence.filter((f) => f.id == s.id).length > 1)
-                        throw Error("Step cannot be repeated");
-                });
-            } catch (error) {
-                if (error instanceof Error) toast.error(error.message);
+
+            if (!formData.id) {
+                formData.uid = generateRandomString(5);
+
+                modal.openModal(
+                    <SaveProductForModal
+                        invoiceForm={mainForm}
+                        lineItemIndex={rowIndex}
+                        stepForm={stepForm}
+                        stepIndex={stepIndex}
+                        onComplete={(resp) => {
+                            // formData._metaData
+                            formData.meta.show = resp || {};
+                            onComplete(formData);
+                        }}
+                    />
+                );
                 return;
             }
-            formData.meta.stepSequence = stepSequence;
-            // return;
-            const [pri, sec] = root ? ["value", "title"] : ["title", "value"];
-
-            if (!formData.product[sec])
-                formData.product[sec] = formData.product[pri];
-
-            formData.product.meta.priced = formData.product.price > 0;
-
-            const reps = await saveStepProduct(formData);
-
-            onCreate(reps as any);
+            await onComplete(formData);
             modal?.close();
         });
     }
     const heightList = () => Object.keys(heights);
     const sizeList = (h) => heights[h] || [];
-    const [tab, setTab] = useState();
+    const [tab, setTab] = useState<string>();
     return (
         <RenderForm {...form}>
             <Modal.Content>
@@ -154,7 +194,7 @@ export default function EditStepItemModal({
                     subtitle={item.product?.title}
                 />
                 <div>
-                    <Tabs defaultValue="general">
+                    <Tabs value={tab} onValueChange={setTab}>
                         <TabsList className="">
                             <TabsTrigger value="general">General</TabsTrigger>
                             {stepTitle == "Door" && (
@@ -163,6 +203,15 @@ export default function EditStepItemModal({
                             <TabsTrigger value="step">
                                 Component Step
                             </TabsTrigger>
+                            {!item.id ? (
+                                <>
+                                    <TabsTrigger value="deleted">
+                                        Copy
+                                    </TabsTrigger>
+                                </>
+                            ) : (
+                                <></>
+                            )}
                         </TabsList>
                         <TabsContent value="general">
                             <div className="grid gap-4">
@@ -307,6 +356,31 @@ export default function EditStepItemModal({
                                 ))}
                             </div>
                             <div className="w-28"></div>
+                        </TabsContent>
+                        <TabsContent value="deleted">
+                            <ScrollArea className="h-[450px]">
+                                <div className="grid grid-cols-3">
+                                    {deletedProds.map((product) => (
+                                        <button
+                                            onClick={() => copyProduct(product)}
+                                            key={product.id}
+                                            className="flex flex-col items-center hover:shadow-sm hover:border "
+                                        >
+                                            <div className="w-2/3 h-16s overflow-hidden">
+                                                <ProductImage
+                                                    aspectRatio={1 / 1}
+                                                    item={product}
+                                                />
+                                            </div>
+                                            <div className="">
+                                                <span className=" text-sm">
+                                                    {product.product.title}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </ScrollArea>
                         </TabsContent>
                     </Tabs>
                 </div>

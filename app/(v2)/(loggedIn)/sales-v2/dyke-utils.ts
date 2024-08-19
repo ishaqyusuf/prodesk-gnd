@@ -10,6 +10,7 @@ export function transformStepProducts(
         meta = {
             stepSequence: [],
             deleted: {},
+            show: {},
         };
     let prodMeta: DykeProductMeta =
         prod.product?.meta || prod.door?.meta || ({} as any);
