@@ -65,6 +65,7 @@ Props) {
             );
             return;
         }
+        onComplete(_show);
         modal.close();
     }
     async function saveForAll() {
