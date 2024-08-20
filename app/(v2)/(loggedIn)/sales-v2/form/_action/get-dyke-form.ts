@@ -35,7 +35,16 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
     const auth = await serverSession();
     const dealerMode = auth.role?.name == "Dealer";
-
+    // await prisma.dykeStepProducts.updateMany({
+    //     where: {
+    //         door: {
+    //             isNot: null,
+    //         },
+    //     },
+    //     data: {
+    //         deletedAt: new Date(),
+    //     },
+    // });
     const dealer = dealerMode
         ? await prisma.dealerAuth.findFirst({
               where: {

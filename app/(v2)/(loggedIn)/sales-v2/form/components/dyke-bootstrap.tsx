@@ -10,7 +10,6 @@ import { dykeExteriorBootstrap } from "../_action/dyke-exterior-bootstrap";
 import { bootstrapShelfItems } from "../_action/bootstraps/shelf-items";
 
 export default function DykeBootstrap() {
-    return <></>;
     return (
         <>
             <Button
@@ -18,7 +17,7 @@ export default function DykeBootstrap() {
                     console.log(await bootstrapShelfItems());
                 }}
             >
-                Dyke Shelfs
+                Hide Doors
             </Button>
         </>
     );

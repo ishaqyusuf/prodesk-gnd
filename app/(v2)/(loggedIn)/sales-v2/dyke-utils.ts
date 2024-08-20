@@ -16,7 +16,7 @@ export function transformStepProducts(
         prod.product?.meta || prod.door?.meta || ({} as any);
     if (prod.door)
         prodMeta = {
-            ...findDoorSvg(prod.door.title, prod.door.img),
+            // ...findDoorSvg(prod.door.title, prod.door.img),
             ...prodMeta,
         };
     return {

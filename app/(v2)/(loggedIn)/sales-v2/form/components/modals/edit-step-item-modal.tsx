@@ -62,7 +62,11 @@ export default function EditStepItemModal({
         keyName: "_id",
         name: "meta.stepSequence",
     });
-    const src = form.watch("product.img");
+    const [url, svg, img] = form.watch([
+        "product.meta.url",
+        "product.meta.svg",
+        "product.img",
+    ]);
     const invoiceItem = mainForm.getValues(`itemArray.${rowIndex}`);
     const doorType = invoiceItem.item.meta.doorType;
     const isBifold = doorType == "Bifold";
@@ -116,14 +120,28 @@ export default function EditStepItemModal({
     const sections = useFn(getDykeSections);
     function onUpload(
         assetId,
-        path: "product.img" | "product.meta.svg" = "product.img"
+        path:
+            | "product.img"
+            | "product.meta.svg"
+            | "product.meta.url" = "product.img"
     ) {
-        form.setValue(path, assetId);
+        let paths: (typeof path)[] = [
+            "product.img",
+            "product.meta.svg",
+            "product.meta.url",
+        ];
+        paths.map((p) => {
+            if (p == path) form.setValue(path, assetId);
+            else form.setValue(p, null);
+        });
     }
     const [saving, startSaving] = useTransition();
     const modal = useModal();
     function copyProduct(product: IStepProducts[number]) {
+        console.log(product);
         if (product.product?.img) onUpload(product.product?.img);
+        else if (product.product?.meta?.url)
+            onUpload(product.product?.meta?.url, "product.meta.url");
         else if (product.product?.meta?.svg)
             onUpload(product.product?.meta?.svg, "product.meta.svg");
         form.setValue(
@@ -248,8 +266,19 @@ export default function EditStepItemModal({
                                     onUpload={onUpload}
                                     label="Product Image"
                                     folder="dyke"
-                                    src={src}
-                                />
+                                >
+                                    <ProductImage
+                                        item={{
+                                            product: {
+                                                img,
+                                                meta: {
+                                                    svg,
+                                                    url,
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </FileUploader>
                             </div>
                         </TabsContent>
                         <TabsContent value="price">

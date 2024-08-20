@@ -59,45 +59,19 @@ export default function useStepItems({
         let _stepProducts: IStepProducts = [];
         if (stepFormTitle == "Door") {
             setStep("Door");
-            const query = doorQueryBuilder(
-                item.get.getFormStepArray(),
-                item.get.doorType()
-            );
-            const _props = { ...query, stepId: stepForm?.step?.id };
+            // const query = doorQueryBuilder(
+            //     item.get.getFormStepArray(),
+            //     item.get.doorType()
+            // );
+            // const _props = { ...query, stepId: stepForm?.step?.id };
             async function _loadDoors() {
-                const prods = await getDykeStepDoors(_props as any);
-                let sample: any = null;
+                const prods = await getDykeStepDoors();
+                // let sample: any = null;
                 let _deleteDoorIds = [];
-                let dups = prods.filter((p, i) => {
-                    let _key = null;
-                    ["productCode", "description", "title"].map(
-                        (k) => !_key && p.product?.[k] && (_key = k)
-                    );
-                    let isUnique = !_key
-                        ? true
-                        : prods.findIndex(
-                              (ps) => ps?.product?.[_key] == p.product?.[_key]
-                          ) == i;
-                    if (!isUnique && !sample) {
-                        sample = {
-                            ls: prods.filter(
-                                (ps) => ps?.product?.[_key] == p.product?.[_key]
-                            ),
-                            _key,
-                        };
-                    }
-                    if (!isUnique) _deleteDoorIds.push(p.id);
-                    return isUnique;
-                });
-                console.log({
-                    dups,
-                    len: dups.length,
-                    _deleteDoorIds,
-                    prodsLen: prods.length,
-                });
+
                 if (_deleteDoorIds.length)
                     await _deleteDuplicateDoorSteps(_deleteDoorIds);
-                return dups; //[];
+                return prods; //[];
             }
             _stepProducts = await _loadDoors();
 

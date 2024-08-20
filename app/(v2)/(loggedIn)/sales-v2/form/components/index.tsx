@@ -14,6 +14,7 @@ import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./item-section/item-section";
 import Bootstrap from "../_action/bootstraps";
+import DykeBootstrap from "./dyke-bootstrap";
 interface Props {
     defaultValues: any;
 }

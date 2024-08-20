@@ -30,7 +30,9 @@ export async function initStepComponents({
         let hasShow = Object.keys(shows).filter(Boolean).length;
         let showThis = stateDeps.some((s) => shows?.[s.key]);
 
-        product._metaData.hidden = hasShow
+        product._metaData.hidden = product.deletedAt
+            ? true
+            : hasShow
             ? !showThis
             : stateDeps.some((s) => product.meta.deleted?.[s.key]);
         return product;

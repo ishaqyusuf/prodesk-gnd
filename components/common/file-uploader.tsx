@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 import { Icons } from "../_v1/icons";
 
 interface Props {
-    src: string | null;
+    src?: string | null;
     label?: string;
     accept?: string;
     folder: UploadFolders;
@@ -20,6 +20,7 @@ interface Props {
     width?: number;
     height?: number;
     alt?: string;
+    children?;
 }
 export function FileUploader({
     src,
@@ -30,6 +31,7 @@ export function FileUploader({
     height = 100,
     alt,
     accept = "image/*",
+    children,
 }: Props) {
     const [assetId, setAssetId] = useState(src);
     const [url, setUrl] = useState("");
@@ -83,15 +85,18 @@ export function FileUploader({
                     </div>
                 ) : (
                     <>
-                        {isImg && assetId && (
-                            <Image
-                                className=""
-                                width={width}
-                                height={height}
-                                src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/${folder}/${assetId}`}
-                                alt={alt as any}
-                            />
-                        )}
+                        {children
+                            ? children
+                            : isImg &&
+                              assetId && (
+                                  <Image
+                                      className=""
+                                      width={width}
+                                      height={height}
+                                      src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/${folder}/${assetId}`}
+                                      alt={alt as any}
+                                  />
+                              )}
                     </>
                 )}
                 {onUpload && (

@@ -19,7 +19,6 @@ import { generateRandomString } from "@/lib/utils";
 export default function ShelfItemIndex() {
     const item = useContext(DykeItemFormContext);
     const form = useDykeForm();
-
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: `itemArray.${item.rowIndex}.item.shelfItemArray`,
