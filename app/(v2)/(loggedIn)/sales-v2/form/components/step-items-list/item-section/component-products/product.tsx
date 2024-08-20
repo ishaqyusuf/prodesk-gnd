@@ -98,7 +98,6 @@ export function StepItem({
     async function savePrice() {
         startSaving(async () => {
             // console.log(item.uid);
-
             await updateStepItemPrice({
                 stepProductUid: item.uid,
                 price: Number(price),

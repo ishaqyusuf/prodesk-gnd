@@ -10,6 +10,7 @@ import { env } from "@/env.mjs";
 import { resend } from "@/lib/resend";
 import dayjs from "dayjs";
 import { __isProd } from "@/lib/is-prod-server";
+import { salesPdf } from "@/app/(v2)/printer/_action/sales-pdf";
 
 export interface DownloadProps {
     slug: string;
@@ -21,31 +22,34 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     // const u = await _dbUser();
     const isProd = __isProd;
     console.log({ isProd, ...data });
+    let attachments = [];
     if (data.attachOrder && isProd && download) {
-        const token = dayjs(download.date)
-            .format("HH:mm:ss")
-            ?.split(":")
-            .join("");
-        trs.body = `${trs.body} </br>
-        <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
-        `;
-        // try {
-        //     const pdf = await salesPdf({
-        //         slugs: data.data.slug,
-        //         mode: data.data?.type,
-        //         mockup: "no",
-        //         pdf: true,
-        //         preview: true,
-        //     });
-        //     if (!pdf) throw new Error("pdf not generated.");
-        //     attachments.push({
-        //         content: pdf.uri,
-        //         filename: `${data.data.orderId}.pdf`,
-        //     });
-        // } catch (error) {
-        //     if (error instanceof Error) console.log(error.message);
-        //     throw Error("Unable to generate pdf");
-        // }
+        try {
+            const pdf = await salesPdf({
+                slugs: data.data.slug,
+                mode: data.data?.type,
+                mockup: "no",
+                pdf: true,
+                preview: true,
+            });
+            if (!pdf) {
+                const token = dayjs(download.date)
+                    .format("HH:mm:ss")
+                    ?.split(":")
+                    .join("");
+                trs.body = `${trs.body} </br>
+                <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
+                `;
+                // throw new Error("pdf not generated.");
+            } else
+                attachments.push({
+                    content: pdf.uri,
+                    filename: `${data.data.orderId}.pdf`,
+                });
+        } catch (error) {
+            if (error instanceof Error) console.log(error.message);
+            throw Error("Unable to generate pdf");
+        }
     }
 
     const to = !isProd ? [`ishaqyusuf024@gmail.com`] : data.to?.split(",");
@@ -59,7 +63,7 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         to,
         subject: trs.subject,
         html: trs.body,
-        // attachments,
+        attachments: attachments.length ? attachments : undefined,
     });
     console.log(_data);
     if (_data.error?.message) throw new Error(_data.error?.message);
