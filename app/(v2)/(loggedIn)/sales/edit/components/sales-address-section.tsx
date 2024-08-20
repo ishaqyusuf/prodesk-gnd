@@ -7,8 +7,8 @@ import { openModal } from "@/lib/modal";
 import { Icons } from "@/components/_v1/icons";
 import { ISalesForm } from "../type";
 import AddressDisplay from "../../_components/address-display";
-import { useModal } from "@/components/common/modal-old/provider";
 import SalesAddressModal from "./sales-address-modal";
+import { useModal } from "@/components/common/modal/provider";
 
 export default function SalesAddressSection() {
     const form = useFormContext<ISalesForm>();
@@ -23,7 +23,7 @@ export default function SalesAddressSection() {
         <>
             <div
                 onClick={() => {
-                    modal?.open(<SalesAddressModal form={form} />);
+                    modal?.openModal(<SalesAddressModal form={form} />);
                 }}
                 className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg  hover:bg-accent-foreground hover:text-white"
             >

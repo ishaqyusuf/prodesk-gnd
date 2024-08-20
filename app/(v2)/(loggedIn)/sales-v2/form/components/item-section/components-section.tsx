@@ -32,6 +32,12 @@ import { Button } from "@/components/ui/button";
 import { sortComponents } from "../../_action/sort-components";
 
 import { updateDykeStepMeta } from "../../_action/dyke-step-setting";
+import RestoreComponentModal from "../modals/restore-component";
+import {
+    getDykeStepState,
+    getFormSteps,
+} from "../step-items-list/item-section/component-products/init-step-components";
+import { toast } from "sonner";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -51,7 +57,25 @@ export function DykeInvoiceItemStepSection({
     const modal = useModal();
     const ctx = useDykeCtx();
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
-
+    function restoreComponent() {
+        const formArray = form.getValues(
+            `itemArray.${item.rowIndex}.item.formStepArray`
+        );
+        const _depFormSteps = getFormSteps(formArray, stepIndex);
+        const stateDeps = getDykeStepState(_depFormSteps, stepForm);
+        let k = stateDeps.slice(-1)[0]?.key;
+        if (!k) {
+            toast("Cannot restore for this section");
+            return;
+        }
+        modal.openModal(
+            <RestoreComponentModal
+                k={k}
+                setStepProducts={setStepProducts}
+                products={stepProducts}
+            />
+        );
+    }
     function conditionSettings(settingKey: keyof DykeStepMeta) {
         modal.openModal(
             <PricingDependenciesModal
@@ -143,8 +167,8 @@ export function DykeInvoiceItemStepSection({
                             >
                                 Component Deps
                             </MenuItem>
-                            <MenuItem onClick={componentPrice}>
-                                Component Price
+                            <MenuItem onClick={restoreComponent}>
+                                Restore Component
                             </MenuItem>
                             <MenuItem
                                 onClick={

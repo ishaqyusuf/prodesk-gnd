@@ -15,7 +15,6 @@ export default function AccountLayout({ children }: any) {
             redirect("/login");
         },
     });
-
     if (!session?.user) return <></>;
     if (session.role?.name == "Dealer") redirect("/orders");
     let sb = nav(session);

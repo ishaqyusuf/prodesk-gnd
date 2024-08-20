@@ -13,13 +13,13 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { Button } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
-import { useModal } from "@/components/common/modal-old/provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { getDykeCategoriesList } from "../../_actions/dyke-categories-list";
 import { saveDykeProduct } from "../_actions/save-dyke-product";
 import { toast } from "sonner";
+import { useModal } from "@/components/common/modal/provider";
 
 interface Props {
     data?: IDykeProduct;
@@ -46,12 +46,9 @@ export default function EditProductModal({ data }: Props) {
     });
     useEffect(() => {}, []);
     async function save(data) {
-        modal?.startTransition(async () => {
-            // console.log(data);
-            await saveDykeProduct(data);
-            modal.close();
-            toast.success("Saved");
-        });
+        await saveDykeProduct(data);
+        modal.close();
+        toast.success("Saved");
     }
     return (
         <RenderForm {...form}>

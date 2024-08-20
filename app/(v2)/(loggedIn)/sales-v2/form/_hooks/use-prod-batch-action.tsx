@@ -80,7 +80,7 @@ export function BatchSelectionAction() {
                 </div>
             </div>
         );
-    return <div className="fixed bottom-0 ">NO SELECTION</div>;
+    return <div className="fixed bottom-0 "></div>;
 }
 function CheckBox({ uid }) {
     const _ctx = useCtx();

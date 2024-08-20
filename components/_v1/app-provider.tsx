@@ -6,9 +6,10 @@ import { store } from "@/store";
 import { useState } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ModalProvider as OldModalProvider } from "@/components/common/modal-old/provider";
+
 import { ModalProvider } from "../common/modal/provider";
 import { CommandProvider } from "../cmd/provider";
+import { NavContext, useNavCtx } from "./layouts/site-nav";
 const AppProvider = ({ children }) => {
     const [queryClient] = useState(() => new QueryClient());
     return (
@@ -16,12 +17,12 @@ const AppProvider = ({ children }) => {
             <Provider store={store}>
                 <CommandProvider>
                     <ModalProvider>
-                        <OldModalProvider>
+                        <NavContext.Provider value={useNavCtx()}>
                             <QueryClientProvider client={queryClient}>
                                 <ReactQueryDevtools initialIsOpen={false} />
                                 {children}
                             </QueryClientProvider>
-                        </OldModalProvider>
+                        </NavContext.Provider>
                     </ModalProvider>
                 </CommandProvider>
             </Provider>

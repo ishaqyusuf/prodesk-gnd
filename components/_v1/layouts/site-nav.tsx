@@ -6,10 +6,22 @@ import { cn, toSingular } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icons } from "../icons";
+import { createContext, useContext, useState } from "react";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
     nav: ISidebar;
     mobile?: Boolean;
+}
+export const NavContext = createContext<ReturnType<typeof useNavInit>>(
+    {} as any
+);
+export const useNavCtx = () => useContext(NavContext);
+function useNavInit() {
+    const [show, toggle] = useState(false);
+    return {
+        show,
+        toggle,
+    };
 }
 
 export default function SiteNav({
@@ -22,8 +34,9 @@ export default function SiteNav({
     //   useEffect(() => {
     //       //     setRoutes(useSidebarRoutes(session));
     //   }, [session?.user?.id]);
+
     const pathname = usePathname();
-    function routeBtn(
+    function RouteBtn(
         route: { icon: any; path: string; title: string; isNew?: boolean },
         i
     ) {
@@ -71,7 +84,7 @@ export default function SiteNav({
                     if (!route?.title || route?.routes?.length < 1)
                         return (
                             <div key={index} className="-mb-2 pt-2 px-4">
-                                {route.routes?.map((cr, i) => routeBtn(cr, i))}
+                                {route.routes?.map((cr, i) => RouteBtn(cr, i))}
                             </div>
                         );
                     return (
@@ -80,7 +93,7 @@ export default function SiteNav({
                                 {route.title}
                             </h2>
                             <div className="space-y-1s">
-                                {route.routes?.map((cr, i) => routeBtn(cr, i))}
+                                {route.routes?.map((cr, i) => RouteBtn(cr, i))}
                             </div>
                         </div>
                     );

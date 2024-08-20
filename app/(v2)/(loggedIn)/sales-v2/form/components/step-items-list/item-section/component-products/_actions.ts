@@ -4,6 +4,22 @@ import { prisma } from "@/db";
 import { IStepProducts } from ".";
 import dayjs from "dayjs";
 
+export async function _restoreStepItems(items: IStepProducts) {
+    await Promise.all(
+        items.map(async (item) => {
+            await prisma.dykeStepProducts.updateMany({
+                where: {
+                    id: item.id,
+                    deletedAt: {},
+                },
+                data: {
+                    deletedAt: null,
+                    meta: item.meta as any,
+                },
+            });
+        })
+    );
+}
 export async function _deleteStepItem(items: IStepProducts) {
     const resp = await prisma.dykeStepProducts.updateMany({
         where: {

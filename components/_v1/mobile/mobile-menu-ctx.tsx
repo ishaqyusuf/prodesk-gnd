@@ -5,10 +5,10 @@ import { Tabs, TabsContent } from "../../ui/tabs";
 import { MobileMenu, MobileOption } from "./mobile-menu-item";
 import optionBuilder from "@/lib/option-builder";
 import { sales } from "@/lib/sales/sales-helper";
-import { useModal } from "@/components/common/modal-old/provider";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
 import Modal from "@/components/common/modal";
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
+import { useModal } from "@/components/common/modal/provider";
 
 interface Props {
     item;

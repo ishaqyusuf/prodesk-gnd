@@ -5,7 +5,7 @@ import {
     moveSales,
 } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
-import { closeModal, openEmailComposer, openModal } from "../modal";
+import { openEmailComposer, openModal } from "../modal";
 import { ISalesOrder, ISalesType, IOrderPrintMode } from "@/types/sales";
 import {
     adminCompleteProductionAction,
@@ -24,7 +24,6 @@ export const sales = {
             to == "quote" ? "Order moved to quote" : "Quote moved to order"
         );
         router?.push(`/sales/${to}/${order.orderId}`);
-        closeModal();
     },
     async copy(order, as: ISalesType = "order") {
         const _ = await copyOrderAction({
@@ -36,17 +35,14 @@ export const sales = {
     async markIncomplete(row) {
         await markProductionIncompleteAction(row.id);
         toast.message("Production Marked as Incomplete");
-        closeModal();
     },
     async _clearAssignment(row) {
         await cancelProductionAssignmentAction(row.id);
         toast.message("Production Assignment Cancelled");
-        closeModal();
     },
     async completeProduction(row) {
         await adminCompleteProductionAction(row.id);
         toast.message("Production Completed");
-        closeModal();
     },
     salesMenuOption(row: ISalesOrder, modal, pdf, assignment) {
         const estimate = row.type == "quote";
@@ -172,7 +168,6 @@ export const sales = {
                 },
                 pdf
             );
-            closeModal();
         }
         return optionBuilder.more(
             title,

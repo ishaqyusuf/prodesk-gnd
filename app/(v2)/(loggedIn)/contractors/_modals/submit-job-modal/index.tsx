@@ -1,5 +1,3 @@
-import { useModal } from "@/components/common/modal-old/provider";
-
 import {
     DialogContent,
     DialogDescription,
@@ -22,6 +20,7 @@ import useSubmitJob, { JobSubmitContext } from "./_/use-submit-job";
 import { SubmitJobModalSubtitle, SubmitJobModalTitle } from "./_/heading";
 import { Form } from "@/components/ui/form";
 import { IJobs } from "@/types/hrm";
+import { useModal } from "@/components/common/modal/provider";
 
 interface Props {
     job?: IJobs;
@@ -58,7 +57,7 @@ export default function SubmitJobModal({ job = {} as any, action }: Props) {
                             <SubmitJobModalTitle />
                         </DialogTitle>
                         <DialogDescription>
-                            <SubmitJobModalSubtitle data={modal?.data} />
+                            <SubmitJobModalSubtitle />
                         </DialogDescription>
                     </DialogHeader>
                     <SubmitJobModalContent />

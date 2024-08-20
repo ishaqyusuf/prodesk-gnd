@@ -15,11 +15,11 @@ import { SalesFormContext } from "../../ctx";
 import { deepCopy } from "@/lib/deep-copy";
 import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
-import { useModal } from "@/components/common/modal-old/provider";
 import { usePathname } from "next/navigation";
 import { DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { updateSalesAddress } from "../../../_actions/update-sales-address";
 import ControlledInput from "@/components/common/controls/controlled-input";
+import { useModal } from "@/components/common/modal/provider";
 
 export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();

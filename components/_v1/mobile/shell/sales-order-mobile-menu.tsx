@@ -8,10 +8,8 @@ import { sales } from "@/lib/sales/sales-helper";
 import { useRouter } from "next/navigation";
 import { TabsContent } from "@/components/ui/tabs";
 import MobileMenuCtx from "../mobile-menu-ctx";
-import { useModal } from "@/components/common/modal-old/provider";
 
 export function SalesProductionMobileMenu({ data }) {
-    const modal = useModal();
     function openAssignProd(order) {
         // modal?.open(<AssignProductionModal order={order} />);
     }
