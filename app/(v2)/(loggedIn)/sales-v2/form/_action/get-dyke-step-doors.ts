@@ -38,7 +38,17 @@ export async function getDykeStepDoors(): Promise<IStepProducts> {
                 isNot: null,
                 // deletedAt: null,
             },
+            deletedAt: {},
+            // OR: [
+            //     { deletedAt: null },
+            //     {
+            //         deletedAt: {
+            //             not: null,
+            //         },
+            //     },
+            // ],
         },
+
         include: {
             door: true,
             product: true,

@@ -74,7 +74,7 @@ export default function useStepItems({
                 return prods; //[];
             }
             _stepProducts = await _loadDoors();
-
+            // console.log(_stepProducts.length);
             // console.log({ sample });
             // console.log(dups.length);
             // _stepProducts = prods;
