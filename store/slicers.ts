@@ -105,7 +105,6 @@ export type ModalName =
     | "employee"
     | "employeeProfile"
     | "editInvoice"
-    | "email"
     | "home"
     | "img"
     | "installCost"

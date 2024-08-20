@@ -32,16 +32,16 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
                 pdf: true,
                 preview: true,
             });
-            if (!pdf) {
-                const token = dayjs(download.date)
-                    .format("HH:mm:ss")
-                    ?.split(":")
-                    .join("");
-                trs.body = `${trs.body} </br>
+
+            const token = dayjs(download.date)
+                .format("HH:mm:ss")
+                ?.split(":")
+                .join("");
+            trs.body = `${trs.body} </br>
                 <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
                 `;
-                // throw new Error("pdf not generated.");
-            } else
+            // throw new Error("pdf not generated.");
+            if (pdf)
                 attachments.push({
                     content: pdf.uri,
                     filename: `${data.data.orderId}.pdf`,

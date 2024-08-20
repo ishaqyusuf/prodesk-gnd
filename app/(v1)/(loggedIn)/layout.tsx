@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import SiteHeader from "@/components/_v1/layouts/site-header";
 import { nav } from "@/lib/navs";
 import SiteNav from "@/components/_v1/layouts/site-nav";
-import EmailComposerModal from "@/components/_v1/modals/email-composer-modal";
 import Refresher from "@/components/_v1/refresher";
 
 export default function AccountLayout({ children }: any) {
@@ -44,7 +43,6 @@ export default function AccountLayout({ children }: any) {
                     </div>
                 </main>
             </div>
-            <EmailComposerModal />
             <Refresher />
         </>
     );
