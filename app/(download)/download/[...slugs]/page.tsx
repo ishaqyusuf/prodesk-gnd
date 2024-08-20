@@ -3,7 +3,6 @@ import SalesDownload from "./sales";
 
 export default async function DownloadPage({ params }) {
     console.log(params.slugs);
-
     const [path, token, slug]: ["sales", string, string] = params.slugs;
 
     const order = await prisma.salesOrders.findFirst({
