@@ -6,8 +6,8 @@ import { DykeDoorType, DykeProductMeta, StepProdctMeta } from "../../type";
 import { DykeDoors, Prisma } from "@prisma/client";
 import { IStepProducts } from "../components/step-items-list/item-section/component-products";
 
-import { generateRandomString } from "@/lib/utils";
 import { sortStepProducts, transformStepProducts } from "../../dyke-utils";
+import { restoreDoors } from "./restore-doors";
 interface Props {
     q;
     omit;
@@ -26,7 +26,9 @@ export async function _deleteDuplicateDoorSteps(ids) {
         },
     });
 }
-export async function getDykeStepDoors(): Promise<IStepProducts> {
+export async function getDykeStepDoors(stepId): Promise<IStepProducts> {
+    await restoreDoors(stepId);
+    // console.log([">>>>>>>>>>>>"]);
     const whereDoor: Prisma.DykeDoorsWhereInput = {
         // query: isBifold || !query ? undefined : query,
     };
@@ -48,7 +50,7 @@ export async function getDykeStepDoors(): Promise<IStepProducts> {
             //     },
             // ],
         },
-
+        // distinct: '',
         include: {
             door: true,
             product: true,
@@ -56,7 +58,9 @@ export async function getDykeStepDoors(): Promise<IStepProducts> {
     });
     // if (stepProds.length) {
     const _response = stepProds.map(transformStepProducts);
+
     return sortStepProducts(_response);
+
     // }
     return null;
 }

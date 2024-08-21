@@ -53,7 +53,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
             {/* <Bootstrap /> */}
             <RenderForm {...form}>
                 <HeaderSection />
-                {/* <DykeBootstrap /> */}
+                <DykeBootstrap />
                 <section
                     id="detailsSection"
                     className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"

@@ -1,9 +1,13 @@
 import JsonSearch from "@/_v2/lib/json-search";
-import { doorSvgsById, dykeDoorsSvg } from "@/lib/data/dyke-doors-svg";
+import {
+    _dykeDoorsSvg2,
+    doorSvgsById,
+    dykeDoorsSvg,
+} from "@/lib/data/dyke-doors-svg";
 
 export function findDoorSvg(title, img) {
     if (img) return {};
-    const s = new JsonSearch(dykeDoorsSvg, {
+    const s = new JsonSearch(_dykeDoorsSvg2, {
         sort: true,
         indices: {
             title: "title",
@@ -22,6 +26,7 @@ export function findDoorSvg(title, img) {
     if (!item) return {};
 
     const resp = {
+        cld: item.cldImg,
         svg: doorSvgsById[item.id],
         url: item.url,
     };

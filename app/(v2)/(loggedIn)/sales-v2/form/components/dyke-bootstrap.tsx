@@ -8,16 +8,17 @@ import { toast } from "sonner";
 import { uploadFile } from "@/lib/upload-file";
 import { dykeExteriorBootstrap } from "../_action/dyke-exterior-bootstrap";
 import { bootstrapShelfItems } from "../_action/bootstraps/shelf-items";
+import { cloudinaryBootstrap } from "../_action/bootstraps/cloudinary";
 
 export default function DykeBootstrap() {
     return (
         <>
             <Button
                 onClick={async () => {
-                    console.log(await bootstrapShelfItems());
+                    console.log(await cloudinaryBootstrap());
                 }}
             >
-                Hide Doors
+                Cloudinary
             </Button>
         </>
     );

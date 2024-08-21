@@ -260,10 +260,12 @@ export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
             whileHover={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300 }}
         >
-            {item.product.img ? (
+            {item.product.img || item?.product?.meta?.cld ? (
                 <AspectRatio ratio={item.isDoor ? 4 / 4 : aspectRatio}>
                     <Image
-                        src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${item.product.img}`}
+                        src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${
+                            item.product.img || item?.product?.meta?.cld
+                        }`}
                         alt={item.product.title}
                         className="object-contain"
                         // sizes="(min-width: 1024px) 10vw"
@@ -276,10 +278,13 @@ export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
                     <SVG className="" src={item.product.meta?.svg} />
                 </AspectRatio>
             ) : item.product.meta?.url ? (
-                <AspectRatio ratio={4 / 2}>
+                <AspectRatio ratio={item.isDoor ? 4 / 4 : aspectRatio}>
+                    <div className="absolute inset-0 bg-red-400 bg-opacity-0"></div>
                     <object
                         data={item.product.meta?.url}
                         type={"image/svg+xml"}
+                        className=""
+                        id="img"
                     />
                 </AspectRatio>
             ) : (

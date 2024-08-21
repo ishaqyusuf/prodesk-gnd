@@ -113,7 +113,7 @@ export default function EditStepItemModal({
                 );
                 // console.log(d);
                 setHeight(d);
-                setTab(_tab);
+                setPriceTab(_tab);
             }
         })();
     }, []);
@@ -204,6 +204,7 @@ export default function EditStepItemModal({
     const heightList = () => Object.keys(heights);
     const sizeList = (h) => heights[h] || [];
     const [tab, setTab] = useState<string>();
+    const [priceTab, setPriceTab] = useState<string>();
     return (
         <RenderForm {...form}>
             <Modal.Content>
@@ -287,7 +288,7 @@ export default function EditStepItemModal({
                                     <div className="col-span-2">
                                         <Tabs
                                             className="w-full "
-                                            defaultValue={tab}
+                                            defaultValue={priceTab}
                                         >
                                             <TabsList>
                                                 {heightList().map((h) => (
