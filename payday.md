@@ -3,7 +3,10 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete.
 -----------------------------
-- AUG 21: 00.00 == 00.00
+- AUG 22: 00.00 == 00.00
+  - 09:50-
+- AUG 21: 02.40 == 10.35
+  - 05:20-06:20
   - 09:20-11:00
 - AUG 20: 02.05 == 07.55
   - 09:50-11:15

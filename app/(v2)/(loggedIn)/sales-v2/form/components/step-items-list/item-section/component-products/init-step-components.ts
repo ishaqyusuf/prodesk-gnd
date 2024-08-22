@@ -18,6 +18,7 @@ export async function initStepComponents({
     stepArray,
     stepIndex,
 }: Props) {
+    const doorSection = stepForm.step.title == "Door";
     const depUid = getDepsUid(stepIndex, stepArray, stepForm);
     const pricings = await getStepPricings(depUid, stepForm.step.id);
     const _formSteps = getFormSteps(stepArray, stepIndex);
@@ -28,9 +29,13 @@ export async function initStepComponents({
             product._metaData.price = pricings.pricesByUid[product.uid];
         const shows = product.meta?.show || {};
         let hasShow = Object.keys(shows).filter(Boolean).length;
-        let showThis = stateDeps.some((s) => shows?.[s.key]);
+        console.log({ hasShow, doorSection });
 
-        product._metaData.hidden = product.deletedAt
+        let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
+
+        product._metaData.hidden = doorSection
+            ? !showThis
+            : product.deletedAt
             ? true
             : hasShow
             ? !showThis
