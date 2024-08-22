@@ -25,6 +25,7 @@ import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
 import SaveProductForModal from "./save-product-for-modal";
 import { generateRandomString } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     item: IStepProducts[0];
@@ -209,6 +210,19 @@ export default function EditStepItemModal({
     const heightList = () => Object.keys(heights);
     const sizeList = (h) => heights[h] || [];
     const [tab, setTab] = useState<string>();
+    function PriceInfo({ prod }: { prod: IStepProducts[number] }) {
+        let priceLen = Object.values(prod.door?.meta?.doorPrice || {}).filter(
+            Boolean
+        ).length;
+        if (priceLen)
+            return (
+                <div id="" className="absolute right-0 top-0 flex ">
+                    <Label>{priceLen}</Label>
+                    <Icons.dollar className="text-muted-foreground w-4 h-4" />
+                </div>
+            );
+        return null;
+    }
     const [priceTab, setPriceTab] = useState<string>();
     return (
         <RenderForm {...form}>
@@ -394,13 +408,14 @@ export default function EditStepItemModal({
                         </TabsContent>
                         <TabsContent value="deleted">
                             <ScrollArea className="h-[450px]">
-                                <div className="grid grid-cols-3">
+                                <div className="grid grid-cols-3 gap-2">
                                     {deletedProds.map((product) => (
                                         <button
                                             onClick={() => copyProduct(product)}
                                             key={product.id}
-                                            className="flex flex-col items-center hover:shadow-sm hover:border "
+                                            className="flex relative flex-col items-center hover:shadow-sm hover:border "
                                         >
+                                            <PriceInfo prod={product} />
                                             <div className="w-2/3 h-16s overflow-hidden">
                                                 <ProductImage
                                                     aspectRatio={1 / 1}
