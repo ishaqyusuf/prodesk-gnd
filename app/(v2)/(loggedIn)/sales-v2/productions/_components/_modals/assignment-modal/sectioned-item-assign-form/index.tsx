@@ -205,7 +205,13 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                             <div className="sm:hidden mt-4">
                                 <div className="">Sections</div>
                                 {group.salesDoors
-                                    ?.filter((s) => s.report?.pendingAssignment)
+                                    ?.filter(
+                                        (s, i) =>
+                                            s.report?.pendingAssignment &&
+                                            (salesDoorIndex >= 0
+                                                ? salesDoorIndex == i
+                                                : true)
+                                    )
                                     .map((salesDoor, index) => (
                                         <div
                                             className={cn(
@@ -259,7 +265,11 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                                 <TableBody>
                                     {group.salesDoors
                                         ?.filter(
-                                            (s) => s.report?.pendingAssignment
+                                            (s, i) =>
+                                                s.report?.pendingAssignment &&
+                                                (salesDoorIndex >= 0
+                                                    ? salesDoorIndex == i
+                                                    : true)
                                         )
                                         .map((salesDoor) => (
                                             <TableRow

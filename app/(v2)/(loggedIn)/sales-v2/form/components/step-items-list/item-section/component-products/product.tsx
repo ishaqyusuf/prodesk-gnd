@@ -1,9 +1,5 @@
-import { useContext, useEffect, useState, useTransition } from "react";
-import {
-    DykeItemFormContext,
-    useDykeCtx,
-    useDykeItemCtx,
-} from "../../../../_hooks/form-context";
+import { useEffect, useState, useTransition } from "react";
+import { useDykeCtx, useDykeItemCtx } from "../../../../_hooks/form-context";
 import { cn, safeFormText } from "@/lib/utils";
 import Image from "next/image";
 import { env } from "@/env.mjs";
@@ -36,6 +32,7 @@ import { PlaceholderImage } from "@/components/placeholder-image";
 import { Dot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
+import DoorMenuOption from "./door-menu-option";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -48,6 +45,7 @@ interface Props {
     setStepProducts;
     deleteStepItem;
     className?: string;
+    products;
 }
 export function StepItem({
     item,
@@ -61,6 +59,7 @@ export function StepItem({
     setStepProducts,
     className,
     isRoot,
+    products,
 }: Props) {
     const ctx = useDykeItemCtx();
     const formCtx = useDykeCtx();
@@ -183,9 +182,20 @@ export function StepItem({
                                 Edit
                             </MenuItem>
 
-                            <MenuItem onClick={onEditPrice} Icon={Icons.dollar}>
-                                Change Price
-                            </MenuItem>
+                            {stepForm.step.title == "Door" ? (
+                                <DoorMenuOption
+                                    setStepProducts={setStepProducts}
+                                    products={products}
+                                />
+                            ) : (
+                                <MenuItem
+                                    onClick={onEditPrice}
+                                    Icon={Icons.dollar}
+                                >
+                                    Change Price
+                                </MenuItem>
+                            )}
+
                             <DeleteRowAction
                                 menu
                                 noToast

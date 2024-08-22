@@ -118,6 +118,7 @@ export function StepProducts({
                                 >
                                     <Card className="border-none flex flex-col h-full bg-red-50">
                                         <StepItem
+                                            products={stepProducts}
                                             className={cn(
                                                 "relative border-muted-foreground/10  borno group",
                                                 !sortMode &&
