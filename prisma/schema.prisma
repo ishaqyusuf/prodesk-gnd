@@ -1792,3 +1792,36 @@ model Blogs {
 
     @@index([authorId])
 }
+
+model Gallery {
+    id          Int          @unique @default(autoincrement())
+    description String?
+    src         String       @unique
+    tags        GalleryTag[]
+    createdAt   DateTime?    @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?    @updatedAt
+    deletedAt   DateTime?    @db.Timestamp(0)
+}
+
+model GalleryTag {
+    id        Int             @unique @default(autoincrement())
+    galleryId Int
+    tagId     Int
+    tag       GalleryTagName? @relation(fields: [tagId], references: [id])
+    gallery   Gallery?        @relation(fields: [galleryId], references: [id])
+    createdAt DateTime?       @default(now()) @db.Timestamp(0)
+    updatedAt DateTime?       @updatedAt
+    deletedAt DateTime?       @db.Timestamp(0)
+
+    @@index([tagId])
+    @@index([galleryId])
+}
+
+model GalleryTagName {
+    id          Int          @unique @default(autoincrement())
+    title       String       @unique
+    galleryTags GalleryTag[]
+    createdAt   DateTime?    @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?    @updatedAt
+    deletedAt   DateTime?    @db.Timestamp(0)
+}

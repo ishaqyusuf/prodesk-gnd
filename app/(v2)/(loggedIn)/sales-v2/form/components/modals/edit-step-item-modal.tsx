@@ -138,7 +138,7 @@ export default function EditStepItemModal({
     const [saving, startSaving] = useTransition();
     const modal = useModal();
     function copyProduct(product: IStepProducts[number]) {
-        console.log(product);
+        // console.log(product);
         if (product.product?.img) onUpload(product.product?.img);
         else if (product.product?.meta?.url)
             onUpload(product.product?.meta?.url, "product.meta.url");
@@ -148,6 +148,11 @@ export default function EditStepItemModal({
             root ? "product.value" : "product.title",
             root ? product?.product?.value : product?.product?.title
         );
+        if (product.door?.meta?.doorPrice)
+            form.setValue(
+                "product.meta.doorPrice",
+                product.door?.meta?.doorPrice
+            );
         setTab("general");
     }
     async function onComplete(formData) {

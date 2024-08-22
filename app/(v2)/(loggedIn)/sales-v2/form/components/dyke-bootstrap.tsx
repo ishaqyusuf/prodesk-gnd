@@ -8,19 +8,32 @@ import { toast } from "sonner";
 import { uploadFile } from "@/lib/upload-file";
 import { dykeExteriorBootstrap } from "../_action/dyke-exterior-bootstrap";
 import { bootstrapShelfItems } from "../_action/bootstraps/shelf-items";
-import { cloudinaryBootstrap } from "../_action/bootstraps/cloudinary";
+import {
+    __dumpGallery,
+    cloudinaryBootstrap,
+} from "../_action/bootstraps/cloudinary";
+import DevOnly from "@/_v2/components/common/dev-only";
 
 export default function DykeBootstrap() {
     return (
-        <>
-            <Button
-                onClick={async () => {
-                    console.log(await cloudinaryBootstrap());
-                }}
-            >
-                Cloudinary
-            </Button>
-        </>
+        <DevOnly>
+            <div className="flex space-x-2">
+                <Button
+                    onClick={async () => {
+                        console.log(await cloudinaryBootstrap());
+                    }}
+                >
+                    Cloudinary
+                </Button>
+                <Button
+                    onClick={async () => {
+                        console.log(await __dumpGallery());
+                    }}
+                >
+                    Gallery
+                </Button>
+            </div>
+        </DevOnly>
     );
     return (
         <div className="flex space-x-3">

@@ -66,7 +66,10 @@ export default function useStepItems({
             // const _props = { ...query, stepId: stepForm?.step?.id };
             async function _loadDoors() {
                 const prods = await getDykeStepDoors(stepForm.step.id);
-                // let sample: any = null;
+                let doorsWithPriceTags = await prods.filter(
+                    (p) => p.door?.meta?.doorPrice
+                );
+                console.log({ doorsWithPriceTags });
                 let _deleteDoorIds = [];
 
                 if (_deleteDoorIds.length)

@@ -27,7 +27,7 @@ export async function _deleteDuplicateDoorSteps(ids) {
     });
 }
 export async function getDykeStepDoors(stepId): Promise<IStepProducts> {
-    await restoreDoors(stepId);
+    // await restoreDoors(stepId);
     // console.log([">>>>>>>>>>>>"]);
     const whereDoor: Prisma.DykeDoorsWhereInput = {
         // query: isBifold || !query ? undefined : query,

@@ -29,7 +29,6 @@ export async function initStepComponents({
             product._metaData.price = pricings.pricesByUid[product.uid];
         const shows = product.meta?.show || {};
         let hasShow = Object.keys(shows).filter(Boolean).length;
-        console.log({ hasShow, doorSection });
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
 
