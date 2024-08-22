@@ -184,6 +184,7 @@ export function StepItem({
 
                             {stepForm.step.title == "Door" ? (
                                 <DoorMenuOption
+                                    prod={item}
                                     setStepProducts={setStepProducts}
                                     products={products}
                                 />

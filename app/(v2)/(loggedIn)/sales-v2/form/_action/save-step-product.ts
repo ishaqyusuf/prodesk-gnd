@@ -58,6 +58,12 @@ async function saveDykeDoor(data: Props) {
         },
     };
 }
+export async function updateDoorMetaAction(id, meta) {
+    await prisma.dykeDoors.update({
+        where: { id },
+        data: { meta },
+    });
+}
 export async function saveStepProduct(data: Props) {
     // if (!data.product.value) data.product.value = data.product.title as any;
     const doorMode = data._meta?.stepTitle == "Door";

@@ -8,16 +8,19 @@ import React, { useEffect, useState } from "react";
 import { IStepProducts } from ".";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ProductImage } from "./product";
+import { cn } from "@/lib/utils";
+import { updateDoorMetaAction } from "../../../../_action/save-step-product";
 
-export default function DoorMenuOption({ setStepProducts, products }) {
+export default function DoorMenuOption({ setStepProducts, products, prod }) {
     const [prods, setProds] = useState([]);
     useEffect(() => {
         setProds(
             (products as IStepProducts)
+                .filter((p) => p.id != prod.id)
                 .map((product) => {
                     let pricings = product.product?.meta?.doorPrice || {};
                     let importables = [
-                        { title: "All", count: 0, filter: null },
+                        { title: "All", count: 0, priceData: {} },
                     ];
                     let heights = Array.from(
                         new Set(
@@ -32,32 +35,55 @@ export default function DoorMenuOption({ setStepProducts, products }) {
                         size: a,
                     }));
                     heights.map((h) => {
-                        let count = prices.filter(
+                        let priceData = {};
+                        const _p = prices.filter(
                             (a) => a.height == h && a.price
-                        ).length;
+                        );
+                        _p.map((p) => {
+                            priceData[p.size] = p.price;
+                        });
+                        let count = _p.length;
                         importables[0].count += count;
+                        importables[0].priceData = {
+                            ...importables[0].priceData,
+                            ...priceData,
+                        };
                         if (count)
                             importables.push({
                                 title: h,
                                 count,
-                                filter: h,
+                                priceData,
+                                // _p,
                             });
                     });
-                    // console.log({ pricings });
-                    // return {
-                    //     title: product.door?.title,
-                    // };
-                    console.log({ img: product?.door?.img });
+
                     return {
                         importables,
                         doorImg: product?.door?.img,
                         id: product.id,
                         title: product.door?.title,
+                        pricings,
                     };
                 })
                 .filter((a) => a.importables[0]?.count)
         );
     }, []);
+    async function importPrice(data) {
+        await updateDoorMetaAction(prod.door.id, {
+            ...(prod.door.meta || {}),
+            doorPrice: data.priceData,
+        });
+        setStepProducts((current) => {
+            let index = current.findIndex((a) => a.id == prod.id);
+            return [...current].map((p, i) => {
+                if (i == index) {
+                    p.door.meta.doorPrice = data.priceData;
+                    p.product.meta.doorPrice = data.priceData;
+                }
+                return p;
+            });
+        });
+    }
     return (
         <React.Fragment>
             <MenuItem
@@ -68,7 +94,7 @@ export default function DoorMenuOption({ setStepProducts, products }) {
                 SubMenu={
                     <>
                         <DropdownMenuLabel>Select Door</DropdownMenuLabel>
-                        <ScrollArea className="h-[40vh]">
+                        <ScrollArea className="max-h-[40vh]">
                             {prods.map((p, i) => (
                                 <MenuItem
                                     key={i}
@@ -81,11 +107,13 @@ export default function DoorMenuOption({ setStepProducts, products }) {
                                                 <div className="w-36">
                                                     {p.importables.map((i) => (
                                                         <MenuItem
+                                                            onClick={() =>
+                                                                importPrice(i)
+                                                            }
                                                             className="flex justify-between"
                                                             key={i.title}
                                                         >
                                                             <span>
-                                                                {" "}
                                                                 {i.title}
                                                             </span>
                                                             <span className="text-xs font-bold inline-flex items-center space-x-1">
@@ -97,7 +125,12 @@ export default function DoorMenuOption({ setStepProducts, products }) {
                                                         </MenuItem>
                                                     ))}
                                                 </div>
-                                                <div className="w-48 h-48">
+                                                <div
+                                                    className={cn(
+                                                        "w-48 h-48",
+                                                        !p.doorImg && "hidden"
+                                                    )}
+                                                >
                                                     <ProductImage
                                                         aspectRatio={4 / 4}
                                                         item={{
