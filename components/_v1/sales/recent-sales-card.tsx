@@ -14,6 +14,7 @@ import {
 import { formatDate } from "@/lib/use-day";
 import { OrderInvoiceCell } from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
 import { useDataPage } from "@/lib/data-page-context";
+import { OrderRowAction } from "../actions/sales-menu-actions";
 
 interface Props {
     className?;
@@ -49,6 +50,7 @@ export default function RecentSalesCard({ className }: Props) {
                                         <OrderInvoiceCell order={order} />
                                     </div>
                                 </TableCell>
+                                <OrderRowAction row={order} />
                             </TableRow>
                         ))}
                     </TableBody>
