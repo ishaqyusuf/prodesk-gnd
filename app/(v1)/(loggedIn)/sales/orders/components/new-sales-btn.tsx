@@ -7,15 +7,55 @@ import {
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function NewSalesBtn({}) {
+interface Props {
+    type?;
+}
+function _btns(type) {
     const btns = [
-        { text: "Old", href: "/sales/edit/order/new" },
-        { text: "New", href: "/sales-v2/form/order" },
+        { text: "Old", href: `/sales/edit/${type}/new` },
+        { text: "New", href: `/sales-v2/form/${type}` },
     ];
+    return btns;
+}
+function getButtons(type) {
+    let title = "New";
+    const isCustomer = type == "customer";
+    let btns = isCustomer ? null : _btns(type);
+    let links = isCustomer
+        ? ["order", "quote"].map((s) => ({
+              title: s,
+              btns: _btns(s),
+          }))
+        : null;
+    return {
+        title,
+        links,
+        btns,
+    };
+}
+export default function NewSalesBtn({ type }: Props) {
+    const [ctx, setBtns] = useState<any>({});
+    useEffect(() => {
+        setBtns(getButtons(type));
+    }, []);
     return (
         <div className="flex space-x-2">
-            {btns.map((b) => (
+            {ctx.links?.map((lnk) => (
+                <Menu
+                    key={lnk.title}
+                    label={lnk.title}
+                    variant={lnk.title == "quote" ? "outline" : "default"}
+                >
+                    {lnk?.btns?.map((l) => (
+                        <MenuItem key={l.text} href={l.href}>
+                            {l.text}
+                        </MenuItem>
+                    ))}
+                </Menu>
+            ))}
+            {ctx?.btns?.map((b) => (
                 <Button
                     key={b.text}
                     size="sm"

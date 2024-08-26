@@ -8,25 +8,27 @@ import {
     CheckColumn,
     ColumnHeader,
     _FilterColumn,
-} from "../columns/base-columns";
+} from "../../../../../components/_v1/columns/base-columns";
 import {
     OrderCustomerCell,
     OrderIdCell,
     OrderInvoiceCell,
     OrderMemoCell,
     SalesCustomerCell,
-} from "../../../app/(v1)/(loggedIn)/sales/orders/components/cells/sales-columns";
+} from "../orders/components/cells/sales-columns";
 import { ISalesOrder } from "@/types/sales";
-import { OrderRowAction } from "../actions/sales-menu-actions";
-import { DataTable2 } from "../data-table/data-table-2";
-import { SalesBatchAction } from "../list-selection-action/sales-selection-action";
-import { SalesCustomerFilter } from "../../../app/(v1)/(loggedIn)/sales/orders/components/sales-customer-filter";
+import { OrderRowAction } from "../../../../../components/_v1/actions/sales-menu-actions";
+import { DataTable2 } from "../../../../../components/_v1/data-table/data-table-2";
+import { SalesBatchAction } from "../../../../../components/_v1/list-selection-action/sales-selection-action";
+import { SalesCustomerFilter } from "../orders/components/sales-customer-filter";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "@/lib/responsive";
-import SalesEstimateMobileCell from "../mobile/sales/sales-estimate-mobile-cell";
-import { SmartTable } from "../data-table/smart-table";
+import SalesEstimateMobileCell from "../../../../../components/_v1/mobile/sales/sales-estimate-mobile-cell";
+import { SmartTable } from "../../../../../components/_v1/data-table/smart-table";
+import PageHeader from "../../../../../components/_v1/page-header";
+import NewSalesBtn from "@/app/(v1)/(loggedIn)/sales/orders/components/new-sales-btn";
 
-export default function EstimatesTableShell<T>({
+export default function EstimatesTableShell({
     data,
     pageInfo,
     searchParams,
@@ -108,26 +110,34 @@ export default function EstimatesTableShell<T>({
         [data, isPending]
     );
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={columns}
-            pageInfo={pageInfo}
-            data={data}
-            mobile
-            BatchAction={SalesBatchAction}
-            filterableColumns={[SalesCustomerFilter]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "estimate id, customer...",
-                },
-            ]}
-            dateFilterColumns={[
-                {
-                    id: "_date" as any,
-                    title: "Date",
-                },
-            ]}
-        />
+        <>
+            <PageHeader
+                title="Sales Quotes"
+                permissions={["editOrders"]}
+                Action={() => <NewSalesBtn type="quote" />}
+                // newLink="/sales/edit/estimate/new"
+            />
+            <DataTable2
+                searchParams={searchParams}
+                columns={columns}
+                pageInfo={pageInfo}
+                data={data}
+                mobile
+                BatchAction={SalesBatchAction}
+                filterableColumns={[SalesCustomerFilter]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "estimate id, customer...",
+                    },
+                ]}
+                dateFilterColumns={[
+                    {
+                        id: "_date" as any,
+                        title: "Date",
+                    },
+                ]}
+            />
+        </>
     );
 }

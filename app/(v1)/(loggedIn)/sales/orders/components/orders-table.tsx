@@ -38,6 +38,8 @@ import { TableCol } from "@/components/common/data-table/table-cells";
 import { ServerPromiseType } from "@/types";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { SalesCells } from "./cells";
+import PageHeader from "@/components/_v1/page-header";
+import NewSalesBtn from "./new-sales-btn";
 
 type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
 export type SalesTableItem = DataServerPromiseType["Item"];
@@ -197,6 +199,12 @@ export default function OrdersTableShell({ promise, searchParams }) {
     );
     return (
         <>
+            <PageHeader
+                title="Sales"
+                permissions={["editOrders"]}
+                Action={() => <NewSalesBtn type="quote" />}
+                // newLink="/sales/edit/estimate/new"
+            />
             <DataTable2
                 searchParams={searchParams}
                 columns={columns}

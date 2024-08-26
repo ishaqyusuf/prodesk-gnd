@@ -34,12 +34,7 @@ export default async function SalesOrdersPage({ searchParams }) {
                     <BreadLink isFirst title="Sales" />
                     <BreadLink isLast title="Orders" />
                 </Breadcrumbs>
-                <PageHeader
-                    title="Sales Orders"
-                    // newLink="/sales/edit/order/new"
-                    Action={NewSalesBtn}
-                    permissions={["editOrders"]}
-                />
+
                 <CopyFn />
                 <OrdersTable searchParams={searchParams} promise={response} />
                 <OrderPrinter />

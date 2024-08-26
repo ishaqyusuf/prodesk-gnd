@@ -9,6 +9,7 @@ import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import { ICustomer } from "@/types/customers";
 import { Metadata } from "next";
 import { getCustomerAction } from "../../_actions/sales-customers";
+import NewSalesBtn from "../../../orders/components/new-sales-btn";
 
 export const metadata: Metadata = {
     title: "Customer Overview",
@@ -37,7 +38,8 @@ export default async function CustomerPage({ searchParams, params }) {
                     </h2>
                     <div className="flex items-center space-x-2">
                         {/* <DatePicker /> */}
-                        <CustomerMenu customer={customer} />
+                        {/* <CustomerMenu customer={customer} /> */}
+                        <NewSalesBtn type="customer" />
                     </div>
                 </div>
                 <div className="space-y-4">
