@@ -19,10 +19,14 @@ import { SmartTable } from "../../../../../../components/_v1/data-table/smart-ta
 import InstallCostCell from "../../../../../../components/_v1/community/install-cost-cell";
 import {
     DeleteRowAction,
+    EditRowAction,
     RowActionCell,
 } from "../../../../../../components/_v1/data-table/data-table-row-actions";
 import { deleteProjectAction } from "../actions/delete-project-action";
+import { useModal } from "@/components/common/modal/provider";
 
+import PageHeader from "@/components/_v1/page-header";
+import ProjectModal from "../project-modal";
 export default function ProjectsTableShell<T>({
     data,
     pageInfo,
@@ -34,6 +38,8 @@ export default function ProjectsTableShell<T>({
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
     const table = SmartTable<IProject>(data);
     // table.checkColumn();
+
+    const modal = useModal();
     const columns = useMemo<ColumnDef<IProject, unknown>[]>(
         () => [
             CheckColumn({
@@ -102,6 +108,13 @@ export default function ProjectsTableShell<T>({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <RowActionCell>
+                        <EditRowAction
+                            onClick={() => {
+                                modal.openModal(
+                                    <ProjectModal data={row.original} />
+                                );
+                            }}
+                        />
                         <DeleteRowAction
                             row={row.original}
                             action={deleteProjectAction}
@@ -114,20 +127,28 @@ export default function ProjectsTableShell<T>({
         [data, isPending]
     );
     return (
-        <DataTable2
-            searchParams={searchParams}
-            columns={columns}
-            pageInfo={pageInfo}
-            data={data}
-            filterableColumns={[BuilderFilter]}
-            searchableColumns={[
-                {
-                    id: "_q" as any,
-                    title: "",
-                },
-            ]}
+        <>
+            <PageHeader
+                title="Projects"
+                newAction={() => {
+                    modal.openModal(<ProjectModal />);
+                }}
+            />
+            <DataTable2
+                searchParams={searchParams}
+                columns={columns}
+                pageInfo={pageInfo}
+                data={data}
+                filterableColumns={[BuilderFilter]}
+                searchableColumns={[
+                    {
+                        id: "_q" as any,
+                        title: "",
+                    },
+                ]}
 
-            //  deleteRowsAction={() => void deleteSelectedRows()}
-        />
+                //  deleteRowsAction={() => void deleteSelectedRows()}
+            />
+        </>
     );
 }

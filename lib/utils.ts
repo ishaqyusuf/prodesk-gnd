@@ -88,15 +88,20 @@ export function transformData<T>(data: T, update = false) {
     if (meta) _data.meta = removeEmptyValues(meta);
     return _data as T;
 }
-export async function slugModel(value, model, c = 0) {
+export async function slugModel(value, model, c = 0, id = null) {
     let slug = slugify([value, c > 0 ? c : null].filter(Boolean).join(" "));
 
     let count = await model.count({
         where: {
             slug,
+            id: id
+                ? {
+                      not: id,
+                  }
+                : undefined,
         },
     });
-    if (count > 0) return await slugModel(value, model, c + 1);
+    if (count > 0) return await slugModel(value, model, c + 1, id);
 
     return slug;
 }

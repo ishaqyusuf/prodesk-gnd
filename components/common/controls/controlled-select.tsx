@@ -82,7 +82,9 @@ export default function ControlledSelect<
     }, []);
     function itemValue(option) {
         if (!option) return option;
-        return typeof option == "string" ? option : option[valueKey];
+        if (Number.isInteger(option)) option = String(option);
+
+        return typeof option == "object" ? option[valueKey] : option;
     }
     function itemText(option) {
         if (!option) return option;

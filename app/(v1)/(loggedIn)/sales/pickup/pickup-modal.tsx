@@ -3,20 +3,15 @@
 import React, { useRef, useTransition } from "react";
 
 import { _useAsync } from "@/lib/use-async";
-import Btn from "../../../../../components/_v1/btn";
-import BaseModal from "../../../../../components/_v1/modals/base-modal";
 import { closeModal } from "@/lib/modal";
 import { toast } from "sonner";
 
 import { useForm } from "react-hook-form";
 
-import { Input } from "../../../../../components/ui/input";
-import { Label } from "../../../../../components/ui/label";
-import SignaturePad from "react-signature-pad-wrapper";
 import refresh from "@/lib/refresh";
 import { ISalesOrder, ISalesPickup } from "@/types/sales";
 import { _createPickup } from "@/app/(v1)/(loggedIn)/sales/_actions/_sales-pickup";
-import { DatePicker } from "../../../../../components/_v1/date-range-picker";
+
 import Modal from "@/components/common/modal";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const projectSchema = z.object({
-    title: z.string(),
+    title: z.string().min(4),
     // model: z.string(),
     refNo: z.string().optional(),
-    builderId: z.number(),
+    builderId: z.number().min(1),
     address: z.string().optional(),
     meta: z
         .object({

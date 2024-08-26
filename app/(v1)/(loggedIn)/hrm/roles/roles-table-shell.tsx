@@ -18,14 +18,11 @@ import {
     RowActionCell,
 } from "../../../../../components/_v1/data-table/data-table-row-actions";
 
-import { deleteEmployeeProfile } from "@/app/(v1)/_actions/hrm/employee-profiles";
 import { SmartTable } from "../../../../../components/_v1/data-table/smart-table";
-import { openModal } from "@/lib/modal";
 import { IRole } from "@/types/hrm";
 import PageHeader from "../../../../../components/_v1/page-header";
 import { Button } from "@/components/ui/button";
 import { Icons } from "../../../../../components/_v1/icons";
-import { useModal } from "@/components/common/modal/provider";
 import { useRoleModal } from "./role-modal";
 import { deleteRoleAction } from "./roles.actions";
 

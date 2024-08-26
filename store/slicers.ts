@@ -118,7 +118,6 @@ export type ModalName =
     | "pickup"
     | "prodItemUpdate"
     | "product"
-    | "project"
     | "salesAddressForm"
     | "salesTimeline"
     | "salesSupply"

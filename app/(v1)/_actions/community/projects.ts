@@ -98,7 +98,6 @@ export async function updateProjectMeta(id, meta: IProjectMeta) {
         },
         data: {
             meta: meta as any,
-            updatedAt: new Date(),
         },
     });
     // revalidatePath('')

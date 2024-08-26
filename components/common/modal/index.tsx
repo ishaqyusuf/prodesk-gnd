@@ -15,7 +15,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { ModalType, useModal } from "./provider";
+import { ModalContextProps, ModalType, useModal } from "./provider";
 import {
     Sheet,
     SheetContent,
@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
 import { Icons } from "@/components/_v1/icons";
+import { useFormContext } from "react-hook-form";
 
 function BaseModal({
     children,
@@ -153,9 +154,10 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
         </Header>
     );
 }
-interface FooterProps extends PrimitiveDivProps {
-    onSubmit?;
-    onCancel?;
+interface FooterProps {
+    children?;
+    onSubmit?(modal: ModalContextProps);
+    onCancel?(modal: ModalContextProps);
     submitText?: string;
     cancelBtn?: boolean;
     cancelText?: string;
@@ -175,6 +177,7 @@ function Footer({
     const modal = useModal();
     const isModal = modal?.data?.type == "modal";
     const [Footer] = isModal ? [DialogFooter] : [SheetFooter];
+    const form = useFormContext();
     return (
         <Footer className="flex space-x-4">
             {children}
@@ -184,7 +187,7 @@ function Footer({
                         <Button
                             variant={cancelVariant}
                             onClick={() => {
-                                onCancel ? onCancel() : modal?.close();
+                                onCancel ? onCancel(modal) : modal?.close();
                             }}
                         >
                             {cancelText}
@@ -194,7 +197,14 @@ function Footer({
                         <Btn
                             variant={submitVariant}
                             isLoading={modal?.loading}
-                            onClick={() => modal?.startTransition(onSubmit)}
+                            onClick={async () => {
+                                if (form) {
+                                    const resp = await form.trigger();
+                                    // console.log(resp);
+                                    if (!resp) return;
+                                }
+                                modal?.startTransition(() => onSubmit(modal));
+                            }}
                         >
                             {submitText}
                         </Btn>
