@@ -43,6 +43,7 @@ export function useHomeModal() {
     const modal = useModal();
     return {
         open(home?) {
+            // console.log()
             modal.openModal(<HomeModal home={home} />);
         },
     };
@@ -55,9 +56,11 @@ export default function HomeModal({ home }: Props) {
     const modal = useModal();
     const [isSaving, startTransition] = useTransition();
     const form = useForm<FormProps>({
-        defaultValues: {
-            units: [{ meta: {} }],
-        },
+        defaultValues: home
+            ? { ...home, units: [home] }
+            : {
+                  units: [{ meta: {} }],
+              },
     });
     const { fields, remove, append } = useFieldArray({
         control: form.control,
@@ -71,12 +74,12 @@ export default function HomeModal({ home }: Props) {
             try {
                 const formData = form.getValues();
                 console.log({ formData });
-                if (data?.id) {
+                if (home?.id) {
                     const unit = formData.units[0] as any;
                     unit.modelName = communityTemplates.find(
                         (f) => f.id == unit.communityTemplateId
                     )?.modelName as any;
-                    await _updateCommunityHome(formData.units[0] as any);
+                    await _updateCommunityHome(unit);
                     msg = "Unit updated!";
                 } else {
                     const isValid = homeSchema.parse(form.getValues());
@@ -123,6 +126,7 @@ export default function HomeModal({ home }: Props) {
     const [communityTemplates, setCommunityTemplates] = useState<
         ICommunityTemplate[]
     >([]);
+    const [isReady, setIsReady] = useState(false);
     useEffect(() => {
         async function loadStatics() {
             setProjects((await staticProjectsAction()) as any);
@@ -132,26 +136,38 @@ export default function HomeModal({ home }: Props) {
         }
 
         loadStatics();
+        console.log("GETTING READY..");
+        setTimeout(() => {
+            setIsReady(true);
+        }, 50);
+        // form.setValue("units", home ? [home] : ([{ meta: {} }] as any));
 
-        form.setValue("units", home ? [home] : ([{ meta: {} }] as any));
-
-        if (home?.projectId) form.setValue("projectId", home.projectId);
+        // if (home?.projectId) form.setValue("projectId", home.projectId);
     }, []);
-
+    function IsReady({ children }) {
+        if (!isReady) return null;
+        return children;
+    }
     return (
         <Modal.Content size="lg">
+            <Modal.Header
+                title={home?.id ? "Edit Unit" : "Create Units"}
+                subtitle={home?.id && home?.project?.title}
+            />
             <div>
                 <div className="grid md:grid-cols-2 gap-4">
                     <div className="col-span-2">
-                        <AutoComplete2
-                            disabled={home?.id}
-                            label="Project"
-                            form={form}
-                            formKey={"projectId"}
-                            options={projects}
-                            itemText={"title"}
-                            itemValue="id"
-                        />
+                        <IsReady>
+                            <AutoComplete2
+                                disabled={home?.id}
+                                label="Project"
+                                form={form}
+                                formKey={"projectId"}
+                                options={projects}
+                                itemText={"title"}
+                                itemValue="id"
+                            />
+                        </IsReady>
                         {/* <SelectInput
                 label="Project" 
                 form={form}
@@ -184,19 +200,22 @@ export default function HomeModal({ home }: Props) {
                         labelKey={"modelName"}
                         valueKey="id"
                       /> */}
-                                        <AutoComplete2
-                                            form={form}
-                                            formKey={`units.${i}.communityTemplateId`}
-                                            options={communityTemplates?.filter(
-                                                (m) => m.projectId == projectId
-                                            )}
-                                            onSelect={(e) => {
-                                                console.log(e);
-                                            }}
-                                            uppercase
-                                            itemText={"modelName"}
-                                            itemValue="id"
-                                        />
+                                        <IsReady>
+                                            <AutoComplete2
+                                                form={form}
+                                                formKey={`units.${i}.communityTemplateId`}
+                                                options={communityTemplates?.filter(
+                                                    (m) =>
+                                                        m.projectId == projectId
+                                                )}
+                                                onSelect={(e) => {
+                                                    console.log(e);
+                                                }}
+                                                uppercase
+                                                itemText={"modelName"}
+                                                itemValue="id"
+                                            />
+                                        </IsReady>
                                     </div>
                                     <div className="col-span-1">
                                         <Input

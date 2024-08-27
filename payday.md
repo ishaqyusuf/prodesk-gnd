@@ -3,8 +3,10 @@ Shelf item search
 Shelf item auto pick when created
 shelf item delete.
 -----------------------------
-- AUG 26: 00.00 == 00.00
-  - 10:10-
+- AUG 27: 00.00 == 00.00
+  - 09:45-
+- AUG 26: 02.15 == 02.15
+  - 10:10-11:10
   - 08:45-10:00
 -----------------------------
 PAYMENT INVOICE

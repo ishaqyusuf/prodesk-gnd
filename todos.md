@@ -10,6 +10,7 @@ TODO:
     <!-- - delete door not working -->
     <!-- - zero not deleting -->
     - custom
+    - 
     - side bar toggle.
     - customer overview: show company information.
     - customer overview: print sales / download pdf
