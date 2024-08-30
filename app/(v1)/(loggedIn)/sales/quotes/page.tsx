@@ -9,8 +9,6 @@ import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Metadata } from "next";
 import EstimatesTableShell from "./estimates-table-shell";
-import { env } from "@/env.mjs";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Sales Quote",
