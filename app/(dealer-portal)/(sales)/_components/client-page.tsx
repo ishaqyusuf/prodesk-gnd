@@ -6,9 +6,9 @@ import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-
 
 import { GetSales } from "@/data-acces/sales";
 import { use } from "react";
-import { Cells } from "./cells";
 import { DataTable } from "@/app/_components/data-table";
 import { TableToolbar } from "@/app/_components/data-table/toolbar";
+import { SalesCells } from "@/app/(v1)/(loggedIn)/sales/orders/components/cells";
 
 interface Props {
     promise;
@@ -26,7 +26,7 @@ export default function ClientPage({ promise, quote }: Props) {
                 // size: "sm",
             },
         },
-        (ctx) => [ctx.Column("Order", Cells.Order)]
+        (ctx) => [ctx.Column("Order", SalesCells.Order)]
     );
     return (
         <>

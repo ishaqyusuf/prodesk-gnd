@@ -25,7 +25,6 @@ import { _cancelBackOrder } from "@/app/(v2)/(loggedIn)/sales/_actions/cancel-ba
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
-import QueryString from "qs";
 
 import { useModal } from "@/components/common/modal/provider";
 import SendEmailSheet from "@/components/_v2/email/send-email";
@@ -45,7 +44,6 @@ export function OrderRowAction(props: IOrderRowProps) {
     const _linkDir = row.isDyke
         ? `/sales-v2/overview/${row.type}/${row.slug}`
         : `/sales/${row.type}/${row.slug}`;
-    const router = useRouter();
 
     async function updateDeliveryMode(delivery) {
         if (delivery != row.deliveryOption) {

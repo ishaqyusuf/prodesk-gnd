@@ -58,6 +58,9 @@ function Cell({
 function Primary({ children, className }: Props) {
     return <div className={cn("font-semibold", className)}>{children}</div>;
 }
+function Medium({ children, className }: Props) {
+    return <div className={cn("font-medium", className)}>{children}</div>;
+}
 function Secondary({ children, className }: Props) {
     return (
         <div className={cn("text-muted-foreground", className)}>{children}</div>
@@ -76,11 +79,14 @@ function Money({
     value,
     validOnly,
     className,
+    children,
 }: {
     value?;
     validOnly?;
     className?: string;
+    children?;
 }) {
+    if (!value && children) value = children;
     if (!value) value = 0;
     if (!value && validOnly) return null;
     return (
@@ -251,6 +257,7 @@ function BatchDelete({ table, action, selectedIds }) {
 
 export let TableCell = Object.assign(Cell, {
     Primary,
+    Medium,
     NewBtn,
     Btn,
     Secondary,

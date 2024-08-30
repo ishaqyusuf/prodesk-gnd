@@ -42,6 +42,7 @@ const useCtx = () => {
         // const currentUrl = `${pathname}?${query.toString()}`
         let tabData: FormProps["tabData"] = {};
         let cTab = null;
+        let fallbackTab = null;
         let defaultTab = null;
         console.log(tabs);
 
@@ -50,17 +51,24 @@ const useCtx = () => {
             newSearchParams.delete("_page");
             newSearchParams.delete(v.qk);
             let tabName = v.tabName || v.children;
-            if (v.qk) {
+            if (v.qk || v.href) {
                 const qv = query.get(v.qk);
-                if (qv == v.qv) {
+                if (qv == v.qv && (v.href ? pathname == v.href : true)) {
                     cTab = tabName;
+                }
+                console.log(v.href);
+                if (v.href && pathname == v.href && !fallbackTab) {
+                    fallbackTab = v.href;
+                    console.log({ fallbackTab });
                 }
                 newSearchParams.set(v.qk, v.qv);
                 newSearchParams.set(v.qk, v.qv || null);
             } else {
                 defaultTab = tabName;
             }
-            const url = `${pathname}?${!v.qk ? "" : newSearchParams.toString()}`
+            const url = `${v.href || pathname}?${
+                !v.qk ? "" : newSearchParams.toString()
+            }`
                 ?.split("?")
                 ?.filter(Boolean)
                 ?.join("?");

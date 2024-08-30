@@ -74,6 +74,8 @@ import {
     ChevronUp,
     DollarSign,
     ImageIcon,
+    Send,
+    Box,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -85,6 +87,8 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 export type Icon = LucideIcon;
 
 export const Icons = {
+    box: Box,
+    pdf: File,
     placeholder: ImageIcon,
     reciept: Receipt,
     X: Cross2Icon,
@@ -113,6 +117,8 @@ export const Icons = {
             />
         </Link>
     ),
+    delivery2: Send,
+    pickup: Package,
     Merge: Merge,
     Warn: Info,
     Rocket: Rocket,

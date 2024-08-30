@@ -36,10 +36,12 @@ import DeliveryCell from "./cells/delivery-cell";
 import { useCmd } from "@/components/cmd/provider";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { ServerPromiseType } from "@/types";
-import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
+import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
 import { SalesCells } from "./cells";
 import PageHeader from "@/components/_v1/page-header";
 import NewSalesBtn from "./new-sales-btn";
+import { DataTable } from "@/app/_components/data-table";
+import { TableToolbar } from "@/app/_components/data-table/toolbar";
 
 type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
 export type SalesTableItem = DataServerPromiseType["Item"];
@@ -49,19 +51,30 @@ export default function OrdersTableShell({ promise, searchParams }) {
     const { data, pageCount, pageInfo }: DataServerPromiseType["Response"] =
         React.use(promise);
     const isMobile = useMediaQuery(screens.xs);
-    const _table = useDataTableColumn(
+    const _table = useDataTableColumn2(
         data,
+        {
+            pageCount,
+            cellVariants: {
+                size: "sm",
+            },
+            filterCells: ["_status", "_q", "_payment", "_customerId", "_date"],
+        },
         (ctx) =>
             isMobile
                 ? []
                 : [
-                      ctx.Column("Flag", SalesCells.Flag, { noTitle: true }),
+                      //   ctx.Column("Flag", SalesCells.Flag, { noTitle: true }),
                       ctx.Column("Order", SalesCells.Order),
-                  ],
-        true,
-        {
-            filterCells: ["_q"],
-        }
+                      ctx.Column("Customer", SalesCells.Customer),
+                      ctx.Column("Address", SalesCells.Address),
+                      ctx.Column("Rep", SalesCells.SalesRep),
+                      ctx.Column("Invoice", SalesCells.Invoice),
+                      ctx.Column("Invoice Due", SalesCells.PaymentDueDate),
+                      ctx.Column("Dispatch", SalesCells.Dispatch),
+                      ctx.Column("Status", SalesCells.SalesStatus),
+                      ctx.ActionColumn(SalesCells.SalesAction),
+                  ]
     );
 
     const cmd = useCmd([
@@ -196,6 +209,25 @@ export default function OrdersTableShell({ promise, searchParams }) {
                       },
                   ],
         [data, isPending]
+    );
+    return (
+        <>
+            <PageHeader
+                title="Sales"
+                permissions={["editOrders"]}
+                Action={() => <NewSalesBtn type="quote" />}
+                // newLink="/sales/edit/estimate/new"
+            />
+            <section className="">
+                <DataTable {..._table.props}>
+                    <TableToolbar>
+                        <TableToolbar.Search />
+                    </TableToolbar>
+                    <DataTable.Table />
+                    <DataTable.Footer />
+                </DataTable>
+            </section>
+        </>
     );
     return (
         <>

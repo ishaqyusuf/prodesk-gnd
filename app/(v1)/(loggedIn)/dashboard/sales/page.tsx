@@ -9,6 +9,7 @@ import { DataPageShell } from "@/components/_v1/shells/data-page-shell";
 import { StartCard, StatCardContainer } from "@/components/_v1/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
+import BarChart from "./_components/bar-chart";
 
 export const metadata: Metadata = {
     title: "Sales Dashboard",
@@ -63,7 +64,8 @@ export default async function SalesDashboardPage({}: Props) {
                     />
                 </StatCardContainer>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                    <Card className="lg:col-span-4">
+                    <BarChart chartData={salesDashboard.bar} />
+                    {/* <Card className="lg:col-span-4">
                         <CardHeader>
                             <CardTitle>Overview</CardTitle>
                         </CardHeader>
@@ -72,7 +74,7 @@ export default async function SalesDashboardPage({}: Props) {
                                 data={salesDashboard.bar || []}
                             />
                         </CardContent>
-                    </Card>
+                    </Card> */}
                     <RecentSalesDashboardCard className="md:col-span-1 lg:col-span-3" />
                 </div>
             </DataPageShell>

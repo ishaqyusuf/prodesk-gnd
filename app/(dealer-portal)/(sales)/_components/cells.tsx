@@ -3,7 +3,7 @@
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import { GetSales } from "@/data-acces/sales";
 
-interface CellProps {
+export interface CellProps {
     item: GetSales["data"][number];
 }
 

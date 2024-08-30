@@ -34,6 +34,9 @@ function Cell({
 function Primary({ children, className }: Props) {
     return <div className={cn("font-semibold", className)}>{children}</div>;
 }
+function Medium({ children, className }: Props) {
+    return <div className={cn("font-medium", className)}>{children}</div>;
+}
 function Secondary({ children, className }: Props) {
     return (
         <div className={cn("text-muted-foreground", className)}>{children}</div>
@@ -227,6 +230,7 @@ function BatchDelete({ table, action, selectedIds }) {
 
 export let TableCol = Object.assign(Cell, {
     Primary,
+    Medium,
     NewBtn,
     Btn,
     Secondary,

@@ -38,14 +38,14 @@ import { TableCol } from "@/components/common/data-table/table-cells";
 import { ServerPromiseType } from "@/types";
 import useDataTableColumn from "@/components/common/data-table/columns/use-data-table-columns";
 import { SalesCells } from "./cells";
+import { GetSales } from "@/data-acces/sales";
 
-type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
-export type SalesTableItem = DataServerPromiseType["Item"];
+// type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
+export type SalesTableItem = GetSales["data"][number];
 
 export default function OrdersTableShell({ promise, searchParams }) {
     const [isPending, startTransition] = useTransition();
-    const { data, pageCount, pageInfo }: DataServerPromiseType["Response"] =
-        React.use(promise);
+    const { data, pageCount, pageInfo }: GetSales = React.use(promise);
     const isMobile = useMediaQuery(screens.xs);
     const _table = useDataTableColumn(
         data,

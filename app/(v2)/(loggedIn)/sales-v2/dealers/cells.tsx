@@ -10,6 +10,7 @@ interface CellProps {
 }
 function MainActions({ item }: CellProps) {
     const modal = useDealerSheet();
+
     return (
         <TableCell>
             <Button

@@ -9,6 +9,7 @@ import { env } from "@/env.mjs";
 import { generateRandomString } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
+import { PageTab } from "./type";
 
 interface GetDealersQuery {
     status;
@@ -60,7 +61,7 @@ export async function getDealersAction(query: GetDealersQuery) {
         pageCount,
     };
 }
-export async function getDealersPageTabAction() {
+export async function getDealersPageTabAction(): Promise<PageTab[]> {
     const s = await prisma.dealerAuth.findMany({
         select: {
             status: true,

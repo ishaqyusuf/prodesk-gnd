@@ -6,7 +6,10 @@ import { useDatableCheckbox } from "./checkbox";
 import { DataTableColumnHeader } from "@/components/common/data-table/data-table-column-header";
 import { toast } from "sonner";
 import { TableCol } from "../table-cells";
-import { TableCellProps } from "@/app/_components/data-table/table-cells";
+import {
+    TableCell,
+    TableCellProps,
+} from "@/app/_components/data-table/table-cells";
 
 type CellValueType<T> = ((item: T) => any) | keyof T;
 interface ColumnArgs {
@@ -35,6 +38,7 @@ interface Props<T> {
     filterCells?: string[];
     pageCount?;
     cellVariants?: TableCellProps;
+    v2?: boolean;
 }
 export function useDataTableColumn3<T>(data: T) {
     const ctx = {
@@ -55,9 +59,9 @@ export function useDataTableColumn2<T>(
     props: Props<T>,
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[]
 ) {
+    props.v2 = true;
     return useDataTableColumn(data, cells, props?.checkable, props);
 }
-
 export default function useDataTableColumn<T>(
     data: T[],
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[],
@@ -66,7 +70,7 @@ export default function useDataTableColumn<T>(
 ) {
     const [isPending, startTransition] = React.useTransition();
     // type ValueType = typeof keyof T;
-    const checkBox = useDatableCheckbox(data);
+    const checkBox = useDatableCheckbox(data, props.v2);
 
     const ctx: CtxType<T> = {
         startTransition,
@@ -126,11 +130,18 @@ export default function useDataTableColumn<T>(
         ActionColumn(Column: ({ item }: { item: T }) => React.ReactElement) {
             return {
                 id: "action",
-                cell: ({ cell }) => (
-                    <div className="flex justify-end items-center space-x-2">
-                        <Column item={cell.row.original} />
-                    </div>
-                ),
+                cell: ({ cell }) =>
+                    props.v2 ? (
+                        <TableCell>
+                            <div className="flex justify-end items-center space-x-2">
+                                <Column item={cell.row.original} />
+                            </div>
+                        </TableCell>
+                    ) : (
+                        <div className="flex justify-end items-center space-x-2">
+                            <Column item={cell.row.original} />
+                        </div>
+                    ),
             };
         },
     } as any;

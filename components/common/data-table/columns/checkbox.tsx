@@ -1,5 +1,6 @@
 "use client";
 
+import { TableCell } from "@/app/_components/data-table/table-cells";
 import { Checkbox } from "@/components/ui/checkbox";
 import React from "react";
 
@@ -18,24 +19,33 @@ function DataTableCheckBoxHeader({ table, setSelectedRowIds, data }) {
         />
     );
 }
-function DataTableCheckbox({ row, setSelectedRowIds }) {
-    return (
-        <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => {
-                row.toggleSelected(!!value);
-                setSelectedRowIds((prev) =>
-                    value
-                        ? [...prev, row.original.id]
-                        : prev.filter((id) => id !== row.original.id)
-                );
-            }}
-            aria-label="Select row"
-            className="translate-y-[2px]"
-        />
-    );
+function DataTableCheckbox({ row, setSelectedRowIds, v2 }) {
+    function Render() {
+        return (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => {
+                    row.toggleSelected(!!value);
+                    setSelectedRowIds((prev) =>
+                        value
+                            ? [...prev, row.original.id]
+                            : prev.filter((id) => id !== row.original.id)
+                    );
+                }}
+                aria-label="Select row"
+                className="translate-y-[2px]"
+            />
+        );
+    }
+    if (v2)
+        return (
+            <TableCell>
+                <Render />
+            </TableCell>
+        );
+    return <Render />;
 }
-export function useDatableCheckbox(data) {
+export function useDatableCheckbox(data, v2 = false) {
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([]);
 
     return {
@@ -53,6 +63,7 @@ export function useDatableCheckbox(data) {
             cell: (props) => (
                 <DataTableCheckbox
                     {...props}
+                    v2
                     setSelectedRowIds={setSelectedRowIds}
                 />
             ),

@@ -1,6 +1,4 @@
 import { TableCell } from "@/app/_components/data-table/table-cells";
-import { SalesTableItem } from "../orders-table-shell";
-import SalesFlag from "./sales-flag";
 import { NewspaperIcon, SparklesIcon } from "lucide-react";
 import StatusBadge from "@/components/_v1/status-badge";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
@@ -13,23 +11,24 @@ import {
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { Badge } from "@/components/ui/badge";
 import { getBadgeColor } from "@/lib/status-badge";
-import {
-    MenuOption,
-    useSalesMenu,
-} from "../../../../../../(v2)/(loggedIn)/sales/utils/use-sales-menu";
+
 import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { deleteOrderAction } from "../../../_actions/sales";
+import { SalesTableItem } from "@/app/(v1)/(loggedIn)/sales/orders/components/orders-table-shell";
+import { GetSalesAction } from "../_actions/get-sales-action";
+import { MenuOption, useSalesMenu } from "../../utils/use-sales-menu";
+import { deleteOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
+import { sum } from "@/lib/utils";
+import { GetSales } from "@/data-acces/sales";
+import { useAssignment } from "../../../sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-    item: SalesTableItem;
+    item: GetSales["data"][number];
 }
-function Order({ item }: Props) {
-    const href = item.isDyke
-        ? `/sales-v2/overview/${item.type}/${item.slug}`
-        : `/sales/order/${item.slug}`;
+function OrderDispatch({ item, href }: Props & { href? }) {
     return (
         <TableCell href={href} className="">
             <TableCell.Medium className={item.isDyke ? "text-orange-500" : ""}>
@@ -47,9 +46,15 @@ function Order({ item }: Props) {
         </TableCell>
     );
 }
+function Order({ item }: Props) {
+    const href = item.isDyke
+        ? `/sales-v2/overview/${item.type}/${item.slug}`
+        : `/sales/order/${item.slug}`;
+    return <OrderDispatch item={item} href={href} />;
+}
 function Customer({ item }: Props) {
     let address = item?.shippingAddress || item?.billingAddress;
-    if (!address && !item.customer) return <></>;
+    if (!address && !item.customer) return <TableCell></TableCell>;
     const link = "/sales/customer/" + item.customer?.id;
     return (
         <TableCell href={link}>
@@ -85,7 +90,10 @@ function SalesRep({ item }: Props) {
     );
 }
 function Invoice({ item }: Props) {
-    if (!item.amountDue || item.amountDue == item.grandTotal)
+    if (
+        (!item.amountDue || item.amountDue == item.grandTotal) &&
+        item.type != "quote"
+    )
         return (
             <TableCell>
                 <TableCell.Money
@@ -104,9 +112,11 @@ function Invoice({ item }: Props) {
             <TableCell.Primary>
                 <TableCell.Money>{item.grandTotal}</TableCell.Money>
             </TableCell.Primary>
-            <TableCell.Secondary className="text-red-500">
-                ( <TableCell.Money>{item.amountDue}</TableCell.Money>)
-            </TableCell.Secondary>
+            {item.type != "quote" && (
+                <TableCell.Secondary className="text-red-500">
+                    ( <TableCell.Money>{item.amountDue}</TableCell.Money>)
+                </TableCell.Secondary>
+            )}
         </TableCell>
     );
 }
@@ -204,7 +214,7 @@ function Status({ item, delivery }: Props & { delivery? }) {
     );
 }
 function SalesAction({ item }: Props) {
-    const ctx = useSalesMenu(item);
+    const ctx = useSalesMenu(item as any);
     function Render({ option }: { option: MenuOption }) {
         if (option.groupTitle)
             return (
@@ -266,16 +276,56 @@ function SalesStatus({ item }: Props) {
         //   </div>
     );
 }
+function ProductionStatus({ item }: Props) {
+    const submitted = sum(
+        item.assignments.map((a) =>
+            sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
+        )
+    );
+    const totalDoors = item._meta.totalDoors;
+    // console.log(item.productionStatus?.status);
+    if (submitted == totalDoors)
+        return (
+            <TableCell>
+                <TableCell.Status status="Completed" />
+            </TableCell>
+        );
+    return (
+        <TableCell>
+            <TableCell.Status
+                score={submitted}
+                total={totalDoors}
+                status={item.productionStatus?.status}
+            />
+        </TableCell>
+    );
+}
+function DeliveryAction({ item }: Props) {
+    const assignment = useAssignment({ type: "prod" });
+    return (
+        <>
+            <Button
+                onClick={() => assignment.open(item.id)}
+                variant={"outline"}
+            >
+                View
+            </Button>
+        </>
+    );
+}
 export let SalesCells = {
     SalesRep,
     SalesStatus,
     Status,
     Order,
+    OrderDispatch,
     Customer,
-    Flag: SalesFlag,
+    ProductionStatus,
+    // Flag: SalesFlag,
     Address,
     PaymentDueDate,
     Invoice,
     Dispatch,
     SalesAction,
+    DeliveryAction,
 };

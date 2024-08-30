@@ -14,6 +14,7 @@ export default function PageTabsClient({ response }) {
                     <FPageTabs.Tab
                         tabName={tab.title}
                         {...tab.params}
+                        href={tab.url}
                         key={tab.title}
                     >
                         <span> {tab.title}</span>
