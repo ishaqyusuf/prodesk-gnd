@@ -1,17 +1,16 @@
 import { getSalesEstimates } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 
 import { queryParams } from "@/app/(v1)/_actions/action-utils";
-import { ISalesOrder } from "@/types/sales";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 
-import PageHeader from "@/components/_v1/page-header";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import SalesTabLayout from "@/components/_v1/tab-layouts/sales-tab-layout";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { Metadata } from "next";
-import { prisma } from "@/db";
 import EstimatesTableShell from "./estimates-table-shell";
+import { env } from "@/env.mjs";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Sales Quote",
@@ -19,6 +18,7 @@ export const metadata: Metadata = {
 interface Props {}
 
 export default async function SalesEstimatesPage({ searchParams }) {
+    // if (env.NODE_ENV == "production") redirect("/sales/dashboard/quotes");
     const response = await getSalesEstimates(queryParams(searchParams));
     return (
         <AuthGuard can={["viewEstimates"]}>
