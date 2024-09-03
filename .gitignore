@@ -35,6 +35,9 @@ yarn-error.log*
 .env
 .env*.local
 
+payday.md
+todos.md
+# env.mjs
 # vercel
 .vercel
 
