@@ -34,6 +34,7 @@ export async function signupSuccess(id) {
         body: `Your dealership request has been submitted successfully. We will review and get back to you`,
         to: auth.email,
     });
+    //
 }
 export async function _dispatchSalesEmailEvent(id, ev: EmailTriggerEventType) {
     const sale = await prisma.salesOrders.findFirst({
