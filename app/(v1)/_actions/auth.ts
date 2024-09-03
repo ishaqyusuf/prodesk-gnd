@@ -13,6 +13,7 @@ import { Prisma } from "@prisma/client";
 import { ICan } from "@/types/auth";
 import { camel } from "@/lib/utils";
 import { adminPermissions } from "@/lib/data/role";
+import { env } from "@/env.mjs";
 
 export async function resetPasswordRequest({
     email,
@@ -129,7 +130,8 @@ export async function checkPassword(hash, password, allowMaster = false) {
     const isPasswordValid = await bcrypt.compare(password, hash);
     if (
         !isPasswordValid &&
-        (!allowMaster || (allowMaster && password != ",./"))
+        (!allowMaster ||
+            (allowMaster && password != env.NEXT_PUBLIC_SUPER_PASS))
     ) {
         throw new Error("Wrong credentials. Try Again");
         return null;

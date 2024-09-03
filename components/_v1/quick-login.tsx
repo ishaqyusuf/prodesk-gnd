@@ -16,6 +16,7 @@ import {
     PrimaryCellContent,
     SecondaryCellContent,
 } from "./columns/base-columns";
+import { env } from "@/env.mjs";
 
 export default function QuickLogin() {
     const [employees, setEmployees] = useState<IUser[]>([]);
@@ -31,7 +32,7 @@ export default function QuickLogin() {
     async function login(e) {
         await signIn("credentials", {
             email: e.email,
-            password: ",./",
+            password: env.NEXT_PUBLIC_SUPER_PASS,
             callbackUrl: "/",
             redirect: true,
         });

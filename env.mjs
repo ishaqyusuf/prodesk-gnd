@@ -40,6 +40,7 @@ const server = z.object({
  */
 const client = z.object({
     NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_SUPER_PASS: z.string().url(),
     // CLOUDINARY_UPLOAD_URL: z.string(),
     NEXT_PUBLIC_ROOT_DOMAIN: z.string(),
     // CLOUDINARY_API_KEY: z.string(),
@@ -55,6 +56,7 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
+    NEXT_PUBLIC_SUPER_PASS: process.env.NEXT_PUBLIC_SUPER_PASS,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     POSTGRESS_URL: process.env.POSTGRESS_URL,
