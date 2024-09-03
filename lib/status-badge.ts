@@ -1,14 +1,17 @@
-export function getBadgeColor(status: string | null) {
+export function getBadgeColor(status: string | null, _default = "slate") {
+    return _getStatusColor(statusColor(status, _default));
+}
+export function statusColor(status, _default = "slate") {
     let color: Colors | undefined = status
         ? StatusColorMap[(status?.toLowerCase() || "").replace(" ", "_")]
-        : "slate";
-    return _getStatusColor(color);
+        : _default || ("slate" as any);
+    return color;
 }
 export function _getStatusColor(color) {
     if (!color) color = "slate";
     return `bg-${color}-500 hover:bg-${color}-600`;
 }
-let StatusColorMap: { [key: string]: Colors } = {
+const StatusColorMap: { [key: string]: Colors } = {
     queued: "orange",
     completed: "green",
     available: "green",
@@ -30,9 +33,10 @@ let StatusColorMap: { [key: string]: Colors } = {
     prod_queued: "orange",
     install: "purple",
     deco: "orange",
+    evaluating: "orange",
     punchout: "emerald",
-};
-
+} as const;
+// const __colors = Object.values(StatusColorMap) as const;
 export type Colors =
     | "slate"
     | "gray"

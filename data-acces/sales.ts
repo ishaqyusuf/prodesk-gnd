@@ -365,41 +365,46 @@ export async function whereSales(query: SalesQueryParams) {
 
     if (query.deliveryOption) where.deliveryOption = query.deliveryOption;
     if (prodId) where.prodId = prodId;
+
     if (status) {
-        const statusIsArray = Array.isArray(status);
-        if (status == "Unassigned") where.prodId = null;
-        else if (status == "Inbound") {
-            where.prodId = {
+        if (status == "Evaluating") {
+            where.status = status;
+        } else {
+            const statusIsArray = Array.isArray(status);
+            if (status == "Unassigned") where.prodId = null;
+            else if (status == "Inbound") {
+                where.prodId = {
+                    gt: 0,
+                };
+                // where.prod
+            } else if (status == "Late") {
+                where.prodStatus = {
+                    notIn: ["Completed"],
+                };
+                where.prodDueDate = {
+                    lt: dayjs().subtract(1).toISOString(),
+                };
+            } else
+                where.prodStatus = {
+                    equals: statusIsArray ? undefined : status,
+                    in: statusIsArray ? (status as any) : undefined,
+                };
+        }
+        if (query.statusNot)
+            where.status = {
+                not: query.statusNot,
+            };
+        if (_payment == "Paid") where.amountDue = 0;
+        else if (_payment == "Pending")
+            where.amountDue = {
                 gt: 0,
             };
-            // where.prod
-        } else if (status == "Late") {
-            where.prodStatus = {
-                notIn: ["Completed"],
-            };
-            where.prodDueDate = {
-                lt: dayjs().subtract(1).toISOString(),
-            };
-        } else
-            where.prodStatus = {
-                equals: statusIsArray ? undefined : status,
-                in: statusIsArray ? (status as any) : undefined,
-            };
-    }
-    if (query.statusNot)
-        where.status = {
-            not: query.statusNot,
-        };
-    if (_payment == "Paid") where.amountDue = 0;
-    else if (_payment == "Pending")
-        where.amountDue = {
-            gt: 0,
-        };
-    if (query._page == "production") {
-        if (!prodId) {
-            where.prodId = {
-                gt: 1,
-            };
+        if (query._page == "production") {
+            if (!prodId) {
+                where.prodId = {
+                    gt: 1,
+                };
+            }
         }
     }
     if (query._customerId) where.customerId = +query._customerId;

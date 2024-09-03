@@ -23,7 +23,13 @@ export type DataTypeType = ReturnType<typeof useComposeDataTable>;
 export const useDataTableContext = (): DataTypeType =>
     useContext(dataTableContext) as any;
 
-export function useComposeDataTable(data, columns, pageCount, cellVariants) {
+export function useComposeDataTable(
+    data,
+    columns,
+    pageCount,
+    cellVariants,
+    addFilterCol
+) {
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
@@ -210,5 +216,6 @@ export function useComposeDataTable(data, columns, pageCount, cellVariants) {
         table,
         columns,
         cellVariants,
+        addFilterCol,
     };
 }

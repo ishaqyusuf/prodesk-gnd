@@ -20,12 +20,13 @@ interface Props {
 export default async function SalesPage({ searchParams, params }: Props) {
     const promise = getSalesAction({
         ...searchParams,
-        type: "quote",
+        // type: "order",
+        status: "Evaluating",
     });
 
     return (
-        <FPage title="Quotes">
-            <PageClient createType="quote" type="quotes" response={promise} />
+        <FPage title={"Sales"}>
+            <PageClient createType="order" type="orders" response={promise} />
         </FPage>
     );
 }

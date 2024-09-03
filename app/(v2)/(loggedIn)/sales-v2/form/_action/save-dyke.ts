@@ -7,8 +7,10 @@ import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-i
 import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
 
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import { dealerSession } from "@/app/(v1)/_actions/utils";
 
 export async function saveDykeSales(data: DykeForm) {
+    const dealerMode = dealerSession();
     const tx =
         // await prisma.$transaction(
         async (tx) => {
@@ -22,6 +24,7 @@ export async function saveDykeSales(data: DykeForm) {
                 billingAddressId,
                 ...rest
             } = data.order;
+
             function connect(id) {
                 return id && { connect: { id } };
             }
@@ -31,6 +34,7 @@ export async function saveDykeSales(data: DykeForm) {
                       data: {
                           ...rest,
                           updatedAt: new Date(),
+                          status: dealerMode ? "Evaluating" : rest.status,
                           //   customer: connect(customerId),
                           //   salesRep: connect(data.salesRep?.id),
                           //   billingAddress: connect(billingAddressId),

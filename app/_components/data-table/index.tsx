@@ -23,6 +23,7 @@ interface BaseProps<TData, TValue> {
     pageCount?: number;
     children?;
     cellVariants: TableCellProps;
+    addFilterCol(col: String);
 }
 function BaseDataTable<TData, TValue>({
     children,
@@ -30,8 +31,15 @@ function BaseDataTable<TData, TValue>({
     pageCount,
     columns,
     cellVariants,
+    addFilterCol,
 }: BaseProps<TData, TValue>) {
-    const ctx = useComposeDataTable(data, columns, pageCount, cellVariants);
+    const ctx = useComposeDataTable(
+        data,
+        columns,
+        pageCount,
+        cellVariants,
+        addFilterCol
+    );
 
     return (
         <dataTableContext.Provider value={ctx}>

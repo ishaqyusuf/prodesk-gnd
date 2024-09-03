@@ -9,13 +9,17 @@ import { SalesCells } from "./sales-cells";
 import { DataTable } from "@/app/_components/data-table";
 import { TableToolbar } from "@/app/_components/data-table/toolbar";
 import { SalesPageType } from "../orders/page";
+import salesData from "../../sales-data";
+import { _getSalesRep } from "@/app/(v1)/(loggedIn)/sales/orders/_actions/get-sales-rep.action";
+import { getStaticCustomers } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customers";
 
 interface Props {
     response;
     type: SalesPageType;
+    createType?: "order" | "quote";
 }
 
-export default function PageClient({ response, type }: Props) {
+export default function PageClient({ response, type, createType }: Props) {
     const { data, pageCount }: GetSalesAction = use(response);
 
     const isMobile = useMediaQuery(screens.xs);
@@ -68,7 +72,14 @@ export default function PageClient({ response, type }: Props) {
             cellVariants: {
                 size: "sm",
             },
-            filterCells: ["_status", "_q", "_payment", "_customerId", "_date"],
+            filterCells: [
+                "_status",
+                "_q",
+                "_payment",
+                "_customerId",
+                "_date",
+                "_salesRepId",
+            ],
         },
         (ctx) => (isMobile ? [] : renderWebView(ctx))
     );
@@ -79,6 +90,45 @@ export default function PageClient({ response, type }: Props) {
                 <DataTable {..._table.props}>
                     <TableToolbar>
                         <TableToolbar.Search />
+                        <TableToolbar.Filter
+                            options={salesData.filters.production}
+                            id="_status"
+                            title="Status"
+                        />
+                        <TableToolbar.Filter
+                            options={salesData.filters.invoice}
+                            id="_payment"
+                            title="Invoice"
+                        />
+                        <TableToolbar.Filter
+                            id="_salesRepId"
+                            title="Sales Rep"
+                            optionFn={_getSalesRep}
+                            labelKey="name"
+                            valueKey="id"
+                        />
+                        <TableToolbar.Filter
+                            id="_customerId"
+                            title="Customer"
+                            optionFn={getStaticCustomers}
+                            labelKey="name"
+                            valueKey="id"
+                        />
+                        {createType && (
+                            <>
+                                <TableToolbar.ActionBtn
+                                    icon="add"
+                                    label="Old"
+                                    variant="outline"
+                                    href={`/sales/edit/${createType}/new`}
+                                />
+                                <TableToolbar.ActionBtn
+                                    icon="add"
+                                    label="New"
+                                    href={`/sales-v2/form/${createType}`}
+                                />
+                            </>
+                        )}
                     </TableToolbar>
                     <DataTable.Table />
                     <DataTable.Footer />

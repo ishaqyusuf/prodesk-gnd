@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 import { useDatableCheckbox } from "./checkbox";
 import { DataTableColumnHeader } from "@/components/common/data-table/data-table-column-header";
 import { toast } from "sonner";
@@ -71,12 +71,16 @@ export default function useDataTableColumn<T>(
     const [isPending, startTransition] = React.useTransition();
     // type ValueType = typeof keyof T;
     const checkBox = useDatableCheckbox(data, props.v2);
-
+    const [dynamicCols, setDynamicCols] = useState([]);
+    function addFilterCol(col) {
+        setDynamicCols((current) => {
+            let s = [...current, col];
+            let cells = [...new Set(s)];
+            return cells;
+        });
+    }
     const ctx: CtxType<T> = {
         startTransition,
-        addColumns(...__columns) {
-            // _setColumns(__columns);
-        },
         Column(
             title,
             Column: ({ item }: { item: T }) => React.ReactElement,
@@ -165,19 +169,27 @@ export default function useDataTableColumn<T>(
                 checkable && checkBox.column,
                 props?.sn && SnCol,
                 ...cells(ctx),
-                ...((props?.filterCells || [])?.map((fs) => {
+                ...([
+                    ...(props?.filterCells || []),
+                    ...(dynamicCols || []),
+                ]?.map((fs) => {
                     return {
                         accessorKey: fs,
                         enableHiding: false,
                     };
                 }) as any),
             ].filter(Boolean) as any,
-        [data, isPending]
+        [data, isPending, dynamicCols]
     );
     return {
         ...ctx,
         columns,
         ...checkBox,
+        addDynamicCol(col) {
+            setDynamicCols((current) =>
+                Array.from(new Set(...dynamicCols, current))
+            );
+        },
         deleteSelectedRow() {
             toast.promise(
                 Promise.all(
@@ -204,6 +216,7 @@ export default function useDataTableColumn<T>(
             data,
             pageCount: props?.pageCount,
             cellVariants: props?.cellVariants,
+            addFilterCol,
         },
     };
 }

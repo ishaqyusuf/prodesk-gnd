@@ -10,6 +10,11 @@ export async function serverSession() {
     if (!data) throw new Error();
     return data;
 }
+export async function dealerSession() {
+    const auth = await serverSession();
+    const dealerMode = auth.role?.name == "Dealer";
+    return dealerMode;
+}
 export async function getSessionPermissions() {
     const session = await serverSession();
     return session.can;

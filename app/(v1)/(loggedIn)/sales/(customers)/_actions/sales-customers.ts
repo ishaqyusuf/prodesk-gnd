@@ -12,6 +12,7 @@ import { ISalesType } from "@/types/sales";
 import { InvoicePastDue, ShowCustomerHaving } from "../../type";
 import customerSalesOrderQuery from "./customer-sales-order-query";
 import { _cache } from "@/app/(v1)/_actions/_cache/load-data";
+import { unstable_noStore } from "next/cache";
 
 export interface IGetCustomerActionQuery extends BaseQuery {
     _having: ShowCustomerHaving;
@@ -211,16 +212,11 @@ export async function getCustomerProfileId(customer: ICustomer) {
     return id;
 }
 export async function getStaticCustomers() {
-    return await _cache(
-        "sales-customers",
-        async () => {
-            const customers = await prisma.customers.findMany({
-                orderBy: {
-                    name: "asc",
-                },
-            });
-            return customers;
+    const customers = await prisma.customers.findMany({
+        orderBy: {
+            name: "asc",
         },
-        "customers"
-    );
+        distinct: "phoneNo",
+    });
+    return customers;
 }

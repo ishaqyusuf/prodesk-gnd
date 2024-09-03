@@ -24,8 +24,7 @@ export default function useDykeFormSaver(form) {
                 data,
             };
             try {
-                const estimate = calculateFooterEstimate(data, null);
-
+                // const estimate = calculateFooterEstimate(data, null);
                 const e = initDykeSaving(data);
 
                 if (e.order.type == "order") {

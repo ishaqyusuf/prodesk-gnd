@@ -18,7 +18,7 @@ import {
     ISalesOrderMeta,
     ISalesType,
 } from "@/types/sales";
-import { serverSession, user } from "@/app/(v1)/_actions/utils";
+import { dealerSession, serverSession, user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
 import {
     generateRandomString,
@@ -34,7 +34,7 @@ import { includeStepPriceCount } from "../../dyke-utils";
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
     const auth = await serverSession();
-    const dealerMode = auth.role?.name == "Dealer";
+    const dealerMode = dealerSession();
     // await prisma.dykeStepProducts.updateMany({
     //     where: {
     //         door: {
@@ -189,7 +189,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         shippingAddress: dealer?.primaryShippingAddress || ({} as any),
         billingAddress: dealer?.primaryBillingAddress || ({} as any),
 
-        status: "Active",
+        status: dealerMode ? "Evaluating" : "Active",
         taxPercentage: +ctx.settings?.tax_percentage,
         paymentTerm: ctx.defaultProfile?.meta?.net,
         goodUntil: ctx.defaultProfile?.goodUntil,

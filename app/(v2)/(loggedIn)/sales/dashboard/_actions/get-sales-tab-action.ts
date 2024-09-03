@@ -9,7 +9,8 @@ export type SalesTabs =
     | "Quotes"
     | "Delivery"
     | "Pickup"
-    | "Productions";
+    | "Productions"
+    | "Pending Evaluation";
 export async function getSalesTabAction(): Promise<PageTab[]> {
     // auto convert SalesTabs to list of string
     let tabNames: SalesTabs[] = [
@@ -18,6 +19,7 @@ export async function getSalesTabAction(): Promise<PageTab[]> {
         // "Productions",
         "Delivery",
         "Pickup",
+        "Pending Evaluation",
     ];
 
     const s = await prisma.salesOrders.findMany({
@@ -25,6 +27,7 @@ export async function getSalesTabAction(): Promise<PageTab[]> {
             id: true,
             type: true,
             deliveryOption: true,
+            status: true,
             assignments: {
                 include: {
                     _count: true,
@@ -51,6 +54,8 @@ export async function getSalesTabAction(): Promise<PageTab[]> {
                     return o.type == "order" && o.deliveryOption == "pickup";
                 case "Productions":
                     return o.type == "order" && o.assignments?.length;
+                case "Pending Evaluation":
+                    return o.status == "Evaluating";
                 default:
                     return false;
             }
@@ -62,6 +67,7 @@ export async function getSalesTabAction(): Promise<PageTab[]> {
                 Pickup: "/sales/dashboard/pickup",
                 Quotes: "/sales/dashboard/quotes",
                 Productions: "/sales/dashboard/productions",
+                "Pending Evaluation": "/sales/dashboard/pending-evaluation",
             } as { [id in SalesTabs]: string }
         )[t];
         return {

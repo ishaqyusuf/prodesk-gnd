@@ -44,7 +44,7 @@ const useCtx = () => {
         let cTab = null;
         let fallbackTab = null;
         let defaultTab = null;
-        console.log(tabs);
+        // console.log(tabs);
 
         Object.entries(tabs).map(([k, v]) => {
             const newSearchParams = new URLSearchParams(query?.toString());
@@ -56,10 +56,10 @@ const useCtx = () => {
                 if (qv == v.qv && (v.href ? pathname == v.href : true)) {
                     cTab = tabName;
                 }
-                console.log(v.href);
+                // console.log(v.href);
                 if (v.href && pathname == v.href && !fallbackTab) {
                     fallbackTab = v.href;
-                    console.log({ fallbackTab });
+                    // console.log({ fallbackTab });
                 }
                 newSearchParams.set(v.qk, v.qv);
                 newSearchParams.set(v.qk, v.qv || null);

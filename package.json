@@ -124,6 +124,7 @@
     "twilio": "^4.19.0",
     "typecript": "^0.0.1-security",
     "typescript": "^5.4.5",
+    "use-debounce": "^10.0.3",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"

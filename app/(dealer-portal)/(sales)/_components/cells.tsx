@@ -1,20 +1,24 @@
 "use client";
 
-import { TableCell } from "@/app/_components/data-table/table-cells";
-import { GetSales } from "@/data-acces/sales";
+import {
+    SalesCellProps,
+    SalesCells,
+} from "@/app/(v2)/(loggedIn)/sales/dashboard/_components/sales-cells";
 
-export interface CellProps {
-    item: GetSales["data"][number];
+function Order({ item }: SalesCellProps) {
+    const href = item.isDyke
+        ? `/overview/${item.type}/${item.slug}`
+        : `/overview/${item.type}/${item.slug}`;
+    return <SalesCells.OrderDispatch item={item} href={href} />;
 }
-
-function Order({ item }: CellProps) {
-    return (
-        <TableCell>
-            <TableCell.Primary>{item.orderId}</TableCell.Primary>
-        </TableCell>
-    );
-}
-
+function DispatchStatus({ item }: SalesCellProps) {}
+function OrderAction({ item }: SalesCellProps) {}
 export let Cells = {
     Order,
+    Invoice: SalesCells.Invoice,
+    Address: SalesCells.Address,
+    Customer: SalesCells.Customer,
+    Dispatch: SalesCells.Dispatch,
+    Status: SalesCells.SalesStatus,
+    OrderAction,
 };

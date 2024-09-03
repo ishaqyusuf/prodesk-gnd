@@ -1,5 +1,4 @@
 import { TableCell } from "@/app/_components/data-table/table-cells";
-import { NewspaperIcon, SparklesIcon } from "lucide-react";
 import StatusBadge from "@/components/_v1/status-badge";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import { toast } from "sonner";
@@ -16,43 +15,42 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { SalesTableItem } from "@/app/(v1)/(loggedIn)/sales/orders/components/orders-table-shell";
-import { GetSalesAction } from "../_actions/get-sales-action";
 import { MenuOption, useSalesMenu } from "../../utils/use-sales-menu";
 import { deleteOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
-import { sum } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import { GetSales } from "@/data-acces/sales";
 import { useAssignment } from "../../../sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { Button } from "@/components/ui/button";
+import FStatusBadge from "@/app/_components/fikr-ui/f-status-badge";
 
-interface Props {
+export interface SalesCellProps {
     item: GetSales["data"][number];
 }
-function OrderDispatch({ item, href }: Props & { href? }) {
+function OrderDispatch({ item, href }: SalesCellProps & { href? }) {
     return (
         <TableCell href={href} className="">
-            <TableCell.Medium className={item.isDyke ? "text-orange-500" : ""}>
+            <TableCell.Medium
+                className={cn(
+                    item.isDyke ? "font-bold" : "",
+                    "whitespace-nowrap"
+                )}
+            >
                 {item.orderId}
             </TableCell.Medium>
             <TableCell.Secondary className="inline-flex items-center space-x-2">
                 <TableCell.Date>{item.createdAt}</TableCell.Date>
-                {/* {item.isDyke && (
-                    // <div className="rounded-full bg-pink-500 p-[.5px]   text-xs leading-none text-[#000000]s text-white no-underline group-hover:no-underline">
-                    //     <SparklesIcon className="w-4 h-4" />
-                    // </div>
-                    // <SparklesIcon className="w-4 h-4 text-pink-700" />
-                )} */}
             </TableCell.Secondary>
         </TableCell>
     );
 }
-function Order({ item }: Props) {
+function Order({ item }: SalesCellProps) {
     const href = item.isDyke
         ? `/sales-v2/overview/${item.type}/${item.slug}`
         : `/sales/order/${item.slug}`;
     return <OrderDispatch item={item} href={href} />;
 }
-function Customer({ item }: Props) {
+
+function Customer({ item }: SalesCellProps) {
     let address = item?.shippingAddress || item?.billingAddress;
     if (!address && !item.customer) return <TableCell></TableCell>;
     const link = "/sales/customer/" + item.customer?.id;
@@ -69,7 +67,7 @@ function Customer({ item }: Props) {
         </TableCell>
     );
 }
-function Address({ item }: Props) {
+function Address({ item }: SalesCellProps) {
     return (
         <TableCell>
             <TableCell.Secondary className="line-clamp-2">
@@ -78,18 +76,21 @@ function Address({ item }: Props) {
         </TableCell>
     );
 }
-function SalesRep({ item }: Props) {
+function SalesRep({ item }: SalesCellProps) {
     return (
         <TableCell>
             <TableCell.Secondary
-                className={!item?.salesRep?.name && "text-red-500"}
+                className={cn(
+                    !item?.salesRep?.name && "text-red-500",
+                    "w-16 truncate"
+                )}
             >
                 {item?.salesRep?.name || item?.customer?.businessName}
             </TableCell.Secondary>
         </TableCell>
     );
 }
-function Invoice({ item }: Props) {
+function Invoice({ item }: SalesCellProps) {
     if (
         (!item.amountDue || item.amountDue == item.grandTotal) &&
         item.type != "quote"
@@ -120,14 +121,14 @@ function Invoice({ item }: Props) {
         </TableCell>
     );
 }
-function PaymentDueDate({ item }: Props) {
+function PaymentDueDate({ item }: SalesCellProps) {
     return (
         <TableCell>
             <TableCell.Date>{item.paymentDueDate}</TableCell.Date>
         </TableCell>
     );
 }
-function Dispatch({ item }: Props) {
+function Dispatch({ item }: SalesCellProps) {
     const date =
         item.pickup?.pickupAt || item.pickup?.createdAt || item.deliveredAt;
     function Content() {
@@ -157,9 +158,9 @@ function Dispatch({ item }: Props) {
         <TableCell>
             <Menu
                 Trigger={
-                    <button>
+                    <Button variant="outline" size="sm">
                         <Content />
-                    </button>
+                    </Button>
                 }
             >
                 {salesData.delivery.map((o) => (
@@ -174,7 +175,7 @@ function Dispatch({ item }: Props) {
         </TableCell>
     );
 }
-function Status({ item, delivery }: Props & { delivery? }) {
+function Status({ item, delivery }: SalesCellProps & { delivery? }) {
     let status: any = item?.prodStatus;
     if (["In Transit", "Return", "Delivered"].includes(item?.status as any))
         status = item?.status;
@@ -213,7 +214,7 @@ function Status({ item, delivery }: Props & { delivery? }) {
         </TableCell>
     );
 }
-function SalesAction({ item }: Props) {
+function SalesAction({ item }: SalesCellProps) {
     const ctx = useSalesMenu(item as any);
     function Render({ option }: { option: MenuOption }) {
         if (option.groupTitle)
@@ -249,23 +250,24 @@ function SalesAction({ item }: Props) {
         </>
     );
 }
-function SalesStatus({ item }: Props) {
+function SalesStatus({ item }: SalesCellProps) {
     let delivery = null;
-    let status: any = item?.prodStatus;
+    let status: any = item?.prodStatus || item?.status;
     if (["In Transit", "Return", "Delivered"].includes(item?.status as any))
         status = item?.status;
-    if (!status) status = delivery ? "-" : item?.prodId ? "Prod Queued" : "";
+    if (!status)
+        status = delivery ? "-" : item?.prodId ? "Prod Queued" : "no status";
     if (status == "Completed" && delivery) status = "Ready";
     const color = getBadgeColor(status || "");
     return (
         <TableCell>
-            <Badge
+            <FStatusBadge status={status} />
+            {/* <Badge
                 variant={"secondary"}
                 className={`h-5 px-1 whitespace-nowrap text-xs text-slate-100 ${color}`}
-            >
-                {/* {order?.prodStatus || "-"} */}
+            > 
                 {status || "no status"}
-            </Badge>
+            </Badge> */}
 
             {delivery && item?.deliveredAt && (
                 <TableCell.Date>{item.deliveredAt}</TableCell.Date>
@@ -276,7 +278,7 @@ function SalesStatus({ item }: Props) {
         //   </div>
     );
 }
-function ProductionStatus({ item }: Props) {
+function ProductionStatus({ item }: SalesCellProps) {
     const submitted = sum(
         item.assignments.map((a) =>
             sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
@@ -300,7 +302,7 @@ function ProductionStatus({ item }: Props) {
         </TableCell>
     );
 }
-function DeliveryAction({ item }: Props) {
+function DeliveryAction({ item }: SalesCellProps) {
     const assignment = useAssignment({ type: "prod" });
     return (
         <>

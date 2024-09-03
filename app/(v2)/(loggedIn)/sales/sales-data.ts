@@ -31,5 +31,22 @@ export default {
             labelValue("61-90 Days Past Due", "61-90"),
             labelValue("Over 90 Days Past Due", ">90"),
         ],
+        production: [
+            { label: "Production Started", value: "Started" },
+            { label: "Production Assigned", value: "Queued" },
+            {
+                label: "Production Completed",
+                value: "Completed",
+            },
+            {
+                label: "Production Not Assigned",
+                value: "Unassigned",
+            },
+        ],
+        invoice: [
+            { label: "Paid", value: "Paid" },
+            // { label: "Part Paid", value: "Part" },
+            { label: "Pending", value: "Pending" },
+        ],
     },
 };

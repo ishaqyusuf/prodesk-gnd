@@ -3,6 +3,7 @@
 import { sendMessage } from "@/app/(v1)/_actions/email";
 import { prisma } from "@/db";
 import { isProdClient } from "@/lib/is-prod";
+import { EmailTriggerEventType } from "../../mail-grid/templates/events";
 
 interface DealerEmailProps {
     emailId?: number;
@@ -33,4 +34,34 @@ export async function signupSuccess(id) {
         body: `Your dealership request has been submitted successfully. We will review and get back to you`,
         to: auth.email,
     });
+}
+export async function _dispatchSalesEmailEvent(id, ev: EmailTriggerEventType) {
+    const sale = await prisma.salesOrders.findFirst({
+        where: { id },
+        include: {
+            billingAddress: true,
+            shippingAddress: true,
+            customer: {
+                include: {
+                    auth: {
+                        include: {
+                            dealer: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    const ctx = {
+        dealer: sale.customer?.auth?.id,
+        evaluating: sale.status == "Evaluating",
+    };
+    switch (ev) {
+        case "QUOTE_CREATED":
+        case "SALES_CREATED":
+            break;
+        case "SALES_EVALUATED":
+        case "QUOTE_EVALUATED":
+            break;
+    }
 }

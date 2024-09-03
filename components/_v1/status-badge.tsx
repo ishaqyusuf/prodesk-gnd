@@ -1,6 +1,10 @@
 "use client";
 
-import { _getStatusColor, getBadgeColor } from "@/lib/status-badge";
+import {
+    _getStatusColor,
+    getBadgeColor,
+    statusColor,
+} from "@/lib/status-badge";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +16,15 @@ interface Props {
 }
 export default function StatusBadge({ status, color, children, sm }: Props) {
     if (!status) status = children;
-    const _color = getBadgeColor(status);
+    const _color = statusColor(status);
+    return (
+        <div className="inline-flex items-center gap-2 font-semibold">
+            <div className={cn("w-1.5 h-1.5", `bg-${_color}-500`)}></div>
+            <div className={cn(`text-${_color}-500`, "text-xs uppercase")}>
+                {status}
+            </div>
+        </div>
+    );
     return (
         <Badge
             className={cn(

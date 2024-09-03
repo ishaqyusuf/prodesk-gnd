@@ -8,7 +8,7 @@ import { GetSales } from "@/data-acces/sales";
 import { use } from "react";
 import { DataTable } from "@/app/_components/data-table";
 import { TableToolbar } from "@/app/_components/data-table/toolbar";
-import { SalesCells } from "@/app/(v1)/(loggedIn)/sales/orders/components/cells";
+import { Cells } from "./cells";
 
 interface Props {
     promise;
@@ -26,7 +26,14 @@ export default function ClientPage({ promise, quote }: Props) {
                 // size: "sm",
             },
         },
-        (ctx) => [ctx.Column("Order", SalesCells.Order)]
+        (ctx) => [
+            ctx.Column("Order", Cells.Order),
+            ctx.Column("Billing", Cells.Customer),
+            ctx.Column("Shipping", Cells.Address),
+            ctx.Column("Invoice", Cells.Invoice),
+            ctx.Column("Dispatch", Cells.Dispatch),
+            ctx.Column("Status", Cells.Status),
+        ]
     );
     return (
         <>

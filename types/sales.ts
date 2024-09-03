@@ -208,6 +208,8 @@ export type SalesStatus =
     | "Inbound"
     | "Late"
     | "Delivered"
+    | "Evaluating"
+    | "Active"
     | undefined;
 
 export type DeliveryOption = "delivery" | "pickup";
