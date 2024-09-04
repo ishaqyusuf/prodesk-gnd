@@ -50,10 +50,10 @@ function Order({ item }: SalesCellProps) {
     return <OrderDispatch item={item} href={href} />;
 }
 
-function Customer({ item }: SalesCellProps) {
+function Customer({ item, noLink }: SalesCellProps & { noLink?: boolean }) {
     let address = item?.shippingAddress || item?.billingAddress;
     if (!address && !item.customer) return <TableCell></TableCell>;
-    const link = "/sales/customer/" + item.customer?.id;
+    const link = noLink ? undefined : "/sales/customer/" + item.customer?.id;
     return (
         <TableCell href={link}>
             <TableCell.Medium className="uppercase">
