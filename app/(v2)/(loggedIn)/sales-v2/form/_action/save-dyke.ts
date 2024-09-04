@@ -10,7 +10,7 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { dealerSession } from "@/app/(v1)/_actions/utils";
 
 export async function saveDykeSales(data: DykeForm) {
-    const dealerMode = dealerSession();
+    const dealerMode = await dealerSession();
     const tx =
         // await prisma.$transaction(
         async (tx) => {
