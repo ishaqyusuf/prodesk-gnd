@@ -17,6 +17,7 @@ import {
     ISalesOrderItemMeta,
     ISalesOrderMeta,
     ISalesType,
+    SalesStatus,
 } from "@/types/sales";
 import { dealerSession, serverSession, user } from "@/app/(v1)/_actions/utils";
 import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-form";
@@ -541,5 +542,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         footer,
         _refresher,
         batchSetting,
+        status: order.status as SalesStatus,
     };
 }

@@ -52,7 +52,9 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
         }
     }
 
-    const to = !isProd ? [`ishaqyusuf024@gmail.com`] : data.to?.split(",");
+    const to = !isProd
+        ? [`ishaqyusuf024@gmail.com`, `pcruz321@gmail.com`]
+        : data.to?.split(",");
 
     console.log(to);
 

@@ -26,7 +26,12 @@ export default async function SalesPage({ searchParams, params }: Props) {
 
     return (
         <FPage title={"Sales"}>
-            <PageClient createType="order" type="orders" response={promise} />
+            <PageClient
+                createType="order"
+                evaluation
+                type="orders"
+                response={promise}
+            />
         </FPage>
     );
 }

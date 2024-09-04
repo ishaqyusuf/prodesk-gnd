@@ -214,36 +214,26 @@ function Status({ item, delivery }: SalesCellProps & { delivery? }) {
         </TableCell>
     );
 }
+function EvaluationSalesAction({ item }: SalesCellProps) {
+    const ctx = useSalesMenu(item as any);
+
+    return (
+        <>
+            <Menu>
+                <ctx.MenuList withDelete menuKey="evalMenu" />
+            </Menu>
+        </>
+    );
+}
 function SalesAction({ item }: SalesCellProps) {
     const ctx = useSalesMenu(item as any);
-    function Render({ option }: { option: MenuOption }) {
-        if (option.groupTitle)
-            return (
-                <>
-                    <DropdownMenuLabel>{option.groupTitle}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                </>
-            );
-        return (
-            <MenuItem
-                href={option.href}
-                onClick={option.action}
-                icon={option.icon}
-                key={option.title}
-                SubMenu={option?.subMenu?.map((s, si) => (
-                    <Render key={si} option={s} />
-                ))}
-            >
-                {option.title}
-            </MenuItem>
-        );
-    }
+
     return (
         <>
             <Menu>
                 {/* <MenuItem icon="menu"></MenuItem> */}
                 {ctx.options?.map((option, oi) => (
-                    <Render option={option} key={oi} />
+                    <ctx.Render option={option} key={oi} />
                 ))}
                 <DeleteRowAction menu row={item} action={deleteOrderAction} />
             </Menu>
@@ -329,5 +319,6 @@ export let SalesCells = {
     Invoice,
     Dispatch,
     SalesAction,
+    EvaluationSalesAction,
     DeliveryAction,
 };

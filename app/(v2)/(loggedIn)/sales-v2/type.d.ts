@@ -6,7 +6,7 @@ import {
 } from "@prisma/client";
 import { getStepForm } from "./form/_action/get-dyke-step";
 import { getDykeFormAction } from "./form/_action/get-dyke-form";
-import { HousePackageToolMeta } from "@/types/sales";
+import { HousePackageToolMeta, SalesStatus } from "@/types/sales";
 import { getStepProduct } from "./form/_action/get-dyke-step-product";
 
 export interface IDykeSalesItem {
@@ -165,6 +165,7 @@ export interface IDykeFormContext {
     loadingStep: boolean;
     dealerMode: boolean;
     itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">;
+    status: SalesStatus;
 }
 export interface DykeBlock {
     title;

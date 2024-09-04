@@ -17,9 +17,15 @@ interface Props {
     response;
     type: SalesPageType;
     createType?: "order" | "quote";
+    evaluation?: boolean;
 }
 
-export default function PageClient({ response, type, createType }: Props) {
+export default function PageClient({
+    response,
+    type,
+    evaluation,
+    createType,
+}: Props) {
     const { data, pageCount }: GetSalesAction = use(response);
 
     const isMobile = useMediaQuery(screens.xs);
@@ -28,6 +34,18 @@ export default function PageClient({ response, type, createType }: Props) {
 
         switch (type) {
             case "orders":
+                if (evaluation)
+                    return [
+                        ctx.Column("Order #", SalesCells.Order),
+                        ctx.Column("Customer", SalesCells.Customer),
+                        ctx.Column("Address", SalesCells.Address),
+                        // ctx.Column("Rep", SalesCells.SalesRep),
+                        ctx.Column("Invoice", SalesCells.Invoice),
+                        // ctx.Column("Invoice Due", SalesCells.PaymentDueDate),
+                        ctx.Column("Dispatch", SalesCells.Dispatch),
+                        ctx.Column("Status", SalesCells.SalesStatus),
+                        ctx.ActionColumn(SalesCells.EvaluationSalesAction),
+                    ];
                 return [
                     ctx.Column("Order #", SalesCells.Order),
                     ctx.Column("Customer", SalesCells.Customer),

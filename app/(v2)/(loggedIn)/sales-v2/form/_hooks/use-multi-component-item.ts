@@ -126,7 +126,6 @@ export function useMultiComponentItem(componentTitle) {
     function initializeSizes() {
         const itemArray = item.get.itemArray();
         const current = itemArray.multiComponent.components?.[componentTitle];
-        // console.log([current, componentTitle]);
         if (current) _setSizeList(current.heights);
     }
 
@@ -259,12 +258,7 @@ export function useMultiComponentSizeRow(
                     : [jambSizePrice, componentsTotal, doorPrice]
                 : [doorPrice]
         );
-        console.log(
-            { _unitPrice },
-            calculatedPriceMode
-                ? [jambSizePrice, componentsTotal, doorPrice]
-                : [doorPrice]
-        );
+
         const _totalLinePrice = math.multiply(qty, _unitPrice);
         form.setValue(`${keys.unitPrice}` as any, _unitPrice);
         form.setValue(`${keys.lineTotal}` as any, _totalLinePrice);

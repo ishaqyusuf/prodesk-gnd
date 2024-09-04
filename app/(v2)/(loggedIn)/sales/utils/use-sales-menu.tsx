@@ -11,11 +11,20 @@ import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/
 import { IOrderPrintMode, ISalesType } from "@/types/sales";
 import {
     copyOrderAction,
+    deleteOrderAction,
     moveSales,
 } from "../../../../(v1)/(loggedIn)/sales/_actions/sales";
 import { useRouter } from "next/navigation";
 import { openLink } from "@/lib/open-link";
 import useSalesPdf from "@/app/(v2)/printer/sales/use-sales-pdf";
+import {
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import {
+    DeleteRowAction,
+    MenuItem,
+} from "@/components/_v1/data-table/data-table-row-actions";
 
 type Mode = "dealer" | "internal";
 export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
@@ -108,80 +117,134 @@ export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
             } as any);
         else openLink(`printer/sales`, query, true);
     }
-    const ctx = {
+    const fullPrint = _option(
+        "Print",
+        null,
+        "print",
+        isEstimate
+            ? [
+                  _option("Print", () => print("quote", "print"), "estimates"),
+                  _option(
+                      "Print Mockup",
+                      () => print("quote", "Print Mockup"),
+                      "box"
+                  ),
+                  _option("Pdf", () => print("quote", "Pdf"), "pdf"),
+              ]
+            : ["Print", "Print Mockup", "Pdf"]
+                  .map((groupTitle) => [
+                      { groupTitle },
+                      _option(
+                          "Order & Packing",
+                          () => print("order-packing", groupTitle),
+                          "box"
+                      ),
+                      _option(
+                          "Order",
+                          () => print("order", groupTitle),
+                          "orders"
+                      ),
+                      _option(
+                          "Packing List",
+                          () => print("packing list", groupTitle),
+                          "packingList"
+                      ),
+                      _option(
+                          "Production",
+                          () => print("production", groupTitle),
+                          "production"
+                      ),
+                  ])
+                  .flat()
+    );
+    const _actions = {
+        view: _option("View", _viewHref, "view"),
+        edit: _option("Edit", _editHref, "edit"),
+        email: _option("Email", emailAction, "Email"),
+        production: _option("Production", prodAction, "production"),
+        delivery: _option(
+            "Delivery",
+            null,
+            "delivery",
+            salesData.delivery?.map((d, i) =>
+                _option(
+                    d.text,
+                    () => updateDeliveryMode(d.text),
+                    i == 0 ? "pickup" : "delivery2"
+                )
+            )
+        ),
+        moveToQuote: _option("Move to Quote", moveToQuote, "estimates"),
+        moveToSales: _option("Move to Sales", moveToSales, "orders"),
+        copy: _option("Copy as", null, "copy", [
+            _option("Sales", copyAsSale, "orders"),
+            _option("Quote", copyAsEstimate, "estimates"),
+        ]),
+        fullPrint,
+    };
+    const menuList = {
+        evalMenu: [_actions.view, _actions.edit],
         options: [
-            _option("View", _viewHref, "view"),
-            _option("Edit", _editHref, "edit"),
-            _option("Email", emailAction, "Email"),
+            _actions.view,
+            _actions.edit,
+            _actions.email,
             ...truthy(
                 !isEstimate,
-                [
-                    _option("Production", prodAction, "production"),
-                    _option(
-                        "Delivery",
-                        null,
-                        "delivery",
-                        salesData.delivery?.map((d, i) =>
-                            _option(
-                                d.text,
-                                () => updateDeliveryMode(d.text),
-                                i == 0 ? "pickup" : "delivery2"
-                            )
-                        )
-                    ),
-                    _option("Move to Quote", moveToQuote, "estimates"),
-                ],
-                [_option("Move to Sales", moveToSales, "orders")]
+                [_actions.production, _actions.delivery, _actions.moveToQuote],
+                [_actions.moveToSales]
             ),
-            _option("Copy as", null, "copy", [
-                _option("Sales", copyAsSale, "orders"),
-                _option("Quote", copyAsEstimate, "estimates"),
-            ]),
-            _option(
-                "Print",
-                null,
-                "print",
-                isEstimate
-                    ? [
-                          _option(
-                              "Print",
-                              () => print("quote", "print"),
-                              "estimates"
-                          ),
-                          _option(
-                              "Print Mockup",
-                              () => print("quote", "Print Mockup"),
-                              "box"
-                          ),
-                          _option("Pdf", () => print("quote", "Pdf"), "pdf"),
-                      ]
-                    : ["Print", "Print Mockup", "Pdf"]
-                          .map((groupTitle) => [
-                              { groupTitle },
-                              _option(
-                                  "Order & Packing",
-                                  () => print("order-packing", groupTitle),
-                                  "box"
-                              ),
-                              _option(
-                                  "Order",
-                                  () => print("order", groupTitle),
-                                  "orders"
-                              ),
-                              _option(
-                                  "Packing List",
-                                  () => print("packing list", groupTitle),
-                                  "packingList"
-                              ),
-                              _option(
-                                  "Production",
-                                  () => print("production", groupTitle),
-                                  "production"
-                              ),
-                          ])
-                          .flat()
-            ),
+            _actions.copy,
+            _actions.fullPrint,
         ] as MenuOption[],
+    };
+    const ctx = {
+        ...menuList,
+        MenuList({
+            menuKey,
+            withDelete,
+        }: {
+            menuKey: keyof typeof menuList;
+            withDelete?: boolean;
+        }) {
+            return (
+                <>
+                    {ctx[menuKey]?.map((option, oi) => (
+                        <ctx.Render option={option} key={oi} />
+                    ))}
+                    {withDelete && (
+                        <DeleteRowAction
+                            menu
+                            row={item}
+                            action={deleteOrderAction}
+                        />
+                    )}
+                </>
+            );
+        },
+        Render: function Render({ option }: { option: MenuOption }) {
+            if (option.groupTitle)
+                return (
+                    <>
+                        <DropdownMenuLabel>
+                            {option.groupTitle}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                    </>
+                );
+            return (
+                <MenuItem
+                    href={option.href}
+                    onClick={option.action}
+                    icon={option.icon}
+                    key={option.title}
+                    SubMenu={option?.subMenu?.map((s, si) => (
+                        <Render key={si} option={s} />
+                    ))}
+                >
+                    {option.title}
+                </MenuItem>
+            );
+        },
     };
     return ctx;
 }

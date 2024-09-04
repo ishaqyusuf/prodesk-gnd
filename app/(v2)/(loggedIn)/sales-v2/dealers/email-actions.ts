@@ -63,6 +63,22 @@ export async function _dispatchSalesEmailEvent(id, ev: EmailTriggerEventType) {
             break;
         case "SALES_EVALUATED":
         case "QUOTE_EVALUATED":
+            // await dealerEmail({
+            //     body: `Hello ${sale.customer.businessName}! your ${sale.type} with # ${sale.orderId} has been evaluated and approved. your estimated total is $${sale.grandTotal}.\n for more information login to your dealership account.`,
+            //     subject: `${sale.type} evaluation #${sale.orderId}`,
+            //     to: sale.customer.email,
+            // });
+            await dealerEmail({
+                body: `Hello ${
+                    sale.customer.businessName || sale.customer.name
+                }! Your ${sale.type} with order number ${
+                    sale.orderId
+                } has been evaluated and approved. Your estimated total is $${
+                    sale.grandTotal
+                }. For more information, please log in to your dealership account.`,
+                subject: `${sale.type} Evaluation - Order #${sale.orderId}`,
+                to: sale.customer.email,
+            });
             break;
     }
 }

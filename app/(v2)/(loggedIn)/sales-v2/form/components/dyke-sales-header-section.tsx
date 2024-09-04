@@ -24,6 +24,7 @@ import { ArchiveRestore } from "lucide-react";
 import PaymentModal from "../../_components/_payments-modal";
 import DykeSettingsModal from "./modals/dyke-settings";
 import { SaveMode } from "../../type";
+import Evaluator from "./evaluator";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -138,6 +139,7 @@ export default function HeaderSection({}) {
                             Notes
                         </Btn>
                         <SaveBtn />
+                        <Evaluator />
                         <Menu Icon={Icons.more}>
                             <CopyOrderMenuAction row={{ slug, id } as any} />
                             {type == "quote" ? (

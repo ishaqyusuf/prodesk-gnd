@@ -29,9 +29,10 @@ export default function SalesFormComponent({ defaultValues }: Props) {
             currentStepIndex: 0,
         },
     });
-    const [components, dealerMode] = form.watch([
+    const [components, dealerMode, status] = form.watch([
         "itemArray.1.multiComponent.components",
         "dealerMode",
+        "status",
     ]);
     const s: DykeForm = {} as any;
 
@@ -46,11 +47,11 @@ export default function SalesFormComponent({ defaultValues }: Props) {
         loadingStep,
         itemArray,
         dealerMode,
+        status,
     } as IDykeFormContext;
 
     return (
         <DykeFormContext.Provider value={ctxValue}>
-            {/* <Bootstrap /> */}
             <RenderForm {...form}>
                 <HeaderSection />
                 <DykeBootstrap />

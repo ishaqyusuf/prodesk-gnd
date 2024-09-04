@@ -18,7 +18,11 @@ export default function useDykeFormSaver(form) {
         "order.type",
     ]);
     const params = useSearchParams();
-    function save(data: DykeForm, mode: SaveMode) {
+    function save(
+        data: DykeForm,
+        mode: SaveMode = "default",
+        onComplete = null
+    ) {
         startTransition(async () => {
             const errorData: any = {
                 data,
@@ -63,6 +67,7 @@ export default function useDykeFormSaver(form) {
                         );
                         break;
                 }
+                await onComplete?.();
             } catch (error) {
                 toast.error("Something went wrong");
                 if (error instanceof Error) {
