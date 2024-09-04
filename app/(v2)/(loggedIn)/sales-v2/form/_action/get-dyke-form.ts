@@ -542,6 +542,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         footer,
         _refresher,
         batchSetting,
-        status: order.status as SalesStatus,
+        status: order?.status as SalesStatus,
     };
 }
