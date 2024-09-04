@@ -390,23 +390,24 @@ export async function whereSales(query: SalesQueryParams) {
                     in: statusIsArray ? (status as any) : undefined,
                 };
         }
-        if (query.statusNot)
-            where.status = {
-                not: query.statusNot,
+    }
+    if (query.statusNot)
+        where.status = {
+            not: query.statusNot,
+        };
+    if (_payment == "Paid") where.amountDue = 0;
+    else if (_payment == "Pending")
+        where.amountDue = {
+            gt: 0,
+        };
+    if (query._page == "production") {
+        if (!prodId) {
+            where.prodId = {
+                gt: 1,
             };
-        if (_payment == "Paid") where.amountDue = 0;
-        else if (_payment == "Pending")
-            where.amountDue = {
-                gt: 0,
-            };
-        if (query._page == "production") {
-            if (!prodId) {
-                where.prodId = {
-                    gt: 1,
-                };
-            }
         }
     }
+
     if (query._customerId) where.customerId = +query._customerId;
     switch (_deliveryStatus) {
         case "delivered":
