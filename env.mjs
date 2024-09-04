@@ -40,7 +40,7 @@ const server = z.object({
  */
 const client = z.object({
     NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_SUPER_PASS: z.string().url(),
+    NEXT_PUBLIC_SUPER_PASS: z.string(),
     // CLOUDINARY_UPLOAD_URL: z.string(),
     NEXT_PUBLIC_ROOT_DOMAIN: z.string(),
     // CLOUDINARY_API_KEY: z.string(),
@@ -56,18 +56,14 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
-    NEXT_PUBLIC_SUPER_PASS: process.env.NEXT_PUBLIC_SUPER_PASS,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    DATABASE_URL: process.env.DATABASE_URL,
+    // server
     POSTGRESS_URL: process.env.POSTGRESS_URL,
+    DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     EMAIL_FROM_ADDRESS: process.env.EMAIL_FROM_ADDRESS,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    NEXT_PUBLIC_CLOUDINARY_BASE_URL:
-        process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL,
     BLESS_TOKEN: process.env.BLESS_TOKEN,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
@@ -76,6 +72,12 @@ const processEnv = {
     CLOUDINARY_UPLOAD_URL: process.env.CLOUDINARY_UPLOAD_URL,
     TWILIO_ACCOUNT_TOKEN: process.env.TWILIO_ACCOUNT_TOKEN,
     TWILIO_PHONE: process.env.TWILIO_PHONE,
+    // client
+    NEXT_PUBLIC_SUPER_PASS: process.env.NEXT_PUBLIC_SUPER_PASS,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_CLOUDINARY_BASE_URL:
+        process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL,
     NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
