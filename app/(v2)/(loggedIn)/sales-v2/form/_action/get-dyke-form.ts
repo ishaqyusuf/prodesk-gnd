@@ -34,7 +34,7 @@ import { includeStepPriceCount } from "../../dyke-utils";
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
     const auth = await serverSession();
-    const dealerMode = dealerSession();
+    const dealerMode = await dealerSession();
     // await prisma.dykeStepProducts.updateMany({
     //     where: {
     //         door: {
