@@ -210,25 +210,25 @@ export default function OrdersTableShell({ promise, searchParams }) {
                   ],
         [data, isPending]
     );
-    return (
-        <>
-            <PageHeader
-                title="Sales"
-                permissions={["editOrders"]}
-                Action={() => <NewSalesBtn type="quote" />}
-                // newLink="/sales/edit/estimate/new"
-            />
-            <section className="">
-                <DataTable {..._table.props}>
-                    <TableToolbar>
-                        <TableToolbar.Search />
-                    </TableToolbar>
-                    <DataTable.Table />
-                    <DataTable.Footer />
-                </DataTable>
-            </section>
-        </>
-    );
+    // return (
+    //     <>
+    //         <PageHeader
+    //             title="Sales"
+    //             permissions={["editOrders"]}
+    //             Action={() => <NewSalesBtn type="quote" />}
+    //             // newLink="/sales/edit/estimate/new"
+    //         />
+    //         <section className="">
+    //             <DataTable {..._table.props}>
+    //                 <TableToolbar>
+    //                     <TableToolbar.Search />
+    //                 </TableToolbar>
+    //                 <DataTable.Table />
+    //                 <DataTable.Footer />
+    //             </DataTable>
+    //         </section>
+    //     </>
+    // );
     return (
         <>
             <PageHeader
