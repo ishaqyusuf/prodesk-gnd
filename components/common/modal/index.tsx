@@ -78,10 +78,10 @@ function BaseModal({
 const contentVariants = cva(``, {
     variants: {
         size: {
-            sm: "w-full sm:w-[350px]",
-            md: "w-full sm:w-[500px]",
-            lg: "w-full sm:w-[700px] md:w-full",
-            xl: "w-full sm:w-[900px] md:w-full",
+            sm: "w-full lg:w-[350px]",
+            md: "w-full lg:w-[500px]",
+            lg: "w-full lg:w-[700px]  ",
+            xl: "w-full lg:w-[900px]  ",
             "2xl": "",
         },
     },
