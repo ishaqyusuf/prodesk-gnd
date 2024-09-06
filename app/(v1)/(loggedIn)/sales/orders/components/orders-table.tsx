@@ -1,12 +1,9 @@
 "use client";
 
-import { TableShellProps } from "@/types/data-table";
-// import { ISalesOrder } from "@/types/ISales";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useMemo, useTransition } from "react";
 import {
     ColumnHeader,
-    DateCellContent,
     _FilterColumn,
 } from "../../../../../../components/_v1/columns/base-columns";
 
@@ -40,8 +37,6 @@ import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-
 import { SalesCells } from "./cells";
 import PageHeader from "@/components/_v1/page-header";
 import NewSalesBtn from "./new-sales-btn";
-import { DataTable } from "@/app/_components/data-table";
-import { TableToolbar } from "@/app/_components/data-table/toolbar";
 
 type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
 export type SalesTableItem = DataServerPromiseType["Item"];
@@ -234,7 +229,14 @@ export default function OrdersTableShell({ promise, searchParams }) {
             <PageHeader
                 title="Sales"
                 permissions={["editOrders"]}
-                Action={() => <NewSalesBtn type="quote" />}
+                Action={() => (
+                    <div className="flex gap-4">
+                        {/* <Button asChild variant="outline" size="sm">
+                            <Link href={`/sales/dashboard/orders`}>New UI</Link>
+                        </Button> */}
+                        <NewSalesBtn type="quote" />
+                    </div>
+                )}
                 // newLink="/sales/edit/estimate/new"
             />
             <DataTable2

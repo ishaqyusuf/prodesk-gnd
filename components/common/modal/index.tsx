@@ -80,8 +80,8 @@ const contentVariants = cva(``, {
         size: {
             sm: "w-full sm:w-[350px]",
             md: "w-full sm:w-[500px]",
-            lg: "w-full sm:w-[700px]",
-            xl: "w-full sm:w-[900px]",
+            lg: "w-full sm:w-[700px] md:w-full",
+            xl: "w-full sm:w-[900px] md:w-full",
             "2xl": "",
         },
     },
