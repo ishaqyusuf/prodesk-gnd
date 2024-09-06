@@ -228,3 +228,6 @@ section.content {
 table.size-sm td {
     @apply p-2;
 }
+.printly .text-primary {
+    @apply text-black-900;
+}
