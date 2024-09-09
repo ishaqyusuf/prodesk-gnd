@@ -23,13 +23,13 @@ export interface CreateSalesPaymentProps {
 }
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
     console.log("```````", data, "`````````````");
-    const { result, statusCode } = await client.checkoutApi.createPaymentLink({
+    const resp = await client.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
         quickPay: {
             locationId: env.SQUARE_LOCATION_ID,
             name: "Item",
             priceMoney: {
-                amount: BigInt(5000),
+                amount: BigInt(Math.ceil(data.amount * 100)),
                 currency: "USD",
             },
         },
@@ -60,6 +60,14 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
             allowTipping: data.allowTip,
         },
     });
+    const { result, statusCode, body: _body } = resp;
+    console.log("```````````", JSON.stringify(resp), "`````````````````");
+    if (typeof _body === "string") {
+        const bdy = JSON.parse(_body);
+        console.log(bdy);
+        if (bdy?.errors) throw new Error(_body);
+    }
+
     if (statusCode == 400) throw new Error("Eror 400");
     if (result.errors.length) {
         throw new Error("Unable to create payment link");
