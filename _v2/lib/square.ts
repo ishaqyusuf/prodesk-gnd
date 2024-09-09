@@ -22,6 +22,7 @@ export interface CreateSalesPaymentProps {
     orderId: number;
 }
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
+    console.log("```````", data, "`````````````");
     const { result, statusCode } = await client.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
         order: {

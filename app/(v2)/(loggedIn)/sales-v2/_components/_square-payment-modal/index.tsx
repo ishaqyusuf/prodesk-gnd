@@ -46,7 +46,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             orderId: order.id,
             amount: order.amountDue,
             items: order.items.map((item) => ({
-                name: item.description,
+                name: item.description || "DESC...",
                 quantity: item.qty?.toString() || "1",
                 basePriceMoney: {
                     amount: BigInt(Math.ceil(item.total * 100)),
