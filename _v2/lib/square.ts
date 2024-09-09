@@ -7,9 +7,9 @@ import { Client, Environment, OrderLineItem, PrePopulatedData } from "square";
 const client = new Client({
     environment:
         env.NODE_ENV == "production"
-            ? Environment.Production
+            ? Environment.Sandbox
             : Environment.Sandbox,
-    accessToken: env.SANDBOX_APP_ID,
+    accessToken: env.SANBOX_ACCESS_TOKEN,
 });
 export interface CreateSalesPaymentProps {
     amount?: number;

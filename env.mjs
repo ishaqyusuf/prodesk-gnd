@@ -7,7 +7,7 @@ import { z } from "zod";
 const server = z.object({
     SQUARE_LOCATION_ID: z.string(),
     SANDBOX_APP_ID: z.string(),
-    SQUARE_ACCESS_TOKEN: z.string(),
+    SANBOX_ACCESS_TOKEN: z.string(),
     DATABASE_URL: z.string().url(),
     POSTGRESS_URL: z.string().url().optional(),
     RESEND_API_KEY: z.string(),
@@ -62,7 +62,7 @@ const processEnv = {
     // server
     SQUARE_LOCATION_ID: process.env.SQUARE_ACCESS_TOKEN,
     SANDBOX_APP_ID: process.env.SANDBOX_APP_ID,
-    SQUARE_ACCESS_TOKEN: process.env.SQUARE_ACCESS_TOKEN,
+    SANBOX_ACCESS_TOKEN: process.env.SANBOX_ACCESS_TOKEN,
     POSTGRESS_URL: process.env.POSTGRESS_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
