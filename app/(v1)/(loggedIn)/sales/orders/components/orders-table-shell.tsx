@@ -131,7 +131,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                       })),
                       {
                           accessorKey: "invoice",
-                          header: ColumnHeader("Total/Due"),
+                          header: ColumnHeader("Total/Dues"),
                           cell: ({ row }) => (
                               <OrderInvoiceCell order={row.original} />
                           ),

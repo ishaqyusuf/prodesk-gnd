@@ -1066,6 +1066,7 @@ model SalesOrders {
     paymentDueDate    DateTime?                        @db.Timestamp(0)
     deliveredAt       DateTime?
     deliveryOption    String?
+    checkouts         SalesCheckout[]
     customer          Customers?                       @relation(fields: [customerId], references: [id])
     items             SalesOrderItems[]
     shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
@@ -1235,24 +1236,23 @@ model OrderItemDelivery {
 }
 
 model HousePackageTools {
-    id            Int       @unique @default(autoincrement())
-    orderItemId   Int       @unique
-    height        String?
-    doorType      String?
-    doorId        Int?
-    dykeDoorId    Int?
-    jambSizeId    Int?
-    casingId      Int?
-    moldingId     Int?
-    stepProductId Int?
-    totalPrice    Float?    @default(0)
-    totalDoors    Int?      @default(0)
-    meta          Json?     @db.Json
-    salesOrderId  Int
-    createdAt     DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt     DateTime? @updatedAt
-    deletedAt     DateTime? @db.Timestamp(0)
-
+    id             Int                @unique @default(autoincrement())
+    orderItemId    Int                @unique
+    height         String?
+    doorType       String?
+    doorId         Int?
+    dykeDoorId     Int?
+    jambSizeId     Int?
+    casingId       Int?
+    moldingId      Int?
+    stepProductId  Int?
+    totalPrice     Float?             @default(0)
+    totalDoors     Int?               @default(0)
+    meta           Json?              @db.Json
+    salesOrderId   Int
+    createdAt      DateTime?          @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?          @updatedAt
+    deletedAt      DateTime?          @db.Timestamp(0)
     order          SalesOrders        @relation(fields: [salesOrderId], references: [id])
     salesOrderItem SalesOrderItems    @relation(fields: [orderItemId], references: [id])
     door           DykeDoors?         @relation(name: "door", fields: [dykeDoorId], references: [id])
@@ -1324,7 +1324,9 @@ model SalesPayments {
     transactionId Int?
     orderId       Int
     amount        Float
+    tip           Float?
     meta          Json?                @db.Json
+    status        String? // success,pending,paid
     deletedAt     DateTime?            @db.Timestamp(0)
     createdAt     DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?            @updatedAt
@@ -1336,6 +1338,22 @@ model SalesPayments {
     @@index([orderId])
     @@index([customerId])
     @@index([transactionId])
+}
+
+model SalesCheckout {
+    id          String      @unique
+    status      String
+    paymentType String
+    amount      Float
+    tip         Float?      @default(0)
+    orderId     Int
+    meta        Json?       @db.Json
+    deletedAt   DateTime?   @db.Timestamp(0)
+    createdAt   DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?   @updatedAt
+    order       SalesOrders @relation(fields: [orderId], references: [id])
+
+    @@index([orderId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

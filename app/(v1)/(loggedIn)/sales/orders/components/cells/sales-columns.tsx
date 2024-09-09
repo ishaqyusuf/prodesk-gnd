@@ -33,6 +33,8 @@ import LinkableNode from "../../../../../../../components/_v1/link-node";
 import { ICustomer } from "@/types/customers";
 import dayjs from "dayjs";
 import StatusBadge from "../../../../../../../components/_v1/status-badge";
+import { useModal } from "@/components/common/modal/provider";
+import SquarePaymentModal from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal";
 
 export const OrderPriorityFlagCell = (
     order: ISalesOrder,
@@ -197,8 +199,15 @@ export function OrderInvoiceCell({
     link,
     className,
 }: OrderInvoiceCellProps) {
+    const modal = useModal();
     return (
-        <div className={cn(className)}>
+        <div
+            onClick={() => {
+                if (!isEstimate)
+                    modal.openModal(<SquarePaymentModal id={order.id} />);
+            }}
+            className={cn(className, "cursor-pointer")}
+        >
             <div className="font-medium uppercase">
                 ${toFixed(order?.grandTotal)}
             </div>

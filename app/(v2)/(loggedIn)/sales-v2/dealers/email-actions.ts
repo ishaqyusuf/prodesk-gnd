@@ -8,10 +8,10 @@ import { EmailTriggerEventType } from "../../mail-grid/templates/events";
 interface DealerEmailProps {
     emailId?: number;
     data?: any;
-    body?: string;
-    subject?: string;
+    body: string;
+    subject: string;
     from?: string;
-    to?: string;
+    to: string;
 }
 export async function dealerEmail(data: DealerEmailProps) {
     let from = isProdClient
@@ -82,3 +82,5 @@ export async function _dispatchSalesEmailEvent(id, ev: EmailTriggerEventType) {
             break;
     }
 }
+
+export async function _processEmail(data, event: EmailTriggerEventType) {}

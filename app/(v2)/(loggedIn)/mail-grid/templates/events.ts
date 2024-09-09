@@ -14,6 +14,12 @@ export const emailTriggerEvents = [
     "SALES_PRODUCTION_ASSIGNED",
     "SALES_PRODUCTION_STARTED",
     "SALES_PRODUCTION_COMPLETED",
+
+    "PAYMENT_LINK_CREATED",
+    "PAYMENT_LINK_DESTROYED",
+    "PAYMENT_SUCCESSFUL",
+    "PAYMENT_SUCCESSFUL_WITH_TIPS",
+    "PAYMENT_FAILED",
 ] as const;
 export type EmailTriggerEventType = (typeof emailTriggerEvents)[number];
 export const eventRecipients = [
