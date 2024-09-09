@@ -49,7 +49,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 name: item.description,
                 quantity: item.qty?.toString() || "1",
                 basePriceMoney: {
-                    amount: BigInt(Math.ceil(item.total)),
+                    amount: BigInt(Math.ceil(item.total * 100)),
                     currency: "USD",
                 },
             })),
