@@ -25,27 +25,35 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
     console.log("```````", data, "`````````````");
     const { result, statusCode } = await client.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
-        order: {
+        quickPay: {
             locationId: env.SQUARE_LOCATION_ID,
-            lineItems:
-                !__isProd || !data.items.length
-                    ? [
-                          {
-                              quantity: "1",
-                              basePriceMoney: {
-                                  amount: BigInt(5000),
-                                  currency: "USD",
-                              },
-                              name: "ITEM NAME",
-                          },
-                      ]
-                    : data.items,
+            name: "Item",
+            priceMoney: {
+                amount: BigInt(5000),
+                currency: "USD",
+            },
         },
-        prePopulatedData: {
-            buyerEmail: data.email,
-            buyerPhoneNumber: data.phone,
-            buyerAddress: data.address,
-        },
+        // order: {
+        //     locationId: env.SQUARE_LOCATION_ID,
+        //     lineItems:
+        //         !__isProd || !data.items.length
+        //             ? [
+        //                   {
+        //                       quantity: "1",
+        //                       basePriceMoney: {
+        //                           amount: BigInt(5000),
+        //                           currency: "USD",
+        //                       },
+        //                       name: "ITEM NAME",
+        //                   },
+        //               ]
+        //             : data.items,
+        // },
+        // prePopulatedData: {
+        //     buyerEmail: data.email,
+        //     buyerPhoneNumber: data.phone,
+        //     buyerAddress: data.address,
+        // },
         checkoutOptions: {
             redirectUrl: `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/api/payment-success`,
             askForShippingAddress: false,
