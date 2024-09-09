@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Props {
-    type?: "quote" | "order";
+    type?: "quote" | "order" | "customer";
 }
 function _btns(type) {
     const btns = [

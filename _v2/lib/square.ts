@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
+import { __isProd } from "@/lib/is-prod-server";
 import { Client, Environment, OrderLineItem, PrePopulatedData } from "square";
 
 const client = new Client({
@@ -25,7 +26,19 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
         idempotencyKey: new Date().toISOString(),
         order: {
             locationId: env.SQUARE_LOCATION_ID,
-            lineItems: data.items,
+            lineItems:
+                !__isProd || !data.items.length
+                    ? [
+                          {
+                              quantity: "1",
+                              basePriceMoney: {
+                                  amount: BigInt(5000),
+                                  currency: "USD",
+                              },
+                              name: "ITEM NAME",
+                          },
+                      ]
+                    : data.items,
         },
         prePopulatedData: {
             buyerEmail: data.email,
