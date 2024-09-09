@@ -45,14 +45,16 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             phone: order?.customer?.phoneNo,
             orderId: order.id,
             amount: order.amountDue,
-            items: order.items.map((item) => ({
-                name: item.description || "DESC...",
-                quantity: item.qty?.toString() || "1",
-                basePriceMoney: {
-                    amount: BigInt(Math.ceil(item.total * 100)),
-                    currency: "USD",
-                },
-            })),
+            items: order.items
+                .filter((item) => item.total && item.qty)
+                .map((item, index) => ({
+                    name: item.description || `Item ${index}`,
+                    quantity: item.qty?.toString(),
+                    basePriceMoney: {
+                        amount: BigInt(Math.ceil(item.total * 100)),
+                        currency: "USD",
+                    },
+                })),
         });
         setTab("paymentLinkForm");
     }
