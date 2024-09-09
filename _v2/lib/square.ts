@@ -9,7 +9,7 @@ const client = new Client({
         env.NODE_ENV == "production"
             ? Environment.Production
             : Environment.Sandbox,
-    accessToken: env.SQUARE_ACCESS_TOKEN,
+    accessToken: env.SANDBOX_APP_ID,
 });
 export interface CreateSalesPaymentProps {
     amount?: number;
