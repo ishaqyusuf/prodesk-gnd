@@ -50,9 +50,9 @@ function initializeMultiComponent(data: DykeForm) {
             return;
         }
         // }
-        const components = Object.values(item.multiComponent.components).filter(
-            Boolean
-        );
+        const components = Object.values(
+            item?.multiComponent?.components || {}
+        ).filter(Boolean);
         let parented =
             components.find(
                 (c: any) => c.checked && c.itemId && c.itemId == item.item.id
