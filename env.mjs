@@ -60,7 +60,7 @@ const client = z.object({
  */
 const processEnv = {
     // server
-    SQUARE_LOCATION_ID: process.env.SQUARE_ACCESS_TOKEN,
+    SQUARE_LOCATION_ID: process.env.SQUARE_LOCATION_ID,
     SANDBOX_APP_ID: process.env.SANDBOX_APP_ID,
     SANBOX_ACCESS_TOKEN: process.env.SANBOX_ACCESS_TOKEN,
     POSTGRESS_URL: process.env.POSTGRESS_URL,
