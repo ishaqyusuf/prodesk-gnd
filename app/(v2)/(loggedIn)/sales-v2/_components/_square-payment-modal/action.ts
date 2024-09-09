@@ -15,6 +15,7 @@ export async function getSalesPaymentData(id) {
                     deletedAt: null,
                 },
             },
+            items: true,
             customer: true,
             shippingAddress: true,
             billingAddress: true,
