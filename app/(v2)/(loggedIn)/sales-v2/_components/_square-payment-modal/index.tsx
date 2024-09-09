@@ -53,13 +53,13 @@ export default function SquarePaymentModal({ id }: { id: number }) {
     async function createLink() {
         try {
             let paymentLink;
+            paymentLink = await createSalesPayment(form.getValues());
             await notify("PAYMENT_LINK_CREATED", {
                 customerName:
                     order.customer.businessName || order.customer.name,
                 paymentLink,
                 orderId: order.orderId,
             });
-            paymentLink = await createSalesPayment(form.getValues());
             toast.success("Created");
         } catch (error) {
             if (error instanceof Error) toast.error(error.message);

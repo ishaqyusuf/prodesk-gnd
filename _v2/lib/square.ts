@@ -10,7 +10,6 @@ const client = new Client({
             : Environment.Sandbox,
     accessToken: env.SQUARE_ACCESS_TOKEN,
 });
-
 export interface CreateSalesPaymentProps {
     amount?: number;
     allowTip?: boolean;
@@ -22,7 +21,7 @@ export interface CreateSalesPaymentProps {
     orderId: number;
 }
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
-    const { result } = await client.checkoutApi.createPaymentLink({
+    const { result, statusCode } = await client.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
         order: {
             locationId: env.SQUARE_LOCATION_ID,
@@ -39,6 +38,7 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
             allowTipping: data.allowTip,
         },
     });
+    if (statusCode == 400) throw new Error("Eror 400");
     if (result.errors.length) {
         throw new Error("Unable to create payment link");
     }

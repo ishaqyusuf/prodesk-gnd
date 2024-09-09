@@ -234,7 +234,8 @@ export default function OrdersTableShell({ promise, searchParams }) {
                         {/* <Button asChild variant="outline" size="sm">
                             <Link href={`/sales/dashboard/orders`}>New UI</Link>
                         </Button> */}
-                        <NewSalesBtn type="quote" />
+                        <NewSalesBtn type="order" />
+                        {/*  */}
                     </div>
                 )}
                 // newLink="/sales/edit/estimate/new"
