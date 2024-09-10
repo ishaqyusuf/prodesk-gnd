@@ -1341,7 +1341,8 @@ model SalesPayments {
 }
 
 model SalesCheckout {
-    id          String      @unique
+    id          String      @id @default(cuid())
+    paymentId   String?     @unique
     status      String
     paymentType String
     amount      Float
