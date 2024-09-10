@@ -13,6 +13,7 @@ const client = new Client({
 });
 export interface CreateSalesPaymentProps {
     amount?: number;
+    description?: string;
     allowTip?: boolean;
     tip?: number;
     phone?: string;
@@ -36,48 +37,32 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
     });
     const resp = await client.checkoutApi.createPaymentLink({
         idempotencyKey: new Date().toISOString(),
-        // quickPay: {
-        //     locationId: env.SQUARE_LOCATION_ID,
-        //     name: "Item",
-        //     priceMoney: {
-        //         amount: BigInt(Math.ceil(data.amount * 100)),
-        //         currency: "USD",
-        //     },
-
-        // },
-        // order: {
-        //     locationId: env.SQUARE_LOCATION_ID,
-        //     lineItems:
-        //         !__isProd || !data.items.length
-        //             ? [
-        //                   {
-        //                       quantity: "1",
-        //                       basePriceMoney: {
-        //                           amount: BigInt(5000),
-        //                           currency: "USD",
-        //                       },
-        //                       name: "ITEM NAME",
-        //                   },
-        //               ]
-        //             : data.items,
-        // },
-        order: {
-            locationId: env.SQUARE_LOCATION_ID,
-            lineItems: [
-                {
-                    name: "Item",
-                    quantity: "1",
-                    basePriceMoney: {
-                        amount: BigInt(5000),
-                        currency: "USD",
-                    },
-                    uid: "abc",
-                },
-            ],
-        },
+        quickPay: data.items.length
+            ? undefined
+            : {
+                  locationId: env.SQUARE_LOCATION_ID,
+                  name: data.description,
+                  priceMoney: {
+                      amount: BigInt(Math.ceil(data.amount * 100)),
+                      currency: "USD",
+                  },
+              },
+        order: !data.items.length
+            ? undefined
+            : {
+                  locationId: env.SQUARE_LOCATION_ID,
+                  serviceCharges: [
+                      // {}
+                  ],
+                  netAmountDueMoney: {
+                      amount: BigInt(data.amount * 100),
+                      currency: "USD",
+                  },
+                  lineItems: data.items,
+              },
         prePopulatedData: {
             buyerEmail: data.email,
-            buyerPhoneNumber: data.phone,
+            buyerPhoneNumber: phone(data.phone),
             buyerAddress: data.address,
         },
         checkoutOptions: {
@@ -88,10 +73,8 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
     });
     const { result, statusCode, body: _body } = resp;
     // console.log("```````````", JSON.stringify(resp), "`````````````````");
-    console.log(resp);
     if (typeof _body === "string") {
         const bdy = JSON.parse(_body);
-        console.log(bdy);
         if (bdy?.errors) throw new Error(_body);
     }
 
@@ -111,11 +94,8 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
         },
     });
     return paymentLink.url;
-    // await dealerEmail({
-    //     to: data.email,
-    //     body: ``,
-    // });
-    // result.paymentLink.id
-    // client.checkoutApi.deletePaymentLink(id);
-    // const paymentUrl = result.paymentLink.;
+}
+function phone(pg: string) {
+    if (!pg?.includes("+")) pg = `+1 ${pg}`;
+    return pg;
 }
