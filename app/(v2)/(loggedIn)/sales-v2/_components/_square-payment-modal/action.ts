@@ -23,7 +23,7 @@ export async function getSalesPaymentData(id) {
     });
     if (!order) throw Error("Order not found");
     const pendingCheckouts = order.checkouts?.filter(
-        (c) => c.status != "pending"
+        (c) => c.status != "pending" && c.status
     );
     const pendingAmount = sum(pendingCheckouts, "amount");
     return {

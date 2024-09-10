@@ -71,6 +71,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             });
             toast.success("Created");
         } catch (error) {
+            // console.log(error);
             if (error instanceof Error) toast.error(error.message);
         }
     }

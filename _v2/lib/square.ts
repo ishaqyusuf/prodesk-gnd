@@ -71,6 +71,7 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
                         amount: BigInt(5000),
                         currency: "USD",
                     },
+                    uid: "abc",
                 },
             ],
         },
