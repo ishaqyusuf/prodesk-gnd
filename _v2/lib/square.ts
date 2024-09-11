@@ -55,7 +55,7 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
                       // {}
                   ],
                   netAmountDueMoney: {
-                      amount: BigInt(data.amount * 100),
+                      amount: BigInt(Math.ceil(data.amount * 100)),
                       currency: "USD",
                   },
                   lineItems: data.items?.map((item) => {
