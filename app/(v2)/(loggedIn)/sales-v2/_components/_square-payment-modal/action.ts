@@ -73,7 +73,7 @@ async function getDykeLineItems(slug) {
                     lineItems.push({
                         name: md.description,
                         quantity: md.qty?.toString(),
-                        itemType: dt,
+                        // itemType: dt,
                         basePriceMoney: {
                             amount: Math.ceil(md.rate * 100) as any,
                             currency: "USD",
@@ -84,7 +84,7 @@ async function getDykeLineItems(slug) {
                     lineItems.push({
                         name: md.housePackageTool?.molding?.title,
                         quantity: md.qty?.toString(),
-                        itemType: dt,
+                        // itemType: dt,
                         basePriceMoney: {
                             amount: Math.ceil(md.rate * 100) as any,
                             currency: "USD",
