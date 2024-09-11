@@ -57,6 +57,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             //     })),
             items: order.lineItems,
         });
+        console.log(order.lineItems);
         setTab("paymentLinkForm");
     }
 
