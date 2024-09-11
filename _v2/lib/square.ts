@@ -58,12 +58,14 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
                       amount: BigInt(Math.ceil(data.amount * 100)),
                       currency: "USD",
                   },
-                  lineItems: data.items?.map((item) => {
-                      item.basePriceMoney.amount = BigInt(
-                          item.basePriceMoney.amount
-                      );
-                      return item;
-                  }),
+                  lineItems: data.items
+                      ?.filter((i) => i.basePriceMoney.amount)
+                      ?.map((item) => {
+                          item.basePriceMoney.amount = BigInt(
+                              item.basePriceMoney.amount
+                          );
+                          return item;
+                      }),
               },
         prePopulatedData: {
             buyerEmail: data.email,
