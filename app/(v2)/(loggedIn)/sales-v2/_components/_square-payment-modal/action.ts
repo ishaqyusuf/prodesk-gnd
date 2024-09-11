@@ -99,7 +99,7 @@ async function getDykeLineItems(slug) {
                             // `${inToFt(door?.dimension)} | ${door.swing} | `,
 
                             quantity: door.totalQty?.toString(),
-                            itemType: dt,
+                            // itemType: dt,
                             basePriceMoney: {
                                 amount: Math.ceil(door.unitPrice * 100) as any,
                                 currency: "USD",
