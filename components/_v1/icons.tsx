@@ -75,13 +75,13 @@ import {
     DollarSign,
     ImageIcon,
     Send,
+    LineChart,
     Box,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
 import logo2 from "@/public/logo.png";
 import Link from "next/link";
-import { LineChart } from "recharts";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 export type Icon = LucideIcon;

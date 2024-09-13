@@ -41,7 +41,7 @@ export default function ControlledCheckbox<
             render={({ field }) => (
                 <FormItem
                     className={cn(
-                        "flex flex-row items-start space-x-3 space-y-0 rounded-md",
+                        "flex flex-row items-starts items-center space-x-3 space-y-0 rounded-md",
                         className
                     )}
                 >

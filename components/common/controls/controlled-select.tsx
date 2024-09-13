@@ -136,7 +136,7 @@ export default function ControlledSelect<
                                 >
                                     <SelectValue placeholder={placeholder} />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="max-h-[40vh] overflow-auto">
                                     {(loader ? list : options)?.map(
                                         (option, index) =>
                                             SelItem ? (

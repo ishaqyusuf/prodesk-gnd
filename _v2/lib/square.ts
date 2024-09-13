@@ -1,8 +1,15 @@
 "use server";
+import { CheckoutStatus } from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal/action";
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
 import { __isProd } from "@/lib/is-prod-server";
-import { Client, Environment, OrderLineItem, PrePopulatedData } from "square";
+import {
+    Client,
+    ApiError,
+    Environment,
+    OrderLineItem,
+    PrePopulatedData,
+} from "square";
 
 const client = new Client({
     environment:
@@ -11,22 +18,53 @@ const client = new Client({
             : Environment.Sandbox,
     accessToken: env.SANBOX_ACCESS_TOKEN,
 });
-export interface CreateSalesPaymentProps {
+export interface SquarePaymentMeta {
+    squareOrderId;
+}
+export interface BaseSalesPaymentProps {
+    customerName: string;
     amount?: number;
+    dueAmount: number;
+    grandTotal: number;
     description?: string;
     allowTip?: boolean;
     tip?: number;
     phone?: string;
+    deviceId?: string;
     email?: string;
-    items: OrderLineItem[];
+    items?: OrderLineItem[];
     address?: PrePopulatedData["buyerAddress"];
     orderId: number;
+    orderIdStr: string;
+    // type: "link" | "terminal";
+    salesCheckoutId?: string;
+    paymentId?: string;
+    squareCustomerId?: string;
+    terminalStatus?:
+        | "idle"
+        | "processing"
+        | "processed"
+        | "failed"
+        | "cancelled";
 }
+export interface CreateSalesPaymentLinkProps extends BaseSalesPaymentProps {
+    type: "link";
+    deviceId?: never; // deviceId should not exist for type 'link'
+}
+
+export interface CreateSalesPaymentTerminalProps extends BaseSalesPaymentProps {
+    type: "terminal";
+    deviceId: string; // deviceId is required for type 'terminal'
+}
+
+export type CreateSalesPaymentProps =
+    | CreateSalesPaymentLinkProps
+    | CreateSalesPaymentTerminalProps;
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
     const salesCheckout = await prisma.salesCheckout.create({
         data: {
-            amount: data.amount,
-            paymentType: "sales_payment",
+            amount: data.amount / 100,
+            paymentType: `square_${data.type}`,
             status: "no-status",
             orderId: data.orderId,
             meta: {
@@ -35,74 +73,264 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
             } as any,
         },
     });
-    const resp = await client.checkoutApi.createPaymentLink({
-        idempotencyKey: new Date().toISOString(),
-        quickPay: data.items.length
-            ? undefined
-            : {
-                  locationId: env.SQUARE_LOCATION_ID,
-                  name: data.description,
-                  priceMoney: {
-                      amount: BigInt(Math.ceil(data.amount * 100)),
-                      currency: "USD",
-                  },
-              },
-        order: !data.items.length
-            ? undefined
-            : {
-                  locationId: env.SQUARE_LOCATION_ID,
-                  serviceCharges: [
-                      // {}
-                  ],
-                  netAmountDueMoney: {
-                      amount: BigInt(Math.ceil(data.amount * 100)),
-                      currency: "USD",
-                  },
-                  lineItems: data.items
-                      ?.filter((i) => i.basePriceMoney.amount)
-                      ?.map((item) => {
-                          item.basePriceMoney.amount = BigInt(
-                              item.basePriceMoney.amount
-                          );
-                          return item;
-                      }),
-              },
-        prePopulatedData: {
-            buyerEmail: data.email,
-            buyerPhoneNumber: phone(data.phone),
-            buyerAddress: data.address,
-        },
-        checkoutOptions: {
-            redirectUrl: `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/sales-payment/${salesCheckout.id}`,
-            askForShippingAddress: false,
-            allowTipping: data.allowTip,
-        },
-    });
-    const { result, statusCode, body: _body } = resp;
-    // console.log("```````````", JSON.stringify(resp), "`````````````````");
-    if (typeof _body === "string") {
-        const bdy = JSON.parse(_body);
-        if (bdy?.errors) throw new Error(_body);
-    }
-
-    if (statusCode == 400) throw new Error("Eror 400");
-    if (result?.errors?.length) {
-        throw new Error("Unable to create payment link");
-    }
-
-    const paymentLink = result.paymentLink;
+    data.salesCheckoutId = salesCheckout.id;
+    const checkout =
+        data.type == "terminal"
+            ? await ceateTerminalCheckout(data)
+            : await createSalesPaymentLink(data);
     await prisma.salesCheckout.update({
         where: {
             id: salesCheckout.id,
         },
         data: {
             status: "pending",
-            paymentId: paymentLink.id,
+            paymentId: checkout.id,
+            meta: checkout.meta as any,
         },
     });
-    return paymentLink.url;
+    return {
+        ...checkout,
+        paymentId: checkout.id,
+        salesCheckoutId: salesCheckout.id,
+    };
+}
+async function errorHandler(fn): Promise<{
+    errors?: ApiError["errors"];
+    error?;
+    id?;
+    meta?: SquarePaymentMeta;
+}> {
+    try {
+        return await fn();
+    } catch (error) {
+        if (error instanceof ApiError) {
+            return {
+                errors: JSON.parse(JSON.stringify(error.errors)),
+            };
+        }
+        console.log(error);
+
+        return { error: "Unable to complete" };
+    }
+}
+export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
+    return await errorHandler(async () => {
+        const redirectUrl = `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/square-payment-response/${data.salesCheckoutId}`;
+        const quickPay = !data.items.length || data.grandTotal != data.amount;
+        console.log({ quickPay });
+        const resp = await client.checkoutApi.createPaymentLink({
+            idempotencyKey: new Date().toISOString(),
+            quickPay: !quickPay
+                ? undefined
+                : {
+                      locationId: env.SQUARE_LOCATION_ID,
+                      name:
+                          data.description || `payment for ${data.orderIdStr}`,
+                      priceMoney: {
+                          amount: BigInt(Math.ceil(data.amount * 100)),
+                          currency: "USD",
+                      },
+                  },
+            order: quickPay
+                ? undefined
+                : {
+                      locationId: env.SQUARE_LOCATION_ID,
+                      serviceCharges: [
+                          {
+                              name: "Total Amount",
+                              calculationPhase: "TOTAL_PHASE",
+                              amountMoney: {
+                                  amount: BigInt(50000),
+                                  currency: "USD",
+                              },
+                          },
+                      ],
+                      discounts: [
+                          {
+                              amountMoney: {
+                                  amount: BigInt(403400),
+                                  currency: "USD",
+                              },
+                              name: "Paid",
+                          },
+                      ],
+                      //   netAmountDueMoney: {
+                      //       amount: BigInt(Math.ceil(data.amount * 100)),
+                      //       currency: "USD",
+                      //   },
+                      lineItems: data.items
+                          ?.filter((i) => i.basePriceMoney.amount)
+                          ?.map((item) => {
+                              item.basePriceMoney.amount = BigInt(
+                                  item.basePriceMoney.amount
+                              );
+                              return item;
+                          }),
+                  },
+            prePopulatedData: {
+                buyerEmail: data.email,
+                buyerPhoneNumber: phone(data.phone),
+                buyerAddress: data.address,
+            },
+            checkoutOptions: {
+                redirectUrl,
+                askForShippingAddress: false,
+                allowTipping: data.allowTip,
+            },
+        });
+        const { result, statusCode, body: _body } = resp;
+        // result.relatedResources.orders
+        const paymentLink = result.paymentLink;
+        // result.relatedResources.orders[0].id
+        const [order] = result.relatedResources.orders;
+        return {
+            id: paymentLink.url,
+            redirectUrl,
+            ...result,
+            meta: {
+                squareOrderId: paymentLink.orderId,
+            },
+        };
+    });
+}
+export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
+    return await errorHandler(async () => {
+        // client.devicesApi.listDevices
+        const s = await client.terminalApi.createTerminalCheckout({
+            // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID,
+            idempotencyKey: data.salesCheckoutId, // Unique identifier for each transaction
+            checkout: {
+                amountMoney: {
+                    amount: BigInt(Number(data.amount) * 100), // Amount in the smallest currency unit, e.g., cents
+                    currency: "USD",
+                },
+                // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID , // Your Square Terminal device ID
+                deviceOptions: {
+                    deviceId: data.deviceId,
+                    tipSettings: {
+                        allowTipping: data.allowTip,
+                    },
+                },
+                note: data.description || `Payment for ${data.orderIdStr}`,
+                referenceId: data.orderIdStr,
+                customerId: data.squareCustomerId,
+                paymentOptions: {
+                    // skipReceipt, // Option to skip the receipt
+                },
+            },
+        });
+        const checkoutId = s.result.checkout.id;
+        // s.result.checkout.orderId
+        return {
+            id: checkoutId,
+            meta: {
+                squareOrderId: s.result.checkout.orderId,
+            } as SquarePaymentMeta,
+        };
+    });
 }
 function phone(pg: string) {
     if (!pg?.includes("+")) pg = `+1 ${pg}`;
     return pg;
+}
+export type GetSquareDevices = Awaited<ReturnType<typeof getSquareDevices>>;
+export async function getSquareDevices() {
+    const devices = await client.devicesApi.listDevices();
+    return devices?.result?.devices
+        ?.map((device) => ({
+            label: device.attributes?.name,
+            status: device.status.category as "OFFLINE" | "AVAILABLE",
+            value: device.id,
+            device,
+        }))
+        .sort((a, b) => b.label - a.label);
+}
+
+export async function getSquareTerminalPaymentStatus(
+    terminalId,
+    salesCheckoutId
+) {
+    const payment = await client.terminalApi.getTerminalCheckout(terminalId);
+    const paymentStatus = payment.result.checkout.status as
+        | "PENDING"
+        | "IN_PROGRESS"
+        | "CANCEL_REQUESTED"
+        | "CANCELED"
+        | "COMPLETED";
+    const tipAmount = payment?.result?.checkout?.tipMoney?.amount;
+    if (tipAmount) {
+        const checkout = await prisma.salesCheckout.findUnique({
+            where: {
+                id: salesCheckoutId,
+            },
+        });
+        await prisma.salesCheckout.update({
+            where: {
+                id: salesCheckoutId,
+            },
+            data: {
+                tip: Number(tipAmount) / 100,
+            },
+        });
+    }
+
+    return paymentStatus;
+}
+export async function validSquarePayment(id) {
+    const p = await prisma.salesCheckout.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            order: true,
+        },
+    });
+    const meta: SquarePaymentMeta = p.meta as any;
+    const order = await client.ordersApi.retrieveOrder(meta.squareOrderId);
+    // order.result.order.
+    const resp = await client.checkoutApi.retrievePaymentLink(p.paymentId);
+    resp.result.paymentLink;
+}
+export async function squarePaymentSuccessful(id) {
+    const p = await prisma.salesCheckout.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            order: true,
+        },
+    });
+    if (p.status == "success") return;
+    const _p = await prisma.salesPayments.create({
+        data: {
+            // transactionId: 1,
+            amount: p.amount,
+            orderId: p.orderId,
+            tip: p.tip,
+            meta: {},
+            status: "success",
+            customerId: p.order.customerId,
+        },
+    });
+    await prisma.salesCheckout.update({
+        where: {
+            id: p.id,
+        },
+        data: {
+            status: "success" as CheckoutStatus,
+            salesPaymentsId: _p.id,
+        },
+    });
+    let amountDue = p.order.amountDue - p.amount;
+    await prisma.salesOrders.update({
+        where: {
+            id: p.orderId,
+        },
+        data: {
+            amountDue,
+        },
+    });
+
+    const o = await client.ordersApi.retrieveOrder("");
+    // o.result.order.
 }

@@ -69,3 +69,6 @@ export interface ServerPromiseType<T extends (...args: any) => any> {
     Response: Awaited<PromiseDataTable<T>>;
     Item: Awaited<PromiseDataTable<T>>["data"][0];
 }
+export type AsyncFnType<T extends (...args: any) => any> = Awaited<
+    ReturnType<T>
+>;

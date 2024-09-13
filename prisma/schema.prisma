@@ -1331,6 +1331,7 @@ model SalesPayments {
     createdAt     DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?            @updatedAt
     order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
+    checkout      SalesCheckout?
     customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
     transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
     commissions   SalesCommision[]
@@ -1341,18 +1342,24 @@ model SalesPayments {
 }
 
 model SalesCheckout {
-    id          String      @id @default(cuid())
-    paymentId   String?     @unique
-    status      String
-    paymentType String
-    amount      Float
-    tip         Float?      @default(0)
-    orderId     Int
-    meta        Json?       @db.Json
-    deletedAt   DateTime?   @db.Timestamp(0)
-    createdAt   DateTime?   @default(now()) @db.Timestamp(0)
-    updatedAt   DateTime?   @updatedAt
-    order       SalesOrders @relation(fields: [orderId], references: [id])
+    id              String         @id @default(cuid())
+    paymentId       String?        @unique
+    userId          Int?
+    status          String
+    paymentType     String
+    terminalId      String?
+    terminalName    String?
+    amount          Float
+    tip             Float?         @default(0)
+    orderId         Int
+    meta            Json?          @db.Json
+    deletedAt       DateTime?      @db.Timestamp(0)
+    createdAt       DateTime?      @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?      @updatedAt
+    order           SalesOrders    @relation(fields: [orderId], references: [id])
+    createdBy       Users?         @relation(fields: [userId], references: [id])
+    salesPaymentsId Int?           @unique
+    paymentSlip     SalesPayments? @relation(fields: [salesPaymentsId], references: [id])
 
     @@index([orderId])
 }
@@ -1501,6 +1508,7 @@ model Users {
     mailEvents                  MailEventTrigger[]
     sessions                    Session[]
     approvedRequests            DealerSalesRequest[]
+    checkouts                   SalesCheckout[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])

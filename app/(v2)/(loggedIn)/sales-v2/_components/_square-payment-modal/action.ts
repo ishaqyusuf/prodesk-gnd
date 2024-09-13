@@ -5,10 +5,12 @@ import { inToFt, sum } from "@/lib/utils";
 import { getSalesOverview } from "../../overview/_actions/get-sales-overview";
 import { OrderLineItem } from "square";
 import { getOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
+import { getSquareDevices } from "@/_v2/lib/square";
 
 export type GetSalesPaymentData = NonNullable<
     Awaited<ReturnType<typeof getSalesPaymentData>>
 >;
+export type CheckoutStatus = "no-status" | "pending" | "success";
 export async function getSalesPaymentData(id) {
     const order = await prisma.salesOrders.findUnique({
         where: { id },
@@ -54,9 +56,12 @@ export async function getSalesPaymentData(id) {
 
     return {
         ...order,
+        // orderId: order.id,
+        // orderIdStr: order.orderId,
         canCreatePaymentLink: order.amountDue > pendingAmount,
         pendingAmount,
         lineItems,
+        terminals: await getSquareDevices(),
     };
 }
 async function getDykeLineItems(slug) {
@@ -98,7 +103,9 @@ async function getDykeLineItems(slug) {
                             note: [inToFt(door?.dimension)].join("|"),
                             // `${inToFt(door?.dimension)} | ${door.swing} | `,
 
-                            quantity: door.totalQty?.toString(),
+                            quantity: (
+                                door.totalQty || sum([door.lhQty, door.rhQty])
+                            )?.toString(),
                             // itemType: dt,
                             basePriceMoney: {
                                 amount: Math.ceil(door.unitPrice * 100) as any,
