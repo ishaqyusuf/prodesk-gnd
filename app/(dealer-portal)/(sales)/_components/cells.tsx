@@ -4,6 +4,7 @@ import {
     SalesCellProps,
     SalesCells,
 } from "@/app/(v2)/(loggedIn)/sales/dashboard/_components/sales-cells";
+import { TableCol } from "@/components/common/data-table/table-cells";
 
 function Order({ item }: SalesCellProps) {
     const href = item.isDyke
@@ -12,7 +13,10 @@ function Order({ item }: SalesCellProps) {
     return <SalesCells.OrderDispatch item={item} href={href} />;
 }
 function DispatchStatus({ item }: SalesCellProps) {}
-function OrderAction({ item }: SalesCellProps) {}
+function OrderAction({ item }: SalesCellProps) {
+    // item.status
+    return <TableCol></TableCol>;
+}
 export let Cells = {
     Order,
     Invoice: SalesCells.Invoice,

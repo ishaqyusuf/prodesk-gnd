@@ -33,6 +33,7 @@ export default function ClientPage({ promise, quote }: Props) {
             ctx.Column("Invoice", Cells.Invoice),
             ctx.Column("Dispatch", Cells.Dispatch),
             ctx.Column("Status", Cells.Status),
+            ctx.ActionColumn(Cells.OrderAction),
         ]
     );
     return (

@@ -59,15 +59,24 @@ export default function SalesMetaData() {
                 />
             </InfoLine>
             {type == "order" ? (
-                <InfoLine label="Payment Term">
-                    <ControlledSelect
-                        control={form.control}
-                        size="sm"
-                        className="min-w-[150px]"
-                        name="order.paymentTerm"
-                        options={salesData.paymentTerms}
-                    />
-                </InfoLine>
+                <>
+                    <InfoLine label="Payment Term">
+                        <ControlledSelect
+                            control={form.control}
+                            size="sm"
+                            className="min-w-[150px]"
+                            name="order.paymentTerm"
+                            options={salesData.paymentTerms}
+                        />
+                    </InfoLine>
+                    <InfoLine label="P.O No.">
+                        <ControlledInput
+                            control={form.control}
+                            size="sm"
+                            name="order.meta.po"
+                        />
+                    </InfoLine>
+                </>
             ) : (
                 <InfoLine label="Good Until">
                     <DateControl
@@ -76,22 +85,22 @@ export default function SalesMetaData() {
                     />
                 </InfoLine>
             )}
-            <div className="grid grid-cols-2 gap-2 items-center xl:col-span-2">
-                <InfoLine label="Tax">
-                    <ControlledCheckbox
-                        switchInput
-                        className="h-8"
-                        name="order.meta.tax"
-                    />
-                </InfoLine>
-                <InfoLine label="Component Price">
-                    <ControlledCheckbox
-                        switchInput
-                        className="h-8"
-                        name="order.meta.calculatedPriceMode"
-                    />
-                </InfoLine>
-            </div>
+            {/* <div className="grid grid-cols-2 gap-2 items-center xl:col-span-2"> */}
+            <InfoLine label="Tax">
+                <ControlledCheckbox
+                    switchInput
+                    className="h-8"
+                    name="order.meta.tax"
+                />
+            </InfoLine>
+            <InfoLine label="Component Price">
+                <ControlledCheckbox
+                    switchInput
+                    className="h-8"
+                    name="order.meta.calculatedPriceMode"
+                />
+            </InfoLine>
+            {/* </div> */}
         </div>
     );
 }

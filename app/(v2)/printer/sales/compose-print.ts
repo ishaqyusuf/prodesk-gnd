@@ -659,12 +659,17 @@ function heading({ mode, isOrder, order, isEstimate }) {
         );
     }
     if (isOrder) {
-        h.lines.push(
-            styled("Invoice Total", formatCurrency.format(order?.grandTotal), {
-                size: "base",
-                font: "bold",
-            })
-        );
+        h.lines.push(styled("P.O No", order?.meta?.po, {})),
+            h.lines.push(
+                styled(
+                    "Invoice Total",
+                    formatCurrency.format(order?.grandTotal),
+                    {
+                        size: "base",
+                        font: "bold",
+                    }
+                )
+            );
         h.lines.push(
             styled(
                 "Invoice Status",
