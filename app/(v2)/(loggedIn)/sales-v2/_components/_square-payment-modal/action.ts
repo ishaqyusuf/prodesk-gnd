@@ -10,7 +10,7 @@ import { getSquareDevices } from "@/_v2/lib/square";
 export type GetSalesPaymentData = NonNullable<
     Awaited<ReturnType<typeof getSalesPaymentData>>
 >;
-export type CheckoutStatus = "no-status" | "pending" | "success";
+export type CheckoutStatus = "no-status" | "pending" | "success" | "cancelled";
 export async function getSalesPaymentData(id) {
     const order = await prisma.salesOrders.findUnique({
         where: { id },

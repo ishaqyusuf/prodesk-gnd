@@ -20,6 +20,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useForm, UseFormReturn } from "react-hook-form";
 import {
+    cancelTerminalPayment,
     createSalesPayment,
     CreateSalesPaymentProps,
     getSquareDevices,
@@ -35,6 +36,7 @@ import ControlledSelect from "@/components/common/controls/controlled-select";
 import { SelectItem } from "@/components/ui/select";
 import { CheckCircle2Icon, Dot, Loader2Icon, XCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { env } from "@/env.mjs";
 
 type FormProps = CreateSalesPaymentProps & {
     modalTitle;
@@ -108,13 +110,18 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             if (data.type == "terminal") {
                 if (!data.deviceId) throw new Error("Select a terminal");
 
-                const devices = await getSquareDevices();
-                const selectedDevice = devices.find(
-                    (d) => d.value == data.deviceId
-                );
-                if (!selectedDevice || selectedDevice?.status != "AVAILABLE") {
-                    console.log({ selectedDevice, devices });
-                    throw new Error("Selected terminal is not online");
+                if (env.NEXT_PUBLIC_NODE_ENV == "production") {
+                    const devices = await getSquareDevices();
+                    const selectedDevice = devices.find(
+                        (d) => d.value == data.deviceId
+                    );
+                    if (
+                        !selectedDevice ||
+                        selectedDevice?.status != "AVAILABLE"
+                    ) {
+                        console.log({ selectedDevice, devices });
+                        throw new Error("Selected terminal is not online");
+                    }
                 }
             }
             let resp = await createSalesPayment(data);
@@ -254,7 +261,11 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                                         <SelectItem
                                             value={option.value}
                                             disabled={
-                                                option.status != "AVAILABLE"
+                                                env.NEXT_PUBLIC_NODE_ENV ==
+                                                "production"
+                                                    ? option.status !=
+                                                      "AVAILABLE"
+                                                    : false
                                             }
                                             className=""
                                         >
@@ -295,21 +306,35 @@ export default function SquarePaymentModal({ id }: { id: number }) {
 function TerminalComponents({}) {
     const ctx = useContext(Ctx);
     const form = ctx.form;
-    const [paymentStatus, paymentId, salesCheckoutId] = ctx.form.watch([
+    const [terminalStatus, paymentId, salesCheckoutId] = ctx.form.watch([
         "terminalStatus",
         "paymentId",
         "salesCheckoutId",
     ]);
+    const modal = useModal();
+    async function cancelPayment() {
+        //  form.setValue("modalTitle", "Payment Failed");
+        //  form.setValue(
+        //      "modalSubtitle",
+        //      "There was an error processing your payment."
+        //  ); form.setValue("modalTitle", "Payment Failed");
+        await cancelTerminalPayment(salesCheckoutId);
+        modal.close();
+        toast.success("Payment Cancelled");
+        // form.setValue("modalSubtitle", "Payment has been cancelled.");
+        // ctx.setTab("paymentProcessFailed");
+    }
     useEffect(() => {
         let interval;
 
-        if (paymentStatus == "processing") {
+        if (terminalStatus == "processing") {
             interval = setInterval(async () => {
                 //
                 const status = await getSquareTerminalPaymentStatus(
                     paymentId,
                     salesCheckoutId
                 );
+
                 switch (status) {
                     case "COMPLETED":
                         ctx.setTab("paymentProcessSuccessful");
@@ -318,6 +343,7 @@ function TerminalComponents({}) {
                             "modalSubtitle",
                             "Swipe your card to finalize payment"
                         );
+                        form.setValue("terminalStatus", "processed");
                         await squarePaymentSuccessful(salesCheckoutId);
                         break;
                     case "IN_PROGRESS":
@@ -333,12 +359,12 @@ function TerminalComponents({}) {
                         );
                         ctx.setTab("paymentProcessFailed");
                 }
-            }, 1500); // Polling every 1 second
+            }, 3000);
         }
 
         // Cleanup interval on component unmount or when polling stops
         return () => clearInterval(interval);
-    }, [paymentStatus]);
+    }, [terminalStatus]);
 
     return (
         <>
@@ -347,7 +373,11 @@ function TerminalComponents({}) {
                     <Loader2Icon className="h-16 w-16 text-blue-500 animate-spin" />
                 </div>
                 <div className="flex gap-4">
-                    <Button variant="destructive" className="flex-1">
+                    <Button
+                        onClick={cancelPayment}
+                        variant="destructive"
+                        className="flex-1"
+                    >
                         Cancel Payment
                     </Button>
                 </div>

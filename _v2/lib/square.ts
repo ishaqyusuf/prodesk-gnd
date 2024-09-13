@@ -243,7 +243,7 @@ export async function getSquareDevices() {
             value: device.id,
             device,
         }))
-        .sort((a, b) => b.label - a.label);
+        .sort((a, b) => a?.label?.localeCompare(b.label) as any);
 }
 
 export async function getSquareTerminalPaymentStatus(
@@ -333,4 +333,20 @@ export async function squarePaymentSuccessful(id) {
 
     const o = await client.ordersApi.retrieveOrder("");
     // o.result.order.
+}
+export async function cancelTerminalPayment(id) {
+    const p = await prisma.salesCheckout.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            order: true,
+        },
+    });
+    await prisma.salesCheckout.update({
+        where: { id },
+        data: {
+            status: "cancelled",
+        },
+    });
 }
