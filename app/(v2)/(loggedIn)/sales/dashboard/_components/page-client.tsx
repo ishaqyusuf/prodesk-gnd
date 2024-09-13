@@ -84,7 +84,7 @@ export default function PageClient({
         return [];
     }
     const _table = useDataTableColumn2(
-        data,
+        data as any,
         {
             pageCount,
             cellVariants: {
