@@ -44,7 +44,7 @@ export interface SalesQueryParams extends BaseQuery {
         | "delivered";
 }
 export type GetSales = Awaited<ReturnType<typeof getSales>>;
-function transformOrder<T>(order: T) {
+function transformOrder<T>(order) {
     return {
         ...order,
         _meta: {
