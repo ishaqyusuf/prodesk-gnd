@@ -173,6 +173,7 @@ export async function getSales(query: SalesQueryParams) {
                     id: true,
                     name: true,
                     address1: true,
+                    email: true,
                     meta: true,
                     phoneNo: true,
                 },
@@ -182,7 +183,7 @@ export async function getSales(query: SalesQueryParams) {
                     id: true,
                     name: true,
                     phoneNo: true,
-
+                    email: true,
                     meta: true,
                     address1: true,
                 },
