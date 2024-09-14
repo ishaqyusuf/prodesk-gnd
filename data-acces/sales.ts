@@ -44,28 +44,7 @@ export interface SalesQueryParams extends BaseQuery {
         | "delivered";
 }
 export type GetSales = Awaited<ReturnType<typeof getSales>>;
-function transformOrder<T>(order) {
-    return {
-        ...order,
-        _meta: {
-            totalDoors: sum(
-                order.isDyke
-                    ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
-                    : order.items?.filter((i) => i.swing).map((i) => i.qty)
-            ),
-        },
-        customer: {
-            ...order.customer,
-            meta: {
-                // ...(order.meta)
-            },
-        },
-        shippingAddress: {
-            ...order.shippingAddress,
-            meta: order.shippingAddress?.meta as any as IAddressMeta,
-        },
-    };
-}
+
 export async function getSales(query: SalesQueryParams) {
     const where = await whereSales(query);
     const _items = await prisma.salesOrders.findMany({
@@ -89,6 +68,7 @@ export async function getSales(query: SalesQueryParams) {
                     prebuiltQty: true,
                     id: true,
                     qty: true,
+                    swing: true,
                     prodCompletedAt: true,
                     meta: true,
                 },
@@ -166,6 +146,7 @@ export async function getSales(query: SalesQueryParams) {
                     businessName: true,
                     name: true,
                     phoneNo: true,
+                    email: true,
                 },
             },
             billingAddress: {
@@ -197,6 +178,28 @@ export async function getSales(query: SalesQueryParams) {
         },
     });
     const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
+    function transformOrder(order: (typeof _items)[number]) {
+        return {
+            ...order,
+            _meta: {
+                totalDoors: sum(
+                    order.isDyke
+                        ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
+                        : order.items?.filter((i) => i.swing).map((i) => i.qty)
+                ),
+            },
+            customer: {
+                ...order.customer,
+                meta: {
+                    // ...(order.meta)
+                },
+            },
+            shippingAddress: {
+                ...order.shippingAddress,
+                meta: order.shippingAddress?.meta as any as IAddressMeta,
+            },
+        };
+    }
     return {
         pageInfo,
         pageCount: pageInfo.pageCount,
