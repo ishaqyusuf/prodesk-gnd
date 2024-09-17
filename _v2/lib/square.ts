@@ -9,6 +9,7 @@ import {
     Environment,
     OrderLineItem,
     PrePopulatedData,
+    Payment,
 } from "square";
 
 const client = new Client({
@@ -56,7 +57,12 @@ export interface CreateSalesPaymentTerminalProps extends BaseSalesPaymentProps {
     type: "terminal";
     deviceId: string; // deviceId is required for type 'terminal'
 }
-
+export type SquarePaymentStatus =
+    | "APPROVED"
+    | "PENDING"
+    | "COMPLETED"
+    | "CANCELED"
+    | "FAILED";
 export type CreateSalesPaymentProps =
     | CreateSalesPaymentLinkProps
     | CreateSalesPaymentTerminalProps;
@@ -99,6 +105,7 @@ async function errorHandler(fn): Promise<{
     error?;
     id?;
     meta?: SquarePaymentMeta;
+    paymentUrl?: string;
 }> {
     try {
         return await fn();
@@ -184,7 +191,8 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
         // result.relatedResources.orders[0].id
         const [order] = result.relatedResources.orders;
         return {
-            id: paymentLink.url,
+            paymentUrl: paymentLink.url,
+            id: paymentLink.id,
             redirectUrl,
             ...result,
             meta: {
@@ -276,7 +284,7 @@ export async function getSquareTerminalPaymentStatus(
 
     return paymentStatus;
 }
-export async function validSquarePayment(id) {
+export async function validateSquarePayment(id) {
     const p = await prisma.salesCheckout.findUnique({
         where: {
             id,
@@ -286,10 +294,23 @@ export async function validSquarePayment(id) {
         },
     });
     const meta: SquarePaymentMeta = p.meta as any;
-    const order = await client.ordersApi.retrieveOrder(meta.squareOrderId);
+    const {
+        result: {
+            order: { id: orderId, tenders },
+        },
+    } = await client.ordersApi.retrieveOrder(meta.squareOrderId);
     // order.result.order.
-    const resp = await client.checkoutApi.retrievePaymentLink(p.paymentId);
-    resp.result.paymentLink;
+    // const resp = await client.checkoutApi.retrievePaymentLink(p.paymentId);
+    // const orderId = resp.result.paymentLink.orderId;
+
+    // const _order = await client.ordersApi.retrieveOrder(orderId);
+    // const tenders = _order.result.order.tenders;
+    const [tender] = tenders;
+    const payment = await client.paymentsApi.getPayment(tender.paymentId);
+    const paymentStatus = payment.result.payment
+        .status as any as SquarePaymentMeta;
+
+    return { payment, tender, paymentStatus };
 }
 export async function squarePaymentSuccessful(id) {
     const p = await prisma.salesCheckout.findUnique({

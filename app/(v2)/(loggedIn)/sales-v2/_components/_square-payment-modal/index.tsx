@@ -15,7 +15,6 @@ import {
 import Modal from "@/components/common/modal";
 import { Info } from "@/components/_v1/info";
 import Money from "@/components/_v1/money";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -30,13 +29,13 @@ import {
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import Btn from "@/components/_v1/btn";
-import { notify } from "../../../mail-grid/lib/use-mail-event";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { SelectItem } from "@/components/ui/select";
 import { CheckCircle2Icon, Dot, Loader2Icon, XCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { env } from "@/env.mjs";
+import Button from "@/components/common/button";
+import { openLink } from "@/lib/open-link";
 
 type FormProps = CreateSalesPaymentProps & {
     modalTitle;
@@ -65,7 +64,6 @@ export default function SquarePaymentModal({ id }: { id: number }) {
     useEffect(() => {
         getSalesPaymentData(id)
             .then((data) => {
-                console.log(data);
                 setOrder(data);
             })
             .catch((e) => {
@@ -84,8 +82,8 @@ export default function SquarePaymentModal({ id }: { id: number }) {
         "modalTitle",
         "modalSubtitle",
     ]);
-    function _initPaymentForm() {
-        form.reset({
+    function defaultFormData() {
+        return {
             address: {
                 addressLine1: order?.billingAddress?.address1,
             },
@@ -100,13 +98,22 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             items: order.lineItems,
             modalTitle: order.orderId,
             modalSubtitle: `Payment Information`,
-        });
-        setTab("paymentLinkForm");
+        } as FormProps;
+    }
+    function resetForm() {
+        form.reset(defaultFormData() as any);
+    }
+    async function _initPaymentForm() {
+        resetForm();
+        if (order.dealerMode) await createPayment();
+        else setTab("paymentLinkForm");
     }
 
     async function createPayment() {
         try {
-            const data = form.getValues();
+            const data = order.dealerMode
+                ? defaultFormData()
+                : form.getValues();
             if (data.type == "terminal") {
                 if (!data.deviceId) throw new Error("Select a terminal");
 
@@ -124,8 +131,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     }
                 }
             }
-            let resp = await createSalesPayment(data);
-            console.log(resp);
+            let resp = await createSalesPayment(data as any);
 
             if (resp?.errors) {
                 resp.errors.map((e) => {
@@ -145,6 +151,12 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     "Swipe your card to finalize payment"
                 );
                 setTab("processingPayment");
+            }
+            if (order.dealerMode) {
+                if (resp.paymentUrl) openLink(resp.paymentUrl, {}, true);
+                else {
+                    toast.message("Check email for payment link or try again");
+                }
             }
             // await notify("PAYMENT_LINK_CREATED", {
             //     customerName:
@@ -200,11 +212,11 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                         </div>
                         <div className="">
                             <Button
-                                onClick={_initPaymentForm}
+                                action={_initPaymentForm}
                                 disabled={!order.canCreatePaymentLink}
                                 className="w-full"
                             >
-                                Create Payment Link
+                                {order.dealerMode ? "Pay" : " Create Payment"}
                             </Button>
                         </div>
                     </TabsContent>
@@ -374,7 +386,7 @@ function TerminalComponents({}) {
                 </div>
                 <div className="flex gap-4">
                     <Button
-                        onClick={cancelPayment}
+                        action={cancelPayment}
                         variant="destructive"
                         className="flex-1"
                     >

@@ -191,7 +191,7 @@ export async function getSales(query: SalesQueryParams) {
             customer: {
                 ...order.customer,
                 meta: {
-                    // ...(order.meta)
+                    // ...(order?.customer?.)
                 },
             },
             shippingAddress: {

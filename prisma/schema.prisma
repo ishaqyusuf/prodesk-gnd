@@ -1342,26 +1342,39 @@ model SalesPayments {
 }
 
 model SalesCheckout {
-    id              String         @id @default(cuid())
-    paymentId       String?        @unique
+    id              String            @id @default(cuid())
+    paymentId       String?           @unique
     userId          Int?
     status          String
     paymentType     String
     terminalId      String?
     terminalName    String?
     amount          Float
-    tip             Float?         @default(0)
+    tip             Float?            @default(0)
     orderId         Int
-    meta            Json?          @db.Json
-    deletedAt       DateTime?      @db.Timestamp(0)
-    createdAt       DateTime?      @default(now()) @db.Timestamp(0)
-    updatedAt       DateTime?      @updatedAt
-    order           SalesOrders    @relation(fields: [orderId], references: [id])
-    createdBy       Users?         @relation(fields: [userId], references: [id])
-    salesPaymentsId Int?           @unique
-    paymentSlip     SalesPayments? @relation(fields: [salesPaymentsId], references: [id])
+    meta            Json?             @db.Json
+    deletedAt       DateTime?         @db.Timestamp(0)
+    createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?         @updatedAt
+    order           SalesOrders       @relation(fields: [orderId], references: [id])
+    createdBy       Users?            @relation(fields: [userId], references: [id])
+    salesPaymentsId Int?              @unique
+    paymentSlip     SalesPayments?    @relation(fields: [salesPaymentsId], references: [id])
+    tenders         CheckoutTenders[]
 
     @@index([orderId])
+}
+
+model CheckoutTenders {
+    id              String        @id @default(cuid())
+    tenderId        String
+    squareOrderId   String
+    salesCheckoutId String
+    status          String
+    createdAt       DateTime?     @default(now()) @db.Timestamp(0)
+    checkout        SalesCheckout @relation(fields: [salesCheckoutId], references: [id])
+
+    @@index([salesCheckoutId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

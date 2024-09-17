@@ -12,7 +12,6 @@ import {
 } from "./action";
 import { Info } from "@/components/_v1/info";
 import StatusBadge from "@/components/_v1/status-badge";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,12 +19,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import useEffectLoader from "@/lib/use-effect-loader";
-import { getCustomerProfileList } from "../form/_action/get-customer-profiles";
 import { useForm } from "react-hook-form";
-import {
-    getSalesSettingAction,
-    getSettingAction,
-} from "@/app/(v1)/_actions/settings";
 import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customer-profiles";
 import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";

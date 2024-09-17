@@ -1,10 +1,14 @@
 "use client";
 
+import SquarePaymentModal from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal";
 import {
     SalesCellProps,
     SalesCells,
 } from "@/app/(v2)/(loggedIn)/sales/dashboard/_components/sales-cells";
+import Button from "@/components/common/button";
 import { TableCol } from "@/components/common/data-table/table-cells";
+import { useModal } from "@/components/common/modal/provider";
+import { SalesStatus } from "@/types/sales";
 
 function Order({ item }: SalesCellProps) {
     const href = item.isDyke
@@ -14,8 +18,21 @@ function Order({ item }: SalesCellProps) {
 }
 function DispatchStatus({ item }: SalesCellProps) {}
 function OrderAction({ item }: SalesCellProps) {
-    // item.status
-    return <TableCol></TableCol>;
+    const status = item.status as SalesStatus;
+    const noPayStatus: SalesStatus[] = ["Evaluating"];
+    const modal = useModal();
+    async function _pay() {
+        modal.openModal(<SquarePaymentModal id={item.id} />);
+    }
+    return (
+        <TableCol>
+            {item.amountDue > 0 && status != "Evaluating" && (
+                <Button size="sm" action={_pay}>
+                    <span>Pay</span>
+                </Button>
+            )}
+        </TableCol>
+    );
 }
 export let Cells = {
     Order,

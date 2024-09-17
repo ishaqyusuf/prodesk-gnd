@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { validSquarePayment } from "@/_v2/lib/square";
+import { validateSquarePayment } from "@/_v2/lib/square";
 
 export default function SquarePaymentResponse({ params }) {
     const [paymentState, setPaymentState] = useState("processing");
@@ -13,7 +13,8 @@ export default function SquarePaymentResponse({ params }) {
     useEffect(() => {
         const timer = setTimeout(async () => {
             // setPaymentState(Math.random() > 0.5 ? "success" : "failure");
-            const p = await validSquarePayment(paymentId);
+            const p = await validateSquarePayment(paymentId);
+            console.log(p);
         }, 1000);
 
         return () => clearTimeout(timer);
@@ -30,7 +31,6 @@ export default function SquarePaymentResponse({ params }) {
         <div className="h-screen flex flex-col justify-center items-center">
             <Card className="w-full max-w-md mx-auto">
                 <CardContent className="flex flex-col items-center justify-center min-h-[300px]">
-                    {JSON.stringify(params)}
                     {paymentState === "processing" && (
                         <motion.div
                             className="flex flex-col items-center"

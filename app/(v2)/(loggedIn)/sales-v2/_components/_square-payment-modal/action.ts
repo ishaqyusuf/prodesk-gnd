@@ -6,6 +6,7 @@ import { getSalesOverview } from "../../overview/_actions/get-sales-overview";
 import { OrderLineItem } from "square";
 import { getOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { getSquareDevices } from "@/_v2/lib/square";
+import { sessionIsDealerMode } from "@/app/(v1)/_actions/utils";
 
 export type GetSalesPaymentData = NonNullable<
     Awaited<ReturnType<typeof getSalesPaymentData>>
@@ -53,9 +54,10 @@ export async function getSalesPaymentData(id) {
         ? await getDykeLineItems(order.slug)
         : getLineItems();
     // overview.groupings.
-
+    const dealerMode = await sessionIsDealerMode();
     return {
         ...order,
+        dealerMode,
         // orderId: order.id,
         // orderIdStr: order.orderId,
         canCreatePaymentLink: order.amountDue > pendingAmount,
