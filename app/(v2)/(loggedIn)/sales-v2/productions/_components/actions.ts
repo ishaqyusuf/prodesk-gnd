@@ -60,7 +60,6 @@ export async function _getProductionList({ query, production = false }: Props) {
             ],
         },
     };
-    console.log();
     const where: Prisma.SalesOrdersWhereInput =
         query?.dueToday || query.pastDue
             ? {

@@ -78,7 +78,8 @@ function ProductionStatus({ item }: Props) {
     );
     const totalDoors = item._meta.totalDoors;
     // console.log(item.productionStatus?.status);
-    if (submitted == totalDoors) return <TableCol.Status status="Completed" />;
+    if (submitted == totalDoors && totalDoors > 0)
+        return <TableCol.Status status="Completed" />;
     return (
         <>
             <TableCol.Status
