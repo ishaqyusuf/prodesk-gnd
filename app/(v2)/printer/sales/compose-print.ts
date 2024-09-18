@@ -635,7 +635,7 @@ function printFooter(data: PrintData, notPrintable) {
     };
 }
 
-function heading({ mode, isOrder, order, isEstimate }) {
+function heading({ mode, isOrder, order, isEstimate, isPacking }) {
     let h = {
         title: mode,
         lines: [
@@ -658,7 +658,7 @@ function heading({ mode, isOrder, order, isEstimate }) {
             )
         );
     }
-    if (isOrder) {
+    if (isOrder || isPacking)
         h.lines.push(styled("P.O No", order?.meta?.po, {})),
             h.lines.push(
                 styled(
@@ -670,6 +670,7 @@ function heading({ mode, isOrder, order, isEstimate }) {
                     }
                 )
             );
+    if (isOrder) {
         h.lines.push(
             styled(
                 "Invoice Status",
