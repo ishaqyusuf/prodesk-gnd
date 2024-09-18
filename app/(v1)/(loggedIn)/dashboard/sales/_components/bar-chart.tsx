@@ -35,11 +35,11 @@ import {
 // ];
 
 const chartConfig = {
-    current: {
+    previous: {
         label: "Last Year",
         color: "hsl(var(--chart-1))",
     },
-    previous: {
+    current: {
         label: "This Year",
         color: "hsl(var(--chart-2))",
     },
@@ -50,7 +50,7 @@ export default function BarChartCard({ chartData }) {
         <Card className="col-span-4">
             <CardHeader>
                 <CardTitle>Sales Overview</CardTitle>
-                <CardDescription>Sept - Aug 2024</CardDescription>
+                <CardDescription>Oct - Sep 2024</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>

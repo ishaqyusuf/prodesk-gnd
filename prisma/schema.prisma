@@ -1368,6 +1368,7 @@ model SalesCheckout {
 model CheckoutTenders {
     id              String        @id @default(cuid())
     tenderId        String
+    squarePaymentId String
     squareOrderId   String
     salesCheckoutId String
     status          String

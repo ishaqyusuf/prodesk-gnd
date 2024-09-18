@@ -10,28 +10,31 @@ export function composeBar(_charts: { year; month; value }[]) {
     let total = 12;
     const charts = _charts; //.splice(-12);
     // const {year,month} = charts[0]
-    console.log(charts);
-    const date = dayjs();
+
+    // const date = dayjs();
     let _chart: BarChartProps[] = [];
-    console.log(charts);
+    // console.log({ _charts });
+
     // const lastYear =
     for (let i = 0; i < 12; i++) {
-        let _d = date.subtract(i, "months");
+        let _d = dayjs().subtract(i, "months");
         const month = _d?.format("M");
         const year = _d?.format("YYYY");
         // console.log([year, month]);
         const lastYear = String(Number(year) - 1);
-        _chart.unshift({
+        const monthChats = charts.filter((c) => c.month == month);
+        const _c = {
             month: _d.format("MMM"),
             current: +toFixed(
-                charts.find((v) => v.year == year && v.month == month)?.value ||
-                    0
+                monthChats.find((v) => v.year == year)?.value || 0
             ),
             previous: +toFixed(
-                charts.find((v) => v.year == lastYear && v.month == month)
-                    ?.value || 0
+                monthChats.find((v) => v.year == lastYear)?.value || 0
             ),
-        });
+        };
+        // console.log({ _c, lastYear, year, month, monthChats });
+
+        _chart.unshift(_c);
     }
     return _chart;
 }
