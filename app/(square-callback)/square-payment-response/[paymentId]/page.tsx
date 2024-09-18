@@ -5,25 +5,28 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { validateSquarePayment } from "@/_v2/lib/square";
+import { SquarePaymentStatus, validateSquarePayment } from "@/_v2/lib/square";
 
 export default function SquarePaymentResponse({ params }) {
-    const [paymentState, setPaymentState] = useState("processing");
+    const [paymentState, setPaymentState] =
+        useState<SquarePaymentStatus>("PENDING");
     const { paymentId } = params;
     useEffect(() => {
         const timer = setTimeout(async () => {
             // setPaymentState(Math.random() > 0.5 ? "success" : "failure");
             const p = await validateSquarePayment(paymentId);
             console.log(p);
+            // if(p.status == 'COMPLETED')
+            setPaymentState(p.status);
         }, 1000);
 
         return () => clearTimeout(timer);
     }, []);
 
     const resetPayment = () => {
-        setPaymentState("processing");
+        setPaymentState("PENDING");
         setTimeout(() => {
-            setPaymentState(Math.random() > 0.5 ? "success" : "failure");
+            setPaymentState(Math.random() > 0.5 ? "COMPLETED" : "FAILED");
         }, 3000);
     };
 
@@ -31,7 +34,7 @@ export default function SquarePaymentResponse({ params }) {
         <div className="h-screen flex flex-col justify-center items-center">
             <Card className="w-full max-w-md mx-auto">
                 <CardContent className="flex flex-col items-center justify-center min-h-[300px]">
-                    {paymentState === "processing" && (
+                    {paymentState === "PENDING" && (
                         <motion.div
                             className="flex flex-col items-center"
                             initial={{ opacity: 0 }}
@@ -53,7 +56,7 @@ export default function SquarePaymentResponse({ params }) {
                             </p>
                         </motion.div>
                     )}
-                    {paymentState === "success" && (
+                    {paymentState === "COMPLETED" && (
                         <motion.div
                             className="flex flex-col items-center text-center"
                             initial={{ opacity: 0, y: 50 }}
@@ -71,7 +74,7 @@ export default function SquarePaymentResponse({ params }) {
                             </p>
                         </motion.div>
                     )}
-                    {paymentState === "failure" && (
+                    {paymentState === "FAILED" && (
                         <motion.div
                             className="flex flex-col items-center text-center"
                             initial={{ opacity: 0, y: 50 }}
@@ -91,8 +94,7 @@ export default function SquarePaymentResponse({ params }) {
                     )}
                 </CardContent>
                 <CardFooter>
-                    {(paymentState === "success" ||
-                        paymentState === "failure") && (
+                    {paymentState === "FAILED" && (
                         <Button className="w-full" onClick={resetPayment}>
                             Try Again
                         </Button>

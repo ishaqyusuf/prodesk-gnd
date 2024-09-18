@@ -285,76 +285,63 @@ export async function getSquareTerminalPaymentStatus(
     return paymentStatus;
 }
 export async function validateSquarePayment(id) {
-    const resp = await prisma.$transaction((async (tx) => {
-        const checkout = await tx.salesCheckout.findUnique({
-            where: {
-                id,
-            },
-            include: {
-                order: true,
-                tenders: true,
-            },
-        });
-        const meta: SquarePaymentMeta = checkout.meta as any;
-        const {
-            result: {
-                order: { id: orderId, tenders },
-            },
-        } = await client.ordersApi.retrieveOrder(meta.squareOrderId);
-        // order.result.order.
-        // const resp = await client.checkoutApi.retrievePaymentLink(p.paymentId);
-        // const orderId = resp.result.paymentLink.orderId;
-
-        // const _order = await client.ordersApi.retrieveOrder(orderId);
-        // const tenders = _order.result.order.tenders;
-        let paidAmount = 0;
-        let tipMoney = 0;
-        await Promise.all(
-            tenders
-                .filter((t) =>
-                    checkout.tenders.every((ct) => ct.tenderId != t.id)
-                )
-                .map(async (tender) => {
-                    const {
-                        result: { payment },
-                    } = await client.paymentsApi.getPayment(tender.paymentId);
-                    const tip = payment.tipMoney?.amount;
-                    const paymentStatus =
-                        payment.status as any as SquarePaymentStatus;
-                    if (paymentStatus == "COMPLETED") {
-                        paidAmount += Number(payment.amountMoney.amount) / 100;
-                        let t = Number(tip);
-                        tipMoney += t > 0 ? t / 100 : 0;
-                    }
-
-                    // await tx.checkoutTenders.create({
-                    //     data: {
-                    //         salesCheckoutId: checkout.id,
-                    //         squareOrderId: orderId,
-                    //         status: paymentStatus,
-                    //         tenderId: tender.id,
-                    //         squarePaymentId: payment.id,
-                    //     },
-                    // });
-                })
-        );
-        return {
-            paidAmount,
-            tipMoney,
-        };
-    }) as any);
-    // return { payment, tender, paymentStatus };
-}
-export async function squarePaymentSuccessful(id) {
-    const p = await prisma.salesCheckout.findUnique({
+    // const resp = await prisma.$transaction((async (tx) => {
+    const tx = prisma;
+    const checkout = await tx.salesCheckout.findUnique({
         where: {
             id,
         },
         include: {
             order: true,
+            tenders: true,
         },
     });
-    if (p.status == "success") return;
+    const meta: SquarePaymentMeta = checkout.meta as any;
+    const {
+        result: {
+            order: { id: orderId, tenders },
+        },
+    } = await client.ordersApi.retrieveOrder(meta.squareOrderId);
+
+    const resp: { amount; tip; status: SquarePaymentStatus } = {
+        amount: null,
+        tip: null,
+        status: null,
+    };
+
+    await Promise.all(
+        tenders.map(async (tender) => {
+            const {
+                result: { payment },
+            } = await client.paymentsApi.getPayment(tender.paymentId);
+            const tip = payment.tipMoney?.amount;
+            resp.status = payment.status as any;
+            if (resp.status == "COMPLETED") {
+                resp.amount = Number(payment.amountMoney.amount) / 100;
+                let t = Number(tip);
+                resp.tip = t > 0 ? t / 100 : 0;
+            }
+            await tx.checkoutTenders.create({
+                data: {
+                    salesCheckoutId: checkout.id,
+                    squareOrderId: orderId,
+                    status: resp.status,
+                    tenderId: tender.id,
+                    squarePaymentId: payment.id,
+                },
+            });
+        })
+    );
+    if (resp.amount > 0) await paymentSuccess({ ...checkout, tip: resp.tip });
+    return resp;
+}
+export async function paymentSuccess(p: {
+    amount;
+    orderId;
+    tip;
+    order: { customerId; amountDue };
+    id;
+}) {
     const _p = await prisma.salesPayments.create({
         data: {
             // transactionId: 1,
@@ -371,6 +358,7 @@ export async function squarePaymentSuccessful(id) {
             id: p.id,
         },
         data: {
+            tip: p.tip,
             status: "success" as CheckoutStatus,
             salesPaymentsId: _p.id,
         },
@@ -384,9 +372,18 @@ export async function squarePaymentSuccessful(id) {
             amountDue,
         },
     });
-
-    const o = await client.ordersApi.retrieveOrder("");
-    // o.result.order.
+}
+export async function squarePaymentSuccessful(id) {
+    const p = await prisma.salesCheckout.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            order: true,
+        },
+    });
+    if (p.status == "success") return;
+    await paymentSuccess(p);
 }
 export async function cancelTerminalPayment(id) {
     const p = await prisma.salesCheckout.findUnique({
