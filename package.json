@@ -28,7 +28,7 @@
     "@next-auth/prisma-adapter": "^1.0.7",
     "@next/mdx": "^14.1.0",
     "@prisma/adapter-pg": "^5.12.1",
-    "@prisma/client": "^5.15.0",
+    "@prisma/client": "^5.19.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -122,9 +122,8 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
     "ts-results": "^3.3.0",
-    "twilio": "^4.19.0",
     "typecript": "^0.0.1-security",
-    "typescript": "^5.4.5",
+    "typescript": "^5.6.2",
     "use-debounce": "^10.0.3",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.0",
@@ -135,6 +134,6 @@
     "@types/bcrypt": "^5.0.0",
     "@types/prettier": "^2.7.3",
     "@types/qs": "^6.9.7",
-    "prisma": "^5.15.0"
+    "prisma": "^5.19.1"
   }
 }

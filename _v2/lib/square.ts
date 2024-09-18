@@ -338,11 +338,11 @@ export async function validateSquarePayment(id) {
                     // });
                 })
         );
-        // return {
-        //     paidAmount,
-        //     tipMoney,
-        // };
-    });
+        return {
+            paidAmount,
+            tipMoney,
+        };
+    }, {});
     // return { payment, tender, paymentStatus };
 }
 export async function squarePaymentSuccessful(id) {
