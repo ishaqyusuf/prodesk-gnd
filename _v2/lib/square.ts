@@ -285,7 +285,7 @@ export async function getSquareTerminalPaymentStatus(
     return paymentStatus;
 }
 export async function validateSquarePayment(id) {
-    const resp = await prisma.$transaction(async (tx) => {
+    const resp = await prisma.$transaction((async (tx) => {
         const checkout = await tx.salesCheckout.findUnique({
             where: {
                 id,
@@ -342,7 +342,7 @@ export async function validateSquarePayment(id) {
             paidAmount,
             tipMoney,
         };
-    }, {});
+    }) as any);
     // return { payment, tender, paymentStatus };
 }
 export async function squarePaymentSuccessful(id) {
