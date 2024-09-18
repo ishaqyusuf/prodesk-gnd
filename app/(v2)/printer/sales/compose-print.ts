@@ -124,7 +124,7 @@ function shelfItemsTable(
                 ),
             ]
         );
-    if (isPacking) res.cells.push(_cell<T>("Packed Qty", "packing", 3));
+    if (isPacking) res.cells.push(_cell<T>("Shipped Qty", "packing", 3));
     const newResp = data.order.items
         .filter((item) => item.shelfItems.length)
         .map((item) => {
@@ -329,7 +329,7 @@ function getDoorsTable(
                     );
                 }
                 if (isPacking)
-                    res.cells.push(_cell("Packed Qty", "packing", 3));
+                    res.cells.push(_cell("Shipped Qty", "packing", 3));
 
                 const details =
                     is.moulding || is.bifold
@@ -659,17 +659,8 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
         );
     }
     if (isOrder || isPacking)
-        h.lines.push(styled("P.O No", order?.meta?.po, {})),
-            h.lines.push(
-                styled(
-                    "Invoice Total",
-                    formatCurrency.format(order?.grandTotal),
-                    {
-                        size: "base",
-                        font: "bold",
-                    }
-                )
-            );
+        h.lines.push(styled("P.O No", order?.meta?.po, {}));
+
     if (isOrder) {
         h.lines.push(
             styled(
@@ -681,6 +672,12 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
                     text: "uppercase",
                 }
             )
+        );
+        h.lines.push(
+            styled("Invoice Total", formatCurrency.format(order?.grandTotal), {
+                size: "base",
+                font: "bold",
+            })
         );
         if (order?.amountDue > 0) {
             let { goodUntil, paymentTerm, createdAt } = order;

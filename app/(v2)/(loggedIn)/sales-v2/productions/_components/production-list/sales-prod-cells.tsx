@@ -71,6 +71,9 @@ function Status({ item }: Props) {
     );
 }
 function ProductionStatus({ item }: Props) {
+    if (item.orderId == "24-0911-2301") {
+        console.log(item);
+    }
     const submitted = sum(
         item.assignments.map((a) =>
             sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
