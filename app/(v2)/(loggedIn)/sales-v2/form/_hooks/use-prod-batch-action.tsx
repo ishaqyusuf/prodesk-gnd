@@ -11,9 +11,8 @@ import { useStepItemCtx } from "./use-step-items";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Icons } from "@/components/_v1/icons";
 import { Label } from "@/components/ui/label";
-import { StepContextContextImpl } from "twilio/lib/rest/studio/v1/flow/engagement/step/stepContext";
+
 import { useModal } from "@/components/common/modal/provider";
-import DeleteItemModal from "../components/modals/delete-item-modal";
 
 export function useProdBatchAction() {
     const form = useDykeForm();
