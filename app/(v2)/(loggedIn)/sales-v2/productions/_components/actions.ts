@@ -128,7 +128,7 @@ export async function _getProductionList({ query, production = false }: Props) {
             items: {
                 where: {
                     deletedAt: null,
-                    swing: { not: null },
+                    // swing: { not: null },
                 },
             },
             productionStatus: true,
@@ -236,7 +236,14 @@ export async function _getProductionList({ query, production = false }: Props) {
             _meta: {
                 totalDoors: sum(
                     order.isDyke
-                        ? order.doors.map((d) => sum([d.lhQty, d.rhQty]))
+                        ? [
+                              ...order.doors.map((d) =>
+                                  sum([d.lhQty, d.rhQty])
+                              ),
+                              ...order.items.map((i) =>
+                                  i.dykeProduction ? i.qty : 0
+                              ),
+                          ]
                         : order.items?.filter((i) => i.swing).map((i) => i.qty)
                 ),
             },
