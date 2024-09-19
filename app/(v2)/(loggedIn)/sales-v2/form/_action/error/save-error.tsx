@@ -4,6 +4,7 @@ import { sendMessage } from "@/app/(v1)/_actions/email";
 import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { generateRandomString } from "@/lib/utils";
+import { DykeForm } from "../../../type";
 
 export async function _saveDykeError(errorId, data) {
     await prisma.dykeSalesError.create({
@@ -30,6 +31,17 @@ export async function _saveDykeError(errorId, data) {
             attachOrder: false,
         } as any);
     } catch (error) {}
+}
+export async function loadDykeErrors() {
+    const list = await prisma.dykeSalesError.findMany({
+        take: 20,
+    });
+    return list.map((l) => {
+        return {
+            ...l,
+            meta: l.meta as any as { message; data: DykeForm; response },
+        };
+    });
 }
 export async function _deleteDykeError(errorId) {
     await prisma.dykeSalesError.deleteMany({

@@ -25,6 +25,7 @@ import PaymentModal from "../../_components/_payments-modal";
 import DykeSettingsModal from "./modals/dyke-settings";
 import { SaveMode } from "../../type";
 import Evaluator from "./evaluator";
+import SaveErrorsModal from "./modals/save-errors";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();
@@ -66,6 +67,9 @@ export default function HeaderSection({}) {
                 </MenuItem>
             </Menu>
         );
+    }
+    function restoreFailed() {
+        modal.openSheet(<SaveErrorsModal />);
     }
     return (
         <div className="h-12">
@@ -223,6 +227,17 @@ export default function HeaderSection({}) {
                                         className="bg-red-500 text-white"
                                     >
                                         Restore
+                                    </MenuItem>
+                                </>
+                            )}
+                            {!dealerMode && (
+                                <>
+                                    <MenuItem
+                                        onClick={restoreFailed}
+                                        Icon={ArchiveRestore}
+                                        className="bg-red-500 text-white"
+                                    >
+                                        Restore Failed
                                     </MenuItem>
                                 </>
                             )}
