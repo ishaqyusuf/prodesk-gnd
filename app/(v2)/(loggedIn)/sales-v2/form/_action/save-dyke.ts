@@ -50,7 +50,9 @@ export async function saveDykeSales(data: DykeForm) {
                           //   salesRepId: data.salesRep?.id,
                           ...(await generateSalesIdDac(rest)),
                           updatedAt: new Date(),
-                          customer: connect(customerId),
+                          customer: !customerId
+                              ? undefined
+                              : connect(customerId),
                           salesRep: data.salesRep?.id
                               ? connect(data.salesRep?.id)
                               : undefined,
