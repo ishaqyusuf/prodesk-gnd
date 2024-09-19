@@ -39,7 +39,7 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     name: true,
                 },
             },
-            productionStatus: true,
+            // productionStatus: true,
             items: {
                 where: {
                     OR: [

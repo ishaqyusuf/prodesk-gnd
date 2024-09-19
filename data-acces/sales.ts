@@ -44,7 +44,7 @@ export interface SalesQueryParams extends BaseQuery {
         | "delivered";
 }
 export type GetSales = Awaited<ReturnType<typeof getSales>>;
-
+export type SalesItem = GetSales["data"][number];
 export async function getSales(query: SalesQueryParams) {
     const where = await whereSales(query);
     const _items = await prisma.salesOrders.findMany({
@@ -70,6 +70,7 @@ export async function getSales(query: SalesQueryParams) {
                     qty: true,
                     swing: true,
                     prodCompletedAt: true,
+                    dykeProduction: true,
                     meta: true,
                 },
             },
@@ -79,7 +80,7 @@ export async function getSales(query: SalesQueryParams) {
             //         swing: { not: null },
             //     },
             // },
-            productionStatus: true,
+            // productionStatus: true,
             doors: {
                 where: {
                     deletedAt: null,

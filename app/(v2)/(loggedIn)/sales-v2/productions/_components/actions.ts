@@ -131,7 +131,7 @@ export async function _getProductionList({ query, production = false }: Props) {
                     // swing: { not: null },
                 },
             },
-            productionStatus: true,
+            // productionStatus: true,
             doors: {
                 where: {
                     deletedAt: null,

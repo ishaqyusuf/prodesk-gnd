@@ -1083,11 +1083,13 @@ model SalesOrders {
     doors             DykeSalesDoors[]
     itemDeliveries    OrderItemDelivery[]
     deliveries        OrderDelivery[]
-    deliveryProgress  OrderDeliveryProgress?
     assignments       OrderItemProductionAssignments[]
 
-    productionStatus SalesProductionStatus?
-    requests         DealerSalesRequest[]
+    // deliveryProgress  OrderDeliveryProgress?
+    // productionStatus SalesProductionStatus?
+
+    requests DealerSalesRequest[]
+    stat     SalesStat[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerId])
@@ -1096,6 +1098,19 @@ model SalesOrders {
     @@index([prodId])
     @@index([salesRepId])
     @@index([pickupId])
+}
+
+model SalesStat {
+    id         Int         @unique @default(autoincrement())
+    salesId    Int
+    status     String?
+    type       String // production, dispatch, payment
+    score      Float?
+    total      Float?
+    percentage Float?
+    sales      SalesOrders @relation(fields: [salesId], references: [id])
+
+    @@index([salesId])
 }
 
 model DealerSalesRequest {
@@ -1114,14 +1129,14 @@ model DealerSalesRequest {
     @@index([approvedById])
 }
 
-model SalesProductionStatus {
-    id      Int         @unique @default(autoincrement())
-    orderId Int         @unique
-    status  String?
-    score   Float?
-    total   Float?
-    order   SalesOrders @relation(fields: [orderId], references: [id])
-}
+// model SalesProductionStatus {
+//     id      Int         @unique @default(autoincrement())
+//     orderId Int         @unique
+//     status  String?
+//     score   Float?
+//     total   Float?
+//     order   SalesOrders @relation(fields: [orderId], references: [id])
+// }
 
 model SalesOrderItems {
     id                 Int                              @unique @default(autoincrement())
@@ -1168,47 +1183,47 @@ model SalesOrderItems {
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
 }
 
-model OrderDeliveryProgress {
-    id              Int             @unique @default(autoincrement())
-    deliveredQty    Int             @default(0)
-    pendingQty      Int             @default(0)
-    percentage      Float           @default(0)
-    orderId         Int             @unique
-    status          String?
-    deliveryDueDate DateTime?       @db.Timestamp(0)
-    order           SalesOrders     @relation(fields: [orderId], references: [id])
-    deliveries      OrderDelivery[]
-    createdAt       DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt       DateTime        @updatedAt
-    deletedAt       DateTime?       @db.Timestamp(0)
-}
+// model OrderDeliveryProgress {
+//     id              Int             @unique @default(autoincrement())
+//     deliveredQty    Int             @default(0)
+//     pendingQty      Int             @default(0)
+//     percentage      Float           @default(0)
+//     orderId         Int             @unique
+//     status          String?
+//     deliveryDueDate DateTime?       @db.Timestamp(0)
+//     order           SalesOrders     @relation(fields: [orderId], references: [id])
+//     deliveries      OrderDelivery[]
+//     createdAt       DateTime?       @default(now()) @db.Timestamp(0)
+//     updatedAt       DateTime        @updatedAt
+//     deletedAt       DateTime?       @db.Timestamp(0)
+// }
 
-model OrderProductionProgress {
-    id Int @unique @default(autoincrement())
-}
+// model OrderProductionProgress {
+//     id Int @unique @default(autoincrement())
+// }
 
 model OrderDelivery {
-    id                      Int                    @unique @default(autoincrement())
-    salesOrderId            Int
-    deliveredTo             String?
-    deliveryMode            String
-    items                   OrderItemDelivery[]
-    driverId                Int?
-    createdById             Int?
-    meta                    Json?                  @db.Json
-    createdAt               DateTime?              @default(now()) @db.Timestamp(0)
-    updatedAt               DateTime               @updatedAt
-    deletedAt               DateTime?              @db.Timestamp(0)
-    order                   SalesOrders            @relation(fields: [salesOrderId], references: [id])
-    driver                  Users?                 @relation(name: "driver", fields: [driverId], references: [id])
-    createdBy               Users?                 @relation(name: "createdBy", fields: [createdById], references: [id])
-    OrderDeliveryProgress   OrderDeliveryProgress? @relation(fields: [orderDeliveryProgressId], references: [id])
-    orderDeliveryProgressId Int?
+    id           Int                 @unique @default(autoincrement())
+    salesOrderId Int
+    deliveredTo  String?
+    deliveryMode String
+    items        OrderItemDelivery[]
+    driverId     Int?
+    createdById  Int?
+    meta         Json?               @db.Json
+    createdAt    DateTime?           @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime            @updatedAt
+    deletedAt    DateTime?           @db.Timestamp(0)
+    order        SalesOrders         @relation(fields: [salesOrderId], references: [id])
+    driver       Users?              @relation(name: "driver", fields: [driverId], references: [id])
+    createdBy    Users?              @relation(name: "createdBy", fields: [createdById], references: [id])
+    // orderDeliveryProgress   OrderDeliveryProgress? @relation(fields: [orderDeliveryProgressId], references: [id])
+    // orderDeliveryProgressId Int?
+    // @@index([orderDeliveryProgressId])
 
     @@index([salesOrderId])
     @@index([driverId])
     @@index([createdById])
-    @@index([orderDeliveryProgressId])
 }
 
 model OrderItemDelivery {

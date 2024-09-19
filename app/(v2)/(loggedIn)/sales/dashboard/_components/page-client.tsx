@@ -71,6 +71,7 @@ export default function PageClient({
                     ctx.Column("Sales #", SalesCells.OrderDispatch),
                     ctx.Column("Shipping Address", SalesCells.Customer),
                     ctx.Column("Production", SalesCells.ProductionStatus),
+                    ctx.Column("Delivery", SalesCells.DeliveryStatus),
                     ctx.ActionColumn(SalesCells.DeliveryAction),
                 ];
             case "pickup":
@@ -113,7 +114,7 @@ export default function PageClient({
                             id="_status"
                             title="Status"
                         />
-                        <TableToolbar.Filter
+                        {/* <TableToolbar.Filter
                             options={salesData.filters.invoice}
                             id="_payment"
                             title="Invoice"
@@ -124,7 +125,7 @@ export default function PageClient({
                             optionFn={_getSalesRep}
                             labelKey="name"
                             valueKey="id"
-                        />
+                        /> */}
                         <TableToolbar.Filter
                             id="_customerId"
                             title="Customer"

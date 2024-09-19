@@ -4,7 +4,7 @@ import { DykeDoorType } from "../../type";
 const _salesAssignmentIncludes =
     //:  Prisma.SalesOrdersInclude
     {
-        productionStatus: true,
+        // productionStatus: true,
         doors: {
             where: {
                 housePackageTool: {

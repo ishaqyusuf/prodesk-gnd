@@ -22,6 +22,7 @@ import { GetSales } from "@/data-acces/sales";
 import { useAssignment } from "../../../sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { Button } from "@/components/ui/button";
 import FStatusBadge from "@/app/_components/fikr-ui/f-status-badge";
+import { useSalesStatus } from "../../hooks/sales-hooks";
 
 export interface SalesCellProps {
     item: GetSales["data"][number];
@@ -287,7 +288,7 @@ function ProductionStatus({ item }: SalesCellProps) {
             <TableCell.Status
                 score={submitted}
                 total={totalDoors}
-                status={item.productionStatus?.status}
+                // status={item.productionStatus?.status}
             />
         </TableCell>
     );
@@ -305,8 +306,14 @@ function DeliveryAction({ item }: SalesCellProps) {
         </>
     );
 }
+function DeliveryStatus({ item }: SalesCellProps) {
+    const status = useSalesStatus(item);
+
+    return <TableCell></TableCell>;
+}
 export let SalesCells = {
     SalesRep,
+    DeliveryStatus,
     SalesStatus,
     Status,
     Order,

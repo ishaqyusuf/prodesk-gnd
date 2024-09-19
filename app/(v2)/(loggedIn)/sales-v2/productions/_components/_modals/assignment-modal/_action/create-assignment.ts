@@ -27,14 +27,14 @@ export async function createProdAssignment(
     });
     // console.log("SUCCESS");
     if (!productionStatusId) {
-        await prisma.salesProductionStatus.create({
-            data: {
-                orderId: data?.[0]?.orderId as any,
-                score: 0,
-                status: ``,
-                total: allQty,
-            },
-        });
+        // await prisma.salesProductionStatus.create({
+        //     data: {
+        //         orderId: data?.[0]?.orderId as any,
+        //         score: 0,
+        //         status: ``,
+        //         total: allQty,
+        //     },
+        // });
     }
     // TODO: Notify new production assigned
 }
