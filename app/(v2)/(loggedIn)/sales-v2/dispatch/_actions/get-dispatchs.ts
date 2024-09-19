@@ -32,7 +32,7 @@ export async function getDispatchSalesAction(query: GetDispatchActionProps) {
     const sales = await prisma.salesOrders.findMany({
         where,
         include: {
-            deliveryProgress: true,
+            // deliveryProgress: true,
             customer: true,
             shippingAddress: true,
             doors: true,
