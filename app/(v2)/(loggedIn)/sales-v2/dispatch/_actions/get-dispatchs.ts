@@ -68,32 +68,36 @@ function _where(query: GetDispatchActionProps) {
     const where: Prisma.SalesOrdersWhereInput = {};
     switch (query._show) {
         case "delivered":
-            where.deliveryProgress = {
+            // where.deliveryProgress = {
+            //     percentage: 100,
+            // };
+            where.stat.some = {
+                type: "delivery",
                 percentage: 100,
             };
             break;
         case "non-delivered":
-            where.deliveryProgress = {
-                id: null,
-            };
+            // where.deliveryProgress = {
+            //     id: null,
+            // };
             break;
         case "part-delivered":
-            where.deliveryProgress = {
-                percentage: {
-                    lt: 100,
-                },
-            };
+            // where.deliveryProgress = {
+            //     percentage: {
+            //         lt: 100,
+            //     },
+            // };
             break;
         case "late-delivery":
-            where.deliveryProgress = {
-                ...dateQuery({
-                    _dateType: "deliveryDueDate",
-                    to: new Date(),
-                }),
-                percentage: {
-                    lt: 100,
-                },
-            };
+            // where.deliveryProgress = {
+            //     ...dateQuery({
+            //         _dateType: "deliveryDueDate",
+            //         to: new Date(),
+            //     }),
+            //     percentage: {
+            //         lt: 100,
+            //     },
+            // };
             break;
     }
     // production: in progress,
