@@ -26,7 +26,8 @@ export async function saveDykeSales(data: DykeForm) {
             } = data.order;
             // delete (rest as any).customer;
             function connect(id) {
-                return id && { connect: { id } };
+                if (!id) return undefined;
+                return { connect: { id } };
             }
             const order = data.order.id
                 ? await prisma.salesOrders.update({
@@ -47,15 +48,11 @@ export async function saveDykeSales(data: DykeForm) {
                 : await prisma.salesOrders.create({
                       data: {
                           ...(rest as any),
-                          //   salesRepId: data.salesRep?.id,
+                          // salesRepId: data.salesRep?.id,
                           ...(await generateSalesIdDac(rest)),
                           updatedAt: new Date(),
-                          customer: !customerId
-                              ? undefined
-                              : connect(customerId),
-                          salesRep: data.salesRep?.id
-                              ? connect(data.salesRep?.id)
-                              : undefined,
+                          customer: connect(customerId),
+                          salesRep: connect(data.salesRep?.id),
                           billingAddress: connect(billingAddressId),
                           shippingAddress: connect(shippingAddressId),
                       },
