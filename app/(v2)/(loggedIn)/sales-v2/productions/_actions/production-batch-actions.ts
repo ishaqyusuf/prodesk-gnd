@@ -54,7 +54,7 @@ export async function assignAllAction(props: Props) {
             if (validate.assignments.length)
                 await createProdAssignment(
                     validate.assignments,
-                    order.productionStatus,
+                    // order.productionStatus,
                     order.totalQty,
                     form.prodDueDate
                 );

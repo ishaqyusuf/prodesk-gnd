@@ -122,7 +122,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                 if (_data) {
                     const r = await createProdAssignment(
                         _data,
-                        data.data.productionStatus?.id,
+                        // data.data.productionStatus?.id,
                         data.data.totalQty,
                         prodDueDate
                     );

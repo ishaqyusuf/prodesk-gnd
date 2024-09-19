@@ -7,7 +7,7 @@ import { math, sum } from "@/lib/utils";
 
 export async function createProdAssignment(
     data: Partial<OrderItemProductionAssignments>[],
-    productionStatusId,
+    // productionStatusId,
     allQty,
     prodDueDate
 ) {
@@ -26,15 +26,15 @@ export async function createProdAssignment(
         }) as any,
     });
     // console.log("SUCCESS");
-    if (!productionStatusId) {
-        // await prisma.salesProductionStatus.create({
-        //     data: {
-        //         orderId: data?.[0]?.orderId as any,
-        //         score: 0,
-        //         status: ``,
-        //         total: allQty,
-        //     },
-        // });
-    }
+    // if (!productionStatusId) {
+    //     // await prisma.salesProductionStatus.create({
+    //     //     data: {
+    //     //         orderId: data?.[0]?.orderId as any,
+    //     //         score: 0,
+    //     //         status: ``,
+    //     //         total: allQty,
+    //     //     },
+    //     // });
+    // }
     // TODO: Notify new production assigned
 }
