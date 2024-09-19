@@ -1,10 +1,6 @@
 import { SalesItem } from "@/data-acces/sales";
 import { sum } from "@/lib/utils";
-import {
-    SalesStatStatus,
-    SalesStatType,
-    TypedSalesStat,
-} from "../../sales-v2/type";
+import { SalesStatType, TypedSalesStat } from "../../sales-v2/type";
 import { SalesStat } from "@prisma/client";
 
 export function sales_TotalDeliverables(item: SalesItem) {

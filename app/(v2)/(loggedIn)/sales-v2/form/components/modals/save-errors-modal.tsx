@@ -7,6 +7,7 @@ import { TableCell } from "@/app/_components/data-table/table-cells";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import StatusBadge from "@/components/_v1/status-badge";
 import { openLink } from "@/lib/open-link";
+import { toast } from "sonner";
 
 export default function SaveErrorsModal() {
     const data = useEffectLoader(loadDykeErrors);
@@ -21,6 +22,10 @@ export default function SaveErrorsModal() {
                                 <TableRow
                                     className="cursor-pointer"
                                     onClick={() => {
+                                        if (order.restoredAt) {
+                                            toast.error("Already restored");
+                                            return;
+                                        }
                                         const orderId =
                                             order.meta?.data?.order?.orderId;
 
@@ -36,7 +41,7 @@ export default function SaveErrorsModal() {
                                 >
                                     <TableCell>
                                         <TableCell.Primary className="uppercase">
-                                            {order.errorId}
+                                            {order.meta?.data?.salesRep?.name}
                                         </TableCell.Primary>
                                         <TableCell.Secondary>
                                             {formatDate(order.createdAt)}
@@ -44,7 +49,11 @@ export default function SaveErrorsModal() {
                                     </TableCell>
                                     <TableCell>
                                         <TableCell.Primary>
-                                            {order.meta?.data?.salesRep?.name}
+                                            {order.meta?.data?.customer
+                                                ?.businessName ||
+                                                order.meta?.data?.customer
+                                                    ?.name ||
+                                                "Customer not set"}
                                         </TableCell.Primary>
                                     </TableCell>
                                     <TableCell>
