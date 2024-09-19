@@ -130,7 +130,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 }
             }
             let resp = await createSalesPayment(data as any);
-
+            // console.log(resp);
             if (resp?.errors) {
                 resp.errors.map((e) => {
                     toast.error(e.detail, {

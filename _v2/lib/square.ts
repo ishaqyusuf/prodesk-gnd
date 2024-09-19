@@ -416,6 +416,7 @@ export async function cancelTerminalPayment(id) {
             order: true,
         },
     });
+    await client.terminalApi.cancelTerminalCheckout(p.paymentId);
     await prisma.salesCheckout.update({
         where: { id },
         data: {
