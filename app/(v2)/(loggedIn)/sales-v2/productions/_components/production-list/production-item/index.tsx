@@ -23,7 +23,7 @@ export default function ProductionItem({ item }: Props) {
                 </div>
                 <div className="flex-1"></div>
                 <div className="">
-                    <TableCol.Status status={item.productionStatus?.status} />
+                    {/* <TableCol.Status status={item.productionStatus?.status} /> */}
                 </div>
             </div>
         </div>

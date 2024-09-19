@@ -88,7 +88,7 @@ function ProductionStatus({ item }: Props) {
             <TableCol.Status
                 score={submitted}
                 total={totalDoors}
-                status={item.productionStatus?.status}
+                // status={item.productionStatus?.status}
             />
         </>
     );
