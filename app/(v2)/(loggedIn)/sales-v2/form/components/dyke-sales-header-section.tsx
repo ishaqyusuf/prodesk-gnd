@@ -25,7 +25,7 @@ import PaymentModal from "../../_components/_payments-modal";
 import DykeSettingsModal from "./modals/dyke-settings";
 import { SaveMode } from "../../type";
 import Evaluator from "./evaluator";
-import SaveErrorsModal from "./modals/save-errors";
+import SaveErrorsModal from "./modals/save-errors-modal";
 
 export default function HeaderSection({}) {
     const form = useDykeForm();

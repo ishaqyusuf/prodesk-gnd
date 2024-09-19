@@ -5,6 +5,8 @@ import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/use-day";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import StatusBadge from "@/components/_v1/status-badge";
+import { openLink } from "@/lib/open-link";
 
 export default function SaveErrorsModal() {
     const data = useEffectLoader(loadDykeErrors);
@@ -19,7 +21,16 @@ export default function SaveErrorsModal() {
                                 <TableRow
                                     className="cursor-pointer"
                                     onClick={() => {
-                                        console.log(order);
+                                        const orderId =
+                                            order.meta?.data?.order?.orderId;
+
+                                        openLink(
+                                            `/sales-v2/form/${
+                                                order.meta?.data?.order?.type
+                                            }${orderId || ""}`,
+                                            { errorId: order.errorId },
+                                            true
+                                        );
                                     }}
                                     key={order.id}
                                 >
@@ -33,8 +44,15 @@ export default function SaveErrorsModal() {
                                     </TableCell>
                                     <TableCell>
                                         <TableCell.Primary>
-                                            {order.meta?.message}
+                                            {order.meta?.data?.salesRep?.name}
                                         </TableCell.Primary>
+                                    </TableCell>
+                                    <TableCell>
+                                        <StatusBadge>
+                                            {order.restoredAt
+                                                ? "Restored"
+                                                : "Not restored"}
+                                        </StatusBadge>
                                     </TableCell>
                                 </TableRow>
                             ))}

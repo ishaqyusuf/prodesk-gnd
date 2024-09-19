@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { saveDykeSales } from "../_action/save-dyke";
 import { toast } from "sonner";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
-import { _saveDykeError } from "../_action/error/save-error";
+import { _saveDykeError, errorRestored } from "../_action/error/save-error";
 import initDykeSaving from "../../_utils/init-dyke-saving";
 import salesFormUtils from "../../../sales/edit/sales-form-utils";
 import { calculateFooterEstimate } from "../footer-estimate";
@@ -18,14 +18,17 @@ export default function useDykeFormSaver(form) {
         "order.type",
     ]);
     const params = useSearchParams();
+
     function save(
         data: DykeForm,
         mode: SaveMode = "default",
         onComplete = null
     ) {
+        const errorId = params.get("errorId");
         startTransition(async () => {
             const errorData: any = {
                 data,
+                errorId,
             };
             try {
                 // const estimate = calculateFooterEstimate(data, null);
@@ -39,9 +42,11 @@ export default function useDykeFormSaver(form) {
                         );
                     const { paymentDueDate, paymentTerm, createdAt } = e.order;
                 }
+                console.log({ e });
                 const { order: resp } = await saveDykeSales(e);
                 errorData.response = resp;
                 toast.success("Saved!");
+                if (errorId) await errorRestored(errorId);
                 switch (mode) {
                     case "close":
                         router.push(
@@ -74,7 +79,8 @@ export default function useDykeFormSaver(form) {
                     console.log(error.message);
                     errorData.message = error.message;
                 }
-                await _saveDykeError(errorData.errorId, errorData);
+                if (!errorId)
+                    await _saveDykeError(errorData.errorId, errorData);
             }
         });
     }

@@ -32,9 +32,28 @@ export async function _saveDykeError(errorId, data) {
         } as any);
     } catch (error) {}
 }
+export async function getErrorData(errorId) {
+    const e = await prisma.dykeSalesError.findFirst({
+        where: {
+            errorId,
+        },
+    });
+    return (e?.meta as any)?.data as DykeForm;
+}
+export async function errorRestored(errorId) {
+    await prisma.dykeSalesError.updateMany({
+        where: { errorId },
+        data: {
+            restoredAt: new Date(),
+        },
+    });
+}
 export async function loadDykeErrors() {
     const list = await prisma.dykeSalesError.findMany({
         take: 20,
+        orderBy: {
+            createdAt: "desc",
+        },
     });
     return list.map((l) => {
         return {
