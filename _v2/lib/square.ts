@@ -9,7 +9,6 @@ import {
     Environment,
     OrderLineItem,
     PrePopulatedData,
-    Payment,
 } from "square";
 
 const client = new Client({
