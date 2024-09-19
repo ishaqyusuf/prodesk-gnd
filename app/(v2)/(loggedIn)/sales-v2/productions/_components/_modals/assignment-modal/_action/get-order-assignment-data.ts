@@ -149,7 +149,7 @@ export async function getOrderAssignmentData(id, mode?: mode) {
             const salesDoors = _items
                 .filter((s) => order.isDyke)
                 .map((subItem) => {
-                    console.log(subItem.id);
+                    // console.log(subItem.id);
                     return subItem.salesDoors.map((salesDoor) => {
                         // console.log(salesDoor.rhQty);
 

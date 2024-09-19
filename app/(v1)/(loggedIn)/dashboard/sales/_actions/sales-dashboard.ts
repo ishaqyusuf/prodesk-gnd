@@ -1,10 +1,12 @@
 "use server";
 
+import { withDeleted } from "@/app/(v1)/_actions/action-utils";
 import { prisma } from "@/db";
 import { composeBar } from "@/lib/chart";
-import { sum } from "@/lib/utils";
+import { capitalizeFirstLetter, sum } from "@/lib/utils";
 import { ISalesDashboard } from "@/types/dashboard";
 import { ISalesType } from "@/types/sales";
+import { Prisma } from "@prisma/client";
 
 interface Props {}
 export async function salesDashboardAction(): Promise<ISalesDashboard> {
@@ -78,6 +80,58 @@ export async function salesDashboardAction(): Promise<ISalesDashboard> {
         // where: {}
     });
     response.recentSales = recentSales as any;
+    const prismaKeys = {
+        tableCounts: {},
+        imports: [],
+    };
+    let _count = 0;
+    let _group = [];
+    async function getCount(table, _withDeleted = true) {
+        try {
+            return await (prisma?.[table] as any)?.count({
+                where: _withDeleted
+                    ? {
+                          ...withDeleted,
+                      }
+                    : undefined,
+            });
+        } catch (error) {
+            return await getCount(table, false);
+        }
+    }
+    await Promise.all(
+        Object.keys(prisma).map(async (k) => {
+            //
+            if (!k?.startsWith("$")) {
+                const count = await getCount(k);
+                if (count) {
+                    prismaKeys.tableCounts[capitalizeFirstLetter(k)] = count;
+                }
+            }
+        })
+    );
+    Object.entries(prismaKeys.tableCounts).map(([k, count]) => {
+        if (_count + (count as any) > 40000) {
+            const tables = _group.map((g) => `'${g}'`).join(",");
+            prismaKeys.imports.push({
+                tables,
+                _count,
+            });
+            _group = [];
+            _count = 0;
+        }
+        _count += count as any;
+        _group.push(k);
+    });
+    if (_group.length) {
+        const tables = _group.map((g) => `'${g}'`).join(",");
+        prismaKeys.imports.push({
+            tables,
+            _count,
+        });
+    }
+
+    (response as any).prismaKeys = prismaKeys;
 
     return response;
 }
