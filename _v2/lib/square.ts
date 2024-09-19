@@ -200,9 +200,28 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
         };
     });
 }
+const refreshAccessToken = async (refreshToken) => {
+    try {
+        const { result } = await client.oAuthApi.obtainToken({
+            clientId: process.env.SQUARE_CLIENT_ID,
+            clientSecret: process.env.SQUARE_CLIENT_SECRET,
+            refreshToken,
+            grantType: "authorization_code",
+            code: "",
+        });
+
+        console.log("New Access Token:", result.accessToken);
+        return result.accessToken;
+    } catch (error) {
+        console.error("Error refreshing token:", error);
+    }
+};
 export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
         // client.devicesApi.listDevices
+        const accessToken = await refreshAccessToken(env.SANBOX_ACCESS_TOKEN);
+        console.log({ accessToken });
+
         const s = await client.terminalApi.createTerminalCheckout({
             // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID,
             idempotencyKey: data.salesCheckoutId, // Unique identifier for each transaction
@@ -243,12 +262,12 @@ function phone(pg: string) {
 export type GetSquareDevices = Awaited<ReturnType<typeof getSquareDevices>>;
 export async function getSquareDevices() {
     try {
-        const devices = await client.devicesApi.listDevices();
-        return devices?.result?.devices
+        const devices = await client.devicesApi.listDeviceCodes();
+        return devices?.result?.deviceCodes
             ?.map((device) => ({
-                label: device.attributes?.name,
-                status: device.status.category as "OFFLINE" | "AVAILABLE",
-                value: device.id,
+                label: device?.name,
+                status: device.status as "PAIRED" | "OFFLINE",
+                value: device.deviceId,
                 device,
             }))
             .sort((a, b) => a?.label?.localeCompare(b.label) as any);

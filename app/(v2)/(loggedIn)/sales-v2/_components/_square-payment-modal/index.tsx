@@ -65,6 +65,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
         getSalesPaymentData(id)
             .then((data) => {
                 setOrder(data);
+                console.log(data);
             })
             .catch((e) => {
                 if (e instanceof Error) toast.error(e.message);
@@ -122,10 +123,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     const selectedDevice = devices.find(
                         (d) => d.value == data.deviceId
                     );
-                    if (
-                        !selectedDevice ||
-                        selectedDevice?.status != "AVAILABLE"
-                    ) {
+                    if (!selectedDevice || selectedDevice?.status != "PAIRED") {
                         console.log({ selectedDevice, devices });
                         throw new Error("Selected terminal is not online");
                     }
@@ -275,8 +273,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                                             disabled={
                                                 env.NEXT_PUBLIC_NODE_ENV ==
                                                 "production"
-                                                    ? option.status !=
-                                                      "AVAILABLE"
+                                                    ? option.status != "PAIRED"
                                                     : false
                                             }
                                             className=""
@@ -285,7 +282,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                                                 <Dot
                                                     className={cn(
                                                         option.status ==
-                                                            "AVAILABLE"
+                                                            "PAIRED"
                                                             ? "text-green-500"
                                                             : "text-red-600"
                                                     )}
