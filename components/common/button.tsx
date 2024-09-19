@@ -17,7 +17,7 @@ export default function Button({
 }: BtnProps) {
     const BtnIcon = icon ? Icons[icon] : null;
     const [loading, startLoader] = useTransition();
-    async function _action() {
+    async function _action(e) {
         if (action) {
             startLoader((async () => {
                 const resp = action();
@@ -25,7 +25,7 @@ export default function Button({
                     await resp;
                 }
             }) as any);
-        }
+        } else onClick?.(e);
     }
     return (
         <BaseButton

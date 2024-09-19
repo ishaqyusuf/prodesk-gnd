@@ -1,3 +1,4 @@
+"use server";
 import {
     SalesStatStatus,
     TypedSalesStat,
@@ -73,6 +74,7 @@ export async function updateSalesStat(id) {
     await saveStat({
         type: "production assignment",
         total: totalQty,
+        salesId: data.id,
         score: sum(
             data.assignments
                 .filter((s) => !s.deletedAt)
@@ -82,6 +84,7 @@ export async function updateSalesStat(id) {
     await saveStat({
         type: "dispatch",
         total: totalQty,
+        salesId: data.id,
         score: data.deliveredAt
             ? totalQty
             : sum(

@@ -51,7 +51,7 @@ export default async function RootLayout({
                     >
                         <Upgrader />
                     </div>
-                    <Toaster />
+                    <Toaster rich />
                     <Analytics />
                     <TailwindIndicator />
                     {prodDB && !__isProd && (

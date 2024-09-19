@@ -15,8 +15,8 @@ import {
 const client = new Client({
     environment:
         env.NODE_ENV == "production"
-            ? Environment.Sandbox
-            : Environment.Sandbox,
+            ? Environment.Production
+            : Environment.Production,
     accessToken: env.SANBOX_ACCESS_TOKEN,
 });
 export interface SquarePaymentMeta {
@@ -243,15 +243,19 @@ function phone(pg: string) {
 }
 export type GetSquareDevices = Awaited<ReturnType<typeof getSquareDevices>>;
 export async function getSquareDevices() {
-    const devices = await client.devicesApi.listDevices();
-    return devices?.result?.devices
-        ?.map((device) => ({
-            label: device.attributes?.name,
-            status: device.status.category as "OFFLINE" | "AVAILABLE",
-            value: device.id,
-            device,
-        }))
-        .sort((a, b) => a?.label?.localeCompare(b.label) as any);
+    try {
+        const devices = await client.devicesApi.listDevices();
+        return devices?.result?.devices
+            ?.map((device) => ({
+                label: device.attributes?.name,
+                status: device.status.category as "OFFLINE" | "AVAILABLE",
+                value: device.id,
+                device,
+            }))
+            .sort((a, b) => a?.label?.localeCompare(b.label) as any);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function getSquareTerminalPaymentStatus(
