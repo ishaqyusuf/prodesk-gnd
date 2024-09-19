@@ -1,17 +1,11 @@
-import { getJobs } from "@/app/(v1)/_actions/hrm-jobs/get-jobs";
 import { getPayableUsers } from "@/app/(v1)/_actions/hrm-jobs/make-payment";
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import {
-    PrimaryCellContent,
-    SecondaryCellContent,
-} from "@/components/_v1/columns/base-columns";
+import { SecondaryCellContent } from "@/components/_v1/columns/base-columns";
 import JobPaymentForm from "@/components/_v1/forms/job-payment-form";
-import HrmLayout from "@/components/_v1/tab-layouts/hrm-layout";
 import Money from "@/components/_v1/money";
 import PageHeader from "@/components/_v1/page-header";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
