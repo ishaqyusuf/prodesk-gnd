@@ -3,6 +3,7 @@ import {
     DykeSalesShelfItem,
     DykeShelfProducts,
     DykeStepForm,
+    SalesStat,
 } from "@prisma/client";
 import { getStepForm } from "./form/_action/get-dyke-step";
 import { getDykeFormAction } from "./form/_action/get-dyke-form";
@@ -19,6 +20,17 @@ export interface IDykeSalesItem {
         };
     };
 }
+export type SalesStatType =
+    | "production"
+    | "dispatch"
+    | "payment"
+    | "production assignment";
+export type SalesStatStatus = "pending" | "in progress" | "completed";
+export type TypedSalesStat = Omit<SalesStat, "status" | "type" | "id"> & {
+    type: SalesStatType;
+    id?: number;
+    status?: SalesStatStatus;
+};
 export type DykeDoorType =
     | "Interior"
     | "Exterior"

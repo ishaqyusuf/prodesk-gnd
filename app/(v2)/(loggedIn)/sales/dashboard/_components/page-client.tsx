@@ -102,7 +102,6 @@ export default function PageClient({
         },
         (ctx) => (isMobile ? [] : renderWebView(ctx))
     );
-
     return (
         <>
             <section className="content">

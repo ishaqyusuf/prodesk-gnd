@@ -24,7 +24,7 @@ export async function saveDykeSales(data: DykeForm) {
                 billingAddressId,
                 ...rest
             } = data.order;
-
+            delete (rest as any).customer;
             function connect(id) {
                 return id && { connect: { id } };
             }

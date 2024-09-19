@@ -1109,6 +1109,9 @@ model SalesStat {
     total      Float?
     percentage Float?
     sales      SalesOrders @relation(fields: [salesId], references: [id])
+    createdAt  DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt  DateTime?   @updatedAt
+    deletedAt  DateTime?   @db.Timestamp(0)
 
     @@index([salesId])
 }
