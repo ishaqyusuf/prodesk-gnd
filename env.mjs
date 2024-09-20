@@ -7,7 +7,7 @@ import { z } from "zod";
 const server = z.object({
     SQUARE_SANDBOX_ACCESS_TOKEN: z.string().optional(),
     SQUARE_SANDBOX_LOCATION_ID: z.string().optional(),
-    SQUARE_SANDBOX_APP_ID: z.string(),
+    SQUARE_SANDBOX_APP_ID: z.string().optional(),
     SQUARE_LOCATION_ID: z.string(),
     SQUARE_APP_ID: z.string(),
     SQUARE_ACCESS_TOKEN: z.string(),
