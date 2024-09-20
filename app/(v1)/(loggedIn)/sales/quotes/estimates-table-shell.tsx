@@ -49,7 +49,13 @@ export default function EstimatesTableShell({
                               <SalesEstimateMobileCell order={row.original} />
                           ),
                       },
-                      ..._FilterColumn("_q", "_status", "_date", "_customerId"),
+                      ..._FilterColumn(
+                          "_q",
+                          "_status",
+                          "_date",
+                          "_customerId",
+                          "_withDeleted"
+                      ),
                   ]
                 : [
                       CheckColumn({ selectedRowIds, setSelectedRowIds, data }),
