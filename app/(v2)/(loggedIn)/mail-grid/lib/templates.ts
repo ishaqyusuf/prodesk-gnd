@@ -29,7 +29,8 @@ export const transformer = (data, mail: MailProps) => {
     Object.entries(trans).forEach(([key, value]) => {
         mail.subject = mail.subject.replaceAll(key, value);
         mail.body = mail.body.replaceAll(key, value);
-        mail.to = mail.to?.replaceAll(key, value);
+        // mail.to = mail.to?.replaceAll(key, value);
+        mail.to = data.email;
         if (env.NODE_ENV == "development")
             mail.to = [`ishaqyusuf024@gmail.com`, `pcruz321@gmail.com`];
     });
