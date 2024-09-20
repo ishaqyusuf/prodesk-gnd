@@ -354,6 +354,9 @@ function TerminalComponents({}) {
                         );
                         form.setValue("terminalStatus", "processed");
                         await squarePaymentSuccessful(salesCheckoutId);
+                        setTimeout(() => {
+                            modal.close();
+                        }, 500);
                         break;
                     case "IN_PROGRESS":
                     case "PENDING":

@@ -15,7 +15,7 @@ const client = new Client({
     environment:
         env.NODE_ENV == "production"
             ? Environment.Production
-            : Environment.Production,
+            : Environment.Sandbox,
     accessToken: env.SANBOX_ACCESS_TOKEN,
 });
 export interface SquarePaymentMeta {
@@ -68,7 +68,7 @@ export type CreateSalesPaymentProps =
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
     const salesCheckout = await prisma.salesCheckout.create({
         data: {
-            amount: data.amount / 100,
+            amount: data.amount,
             paymentType: `square_${data.type}`,
             status: "no-status",
             orderId: data.orderId,
@@ -141,25 +141,25 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
                 ? undefined
                 : {
                       locationId: env.SQUARE_LOCATION_ID,
-                      serviceCharges: [
-                          {
-                              name: "Total Amount",
-                              calculationPhase: "TOTAL_PHASE",
-                              amountMoney: {
-                                  amount: BigInt(50000),
-                                  currency: "USD",
-                              },
-                          },
-                      ],
-                      discounts: [
-                          {
-                              amountMoney: {
-                                  amount: BigInt(403400),
-                                  currency: "USD",
-                              },
-                              name: "Paid",
-                          },
-                      ],
+                      //   serviceCharges: [
+                      //       {
+                      //           name: "Total Amount",
+                      //           calculationPhase: "TOTAL_PHASE",
+                      //           amountMoney: {
+                      //               amount: BigInt(data.amount),
+                      //               currency: "USD",
+                      //           },
+                      //       },
+                      //   ],
+                      //   discounts: [
+                      //       {
+                      //           amountMoney: {
+                      //               amount: BigInt(403400),
+                      //               currency: "USD",
+                      //           },
+                      //           name: "Paid",
+                      //       },
+                      //   ],
                       //   netAmountDueMoney: {
                       //       amount: BigInt(Math.ceil(data.amount * 100)),
                       //       currency: "USD",
