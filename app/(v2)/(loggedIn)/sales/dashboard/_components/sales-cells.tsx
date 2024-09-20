@@ -275,6 +275,7 @@ function ProductionStatus({ item }: SalesCellProps) {
             sum(a.submissions.map((s) => sum([s.lhQty, s.rhQty])))
         )
     );
+    // item.assignments[0].
     const totalDoors = item._meta.totalDoors;
     // console.log(item.productionStatus?.status);
     if (submitted == totalDoors)

@@ -361,7 +361,7 @@ function allSalesQuery(query: SalesQueryParam2) {
 
     return where;
 }
-const SalesInclude: Prisma.SalesOrdersInclude = {
+const SalesInclude = {
     // customer: true,
     // shippingAddress: true,
     // billingAddress: true,
@@ -487,4 +487,4 @@ const SalesInclude: Prisma.SalesOrdersInclude = {
             name: true,
         },
     },
-};
+} satisfies Prisma.SalesOrdersInclude;
