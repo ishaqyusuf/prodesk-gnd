@@ -34,6 +34,7 @@ export default function SalesEmailSection({}: Props) {
                         {order.prodStatus} (
                         {(order.prodDueDate || "-") as string})
                     </Info>
+                    <Info label={"P.O No."} value={order.meta.po}></Info>
                     <Info hidden={isProd} label="Invoice (Paid)">
                         <span>
                             <span className="font-medium">

@@ -79,6 +79,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                         >
                             <span>{formatDate(order.createdAt as any)}</span>
                         </Info>
+                        <Info label={"P.O No."} value={order.meta.po}></Info>
                         {order.type == "quote" ? (
                             <>
                                 <Info label="Good Until">
