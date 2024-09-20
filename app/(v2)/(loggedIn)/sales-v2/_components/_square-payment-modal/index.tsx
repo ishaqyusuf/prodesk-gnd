@@ -96,7 +96,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             orderId: order.id,
             orderIdStr: order.orderId,
             amount: order.amountDue,
-            type: "link",
+            type: "terminal",
             items: order.lineItems,
             modalTitle: order.orderId,
             modalSubtitle: `Payment Information`,

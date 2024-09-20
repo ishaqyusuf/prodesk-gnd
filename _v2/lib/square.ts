@@ -14,7 +14,7 @@ import {
 const client = new Client({
     environment:
         env.SQUARE_MODE == "sandbox"
-            ? Environment.Sandbox
+            ? Environment.Production
             : Environment.Production,
     accessToken: env.SQUARE_ACCESS_TOKEN,
 });
