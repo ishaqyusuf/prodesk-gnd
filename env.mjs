@@ -63,8 +63,8 @@ const processEnv = {
     // server
     SQUARE_LOCATION_ID: process.env.SQUARE_LOCATION_ID,
     SQUARE_MODE: process.env.SQUARE_MODE,
-    SQUARE_APP_ID: process.env.SANDBOX_APP_ID,
-    SQUARE_ACCESS_TOKEN: process.env.SANBOX_ACCESS_TOKEN,
+    SQUARE_APP_ID: process.env.SQUARE_APP_ID,
+    SQUARE_ACCESS_TOKEN: process.env.SQUARE_ACCESS_TOKEN,
     POSTGRESS_URL: process.env.POSTGRESS_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
