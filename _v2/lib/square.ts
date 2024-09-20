@@ -13,10 +13,10 @@ import {
 
 const client = new Client({
     environment:
-        env.NODE_ENV == "production"
-            ? Environment.Production
-            : Environment.Sandbox,
-    accessToken: env.SANBOX_ACCESS_TOKEN,
+        env.SQUARE_MODE == "sandbox"
+            ? Environment.Sandbox
+            : Environment.Production,
+    accessToken: env.SQUARE_ACCESS_TOKEN,
 });
 export interface SquarePaymentMeta {
     squareOrderId;
@@ -200,27 +200,27 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
         };
     });
 }
-const refreshAccessToken = async (refreshToken) => {
-    try {
-        const { result } = await client.oAuthApi.obtainToken({
-            clientId: process.env.SQUARE_CLIENT_ID,
-            clientSecret: process.env.SQUARE_CLIENT_SECRET,
-            refreshToken,
-            grantType: "authorization_code",
-            code: "",
-        });
+// const refreshAccessToken = async (refreshToken) => {
+//     try {
+//         const { result } = await client.oAuthApi.obtainToken({
+//             clientId: process.env.SQUARE_CLIENT_ID,
+//             clientSecret: process.env.SQUARE_CLIENT_SECRET,
+//             refreshToken,
+//             grantType: "authorization_code",
+//             code: "",
+//         });
 
-        console.log("New Access Token:", result.accessToken);
-        return result.accessToken;
-    } catch (error) {
-        console.error("Error refreshing token:", error);
-    }
-};
+//         console.log("New Access Token:", result.accessToken);
+//         return result.accessToken;
+//     } catch (error) {
+//         console.error("Error refreshing token:", error);
+//     }
+// };
 export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
         // client.devicesApi.listDevices
-        const accessToken = await refreshAccessToken(env.SANBOX_ACCESS_TOKEN);
-        console.log({ accessToken });
+        // const accessToken = await refreshAccessToken(env.SANBOX_ACCESS_TOKEN);
+        // console.log({ accessToken });
 
         const s = await client.terminalApi.createTerminalCheckout({
             // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID,
