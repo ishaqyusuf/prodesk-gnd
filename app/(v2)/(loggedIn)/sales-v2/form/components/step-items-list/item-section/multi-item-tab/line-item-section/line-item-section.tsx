@@ -9,7 +9,6 @@ import Money from "@/components/_v1/money";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { sum } from "@/lib/utils";
 import PriceBreakDownCell from "../price-breakdown-cell";
 
 interface Props {

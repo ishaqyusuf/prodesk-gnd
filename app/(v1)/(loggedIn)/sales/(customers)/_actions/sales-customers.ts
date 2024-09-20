@@ -133,7 +133,9 @@ export async function getCustomerAction(id) {
     let customer: ICustomer = _customer as any;
 
     customer._count.totalSales = sum(customer.salesOrders, "grandTotal");
-    customer._count.amountDue = sum(customer.salesOrders, "amountDue");
+    customer._count.amountDue = sum(
+        customer.salesOrders.map((s) => Number(s.amountDue) || 0)
+    );
     let pd = (customer._count.pendingDoors = sum(
         customer.salesOrders,
         "builtQty"
@@ -150,7 +152,7 @@ export async function getCustomerAction(id) {
     customer._count.completedOrders = _customer.salesOrders?.filter(
         (s) => s.prodStatus == "Completed"
     ).length;
-    customer.salesOrders = customer.salesOrders;
+    // customer.salesOrders = customer.salesOrders;
     // .slice(
     //   customer.salesOrders.length - 5
     // );
