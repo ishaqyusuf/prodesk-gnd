@@ -163,6 +163,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     order.customer.businessName || order.customer.name,
                 paymentLink,
                 orderId: order.orderId,
+                email: data.email,
             });
             toast.success("Created");
         } catch (error) {

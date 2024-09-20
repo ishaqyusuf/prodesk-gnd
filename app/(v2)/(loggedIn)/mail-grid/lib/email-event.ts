@@ -7,6 +7,7 @@ export interface EmailEventProps {
     orderId?: string;
     customerName?: string;
     paymentLink?: string;
+    email?: string;
 }
 export async function _event(e: EmailTriggerEventType, data: EmailEventProps) {
     let template = emailTemplates[e];

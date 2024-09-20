@@ -11,12 +11,16 @@ import {
     PrePopulatedData,
 } from "square";
 
+// const devMode = env.NODE_ENV == "development";
+const devMode = false; //env.NODE_ENV == "development";
+const SQUARE_LOCATION_ID = devMode
+    ? env.SQUARE_SANDBOX_LOCATION_ID
+    : env.SQUARE_LOCATION_ID;
 const client = new Client({
-    environment:
-        env.SQUARE_MODE == "sandbox"
-            ? Environment.Production
-            : Environment.Production,
-    accessToken: env.SQUARE_ACCESS_TOKEN,
+    environment: devMode ? Environment.Sandbox : Environment.Production,
+    accessToken: devMode
+        ? env.SQUARE_SANDBOX_ACCESS_TOKEN
+        : env.SQUARE_ACCESS_TOKEN,
 });
 export interface SquarePaymentMeta {
     squareOrderId;
@@ -129,7 +133,7 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
             quickPay: !quickPay
                 ? undefined
                 : {
-                      locationId: env.SQUARE_LOCATION_ID,
+                      locationId: SQUARE_LOCATION_ID,
                       name:
                           data.description || `payment for ${data.orderIdStr}`,
                       priceMoney: {
@@ -140,7 +144,7 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
             order: quickPay
                 ? undefined
                 : {
-                      locationId: env.SQUARE_LOCATION_ID,
+                      locationId: SQUARE_LOCATION_ID,
                       //   serviceCharges: [
                       //       {
                       //           name: "Total Amount",

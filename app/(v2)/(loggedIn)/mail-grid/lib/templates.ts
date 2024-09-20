@@ -44,6 +44,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     DEALERSHIP_REJECTED: {
         subject: "Your Dealership Registration Was Rejected",
@@ -54,6 +55,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     DEALERSHIP_REGISTRATION_SUBMITTED: {
         subject: "Your Dealership Registration Has Been Submitted",
@@ -64,6 +66,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_CREATED: {
         subject: "New Sales Record Created",
@@ -74,6 +77,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     QUOTE_CREATED: {
         subject: "New Quote Created",
@@ -85,6 +89,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_UPDATED: {
         subject: "Sales Record Updated",
@@ -95,6 +100,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     QUOTE_UPDATED: {
         subject: "Quote Updated",
@@ -106,6 +112,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_EVALUATED: {
         subject: "Sales Record Evaluated",
@@ -116,6 +123,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     QUOTE_EVALUATED: {
         subject: "Quote Evaluated",
@@ -127,6 +135,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_PRODUCTION_ASSIGNED: {
         subject: "Production Has Been Assigned",
@@ -137,6 +146,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_PRODUCTION_STARTED: {
         subject: "Production Has Started",
@@ -147,6 +157,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     SALES_PRODUCTION_COMPLETED: {
         subject: "Production Completed",
@@ -157,6 +168,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     PAYMENT_LINK_CREATED: {
         subject: "Your Order Payment Link is Ready",
@@ -168,6 +180,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     PAYMENT_LINK_DESTROYED: {
         subject: "Your Payment Link Has Been Canceled",
@@ -178,6 +191,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     PAYMENT_SUCCESSFUL: {
         subject: "Payment Received - Thank You!",
@@ -188,6 +202,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     PAYMENT_SUCCESSFUL_WITH_TIPS: {
         subject: "Payment and Tip Received - Thank You!",
@@ -198,6 +213,7 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
     PAYMENT_FAILED: {
         subject: "Payment Failure Notice for Your Order",
@@ -210,5 +226,6 @@ export const emailTemplates: Partial<EmailTemplate> = {
         Best regards,<br/>
         @yourCompanyName
         `,
+        to: "@email",
     },
 };
