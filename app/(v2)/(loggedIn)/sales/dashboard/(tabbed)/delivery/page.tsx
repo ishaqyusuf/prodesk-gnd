@@ -1,8 +1,11 @@
 import { Metadata } from "next";
-import { SalesQueryParams, getSalesAction } from "../_actions/get-sales-action";
+import {
+    SalesQueryParams,
+    getSalesAction,
+} from "../../_actions/get-sales-action";
 import FPage from "@/app/_components/fikr-ui/f-page";
-import PageClient from "../_components/page-client";
-import ServerTab from "../_components/server-tab";
+import PageClient from "../../_components/page-client";
+import ServerTab from "../../_components/server-tab";
 
 export const metadata: Metadata = {
     title: "Sales",
@@ -20,18 +23,13 @@ interface Props {
 export default async function SalesPage({ searchParams, params }: Props) {
     const promise = getSalesAction({
         ...searchParams,
-        // type: "order",
-        status: "Evaluating",
+        type: "order",
+        deliveryOption: "delivery",
     });
 
     return (
-        <FPage title={"Sales"}>
-            <PageClient
-                createType="order"
-                evaluation
-                type="orders"
-                response={promise}
-            />
+        <FPage title="Delivery">
+            <PageClient type="delivery" response={promise} />
         </FPage>
     );
 }
