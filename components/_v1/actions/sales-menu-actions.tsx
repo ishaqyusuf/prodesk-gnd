@@ -208,6 +208,8 @@ export const PrintOrderMenuAction = typedMemo(
     ) => {
         const pdf = useSalesPdf();
         async function _print(mode: IOrderPrintMode) {
+            console.log(mode);
+
             const ids = props.ids || [props.row.slug];
             const query = {
                 slugs: ids.join(","),
@@ -215,10 +217,11 @@ export const PrintOrderMenuAction = typedMemo(
                 mockup: props.mockup ? "yes" : "no",
                 preview: false,
             };
-            if (props.row.deletedAt)
+            if (props?.row?.deletedAt)
                 (query as any).deletedAt = props.row.deletedAt;
             if (props.link) {
                 openLink("printer/sales", query, true);
+                console.log("....");
             } else {
                 pdf.print({
                     slugs: ids.join(","),
