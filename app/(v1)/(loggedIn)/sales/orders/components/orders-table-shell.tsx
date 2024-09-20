@@ -58,7 +58,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                   ],
         true,
         {
-            filterCells: ["_q"],
+            filterCells: ["_q", "_withDeleted"],
         }
     );
 
