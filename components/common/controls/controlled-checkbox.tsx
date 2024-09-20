@@ -22,6 +22,7 @@ interface Props<T> {
     className?: string;
     placeholder?: string;
     switchInput?: boolean;
+    list?: boolean;
 }
 export default function ControlledCheckbox<
     TFieldValues extends FieldValues = FieldValues,
@@ -33,40 +34,46 @@ export default function ControlledCheckbox<
     className,
     placeholder,
     switchInput,
+    list,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
         <FormField
             {...(props as any)}
-            render={({ field }) => (
-                <FormItem
-                    className={cn(
-                        "flex flex-row items-starts items-center space-x-3 space-y-0 rounded-md",
-                        className
-                    )}
-                >
-                    <FormControl className="mt-0.5">
-                        {switchInput ? (
-                            <Switch
-                                color="green"
-                                checked={field.value as any}
-                                onCheckedChange={field.onChange}
-                            />
-                        ) : (
-                            <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                            />
+            render={({ field }) => {
+                const valueProps = list
+                    ? { defaultChecked: field.value }
+                    : { checked: field.value };
+                return (
+                    <FormItem
+                        className={cn(
+                            "flex flex-row items-starts items-center space-x-3 space-y-0 rounded-md",
+                            className
                         )}
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                        {label && <FormLabel>{label}</FormLabel>}
-                        {description && (
-                            <FormDescription>{description}</FormDescription>
-                        )}
-                    </div>
-                </FormItem>
-            )}
+                    >
+                        <FormControl className="mt-0.5">
+                            {switchInput ? (
+                                <Switch
+                                    color="green"
+                                    {...valueProps}
+                                    onCheckedChange={field.onChange}
+                                />
+                            ) : (
+                                <Checkbox
+                                    {...valueProps}
+                                    onCheckedChange={field.onChange}
+                                />
+                            )}
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                            {label && <FormLabel>{label}</FormLabel>}
+                            {description && (
+                                <FormDescription>{description}</FormDescription>
+                            )}
+                        </div>
+                    </FormItem>
+                );
+            }}
         />
     );
 }

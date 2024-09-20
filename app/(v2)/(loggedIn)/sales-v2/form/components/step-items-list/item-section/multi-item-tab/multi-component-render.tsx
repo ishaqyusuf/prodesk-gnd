@@ -32,9 +32,10 @@ export default function MultiComponentRender({ Render, line = false }) {
             <div className="overflow-auto max-w-[100vw]">
                 <div className="flex flex-col sw-[200vw]  md:w-auto">
                     {line ? (
-                        <div className="h-[300px] px-8 -mx-8 overflow-auto">
+                        <div className="max-h-[300px] px-8 -mx-8 overflow-auto">
                             <Table id="housePackageTable">
                                 <TableHeader>
+                                    <TableHead className="">Sn.</TableHead>
                                     <TableHead>
                                         {item.isType.moulding
                                             ? "Moulding"
@@ -75,7 +76,19 @@ export default function MultiComponentRender({ Render, line = false }) {
                                 </TableHeader>
                                 <TableBody>
                                     {mdf.tabs?.map((tab, index) => (
-                                        <TableRow key={index}>
+                                        <TableRow
+                                            className={cn(
+                                                tab.deleted && "hidden",
+                                                "border-none"
+                                            )}
+                                            key={index}
+                                        >
+                                            <TableCell>
+                                                {mdf.tabs
+                                                    .filter((t, i) => i < index)
+                                                    .filter((t) => !t.deleted)
+                                                    .length + 1}
+                                            </TableCell>
                                             <Render
                                                 mdf={mdf}
                                                 componentTitle={tab.title}

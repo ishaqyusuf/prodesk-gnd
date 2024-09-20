@@ -167,8 +167,7 @@ export function useMultiComponentItem(componentTitle) {
     }
     function removeLine(removeTab) {
         removeTab(componentTitle);
-        console.log({ componentTitle });
-
+        // console.log({ componentTitle });
         footerEstimate.lineItemDeleted(ctx);
         form.setValue(multiComponentComponentTitleKey as any, null);
     }

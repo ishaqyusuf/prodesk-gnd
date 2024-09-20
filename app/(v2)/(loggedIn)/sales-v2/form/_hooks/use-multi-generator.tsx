@@ -5,7 +5,7 @@ import { generateRandomString } from "@/lib/utils";
 
 export default function useMultiDykeForm() {
     const form = useDykeForm();
-    const [tabs, setTabs] = useState<{ title }[]>([]);
+    const [tabs, setTabs] = useState<{ title; deleted?: boolean }[]>([]);
     const [currentTab, setCurrentTab] = useState<string>();
     const [ready, setReady] = useState(false);
     const item = useContext(DykeItemFormContext);
@@ -22,7 +22,7 @@ export default function useMultiDykeForm() {
         const n = generateRandomString();
         setValue(`components.${n}` as any, {
             checked: true,
-            tax: true,
+            tax: false,
         });
         setTabs((tabs) => {
             return [
@@ -82,8 +82,13 @@ export default function useMultiDykeForm() {
         currentTab,
         removeTab(title) {
             setTabs((_tabs) => {
-                console.log(_tabs);
-                return [..._tabs].filter((t) => t.title != title);
+                return [..._tabs].map((tab) => {
+                    if (title == tab.title) {
+                        tab.deleted = true;
+                    }
+                    return tab;
+                });
+                // .filter((t) => t.title != title);
             });
         },
         setCurrentTab,

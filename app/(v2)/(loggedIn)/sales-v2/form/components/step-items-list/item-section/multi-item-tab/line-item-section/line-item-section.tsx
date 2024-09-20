@@ -34,6 +34,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                     componentTitle
                 ) : (
                     <ControlledInput
+                        size="sm"
                         list
                         control={form.control}
                         name={
@@ -48,6 +49,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                         <ControlledCheckbox
                             control={form.control}
                             switchInput
+                            list
                             name={
                                 `${componentItem.multiComponentComponentTitleKey}.tax` as any
                             }
@@ -57,6 +59,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                         <ControlledCheckbox
                             control={form.control}
                             switchInput
+                            list
                             name={
                                 `${componentItem.multiComponentComponentTitleKey}.production` as any
                             }
@@ -68,6 +71,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 <ControlledInput
                     type="number"
                     list
+                    size="sm"
                     control={form.control}
                     name={
                         `${componentItem.multiComponentComponentTitleKey}.qty` as any
@@ -81,6 +85,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 <ControlledInput
                     type="number"
                     list
+                    size="sm"
                     control={form.control}
                     name={
                         `${componentItem.multiComponentComponentTitleKey}.${

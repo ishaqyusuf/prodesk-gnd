@@ -221,7 +221,6 @@ export const PrintOrderMenuAction = typedMemo(
                 (query as any).deletedAt = props.row.deletedAt;
             if (props.link) {
                 openLink("printer/sales", query, true);
-                console.log("....");
             } else {
                 pdf.print({
                     slugs: ids.join(","),
