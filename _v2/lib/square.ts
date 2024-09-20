@@ -68,7 +68,7 @@ export type CreateSalesPaymentProps =
 export async function createSalesPayment(data: CreateSalesPaymentProps) {
     const salesCheckout = await prisma.salesCheckout.create({
         data: {
-            amount: data.amount,
+            amount: Number(data.amount),
             paymentType: `square_${data.type}`,
             status: "no-status",
             orderId: data.orderId,

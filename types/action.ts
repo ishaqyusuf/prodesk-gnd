@@ -7,6 +7,12 @@ export type TableApiResponse<T> = Promise<{
         hasPreviousPage?: Boolean;
     };
 }>;
+export interface PageQuery {
+    page?;
+    per_page?;
+    sort_order?;
+    sort?;
+}
 export interface BaseQuery {
     id?;
     _q?;

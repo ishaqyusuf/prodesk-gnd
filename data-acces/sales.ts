@@ -7,7 +7,7 @@ import {
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { prisma } from "@/db";
 import { ftToIn, sum } from "@/lib/utils";
-import { BaseQuery } from "@/types/action";
+import { BaseQuery, PageQuery } from "@/types/action";
 import {
     DeliveryOption,
     IAddressMeta,
@@ -50,133 +50,7 @@ export async function getSales(query: SalesQueryParams) {
     const _items = await prisma.salesOrders.findMany({
         where,
         ...(await queryFilter(query)),
-        include: {
-            // customer: true,
-            // shippingAddress: true,
-            // billingAddress: true,
-            producer: true,
-            // salesRep: true,
-            pickup: true,
-            items: {
-                where: {
-                    swing: {
-                        not: null,
-                    },
-                },
-                select: {
-                    description: true,
-                    prebuiltQty: true,
-                    id: true,
-                    qty: true,
-                    swing: true,
-                    prodCompletedAt: true,
-                    dykeProduction: true,
-                    meta: true,
-                },
-            },
-            // items: {
-            //     where: {
-            //         deletedAt: null,
-            //         swing: { not: null },
-            //     },
-            // },
-            // productionStatus: true,
-            doors: {
-                where: {
-                    deletedAt: null,
-                    housePackageTool: {
-                        doorType: {
-                            in: salesData.productionDoorTypes,
-                        },
-                    },
-                },
-                select: {
-                    id: true,
-                    doorType: true,
-                    lhQty: true,
-                    rhQty: true,
-                    totalQty: true,
-                },
-            },
-            assignments: {
-                where: {
-                    deletedAt: null,
-                    item: {
-                        deletedAt: null,
-                    },
-                },
-                include: {
-                    assignedTo: {
-                        select: {
-                            name: true,
-                            id: true,
-                        },
-                    },
-                    salesDoor: {
-                        select: {
-                            id: true,
-                            housePackageTool: {
-                                select: {
-                                    door: {
-                                        select: {
-                                            id: true,
-                                            title: true,
-                                            img: true,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    submissions: {
-                        where: {
-                            deletedAt: null,
-                        },
-                        select: {
-                            id: true,
-                            qty: true,
-                            rhQty: true,
-                            lhQty: true,
-                        },
-                    },
-                },
-            },
-            customer: {
-                select: {
-                    id: true,
-                    businessName: true,
-                    name: true,
-                    phoneNo: true,
-                    email: true,
-                },
-            },
-            billingAddress: {
-                select: {
-                    id: true,
-                    name: true,
-                    address1: true,
-                    email: true,
-                    meta: true,
-                    phoneNo: true,
-                },
-            },
-            shippingAddress: {
-                select: {
-                    id: true,
-                    name: true,
-                    phoneNo: true,
-                    email: true,
-                    meta: true,
-                    address1: true,
-                },
-            },
-            salesRep: {
-                select: {
-                    id: true,
-                    name: true,
-                },
-            },
-        },
+        include: SalesInclude,
     });
     const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
     function transformOrder(order: (typeof _items)[number]) {
@@ -461,3 +335,156 @@ export async function whereSales(query: SalesQueryParams) {
     if (query._salesRepId) where.salesRepId = +query._salesRepId;
     return where;
 }
+
+export interface SalesQueryParam2 extends PageQuery {
+    _q?: string;
+    _type?: ISalesType;
+}
+export type GetAllSales = Awaited<ReturnType<typeof getAllSales>>;
+export async function getAllSales(query: SalesQueryParam2) {
+    const where = allSalesQuery(query);
+    const sales = await prisma.salesOrders.findMany({
+        where,
+        ...(await queryFilter(query)),
+        include: SalesInclude,
+    });
+    const pageInfo = await getPageInfo(query, where, prisma.salesOrders);
+    return {
+        pageInfo,
+        data: sales,
+        pageCount: pageInfo.pageCount,
+    };
+}
+
+function allSalesQuery(query: SalesQueryParam2) {
+    const where: Prisma.SalesOrdersWhereInput = {};
+
+    return where;
+}
+const SalesInclude: Prisma.SalesOrdersInclude = {
+    // customer: true,
+    // shippingAddress: true,
+    // billingAddress: true,
+    producer: true,
+    // salesRep: true,
+    pickup: true,
+    items: {
+        where: {
+            swing: {
+                not: null,
+            },
+        },
+        select: {
+            description: true,
+            prebuiltQty: true,
+            id: true,
+            qty: true,
+            swing: true,
+            prodCompletedAt: true,
+            dykeProduction: true,
+            meta: true,
+        },
+    },
+    // items: {
+    //     where: {
+    //         deletedAt: null,
+    //         swing: { not: null },
+    //     },
+    // },
+    // productionStatus: true,
+    doors: {
+        where: {
+            deletedAt: null,
+            housePackageTool: {
+                doorType: {
+                    in: salesData.productionDoorTypes,
+                },
+            },
+        },
+        select: {
+            id: true,
+            doorType: true,
+            lhQty: true,
+            rhQty: true,
+            totalQty: true,
+        },
+    },
+    assignments: {
+        where: {
+            deletedAt: null,
+            item: {
+                deletedAt: null,
+            },
+        },
+        include: {
+            assignedTo: {
+                select: {
+                    name: true,
+                    id: true,
+                },
+            },
+            salesDoor: {
+                select: {
+                    id: true,
+                    housePackageTool: {
+                        select: {
+                            door: {
+                                select: {
+                                    id: true,
+                                    title: true,
+                                    img: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            submissions: {
+                where: {
+                    deletedAt: null,
+                },
+                select: {
+                    id: true,
+                    qty: true,
+                    rhQty: true,
+                    lhQty: true,
+                },
+            },
+        },
+    },
+    customer: {
+        select: {
+            id: true,
+            businessName: true,
+            name: true,
+            phoneNo: true,
+            email: true,
+        },
+    },
+    billingAddress: {
+        select: {
+            id: true,
+            name: true,
+            address1: true,
+            email: true,
+            meta: true,
+            phoneNo: true,
+        },
+    },
+    shippingAddress: {
+        select: {
+            id: true,
+            name: true,
+            phoneNo: true,
+            email: true,
+            meta: true,
+            address1: true,
+        },
+    },
+    salesRep: {
+        select: {
+            id: true,
+            name: true,
+        },
+    },
+};

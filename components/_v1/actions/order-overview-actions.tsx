@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "../../ui/button";
 import { Pencil } from "lucide-react";
 import { OrderRowAction } from "./sales-menu-actions";
 import { ISalesOrder } from "@/types/sales";
@@ -9,6 +8,9 @@ import { useAppSelector } from "@/store";
 import UpdateSalesDate from "../sales/update-sales-date";
 import { useDataPage } from "@/lib/data-page-context";
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
+import Button from "@/components/common/button";
+import { restoreSalesDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/sales.restore.dac";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 interface Props {
     estimate?: Boolean;
@@ -20,9 +22,18 @@ export default function OrderOverviewActions({ estimate }: Props) {
         ? `/sales-v2/form/${order.type}/${order.slug}`
         : `/sales/edit/${order.type}/${order.slug}`;
     const prod = useAssignment();
+    async function _restore() {
+        await restoreSalesDac(order.id);
+        await _revalidate("salesOverview");
+    }
     return (
         <div className="flex space-x-2">
             {/* <UpdateSalesDate sales={order} /> */}
+            {order.deletedAt && (
+                <Button variant="destructive" size="sm" action={_restore}>
+                    Restore
+                </Button>
+            )}
             {order.isDyke && (
                 <Button
                     onClick={() => {

@@ -1,8 +1,6 @@
 "use server";
 
-import { paginatedAction } from "@/app/_actions/get-action-utils";
 import { getSales } from "@/data-acces/sales";
-import { prisma } from "@/db";
 import { BaseQuery } from "@/types/action";
 import { DeliveryOption, ISalesType } from "@/types/sales";
 import { Prisma } from "@prisma/client";

@@ -7,7 +7,7 @@ import {
     TypedSalesStat,
 } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { sum } from "@/lib/utils";
-import { SalesItem } from "@/data-acces/sales";
+import { GetAllSales, SalesItem } from "@/data-acces/sales";
 
 export function composeSalesCostBreakdown(data: IGetFullSale) {
     if (data.type != "order") return null;
@@ -62,4 +62,13 @@ export function composeSalesStatKeyValue(stats: SalesStat[]) {
     stats.map((stat) => (resp[stat.type] = stat));
 
     return resp;
+}
+
+export function composeListOrders(item: GetAllSales["data"][number]) {
+    return {
+        id: item.id,
+        slug: item.slug,
+        orderId: item.orderId,
+        salesRep: item.salesRep?.name || "-",
+    };
 }

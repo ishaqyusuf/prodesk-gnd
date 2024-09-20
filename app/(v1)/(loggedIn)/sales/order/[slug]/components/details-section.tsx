@@ -21,7 +21,6 @@ interface Props {
 }
 export default function DetailsSection({ myProd, estimate }: Props) {
     const { data: order } = useDataPage<ISalesOrder>();
-    console.log(order.items);
     const isProd = order?.ctx?.prodPage;
     return (
         <div className="">
@@ -37,6 +36,7 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                                 status={order?.prodStatus || "no status"}
                             />
                         </div>
+
                         {isProd ? (
                             <></>
                         ) : (
