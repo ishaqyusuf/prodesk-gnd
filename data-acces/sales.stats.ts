@@ -3,7 +3,8 @@ import {
     SalesStatStatus,
     TypedSalesStat,
 } from "@/app/(v2)/(loggedIn)/sales-v2/type";
-import { sales_StattoKeyValue } from "@/app/(v2)/(loggedIn)/sales/utils/sales-helper";
+
+import { composeSalesStatKeyValue } from "@/data/compose-sales";
 import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
 
@@ -53,7 +54,7 @@ export async function updateSalesStat(id) {
               ]
             : data.items.filter((a) => a.swing).map((a) => a.qty)
     );
-    const statkv = sales_StattoKeyValue(data.stat);
+    const statkv = composeSalesStatKeyValue(data.stat);
     await saveStat({
         type: "production",
         salesId: data.id,

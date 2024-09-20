@@ -9,7 +9,6 @@ import {
 import { composeSalesItems } from "../../_utils/compose-sales-items";
 import { DykeDoorType } from "../../type";
 import { isComponentType } from "../is-component-type";
-import { getProgress } from "@/app/(v1)/_actions/progress";
 
 export async function getSalesOverview({
     type,

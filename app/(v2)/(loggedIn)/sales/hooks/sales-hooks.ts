@@ -1,7 +1,7 @@
 import { SalesItem } from "@/data-acces/sales";
 import { sum } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { sales_TotalDeliverables } from "../utils/sales-helper";
+import { composeTotalDeliverables } from "@/data/compose-sales";
 
 interface SalesStatus {
     payment: {
@@ -25,7 +25,7 @@ export function useSalesStatus(item: SalesItem) {
     const [status, setStatus] = useState<SalesStatus>(null);
     useEffect(() => {
         //
-        const totalDeliverables = sales_TotalDeliverables(item);
+        const totalDeliverables = composeTotalDeliverables(item);
     }, []);
 
     return {

@@ -28,10 +28,10 @@ export async function getSalesPaymentData(id) {
         },
     });
     if (!order) throw Error("Order not found");
-    const pendingCheckouts = order.checkouts?.filter(
-        (c) => c.status != "pending" && c.status != "no-status"
-    );
-    const pendingAmount = sum(pendingCheckouts, "amount");
+    // const pendingCheckouts = order.checkouts?.filter(
+    //     (c) => //c.status != "pending" && c.status != "no-status"
+    // );
+    // const pendingAmount = sum(pendingCheckouts, "amount");
 
     function getLineItems() {
         const lineItems: OrderLineItem[] = [];
@@ -60,8 +60,7 @@ export async function getSalesPaymentData(id) {
         dealerMode,
         // orderId: order.id,
         // orderIdStr: order.orderId,
-        canCreatePaymentLink: order.amountDue > pendingAmount,
-        pendingAmount,
+        canCreatePaymentLink: order.amountDue > 0,
         lineItems,
         terminals: await getSquareDevices(),
     };
