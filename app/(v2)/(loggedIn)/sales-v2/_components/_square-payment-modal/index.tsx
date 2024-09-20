@@ -36,6 +36,7 @@ import { cn } from "@/lib/utils";
 import { env } from "@/env.mjs";
 import Button from "@/components/common/button";
 import { openLink } from "@/lib/open-link";
+import { notify } from "../../../mail-grid/lib/use-mail-event";
 
 type FormProps = CreateSalesPaymentProps & {
     modalTitle;
@@ -130,6 +131,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 }
             }
             let resp = await createSalesPayment(data as any);
+            const paymentLink = resp.paymentUrl;
             // console.log(resp);
             if (resp?.errors) {
                 resp.errors.map((e) => {
@@ -156,12 +158,12 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     toast.message("Check email for payment link or try again");
                 }
             }
-            // await notify("PAYMENT_LINK_CREATED", {
-            //     customerName:
-            //         order.customer.businessName || order.customer.name,
-            //     paymentLink,
-            //     orderId: order.orderId,
-            // });
+            await notify("PAYMENT_LINK_CREATED", {
+                customerName:
+                    order.customer.businessName || order.customer.name,
+                paymentLink,
+                orderId: order.orderId,
+            });
             toast.success("Created");
         } catch (error) {
             // console.log(error);
