@@ -12,7 +12,7 @@ import {
 } from "square";
 
 // const devMode = env.NODE_ENV == "development";
-const devMode = false; //env.NODE_ENV == "development";
+const devMode = env.NODE_ENV != "production";
 const SQUARE_LOCATION_ID = devMode
     ? env.SQUARE_SANDBOX_LOCATION_ID
     : env.SQUARE_LOCATION_ID;

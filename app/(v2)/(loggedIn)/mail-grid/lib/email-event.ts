@@ -18,7 +18,7 @@ export async function _event(e: EmailTriggerEventType, data: EmailEventProps) {
         // reply_to: u?.meta?.emailRespondTo || u?.email,
         from: mail.from || "Pablo From GNDMillwork <pcruz321@gndprodesk.com>",
         // from: "Pablo From GNDMillwork <pablo@gndprodesk.com>",
-        to: mail.to,
+        to: data.email,
         subject: mail.subject,
         html: mail.body,
         attachments: mail.attachments?.length ? mail.attachments : undefined,
