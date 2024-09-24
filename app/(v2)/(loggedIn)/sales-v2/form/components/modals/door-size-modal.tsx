@@ -22,27 +22,35 @@ import { HousePackageToolMeta } from "@/types/sales";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import Button from "@/components/common/button";
 
 interface Props {
     rowIndex;
     productTitle;
     form: UseFormReturn<DykeForm>;
+    onProceed?;
 }
 export function useDoorSizeModal(form, rowIndex) {
     const modal = useModal();
     return {
-        open(productTitle) {
+        open(productTitle, args = {}) {
             modal.openModal(
                 <DoorSizeModal
                     form={form}
                     productTitle={productTitle}
                     rowIndex={rowIndex}
+                    {...args}
                 />
             );
         },
     };
 }
-export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
+export default function DoorSizeModal({
+    rowIndex,
+    productTitle,
+    form,
+    onProceed,
+}: Props) {
     const basePath = `itemArray.${rowIndex}.multiComponent.components.${productTitle}`;
     const defaultValues = {};
 
@@ -110,6 +118,13 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
     }
     function onCancel() {
         form.setValue(`${basePath}.checked` as any, false);
+        modal.close();
+    }
+    function submitAndProceed() {
+        onSubmit();
+        setTimeout(() => {
+            onProceed?.();
+        }, 1000);
     }
     return (
         <Form {..._form}>
@@ -216,11 +231,18 @@ export default function DoorSizeModal({ rowIndex, productTitle, form }: Props) {
                     </ScrollArea>
                 </div>
                 <Modal.Footer
-                    submitText="Proceed"
-                    onSubmit={onSubmit}
-                    cancelText="Remove Door"
-                    onCancel={onCancel}
-                />
+                    submitText="Select & Proceed"
+                    onSubmit={submitAndProceed}
+                    submitVariant="outline"
+                    cancelText="Select"
+                    cancelBtn
+                    cancelVariant="default"
+                    onCancel={onSubmit}
+                >
+                    <Button onClick={onCancel} variant="destructive">
+                        Remove Selection
+                    </Button>
+                </Modal.Footer>
             </Modal.Content>
         </Form>
     );

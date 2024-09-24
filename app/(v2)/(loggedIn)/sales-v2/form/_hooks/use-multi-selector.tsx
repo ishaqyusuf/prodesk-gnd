@@ -138,6 +138,11 @@ export function useMultiSelector(rowIndex, get) {
             if (!isMoulding) {
                 // form.setValue(`${basePath}.checked` as any, true);
                 sizeModal.open(safeTitle);
+                sizeModal.open(safeTitle, {
+                    onProceed: () => {
+                        onSelect();
+                    },
+                });
                 // modal.openModal(
                 //     <SelectDoorHeightsModal
                 //         form={form}
