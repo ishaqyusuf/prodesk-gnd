@@ -1103,14 +1103,31 @@ model SalesOrders {
 }
 
 model SalesTaxes {
-    id       String      @id @default(cuid())
-    sale     SalesOrders @relation(fields: [salesId], references: [id])
-    salesId  Int
-    taxCode  String //
-    taxxable Float
-    tax      Float       @default(0)
+    id        String      @id @default(cuid())
+    sale      SalesOrders @relation(fields: [salesId], references: [id])
+    salesId   Int
+    taxCode   String
+    taxxable  Float
+    tax       Float       @default(0)
+    createdAt DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt DateTime?   @updatedAt
+    deletedAt DateTime?   @db.Timestamp(0)
+
+    taxConfig Taxes? @relation(fields: [taxCode], references: [taxCode])
 
     @@index([salesId])
+    @@index([taxCode])
+}
+
+model Taxes {
+    title      String
+    taxCode    String       @unique
+    percentage Float        @default(0.00)
+    taxOn      String       @default("total") //total, first 50000 
+    createdAt  DateTime?    @default(now()) @db.Timestamp(0)
+    updatedAt  DateTime?    @updatedAt
+    deletedAt  DateTime?    @db.Timestamp(0)
+    salesTaxes SalesTaxes[]
 }
 
 model SalesStat {

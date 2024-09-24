@@ -242,6 +242,7 @@ export default function DoorSizeModal({
                     <Button onClick={onCancel} variant="destructive">
                         Remove Selection
                     </Button>
+                    <div className="flex-1"></div>
                 </Modal.Footer>
             </Modal.Content>
         </Form>

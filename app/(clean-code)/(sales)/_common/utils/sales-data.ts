@@ -6,11 +6,7 @@ const salesTaxes = [
 ] as const;
 export type SalesTaxes = (typeof salesTaxes)[number];
 export type TaxCodes = SalesTaxes["code"];
-type TaxTitle = SalesTaxes["title"];
-const salesTaxCodeTitle: { [id in TaxCodes]: TaxTitle } = {
-    A: "County Tax",
-    B: "Florida State Tax",
-} as const;
+
 const salesTaxByCode: { [id in TaxCodes]: SalesTaxes } = {
     A: salesTaxes[0],
     B: salesTaxes[1],
@@ -18,6 +14,5 @@ const salesTaxByCode: { [id in TaxCodes]: SalesTaxes } = {
 export default {
     productionDoorTypes: ["Garage", "Interior", "Exterior"] as DykeDoorType[],
     salesTaxes,
-    salesTaxCodeTitle,
     salesTaxByCode,
 };
