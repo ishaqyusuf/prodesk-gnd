@@ -33,6 +33,13 @@ import { Dot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
 import DoorMenuOption from "./door-menu-option";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -119,6 +126,86 @@ export function StepItem({
         setEditPrice(true);
     };
     const batchCtx = useProdBatchAction();
+    function Content({ onClick }) {
+        return (
+            <>
+                <CardHeader
+                    onClick={onClick}
+                    className="border-b realtive flex-1 p-0 py-4"
+                >
+                    {item.meta?.stepSequence?.length ? (
+                        <div className="absolute top-0 right-0">
+                            <Dot className="w-8 h-8 text-cyan-600" />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    <ProductImage item={item} />
+                </CardHeader>
+                <CardContent
+                    onClick={onClick}
+                    className="space-y-1.5 inline-flex items-center justify-between p-2"
+                >
+                    <CardTitle className="line-clamp-1s text-sm">
+                        {isRoot
+                            ? item.product?.value || item.product.title
+                            : item.product.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-1">
+                        {/* {formatPrice(product.price)} */}
+                        {stepForm.step.title == "Door" ? (
+                            <span className="inline-flex space-x-1 text-muted-foreground">
+                                {/* <Icons.dollar className="w-4 h-4" /> */}
+                                <span>
+                                    {doorPriceCount} {" price found"}
+                                </span>
+                            </span>
+                        ) : (
+                            item._metaData.price > 0 && (
+                                <Badge>
+                                    <Money value={item._metaData.price} />
+                                </Badge>
+                            )
+                        )}
+                    </CardDescription>
+                </CardContent>
+            </>
+        );
+    }
+    const [showProceed, setShowProceed] = useState(false);
+
+    useEffect(() => {
+        if (showProceed) {
+            setTimeout(() => {
+                setShowProceed(false);
+            }, 3000);
+        }
+    }, [showProceed]);
+    function MouldingContent() {
+        return (
+            <>
+                <Content
+                    onClick={() => {
+                        setShowProceed(true);
+                        if (!loadingStep && !menuOpen) select(selected, item);
+                    }}
+                />
+
+                {showProceed && (
+                    <div className="absolute">
+                        <Button
+                            onClick={() => {
+                                select(false);
+                            }}
+                            size="sm"
+                        >
+                            Proceed
+                        </Button>
+                    </div>
+                )}
+            </>
+        );
+    }
     return (
         <Card
             className={cn(
@@ -207,56 +294,21 @@ export function StepItem({
                     )}
                 </Menu>
             </div>
-            <CardHeader
-                onClick={() => {
-                    if (!loadingStep && !menuOpen) select(selected, item);
-                }}
-                className="border-b realtive flex-1 p-0 py-4"
-            >
-                {item.meta?.stepSequence?.length ? (
-                    <div className="absolute top-0 right-0">
-                        <Dot className="w-8 h-8 text-cyan-600" />
-                    </div>
-                ) : (
-                    <></>
-                )}
-                <ProductImage item={item} />
-            </CardHeader>
+
             <span className="sr-only">
                 {isRoot
                     ? item.product?.value || item.product.title
                     : item.product.title}
             </span>
-
-            <CardContent
-                onClick={() => {
-                    if (!loadingStep && !menuOpen) select(selected, item);
-                }}
-                className="space-y-1.5 inline-flex items-center justify-between p-2"
-            >
-                <CardTitle className="line-clamp-1s text-sm">
-                    {isRoot
-                        ? item.product?.value || item.product.title
-                        : item.product.title}
-                </CardTitle>
-                <CardDescription className="line-clamp-1">
-                    {/* {formatPrice(product.price)} */}
-                    {stepForm.step.title == "Door" ? (
-                        <span className="inline-flex space-x-1 text-muted-foreground">
-                            {/* <Icons.dollar className="w-4 h-4" /> */}
-                            <span>
-                                {doorPriceCount} {" price found"}
-                            </span>
-                        </span>
-                    ) : (
-                        item._metaData.price > 0 && (
-                            <Badge>
-                                <Money value={item._metaData.price} />
-                            </Badge>
-                        )
-                    )}
-                </CardDescription>
-            </CardContent>
+            {stepForm.step?.title == "Moulding" ? (
+                <MouldingContent />
+            ) : (
+                <Content
+                    onClick={() => {
+                        if (!loadingStep && !menuOpen) select(selected, item);
+                    }}
+                />
+            )}
         </Card>
     );
 }
