@@ -14,6 +14,9 @@ import { formatCurrency, inToFt, sum } from "@/lib/utils";
 import { PrintTextProps } from "../components/print-text";
 import salesFormUtils from "../../(loggedIn)/sales/edit/sales-form-utils";
 import { isComponentType } from "../../(loggedIn)/sales-v2/overview/is-component-type";
+import salesData, {
+    SalesTaxes,
+} from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 
 type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
 
@@ -578,6 +581,33 @@ function printFooter(data: PrintData, notPrintable) {
     const totalPaid = sum(
         data.order.payments.filter((p) => !p.deletedAt).map((p) => p.amount)
     );
+    let taxLines = [];
+    if (data.order.taxes?.length) {
+        data.order.taxes.map((t) => {
+            const sData = salesData.salesTaxByCode[t.taxCode] as SalesTaxes;
+            if (sData) {
+                taxLines.push(
+                    styled(
+                        `${sData.title} ${sData.percentage}%`,
+                        formatCurrency.format(t.tax),
+                        {
+                            font: "bold",
+                        }
+                    )
+                );
+            }
+        });
+    } else {
+        taxLines.push(
+            styled(
+                `Tax (${data.order.taxPercentage}%)`,
+                formatCurrency.format(data.order.tax || 0),
+                {
+                    font: "bold",
+                }
+            )
+        );
+    }
     return {
         lines: [
             styled(
@@ -587,13 +617,7 @@ function printFooter(data: PrintData, notPrintable) {
                     font: "bold",
                 }
             ),
-            styled(
-                `Tax (${data.order.taxPercentage}%)`,
-                formatCurrency.format(data.order.tax || 0),
-                {
-                    font: "bold",
-                }
-            ),
+            ...taxLines,
             styled(
                 "Labor",
                 formatCurrency.format(data.order.meta?.labor_cost || 0),

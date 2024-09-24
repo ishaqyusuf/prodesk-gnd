@@ -84,6 +84,7 @@ export async function viewSale(type, slug, deletedAt?) {
             salesRep: true,
             productions: true,
             payments: true,
+            taxes: true,
         },
     });
 
