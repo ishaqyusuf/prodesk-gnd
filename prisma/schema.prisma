@@ -1059,6 +1059,7 @@ model SalesOrders {
     profitMargin      Float?
     tax               Float?
     taxPercentage     Float?
+    taxes             SalesTaxes[]
     grandTotal        Float?
     amountDue         Float?
     invoiceStatus     String?                          @db.VarChar(255)
@@ -1099,6 +1100,17 @@ model SalesOrders {
     @@index([prodId])
     @@index([salesRepId])
     @@index([pickupId])
+}
+
+model SalesTaxes {
+    id       String      @id @default(cuid())
+    sale     SalesOrders @relation(fields: [salesId], references: [id])
+    salesId  Int
+    taxCode  String //
+    taxxable Float
+    tax      Float       @default(0)
+
+    @@index([salesId])
 }
 
 model SalesStat {
