@@ -219,7 +219,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         createdAt: dayjs().toISOString() as any,
     };
     // const {} = order;
-    const { taxes, ...form } = (order || newOrderForm) as any as OrderType;
+    const { taxes = [], ...form } = (order || newOrderForm) as any as OrderType;
 
     const meta = form.meta as any as ISalesOrderMeta;
     if (!Object.keys(meta).includes("tax")) meta.tax = true;
