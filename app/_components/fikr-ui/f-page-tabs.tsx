@@ -3,15 +3,34 @@
 import { Button } from "@/components/ui/button";
 import FContentShell from "./f-content-shell";
 import { cn } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+    createContext,
+    use,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { usePathname, useSearchParams } from "next/navigation";
+import Portal from "@/components/_v1/portal";
+import { typedMemo } from "@/lib/hocs/typed-memo";
 // import Link from "next/link";
 
-interface Props extends PrimitiveDivProps {}
-
+interface Props {
+    children?;
+    tabs?: PageTab[];
+    promise?;
+    port?: boolean;
+}
+export interface PageTab {
+    count?;
+    params?: { [k in string]: string };
+    title: string;
+    url?: string;
+}
 interface FormProps {
     currentTab?: string;
     tabs: {
@@ -84,6 +103,7 @@ const useCtx = () => {
         form.setValue("tabData", tabData);
     }, [query, tabs]);
     return {
+        form,
         register(props: TabProps) {
             if (props.tabName || props.children)
                 form.setValue(
@@ -99,15 +119,51 @@ const useCtx = () => {
     };
 };
 const ctx = createContext<ReturnType<typeof useCtx>>({} as any);
-function _FPageTabs({ children }: Props) {
+function _FPageTabs({ children, promise, tabs, port }: Props) {
     const _values = useCtx();
-    return (
-        <ctx.Provider value={_values}>
-            <FContentShell className="border-b flex-1 ">
-                {children}
-            </FContentShell>
-        </ctx.Provider>
-    );
+    const _tabList: PageTab[] = tabs || promise ? use(promise) : null;
+    useEffect(() => {
+        if (_tabList?.length) {
+            const tabs = {};
+            _tabList?.map(
+                (t) =>
+                    (tabs[t.title] = {
+                        ...t.params,
+                        ...t,
+                        tabName: t.title,
+                        href: t.url,
+                    })
+            );
+            _values.form.reset({
+                tabs,
+            });
+        }
+    }, [_tabList]);
+    function Render() {
+        return (
+            <ctx.Provider value={_values}>
+                <FContentShell className="border-b flex-1 ">
+                    {children}
+                    {_tabList &&
+                        _tabList?.map((tab) => (
+                            <MemoiedTab
+                                tabName={tab.title}
+                                {...tab.params}
+                                href={tab.url}
+                                key={tab.title}
+                            />
+                        ))}
+                </FContentShell>
+            </ctx.Provider>
+        );
+    }
+    if (port)
+        return (
+            <Portal nodeId={"pageTab"}>
+                <Render />
+            </Portal>
+        );
+    return <Render />;
 }
 
 interface TabProps {
@@ -123,9 +179,23 @@ interface TabProps {
 }
 function Tab(props: TabProps) {
     const ct = useContext(ctx);
+    // const register = useCallback(ct.register, [ct]);
+    const { form } = ct;
+
     useEffect(() => {
-        ct.register(props);
+        if (props.tabName || props.children) {
+            // setTimeout(() => {
+            // console.log("REGISTERED");
+            // form.setValue(`tabs.${props.tabName || props.children}` as any, {
+            //     ...props,
+            // });
+            // }, 1000);
+        }
     }, []);
+    // useEffect(() => {
+    //     register(props);
+    //     console.log("...");
+    // }, [register, props]);
     return (
         <Button
             variant={"ghost"}
@@ -133,7 +203,8 @@ function Tab(props: TabProps) {
             className={cn(
                 ct.tabData?.[props.tabName || props.children]?.current
                     ? "border-b-2 border-blue-600 rounded-none"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground",
+                "h-12"
             )}
             asChild
             disabled={ct.tabData?.[props.tabName || props.children]?.current}
@@ -142,12 +213,12 @@ function Tab(props: TabProps) {
                 className={cn("inline-flex items-center space-x-2")}
                 href={ct.tabData?.[props.tabName || props.children]?.url || ""}
             >
-                {props.children}
+                {props.children || props.tabName}
             </Link>
         </Button>
     );
 }
-
+const MemoiedTab = typedMemo(Tab, (pre, cur) => pre != cur);
 export let FPageTabs = Object.assign(_FPageTabs, {
-    Tab,
+    Tab: MemoiedTab,
 });

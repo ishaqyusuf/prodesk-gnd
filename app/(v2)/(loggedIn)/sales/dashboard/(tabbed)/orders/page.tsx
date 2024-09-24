@@ -9,15 +9,15 @@ import PageClient from "../../_components/page-client";
 export const metadata: Metadata = {
     title: "Sales",
 };
-export type SalesPageType =
-    | "orders"
-    | "delivery"
-    | "pickup"
-    | "quotes"
-    | "productions";
+// export type SalesPageType =
+//     | "orders"
+//     | "delivery"
+//     | "pickup"
+//     | "quotes"
+//     | "productions";
 interface Props {
     searchParams: SalesQueryParams;
-    params: { type: SalesPageType };
+    params;
 }
 export default async function SalesPage({ searchParams, params }: Props) {
     const promise = getSalesAction({

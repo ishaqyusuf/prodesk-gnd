@@ -137,6 +137,7 @@ export const Icons = {
     clear: Eraser,
     Email: Mail,
     jobs: Briefcase,
+    dealer: Briefcase,
     customerService: ClipboardList,
     communityInvoice: NewspaperIcon,
     dashboard: LayoutDashboard,

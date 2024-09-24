@@ -63,10 +63,10 @@ export interface ISalesPickup extends OmitMeta<SalesPickup> {
     };
 }
 export type ISalesOrderMeta = {
-    manual_cost_price;
-    cost_price;
-    production_status;
-    pre_build_qty: any;
+    // manual_cost_price;
+    // cost_price;
+    // production_status;
+    // pre_build_qty: any;
     qb;
     profileEstimate: Boolean;
     ccc;
@@ -77,26 +77,26 @@ export type ISalesOrderMeta = {
     sales_profile;
     sales_percentage;
     po;
-    manual_estimate: Boolean;
+    // manual_estimate: Boolean;
     mockupPercentage: number;
     rep;
-    job_address;
-    type: "estimate" | null;
-    production_event;
+    // job_address;
+    // type: "estimate" | null;
+    // production_event;
     total_prod_qty;
-    prod_status;
+    // prod_status;
     payment_option: IPaymentOptions;
-    sales_job_id;
+    // sales_job_id;
     truckLoadLocation;
     truck;
     tax?: boolean;
     calculatedPriceMode?: boolean;
-    job: {
-        status;
-        estimated_cost;
-        job_assigned_to;
-        job_schedule;
-    };
+    // job: {
+    //     status;
+    //     estimated_cost;
+    //     job_assigned_to;
+    //     job_schedule;
+    // };
 };
 export type ISalesOrderItem = Omit<SalesOrderItems, "meta"> & {
     productions: OrderProductionSubmissions[];
