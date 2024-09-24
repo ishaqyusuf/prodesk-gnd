@@ -33,6 +33,7 @@ import {
 import { toast } from "sonner";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import SquarePaymentModal from "../_square-payment-modal";
 
 interface Props {
     id;
@@ -182,8 +183,20 @@ export default function PaymentModal({
                         <p className="">No Payment Applied yet</p>
                     </div>
                 )}
-                <div>
+                <div className="grid gap-2">
                     <Button
+                        className={cn("w-full", showForm && "hidden")}
+                        size="sm"
+                        onClick={() => {
+                            modal.openModal(
+                                <SquarePaymentModal id={ctx.data.id} />
+                            );
+                        }}
+                    >
+                        Square Checkout
+                    </Button>
+                    <Button
+                        variant="secondary"
                         onClick={() => {
                             form.setValue("showForm", true);
                             form.setValue("data.amount", ctx.data?.amountDue);

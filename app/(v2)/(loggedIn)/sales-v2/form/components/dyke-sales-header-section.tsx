@@ -117,7 +117,7 @@ export default function HeaderSection({}) {
                         {id && type == "order" && (
                             <Btn
                                 size="sm"
-                                variant={"outline"}
+                                // variant={""}
                                 onClick={() => {
                                     modal.openSheet(
                                         <PaymentModal
