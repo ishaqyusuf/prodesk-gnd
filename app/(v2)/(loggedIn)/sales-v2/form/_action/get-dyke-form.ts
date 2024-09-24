@@ -31,6 +31,7 @@ import {
 import dayjs from "dayjs";
 import { isComponentType } from "../../overview/is-component-type";
 import { includeStepPriceCount } from "../../dyke-utils";
+import { taxByCode } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
@@ -135,6 +136,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                     name: true,
                 },
             },
+            taxes: true,
             customer: true,
             shippingAddress: true,
             billingAddress: true,
@@ -173,6 +175,13 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         calculatedPriceMode: true,
     };
 
+    // console.log({ goodUntil: dayjs(ctx.profiles[0].goodUntil).toISOString() });
+    let goodUntil = ctx.defaultProfile?.goodUntil;
+
+    if (goodUntil && typeof goodUntil != "string")
+        goodUntil = dayjs(goodUntil).toISOString();
+    // console.log({ goodUntil });
+
     const newOrderForm: Partial<OrderType> = {
         type,
         isDyke: true,
@@ -183,7 +192,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         status: dealerMode ? "Evaluating" : "Active",
         taxPercentage: +ctx.settings?.tax_percentage,
         paymentTerm: ctx.defaultProfile?.meta?.net,
-        goodUntil: ctx.defaultProfile?.goodUntil,
+        goodUntil,
         meta: _meta as any,
         items: [
             {
@@ -209,7 +218,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
               },
         createdAt: dayjs().toISOString() as any,
     };
-    const form = (order || newOrderForm) as any as OrderType;
+    // const {} = order;
+    const { taxes, ...form } = (order || newOrderForm) as any as OrderType;
 
     const meta = form.meta as any as ISalesOrderMeta;
     if (!Object.keys(meta).includes("tax")) meta.tax = true;
@@ -538,6 +548,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
+        taxes: order.taxes,
+        taxByCode: taxByCode(order.taxes),
         paidAmount,
         footer,
         _refresher,

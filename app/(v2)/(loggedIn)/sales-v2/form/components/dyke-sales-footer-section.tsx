@@ -19,6 +19,7 @@ import { formatMoney } from "@/lib/use-number";
 import "./style.css";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { calculateFooterEstimate } from "../footer-estimate";
+import salesData2 from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -59,6 +60,10 @@ export default function DykeSalesFooterSection({}) {
         "order.grandTotal",
         "order.subTotal",
     ]);
+    const taxes = form.watch(
+        salesData2.salesTaxes.map((s) => `taxByCode.${s.code}.tax`) as any
+    );
+
     useEffect(() => {
         const estimate = calculateFooterEstimate(form.getValues(), {
             cccPercentage,
@@ -72,8 +77,10 @@ export default function DykeSalesFooterSection({}) {
         form.setValue("order.meta.ccc", estimate.ccc);
         form.setValue("order.tax", formatMoney(estimate.tax));
         form.setValue("order.subTotal", formatMoney(estimate.subTotal));
-
         form.setValue("order.grandTotal", estimate.grandTotal);
+        estimate.taxes.map((tax) => {
+            form.setValue(`taxByCode.${tax.taxCode}.tax` as any, tax.tax);
+        });
     }, [footerPrices, paymentOption, laborCost, discount, orderTax]);
     const ctxValue = {
         // footerPrices,
@@ -88,6 +95,7 @@ export default function DykeSalesFooterSection({}) {
         subTotal,
         floating: false,
     } as any;
+    salesData2.salesTaxes.map((t, i) => (ctxValue[t.code] = taxes?.[i]));
     return (
         <div className="mb-16">
             <ctx.Provider
@@ -254,14 +262,22 @@ function Footer() {
                                 valueKey="subTotal"
                             />
                         </TableRow>
-                        <TableRow>
+                        {salesData2.salesTaxes?.map((line) => (
+                            <TableRow key={line.code}>
+                                <Details.Line
+                                    title={`${line.title} ${line.percentage}%`}
+                                    valueKey={line.code as any}
+                                />
+                            </TableRow>
+                        ))}
+                        {/* <TableRow>
                             <Details.Line
                                 title={`Tax (${
                                     _ctx.orderTax ? _ctx.taxPercentage : 0
                                 }%)`}
                                 valueKey="tax"
                             />
-                        </TableRow>
+                        </TableRow> */}
                         <TableRow>
                             <Details.Line title="C.C.C" valueKey="ccc" />
                         </TableRow>

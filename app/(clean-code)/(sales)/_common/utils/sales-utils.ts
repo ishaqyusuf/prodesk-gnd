@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import salesData from "./sales-data";
+import { Prisma, SalesTaxes } from "@prisma/client";
+import salesData, { TaxCodes } from "./sales-data";
 import { GetSalesListQuery } from "../data-access/sales-list-dta";
 import {
     anyDateQuery,
@@ -215,3 +215,15 @@ export const SalesInclude = {
         },
     },
 } satisfies Prisma.SalesOrdersInclude;
+
+export function taxByCode(taxes: SalesTaxes[]) {
+    const a: { [code in TaxCodes]: SalesTaxes } = {} as any;
+    salesData.salesTaxes.map((t) => {
+        const tax = taxes.find((_t) => _t.taxCode == t.code);
+        a[t.code] = {
+            ...(tax || {}),
+            taxCode: t.code,
+        } as any;
+    });
+    return a;
+}

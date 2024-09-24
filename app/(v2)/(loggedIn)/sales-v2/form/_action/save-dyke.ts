@@ -8,6 +8,7 @@ import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
 
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { dealerSession } from "@/app/(v1)/_actions/utils";
+import { saveSalesTaxDta } from "@/app/(clean-code)/(sales)/_common/data-access/store-sales.persistent";
 
 export async function saveDykeSales(data: DykeForm) {
     const dealerMode = await dealerSession();
@@ -398,7 +399,7 @@ export async function saveDykeSales(data: DykeForm) {
                         // });
                     })
             );
-
+            await saveSalesTaxDta(data, order.id);
             return { order, createHpts };
         };
     // const resp = await prisma.$transaction(tx, {
