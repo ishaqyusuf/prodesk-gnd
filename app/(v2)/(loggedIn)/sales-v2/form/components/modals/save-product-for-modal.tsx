@@ -23,11 +23,13 @@ interface Props {
     // stepItem?: IStepProducts[number];
     // stepItems: IStepProducts;
     stepForm: DykeStep;
+    formData;
     onComplete(resp);
 }
 export default function SaveProductForModal({
     lineItemIndex,
     stepIndex,
+    formData,
     // stepItems,
     invoiceForm,
     stepForm,
@@ -37,10 +39,11 @@ Props) {
     const form = useForm({
         defaultValues: {
             deleteSelections: {},
-            deletables: {},
+            // deletables: {},
+            show: formData || {},
         },
     });
-    const [deletables, setDeletables] = useState<
+    const [components, setComponents] = useState<
         ReturnType<typeof getDykeStepState>
     >([]);
     useEffect(() => {
@@ -48,12 +51,13 @@ Props) {
             `itemArray.${lineItemIndex}.item.formStepArray`
         );
         const _depFormSteps = getFormSteps(formArray, stepIndex);
+        console.log({ _depFormSteps, stepForm, formData });
         const stateDeps = getDykeStepState(_depFormSteps, stepForm);
-        setDeletables(stateDeps);
+        setComponents(stateDeps);
     }, []);
     const modal = useModal();
     async function submit() {
-        const d = form.getValues("deletables");
+        const d = form.getValues("show");
         let _show = {};
         let valid = false;
         Object.entries(d).map(
@@ -71,6 +75,7 @@ Props) {
     async function saveForAll() {
         // saveForAll
         onComplete({});
+        modal.close();
     }
     return (
         <Form {...form}>
@@ -98,12 +103,12 @@ Props) {
                                     </Button>
                                 </TableCell>
                             </TableRow>
-                            {deletables?.map((d, i) => (
+                            {components?.map((d, i) => (
                                 <TableRow key={i}>
                                     <TableCell>
                                         <ControlledCheckbox
                                             control={form.control}
-                                            name={`deletables.${d.key}` as any}
+                                            name={`show.${d.key}` as any}
                                             label={d.steps
                                                 .map((s) => s.value)
                                                 .join(" & ")}

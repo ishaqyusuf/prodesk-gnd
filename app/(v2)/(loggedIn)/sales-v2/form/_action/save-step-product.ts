@@ -87,7 +87,7 @@ export async function saveStepProduct(data: Props) {
         const s = await prisma.dykeStepProducts.create({
             data: {
                 ...stepData,
-                // uid: generateRandomString(5),
+                uid: generateRandomString(5),
                 meta: stepData.meta as any,
                 product: doorMode
                     ? undefined

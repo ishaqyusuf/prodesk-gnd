@@ -179,30 +179,31 @@ export default function EditStepItemModal({
         formData.product.meta.priced = formData.product.price > 0;
 
         const reps = await saveStepProduct(formData);
+        // console.log({ reps });
         onCreate(reps as any);
     }
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
 
-            if (!formData.id) {
-                formData.uid = generateRandomString(5);
-
-                modal.openModal(
-                    <SaveProductForModal
-                        invoiceForm={mainForm}
-                        lineItemIndex={rowIndex}
-                        stepForm={stepForm}
-                        stepIndex={stepIndex}
-                        onComplete={(resp) => {
-                            // formData._metaData
-                            formData.meta.show = resp || {};
-                            onComplete(formData);
-                        }}
-                    />
-                );
-                return;
-            }
+            if (!formData.id) formData.uid = generateRandomString(5);
+            // if (!formData.id) {
+            modal.openModal(
+                <SaveProductForModal
+                    invoiceForm={mainForm}
+                    lineItemIndex={rowIndex}
+                    stepForm={stepForm}
+                    stepIndex={stepIndex}
+                    formData={formData?.meta?.show || {}}
+                    onComplete={(resp) => {
+                        // formData._metaData
+                        formData.meta.show = resp || {};
+                        onComplete(formData);
+                    }}
+                />
+            );
+            return;
+            // }
             await onComplete(formData);
             modal?.close();
         });
