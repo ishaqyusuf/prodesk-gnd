@@ -8,6 +8,8 @@ import * as XLSX from "xlsx";
 import { useSearchParams } from "next/navigation";
 import { getExportData } from "./action";
 import { toast } from "sonner";
+import dayjs from "dayjs";
+import { dotObject } from "../utils/utils";
 
 export function useExport(type) {
     const _exports = useEffectLoader(async () => await getExportConfigs(type));
@@ -31,9 +33,10 @@ export function useExportForm(type, config?: TypedExport) {
         query.forEach((v, q) => {
             _q[q] = v;
         });
-
-        const includes = getIncludes(form.getValues());
-        // console.log({ includes });
+        const formVal = form.getValues();
+        formVal.exports = dotObject.dot(formVal.exports);
+        const includes = getIncludes(formVal);
+        // console.log({ formVal, includes });
         // return;
         const data = await getExportData(type, _q, includes);
 
@@ -41,12 +44,14 @@ export function useExportForm(type, config?: TypedExport) {
             toast.error("0 data found");
             return;
         }
-        const dataToExport = transformExportData(form.getValues(), data);
-        console.log({ dataToExport, data, includes });
-        let title = "export-2024";
+        const dataToExport = transformExportData(formVal, data);
+        // console.log({ dataToExport, data, includes });
+        let title = `${type}-export-${dayjs().format("DD-MM-YYYY")}`;
         let worksheetname = "";
         const workbook = XLSX.utils.book_new();
-        const worksheet = XLSX.utils?.json_to_sheet(dataToExport);
+        const worksheet = XLSX.utils?.json_to_sheet(dataToExport, {
+            cellStyles: true,
+        });
         XLSX.utils.book_append_sheet(workbook, worksheet, worksheetname);
         // Save the workbook as an Excel file
         XLSX.writeFile(workbook, `${title}.xlsx`);

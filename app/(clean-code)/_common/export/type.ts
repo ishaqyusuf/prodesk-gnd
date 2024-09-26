@@ -11,6 +11,7 @@ export type TypedExport = Omit<ExportConfig, "meta" | "type"> & {
 };
 export interface ExportForm {
     title: string;
+    type: ExportTypes;
     exports: {
         [key in string]: {
             selected: boolean;

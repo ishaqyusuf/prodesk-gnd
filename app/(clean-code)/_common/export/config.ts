@@ -1,8 +1,10 @@
 import { Prisma } from "@prisma/client";
 import { ExportForm, ExportTypes, TypedExport } from "./type";
 import { dotArray } from "@/lib/utils";
-import { dotKeys } from "../utils/utils";
-import dotObj from "dot-object";
+import { dotKeys, dotObject } from "../utils/utils";
+import { isDate } from "lodash";
+import dayjs from "dayjs";
+
 type OrderSelect = Prisma.SalesOrdersSelect;
 type ExportCells = Partial<{
     [type in ExportTypes]: {
@@ -51,8 +53,14 @@ export function getIncludes(formData: ExportForm) {
             includes[cell.selectNode] = true;
         }
     });
-    return dotObj.object(includes);
+    return dotObject.object(includes);
     // return;
+}
+function transformValue(value, type: ExportTypes) {
+    if (isDate(value)) {
+        return dayjs(value).format("DD-MM-YYYY");
+    }
+    return value;
 }
 export function transformExportData(formData: ExportForm, data) {
     return data.map((item) => {
@@ -60,7 +68,8 @@ export function transformExportData(formData: ExportForm, data) {
         const trans = {};
         Object.entries(dot).map(([dotKey, dotValue]) => {
             const cell = formData.cellList.find((c) => c.valueNode == dotKey);
-            if (cell) trans[cell.title] = dotValue;
+            if (cell)
+                trans[cell.title] = transformValue(dotValue, formData.type);
         });
         return trans;
     });
@@ -69,11 +78,13 @@ export function getExportForm(
     type: ExportTypes,
     config?: TypedExport
 ): ExportForm {
-    return {
+    const _ = {
         exports: {},
         title: "",
         cellList: nodules(type),
+        type,
     };
+    return _;
 }
 function transformExportForm(form: ExportForm) {}
 // let c:keyof Prisma.SalesOrdersCountOutputTypeDefaultArgs['select'] = ''

@@ -136,6 +136,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "@types/bcrypt": "^5.0.0",
+    "@types/dot-object": "^2.1.6",
     "@types/prettier": "^2.7.3",
     "@types/qs": "^6.9.7",
     "prisma": "^5.19.1"

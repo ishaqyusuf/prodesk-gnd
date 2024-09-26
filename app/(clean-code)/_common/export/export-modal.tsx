@@ -12,7 +12,7 @@ interface Props {
 }
 export default function ExportModal({ type, config }: Props) {
     const ctx = useExportForm(type, config);
-    async function startExport() {}
+
     return (
         <Form {...ctx.form}>
             <Modal.Content size="sm">

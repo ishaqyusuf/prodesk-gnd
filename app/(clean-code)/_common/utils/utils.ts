@@ -1,3 +1,4 @@
+export * as dotObject from "dot-object";
 export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
     let result = {};
     if (!obj) obj = {};
