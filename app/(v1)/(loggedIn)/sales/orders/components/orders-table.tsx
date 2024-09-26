@@ -319,8 +319,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                         title: "Date",
                     },
                 ]}
-                export="orders"
-            />
+            ></DataTable2>
         </>
     );
 }

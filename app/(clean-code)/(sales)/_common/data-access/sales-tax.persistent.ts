@@ -11,15 +11,29 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
     const removedTaxesId = taxList
         .filter((t) => !t.selected && t?.data?.id)
         .map((t) => t.data.id);
-    if (removedTaxesId.length)
-        await prisma.salesTaxes.updateMany({
-            where: {
-                id: { in: removedTaxesId },
-            },
-            data: {
-                deletedAt: new Date(),
-            },
-        });
+    // if (removedTaxesId.length)
+    await prisma.salesTaxes.updateMany({
+        where: {
+            OR: [
+                {
+                    id: { in: removedTaxesId },
+                },
+                {
+                    taxCode: {
+                        in: ["A", "B"],
+                    },
+                },
+                {
+                    taxConfig: {
+                        is: null,
+                    },
+                },
+            ],
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
     const updateTaxList = selectTaxes.filter((s) => s.data.id);
     const newTaxList = selectTaxes.filter((t) => !t.data?.id);
     await Promise.all(
@@ -43,6 +57,7 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
     if (newTaxes.length)
         await prisma.salesTaxes.createMany({ data: newTaxes as any });
     // const taxes = Object.values(data.taxByCode);
+
     // await prisma.salesTaxes.createMany({
     //     data: taxes
     //         .filter((t) => !t.id)
