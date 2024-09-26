@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination";
 import { DataTableToolbar } from "@/components/common/data-table/data-table-toolbar";
+import { useComposeDataTable } from "@/app/_components/data-table/data-table";
+import { DataTable as BaseDataTable } from "@/app/_components/data-table";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -280,82 +282,92 @@ export function DataTable<TData, TValue>({
         manualSorting: true,
         manualFiltering: true,
     });
-
+    const ctx = useComposeDataTable(data, columns, pageCount, {}, null);
     return (
-        <div className="w-full space-y-3 overflow-auto">
-            <DataTableToolbar
-                table={table}
-                filterableColumns={filterableColumns}
-                BatchAction={BatchAction}
-                batchSelectCount={batchSelectCount}
-                searchableColumns={searchableColumns}
-                newRowLink={newRowLink}
-                newRowAction={newRowAction}
-                deleteRowsAction={deleteRowsAction}
-            />
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    if (!header.id.includes("_"))
-                                        return (
-                                            <TableHead
-                                                key={header.id}
-                                                className="whitespace-nowrap"
-                                            >
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                          header.column
-                                                              .columnDef.header,
-                                                          header.getContext()
-                                                      )}
-                                            </TableHead>
-                                        );
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
-                                >
-                                    {row
-                                        .getVisibleCells()
-                                        .map((cell) =>
-                                            cell.id.includes("__") ? null : (
-                                                <TableCell key={cell.id}>
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </TableCell>
-                                            )
-                                        )}
+        <BaseDataTable
+            data={data}
+            pageCount={pageCount}
+            columns={columns}
+            cellVariants={{ size: "default" }}
+        >
+            <div className="w-full space-y-3 overflow-auto">
+                <DataTableToolbar
+                    table={table}
+                    filterableColumns={filterableColumns}
+                    BatchAction={BatchAction}
+                    batchSelectCount={batchSelectCount}
+                    searchableColumns={searchableColumns}
+                    newRowLink={newRowLink}
+                    newRowAction={newRowAction}
+                    deleteRowsAction={deleteRowsAction}
+                />
+                <div className="rounded-md border">
+                    <Table>
+                        <TableHeader>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => {
+                                        if (!header.id.includes("_"))
+                                            return (
+                                                <TableHead
+                                                    key={header.id}
+                                                    className="whitespace-nowrap"
+                                                >
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                              header.column
+                                                                  .columnDef
+                                                                  .header,
+                                                              header.getContext()
+                                                          )}
+                                                </TableHead>
+                                            );
+                                    })}
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={
+                                            row.getIsSelected() && "selected"
+                                        }
+                                    >
+                                        {row
+                                            .getVisibleCells()
+                                            .map((cell) =>
+                                                cell.id.includes(
+                                                    "__"
+                                                ) ? null : (
+                                                    <TableCell key={cell.id}>
+                                                        {flexRender(
+                                                            cell.column
+                                                                .columnDef.cell,
+                                                            cell.getContext()
+                                                        )}
+                                                    </TableCell>
+                                                )
+                                            )}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="h-24 text-center"
+                                    >
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+                <DataTablePagination table={table} />
             </div>
-            <DataTablePagination table={table} />
-        </div>
+        </BaseDataTable>
     );
 }

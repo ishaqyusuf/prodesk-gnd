@@ -153,7 +153,7 @@ export function DataTableToolbar<TData, TValue>({
                 ) : (
                     <>{Toolbar && <Toolbar table={table} />}</>
                 )}
-                <div className="">abc</div>
+                <div id="tableExport"></div>
                 <DataTableViewOptions table={table} />
             </div>
         </div>

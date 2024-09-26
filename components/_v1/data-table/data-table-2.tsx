@@ -27,6 +27,7 @@ import {
     type VisibilityState,
 } from "@tanstack/react-table";
 
+import { DataTable as BaseDataTable } from "@/app/_components/data-table";
 import { DataTablePagination as DTPagination } from "@/components/common/data-table/data-table-pagination";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
@@ -43,6 +44,7 @@ import { formatDate } from "@/lib/use-day";
 import useQueryParams from "@/lib/use-query-params";
 import * as qs from "qs";
 import { cn } from "@/lib/utils";
+import { useComposeDataTable } from "@/app/_components/data-table/data-table";
 
 interface DataTableProps<TData, TValue> {
     searchParams?;
@@ -60,6 +62,7 @@ interface DataTableProps<TData, TValue> {
     mobile?: Boolean;
     BatchAction?;
     children?;
+    noChild?: boolean;
     Toolbar?({ table }: { table: any });
 }
 
@@ -80,6 +83,7 @@ export function DataTable2<TData, TValue>({
     Toolbar,
     children,
     searchParams: _searchParams,
+    noChild,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] =
@@ -262,104 +266,122 @@ export function DataTable2<TData, TValue>({
     React.useEffect(() => {
         __boot(searchParams);
     }, []);
-    return (
-        <div className="w-full space-y-3 overflow-auto">
-            {!hideHeader && (
-                <DataTableToolbar
-                    table={table}
-                    BatchAction={BatchAction}
-                    Toolbar={Toolbar}
-                    filterableColumns={filterableColumns}
-                    searchableColumns={searchableColumns}
-                    dateFilterColumns={dateFilterColumns}
-                    newRowLink={newRowLink}
-                    deleteRowsAction={deleteRowsAction}
-                />
-            )}
-            {children ? (
-                children
-            ) : (
-                <div className={cn("sm:border sm:rounded-lg")}>
-                    <Table>
-                        <TableHeader className={cn(mobile && "max-sm:hidden")}>
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => {
-                                        if (!header.id.includes("_"))
-                                            return (
-                                                <TableHead
-                                                    key={header.id}
-                                                    className="whitespace-nowrap"
-                                                >
-                                                    {header.isPlaceholder
-                                                        ? null
-                                                        : flexRender(
-                                                              header.column
-                                                                  .columnDef
-                                                                  .header,
-                                                              header.getContext()
-                                                          )}
-                                                </TableHead>
-                                            );
-                                    })}
-                                </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody>
-                            {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        className={cn(
-                                            mobile && "max-sm:border-0"
-                                        )}
-                                        key={row.id}
-                                        data-state={
-                                            row.getIsSelected() && "selected"
-                                        }
-                                    >
-                                        {row
-                                            .getVisibleCells()
-                                            .map((cell) =>
-                                                cell.id.includes(
-                                                    "__"
-                                                ) ? null : (
-                                                    <TableCell
-                                                        className={cn(
-                                                            mobile &&
-                                                                "max-sm:p-0",
-                                                            "p-2 px-4"
-                                                        )}
-                                                        key={cell.id}
+    function Render({ table }) {
+        return (
+            <div className="w-full space-y-3 overflow-auto">
+                {!hideHeader && (
+                    <DataTableToolbar
+                        table={table}
+                        BatchAction={BatchAction}
+                        Toolbar={Toolbar}
+                        filterableColumns={filterableColumns}
+                        searchableColumns={searchableColumns}
+                        dateFilterColumns={dateFilterColumns}
+                        newRowLink={newRowLink}
+                        deleteRowsAction={deleteRowsAction}
+                    />
+                )}
+                {children && !noChild ? (
+                    children
+                ) : (
+                    <div className={cn("sm:border sm:rounded-lg")}>
+                        {children}
+                        <Table>
+                            <TableHeader
+                                className={cn(mobile && "max-sm:hidden")}
+                            >
+                                {table.getHeaderGroups().map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                        {headerGroup.headers.map((header) => {
+                                            if (!header.id.includes("_"))
+                                                return (
+                                                    <TableHead
+                                                        key={header.id}
+                                                        className="whitespace-nowrap"
                                                     >
-                                                        {flexRender(
-                                                            cell.column
-                                                                .columnDef.cell,
-                                                            cell.getContext()
-                                                        )}
-                                                    </TableCell>
-                                                )
-                                            )
-                                            .filter(Boolean)}
+                                                        {header.isPlaceholder
+                                                            ? null
+                                                            : flexRender(
+                                                                  header.column
+                                                                      .columnDef
+                                                                      .header,
+                                                                  header.getContext()
+                                                              )}
+                                                    </TableHead>
+                                                );
+                                        })}
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
-                                        No results.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-            )}
-            {!hideFooter && pageInfo && (
-                <DataTablePagination pageInfo={pageInfo} table={table} />
-            )}
-            {!pageInfo && !hideFooter && <DTPagination table={table} />}
-        </div>
+                                ))}
+                            </TableHeader>
+                            <TableBody>
+                                {table.getRowModel().rows?.length ? (
+                                    table.getRowModel().rows.map((row) => (
+                                        <TableRow
+                                            className={cn(
+                                                mobile && "max-sm:border-0"
+                                            )}
+                                            key={row.id}
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                "selected"
+                                            }
+                                        >
+                                            {row
+                                                .getVisibleCells()
+                                                .map((cell) =>
+                                                    cell.id.includes(
+                                                        "__"
+                                                    ) ? null : (
+                                                        <TableCell
+                                                            className={cn(
+                                                                mobile &&
+                                                                    "max-sm:p-0",
+                                                                "p-2 px-4"
+                                                            )}
+                                                            key={cell.id}
+                                                        >
+                                                            {flexRender(
+                                                                cell.column
+                                                                    .columnDef
+                                                                    .cell,
+                                                                cell.getContext()
+                                                            )}
+                                                        </TableCell>
+                                                    )
+                                                )
+                                                .filter(Boolean)}
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={columns.length}
+                                            className="h-24 text-center"
+                                        >
+                                            No results.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
+                {!hideFooter && pageInfo && (
+                    <DataTablePagination pageInfo={pageInfo} table={table} />
+                )}
+                {!pageInfo && !hideFooter && <DTPagination table={table} />}
+            </div>
+        );
+    }
+    const ctx = useComposeDataTable(data, columns, pageCount, {}, null);
+    return (
+        <BaseDataTable
+            data={data}
+            pageCount={pageCount}
+            columns={columns}
+            cellVariants={{ size: "default" }}
+        >
+            <Render table={ctx.table} />
+        </BaseDataTable>
     );
 }

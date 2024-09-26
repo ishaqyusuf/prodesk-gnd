@@ -22,8 +22,8 @@ interface BaseProps<TData, TValue> {
     data: TData[];
     pageCount?: number;
     children?;
-    cellVariants: TableCellProps;
-    addFilterCol(col: String);
+    cellVariants?: TableCellProps;
+    addFilterCol?(col: String);
 }
 function BaseDataTable<TData, TValue>({
     children,

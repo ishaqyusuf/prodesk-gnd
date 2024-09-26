@@ -75,6 +75,7 @@
     "crypto": "^1.0.1",
     "dayjs": "^1.11.9",
     "debounce": "^2.0.0",
+    "dot-object": "^2.1.5",
     "downshift": "^8.2.3",
     "embla-carousel-autoplay": "^8.0.0-rc22",
     "embla-carousel-react": "^8.0.0-rc22",

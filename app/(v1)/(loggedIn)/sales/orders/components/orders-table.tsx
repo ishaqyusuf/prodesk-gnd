@@ -37,6 +37,7 @@ import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-
 import { SalesCells } from "./cells";
 import PageHeader from "@/components/_v1/page-header";
 import NewSalesBtn from "./new-sales-btn";
+import TableExport from "@/app/(clean-code)/_common/export";
 
 type DataServerPromiseType = ServerPromiseType<typeof getSalesOrder>;
 export type SalesTableItem = DataServerPromiseType["Item"];
@@ -319,7 +320,10 @@ export default function OrdersTableShell({ promise, searchParams }) {
                         title: "Date",
                     },
                 ]}
-            ></DataTable2>
+                noChild
+            >
+                <TableExport type="order" />
+            </DataTable2>
         </>
     );
 }

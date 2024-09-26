@@ -77,6 +77,8 @@ import {
     Send,
     LineChart,
     Box,
+    Download,
+    MoreHorizontal,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo_mini.png";
@@ -88,7 +90,9 @@ export type Icon = LucideIcon;
 
 export const Icons = {
     box: Box,
+    Menu: MoreHorizontal,
     pdf: File,
+    Export: Download,
     placeholder: ImageIcon,
     reciept: Receipt,
     X: Cross2Icon,

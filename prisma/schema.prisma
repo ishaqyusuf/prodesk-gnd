@@ -1572,6 +1572,7 @@ model Users {
     sessions                    Session[]
     approvedRequests            DealerSalesRequest[]
     checkouts                   SalesCheckout[]
+    exportConfigs               ExportConfig[]
 
     @@index([createdAt, deletedAt, name])
     @@index([employeeProfileId])
@@ -1914,4 +1915,18 @@ model GalleryTagName {
     createdAt   DateTime?    @default(now()) @db.Timestamp(0)
     updatedAt   DateTime?    @updatedAt
     deletedAt   DateTime?    @db.Timestamp(0)
+}
+
+model ExportConfig {
+    id          Int       @unique @default(autoincrement())
+    title       String
+    type        String
+    meta        Json      @db.Json
+    createdById Int
+    createdBy   Users?    @relation(fields: [createdById], references: [id])
+    createdAt   DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime? @updatedAt
+    deletedAt   DateTime? @db.Timestamp(0)
+
+    @@index([createdById])
 }
