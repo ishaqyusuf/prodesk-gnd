@@ -71,28 +71,51 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
             calculate(shelfItem.uid);
         });
     });
-    const taxes = salesData.salesTaxes.map((tx) => {
-        let eTax = data.taxes.find((a) => a.taxCode == tx.code);
-        if (!eTax) eTax = {} as any;
-        eTax.taxCode = tx.code;
-        eTax.tax = 0;
-        eTax.taxxable = 0;
-        // const on = tx.on;
-        const [part1, part2] = tx.on?.split(" ");
-        let taxPercentage = tx.percentage;
-        let taxOn = taxxable;
-        if (part1 == "first") {
-            taxOn = Math.min(taxOn, Number(part2));
+    const taxForm = data._taxForm;
+    let totalTax = 0;
+    Object.entries(taxForm.taxByCode).map(([k, v]) => {
+        if (v.selected) {
+            let taxPercentage = v._tax.percentage;
+            let taxOn = taxxable;
+            taxForm.taxByCode[k].data.taxxable = taxxable;
+            let _taxAmount = (taxForm.taxByCode[k].data.tax = formatMoney(
+                (taxPercentage / 100) * taxOn
+            ));
+            totalTax += _taxAmount;
         }
-        // console.log({ taxPercentage, taxOn });
-        if (taxPercentage && taxOn) {
-            eTax.taxxable = taxOn;
-            eTax.tax = formatMoney((taxPercentage / 100) * taxOn);
-        }
-        return eTax;
     });
+    // const taxes = taxForm.taxList
+    //     .map((tx) => {
+    //         const selection = taxForm.taxByCode[tx.taxCode];
+    //         return {
+    //             tx,
+    //             selection,
+    //             selected: selection?.selected,
+    //         };
+    //     })
+    //     .filter((tx) => tx.selected)
+    //     .map(({ selection, tx }) => {
+    //         // let eTax = data.taxes.find((a) => a.taxCode == tx.code);
+    //         // if (!eTax) eTax = {} as any;
+    //         // eTax.taxCode = tx.code;
+    //         selection.data.tax = 0;
+    //         selection.data.taxxable = 0;
+    //         // const on = tx.on;
+    //         const [part1, part2] = tx.taxOn?.split(" ");
+    //         let taxPercentage = tx.percentage;
+    //         let taxOn = taxxable;
+    //         if (part1 == "first") {
+    //             taxOn = Math.min(taxOn, Number(part2));
+    //         }
+    //         // console.log({ taxPercentage, taxOn });
+    //         if (taxPercentage && taxOn) {
+    //             selection.data.taxxable = taxOn;
+    //             selection.data.tax = formatMoney((taxPercentage / 100) * taxOn);
+    //         }
+    //         return selection;
+    //     });
 
-    const tax = formatMoney(sum(taxes.map((t) => t.tax || 0)));
+    const tax = formatMoney(totalTax);
     // console.log({ taxes, tax });
     let total = formatMoney(sum([subTotal, laborCost]));
     let ccc = 0;
@@ -111,6 +134,6 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
         total,
         subTotal,
         tax,
-        taxes,
+        taxForm,
     };
 }

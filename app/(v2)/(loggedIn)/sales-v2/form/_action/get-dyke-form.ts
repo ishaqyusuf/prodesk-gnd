@@ -31,7 +31,8 @@ import {
 import dayjs from "dayjs";
 import { isComponentType } from "../../overview/is-component-type";
 import { includeStepPriceCount } from "../../dyke-utils";
-import { taxByCode } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
+
+import { salesTaxForm } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
 
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
@@ -136,7 +137,11 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                     name: true,
                 },
             },
-            taxes: true,
+            taxes: {
+                where: {
+                    deletedAt: null,
+                },
+            },
             customer: true,
             shippingAddress: true,
             billingAddress: true,
@@ -548,8 +553,9 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
-        taxes: taxes,
-        taxByCode: taxByCode(taxes),
+        _taxForm: await salesTaxForm(taxes as any),
+        // taxes: taxes,
+        // taxByCode: taxByCode(taxes),
         paidAmount,
         footer,
         _refresher,

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useRef,
-} from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -78,7 +72,7 @@ function BaseModal({
 const contentVariants = cva(``, {
     variants: {
         size: {
-            sm: "w-full lg:w-[350px]",
+            sm: "w-full sm:w-[350px] lg:w-[350px]",
             md: "w-full lg:w-[500px]",
             lg: "w-full lg:w-[700px]  ",
             xl: "w-full lg:w-[900px]  ",

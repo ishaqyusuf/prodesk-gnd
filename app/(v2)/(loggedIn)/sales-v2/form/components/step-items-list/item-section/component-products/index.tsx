@@ -21,7 +21,6 @@ import { Sortable, SortableItem } from "@/components/ui/sortable";
 import { closestCorners } from "@dnd-kit/core";
 import { Card } from "@/components/ui/card";
 import { useModal } from "@/components/common/modal/provider";
-import DeleteItemModal from "../../../modals/delete-item-modal";
 import { useDykeForm } from "../../../../_hooks/form-context";
 import {
     BatchSelectionAction,

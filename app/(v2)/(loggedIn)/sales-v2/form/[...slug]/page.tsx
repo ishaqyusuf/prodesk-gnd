@@ -5,6 +5,8 @@ import { BreadLink } from "@/components/_v1/breadcrumbs/links";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sale";
 import { getErrorData } from "../_action/error/save-error";
+import { prisma } from "@/db";
+import MigrateStepDuplicateUid from "./_debug/migrate-steps-duplicate-uid";
 
 export async function generateMetadata({ params, searchParams }) {
     const [type, slug] = params.slug;
@@ -20,6 +22,14 @@ export default async function SalesForm({ params, searchParams }) {
     let copy = searchParams.copy;
     // console.log(slug);
 
+    // const steps = await prisma.dykeStepProducts.findMany({
+    //     where: {
+    //         product: {
+    //             title: "HC Molded",
+    //         },
+    //     },
+    // });
+    // console.log(steps.map((s) => s.uid));
     const form = searchParams.errorId
         ? await getErrorData(searchParams.errorId)
         : copy
@@ -29,6 +39,7 @@ export default async function SalesForm({ params, searchParams }) {
     return (
         <AuthGuard can={["editOrders"]}>
             <div className="sm:px-8 px-4">
+                <MigrateStepDuplicateUid />
                 <Breadcrumbs>
                     <BreadLink title={"Sales"} isFirst link={"/sales/orders"} />
                     {slug && (

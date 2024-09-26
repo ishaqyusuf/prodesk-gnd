@@ -51,7 +51,7 @@ Props) {
             `itemArray.${lineItemIndex}.item.formStepArray`
         );
         const _depFormSteps = getFormSteps(formArray, stepIndex);
-        console.log({ _depFormSteps, stepForm, formData });
+        // console.log({ _depFormSteps, stepForm, formData });
         const stateDeps = getDykeStepState(_depFormSteps, stepForm);
         setComponents(stateDeps);
     }, []);

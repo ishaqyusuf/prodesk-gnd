@@ -32,13 +32,21 @@ export async function initStepComponents({
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
 
-        product._metaData.hidden = doorSection
+        product._metaData.hidden = product.deletedAt
+            ? true
+            : doorSection
             ? !showThis
             : product.deletedAt
             ? true
             : hasShow
             ? !showThis
             : stateDeps.some((s) => product.meta.deleted?.[s.key]);
+        if (product.product.title.startsWith("ABC H.C")) {
+            console.log({
+                product,
+                stateDeps,
+            });
+        }
         return product;
     });
     return stepProducts;
@@ -65,7 +73,7 @@ export function getDykeStepState(
         key: string;
     }[] = [];
     let stateBuilder = null;
-    _formSteps.map((step) => {
+    _formSteps.map((step, i) => {
         if (stateDeps?.[step.uid]) {
             stateBuilder = [stateBuilder, step.prodUid]
                 .filter(Boolean)
@@ -77,6 +85,16 @@ export function getDykeStepState(
                     .map((k) => _formSteps.find((fs) => fs.prodUid == k)),
                 key: stateBuilder,
             });
+            if (i > 0) {
+                let sb2 = step.prodUid;
+                states.push({
+                    step,
+                    steps: sb2
+                        ?.split("-")
+                        .map((k) => _formSteps.find((fs) => fs.prodUid == k)),
+                    key: sb2,
+                });
+            }
         }
     });
     return states;

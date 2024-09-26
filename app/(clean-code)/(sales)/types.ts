@@ -1,6 +1,7 @@
-import { SalesOrders } from "@prisma/client";
+import { SalesOrders, Taxes } from "@prisma/client";
 
 export type SalesType = "order" | "quote";
+export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type SalesPrintMode =
     | "quote"
     | "order"
@@ -17,11 +18,17 @@ export type DykeDoorType =
     | "Door Slabs Only"
     | "Services";
 export type DeliveryOption = "delivery" | "pickup";
+export type SalesPaymentOptions =
+    | "Cash"
+    | "Credit Card"
+    | "Check"
+    | "COD"
+    | "Zelle";
 export type SalesMeta = {
     qb;
     profileEstimate: Boolean;
     ccc;
-    priority: IPriority;
+    priority: SalesPriority;
     ccc_percentage;
     labor_cost;
     discount;
@@ -31,7 +38,7 @@ export type SalesMeta = {
     mockupPercentage: number;
     rep;
     total_prod_qty;
-    payment_option: IPaymentOptions;
+    payment_option: SalesPaymentOptions;
     truckLoadLocation;
     truck;
     tax?: boolean;
@@ -42,3 +49,5 @@ export type TypedSales = SalesOrders & {
     deliveryOption: DeliveryOption;
     meta: SalesMeta;
 };
+
+// export type CreateTaxForm = Omit<Taxes, "sa">;

@@ -33,12 +33,7 @@ import { Dot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
 import DoorMenuOption from "./door-menu-option";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Button } from "@/components/ui/button";
 interface Props {
     item: IStepProducts[number];
@@ -146,6 +141,7 @@ export function StepItem({
                     onClick={onClick}
                     className="space-y-1.5 inline-flex items-center justify-between p-2"
                 >
+                    {/* <span>{item.deletedAt ? "yes" : "no"}</span> */}
                     <CardTitle className="line-clamp-1s text-sm">
                         {isRoot
                             ? item.product?.value || item.product.title

@@ -12,5 +12,5 @@
     @apply h-8 w-[100px] text-right;
 }
 #dykeFooter button {
-    @apply h-8 w-[150px];
+    /* @apply h-8 w-[150px]; */
 }

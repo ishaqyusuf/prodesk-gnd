@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDykeForm } from "../_hooks/form-context";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
+    TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { cn, sum } from "@/lib/utils";
+import { cn, generateRandomString } from "@/lib/utils";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import salesData from "../../../sales/sales-data";
 import ControlledInput from "@/components/common/controls/controlled-input";
@@ -19,7 +20,24 @@ import { formatMoney } from "@/lib/use-number";
 import "./style.css";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { calculateFooterEstimate } from "../footer-estimate";
-import salesData2 from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
+
+import {
+    FieldArray,
+    useFieldArray,
+    UseFieldArrayReturn,
+} from "react-hook-form";
+import { DykeForm } from "../../type";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { useModal } from "@/components/common/modal/provider";
+import TaxModal from "@/app/(clean-code)/(sales)/_common/_modals/tax-modal/tax-modal";
+import { Icons } from "@/components/_v1/icons";
+import { Button } from "@/components/ui/button";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -29,7 +47,19 @@ const defaultValues = {
     orderTax: null,
     floating: false,
 };
-const ctx = React.createContext(defaultValues);
+type ICtx = typeof defaultValues & {
+    taxForm?: {
+        listArray?: UseFieldArrayReturn<DykeForm, "_taxForm.taxList", "id">;
+        selectionArray?: UseFieldArrayReturn<
+            DykeForm,
+            "_taxForm.selection",
+            "id"
+        >;
+        taxSelect;
+        setTaxSelect;
+    };
+};
+const ctx = React.createContext<ICtx>(defaultValues);
 type CtxKeys = keyof typeof defaultValues;
 
 export default function DykeSalesFooterSection({}) {
@@ -47,6 +77,7 @@ export default function DykeSalesFooterSection({}) {
         cccPercentage,
         grandTotal,
         subTotal,
+        taxChanged,
     ] = form.watch([
         "order.meta.tax",
         "footer.footerPrices",
@@ -59,11 +90,18 @@ export default function DykeSalesFooterSection({}) {
         "order.meta.ccc_percentage",
         "order.grandTotal",
         "order.subTotal",
+        "_taxForm.taxChangedCode",
     ]);
-    const taxes = form.watch(
-        salesData2.salesTaxes.map((s) => `taxByCode.${s.code}.tax`) as any
-    );
 
+    const taxListFieldArray = useFieldArray({
+        name: "_taxForm.taxList",
+        control: form.control,
+    });
+    // const taxSelection = form.watch("_taxForm.selection");
+    const taxSelectionFieldArray = useFieldArray({
+        name: "_taxForm.selection",
+        control: form.control,
+    });
     useEffect(() => {
         const estimate = calculateFooterEstimate(form.getValues(), {
             cccPercentage,
@@ -78,11 +116,34 @@ export default function DykeSalesFooterSection({}) {
         form.setValue("order.tax", formatMoney(estimate.tax));
         form.setValue("order.subTotal", formatMoney(estimate.subTotal));
         form.setValue("order.grandTotal", estimate.grandTotal);
-        estimate.taxes.map((tax) => {
-            form.setValue(`taxByCode.${tax.taxCode}.tax` as any, tax.tax);
+        Object.entries(estimate.taxForm.taxByCode).map(([k, v]) => {
+            form.setValue(`_taxForm.taxCostsByCode.${k}`, v.data.tax);
+            form.setValue(`_taxForm.taxByCode.${k}.data.tax`, v.data.tax);
+            form.setValue(
+                `_taxForm.taxByCode.${k}.data.taxxable`,
+                v.data.taxxable
+            );
         });
-    }, [footerPrices, paymentOption, laborCost, discount, orderTax]);
-    const ctxValue = {
+        // estimate.taxes.map((tax) => {
+        //     form.setValue(
+        //         `_taxForm.taxByCode.${tax.data.taxCode}.data.tax` as any,
+        //         tax.data.tax
+        //     );
+        //     form.setValue(
+        //         `_taxForm.taxByCode.${tax.data.taxCode}.data.taxxable` as any,
+        //         tax.data.taxxable
+        //     );
+        // });
+    }, [
+        footerPrices,
+        paymentOption,
+        laborCost,
+        discount,
+        orderTax,
+        taxChanged,
+    ]);
+    const [taxSelect, setTaxSelect] = useState(null);
+    const ctxValue: ICtx = {
         // footerPrices,
         // laborCost,
         // discount,
@@ -94,8 +155,13 @@ export default function DykeSalesFooterSection({}) {
         orderTax,
         subTotal,
         floating: false,
-    } as any;
-    salesData2.salesTaxes.map((t, i) => (ctxValue[t.code] = taxes?.[i]));
+        taxForm: {
+            listArray: taxListFieldArray,
+            selectionArray: taxSelectionFieldArray,
+            taxSelect,
+            setTaxSelect,
+        },
+    };
     return (
         <div className="mb-16">
             <ctx.Provider
@@ -134,6 +200,7 @@ const Details = {
                 <TableHead className={cn()}>Payment</TableHead>
                 <CustomTableCell>
                     <ControlledSelect
+                        size="sm"
                         control={form.control}
                         className={cn("")}
                         onSelect={(e) => {
@@ -153,6 +220,7 @@ const Details = {
                 <TableHead className={cn()}>Discount</TableHead>
                 <CustomTableCell>
                     <ControlledInput
+                        size="sm"
                         type="number"
                         control={form.control}
                         className={cn("")}
@@ -169,6 +237,7 @@ const Details = {
                 <TableHead className={cn()}>Labour</TableHead>
                 <CustomTableCell>
                     <ControlledInput
+                        size="sm"
                         type="number"
                         control={form.control}
                         className={cn("")}
@@ -244,8 +313,14 @@ function Footer() {
     const _ctx = useContext(ctx);
     return (
         <div className="flex  justify-end">
-            <div className="" id="dykeFooter">
-                <Table className=" border rounded">
+            <div className="md:max-w-xs" id="dykeFooter">
+                <Table className="table-fixed  border rounded">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead colSpan={2}>Estimate</TableHead>
+                            {/* <TableHead colSpan={1}>a</TableHead> */}
+                        </TableRow>
+                    </TableHeader>
                     <TableBody>
                         <TableRow>
                             <Details.PaymentOptions />
@@ -262,14 +337,15 @@ function Footer() {
                                 valueKey="subTotal"
                             />
                         </TableRow>
-                        {salesData2.salesTaxes?.map((line) => (
+                        <TaxForm />
+                        {/* {salesData2.salesTaxes?.map((line) => (
                             <TableRow key={line.code}>
                                 <Details.Line
                                     title={`${line.title} ${line.percentage}%`}
                                     valueKey={line.code as any}
                                 />
                             </TableRow>
-                        ))}
+                        ))} */}
                         {/* <TableRow>
                             <Details.Line
                                 title={`Tax (${
@@ -288,5 +364,144 @@ function Footer() {
                 </Table>
             </div>
         </div>
+    );
+}
+
+function TaxForm({}) {
+    const { taxForm } = useContext(ctx);
+    const modal = useModal();
+    const form = useDykeForm();
+    function removeTaxSelection(code, index) {
+        taxForm.selectionArray.remove(index);
+        form.setValue(`_taxForm.taxByCode.${code}.selected`, false);
+        setTimeout(() => {
+            form.setValue("_taxForm.taxChangedCode", generateRandomString(10));
+        }, 500);
+    }
+    function selectionChanged(e) {
+        setSelection((v) => {
+            return null as any;
+        });
+        if (e == "new") {
+            modal.openModal(
+                <TaxModal
+                    onCreate={(tax) => {
+                        taxForm.listArray.append(tax);
+                        setTimeout(() => {
+                            selectionChanged(tax.taxCode);
+                        }, 500);
+                    }}
+                />
+            );
+        } else {
+            const c = taxForm.listArray.fields.find((f) => f.taxCode == e);
+            taxForm.selectionArray.update(0, {
+                taxCode: c.taxCode,
+                deletedAt: null,
+                tax: 0,
+                title: c.title,
+                percentage: c.percentage,
+            });
+            form.setValue(`_taxForm.taxByCode.${c.taxCode}.selected`, true);
+            form.setValue(
+                `_taxForm.taxByCode.${c.taxCode}.data.taxCode`,
+                c.taxCode
+            );
+            form.setValue(`_taxForm.taxByCode.${c.taxCode}._tax`, c);
+            // form.setValue(`_taxForm.taxByCode.${c.taxCode}`, {
+            //     selected: true,
+            //     data: {
+            //         taxCode: c.taxCode,
+            //     },
+            // });
+            setTimeout(() => {
+                form.setValue(
+                    "_taxForm.taxChangedCode",
+                    generateRandomString(10)
+                );
+            }, 500);
+        }
+    }
+    const [selection, setSelection] = useState();
+    useEffect(() => {
+        if (selection) setSelection(null);
+    }, [selection]);
+    if (taxForm.selectionArray.fields.length)
+        return (
+            <>
+                {taxForm.selectionArray.fields.map((s, i) => (
+                    <TableRow key={s.taxCode}>
+                        <TableHead>
+                            {s.title} {` (${s.percentage}%)`}
+                        </TableHead>
+                        <TableCell className="w-full">
+                            <div className="flex justify-end  w-full space-x-2 items-center">
+                                <div>
+                                    <TaxAmount code={s.taxCode} />
+                                </div>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() =>
+                                        removeTaxSelection(s.taxCode, i)
+                                    }
+                                    className="w-8 h-8"
+                                    size="icon"
+                                >
+                                    <Icons.X />
+                                </Button>
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </>
+        );
+    // if(selection)
+    return (
+        <>
+            <TableRow>
+                <TableHead className="bg-red-400 w-full" colSpan={2}>
+                    <div className="flex items-center gap-4">
+                        <Label>Select Tax</Label>
+                        <Select
+                            value={selection}
+                            onValueChange={selectionChanged}
+                        >
+                            <SelectTrigger className="">
+                                <SelectValue
+                                    className="h-8"
+                                    defaultValue={"Select tax"}
+                                    placeholder="Select tax"
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                    }}
+                                    value="new"
+                                >
+                                    Create new
+                                </SelectItem>
+                                {taxForm?.listArray?.fields?.map((t) => (
+                                    <SelectItem key={t.id} value={t.taxCode}>
+                                        {t.title}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </TableHead>
+            </TableRow>
+        </>
+    );
+}
+function TaxAmount({ code }) {
+    const form = useDykeForm();
+    const tax = form.watch(`_taxForm.taxCostsByCode.${code}` as any);
+
+    return (
+        <>
+            <Money value={tax} />
+        </>
     );
 }
