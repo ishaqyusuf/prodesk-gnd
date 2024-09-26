@@ -584,15 +584,32 @@ function printFooter(data: PrintData, notPrintable) {
     let taxLines = [];
     if (data.order.taxes?.length) {
         data.order.taxes.map((t) => {
-            taxLines.push(
-                styled(
-                    `${t.taxConfig.title} ${t.taxConfig.percentage}%`,
-                    formatCurrency.format(t.tax),
-                    {
-                        font: "bold",
-                    }
-                )
-            );
+            const sData = salesData.salesTaxByCode[t.taxCode] as SalesTaxes;
+            if (sData) {
+                taxLines.push(
+                    styled(
+                        `${sData.title} ${sData.percentage}%`,
+                        formatCurrency.format(t.tax),
+                        {
+                            font: "bold",
+                        }
+                    )
+                );
+            } else {
+                taxLines.push(
+                    styled(
+                        `${
+                            t.taxConfig
+                                ? `${t?.taxConfig?.title} ${t?.taxConfig?.percentage}%`
+                                : "Tax"
+                        }`,
+                        formatCurrency.format(t.tax),
+                        {
+                            font: "bold",
+                        }
+                    )
+                );
+            }
         });
     } else {
         taxLines.push(

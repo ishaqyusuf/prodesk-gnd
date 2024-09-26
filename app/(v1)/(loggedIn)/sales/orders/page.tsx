@@ -14,8 +14,6 @@ import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
 import OrdersTable from "./components/orders-table";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
-import { redirect } from "next/navigation";
-import { env } from "@/env.mjs";
 
 export const metadata: Metadata = {
     title: "Sales Orders",

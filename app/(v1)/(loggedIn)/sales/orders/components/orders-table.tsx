@@ -235,6 +235,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                             <Link href={`/sales/dashboard/orders`}>New UI</Link>
                         </Button> */}
                         <NewSalesBtn type="order" />
+
                         {/*  */}
                     </div>
                 )}
@@ -318,6 +319,7 @@ export default function OrdersTableShell({ promise, searchParams }) {
                         title: "Date",
                     },
                 ]}
+                export="orders"
             />
         </>
     );

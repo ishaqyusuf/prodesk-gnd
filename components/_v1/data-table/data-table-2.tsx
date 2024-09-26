@@ -61,6 +61,7 @@ interface DataTableProps<TData, TValue> {
     BatchAction?;
     children?;
     Toolbar?({ table }: { table: any });
+    export?: string;
 }
 
 export function DataTable2<TData, TValue>({
