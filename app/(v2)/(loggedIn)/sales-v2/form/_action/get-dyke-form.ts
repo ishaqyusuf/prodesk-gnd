@@ -73,6 +73,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         : {
               deletedAt: null,
           };
+
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
@@ -553,7 +554,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
-        _taxForm: await salesTaxForm(taxes as any),
+        _taxForm: await salesTaxForm(taxes as any, order?.id),
         // taxes: taxes,
         // taxByCode: taxByCode(taxes),
         paidAmount,

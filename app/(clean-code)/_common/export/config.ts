@@ -57,7 +57,7 @@ export function getIncludes(formData: ExportForm) {
     // return;
 }
 function transformValue(value, type: ExportTypes) {
-    if (isDate(value)) {
+    if (value instanceof Date) {
         return dayjs(value).format("DD-MM-YYYY");
     }
     return value;

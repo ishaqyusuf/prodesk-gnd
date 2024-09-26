@@ -4,7 +4,7 @@ import { ExportForm, TypedExport } from "./type";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { getExportForm, getIncludes, transformExportData } from "./config";
-import * as XLSX from "xlsx";
+import { utils, writeFile } from "xlsx";
 import { useSearchParams } from "next/navigation";
 import { getExportData } from "./action";
 import { toast } from "sonner";
@@ -48,13 +48,13 @@ export function useExportForm(type, config?: TypedExport) {
         // console.log({ dataToExport, data, includes });
         let title = `${type}-export-${dayjs().format("DD-MM-YYYY")}`;
         let worksheetname = "";
-        const workbook = XLSX.utils.book_new();
-        const worksheet = XLSX.utils?.json_to_sheet(dataToExport, {
+        const workbook = utils.book_new();
+        const worksheet = utils?.json_to_sheet(dataToExport, {
             cellStyles: true,
         });
-        XLSX.utils.book_append_sheet(workbook, worksheet, worksheetname);
+        utils.book_append_sheet(workbook, worksheet, worksheetname);
         // Save the workbook as an Excel file
-        XLSX.writeFile(workbook, `${title}.xlsx`);
+        writeFile(workbook, `${title}.xlsx`);
     }
     return { form, list, startExport };
 }

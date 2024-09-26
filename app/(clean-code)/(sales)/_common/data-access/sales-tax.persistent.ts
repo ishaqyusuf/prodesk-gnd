@@ -102,9 +102,8 @@ export async function createSalesTax(tax: Taxes) {
         },
     });
 }
-export async function salesTaxForm(taxes: SalesTaxes[]) {
+export async function salesTaxForm(taxes: SalesTaxes[], orderId?) {
     const taxList = await getWithDeletedTaxList();
-
     const taxByCode: {
         [code in string]: {
             data: Partial<SalesTaxes>;
@@ -118,12 +117,15 @@ export async function salesTaxForm(taxes: SalesTaxes[]) {
         percentage;
     })[] = [];
     const taxCostsByCode: { [code in string]: number } = {};
-    console.log(taxList);
+    // console.log(taxList);
 
     taxList.map((tl) => {
         const tx = taxes.find((t) => t.taxCode == tl.taxCode);
-        if (tx || !tl.deletedAt) {
-            const selected = tx != null;
+        const isDefault = !orderId && tl.title?.trim() == "County & State Tax";
+        if (tx || !tl.deletedAt || isDefault) {
+            const selected = tx != null || isDefault;
+            // console.log({ selected, t: tl.title });
+
             taxByCode[tl.taxCode] = {
                 selected,
                 _tax: tl,
@@ -133,15 +135,15 @@ export async function salesTaxForm(taxes: SalesTaxes[]) {
                         taxCode: tl.taxCode,
                     } as any),
             };
-            if (selected) {
+            if (selected || isDefault) {
                 selection.push({
-                    tax: tx.tax,
-                    taxCode: tx.taxCode,
-                    deletedAt: tx.deletedAt,
+                    tax: tx?.tax,
+                    taxCode: tx?.taxCode,
+                    deletedAt: tx?.deletedAt,
                     title: tl.title,
                     percentage: tl.percentage,
                 });
-                taxCostsByCode[tx.taxCode] = tx.tax;
+                taxCostsByCode[tl.taxCode] = tx?.tax;
             }
         }
     });
