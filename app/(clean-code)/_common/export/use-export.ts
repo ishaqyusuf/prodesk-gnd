@@ -51,6 +51,16 @@ export function useExportForm(type, config?: TypedExport) {
         const worksheet = utils?.json_to_sheet(dataToExport, {
             cellStyles: true,
         });
+        worksheet["!cols"] = [
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+            { width: 20 },
+        ];
         utils.book_append_sheet(workbook, worksheet, worksheetname);
         // Save the workbook as an Excel file
         writeFile(workbook, `${title}.xlsx`);
