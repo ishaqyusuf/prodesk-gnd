@@ -1,4 +1,5 @@
-export * as dotObject from "dot-object";
+import _dotObject from "dot-object";
+export const dotObject = _dotObject;
 export function dotArray(obj, parentKey = "", removeEmptyArrays = false) {
     let result = {};
     if (!obj) obj = {};
