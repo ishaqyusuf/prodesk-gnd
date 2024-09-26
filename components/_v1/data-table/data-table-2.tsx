@@ -266,122 +266,118 @@ export function DataTable2<TData, TValue>({
     React.useEffect(() => {
         __boot(searchParams);
     }, []);
-    function Render({ table }) {
-        return (
-            <div className="w-full space-y-3 overflow-auto">
-                {!hideHeader && (
-                    <DataTableToolbar
-                        table={table}
-                        BatchAction={BatchAction}
-                        Toolbar={Toolbar}
-                        filterableColumns={filterableColumns}
-                        searchableColumns={searchableColumns}
-                        dateFilterColumns={dateFilterColumns}
-                        newRowLink={newRowLink}
-                        deleteRowsAction={deleteRowsAction}
-                    />
-                )}
-                {children && !noChild ? (
-                    children
-                ) : (
-                    <div className={cn("sm:border sm:rounded-lg")}>
-                        {children}
-                        <Table>
-                            <TableHeader
-                                className={cn(mobile && "max-sm:hidden")}
-                            >
-                                {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id}>
-                                        {headerGroup.headers.map((header) => {
-                                            if (!header.id.includes("_"))
-                                                return (
-                                                    <TableHead
-                                                        key={header.id}
-                                                        className="whitespace-nowrap"
-                                                    >
-                                                        {header.isPlaceholder
-                                                            ? null
-                                                            : flexRender(
-                                                                  header.column
-                                                                      .columnDef
-                                                                      .header,
-                                                                  header.getContext()
-                                                              )}
-                                                    </TableHead>
-                                                );
-                                        })}
-                                    </TableRow>
-                                ))}
-                            </TableHeader>
-                            <TableBody>
-                                {table.getRowModel().rows?.length ? (
-                                    table.getRowModel().rows.map((row) => (
-                                        <TableRow
-                                            className={cn(
-                                                mobile && "max-sm:border-0"
-                                            )}
-                                            key={row.id}
-                                            data-state={
-                                                row.getIsSelected() &&
-                                                "selected"
-                                            }
-                                        >
-                                            {row
-                                                .getVisibleCells()
-                                                .map((cell) =>
-                                                    cell.id.includes(
-                                                        "__"
-                                                    ) ? null : (
-                                                        <TableCell
-                                                            className={cn(
-                                                                mobile &&
-                                                                    "max-sm:p-0",
-                                                                "p-2 px-4"
-                                                            )}
-                                                            key={cell.id}
-                                                        >
-                                                            {flexRender(
-                                                                cell.column
-                                                                    .columnDef
-                                                                    .cell,
-                                                                cell.getContext()
-                                                            )}
-                                                        </TableCell>
-                                                    )
-                                                )
-                                                .filter(Boolean)}
-                                        </TableRow>
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell
-                                            colSpan={columns.length}
-                                            className="h-24 text-center"
-                                        >
-                                            No results.
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
-                )}
-                {!hideFooter && pageInfo && (
-                    <DataTablePagination pageInfo={pageInfo} table={table} />
-                )}
-                {!pageInfo && !hideFooter && <DTPagination table={table} />}
-            </div>
-        );
-    }
-    const ctx = useComposeDataTable(data, columns, pageCount, {}, null);
+    // function Render({  }) {
     return (
-        <BaseDataTable
-            data={data}
-            pageCount={pageCount}
-            columns={columns}
-            cellVariants={{ size: "default" }}
-        >
-            <Render table={ctx.table} />
-        </BaseDataTable>
+        <div className="w-full space-y-3 overflow-auto">
+            {!hideHeader && (
+                <DataTableToolbar
+                    table={table}
+                    BatchAction={BatchAction}
+                    Toolbar={Toolbar}
+                    filterableColumns={filterableColumns}
+                    searchableColumns={searchableColumns}
+                    dateFilterColumns={dateFilterColumns}
+                    newRowLink={newRowLink}
+                    deleteRowsAction={deleteRowsAction}
+                />
+            )}
+            {children && !noChild ? (
+                children
+            ) : (
+                <div className={cn("sm:border sm:rounded-lg")}>
+                    {children}
+                    <Table>
+                        <TableHeader className={cn(mobile && "max-sm:hidden")}>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => {
+                                        if (!header.id.includes("_"))
+                                            return (
+                                                <TableHead
+                                                    key={header.id}
+                                                    className="whitespace-nowrap"
+                                                >
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                              header.column
+                                                                  .columnDef
+                                                                  .header,
+                                                              header.getContext()
+                                                          )}
+                                                </TableHead>
+                                            );
+                                    })}
+                                </TableRow>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        className={cn(
+                                            mobile && "max-sm:border-0"
+                                        )}
+                                        key={row.id}
+                                        data-state={
+                                            row.getIsSelected() && "selected"
+                                        }
+                                    >
+                                        {row
+                                            .getVisibleCells()
+                                            .map((cell) =>
+                                                cell.id.includes(
+                                                    "__"
+                                                ) ? null : (
+                                                    <TableCell
+                                                        className={cn(
+                                                            mobile &&
+                                                                "max-sm:p-0",
+                                                            "p-2 px-4"
+                                                        )}
+                                                        key={cell.id}
+                                                    >
+                                                        {flexRender(
+                                                            cell.column
+                                                                .columnDef.cell,
+                                                            cell.getContext()
+                                                        )}
+                                                    </TableCell>
+                                                )
+                                            )
+                                            .filter(Boolean)}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="h-24 text-center"
+                                    >
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+            )}
+            {!hideFooter && pageInfo && (
+                <DataTablePagination pageInfo={pageInfo} table={table} />
+            )}
+            {!pageInfo && !hideFooter && <DTPagination table={table} />}
+        </div>
     );
+    // }
+    // const ctx = useComposeDataTable(data, columns, pageCount, {}, null);
+    // return (
+    //     <BaseDataTable
+    //         data={data}
+    //         pageCount={pageCount}
+    //         columns={columns}
+    //         cellVariants={{ size: "default" }}
+    //     >
+    //         <Render table={ctx.table} />
+    //     </BaseDataTable>
+    // );
 }
