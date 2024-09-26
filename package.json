@@ -128,6 +128,7 @@
     "use-debounce": "^10.0.3",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.0",
+    "xlsx": "^0.18.5",
     "zod": "^3.21.4",
     "zustand": "^5.0.0-rc.2"
   },

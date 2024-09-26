@@ -584,18 +584,15 @@ function printFooter(data: PrintData, notPrintable) {
     let taxLines = [];
     if (data.order.taxes?.length) {
         data.order.taxes.map((t) => {
-            const sData = salesData.salesTaxByCode[t.taxCode] as SalesTaxes;
-            if (sData) {
-                taxLines.push(
-                    styled(
-                        `${sData.title} ${sData.percentage}%`,
-                        formatCurrency.format(t.tax),
-                        {
-                            font: "bold",
-                        }
-                    )
-                );
-            }
+            taxLines.push(
+                styled(
+                    `${t.taxConfig.title} ${t.taxConfig.percentage}%`,
+                    formatCurrency.format(t.tax),
+                    {
+                        font: "bold",
+                    }
+                )
+            );
         });
     } else {
         taxLines.push(

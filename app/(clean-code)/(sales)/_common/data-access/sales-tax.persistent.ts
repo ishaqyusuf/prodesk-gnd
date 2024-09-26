@@ -102,7 +102,7 @@ export async function salesTaxForm(taxes: SalesTaxes[]) {
         title: string;
         percentage;
     })[] = [];
-    const taxCostsByCode = {};
+    const taxCostsByCode: { [code in string]: number } = {};
     console.log(taxList);
 
     taxList.map((tl) => {
