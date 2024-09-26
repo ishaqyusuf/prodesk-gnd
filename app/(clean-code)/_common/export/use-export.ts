@@ -36,8 +36,6 @@ export function useExportForm(type, config?: TypedExport) {
         const formVal = form.getValues();
         formVal.exports = dotObject.dot(formVal.exports);
         const includes = getIncludes(formVal);
-        // console.log({ formVal, includes });
-        // return;
         const data = await getExportData(type, _q, includes);
 
         if (!data.length) {
@@ -46,6 +44,7 @@ export function useExportForm(type, config?: TypedExport) {
         }
         const dataToExport = transformExportData(formVal, data);
         // console.log({ dataToExport, data, includes });
+        // return;
         let title = `${type}-export-${dayjs().format("DD-MM-YYYY")}`;
         let worksheetname = "";
         const workbook = utils.book_new();

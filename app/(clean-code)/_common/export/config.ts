@@ -4,6 +4,7 @@ import { dotArray } from "@/lib/utils";
 import { dotKeys, dotObject } from "../utils/utils";
 import { isDate } from "lodash";
 import dayjs from "dayjs";
+import { formatDate } from "@/lib/use-day";
 
 type OrderSelect = Prisma.SalesOrdersSelect;
 type ExportCells = Partial<{
@@ -22,6 +23,7 @@ export const exportCells: ExportCells = {
         "Sales Rep": salesRepSelect("name"),
         "Customer Phone": salesCustomerSelect("phoneNo"),
         "Customer Phone 2": salesCustomerSelect("phoneNo2"),
+        // "Invoice Due Date"
     } as { [title: string]: OrderSelect },
 };
 
@@ -49,7 +51,7 @@ export function getIncludes(formData: ExportForm) {
     Object.entries(formData.exports).map(([valueKey, selected]) => {
         if ((selected as any) == true) {
             const cell = formData.cellList.find((s) => s.valueNode == valueKey);
-            console.log({ valueKey, cell, selected });
+            // console.log({ valueKey, cell, selected });
             includes[cell.selectNode] = true;
         }
     });
@@ -57,19 +59,29 @@ export function getIncludes(formData: ExportForm) {
     // return;
 }
 function transformValue(value, type: ExportTypes) {
-    if (value instanceof Date) {
-        return dayjs(value).format("DD-MM-YYYY");
+    // console.log({ value });
+    if (isDate(value)) {
+        const _v = formatDate(value); //dayjs(value).format("DD-MM-YYYY");
+        // console.log({ _v });
+
+        return _v;
     }
     return value;
 }
 export function transformExportData(formData: ExportForm, data) {
     return data.map((item) => {
+        Object.keys(item).map((k) => {
+            item[k] = transformValue(item[k], formData.type);
+        });
         const dot = dotArray(item);
         const trans = {};
+        // console.log({ dot, item });
         Object.entries(dot).map(([dotKey, dotValue]) => {
             const cell = formData.cellList.find((c) => c.valueNode == dotKey);
-            if (cell)
+
+            if (cell) {
                 trans[cell.title] = transformValue(dotValue, formData.type);
+            }
         });
         return trans;
     });
