@@ -152,7 +152,9 @@ export function DykeInvoiceItemStepSection({
                             {stepForm?.step?.title}:
                         </span>
                         <span>{stepValue}</span>
-                        {/* <span>{stepForm?.step?.id}</span> */}
+                        <span>
+                            {stepForm?.step?.id}-{stepForm?.step.uid}
+                        </span>
                     </button>
                     <div className={cn("px-2", ctx.dealerMode && "hidden")}>
                         <Menu Icon={Icons.more}>

@@ -18,6 +18,15 @@ export async function generateMetadata({ params, searchParams }) {
     };
 }
 export default async function SalesForm({ params, searchParams }) {
+    // <span>42-vkQGB</span>
+    await prisma.dykeSteps.updateMany({
+        where: {
+            id: { in: [21, 42] },
+        },
+        data: {
+            uid: "wUGhI",
+        },
+    });
     const [type, slug] = params.slug;
     let copy = searchParams.copy;
     // console.log(slug);
