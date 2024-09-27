@@ -26,6 +26,7 @@ import { useModal } from "@/components/common/modal/provider";
 import SaveProductForModal from "./save-product-for-modal";
 import { generateRandomString } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { Search } from "@/app/(clean-code)/_common/components/search";
 
 interface Props {
     item: IStepProducts[0];
@@ -413,30 +414,38 @@ export default function EditStepItemModal({
                             <div className="w-28"></div>
                         </TabsContent>
                         <TabsContent value="deleted">
-                            <ScrollArea className="h-[450px]">
-                                <div className="grid grid-cols-3 gap-2">
-                                    {deletedProds.map((product) => (
-                                        <button
-                                            onClick={() => copyProduct(product)}
-                                            key={product.id}
-                                            className="flex relative flex-col items-center hover:shadow-sm hover:border "
-                                        >
-                                            <PriceInfo prod={product} />
-                                            <div className="w-2/3 h-16s overflow-hidden">
-                                                <ProductImage
-                                                    aspectRatio={1 / 1}
-                                                    item={product}
-                                                />
-                                            </div>
-                                            <div className="">
-                                                <span className=" text-sm">
-                                                    {product.product.title}
-                                                </span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </ScrollArea>
+                            <Search
+                                items={deletedProds}
+                                searchText={(item) => item.product.title}
+                                itemKey={"id"}
+                                Item={({ item }) => (
+                                    <button
+                                        onClick={() => copyProduct(item)}
+                                        key={item.id}
+                                        className="flex relative flex-col items-center hover:shadow-sm hover:border "
+                                    >
+                                        <PriceInfo prod={item} />
+                                        <div className="w-2/3 h-16s overflow-hidden">
+                                            <ProductImage
+                                                aspectRatio={1 / 1}
+                                                item={item}
+                                            />
+                                        </div>
+                                        <div className="">
+                                            <span className=" text-sm">
+                                                {item.product.title}
+                                            </span>
+                                        </div>
+                                    </button>
+                                )}
+                            >
+                                <Search.SearchInput label="Search" />
+                                <ScrollArea className="h-[450px] mt-4">
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <Search.RenderItem />
+                                    </div>
+                                </ScrollArea>
+                            </Search>
                         </TabsContent>
                     </Tabs>
                 </div>

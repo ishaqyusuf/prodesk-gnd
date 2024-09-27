@@ -13,6 +13,7 @@ interface Props<T> {
     children?: ReactNode; // Define children type correctly
     Item?: Item<T>;
     itemKey: keyof T;
+    searchText: (item: T) => string;
 }
 
 // BaseSearch component with generic
@@ -32,11 +33,13 @@ const useBaseSearchCtx = <T,>(props: Props<T>) => {
     function getFilter(inputValue) {
         const lowerCasedInputValue = inputValue.toLowerCase();
 
-        return function filter(book) {
+        return function filter(item) {
             return (
                 !inputValue ||
-                book.title.toLowerCase().includes(lowerCasedInputValue) ||
-                book.author.toLowerCase().includes(lowerCasedInputValue)
+                props
+                    .searchText(item)
+                    .toLowerCase()
+                    .includes(lowerCasedInputValue)
             );
         };
     }
@@ -102,10 +105,11 @@ function SearchInput({ className, label, ...inputProps }: SearchInputProps) {
 function RenderItem() {
     const ctx = useSearchContext();
     if (!ctx.props.Item) throw Error("Item cannot be rendered");
+    // return <>{ctx.items?.length}</>;
     return (
         <>
-            {ctx.items?.map((item) => (
-                <ctx.props.Item item={item} />
+            {ctx.items?.map((item, index) => (
+                <ctx.props.Item key={index} item={item} />
             ))}
         </>
     );
