@@ -1741,7 +1741,7 @@ model DykeStepForm {
 model DykeSteps {
     id              Int                 @unique @default(autoincrement())
     title           String?
-    uid             String?             @unique
+    uid             String?
     value           String?             @db.Text
     createdAt       DateTime?           @default(now()) @db.Timestamp(0)
     updatedAt       DateTime?           @updatedAt
