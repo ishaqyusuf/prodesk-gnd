@@ -117,11 +117,11 @@ export default function DykeSalesFooterSection({}) {
         form.setValue("order.subTotal", formatMoney(estimate.subTotal));
         form.setValue("order.grandTotal", estimate.grandTotal);
         Object.entries(estimate.taxForm.taxByCode).map(([k, v]) => {
-            form.setValue(`_taxForm.taxCostsByCode.${k}`, v.data.tax);
-            form.setValue(`_taxForm.taxByCode.${k}.data.tax`, v.data.tax);
+            form.setValue(`_taxForm.taxCostsByCode.${k}`, v.data?.tax);
+            form.setValue(`_taxForm.taxByCode.${k}.data.tax`, v.data?.tax);
             form.setValue(
                 `_taxForm.taxByCode.${k}.data.taxxable`,
-                v.data.taxxable
+                v.data?.taxxable
             );
         });
         // estimate.taxes.map((tax) => {

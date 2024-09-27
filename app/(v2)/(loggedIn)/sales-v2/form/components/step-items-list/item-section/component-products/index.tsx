@@ -26,6 +26,9 @@ import {
     BatchSelectionAction,
     useProdBatchAction,
 } from "../../../../_hooks/use-prod-batch-action";
+import RestoreComponentsModal from "../../../modals/restore-modal";
+import { ArchiveRestoreIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -152,6 +155,35 @@ export function StepProducts({
                                     <Icons.add />
                                 </button>
                             </div>
+                        )}
+                        {stepProducts?.filter((s) => s._metaData.hidden)
+                            .length > 0 && (
+                            <>
+                                <div className="p-4">
+                                    <button
+                                        onClick={() => {
+                                            modal.openModal(
+                                                <RestoreComponentsModal
+                                                    products={stepProducts}
+                                                    setStepProducts={
+                                                        setStepProducts
+                                                    }
+                                                    stepIndex={stepIndex}
+                                                    lineItemIndex={rowIndex}
+                                                    stepForm={stepForm}
+                                                    invoiceForm={form}
+                                                />
+                                            );
+                                        }}
+                                        className={cn(
+                                            "border border-red-500 bg-red-50/50 hover:shadow-xl hover:bg-red-50 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                                        )}
+                                    >
+                                        <ArchiveRestoreIcon />
+                                        <Label className="mt-4">Restore</Label>
+                                    </button>
+                                </div>
+                            </>
                         )}
                         {allowCustom && (
                             <>

@@ -19,12 +19,41 @@ export async function generateMetadata({ params, searchParams }) {
 }
 export default async function SalesForm({ params, searchParams }) {
     // <span>42-vkQGB</span>
+    // console.log(
+    //     await prisma.dykeSteps.findMany({
+    //         where: {
+    //             stepProducts: {
+    //                 some: {
+    //                     uid: {
+    //                         in: ["j2SdP", "WGPOd"],
+    //                     },
+    //                 },
+    //             },
+    //             // uid: {
+    //             //     in: ["j2SdP"],
+    //             // },
+    //         },
+    //         include: {
+    //             stepProducts: {
+    //                 where: {
+    //                     uid: {
+    //                         in: ["j2SdP", "WGPOd"],
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     })
+    // );
     // await prisma.dykeSteps.updateMany({
     //     where: {
-    //         id: { in: [21, 42] },
+    //         id: {
+    //             in: [42],
+    //             // [21, 42]
+    //         },
     //     },
     //     data: {
-    //         uid: "wUGhI",
+    //         uid: "vkQGB",
+    //         // uid: "wUGhI",
     //     },
     // });
     const [type, slug] = params.slug;

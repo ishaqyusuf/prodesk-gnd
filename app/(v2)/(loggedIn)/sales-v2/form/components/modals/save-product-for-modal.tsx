@@ -10,7 +10,6 @@ import {
 } from "../step-items-list/item-section/component-products/init-step-components";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { updateDykeStepProductMeta } from "../../_action/dyke-step-setting";
 import { useModal } from "@/components/common/modal/provider";
 import { _deleteStepItem } from "../step-items-list/item-section/component-products/_actions";
 import { Button } from "@/components/ui/button";

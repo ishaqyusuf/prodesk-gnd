@@ -69,11 +69,18 @@ export default function useStepItems({
                 let doorsWithPriceTags = await prods.filter(
                     (p) => p.door?.meta?.doorPrice
                 );
-                console.log({ doorsWithPriceTags });
-                let _deleteDoorIds = [];
+                const doorDebug = prods
+                    .map((d) => ({
+                        meta: d.meta,
+                        title: d.door?.title,
+                    }))
+                    .filter((s) => s.meta?.show);
+                console.log({ doorDebug });
+                console.log({ stepForm });
+                // let _deleteDoorIdes = [];
 
-                if (_deleteDoorIds.length)
-                    await _deleteDuplicateDoorSteps(_deleteDoorIds);
+                // if (_deleteDoorIds.length)
+                //     await _deleteDuplicateDoorSteps(_deleteDoorIds);
                 return prods; //[];
             }
             _stepProducts = await _loadDoors();

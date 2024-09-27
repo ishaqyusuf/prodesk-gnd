@@ -23,7 +23,7 @@ export async function initStepComponents({
     const pricings = await getStepPricings(depUid, stepForm.step.id);
     const _formSteps = getFormSteps(stepArray, stepIndex);
     const stateDeps = getDykeStepState(_formSteps, stepForm);
-
+    console.log({ stateDeps });
     stepProducts = stepProducts.map((product) => {
         if (product._metaData)
             product._metaData.price = pricings.pricesByUid[product.uid];

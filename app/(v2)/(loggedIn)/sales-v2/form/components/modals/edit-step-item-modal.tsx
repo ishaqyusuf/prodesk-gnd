@@ -24,7 +24,7 @@ import { ProductImage } from "../step-items-list/item-section/component-products
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
 import SaveProductForModal from "./save-product-for-modal";
-import { generateRandomString } from "@/lib/utils";
+import { cn, generateRandomString } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Search } from "@/app/(clean-code)/_common/components/search";
 
@@ -40,6 +40,7 @@ interface Props {
     stepIndex;
     stepForm;
 }
+type TabType = "general" | "price" | "deleted" | "restore" | "step";
 export default function EditStepItemModal({
     item,
     onCreate,
@@ -177,7 +178,7 @@ export default function EditStepItemModal({
         if (!formData.product[sec])
             formData.product[sec] = formData.product[pri];
 
-        formData.product.meta.priced = formData.product.price > 0;
+        // formData.product.meta.priced = formData.product.price > 0;
 
         const reps = await saveStepProduct(formData);
         // console.log({ reps });
@@ -211,7 +212,7 @@ export default function EditStepItemModal({
     }
     const heightList = () => Object.keys(heights);
     const sizeList = (h) => heights[h] || [];
-    const [tab, setTab] = useState<string>();
+    const [tab, setTab] = useState<TabType>();
     function PriceInfo({ prod }: { prod: IStepProducts[number] }) {
         let priceLen = Object.values(prod.door?.meta?.doorPrice || {}).filter(
             Boolean
@@ -226,6 +227,62 @@ export default function EditStepItemModal({
         return null;
     }
     const [priceTab, setPriceTab] = useState<string>();
+    // const [restores, setRestore] = useState({});
+
+    function ComponentList({ isRestore }: { isRestore?: boolean }) {
+        const ItemRender = ({ item }) => {
+            const k = `restores.${item.uid}` as any;
+            const [selected, setSelected] = useState(form.getValues(k));
+            // const watchRestores = form.watch(`restores.${item.uid}` as any);
+            return (
+                <button
+                    onClick={() => {
+                        // console.log("...");
+                        if (isRestore) {
+                            const val = !selected;
+                            form.setValue(k, val);
+                            setSelected(val);
+                        } else {
+                            copyProduct(item);
+                        }
+                    }}
+                    key={item.id}
+                    className={cn(
+                        "flex relative flex-col items-center hover:shadow-sm hover:border",
+                        selected && isRestore && "border  border-purple-600"
+                    )}
+                >
+                    {/* {restores[item.uid] && tab == "restore" && (
+                            <div className="absolute left-0 m-2">
+                                <CheckCircle2Icon className="w-6 h-6 text-purple-500" />
+                            </div>
+                        )} */}
+                    <PriceInfo prod={item} />
+                    <div className="w-2/3 h-16s overflow-hidden">
+                        <ProductImage aspectRatio={1 / 1} item={item} />
+                    </div>
+                    <div className="">
+                        <span className=" text-sm">{item.product.title}</span>
+                    </div>
+                </button>
+            );
+        };
+        return (
+            <Search
+                items={deletedProds}
+                searchText={(item) => item.product.title}
+                itemKey={"id"}
+                Item={ItemRender}
+            >
+                <Search.SearchInput label="Search" />
+                <ScrollArea className="h-[450px] mt-4">
+                    <div className="grid grid-cols-3 gap-2">
+                        <Search.RenderItem />
+                    </div>
+                </ScrollArea>
+            </Search>
+        );
+    }
     return (
         <RenderForm {...form}>
             <Modal.Content>
@@ -234,7 +291,7 @@ export default function EditStepItemModal({
                     subtitle={item.product?.title}
                 />
                 <div>
-                    <Tabs value={tab} onValueChange={setTab}>
+                    <Tabs value={tab} onValueChange={setTab as any}>
                         <TabsList className="">
                             <TabsTrigger value="general">General</TabsTrigger>
                             {stepTitle == "Door" && (
@@ -247,6 +304,9 @@ export default function EditStepItemModal({
                                 <>
                                     <TabsTrigger value="deleted">
                                         Copy
+                                    </TabsTrigger>
+                                    <TabsTrigger value="restore">
+                                        Restore
                                     </TabsTrigger>
                                 </>
                             ) : (
@@ -414,38 +474,10 @@ export default function EditStepItemModal({
                             <div className="w-28"></div>
                         </TabsContent>
                         <TabsContent value="deleted">
-                            <Search
-                                items={deletedProds}
-                                searchText={(item) => item.product.title}
-                                itemKey={"id"}
-                                Item={({ item }) => (
-                                    <button
-                                        onClick={() => copyProduct(item)}
-                                        key={item.id}
-                                        className="flex relative flex-col items-center hover:shadow-sm hover:border "
-                                    >
-                                        <PriceInfo prod={item} />
-                                        <div className="w-2/3 h-16s overflow-hidden">
-                                            <ProductImage
-                                                aspectRatio={1 / 1}
-                                                item={item}
-                                            />
-                                        </div>
-                                        <div className="">
-                                            <span className=" text-sm">
-                                                {item.product.title}
-                                            </span>
-                                        </div>
-                                    </button>
-                                )}
-                            >
-                                <Search.SearchInput label="Search" />
-                                <ScrollArea className="h-[450px] mt-4">
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <Search.RenderItem />
-                                    </div>
-                                </ScrollArea>
-                            </Search>
+                            <ComponentList />
+                        </TabsContent>
+                        <TabsContent value="restore">
+                            <ComponentList isRestore />
                         </TabsContent>
                     </Tabs>
                 </div>
