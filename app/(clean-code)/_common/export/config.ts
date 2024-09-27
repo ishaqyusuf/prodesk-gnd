@@ -1,18 +1,23 @@
 import { Prisma } from "@prisma/client";
-import { ExportForm, ExportTypes, TypedExport } from "./type";
+import { CellTransform, ExportForm, ExportTypes, TypedExport } from "./type";
 import { dotArray } from "@/lib/utils";
 import { dotKeys, dotObject } from "../utils/utils";
 import { isDate } from "lodash";
-import dayjs from "dayjs";
 import { formatDate } from "@/lib/use-day";
 
 type OrderSelect = Prisma.SalesOrdersSelect;
-type ExportCells = Partial<{
-    [type in ExportTypes]: {
-        [title in string]: object | any;
-    };
-}>;
-export const exportCells: ExportCells = {
+// type ExportCells = Partial<{
+//     [type in ExportTypes]: {
+//         [title in string]: object | any;
+//     };
+// }>;
+// type CellTransform = Partial<{
+//     [type in ExportTypes]: {
+//         {[title in CellTypes<type>]: any}
+//     }
+// }>;
+// type CellTypes<T> =  keyof (typeof exportCells)[T]
+export const exportCells = {
     order: {
         "Amount Due": salesSelect("amountDue"),
         "Order Date": salesSelect("createdAt"),
@@ -23,10 +28,16 @@ export const exportCells: ExportCells = {
         "Sales Rep": salesRepSelect("name"),
         "Customer Phone": salesCustomerSelect("phoneNo"),
         "Customer Phone 2": salesCustomerSelect("phoneNo2"),
-        // "Invoice Due Date"
-    } as { [title: string]: OrderSelect },
+        "Invoice Due Date": salesSelect("paymentDueDate"),
+        "P.O No": salesSelect("meta"),
+    } as const,
+    quote: {} as const,
+} as const;
+export const cellTransform: CellTransform = {
+    order: {
+        "Invoice Due Date": (value, data) => formatDate(value),
+    },
 };
-
 function salesSelect(node: keyof OrderSelect): OrderSelect {
     return {
         [node]: true,

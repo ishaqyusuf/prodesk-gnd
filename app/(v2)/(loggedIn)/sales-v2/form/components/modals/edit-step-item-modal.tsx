@@ -257,12 +257,14 @@ export default function EditStepItemModal({
                                 {root ? (
                                     <ControlledInput
                                         control={form.control}
+                                        size="sm"
                                         name="product.value"
                                         label="Item Type"
                                     />
                                 ) : (
                                     <>
                                         <ControlledInput
+                                            size="sm"
                                             control={form.control}
                                             name="product.title"
                                             label="Product Title"
@@ -327,9 +329,11 @@ export default function EditStepItemModal({
                                                             (size) => (
                                                                 <ControlledInput
                                                                     key={size}
+                                                                    size="sm"
                                                                     control={
                                                                         form.control
                                                                     }
+                                                                    // prefix="$"
                                                                     name={`product.meta.doorPrice.${size}`}
                                                                     label={size}
                                                                     type="number"
@@ -347,6 +351,7 @@ export default function EditStepItemModal({
                                         name="product.price"
                                         label="Base Price"
                                         type="number"
+                                        size="sm"
                                         className="col-span-2"
                                     />
                                 )}

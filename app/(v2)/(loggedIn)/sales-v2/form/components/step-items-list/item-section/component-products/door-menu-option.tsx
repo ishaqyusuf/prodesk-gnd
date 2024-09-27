@@ -94,7 +94,7 @@ export default function DoorMenuOption({ setStepProducts, products, prod }) {
                 SubMenu={
                     <>
                         <DropdownMenuLabel>Select Door</DropdownMenuLabel>
-                        <ScrollArea className="max-h-[40vh]">
+                        <ScrollArea className="h-[40vh]">
                             {prods.map((p, i) => (
                                 <MenuItem
                                     key={i}
