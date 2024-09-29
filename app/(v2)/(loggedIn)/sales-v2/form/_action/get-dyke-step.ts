@@ -5,10 +5,6 @@ import { DykeStepForm } from "@prisma/client";
 import { DykeFormStepMeta, DykeStepMeta } from "../../type";
 
 export async function getStepForm(id) {
-    const tag = `dyke-step-${id}`;
-    // console.log(tag);
-    // return unstable_cache(
-    //     async () => {
     const step = await prisma.dykeSteps.findUnique({
         where: {
             id,
@@ -21,7 +17,7 @@ export async function getStepForm(id) {
             },
         },
     });
-    // console.log(step);
+
     return {
         // step,
         step: {
@@ -36,12 +32,5 @@ export async function getStepForm(id) {
             meta: {},
         } as Omit<DykeStepForm, "meta"> & { meta: DykeFormStepMeta },
     };
-    //     },
-    //     [tag],
-    //     {
-    //         revalidate: 60 * 60 * 6,
-    //         tags: [tag],
-    //     }
-    // );
 }
 // export async function getStepProductsAction

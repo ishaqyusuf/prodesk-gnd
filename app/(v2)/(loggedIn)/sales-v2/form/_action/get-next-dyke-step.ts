@@ -29,6 +29,7 @@ export async function getNextDykeStepAction(
     }
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
 
+    console.log({ nextStepId, stepValueId, t: step.title });
     if (!nextStepId) {
         // const path = await prisma.
         let nextSteps = await prisma.dykeSteps.findMany({
@@ -43,6 +44,8 @@ export async function getNextDykeStepAction(
                 _count: includeStepPriceCount,
             },
         });
+        // console.log(nextSteps);
+
         if (!nextSteps.length && step.title == "Door Species") {
             nextSteps = await prisma.dykeSteps.findMany({
                 where: {
@@ -56,8 +59,15 @@ export async function getNextDykeStepAction(
                 },
             });
         }
-        nextStepId = nextSteps[0]?.id;
-
+        const ns = nextSteps[0];
+        nextStepId = ns?.id;
+        if (ns?.title == "Door Type" && ns?.id != 41) {
+            //
+            const step41 = await prisma.dykeSteps.findFirst({
+                where: { id: 41 },
+            });
+            nextStepId = step41.id;
+        }
         if (nextSteps.length > 1) {
             const matchedStep = nextSteps.filter(
                 (s) =>

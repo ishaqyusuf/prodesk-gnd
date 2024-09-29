@@ -7,6 +7,7 @@ import { copyDykeSales } from "@/app/(v1)/(loggedIn)/sales/_actions/copy-dyke-sa
 import { getErrorData } from "../_action/error/save-error";
 import { prisma } from "@/db";
 import MigrateStepDuplicateUid from "./_debug/migrate-steps-duplicate-uid";
+import { groupBy } from "lodash";
 
 export async function generateMetadata({ params, searchParams }) {
     const [type, slug] = params.slug;
@@ -18,6 +19,109 @@ export async function generateMetadata({ params, searchParams }) {
     };
 }
 export default async function SalesForm({ params, searchParams }) {
+    // const deletes = await prisma.dykeSteps.updateMany({
+    //     where: {
+    //         OR: [
+    //             {
+    //                 id: { gt: 3 },
+    //                 title: "Width",
+    //             },
+    //             {
+    //                 id: { gt: 13 },
+    //                 title: "Height",
+    //             },
+    //             {
+    //                 id: { gt: 22 },
+    //                 title: "Hand",
+    //             },
+    //         ],
+    //     },
+    //     data: {
+    //         deletedAt: new Date(),
+    //     },
+    // });
+    // const duplicates = await prisma.dykeSteps.findMany({
+    //     // where: {
+    //     //     title: "Door Type",
+    //     // },
+    //     select: {
+    //         id: true,
+    //         uid: true,
+    //         title: true,
+
+    //         _count: {
+    //             select: {
+    //                 stepForms: {
+    //                     where: {
+    //                         deletedAt: null,
+    //                     },
+    //                 },
+    //                 stepProducts: {
+    //                     where: {
+    //                         deletedAt: null,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //         stepProducts: {
+    //             where: {
+    //                 deletedAt: null,
+    //             },
+    //             select: {
+    //                 uid: true,
+    //                 product: {
+    //                     where: {
+    //                         deletedAt: null,
+    //                     },
+    //                     select: {
+    //                         title: true,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     // distinct: "title",
+    // });
+    // let updates = 0;
+
+    // const grouped = groupBy(
+    //     duplicates.filter(
+    //         (s) => duplicates.filter((a) => a.title == s.title).length > 1
+    //     ),
+    //     "title"
+    // );
+
+    // await Promise.all(
+    //     Object.values(grouped).map(async (grp) => {
+    //         let [main, ...rest] = grp;
+    //         await prisma.$transaction((async (tx: typeof prisma) => {
+    //             console.log(main);
+    //             const ids = rest.map((s) => s.id);
+    //             const stepProds = await tx.dykeStepProducts.updateMany({
+    //                 where: {
+    //                     nextStepId: {
+    //                         in: ids,
+    //                     },
+    //                 },
+    //                 data: {
+    //                     nextStepId: main.id,
+    //                 },
+    //             });
+    //             const stespforms = await tx.dykeStepForm.updateMany({
+    //                 where: {
+    //                     stepId: { in: ids },
+    //                 },
+    //                 data: {
+    //                     stepId: main.id,
+    //                 },
+    //             });
+
+    //             updates += stespforms.count + stepProds.count;
+    //         }) as any);
+    //     })
+    // );
+    // console.log(updates);
+
     // <span>42-vkQGB</span>
     // console.log(
     //     await prisma.dykeSteps.findMany({

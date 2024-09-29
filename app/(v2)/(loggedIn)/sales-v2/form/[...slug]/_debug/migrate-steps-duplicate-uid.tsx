@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { stepUpdateDebug } from "./debug-steps";
+import { useEffect } from "react";
 
-export default function MigrateStepDuplicateUid() {
+export default function MigrateStepDuplicateUid({ data = null }) {
+    useEffect(() => {}, []);
     return (
         <>
             <Button

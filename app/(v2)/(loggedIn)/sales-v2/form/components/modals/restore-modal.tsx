@@ -57,7 +57,7 @@ export default function RestoreComponentsModal({
         setComponents(stateDeps);
     }, []);
     async function _restore(item: IStepProducts[number]) {
-        console.log(item);
+        // console.log(item);
         const d = form.getValues("show");
         let _show = item.meta.show || {};
 
