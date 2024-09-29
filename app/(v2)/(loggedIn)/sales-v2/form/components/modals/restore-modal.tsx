@@ -60,14 +60,17 @@ export default function RestoreComponentsModal({
         // console.log(item);
         const d = form.getValues("show");
         let _show = item.meta.show || {};
-
+        if (Object.values(_show).filter(Boolean).length == 0) {
+            toast.error("Select component deps first!.");
+            return;
+        }
         let valid = false;
         Object.entries(d).map(([k, v]) => {
             v && (_show[k] = true) && (valid = true);
             if (!v) delete _show[k];
         });
         item.meta.show = _show;
-        console.log({ _show });
+        // console.log({ _show });
 
         const reps = await saveStepProduct(item);
         toast.success("Restored");
