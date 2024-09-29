@@ -31,8 +31,9 @@ export async function initStepComponents({
         let hasShow = Object.keys(shows).filter(Boolean).length;
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
+        // console.log({ showThis, shows });
 
-        product._metaData.hidden = product.deletedAt
+        const s = (product._metaData.hidden = product.deletedAt
             ? true
             : doorSection
             ? !showThis
@@ -40,13 +41,16 @@ export async function initStepComponents({
             ? true
             : hasShow
             ? !showThis
-            : stateDeps.some((s) => product.meta.deleted?.[s.key]);
-        if (product.product.title.startsWith("ABC H.C")) {
-            console.log({
-                product,
-                stateDeps,
-            });
-        }
+            : stateDeps.some((s) => product.meta.deleted?.[s.key]));
+        // if (showThis) {
+        //     console.log({
+        //         hidden: product._metaData.hidden,
+        //         dels: product.meta.deleted,
+        //         deleted: product.deletedAt,
+        //         _title: product.product?.title,
+        //     });
+        // }
+
         return product;
     });
     return stepProducts;

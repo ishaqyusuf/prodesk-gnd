@@ -144,6 +144,7 @@ export async function saveStepProduct(data: Props) {
                 ...stepData,
                 meta: stepData.meta as any,
                 updatedAt: new Date(),
+                deletedAt: null,
                 product: doorMode
                     ? undefined
                     : {

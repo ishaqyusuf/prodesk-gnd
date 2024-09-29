@@ -62,10 +62,13 @@ export default function RestoreComponentsModal({
         let _show = item.meta.show || {};
 
         let valid = false;
-        Object.entries(d).map(
-            ([k, v]) => v && (_show[k] = true) && (valid = true)
-        );
+        Object.entries(d).map(([k, v]) => {
+            v && (_show[k] = true) && (valid = true);
+            if (!v) delete _show[k];
+        });
         item.meta.show = _show;
+        console.log({ _show });
+
         const reps = await saveStepProduct(item);
         toast.success("Restored");
     }

@@ -38,6 +38,7 @@ import {
     getFormSteps,
 } from "../step-items-list/item-section/component-products/init-step-components";
 import { toast } from "sonner";
+import DevOnly from "@/_v2/components/common/dev-only";
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -152,9 +153,11 @@ export function DykeInvoiceItemStepSection({
                             {stepForm?.step?.title}:
                         </span>
                         <span>{stepValue}</span>
-                        <span>
-                            {stepForm?.step?.id}-{stepForm?.step.uid}
-                        </span>
+                        <DevOnly>
+                            <span>
+                                {stepForm?.step?.id}-{stepForm?.step.uid}
+                            </span>
+                        </DevOnly>
                     </button>
                     <div className={cn("px-2", ctx.dealerMode && "hidden")}>
                         <Menu Icon={Icons.more}>
