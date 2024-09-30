@@ -430,7 +430,7 @@ function TaxForm({}) {
         return (
             <>
                 {taxForm.selectionArray.fields.map((s, i) => (
-                    <TableRow key={s.taxCode}>
+                    <TableRow key={i}>
                         <TableHead>
                             {s.title} {` (${s.percentage}%)`}
                         </TableHead>

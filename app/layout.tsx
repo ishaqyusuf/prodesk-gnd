@@ -31,6 +31,7 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const prodDB = env.DATABASE_URL?.includes("pscale");
+    throw new Error("digest error");
     // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
