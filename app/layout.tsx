@@ -25,18 +25,18 @@ export const metadata: Metadata = {
     description: "home page",
 };
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
     const prodDB = env.DATABASE_URL?.includes("pscale");
-    if (dayjs().minute() > 12) throw new Error("digest error");
+    // if (dayjs().minute() > 12) throw new Error("digest error");
     // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body>
                 <div className="print:hidden">
                     <AppProvider>
                         {children}

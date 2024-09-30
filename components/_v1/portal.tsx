@@ -15,11 +15,10 @@ export default function Portal({ nodeId, children }: Props) {
             // setPaymentState(Math.random() > 0.5 ? "success" : "failure");
             // const p = await validSquarePayment(paymentId);
             setNode(() => document.getElementById(nodeId));
-        }, 2000);
+        }, 1500);
 
         return () => clearTimeout(timer);
     }, []);
     if (node) return createPortal(<>{children}</>, node);
     return null;
 }
-

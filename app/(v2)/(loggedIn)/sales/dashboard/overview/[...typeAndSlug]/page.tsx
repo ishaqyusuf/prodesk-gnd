@@ -1,4 +1,4 @@
-import FPage from "@/app/_components/fikr-ui/f-page";
+import FPage from "@/app/(clean-code)/_common/components/fikr-ui/f-page";
 import { capitalize } from "lodash";
 import SalesOverviewClient from "../_components/sales-overview-client";
 

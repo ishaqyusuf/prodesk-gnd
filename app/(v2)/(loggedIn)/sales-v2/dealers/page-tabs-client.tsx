@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import { GetDealersPageTabAction } from "./action";
-import { FPageTabs } from "@/app/_components/fikr-ui/f-page-tabs";
+import { FPageTabs } from "@/app/(clean-code)/_common/components/fikr-ui/f-page-tabs";
 import { Badge } from "@/components/ui/badge";
 
 export default function PageTabsClient({ response }) {

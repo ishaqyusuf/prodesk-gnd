@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/_v1/breadcrumbs";
 import AuthGuard from "../../_components/auth-guard";
 import { BreadLink } from "@/components/_v1/breadcrumbs/links";
-import FPage from "@/app/_components/fikr-ui/f-page";
+import FPage from "@/app/(clean-code)/_common/components/fikr-ui/f-page";
 import DispatchPageClient from "./page-client";
 import { getDispatchSalesAction } from "./_actions/get-dispatchs";
 

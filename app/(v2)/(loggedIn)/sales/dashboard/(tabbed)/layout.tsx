@@ -1,4 +1,4 @@
-import FPage from "@/app/_components/fikr-ui/f-page";
+import FPage from "@/app/(clean-code)/_common/components/fikr-ui/f-page";
 import ServerTab from "../_components/server-tab";
 
 export default function Layout({ children }) {

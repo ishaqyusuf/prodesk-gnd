@@ -1,6 +1,6 @@
 "use client";
 
-import FPageNav from "@/app/_components/fikr-ui/f-page-nav";
+import FPageNav from "@/app/(clean-code)/_common/components/fikr-ui/f-page-nav";
 import PageHeader from "@/components/_v1/page-header";
 import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
 
