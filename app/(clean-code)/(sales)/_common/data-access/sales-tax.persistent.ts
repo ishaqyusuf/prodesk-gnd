@@ -138,7 +138,7 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?) {
             if (selected || isDefault) {
                 selection.push({
                     tax: tx?.tax,
-                    taxCode: tx?.taxCode,
+                    taxCode: tl?.taxCode,
                     deletedAt: tx?.deletedAt,
                     title: tl.title,
                     percentage: tl.percentage,
