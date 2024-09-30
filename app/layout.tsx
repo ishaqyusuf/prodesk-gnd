@@ -18,6 +18,7 @@ import { Cmd } from "@/components/cmd";
 import PageAnalytics from "@/lib/analytics/page-analytics";
 import { Suspense } from "react";
 import { __isProd } from "@/lib/is-prod-server";
+import dayjs from "dayjs";
 
 export const metadata: Metadata = {
     title: "GND-PRODESK",
@@ -31,7 +32,7 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const prodDB = env.DATABASE_URL?.includes("pscale");
-    throw new Error("digest error");
+    if (dayjs().minute() > 12) throw new Error("digest error");
     // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
