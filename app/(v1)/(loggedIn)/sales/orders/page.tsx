@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 interface Props {}
 export default async function SalesOrdersPage({ searchParams }) {
     // if (env.NODE_ENV == "production") redirect("/sales/dashboard/orders");
-    if (dayjs().get("minutes") > 10) throw new Error("paystack error");
+    // if (dayjs().get("minutes") > 10) throw new Error("paystack error");
     const response = getSalesOrder({
         ...queryParams(searchParams),
         _noBackOrder: true,
