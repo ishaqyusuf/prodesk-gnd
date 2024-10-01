@@ -1,9 +1,23 @@
+import { formatDate, timeAgo } from "@/lib/use-day";
 import { GetSalesListDta } from "../sales-list-dta";
+import { salesLinks } from "./links-dto";
+import { SalesStatType, SalesType } from "../../../types";
+import { SalesStat } from "@prisma/client";
 
-type Item = GetSalesListDta["data"][number];
+export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
     return {
         ...commonListData(data),
+        status: getSalesOrderStatus(data.stat),
+    };
+}
+function getSalesOrderStatus(stats: SalesStat[]) {
+    const _stat: { [id in SalesStatType]: SalesStat } = {} as any;
+    stats.map((s) => (_stat[s.type] = s));
+
+    return {
+        status: "-",
+        date: undefined,
     };
 }
 function commonListData(data: Item) {
@@ -20,6 +34,15 @@ function commonListData(data: Item) {
             data.shippingAddress?.phoneNo ||
             data.billingAddress?.phoneNo ||
             data.customer?.phoneNo,
+        salesDate: timeAgo(data.createdAt),
+        links: salesLinks(data),
+        shippingId: data.shippingAddressId,
+        type: data.type as SalesType,
+        invoice: {
+            total: data.grandTotal,
+            paid: data.grandTotal - data.amountDue,
+            pending: data.amountDue,
+        },
     };
 }
 export function salesQuoteDto(data: Item) {

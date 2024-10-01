@@ -26,6 +26,9 @@ export function whereSales(query: GetSalesListQuery) {
                 },
             },
         });
+    whereAnd.push({
+        type: query._type,
+    });
     const where: Prisma.SalesOrdersWhereInput =
         whereAnd.length > 1
             ? {
@@ -67,23 +70,23 @@ export const SalesListInclude = {
     producer: true,
     // salesRep: true,
     pickup: true,
-    items: {
-        where: {
-            swing: {
-                not: null,
-            },
-        },
-        select: {
-            description: true,
-            prebuiltQty: true,
-            id: true,
-            qty: true,
-            swing: true,
-            prodCompletedAt: true,
-            dykeProduction: true,
-            meta: true,
-        },
-    },
+    // items: {
+    //     where: {
+    //         swing: {
+    //             not: null,
+    //         },
+    //     },
+    //     select: {
+    //         description: true,
+    //         prebuiltQty: true,
+    //         id: true,
+    //         qty: true,
+    //         swing: true,
+    //         prodCompletedAt: true,
+    //         dykeProduction: true,
+    //         meta: true,
+    //     },
+    // },
     // items: {
     //     where: {
     //         deletedAt: null,
@@ -108,49 +111,49 @@ export const SalesListInclude = {
             totalQty: true,
         },
     },
-    assignments: {
-        where: {
-            deletedAt: null,
-            item: {
-                deletedAt: null,
-            },
-        },
-        include: {
-            assignedTo: {
-                select: {
-                    name: true,
-                    id: true,
-                },
-            },
-            salesDoor: {
-                select: {
-                    id: true,
-                    housePackageTool: {
-                        select: {
-                            door: {
-                                select: {
-                                    id: true,
-                                    title: true,
-                                    img: true,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            submissions: {
-                where: {
-                    deletedAt: null,
-                },
-                select: {
-                    id: true,
-                    qty: true,
-                    rhQty: true,
-                    lhQty: true,
-                },
-            },
-        },
-    },
+    // assignments: {
+    //     where: {
+    //         deletedAt: null,
+    //         item: {
+    //             deletedAt: null,
+    //         },
+    //     },
+    //     include: {
+    //         assignedTo: {
+    //             select: {
+    //                 name: true,
+    //                 id: true,
+    //             },
+    //         },
+    //         salesDoor: {
+    //             select: {
+    //                 id: true,
+    //                 housePackageTool: {
+    //                     select: {
+    //                         door: {
+    //                             select: {
+    //                                 id: true,
+    //                                 title: true,
+    //                                 img: true,
+    //                             },
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //         submissions: {
+    //             where: {
+    //                 deletedAt: null,
+    //             },
+    //             select: {
+    //                 id: true,
+    //                 qty: true,
+    //                 rhQty: true,
+    //                 lhQty: true,
+    //             },
+    //         },
+    //     },
+    // },
     customer: {
         select: {
             id: true,
@@ -186,4 +189,56 @@ export const SalesListInclude = {
             name: true,
         },
     },
+    stat: true,
+} satisfies Prisma.SalesOrdersInclude;
+export const SalesIncludeAll = {
+    items: {
+        where: { deletedAt: null },
+        include: {
+            shelfItems: {
+                where: { deletedAt: null },
+                include: {
+                    shelfProduct: true,
+                },
+            },
+            formSteps: {
+                where: { deletedAt: null },
+                include: {
+                    step: {
+                        select: {
+                            id: true,
+                            title: true,
+                            value: true,
+                        },
+                    },
+                },
+            },
+            housePackageTool: {
+                where: { deletedAt: null },
+                include: {
+                    casing: true,
+                    door: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
+                    jambSize: true,
+                    doors: {
+                        where: { deletedAt: null },
+                    },
+                    molding: {
+                        where: { deletedAt: null },
+                    },
+                },
+            },
+        },
+    },
+    customer: true,
+    shippingAddress: true,
+    billingAddress: true,
+    producer: true,
+    salesRep: true,
+    productions: true,
+    payments: true,
+    stat: true,
 } satisfies Prisma.SalesOrdersInclude;

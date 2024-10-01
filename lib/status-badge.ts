@@ -5,13 +5,14 @@ export function statusColor(status, _default = "slate") {
     let color: Colors | undefined = status
         ? StatusColorMap[(status?.toLowerCase() || "").replace(" ", "_")]
         : _default || ("slate" as any);
-    return color;
+    return color || _default;
 }
 export function _getStatusColor(color) {
     if (!color) color = "slate";
     return `bg-${color}-500 hover:bg-${color}-600`;
 }
 const StatusColorMap: { [key: string]: Colors } = {
+    active: "blue",
     queued: "orange",
     completed: "green",
     available: "green",

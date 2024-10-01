@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TableCell, TableCellProps } from "./table-cells";
+import { TableCellProps } from "./table-cells";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
@@ -9,8 +9,11 @@ interface ColumnArgs {
 type CtxType<T> = {
     // PrimaryColumn(title, value: CellValueType<T>): ColumnDef<T, unknown>;
     Column(
-        title,
-        Column: ({ item }: { item: T }, args: ColumnArgs) => React.ReactElement,
+        title?: string,
+        Column?: (
+            { item }: { item: T },
+            args: ColumnArgs
+        ) => React.ReactElement,
         args?: ColumnArgs
     );
     ActionCell(Column: ({ item }: { item: T }) => React.ReactElement);
@@ -45,7 +48,8 @@ export function useTableCompose<T>(data: T[], props: Props<T>) {
                         title={args?.noTitle ? "" : title}
                     />
                 ),
-                cell: ({ cell }) => <Column item={cell.row.original} />,
+                cell: ({ cell }) =>
+                    Column ? <Column item={cell.row.original} /> : null,
             };
         },
         ActionCell(Column: ({ item }: { item: T }) => React.ReactElement) {
@@ -84,4 +88,20 @@ export function useTableCompose<T>(data: T[], props: Props<T>) {
             ].filter(Boolean) as any,
         [data, isPending, dynamicCols]
     );
+    function addFilterCol(col) {
+        setDynamicCols((current) => {
+            let s = [...current, col];
+            let cells = [...new Set(s)];
+            return cells;
+        });
+    }
+    return {
+        props: {
+            columns,
+            data,
+            pageCount: props?.pageCount,
+            cellVariants: props.cellVariants,
+            addFilterCol,
+        },
+    };
 }

@@ -9,7 +9,7 @@ import { TableCol } from "../table-cells";
 import {
     TableCell,
     TableCellProps,
-} from "@/app/(clean-code)/_common/components/data-table/table-cells";
+} from "@/app/_components/data-table/table-cells";
 
 type CellValueType<T> = ((item: T) => any) | keyof T;
 interface ColumnArgs {

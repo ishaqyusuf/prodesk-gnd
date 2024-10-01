@@ -18,7 +18,7 @@ interface MenuProps {
     isOpen: boolean | undefined;
 }
 
-export default function Menu({ isOpen }: MenuProps) {
+export default function NavMenu({ isOpen }: MenuProps) {
     const pathname = usePathname();
     const { data: session } = useSession();
     const menuList = getMenuList(pathname, session);

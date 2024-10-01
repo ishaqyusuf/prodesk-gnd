@@ -2,6 +2,13 @@ import { SalesOrders, Taxes } from "@prisma/client";
 
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
+export type SalesStatType =
+    | "prod"
+    | "dispatch"
+    | "payment"
+    | "prodAssignment"
+    | "prodCompleted";
+
 export type SalesPrintMode =
     | "quote"
     | "order"

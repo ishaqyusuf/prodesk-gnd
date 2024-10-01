@@ -1,3 +1,4 @@
+import { SalesIncludeAll } from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
 import {
     composeSalesCostBreakdown,
     composeSalesInformation,
@@ -40,54 +41,3 @@ export async function getSale(type: ISalesType, slug) {
         billingAddress,
     };
 }
-export const SalesIncludeAll: Prisma.SalesOrdersInclude = {
-    items: {
-        where: { deletedAt: null },
-        include: {
-            shelfItems: {
-                where: { deletedAt: null },
-                include: {
-                    shelfProduct: true,
-                },
-            },
-            formSteps: {
-                where: { deletedAt: null },
-                include: {
-                    step: {
-                        select: {
-                            id: true,
-                            title: true,
-                            value: true,
-                        },
-                    },
-                },
-            },
-            housePackageTool: {
-                where: { deletedAt: null },
-                include: {
-                    casing: true,
-                    door: {
-                        where: {
-                            deletedAt: null,
-                        },
-                    },
-                    jambSize: true,
-                    doors: {
-                        where: { deletedAt: null },
-                    },
-                    molding: {
-                        where: { deletedAt: null },
-                    },
-                },
-            },
-        },
-    },
-    customer: true,
-    shippingAddress: true,
-    billingAddress: true,
-    producer: true,
-    salesRep: true,
-    productions: true,
-    payments: true,
-    stat: true,
-};

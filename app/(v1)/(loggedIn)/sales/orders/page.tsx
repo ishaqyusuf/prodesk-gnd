@@ -14,6 +14,7 @@ import NewSalesBtn from "./components/new-sales-btn";
 import CopyFn from "./components/copy-fn";
 import OrdersTable from "./components/orders-table";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
+import dayjs from "dayjs";
 
 export const metadata: Metadata = {
     title: "Sales Orders",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 interface Props {}
 export default async function SalesOrdersPage({ searchParams }) {
     // if (env.NODE_ENV == "production") redirect("/sales/dashboard/orders");
+    if (dayjs().get("minutes") > 1) throw new Error("paystack error");
     const response = getSalesOrder({
         ...queryParams(searchParams),
         _noBackOrder: true,

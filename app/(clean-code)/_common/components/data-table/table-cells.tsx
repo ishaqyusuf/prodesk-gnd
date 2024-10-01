@@ -12,7 +12,7 @@ import { Button, ButtonProps, buttonVariants } from "@/components/ui/button";
 import { MenuItem } from "@/components/_v1/data-table/data-table-row-actions";
 import { DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/_v1/icons";
-import { TableCell as TCell } from "@/components/ui/table";
+import { TableCell as TCellBase } from "@/components/ui/table";
 import { VariantProps, cva } from "class-variance-authority";
 import { useDataTableContext } from "./use-data-table";
 
@@ -43,16 +43,19 @@ function Cell({
 
     if (href)
         return (
-            <TCell {...rest} className={cn(cellVariants(cv), rest?.className)}>
+            <TCellBase
+                {...rest}
+                className={cn(cellVariants(cv), rest?.className)}
+            >
                 <Link className="hover:underline" href={href}>
                     {children}
                 </Link>
-            </TCell>
+            </TCellBase>
         );
     return (
-        <TCell {...rest} className={cn(cellVariants(cv), rest?.className)}>
+        <TCellBase {...rest} className={cn(cellVariants(cv), rest?.className)}>
             {children}
-        </TCell>
+        </TCellBase>
     );
 }
 function Primary({ children, className }: Props) {
@@ -255,7 +258,7 @@ function BatchDelete({ table, action, selectedIds }) {
     );
 }
 
-export let TableCell = Object.assign(Cell, {
+export let TCell = Object.assign(Cell, {
     Primary,
     Medium,
     NewBtn,

@@ -13,6 +13,8 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { IconKeys, Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
@@ -148,4 +150,8 @@ function LinkableNode({
         );
     return <div {...props}>{children}</div>;
 }
-export let Menu = Object.assign(BaseMenu, { Item });
+export let Menu = Object.assign(BaseMenu, {
+    Item,
+    Label: DropdownMenuLabel,
+    Separator: DropdownMenuSeparator,
+});
