@@ -4,7 +4,7 @@ import { Form } from "@/components/ui/form";
 import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { TableCell } from "../components/data-table/table-cells";
+import { TableCell } from "@/app/_components/data-table/table-cells";
 
 interface Props {
     type;

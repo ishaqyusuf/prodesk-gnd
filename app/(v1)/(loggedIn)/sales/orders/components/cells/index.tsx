@@ -21,7 +21,7 @@ import {
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { deleteOrderAction } from "../../../_actions/sales";
-import { TableCell } from "@/app/(clean-code)/_common/components/data-table/table-cells";
+import { TableCell } from "@/app/_components/data-table/table-cells";
 
 interface Props {
     item: SalesTableItem;
