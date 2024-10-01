@@ -3,7 +3,7 @@
 import { createPortal } from "react-dom";
 
 export default function FTitle({ children }) {
-    const Element = document?.getElementById("headerTitleSlot");
+    const Element = document?.getElementById("pageTitle");
     if (!Element) return;
     return createPortal(
         <div className="text-lg capitalize xl:text-xl font-medium">

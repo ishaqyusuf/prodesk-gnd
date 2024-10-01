@@ -101,7 +101,7 @@ export default function PageClient({
                 "_salesRepId",
             ],
         },
-        (ctx) => (isMobile ? [] : renderWebView(ctx))
+        (ctx) => renderWebView(ctx)
     );
     return (
         <>

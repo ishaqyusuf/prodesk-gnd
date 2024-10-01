@@ -27,7 +27,6 @@ import {
     type VisibilityState,
 } from "@tanstack/react-table";
 
-import { DataTable as BaseDataTable } from "@/app/_components/data-table";
 import { DataTablePagination as DTPagination } from "@/components/common/data-table/data-table-pagination";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
@@ -44,7 +43,6 @@ import { formatDate } from "@/lib/use-day";
 import useQueryParams from "@/lib/use-query-params";
 import * as qs from "qs";
 import { cn } from "@/lib/utils";
-import { useComposeDataTable } from "@/app/_components/data-table/data-table";
 
 interface DataTableProps<TData, TValue> {
     searchParams?;

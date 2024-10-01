@@ -19,11 +19,17 @@ import qs from "qs";
 import React, { createContext, useContext } from "react";
 
 export const dataTableContext = createContext({});
-export type DataTypeType = ReturnType<typeof useComposeDataTable>;
-export const useDataTableContext = (): DataTypeType =>
+export const dataTableRowContext = createContext({});
+export type DataTableType = ReturnType<typeof useDataTable>;
+export type TableRowModel = ReturnType<
+    DataTableType["table"]["getRowModel"]
+>["rows"][number];
+export const useDataTableContext = (): DataTableType =>
     useContext(dataTableContext) as any;
+export const useTRContext = (): DataTableType =>
+    useContext(dataTableRowContext) as any;
 
-export function useComposeDataTable(
+export function useDataTable(
     data,
     columns,
     pageCount,
@@ -132,6 +138,7 @@ export function useComposeDataTable(
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
+
     function __boot(searchParams: ReadonlyURLSearchParams) {
         const _q: any = {};
         const filter: ColumnFiltersState = [];

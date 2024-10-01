@@ -1,5 +1,4 @@
 import {
-    getSalesListDta,
     GetSalesListQuery,
     getSalesOrdersDta,
 } from "../data-access/sales-list-dta";
