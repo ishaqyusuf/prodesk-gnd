@@ -28,20 +28,26 @@ export async function initStepComponents({
         if (product._metaData)
             product._metaData.price = pricings.pricesByUid[product.uid];
         const shows = product.meta?.show || {};
+        const _deleted = product.meta?.deleted || {};
         let hasShow = Object.keys(shows).filter(Boolean).length;
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
         // console.log({ showThis, shows });
-
-        const s = (product._metaData.hidden = product.deletedAt
-            ? true
-            : doorSection
-            ? !showThis
-            : product.deletedAt
-            ? true
-            : hasShow
-            ? !showThis
-            : stateDeps.some((s) => product.meta.deleted?.[s.key]));
+        const dItem = product.product?.title?.includes("2PNL FIBERGLASS");
+        const isHidden = stateDeps.some((s) => product.meta.deleted?.[s.key]);
+        product._metaData.hidden =
+            product.deletedAt || isHidden
+                ? true
+                : doorSection
+                ? !showThis
+                : product.deletedAt
+                ? true
+                : hasShow
+                ? !showThis
+                : isHidden;
+        if (dItem) {
+            console.log({ shows, showThis });
+        }
         // if (showThis) {
         //     console.log({
         //         hidden: product._metaData.hidden,

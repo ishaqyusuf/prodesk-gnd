@@ -74,8 +74,8 @@ export default function useStepItems({
                         title: d.door?.title,
                     }))
                     .filter((s) => s.meta?.show);
-                console.log({ doorDebug });
-                console.log({ stepForm });
+                // console.log({ doorDebug });
+                // console.log({ stepForm });
                 // let _deleteDoorIdes = [];
 
                 // if (_deleteDoorIds.length)
