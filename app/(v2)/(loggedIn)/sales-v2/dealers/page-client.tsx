@@ -1,7 +1,7 @@
 "use client";
 
-import FPageNav from "@/app/(clean-code)/_common/components/fikr-ui/f-page-nav";
-import { FPageTabs } from "@/app/(clean-code)/_common/components/fikr-ui/f-page-tabs";
+import FPageNav from "@/components/(clean-code)/fikr-ui/f-page-nav";
+import { FPageTabs } from "@/components/(clean-code)/fikr-ui/f-page-tabs";
 import {
     DealerStatus,
     GetDealersAction,

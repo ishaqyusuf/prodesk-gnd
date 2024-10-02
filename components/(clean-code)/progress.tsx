@@ -1,8 +1,16 @@
 import { statusColor } from "@/lib/status-badge";
 import { cn } from "@/lib/utils";
 
-function ProgressBase({ children }) {
-    return <div>{children}</div>;
+interface ProgressBaseProps {
+    children?;
+    className?;
+}
+function ProgressBase({ children, className }: ProgressBaseProps) {
+    return (
+        <div className={cn("flex flex-col items-start", className)}>
+            {children}
+        </div>
+    );
 }
 interface StatusProps {
     noDot?: boolean;
@@ -22,8 +30,12 @@ function Status({ children, noDot }: StatusProps) {
         </div>
     );
 }
-function ProgressBar({ children }) {
-    return <div>{children}</div>;
+interface ProgressBarProps {
+    children?;
+    className?;
+}
+function ProgressBar({ children, className }: ProgressBarProps) {
+    return <div className={cn(className)}>{children}</div>;
 }
 export const Progress = Object.assign(ProgressBase, {
     Status,

@@ -1,6 +1,6 @@
 "use client";
 import Portal from "@/components/_v1/portal";
-import { Menu } from "../../_common/components/menu";
+import { Menu } from "../../../../components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
 import SalesStat from "./sales-stat";
 

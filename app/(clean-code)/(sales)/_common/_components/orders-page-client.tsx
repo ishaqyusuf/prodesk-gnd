@@ -2,9 +2,10 @@
 
 import { use } from "react";
 import { GetSalesOrdersDta } from "../data-access/sales-list-dta";
-import { useTableCompose } from "@/app/(clean-code)/_common/components/data-table/use-table-compose";
-import { DataTable } from "@/app/(clean-code)/_common/components/data-table";
+import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
+import { DataTable } from "@/components/(clean-code)/data-table";
 import { Cells } from "./orders-page-cells";
+import { TableToolbar } from "@/components/(clean-code)/data-table/toolbar";
 
 interface Props {
     promise;
@@ -24,10 +25,14 @@ export default function OrdersPageClient({ promise }: Props) {
                 ctx.Column("Status", Cells.Status),
             ];
         },
+        filterCells: ["_q"],
     });
     return (
         <div>
             <DataTable {...table.props}>
+                <TableToolbar>
+                    <TableToolbar.Search placeholder="sales" />
+                </TableToolbar>
                 <DataTable.Table />
             </DataTable>
         </div>

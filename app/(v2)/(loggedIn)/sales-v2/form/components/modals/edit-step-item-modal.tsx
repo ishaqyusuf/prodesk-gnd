@@ -26,7 +26,7 @@ import { useModal } from "@/components/common/modal/provider";
 import SaveProductForModal from "./save-product-for-modal";
 import { cn, generateRandomString } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { Search } from "@/app/(clean-code)/_common/components/search";
+import { Search } from "@/components/(clean-code)/search";
 
 interface Props {
     item: IStepProducts[0];

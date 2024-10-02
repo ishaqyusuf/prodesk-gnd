@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { usePathname, useSearchParams } from "next/navigation";
 import Portal from "@/components/_v1/portal";
 import { typedMemo } from "@/lib/hocs/typed-memo";
+import { Badge } from "@/components/ui/badge";
 // import Link from "next/link";
 
 interface Props {
@@ -124,6 +125,7 @@ function _FPageTabs({ children, promise, tabs, port }: Props) {
     const _tabList: PageTab[] = tabs || promise ? use(promise) : null;
     useEffect(() => {
         if (_tabList?.length) {
+            // console.log(_tabList);
             const tabs = {};
             _tabList?.map(
                 (t) =>
@@ -131,6 +133,7 @@ function _FPageTabs({ children, promise, tabs, port }: Props) {
                         ...t.params,
                         ...t,
                         tabName: t.title,
+                        // count: t.count
                         href: t.url,
                     })
             );
@@ -151,6 +154,7 @@ function _FPageTabs({ children, promise, tabs, port }: Props) {
                                 {...tab.params}
                                 href={tab.url}
                                 key={tab.title}
+                                count={tab.count}
                             />
                         ))}
                 </FContentShell>
@@ -176,6 +180,7 @@ interface TabProps {
     }[];
     qk?: string;
     qv?: string;
+    count?;
 }
 function Tab(props: TabProps) {
     const ct = useContext(ctx);
@@ -213,7 +218,12 @@ function Tab(props: TabProps) {
                 className={cn("inline-flex items-center space-x-2")}
                 href={ct.tabData?.[props.tabName || props.children]?.url || ""}
             >
-                {props.children || props.tabName}
+                <span>{props.children || props.tabName}</span>
+                {props.count >= 0 && (
+                    <Badge className="px-2" variant="secondary">
+                        {props.count}
+                    </Badge>
+                )}
             </Link>
         </Button>
     );

@@ -21,7 +21,7 @@ import { cn, sum } from "@/lib/utils";
 import { GetSales } from "@/data-acces/sales";
 import { useAssignment } from "../../../sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { Button } from "@/components/ui/button";
-import FStatusBadge from "@/app/(clean-code)/_common/components/fikr-ui/f-status-badge";
+import FStatusBadge from "@/components/(clean-code)/fikr-ui/f-status-badge";
 import { useSalesStatus } from "../../hooks/sales-hooks";
 
 export interface SalesCellProps {

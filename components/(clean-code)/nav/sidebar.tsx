@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import { useSidebarToggle } from "../../hooks/use-sidebar-toggle";
-import { useStore } from "../../hooks/use-store";
+import { useSidebarToggle } from "../../../app/(clean-code)/_common/hooks/use-sidebar-toggle";
+import { useStore } from "../../../app/(clean-code)/_common/hooks/use-store";
 import { SidebarToggle } from "./sidebar-toggle";
 import { PanelsTopLeft } from "lucide-react";
 import Link from "next/link";

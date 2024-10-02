@@ -1,9 +1,9 @@
-import { TCell } from "@/app/(clean-code)/_common/components/data-table/table-cells";
+import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { GetSalesOrdersDta } from "../data-access/sales-list-dta";
 import { cn } from "@/lib/utils";
-import { useTRContext } from "@/app/(clean-code)/_common/components/data-table/use-data-table";
-import { Progress } from "@/app/(clean-code)/_common/components/progress";
-import { Menu } from "@/app/(clean-code)/_common/components/menu";
+import { useTRContext } from "@/components/(clean-code)/data-table/use-data-table";
+import { Progress } from "@/components/(clean-code)/progress";
+import { Menu } from "@/components/(clean-code)/menu";
 import { Button } from "@/components/ui/button";
 
 interface ItemProps {
@@ -72,7 +72,7 @@ function Dispatch({ item }: ItemProps) {
         <TCell>
             <Menu
                 Trigger={
-                    <Button size="sm" variant="secondary">
+                    <Button size="sm" className="" variant="secondary">
                         <Progress>
                             <Progress.Status>pickup</Progress.Status>
                             <TCell.Secondary>{item.salesDate}</TCell.Secondary>

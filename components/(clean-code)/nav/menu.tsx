@@ -10,7 +10,7 @@ import { Ellipsis, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CollapseMenuButton } from "./collapse-menu-button";
-import { getMenuList } from "../../utils/get-menu-list";
+import { getMenuList } from "../../../app/(clean-code)/_common/utils/get-menu-list";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 

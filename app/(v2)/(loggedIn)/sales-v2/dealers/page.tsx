@@ -1,4 +1,4 @@
-import FPage from "@/app/(clean-code)/_common/components/fikr-ui/f-page";
+import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import PageClient from "./page-client";
 import { getDealersAction } from "./action";
 import PageTabsServer from "./page-tabs-server";

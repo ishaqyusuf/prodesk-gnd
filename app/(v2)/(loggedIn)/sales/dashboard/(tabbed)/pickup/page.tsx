@@ -3,7 +3,7 @@ import {
     SalesQueryParams,
     getSalesAction,
 } from "../../_actions/get-sales-action";
-import FPage from "@/app/(clean-code)/_common/components/fikr-ui/f-page";
+import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import PageClient from "../../_components/page-client";
 import ServerTab from "../../_components/server-tab";
 

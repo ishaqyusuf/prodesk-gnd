@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useStore } from "../hooks/use-store";
-import { useSidebarToggle } from "../hooks/use-sidebar-toggle";
+import { useStore } from "../../app/(clean-code)/_common/hooks/use-store";
+import { useSidebarToggle } from "../../app/(clean-code)/_common/hooks/use-sidebar-toggle";
 import { Sidebar } from "./nav/sidebar";
 import { cn } from "@/lib/utils";
 

@@ -1,6 +1,6 @@
 "use client";
-import FPageNav from "@/app/(clean-code)/_common/components/fikr-ui/f-page-nav";
-import { FPageTabs } from "@/app/(clean-code)/_common/components/fikr-ui/f-page-tabs";
+import FPageNav from "@/components/(clean-code)/fikr-ui/f-page-nav";
+import { FPageTabs } from "@/components/(clean-code)/fikr-ui/f-page-tabs";
 import { use } from "react";
 import { GetDispatchSalesAction } from "./_actions/get-dispatchs";
 import { useDataTableColumn2 } from "@/components/common/data-table/columns/use-data-table-columns";
