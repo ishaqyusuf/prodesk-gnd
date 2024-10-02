@@ -1,14 +1,6 @@
-import _dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
 import relativeTime from "dayjs/plugin/relativeTime";
-export const dayjs = _dayjs; //.extend(updateLocale);
-dayjs.extend(updateLocale);
-dayjs.extend(relativeTime);
-// dayjs.updateLocale("en", {
-//     relativeTime: {
-//         past: "%s ago",
-//     },
-// });
+import dayjs from "./dayjs";
 
 export type DateFormats =
     | "DD/MM/YY"
@@ -25,7 +17,9 @@ export function formatDate(date, format: DateFormats = "MM/DD/YY") {
 export function timeAgo(date, format: DateFormats = "MM/DD/YY") {
     const d = dayjs(date);
     const tAgo = d.fromNow();
+    const daysDiff = dayjs().diff(d, "days");
+
     if (tAgo == "a day ago") return "yesterday";
-    if (dayjs().diff(d, "days") > 1) return formatDate(date, format);
+    if (daysDiff > 1) return formatDate(date, format);
     return tAgo;
 }

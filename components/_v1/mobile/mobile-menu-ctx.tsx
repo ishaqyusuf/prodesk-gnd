@@ -56,6 +56,7 @@ const MobileMenuContext = ({ item }: Props) => {
                                                 } else
                                                     item.onClick &&
                                                         item.onClick();
+                                                modal.close();
                                             }}
                                         />
                                     );
