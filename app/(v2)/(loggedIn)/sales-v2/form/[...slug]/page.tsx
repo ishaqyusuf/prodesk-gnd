@@ -181,7 +181,6 @@ export default async function SalesForm({ params, searchParams }) {
     return (
         <AuthGuard can={["editOrders"]}>
             <div className="sm:px-8 px-4">
-                <MigrateStepDuplicateUid />
                 <Breadcrumbs>
                     <BreadLink title={"Sales"} isFirst link={"/sales/orders"} />
                     {slug && (
