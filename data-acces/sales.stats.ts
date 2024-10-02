@@ -1,9 +1,9 @@
 "use server";
+
 import {
     SalesStatStatus,
     TypedSalesStat,
-} from "@/app/(v2)/(loggedIn)/sales-v2/type";
-
+} from "@/app/(clean-code)/(sales)/types";
 import { composeSalesStatKeyValue } from "@/data/compose-sales";
 import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
@@ -56,7 +56,7 @@ export async function updateSalesStat(id) {
     );
     const statkv = composeSalesStatKeyValue(data.stat);
     await saveStat({
-        type: "production",
+        type: "prod",
         salesId: data.id,
         total: totalQty,
         score: sum(
@@ -73,7 +73,7 @@ export async function updateSalesStat(id) {
         id: statkv["production"]?.id,
     });
     await saveStat({
-        type: "production assignment",
+        type: "prodAssignment",
         total: totalQty,
         salesId: data.id,
         score: sum(
