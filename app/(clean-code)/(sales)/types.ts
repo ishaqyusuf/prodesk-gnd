@@ -2,6 +2,22 @@ import { SalesOrders, Taxes } from "@prisma/client";
 
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
+export type DykeStepTitles =
+    | "Shelf Items"
+    | "Cutdown Height"
+    | "House Package Tool"
+    | "Height"
+    | "Item Type"
+    | "Door"
+    | "Height"
+    | "Specie"
+    | "Moulding"
+    | "Door Configuration"
+    | "Door Type"
+    | "Line Item";
+export type DykeStepTitleKv = Partial<{
+    [title in Partial<DykeStepTitles>]: DykeStepTitles;
+}>;
 export type SalesStatType =
     | "prod"
     | "dispatch"

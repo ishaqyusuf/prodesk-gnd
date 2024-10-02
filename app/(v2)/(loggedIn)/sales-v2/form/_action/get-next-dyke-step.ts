@@ -7,6 +7,10 @@ import { createDoorSpecies } from "./create-door-species";
 import { DykeDoorType } from "../../type";
 import { generateRandomString } from "@/lib/utils";
 import { includeStepPriceCount } from "../../dyke-utils";
+import {
+    DykeStepTitleKv,
+    DykeStepTitles,
+} from "@/app/(clean-code)/(sales)/types";
 
 export async function getNextDykeStepAction(
     step: DykeSteps,
@@ -130,7 +134,8 @@ function hiddenSteps(title, doorType: DykeDoorType) {
     }
     if (doorType == "Bifold" && !hidden) {
         hidden = [
-            "door configuration",
+            // "door configuration",
+            // "door type",
             "bore",
             "jamb size",
             "casing",
@@ -139,7 +144,6 @@ function hiddenSteps(title, doorType: DykeDoorType) {
             "cutdown height",
             "casing y/n",
             "hinge finish",
-            "door type",
             "casing side choice",
             "casing species",
             "cutdown height",
@@ -165,7 +169,9 @@ function hiddenSteps(title, doorType: DykeDoorType) {
     return hidden;
 }
 function isCustomStep(stepTitle, doorType: DykeDoorType) {
-    return ["Shelf Items", "House Package Tool", "Door"].includes(stepTitle);
+    return (
+        ["Shelf Items", "House Package Tool", "Door"] as DykeStepTitles[]
+    ).includes(stepTitle);
 }
 async function CustomStepForm(
     { title: productTitle },
@@ -174,7 +180,7 @@ async function CustomStepForm(
 ) {
     stepTitle = stepTitle.trim();
 
-    const customSteps = {
+    const customSteps: DykeStepTitleKv = {
         "Shelf Items": "Shelf Items",
         "Cutdown Height": "House Package Tool",
     };
@@ -182,9 +188,11 @@ async function CustomStepForm(
     if (doorType == "Bifold") {
         // console.log(doorType);
 
-        const customSteps = {
-            "Item Type": "Height",
-            Height: "Door",
+        const customSteps: DykeStepTitleKv = {
+            "Item Type": "Door Configuration",
+            "Door Configuration": "Height",
+            Height: "Door Type",
+            "Door Type": "Door",
             Door: "House Package Tool",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
@@ -198,7 +206,7 @@ async function CustomStepForm(
     //     title = customSteps[productTitle] || customSteps[stepTitle];
     // }
     if (doorType == "Moulding") {
-        const customSteps = {
+        const customSteps: DykeStepTitleKv = {
             "Item Type": "Specie",
             Specie: "Moulding",
             Moulding: "Line Item",
@@ -208,7 +216,7 @@ async function CustomStepForm(
         // console.log({ title, productTitle, stepTitle });
     }
     if ((doorType || productTitle) == "Services") {
-        const customSteps = {
+        const customSteps: DykeStepTitleKv = {
             "Item Type": "Line Item",
             //  Specie: "Moulding",
             //  Moulding: "Line Item",
