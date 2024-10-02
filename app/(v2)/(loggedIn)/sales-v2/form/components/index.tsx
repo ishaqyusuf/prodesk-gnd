@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { DykeForm, IDykeFormContext } from "../../type";
 import { DykeFormContext } from "../_hooks/form-context";
@@ -14,15 +14,10 @@ import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./item-section/item-section";
 
-import DykeBootstrap from "./dyke-bootstrap";
-
 interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    useEffect(() => {
-        console.log(defaultValues);
-    }, []);
     const form = useForm<DykeForm>({
         defaultValues: {
             ...defaultValues,
@@ -56,7 +51,6 @@ export default function SalesFormComponent({ defaultValues }: Props) {
         <DykeFormContext.Provider value={ctxValue}>
             <RenderForm {...form}>
                 <HeaderSection />
-                <DykeBootstrap />
                 <section
                     id="detailsSection"
                     className="border-y my-2 py-1 grid gap-4 md:grid-cols-2 xl:grid-cols-5 gap-x-8"
