@@ -83,6 +83,9 @@ export async function saveStepProduct(data: Props) {
         isDoor,
         ...stepData
     } = data;
+    Object.entries(stepData.meta).map(([k, v]) => {
+        if (v) delete stepData.meta?.deleted?.[k];
+    });
     _metaData.price = productData.price;
     if (!id) {
         if (_meta?.isMoulding && !_meta.mouldingCategoryId) {
