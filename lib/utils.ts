@@ -229,6 +229,10 @@ export function truthy<T>(condition, _true: T[] = [], _false: T[] = []): any {
 export function addPercentage(value, percentage) {
     return value + (value || 0) * ((percentage || 100) / 100);
 }
+export function percentage(score, total, def = 0) {
+    if (!score || !total) return def;
+    return (Number(score) / Number(total)) * 100;
+}
 export function getModelNumber(modelName) {
     return modelName
         ?.split(" ")

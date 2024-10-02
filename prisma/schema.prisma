@@ -1059,7 +1059,6 @@ model SalesOrders {
     profitMargin      Float?
     tax               Float?
     taxPercentage     Float?
-    taxes             SalesTaxes[]
     grandTotal        Float?
     amountDue         Float?
     invoiceStatus     String?                          @db.VarChar(255)
@@ -1068,6 +1067,7 @@ model SalesOrders {
     paymentDueDate    DateTime?                        @db.Timestamp(0)
     deliveredAt       DateTime?
     deliveryOption    String?
+    taxes             SalesTaxes[]
     checkouts         SalesCheckout[]
     customer          Customers?                       @relation(fields: [customerId], references: [id])
     items             SalesOrderItems[]

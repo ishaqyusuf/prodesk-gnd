@@ -1,8 +1,8 @@
 import { formatDate, timeAgo } from "@/lib/use-day";
-import { GetSalesListDta } from "../sales-list-dta";
+import { GetSalesListDta } from "../sales-dta";
 import { salesLinks } from "./links-dto";
-import { SalesStatType, SalesType } from "../../../types";
 import { SalesStat } from "@prisma/client";
+import { SalesStatType, SalesType } from "../../../types";
 
 export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {

@@ -1,8 +1,9 @@
-import { SalesOrders, Taxes } from "@prisma/client";
+import { AddressBooks, SalesOrders, SalesStat, Taxes } from "@prisma/client";
 
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type DykeStepTitles =
+    | "Category"
     | "Shelf Items"
     | "Cutdown Height"
     | "House Package Tool"
@@ -18,13 +19,13 @@ export type DykeStepTitles =
 export type DykeStepTitleKv = Partial<{
     [title in Partial<DykeStepTitles>]: DykeStepTitles;
 }>;
-export type SalesStatType =
-    | "prod"
-    | "dispatch"
-    | "payment"
-    | "prodAssignment"
-    | "prodCompleted";
-
+export type SalesStatType = "dispatch" | "payment" | "prodAssignment" | "prod";
+export type SalesStatStatus = "pending" | "in progress" | "completed";
+export type TypedSalesStat = Omit<SalesStat, "status" | "type" | "id"> & {
+    type: SalesStatType;
+    id?: number;
+    status?: SalesStatStatus;
+};
 export type SalesPrintMode =
     | "quote"
     | "order"
@@ -72,5 +73,10 @@ export type TypedSales = SalesOrders & {
     deliveryOption: DeliveryOption;
     meta: SalesMeta;
 };
-
+export interface AddressBookMeta {
+    zip_code;
+}
+export type TypedAddressBook = Omit<AddressBooks, "meta"> & {
+    meta: AddressBookMeta;
+};
 // export type CreateTaxForm = Omit<Taxes, "sa">;

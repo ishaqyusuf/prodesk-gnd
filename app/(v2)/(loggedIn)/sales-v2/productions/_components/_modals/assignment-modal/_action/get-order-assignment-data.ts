@@ -13,6 +13,7 @@ import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
 import { ServerPromiseType } from "@/types";
 import { unstable_noStore } from "next/cache";
 import { IAssignGroupForm } from "../sectioned-item-assign-form";
+import { SalesIncludeAll } from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
 
 interface mode {
     prod: boolean;
@@ -22,98 +23,18 @@ export type GetOrderAssignmentData = ServerPromiseType<
     typeof getOrderAssignmentData
 >["Response"];
 export async function getOrderAssignmentData(id, mode?: mode) {
-    unstable_noStore();
     if (!mode) mode = {} as any;
     const authId = await userId();
     const session = await serverSession();
     const { can } = session;
     const readOnly = can.viewOrderProduction && !can.editOrderProduction;
-
+    const Includes = SalesIncludeAll;
+    Includes.items.include.assignments.where.assignedToId = mode.prod
+        ? authId
+        : undefined;
     const order = await prisma.salesOrders.findFirst({
         where: { id },
-        include: {
-            customer: {
-                select: {
-                    id: true,
-                    businessName: true,
-                    name: true,
-                },
-            },
-            // productionStatus: true,
-            items: {
-                where: {
-                    OR: [
-                        {
-                            salesDoors: {
-                                some: {
-                                    doorType: {
-                                        in: salesData.productionDoorTypes,
-                                    },
-                                },
-                            },
-                        },
-                        {
-                            swing: {
-                                not: null,
-                            },
-                        },
-                        {
-                            qty: null,
-                            swing: null,
-                            salesOrder: {
-                                isDyke: false,
-                            },
-                        },
-                        {
-                            dykeProduction: true,
-                        },
-                    ],
-                    deletedAt: null,
-                },
-                include: {
-                    formSteps: {
-                        where: {
-                            deletedAt: null,
-                        },
-                        include: {
-                            step: true,
-                        },
-                    },
-                    salesDoors: {
-                        include: {
-                            housePackageTool: {
-                                include: {
-                                    door: true,
-                                },
-                            },
-                        },
-                        where: {
-                            doorType: {
-                                in: salesData.productionDoorTypes,
-                            },
-                            deletedAt: null,
-                        },
-                    },
-                    assignments: {
-                        where: {
-                            deletedAt: null,
-                            assignedToId: mode.prod ? authId : undefined,
-                        },
-                        include: {
-                            assignedTo: true,
-                            submissions: {
-                                include: {
-                                    itemDeliveries: true,
-                                },
-                                where: {
-                                    deletedAt: null,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+        include: Includes,
     });
     if (!order) throw Error("Not found");
     const items = ArrayMetaType(order.items, {} as ISalesOrderItemMeta).map(
@@ -132,7 +53,7 @@ export async function getOrderAssignmentData(id, mode?: mode) {
             (order.isDyke &&
                 (item.multiDyke || (!item.multiDyke && !item.multiDykeUid)))
     );
-    console.log("ITEMS:", fItems.length);
+    // console.log("ITEMS:", fItems.length);
     let doorGroups = fItems
         .map((item, index) => {
             const _items = order.items.filter(

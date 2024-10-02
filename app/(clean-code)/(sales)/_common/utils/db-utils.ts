@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import salesData from "./sales-data";
 import { ftToIn } from "./sales-utils";
-import { GetSalesListQuery } from "../data-access/sales-list-dta";
+import { GetSalesListQuery } from "../data-access/sales-dta";
 import {
     anyDateQuery,
     withDeleted,
@@ -63,6 +63,10 @@ export function parseSearchQuery(query) {
         originalQuery: query,
     };
 }
+export const excludeDeleted = {
+    where: { deletedAt: null },
+};
+
 export const SalesListInclude = {
     // customer: true,
     // shippingAddress: true,
@@ -195,50 +199,80 @@ export const SalesIncludeAll = {
     items: {
         where: { deletedAt: null },
         include: {
+            formSteps: {
+                ...excludeDeleted,
+                include: {
+                    step: true,
+                },
+            },
+            salesDoors: {
+                include: {
+                    housePackageTool: {
+                        include: {
+                            door: true,
+                        },
+                    },
+                },
+                where: {
+                    doorType: {
+                        in: salesData.productionDoorTypes,
+                    },
+                    ...excludeDeleted.where,
+                },
+            },
+            assignments: {
+                where: {
+                    ...excludeDeleted.where,
+                    assignedToId: undefined,
+                },
+                include: {
+                    assignedTo: true,
+                    submissions: {
+                        include: {
+                            itemDeliveries: true,
+                        },
+                        ...excludeDeleted,
+                    },
+                },
+            },
             shelfItems: {
                 where: { deletedAt: null },
                 include: {
                     shelfProduct: true,
                 },
             },
-            formSteps: {
-                where: { deletedAt: null },
-                include: {
-                    step: {
-                        select: {
-                            id: true,
-                            title: true,
-                            value: true,
-                        },
-                    },
-                },
-            },
+            // formSteps: {
+            //     where: { deletedAt: null },
+            //     include: {
+            //         step: {
+            //             select: {
+            //                 id: true,
+            //                 title: true,
+            //                 value: true,
+            //             },
+            //         },
+            //     },
+            // },
             housePackageTool: {
-                where: { deletedAt: null },
+                ...excludeDeleted,
                 include: {
-                    casing: true,
-                    door: {
-                        where: {
-                            deletedAt: null,
-                        },
-                    },
-                    jambSize: true,
-                    doors: {
-                        where: { deletedAt: null },
-                    },
-                    molding: {
-                        where: { deletedAt: null },
-                    },
+                    casing: excludeDeleted,
+                    door: excludeDeleted,
+                    jambSize: excludeDeleted,
+                    doors: excludeDeleted,
+                    molding: excludeDeleted,
                 },
             },
         },
     },
-    customer: true,
-    shippingAddress: true,
-    billingAddress: true,
-    producer: true,
-    salesRep: true,
-    productions: true,
-    payments: true,
-    stat: true,
+    customer: excludeDeleted,
+    shippingAddress: excludeDeleted,
+    billingAddress: excludeDeleted,
+    producer: excludeDeleted,
+    salesRep: excludeDeleted,
+    productions: excludeDeleted,
+    payments: excludeDeleted,
+    stat: excludeDeleted,
+    deliveries: excludeDeleted,
+    itemDeliveries: excludeDeleted,
 } satisfies Prisma.SalesOrdersInclude;

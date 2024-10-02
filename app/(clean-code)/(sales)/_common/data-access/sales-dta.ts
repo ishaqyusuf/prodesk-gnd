@@ -1,8 +1,12 @@
 import { AsyncFnType, PageBaseQuery } from "@/app/(clean-code)/type";
-import { SalesType } from "../../types";
+import { SalesMeta, SalesType, TypedAddressBook } from "../../types";
 import { getPageInfo, pageQueryFilter } from "../../../_common/utils/db-utils";
 import { prisma } from "@/db";
-import { SalesListInclude, whereSales } from "../utils/db-utils";
+import {
+    SalesIncludeAll,
+    SalesListInclude,
+    whereSales,
+} from "../utils/db-utils";
 import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
 
 export interface GetSalesListQuery extends PageBaseQuery {
@@ -39,5 +43,28 @@ export async function getSalesListDta(query: GetSalesListQuery) {
         pageCount: pageInfo.pageCount,
         pageInfo,
         data,
+    };
+}
+export type GetFullSalesDataDta = AsyncFnType<typeof getFullSalesDataDta>;
+export async function getFullSalesDataDta(slug, type) {
+    const sale = await prisma.salesOrders.findFirstOrThrow({
+        where: {
+            type,
+            slug,
+        },
+        include: SalesIncludeAll,
+    });
+    const shippingAddress = {
+        ...(sale.shippingAddress || {}),
+    } as any as TypedAddressBook;
+    const billingAddress = {
+        ...(sale.billingAddress || {}),
+    } as any as TypedAddressBook;
+    return {
+        ...sale,
+        type: sale.type as SalesType,
+        meta: sale.meta as any as SalesMeta,
+        shippingAddress,
+        billingAddress,
     };
 }

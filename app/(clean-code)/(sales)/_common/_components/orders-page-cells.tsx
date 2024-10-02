@@ -1,5 +1,5 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { GetSalesOrdersDta } from "../data-access/sales-list-dta";
+import { GetSalesOrdersDta } from "../data-access/sales-dta";
 import { cn } from "@/lib/utils";
 import { useTRContext } from "@/components/(clean-code)/data-table/use-data-table";
 import { Progress } from "@/components/(clean-code)/progress";

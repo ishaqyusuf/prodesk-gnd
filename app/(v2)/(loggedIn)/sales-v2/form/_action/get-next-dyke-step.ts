@@ -189,11 +189,18 @@ async function CustomStepForm(
         // console.log(doorType);
 
         const customSteps: DykeStepTitleKv = {
-            "Item Type": "Door Configuration",
-            "Door Configuration": "Height",
+            "Item Type": "Height",
+            // "Door Configuration": "Height",
             Height: "Door Type",
             "Door Type": "Door",
             Door: "House Package Tool",
+        };
+        title = customSteps[productTitle] || customSteps[stepTitle];
+    }
+    if (doorType == "Exterior") {
+        const customSteps: DykeStepTitleKv = {
+            "Door Type": "Category",
+            Category: "Door",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
     }

@@ -20,17 +20,7 @@ export interface IDykeSalesItem {
         };
     };
 }
-export type SalesStatType =
-    | "production"
-    | "dispatch"
-    | "payment"
-    | "production assignment";
-export type SalesStatStatus = "pending" | "in progress" | "completed";
-export type TypedSalesStat = Omit<SalesStat, "status" | "type" | "id"> & {
-    type: SalesStatType;
-    id?: number;
-    status?: SalesStatStatus;
-};
+
 export type DykeDoorType =
     | "Interior"
     | "Exterior"

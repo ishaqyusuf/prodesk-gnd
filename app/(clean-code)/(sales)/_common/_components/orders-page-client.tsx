@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import { GetSalesOrdersDta } from "../data-access/sales-list-dta";
+import { GetSalesOrdersDta } from "../data-access/sales-dta";
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { Cells } from "./orders-page-cells";

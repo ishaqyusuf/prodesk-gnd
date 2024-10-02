@@ -1,10 +1,4 @@
-import { Prisma, SalesTaxes } from "@prisma/client";
-import salesData, { TaxCodes } from "./sales-data";
-import { GetSalesListQuery } from "../data-access/sales-list-dta";
-import {
-    anyDateQuery,
-    withDeleted,
-} from "@/app/(clean-code)/_common/utils/db-utils";
+import { SalesStatStatus } from "../../types";
 
 export function inToFt(_in) {
     let _ft = _in;
@@ -34,4 +28,10 @@ export function ftToIn(h) {
         ?.map((s) => s?.trim())
         .filter(Boolean);
     return `${+_in + +ft * 12}in`;
+}
+
+export function statStatus(percentage): SalesStatStatus {
+    if (percentage == 0) return "pending";
+    if (percentage == 100) return "completed";
+    return "in progress";
 }
