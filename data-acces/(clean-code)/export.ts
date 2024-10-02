@@ -1,6 +1,6 @@
 "use server";
+import { TypedExport } from "@/app/(clean-code)/_common/export/type";
 import { prisma } from "@/db";
-import { TypedExport } from "../../app/(clean-code)/_common/export/type";
 
 export async function getExportConfigs(type) {
     return (await prisma.exportConfig.findMany({

@@ -5,6 +5,7 @@ import { useTRContext } from "@/components/(clean-code)/data-table/use-data-tabl
 import { Progress } from "@/components/(clean-code)/progress";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 interface ItemProps {
     item: GetSalesOrdersDta["data"][number];
@@ -68,11 +69,16 @@ function Status({ item }: ItemProps) {
 }
 function Dispatch({ item }: ItemProps) {
     //  const []
+    const { theme } = useTheme();
     return (
         <TCell>
             <Menu
                 Trigger={
-                    <Button size="sm" className="" variant="secondary">
+                    <Button
+                        size="sm"
+                        className="h-auto py-1"
+                        variant={theme == "dark" ? "outline" : "secondary"}
+                    >
                         <Progress>
                             <Progress.Status>pickup</Progress.Status>
                             <TCell.Secondary>{item.salesDate}</TCell.Secondary>
@@ -97,11 +103,11 @@ function Dispatch({ item }: ItemProps) {
 }
 function Invoice({ item }: ItemProps) {
     const invoice = item.invoice;
-
+    const { theme } = useTheme();
     return (
         <TCell>
             <Button
-                variant="secondary"
+                variant={theme == "dark" ? "outline" : "secondary"}
                 className="flex flex-col items-end"
                 size="sm"
             >
@@ -110,9 +116,10 @@ function Invoice({ item }: ItemProps) {
                         value={invoice.total}
                         className={cn(
                             "font-semibold",
-                            !invoice.pending && "text-green-700/70 ",
+                            !invoice.pending &&
+                                "text-green-700/70 dark:text-green-600",
                             invoice.pending == invoice.total &&
-                                "  text-red-700/70 "
+                                "  text-red-700/70 dark:text-red-600"
                         )}
                     />
                 </TCell.Primary>

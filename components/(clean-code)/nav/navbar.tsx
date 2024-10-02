@@ -1,3 +1,4 @@
+import { ModeToggle } from "../layouts/mode-toggle";
 import { SheetMenu } from "./sheet-menu";
 import { UserNav } from "./user-nav";
 
@@ -15,9 +16,11 @@ export function Navbar({ title }: NavbarProps) {
                         {title}
                     </h1>
                 </div>
-                <div className="flex flex-1 items-center justify-end">
+                <div className="flex flex-1 items-center justify-end space-x-2">
                     {/* <ModeToggle /> */}
+
                     <div className="mx-4" id="navRightSlot"></div>
+                    <ModeToggle />
                     <UserNav />
                 </div>
             </div>

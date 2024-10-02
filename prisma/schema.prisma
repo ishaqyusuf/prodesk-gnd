@@ -1583,7 +1583,8 @@ model Session {
     sessionToken String   @unique @map("session_token")
     userId       Int
     expires      DateTime
-    user         Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
