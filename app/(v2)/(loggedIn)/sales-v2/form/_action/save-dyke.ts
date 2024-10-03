@@ -36,6 +36,7 @@ export async function saveDykeSales(data: DykeForm) {
                       where: { id: data.order.id },
                       data: {
                           ...rest,
+                          customerProfileId,
                           updatedAt: new Date(),
                           status: dealerMode ? "Evaluating" : rest.status,
                           //   customer: connect(customerId),

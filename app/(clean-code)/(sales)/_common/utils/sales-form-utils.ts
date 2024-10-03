@@ -7,7 +7,7 @@ function salesProfileChanged(form: DykeFormReturn, id) {
     const profile = data.data.profiles.find((p) => p.id == id);
     form.setValue("order.paymentTerm", profile?.meta?.net || ("None" as any));
     form.setValue("order.goodUntil", profile?.goodUntil);
-    return;
+    // return;
     setTimeout(() => {
         data.itemArray.map((item, index) => {
             item.item.formStepArray.map((formStep, formStepIndex) => {
@@ -20,16 +20,18 @@ function salesProfileChanged(form: DykeFormReturn, id) {
             });
             // return;
             Object.entries(item.multiComponent?.components).map(([k, v]) => {
-                if (item.item.meta.doorType == "Moulding") {
+                if (v.priceTags?.moulding?.price) {
                     const bPrice = v.priceTags.moulding.basePrice;
                     const price = salesProfileCost(form, bPrice);
                     // console.log({ bPrice, price });
                     console.log(item.multiComponent.components);
 
                     form.setValue(
-                        `itemArray.${index}.item.multiComponent.components.${k}.priceTags.moulding.price` as any,
+                        `itemArray.${index}.multiComponent.components.${k}.priceTags.moulding.price` as any,
                         price
                     );
+                    // console.log({ price, bPrice });
+                    v._doorForm;
                 }
             });
         });
