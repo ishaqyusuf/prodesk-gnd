@@ -5,6 +5,7 @@ import {
 } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { IStepProducts } from ".";
 import { getStepPricings } from "./_actions";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 interface Props {
     stepProducts: IStepProducts;
@@ -12,12 +13,10 @@ interface Props {
     stepArray: FormStepArray;
     stepIndex;
 }
-export async function initStepComponents({
-    stepProducts,
-    stepForm,
-    stepArray,
-    stepIndex,
-}: Props) {
+export async function initStepComponents(
+    form,
+    { stepProducts, stepForm, stepArray, stepIndex }: Props
+) {
     const doorSection = stepForm.step.title == "Door";
     const depUid = getDepsUid(stepIndex, stepArray, stepForm);
     const pricings = await getStepPricings(depUid, stepForm.step.id);
@@ -25,15 +24,20 @@ export async function initStepComponents({
     const stateDeps = getDykeStepState(_formSteps, stepForm);
     // console.log({ stateDeps });
     stepProducts = stepProducts.map((product) => {
-        if (product._metaData)
-            product._metaData.price = pricings.pricesByUid[product.uid];
+        if (product._metaData) {
+            const basePrice = (product._metaData.basePrice =
+                pricings.pricesByUid[product.uid]);
+            product._metaData.price = salesFormUtils.salesProfileCost(
+                form,
+                basePrice
+            );
+        }
         const shows = product.meta?.show || {};
         const _deleted = product.meta?.deleted || {};
         let hasShow = Object.keys(shows).filter(Boolean).length;
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
         // console.log({ showThis, shows });
-        const dItem = product.product?.title?.includes("2PNL FIBERGLASS");
         const isHidden = stateDeps.some((s) => product.meta.deleted?.[s.key]);
         product._metaData.hidden =
             product.deletedAt || isHidden
@@ -45,18 +49,6 @@ export async function initStepComponents({
                 : hasShow
                 ? !showThis
                 : isHidden;
-        if (dItem) {
-            console.log({ shows, showThis });
-        }
-        // if (showThis) {
-        //     console.log({
-        //         hidden: product._metaData.hidden,
-        //         dels: product.meta.deleted,
-        //         deleted: product.deletedAt,
-        //         _title: product.product?.title,
-        //     });
-        // }
-
         return product;
     });
     return stepProducts;

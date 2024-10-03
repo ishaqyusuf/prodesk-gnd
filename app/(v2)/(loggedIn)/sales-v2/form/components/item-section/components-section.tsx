@@ -159,7 +159,7 @@ export function DykeInvoiceItemStepSection({
                             </span>
                         </DevOnly>
                     </button>
-                    <div className={cn("px-2", ctx.dealerMode && "hidden")}>
+                    <div className={cn("px-2", !ctx.superAdmin && "hidden")}>
                         <Menu Icon={Icons.more}>
                             <MenuItem
                                 onClick={() =>

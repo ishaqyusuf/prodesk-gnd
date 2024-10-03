@@ -21,7 +21,7 @@ import { Sortable, SortableItem } from "@/components/ui/sortable";
 import { closestCorners } from "@dnd-kit/core";
 import { Card } from "@/components/ui/card";
 import { useModal } from "@/components/common/modal/provider";
-import { useDykeForm } from "../../../../_hooks/form-context";
+import { useDykeCtx, useDykeForm } from "../../../../_hooks/form-context";
 import {
     BatchSelectionAction,
     useProdBatchAction,
@@ -66,6 +66,7 @@ export function StepProducts({
         ...stepCtx
     } = stepItemCtx;
     const form = useDykeForm();
+    const dykeCtx = useDykeCtx();
     const { isVisible, elementRef } = useIsVisible({});
     useEffect(() => {
         setTimeout(() => {
@@ -142,7 +143,7 @@ export function StepProducts({
                                     </Card>
                                 </SortableItem>
                             ))}
-                        {allowAdd && (
+                        {allowAdd && dykeCtx.superAdmin && (
                             <div className="p-4">
                                 <button
                                     onClick={() => {

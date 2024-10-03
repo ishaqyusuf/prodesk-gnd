@@ -43,6 +43,7 @@ export function transformStepProducts(
         _metaData: {
             price: null,
             hidden: false,
+            basePrice: null,
         },
     };
 }

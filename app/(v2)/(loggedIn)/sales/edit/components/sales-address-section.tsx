@@ -25,7 +25,7 @@ export default function SalesAddressSection() {
                 onClick={() => {
                     modal?.openModal(<SalesAddressModal form={form} />);
                 }}
-                className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg  hover:bg-accent-foreground hover:text-white"
+                className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg dark:hover:bg-accent hover:bg-accent-foreground hover:text-white"
             >
                 <div className="absolute right-0 opacity-0 group-hover:opacity-100 ">
                     <Button size="sm" variant="secondary" className="h-8">

@@ -211,13 +211,13 @@ export function StepItem({
                 loadingStep ? "cursor-not-allowed" : "cursor-pointer"
             )}
         >
-            <batchCtx.CheckBox uid={item.uid} />
+            {formCtx.superAdmin && <batchCtx.CheckBox uid={item.uid} />}
 
             <div
                 className={cn(
                     !menuOpen && "hidden",
                     "absolute top-0 right-0  rounded-lg shadow-xl -m-2 bg-white z-10",
-                    formCtx.dealerMode ? "hidden" : "group-hover:flex"
+                    !formCtx.superAdmin ? "hidden" : "group-hover:flex"
                 )}
             >
                 <Menu open={menuOpen} onOpenChanged={menuOpenChange}>

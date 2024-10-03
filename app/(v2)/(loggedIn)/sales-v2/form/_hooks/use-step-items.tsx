@@ -32,6 +32,7 @@ import { initStepComponents } from "../components/step-items-list/item-section/c
 import { generateRandomString } from "@/lib/utils";
 import DeleteItemModal from "../components/modals/delete-item-modal";
 import { useModal } from "@/components/common/modal/provider";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(
     {} as any
@@ -106,7 +107,7 @@ export default function useStepItems({
         }
         if (_stepProducts)
             setStepProducts(
-                await initStepComponents({
+                await initStepComponents(form, {
                     stepProducts: _stepProducts,
                     stepForm,
                     stepArray: item.get.getFormStepArray(),
@@ -157,9 +158,24 @@ export default function useStepItems({
                 `itemArray.${item.rowIndex}.item.housePackageTool`
             );
             const stepTitle = stepForm.step?.title;
-            let price = 0;
+
+            const data: Partial<DykeStep["item"]> = {
+                value: val,
+                // qty: stepProd?.product?.qty,
+                basePrice: 0,
+                price: 0,
+                //   price: salesFormUtils.salesProfileCost(form, basePrice),
+                stepId: stepProd?.dykeStepId,
+                prodUid: stepProd.uid,
+                meta: {
+                    custom,
+                } as any,
+                // title: stepProd?.product?.description,
+            };
             if (!isMultiSection && stepTitle !== "Moulding") {
-                price = stepProd._metaData?.price || 0;
+                // basePrice = stepProd._metaData?.price || 0;
+                data.basePrice = stepProd._metaData?.basePrice;
+                data.price = stepProd._metaData?.price;
             }
 
             switch (stepTitle) {
@@ -254,17 +270,6 @@ export default function useStepItems({
                 case "Cutdown Height":
                     break;
             }
-            const data: Partial<DykeStep["item"]> = {
-                value: val,
-                // qty: stepProd?.product?.qty,
-                price,
-                stepId: stepProd?.dykeStepId,
-                prodUid: stepProd.uid,
-                meta: {
-                    custom,
-                } as any,
-                // title: stepProd?.product?.description,
-            };
 
             const formSteps = form.getValues(
                 `itemArray.${item.rowIndex}.item.formStepArray`

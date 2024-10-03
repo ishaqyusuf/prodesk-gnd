@@ -85,7 +85,7 @@ export default function HeaderSection({}) {
                     className={cn(
                         "flex justify-between flex-1  sm:items-center flex-col sm:flex-row",
                         scroll.isScrolled &&
-                            "bg-white py-2   shadow-sm border-b px-8"
+                            "bg-accent py-2   shadow-sm border-b px-8"
                     )}
                 >
                     <div className="">

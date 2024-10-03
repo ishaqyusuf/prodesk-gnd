@@ -64,7 +64,7 @@ export default function PricingDependenciesModal({
             stepForm
         );
         setStepProducts(
-            await initStepComponents({
+            await initStepComponents(form, {
                 stepForm,
                 stepProducts,
                 stepIndex,

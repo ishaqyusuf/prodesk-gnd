@@ -112,29 +112,33 @@ function ItemHeader({ item }: ItemHeaderProps) {
                     <Icons.trash className="w-4 h-4" />
                 </Button>
 
-                <Menu variant={"ghost"}>
-                    <MenuItem
-                        SubMenu={
-                            <div className="grid grid-cols-5 gap-1">
-                                {Array(dykeCtx.itemArray.fields.length)
-                                    .fill(null)
-                                    .map((_, pos) => (
-                                        <MenuItem
-                                            key={pos}
-                                            className="w-10 inline-flex justify-center"
-                                            disabled={pos == rowIndex}
-                                            onClick={() => move(pos)}
-                                        >
-                                            <span className="">{pos + 1}</span>
-                                        </MenuItem>
-                                    ))}
-                            </div>
-                        }
-                        Icon={Icons.move2}
-                    >
-                        Move To
-                    </MenuItem>
-                </Menu>
+                {dykeCtx.superAdmin && (
+                    <Menu variant={"ghost"}>
+                        <MenuItem
+                            SubMenu={
+                                <div className="grid grid-cols-5 gap-1">
+                                    {Array(dykeCtx.itemArray.fields.length)
+                                        .fill(null)
+                                        .map((_, pos) => (
+                                            <MenuItem
+                                                key={pos}
+                                                className="w-10 inline-flex justify-center"
+                                                disabled={pos == rowIndex}
+                                                onClick={() => move(pos)}
+                                            >
+                                                <span className="">
+                                                    {pos + 1}
+                                                </span>
+                                            </MenuItem>
+                                        ))}
+                                </div>
+                            }
+                            Icon={Icons.move2}
+                        >
+                            Move To
+                        </MenuItem>
+                    </Menu>
+                )}
             </div>
         </div>
     );
