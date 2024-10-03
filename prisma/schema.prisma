@@ -1092,9 +1092,9 @@ model SalesOrders {
     // deliveryProgress  OrderDeliveryProgress?
     // productionStatus SalesProductionStatus?
 
-    requests      DealerSalesRequest[]
-    stat          SalesStat[]
-    CustomerTypes CustomerTypes?       @relation(fields: [customerProfileId], references: [id])
+    requests     DealerSalesRequest[]
+    stat         SalesStat[]
+    salesProfile CustomerTypes?       @relation(fields: [customerProfileId], references: [id])
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerProfileId])

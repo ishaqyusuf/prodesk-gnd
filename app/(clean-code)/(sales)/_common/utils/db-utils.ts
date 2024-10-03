@@ -276,3 +276,73 @@ export const SalesIncludeAll = {
     deliveries: excludeDeleted,
     itemDeliveries: excludeDeleted,
 } satisfies Prisma.SalesOrdersInclude;
+
+export const dykeFormIncludes = (restoreQuery, includeStepPriceCount) =>
+    ({
+        items: {
+            where: {
+                ...restoreQuery,
+            },
+            include: {
+                formSteps: {
+                    where: {
+                        ...restoreQuery,
+                    },
+                    include: {
+                        step: {
+                            include: {
+                                _count: includeStepPriceCount,
+                            },
+                        },
+                    },
+                },
+                shelfItems: {
+                    where: {
+                        ...restoreQuery,
+                    },
+                },
+                housePackageTool: {
+                    // where: {
+                    //     ...restoreQuery
+                    // },
+                    include: {
+                        stepProduct: {
+                            include: {
+                                door: true,
+                            },
+                        },
+                        doors: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                        door: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                        molding: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        payments: true,
+        salesRep: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+        taxes: {
+            where: {
+                deletedAt: null,
+            },
+        },
+        customer: true,
+        shippingAddress: true,
+        billingAddress: true,
+    } satisfies Prisma.SalesOrdersInclude);

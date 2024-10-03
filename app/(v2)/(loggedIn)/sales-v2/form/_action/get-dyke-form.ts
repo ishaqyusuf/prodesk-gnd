@@ -80,6 +80,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             isDyke: true,
         },
         include: {
+            salesProfile: true,
             items: {
                 where: {
                     ...restoreQuery,
@@ -553,6 +554,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         shippingAddress,
         billingAddress,
         order: orderData,
+        salesCoefficient: 
         // currentSalesProfileCoefficient: ctx.profiles.find(p => p.title ==)
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
