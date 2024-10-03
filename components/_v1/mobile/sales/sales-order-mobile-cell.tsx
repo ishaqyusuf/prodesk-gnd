@@ -29,7 +29,8 @@ export default function SalesOrderMobileCell({
                         {order?.customer?.businessName || order?.customer?.name}
                     </PrimaryCellContent>
                     <SecondaryCellContent>
-                        {order?.customer?.phoneNo}
+                        {order?.shippingAddress?.phoneNo ||
+                            order?.billingAddress?.phone}
                     </SecondaryCellContent>
                 </div>
                 <SecondaryCellContent>
