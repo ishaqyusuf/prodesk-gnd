@@ -160,6 +160,7 @@ export interface HousePackageToolMeta {
     priceTags?: {
         moulding?: {
             price?: number | undefined;
+            basePrice?: number | undefined;
             addon?: number | undefined;
         };
         components?: number | undefined;

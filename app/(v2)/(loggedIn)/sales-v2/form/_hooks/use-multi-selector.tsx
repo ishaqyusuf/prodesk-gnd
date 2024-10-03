@@ -111,14 +111,16 @@ export function useMultiSelector(rowIndex, get) {
                     `${basePath}.toolId` as any,
                     stepProd.dykeProductId
                 );
-                const componentPrice = stepProd.product.meta?.priced
-                    ? stepProd.product.price
-                    : 0;
+                const componentPrice = stepProd._metaData.price || 0;
+                // .product.meta?.priced
+                // ? stepProd.product.price
+                // : 0;
                 const priceTags = (
                     isMoulding
                         ? {
                               moulding: {
                                   price: componentPrice,
+                                  basePrice: stepProd._metaData?.basePrice,
                                   addon: 0,
                               },
                               components: 0,
@@ -137,7 +139,7 @@ export function useMultiSelector(rowIndex, get) {
                 );
             if (!isMoulding) {
                 // form.setValue(`${basePath}.checked` as any, true);
-                sizeModal.open(safeTitle);
+                // sizeModal.open(safeTitle);
                 sizeModal.open(safeTitle, {
                     onProceed: () => {
                         onSelect();

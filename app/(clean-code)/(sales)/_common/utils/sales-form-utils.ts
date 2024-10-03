@@ -14,6 +14,13 @@ function salesProfileChanged(form: DykeFormReturn) {
             );
             // formStep.item.price
         });
+        Object.entries(item.multiComponent?.components).map(([k, v]) => {
+            if (item.item.meta.doorType == "Moulding") {
+                console.log("....");
+                const price = v.priceTags.moulding.price;
+            }
+            // if(v.)
+        });
     });
 }
 
@@ -23,6 +30,8 @@ function salesProfileCost(form: DykeFormReturn, baseCost) {
     const defaultProfile = data.data.defaultProfile;
     const profiles = data.data.profiles;
     const profileTitle = data.order.meta.sales_profile;
+    console.log(profileTitle);
+
     const profile = profiles.find((p) => p.title == profileTitle);
     if (!profile || profile.coefficient == 0) return baseCost;
     return baseCost / (profile.coefficient || 1);

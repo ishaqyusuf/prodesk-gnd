@@ -174,7 +174,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const session = await user();
 
     const _meta: Partial<ISalesOrderMeta> = {
-        sales_profile: ctx.defaultProfile?.title,
+        // sales_profile: ctx.defaultProfile?.title,
         sales_percentage: ctx.defaultProfile?.coefficient,
         ccc_percentage: +ctx?.settings?.ccc,
         tax: true,
@@ -553,6 +553,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         shippingAddress,
         billingAddress,
         order: orderData,
+        // currentSalesProfileCoefficient: ctx.profiles.find(p => p.title ==)
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
