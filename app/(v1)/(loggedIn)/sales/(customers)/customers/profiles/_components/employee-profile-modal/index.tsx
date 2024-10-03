@@ -30,8 +30,10 @@ export default function CustomerProfileModal({
     async function submit() {
         const data = form.getValues();
         try {
-            data.coefficient = parseInt((data.coefficient as any) || 0);
-            data.meta.goodUntil = parseInt(data.meta.goodUntil as any);
+            console.log(data.coefficient);
+            data.coefficient = Number(data.coefficient as any);
+
+            data.meta.goodUntil = Number(data.meta.goodUntil as any);
 
             await saveCustomerProfile(data);
 
