@@ -1,7 +1,7 @@
 "use client";
 
 import { InfoLine } from "../../../sales/edit/components/sales-details-section";
-import { useDykeForm } from "../_hooks/form-context";
+import { useDykeCtx, useDykeForm } from "../_hooks/form-context";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { useEffect, useState } from "react";
 import ControlledInput from "@/components/common/controls/controlled-input";
@@ -12,7 +12,7 @@ import ControlledCheckbox from "@/components/common/controls/controlled-checkbox
 export default function SalesMetaData() {
     const form = useDykeForm();
     const profiles = form.getValues("data.profiles");
-
+    const ctx = useDykeCtx();
     const profile = form.watch("order.meta.sales_profile");
     useEffect(() => {
         const p = profiles.find((p) => p.label == profile);
@@ -89,10 +89,12 @@ export default function SalesMetaData() {
             <InfoLine label="Tax">
                 <ControlledCheckbox
                     switchInput
+                    control={form.control}
                     className="h-8"
                     name="order.meta.tax"
                 />
             </InfoLine>
+
             <InfoLine label="Component Price">
                 <ControlledCheckbox
                     switchInput
@@ -100,6 +102,16 @@ export default function SalesMetaData() {
                     name="order.meta.calculatedPriceMode"
                 />
             </InfoLine>
+            {ctx.superAdmin && (
+                <InfoLine label="Price Admin">
+                    <ControlledCheckbox
+                        switchInput
+                        control={form.control}
+                        className="h-8"
+                        name="adminMode"
+                    />
+                </InfoLine>
+            )}
             {/* </div> */}
         </div>
     );

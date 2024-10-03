@@ -26,11 +26,12 @@ export default function SalesFormComponent({ defaultValues }: Props) {
         },
     });
 
-    const [components, dealerMode, status, superAdmin] = form.watch([
+    const [components, dealerMode, status, superAdmin, adminMode] = form.watch([
         "itemArray.1.multiComponent.components",
         "dealerMode",
         "status",
         "superAdmin",
+        "adminMode",
     ]);
     const s: DykeForm = {} as any;
 
@@ -47,6 +48,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
         dealerMode,
         superAdmin,
         status,
+        adminMode,
     } as IDykeFormContext;
 
     return (

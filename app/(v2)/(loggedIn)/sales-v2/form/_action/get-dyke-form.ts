@@ -549,6 +549,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         customer,
         dealerMode,
         superAdmin: auth.user.id == 1,
+        adminMode: true,
         shippingAddress,
         billingAddress,
         order: orderData,

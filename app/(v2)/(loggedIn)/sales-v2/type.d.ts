@@ -166,6 +166,7 @@ export interface IDykeFormContext {
     startLoadingStep;
     loadingStep: boolean;
     dealerMode: boolean;
+    adminMode: boolean;
     superAdmin: boolean;
     itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">;
     status: SalesStatus;

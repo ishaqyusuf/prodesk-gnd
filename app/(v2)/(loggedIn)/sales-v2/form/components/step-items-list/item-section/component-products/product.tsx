@@ -128,14 +128,37 @@ export function StepItem({
                     onClick={onClick}
                     className="border-b realtive flex-1 p-0 py-4"
                 >
-                    {item.meta?.stepSequence?.length ? (
-                        <div className="absolute top-0 right-0">
+                    <div className="absolute p-2 z-10 px-4 top-0 right-0 flex gap-4">
+                        {item.meta?.stepSequence?.length ? (
                             <Dot className="w-8 h-8 text-cyan-600" />
-                        </div>
-                    ) : (
-                        <></>
-                    )}
+                        ) : null}
+                        {stepForm.step.title == "Door" ? (
+                            <span className="inline-flex space-x-1 text-muted-foreground">
+                                {/* <Icons.dollar className="w-4 h-4" /> */}
+                                <span>
+                                    {doorPriceCount} {" price found"}
+                                </span>
+                            </span>
+                        ) : (
+                            item._metaData.basePrice > 0 && (
+                                <div className="flex">
+                                    {formCtx.adminMode && (
+                                        <Badge variant="secondary">
+                                            <Money
+                                                value={item._metaData.basePrice}
+                                            />
+                                        </Badge>
+                                    )}
+                                    <Badge variant="destructive">
+                                        <Money value={item._metaData.price} />
+                                    </Badge>
+                                </div>
+                            )
+                        )}
+                    </div>
+
                     <ProductImage item={item} />
+                    {/* <div className="absolute top-0"></div> */}
                 </CardHeader>
                 <CardContent
                     onClick={onClick}
@@ -147,23 +170,6 @@ export function StepItem({
                             ? item.product?.value || item.product.title
                             : item.product.title}
                     </CardTitle>
-                    <CardDescription className="line-clamp-1">
-                        {/* {formatPrice(product.price)} */}
-                        {stepForm.step.title == "Door" ? (
-                            <span className="inline-flex space-x-1 text-muted-foreground">
-                                {/* <Icons.dollar className="w-4 h-4" /> */}
-                                <span>
-                                    {doorPriceCount} {" price found"}
-                                </span>
-                            </span>
-                        ) : (
-                            item._metaData.price > 0 && (
-                                <Badge>
-                                    <Money value={item._metaData.price} />
-                                </Badge>
-                            )
-                        )}
-                    </CardDescription>
                 </CardContent>
             </>
         );
