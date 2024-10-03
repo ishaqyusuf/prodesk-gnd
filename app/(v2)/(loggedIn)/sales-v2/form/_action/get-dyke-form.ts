@@ -193,6 +193,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         type,
         isDyke: true,
         customerId: dealer?.dealerId,
+        customerProfileId: ctx.defaultProfile.id,
         shippingAddress: dealer?.primaryShippingAddress || ({} as any),
         billingAddress: dealer?.primaryBillingAddress || ({} as any),
         salesProfile: ctx.defaultProfile as any,
@@ -312,6 +313,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         shippingAddress,
         billingAddress,
         payments,
+        salesProfile,
         ...orderData
     } = typedForm;
     let footerPrices: {
@@ -554,6 +556,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         adminMode: true,
         shippingAddress,
         billingAddress,
+        salesProfile,
         order: orderData,
         // salesCoefficient:
         // currentSalesProfileCoefficient: ctx.profiles.find(p => p.title ==)

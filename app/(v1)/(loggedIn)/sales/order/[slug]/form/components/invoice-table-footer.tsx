@@ -103,7 +103,7 @@ function Footer({
         <div
             className={cn(
                 className,
-                "shadow-xl bg-slate-50 border-slate-300 border z-10",
+                "shadow-xl bg-slate-50 dark:bg-muted border-slate-300 border z-10",
                 floatingFooter ? "rounded-full" : "rounded p-2"
             )}
         >

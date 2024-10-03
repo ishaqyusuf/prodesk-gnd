@@ -139,14 +139,14 @@ export function SalesCustomerModal({
             onOpenChange={(e) => {
                 if (!e) setOpen(e);
                 else {
-                    const [title, coefficient] = form.getValues([
-                        "meta.sales_profile",
-                        "meta.sales_percentage",
-                    ]);
-                    addressForm.setValue("profile", {
-                        coefficient,
-                        title,
-                    } as any);
+                    // const [title, coefficient] = form.getValues([
+                    //     "meta.sales_profile",
+                    //     "meta.sales_percentage",
+                    // ]);
+                    // addressForm.setValue("profile", {
+                    //     coefficient,
+                    //     title,
+                    // } as any);
                     setTab("billingAddress");
                 }
             }}

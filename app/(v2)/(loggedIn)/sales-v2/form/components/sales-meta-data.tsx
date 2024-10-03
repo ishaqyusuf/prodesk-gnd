@@ -8,17 +8,16 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 export default function SalesMetaData() {
     const form = useDykeForm();
     const profiles = form.getValues("data.profiles");
     const ctx = useDykeCtx();
-    const profile = form.watch("order.meta.sales_profile");
+    const salesProfileId = form.watch("order.customerProfileId");
     useEffect(() => {
-        const p = profiles.find((p) => p.label == profile);
-        form.setValue("order.paymentTerm", p?.meta?.net as any);
-        form.setValue("order.goodUntil", p?.goodUntil);
-    }, [profile]);
+        salesFormUtils.salesProfileChanged(form, salesProfileId);
+    }, [salesProfileId]);
     const type = form.getValues("order.type");
     return (
         <div className="xl:col-span-3 grid gap-2 xl:grid-cols-2 xl:gap-x-4">
@@ -30,8 +29,16 @@ export default function SalesMetaData() {
                     control={form.control}
                     size="sm"
                     className="min-w-[150px]"
-                    name="order.meta.sales_profile"
-                    options={profiles}
+                    name="order.customerProfileId"
+                    titleKey="title"
+                    valueKey="id"
+                    options={[
+                        {
+                            title: "None",
+                            id: null,
+                        } as (typeof profiles)[number],
+                        ...profiles,
+                    ]}
                 />
             </InfoLine>
             <InfoLine label="Q.B Order #">

@@ -3,7 +3,7 @@
     @apply p-1 px-4 h-10 !important;
 }
 #dykeFooter th {
-    @apply whitespace-nowrap border-r bg-slate-50;
+    @apply whitespace-nowrap border-r bg-slate-50 dark:bg-muted;
 }
 #dykeFooter td {
     @apply inline-flex justify-end items-end  !important;

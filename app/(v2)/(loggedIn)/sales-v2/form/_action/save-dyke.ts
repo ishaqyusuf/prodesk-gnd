@@ -23,6 +23,7 @@ export async function saveDykeSales(data: DykeForm) {
                 pickupId,
                 prodId,
                 billingAddressId,
+                customerProfileId,
                 ...rest
             } = data.order;
             // delete (rest as any).customer;

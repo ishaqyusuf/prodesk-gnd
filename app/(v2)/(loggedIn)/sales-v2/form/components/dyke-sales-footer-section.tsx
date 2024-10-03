@@ -280,7 +280,7 @@ function FloatingFooter() {
             <div className="hidden  md:block" />
             <div className="lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px] mx-2">
                 {/* <Footer floatingFooter /> */}
-                <div className="flex rounded-lg border bg-white p-1 shadow">
+                <div className="flex rounded-lg border bg-white dark:bg-muted p-1 shadow">
                     <Table>
                         <TableBody>
                             <TableRow>
@@ -317,7 +317,9 @@ function Footer() {
                 <Table className="table-fixed  border rounded">
                     <TableHeader>
                         <TableRow>
-                            <TableHead colSpan={2}>Estimate</TableHead>
+                            <TableHead className="" colSpan={2}>
+                                Estimate
+                            </TableHead>
                             {/* <TableHead colSpan={1}>a</TableHead> */}
                         </TableRow>
                     </TableHeader>

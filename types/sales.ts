@@ -74,7 +74,6 @@ export type ISalesOrderMeta = {
     ccc_percentage;
     labor_cost;
     discount;
-    sales_profile;
     sales_percentage;
     po;
     // manual_estimate: Boolean;
