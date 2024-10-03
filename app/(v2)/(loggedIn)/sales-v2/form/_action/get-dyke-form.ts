@@ -195,7 +195,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         customerId: dealer?.dealerId,
         shippingAddress: dealer?.primaryShippingAddress || ({} as any),
         billingAddress: dealer?.primaryBillingAddress || ({} as any),
-
+        salesProfile: ctx.defaultProfile as any,
         status: dealerMode ? "Evaluating" : "Active",
         taxPercentage: +ctx.settings?.tax_percentage,
         paymentTerm: ctx.defaultProfile?.meta?.net,
@@ -225,6 +225,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
               },
         createdAt: dayjs().toISOString() as any,
     };
+    // newOrderForm.salesProfile.
     // const {} = order;
     const { taxes = [], ...form } = (order || newOrderForm) as any as OrderType;
 
@@ -554,7 +555,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         shippingAddress,
         billingAddress,
         order: orderData,
-        salesCoefficient: 
+        // salesCoefficient:
         // currentSalesProfileCoefficient: ctx.profiles.find(p => p.title ==)
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
