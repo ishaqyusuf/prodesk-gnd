@@ -177,12 +177,13 @@ export async function saveDykeSales(data: DykeForm) {
                             _doorFormDefaultValue,
                             doorId,
                             stepProduct,
+                            priceData,
                             ...hptData
                         } = housePackageTool; // || ({} as any as typeof<housePackageTool>);
 
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
-                            ([dimension, doorData]) => {
+                            ([dimension, { priceData, ...doorData }]) => {
                                 if (doorData && typeof doorData == "object")
                                     doors?.push({
                                         ...(doorData || {}),
@@ -259,7 +260,11 @@ export async function saveDykeSales(data: DykeForm) {
                     await Promise.all(
                         formStepArray.map(
                             async ({
-                                item: { id: stepFormId, ...stepForm },
+                                item: {
+                                    id: stepFormId,
+                                    priceData,
+                                    ...stepForm
+                                },
                                 step,
                             }) => {
                                 const newStep = !stepFormId;

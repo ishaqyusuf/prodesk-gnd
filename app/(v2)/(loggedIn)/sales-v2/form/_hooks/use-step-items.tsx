@@ -170,6 +170,7 @@ export default function useStepItems({
                 meta: {
                     custom,
                 } as any,
+
                 // title: stepProd?.product?.description,
             };
             if (!isMultiSection && stepTitle !== "Moulding") {
