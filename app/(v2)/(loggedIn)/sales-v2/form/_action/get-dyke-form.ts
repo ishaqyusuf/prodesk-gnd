@@ -110,12 +110,16 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                         //     ...restoreQuery
                         // },
                         include: {
+                            priceData: true,
                             stepProduct: {
                                 include: {
                                     door: true,
                                 },
                             },
                             doors: {
+                                include: {
+                                    priceData: true,
+                                },
                                 where: {
                                     ...restoreQuery,
                                 },
