@@ -33,6 +33,7 @@ import { isComponentType } from "../../overview/is-component-type";
 import { includeStepPriceCount } from "../../dyke-utils";
 
 import { salesTaxForm } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
+import { ComponentPrice } from "@prisma/client";
 
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
@@ -244,7 +245,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             meta,
             items: form.items.map((item) => {
                 let _doorForm: {
-                    [dimension in string]: OrderType["items"][number]["housePackageTool"]["doors"][number];
+                    [dimension in string]: DykeSalesDoor;
+                    // OrderType["items"][number]["housePackageTool"]["doors"][number];
                 } = {};
                 let _doorFormDefaultValue: {
                     [dimension in string]: { id: number };
@@ -255,9 +257,11 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                 item.housePackageTool?.doors?.map((d) => {
                     if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
                     let dim = d.dimension?.replaceAll('"', "in");
-                    if (!d.priceId) d.priceData = {} as any;
-                    _doorForm[dim] = { ...d };
-                    // if(item.housePackageTool.)
+                    if (!d.priceId)
+                        d.priceData = {
+                            baseUnitCost: d.jambSizePrice,
+                        } as any;
+                    _doorForm[dim] = { ...d } as any;
                     _doorFormDefaultValue[dim] = {
                         id: d.id,
                     };

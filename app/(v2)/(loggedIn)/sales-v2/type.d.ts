@@ -1,4 +1,5 @@
 import {
+    ComponentPrice,
     DykeSalesDoors,
     DykeSalesShelfItem,
     DykeShelfProducts,
@@ -144,7 +145,7 @@ export type MultiDyke = {
                 };
             };
             _doorForm: {
-                [dim in string]: DykeSalesDoor;
+                [dim in string]: DykeSalesDoor & { priceData: ComponentPrice };
             };
             uid?;
             priceTags?: HousePackageToolMeta["priceTags"];
@@ -158,6 +159,7 @@ export type MultiDyke = {
 
 export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
     meta: DykeSalesDoorMeta;
+    priceData?: Partial<ComponentPrice>;
 };
 export interface DykeSalesDoorMeta {
     _doorPrice: number | null;
