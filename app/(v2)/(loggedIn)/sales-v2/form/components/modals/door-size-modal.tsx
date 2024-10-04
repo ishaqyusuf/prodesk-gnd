@@ -102,6 +102,8 @@ export default function DoorSizeModal({
         };
         const _formData = _form.getValues();
         let newDoorForm = {};
+        console.log({ _formData, doors });
+
         Object.entries(_formData).map(
             ([size, { jambSizePrice, lhQty, rhQty, swing }]) => {
                 const existingData = doors[size] || {
@@ -111,6 +113,8 @@ export default function DoorSizeModal({
                 };
                 const _size = sizes.find((s) => s.dim == size);
                 const price = (priceTags.doorSizePriceTag[size] = _size.price);
+                // console.log(">>>>>>");
+
                 newDoorForm[size] = {
                     ...existingData,
                     swing,
@@ -185,7 +189,7 @@ export default function DoorSizeModal({
                                                 >
                                                     {size.basePrice > 0 && (
                                                         <div className="flex gap-2">
-                                                            <Badge variant={""}>
+                                                            <Badge>
                                                                 <Money
                                                                     value={
                                                                         size.basePrice

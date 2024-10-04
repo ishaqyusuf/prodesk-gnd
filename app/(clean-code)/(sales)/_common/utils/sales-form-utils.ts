@@ -67,6 +67,7 @@ function updateSalesComponentPrice(
     // set tax percentage
     pData.salesTotalCost = formatMoney(qty * pData.salesUnitCost);
     // pData.grandTotal = tax + salesTotal etc.
+    console.log(pData);
     return pData;
 }
 function updateSalesComponentPriceQty(

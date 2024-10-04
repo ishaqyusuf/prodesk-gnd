@@ -14,6 +14,7 @@ import {
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { dealerSession } from "@/app/(v1)/_actions/utils";
 import { saveSalesTaxDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
+import { saveSalesComponentPricing } from "@/app/(clean-code)/(sales)/_common/data-access/sales-form-dta";
 
 export async function saveDykeSales(data: DykeForm) {
     const dealerMode = await dealerSession();
@@ -190,11 +191,15 @@ export async function saveDykeSales(data: DykeForm) {
 
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
-                            ([dimension, { priceData, ...doorData }]) => {
+                            ([
+                                dimension,
+                                { priceData: doorPriceData, ...doorData },
+                            ]) => {
                                 if (doorData && typeof doorData == "object") {
                                     createPrices.push({
-                                        ...priceData,
-                                        // salesItemId
+                                        ...doorPriceData,
+                                        salesItemId: itemId,
+                                        salesId: order.id,
                                     });
                                     doors?.push({
                                         ...(doorData || {}),
@@ -210,6 +215,11 @@ export async function saveDykeSales(data: DykeForm) {
 
                             if (!hptId && newHpt) hptId = ++lastHptId;
                             hptData.meta = hptData.meta || {};
+                            createPrices.push({
+                                ...priceData,
+                                salesItemId: itemId,
+                                salesId: order.id,
+                            });
                             if (newHpt) {
                                 createHpts.push({
                                     ...hptData,
@@ -219,8 +229,6 @@ export async function saveDykeSales(data: DykeForm) {
                                     meta: hptData.meta as any,
                                 });
                             } else {
-                                console.log({ hptData, hptId });
-
                                 await prisma.housePackageTools.update({
                                     where: { id: hptId },
                                     data: {
@@ -419,6 +427,8 @@ export async function saveDykeSales(data: DykeForm) {
                     })
             );
             await saveSalesTaxDta(data, order.id);
+
+            await saveSalesComponentPricing(createPrices);
             return { order, createHpts };
         };
     // const resp = await prisma.$transaction(tx, {
