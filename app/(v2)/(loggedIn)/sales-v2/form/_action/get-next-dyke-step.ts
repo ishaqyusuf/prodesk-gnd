@@ -28,11 +28,17 @@ export async function getNextDykeStepAction(
         stepProd.nextStepId = nextStepId;
     }
     if (product) {
-        const customStep = await CustomStepForm(product, step.title, doorType);
+        const customStep = await CustomStepForm(
+            product,
+            step.title,
+            doorType,
+            step.value
+        );
         if (customStep) return [..._steps, customStep];
     }
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
 
+    console.log(step);
     console.log({ nextStepId, stepValueId, t: step.title });
     if (!nextStepId) {
         // const path = await prisma.
@@ -120,6 +126,15 @@ export async function getNextDykeStepAction(
         }
         return [..._steps, stepForm];
     }
+    const __s = await prisma.dykeSteps.findMany({
+        where: {
+            title: step.title,
+        },
+    });
+    console.log(__s);
+    console.log(step.title);
+
+    console.log("NOT FOUND", prevStepValueId);
     return null;
 }
 function hiddenSteps(title, doorType: DykeDoorType) {
@@ -176,7 +191,8 @@ function isCustomStep(stepTitle, doorType: DykeDoorType) {
 async function CustomStepForm(
     { title: productTitle },
     stepTitle,
-    doorType: DykeDoorType
+    doorType: DykeDoorType,
+    stepVal
 ) {
     stepTitle = stepTitle.trim();
 
@@ -185,6 +201,8 @@ async function CustomStepForm(
         "Cutdown Height": "House Package Tool",
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
+    console.log({ title });
+
     if (doorType == "Bifold") {
         // console.log(doorType);
 
@@ -197,12 +215,13 @@ async function CustomStepForm(
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
     }
-    if (doorType == "Exterior") {
+    if (doorType == "Exterior" && !title) {
         const customSteps: DykeStepTitleKv = {
             "Door Type": "Category",
             Category: "Door",
         };
         title = customSteps[productTitle] || customSteps[stepTitle];
+        // console.log(stepVal);
     }
     // if (doorType == "Exterior") {
     //     // console.log(doorType);
