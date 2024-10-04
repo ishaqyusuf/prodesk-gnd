@@ -8,6 +8,7 @@ export async function saveSalesComponentPricing(
     prices: Partial<ComponentPrice>[]
 ) {
     // console.log(prices);
+    return;
     await Promise.all(
         prices.map(async (price) => {
             await prisma.componentPrice.upsert({
