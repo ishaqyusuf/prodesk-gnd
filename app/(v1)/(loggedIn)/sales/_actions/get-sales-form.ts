@@ -163,7 +163,7 @@ async function newSalesFormAction(
         type: query.type,
         status: "Active",
         meta: {
-            sales_profile: ctx.defaultProfile?.title,
+            // sales_profile: ctx.defaultProfile?.title,
             sales_percentage: ctx.defaultProfile?.coefficient,
         },
         salesRepId: session?.id,
@@ -187,8 +187,9 @@ async function newSalesFormAction(
         });
         if (customer) {
             form.customerId = customer.id;
-            form.meta.sales_profile =
-                customer.profile?.title || ctx.defaultProfile?.title;
+            // form.meta.sales_profile =
+            // customer.profile?.title || ctx.defaultProfile?.title;
+            form.customerProfileId = ctx.defaultProfile?.id;
             form.meta.sales_percentage =
                 customer.profile?.coefficient || ctx?.settings?.sales_margin;
             const addr = {
