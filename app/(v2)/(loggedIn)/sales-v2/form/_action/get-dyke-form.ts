@@ -243,7 +243,9 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             ...form,
             meta,
             items: form.items.map((item) => {
-                let _doorForm: { [dimension in string]: DykeSalesDoor } = {};
+                let _doorForm: {
+                    [dimension in string]: OrderType["items"][number]["housePackageTool"]["doors"][number];
+                } = {};
                 let _doorFormDefaultValue: {
                     [dimension in string]: { id: number };
                 } = {};
@@ -253,8 +255,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                 item.housePackageTool?.doors?.map((d) => {
                     if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
                     let dim = d.dimension?.replaceAll('"', "in");
-
-                    _doorForm[dim] = { ...d } as any;
+                    if (!d.priceId) d.priceData = {} as any;
+                    _doorForm[dim] = { ...d };
                     // if(item.housePackageTool.)
                     _doorFormDefaultValue[dim] = {
                         id: d.id,
@@ -291,6 +293,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                         .map((item) => ({
                             ...item,
                             meta: item.meta as any as DykeFormStepMeta,
+
                             step: {
                                 ...item.step,
                                 meta: item.step.meta || {},
@@ -461,7 +464,11 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                             toolId: isMoulding
                                 ? getMouldingId()
                                 : item.housePackageTool?.dykeDoorId,
-                            _doorForm: item.housePackageTool?._doorForm || {},
+                            _doorForm:
+                                item.housePackageTool?._doorForm ||
+                                ({
+                                    priceData: {},
+                                } as any),
                             hptId: item.housePackageTool?.id as any,
                             doorTotalPrice: price,
                             priceTags,

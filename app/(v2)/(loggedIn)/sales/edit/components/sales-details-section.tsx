@@ -19,7 +19,7 @@ export default function SalesDetailsSection() {
                 <span>{ctx?.data?.form?.salesRep?.name}</span>
             </InfoLine>
             <InfoLine label="Profile">
-                <SelectControl<ISalesForm>
+                {/* <SelectControl<ISalesForm>
                     name="meta.sales_profile"
                     options={transformOptions(
                         ctx.data.ctx.profiles,
@@ -28,7 +28,7 @@ export default function SalesDetailsSection() {
                     )}
                     className="h-8 min-w-[150px]"
                     placeholder="Profile"
-                />
+                /> */}
             </InfoLine>
             <InfoLine label="Q.B Order #">
                 <InputControl<ISalesForm>
