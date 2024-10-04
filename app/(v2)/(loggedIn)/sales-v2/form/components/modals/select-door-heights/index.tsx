@@ -41,6 +41,7 @@ interface Props {
     stepProd?: IStepProducts[0];
     productTitle: string;
     rowIndex;
+    superAdmin?: boolean;
     onSubmit?(heights: SizeForm);
 }
 type ComponentHeight =
@@ -51,6 +52,7 @@ export default function SelectDoorHeightsModal({
     rowIndex,
     onSubmit,
     productTitle,
+    superAdmin,
     stepProd,
 }: Props) {
     const safeTitle = safeFormText(productTitle);

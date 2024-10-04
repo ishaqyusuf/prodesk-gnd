@@ -41,6 +41,9 @@ export interface DykeForm
     extends Awaited<ReturnType<typeof getDykeFormAction>> {}
 export type FormStepArray = DykeForm["itemArray"][0]["item"]["formStepArray"];
 export type DykeFormItem = DykeForm["itemArray"][0];
+export type DykeDoorForm =
+    DykeFormItem["multiComponent"]["components"][number]["_doorForm"];
+export type DykeDoorSizeForm = DykeDoorForm[number];
 export type SaveMode = "close" | "new" | "default";
 // export interface DykeForm {
 //     items: { [index in string]: DykeItemForm };

@@ -1,6 +1,6 @@
 import { useModal } from "@/components/common/modal/provider";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { DykeForm } from "../../../type";
+import { DykeDoorForm, DykeForm } from "../../../type";
 import { Form } from "@/components/ui/form";
 import Modal from "@/components/common/modal";
 import { useEffect } from "react";
@@ -20,18 +20,22 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { HousePackageToolMeta } from "@/types/sales";
 import ControlledSelect from "@/components/common/controls/controlled-select";
-import { cn } from "@/lib/utils";
+import { cn, sum } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import Button from "@/components/common/button";
+import { useDykeCtx } from "../../_hooks/form-context";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 interface Props {
     rowIndex;
     productTitle;
     form: UseFormReturn<DykeForm>;
     onProceed?;
+    superAdmin?: boolean;
 }
 export function useDoorSizeModal(form, rowIndex) {
     const modal = useModal();
+    const ctx = useDykeCtx();
     return {
         open(productTitle, args = {}) {
             modal.openModal(
@@ -39,6 +43,7 @@ export function useDoorSizeModal(form, rowIndex) {
                     form={form}
                     productTitle={productTitle}
                     rowIndex={rowIndex}
+                    superAdmin={ctx.superAdmin}
                     {...args}
                 />
             );
@@ -50,6 +55,7 @@ export default function DoorSizeModal({
     productTitle,
     form,
     onProceed,
+    superAdmin,
 }: Props) {
     const basePath = `itemArray.${rowIndex}.multiComponent.components.${productTitle}`;
     const defaultValues = {};
@@ -70,8 +76,9 @@ export default function DoorSizeModal({
 
     useEffect(() => {
         const _values = {};
-        const doors = form.getValues(`${basePath}._doorForm` as any);
-        console.log({ doors });
+        const doors = form.getValues(
+            `${basePath}._doorForm` as any
+        ) as DykeDoorForm;
         Object.entries(doors || {}).map(([size, doorForm]) => {
             const { swing, jambSizePrice, lhQty, rhQty } = doorForm as any;
             _values[size] = {
@@ -85,7 +92,8 @@ export default function DoorSizeModal({
     }, []);
     const modal = useModal();
     function onSubmit() {
-        const doors = form.getValues(`${basePath}._doorForm` as any) || {};
+        const doors: DykeDoorForm =
+            form.getValues(`${basePath}._doorForm` as any) || {};
 
         const priceTags: HousePackageToolMeta["priceTags"] = form.getValues(
             `${basePath}.priceTags` as any
@@ -96,16 +104,25 @@ export default function DoorSizeModal({
         let newDoorForm = {};
         Object.entries(_formData).map(
             ([size, { jambSizePrice, lhQty, rhQty, swing }]) => {
-                const existingData = doors[size] || {};
-                const price = (priceTags.doorSizePriceTag[size] = sizes.find(
-                    (s) => s.dim == size
-                )?.price);
+                const existingData = doors[size] || {
+                    priceData: {
+                        type: "door",
+                    },
+                };
+                const _size = sizes.find((s) => s.dim == size);
+                const price = (priceTags.doorSizePriceTag[size] = _size.price);
                 newDoorForm[size] = {
                     ...existingData,
                     swing,
                     lhQty,
                     rhQty,
                     jambSizePrice: price,
+                    priceData: salesFormUtils.componentPrice.update(
+                        form,
+                        existingData.priceData,
+                        _size.basePrice,
+                        sum([lhQty, rhQty])
+                    ),
                 };
             }
         );
@@ -166,23 +183,30 @@ export default function DoorSizeModal({
                                                 <TableCol.Secondary
                                                     className={cn("")}
                                                 >
-                                                    <Badge
-                                                        variant={
-                                                            size.price > 0
-                                                                ? "default"
-                                                                : "secondary"
-                                                        }
-                                                    >
-                                                        {!size.price ? (
-                                                            <>-</>
-                                                        ) : (
-                                                            <Money
-                                                                value={
-                                                                    size.price
-                                                                }
-                                                            />
-                                                        )}
-                                                    </Badge>
+                                                    {size.basePrice > 0 && (
+                                                        <div className="flex gap-2">
+                                                            <Badge variant={""}>
+                                                                <Money
+                                                                    value={
+                                                                        size.basePrice
+                                                                    }
+                                                                />
+                                                            </Badge>
+                                                            {superAdmin && (
+                                                                <Badge
+                                                                    variant={
+                                                                        "destructive"
+                                                                    }
+                                                                >
+                                                                    <Money
+                                                                        value={
+                                                                            size.price
+                                                                        }
+                                                                    />
+                                                                </Badge>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </TableCol.Secondary>
                                             </div>
                                         </TableCell>

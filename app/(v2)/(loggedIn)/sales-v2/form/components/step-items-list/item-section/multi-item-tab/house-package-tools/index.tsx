@@ -12,7 +12,7 @@ import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/components/common/modal/provider";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
-import SelectDoorHeightsModal from "../../../../modals/select-door-heights";
+
 import { getDykeStepDoorByProductId } from "../../../../../_action/get-dyke-step-doors";
 import { useDoorSizes } from "../../../../../_hooks/use-door-size";
 import { cn } from "@/lib/utils";
@@ -39,15 +39,16 @@ export default function HousePackageTool({ componentTitle }) {
             dykeProductId
         );
         // console.log(stepProd);
-        modal.openModal(
-            <SelectDoorHeightsModal
-                form={form}
-                rowIndex={item.rowIndex}
-                stepProd={stepProd}
-                productTitle={componentTitle}
-                onSubmit={_setSizeList}
-            />
-        );
+        // modal.openModal(
+        //     <SelectDoorHeightsModal
+        //         form={form}
+        //         rowIndex={item.rowIndex}
+        //         stepProd={stepProd}
+        //         productTitle={componentTitle}
+        //         onSubmit={_setSizeList}
+        //         superAdmin={ctx.superAdmin}
+        //     />
+        // );
     }
     return (
         <>

@@ -201,7 +201,7 @@ async function CustomStepForm(
         "Cutdown Height": "House Package Tool",
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
-    console.log({ title });
+    // console.log({ title });
 
     if (doorType == "Bifold") {
         // console.log(doorType);
