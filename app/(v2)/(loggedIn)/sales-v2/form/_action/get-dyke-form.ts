@@ -90,7 +90,9 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                         where: {
                             ...restoreQuery,
                         },
+
                         include: {
+                            priceData: true,
                             step: {
                                 include: {
                                     _count: includeStepPriceCount,

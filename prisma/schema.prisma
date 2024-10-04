@@ -1088,7 +1088,7 @@ model SalesOrders {
     itemDeliveries    OrderItemDelivery[]
     deliveries        OrderDelivery[]
     assignments       OrderItemProductionAssignments[]
-
+    pricings          ComponentPrice[]
     // deliveryProgress  OrderDeliveryProgress?
     // productionStatus SalesProductionStatus?
 
@@ -1215,6 +1215,7 @@ model SalesOrderItems {
     assignments        OrderItemProductionAssignments[]
     productions        OrderProductionSubmissions[]
     itemDeliveries     OrderItemDelivery[]
+    priceList          ComponentPrice[]
 
     @@index([createdAt, description, swing])
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
@@ -1290,6 +1291,7 @@ model OrderItemDelivery {
 model HousePackageTools {
     id             Int                @unique @default(autoincrement())
     orderItemId    Int                @unique
+    priceId        String?            @unique
     height         String?
     doorType       String?
     doorId         Int?
@@ -1314,6 +1316,7 @@ model HousePackageTools {
     molding        DykeProducts?      @relation(name: "molding", fields: [moldingId], references: [id])
     doors          DykeSalesDoors[]
     stepProduct    DykeStepProducts?  @relation(fields: [stepProductId], references: [id])
+    priceData      ComponentPrice?    @relation(fields: [priceId], references: [id], name: "moulding")
 
     @@index([stepProductId])
     @@index([salesOrderId])
@@ -1324,8 +1327,34 @@ model HousePackageTools {
     @@index([moldingId])
 }
 
+model ComponentPrice {
+    id             String             @id @default(cuid())
+    salesItemId    Int
+    salesId        Int
+    qty            Float
+    type           String
+    baseUnitCost   Float
+    baseTotalCost  Float
+    salesUnitCost  Float
+    salesTotalCost Float
+    margin         Float              @default(1)
+    salesProfit    Float
+    createdAt      DateTime?          @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?          @updatedAt
+    deletedAt      DateTime?          @db.Timestamp(0)
+    door           DykeSalesDoors?    @relation(name: "door")
+    moulding       HousePackageTools? @relation(name: "moulding")
+    component      DykeStepForm?      @relation(name: "component")
+    sales          SalesOrders        @relation(fields: [salesId], references: [id])
+    salesItem      SalesOrderItems    @relation(fields: [salesItemId], references: [id])
+
+    @@index([salesId])
+    @@index([salesItemId])
+}
+
 model DykeSalesDoors {
     id                 Int                              @unique @default(autoincrement())
+    priceId            String?                          @unique
     dimension          String
     swing              String?
     doorType           String?
@@ -1348,6 +1377,7 @@ model DykeSalesDoors {
     salesOrderItem     SalesOrderItems?                 @relation(fields: [salesOrderItemId], references: [id])
     order              SalesOrders?                     @relation(fields: [salesOrderId], references: [id])
     productions        OrderItemProductionAssignments[]
+    priceData          ComponentPrice?                  @relation(fields: [priceId], references: [id], name: "door")
 
     @@index([housePackageToolId])
     @@index([salesOrderItemId])
@@ -1724,6 +1754,7 @@ model Cache {
 model DykeStepForm {
     id             Int              @unique @default(autoincrement())
     value          String?
+    priceId        String?          @unique
     qty            Int?             @default(0)
     price          Float?           @default(0)
     basePrice      Float?           @default(0)
@@ -1738,6 +1769,7 @@ model DykeStepForm {
     sales          SalesOrders?     @relation(fields: [salesId], references: [id])
     salesOrderItem SalesOrderItems? @relation(fields: [salesItemId], references: [id])
     step           DykeSteps        @relation(fields: [stepId], references: [id])
+    priceData      ComponentPrice?  @relation(fields: [priceId], references: [id], name: "component")
 
     @@index([salesId])
     @@index([salesItemId])

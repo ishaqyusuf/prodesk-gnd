@@ -225,7 +225,7 @@ export default function AutoComplete({
                 <div className="flex">
                     <Input
                         className={cn(
-                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-white text-left  sm:text-sm border border-input h-10",
+                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-whites text-left  sm:text-sm border border-input h-10",
                             uppercase && "uppercase",
                             className
                         )}
@@ -240,7 +240,7 @@ export default function AutoComplete({
                     width: `${inputRef.current?.clientWidth}px`,
                 }}
                 className={cn(
-                    "absolute border w-full bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-[999]",
+                    "absolute border w-full bg-white dark:bg-accent mt-1 shadow-md max-h-80 overflow-scroll p-0 z-[999]",
                     !(isOpen && items.length) && "hidden",
                     "min-w-[150px]"
                 )}
@@ -254,7 +254,7 @@ export default function AutoComplete({
                                 <li
                                     className={cn(
                                         highlightedIndex === index &&
-                                            "bg-blue-300",
+                                            "bg-primary text-accent",
                                         selectedItem === item &&
                                             "bg-accent text-accent-foreground",
                                         "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none"
