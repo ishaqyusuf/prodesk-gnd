@@ -102,7 +102,7 @@ export default function DoorSizeModal({
         };
         const _formData = _form.getValues();
         let newDoorForm = {};
-        console.log({ _formData, doors });
+        // console.log({ _formData, doors });
 
         Object.entries(_formData).map(
             ([size, { jambSizePrice, lhQty, rhQty, swing }]) => {
@@ -115,6 +115,7 @@ export default function DoorSizeModal({
                 const price = (priceTags.doorSizePriceTag[size] = _size.price);
                 // console.log(">>>>>>");
 
+                const _qty = sum([lhQty, rhQty]);
                 newDoorForm[size] = {
                     ...existingData,
                     swing,
@@ -125,7 +126,7 @@ export default function DoorSizeModal({
                         form,
                         existingData.priceData,
                         _size.basePrice,
-                        sum([lhQty, rhQty])
+                        _qty
                     ),
                 };
             }

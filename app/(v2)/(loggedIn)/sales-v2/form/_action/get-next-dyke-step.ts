@@ -199,6 +199,9 @@ async function CustomStepForm(
     const customSteps: DykeStepTitleKv = {
         "Shelf Items": "Shelf Items",
         "Cutdown Height": "House Package Tool",
+        "Jamb Species": "Jamb Size",
+        Door: "Jamb Species",
+        "Jamb Size": "Jamb Type",
     };
     let title = customSteps[productTitle] || customSteps[stepTitle];
     // console.log({ title });

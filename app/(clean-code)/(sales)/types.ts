@@ -14,6 +14,9 @@ export type DykeStepTitles =
     | "Specie"
     | "Moulding"
     | "Door Configuration"
+    | "Jamb Species"
+    | "Jamb Type"
+    | "Jamb Size"
     | "Door Type"
     | "Line Item";
 export type DykeStepTitleKv = Partial<{

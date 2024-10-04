@@ -117,7 +117,7 @@ export function StepItem({
     }
     const onEditPrice = async (e) => {
         e.preventDefault();
-        setPrice(item._metaData.price);
+        setPrice(item._metaData.basePrice);
         setEditPrice(true);
     };
     const batchCtx = useProdBatchAction();
@@ -222,7 +222,7 @@ export function StepItem({
             <div
                 className={cn(
                     !menuOpen && "hidden",
-                    "absolute top-0 right-0  rounded-lg shadow-xl -m-2 bg-white z-10",
+                    "absolute top-0 right-0  rounded-lg shadow-xl -m-4 bg-white z-20",
                     !formCtx.superAdmin ? "hidden" : "group-hover:flex"
                 )}
             >

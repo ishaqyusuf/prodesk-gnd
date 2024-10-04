@@ -26,14 +26,17 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                     const bPrice = v.priceTags.moulding.basePrice;
                     const price = salesProfileCost(form, bPrice);
                     // console.log({ bPrice, price });
-                    console.log(item.multiComponent.components);
-
+                    // console.log(item.multiComponent.components);
                     form.setValue(
                         `itemArray.${index}.multiComponent.components.${k}.priceTags.moulding.price` as any,
                         price
                     );
                     // console.log({ price, bPrice });
-                    v._doorForm;
+                    if (v._doorForm) {
+                        Object.entries(v._doorForm).map(
+                            ([size, doorForm]) => {}
+                        );
+                    }
                 }
             });
         });

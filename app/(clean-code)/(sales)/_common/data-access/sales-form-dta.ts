@@ -8,21 +8,25 @@ export async function saveSalesComponentPricing(
     prices: Partial<ComponentPrice>[]
 ) {
     // console.log(prices);
-    return;
+    // return;
+    const filterPrices = prices.filter((p) => p.qty);
     await Promise.all(
-        prices.map(async (price) => {
-            await prisma.componentPrice.upsert({
-                create: {
-                    ...(price as any),
-                },
-                update: {
-                    ...price,
-                },
-                where: {
-                    id: price.id,
-                },
-            });
-        })
+        filterPrices
+            .filter((p) => p.qty)
+            .map(async (price) => {
+                price.salesProfit = price.salesTotalCost - price.baseTotalCost;
+                await prisma.componentPrice.upsert({
+                    create: {
+                        ...(price as any),
+                    },
+                    update: {
+                        ...price,
+                    },
+                    where: {
+                        id: price.id,
+                    },
+                });
+            })
     );
     console.log("DONE");
 }
