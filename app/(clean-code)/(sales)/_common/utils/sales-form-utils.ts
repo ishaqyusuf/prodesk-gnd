@@ -1,6 +1,8 @@
 import { UseFormReturn } from "react-hook-form";
 import { DykeForm } from "../data-access/sales-form-dta";
 import { formatMoney } from "@/lib/use-number";
+import { ComponentPrice } from "@prisma/client";
+import { generateRandomString } from "@/lib/utils";
 type DykeFormReturn = UseFormReturn<DykeForm>;
 function salesProfileChanged(form: DykeFormReturn, id) {
     const data = form.getValues();
@@ -49,4 +51,36 @@ function salesProfileCost(form: DykeFormReturn, baseCost) {
     if (!profile || profile.coefficient == 0) return baseCost;
     return formatMoney(baseCost / (profile.coefficient || 1));
 }
-export default { salesProfileChanged, salesProfileCost };
+function updateSalesComponentPrice(
+    form: DykeFormReturn,
+    pData: Partial<ComponentPrice>,
+    basePrice,
+    qty = 1
+) {
+    if (!pData) pData = {};
+    if (!pData.id) pData.id = generateRandomString();
+    pData.baseUnitCost = pData.baseTotalCost = basePrice;
+    pData.salesUnitCost = salesProfileCost(form, basePrice);
+    pData.qty = qty;
+    // Calculate tax cost;
+    // set margin
+    // set tax percentage
+    pData.salesTotalCost = formatMoney(qty * pData.salesUnitCost);
+    // pData.grandTotal = tax + salesTotal etc.
+    return pData;
+}
+function updateSalesComponentPriceQty(
+    pData: Partial<ComponentPrice>,
+    qty,
+    args?: {
+        form?: DykeFormReturn;
+    }
+) {}
+export default {
+    salesProfileChanged,
+    salesProfileCost,
+    componentPrice: {
+        update: updateSalesComponentPrice,
+        updateQty: updateSalesComponentPriceQty,
+    },
+};

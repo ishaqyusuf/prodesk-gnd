@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 export type SizeForm = {
     [id in string]: {
@@ -66,7 +67,7 @@ export default function SelectDoorHeightsModal({
     const doorType = item.item.meta.doorType;
     const isBifold = doorType == "Bifold";
     const [sizes, setSizes] = useState<
-        { dim: string; width: string; dimFt: string; price? }[]
+        { dim: string; width: string; dimFt: string; price?; basePrice? }[]
     >([]);
     const sizeForm = useForm<{
         sizes: SizeForm;
@@ -91,7 +92,11 @@ export default function SelectDoorHeightsModal({
                     dim: s?.dim,
                     width: s?.width,
                     title: s?.dimFt,
-                    price: heightPrices[s?.dimFt],
+                    basePrice: heightPrices[s?.dimFt],
+                    price: salesFormUtils.salesProfileCost(
+                        form,
+                        heightPrices[s?.dimFt]
+                    ),
                 };
             });
             sizeForm.reset({
@@ -101,7 +106,11 @@ export default function SelectDoorHeightsModal({
                 _sizes.map((s) => {
                     return {
                         ...s,
-                        price: heightPrices[s?.dimFt],
+                        basePrice: heightPrices[s?.dimFt],
+                        price: salesFormUtils.salesProfileCost(
+                            form,
+                            heightPrices[s?.dimFt]
+                        ),
                     };
                 })
             );
@@ -129,6 +138,17 @@ export default function SelectDoorHeightsModal({
                 const jamPath =
                     `${baseKey}._doorForm.${size.dim}.jambSizePrice` as any;
                 form.setValue(jamPath, price);
+                const pDataKey =
+                    `${baseKey}._doorForm.${size.dim}.priceData` as any;
+                const pData = form.getValues(pDataKey) || {};
+                form.setValue(
+                    pDataKey,
+                    salesFormUtils.componentPrice.update(
+                        form,
+                        pData,
+                        size.basePrice
+                    )
+                );
             }
         });
         const checked = (Object.values(sizesData).filter((s) => s.checked)

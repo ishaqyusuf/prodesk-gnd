@@ -32,7 +32,6 @@ import { initStepComponents } from "../components/step-items-list/item-section/c
 import { generateRandomString } from "@/lib/utils";
 import DeleteItemModal from "../components/modals/delete-item-modal";
 import { useModal } from "@/components/common/modal/provider";
-import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(
     {} as any
@@ -170,13 +169,24 @@ export default function useStepItems({
                 meta: {
                     custom,
                 } as any,
-
+                priceData: {},
                 // title: stepProd?.product?.description,
             };
-            if (!isMultiSection && stepTitle !== "Moulding") {
+            if (!isMultiSection) {
+                console.log(">>>>");
                 // basePrice = stepProd._metaData?.price || 0;
-                data.basePrice = stepProd._metaData?.basePrice;
-                data.price = stepProd._metaData?.price;
+                const baseUnitCost = (data.basePrice =
+                    stepProd._metaData?.basePrice);
+                const salesUnitCost = (data.price = stepProd._metaData?.price);
+                data.priceData = {
+                    baseUnitCost,
+                    qty: 1,
+                    baseTotalCost: baseUnitCost,
+                    salesUnitCost,
+                    salesTotalCost: salesUnitCost,
+                    id: data.priceData?.id || generateRandomString(),
+                };
+                data.priceId = data.priceData.id;
             }
 
             switch (stepTitle) {
@@ -322,7 +332,7 @@ export default function useStepItems({
                 doorType
             );
             // console.log({ nextSteps, nextStepId });
-            if (nextSteps.length) {
+            if (nextSteps?.length) {
                 const currentNextStep = item.formStepArray[stepIndex + 1];
                 if (currentNextStep) {
                     if (currentNextStep.step?.id == nextSteps[0]?.step?.id) {

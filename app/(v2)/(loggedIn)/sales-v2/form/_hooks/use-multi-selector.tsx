@@ -7,6 +7,8 @@ import { useModal } from "@/components/common/modal/provider";
 import { timeout } from "@/lib/timeout";
 import { HousePackageToolMeta } from "@/types/sales";
 import { useDoorSizeModal } from "../components/modals/door-size-modal";
+import { ComponentPrice } from "@prisma/client";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 
 export function useMultiSelector(rowIndex, get) {
     const form = useDykeForm();
@@ -130,7 +132,19 @@ export function useMultiSelector(rowIndex, get) {
                               components: 0,
                           }
                 ) as HousePackageToolMeta["priceTags"];
+
                 form.setValue(`${basePath}.priceTags` as any, priceTags);
+                const pData =
+                    form.getValues(`${basePath}.mouldingPriceData` as any) ||
+                    {};
+                form.setValue(
+                    `${basePath}.mouldingPriceData` as any,
+                    salesFormUtils.componentPrice.update(
+                        form,
+                        pData,
+                        stepProd._metaData?.basePrice
+                    )
+                );
             }
             if (!uid)
                 form.setValue(

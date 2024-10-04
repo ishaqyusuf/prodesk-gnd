@@ -4,7 +4,12 @@ import { prisma } from "@/db";
 import { DykeForm } from "../../type";
 import { lastId } from "@/lib/nextId";
 import { generateSalesIdDac } from "../../../sales/_data-access/generate-sales-id.dac";
-import { DykeSalesDoors, HousePackageTools, Prisma } from "@prisma/client";
+import {
+    ComponentPrice,
+    DykeSalesDoors,
+    HousePackageTools,
+    Prisma,
+} from "@prisma/client";
 
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { dealerSession } from "@/app/(v1)/_actions/utils";
@@ -71,6 +76,8 @@ export async function saveDykeSales(data: DykeForm) {
             const createStepForms: any[] = [];
             const createHpts: Partial<HousePackageTools>[] = [];
             const createDoors: Partial<DykeSalesDoors>[] = [];
+            const createPrices: Partial<ComponentPrice>[] = [];
+
             const ids = {
                 itemIds: [] as number[],
                 shelfIds: [] as number[],
@@ -184,12 +191,17 @@ export async function saveDykeSales(data: DykeForm) {
                         doors = []; //Object.values(_doorForm);
                         Object.entries(_doorForm).map(
                             ([dimension, { priceData, ...doorData }]) => {
-                                if (doorData && typeof doorData == "object")
+                                if (doorData && typeof doorData == "object") {
+                                    createPrices.push({
+                                        ...priceData,
+                                        // salesItemId
+                                    });
                                     doors?.push({
                                         ...(doorData || {}),
                                         dimension,
                                         doorType: item?.meta?.doorType,
                                     } as any);
+                                }
                             }
                         );
 

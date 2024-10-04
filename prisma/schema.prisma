@@ -1328,7 +1328,7 @@ model HousePackageTools {
 }
 
 model ComponentPrice {
-    id             String             @id @default(cuid())
+    id             String             @unique
     salesItemId    Int
     salesId        Int
     qty            Float
@@ -1339,6 +1339,9 @@ model ComponentPrice {
     salesTotalCost Float
     margin         Float              @default(1)
     salesProfit    Float
+    taxPercentage  Float?
+    totalTax       Float?
+    grandTotal     Float?
     createdAt      DateTime?          @default(now()) @db.Timestamp(0)
     updatedAt      DateTime?          @updatedAt
     deletedAt      DateTime?          @db.Timestamp(0)

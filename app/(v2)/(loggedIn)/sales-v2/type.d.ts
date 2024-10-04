@@ -122,7 +122,7 @@ export type MultiDyke = {
 
             _componentsTotalPrice?: number | null;
             _mouldingPriceTag?: number | null;
-
+            mouldingPriceData?: Partial<ComponentPrice>;
             toolId?;
             itemId?;
             qty: number | null;

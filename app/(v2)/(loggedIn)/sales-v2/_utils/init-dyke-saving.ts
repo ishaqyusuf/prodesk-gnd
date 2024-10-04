@@ -103,6 +103,9 @@ function initializeMultiComponent(data: DykeForm) {
                 });
                 clone.item.housePackageTool._doorForm = c._doorForm;
                 clone.item.housePackageTool.totalDoors = c.doorQty;
+                clone.item.housePackageTool.priceData =
+                    c.mouldingPriceData as any;
+                clone.item.housePackageTool.priceId = c.mouldingPriceData?.id;
                 let {
                     createdAt,
                     deletedAt,
@@ -125,6 +128,7 @@ function initializeMultiComponent(data: DykeForm) {
                     ...rest,
                     dykeDoorId,
                     moldingId,
+                    // priceData:
                     meta: {
                         priceTags: c.priceTags,
                     } as HousePackageToolMeta,

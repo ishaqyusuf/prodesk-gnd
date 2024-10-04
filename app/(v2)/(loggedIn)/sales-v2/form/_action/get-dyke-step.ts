@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { DykeStepForm } from "@prisma/client";
+import { ComponentPrice, DykeStepForm } from "@prisma/client";
 import { DykeFormStepMeta, DykeStepMeta } from "../../type";
 
 export async function getStepForm(id) {
@@ -30,7 +30,10 @@ export async function getStepForm(id) {
         item: {
             stepId: id,
             meta: {},
-        } as Omit<DykeStepForm, "meta"> & { meta: DykeFormStepMeta },
+        } as Omit<DykeStepForm, "meta"> & {
+            meta: DykeFormStepMeta;
+            priceData?: Partial<ComponentPrice>;
+        },
     };
 }
 // export async function getStepProductsAction

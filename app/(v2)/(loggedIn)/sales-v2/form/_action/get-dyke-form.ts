@@ -427,10 +427,6 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                         const uid = generateRandomString(4);
                         function getMouldingId() {
                             let mid = item.housePackageTool.moldingId;
-                            const s = item.formSteps.find(
-                                (fs) => fs.step.title == "Moulding"
-                            );
-                            const svid = s?.step?.title;
 
                             return mid;
                         }
@@ -474,6 +470,9 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                                     priceData: {},
                                 } as any),
                             hptId: item.housePackageTool?.id as any,
+                            mouldingPriceData:
+                                item?.housePackageTool?.priceData ||
+                                ({} as any),
                             doorTotalPrice: price,
                             priceTags,
                             stepProductId: item.housePackageTool?.stepProductId,
