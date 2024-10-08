@@ -96,6 +96,7 @@ export async function saveStepProduct(data: Props) {
                 ...stepData,
                 uid: generateRandomString(5),
                 meta: stepData.meta as any,
+                productCode: stepData.productCode,
                 product: doorMode
                     ? undefined
                     : {
