@@ -15,6 +15,7 @@ import ControlledCheckbox from "@/components/common/controls/controlled-checkbox
 import { Form } from "@/components/ui/form";
 import { saveStepProduct } from "../../_action/save-step-product";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
     products: IStepProducts;
@@ -95,7 +96,7 @@ export default function RestoreComponentsModal({
                     ))}
                 </div>
             </Form>
-            <ScrollArea className="h-[70vh]">
+            <ScrollArea className="h-[70vh] p-4">
                 <div className="grid grid-cols-3 gap-4">
                     {sortedProds?.map((item) => (
                         <button
@@ -104,9 +105,12 @@ export default function RestoreComponentsModal({
                             }}
                             key={item.id}
                             className={cn(
-                                "flex relative flex-col items-center hover:shadow-sm hover:border"
+                                "flex relative flex-col items-center hover:shadow-sm border justify-center min-h-[200px]"
                             )}
                         >
+                            <div className="absolute top-0 left-0 -m-4">
+                                <Badge variant="outline">#{item.id}</Badge>
+                            </div>
                             {/* {restores[item.uid] && tab == "restore" && (
                             <div className="absolute left-0 m-2">
                                 <CheckCircle2Icon className="w-6 h-6 text-purple-500" />
