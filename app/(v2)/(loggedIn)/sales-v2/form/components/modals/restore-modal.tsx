@@ -109,9 +109,11 @@ export default function RestoreComponentsModal({
                             )}
                         >
                             <div className="absolute top-0 left-0 -m-4">
-                                <Badge variant="outline">
-                                    #{item.productCode}
-                                </Badge>
+                                {item.productCode && (
+                                    <Badge variant="outline">
+                                        #{item.productCode}
+                                    </Badge>
+                                )}
                             </div>
                             {/* {restores[item.uid] && tab == "restore" && (
                             <div className="absolute left-0 m-2">
