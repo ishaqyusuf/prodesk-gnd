@@ -16,7 +16,7 @@ import LineItemSection from "../step-items-list/item-section/multi-item-tab/line
 import {
     IStepProducts,
     StepProducts,
-} from "../step-items-list/item-section/component-products";
+} from "../step-items-list/item-section/step-products";
 import MultiComponentRender from "../step-items-list/item-section/multi-item-tab/multi-component-render";
 import HousePackageTool from "../step-items-list/item-section/multi-item-tab/house-package-tools";
 import {
@@ -36,7 +36,7 @@ import RestoreComponentModal from "../modals/restore-component";
 import {
     getDykeStepState,
     getFormSteps,
-} from "../step-items-list/item-section/component-products/init-step-components";
+} from "../step-items-list/item-section/step-products/init-step-components";
 import { toast } from "sonner";
 import DevOnly from "@/_v2/components/common/dev-only";
 export interface DykeItemStepSectionProps {

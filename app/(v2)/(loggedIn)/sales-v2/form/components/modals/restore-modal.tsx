@@ -1,15 +1,15 @@
 import Modal from "@/components/common/modal";
-import { IStepProducts } from "../step-items-list/item-section/component-products";
+import { IStepProducts } from "../step-items-list/item-section/step-products";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { ProductImage } from "../step-items-list/item-section/component-products/product";
+import { ProductImage } from "../step-items-list/item-section/step-products/product";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/_v1/icons";
 import {
     getDykeStepState,
     getFormSteps,
-} from "../step-items-list/item-section/component-products/init-step-components";
+} from "../step-items-list/item-section/step-products/init-step-components";
 import { useForm } from "react-hook-form";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { Form } from "@/components/ui/form";

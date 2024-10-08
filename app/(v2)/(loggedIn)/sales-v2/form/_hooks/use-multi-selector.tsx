@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useDykeForm } from "./form-context";
 
-import { IStepProducts } from "../components/step-items-list/item-section/component-products";
+import { IStepProducts } from "../components/step-items-list/item-section/step-products";
 import { generateRandomString, safeFormText } from "@/lib/utils";
 import { useModal } from "@/components/common/modal/provider";
 import { timeout } from "@/lib/timeout";

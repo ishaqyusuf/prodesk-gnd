@@ -8,7 +8,7 @@ import { useEffect, useState, useTransition } from "react";
 import { saveStepProduct } from "../../../_action/save-step-product";
 import { _getMouldingSpecies } from "../_action";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { IStepProducts } from "../../step-items-list/item-section/component-products";
+import { IStepProducts } from "../../step-items-list/item-section/step-products";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DykeForm } from "../../../../type";
 import { getDimensionSizeList } from "../../../../dimension-variants/_actions/get-size-list";
@@ -20,7 +20,7 @@ import { Icons } from "@/components/_v1/icons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProductImage } from "../../step-items-list/item-section/component-products/product";
+import { ProductImage } from "../../step-items-list/item-section/step-products/product";
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
 import SaveProductForModal from "../save-product-for-modal";
@@ -28,7 +28,7 @@ import { cn, generateRandomString } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Input } from "@/components/ui/input";
 import { CheckCheckIcon, CheckCircle2 } from "lucide-react";
-import { _restoreStepItems } from "../../step-items-list/item-section/component-products/_actions";
+import { _restoreStepItems } from "../../step-items-list/item-section/step-products/_actions";
 
 interface Props {
     setStepProducts;

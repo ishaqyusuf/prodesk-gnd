@@ -3,7 +3,7 @@
 import {
     IStepProducts,
     StepProductProps,
-} from "../components/step-items-list/item-section/component-products";
+} from "../components/step-items-list/item-section/step-products";
 
 import { getMouldingStepProduct } from "../_action/get-dyke-step-product";
 
@@ -26,9 +26,9 @@ import { SaveStepProductExtra } from "../_action/save-step-product";
 import {
     _deleteDoorStep,
     _deleteStepItem,
-} from "../components/step-items-list/item-section/component-products/_actions";
-import { calculateComponentPrices } from "../components/step-items-list/item-section/component-products/calculate-prices";
-import { initStepComponents } from "../components/step-items-list/item-section/component-products/init-step-components";
+} from "../components/step-items-list/item-section/step-products/_actions";
+import { calculateComponentPrices } from "../components/step-items-list/item-section/step-products/calculate-prices";
+import { initStepComponents } from "../components/step-items-list/item-section/step-products/init-step-components";
 import { generateRandomString } from "@/lib/utils";
 import DeleteItemModal from "../components/modals/delete-item-modal";
 import { useModal } from "@/components/common/modal/provider";

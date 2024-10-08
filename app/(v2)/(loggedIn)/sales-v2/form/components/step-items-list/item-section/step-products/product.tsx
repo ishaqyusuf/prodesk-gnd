@@ -128,6 +128,9 @@ export function StepItem({
                     onClick={onClick}
                     className="border-b realtive flex-1 p-0 py-4"
                 >
+                    <div className="absolute -m-4 z-10 left-0 top-0">
+                        <Badge variant="outline">#{item.id}</Badge>
+                    </div>
                     <div className="absolute p-2 z-10 px-4 top-0 right-0 flex gap-4">
                         {item.meta?.stepSequence?.length ? (
                             <Dot className="w-8 h-8 text-cyan-600" />

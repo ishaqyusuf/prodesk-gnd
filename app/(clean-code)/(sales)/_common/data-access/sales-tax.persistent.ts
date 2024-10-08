@@ -8,32 +8,32 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
     const taxForm = data._taxForm;
     const taxList = Object.values(taxForm.taxByCode);
     const selectTaxes = taxList.filter((s) => s.selected);
-    const removedTaxesId = taxList
-        .filter((t) => !t.selected && t?.data?.id)
-        .map((t) => t.data.id);
+    // const removedTaxesId = taxList
+    //     .filter((t) => !t.selected && t?.data?.id)
+    //     .map((t) => t.data.id);
     // if (removedTaxesId.length)
-    await prisma.salesTaxes.updateMany({
-        where: {
-            OR: [
-                {
-                    id: { in: removedTaxesId },
-                },
-                {
-                    taxCode: {
-                        in: ["A", "B"],
-                    },
-                },
-                {
-                    taxConfig: {
-                        is: null,
-                    },
-                },
-            ],
-        },
-        data: {
-            deletedAt: new Date(),
-        },
-    });
+    // await prisma.salesTaxes.updateMany({
+    //     where: {
+    //         OR: [
+    //             {
+    //                 id: { in: removedTaxesId },
+    //             },
+    //             {
+    //                 taxCode: {
+    //                     in: ["A", "B"],
+    //                 },
+    //             },
+    //             {
+    //                 taxConfig: {
+    //                     is: null,
+    //                 },
+    //             },
+    //         ],
+    //     },
+    //     data: {
+    //         deletedAt: new Date(),
+    //     },
+    // });
     const updateTaxList = selectTaxes.filter((s) => s.data.id);
     const newTaxList = selectTaxes.filter((t) => !t.data?.id);
     await Promise.all(

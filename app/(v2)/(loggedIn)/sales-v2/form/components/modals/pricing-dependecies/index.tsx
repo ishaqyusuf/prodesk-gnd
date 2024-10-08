@@ -9,7 +9,7 @@ import { useModal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { saveDykeMeta } from "./action";
-import { initStepComponents } from "../../step-items-list/item-section/component-products/init-step-components";
+import { initStepComponents } from "../../step-items-list/item-section/step-products/init-step-components";
 
 interface Props {
     form: UseFormReturn<DykeForm>;

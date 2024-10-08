@@ -12,7 +12,7 @@ import { cn, ftToIn, safeFormText } from "@/lib/utils";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { toast } from "sonner";
 import { _addSize } from "../../../../dimension-variants/_actions/add-size";
-import { IStepProducts } from "../../step-items-list/item-section/component-products";
+import { IStepProducts } from "../../step-items-list/item-section/step-products";
 import Money from "@/components/_v1/money";
 import { HousePackageToolMeta } from "@/types/sales";
 import {

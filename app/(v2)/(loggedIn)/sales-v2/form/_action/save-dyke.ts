@@ -428,7 +428,7 @@ export async function saveDykeSales(data: DykeForm) {
             );
             await saveSalesTaxDta(data, order.id);
 
-            await saveSalesComponentPricing(createPrices);
+            await saveSalesComponentPricing(createPrices, order.id);
             return { order, createHpts };
         };
     // const resp = await prisma.$transaction(tx, {

@@ -5,17 +5,19 @@ import { ComponentPrice } from "@prisma/client";
 export type DykeForm = OldDykeForm;
 
 export async function saveSalesComponentPricing(
-    prices: Partial<ComponentPrice>[]
+    prices: Partial<ComponentPrice>[],
+    orderId
 ) {
     // console.log(prices);
     // return;
+    const ids = [];
     const filterPrices = prices.filter((p) => p.qty);
     await Promise.all(
         filterPrices
             .filter((p) => p.qty)
             .map(async (price) => {
                 price.salesProfit = price.salesTotalCost - price.baseTotalCost;
-                await prisma.componentPrice.upsert({
+                const s = await prisma.componentPrice.upsert({
                     create: {
                         ...(price as any),
                     },
@@ -26,7 +28,21 @@ export async function saveSalesComponentPricing(
                         id: price.id,
                     },
                 });
+                ids.push(s.id);
             })
     );
+    const res = await prisma.componentPrice.updateMany({
+        where: {
+            salesId: orderId,
+            id: {
+                notIn: ids,
+            },
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+    console.log(res.count);
+
     console.log("DONE");
 }

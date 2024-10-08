@@ -3,15 +3,15 @@ import { Form } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { DykeForm, DykeStep } from "../../../type";
 import { useEffect, useState } from "react";
-import { IStepProducts } from "../step-items-list/item-section/component-products";
+import { IStepProducts } from "../step-items-list/item-section/step-products";
 import {
     getDykeStepState,
     getFormSteps,
-} from "../step-items-list/item-section/component-products/init-step-components";
+} from "../step-items-list/item-section/step-products/init-step-components";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { useModal } from "@/components/common/modal/provider";
-import { _deleteStepItem } from "../step-items-list/item-section/component-products/_actions";
+import { _deleteStepItem } from "../step-items-list/item-section/step-products/_actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 

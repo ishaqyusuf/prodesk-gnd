@@ -3,7 +3,7 @@
 import { prisma } from "@/db";
 
 import { DykeDoorType } from "../../type";
-import { IStepProducts } from "../components/step-items-list/item-section/component-products";
+import { IStepProducts } from "../components/step-items-list/item-section/step-products";
 import { generateRandomString } from "@/lib/utils";
 import { transformStepProducts } from "../../dyke-utils";
 export interface SaveStepProductExtra {
