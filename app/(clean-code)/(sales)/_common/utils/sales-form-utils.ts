@@ -2,7 +2,7 @@ import { UseFormReturn } from "react-hook-form";
 import { DykeForm } from "../data-access/sales-form-dta";
 import { formatMoney } from "@/lib/use-number";
 import { ComponentPrice } from "@prisma/client";
-import { generateRandomString } from "@/lib/utils";
+import { generateRandomString, sum } from "@/lib/utils";
 type DykeFormReturn = UseFormReturn<DykeForm>;
 function salesProfileChanged(form: DykeFormReturn, id) {
     const data = form.getValues();
@@ -21,24 +21,49 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                 );
             });
             // return;
-            Object.entries(item.multiComponent?.components).map(([k, v]) => {
-                if (v.priceTags?.moulding?.price) {
-                    const bPrice = v.priceTags.moulding.basePrice;
-                    const price = salesProfileCost(form, bPrice);
-                    // console.log({ bPrice, price });
-                    // console.log(item.multiComponent.components);
-                    form.setValue(
-                        `itemArray.${index}.multiComponent.components.${k}.priceTags.moulding.price` as any,
-                        price
-                    );
-                    // console.log({ price, bPrice });
-                    if (v._doorForm) {
-                        Object.entries(v._doorForm).map(
-                            ([size, doorForm]) => {}
+            Object.entries(item?.multiComponent?.components || {}).map(
+                ([k, v]) => {
+                    const componentKey = `itemArray.${index}.multiComponent.components.${k}`;
+                    if (v.priceTags?.moulding?.price) {
+                        const bPrice = v.priceTags.moulding.basePrice;
+                        const price = salesProfileCost(form, bPrice);
+                        // console.log({ bPrice, price });
+                        // console.log(item.multiComponent.components);
+                        form.setValue(
+                            `${componentKey}.priceTags.moulding.price` as any,
+                            price
                         );
+                        // console.log({ price, bPrice });
+                    }
+                    if (v._doorForm) {
+                        Object.entries(v._doorForm).map(([size, doorForm]) => {
+                            // const price = salesProfileCost(
+                            //     form,
+                            //     doorForm.jambSizePrice
+                            // );
+                            const sizeKey = `${componentKey}._doorForm.${size}`;
+                            const priceData = ctx.componentPrice.update(
+                                form,
+                                doorForm.priceData,
+
+                                doorForm.priceData.baseUnitCost
+                            );
+
+                            // if (sum([doorForm.lhQty, doorForm.rhQty]))
+                            //     console.log(priceData);
+
+                            form.setValue(
+                                `${sizeKey}.priceData` as any,
+                                priceData
+                            );
+                            form.setValue(
+                                `${sizeKey}.jambSizePrice` as any,
+                                priceData.salesUnitCost
+                            );
+                        });
                     }
                 }
-            });
+            );
         });
     }, 500);
 }
@@ -50,27 +75,28 @@ function salesProfileCost(form: DykeFormReturn, baseCost) {
     const profile = data.data.profiles.find(
         (p) => p.id == data.order.customerProfileId
     );
-    console.log(profile);
     if (!profile || profile.coefficient == 0) return baseCost;
     return formatMoney(baseCost / (profile.coefficient || 1));
 }
 function updateSalesComponentPrice(
     form: DykeFormReturn,
-    pData: Partial<ComponentPrice>,
+    _pData: Partial<ComponentPrice>,
     basePrice,
     qty = 1
 ) {
-    if (!pData) pData = {};
+    const pData = _pData || {};
+    // if (!pData) pData = {};
     if (!pData.id) pData.id = generateRandomString();
-    pData.baseUnitCost = pData.baseTotalCost = basePrice;
+    pData.baseUnitCost = basePrice;
     pData.salesUnitCost = salesProfileCost(form, basePrice);
     pData.qty = qty;
     // Calculate tax cost;
     // set margin
     // set tax percentage
     pData.salesTotalCost = formatMoney(qty * pData.salesUnitCost);
+    pData.baseTotalCost = formatMoney(qty * basePrice);
     // pData.grandTotal = tax + salesTotal etc.
-    console.log(pData);
+    // console.log(pData);
     return pData;
 }
 function updateSalesComponentPriceQty(
@@ -80,7 +106,7 @@ function updateSalesComponentPriceQty(
         form?: DykeFormReturn;
     }
 ) {}
-export default {
+const ctx = {
     salesProfileChanged,
     salesProfileCost,
     componentPrice: {
@@ -88,3 +114,4 @@ export default {
         updateQty: updateSalesComponentPriceQty,
     },
 };
+export default ctx;
