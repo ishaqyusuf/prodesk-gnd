@@ -17,6 +17,7 @@ export async function saveSalesComponentPricing(
             .filter((p) => p.qty)
             .map(async (price) => {
                 price.salesProfit = price.salesTotalCost - price.baseTotalCost;
+                if (!price.type) price.type = "...";
                 const s = await prisma.componentPrice.upsert({
                     create: {
                         ...(price as any),
