@@ -187,7 +187,7 @@ export default function EditStepItemModal({
     async function save() {
         startSaving(async () => {
             const formData = form.getValues();
-
+            // formData.productCode
             if (!formData.id) formData.uid = generateRandomString(5);
             // if (!formData.id) {
             modal.openModal(
@@ -332,6 +332,12 @@ export default function EditStepItemModal({
                                         />
                                     </>
                                 )}
+                                <ControlledInput
+                                    control={form.control}
+                                    size="sm"
+                                    name="productCode"
+                                    label="Product Code"
+                                />
                                 {moulding && (
                                     <div className="grid grid-cols-2 gap-4">
                                         {species.map((s, i) => (
