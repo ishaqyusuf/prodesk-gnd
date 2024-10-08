@@ -25,9 +25,9 @@ export async function _saveSales(
         billingAddressId,
         createdAt,
         pickupId,
+        customerProfileId,
         ..._order
     } = order;
-    console.log(_order);
     if (!slug && !orderId) {
         const now = dayjs();
         let id = await nextId(prisma.salesOrders);
