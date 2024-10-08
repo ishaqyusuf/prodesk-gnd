@@ -220,7 +220,7 @@ export function StepItem({
                 loadingStep ? "cursor-not-allowed" : "cursor-pointer"
             )}
         >
-            {formCtx.superAdmin && <batchCtx.CheckBox uid={item.uid} />}
+            {/* {formCtx.superAdmin && <batchCtx.CheckBox uid={item.uid} />} */}
 
             <div
                 className={cn(
