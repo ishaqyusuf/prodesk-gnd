@@ -36,6 +36,7 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
     // const taxPercentage = data.order.taxPercentage;
 
     const items = data.itemArray;
+    console.log(items.length);
     let subTotal = 0;
     // let tax = 0;
     let taxxable = 0;

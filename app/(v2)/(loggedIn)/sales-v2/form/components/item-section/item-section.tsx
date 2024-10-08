@@ -13,7 +13,7 @@ import {
     useDykeItemCtx,
 } from "../../_hooks/form-context";
 import useDykeItem, { IDykeItemFormContext } from "../../_hooks/use-dyke-item";
-import { cn } from "@/lib/utils";
+import { cn, generateRandomString } from "@/lib/utils";
 import { _deleteDykeItem } from "../../_action/delete-item";
 import { DykeInvoiceItemStepSection } from "./components-section";
 import ControlledInput from "@/components/common/controls/controlled-input";
@@ -75,6 +75,9 @@ function ItemHeader({ item }: ItemHeaderProps) {
         // console.log(itemData);
         await _deleteDykeItem(itemData?.item?.id);
         dykeCtx.itemArray.remove(item.rowIndex);
+        setTimeout(() => {
+            form.setValue("priceRefresh" as any, generateRandomString());
+        }, 500);
     }
     function move(to) {
         dykeCtx.itemArray.move(rowIndex, to);

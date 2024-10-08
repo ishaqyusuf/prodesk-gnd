@@ -78,6 +78,7 @@ export default function DykeSalesFooterSection({}) {
         grandTotal,
         subTotal,
         taxChanged,
+        priceRefresh,
     ] = form.watch([
         "order.meta.tax",
         "footer.footerPrices",
@@ -91,6 +92,7 @@ export default function DykeSalesFooterSection({}) {
         "order.grandTotal",
         "order.subTotal",
         "_taxForm.taxChangedCode",
+        "priceRefresh" as any,
     ]);
 
     const taxListFieldArray = useFieldArray({
@@ -141,6 +143,7 @@ export default function DykeSalesFooterSection({}) {
         discount,
         orderTax,
         taxChanged,
+        priceRefresh,
     ]);
     const [taxSelect, setTaxSelect] = useState(null);
     const ctxValue: ICtx = {
