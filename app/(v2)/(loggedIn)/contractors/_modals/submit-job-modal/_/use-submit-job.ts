@@ -18,7 +18,9 @@ import { InstallCostLine } from "@/types/settings";
 import { deepCopy } from "@/lib/deep-copy";
 import { useModal } from "@/components/common/modal/provider";
 
-export const JobSubmitContext = createContext<any>({});
+export const JobSubmitContext = createContext<ReturnType<typeof useSubmitJob>>(
+    {} as any
+);
 export const useJobSubmitCtx = () => useContext(JobSubmitContext);
 export default function useSubmitJob(form) {
     const modal = useModal();

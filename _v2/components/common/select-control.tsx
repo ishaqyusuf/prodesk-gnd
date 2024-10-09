@@ -5,6 +5,7 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     Select,
     SelectContent,
@@ -67,14 +68,16 @@ export default function SelectControl<T>({
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                {options?.map((option, index) => (
-                                    <SelectItem
-                                        key={index}
-                                        value={itemValue(option)}
-                                    >
-                                        {itemText(option)}
-                                    </SelectItem>
-                                ))}
+                                <ScrollArea className="max-h-[40vh] overflow-auto">
+                                    {options?.map((option, index) => (
+                                        <SelectItem
+                                            key={index}
+                                            value={itemValue(option)}
+                                        >
+                                            {itemText(option)}
+                                        </SelectItem>
+                                    ))}
+                                </ScrollArea>
                             </SelectContent>
                         </Select>
                     </FormItem>

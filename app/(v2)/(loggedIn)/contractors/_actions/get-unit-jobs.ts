@@ -21,6 +21,11 @@ export async function getUnitJobs(
     jobType: IJobType,
     byAvailability = true
 ) {
+    if (!projectId)
+        return {
+            homeList: [],
+            addon: 0,
+        };
     const project = await prisma.projects.findFirst({
         where: {
             id: projectId,
