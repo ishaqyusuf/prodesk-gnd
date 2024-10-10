@@ -47,10 +47,12 @@ export default function useSubmitJob(form) {
     const tabHistory = useFieldArray({
         control: form.control,
         name: "tabHistory",
+        keyName: "_id",
     });
     const costList = useFieldArray({
         control: form.control,
         name: "costList",
+        keyName: "_id",
     });
     const [isLoading, startTransition] = useTransition();
 

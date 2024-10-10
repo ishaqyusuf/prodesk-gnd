@@ -38,7 +38,7 @@ export default function TaskDetailsTab({}) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {ctx.costList?.fields?.map((row, index) => (
+                        {(ctx.costList?.fields as any)?.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>
                                     <PrimaryCellContent>

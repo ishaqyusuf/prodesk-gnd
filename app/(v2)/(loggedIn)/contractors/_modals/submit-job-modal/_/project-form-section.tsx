@@ -6,12 +6,9 @@ import {
 } from "@/components/ui/form";
 import AutoComplete from "@/components/_v1/common/auto-complete";
 import { Projects } from "@prisma/client";
-import { HomeJobList } from "@/types/hrm";
-import { deepCopy } from "@/lib/deep-copy";
-import { InstallCostLine } from "@/types/settings";
 import { useJobSubmitCtx } from "./use-submit-job";
 import { useEffect } from "react";
-import ControlledAutoComplete from "@/components/common/controls/controlled-auto-complete";
+
 export default function ProjectFormSection({}) {
     const ctx = useJobSubmitCtx();
 
