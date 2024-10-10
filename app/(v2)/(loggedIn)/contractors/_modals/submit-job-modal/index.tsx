@@ -35,13 +35,9 @@ export default function SubmitJobModal({ job = {} as any, action }: Props) {
     const form = useForm<SubmitJobForm>({
         defaultValues,
     });
-    const contractors = useStaticContractors();
-    const projects = useStaticProjects();
 
     const ctx = {
         ...useSubmitJob(form),
-        contractors,
-        projects,
     };
     useEffect(() => {
         ctx.initialize(job as any, action);

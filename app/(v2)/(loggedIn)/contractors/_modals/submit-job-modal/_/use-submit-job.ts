@@ -17,6 +17,10 @@ import submitJobUtils from "./submit-job-utils";
 import { InstallCostLine } from "@/types/settings";
 import { deepCopy } from "@/lib/deep-copy";
 import { useModal } from "@/components/common/modal/provider";
+import {
+    useStaticContractors,
+    useStaticProjects,
+} from "@/_v2/hooks/use-static-data";
 
 export const JobSubmitContext = createContext<ReturnType<typeof useSubmitJob>>(
     {} as any
@@ -49,6 +53,9 @@ export default function useSubmitJob(form) {
         name: "costList",
     });
     const [isLoading, startTransition] = useTransition();
+
+    const contractors = useStaticContractors();
+    const projects = useStaticProjects();
     async function submit() {
         startTransition(async () => {
             // try {
@@ -138,7 +145,7 @@ export default function useSubmitJob(form) {
                 })
                 .filter(Boolean) || []
         );
-        console.log(cost, cl.length, home);
+        // console.log(cost, cl.length, home);
         if (updateCostData) form.setValue("job.meta.costData", cData as any);
         costList.append(cl as any);
     }
@@ -152,7 +159,8 @@ export default function useSubmitJob(form) {
     }
     return {
         isLoading,
-
+        contractors,
+        projects,
         id,
         form,
         // costList2,
