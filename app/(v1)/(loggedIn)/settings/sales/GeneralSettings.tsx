@@ -52,7 +52,10 @@ export default function GeneralSettings({
                         label="C.C.C (%)"
                     />
                     <ControlledSelect
-                        options={profiles.data || []}
+                        options={[
+                            { id: null, title: "None" },
+                            ...(profiles?.data || []),
+                        ]}
                         titleKey="title"
                         valueKey="id"
                         control={form.control}

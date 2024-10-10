@@ -46,7 +46,7 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                                 form,
                                 doorForm.priceData,
 
-                                doorForm.priceData.baseUnitCost
+                                doorForm.priceData?.baseUnitCost
                             );
 
                             // if (sum([doorForm.lhQty, doorForm.rhQty]))
