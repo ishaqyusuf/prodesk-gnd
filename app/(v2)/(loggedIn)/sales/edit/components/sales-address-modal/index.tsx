@@ -86,7 +86,7 @@ export default function SalesAddressModal({ form: mainForm }) {
                 const respData = {
                     ...(isDyke
                         ? {
-                              "order.salesProfileId": profile?.id,
+                              "order.customerProfileId": profile?.id,
                               "order.customerId": customerId,
                               "order.billingAddressId": billingAddressId,
                               "order.shippingAddressId": shippingAddressId,
