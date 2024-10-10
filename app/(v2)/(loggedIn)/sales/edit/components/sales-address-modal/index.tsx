@@ -1,7 +1,6 @@
-import BaseModal from "@/components/_v1/modals/base-modal";
 import { Form } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import salesData from "../../../sales-data";
 import InputControl from "@/_v2/components/common/input-control";
@@ -11,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { _getCustomerSearchList } from "../../../_data-access/get-customer-search.dac";
 import { ICustomer } from "@/types/customers";
 import Btn from "@/components/_v1/btn";
-import { SalesFormContext } from "../../ctx";
 import { deepCopy } from "@/lib/deep-copy";
 import { toast } from "sonner";
 import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
@@ -20,11 +18,14 @@ import { DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { updateSalesAddress } from "../../../_actions/update-sales-address";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { useModal } from "@/components/common/modal/provider";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function SalesAddressModal({ form: mainForm }) {
     // const mainForm = useFormContext();
     // const ctx = useContext(SalesFormContext);
-    const { billingAddress, shippingAddress, customer } = mainForm.getValues();
+    const { billingAddress, shippingAddress, customer, ...restData } =
+        mainForm.getValues();
+
     const addressForm = useForm<ISalesAddressForm>({
         defaultValues: {
             sameAddress: billingAddress?.id == shippingAddress?.id,
@@ -81,10 +82,11 @@ export default function SalesAddressModal({ form: mainForm }) {
                     customer,
                     ...ext
                 } = resp;
+
                 const respData = {
                     ...(isDyke
                         ? {
-                              "order.meta.sales_profile": profile?.title,
+                              "order.salesProfileId": profile?.id,
                               "order.customerId": customerId,
                               "order.billingAddressId": billingAddressId,
                               "order.shippingAddressId": shippingAddressId,
@@ -153,10 +155,12 @@ export default function SalesAddressModal({ form: mainForm }) {
                     </TabsList>
                     {tabs.map((t) => (
                         <TabsContent value={t.value} key={t.name}>
-                            <AddressForm
-                                customers={customers}
-                                formKey={t.value as any}
-                            />
+                            <ScrollArea className="max-h-[70vh] overflow-auto -mr-4 pr-4 pb-8 pt-4">
+                                <AddressForm
+                                    customers={customers}
+                                    formKey={t.value as any}
+                                />
+                            </ScrollArea>
                         </TabsContent>
                     ))}
                 </Tabs>
@@ -188,8 +192,10 @@ function AddressForm({
         const { data: address } = e as any;
         const { customer, businessName, search, ..._address } = address;
         form.setValue(formKey, _address);
-        if (customer?.profile && formKey == "billingAddress")
+        if (customer?.profile && formKey == "billingAddress") {
             form.setValue("profile", customer.profile);
+            console.log(customer.profile);
+        }
     };
     return (
         <div className="grid grid-cols-2 gap-2">
@@ -202,17 +208,23 @@ function AddressForm({
                         itemText={"search"}
                         itemValue={"search"}
                         onSelect={addressSelected}
+                        size="sm"
+                        // Item={({item}) => <></>}
                     />
                 </div>
             </div>
-            <div className="col-span-2">
-                <ControlledInput
-                    control={form.control}
-                    size="sm"
-                    name="customer.businessName"
-                    label="Business Name"
-                />
-            </div>
+            {formKey == "billingAddress" && (
+                <div className="col-span-2 grid grid-cols-4 gap-2">
+                    <div className="col-span-3">
+                        <ControlledInput
+                            control={form.control}
+                            size="sm"
+                            name="customer.businessName"
+                            label="Business Name"
+                        />
+                    </div>
+                </div>
+            )}
             <div className="col-span-2">
                 <ControlledInput
                     control={form.control}

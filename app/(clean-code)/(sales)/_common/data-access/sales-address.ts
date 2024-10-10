@@ -17,3 +17,24 @@ export async function updateAddressDta(
         id,
     };
 }
+export async function saveSalesAddressDta(data) {
+    // await prisma.addressBooks.upsert({
+    //     where: {
+    //         // id:
+    //         AND: [
+    //             { name: data.name },
+    //             {
+    //                 phoneNo: data.phoneNo,
+    //             },
+    //             {
+    //                 OR: [{ email: null }, { email: data.email }],
+    //             },
+    //             {
+    //                 OR: [{ address1: null }, { address1: data.address1 }],
+    //             },
+    //         ],
+    //     },
+    //     create: {},
+    //     update: {},
+    // });
+}

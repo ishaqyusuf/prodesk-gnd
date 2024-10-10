@@ -8,7 +8,7 @@ export function SubmitJobModalTitle({ data }: SubmitJobModalProps) {
     function goBack() {
         const [tab1, ...tabs] = ctx.tabHistory.fields;
         ctx.tabHistory.remove(0);
-        ctx.form.setValue("tab", tab1?.title);
+        ctx.form.setValue("tab", (tab1 as any)?.title);
     }
     return (
         <div className="flex space-x-2 items-center">

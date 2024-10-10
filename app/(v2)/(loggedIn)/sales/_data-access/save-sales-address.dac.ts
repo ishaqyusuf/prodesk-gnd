@@ -55,21 +55,23 @@ export async function _saveSalesAddress({
                 };
             }
             const where: Prisma.AddressBooksWhereInput = {
-                name,
                 AND: [
+                    { name },
                     _or("phoneNo", phoneNo),
                     _or("email", email),
                     _or("address1", address1),
+                    {
+                        customer: dealer
+                            ? {
+                                  auth: {
+                                      id: dealer.id,
+                                  },
+                              }
+                            : {
+                                  isNot: null,
+                              },
+                    },
                 ],
-                customer: dealer
-                    ? {
-                          auth: {
-                              id: dealer.id,
-                          },
-                      }
-                    : {
-                          isNot: null,
-                      },
             };
             let eAddr = (await prisma.addressBooks.findFirst({
                 where,

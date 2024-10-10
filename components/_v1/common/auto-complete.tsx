@@ -9,6 +9,7 @@ import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import JsonSearch from "@/_v2/lib/json-search";
 import useStaticDataLoader from "@/lib/static-data-loader";
+import { cva, VariantProps } from "class-variance-authority";
 // import JsonSearch from "search-array";
 export interface AutoCompleteProps {
     options?: any[];
@@ -34,6 +35,21 @@ export interface AutoCompleteProps {
     form?;
     loader?;
 }
+const inputVariants = cva(
+    "relative w-full ring-offset-background cursor-default overflow-hidden  bg-whites text-left  sm:text-sm border border-input",
+    {
+        variants: {
+            size: {
+                default: "h-10 rounded-lg",
+                sm: "h-8 px-3 rounded-md",
+                xs: "h-6 px-2 rounded",
+            },
+        },
+        defaultVariants: {
+            size: "default",
+        },
+    }
+);
 export default function AutoComplete({
     options,
     value,
@@ -58,7 +74,7 @@ export default function AutoComplete({
     perPage = 500,
     loader,
     ...props
-}: AutoCompleteProps & PrimitiveDivProps) {
+}: AutoCompleteProps & PrimitiveDivProps & VariantProps<typeof inputVariants>) {
     const transformedOptions = transformItems(
         options || [],
         itemText,
@@ -225,7 +241,7 @@ export default function AutoComplete({
                 <div className="flex">
                     <Input
                         className={cn(
-                            "relative w-full ring-offset-background cursor-default overflow-hidden rounded-lg bg-whites text-left  sm:text-sm border border-input h-10",
+                            inputVariants(props),
                             uppercase && "uppercase",
                             className
                         )}
