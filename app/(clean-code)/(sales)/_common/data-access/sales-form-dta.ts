@@ -36,7 +36,7 @@ export async function saveSalesComponentPricing(
         where: {
             salesId: orderId,
             id: {
-                notIn: ids,
+                notIn: ids.filter((id) => id > 0),
             },
         },
         data: {
