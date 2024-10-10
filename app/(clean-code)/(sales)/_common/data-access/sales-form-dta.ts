@@ -9,7 +9,7 @@ export async function saveSalesComponentPricing(
     orderId
 ) {
     // console.log(prices);
-    // return;
+    return;
     const ids = [];
     const filterPrices = prices.filter((p) => p.qty);
     await Promise.all(
