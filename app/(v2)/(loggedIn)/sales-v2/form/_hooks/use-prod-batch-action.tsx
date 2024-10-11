@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import {
     DykeItemFormContext,
-    useDykeCtx,
     useDykeForm,
     useDykeItemCtx,
 } from "./form-context";
@@ -13,6 +12,7 @@ import { Icons } from "@/components/_v1/icons";
 import { Label } from "@/components/ui/label";
 
 import { useModal } from "@/components/common/modal/provider";
+import { useLegacyDykeForm } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 export function useProdBatchAction() {
     const form = useDykeForm();
@@ -32,7 +32,7 @@ function useCtx() {
     const watchBatch = form.watch(`batchSetting.${stepCtx.__uid}`);
     const selectionCount = () =>
         Object.values(watchBatch?.selections || {}).filter(Boolean).length;
-    const formCtx = useDykeCtx();
+    const formCtx = useLegacyDykeForm();
     function isSelected(uid) {
         return watchBatch?.selections?.[uid];
     }

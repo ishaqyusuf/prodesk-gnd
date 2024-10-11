@@ -1,9 +1,5 @@
 "use client";
 
-import { useTransition } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { DykeForm, IDykeFormContext } from "../../type";
-import { DykeFormContext } from "../_hooks/form-context";
 import RenderForm from "@/_v2/components/common/render-form";
 import { Button } from "@/components/ui/button";
 import { addDoorUnitAction } from "../_action/add-door-unit";
@@ -13,46 +9,19 @@ import SalesAddressSection from "../../../sales/edit/components/sales-address-se
 import { Icons } from "@/components/_v1/icons";
 import DykeSalesFooterSection from "./dyke-sales-footer-section";
 import { DykeInvoiceItemSection } from "./item-section/item-section";
+import {
+    LegacyDykeFormContext,
+    useLegacyDykeFormContext,
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 interface Props {
     defaultValues: any;
 }
 export default function SalesFormComponent({ defaultValues }: Props) {
-    const form = useForm<DykeForm>({
-        defaultValues: {
-            ...defaultValues,
-            currentItemIndex: 0,
-            currentStepIndex: 0,
-        },
-    });
-
-    const [components, dealerMode, status, superAdmin, adminMode] = form.watch([
-        "itemArray.1.multiComponent.components",
-        "dealerMode",
-        "status",
-        "superAdmin",
-        "adminMode",
-    ]);
-    const s: DykeForm = {} as any;
-
-    const [loadingStep, startLoadingStep] = useTransition();
-    const itemArray = useFieldArray({
-        control: form.control,
-        name: "itemArray",
-    });
-
-    const ctxValue = {
-        startLoadingStep,
-        loadingStep,
-        itemArray,
-        dealerMode,
-        superAdmin,
-        status,
-        adminMode,
-    } as IDykeFormContext;
-
+    const ctx = useLegacyDykeFormContext(defaultValues);
+    const { form, dealerMode, itemArray } = ctx;
     return (
-        <DykeFormContext.Provider value={ctxValue}>
+        <LegacyDykeFormContext.Provider value={ctx}>
             <RenderForm {...form}>
                 <HeaderSection />
                 <section
@@ -63,11 +32,7 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                     <SalesAddressSection />
                 </section>
                 {itemArray.fields.map((field, index) => (
-                    <DykeInvoiceItemSection
-                        itemArray={itemArray}
-                        key={field.id}
-                        rowIndex={index}
-                    />
+                    <DykeInvoiceItemSection key={field.id} rowIndex={index} />
                 ))}
                 <div className="flex justify-end space-x-2 mt-2">
                     <Button
@@ -83,6 +48,6 @@ export default function SalesFormComponent({ defaultValues }: Props) {
                 </div>
                 <DykeSalesFooterSection />
             </RenderForm>
-        </DykeFormContext.Provider>
+        </LegacyDykeFormContext.Provider>
     );
 }

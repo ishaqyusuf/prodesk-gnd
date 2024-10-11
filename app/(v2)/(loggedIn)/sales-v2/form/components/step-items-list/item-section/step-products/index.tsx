@@ -26,9 +26,14 @@ import {
     BatchSelectionAction,
     useProdBatchAction,
 } from "../../../../_hooks/use-prod-batch-action";
+import {
+    LegacyDykeFormStepContext,
+    useLegacyDykeFormStepContext,
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 import RestoreComponentsModal from "../../../modals/restore-modal";
 import { ArchiveRestoreIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import legacyDykeFormHelper from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/legacy-dyke-form-helper";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
     stepProducts: IStepProducts;
@@ -88,150 +93,163 @@ export function StepProducts({
         }, 300);
     }, []);
     const modal = useModal();
+    const legacyStepCtx = useLegacyDykeFormStepContext(stepIndex, stepForm);
     return (
         <StepItemCtx.Provider value={stepItemCtx}>
-            <motion.div
-                ref={elementRef}
-                // initial={{ opacity: 0 }}
-                // animate={{ opacity: isVisible ? 1 : 0 }}
-                transition={{ duration: 1 }}
-                style={{}}
-            >
-                <Sortable
-                    orientation="mixed"
-                    collisionDetection={closestCorners}
-                    value={stepProducts}
-                    onValueChange={setStepProducts}
-                    overlay={
-                        <div className="size-full rounded-md bg-primary/10" />
-                    }
+            <LegacyDykeFormStepContext.Provider value={legacyStepCtx}>
+                <motion.div
+                    ref={elementRef}
+                    // initial={{ opacity: 0 }}
+                    // animate={{ opacity: isVisible ? 1 : 0 }}
+                    transition={{ duration: 1 }}
+                    style={{}}
                 >
-                    {/* <Hider hide="dealer">
+                    <Sortable
+                        orientation="mixed"
+                        collisionDetection={closestCorners}
+                        value={stepProducts}
+                        onValueChange={setStepProducts}
+                        overlay={
+                            <div className="size-full rounded-md bg-primary/10" />
+                        }
+                    >
+                        {/* <Hider hide="dealer">
                     <Header />
                 </Hider> */}
-                    <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                        {stepProducts
-                            ?.filter((s) => !s.custom && !s._metaData?.hidden)
-                            ?.map((item, i) => (
-                                <SortableItem
-                                    key={item.id}
-                                    value={item.id}
-                                    asTrigger={sortMode}
-                                    asChild
-                                >
-                                    <Card className="border-none flex flex-col h-full bg-red-50">
-                                        <StepItem
-                                            products={stepProducts}
-                                            className={cn(
-                                                "relative border-muted-foreground/10  borno group",
-                                                !sortMode &&
-                                                    "hover:border-muted-foreground"
-                                            )}
-                                            stepForm={stepForm}
-                                            isMultiSection={isMultiSection}
-                                            select={selectProduct}
-                                            loadingStep={ctx.loadingStep}
-                                            item={item}
-                                            deleteStepItem={() =>
-                                                deleteStepItemModal([item])
-                                            }
-                                            setStepProducts={setStepProducts}
-                                            openStepForm={openStepForm}
-                                            isRoot={stepCtx.isRoot}
-                                            stepIndex={stepIndex}
-                                        />
-                                    </Card>
-                                </SortableItem>
-                            ))}
-                        {allowAdd && dykeCtx.superAdmin && (
-                            <div className="p-4">
-                                <button
-                                    onClick={() => {
-                                        openStepForm();
-                                    }}
-                                    className={cn(
-                                        "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
-                                    )}
-                                >
-                                    <Icons.add />
-                                </button>
-                            </div>
-                        )}
-                        {stepProducts?.filter((s) => s._metaData.hidden)
-                            .length > 0 &&
-                            dykeCtx.superAdmin && (
+                        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+                            {stepProducts
+                                ?.filter(
+                                    (s) => !s.custom && !s._metaData?.hidden
+                                )
+                                ?.map((item, i) => (
+                                    <SortableItem
+                                        key={item.id}
+                                        value={item.id}
+                                        asTrigger={sortMode}
+                                        asChild
+                                    >
+                                        <Card className="border-none flex flex-col h-full bg-red-50">
+                                            <StepItem
+                                                products={stepProducts}
+                                                className={cn(
+                                                    "relative border-muted-foreground/10  borno group",
+                                                    !sortMode &&
+                                                        "hover:border-muted-foreground"
+                                                )}
+                                                stepForm={stepForm}
+                                                isMultiSection={isMultiSection}
+                                                select={selectProduct}
+                                                loadingStep={ctx.loadingStep}
+                                                item={item}
+                                                deleteStepItem={() =>
+                                                    deleteStepItemModal([item])
+                                                }
+                                                setStepProducts={
+                                                    setStepProducts
+                                                }
+                                                openStepForm={openStepForm}
+                                                isRoot={stepCtx.isRoot}
+                                                stepIndex={stepIndex}
+                                            />
+                                        </Card>
+                                    </SortableItem>
+                                ))}
+                            {allowAdd && dykeCtx.superAdmin && (
+                                <div className="p-4">
+                                    <button
+                                        onClick={() => {
+                                            openStepForm();
+                                        }}
+                                        className={cn(
+                                            "border hover:shadow-xl hover:bg-slate-200 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                                        )}
+                                    >
+                                        <Icons.add />
+                                    </button>
+                                </div>
+                            )}
+                            {stepProducts?.filter((s) => s._metaData.hidden)
+                                .length > 0 &&
+                                dykeCtx.superAdmin && (
+                                    <>
+                                        <div className="p-4">
+                                            <button
+                                                onClick={() => {
+                                                    modal.openModal(
+                                                        <RestoreComponentsModal
+                                                            products={
+                                                                stepProducts
+                                                            }
+                                                            setStepProducts={
+                                                                setStepProducts
+                                                            }
+                                                            stepIndex={
+                                                                stepIndex
+                                                            }
+                                                            lineItemIndex={
+                                                                rowIndex
+                                                            }
+                                                            stepForm={stepForm}
+                                                            invoiceForm={form}
+                                                        />
+                                                    );
+                                                }}
+                                                className={cn(
+                                                    "border border-red-500 bg-red-50/50 hover:shadow-xl hover:bg-red-50 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
+                                                )}
+                                            >
+                                                <ArchiveRestoreIcon />
+                                                <Label className="mt-4">
+                                                    Restore
+                                                </Label>
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            {allowCustom && (
                                 <>
-                                    <div className="p-4">
-                                        <button
-                                            onClick={() => {
-                                                modal.openModal(
-                                                    <RestoreComponentsModal
-                                                        products={stepProducts}
-                                                        setStepProducts={
-                                                            setStepProducts
-                                                        }
-                                                        stepIndex={stepIndex}
-                                                        lineItemIndex={rowIndex}
-                                                        stepForm={stepForm}
-                                                        invoiceForm={form}
-                                                    />
-                                                );
-                                            }}
-                                            className={cn(
-                                                "border border-red-500 bg-red-50/50 hover:shadow-xl hover:bg-red-50 rounded-lg flex flex-col justify-center items-center h-[200px] w-full"
-                                            )}
-                                        >
-                                            <ArchiveRestoreIcon />
-                                            <Label className="mt-4">
-                                                Restore
-                                            </Label>
-                                        </button>
-                                    </div>
+                                    <CustomInput
+                                        currentValue={
+                                            (stepForm.item.meta as any)?.custom
+                                                ? stepForm.item.value
+                                                : ""
+                                        }
+                                        onProceed={async (value) => {
+                                            selectProduct(true, {
+                                                custom: true,
+                                                product: {
+                                                    title: value,
+                                                    meta: {
+                                                        custom: true,
+                                                    },
+                                                },
+                                                dykeStepId: stepForm.step.id,
+                                                _metaData: {
+                                                    price: 0,
+                                                },
+                                            } as any);
+                                        }}
+                                    />
                                 </>
                             )}
-                        {allowCustom && (
-                            <>
-                                <CustomInput
-                                    currentValue={
-                                        (stepForm.item.meta as any)?.custom
-                                            ? stepForm.item.value
-                                            : ""
-                                    }
-                                    onProceed={async (value) => {
-                                        selectProduct(true, {
-                                            custom: true,
-                                            product: {
-                                                title: value,
-                                                meta: {
-                                                    custom: true,
-                                                },
-                                            },
-                                            dykeStepId: stepForm.step.id,
-                                            _metaData: {
-                                                price: 0,
-                                            },
-                                        } as any);
-                                    }}
-                                />
-                            </>
+                        </div>
+                    </Sortable>
+
+                    {isMultiSection && (
+                        <div className="flex justify-end">
+                            <Button onClick={() => selectProduct(false)}>
+                                Proceed
+                            </Button>
+                        </div>
+                    )}
+                    <div className="flex justify-center">
+                        {ctx.loadingStep && (
+                            <Icons.spinner className="h-8 w-8 animate-spin" />
                         )}
                     </div>
-                </Sortable>
-
-                {isMultiSection && (
-                    <div className="flex justify-end">
-                        <Button onClick={() => selectProduct(false)}>
-                            Proceed
-                        </Button>
-                    </div>
-                )}
-                <div className="flex justify-center">
-                    {ctx.loadingStep && (
-                        <Icons.spinner className="h-8 w-8 animate-spin" />
-                    )}
-                </div>
-            </motion.div>
-            <BatchSelectionAction />
+                </motion.div>
+                <BatchSelectionAction />
+            </LegacyDykeFormStepContext.Provider>
         </StepItemCtx.Provider>
     );
 }

@@ -1,9 +1,9 @@
 import { UseFormReturn } from "react-hook-form";
-import { DykeForm } from "../data-access/sales-form-dta";
+import { DykeFormData } from "../data-access/sales-form-dta";
 import { formatMoney } from "@/lib/use-number";
 import { ComponentPrice } from "@prisma/client";
 import { generateRandomString, sum } from "@/lib/utils";
-type DykeFormReturn = UseFormReturn<DykeForm>;
+type DykeFormReturn = UseFormReturn<DykeFormData>;
 function salesProfileChanged(form: DykeFormReturn, id) {
     const data = form.getValues();
     const profile = data.data.profiles.find((p) => p.id == id);

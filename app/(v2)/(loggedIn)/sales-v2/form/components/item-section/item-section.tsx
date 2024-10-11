@@ -15,50 +15,57 @@ import {
 import useDykeItem, { IDykeItemFormContext } from "../../_hooks/use-dyke-item";
 import { cn, generateRandomString } from "@/lib/utils";
 import { _deleteDykeItem } from "../../_action/delete-item";
-import { DykeInvoiceItemStepSection } from "./components-section";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import {
     Menu,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
+import {
+    LegacyDykeFormItemContext,
+    useLegacyDykeFormItemContext,
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { DykeInvoiceItemStepSection } from "./components-section";
 
 interface Props {
     rowIndex;
-    itemArray;
 }
-export function DykeInvoiceItemSection({ rowIndex, itemArray }: Props) {
+export function DykeInvoiceItemSection({ rowIndex }: Props) {
     const form = useDykeForm();
     // const configIndex = form.watch(`items.${rowIndex}.meta.configIndex`);
-    const item = useDykeItem(rowIndex, itemArray);
     const dykeCtx = useDykeCtx();
+    const item = useDykeItem(rowIndex, dykeCtx.itemArray);
     const ctx = {
         ...item,
     } as IDykeItemFormContext;
 
+    const legacyCtx = useLegacyDykeFormItemContext(rowIndex);
+
     return (
-        <DykeItemFormContext.Provider value={ctx}>
-            <Collapsible
-                open={item.opened}
-                onOpenChange={item.openChange}
-                className={cn(rowIndex > 0 && "mt-4")}
-            >
-                <ItemHeader item={item} />
-                <CollapsibleContent className="">
-                    <div className="grid sm:grid-cols-3 overflow-auto max-h-[110vh]">
-                        <div className="sm:col-span-3">
-                            {item.formStepArray.map((formStep, bIndex) => (
-                                <DykeInvoiceItemStepSection
-                                    stepForm={formStep as any}
-                                    stepIndex={bIndex}
-                                    key={bIndex}
-                                />
-                            ))}
+        <LegacyDykeFormItemContext.Provider value={legacyCtx}>
+            <DykeItemFormContext.Provider value={ctx}>
+                <Collapsible
+                    open={item.opened}
+                    onOpenChange={item.openChange}
+                    className={cn(rowIndex > 0 && "mt-4")}
+                >
+                    <ItemHeader item={item} />
+                    <CollapsibleContent className="">
+                        <div className="grid sm:grid-cols-3 overflow-auto max-h-[110vh]">
+                            <div className="sm:col-span-3">
+                                {item.formStepArray.map((formStep, bIndex) => (
+                                    <DykeInvoiceItemStepSection
+                                        stepForm={formStep as any}
+                                        stepIndex={bIndex}
+                                        key={bIndex}
+                                    />
+                                ))}
+                            </div>
+                            {/* <div className="hidden sm:col-span-1"></div> */}
                         </div>
-                        {/* <div className="hidden sm:col-span-1"></div> */}
-                    </div>
-                </CollapsibleContent>
-            </Collapsible>
-        </DykeItemFormContext.Provider>
+                    </CollapsibleContent>
+                </Collapsible>
+            </DykeItemFormContext.Provider>
+        </LegacyDykeFormItemContext.Provider>
     );
 }
 interface ItemHeaderProps {

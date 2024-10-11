@@ -284,6 +284,7 @@ export async function saveDykeSales(data: DykeForm) {
                                 item: {
                                     id: stepFormId,
                                     priceData,
+                                    priceId,
                                     ...stepForm
                                 },
                                 step,

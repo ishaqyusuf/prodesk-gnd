@@ -2,7 +2,8 @@ import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { prisma } from "@/db";
 import { ComponentPrice } from "@prisma/client";
 
-export type DykeForm = OldDykeForm;
+export type DykeFormData = OldDykeForm;
+export type OldDykeFormData = OldDykeForm;
 
 export async function saveSalesComponentPricing(
     prices: Partial<ComponentPrice>[],

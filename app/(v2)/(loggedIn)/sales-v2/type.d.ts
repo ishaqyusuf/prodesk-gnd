@@ -167,15 +167,7 @@ export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
 export interface DykeSalesDoorMeta {
     _doorPrice: number | null;
 }
-export interface IDykeFormContext {
-    startLoadingStep;
-    loadingStep: boolean;
-    dealerMode: boolean;
-    adminMode: boolean;
-    superAdmin: boolean;
-    itemArray: UseFieldArrayReturn<DykeForm, "itemArray", "id">;
-    status: SalesStatus;
-}
+
 export interface DykeBlock {
     title;
     options: { title; img }[];

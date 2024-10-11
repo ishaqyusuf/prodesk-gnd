@@ -52,6 +52,7 @@ export default function useStepItems({
     const stepFormTitle = stepForm.step?.title;
     const ctx = useDykeCtx();
     const [step, setStep] = useState<"Door" | "Moulding" | "Slab" | null>(null);
+
     const load = async () => {
         const doorType = item.get.doorType();
         if (stepForm?.item?.meta?.hidden) return;
@@ -476,7 +477,6 @@ export default function useStepItems({
         setUid(generateRandomString(4));
     };
     return {
-        load,
         onDeleteItem,
         async deleteStepItemModal(items) {
             modal.openModal(

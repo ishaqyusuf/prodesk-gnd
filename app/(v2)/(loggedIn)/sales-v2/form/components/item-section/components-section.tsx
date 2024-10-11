@@ -39,6 +39,7 @@ import {
 } from "../step-items-list/item-section/step-products/init-step-components";
 import { toast } from "sonner";
 import DevOnly from "@/_v2/components/common/dev-only";
+
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
     stepIndex: number;
@@ -49,7 +50,6 @@ export function DykeInvoiceItemStepSection({
 }: DykeItemStepSectionProps) {
     const form = useDykeForm();
     const item = useDykeItemCtx();
-
     const [stepValue, allowAdd, allowCustom] = form.watch([
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowAdd`,
@@ -57,6 +57,7 @@ export function DykeInvoiceItemStepSection({
     ] as any);
     const modal = useModal();
     const ctx = useDykeCtx();
+
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     function restoreComponent() {
         const formArray = form.getValues(
