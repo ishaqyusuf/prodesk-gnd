@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import { ISidebar } from "@/lib/navs";
 import Notifications from "../notification";
 import { MobileNav } from "../mobile-nav";
+import { ModeToggle } from "@/components/(clean-code)/layouts/mode-toggle";
 export default function SiteHeader({ nav }: { nav: ISidebar }) {
     const { data: session } = useSession();
 
@@ -109,6 +110,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
                         </Link>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <ModeToggle />
             </div>
             <div className="overflow-auto" id="tab"></div>
         </header>
