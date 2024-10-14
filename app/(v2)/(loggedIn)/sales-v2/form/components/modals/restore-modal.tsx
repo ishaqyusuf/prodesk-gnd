@@ -61,20 +61,27 @@ export default function RestoreComponentsModal({
         // console.log(item);
         const d = form.getValues("show");
         let _show = item.meta.show || {};
+        let _deleted = item.meta.deleted || {};
         let valid = false;
         Object.entries(d).map(([k, v]) => {
-            v && (_show[k] = true) && (valid = true);
             if (!v) delete _show[k];
+            else {
+                (_show[k] = true) && (valid = true);
+                delete _deleted[k];
+            }
         });
         if (Object.values(_show).filter(Boolean).length == 0) {
             toast.error("Select component deps first!.");
             return;
         }
         item.meta.show = _show;
+        item.meta.deleted = _deleted;
 
         // console.log({ _show });
 
         const reps = await saveStepProduct(item);
+        console.log(reps);
+
         toast.success("Restored");
     }
     return (
