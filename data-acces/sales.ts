@@ -200,8 +200,13 @@ export async function whereSales(query: SalesQueryParams) {
                           },
                       },
                       {
-                          shippingAddress: {
-                              address1: inputQ,
+                          billingAddress: {
+                              OR: [
+                                  { address1: inputQ },
+                                  {
+                                      phoneNo: inputQ,
+                                  },
+                              ],
                           },
                       },
                       {
