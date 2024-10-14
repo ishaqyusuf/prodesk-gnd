@@ -34,6 +34,8 @@ interface Props<T> {
     cellVariants?: TableCellProps;
     v2?: boolean;
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[];
+    schema;
+    filterFields;
 }
 export function useTableCompose<T>(data: T[], props: Props<T>) {
     const [dynamicCols, setDynamicCols] = useState([]);
@@ -102,6 +104,8 @@ export function useTableCompose<T>(data: T[], props: Props<T>) {
             pageCount: props?.pageCount,
             cellVariants: props.cellVariants,
             addFilterCol,
+            schema: props.schema,
+            filterFields: props.filterFields,
         },
     };
 }

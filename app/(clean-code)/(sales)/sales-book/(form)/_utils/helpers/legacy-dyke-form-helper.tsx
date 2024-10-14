@@ -1,9 +1,11 @@
+import { LoadStepComponentsProps } from "@/app/(clean-code)/(sales)/_common/data-access/step-components.persistent";
 import { DykeDoorType } from "../../../../types";
 import { IDykeComponentStore } from "../../_hooks/data-store";
 import {
     LegacyDykeFormItemType,
     LegacyDykeFormStepType,
 } from "../../_hooks/legacy-hooks";
+import { getStepComponents } from "../../_actions/steps.action";
 
 const helpers = {
     item: {
@@ -31,8 +33,22 @@ async function loadComponents(
 ) {
     const title = helpers.step.getStepTitle(stepCtx);
     const storedComponents = storeComponentsByTitle[title];
-    // console.log({ storedComponents, title });
-    return storedComponents || [];
+    const props: LoadStepComponentsProps = {};
+    const resp = {
+        data: storedComponents || [],
+        cache: storedComponents?.length > 0,
+        key: title,
+    };
+    if (!resp.cache) {
+        if (title == "Door") props.stepTitle = "Door";
+        else if (title == "Moulding") props.stepTitle = "Moulding";
+        else props.stepId = stepCtx.step.step.id;
+        const _resp = await getStepComponents(props);
+        resp.data = _resp;
+    } else {
+    }
+    // console.log({ props, cache: resp.cache, len: resp.data?.length });
+    return resp;
 }
 const legacyDykeFormHelper = helpers;
 export default legacyDykeFormHelper;

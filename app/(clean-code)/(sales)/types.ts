@@ -83,3 +83,16 @@ export type TypedAddressBook = Omit<AddressBooks, "meta"> & {
     meta: AddressBookMeta;
 };
 // export type CreateTaxForm = Omit<Taxes, "sa">;
+export interface StepComponentMeta {
+    stepSequence?: { id?: number }[];
+    deleted?: { [uid in string]: boolean };
+    show?: { [uid in string]: boolean };
+}
+export interface DykeProductMeta {
+    svg;
+    url;
+    sortIndex?;
+    priced?: boolean;
+    mouldingSpecies: { [id in string]: boolean };
+    doorPrice?: { [size in string]: number };
+}

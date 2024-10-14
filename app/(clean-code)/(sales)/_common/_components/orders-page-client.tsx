@@ -6,6 +6,11 @@ import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { Cells } from "./orders-page-cells";
 import { TableToolbar } from "@/components/(clean-code)/data-table/toolbar";
+import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
+import {
+    salesFilterFields,
+    salesSearchSchema,
+} from "../_schema/base-order-schema";
 
 interface Props {
     promise;
@@ -26,10 +31,13 @@ export default function OrdersPageClient({ promise }: Props) {
             ];
         },
         filterCells: ["_q"],
+        schema: salesSearchSchema,
+        filterFields: salesFilterFields,
     });
     return (
         <div>
             <DataTable {...table.props}>
+                <DataTableFilterCommand />
                 <TableToolbar>
                     <TableToolbar.Search placeholder="sales" />
                 </TableToolbar>

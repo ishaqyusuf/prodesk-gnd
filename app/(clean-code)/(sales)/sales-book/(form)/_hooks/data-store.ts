@@ -5,15 +5,21 @@ type State = {
     loadedComponentsByStepTitle: {};
 };
 type Action = {
-    updateProducts: (data) => void;
+    updateComponent: (key, data) => void;
 };
 export type IDykeComponentStore = State & Action;
 export const useDykeComponentStore = create<IDykeComponentStore>((set) => ({
     products: [],
     loadedComponentsByStepTitle: {},
-    updateProducts: (newProducts) => {
-        set({
-            products: newProducts,
-        });
+    updateComponent: (key, data) => {
+        set((state) => ({
+            loadedComponentsByStepTitle: {
+                ...state.loadedComponentsByStepTitle,
+                [key]: data,
+            },
+        }));
+        // set({
+        //     products: newProducts,
+        // });
     },
 }));

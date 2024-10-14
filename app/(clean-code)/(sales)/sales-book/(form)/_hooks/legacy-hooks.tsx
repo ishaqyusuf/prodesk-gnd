@@ -70,14 +70,20 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
     const componentsByTitle = useDykeComponentStore(
         (state) => state.loadedComponentsByStepTitle
     );
+    const updateComponent = useDykeComponentStore(
+        (state) => state.updateComponent
+    );
     const [loading, startLoading] = useTransition();
     const [items, setItems] = useState();
     async function fetchStepComponents() {
         startLoading(async () => {
-            const components = await legacyDykeFormHelper.step.loadComponents(
-                componentsByTitle,
-                stepCtx
-            );
+            const { cache, data, key } =
+                await legacyDykeFormHelper.step.loadComponents(
+                    componentsByTitle,
+                    stepCtx
+                );
+            if (!cache) updateComponent(key, data);
+            setItems(data);
         });
     }
 

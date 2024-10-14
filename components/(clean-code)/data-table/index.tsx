@@ -25,22 +25,19 @@ interface BaseProps<TData, TValue> {
     children?;
     cellVariants?: TableCellProps;
     addFilterCol?(col: String);
+    schema;
+    filterFields;
 }
 function BaseDataTable<TData, TValue>({
     children,
-    data,
-    pageCount,
-    columns,
-    cellVariants,
-    addFilterCol,
-}: BaseProps<TData, TValue>) {
-    const ctx = useDataTable(
-        data,
-        columns,
-        pageCount,
-        cellVariants,
-        addFilterCol
-    );
+    ...props
+}: // data,
+// pageCount,
+// columns,
+// cellVariants,
+// addFilterCol,
+BaseProps<TData, TValue>) {
+    const ctx = useDataTable(props as any);
 
     return (
         <dataTableContext.Provider value={ctx}>

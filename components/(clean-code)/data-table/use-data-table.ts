@@ -29,13 +29,15 @@ export const useDataTableContext = (): DataTableType =>
 export const useTRContext = (): DataTableType =>
     useContext(dataTableRowContext) as any;
 
-export function useDataTable(
+export function useDataTable({
     data,
     columns,
     pageCount,
     cellVariants,
-    addFilterCol
-) {
+    addFilterCol,
+    schema,
+    filterFields,
+}) {
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
@@ -224,5 +226,7 @@ export function useDataTable(
         columns,
         cellVariants,
         addFilterCol,
+        filterFields,
+        schema,
     };
 }

@@ -66,21 +66,6 @@ export default function useStepItems({
             // const _props = { ...query, stepId: stepForm?.step?.id };
             async function _loadDoors() {
                 const prods = await getDykeStepDoors(stepForm.step.id);
-                let doorsWithPriceTags = await prods.filter(
-                    (p) => p.door?.meta?.doorPrice
-                );
-                const doorDebug = prods
-                    .map((d) => ({
-                        meta: d.meta,
-                        title: d.door?.title,
-                    }))
-                    .filter((s) => s.meta?.show);
-                // console.log({ doorDebug });
-                // console.log({ stepForm });
-                // let _deleteDoorIdes = [];
-
-                // if (_deleteDoorIds.length)
-                //     await _deleteDuplicateDoorSteps(_deleteDoorIds);
                 return prods; //[];
             }
             _stepProducts = await _loadDoors();
