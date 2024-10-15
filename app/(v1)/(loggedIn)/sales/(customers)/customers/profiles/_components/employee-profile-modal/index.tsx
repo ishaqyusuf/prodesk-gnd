@@ -12,6 +12,9 @@ import { saveCustomerProfile } from "../actions";
 import { useModal } from "@/components/common/modal/provider";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import salesData from "@/app/(v2)/(loggedIn)/sales/sales-data";
+import useEffectLoader from "@/lib/use-effect-loader";
+import { getTaxesDta } from "@/app/(clean-code)/(sales)/_common/data-access/tax.dta";
+import { getTaxListOptionUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-tax-use-case";
 
 export default function CustomerProfileModal({
     defaultValues,
@@ -26,6 +29,7 @@ export default function CustomerProfileModal({
     const form = useForm<ICustomerProfile>({
         defaultValues,
     });
+    const taxes = useEffectLoader(getTaxListOptionUseCase);
     const modal = useModal();
     async function submit() {
         const data = form.getValues();
@@ -73,6 +77,14 @@ export default function CustomerProfileModal({
                         name={"meta.net"}
                         options={salesData.paymentTerms}
                         label="Sales Payment Term"
+                    />
+                    <ControlledSelect
+                        control={form.control}
+                        name={"meta.taxCode"}
+                        titleKey="title"
+                        valueKey="taxCode"
+                        options={taxes.data || []}
+                        label="Tax Profile"
                     />
                 </div>
                 <Modal.Footer onSubmit={submit} />

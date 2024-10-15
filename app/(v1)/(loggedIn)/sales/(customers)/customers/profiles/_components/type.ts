@@ -6,4 +6,5 @@ export interface ICustomerProfile extends Omit<CustomerTypes, "meta"> {
 export interface ICustomerProfileMeta {
     net: string;
     goodUntil: number;
+    taxCode?: string;
 }
