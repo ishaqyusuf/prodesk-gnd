@@ -370,7 +370,7 @@ function TaxForm({}) {
     const modal = useModal();
     const form = useDykeForm();
 
-    const mainCtx = useLegacyDykeForm();
+    const { footerCtx } = useLegacyDykeForm();
     function selectionChanged(e) {
         setSelection((v) => {
             return null as any;
@@ -387,7 +387,7 @@ function TaxForm({}) {
                 />
             );
         } else {
-            mainCtx.footerCtx.changeTax(e);
+            footerCtx.changeTax(e);
             return;
         }
     }
@@ -411,7 +411,10 @@ function TaxForm({}) {
                                 <Button
                                     variant="destructive"
                                     onClick={() =>
-                                        removeTaxSelection(s.taxCode, i)
+                                        footerCtx.removeTaxSelection(
+                                            s.taxCode,
+                                            i
+                                        )
                                     }
                                     className="w-8 h-8"
                                     size="icon"

@@ -119,6 +119,7 @@ function useLegacyFooter(form: UseFormReturn<OldDykeFormData>) {
     }
     return {
         taxListFieldArray,
+        removeTaxSelection,
         changeTax,
         taxSelectionFieldArray,
     };
