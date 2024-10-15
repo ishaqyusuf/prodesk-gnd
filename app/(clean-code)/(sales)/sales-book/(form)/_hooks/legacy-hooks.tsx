@@ -6,10 +6,24 @@ import {
     useTransition,
 } from "react";
 import { useDykeComponentStore } from "./data-store";
-import { useFieldArray, useForm } from "react-hook-form";
-import { OldDykeFormData } from "../../../_common/data-access/sales-form-dta";
+import {
+    FieldPath,
+    FieldValues,
+    Path,
+    useFieldArray,
+    useForm,
+} from "react-hook-form";
+import {
+    DykeFormDataPath,
+    DykeFormItemData,
+    DykeFormItemDataPath,
+    ItemMultiComponentDataPath,
+    ItemMultiComponentSizeDataPath,
+    OldDykeFormData,
+} from "../../../types";
 import legacyDykeFormHelper from "../_utils/helpers/legacy-dyke-form-helper";
-import { DykeStep } from "@/app/(v2)/(loggedIn)/sales-v2/type";
+import { DykeItemForm, DykeStep } from "@/app/(v2)/(loggedIn)/sales-v2/type";
+import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
 
 export type LegacyDykeFormType = ReturnType<typeof useLegacyDykeFormContext>;
 export const LegacyDykeFormContext = createContext<LegacyDykeFormType>(null);
@@ -29,7 +43,9 @@ export const useLegacyDykeFormItem = () =>
     useContext(LegacyDykeFormItemContext);
 export const useLegacyDykeFormStep = () =>
     useContext(LegacyDykeFormStepContext);
-
+export type LegacyDoorHPTType = ReturnType<typeof useLegacyDoorHPTContext>;
+export const LegacyDoorHPTContext = createContext<LegacyDoorHPTType>(null);
+export const useLegacyDoorHPT = () => useContext(LegacyDoorHPTContext);
 export function useLegacyDykeFormContext(data: OldDykeFormData) {
     const form = useForm<OldDykeFormData>({
         defaultValues: {
@@ -58,10 +74,31 @@ export function useLegacyDykeFormContext(data: OldDykeFormData) {
 
 export function useLegacyDykeFormItemContext(rowIndex) {
     const ctx = useLegacyDykeForm();
-    return {
+
+    const rootPath: DykeFormDataPath = `itemArray.${rowIndex}`;
+    const formStepPath: DykeFormItemDataPath = `item.formStepArray`;
+    // const multiComponentRootPath: DykeFormItemDataPath = `multiComponent`;
+    // const multiComponentPath: ItemMultiComponentDataPath = ''
+    const componentsPath: DykeFormItemDataPath = "multiComponent.components";
+    const _ = {
+        rootPath,
+        formStepPath,
+        formSteps: () => ctx.form.getValues(`${rootPath}.${formStepPath}`),
         rowIndex,
         mainCtx: ctx,
+        getPath: {
+            item(path: DykeFormItemDataPath) {
+                return `${rootPath}.${path}`;
+            },
+            componentItem(title, path: ItemMultiComponentDataPath) {
+                return `${rootPath}.${componentsPath}.${title}.${path}`;
+            },
+            doorSize(title, size, path: ItemMultiComponentSizeDataPath) {
+                return `${rootPath}.${componentsPath}.${title}.${size}.${path}`;
+            },
+        },
     };
+    return _;
 }
 
 export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
@@ -73,8 +110,12 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
     const updateComponent = useDykeComponentStore(
         (state) => state.updateComponent
     );
+    const [filteredComponents, setFilteredComponents] = useState<IStepProducts>(
+        []
+    );
+    const [components, setComponents] = useState<IStepProducts>([]);
     const [loading, startLoading] = useTransition();
-    const [items, setItems] = useState();
+
     async function fetchStepComponents() {
         startLoading(async () => {
             const { cache, data, key } =
@@ -82,8 +123,6 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
                     componentsByTitle,
                     stepCtx
                 );
-            if (!cache) updateComponent(key, data);
-            setItems(data);
         });
     }
 
@@ -92,13 +131,37 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
     }, []);
     const stepCtx = {
         fetchStepComponents,
+        updateComponent,
+        filteredComponents,
+        setFilteredComponents,
         loading,
         mainCtx: ctx,
         itemCtx,
         // itemArray: ctx.itemArray,
         rowIndex: itemCtx.rowIndex,
         step,
+        components,
+        setComponents,
+        stepIndex,
         //
     };
     return stepCtx;
+}
+export function useLegacyDoorHPTContext(title) {
+    const itemCtx = useLegacyDykeFormItem();
+    const formSteps = itemCtx.formSteps();
+    const doorStepIndex = formSteps.findIndex((i) => i.step.title == "Door");
+    if (!doorStepIndex) throw new Error("Door Not found");
+    const doorStepCtx = useLegacyDykeFormStepContext(
+        doorStepIndex,
+        formSteps[doorStepIndex] as any
+    );
+
+    const [showSelection, setShowSelection] = useState(false);
+
+    return {
+        doorStepCtx,
+    };
+    // const rootPath =
+    // const k: FieldPath<OldDykeFormData> = "_rawData.billingAddress.city";
 }

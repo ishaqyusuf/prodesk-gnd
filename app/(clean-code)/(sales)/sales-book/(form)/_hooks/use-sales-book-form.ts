@@ -1,4 +1,4 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import { DykeFormData } from "../../../_common/data-access/sales-form-dta";
+import { OldDykeFormData } from "../../../types";
 
-export function useBaseSalesBookFormContext(data: DykeFormData) {}
+export function useBaseSalesBookFormContext(data: OldDykeFormData) {}

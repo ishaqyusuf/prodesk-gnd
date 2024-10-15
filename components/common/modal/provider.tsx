@@ -22,6 +22,20 @@ export interface ModalContextProps {
 export type ModalType = "modal" | "sheet";
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 type DataType = { type?: ModalType; _data? };
+
+function fn() {
+    throw new Error("Modal Context not initialized");
+}
+
+const modalUtil: ModalContextProps = {
+    openModal: fn,
+    openSheet: fn,
+    close: fn,
+    data: null,
+    setShowModal: null,
+    loading: false,
+    startTransition: null,
+};
 export function ModalProvider({ children }: { children: ReactNode }) {
     const [modalContent, setModalContent] = useState<ReactNode | null>(null);
     const [showModal, setShowModal] = useState(false);
@@ -49,24 +63,26 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             callBack && callBack();
         }, 300); // Adjust this timeout as per your transition duration
     };
+    const value = {
+        loading,
+        startTransition,
+        close,
+        setShowModal,
+        data,
+        opened: showModal,
+        openModal(content: ReactNode, extras: any = {}) {
+            show(content, "modal", extras);
+        },
+        openSheet(content: ReactNode, extras: any = {}) {
+            show(content, "sheet", extras);
+        },
+    };
+    Object.keys(value).map((k) => {
+        modalUtil[k] = value[k];
+    });
 
     return (
-        <ModalContext.Provider
-            value={{
-                loading,
-                startTransition,
-                close,
-                setShowModal,
-                data,
-                opened: showModal,
-                openModal(content: ReactNode, extras: any = {}) {
-                    show(content, "modal", extras);
-                },
-                openSheet(content: ReactNode, extras: any = {}) {
-                    show(content, "sheet", extras);
-                },
-            }}
-        >
+        <ModalContext.Provider value={value}>
             {children}
             {showModal && (
                 <Modal
@@ -82,5 +98,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 }
 
 export function useModal() {
-    return useContext<ModalContextProps>(ModalContext as any);
+    const context = useContext<ModalContextProps>(ModalContext as any);
+    if (!context) throw new Error("useModal must be within a ModalProvider");
+    return context;
 }
+export const _modal = modalUtil;

@@ -8,7 +8,7 @@ import { Icons } from "@/components/_v1/icons";
 import { ISalesForm } from "../type";
 import AddressDisplay from "../../_components/address-display";
 import SalesAddressModal from "./sales-address-modal";
-import { useModal } from "@/components/common/modal/provider";
+import { _modal } from "@/components/common/modal/provider";
 
 export default function SalesAddressSection() {
     const form = useFormContext<ISalesForm>();
@@ -18,12 +18,11 @@ export default function SalesAddressSection() {
         "customer",
         "customerId",
     ]);
-    const modal = useModal();
     return (
         <>
             <div
                 onClick={() => {
-                    modal?.openModal(<SalesAddressModal form={form} />);
+                    _modal?.openModal(<SalesAddressModal form={form} />);
                 }}
                 className="xl:col-span-2 group cursor-pointer hover:shadow-sm relative  p-2 grid grid-cols-2 rounded-lg dark:hover:bg-accent hover:bg-accent-foreground hover:text-white"
             >

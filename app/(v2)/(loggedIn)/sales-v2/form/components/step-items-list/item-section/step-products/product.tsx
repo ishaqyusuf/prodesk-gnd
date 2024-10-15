@@ -35,6 +35,7 @@ import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
 import DoorMenuOption from "./door-menu-option";
 
 import { Button } from "@/components/ui/button";
+import Img from "@/components/(clean-code)/img";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -324,6 +325,19 @@ interface ProductImageProps {
     aspectRatio?;
 }
 export function ProductImage({ item, aspectRatio = 4 / 2 }: ProductImageProps) {
+    const src = item.product.img || item?.product?.meta?.cld;
+    const svg = (item.product.meta as any)?.svg;
+    const url = item.product.meta?.url;
+    return (
+        <Img
+            src={src}
+            aspectRatio={
+                src || url ? (item.isDoor ? 4 / 4 : aspectRatio) : aspectRatio
+            }
+            alt={item.product.title}
+            svg={svg}
+        />
+    );
     return (
         <motion.div
             className="flex flex-1 h-full flex-col items-center space-y-2 justify-center relative "

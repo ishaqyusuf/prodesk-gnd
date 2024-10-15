@@ -10,13 +10,18 @@ import {
 import HousePackageSizeLineItem from "./size-line-item";
 import Money from "@/components/_v1/money";
 import { Button } from "@/components/ui/button";
-import { useModal } from "@/components/common/modal/provider";
+import { _modal, useModal } from "@/components/common/modal/provider";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 
 import { getDykeStepDoorByProductId } from "../../../../../_action/get-dyke-step-doors";
 import { useDoorSizes } from "../../../../../_hooks/use-door-size";
 import { cn } from "@/lib/utils";
 import { useDykeCtx } from "../../../../../_hooks/form-context";
+import {
+    LegacyDoorHPTContext,
+    useLegacyDoorHPTContext,
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import DoorsModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/doors-modal";
 export default function HousePackageTool({ componentTitle }) {
     const ctx = useDykeCtx();
     const componentItem = useMultiComponentItem(componentTitle);
@@ -25,7 +30,8 @@ export default function HousePackageTool({ componentTitle }) {
     useEffect(() => {
         componentItem.initializeSizes();
     }, []);
-    const modal = useModal();
+    const hptCtx = useLegacyDoorHPTContext(componentTitle);
+
     const { sizes, isType } = useDoorSizes(form, item.rowIndex, componentTitle);
     async function editSize() {
         const i = item.get.data();
@@ -50,8 +56,21 @@ export default function HousePackageTool({ componentTitle }) {
         //     />
         // );
     }
+
     return (
-        <>
+        <LegacyDoorHPTContext.Provider value={hptCtx}>
+            <div className="flex justify-end gap-4">
+                <Button
+                    size="sm"
+                    onClick={() => {
+                        _modal.openModal(
+                            <DoorsModal stepCtx={hptCtx.doorStepCtx} />
+                        );
+                    }}
+                >
+                    Change Selection
+                </Button>
+            </div>
             <Table className="" id="housePackageTable">
                 <TableHeader>
                     <TableHead>Dimension</TableHead>
@@ -124,6 +143,6 @@ export default function HousePackageTool({ componentTitle }) {
                     Edit Size
                 </Button>
             </div> */}
-        </>
+        </LegacyDoorHPTContext.Provider>
     );
 }

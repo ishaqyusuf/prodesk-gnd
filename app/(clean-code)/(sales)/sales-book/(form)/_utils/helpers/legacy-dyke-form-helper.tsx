@@ -6,6 +6,8 @@ import {
     LegacyDykeFormStepType,
 } from "../../_hooks/legacy-hooks";
 import { getStepComponents } from "../../_actions/steps.action";
+import { initStepComponents } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/init-step-components";
+import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
 
 const helpers = {
     item: {
@@ -45,10 +47,33 @@ async function loadComponents(
         else props.stepId = stepCtx.step.step.id;
         const _resp = await getStepComponents(props);
         resp.data = _resp;
+        stepCtx.updateComponent(title, _resp);
     } else {
     }
+    const allComponents: IStepProducts = await initComponents(
+        stepCtx,
+        resp.data
+    );
+    stepCtx.setComponents(allComponents);
+    stepCtx.setFilteredComponents(
+        allComponents.filter((s) => !s._metaData.hidden)
+    );
+
     // console.log({ props, cache: resp.cache, len: resp.data?.length });
     return resp;
 }
+async function initComponents(stepCtx: LegacyDykeFormStepType, data) {
+    return await initStepComponents(stepCtx.mainCtx.form, {
+        stepProducts: data,
+        stepForm: stepCtx.step,
+        stepArray: stepCtx.itemCtx.formSteps(),
+        //item.get.getFormStepArray(),
+        stepIndex: stepCtx.stepIndex,
+    });
+    // await ÷
+    // TODO: you know what to do
+    return data;
+}
+
 const legacyDykeFormHelper = helpers;
 export default legacyDykeFormHelper;

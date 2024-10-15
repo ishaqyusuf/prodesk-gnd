@@ -1,5 +1,6 @@
 import { AddressBooks, SalesOrders, SalesStat, Taxes } from "@prisma/client";
-
+import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
+import { FieldPath } from "react-hook-form";
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type DykeStepTitles =
@@ -96,3 +97,19 @@ export interface DykeProductMeta {
     mouldingSpecies: { [id in string]: boolean };
     doorPrice?: { [size in string]: number };
 }
+
+export type DykeFormData = OldDykeForm;
+export type OldDykeFormData = OldDykeForm;
+export type DykeFormDataPath = FieldPath<OldDykeFormData>;
+export type DykeFormItemData = OldDykeForm["itemArray"][number];
+export type DykeFormStepData =
+    DykeFormItemData["item"]["formStepArray"][number];
+export type DykeFormStepDataPath = FieldPath<DykeFormStepData>;
+export type DykeFormItemDataPath = FieldPath<DykeFormItemData>;
+export type ItemMultiComponentData =
+    DykeFormItemData["multiComponent"]["components"][number];
+export type ItemMultiComponentSizeData =
+    ItemMultiComponentData["_doorForm"][number];
+export type ItemMultiComponentSizeDataPath =
+    FieldPath<ItemMultiComponentSizeData>;
+export type ItemMultiComponentDataPath = FieldPath<ItemMultiComponentData>;

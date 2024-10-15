@@ -36,8 +36,8 @@ import { Label } from "@/components/ui/label";
 import legacyDykeFormHelper from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/legacy-dyke-form-helper";
 export interface StepProductProps extends DykeItemStepSectionProps {
     rowIndex;
-    stepProducts: IStepProducts;
-    setStepProducts;
+    // stepProducts: IStepProducts;
+    // setStepProducts;
     allowAdd;
     allowCustom;
     sortMode?: boolean;
@@ -49,17 +49,13 @@ export function StepProducts({
     rowIndex,
     allowAdd,
     allowCustom,
-    stepProducts,
+    // stepProducts,
     sortMode,
-    setStepProducts,
-}: StepProductProps) {
-    const stepItemCtx = useStepItems({
-        stepForm,
-        stepProducts,
-        setStepProducts,
-        stepIndex,
-        rowIndex,
-    } as any);
+}: // setStepProducts,
+StepProductProps) {
+    const legacyStepCtx = useLegacyDykeFormStepContext(stepIndex, stepForm);
+    const { components, setComponents } = legacyStepCtx;
+    const stepItemCtx = useStepItems(legacyStepCtx);
     const {
         openStepForm,
         isMultiSection,
@@ -93,7 +89,7 @@ export function StepProducts({
         }, 300);
     }, []);
     const modal = useModal();
-    const legacyStepCtx = useLegacyDykeFormStepContext(stepIndex, stepForm);
+
     return (
         <StepItemCtx.Provider value={stepItemCtx}>
             <LegacyDykeFormStepContext.Provider value={legacyStepCtx}>
@@ -107,8 +103,8 @@ export function StepProducts({
                     <Sortable
                         orientation="mixed"
                         collisionDetection={closestCorners}
-                        value={stepProducts}
-                        onValueChange={setStepProducts}
+                        value={legacyStepCtx.components}
+                        onValueChange={legacyStepCtx.setComponents}
                         overlay={
                             <div className="size-full rounded-md bg-primary/10" />
                         }
@@ -117,7 +113,7 @@ export function StepProducts({
                     <Header />
                 </Hider> */}
                         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                            {stepProducts
+                            {components
                                 ?.filter(
                                     (s) => !s.custom && !s._metaData?.hidden
                                 )
@@ -130,7 +126,7 @@ export function StepProducts({
                                     >
                                         <Card className="border-none flex flex-col h-full bg-red-50">
                                             <StepItem
-                                                products={stepProducts}
+                                                products={setComponents}
                                                 className={cn(
                                                     "relative border-muted-foreground/10  borno group",
                                                     !sortMode &&
@@ -144,9 +140,7 @@ export function StepProducts({
                                                 deleteStepItem={() =>
                                                     deleteStepItemModal([item])
                                                 }
-                                                setStepProducts={
-                                                    setStepProducts
-                                                }
+                                                setStepProducts={setComponents}
                                                 openStepForm={openStepForm}
                                                 isRoot={stepCtx.isRoot}
                                                 stepIndex={stepIndex}
@@ -168,7 +162,7 @@ export function StepProducts({
                                     </button>
                                 </div>
                             )}
-                            {stepProducts?.filter((s) => s._metaData.hidden)
+                            {components?.filter((s) => s._metaData.hidden)
                                 .length > 0 &&
                                 dykeCtx.superAdmin && (
                                     <>
@@ -178,10 +172,10 @@ export function StepProducts({
                                                     modal.openModal(
                                                         <RestoreComponentsModal
                                                             products={
-                                                                stepProducts
+                                                                components
                                                             }
                                                             setStepProducts={
-                                                                setStepProducts
+                                                                setComponents
                                                             }
                                                             stepIndex={
                                                                 stepIndex

@@ -32,17 +32,18 @@ import { initStepComponents } from "../components/step-items-list/item-section/s
 import { generateRandomString } from "@/lib/utils";
 import DeleteItemModal from "../components/modals/delete-item-modal";
 import { useModal } from "@/components/common/modal/provider";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(
     {} as any
 );
 export const useStepItemCtx = () => useContext(StepItemCtx);
 export default function useStepItems({
-    stepForm,
+    step: stepForm,
+    components: stepProducts,
     stepIndex,
-    stepProducts,
-    setStepProducts,
-}: StepProductProps) {
+    setComponents: setStepProducts,
+}: LegacyDykeFormStepType) {
     const form = useDykeForm();
 
     const item = useContext(DykeItemFormContext);
@@ -54,6 +55,7 @@ export default function useStepItems({
     const [step, setStep] = useState<"Door" | "Moulding" | "Slab" | null>(null);
 
     const load = async () => {
+        return;
         const doorType = item.get.doorType();
         if (stepForm?.item?.meta?.hidden) return;
         let _stepProducts: IStepProducts = [];
@@ -337,14 +339,15 @@ export default function useStepItems({
     function onCreate(stepItem: IStepProducts[number]) {
         if (stepItem.door) stepItem.product = stepItem.door as any;
         // console.log(stepItem);
-        setStepProducts((cd) => {
-            const index = cd.findIndex((c) => c.id == stepItem.id);
-            const ret = [...cd];
+        // TODO: set step product on created
+        // setStepProducts((cd) => {
+        //     const index = cd.findIndex((c) => c.id == stepItem.id);
+        //     const ret = [...cd];
 
-            if (index > -1) ret[index] = stepItem;
-            else ret.push(stepItem);
-            return ret;
-        });
+        //     if (index > -1) ret[index] = stepItem;
+        //     else ret.push(stepItem);
+        //     return ret;
+        // });
     }
     function openStepForm(itm?) {
         const {
