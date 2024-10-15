@@ -58,6 +58,7 @@ export function DykeInvoiceItemStepSection({
     const modal = useModal();
     const ctx = useDykeCtx();
 
+    //TODO: refactor to use new components system
     const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
     function restoreComponent() {
         const formArray = form.getValues(
@@ -224,8 +225,6 @@ export function DykeInvoiceItemStepSection({
                         stepIndex={stepIndex}
                         rowIndex={item.rowIndex}
                         sortMode={sortMode}
-                        stepProducts={stepProducts}
-                        setStepProducts={setStepProducts}
                     />
                 )}
                 {sortMode && (
