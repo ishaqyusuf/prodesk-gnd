@@ -579,7 +579,11 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
-        _taxForm: await salesTaxForm(taxes as any, order?.id),
+        _taxForm: await salesTaxForm(
+            taxes as any,
+            order?.id,
+            ctx?.defaultProfile?.meta?.taxCode
+        ),
         // taxes: taxes,
         // taxByCode: taxByCode(taxes),
         paidAmount,

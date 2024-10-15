@@ -12,6 +12,7 @@ import {
     Path,
     useFieldArray,
     useForm,
+    UseFormReturn,
 } from "react-hook-form";
 import {
     DykeFormDataPath,
@@ -24,6 +25,9 @@ import {
 import legacyDykeFormHelper from "../_utils/helpers/legacy-dyke-form-helper";
 import { DykeItemForm, DykeStep } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
+import useEffectLoader from "@/lib/use-effect-loader";
+import { getTaxListUseCase } from "../../../_common/use-case/sales-tax-use-case";
+import { generateRandomString } from "@/lib/utils";
 
 export type LegacyDykeFormType = ReturnType<typeof useLegacyDykeFormContext>;
 export const LegacyDykeFormContext = createContext<LegacyDykeFormType>(null);
@@ -68,10 +72,57 @@ export function useLegacyDykeFormContext(data: OldDykeFormData) {
         superAdmin: data.superAdmin,
         status: data.status,
         adminMode,
+        footerCtx: useLegacyFooter(form),
     };
     return ctxValue;
 }
-
+function useLegacyFooter(form: UseFormReturn<OldDykeFormData>) {
+    const taxListFieldArray = useFieldArray({
+        name: "_taxForm.taxList",
+        control: form.control,
+    });
+    // const taxSelection = form.watch("_taxForm.selection");
+    const taxSelectionFieldArray = useFieldArray({
+        name: "_taxForm.selection",
+        control: form.control,
+    });
+    // const taxData = useEffectLoader(getTaxListUseCase);
+    function removeTaxSelection(code, index) {
+        taxSelectionFieldArray.remove(index);
+        form.setValue(`_taxForm.taxByCode.${code}.selected`, false);
+        setTimeout(() => {
+            form.setValue("_taxForm.taxChangedCode", generateRandomString(10));
+        }, 500);
+    }
+    async function changeTax(taxCode) {
+        if (!taxCode) {
+            removeTaxSelection(taxSelectionFieldArray[0]?.taxCode, 0);
+            return;
+        }
+        const c = taxListFieldArray.fields.find((f) => f.taxCode == taxCode);
+        taxSelectionFieldArray.update(0, {
+            taxCode: c.taxCode,
+            deletedAt: null,
+            tax: 0,
+            title: c.title,
+            percentage: c.percentage,
+        });
+        form.setValue(`_taxForm.taxByCode.${c.taxCode}.selected`, true);
+        form.setValue(
+            `_taxForm.taxByCode.${c.taxCode}.data.taxCode`,
+            c.taxCode
+        );
+        form.setValue(`_taxForm.taxByCode.${c.taxCode}._tax`, c);
+        setTimeout(() => {
+            form.setValue("_taxForm.taxChangedCode", generateRandomString(10));
+        }, 500);
+    }
+    return {
+        taxListFieldArray,
+        changeTax,
+        taxSelectionFieldArray,
+    };
+}
 export function useLegacyDykeFormItemContext(rowIndex) {
     const ctx = useLegacyDykeForm();
 

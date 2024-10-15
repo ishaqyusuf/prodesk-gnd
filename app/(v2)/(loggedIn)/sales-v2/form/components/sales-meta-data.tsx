@@ -9,14 +9,20 @@ import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
+import { useLegacyDykeForm } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 export default function SalesMetaData() {
     const form = useDykeForm();
     const profiles = form.getValues("data.profiles");
     const ctx = useDykeCtx();
     const salesProfileId = form.watch("order.customerProfileId");
+    const mainCtx = useLegacyDykeForm();
     useEffect(() => {
         salesFormUtils.salesProfileChanged(form, salesProfileId);
+        const prof = profiles?.find((p) => salesProfileId == p.id);
+        const taxCode = prof?.meta?.taxCode;
+        console.log({ taxCode });
+        mainCtx.footerCtx.changeTax(taxCode);
     }, [salesProfileId]);
     const type = form.getValues("order.type");
     return (
@@ -93,22 +99,22 @@ export default function SalesMetaData() {
                 </InfoLine>
             )}
             {/* <div className="grid grid-cols-2 gap-2 items-center xl:col-span-2"> */}
-            <InfoLine label="Tax">
+            {/* <InfoLine label="Tax">
                 <ControlledCheckbox
                     switchInput
                     control={form.control}
                     className="h-8"
                     name="order.meta.tax"
                 />
-            </InfoLine>
+            </InfoLine> */}
 
-            <InfoLine label="Component Price">
+            {/* <InfoLine label="Component Price">
                 <ControlledCheckbox
                     switchInput
                     className="h-8"
                     name="order.meta.calculatedPriceMode"
                 />
-            </InfoLine>
+            </InfoLine> */}
             {ctx.superAdmin && (
                 <InfoLine label="Price Admin">
                     <ControlledCheckbox

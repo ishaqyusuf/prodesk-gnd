@@ -74,7 +74,6 @@ export function calculateFooterEstimate(data: DykeForm, args: Props) {
     });
     const taxForm = data._taxForm;
     let totalTax = 0;
-    console.log({ taxForm });
 
     Object.entries(taxForm.taxByCode).map(([k, v]) => {
         if (v.selected) {

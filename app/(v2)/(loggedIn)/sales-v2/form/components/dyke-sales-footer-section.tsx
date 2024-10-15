@@ -38,6 +38,7 @@ import { useModal } from "@/components/common/modal/provider";
 import TaxModal from "@/app/(clean-code)/(sales)/_common/_modals/tax-modal/tax-modal";
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
+import { useLegacyDykeForm } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 const defaultValues = {
     taxPercentage: null,
     tax: null,
@@ -94,16 +95,8 @@ export default function DykeSalesFooterSection({}) {
         "_taxForm.taxChangedCode",
         "priceRefresh" as any,
     ]);
-
-    const taxListFieldArray = useFieldArray({
-        name: "_taxForm.taxList",
-        control: form.control,
-    });
-    // const taxSelection = form.watch("_taxForm.selection");
-    const taxSelectionFieldArray = useFieldArray({
-        name: "_taxForm.selection",
-        control: form.control,
-    });
+    const mainCtx = useLegacyDykeForm();
+    const { taxListFieldArray, taxSelectionFieldArray } = mainCtx.footerCtx;
     useEffect(() => {
         const estimate = calculateFooterEstimate(form.getValues(), {
             cccPercentage,
@@ -376,13 +369,8 @@ function TaxForm({}) {
     const { taxForm } = useContext(ctx);
     const modal = useModal();
     const form = useDykeForm();
-    function removeTaxSelection(code, index) {
-        taxForm.selectionArray.remove(index);
-        form.setValue(`_taxForm.taxByCode.${code}.selected`, false);
-        setTimeout(() => {
-            form.setValue("_taxForm.taxChangedCode", generateRandomString(10));
-        }, 500);
-    }
+
+    const mainCtx = useLegacyDykeForm();
     function selectionChanged(e) {
         setSelection((v) => {
             return null as any;
@@ -399,32 +387,8 @@ function TaxForm({}) {
                 />
             );
         } else {
-            const c = taxForm.listArray.fields.find((f) => f.taxCode == e);
-            taxForm.selectionArray.update(0, {
-                taxCode: c.taxCode,
-                deletedAt: null,
-                tax: 0,
-                title: c.title,
-                percentage: c.percentage,
-            });
-            form.setValue(`_taxForm.taxByCode.${c.taxCode}.selected`, true);
-            form.setValue(
-                `_taxForm.taxByCode.${c.taxCode}.data.taxCode`,
-                c.taxCode
-            );
-            form.setValue(`_taxForm.taxByCode.${c.taxCode}._tax`, c);
-            // form.setValue(`_taxForm.taxByCode.${c.taxCode}`, {
-            //     selected: true,
-            //     data: {
-            //         taxCode: c.taxCode,
-            //     },
-            // });
-            setTimeout(() => {
-                form.setValue(
-                    "_taxForm.taxChangedCode",
-                    generateRandomString(10)
-                );
-            }, 500);
+            mainCtx.footerCtx.changeTax(e);
+            return;
         }
     }
     const [selection, setSelection] = useState();

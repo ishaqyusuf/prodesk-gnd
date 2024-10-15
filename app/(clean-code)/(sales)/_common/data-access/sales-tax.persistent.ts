@@ -102,7 +102,7 @@ export async function createSalesTax(tax: Taxes) {
         },
     });
 }
-export async function salesTaxForm(taxes: SalesTaxes[], orderId?) {
+export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
     const taxList = await getWithDeletedTaxList();
     const taxByCode: {
         [code in string]: {
@@ -121,7 +121,7 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?) {
 
     taxList.map((tl) => {
         const tx = taxes.find((t) => t.taxCode == tl.taxCode);
-        const isDefault = !orderId && tl.title?.trim() == "County & State Tax";
+        const isDefault = !orderId && tl.taxCode == taxCode;
         if (tx || !tl.deletedAt || isDefault) {
             const selected = tx != null || isDefault;
             // console.log({ selected, t: tl.title });
