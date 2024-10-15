@@ -19,13 +19,13 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
-import { PrimitiveDivProps } from "@radix-ui/react-dialog";
 import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
 import { Icons } from "@/components/_v1/icons";
 import { useFormContext } from "react-hook-form";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 
 function BaseModal({
     children,
