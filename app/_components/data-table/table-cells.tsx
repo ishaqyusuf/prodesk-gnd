@@ -7,7 +7,7 @@ import { TdHTMLAttributes, useState, useTransition } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import ProgressStatus from "@/components/_v1/progress-status";
-import { PrimitiveDivProps } from "@radix-ui/react-dialog";
+
 import { Button, ButtonProps, buttonVariants } from "@/components/ui/button";
 import { MenuItem } from "@/components/_v1/data-table/data-table-row-actions";
 import { DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
