@@ -1,4 +1,4 @@
 import { useFormContext } from "react-hook-form";
-import { DykeFormData } from "../data-access/sales-form-dta";
+import { DykeFormData } from "../../types";
 
 export const useDykeForm = () => useFormContext<DykeFormData>();
