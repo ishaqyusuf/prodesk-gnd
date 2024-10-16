@@ -34,6 +34,7 @@ import { includeStepPriceCount } from "../../dyke-utils";
 
 import { salesTaxForm } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
 import { ComponentPrice } from "@prisma/client";
+import { withDeleted } from "@/app/(clean-code)/_common/utils/db-utils";
 
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
@@ -59,18 +60,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         // return null;
     }
     const restoreQuery = restore
-        ? {
-              OR: [
-                  {
-                      deletedAt: null,
-                  },
-                  {
-                      deletedAt: {
-                          not: null,
-                      },
-                  },
-              ],
-          }
+        ? withDeleted
         : {
               deletedAt: null,
           };
@@ -89,7 +79,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                 include: {
                     formSteps: {
                         where: {
-                            ...restoreQuery,
+                            ...withDeleted,
+                            // ...restoreQuery,
                         },
 
                         include: {
@@ -156,6 +147,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             billingAddress: true,
         },
     });
+    // console.log(order.items.length);
+
     let paidAmount = sum(order?.payments || [], "amount");
     type OrderType = NonNullable<typeof order>;
 
@@ -346,6 +339,8 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                 { formSteps, shelfItems, housePackageTool, ...itemData },
                 itemIndex
             ) => {
+                // console.log(formSteps.length);
+
                 let sectionPrice = 0;
                 const shelfItemArray: {
                     [k in string]: {

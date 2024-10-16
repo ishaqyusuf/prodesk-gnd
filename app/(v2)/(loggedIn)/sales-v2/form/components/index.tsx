@@ -20,6 +20,7 @@ interface Props {
 export default function SalesFormComponent({ defaultValues }: Props) {
     const ctx = useLegacyDykeFormContext(defaultValues);
     const { form, dealerMode, itemArray } = ctx;
+    console.log(defaultValues);
     return (
         <LegacyDykeFormContext.Provider value={ctx}>
             <RenderForm {...form}>

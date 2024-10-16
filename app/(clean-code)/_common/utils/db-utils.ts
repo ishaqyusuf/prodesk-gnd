@@ -8,7 +8,7 @@ export function anyDateQuery() {
     };
 }
 export const withDeleted = {
-    OR: [{ deletedAt: null }, { deletedAt: anyDateQuery() }],
+    OR: [{ deletedAt: null }, { deletedAt: { not: null } }],
 };
 export async function getPageInfo(input, where, model) {
     const { page = 1, perPage = 20 } = input;

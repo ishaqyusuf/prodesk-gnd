@@ -7,12 +7,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { Table } from "@tanstack/react-table";
 import { LoaderCircle, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { DataTableViewOptions } from "./data-table-view-options";
 import { useEffect } from "react";
 import { Kbd } from "../../kbd";
-import { useDataTableContext, useInifinityDataTable } from "../use-data-table";
+import { useInifinityDataTable } from "../use-data-table";
 
 interface DataTableToolbarProps<TData> {
     // table: Table<TData>;
