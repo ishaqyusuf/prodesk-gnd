@@ -41,7 +41,7 @@ async function loadComponents(
         cache: storedComponents?.length > 0,
         key: title,
     };
-    if (!resp.cache) {
+    if (!resp.cache || resp.cache) {
         if (title == "Door") props.stepTitle = "Door";
         else if (title == "Moulding") props.stepTitle = "Moulding";
         else props.stepId = stepCtx.step.step.id;

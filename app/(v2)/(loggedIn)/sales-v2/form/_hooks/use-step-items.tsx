@@ -338,16 +338,17 @@ export default function useStepItems({
     const modal = useModal();
     function onCreate(stepItem: IStepProducts[number]) {
         if (stepItem.door) stepItem.product = stepItem.door as any;
+
         // console.log(stepItem);
         // TODO: set step product on created
-        // setStepProducts((cd) => {
-        //     const index = cd.findIndex((c) => c.id == stepItem.id);
-        //     const ret = [...cd];
+        setStepProducts((cd) => {
+            const index = cd.findIndex((c) => c.id == stepItem.id);
+            const ret = [...cd];
 
-        //     if (index > -1) ret[index] = stepItem;
-        //     else ret.push(stepItem);
-        //     return ret;
-        // });
+            if (index > -1) ret[index] = stepItem;
+            else ret.push(stepItem);
+            return ret;
+        });
     }
     function openStepForm(itm?) {
         const {

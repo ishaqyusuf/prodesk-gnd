@@ -35,25 +35,27 @@ export const parseAsSort = createParser({
 
 export const searchParamsParser = {
     // CUSTOM FILTERS
-    success: parseAsArrayOf(parseAsBoolean, ARRAY_DELIMITER),
-    latency: parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    "timing.dns": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    "timing.connection": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    "timing.tls": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    "timing.ttfb": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    "timing.transfer": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    status: parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
-    //   regions: parseAsArrayOf(parseAsStringLiteral(REGIONS), ARRAY_DELIMITER),
-    //   method: parseAsArrayOf(parseAsStringLiteral(METHODS), ARRAY_DELIMITER),
-    host: parseAsString,
-    pathname: parseAsString,
-    date: parseAsArrayOf(parseAsTimestamp, RANGE_DELIMITER),
-    // REQUIRED FOR SORTING & PAGINATION
+    // success: parseAsArrayOf(parseAsBoolean, ARRAY_DELIMITER),
+    // latency: parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // "timing.dns": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // "timing.connection": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // "timing.tls": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // "timing.ttfb": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // "timing.transfer": parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // status: parseAsArrayOf(parseAsInteger, SLIDER_DELIMITER),
+    // //   regions: parseAsArrayOf(parseAsStringLiteral(REGIONS), ARRAY_DELIMITER),
+    // //   method: parseAsArrayOf(parseAsStringLiteral(METHODS), ARRAY_DELIMITER),
+    // host: parseAsString,
+    // pathname: parseAsString,
+    // date: parseAsArrayOf(parseAsTimestamp, RANGE_DELIMITER),
+    // // REQUIRED FOR SORTING & PAGINATION
     sort: parseAsSort,
     size: parseAsInteger.withDefault(30),
     start: parseAsInteger.withDefault(0),
-    // REQUIRED FOR SELECTION
+    // // REQUIRED FOR SELECTION
     uuid: parseAsString,
+
+    customer: parseAsString,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
@@ -61,4 +63,3 @@ export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);
 
 export type SearchParamsType = inferParserType<typeof searchParamsParser>;
-

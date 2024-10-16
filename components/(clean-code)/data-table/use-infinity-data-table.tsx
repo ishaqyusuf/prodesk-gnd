@@ -190,7 +190,7 @@ export function useInfiniteDataTable({
             }
             return map;
         },
-        filterFns: { inDateRange, arrSome },
+        // filterFns: { inDateRange, arrSome },
     });
 
     React.useEffect(() => {
@@ -206,6 +206,7 @@ export function useInfiniteDataTable({
             prev[curr.id as string] = curr.value;
             return prev;
         }, {} as Record<string, unknown>);
+        console.log({ search });
 
         setSearch(search);
         // eslint-disable-next-line react-hooks/exhaustive-deps
