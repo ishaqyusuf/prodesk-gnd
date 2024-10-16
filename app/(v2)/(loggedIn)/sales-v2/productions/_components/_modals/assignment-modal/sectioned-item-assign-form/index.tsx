@@ -135,43 +135,36 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
             }
         });
     }
-
+    if (data.data.readOnly) return <></>;
     return (
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
-            <DropdownMenuTrigger
+            <Button
+                // onClick={() => onOpenChange(!open)}
                 asChild
+                size={"sm"}
                 disabled={
                     salesDoorIndex >= 0
                         ? group.salesDoors[salesDoorIndex]?.report
                               ?.pendingAssignment == 0
                         : group.report.pendingAssignment == 0
                 }
+                className="whitespace-nowrap p-2 h-8"
             >
-                {!data.data.readOnly && (
-                    <Button
-                        onClick={() => onOpenChange(!open)}
-                        disabled={
-                            salesDoorIndex >= 0
-                                ? group.salesDoors[salesDoorIndex]?.report
-                                      ?.pendingAssignment == 0
-                                : group.report.pendingAssignment == 0
-                        }
-                        size={"sm"}
-                        className="whitespace-nowrap p-2 h-8"
-                    >
-                        <span className="hidden sm:inline-block">Assign</span>
-                        <span className="sm:hidden mr-2">
-                            <Icons.production className="w-4 h-4 " />
-                        </span>
+                <DropdownMenuTrigger>
+                    <span className="hidden sm:inline-block">Assign</span>
+                    <span className="sm:hidden mr-2">
+                        <Icons.production className="w-4 h-4 " />
+                    </span>
+                    <span>
                         (
                         {salesDoorIndex >= 0
                             ? group.salesDoors[salesDoorIndex]?.report
                                   ?.pendingAssignment
                             : group.report.pendingAssignment}
                         )
-                    </Button>
-                )}
-            </DropdownMenuTrigger>
+                    </span>
+                </DropdownMenuTrigger>
+            </Button>
             <DropdownMenuContent
                 side={isMobile ? "bottom" : "left"}
                 className=""
