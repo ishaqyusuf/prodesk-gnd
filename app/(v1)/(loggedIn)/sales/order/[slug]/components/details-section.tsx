@@ -92,7 +92,11 @@ export default function DetailsSection({ myProd, estimate }: Props) {
                             <>
                                 <Info label="Payment Terms">
                                     <p>{order.paymentTerm}</p>
-                                    <p>{formatDate(order.goodUntil as any)}</p>
+                                    <p>
+                                        {formatDate(
+                                            order.paymentDueDate as any
+                                        )}
+                                    </p>
                                 </Info>
                             </>
                         )}

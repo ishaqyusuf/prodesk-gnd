@@ -92,8 +92,10 @@ function _calculatePaymentTerm(paymentTerm, createdAt) {
     const t = parseInt(paymentTerm?.replace("Net", ""));
     let goodUntil: any = null;
     if (t) {
-        goodUntil = dayjs(createdAt).add(t, "days");
+        goodUntil = dayjs(createdAt).add(t, "days").toISOString();
     }
+    console.log({ paymentTerm, goodUntil });
+
     // form.setValue("goodUntil", goodUntil);
     // console.log([paymentTerm, createdAt, t, goodUntil]);
     return goodUntil;

@@ -33,6 +33,7 @@ export async function saveDykeSales(data: DykeForm) {
                 // salesProfileId,
                 ...rest
             } = data.order;
+            console.log(rest);
             // delete (rest as any).customer;
             function connect(id) {
                 if (!id) return undefined;
