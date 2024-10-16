@@ -246,7 +246,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                                 e.stopPropagation();
                                             }}
                                             onSelect={(value) => {
-                                                console.log(value);
                                                 setInputValue((prev) => {
                                                     if (
                                                         currentWord.trim() ===
