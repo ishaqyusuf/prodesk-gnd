@@ -123,8 +123,8 @@ export function DataTableViewOptions<TData>({
                                                 />
                                             </div>
                                             <span>
-                                                {column.columnDef.meta?.label ||
-                                                    column.id}
+                                                {(column.columnDef.meta as any)
+                                                    ?.label || column.id}
                                             </span>
                                             {enableOrdering && !search ? (
                                                 <SortableDragHandle
