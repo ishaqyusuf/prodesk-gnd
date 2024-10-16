@@ -16,7 +16,7 @@ export function filterData<T>(data: T[], search: Partial<SearchParamsType>) {
     const { start, size, sort, ...filters } = search;
     return data.filter((row) => {
         for (const key in filters) {
-            const filter = filters[key as keyof typeof filters];
+            const filter: any = filters[key as keyof typeof filters];
             if (filter === undefined || filter === null) continue;
             if (
                 (key === "latency" ||
