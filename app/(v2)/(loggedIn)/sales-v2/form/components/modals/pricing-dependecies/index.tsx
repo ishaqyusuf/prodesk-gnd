@@ -5,7 +5,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { DykeForm, DykeStep, DykeStepMeta } from "../../../../type";
 import { Form } from "@/components/ui/form";
 
-import { useModal } from "@/components/common/modal/provider";
+import { _modal, useModal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { saveDykeMeta } from "./action";
@@ -71,9 +71,8 @@ export default function PricingDependenciesModal({
                 stepArray,
             })
         );
-        modal.close();
+        _modal.close();
     }
-    const modal = useModal();
     return (
         <Form {..._form}>
             <Modal.Content size="sm">

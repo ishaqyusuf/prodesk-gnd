@@ -61,6 +61,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         setTimeout(() => {
             setModalContent(null);
             callBack && callBack();
+            document.body.style.pointerEvents = "";
         }, 1000); // Adjust this timeout as per your transition duration
     };
     const value = {
