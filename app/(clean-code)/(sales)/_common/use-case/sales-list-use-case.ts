@@ -1,7 +1,6 @@
 "use server";
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
 import { GetSalesListQuery, getSalesOrdersDta } from "../data-access/sales-dta";
-import { dataResponse } from "@/components/(clean-code)/data-table/server-helper";
 
 export async function getSalesOrderListUseCase(query: GetSalesListQuery) {
     query._type = "order";

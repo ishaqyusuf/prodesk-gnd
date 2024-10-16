@@ -85,15 +85,16 @@ export function sortData<T>(data: T[], sort: SearchParamsType["sort"]) {
 // TODO: later on, we could hover over the percentile to get a concrete value for the p50, p75, p90, p95, p99
 // for better comparability
 export function percentileData<T>(data: T[]) {
-    const latencies = data.map((row) => row.latency);
-    return data.map((row) => ({
-        ...row,
-        percentile: calculatePercentile(latencies, row.latency),
-    }));
+    return data;
+    // const latencies = data.map((row) => row.latency);
+    // return data.map((row) => ({
+    //     ...row,
+    //     percentile: calculatePercentile(latencies, row.latency),
+    // }));
 }
 
 export function getPercentileFromData<T>(data: T[]) {
-    const latencies = data.map((row) => row.latency);
+    const latencies = data.map((row) => (row as any).latency);
 
     const p50 = calculateSpecificPercentile(latencies, 50);
     const p75 = calculateSpecificPercentile(latencies, 75);
@@ -108,7 +109,7 @@ export function dataResponse<T>(filteredData: T[], search) {
     // const filteredData = filterData(totalData, search);
     const sortedData = sortData(filteredData, search.sort);
     const withPercentileData = percentileData(sortedData);
-    const latencies = withPercentileData.map(({ latency }) => latency);
+    const latencies = (withPercentileData as any).map(({ latency }) => latency);
     const currentPercentiles = {
         50: calculateSpecificPercentile(latencies, 50),
         75: calculateSpecificPercentile(latencies, 75),
