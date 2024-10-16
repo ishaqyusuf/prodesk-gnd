@@ -162,6 +162,7 @@ export function useInfiniteDataTable({
             rowSelection,
             columnOrder,
         },
+        manualFiltering: true,
         enableMultiRowSelection: false,
         // @ts-ignore FIXME: because it is not in the types
         getRowId: (row, index) => `${row?.uuid}` || `${index}`,

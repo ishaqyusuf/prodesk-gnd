@@ -41,6 +41,7 @@ async function loadComponents(
         cache: storedComponents?.length > 0,
         key: title,
     };
+    // TODO: POOOOR CODE. FIX
     if (!resp.cache || resp.cache) {
         if (title == "Door") props.stepTitle = "Door";
         else if (title == "Moulding") props.stepTitle = "Moulding";
