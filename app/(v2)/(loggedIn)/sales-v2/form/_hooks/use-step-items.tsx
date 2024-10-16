@@ -342,6 +342,7 @@ export default function useStepItems({
         // console.log(stepItem);
         // TODO: set step product on created
         // TODO: sync with component loader to store new or update.
+
         setStepProducts((cd) => {
             const index = cd.findIndex((c) => c.id == stepItem.id);
             const ret = [...cd];

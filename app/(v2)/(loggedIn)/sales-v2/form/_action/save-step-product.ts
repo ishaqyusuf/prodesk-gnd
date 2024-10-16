@@ -68,6 +68,7 @@ export async function saveStepProduct(data: Props) {
     // if (!data.product.value) data.product.value = data.product.title as any;
     const doorMode = data.door != null || data.isDoor; //_meta?.stepTitle == "Door";
     // if (data._meta?.stepTitle == "Door") return await saveDykeDoor(data);
+    console.log("SAVING>>");
     const {
         product: {
             id: prodId,
@@ -142,6 +143,7 @@ export async function saveStepProduct(data: Props) {
         });
         return { ...s, _metaData };
     } else {
+        console.log(stepData);
         const _ss = await prisma.dykeStepProducts.update({
             where: { id: id },
             data: {
@@ -157,7 +159,7 @@ export async function saveStepProduct(data: Props) {
                                   id: prodId,
                               },
                               data: {
-                                  //   ...productData,
+                                  ...productData,
 
                                   // value: productData.title as any,
                                   meta: productData.meta as any,
