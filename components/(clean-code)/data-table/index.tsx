@@ -4,6 +4,7 @@ import {
     TableRowModel,
     useDataTable,
     useDataTableContext,
+    useInifinityDataTable,
 } from "./use-data-table";
 import {
     Table,
@@ -17,6 +18,10 @@ import { cn } from "@/lib/utils";
 import { Fragment } from "react";
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination";
 import { TableCellProps } from "./table-cells";
+import { useInfiniteDataTable } from "./use-infinity-data-table";
+import { Button } from "@/components/ui/button";
+import { LoaderCircle } from "lucide-react";
+import { formatCompactNumber } from "@/lib/format";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -38,6 +43,15 @@ function BaseDataTable<TData, TValue>({
 // addFilterCol,
 BaseProps<TData, TValue>) {
     const ctx = useDataTable(props as any);
+
+    return (
+        <dataTableContext.Provider value={ctx}>
+            <div className="w-full space-y-3 overflow-auto">{children}</div>
+        </dataTableContext.Provider>
+    );
+}
+function Infinity({ children, ...props }) {
+    const ctx = useInfiniteDataTable(props as any);
 
     return (
         <dataTableContext.Provider value={ctx}>
@@ -123,7 +137,50 @@ function Footer() {
     const { table, columns } = useDataTableContext();
     return <DataTablePagination table={table} />;
 }
+function LoadMore() {
+    const {
+        table,
+        columns,
+        totalRowsFetched,
+        filterRows,
+
+        isFetching,
+        totalRows,
+        fetchNextPage,
+        isLoading,
+    } = useInifinityDataTable();
+    return (
+        <div className="flex justify-center">
+            {/* {JSON.stringify({ totalRows, totalRowsFetched, filterRows })} */}
+
+            {totalRows > totalRowsFetched ||
+            !table.getCoreRowModel().rows?.length ? (
+                <Button
+                    disabled={isFetching || isLoading}
+                    onClick={() => fetchNextPage()}
+                    size="sm"
+                    variant="outline"
+                >
+                    {isFetching ? (
+                        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    ) : null}
+                    Load More
+                </Button>
+            ) : (
+                <p className="text-muted-foreground text-sm">
+                    No more data to load (total:{" "}
+                    <span className="font-medium font-mono">
+                        {formatCompactNumber(totalRows)}
+                    </span>{" "}
+                    rows)
+                </p>
+            )}
+        </div>
+    );
+}
 export let DataTable = Object.assign(BaseDataTable, {
     Table: _Table,
     Footer,
+    Infinity,
+    LoadMore,
 });

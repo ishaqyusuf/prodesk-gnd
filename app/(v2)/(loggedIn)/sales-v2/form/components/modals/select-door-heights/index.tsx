@@ -52,7 +52,6 @@ export default function SelectDoorHeightsModal({
     rowIndex,
     onSubmit,
     productTitle,
-    superAdmin,
     stepProd,
 }: Props) {
     const safeTitle = safeFormText(productTitle);

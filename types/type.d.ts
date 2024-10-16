@@ -8,3 +8,7 @@ export interface IDataPage<T> {
     id;
     data: T;
 }
+export type MakeArray<T> = {
+    [P in keyof T]: T[P][];
+};
+

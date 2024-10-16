@@ -23,7 +23,10 @@ export async function getSalesQuotesDta(query: GetSalesListQuery) {
 }
 export type GetSalesOrdersDta = AsyncFnType<typeof getSalesOrdersDta>;
 export async function getSalesOrdersDta(query: GetSalesListQuery) {
+    console.log(">>>>");
     const resp = await getSalesListDta(query);
+    console.log(">>>>");
+
     return {
         ...resp,
         data: resp.data.map(salesOrderDto),

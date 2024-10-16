@@ -36,8 +36,9 @@ interface Props<T> {
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[];
     schema;
     filterFields;
+    serverAction?;
 }
-export function useTableCompose<T>(data: T[], props: Props<T>) {
+export function useTableCompose<T>(props: Props<T>) {
     const [dynamicCols, setDynamicCols] = useState([]);
     const [isPending, startTransition] = React.useTransition();
     const ctx: CtxType<T> = {
@@ -88,7 +89,7 @@ export function useTableCompose<T>(data: T[], props: Props<T>) {
                     };
                 }) as any),
             ].filter(Boolean) as any,
-        [data, isPending, dynamicCols]
+        [isPending, dynamicCols]
     );
     function addFilterCol(col) {
         setDynamicCols((current) => {
@@ -100,12 +101,13 @@ export function useTableCompose<T>(data: T[], props: Props<T>) {
     return {
         props: {
             columns,
-            data,
+            // data,
             pageCount: props?.pageCount,
             cellVariants: props.cellVariants,
             addFilterCol,
             schema: props.schema,
             filterFields: props.filterFields,
+            serverAction: props.serverAction,
         },
     };
 }

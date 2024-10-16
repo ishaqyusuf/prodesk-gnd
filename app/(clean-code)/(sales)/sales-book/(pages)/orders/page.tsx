@@ -3,10 +3,10 @@ import { getSalesOrderListUseCase } from "../../../_common/use-case/sales-list-u
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 
 export default async function SalesBookPage({ searchParams }) {
-    const promise = getSalesOrderListUseCase(searchParams);
+    // const promise = getSalesOrderListUseCase(searchParams);
     return (
         <FPage title="Orders">
-            <OrdersPageClient promise={promise} />
+            <OrdersPageClient />
         </FPage>
     );
 }

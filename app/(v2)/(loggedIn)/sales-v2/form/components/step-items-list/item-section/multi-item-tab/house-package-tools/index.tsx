@@ -63,9 +63,7 @@ export default function HousePackageTool({ componentTitle }) {
                 <Button
                     size="sm"
                     onClick={() => {
-                        _modal.openModal(
-                            <DoorsModal stepCtx={hptCtx.doorStepCtx} />
-                        );
+                        _modal.openModal(<DoorsModal hptCtx={hptCtx} />);
                     }}
                 >
                     Change Selection

@@ -210,7 +210,7 @@ export function useLegacyDoorHPTContext(title) {
     );
 
     const [showSelection, setShowSelection] = useState(false);
-
+    async function changeDoor() {}
     return {
         doorStepCtx,
     };

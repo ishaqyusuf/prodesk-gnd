@@ -4,7 +4,7 @@ export const filterFields = {
     customerName: {
         label: "Customer Name",
         type: "input",
-        value: "customer",
+        value: "Customer",
         options: [{ label: "Customer 1", value: "Customer 2" }],
     },
     address: {
