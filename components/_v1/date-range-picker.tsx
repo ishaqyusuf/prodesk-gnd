@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/popover";
 import dayjs from "dayjs";
 import { DateFormats, formatDate } from "@/lib/use-day";
+import { Menu } from "../(clean-code)/menu";
 
 interface Props {
     range?: Boolean;
@@ -78,10 +79,19 @@ export function DatePicker({
     //   console.log(value);
     // }, []);
     const [open, setOpen] = useState(false);
+    const openChanged = useCallback(
+        (e) => {
+            console.log(e);
+
+            setOpen(e);
+        },
+        [open]
+    );
     return (
         <div className={cn("grid gap-2")}>
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
+            <Menu
+                noSize
+                Trigger={
                     <Button
                         id="date"
                         variant={"outline"}
@@ -115,8 +125,9 @@ export function DatePicker({
                                 __format(_date())
                             ))}
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto z-10 p-0" align="end">
+                }
+            >
+                <div className="">
                     <Calendar
                         {...(calendarProps as any)}
                         initialFocus
@@ -130,8 +141,10 @@ export function DatePicker({
                         }}
                         numberOfMonths={range ? 2 : 1}
                     />
-                </PopoverContent>
-            </Popover>
+                </div>
+                {/* <PopoverContent className="w-auto z-10 p-0" align="end"> */}
+                {/* </PopoverContent> */}
+            </Menu>
         </div>
     );
 }
