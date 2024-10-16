@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { ModalContextProps, ModalType, useModal } from "./provider";
+import { _modal, ModalContextProps, ModalType, useModal } from "./provider";
 import {
     Sheet,
     SheetContent,
@@ -52,20 +52,28 @@ function BaseModal({
         return () => document.removeEventListener("keydown", onKeyDown);
     }, [onKeyDown]);
 
+    function onOpenChange(e) {
+        setShowModal(e);
+        if (!e) {
+            setTimeout(() => {
+                document.body.style.pointerEvents = "";
+            }, 200);
+        }
+    }
     return (
         <>
-            {showModal && (
+            {
                 <>
                     {
                         <>
-                            <Modal open={showModal} onOpenChange={setShowModal}>
+                            <Modal open={showModal} onOpenChange={onOpenChange}>
                                 {/* <ModalContent> {children}</ModalContent> */}
                                 {children}
                             </Modal>
                         </>
                     }
                 </>
-            )}
+            }
         </>
     );
 }
@@ -114,8 +122,8 @@ interface HeaderProps {
     children?;
 }
 function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
-    const modal = useModal();
-    const isModal = modal?.data?.type == "modal";
+    // const modal = useModal();
+    const isModal = _modal?.data?.type == "modal";
     const [Header, Title, Subtitle] = isModal
         ? [DialogHeader, DialogTitle, DialogDescription]
         : [SheetHeader, SheetTitle, SheetDescription];
@@ -168,8 +176,7 @@ function Footer({
     cancelVariant = "secondary",
     submitVariant = "default",
 }: FooterProps) {
-    const modal = useModal();
-    const isModal = modal?.data?.type == "modal";
+    const isModal = _modal?.data?.type == "modal";
     const [Footer] = isModal ? [DialogFooter] : [SheetFooter];
     const form = useFormContext();
     return (
@@ -181,7 +188,7 @@ function Footer({
                         <Button
                             variant={cancelVariant}
                             onClick={() => {
-                                onCancel ? onCancel(modal) : modal?.close();
+                                onCancel ? onCancel(_modal) : _modal?.close();
                             }}
                         >
                             {cancelText}
@@ -190,14 +197,14 @@ function Footer({
                     {onSubmit && (
                         <Btn
                             variant={submitVariant}
-                            isLoading={modal?.loading}
+                            isLoading={_modal?.loading}
                             onClick={async () => {
                                 if (form) {
                                     const resp = await form.trigger();
                                     // console.log(resp);
                                     if (!resp) return;
                                 }
-                                modal?.startTransition(() => onSubmit(modal));
+                                _modal?.startTransition(() => onSubmit(_modal));
                             }}
                         >
                             {submitText}

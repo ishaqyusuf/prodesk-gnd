@@ -11,8 +11,9 @@ import { ModalProvider } from "../common/modal/provider";
 import { CommandProvider } from "../cmd/provider";
 import { NavContext, useNavCtx } from "./layouts/site-nav";
 import { ThemeProvider } from "next-themes";
+import { getQueryClient } from "@/providers/get-query-client";
 const AppProvider = ({ children }) => {
-    const [queryClient] = useState(() => new QueryClient());
+    const queryClient = getQueryClient();
     return (
         <SessionProvider>
             <Provider store={store}>
@@ -21,7 +22,7 @@ const AppProvider = ({ children }) => {
                         <ModalProvider>
                             <NavContext.Provider value={useNavCtx()}>
                                 <QueryClientProvider client={queryClient}>
-                                    <ReactQueryDevtools initialIsOpen={false} />
+                                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                                     {children}
                                 </QueryClientProvider>
                             </NavContext.Provider>

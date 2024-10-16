@@ -103,6 +103,8 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
         );
 
         if (searchParams.success) {
+            console.log(searchParams.data);
+
             for (const key of Object.keys(searchParams.data)) {
                 const value =
                     searchParams.data[key as keyof typeof searchParams.data];
@@ -116,6 +118,8 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             for (const filter of currentFiltersToReset) {
                 table.getColumn(filter.id)?.setFilterValue(undefined);
             }
+        } else {
+            console.log("NOT SUCCESSFUL", inputValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValue, open, currentWord]);

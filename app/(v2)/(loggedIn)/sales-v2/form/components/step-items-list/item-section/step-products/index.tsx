@@ -126,7 +126,7 @@ StepProductProps) {
                                     >
                                         <Card className="border-none flex flex-col h-full bg-red-50">
                                             <StepItem
-                                                products={setComponents}
+                                                products={components}
                                                 className={cn(
                                                     "relative border-muted-foreground/10  borno group",
                                                     !sortMode &&
