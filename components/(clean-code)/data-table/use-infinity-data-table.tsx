@@ -191,7 +191,7 @@ export function useInfiniteDataTable({
             }
             return map;
         },
-        // filterFns: { inDateRange, arrSome },
+        filterFns: { inDateRange, arrSome },
     });
 
     React.useEffect(() => {
