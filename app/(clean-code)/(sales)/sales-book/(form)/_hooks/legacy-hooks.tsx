@@ -28,6 +28,8 @@ import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/st
 import useEffectLoader from "@/lib/use-effect-loader";
 import { getTaxListUseCase } from "../../../_common/use-case/sales-tax-use-case";
 import { generateRandomString } from "@/lib/utils";
+import stepHelpers from "../_utils/helpers/step-helper";
+import { toast } from "sonner";
 
 export type LegacyDykeFormType = ReturnType<typeof useLegacyDykeFormContext>;
 export const LegacyDykeFormContext = createContext<LegacyDykeFormType>(null);
@@ -154,12 +156,14 @@ export function useLegacyDykeFormItemContext(rowIndex) {
     return _;
 }
 
-export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
+export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
+    const [step, setStep] = useState(_step);
     const ctx = useLegacyDykeForm();
     const itemCtx = useLegacyDykeFormItem();
     const componentsByTitle = useDykeComponentStore(
         (state) => state.loadedComponentsByStepTitle
     );
+    const [sortMode, setSortMode] = useState(false);
     const updateComponent = useDykeComponentStore(
         (state) => state.updateComponent
     );
@@ -194,8 +198,42 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
     useEffect(() => {
         fetchStepComponents();
     }, []);
+    const formStepRootPath = itemCtx.getPath.item(
+        `item.formStepArray.${stepIndex}`
+    ) as any;
+    async function updateStep(stepForm) {
+        setStep(stepForm);
+
+        ctx.form.setValue(formStepRootPath, stepForm);
+        reloadComponents();
+    }
+
+    const [stepValue, allowAdd, allowCustom] = ctx.form.watch([
+        `${formStepRootPath}.item.value`,
+        `${formStepRootPath}.item.meta.allowAdd`,
+        `${formStepRootPath}.item.meta.allowCustom`,
+    ] as any);
+    //  const [stepValue, allowAdd, allowCustom] = form.watch([
+    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
+    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowAdd`,
+    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowCustom`,
+    //  ] as any);
+    const watch = {
+        stepValue,
+        sortMode,
+        allowAdd,
+        allowCustom,
+    };
     const stepCtx = {
         deletedComponents,
+        sortToggle() {
+            if (sortMode) {
+                stepHelpers.finishSort(stepCtx);
+                toast.success("Saved");
+            }
+            setSortMode(!sortMode);
+        },
+        updateStep,
         reloadComponents,
         setDeletedComponents,
         fetchStepComponents,
@@ -214,6 +252,7 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
         isRoot: step.step.title == "Item Type",
         isDoor: step.step.title == "Door",
         isMoulding: step.step.title == "Moulding",
+        watch,
     };
     return stepCtx;
 }

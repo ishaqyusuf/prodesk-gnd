@@ -3,7 +3,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
+import { cn, generateRandomString } from "@/lib/utils";
 import {
     useDykeCtx,
     useDykeForm,
@@ -24,10 +24,10 @@ import {
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
 import { Icons } from "@/components/_v1/icons";
-import { useModal } from "@/components/common/modal/provider";
+import { _modal } from "@/components/common/modal/provider";
 import { useState } from "react";
 import EditStepComponentPrice from "../modals/edit-step-component-price";
-import PricingDependenciesModal from "../modals/pricing-dependecies";
+import DependenciesModal from "../../../../../../(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal";
 import { Button } from "@/components/ui/button";
 import { sortComponents } from "../../_action/sort-components";
 
@@ -39,6 +39,7 @@ import {
 } from "../step-items-list/item-section/step-products/init-step-components";
 import { toast } from "sonner";
 import DevOnly from "@/_v2/components/common/dev-only";
+import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
@@ -50,79 +51,12 @@ export function DykeInvoiceItemStepSection({
 }: DykeItemStepSectionProps) {
     const form = useDykeForm();
     const item = useDykeItemCtx();
-    const [stepValue, allowAdd, allowCustom] = form.watch([
+    const [stepValue] = form.watch([
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowAdd`,
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowCustom`,
     ] as any);
-    const modal = useModal();
     const ctx = useDykeCtx();
+    const stepActionNodeId = `${item.rowIndex}-${stepIndex}`;
 
-    //TODO: refactor to use new components system
-    const [stepProducts, setStepProducts] = useState<IStepProducts>([]);
-    function restoreComponent() {
-        const formArray = form.getValues(
-            `itemArray.${item.rowIndex}.item.formStepArray`
-        );
-        const _depFormSteps = getFormSteps(formArray, stepIndex);
-        const stateDeps = getDykeStepState(_depFormSteps, stepForm);
-        let k = stateDeps.slice(-1)[0]?.key;
-        if (!k) {
-            toast("Cannot restore for this section");
-            return;
-        }
-        modal.openModal(
-            <RestoreComponentModal
-                k={k}
-                setStepProducts={setStepProducts}
-                products={stepProducts}
-            />
-        );
-    }
-    function conditionSettings(settingKey: keyof DykeStepMeta) {
-        modal.openModal(
-            <PricingDependenciesModal
-                stepIndex={stepIndex}
-                rowIndex={item.rowIndex}
-                settingKey={settingKey}
-                stepForm={stepForm}
-                form={form}
-                setStepProducts={setStepProducts}
-                stepProducts={stepProducts}
-            />
-        );
-    }
-    function componentPrice() {
-        modal.openModal(
-            <EditStepComponentPrice
-                rowIndex={item.rowIndex}
-                baseForm={form}
-                stepProducts={stepProducts}
-            />
-        );
-    }
-    const [sortMode, setSortMode] = useState(false);
-    const finishSort = async () => {
-        setSortMode(false);
-        await sortComponents(
-            stepProducts.map((prod, index) => {
-                const data = { sortIndex: index };
-                return {
-                    id: prod.id,
-                    data,
-                };
-            })
-        );
-    };
-    async function toggleStepSetting(key: keyof typeof stepForm.step.meta) {
-        const meta = stepForm.step.meta || {};
-        const state = ((meta as any)[key] = !meta[key]);
-        await updateDykeStepMeta(stepForm.step.id, meta);
-        form.setValue(
-            `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.${key}` as any,
-            state
-        );
-    }
     return (
         <Collapsible
             id={stepForm.step.title}
@@ -161,46 +95,7 @@ export function DykeInvoiceItemStepSection({
                             </span>
                         </DevOnly>
                     </button>
-                    <div className={cn("px-2", !ctx.superAdmin && "hidden")}>
-                        <Menu Icon={Icons.more}>
-                            <MenuItem
-                                onClick={() =>
-                                    conditionSettings("priceDepencies")
-                                }
-                            >
-                                Pricing Deps
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => conditionSettings("stateDeps")}
-                            >
-                                Component Deps
-                            </MenuItem>
-                            <MenuItem onClick={restoreComponent}>
-                                Restore Component
-                            </MenuItem>
-                            <MenuItem
-                                onClick={
-                                    sortMode
-                                        ? finishSort
-                                        : () => setSortMode(true)
-                                }
-                            >
-                                {sortMode ? "Finish Sort" : "Sort"}
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => toggleStepSetting("allowCustom")}
-                            >
-                                {allowCustom ? "Disable " : "Enable "}
-                                Custom
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => toggleStepSetting("allowAdd")}
-                            >
-                                {allowAdd ? "Disable " : "Enable "}
-                                Add
-                            </MenuItem>
-                        </Menu>
-                    </div>
+                    <div className="" id={stepActionNodeId}></div>
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="p-8 border ">
@@ -219,20 +114,10 @@ export function DykeInvoiceItemStepSection({
                     </>
                 ) : (
                     <StepProducts
-                        allowAdd={allowAdd}
-                        allowCustom={allowCustom}
+                        stepActionNodeId={stepActionNodeId}
                         stepForm={stepForm}
                         stepIndex={stepIndex}
-                        rowIndex={item.rowIndex}
-                        sortMode={sortMode}
                     />
-                )}
-                {sortMode && (
-                    <div className="fixed shadow-xl  z-10 mb-16 bottom-0 left-1/2">
-                        <Button onClick={finishSort} size="sm">
-                            Finish Sort
-                        </Button>
-                    </div>
                 )}
             </CollapsibleContent>
         </Collapsible>

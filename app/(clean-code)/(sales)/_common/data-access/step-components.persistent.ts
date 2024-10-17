@@ -106,3 +106,12 @@ export function transformStepProducts(
         },
     };
 }
+
+export async function updateStepComponentDta(id, data) {
+    return await prisma.dykeStepProducts.update({
+        where: { id },
+        data: {
+            ...data,
+        },
+    });
+}

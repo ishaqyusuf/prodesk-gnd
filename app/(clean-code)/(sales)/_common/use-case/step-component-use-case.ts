@@ -6,6 +6,7 @@ import {
     getDykeStepProductTitles,
     getDykeStepTitlesDta,
 } from "../data-access/dyke-steps.persistent";
+import { updateStepComponentDta } from "../data-access/step-components.persistent";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -21,5 +22,13 @@ export async function getDykeStepTitlesOptionUseCase() {
                 label: title,
                 value: id,
             } as LabelValue)
+    );
+}
+export async function sortStepComponentsUseCase(components) {
+    await Promise.all(
+        components.map(async (c, index) => {
+            const data = { sortIndex: index };
+            await updateStepComponentDta(c.id, data);
+        })
     );
 }

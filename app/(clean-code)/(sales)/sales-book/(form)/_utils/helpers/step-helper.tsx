@@ -5,6 +5,7 @@ import { _modal } from "@/components/common/modal/provider";
 import ComponentDepsModal from "../../_components/modals/step-component-modal/component-deps-modal";
 import { toast } from "sonner";
 import { saveStepProduct } from "@/app/(v2)/(loggedIn)/sales-v2/form/_action/save-step-product";
+import { sortStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 
 type CtxProps = LegacyDykeFormStepType;
 export type StepProduct = IStepProducts[number];
@@ -15,7 +16,13 @@ const stepHelpers = {
     saveComponent,
     getDykeStepState,
     formStepsForDeps,
+    finishSort,
 };
+async function finishSort(ctx: CtxProps) {
+    //TODO: FINISH SORT
+    await sortStepComponentsUseCase(ctx.components);
+    ctx.reloadComponents();
+}
 async function componentDepsForm(ctx: CtxProps, formData: StepProduct) {
     if (!formData.id) formData.uid = generateRandomString(5);
 

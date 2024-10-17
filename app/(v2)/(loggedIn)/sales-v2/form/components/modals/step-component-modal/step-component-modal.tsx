@@ -24,20 +24,7 @@ interface Props {
     item: IStepProducts[number];
     ctx: LegacyDykeFormStepType;
 }
-export default function StepComponentModal({
-    // item,
-    // onCreate,
-    // moulding,
-    // rowIndex,
-    // mainForm,
-    // stepTitle,
-    // products,
-    // stepIndex,
-    // stepForm,
-    // root,
-    item,
-    ctx,
-}: Props) {
+export default function StepComponentModal({ item, ctx }: Props) {
     const stepModal = useStepComponentModal(ctx, item);
     const {
         form,

@@ -16,26 +16,30 @@ import { Form } from "@/components/ui/form";
 import { saveStepProduct } from "../../_action/save-step-product";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 interface Props {
-    products: IStepProducts;
-    setStepProducts;
-    invoiceForm;
-    lineItemIndex;
-    stepIndex;
-    stepForm;
+    // products: IStepProducts;
+    // setStepProducts;
+    // invoiceForm;
+    // lineItemIndex;
+    // stepIndex;
+    // stepForm;
+    stepCtx: LegacyDykeFormStepType;
 }
 export default function RestoreComponentsModal({
-    products,
-    invoiceForm,
-    lineItemIndex,
-    stepIndex,
-    stepForm,
+    // products,
+    // invoiceForm,
+    // lineItemIndex,
+    // stepIndex,
+    // stepForm,
+    stepCtx,
 }: Props) {
+    const { step: stepForm, stepIndex, deletedComponents } = stepCtx;
     const [sortedProds, setSortedProds] = useState(
-        products
-            .filter((p) => p._metaData?.hidden)
-            .sort((a, b) => a.product.title?.localeCompare(b.product.title))
+        deletedComponents.sort((a, b) =>
+            a.product.title?.localeCompare(b.product.title)
+        )
     );
     const form = useForm({
         defaultValues: {
@@ -49,11 +53,8 @@ export default function RestoreComponentsModal({
         ReturnType<typeof getDykeStepState>
     >([]);
     useEffect(() => {
-        const formArray = invoiceForm.getValues(
-            `itemArray.${lineItemIndex}.item.formStepArray`
-        );
+        const formArray = stepCtx.itemCtx.formSteps();
         const _depFormSteps = getFormSteps(formArray, stepIndex);
-        // console.log({ _depFormSteps, stepForm, formData });
         const stateDeps = getDykeStepState(_depFormSteps, stepForm);
         setComponents(stateDeps);
     }, []);
@@ -77,11 +78,8 @@ export default function RestoreComponentsModal({
         item.meta.show = _show;
         item.meta.deleted = _deleted;
 
-        // console.log({ _show });
-
         const reps = await saveStepProduct(item);
-        console.log(reps);
-
+        stepCtx.reloadComponents();
         toast.success("Restored");
     }
     return (
@@ -122,11 +120,7 @@ export default function RestoreComponentsModal({
                                     </Badge>
                                 )}
                             </div>
-                            {/* {restores[item.uid] && tab == "restore" && (
-                            <div className="absolute left-0 m-2">
-                                <CheckCircle2Icon className="w-6 h-6 text-purple-500" />
-                            </div>
-                        )} */}
+
                             <PriceInfo prod={item} />
                             <div className="w-2/3 h-16s overflow-hidden">
                                 <ProductImage aspectRatio={1 / 1} item={item} />

@@ -2,14 +2,19 @@
 
 import Modal from "@/components/common/modal";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { DykeForm, DykeStep, DykeStepMeta } from "../../../../type";
+import {
+    DykeForm,
+    DykeStep,
+    DykeStepMeta,
+} from "../../../../../../../(v2)/(loggedIn)/sales-v2/type";
 import { Form } from "@/components/ui/form";
 
-import { _modal, useModal } from "@/components/common/modal/provider";
+import { _modal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { saveDykeMeta } from "./action";
-import { initStepComponents } from "../../step-items-list/item-section/step-products/init-step-components";
+
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { saveDykeMeta } from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal/action";
 
 interface Props {
     form: UseFormReturn<DykeForm>;
@@ -19,20 +24,21 @@ interface Props {
     stepProducts;
     setStepProducts;
     settingKey: keyof DykeStepMeta;
+    stepCtx: LegacyDykeFormStepType;
 }
-export default function PricingDependenciesModal({
-    form,
-    stepForm,
-    stepIndex,
-    rowIndex,
+export default function DependenciesModal({
+    // form,
+    // stepForm,
+    // stepIndex,
+    // rowIndex,
     settingKey,
-    stepProducts,
-    setStepProducts,
+    // stepProducts,
+    // setStepProducts,
+    stepCtx,
 }: Props) {
-    const stepArray = form.getValues(
-        `itemArray.${rowIndex}.item.formStepArray`
-    );
-
+    const stepArray = stepCtx.itemCtx.formSteps();
+    const { step: stepForm, stepIndex } = stepCtx;
+    const form = stepCtx.mainCtx.form;
     const deps = {};
     if (!stepForm.step.meta[settingKey])
         stepForm.step.meta[settingKey] = {} as any;
@@ -59,18 +65,19 @@ export default function PricingDependenciesModal({
         stepForm.step.meta[settingKey] = _form.getValues("deps") as any;
         // delete (stepForm.step.meta as any)[settingKey];
         const _ = await saveDykeMeta(stepForm.step.id, stepForm.step.meta);
-        form.setValue(
-            `itemArray.${rowIndex}.item.formStepArray.${stepIndex}` as any,
-            stepForm
-        );
-        setStepProducts(
-            await initStepComponents(form, {
-                stepForm,
-                stepProducts,
-                stepIndex,
-                stepArray,
-            })
-        );
+        stepCtx.updateStep(stepForm);
+        // form.setValue(
+        //     `itemArray.${rowIndex}.item.formStepArray.${stepIndex}` as any,
+        //     stepForm
+        // );
+        // setStepProducts(
+        //     await initStepComponents(form, {
+        //         stepForm,
+        //         stepProducts,
+        //         stepIndex,
+        //         stepArray,
+        //     })
+        // );
         _modal.close();
     }
     return (

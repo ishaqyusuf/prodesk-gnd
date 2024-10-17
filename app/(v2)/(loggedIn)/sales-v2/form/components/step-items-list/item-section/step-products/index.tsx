@@ -20,12 +20,9 @@ import { motion } from "framer-motion";
 import { Sortable, SortableItem } from "@/components/ui/sortable";
 import { closestCorners } from "@dnd-kit/core";
 import { Card } from "@/components/ui/card";
-import { useModal } from "@/components/common/modal/provider";
+import { _modal, useModal } from "@/components/common/modal/provider";
 import { useDykeCtx, useDykeForm } from "../../../../_hooks/form-context";
-import {
-    BatchSelectionAction,
-    useProdBatchAction,
-} from "../../../../_hooks/use-prod-batch-action";
+import { BatchSelectionAction } from "../../../../_hooks/use-prod-batch-action";
 import {
     LegacyDykeFormStepContext,
     useLegacyDykeFormStepContext,
@@ -33,28 +30,38 @@ import {
 import RestoreComponentsModal from "../../../modals/restore-modal";
 import { ArchiveRestoreIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import legacyDykeFormHelper from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/legacy-dyke-form-helper";
+
+import StepMenu from "./step-trigger";
+import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
 export interface StepProductProps extends DykeItemStepSectionProps {
-    rowIndex;
+    stepActionNodeId;
+    // rowIndex;
     // stepProducts: IStepProducts;
     // setStepProducts;
-    allowAdd;
-    allowCustom;
-    sortMode?: boolean;
+    // allowAdd;
+    // allowCustom;
+    // sortMode?: boolean;
 }
 export type IStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
 export function StepProducts({
     stepForm,
     stepIndex,
-    rowIndex,
-    allowAdd,
-    allowCustom,
-    // stepProducts,
-    sortMode,
-}: // setStepProducts,
+    stepActionNodeId,
+}: // rowIndex,
+// allowAdd,
+// allowCustom,
+// // stepProducts,
+// sortMode,
+// setStepProducts,
 StepProductProps) {
     const legacyStepCtx = useLegacyDykeFormStepContext(stepIndex, stepForm);
-    const { components, setComponents } = legacyStepCtx;
+    const {
+        components,
+        setComponents,
+        itemCtx: { rowIndex },
+        watch: { sortMode },
+    } = legacyStepCtx;
+    const { allowAdd, allowCustom } = legacyStepCtx.watch;
     const stepItemCtx = useStepItems(legacyStepCtx);
     const {
         openStepForm,
@@ -66,6 +73,7 @@ StepProductProps) {
         // allowCustom,
         ...stepCtx
     } = stepItemCtx;
+
     const form = useDykeForm();
     const dykeCtx = useDykeCtx();
     const { isVisible, elementRef } = useIsVisible({});
@@ -93,6 +101,7 @@ StepProductProps) {
     return (
         <StepItemCtx.Provider value={stepItemCtx}>
             <LegacyDykeFormStepContext.Provider value={legacyStepCtx}>
+                <StepMenu stepActionNodeId={stepActionNodeId} />
                 <motion.div
                     ref={elementRef}
                     // initial={{ opacity: 0 }}
@@ -162,29 +171,17 @@ StepProductProps) {
                                     </button>
                                 </div>
                             )}
-                            {components?.filter((s) => s._metaData.hidden)
-                                .length > 0 &&
+                            {legacyStepCtx.deletedComponents?.length > 0 &&
                                 dykeCtx.superAdmin && (
                                     <>
                                         <div className="p-4">
                                             <button
                                                 onClick={() => {
-                                                    modal.openModal(
+                                                    _modal.openModal(
                                                         <RestoreComponentsModal
-                                                            products={
-                                                                components
+                                                            stepCtx={
+                                                                legacyStepCtx
                                                             }
-                                                            setStepProducts={
-                                                                setComponents
-                                                            }
-                                                            stepIndex={
-                                                                stepIndex
-                                                            }
-                                                            lineItemIndex={
-                                                                rowIndex
-                                                            }
-                                                            stepForm={stepForm}
-                                                            invoiceForm={form}
                                                         />
                                                     );
                                                 }}
@@ -243,6 +240,18 @@ StepProductProps) {
                     </div>
                 </motion.div>
                 <BatchSelectionAction />
+                {sortMode && (
+                    <div className="fixed shadow-xl  z-10 mb-16 bottom-0 left-1/2">
+                        <Button
+                            onClick={() =>
+                                stepHelpers.finishSort(legacyStepCtx)
+                            }
+                            size="sm"
+                        >
+                            Finish Sort
+                        </Button>
+                    </div>
+                )}
             </LegacyDykeFormStepContext.Provider>
         </StepItemCtx.Provider>
     );
