@@ -3,7 +3,7 @@ import { formatMoney } from "@/lib/use-number";
 import { ComponentPrice } from "@prisma/client";
 import { generateRandomString, sum } from "@/lib/utils";
 import { DykeFormData } from "../../types";
-import { profileUpdateStepCtx } from "../../sales-book/(form)/_utils/helpers/step-helper";
+// import { profileUpdateStepCtx } from "../../sales-book/(form)/_utils/helpers/step-helper";
 type DykeFormReturn = UseFormReturn<DykeFormData>;
 function salesProfileChanged(form: DykeFormReturn, id) {
     const data = form.getValues();
@@ -65,8 +65,13 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                     }
                 }
             );
+            form.setValue(
+                `itemArray.${index}.priceRefresher`,
+                generateRandomString()
+            );
         });
-        profileUpdateStepCtx.applyUpdates();
+        // profileUpdateStepCtx.applyUpdates();
+        // data.itemArray?.map(item => )
     }, 500);
 }
 

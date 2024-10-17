@@ -158,18 +158,18 @@ function getDykeStepState(ctx: LegacyDykeFormStepType) {
 }
 export default stepHelpers;
 
-export const profileUpdateStepCtx = {
-    steps: {},
-    registerStep(ctx: LegacyDykeFormStepType) {
-        // console.log("REGISTER");
-        profileUpdateStepCtx.steps[`item-${ctx.itemCtx.rowIndex}`] =
-            ctx.reloadComponents;
-    },
-    applyUpdates() {
-        // console.log("APPLY>>>>", Object.keys(profileUpdateStepCtx.steps));
-        Object.entries(profileUpdateStepCtx.steps).map(([k, v]) => {
-            // console.log(k);
-            (v as any)?.();
-        });
-    },
-};
+// export const profileUpdateStepCtx = {
+//     steps: {},
+//     registerStep(ctx: LegacyDykeFormStepType) {
+//         // console.log("REGISTER");
+//         profileUpdateStepCtx.steps[`item-${ctx.itemCtx.rowIndex}`] =
+//             ctx.reloadComponents;
+//     },
+//     applyUpdates() {
+//         // console.log("APPLY>>>>", Object.keys(profileUpdateStepCtx.steps));
+//         Object.entries(profileUpdateStepCtx.steps).map(([k, v]) => {
+//             // console.log(k);
+//             (v as any)?.();
+//         });
+//     },
+// };

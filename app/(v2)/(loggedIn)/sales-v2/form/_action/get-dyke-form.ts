@@ -500,6 +500,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                     expanded: form.id ? false : true,
                     stillChecked: true,
                     sectionPrice,
+                    priceRefresher: null,
                     item: {
                         ...itemData,
                         housePackageTool,

@@ -28,9 +28,7 @@ import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/st
 import useEffectLoader from "@/lib/use-effect-loader";
 import { getTaxListUseCase } from "../../../_common/use-case/sales-tax-use-case";
 import { generateRandomString } from "@/lib/utils";
-import stepHelpers, {
-    profileUpdateStepCtx,
-} from "../_utils/helpers/step-helper";
+import stepHelpers from "../_utils/helpers/step-helper";
 import { toast } from "sonner";
 
 export type LegacyDykeFormType = ReturnType<typeof useLegacyDykeFormContext>;
@@ -162,6 +160,12 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [step, setStep] = useState(_step);
     const ctx = useLegacyDykeForm();
     const itemCtx = useLegacyDykeFormItem();
+    const [priceRefresher] = ctx.form.watch(
+        `itemArray.${itemCtx.rowIndex}.priceRefresher`
+    );
+    useEffect(() => {
+        stepCtx.reloadComponents();
+    }, [priceRefresher]);
     const componentsByTitle = useDykeComponentStore(
         (state) => state.loadedComponentsByStepTitle
     );
@@ -172,9 +176,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [filteredComponents, setFilteredComponents] = useState<IStepProducts>(
         []
     );
-    useEffect(() => {
-        profileUpdateStepCtx.registerStep(stepCtx);
-    }, []);
+
     const [components, setComponents] = useState<IStepProducts>([]);
     const [deletedComponents, setDeletedComponents] = useState<IStepProducts>(
         []
