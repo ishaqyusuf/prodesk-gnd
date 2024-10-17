@@ -38,7 +38,7 @@ export async function initStepComponents(
 
         let showThis = hasShow && stateDeps.some((s) => shows?.[s.key]);
         // console.log({ showThis, shows });
-        const isHidden = stateDeps.some((s) => product.meta.deleted?.[s.key]);
+        const isHidden = stateDeps.some((s) => _deleted?.[s.key]);
         product._metaData.hidden =
             (product.deletedAt || isHidden) && !showThis
                 ? true

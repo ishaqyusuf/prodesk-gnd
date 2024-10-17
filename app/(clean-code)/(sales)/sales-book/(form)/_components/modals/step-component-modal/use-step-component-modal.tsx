@@ -171,12 +171,13 @@ function useDoor(isDoor) {
                 await Promise.all(
                     Object.keys(heights).map(async (height) => {
                         if (!_tab) _tab = height;
-                        getDoorSizesUseCase(height).then((result) => {
-                            d[height] = result.map((s) => s.dimFt);
-                        });
+                        const result = await getDoorSizesUseCase(height); //.then((result) => {
+                        // console.log(result);
+                        d[height] = result.map((s) => s.dimFt);
+                        // });/
                     })
                 );
-                // console.log(d);
+                console.log(d);
                 setHeight(d);
                 setPriceTab(_tab);
                 getDykeStepTitlesOptionUseCase().then((resp) => {
