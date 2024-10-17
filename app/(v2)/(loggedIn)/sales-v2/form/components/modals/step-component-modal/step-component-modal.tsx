@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { ProductImage } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/product";
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
-import ComponentDepsModal from "./component-deps-modal";
 import { cn, generateRandomString } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Search } from "@/components/(clean-code)/search";
