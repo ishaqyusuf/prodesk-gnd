@@ -1878,6 +1878,7 @@ model DykeProducts {
     img                     String?
     description             String?
     noteRequired            Boolean?            @default(false)
+    custom                  Boolean?
     title                   String?
     price                   Float?
     categoryId              Int?
