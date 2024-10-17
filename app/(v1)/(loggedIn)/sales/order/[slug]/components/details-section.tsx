@@ -150,6 +150,7 @@ function AddressInfo({
                     ?.filter(Boolean)
                     .join(", ")}
             </p>
+            <p>{address?.email}</p>
         </Info>
     );
 }

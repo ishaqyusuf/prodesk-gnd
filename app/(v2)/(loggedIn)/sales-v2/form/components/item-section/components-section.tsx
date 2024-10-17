@@ -35,7 +35,7 @@ export function DykeInvoiceItemStepSection({
     const item = useDykeItemCtx();
     const [stepValue, stepCost] = form.watch([
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
-        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.priceData.salesTotalCost`,
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.price`,
     ] as any);
     const ctx = useDykeCtx();
     const stepActionNodeId = `${item.rowIndex}-${stepIndex}`;

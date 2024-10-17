@@ -3,6 +3,7 @@ import { formatMoney } from "@/lib/use-number";
 import { ComponentPrice } from "@prisma/client";
 import { generateRandomString, sum } from "@/lib/utils";
 import { DykeFormData } from "../../types";
+import { profileUpdateStepCtx } from "../../sales-book/(form)/_utils/helpers/step-helper";
 type DykeFormReturn = UseFormReturn<DykeFormData>;
 function salesProfileChanged(form: DykeFormReturn, id) {
     const data = form.getValues();
@@ -24,7 +25,7 @@ function salesProfileChanged(form: DykeFormReturn, id) {
             Object.entries(item?.multiComponent?.components || {}).map(
                 ([k, v]) => {
                     const componentKey = `itemArray.${index}.multiComponent.components.${k}`;
-                    if (v.priceTags?.moulding?.price) {
+                    if (v.priceTags?.moulding?.basePrice) {
                         const bPrice = v.priceTags.moulding.basePrice;
                         const price = salesProfileCost(form, bPrice);
                         // console.log({ bPrice, price });
@@ -65,6 +66,7 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                 }
             );
         });
+        profileUpdateStepCtx.applyUpdates();
     }, 500);
 }
 

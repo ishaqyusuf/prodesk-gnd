@@ -177,7 +177,7 @@ function useDoor(isDoor) {
                         // });/
                     })
                 );
-                console.log(d);
+                // console.log(d);
                 setHeight(d);
                 setPriceTab(_tab);
                 getDykeStepTitlesOptionUseCase().then((resp) => {

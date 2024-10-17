@@ -17,7 +17,11 @@ const stepHelpers = {
     getDykeStepState,
     formStepsForDeps,
     finishSort,
+    profileChanged,
 };
+function profileChanged(ctx: CtxProps) {
+    ctx.reloadComponents();
+}
 async function selectCustomComponent(ctx: CtxProps, value, price) {}
 async function finishSort(ctx: CtxProps) {
     //TODO: FINISH SORT
@@ -153,3 +157,19 @@ function getDykeStepState(ctx: LegacyDykeFormStepType) {
     return states;
 }
 export default stepHelpers;
+
+export const profileUpdateStepCtx = {
+    steps: {},
+    registerStep(ctx: LegacyDykeFormStepType) {
+        // console.log("REGISTER");
+        profileUpdateStepCtx.steps[`item-${ctx.itemCtx.rowIndex}`] =
+            ctx.reloadComponents;
+    },
+    applyUpdates() {
+        // console.log("APPLY>>>>", Object.keys(profileUpdateStepCtx.steps));
+        Object.entries(profileUpdateStepCtx.steps).map(([k, v]) => {
+            // console.log(k);
+            (v as any)?.();
+        });
+    },
+};

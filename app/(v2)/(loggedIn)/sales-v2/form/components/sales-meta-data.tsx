@@ -21,7 +21,7 @@ export default function SalesMetaData() {
         salesFormUtils.salesProfileChanged(form, salesProfileId);
         const prof = profiles?.find((p) => salesProfileId == p.id);
         const taxCode = prof?.meta?.taxCode;
-        console.log({ taxCode });
+        // console.log({ taxCode });
         mainCtx.footerCtx.changeTax(taxCode);
     }, [salesProfileId]);
     const type = form.getValues("order.type");
