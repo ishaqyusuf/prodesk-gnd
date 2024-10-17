@@ -3,43 +3,23 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { cn, generateRandomString } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
     useDykeCtx,
     useDykeForm,
     useDykeItemCtx,
 } from "../../_hooks/form-context";
-import { DykeStep, DykeStepMeta } from "../../../type";
+import { DykeStep } from "../../../type";
 import ShelfItemIndex from "../step-items-list/item-section/shelf-item";
 
 import LineItemSection from "../step-items-list/item-section/multi-item-tab/line-item-section/line-item-section";
-import {
-    IStepProducts,
-    StepProducts,
-} from "../step-items-list/item-section/step-products";
+import { StepProducts } from "../step-items-list/item-section/step-products";
 import MultiComponentRender from "../step-items-list/item-section/multi-item-tab/multi-component-render";
 import HousePackageTool from "../step-items-list/item-section/multi-item-tab/house-package-tools";
-import {
-    Menu,
-    MenuItem,
-} from "@/components/_v1/data-table/data-table-row-actions";
-import { Icons } from "@/components/_v1/icons";
-import { _modal } from "@/components/common/modal/provider";
-import { useState } from "react";
-import EditStepComponentPrice from "../modals/edit-step-component-price";
-import DependenciesModal from "../../../../../../(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal";
-import { Button } from "@/components/ui/button";
-import { sortComponents } from "../../_action/sort-components";
 
-import { updateDykeStepMeta } from "../../_action/dyke-step-setting";
-import RestoreComponentModal from "../modals/restore-component";
-import {
-    getDykeStepState,
-    getFormSteps,
-} from "../step-items-list/item-section/step-products/init-step-components";
-import { toast } from "sonner";
+import { _modal } from "@/components/common/modal/provider";
+
 import DevOnly from "@/_v2/components/common/dev-only";
-import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;

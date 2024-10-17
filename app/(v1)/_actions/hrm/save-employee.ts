@@ -27,12 +27,13 @@ export async function createEmployeeAction(data: IUser) {
             },
         });
     }
-    await clearCacheAction(
-        "1099-contractors",
-        "employees",
-        "job-employees",
-        "punchouts"
-    );
+
+    // await clearCacheAction(
+    //     "1099-contractors",
+    //     "employees",
+    //     "job-employees",
+    //     "punchouts"
+    // );
 }
 export async function saveEmployeeAction(data: IUser) {
     const { id, name, createdAt, phoneNo, username, email, meta, role } = data;
