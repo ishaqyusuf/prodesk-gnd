@@ -101,8 +101,8 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             },
             {} as Record<string, unknown>
         );
-
-        if (searchParams.success) {
+        console.log({ inputValue });
+        if (searchParams.success && !inputValue?.endsWith(" ")) {
             console.log(searchParams.data);
 
             for (const key of Object.keys(searchParams.data)) {

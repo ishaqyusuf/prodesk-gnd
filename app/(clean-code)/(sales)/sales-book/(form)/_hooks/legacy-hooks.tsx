@@ -160,7 +160,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [step, setStep] = useState(_step);
     const ctx = useLegacyDykeForm();
     const itemCtx = useLegacyDykeFormItem();
-    const [priceRefresher] = ctx.form.watch(
+    const priceRefresher = ctx.form.watch(
         `itemArray.${itemCtx.rowIndex}.priceRefresher`
     );
     useEffect(() => {
