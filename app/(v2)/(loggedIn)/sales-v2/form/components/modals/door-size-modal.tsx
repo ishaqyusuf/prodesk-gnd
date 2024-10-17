@@ -94,14 +94,12 @@ export default function DoorSizeModal({
     function onSubmit() {
         const doors: DykeDoorForm =
             form.getValues(`${basePath}._doorForm` as any) || {};
-        const basePriceTags =HousePackageToolMeta["priceTags"] = form.getValues(
-            `${basePath}.priceTags` as any
-        ) || {}
-        const priceTags:   {
+        const basePriceTags =
+            form.getValues(`${basePath}.priceTags` as any) || {};
+        const priceTags: HousePackageToolMeta["priceTags"] = {
             doorSizePriceTag: {},
             ...basePriceTags,
         };
-        console.log(priceTags);
 
         const _formData = _form.getValues();
         let newDoorForm = {};
