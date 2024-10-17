@@ -63,6 +63,7 @@ async function saveComponent(ctx: CtxProps, formData: StepProduct, form?) {
     if (stepItem.door) stepItem.product = stepItem.door as any;
     await ctx.reloadComponents();
     _modal.close();
+    toast.success("Saved");
 }
 
 function copyProduct(form, root, product: StepProduct) {
