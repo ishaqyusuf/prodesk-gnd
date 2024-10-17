@@ -125,7 +125,7 @@ export default function StepComponentModal({
                                 <FileUploader
                                     width={50}
                                     height={50}
-                                    onUpload={(assetId) => onUpload(assetId)}
+                                    onUpload={onUpload}
                                     label="Product Image"
                                     folder="dyke"
                                 >

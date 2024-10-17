@@ -57,7 +57,7 @@ export function useStepComponentModal(
         tab,
         setTab,
         stepS,
-        onUpload: (assetId, path) => stepHelpers.onUpload(form, assetId, path),
+        onUpload: (assetId, path?) => stepHelpers.onUpload(form, assetId, path),
         url,
         svg,
         img,
