@@ -36,6 +36,8 @@ import DoorMenuOption from "./door-menu-option";
 
 import { Button } from "@/components/ui/button";
 import Img from "@/components/(clean-code)/img";
+import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
+import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 interface Props {
     item: IStepProducts[number];
     select;
@@ -66,6 +68,7 @@ export function StepItem({
 }: Props) {
     const ctx = useDykeItemCtx();
     const formCtx = useDykeCtx();
+    const stepCtx = useLegacyDykeFormStep();
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
@@ -106,13 +109,14 @@ export function StepItem({
                 dykeStepId: stepForm.step.id,
                 dependenciesUid,
             });
-            setStepProducts((prods) => {
-                return [...prods].map((prod, index) => {
-                    if (prod.uid == item.uid)
-                        prod._metaData.price = Number(price);
-                    return prod;
-                });
-            });
+            stepCtx.reloadComponents();
+            // setStepProducts((prods) => {
+            //     return [...prods].map((prod, index) => {
+            //         if (prod.uid == item.uid)
+            //             prod._metaData.price = Number(price);
+            //         return prod;
+            //     });
+            // });
             menuOpenChange(false);
         });
     }

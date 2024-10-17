@@ -143,7 +143,8 @@ export async function saveStepProduct(data: Props) {
         });
         return { ...s, _metaData };
     } else {
-        console.log(stepData);
+        // console.log(stepData);
+
         const _ss = await prisma.dykeStepProducts.update({
             where: { id: id },
             data: {

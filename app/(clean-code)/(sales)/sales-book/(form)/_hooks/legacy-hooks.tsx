@@ -149,6 +149,7 @@ export function useLegacyDykeFormItemContext(rowIndex) {
                 return `${rootPath}.${componentsPath}.${title}.${size}.${path}`;
             },
         },
+        get: {},
     };
     return _;
 }
@@ -166,6 +167,9 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
         []
     );
     const [components, setComponents] = useState<IStepProducts>([]);
+    const [deletedComponents, setDeletedComponents] = useState<IStepProducts>(
+        []
+    );
     const [loading, startLoading] = useTransition();
 
     async function fetchStepComponents() {
@@ -177,11 +181,23 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
                 );
         });
     }
-
+    async function reloadComponents() {
+        startLoading(async () => {
+            const { cache, data, key } =
+                await legacyDykeFormHelper.step.loadComponents(
+                    componentsByTitle,
+                    stepCtx,
+                    true
+                );
+        });
+    }
     useEffect(() => {
         fetchStepComponents();
     }, []);
     const stepCtx = {
+        deletedComponents,
+        reloadComponents,
+        setDeletedComponents,
         fetchStepComponents,
         updateComponent,
         filteredComponents,
@@ -195,7 +211,9 @@ export function useLegacyDykeFormStepContext(stepIndex, step: DykeStep) {
         components,
         setComponents,
         stepIndex,
-        //
+        isRoot: step.step.title == "Item Type",
+        isDoor: step.step.title == "Door",
+        isMoulding: step.step.title == "Moulding",
     };
     return stepCtx;
 }

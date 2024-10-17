@@ -31,7 +31,8 @@ function getDoorType(itemCtx: LegacyDykeFormItemType): DykeDoorType {
 }
 async function loadComponents(
     storeComponentsByTitle: IDykeComponentStore["loadedComponentsByStepTitle"],
-    stepCtx: LegacyDykeFormStepType
+    stepCtx: LegacyDykeFormStepType,
+    ignoreCache = false
 ) {
     const title = helpers.step.getStepTitle(stepCtx);
     const storedComponents = storeComponentsByTitle[title];
@@ -42,7 +43,7 @@ async function loadComponents(
         key: title,
     };
     // TODO: POOOOR CODE. FIX
-    if (!resp.cache || resp.cache) {
+    if (!resp.cache || ignoreCache) {
         if (title == "Door") props.stepTitle = "Door";
         else if (title == "Moulding") props.stepTitle = "Moulding";
         else props.stepId = stepCtx.step.step.id;
@@ -58,6 +59,9 @@ async function loadComponents(
     stepCtx.setComponents(allComponents);
     stepCtx.setFilteredComponents(
         allComponents.filter((s) => !s._metaData.hidden)
+    );
+    stepCtx.setDeletedComponents(
+        allComponents.filter((s) => s._metaData.hidden)
     );
 
     // console.log({ props, cache: resp.cache, len: resp.data?.length });

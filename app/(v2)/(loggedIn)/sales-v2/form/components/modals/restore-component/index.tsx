@@ -23,7 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ProductImage } from "../../step-items-list/item-section/step-products/product";
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
-import SaveProductForModal from "../save-product-for-modal";
+import ComponentDepsModal from "../../../../../../../(clean-code)/(sales)/sales-book/(form)/_components/modals/step-component-modal/component-deps-modal";
 import { cn, generateRandomString } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Input } from "@/components/ui/input";

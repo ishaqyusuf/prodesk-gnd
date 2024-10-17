@@ -1,80 +1,71 @@
 import Modal from "@/components/common/modal";
 import { Form } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { DykeForm, DykeStep } from "../../../type";
+import {
+    DykeForm,
+    DykeStep,
+} from "../../../../../../../(v2)/(loggedIn)/sales-v2/type";
 import { useEffect, useState } from "react";
-import { IStepProducts } from "../step-items-list/item-section/step-products";
+import { IStepProducts } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
 import {
     getDykeStepState,
     getFormSteps,
-} from "../step-items-list/item-section/step-products/init-step-components";
+} from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/init-step-components";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 import { useModal } from "@/components/common/modal/provider";
-import { _deleteStepItem } from "../step-items-list/item-section/step-products/_actions";
+import { _deleteStepItem } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/_actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { LegacyDykeFormStepType } from "../../../_hooks/legacy-hooks";
+import stepHelpers, { StepProduct } from "../../../_utils/helpers/step-helper";
 
 interface Props {
-    lineItemIndex: number;
-    stepIndex;
-    invoiceForm: UseFormReturn<DykeForm>;
-    // stepItem?: IStepProducts[number];
-    // stepItems: IStepProducts;
-    stepForm: DykeStep;
-    formData;
-    onComplete(resp);
+    // lineItemIndex: number;
+    // stepIndex;
+    // invoiceForm: UseFormReturn<DykeForm>;
+    // // stepItem?: IStepProducts[number];
+    // // stepItems: IStepProducts;
+    // stepForm: DykeStep;
+    // formData;
+    // onComplete(resp);
+    ctx: LegacyDykeFormStepType;
+    formData: StepProduct;
 }
-export default function SaveProductForModal({
-    lineItemIndex,
-    stepIndex,
+export default function ComponentDepsModal({
+    // lineItemIndex,
+    // stepIndex,
+    // formData,
+    // // stepItems,
+    // invoiceForm,
+    // stepForm,
+    // onComplete,
+    ctx,
     formData,
-    // stepItems,
-    invoiceForm,
-    stepForm,
-    onComplete,
 }: // onComplete,
 Props) {
+    const defaultValues = {
+        deleteSelections: {},
+        show: formData?.meta?.show || {},
+    };
     const form = useForm({
-        defaultValues: {
-            deleteSelections: {},
-            // deletables: {},
-            show: formData || {},
-        },
+        defaultValues,
     });
-    const [components, setComponents] = useState<
-        ReturnType<typeof getDykeStepState>
-    >([]);
-    useEffect(() => {
-        const formArray = invoiceForm.getValues(
-            `itemArray.${lineItemIndex}.item.formStepArray`
-        );
-        const _depFormSteps = getFormSteps(formArray, stepIndex);
-        // console.log({ _depFormSteps, stepForm, formData });
-        const stateDeps = getDykeStepState(_depFormSteps, stepForm);
-        setComponents(stateDeps);
-    }, []);
-    const modal = useModal();
+    const [components, setComponents] = useState([]);
+
     async function submit() {
-        const d = form.getValues("show");
-        let _show = {};
-        let valid = false;
-        Object.entries(d).map(
-            ([k, v]) => v && (_show[k] = true) && (valid = true)
-        );
-        if (!valid) {
-            toast.error(
-                "Select atleast one component tree and use the visible for all button"
-            );
-            return;
-        }
-        onComplete(_show);
-        modal.close();
+        await stepHelpers.saveComponent(ctx, formData, form);
     }
+    useEffect(() => {
+        const ls = stepHelpers.getDykeStepState(ctx);
+        if (ls.length) setComponents(ls);
+        else saveForAll();
+    }, []);
     async function saveForAll() {
         // saveForAll
-        onComplete({});
-        modal.close();
+        // onComplete({});
+        await stepHelpers.saveComponent(ctx, formData);
+        // modal.close();
     }
     return (
         <Form {...form}>
@@ -84,8 +75,8 @@ Props) {
                     subtitle={
                         <span className="whitespace-normal">
                             {`If selected, this component will only be
-                                    visible on ${stepForm?.step?.title} when the
-                                    component combination is selected. Click visible in all to make it always visible in ${stepForm?.step?.title}`}
+                                    visible on ${ctx?.step?.step?.title} when the
+                                    component combination is selected. Click visible in all to make it always visible in ${ctx?.step?.step?.title}`}
                         </span>
                     }
                 />

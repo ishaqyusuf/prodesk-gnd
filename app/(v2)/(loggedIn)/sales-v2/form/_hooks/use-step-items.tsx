@@ -21,7 +21,7 @@ import {
     getDykeStepDoors,
 } from "../_action/get-dyke-step-doors";
 
-import EditStepItemModal from "../components/modals/edit-step-item-modal";
+import StepComponentModal from "../../../../../(clean-code)/(sales)/sales-book/(form)/_components/modals/step-component-modal/step-component-modal";
 import { SaveStepProductExtra } from "../_action/save-step-product";
 import {
     _deleteDoorStep,
@@ -38,12 +38,13 @@ export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(
     {} as any
 );
 export const useStepItemCtx = () => useContext(StepItemCtx);
-export default function useStepItems({
-    step: stepForm,
-    components: stepProducts,
-    stepIndex,
-    setComponents: setStepProducts,
-}: LegacyDykeFormStepType) {
+export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
+    const {
+        step: stepForm,
+        components: stepProducts,
+        stepIndex,
+        setComponents: setStepProducts,
+    } = stepCtx;
     const form = useDykeForm();
 
     const item = useContext(DykeItemFormContext);
@@ -54,58 +55,10 @@ export default function useStepItems({
     const ctx = useDykeCtx();
     const [step, setStep] = useState<"Door" | "Moulding" | "Slab" | null>(null);
 
-    const load = async () => {
-        return;
-        const doorType = item.get.doorType();
-        if (stepForm?.item?.meta?.hidden) return;
-        let _stepProducts: IStepProducts = [];
-        if (stepFormTitle == "Door") {
-            setStep("Door");
-            // const query = doorQueryBuilder(
-            //     item.get.getFormStepArray(),
-            //     item.get.doorType()
-            // );
-            // const _props = { ...query, stepId: stepForm?.step?.id };
-            async function _loadDoors() {
-                const prods = await getDykeStepDoors(stepForm.step.id);
-                return prods; //[];
-            }
-            _stepProducts = await _loadDoors();
-            // console.log(_stepProducts.length);
-            // console.log({ sample });
-            // console.log(dups.length);
-            // _stepProducts = prods;
-        } else if (doorType == "Moulding" && stepFormTitle == "Moulding") {
-            setStep("Moulding");
-            const specie = item.get.getMouldingSpecie();
-            const prods = await getMouldingStepProduct(specie);
-            _stepProducts = prods as any;
-        } else if (
-            doorType == "Door Slabs Only" &&
-            stepFormTitle == "Door Type"
-        ) {
-            setStep("Slab");
-            _stepProducts = await getSlabDoorTypes();
-            // setStepProducts(await getSlabDoorTypes());
-            // if(stepFormTitle == 'Height' )
-        } else {
-            const _stepProds = await getStepProduct(stepForm?.step?.id);
-            _stepProducts = _stepProds;
-        }
-        if (_stepProducts)
-            setStepProducts(
-                await initStepComponents(form, {
-                    stepProducts: _stepProducts,
-                    stepForm,
-                    stepArray: item.get.getFormStepArray(),
-                    stepIndex,
-                })
-            );
-    };
     const [__uid, setUid] = useState<string>();
     useEffect(() => {
         setUid(generateRandomString(4));
-        load();
+
         allowsCustom();
         calculateComponentPrices(form, item.rowIndex);
     }, []);
@@ -405,17 +358,20 @@ export default function useStepItems({
               } as any);
 
         modal.openModal(
-            <EditStepItemModal
-                onCreate={onCreate}
-                stepIndex={stepIndex}
-                stepForm={stepForm}
-                root={isRoot}
-                stepTitle={stepFormTitle}
-                mainForm={form}
-                rowIndex={item.rowIndex}
-                moulding={isMoulding && stepFormTitle == "Moulding"}
+            <StepComponentModal
+                ctx={stepCtx}
                 item={_item}
-                products={stepProducts}
+
+                // onCreate={onCreate}
+                // stepIndex={stepIndex}
+                // stepForm={stepForm}
+                // root={isRoot}
+                // stepTitle={stepFormTitle}
+                // mainForm={form}
+                // rowIndex={item.rowIndex}
+                // moulding={isMoulding && stepFormTitle == "Moulding"}
+                // item={_item}
+                // products={stepProducts}
             />
         );
     }

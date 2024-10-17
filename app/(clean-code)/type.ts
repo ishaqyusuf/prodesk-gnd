@@ -21,3 +21,7 @@ export interface PageBaseQuery {
     trashedOnly?: boolean;
     withTrashed?: boolean;
 }
+export interface LabelValue {
+    label;
+    value;
+}
