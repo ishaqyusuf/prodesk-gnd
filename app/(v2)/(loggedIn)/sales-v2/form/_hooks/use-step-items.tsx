@@ -312,6 +312,7 @@ export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
             custom,
             sortIndex,
             doorId,
+            productCode,
             door: { query } = {} as any,
             product: {
                 id: prodId,

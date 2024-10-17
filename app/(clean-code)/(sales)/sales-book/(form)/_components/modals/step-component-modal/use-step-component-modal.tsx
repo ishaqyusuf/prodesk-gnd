@@ -155,12 +155,13 @@ function useDoor(isDoor) {
         "7-0": [],
         "8-0": [],
     });
-    const [heightList, setHeightList] = useState(Object.keys(heights));
+    const heightList = Object.keys(heights);
+    // const [heightList, setHeightList] = useState(_heightList);
     const [priceTab, setPriceTab] = useState<string>();
     const [sizeList, setSizeList] = useState<string[]>([]);
     const [stepTitles, setStepTitle] = useState<LabelValue[]>([]);
     useEffect(() => {
-        setSizeList(heights[priceTab]);
+        setSizeList(heights[priceTab] || []);
     }, [priceTab]);
     useEffect(() => {
         if (isDoor) {

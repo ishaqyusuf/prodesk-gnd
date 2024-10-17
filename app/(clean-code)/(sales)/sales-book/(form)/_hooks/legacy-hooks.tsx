@@ -209,9 +209,9 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     }
 
     const [stepValue, allowAdd, allowCustom] = ctx.form.watch([
-        `${formStepRootPath}.item.value`,
-        `${formStepRootPath}.item.meta.allowAdd`,
-        `${formStepRootPath}.item.meta.allowCustom`,
+        `${formStepRootPath}.step.value`,
+        `${formStepRootPath}.step.meta.allowAdd`,
+        `${formStepRootPath}.step.meta.allowCustom`,
     ] as any);
     //  const [stepValue, allowAdd, allowCustom] = form.watch([
     //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,

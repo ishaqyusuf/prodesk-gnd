@@ -12,6 +12,7 @@ import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { cn } from "@/lib/utils";
 import DependenciesModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal";
 import RestoreComponentsModal from "../../../modals/restore-modal";
+import { updateDykeStepMeta } from "../../../../_action/dyke-step-setting";
 
 export default function StepMenu({ stepActionNodeId }) {
     const stepCtx = useLegacyDykeFormStep();
@@ -45,7 +46,7 @@ export default function StepMenu({ stepActionNodeId }) {
     async function toggleStepSetting(key: keyof typeof stepForm.step.meta) {
         const meta = stepForm.step.meta || {};
         const state = ((meta as any)[key] = !meta[key]);
-        // await updateDykeStepMeta(stepForm.step.id, meta);
+        await updateDykeStepMeta(stepForm.step.id, meta);
         form.setValue(
             `itemArray.${rowIndex}.item.formStepArray.${stepIndex}.step.meta.${key}` as any,
             state
