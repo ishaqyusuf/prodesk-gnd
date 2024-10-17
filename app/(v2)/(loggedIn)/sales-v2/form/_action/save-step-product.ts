@@ -68,7 +68,7 @@ export async function saveStepProduct(data: Props) {
     // if (!data.product.value) data.product.value = data.product.title as any;
     const doorMode = data.door != null || data.isDoor; //_meta?.stepTitle == "Door";
     // if (data._meta?.stepTitle == "Door") return await saveDykeDoor(data);
-    console.log("SAVING>>");
+
     const {
         product: {
             id: prodId,

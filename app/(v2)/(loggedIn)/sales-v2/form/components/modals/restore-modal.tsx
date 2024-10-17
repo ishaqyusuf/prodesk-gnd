@@ -65,6 +65,8 @@ export default function RestoreComponentsModal({
         let _deleted = item.meta.deleted || {};
         let valid = false;
         Object.entries(d).map(([k, v]) => {
+            // console.log({ k, v });
+
             if (!v) delete _show[k];
             else {
                 (_show[k] = true) && (valid = true);
@@ -76,9 +78,14 @@ export default function RestoreComponentsModal({
             return;
         }
         item.meta.show = _show;
-        item.meta.deleted = _deleted;
+        // item.meta.deleted = _deleted;
+        item.meta.deleted = {
+            xZTAn: true,
+        };
 
+        // console.log(item.meta);
         const reps = await saveStepProduct(item);
+        console.log(reps);
         stepCtx.reloadComponents();
         toast.success("Restored");
     }

@@ -20,6 +20,8 @@ import HousePackageTool from "../step-items-list/item-section/multi-item-tab/hou
 import { _modal } from "@/components/common/modal/provider";
 
 import DevOnly from "@/_v2/components/common/dev-only";
+import { Badge } from "@/components/ui/badge";
+import Money from "@/components/_v1/money";
 
 export interface DykeItemStepSectionProps {
     stepForm: DykeStep;
@@ -31,8 +33,9 @@ export function DykeInvoiceItemStepSection({
 }: DykeItemStepSectionProps) {
     const form = useDykeForm();
     const item = useDykeItemCtx();
-    const [stepValue] = form.watch([
+    const [stepValue, stepCost] = form.watch([
         `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
+        `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.priceData.salesTotalCost`,
     ] as any);
     const ctx = useDykeCtx();
     const stepActionNodeId = `${item.rowIndex}-${stepIndex}`;
@@ -69,6 +72,11 @@ export function DykeInvoiceItemStepSection({
                             {stepForm?.step?.title}:
                         </span>
                         <span>{stepValue}</span>
+                        {stepCost && (
+                            <Badge variant="destructive">
+                                <Money value={stepCost} />
+                            </Badge>
+                        )}
                         <DevOnly>
                             <span>
                                 {stepForm?.step?.id}-{stepForm?.step.uid}

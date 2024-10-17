@@ -18,6 +18,7 @@ const stepHelpers = {
     formStepsForDeps,
     finishSort,
 };
+async function selectCustomComponent(ctx: CtxProps, value, price) {}
 async function finishSort(ctx: CtxProps) {
     //TODO: FINISH SORT
     await sortStepComponentsUseCase(ctx.components);

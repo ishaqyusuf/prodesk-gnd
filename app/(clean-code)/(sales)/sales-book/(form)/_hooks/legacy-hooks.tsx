@@ -174,6 +174,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [deletedComponents, setDeletedComponents] = useState<IStepProducts>(
         []
     );
+    // const [_components,_setComponents] = use
     const [loading, startLoading] = useTransition();
 
     async function fetchStepComponents() {
@@ -213,11 +214,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         `${formStepRootPath}.step.meta.allowAdd`,
         `${formStepRootPath}.step.meta.allowCustom`,
     ] as any);
-    //  const [stepValue, allowAdd, allowCustom] = form.watch([
-    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.item.value`,
-    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowAdd`,
-    //      `itemArray.${item.rowIndex}.item.formStepArray.${stepIndex}.step.meta.allowCustom`,
-    //  ] as any);
+
     const watch = {
         stepValue,
         sortMode,

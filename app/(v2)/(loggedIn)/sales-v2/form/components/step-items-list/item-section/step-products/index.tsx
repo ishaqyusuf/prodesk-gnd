@@ -25,6 +25,7 @@ import { useDykeCtx, useDykeForm } from "../../../../_hooks/form-context";
 import { BatchSelectionAction } from "../../../../_hooks/use-prod-batch-action";
 import {
     LegacyDykeFormStepContext,
+    useLegacyDykeFormStep,
     useLegacyDykeFormStepContext,
 } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 import RestoreComponentsModal from "../../../modals/restore-modal";
@@ -260,8 +261,10 @@ function CustomInput({ onProceed, currentValue }) {
     const inputForm = useForm({
         defaultValues: {
             value: currentValue,
+            price: null,
         },
     });
+    const ctx = useLegacyDykeFormStep();
     return (
         <Form {...inputForm}>
             <div className="flex ">
@@ -270,6 +273,12 @@ function CustomInput({ onProceed, currentValue }) {
                         name="value"
                         control={inputForm.control}
                         label="Custom"
+                    />
+                    <ControlledInput
+                        name="price"
+                        control={inputForm.control}
+                        label="Price"
+                        type="number"
                     />
                     <div className="flex justify-end">
                         <Button

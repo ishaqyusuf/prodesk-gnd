@@ -114,8 +114,6 @@ export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
                 // title: stepProd?.product?.description,
             };
             if (!isMultiSection) {
-                console.log(">>>>");
-                // basePrice = stepProd._metaData?.price || 0;
                 const baseUnitCost = (data.basePrice =
                     stepProd._metaData?.basePrice);
                 const salesUnitCost = (data.price = stepProd._metaData?.price);
@@ -413,15 +411,16 @@ export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
         );
     }
     const onDeleteItem = (stepItems) => {
-        setStepProducts((prods) => {
-            let _prods = [...prods];
-            stepItems.map((stepItem) => {
-                let prodIndex = _prods.findIndex((p) => p.uid == stepItem.uid);
-                if (prodIndex >= 0)
-                    _prods[prodIndex] = stepItem.deletedAt ? null : stepItem;
-            });
-            return _prods.filter(Boolean);
-        });
+        // setStepProducts((prods) => {
+        //     let _prods = [...prods];
+        //     stepItems.map((stepItem) => {
+        //         let prodIndex = _prods.findIndex((p) => p.uid == stepItem.uid);
+        //         if (prodIndex >= 0)
+        //             _prods[prodIndex] = stepItem.deletedAt ? null : stepItem;
+        //     });
+        //     return _prods.filter(Boolean);
+        // });
+        stepCtx.reloadComponents();
         setUid(generateRandomString(4));
     };
     return {
