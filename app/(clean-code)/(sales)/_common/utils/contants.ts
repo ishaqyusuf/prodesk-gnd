@@ -11,8 +11,9 @@ export const filterFields = {
         label: "Address",
         type: "input",
         value: "address",
-        options: [{ label: "Customer 1", value: "Customer 2" }],
+        options: [{ label: "Address 1", value: "Address2" }],
     },
 } satisfies {
     [key in string]: DataTableFilterField<any>;
 };
+export const SEPARATOR = ` &`;

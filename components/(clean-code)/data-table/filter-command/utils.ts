@@ -1,3 +1,4 @@
+import { SEPARATOR } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import {
     ARRAY_DELIMITER,
     RANGE_DELIMITER,
@@ -19,8 +20,8 @@ export function getWordByCaretPosition({
     let start = caretPosition;
     let end = caretPosition;
 
-    while (start > 0 && value[start - 1] !== " ") start--;
-    while (end < value.length && value[end] !== " ") end++;
+    while (start > 0 && value[start - 1] !== SEPARATOR) start--;
+    while (end < value.length && value[end] !== SEPARATOR) end++;
 
     const word = value.substring(start, end);
     return word;
@@ -48,7 +49,7 @@ export function replaceInputByFieldType<TData>({
                     currentWord,
                     words.join(ARRAY_DELIMITER)
                 );
-                return `${input.trim()} `;
+                return `${input.trim()}${SEPARATOR}`;
             }
         }
         case "slider": {
@@ -59,7 +60,7 @@ export function replaceInputByFieldType<TData>({
                     currentWord,
                     words.join(SLIDER_DELIMITER)
                 );
-                return `${input.trim()} `;
+                return `${input.trim()}${SEPARATOR}`;
             }
         }
         case "timerange": {
@@ -70,12 +71,12 @@ export function replaceInputByFieldType<TData>({
                     currentWord,
                     words.join(RANGE_DELIMITER)
                 );
-                return `${input.trim()} `;
+                return `${input.trim()}${SEPARATOR}`;
             }
         }
         default: {
             const input = prev.replace(currentWord, value);
-            return `${input.trim()} `;
+            return `${input.trim()}${SEPARATOR}`;
         }
     }
 }
@@ -223,4 +224,3 @@ export function notEmpty<TValue>(
 ): value is TValue {
     return value !== null && value !== undefined;
 }
-

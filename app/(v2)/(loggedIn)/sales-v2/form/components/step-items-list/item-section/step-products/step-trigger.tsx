@@ -13,12 +13,13 @@ import { cn } from "@/lib/utils";
 import DependenciesModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal";
 import RestoreComponentsModal from "../../../modals/restore-modal";
 import { updateDykeStepMeta } from "../../../../_action/dyke-step-setting";
+import HeightSettingsModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/height-settings-modal/height-settings-modal";
 
 export default function StepMenu({ stepActionNodeId }) {
     const stepCtx = useLegacyDykeFormStep();
     const {
         stepIndex,
-        watch: { allowCustom, allowAdd, sortMode },
+        watch: { allowCustom, allowAdd, sortMode, enableSearch },
         step: stepForm,
         mainCtx: { superAdmin },
     } = stepCtx;
@@ -80,10 +81,25 @@ export default function StepMenu({ stepActionNodeId }) {
                         {allowCustom ? "Disable " : "Enable "}
                         Custom
                     </MenuItem>
+                    <MenuItem onClick={() => toggleStepSetting("enableSearch")}>
+                        {enableSearch ? "Disable " : "Enable "}
+                        Search
+                    </MenuItem>
                     <MenuItem onClick={() => toggleStepSetting("allowAdd")}>
                         {allowAdd ? "Disable " : "Enable "}
                         Add
                     </MenuItem>
+                    {stepCtx.isDoor && (
+                        <MenuItem
+                            onClick={() => {
+                                _modal.openSheet(
+                                    <HeightSettingsModal ctx={stepCtx} />
+                                );
+                            }}
+                        >
+                            Height Settings
+                        </MenuItem>
+                    )}
                 </Menu>
             </div>
         </Portal>

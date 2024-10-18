@@ -47,13 +47,6 @@ export async function saveDykeSales(data: DykeForm) {
                           customerProfileId,
                           updatedAt: new Date(),
                           status: dealerMode ? "Evaluating" : rest.status,
-                          //   customer: connect(customerId),
-                          //   salesRep: connect(data.salesRep?.id),
-                          //   billingAddress: connect(billingAddressId),
-                          //   shippingAddress: connect(shippingAddressId),
-                          //   customer: connect(id),
-                          //   billingAddress: connect(billingAddressId),
-                          //   shippingAddress: connect(shippingAddressId),
                       } as any,
                   })
                 : await prisma.salesOrders.create({

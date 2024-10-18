@@ -173,7 +173,9 @@ function useDoor(isDoor) {
                         if (!_tab) _tab = height;
                         const result = await getDoorSizesUseCase(height); //.then((result) => {
                         // console.log(result);
-                        d[height] = result.map((s) => s.dimFt);
+                        d[height] = Array.from(
+                            new Set(result.map((s) => s.dimFt))
+                        );
                         // });/
                     })
                 );

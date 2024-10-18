@@ -151,7 +151,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                             {door.heightList.map((h) => (
                                                 <TabsContent key={h} value={h}>
                                                     <div className="grid  grid-cols-4 gap-4">
-                                                        {door.sizeList.map(
+                                                        {door.heights[h]?.map(
                                                             (size) => (
                                                                 <ControlledInput
                                                                     key={size}

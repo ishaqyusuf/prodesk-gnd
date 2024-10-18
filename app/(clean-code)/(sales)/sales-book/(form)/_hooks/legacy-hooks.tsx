@@ -216,10 +216,11 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         reloadComponents();
     }
 
-    const [stepValue, allowAdd, allowCustom] = ctx.form.watch([
+    const [stepValue, allowAdd, allowCustom, enableSearch] = ctx.form.watch([
         `${formStepRootPath}.step.value`,
         `${formStepRootPath}.step.meta.allowAdd`,
         `${formStepRootPath}.step.meta.allowCustom`,
+        `${formStepRootPath}.step.meta.enableSearch`,
     ] as any);
 
     const watch = {
@@ -227,6 +228,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         sortMode,
         allowAdd,
         allowCustom,
+        enableSearch,
     };
     const stepCtx = {
         deletedComponents,

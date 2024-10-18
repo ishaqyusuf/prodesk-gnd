@@ -90,6 +90,7 @@ export interface DykeStepMeta {
     custom?: boolean;
     allowCustom?: boolean;
     allowAdd?: boolean;
+    enableSearch?: boolean;
 }
 export interface DykeStepItemMeta {
     custom?: boolean;
