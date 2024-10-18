@@ -1,11 +1,8 @@
 "use client";
 
-import { use } from "react";
-import { GetSalesOrdersDta } from "../data-access/sales-dta";
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { Cells } from "./orders-page-cells";
-import { TableToolbar } from "@/components/(clean-code)/data-table/toolbar";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import {
     salesFilterFields,
@@ -36,6 +33,9 @@ export default function OrdersPageClient({}: Props) {
         schema: salesSearchSchema,
         filterFields: salesFilterFields,
         serverAction: getSalesOrderInifityListUseCase,
+        cellVariants: {
+            size: "sm",
+        },
     });
     return (
         <div>

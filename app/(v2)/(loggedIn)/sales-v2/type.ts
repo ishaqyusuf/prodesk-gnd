@@ -31,7 +31,7 @@ export type DykeDoorType =
     | "Moulding"
     | "Door Slabs Only"
     | "Services";
-type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
+export type DykeStep = Awaited<ReturnType<typeof getStepForm>>;
 type DykeStepProducts = Awaited<ReturnType<typeof getStepProduct>>;
 // type IDykeStepForm = {
 //     data: DykeStepForm;
@@ -91,6 +91,15 @@ export interface DykeStepMeta {
     allowCustom?: boolean;
     allowAdd?: boolean;
     enableSearch?: boolean;
+    doorSizeConfig: {
+        [uid in string]: {
+            title: string;
+            sizes: { [height in string]: boolean };
+            productRules: {
+                [uid in string]: boolean;
+            };
+        };
+    };
 }
 export interface DykeStepItemMeta {
     custom?: boolean;

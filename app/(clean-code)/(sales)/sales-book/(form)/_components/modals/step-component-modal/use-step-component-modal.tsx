@@ -149,7 +149,7 @@ function useMouldingSpecies(isMoulding, form, item) {
     }, []);
     return { species };
 }
-function useDoor(isDoor) {
+export function useDoor(isDoor = true) {
     const [heights, setHeight] = useState({
         "6-8": [],
         "7-0": [],

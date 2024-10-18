@@ -252,8 +252,10 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
                     let dim = d.dimension?.replaceAll('"', "in");
                     if (!d.priceId)
                         d.priceData = {
-                            baseUnitCost: d.jambSizePrice,
+                            salesUnitCost: d.jambSizePrice,
                         } as any;
+                    // console.log(d.priceData);
+
                     _doorForm[dim] = { ...d } as any;
                     _doorFormDefaultValue[dim] = {
                         id: d.id,

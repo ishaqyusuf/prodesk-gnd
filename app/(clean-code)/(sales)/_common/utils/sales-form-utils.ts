@@ -46,10 +46,16 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                             const priceData = ctx.componentPrice.update(
                                 form,
                                 doorForm.priceData,
-
-                                doorForm.priceData?.baseUnitCost
+                                ctx.baseProfileCost(
+                                    form,
+                                    doorForm.priceData || {}
+                                )
                             );
+                            // console.log(size);
 
+                            // if (size == `1-6 x 6-8`) {
+                            //     console.log(doorForm.priceData);
+                            // }
                             // if (sum([doorForm.lhQty, doorForm.rhQty]))
                             //     console.log(priceData);
 
@@ -57,6 +63,7 @@ function salesProfileChanged(form: DykeFormReturn, id) {
                                 `${sizeKey}.priceData` as any,
                                 priceData
                             );
+                            // console.log(priceData.salesUnitCost);
                             form.setValue(
                                 `${sizeKey}.jambSizePrice` as any,
                                 priceData.salesUnitCost
@@ -85,12 +92,28 @@ function salesProfileCost(form: DykeFormReturn, baseCost) {
     if (!profile || profile.coefficient == 0) return baseCost;
     return formatMoney(baseCost / (profile.coefficient || 1));
 }
+function baseProfileCost(
+    form: DykeFormReturn,
+    { baseUnitCost, salesUnitCost }: Partial<ComponentPrice>
+) {
+    if (!salesUnitCost || baseUnitCost) return baseUnitCost;
+    const data = form.getValues();
+
+    const profile = data.data.profiles.find(
+        (p) => p.id == data.order.customerProfileId
+    );
+    if (!profile || profile.coefficient == 0) return salesUnitCost;
+    return formatMoney(salesUnitCost * (profile.coefficient || 1));
+}
+
 function updateSalesComponentPrice(
     form: DykeFormReturn,
     _pData: Partial<ComponentPrice>,
     basePrice,
     qty = 1
 ) {
+    console.log({ basePrice });
+
     const pData = _pData || {};
     // if (!pData) pData = {};
     if (!pData.id) pData.id = generateRandomString();
@@ -116,6 +139,7 @@ function updateSalesComponentPriceQty(
 const ctx = {
     salesProfileChanged,
     salesProfileCost,
+    baseProfileCost,
     componentPrice: {
         update: updateSalesComponentPrice,
         updateQty: updateSalesComponentPriceQty,

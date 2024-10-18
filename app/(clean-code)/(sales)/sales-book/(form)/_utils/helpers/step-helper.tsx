@@ -19,6 +19,7 @@ const stepHelpers = {
     finishSort,
     profileChanged,
 };
+
 function profileChanged(ctx: CtxProps) {
     ctx.reloadComponents();
 }
