@@ -38,13 +38,7 @@ export default function SalesMetaData() {
                     name="order.customerProfileId"
                     titleKey="title"
                     valueKey="id"
-                    options={[
-                        {
-                            title: "None",
-                            id: null,
-                        } as (typeof profiles)[number],
-                        ...profiles,
-                    ]}
+                    options={[...profiles]}
                 />
             </InfoLine>
             <InfoLine label="Q.B Order #">

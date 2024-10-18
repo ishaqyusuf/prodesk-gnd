@@ -33,7 +33,7 @@ export async function saveDykeSales(data: DykeForm) {
                 // salesProfileId,
                 ...rest
             } = data.order;
-            console.log(rest);
+            // console.log(rest);
             // delete (rest as any).customer;
             function connect(id) {
                 if (!id) return undefined;
@@ -59,6 +59,8 @@ export async function saveDykeSales(data: DykeForm) {
                 : await prisma.salesOrders.create({
                       data: {
                           ...(rest as any),
+                          //   customerProfileId,
+                          salesProfile: connect(customerProfileId),
                           // salesRepId: data.salesRep?.id,
                           ...(await generateSalesIdDac(rest)),
                           updatedAt: new Date(),
