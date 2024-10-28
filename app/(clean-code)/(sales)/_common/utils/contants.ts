@@ -5,13 +5,13 @@ export const filterFields = {
         label: "Customer Name",
         type: "input",
         value: "customer",
-        options: [{ label: "Customer 1", value: "Customer 2" }],
+        options: [],
     },
     address: {
         label: "Address",
         type: "input",
         value: "address",
-        options: [{ label: "Address 1", value: "Address2" }],
+        options: [],
     },
 } satisfies {
     [key in string]: DataTableFilterField<any>;

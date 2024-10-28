@@ -25,3 +25,9 @@ export interface LabelValue {
     label;
     value;
 }
+
+export interface SelectOption {
+    label?: string;
+    value?: any;
+    data?: any;
+}

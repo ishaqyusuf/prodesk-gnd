@@ -85,6 +85,8 @@ import logo from "@/public/logo_mini.png";
 import logo2 from "@/public/logo.png";
 import Link from "next/link";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import { cva, VariantProps } from "class-variance-authority";
 
 export type Icon = LucideIcon;
 
@@ -315,3 +317,28 @@ export const Icons = {
 };
 
 export type IconKeys = keyof typeof Icons;
+const iconVariants = cva("", {
+    variants: {
+        variant: {
+            primary: "text-primary",
+            muted: "text-muted-foreground",
+        },
+        size: {
+            sm: "w-4 h-4",
+            default: "",
+        },
+    },
+    defaultVariants: {
+        size: "default",
+        variant: "muted",
+    },
+});
+export function Icon({
+    name,
+    className,
+    ...props
+}: { name: IconKeys; className? } & VariantProps<typeof iconVariants>) {
+    const RenderIcon = Icons[name];
+    if (!RenderIcon) return null;
+    return <RenderIcon className={cn("", iconVariants(props), className)} />;
+}

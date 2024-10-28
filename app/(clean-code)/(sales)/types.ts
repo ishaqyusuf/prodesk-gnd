@@ -52,6 +52,35 @@ export type SalesPaymentOptions =
     | "Check"
     | "COD"
     | "Zelle";
+export interface SalesItemMeta {
+    supplier;
+    supplyDate;
+    prehung_description;
+    prehung_information;
+    product_information;
+    product_description;
+    prehung_cost;
+    cost_price;
+    computed_rate;
+    sales_percentage;
+    tax: boolean;
+    door_qty_selector;
+    frame;
+    product_cost;
+    produced_qty: number | undefined | null;
+    casing;
+    hinge;
+    line_index;
+    lineIndex;
+    uid;
+    sales_margin;
+    manual_cost_price;
+    manual_rate;
+    doorType: DykeDoorType;
+
+    _dykeSizes: { [size in string]: boolean };
+    // _dykeMulti: { [item in string]: boolean };
+}
 export type SalesMeta = {
     qb;
     profileEstimate: Boolean;
@@ -72,6 +101,7 @@ export type SalesMeta = {
     tax?: boolean;
     calculatedPriceMode?: boolean;
 };
+
 export type TypedSales = SalesOrders & {
     type: SalesType;
     deliveryOption: DeliveryOption;

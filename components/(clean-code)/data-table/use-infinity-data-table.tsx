@@ -29,6 +29,7 @@ import {
 import { Percentile } from "@/lib/request/percentile";
 import { inDateRange, arrSome } from "@/lib/table/filterfns";
 import { dataOptions } from "./query-options";
+import { TableProps } from "./use-table-compose";
 
 export function useInfiniteDataTable({
     columns,
@@ -39,7 +40,7 @@ export function useInfiniteDataTable({
     filterFields: __filterFields,
     serverAction,
     ...props
-}) {
+}: TableProps) {
     const [search] = useQueryStates(searchParamsParser);
     const { data, isFetching, isLoading, fetchNextPage } = useInfiniteQuery(
         dataOptions(search, serverAction)
@@ -66,28 +67,28 @@ export function useInfiniteDataTable({
     const filterFields = React.useMemo(
         () =>
             __filterFields.map((field) => {
-                if (
-                    field.value === "latency" ||
-                    field.value === "timing.dns" ||
-                    field.value === "timing.connection" ||
-                    field.value === "timing.tls" ||
-                    field.value === "timing.ttfb" ||
-                    field.value === "timing.transfer" ||
-                    field.value === "status"
-                ) {
-                    field.options =
-                        totalFilters?.[field.value].map((value) => ({
-                            label: `${value}`,
-                            value,
-                        })) ?? field.options;
-                }
-                if (field.value === "host" || field.value === "pathname") {
-                    field.options =
-                        totalFilters?.[field.value].map((value) => ({
-                            label: `${value}`,
-                            value,
-                        })) ?? field.options;
-                }
+                // if (
+                //     field.value === "latency" ||
+                //     field.value === "timing.dns" ||
+                //     field.value === "timing.connection" ||
+                //     field.value === "timing.tls" ||
+                //     field.value === "timing.ttfb" ||
+                //     field.value === "timing.transfer" ||
+                //     field.value === "status"
+                // ) {
+                //     field.options =
+                //         totalFilters?.[field.value].map((value) => ({
+                //             label: `${value}`,
+                //             value,
+                //         })) ?? field.options;
+                // }
+                // if (field.value === "host" || field.value === "pathname") {
+                //     field.options =
+                //         totalFilters?.[field.value].map((value) => ({
+                //             label: `${value}`,
+                //             value,
+                //         })) ?? field.options;
+                // }
                 return field;
             }),
         [totalFilters]
@@ -105,12 +106,12 @@ export function useInfiniteDataTable({
 
     const [columnVisibility, setColumnVisibility] =
         useLocalStorage<VisibilityState>("data-table-visibility", {
-            uuid: false,
-            "timing.dns": false,
-            "timing.connection": false,
-            "timing.tls": false,
-            "timing.ttfb": false,
-            "timing.transfer": false,
+            // uuid: false,
+            // "timing.dns": false,
+            // "timing.connection": false,
+            // "timing.tls": false,
+            // "timing.ttfb": false,
+            // "timing.transfer": false,
         });
     const [controlsOpen, setControlsOpen] = useLocalStorage(
         "data-table-controls",
@@ -249,5 +250,6 @@ export function useInfiniteDataTable({
         isFetching,
         fetchNextPage,
         totalRows,
+        selectedRow,
     };
 }

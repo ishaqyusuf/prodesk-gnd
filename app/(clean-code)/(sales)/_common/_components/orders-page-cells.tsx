@@ -6,25 +6,58 @@ import { Progress } from "@/components/(clean-code)/progress";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
 
-interface ItemProps {
+export interface ItemProps {
     item: GetSalesOrdersDta["data"][number];
+}
+export type SalesItemProp = ItemProps["item"];
+function Date({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Secondary className="font-mono">
+                {item.salesDate}
+            </TCell.Secondary>
+        </TCell>
+    );
 }
 function Order({ item }: ItemProps) {
     return (
-        <TCell href={item.links.overview}>
-            <TCell.Primary>{item.orderId}</TCell.Primary>
-            <TCell.Secondary>{item.salesDate}</TCell.Secondary>
+        <TCell>
+            <TCell.Secondary className="whitespace-nowrap  ">
+                {item.orderId}
+            </TCell.Secondary>
+            {/* <TCell.Secondary>{item.salesDate}</TCell.Secondary> */}
         </TCell>
     );
 }
 function Customer({ item }: ItemProps) {
     return (
-        <TCell href={item.links.customer}>
-            <TCell.Primary className={cn(item.isBusiness && "text-blue-700")}>
-                {item.displayName}
+        <TCell>
+            <TCell.Primary
+                className={cn(
+                    item.isBusiness && "text-blue-700",
+                    "whitespace-nowrap"
+                )}
+            >
+                <TextWithTooltip
+                    className="max-w-[100px]"
+                    text={item.displayName || "-"}
+                />
             </TCell.Primary>
-            <TCell.Secondary>{item.customerPhone}</TCell.Secondary>
+            {/* <TCell.Secondary>{item.customerPhone}</TCell.Secondary> */}
+        </TCell>
+    );
+}
+function CustomerPhone({ item }: ItemProps) {
+    return (
+        <TCell>
+            <TCell.Secondary className="whitespace-nowrap">
+                <TextWithTooltip
+                    className="max-w-[85px]"
+                    text={item.customerPhone || "-"}
+                />
+            </TCell.Secondary>
         </TCell>
     );
 }
@@ -32,14 +65,24 @@ function Address({ item }: ItemProps) {
     const rowCtx = useTRContext();
     return (
         <TCell>
-            <TCell.Secondary>{item.address}</TCell.Secondary>
+            <TCell.Secondary>
+                <TextWithTooltip
+                    className="max-w-[100px]"
+                    text={item.address}
+                />
+            </TCell.Secondary>
         </TCell>
     );
 }
 function SalesRep({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary>{item.salesRep}</TCell.Secondary>
+            <TCell.Secondary className="whitespace-nowrap">
+                <TextWithTooltip
+                    className="max-w-[85px]"
+                    text={item.salesRep}
+                />
+            </TCell.Secondary>
         </TCell>
     );
 }
@@ -70,6 +113,11 @@ function Status({ item }: ItemProps) {
 function Dispatch({ item }: ItemProps) {
     //  const []
     const { theme } = useTheme();
+    return (
+        <TCell>
+            <Progress.Status>pickup</Progress.Status>
+        </TCell>
+    );
     return (
         <TCell>
             <Menu
@@ -105,25 +153,10 @@ function Invoice({ item }: ItemProps) {
     const invoice = item.invoice;
     const { theme } = useTheme();
     return (
-        <TCell>
-            <Button
-                variant={theme == "dark" ? "outline" : "secondary"}
-                className="flex flex-col items-end"
-                size="sm"
-            >
-                <TCell.Primary>
-                    <TCell.Money
-                        value={invoice.total}
-                        className={cn(
-                            "font-semibold",
-                            !invoice.pending &&
-                                "text-green-700/70 dark:text-green-600",
-                            invoice.pending == invoice.total &&
-                                "  text-red-700/70 dark:text-red-600"
-                        )}
-                    />
-                </TCell.Primary>
-                <TCell.Primary>
+        <TCell align="right">
+            <TCell.Money value={invoice.total} className={cn("font-mono")} />
+
+            {/* <TCell.Primary>
                     <TCell.Money
                         value={invoice.pending}
                         className={cn(
@@ -136,8 +169,23 @@ function Invoice({ item }: ItemProps) {
                                 "  text-red-700/70 block"
                         )}
                     />
-                </TCell.Primary>
-            </Button>
+                </TCell.Primary> */}
+        </TCell>
+    );
+}
+function InvoicePending({ item }: ItemProps) {
+    const invoice = item.invoice;
+    const { theme } = useTheme();
+    return (
+        <TCell>
+            <TCell.Money
+                value={invoice.pending || 0}
+                className={cn(
+                    "text-muted-foreground font-mono font-medium",
+
+                    invoice.pending && "  text-red-700/70"
+                )}
+            />
         </TCell>
     );
 }
@@ -147,6 +195,9 @@ export let Cells = {
     Address,
     SalesRep,
     Invoice,
+    Date,
     Status,
     Dispatch,
+    CustomerPhone,
+    InvoicePending,
 };

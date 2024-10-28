@@ -1,0 +1,92 @@
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+    ItemAssignment,
+    ItemAssignmentSubmission,
+    LineItem,
+} from "../sales-items-overview";
+import { Icons } from "@/components/_v1/icons";
+import { cn } from "@/lib/utils";
+import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-overview-sheet";
+import { formatDate } from "@/lib/use-day";
+import { ItemProdViewContext, useItemProdViewContext } from "./use-hooks";
+import { AssignForm } from "./assigne-form";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+
+export function ItemProdView({}) {
+    const ctx = useItemProdViewContext();
+    const { mainCtx, item } = ctx;
+    return (
+        <ItemProdViewContext.Provider value={ctx}>
+            <div className="w-[600px] flex flex-col transition-all duration-300 ease-in-out">
+                <SecondaryTabSheet
+                    title={`${item?.title}`}
+                    onBack={() => mainCtx.setTabData(null)}
+                />
+                <div className="p-4 sm:p-8">
+                    <div className={cn("")}>
+                        <LineItem item={item} />
+                    </div>
+
+                    <AssignForm />
+                    <div className="px-4 sm:px-8">
+                        {item.assignments.map((assignment) => (
+                            <Assignment
+                                key={assignment.id}
+                                assignment={assignment}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </ItemProdViewContext.Provider>
+    );
+}
+function Assignment({ assignment }: { assignment: ItemAssignment }) {
+    return (
+        <div key={assignment.id}>
+            <div>
+                <div className="flex items-center gap-4">
+                    <div className="p-2">
+                        <Label className="text-base leading-relaxed">
+                            {assignment.assignedTo}
+                        </Label>
+                        <div className="flex items-center text-sm gap-2">
+                            <Icons.calendar className="w-4 h-4" />
+                            <span>{formatDate(assignment.dueDate)}</span>
+                        </div>
+                    </div>
+                    {/* <div>{JSON.parse(assignment.)}</div> */}
+                    <div className="flex-1"></div>
+                    <div className="flex">
+                        {/* <div>Pending: {assignment.pendingQty}</div> */}
+                        <ConfirmBtn size="icon" trash />
+                    </div>
+                </div>
+                <div className="pl-4 border-t">
+                    {assignment.submissions?.map((s) => (
+                        <AssignmentSubmissionLine submission={s} key={s.id} />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+function AssignmentSubmissionLine({
+    submission,
+}: {
+    submission: ItemAssignmentSubmission;
+}) {
+    return (
+        <div className="flex justify-between items-center">
+            <div className="text-muted-foreground text-sm font-mono">
+                {`${submission.qty?.total} submitted on ${formatDate(
+                    submission.date
+                )}`}
+            </div>
+            <div>
+                <ConfirmBtn size="icon" trash />
+            </div>
+        </div>
+    );
+}

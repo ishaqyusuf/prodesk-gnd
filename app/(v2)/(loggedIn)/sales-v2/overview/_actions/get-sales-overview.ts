@@ -9,6 +9,7 @@ import {
 import { composeSalesItems } from "../../_utils/compose-sales-items";
 import { DykeDoorType } from "../../type";
 import { isComponentType } from "../is-component-type";
+import { Prisma } from "@prisma/client";
 
 export async function getSalesOverview({
     type,
@@ -35,64 +36,7 @@ export async function viewSale(type, slug, deletedAt?) {
             slug,
             deletedAt,
         },
-        include: {
-            items: {
-                where: { deletedAt: null },
-                include: {
-                    shelfItems: {
-                        where: { deletedAt: null },
-                        include: {
-                            shelfProduct: true,
-                        },
-                    },
-                    formSteps: {
-                        where: { deletedAt: null },
-                        include: {
-                            step: {
-                                select: {
-                                    id: true,
-                                    title: true,
-                                    value: true,
-                                },
-                            },
-                        },
-                    },
-                    housePackageTool: {
-                        where: { deletedAt: null },
-                        include: {
-                            casing: true,
-                            door: {
-                                where: {
-                                    deletedAt: null,
-                                },
-                            },
-                            jambSize: true,
-                            doors: {
-                                where: { deletedAt: null },
-                            },
-                            molding: {
-                                where: { deletedAt: null },
-                            },
-                        },
-                    },
-                },
-            },
-            customer: true,
-            shippingAddress: true,
-            billingAddress: true,
-            producer: true,
-            salesRep: true,
-            productions: true,
-            payments: true,
-            taxes: {
-                where: {
-                    deletedAt: null,
-                },
-                include: {
-                    taxConfig: true,
-                },
-            },
-        },
+        include: SalesIncludes,
     });
 
     if (!order) throw Error();
@@ -197,3 +141,62 @@ export async function viewSale(type, slug, deletedAt?) {
         progress,
     };
 }
+
+const SalesIncludes = {
+    items: {
+        where: { deletedAt: null },
+        include: {
+            shelfItems: {
+                where: { deletedAt: null },
+                include: {
+                    shelfProduct: true,
+                },
+            },
+            formSteps: {
+                where: { deletedAt: null },
+                include: {
+                    step: {
+                        select: {
+                            id: true,
+                            title: true,
+                            value: true,
+                        },
+                    },
+                },
+            },
+            housePackageTool: {
+                where: { deletedAt: null },
+                include: {
+                    casing: true,
+                    door: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
+                    jambSize: true,
+                    doors: {
+                        where: { deletedAt: null },
+                    },
+                    molding: {
+                        where: { deletedAt: null },
+                    },
+                },
+            },
+        },
+    },
+    customer: true,
+    shippingAddress: true,
+    billingAddress: true,
+    producer: true,
+    salesRep: true,
+    productions: true,
+    payments: true,
+    taxes: {
+        where: {
+            deletedAt: null,
+        },
+        include: {
+            taxConfig: true,
+        },
+    },
+} satisfies Prisma.SalesOrdersInclude;

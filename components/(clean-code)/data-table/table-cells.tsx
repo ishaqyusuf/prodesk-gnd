@@ -14,7 +14,7 @@ import { DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/_v1/icons";
 import { TableCell as TCellBase } from "@/components/ui/table";
 import { VariantProps, cva } from "class-variance-authority";
-import { useDataTableContext } from "./use-data-table";
+import { useDataTableContext, useTRContext } from "./use-data-table";
 
 interface Props {
     children?;
@@ -24,7 +24,7 @@ const cellVariants = cva("", {
     variants: {
         size: {
             default: "",
-            sm: "p-2 px-4 text-sm",
+            sm: "p-2 text-sm",
             mobile: "max-sm:p-0 p-2 px-4",
         },
     },

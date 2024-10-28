@@ -2,10 +2,10 @@
     @apply p-0;
 }
 #salesPrinter tbody#invoiceLines td {
-    @apply border-x border-b border-gray-400 border-b-gray-300 p-1 text-black-900;
+    @apply border-x border-b border-gray-400 border-b-gray-300 p-1 text-black/90;
 }
 #salesPrinter table#specialInstruction td {
-    @apply border-x border-gray-400 border-b-gray-300 p-1 text-black-900;
+    @apply border-x border-gray-400 border-b-gray-300 p-1 text-black/90;
 }
 #salesPrinter tfoot td {
     @apply border border-gray-400;

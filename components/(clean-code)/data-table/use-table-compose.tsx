@@ -10,6 +10,7 @@ type CtxType<T> = {
     // PrimaryColumn(title, value: CellValueType<T>): ColumnDef<T, unknown>;
     Column(
         title?: string,
+        key?: string,
         Column?: (
             { item }: { item: T },
             args: ColumnArgs
@@ -37,14 +38,21 @@ interface Props<T> {
     schema;
     filterFields;
     serverAction?;
+    passThroughProps: {
+        itemClick?(item);
+    };
 }
+export type TableProps = ReturnType<typeof useTableCompose>["props"] & {
+    defaultRowSelection?;
+};
 export function useTableCompose<T>(props: Props<T>) {
     const [dynamicCols, setDynamicCols] = useState([]);
     const [isPending, startTransition] = React.useTransition();
     const ctx: CtxType<T> = {
-        Column(title, Column, args?: ColumnArgs) {
+        Column(title, key, Column, args?: ColumnArgs) {
             return {
-                accessorKey: title.toLowerCase(),
+                accessorKey: key,
+                // key,
                 header: ({ column }) => (
                     <DataTableColumnHeader
                         column={column}
@@ -108,6 +116,7 @@ export function useTableCompose<T>(props: Props<T>) {
             schema: props.schema,
             filterFields: props.filterFields,
             serverAction: props.serverAction,
+            ...props.passThroughProps,
         },
     };
 }

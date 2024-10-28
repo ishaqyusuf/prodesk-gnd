@@ -1,13 +1,20 @@
 import { AsyncFnType, PageBaseQuery } from "@/app/(clean-code)/type";
-import { SalesMeta, SalesType, TypedAddressBook } from "../../types";
+import {
+    DykeDoorType,
+    SalesItemMeta,
+    SalesMeta,
+    SalesType,
+    TypedAddressBook,
+} from "../../types";
 import { getPageInfo, pageQueryFilter } from "../../../_common/utils/db-utils";
 import { prisma } from "@/db";
 import {
-    SalesIncludeAll,
     SalesListInclude,
+    SalesOverviewIncludes,
     whereSales,
 } from "../utils/db-utils";
 import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
+import { salesItemsOverviewDto } from "./dto/sales-item-dto";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
@@ -23,9 +30,7 @@ export async function getSalesQuotesDta(query: GetSalesListQuery) {
 }
 export type GetSalesOrdersDta = AsyncFnType<typeof getSalesOrdersDta>;
 export async function getSalesOrdersDta(query: GetSalesListQuery) {
-    console.log(">>>>");
     const resp = await getSalesListDta(query);
-    console.log(">>>>");
 
     return {
         ...resp,
@@ -36,6 +41,7 @@ export async function getSalesOrdersDta(query: GetSalesListQuery) {
 export type GetSalesListDta = AsyncFnType<typeof getSalesListDta>;
 export async function getSalesListDta(query: GetSalesListQuery) {
     const where = whereSales(query);
+
     const data = await prisma.salesOrders.findMany({
         where,
         ...pageQueryFilter(query),
@@ -55,7 +61,7 @@ export async function getFullSalesDataDta(slug, type) {
             type,
             slug,
         },
-        include: SalesIncludeAll,
+        include: SalesOverviewIncludes,
     });
     const shippingAddress = {
         ...(sale.shippingAddress || {}),
@@ -65,9 +71,30 @@ export async function getFullSalesDataDta(slug, type) {
     } as any as TypedAddressBook;
     return {
         ...sale,
+        items: sale.items.map(({ meta, ...rest }) => ({
+            ...rest,
+            meta: meta as any as SalesItemMeta,
+            housePackageTool: rest.housePackageTool
+                ? {
+                      ...rest.housePackageTool,
+                      doorType: rest.housePackageTool.doorType as DykeDoorType,
+                  }
+                : null,
+        })),
         type: sale.type as SalesType,
         meta: sale.meta as any as SalesMeta,
         shippingAddress,
         billingAddress,
+    };
+}
+
+export type GetSalesItemOverviewDta = AsyncFnType<
+    typeof getSalesItemOverviewDta
+>;
+export async function getSalesItemOverviewDta(slug, type) {
+    const data = await getFullSalesDataDta(slug, type);
+    const resp = salesItemsOverviewDto(data);
+    return {
+        itemGroup: resp,
     };
 }

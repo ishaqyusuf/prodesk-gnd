@@ -3,7 +3,7 @@ import AcccountHeader from "./account-header";
 
 export default function ContactHeader() {
     return (
-        <div className="min-h-10 flex p-4 justify-between bg-black-800 text-white">
+        <div className="min-h-10 flex p-4 justify-between bg-black/80 text-white">
             <div className="text-sm sm:flex sm:space-x-4">
                 <div className="flex items-center space-x-2">
                     <MapPin className="w-4 h-4" />

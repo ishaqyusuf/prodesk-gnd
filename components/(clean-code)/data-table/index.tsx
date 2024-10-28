@@ -22,6 +22,7 @@ import { useInfiniteDataTable } from "./use-infinity-data-table";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { formatCompactNumber } from "@/lib/format";
+import { TableProps } from "./use-table-compose";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -50,8 +51,8 @@ BaseProps<TData, TValue>) {
         </dataTableContext.Provider>
     );
 }
-function Infinity({ children, ...props }) {
-    const ctx = useInfiniteDataTable(props as any);
+function Infinity({ children, ...props }: { children } & TableProps) {
+    const ctx = useInfiniteDataTable(props);
 
     return (
         <dataTableContext.Provider value={ctx}>
@@ -62,7 +63,10 @@ function Infinity({ children, ...props }) {
 function _Table({}) {
     const { table, columns } = useDataTableContext();
     return (
-        <div className="sm:border sm:rounded-lg">
+        <div
+            // className="sm:border sm:rounded-lg"
+            className="flex w-full min-h-screen h-full flex-col sm:flex-row"
+        >
             <Table>
                 <TableHeader className={cn("")}>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -115,6 +119,7 @@ function Tr({ row }: TrProps) {
         <TableRow
             className={cn("")}
             key={row.id}
+            onClick={() => row.toggleSelected()}
             data-state={row.getIsSelected() && "selected"}
         >
             {row

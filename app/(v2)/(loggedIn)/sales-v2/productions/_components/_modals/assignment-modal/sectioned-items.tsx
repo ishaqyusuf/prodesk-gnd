@@ -27,7 +27,7 @@ export default function SectionedItems({ index }) {
                 className={cn(!group.isDyke && !group.sectionTitle && "hidden")}
                 asChild
             >
-                <div className="p-2   rounded  bg-black-300/5  border  w-full flex">
+                <div className="p-2   rounded  bg-gray-700/5  border  w-full flex">
                     <button
                         onClick={() => onOpenChange(!open)}
                         className="uppercase flex-1 font-semibold text-start"

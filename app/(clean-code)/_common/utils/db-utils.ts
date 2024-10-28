@@ -29,9 +29,19 @@ export async function getPageInfo(input, where, model) {
     };
     return pageInfo;
 }
+
 export function pageQueryFilter(input) {
-    const { page = 1, perPage = 20 } = input;
-    const skip = (page - 1) * perPage;
+    let { page = 1, perPage = 20 } = input;
+
+    const keys = Object.keys(input);
+    let skip = null;
+    if (keys.includes("start")) {
+        skip = input.start;
+        perPage = input.size;
+    } else {
+        skip = (page - 1) * perPage;
+    }
+
     let orderBy = {};
     const { sort_order = "desc", sort = "id" } = input;
     if (sort == "customer")
@@ -39,15 +49,13 @@ export function pageQueryFilter(input) {
             customer: {
                 name: sort_order,
             },
-            // meta: {
-            //   aaa: true
-            // }
         };
     else {
         orderBy = {
-            [sort]: sort_order,
+            [sort || "id"]: sort_order,
         };
     }
+
     return {
         take: Number(perPage),
         skip: Number(skip),

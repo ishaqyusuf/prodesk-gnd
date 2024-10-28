@@ -102,14 +102,16 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             },
             {} as Record<string, unknown>
         );
-        console.log({ inputValue });
+        console.log({ inputValue, paramState: searchParams });
         if (searchParams.success && !inputValue?.endsWith(" ")) {
-            console.log(searchParams.data);
+            // console.log(searchParams.data);
 
             for (const key of Object.keys(searchParams.data)) {
                 const value =
                     searchParams.data[key as keyof typeof searchParams.data];
-                table.getColumn(key)?.setFilterValue(value);
+                const col = table.getColumn(key);
+                // console.log({ key, col: col ? true : false });
+                col?.setFilterValue(value);
             }
             const currentFiltersToReset = currentEnabledFilters.filter(
                 (filter) => {
@@ -117,6 +119,8 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                 }
             );
             for (const filter of currentFiltersToReset) {
+                console.log(filter.id);
+
                 table.getColumn(filter.id)?.setFilterValue(undefined);
             }
         } else {
@@ -151,10 +155,10 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
 
     return (
         <div>
-            <div>
+            {/* <div>
                 <p>currentWord:{currentWord}</p>
                 <p>inputValue:{inputValue}</p>
-            </div>
+            </div> */}
             <button
                 type="button"
                 className={cn(
@@ -227,7 +231,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             value,
                             caretPosition,
                         });
-                        console.log({ word });
+                        // console.log({ word });
 
                         setCurrentWord(word);
                     }}
@@ -398,7 +402,10 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             </CommandGroup>
 
                             <CommandSeparator />
-                            <CommandGroup heading="Suggestions">
+                            <CommandGroup
+                                className="hidden"
+                                heading="Suggestions"
+                            >
                                 {lastSearches
                                     ?.sort((a, b) => b.timestamp - a.timestamp)
                                     .slice(0, 5)

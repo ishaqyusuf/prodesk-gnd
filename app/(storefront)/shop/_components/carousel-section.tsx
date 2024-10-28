@@ -76,7 +76,7 @@ export function CarouselSection() {
                                     />
                                 </div>
                                 <div className="relative flex h-full w-full items-end z-10 mb-6 p-10 pb-16">
-                                    <div className="w-[45%] bg-black-500/30 p-4 space-y-4 text-white">
+                                    <div className="w-[45%] bg-black/20 p-4 space-y-4 text-white">
                                         <div className="text-6xl  font-extrabold tracking-widest">
                                             {_.title}
                                         </div>

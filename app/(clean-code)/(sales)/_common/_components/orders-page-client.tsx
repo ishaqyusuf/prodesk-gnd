@@ -8,8 +8,10 @@ import {
     salesFilterFields,
     salesSearchSchema,
 } from "../_schema/base-order-schema";
-import { getSalesOrderInifityListUseCase } from "../use-case/sales-list-use-case";
+import { getSalesOrderInfinityListUseCase } from "../use-case/sales-list-use-case";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
+import { _modal } from "@/components/common/modal/provider";
+import OrderOverviewSheet from "./order-overview-sheet";
 
 interface Props {
     // promise;
@@ -20,21 +22,30 @@ export default function OrdersPageClient({}: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [
-                ctx.Column("Order #", Cells.Order),
-                ctx.Column("Customer", Cells.Customer),
-                ctx.Column("Address", Cells.Address),
-                ctx.Column("Rep", Cells.SalesRep),
-                ctx.Column("Invoice", Cells.Invoice),
-                ctx.Column("Dispatch", Cells.Dispatch),
-                ctx.Column("Status", Cells.Status),
+                ctx.Column("Date", "date", Cells.Date),
+                ctx.Column("Order #", "orderId", Cells.Order),
+                ctx.Column("Customer", "customer", Cells.Customer),
+                ctx.Column("Phone", "phone", Cells.CustomerPhone),
+                ctx.Column("Address", "address", Cells.Address),
+                ctx.Column("Rep", "rep", Cells.SalesRep),
+                ctx.Column("Invoice", "invoice", Cells.Invoice),
+                ctx.Column("Pending", "pending", Cells.InvoicePending),
+                ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
+                ctx.Column("Status", "status", Cells.Status),
             ];
         },
+        checkable: true,
         filterCells: ["_q"],
         schema: salesSearchSchema,
         filterFields: salesFilterFields,
-        serverAction: getSalesOrderInifityListUseCase,
+        serverAction: getSalesOrderInfinityListUseCase,
         cellVariants: {
             size: "sm",
+        },
+        passThroughProps: {
+            itemClick(item) {
+                // _modal.openSheet();
+            },
         },
     });
     return (
@@ -51,6 +62,7 @@ export default function OrdersPageClient({}: Props) {
                 </TableToolbar> */}
                 <DataTable.Table />
                 <DataTable.LoadMore />
+                <OrderOverviewSheet />
             </DataTable.Infinity>
         </div>
     );

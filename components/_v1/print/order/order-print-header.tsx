@@ -23,7 +23,7 @@ export function OrderPrintHeader({ order, Logo }: Props) {
                                     <Logo />
                                 </td>
                                 <td valign="top" colSpan={5}>
-                                    <div className="text-xs font-semibold text-black-900">
+                                    <div className="text-xs font-semibold text-black/90">
                                         <p>13285 SW 131 ST</p>
                                         <p>Miami, Fl 33186</p>
                                         <p>Phone: 305-278-6555</p>
@@ -169,13 +169,13 @@ function InfoLine({ label, value }) {
     return (
         <tr className="">
             <td
-                className="text-sm font-semibold leading-none  text-black-600"
+                className="text-sm font-semibold leading-none  text-black/90"
                 align="left"
             >
                 {label}
             </td>
             <td
-                className="font-black-900  whitespace-nowrap text-sm leading-none"
+                className="font-black/60  whitespace-nowrap text-sm leading-none"
                 align="right"
             >
                 <div className="min-h-[16px]">{value}</div>
@@ -187,7 +187,7 @@ function Info1Line({ label, value }) {
     return (
         <tr>
             <td
-                className="whitespace-nowrap text-sm font-semibold text-black-600"
+                className="whitespace-nowrap text-sm font-semibold text-black/60"
                 align="left"
             >
                 {label}

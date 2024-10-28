@@ -11,7 +11,7 @@ export default function InvoiceItemsSelection() {
                 <div className="hidden  md:block" />
                 <div className="lg:gap-10 2xl:grid 2xl:grid-cols-[1fr_300px] ">
                     <div className="flex justify-center">
-                        <div className="space-x-2 p-3 px-4 shadow rounded-full border border-black-200 bg-foreground">
+                        <div className="space-x-2 p-3 px-4 shadow rounded-full border border-gray-600 bg-foreground">
                             <Button size="sm" variant={"secondary"}>
                                 Clear
                             </Button>

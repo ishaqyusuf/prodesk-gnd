@@ -73,7 +73,6 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                     // console.log(subItem.id);
                     return subItem.salesDoors.map((salesDoor) => {
                         // console.log(salesDoor.rhQty);
-
                         const ret = {
                             salesDoor: {
                                 ...salesDoor,
@@ -108,7 +107,6 @@ export async function getOrderAssignmentData(id, mode?: mode) {
                         doorTitle: sItem.description as any,
                         report: initJobReport(sItem, { lhQty: sItem.qty }),
                     };
-
                     salesDoors.push(analyseItem(ret, report));
                 }
             });

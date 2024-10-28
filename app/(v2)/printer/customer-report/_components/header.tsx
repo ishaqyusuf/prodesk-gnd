@@ -16,7 +16,7 @@ export default function Header() {
                                         <Icons.PrintLogo />
                                     </td>
                                     <td valign="top" align="center" colSpan={5}>
-                                        <div className="text-xs font-semibold text-black-900">
+                                        <div className="text-xs font-semibold text-black/90">
                                             <p>13285 SW 131 ST</p>
                                             <p>Miami, Fl 33186</p>
                                             <p>Phone: 305-278-6555</p>

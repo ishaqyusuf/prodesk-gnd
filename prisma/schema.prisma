@@ -1089,8 +1089,6 @@ model SalesOrders {
     deliveries        OrderDelivery[]
     assignments       OrderItemProductionAssignments[]
     pricings          ComponentPrice[]
-    // deliveryProgress  OrderDeliveryProgress?
-    // productionStatus SalesProductionStatus?
 
     requests     DealerSalesRequest[]
     stat         SalesStat[]

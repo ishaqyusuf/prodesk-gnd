@@ -68,36 +68,8 @@ export const excludeDeleted = {
 };
 
 export const SalesListInclude = {
-    // customer: true,
-    // shippingAddress: true,
-    // billingAddress: true,
     producer: true,
-    // salesRep: true,
     pickup: true,
-    // items: {
-    //     where: {
-    //         swing: {
-    //             not: null,
-    //         },
-    //     },
-    //     select: {
-    //         description: true,
-    //         prebuiltQty: true,
-    //         id: true,
-    //         qty: true,
-    //         swing: true,
-    //         prodCompletedAt: true,
-    //         dykeProduction: true,
-    //         meta: true,
-    //     },
-    // },
-    // items: {
-    //     where: {
-    //         deletedAt: null,
-    //         swing: { not: null },
-    //     },
-    // },
-    // productionStatus: true,
     doors: {
         where: {
             deletedAt: null,
@@ -115,49 +87,6 @@ export const SalesListInclude = {
             totalQty: true,
         },
     },
-    // assignments: {
-    //     where: {
-    //         deletedAt: null,
-    //         item: {
-    //             deletedAt: null,
-    //         },
-    //     },
-    //     include: {
-    //         assignedTo: {
-    //             select: {
-    //                 name: true,
-    //                 id: true,
-    //             },
-    //         },
-    //         salesDoor: {
-    //             select: {
-    //                 id: true,
-    //                 housePackageTool: {
-    //                     select: {
-    //                         door: {
-    //                             select: {
-    //                                 id: true,
-    //                                 title: true,
-    //                                 img: true,
-    //                             },
-    //                         },
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //         submissions: {
-    //             where: {
-    //                 deletedAt: null,
-    //             },
-    //             select: {
-    //                 id: true,
-    //                 qty: true,
-    //                 rhQty: true,
-    //                 lhQty: true,
-    //             },
-    //         },
-    //     },
-    // },
     customer: {
         select: {
             id: true,
@@ -195,6 +124,24 @@ export const SalesListInclude = {
     },
     stat: true,
 } satisfies Prisma.SalesOrdersInclude;
+
+const AssignmentsInclude = {
+    where: {
+        ...excludeDeleted.where,
+        assignedToId: undefined,
+    },
+    include: {
+        assignedTo: true,
+        submissions: {
+            include: {
+                itemDeliveries: true,
+            },
+            ...excludeDeleted,
+        },
+    },
+} satisfies
+    | Prisma.DykeSalesDoors$productionsArgs
+    | Prisma.SalesOrderItems$assignmentsArgs;
 export const SalesIncludeAll = {
     items: {
         where: { deletedAt: null },
@@ -212,6 +159,7 @@ export const SalesIncludeAll = {
                             door: true,
                         },
                     },
+                    productions: AssignmentsInclude,
                 },
                 where: {
                     doorType: {
@@ -220,46 +168,67 @@ export const SalesIncludeAll = {
                     ...excludeDeleted.where,
                 },
             },
-            assignments: {
-                where: {
-                    ...excludeDeleted.where,
-                    assignedToId: undefined,
-                },
-                include: {
-                    assignedTo: true,
-                    submissions: {
-                        include: {
-                            itemDeliveries: true,
-                        },
-                        ...excludeDeleted,
-                    },
-                },
-            },
+            assignments: AssignmentsInclude,
             shelfItems: {
                 where: { deletedAt: null },
                 include: {
                     shelfProduct: true,
                 },
             },
-            // formSteps: {
-            //     where: { deletedAt: null },
-            //     include: {
-            //         step: {
-            //             select: {
-            //                 id: true,
-            //                 title: true,
-            //                 value: true,
-            //             },
-            //         },
-            //     },
-            // },
             housePackageTool: {
                 ...excludeDeleted,
                 include: {
                     casing: excludeDeleted,
                     door: excludeDeleted,
                     jambSize: excludeDeleted,
-                    doors: excludeDeleted,
+                    doors: {
+                        ...excludeDeleted,
+                    },
+                    molding: excludeDeleted,
+                },
+            },
+        },
+    },
+    customer: excludeDeleted,
+    shippingAddress: excludeDeleted,
+    billingAddress: excludeDeleted,
+    producer: excludeDeleted,
+    salesRep: excludeDeleted,
+    productions: excludeDeleted,
+    payments: excludeDeleted,
+    stat: excludeDeleted,
+    deliveries: excludeDeleted,
+    itemDeliveries: excludeDeleted,
+} satisfies Prisma.SalesOrdersInclude;
+export const SalesOverviewIncludes = {
+    items: {
+        where: { deletedAt: null },
+        include: {
+            formSteps: {
+                ...excludeDeleted,
+                include: {
+                    step: true,
+                },
+            },
+            assignments: AssignmentsInclude,
+            shelfItems: {
+                where: { deletedAt: null },
+                include: {
+                    shelfProduct: true,
+                },
+            },
+            housePackageTool: {
+                ...excludeDeleted,
+                include: {
+                    casing: excludeDeleted,
+                    door: excludeDeleted,
+                    jambSize: excludeDeleted,
+                    doors: {
+                        ...excludeDeleted,
+                        include: {
+                            productions: AssignmentsInclude,
+                        },
+                    },
                     molding: excludeDeleted,
                 },
             },
