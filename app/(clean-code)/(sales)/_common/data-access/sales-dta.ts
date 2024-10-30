@@ -14,7 +14,10 @@ import {
     whereSales,
 } from "../utils/db-utils";
 import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
-import { salesItemsOverviewDto } from "./dto/sales-item-dto";
+import {
+    salesItemGroupOverviewDto,
+    salesOverviewDto,
+} from "./dto/sales-item-dto";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
@@ -54,15 +57,27 @@ export async function getSalesListDta(query: GetSalesListQuery) {
         data,
     };
 }
-export type GetFullSalesDataDta = AsyncFnType<typeof getFullSalesDataDta>;
-export async function getFullSalesDataDta(slug, type) {
+export type GetFullSalesDataDta = AsyncFnType<typeof typedFullSale>;
+export async function getFullSaleById(id) {
     const sale = await prisma.salesOrders.findFirstOrThrow({
         where: {
-            type,
-            slug,
+            id,
         },
         include: SalesOverviewIncludes,
     });
+    return sale;
+}
+export async function getFullSaleBySlugType(slug, type) {
+    const sale = await prisma.salesOrders.findFirstOrThrow({
+        where: {
+            slug,
+            type,
+        },
+        include: SalesOverviewIncludes,
+    });
+    return sale;
+}
+export function typedFullSale(sale: AsyncFnType<typeof getFullSaleById>) {
     const shippingAddress = {
         ...(sale.shippingAddress || {}),
     } as any as TypedAddressBook;
@@ -92,9 +107,11 @@ export type GetSalesItemOverviewDta = AsyncFnType<
     typeof getSalesItemOverviewDta
 >;
 export async function getSalesItemOverviewDta(slug, type) {
-    const data = await getFullSalesDataDta(slug, type);
-    const resp = salesItemsOverviewDto(data);
+    const sale = await getFullSaleBySlugType(slug, type);
+    const data = typedFullSale(sale);
+    const overview = salesOverviewDto(data);
     return {
-        itemGroup: resp,
+        // itemGroup: resp,
+        ...overview,
     };
 }

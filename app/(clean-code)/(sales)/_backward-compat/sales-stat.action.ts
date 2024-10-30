@@ -4,11 +4,12 @@ import { prisma } from "@/db";
 import { SalesIncludeAll } from "../_common/utils/db-utils";
 import { TypedSalesStat } from "../types";
 import { GetFullSalesDataDta } from "../_common/data-access/sales-dta";
-import { percentage, sum } from "@/lib/utils";
+import { percent, sum } from "@/lib/utils";
 import { statStatus } from "../_common/utils/sales-utils";
 import { OrderItemProductionAssignments } from "@prisma/client";
+import { AsyncFnType } from "../../type";
 
-export async function salesStatisticsAction() {
+async function loadSales() {
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order",
@@ -18,6 +19,11 @@ export async function salesStatisticsAction() {
         },
         include: SalesIncludeAll,
     });
+    return sales;
+}
+type LoadedSales = AsyncFnType<typeof loadSales>;
+export async function salesStatisticsAction() {
+    const sales = await loadSales();
     const stats: Partial<TypedSalesStat>[] = [];
     let resps: any = {
         stats: [] as Partial<TypedSalesStat>[],
@@ -28,7 +34,7 @@ export async function salesStatisticsAction() {
         const r = productionStats(s as any);
         r.stats.map((stat) => {
             stat.salesId = s.id;
-            stat.percentage = percentage(stat.score, stat.total);
+            stat.percentage = percent(stat.score, stat.total);
             stat.status = statStatus(stat.percentage);
             stats.push(stat);
         });
@@ -66,7 +72,7 @@ export async function salesStatisticsAction() {
     };
     return resps;
 }
-function productionStats(order: GetFullSalesDataDta) {
+function productionStats(order: LoadedSales[number]) {
     // get total produceables
     let totalProds = 0;
     let completedProds = 0;

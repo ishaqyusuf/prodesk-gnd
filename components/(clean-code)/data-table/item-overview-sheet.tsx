@@ -46,7 +46,7 @@ Props) {
         >
             <SheetContent
                 hideClose
-                className="sm:max-w-none w-auto overflow-y-auto p-0"
+                className="sm:max-w-none w-auto overflow-y-autos overflow-hidden p-0 sm:m-8 sm:rounded-xl h-auto"
             >
                 <SheetDescription className="sr-only">
                     Selected row details

@@ -6,6 +6,7 @@ import {
     validateShowComponentStyle,
 } from "../../utils/sales-utils";
 import { salesItemAssignmentsDto } from "./sales-item-assignment-dto";
+import { salesItemsStatsDto } from "./sales-stat-dto";
 
 interface Pill {
     label?: string;
@@ -26,6 +27,7 @@ interface Analytics {
 }
 export interface LineItemOverview {
     salesItemId;
+    orderId;
     doorItemId?;
     title: string;
     size?: string;
@@ -60,7 +62,16 @@ export interface LineItemOverview {
 type Item = GetFullSalesDataDta["items"][number];
 export type Assignments = Item["assignments"];
 export type LineAssignment = LineItemOverview["assignments"][number];
-export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
+export function salesOverviewDto(data: GetFullSalesDataDta) {
+    const itemGroup = salesItemGroupOverviewDto(data);
+    const stat = salesItemsStatsDto(data, itemGroup);
+    return {
+        itemGroup,
+        stat,
+    };
+}
+
+export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
     function filter(item: Item, itemIndex) {
         if (data.isDyke) {
             return (
@@ -72,7 +83,7 @@ export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
     }
     data.items = data.items?.sort(sortSalesItems);
     const filteredItems = data.items.filter(filter);
-    return filteredItems.map((item, fItemIndex) => {
+    const itemGroup = filteredItems.map((item, fItemIndex) => {
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
         );
@@ -162,6 +173,7 @@ export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
                     items.push(
                         itemAnalytics(
                             {
+                                orderId: data.id,
                                 salesItemId: gItem.id,
                                 doorItemId: _door.id,
                                 title: door.title,
@@ -190,6 +202,7 @@ export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
                 items.push(
                     itemAnalytics(
                         {
+                            orderId: data.id,
                             salesItemId: gItem.id,
                             title: molding.title,
                             totalQty: {
@@ -211,6 +224,7 @@ export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
                 items.push(
                     itemAnalytics(
                         {
+                            orderId: data.id,
                             salesItemId: gItem.id,
                             title: gItem.description,
                             totalQty: {
@@ -248,6 +262,7 @@ export function salesItemsOverviewDto(data: GetFullSalesDataDta) {
             style: componentStyle(item),
         };
     });
+    return itemGroup;
 }
 function starredTitle(title: string) {
     if (title?.includes("***"))

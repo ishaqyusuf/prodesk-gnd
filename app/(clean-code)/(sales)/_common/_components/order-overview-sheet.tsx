@@ -29,7 +29,6 @@ export default function OrderOverviewSheet({}) {
 
                     <div className="w-full lg:w-[600px] sbg-muted-foreground/5">
                         <TableSheetHeader title={item?.orderId} />
-                        {/* <SalesOverviewHeader className="" /> */}
                         <Tabs defaultValue="general">
                             <TabsList className="w-full">
                                 <TabsTrigger value="general">
@@ -45,7 +44,6 @@ export default function OrderOverviewSheet({}) {
                                 <TabsTrigger value="shipping">
                                     Shipping
                                 </TabsTrigger>
-                                {/* <TabsTrigger value="general"></TabsTrigger> */}
                             </TabsList>
                             <ScrollArea className="h-[80vh]">
                                 <TabsContent value="general">

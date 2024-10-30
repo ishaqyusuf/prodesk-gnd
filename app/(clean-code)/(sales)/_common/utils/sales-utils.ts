@@ -30,9 +30,10 @@ export function ftToIn(h) {
 }
 
 export function statStatus(percentage): SalesStatStatus {
-    if (percentage == 0) return "pending";
-    if (percentage == 100) return "completed";
-    return "in progress";
+    if (percentage === 0) return "pending";
+    if (percentage > 0 && percentage < 100) return "in progress";
+    if (percentage === 100) return "completed";
+    return "unknown";
 }
 
 const DontShowComponents = [

@@ -9,29 +9,31 @@ import { getSalesProdWorkersAsSelectOption } from "../../../use-case/sales-prod-
 import useEffectLoader from "@/lib/use-effect-loader";
 import Button from "@/components/common/button";
 import { DatePicker } from "@/components/(clean-code)/custom/controlled/date-picker";
+import NumberPicker from "@/components/(clean-code)/custom/controlled/number-picker";
+import {
+    getItemAssignmentFormUseCase,
+    ItemAssignmentForm,
+} from "../../../use-case/sales-prod.use-case";
 
 function useAssignmentCtx() {
     const ctx = useItemProdView();
     const { item } = ctx;
     const [assignMode, setAssignMode] = useState(false);
     const pendingAssignments = item?.analytics?.pending?.assignment;
-    const form = useForm({
-        defaultValues: {
-            lhQty: null,
-            rhQty: null,
-            assignedToId: null,
-            dueDate: null,
-            note: null,
-        },
+    const form = useForm<ItemAssignmentForm>({
+        defaultValues: null,
     });
     useEffect(() => {
         if (assignMode) {
-            form.reset({
-                assignedToId: null,
+            getItemAssignmentFormUseCase(item).then((res) => {
+                form.reset(res);
             });
         }
     }, [assignMode]);
-    async function save() {}
+    async function save() {
+        const formData = form.getValues();
+        console.log(formData);
+    }
     return {
         save,
         setAssignMode,
@@ -65,38 +67,56 @@ export function AssignForm({}) {
 }
 function AssignmentForm({}) {
     const ctx = useContext(Context);
-    const { form } = ctx;
+    const { form, pending } = ctx;
     const workers = useEffectLoader(getSalesProdWorkersAsSelectOption);
     return (
         <Form {...ctx.form}>
-            <div className="grid sm:grid-cols-2 gap-4 items-end">
-                <ControlledSelect
-                    size="sm"
-                    options={workers?.data || []}
-                    label={"Assign To"}
-                    name="assignedToId"
-                    control={form.control}
-                />
-                <DatePicker
-                    control={form.control}
-                    name="dueDate"
-                    size="sm"
-                    label="Due Date"
-                />
-            </div>
-            <div className="justify-end mt-4 flex gap-4">
-                <Button
-                    onClick={() => {
-                        ctx.setAssignMode(false);
-                    }}
-                    size="sm"
-                    variant="destructive"
-                >
-                    Cancel
-                </Button>
-                <Button action={ctx.save} size="sm" variant="default">
-                    Save
-                </Button>
+            <div className="border rounded-lg">
+                <div className="grid p-4 sm:grid-cols-2 gap-4 items-end">
+                    <ControlledSelect
+                        size="sm"
+                        options={workers?.data || []}
+                        label={"Assign To"}
+                        name="assignedTo.connect.id"
+                        control={form.control}
+                    />
+                    <DatePicker
+                        control={form.control}
+                        name="dueDate"
+                        size="sm"
+                        label="Due Date"
+                    />
+                    <NumberPicker
+                        control={form.control}
+                        name="lhQty"
+                        size="sm"
+                        label={pending.lh ? "LH Qty" : "Qty"}
+                        length={pending.lh || pending.qty}
+                    />
+                    {pending.rh ? (
+                        <NumberPicker
+                            control={form.control}
+                            name="rhQty"
+                            size="sm"
+                            label="RH Qty"
+                            length={pending.rh}
+                        />
+                    ) : null}
+                </div>
+                <div className="justify-end  flex gap-4 border-t p-4">
+                    <Button
+                        onClick={() => {
+                            ctx.setAssignMode(false);
+                        }}
+                        size="sm"
+                        variant="destructive"
+                    >
+                        Cancel
+                    </Button>
+                    <Button action={ctx.save} size="sm" variant="default">
+                        Assign
+                    </Button>
+                </div>
             </div>
         </Form>
     );
