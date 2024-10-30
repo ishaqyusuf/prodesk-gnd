@@ -92,14 +92,14 @@ function Status({ item }: ItemProps) {
             <Menu
                 Trigger={
                     <Button size="sm" variant="secondary">
-                        <Progress>
+                        {/* <Progress>
                             <Progress.Status>
                                 {item.status.status}
                             </Progress.Status>
                             <TCell.Secondary>
                                 {item.status.date}
                             </TCell.Secondary>
-                        </Progress>
+                        </Progress> */}
                     </Button>
                 }
             >

@@ -2,15 +2,8 @@ import { prisma } from "@/db";
 import { SalesStatType } from "../../types";
 import { percent } from "@/lib/utils";
 import { statStatus } from "../utils/sales-utils";
-import {
-    getFullSaleById,
-    getSalesItemOverviewDta,
-    typedFullSale,
-} from "./sales-dta";
-import {
-    salesItemGroupOverviewDto,
-    salesOverviewDto,
-} from "./dto/sales-item-dto";
+import { getFullSaleById, typedFullSale } from "./sales-dta";
+import { salesOverviewDto } from "./dto/sales-item-dto";
 
 export async function initSalesProgressDta(id) {}
 export async function salesAssignmentCreated(orderId, qty) {
@@ -35,20 +28,45 @@ async function createSalesProgressDta(
 async function generateMissingStatsDta(salesId) {
     const data = typedFullSale(await getFullSaleById(salesId));
     const overview = salesOverviewDto(data);
-
+    await Promise.all(
+        Object.values(overview.stat.salesStatByKey).map(async (stat) => {
+            if (!stat.id)
+                await createSalesProgressDta(
+                    stat.salesId,
+                    stat.type as any,
+                    stat.total,
+                    stat.score
+                );
+            else {
+                let _s = overview.stat.salesStatByKey?.[stat.type as any];
+                if (_s.total != stat.total || _s.score != stat.score)
+                    await updateSalesProgressDta(
+                        stat.salesId,
+                        stat.type as any,
+                        {
+                            score: stat.score,
+                            total: stat.total,
+                            id: stat.id,
+                        }
+                    );
+            }
+        })
+    );
     // overview.
 }
 async function updateSalesProgressDta(
     salesId,
     type: SalesStatType,
-    { total = null, score = null, plusScore = 0, minusScore = 0 }
+    { total = null, id = null, score = null, plusScore = 0, minusScore = 0 }
 ) {
-    const stat = await prisma.salesStat.findFirst({
-        where: {
-            type,
-            salesId,
-        },
-    });
+    const stat = id
+        ? { id, total, score }
+        : await prisma.salesStat.findFirst({
+              where: {
+                  type,
+                  salesId,
+              },
+          });
     if (!stat?.id) {
         await generateMissingStatsDta(salesId);
         return;
