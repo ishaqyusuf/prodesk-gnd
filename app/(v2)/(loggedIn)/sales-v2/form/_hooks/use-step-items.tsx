@@ -93,7 +93,9 @@ export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
             return;
         }
         ctx.startLoadingStep(async () => {
-            const val = stepProd?.product?.value || stepProd?.product?.title;
+            const val =
+                // stepProd?.product?.value ||
+                stepProd?.product?.title;
 
             const hpt = form.getValues(
                 `itemArray.${item.rowIndex}.item.housePackageTool`
