@@ -347,10 +347,10 @@ function itemAnalytics(
 }
 function qtyDiff(rh: Qty, lh: Qty): Qty {
     return {
-        lh: sum([rh.lh, lh.lh * -1]),
-        rh: sum([rh.rh, lh.rh * -1]),
-        total: sum([rh.total, lh.total * -1]),
-        qty: sum([rh.qty, lh.qty * -1]),
+        lh: sum([rh.lh, (lh?.lh || 0) * -1]),
+        rh: sum([rh.rh, (lh?.rh || 0) * -1]),
+        total: sum([rh.total, (lh?.total || 0) * -1]),
+        qty: sum([rh.qty, (lh?.qty || 0) * -1]),
     };
 }
 

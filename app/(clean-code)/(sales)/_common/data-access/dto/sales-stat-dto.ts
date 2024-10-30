@@ -30,8 +30,8 @@ export function calculatedStatsDto(
                 salesId: data.id,
                 type,
             } as any;
-        const totalPending = pending.total;
-        const totalSuccess = success.total;
+        const totalPending = pending?.total || 0;
+        const totalSuccess = success?.total || 0;
         cs[type].score += totalSuccess;
         cs[type].total += totalPending + totalSuccess;
     }
