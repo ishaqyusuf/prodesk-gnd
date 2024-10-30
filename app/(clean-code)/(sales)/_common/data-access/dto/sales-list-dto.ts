@@ -8,12 +8,14 @@ import {
     SalesStatType,
     SalesType,
 } from "../../../types";
+import { overallStatus, statToKeyValueDto } from "./sales-stat-dto";
 
 export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
     return {
         ...commonListData(data),
-        status: getSalesOrderStatus(data.stat),
+        stats: statToKeyValueDto(data.stat),
+        status: overallStatus(data.stat),
         addressData: {
             shipping: getAddressDto(
                 data.shippingAddress || data.billingAddress,

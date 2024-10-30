@@ -89,24 +89,10 @@ function SalesRep({ item }: ItemProps) {
 function Status({ item }: ItemProps) {
     return (
         <TCell>
-            <Menu
-                Trigger={
-                    <Button size="sm" variant="secondary">
-                        {/* <Progress>
-                            <Progress.Status>
-                                {item.status.status}
-                            </Progress.Status>
-                            <TCell.Secondary>
-                                {item.status.date}
-                            </TCell.Secondary>
-                        </Progress> */}
-                    </Button>
-                }
-            >
-                <Menu.Label>Sales Progress</Menu.Label>
-                <Menu.Item icon="pickup">Delivery</Menu.Item>
-                <Menu.Item icon="delivery">Pickup</Menu.Item>
-            </Menu>
+            <Progress>
+                <Progress.Status>{item.status.status}</Progress.Status>
+                <TCell.Secondary>{/* {item.status.date} */}</TCell.Secondary>
+            </Progress>
         </TCell>
     );
 }
