@@ -15,6 +15,7 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SubmitProductionForm from "./submit-form";
+import { useState } from "react";
 
 export function ItemProdView({}) {
     const ctx = useItemProdViewContext();
@@ -48,6 +49,7 @@ export function ItemProdView({}) {
 function Assignment({ assignment }: { assignment: ItemAssignment }) {
     const ctx = useItemProdViewContext();
     const { mainCtx, item } = ctx;
+    const [showSubmit, setShowSubmit] = useState(false);
     return (
         <div key={assignment.id}>
             <div>
@@ -101,13 +103,20 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
                     {/* <div>{JSON.parse(assignment.)}</div> */}
                     <div className="flex-1"></div>
                     <div className="flex gap-2">
-                        <Button size="sm" className="h-8">
+                        <Button
+                            onClick={() => {
+                                setShowSubmit(true);
+                            }}
+                            disabled={showSubmit || !assignment.pending.total}
+                            size="sm"
+                            className="h-8"
+                        >
                             Submit
                         </Button>
                         <ConfirmBtn size="icon" trash />
                     </div>
                 </div>
-                <SubmitProductionForm />
+                {showSubmit && <SubmitProductionForm assignment={assignment} />}
                 <div className="pl-4 border-t">
                     {assignment.submissions?.map((s) => (
                         <AssignmentSubmissionLine submission={s} key={s.id} />

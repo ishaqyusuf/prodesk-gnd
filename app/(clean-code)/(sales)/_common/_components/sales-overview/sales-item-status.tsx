@@ -3,7 +3,7 @@ import { GetSalesOrderListItem } from "../../use-case/sales-list-use-case";
 import { Label } from "@/components/ui/label";
 
 interface Props {
-    status: GetSalesOrderListItem["status"]["dispatch"];
+    status: GetSalesOrderListItem["stats"]["dispatch"];
     title?: string;
 }
 export function SalesItemStatus({ status, title }: Props) {

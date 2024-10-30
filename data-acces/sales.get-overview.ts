@@ -5,7 +5,6 @@ import {
 } from "@/data/compose-sales";
 import { prisma } from "@/db";
 import { IAddressMeta, ISalesOrderMeta, ISalesType } from "@/types/sales";
-import { Prisma } from "@prisma/client";
 
 export type IGetFullSale = Awaited<ReturnType<typeof getSale>>;
 
