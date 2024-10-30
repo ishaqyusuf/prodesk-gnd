@@ -361,6 +361,7 @@ export async function saveDykeSales(data: DykeForm) {
 
             await _deleteWhere(tx.salesOrderItems, ids.itemIds, true);
             // console.log("INSERTING>>>>>>");
+            // console.log(createItems);
 
             await Promise.all(
                 [

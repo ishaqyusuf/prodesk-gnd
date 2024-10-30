@@ -13,6 +13,7 @@ import {
     LegacyDykeFormContext,
     useLegacyDykeFormContext,
 } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { useEffect } from "react";
 
 interface Props {
     defaultValues: any;
@@ -20,6 +21,10 @@ interface Props {
 export default function SalesFormComponent({ defaultValues }: Props) {
     const ctx = useLegacyDykeFormContext(defaultValues);
     const { form, dealerMode, itemArray } = ctx;
+    useEffect(() => {
+        console.log({ defaultValues });
+    }, []);
+
     return (
         <LegacyDykeFormContext.Provider value={ctx}>
             <RenderForm {...form}>
