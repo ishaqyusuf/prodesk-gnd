@@ -12,6 +12,9 @@ import { formatDate } from "@/lib/use-day";
 import { ItemProdViewContext, useItemProdViewContext } from "./use-hooks";
 import { AssignForm } from "./assigne-form";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import SubmitProductionForm from "./submit-form";
 
 export function ItemProdView({}) {
     const ctx = useItemProdViewContext();
@@ -29,7 +32,7 @@ export function ItemProdView({}) {
                     </div>
 
                     <AssignForm />
-                    <div className="px-4 sm:px-8">
+                    <div className="">
                         {item.assignments.map((assignment) => (
                             <Assignment
                                 key={assignment.id}
@@ -43,6 +46,8 @@ export function ItemProdView({}) {
     );
 }
 function Assignment({ assignment }: { assignment: ItemAssignment }) {
+    const ctx = useItemProdViewContext();
+    const { mainCtx, item } = ctx;
     return (
         <div key={assignment.id}>
             <div>
@@ -56,13 +61,53 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
                             <span>{formatDate(assignment.dueDate)}</span>
                         </div>
                     </div>
+                    <div>
+                        {item.hasSwing ? (
+                            <>
+                                <Badge
+                                    className={cn(
+                                        !assignment.qty.rh && "hidden"
+                                    )}
+                                    variant="outline"
+                                >
+                                    {assignment.submitted?.rh}
+                                    {" / "}
+                                    {assignment.qty.rh}
+                                    {" RH"}
+                                </Badge>
+                                <Badge
+                                    className={cn(
+                                        !assignment.qty.lh && "hidden"
+                                    )}
+                                    variant="outline"
+                                >
+                                    {assignment.submitted?.lh}
+                                    {" / "}
+                                    {assignment.qty.lh}
+                                    {" LH"}
+                                </Badge>
+                            </>
+                        ) : (
+                            <>
+                                <Badge className={cn()} variant="outline">
+                                    {assignment.submitted?.qty}
+                                    {" / "}
+                                    {assignment.qty.qty}
+                                    {" QTY"}
+                                </Badge>
+                            </>
+                        )}
+                    </div>
                     {/* <div>{JSON.parse(assignment.)}</div> */}
                     <div className="flex-1"></div>
-                    <div className="flex">
-                        {/* <div>Pending: {assignment.pendingQty}</div> */}
+                    <div className="flex gap-2">
+                        <Button size="sm" className="h-8">
+                            Submit
+                        </Button>
                         <ConfirmBtn size="icon" trash />
                     </div>
                 </div>
+                <SubmitProductionForm />
                 <div className="pl-4 border-t">
                     {assignment.submissions?.map((s) => (
                         <AssignmentSubmissionLine submission={s} key={s.id} />

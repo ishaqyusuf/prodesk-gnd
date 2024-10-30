@@ -4,7 +4,6 @@ import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { Progress } from "@/components/(clean-code)/progress";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Label } from "@/components/ui/label";
-import { Icon, Icons } from "@/components/_v1/icons";
 import { SalesItemStatus } from "./sales-item-status";
 
 export function SalesGeneralOverview({}) {
@@ -70,15 +69,15 @@ export function SalesGeneralOverview({}) {
                 </div>
                 <div className="px-4 sm:px-8">
                     <SalesItemStatus
-                        status={item.status.prodAssignment}
+                        status={item.stats.prodAssignment}
                         title="Assigned"
                     />
                     <SalesItemStatus
-                        status={item.status.prod}
+                        status={item.stats.prod}
                         title="Production Completed"
                     />
                     <SalesItemStatus
-                        status={item.status.dispatch}
+                        status={item.stats.dispatch}
                         title="Delivered"
                     />
                 </div>

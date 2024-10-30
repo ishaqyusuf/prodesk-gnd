@@ -7,7 +7,9 @@ import { salesOverviewDto } from "./dto/sales-item-dto";
 
 export async function initSalesProgressDta(id) {}
 export async function salesAssignmentCreated(orderId, qty) {
-    await updateSalesProgressDta(orderId, "prodAssignment", qty);
+    await updateSalesProgressDta(orderId, "prodAssignment", {
+        plusScore: qty,
+    });
 }
 async function createSalesProgressDta(
     salesId,
@@ -29,7 +31,8 @@ async function generateMissingStatsDta(salesId) {
     const data = typedFullSale(await getFullSaleById(salesId));
     const overview = salesOverviewDto(data);
     await Promise.all(
-        Object.values(overview.stat.salesStatByKey).map(async (stat) => {
+        Object.values(overview.stat.calculatedStats).map(async (stat) => {
+            // console.log(stat);
             if (!stat.id)
                 await createSalesProgressDta(
                     stat.salesId,
@@ -67,6 +70,8 @@ async function updateSalesProgressDta(
                   salesId,
               },
           });
+    console.log(stat);
+
     if (!stat?.id) {
         await generateMissingStatsDta(salesId);
         return;

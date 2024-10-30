@@ -43,6 +43,7 @@ export function calculatedStatsDto(
             populate("dispatch", pending.delivery, success.delivery);
         });
     });
+    return cs;
 }
 export function statToKeyValueDto(dataStats: SalesStat[]) {
     // const dataStats = data.stat;

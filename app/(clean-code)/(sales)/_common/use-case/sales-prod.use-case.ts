@@ -29,6 +29,13 @@ export async function getItemAssignmentFormUseCase(item: LineItemOverview) {
         rhQty: pendingAssignments?.rh,
         qtyAssigned: null,
         dueDate: null,
+        salesDoor: !item.doorItemId
+            ? undefined
+            : {
+                  connect: {
+                      id: item.doorItemId,
+                  },
+              },
         item: {
             connect: {
                 id: item.salesItemId,

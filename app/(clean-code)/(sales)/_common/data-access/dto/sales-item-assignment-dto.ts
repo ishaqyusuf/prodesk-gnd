@@ -3,6 +3,7 @@ import {
     Assignments,
     LineAssignment,
     LineItemOverview,
+    qtyDiff,
 } from "./sales-item-dto";
 
 export function salesItemAssignmentsDto(
@@ -16,7 +17,12 @@ export function salesItemAssignmentsDto(
             return sum(data.map((s) => s?.[k]));
         }
         const deliveries = d.submissions.map((s) => s.itemDeliveries).flat();
-
+        const qty = __qty(d.lhQty, d.rhQty, d.qtyAssigned);
+        const submitted = __qty(
+            __sum("lhQty", d.submissions),
+            __sum("rhQty", d.submissions),
+            __sum("qty", d.submissions)
+        );
         const _data: LineAssignment = {
             assignedTo: d.assignedTo.name,
             id: d.id,
@@ -33,28 +39,27 @@ export function salesItemAssignmentsDto(
                 id: del.id,
                 qty: __qty(del.lhQty, del.rhQty, del.qty),
             })),
-            submitted: __qty(
-                __sum("lhQty", d.submissions),
-                __sum("rhQty", d.submissions),
-                __sum("qty", d.submissions)
-            ),
+            submitted,
             delivered: __qty(
                 __sum("lhQty", deliveries),
                 __sum("rhQty", deliveries),
                 __sum("qty", deliveries)
             ),
-            qty: __qty(d.lhQty, d.rhQty, d.qtyAssigned),
-            pendingQty: 0,
+            qty,
+            pending: qtyDiff(qty, submitted),
         };
-        _data.pendingQty = _data.qty.total - _data.submitted.total;
+        // _data.pendingQty = _data.qty.total - _data.submitted.total;
         assignments.push(_data);
     });
     return assignments;
 }
-function __qty(lhQty, rhQty, total) {
+function __qty(lh, rh, qty) {
+    let total = qty;
+    if (lh || rh) total = sum([lh, rh]);
     return {
-        lhQty,
-        rhQty,
+        lh,
+        rh,
+        qty,
         total,
     };
 }

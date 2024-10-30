@@ -34,6 +34,7 @@ export interface LineItemOverview {
     totalQty: Qty;
     rate?: number;
     total?: number;
+    hasSwing?: boolean;
     pills?: Pill[];
     analytics?: {
         success: Analytics;
@@ -56,7 +57,7 @@ export interface LineItemOverview {
         delivered: Qty;
         deliveries: { id; qty: Qty; date; deliveryId }[];
         submissions: { id; qty: Qty; date }[];
-        pendingQty;
+        pending: Qty;
     }[];
 }
 type Item = GetFullSalesDataDta["items"][number];
@@ -122,7 +123,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     ];
                     let _totalQty;
                     let totalQty: Qty = {};
-                    if (doorType == "Bifold") {
+                    const isBifold = doorType == "Bifold";
+                    if (isBifold) {
                         pills.push(
                             createTextPill(
                                 `Qty x ${_door.lhQty}`,
@@ -173,6 +175,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     items.push(
                         itemAnalytics(
                             {
+                                hasSwing: !isBifold,
                                 orderId: data.id,
                                 salesItemId: gItem.id,
                                 doorItemId: _door.id,
@@ -345,7 +348,7 @@ function itemAnalytics(
     data.assignments = salesItemAssignmentsDto(data, assignments);
     return data;
 }
-function qtyDiff(rh: Qty, lh: Qty): Qty {
+export function qtyDiff(rh: Qty, lh: Qty): Qty {
     return {
         lh: sum([rh.lh, (lh?.lh || 0) * -1]),
         rh: sum([rh.rh, (lh?.rh || 0) * -1]),

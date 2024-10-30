@@ -11,6 +11,7 @@ import Button from "@/components/common/button";
 import { DatePicker } from "@/components/(clean-code)/custom/controlled/date-picker";
 import NumberPicker from "@/components/(clean-code)/custom/controlled/number-picker";
 import {
+    createItemAssignmentUseCase,
     getItemAssignmentFormUseCase,
     ItemAssignmentForm,
 } from "../../../use-case/sales-prod.use-case";
@@ -32,7 +33,8 @@ function useAssignmentCtx() {
     }, [assignMode]);
     async function save() {
         const formData = form.getValues();
-        console.log(formData);
+        // console.log(formData);
+        await createItemAssignmentUseCase(formData);
     }
     return {
         save,

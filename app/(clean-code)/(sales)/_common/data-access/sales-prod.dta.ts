@@ -12,4 +12,3 @@ export async function createItemAssignmentDta(
     });
     await salesAssignmentCreated(data.order.connect.id, data.qtyAssigned);
 }
-
