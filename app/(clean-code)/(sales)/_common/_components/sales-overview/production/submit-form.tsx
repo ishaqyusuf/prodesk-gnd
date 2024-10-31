@@ -30,7 +30,7 @@ export default function SubmitProductionForm({ assignment }: Props) {
         },
     });
     const pending = assignment.pending;
-    const hasBothSide = assignment.pending.lh && assignment.pending.rh;
+    const hasBothSide = pending.lh && pending.rh;
     async function __sumbit() {
         try {
             const data = form.getValues();
@@ -48,13 +48,17 @@ export default function SubmitProductionForm({ assignment }: Props) {
         <div className="p-4 grid gap-4">
             <Form {...form}>
                 <div className={cn(hasBothSide && "grid grid-cols-2 gap-4")}>
-                    <NumberPicker
-                        control={form.control}
-                        name={item.hasSwing ? "lhQty" : "qty"}
-                        size="sm"
-                        label={item.hasSwing ? "LH Qty" : "Qty"}
-                        length={pending.lh || pending.qty}
-                    />
+                    {(item.hasSwing && pending.lh) || pending.qty ? (
+                        <NumberPicker
+                            control={form.control}
+                            name={item.hasSwing ? "lhQty" : "qty"}
+                            size="sm"
+                            label={item.hasSwing ? "LH Qty" : "Qty"}
+                            length={pending.lh || pending.qty}
+                        />
+                    ) : (
+                        <></>
+                    )}
                     {pending.rh ? (
                         <NumberPicker
                             control={form.control}

@@ -72,7 +72,7 @@ export function AssignForm({}) {
 }
 function AssignmentForm({}) {
     const ctx = useContext(Context);
-    const { form, pending } = ctx;
+    const { form, pending, item } = ctx;
     const workers = useEffectLoader(getSalesProdWorkersAsSelectOption);
     return (
         <Form {...ctx.form}>
@@ -91,13 +91,24 @@ function AssignmentForm({}) {
                         size="sm"
                         label="Due Date"
                     />
-                    <NumberPicker
+                    {(item.hasSwing && pending.lh) || pending.qty ? (
+                        <NumberPicker
+                            control={form.control}
+                            name={"lhQty"}
+                            size="sm"
+                            label={item.hasSwing ? "LH Qty" : "Qty"}
+                            length={pending.lh || pending.qty}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    {/* <NumberPicker
                         control={form.control}
                         name="lhQty"
                         size="sm"
                         label={pending.lh ? "LH Qty" : "Qty"}
                         length={pending.lh || pending.qty}
-                    />
+                    /> */}
                     {pending.rh ? (
                         <NumberPicker
                             control={form.control}

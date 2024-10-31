@@ -135,6 +135,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         _totalQty = _door.lhQty;
                         totalQty = {
                             total: _totalQty,
+                            qty: _totalQty,
                         };
                     } else {
                         pills.push(
