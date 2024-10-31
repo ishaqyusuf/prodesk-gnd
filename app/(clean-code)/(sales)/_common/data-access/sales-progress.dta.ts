@@ -57,7 +57,7 @@ async function generateMissingStatsDta(salesId) {
     );
     // overview.
 }
-async function updateSalesProgressDta(
+export async function updateSalesProgressDta(
     salesId,
     type: SalesStatType,
     { total = null, id = null, score = null, plusScore = 0, minusScore = 0 }
@@ -70,7 +70,7 @@ async function updateSalesProgressDta(
                   salesId,
               },
           });
-    console.log(stat);
+    // console.log(stat);
 
     if (!stat?.id) {
         await generateMissingStatsDta(salesId);

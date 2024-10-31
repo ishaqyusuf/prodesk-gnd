@@ -2,12 +2,15 @@
 
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { LineItemOverview } from "../data-access/dto/sales-item-dto";
-import { prisma } from "@/db";
+
 import { userId } from "@/app/(v1)/_actions/utils";
-import { Prisma } from "@prisma/client";
+import { OrderProductionSubmissions, Prisma } from "@prisma/client";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { revalidatePath } from "next/cache";
-import { createItemAssignmentDta } from "../data-access/sales-prod.dta";
+import {
+    createItemAssignmentDta,
+    submitAssignmentDta,
+} from "../data-access/sales-prod.dta";
 
 export type ItemAssignmentForm = AsyncFnType<
     typeof getItemAssignmentFormUseCase
@@ -54,4 +57,9 @@ export async function createItemAssignmentUseCase(data: ItemAssignmentForm) {
     await createItemAssignmentDta(data);
     // await _revalidate('sales')
     revalidatePath("/sales-book/orders");
+}
+export type AssignmentSubmitForm = OrderProductionSubmissions;
+export async function submitAssignmentUseCase(data: AssignmentSubmitForm) {
+    // data.
+    await submitAssignmentDta(data);
 }

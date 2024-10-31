@@ -2,6 +2,15 @@ import Button from "@/components/common/button";
 import { ItemAssignment } from "../sales-items-overview";
 import { useForm } from "react-hook-form";
 import { useItemProdViewContext } from "./use-hooks";
+import { Form } from "@/components/ui/form";
+import { cn, sum } from "@/lib/utils";
+import NumberPicker from "@/components/(clean-code)/custom/controlled/number-picker";
+import ControlledInput from "@/components/common/controls/controlled-input";
+import { toast } from "sonner";
+import {
+    AssignmentSubmitForm,
+    submitAssignmentUseCase,
+} from "../../../use-case/sales-prod.use-case";
 
 interface Props {
     assignment: ItemAssignment;
@@ -9,8 +18,66 @@ interface Props {
 export default function SubmitProductionForm({ assignment }: Props) {
     const ctx = useItemProdViewContext();
     const { mainCtx, item } = ctx;
-    const form = useForm({
-        defaultValues: {},
+    const form = useForm<AssignmentSubmitForm>({
+        defaultValues: {
+            qty: 0,
+            lhQty: 0,
+            rhQty: 0,
+            note: "",
+            salesOrderItemId: item.salesItemId,
+            assignmentId: assignment.id,
+            salesOrderId: item.orderId,
+        },
     });
-    return <div className=""></div>;
+    const pending = assignment.pending;
+    const hasBothSide = assignment.pending.lh && assignment.pending.rh;
+    async function __sumbit() {
+        try {
+            const data = form.getValues();
+            if (!data.lhQty && !data.qty && !data.rhQty)
+                throw Error("Select valid qty");
+            if (item.hasSwing) data.qty = sum([data.lhQty, data.rhQty]);
+            await submitAssignmentUseCase(data);
+        } catch (error) {
+            if (error instanceof Error) toast.error(error.message);
+        }
+    }
+    return (
+        <div className="p-4 grid gap-4">
+            <Form {...form}>
+                <div className={cn(hasBothSide && "grid grid-cols-2 gap-4")}>
+                    <NumberPicker
+                        control={form.control}
+                        name={item.hasSwing ? "lhQty" : "qty"}
+                        size="sm"
+                        label={item.hasSwing ? "LH Qty" : "Qty"}
+                        length={pending.lh || pending.qty}
+                    />
+                    {pending.rh ? (
+                        <NumberPicker
+                            control={form.control}
+                            name="rhQty"
+                            size="sm"
+                            label="RH Qty"
+                            length={pending.rh}
+                        />
+                    ) : null}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <ControlledInput
+                        type="textarea"
+                        className="col-span-2"
+                        control={form.control}
+                        name="note"
+                        label="Note"
+                    />
+                </div>
+            </Form>
+            <div className="flex justify-end">
+                <Button size="sm" action={__sumbit}>
+                    Submit
+                </Button>
+            </div>
+        </div>
+    );
 }
