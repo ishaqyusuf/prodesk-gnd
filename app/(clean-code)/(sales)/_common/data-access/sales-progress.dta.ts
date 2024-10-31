@@ -79,6 +79,7 @@ export async function updateSalesProgressDta(
     if (!total) total = stat.total;
     if (!score) score = stat.score;
     score = score + plusScore - minusScore;
+
     await prisma.salesStat.update({
         where: {
             id: stat.id,

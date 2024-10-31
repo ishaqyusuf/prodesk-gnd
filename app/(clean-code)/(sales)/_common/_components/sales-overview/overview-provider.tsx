@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { SalesItemProp } from "../orders-page-cells";
 import { generateRandomString } from "@/lib/utils";
 import {
@@ -12,6 +12,7 @@ type TabData = {
     payload?;
     payloadSlug?;
     slug: TabItems;
+    meta?: any;
 };
 export const OverviewContext = createContext<
     ReturnType<typeof useOverviewContext>
@@ -23,10 +24,33 @@ export const useOverviewContext = (item: SalesItemProp) => {
         setOverview(await getSalesItemOverviewUseCase(item.slug, item.type));
     }
     const [tabData, setTabData] = useState<TabData>(null);
+
+    useEffect(() => {
+        if (tabData) {
+            switch (tabData.slug) {
+                case "itemView":
+                    openItemTab(tabData.meta?.groupIndex, tabData.payloadSlug);
+                    break;
+            }
+        }
+    }, [overview]);
+    async function refresh() {
+        await load();
+    }
+    function openItemTab(groupIndex, itemIndex) {
+        const payload = overview?.itemGroup?.[groupIndex];
+        setTabData({
+            slug: "itemView",
+            payloadSlug: itemIndex,
+            payload,
+            meta: {
+                groupIndex,
+            },
+        });
+    }
     return {
-        openTab(data: TabData) {
-            setTabData(data);
-        },
+        refresh,
+        openItemTab,
         dataKey,
         tabData,
         setTabData,

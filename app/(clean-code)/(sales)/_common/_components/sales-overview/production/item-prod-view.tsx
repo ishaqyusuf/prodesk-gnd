@@ -11,11 +11,13 @@ import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-ove
 import { formatDate } from "@/lib/use-day";
 import { ItemProdViewContext, useItemProdViewContext } from "./use-hooks";
 import { AssignForm } from "./assigne-form";
-import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SubmitProductionForm from "./submit-form";
 import { useState } from "react";
+import { deleteAssignmentUseCase } from "../../../use-case/sales-prod.use-case";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { toast } from "sonner";
 
 export function ItemProdView({}) {
     const ctx = useItemProdViewContext();
@@ -50,6 +52,11 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
     const ctx = useItemProdViewContext();
     const { mainCtx, item } = ctx;
     const [showSubmit, setShowSubmit] = useState(false);
+    async function deleteAssignment() {
+        await deleteAssignmentUseCase(assignment.id);
+        toast.success("Deleted");
+        mainCtx.refresh();
+    }
     return (
         <div key={assignment.id}>
             <div>
@@ -113,7 +120,11 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
                         >
                             Submit
                         </Button>
-                        <ConfirmBtn size="icon" trash />
+                        <ConfirmBtn
+                            size="icon"
+                            trash
+                            onClick={deleteAssignment}
+                        />
                     </div>
                 </div>
                 {showSubmit && <SubmitProductionForm assignment={assignment} />}

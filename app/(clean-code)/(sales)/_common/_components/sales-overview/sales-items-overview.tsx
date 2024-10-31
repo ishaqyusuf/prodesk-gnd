@@ -61,11 +61,7 @@ export function SalesItemsOverview({}) {
                             key={itemId}
                             className={"hover:bg-purple-100/20 cursor-pointer"}
                             onClick={() => {
-                                ctx.openTab({
-                                    payload: grp,
-                                    payloadSlug: itemId,
-                                    slug: "itemView",
-                                });
+                                ctx.openItemTab(id, itemId);
                             }}
                             item={item}
                         />

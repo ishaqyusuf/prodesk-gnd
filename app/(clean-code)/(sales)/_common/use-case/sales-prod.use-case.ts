@@ -9,6 +9,8 @@ import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { revalidatePath } from "next/cache";
 import {
     createItemAssignmentDta,
+    deleteAssignmentDta,
+    deleteAssignmentSubmissionDta,
     submitAssignmentDta,
 } from "../data-access/sales-prod.dta";
 
@@ -62,4 +64,10 @@ export type AssignmentSubmitForm = OrderProductionSubmissions;
 export async function submitAssignmentUseCase(data: AssignmentSubmitForm) {
     // data.
     await submitAssignmentDta(data);
+}
+export async function deleteAssignmentUseCase(id) {
+    await deleteAssignmentDta(id);
+}
+export async function deleteAssignmentSubmissionUseCase(id) {
+    await deleteAssignmentSubmissionDta(id);
 }

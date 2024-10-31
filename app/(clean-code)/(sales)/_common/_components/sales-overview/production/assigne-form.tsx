@@ -15,6 +15,7 @@ import {
     getItemAssignmentFormUseCase,
     ItemAssignmentForm,
 } from "../../../use-case/sales-prod.use-case";
+import { toast } from "sonner";
 
 function useAssignmentCtx() {
     const ctx = useItemProdView();
@@ -35,6 +36,8 @@ function useAssignmentCtx() {
         const formData = form.getValues();
         // console.log(formData);
         await createItemAssignmentUseCase(formData);
+        toast.success("Created!");
+        ctx.mainCtx.refresh();
     }
     return {
         save,
