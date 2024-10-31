@@ -59,7 +59,14 @@ export function SalesItemsOverview({}) {
                     {grp.items.map((item, itemId) => (
                         <LineItem
                             key={itemId}
-                            className={"hover:bg-purple-100/20 cursor-pointer"}
+                            className={cn(
+                                "",
+                                ctx.tabData?.slug == "itemView" &&
+                                    ctx.tabData?.meta?.groupIndex == id &&
+                                    ctx.tabData?.payloadSlug == itemId
+                                    ? "bg-muted-foreground/10"
+                                    : "hover:bg-muted-foreground/10 cursor-pointer"
+                            )}
                             onClick={() => {
                                 ctx.openItemTab(id, itemId);
                             }}
