@@ -24,7 +24,7 @@ export function salesItemAssignmentsDto(
             __sum("qty", d.submissions)
         );
         const _data: LineAssignment = {
-            assignedTo: d.assignedTo.name,
+            assignedTo: d.assignedTo?.name || "Not Set",
             id: d.id,
             assignedToId: d.assignedToId,
             dueDate: d.dueDate,

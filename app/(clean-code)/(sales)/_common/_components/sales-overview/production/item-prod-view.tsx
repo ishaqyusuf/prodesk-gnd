@@ -15,7 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SubmitProductionForm from "./submit-form";
 import { useState } from "react";
-import { deleteAssignmentUseCase } from "../../../use-case/sales-prod.use-case";
+import {
+    deleteAssignmentSubmissionUseCase,
+    deleteAssignmentUseCase,
+} from "../../../use-case/sales-prod.use-case";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { toast } from "sonner";
 
@@ -142,6 +145,12 @@ function AssignmentSubmissionLine({
 }: {
     submission: ItemAssignmentSubmission;
 }) {
+    const ctx = useItemProdViewContext();
+    async function _deleteSubmission() {
+        await deleteAssignmentSubmissionUseCase(submission.id);
+        toast.error("Deleted");
+        ctx.mainCtx.refresh();
+    }
     return (
         <div className="flex justify-between items-center">
             <div className="text-muted-foreground text-sm font-mono">
@@ -150,7 +159,7 @@ function AssignmentSubmissionLine({
                 )}`}
             </div>
             <div>
-                <ConfirmBtn size="icon" trash />
+                <ConfirmBtn onClick={_deleteSubmission} size="icon" trash />
             </div>
         </div>
     );

@@ -38,6 +38,8 @@ export default function SubmitProductionForm({ assignment }: Props) {
                 throw Error("Select valid qty");
             if (item.hasSwing) data.qty = sum([data.lhQty, data.rhQty]);
             await submitAssignmentUseCase(data);
+            toast.success("Submitted");
+            mainCtx.refresh();
         } catch (error) {
             if (error instanceof Error) toast.error(error.message);
         }
