@@ -7,7 +7,7 @@ export function useItemProdViewContext() {
     const tabData = ctx.tabData;
     const payload: ItemGroupType = tabData.payload;
     const [item] = useState(() =>
-        payload.items?.find((_, i) => i == tabData.payloadSlug)
+        payload?.items?.find((_, i) => i == tabData.payloadSlug)
     );
     return {
         mainCtx: ctx,

@@ -16,6 +16,8 @@ import { SalesItemsOverview } from "./sales-overview/sales-items-overview";
 import SalesOverviewHeader from "./sales-overview/sales-overview-header";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./sales-overview/production/item-prod-view";
+import { SalesShippingOverview } from "./sales-overview/sales-shipping-overview";
+import { ShippingForm } from "./sales-overview/shipping/shipping-form";
 
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
@@ -35,9 +37,9 @@ export default function OrderOverviewSheet({}) {
                                     General
                                 </TabsTrigger>
                                 <TabsTrigger value="items">Items</TabsTrigger>
-                                <TabsTrigger value="production">
+                                {/* <TabsTrigger value="production">
                                     Production
-                                </TabsTrigger>
+                                </TabsTrigger> */}
                                 <TabsTrigger value="payments">
                                     Payments
                                 </TabsTrigger>
@@ -51,6 +53,9 @@ export default function OrderOverviewSheet({}) {
                                 </TabsContent>
                                 <TabsContent className="" value="items">
                                     <SalesItemsOverview />
+                                </TabsContent>
+                                <TabsContent className="" value="shipping">
+                                    <SalesShippingOverview />
                                 </TabsContent>
                             </ScrollArea>
                         </Tabs>
@@ -67,6 +72,8 @@ function SecondaryTab({}) {
         switch (ctx.tabData.slug) {
             case "itemView":
                 return <ItemProdView />;
+            case "createShipping":
+                return <ShippingForm />;
         }
     }
     return (

@@ -51,12 +51,13 @@ export default function NumberPicker<
                         </Button>
                     </div>
                     <FormControl>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-2s flex-wrap">
                             {disabled && !inputs.length ? (
                                 <Button disabled></Button>
                             ) : null}
                             {inputs.map((i) => (
                                 <Button
+                                    className="border-none rounded-none"
                                     disabled={disabled}
                                     variant={
                                         (field.value || 0) >= i

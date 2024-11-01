@@ -14,7 +14,7 @@ interface Pill {
     text?: string;
     color?: string;
 }
-interface Qty {
+export interface Qty {
     qty?;
     lh?;
     rh?;
@@ -55,7 +55,7 @@ export interface LineItemOverview {
         qty: Qty;
         submitted: Qty;
         delivered: Qty;
-        deliveries: { id; qty: Qty; date; deliveryId }[];
+        deliveries: { id; qty: Qty; date; deliveryId; submissionId }[];
         submissions: { id; qty: Qty; date }[];
         pending: Qty;
     }[];
@@ -63,6 +63,7 @@ export interface LineItemOverview {
 type Item = GetFullSalesDataDta["items"][number];
 export type Assignments = Item["assignments"];
 export type LineAssignment = LineItemOverview["assignments"][number];
+export type SalesOverviewDto = ReturnType<typeof salesOverviewDto>;
 export function salesOverviewDto(data: GetFullSalesDataDta) {
     const itemGroup = salesItemGroupOverviewDto(data);
     const stat = salesItemsStatsDto(data, itemGroup);
@@ -349,12 +350,13 @@ function itemAnalytics(
     data.assignments = salesItemAssignmentsDto(data, assignments);
     return data;
 }
-export function qtyDiff(rh: Qty, lh: Qty): Qty {
+export function qtyDiff(rh: Qty, lh: Qty, add = false): Qty {
+    const mult = add ? 1 : -1;
     return {
-        lh: sum([rh.lh, (lh?.lh || 0) * -1]),
-        rh: sum([rh.rh, (lh?.rh || 0) * -1]),
-        total: sum([rh.total, (lh?.total || 0) * -1]),
-        qty: sum([rh.qty, (lh?.qty || 0) * -1]),
+        lh: sum([rh.lh, (lh?.lh || 0) * mult]),
+        rh: sum([rh.rh, (lh?.rh || 0) * mult]),
+        total: sum([rh.total, (lh?.total || 0) * mult]),
+        qty: sum([rh.qty, (lh?.qty || 0) * mult]),
     };
 }
 

@@ -48,9 +48,15 @@ export const useOverviewContext = (item: SalesItemProp) => {
             },
         });
     }
+    function createShipping() {
+        setTabData({
+            slug: "createShipping",
+        });
+    }
     return {
         refresh,
         openItemTab,
+        createShipping,
         dataKey,
         tabData,
         setTabData,

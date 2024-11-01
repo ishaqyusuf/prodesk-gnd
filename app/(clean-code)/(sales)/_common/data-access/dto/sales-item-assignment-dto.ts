@@ -36,9 +36,11 @@ export function salesItemAssignmentsDto(
             deliveries: deliveries.map((del) => ({
                 date: del.createdAt,
                 deliveryId: del.orderDeliveryId,
+                submissionId: del.orderProductionSubmissionId,
                 id: del.id,
                 qty: __qty(del.lhQty, del.rhQty, del.qty),
             })),
+
             submitted,
             delivered: __qty(
                 __sum("lhQty", deliveries),

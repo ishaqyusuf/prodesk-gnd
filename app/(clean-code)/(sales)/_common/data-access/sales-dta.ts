@@ -18,6 +18,7 @@ import {
     salesItemGroupOverviewDto,
     salesOverviewDto,
 } from "./dto/sales-item-dto";
+import { salesShippingDto } from "./dto/sales-shipping-dto";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
@@ -113,5 +114,6 @@ export async function getSalesItemOverviewDta(slug, type) {
     return {
         // itemGroup: resp,
         ...overview,
+        shipping: salesShippingDto(overview, data),
     };
 }

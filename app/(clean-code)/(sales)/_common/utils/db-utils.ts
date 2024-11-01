@@ -242,8 +242,14 @@ export const SalesOverviewIncludes = {
     productions: excludeDeleted,
     payments: excludeDeleted,
     stat: excludeDeleted,
-    deliveries: excludeDeleted,
-    itemDeliveries: excludeDeleted,
+    deliveries: {
+        ...excludeDeleted,
+        include: {
+            items: excludeDeleted,
+            driver: true,
+        },
+    },
+    // itemDeliveries: excludeDeleted,
 } satisfies Prisma.SalesOrdersInclude;
 
 export const dykeFormIncludes = (restoreQuery, includeStepPriceCount) =>
