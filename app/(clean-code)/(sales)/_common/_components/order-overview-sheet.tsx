@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./sales-overview/production/item-prod-view";
 import { SalesShippingOverview } from "./sales-overview/sales-shipping-overview";
 import { ShippingForm } from "./sales-overview/shipping/shipping-form";
+import { cn } from "@/lib/utils";
 
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
@@ -29,40 +30,45 @@ export default function OrderOverviewSheet({}) {
                 <div className="flex">
                     <SecondaryTab />
 
-                    <div className="w-full lg:w-[600px] sbg-muted-foreground/5">
-                        <TableSheetHeader title={item?.orderId} />
-                        <Tabs defaultValue="general">
-                            <TabsList className="w-full">
-                                <TabsTrigger value="general">
-                                    General
-                                </TabsTrigger>
-                                <TabsTrigger value="items">Items</TabsTrigger>
-                                {/* <TabsTrigger value="production">
-                                    Production
-                                </TabsTrigger> */}
-                                <TabsTrigger value="payments">
-                                    Payments
-                                </TabsTrigger>
-                                <TabsTrigger value="shipping">
-                                    Shipping
-                                </TabsTrigger>
-                            </TabsList>
-                            <ScrollArea className="h-[80vh]">
-                                <TabsContent value="general">
-                                    <SalesGeneralOverview />
-                                </TabsContent>
-                                <TabsContent className="" value="items">
-                                    <SalesItemsOverview />
-                                </TabsContent>
-                                <TabsContent className="" value="shipping">
-                                    <SalesShippingOverview />
-                                </TabsContent>
-                            </ScrollArea>
-                        </Tabs>
-                    </div>
+                    <PrimaryTab />
                 </div>
             </OverviewProvider>
         </TableItemOverviewSheet>
+    );
+}
+function PrimaryTab() {
+    const ctx = useSalesOverview();
+    return (
+        <div
+            className={cn(
+                "w-[60vw] lg:w-[600px]",
+                ctx.tabData && "hidden lg:block"
+            )}
+        >
+            <TableSheetHeader title={ctx.item?.orderId} />
+            <Tabs defaultValue="general">
+                <TabsList className="w-full">
+                    <TabsTrigger value="general">General</TabsTrigger>
+                    <TabsTrigger value="items">Items</TabsTrigger>
+                    {/* <TabsTrigger value="production">
+                                    Production
+                                </TabsTrigger> */}
+                    <TabsTrigger value="payments">Payments</TabsTrigger>
+                    <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                </TabsList>
+                <ScrollArea className="h-[80vh]">
+                    <TabsContent value="general">
+                        <SalesGeneralOverview />
+                    </TabsContent>
+                    <TabsContent className="" value="items">
+                        <SalesItemsOverview />
+                    </TabsContent>
+                    <TabsContent className="" value="shipping">
+                        <SalesShippingOverview />
+                    </TabsContent>
+                </ScrollArea>
+            </Tabs>
+        </div>
     );
 }
 function SecondaryTab({}) {

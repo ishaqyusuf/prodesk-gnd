@@ -17,11 +17,15 @@ export function salesItemAssignmentsDto(
             return sum(data.map((s) => s?.[k]));
         }
         const deliveries = d.submissions.map((s) => s.itemDeliveries).flat();
-        const qty = __qty(d.lhQty, d.rhQty, d.qtyAssigned);
+        const qty = __qty(
+            d.lhQty,
+            d.rhQty,
+            data.hasSwing ? null : d.qtyAssigned
+        );
         const submitted = __qty(
             __sum("lhQty", d.submissions),
             __sum("rhQty", d.submissions),
-            __sum("qty", d.submissions)
+            data.hasSwing ? null : __sum("qty", d.submissions)
         );
         const _data: LineAssignment = {
             assignedTo: d.assignedTo?.name || "Not Set",
@@ -31,21 +35,25 @@ export function salesItemAssignmentsDto(
             submissions: d.submissions.map((sb) => ({
                 id: sb.id,
                 date: sb.createdAt,
-                qty: __qty(sb.lhQty, sb.rhQty, sb.qty),
+                qty: __qty(sb.lhQty, sb.rhQty, data.hasSwing ? null : sb.qty),
             })),
             deliveries: deliveries.map((del) => ({
                 date: del.createdAt,
                 deliveryId: del.orderDeliveryId,
                 submissionId: del.orderProductionSubmissionId,
                 id: del.id,
-                qty: __qty(del.lhQty, del.rhQty, del.qty),
+                qty: __qty(
+                    del.lhQty,
+                    del.rhQty,
+                    data.hasSwing ? null : del.qty
+                ),
             })),
 
             submitted,
             delivered: __qty(
                 __sum("lhQty", deliveries),
                 __sum("rhQty", deliveries),
-                __sum("qty", deliveries)
+                data.hasSwing ? null : __sum("qty", deliveries)
             ),
             qty,
             pending: qtyDiff(qty, submitted),
