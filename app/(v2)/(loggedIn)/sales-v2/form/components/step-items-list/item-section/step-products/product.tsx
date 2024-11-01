@@ -52,7 +52,7 @@ interface Props {
     className?: string;
     products;
 }
-export function StepItem({
+export function StepProduct({
     item,
     select,
     loadingStep,
@@ -86,20 +86,20 @@ export function StepItem({
     }, [menuOpen]);
     const [price, setPrice] = useState();
     const [saving, startSaving] = useTransition();
-
-    const dependecies = ctx.formStepArray
-        .map((s) => ({
-            uid: s.step.uid,
-            label: s.step.title,
-            value: s.item.value,
-            prodUid: s.item.prodUid,
-        }))
-        .filter(
-            (_, i) =>
-                i < stepIndex && stepForm.step.meta?.priceDepencies?.[_.uid]
-        );
-    const uids = dependecies.map((s) => s.prodUid);
-    const dependenciesUid = uids.length ? uids.join("-") : null;
+    const { dependencies, dependenciesUid } = stepCtx;
+    // const dependecies = ctx.formStepArray
+    //     .map((s) => ({
+    //         uid: s.step.uid,
+    //         label: s.step.title,
+    //         value: s.item.value,
+    //         prodUid: s.item.prodUid,
+    //     }))
+    //     .filter(
+    //         (_, i) =>
+    //             i < stepIndex && stepForm.step.meta?.priceDepencies?.[_.uid]
+    //     );
+    // const uids = dependecies.map((s) => s.prodUid);
+    // const dependenciesUid = uids.length ? uids.join("-") : null;
     async function savePrice() {
         startSaving(async () => {
             // console.log(item.uid);
@@ -242,11 +242,11 @@ export function StepItem({
                             <div
                                 className={cn(
                                     "grid",
-                                    dependecies.length && "border-b pt-2",
-                                    dependecies.length > 1 ? "grid-cols-2" : ""
+                                    dependencies.length && "border-b pt-2",
+                                    dependencies.length > 1 ? "grid-cols-2" : ""
                                 )}
                             >
-                                {dependecies.map((i) => (
+                                {dependencies.map((i) => (
                                     <Info key={i.label} label={i.label}>
                                         {i.value}
                                     </Info>

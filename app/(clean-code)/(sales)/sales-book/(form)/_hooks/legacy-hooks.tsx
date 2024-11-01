@@ -157,6 +157,20 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const priceRefresher = ctx.form.watch(
         `itemArray.${itemCtx.rowIndex}.priceRefresher`
     );
+    const dependencies = itemCtx
+        .formSteps()
+        .map((s) => ({
+            uid: s.step.uid,
+            label: s.step.title,
+            value: s.item.value,
+            prodUid: s.item.prodUid,
+        }))
+        .filter(
+            (_, i) =>
+                i < stepIndex && _step?.step?.meta?.priceDepencies?.[_.uid]
+        );
+    const uids = dependencies.map((s) => s.prodUid);
+    const dependenciesUid = uids.length ? uids.join("-") : null;
     useEffect(() => {
         stepCtx.reloadComponents();
     }, [priceRefresher]);
@@ -225,6 +239,8 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         enableSearch,
     };
     const stepCtx = {
+        dependenciesUid,
+        dependencies,
         deletedComponents,
         sortToggle() {
             if (sortMode) {
@@ -254,6 +270,7 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         isMoulding: step.step.title == "Moulding",
         watch,
     };
+
     return stepCtx;
 }
 export function useLegacyDoorHPTContext(title) {

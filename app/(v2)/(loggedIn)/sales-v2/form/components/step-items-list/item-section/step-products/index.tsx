@@ -6,10 +6,8 @@ import { getStepProduct } from "../../../../_action/get-dyke-step-product";
 
 import { Icons } from "@/components/_v1/icons";
 
-import { Button } from "@/components/ui/button";
-
 import useStepItems, { StepItemCtx } from "../../../../_hooks/use-step-items";
-import { StepItem } from "./product";
+import { StepProduct } from "./product";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import ControlledInput from "@/components/common/controls/controlled-input";
@@ -34,6 +32,8 @@ import { Label } from "@/components/ui/label";
 
 import StepMenu from "./step-trigger";
 import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
+import Button from "@/components/common/button";
+import { createCustomDykeStepUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/dyke-steps-use-case";
 export interface StepProductProps extends DykeItemStepSectionProps {
     stepActionNodeId;
     // rowIndex;
@@ -135,7 +135,7 @@ StepProductProps) {
                                         asChild
                                     >
                                         <Card className="border-none flex flex-col h-full bg-red-50">
-                                            <StepItem
+                                            <StepProduct
                                                 products={components}
                                                 className={cn(
                                                     "relative border-muted-foreground/10  borno group",
@@ -265,6 +265,19 @@ function CustomInput({ onProceed, currentValue }) {
         },
     });
     const ctx = useLegacyDykeFormStep();
+    async function createCustom() {
+        const formData = inputForm.getValues();
+        const prod = await createCustomDykeStepUseCase({
+            price: formData.price,
+            dependenciesUid: ctx.dependenciesUid,
+            dykeStepId: ctx.step.step.id,
+            title: formData.value,
+        });
+        // ctx.
+        //  const value = inputForm.getValues("value")?.trim();
+        //  if (!value) toast.error("Invalid value");
+        //  else onProceed(value);
+    }
     return (
         <Form {...inputForm}>
             <div className="flex ">
@@ -281,16 +294,7 @@ function CustomInput({ onProceed, currentValue }) {
                         type="number"
                     />
                     <div className="flex justify-end">
-                        <Button
-                            size="sm"
-                            onClick={() => {
-                                const value = inputForm
-                                    .getValues("value")
-                                    ?.trim();
-                                if (!value) toast.error("Invalid value");
-                                else onProceed(value);
-                            }}
-                        >
+                        <Button size="sm" onClick={createCustom}>
                             Continue
                         </Button>
                     </div>

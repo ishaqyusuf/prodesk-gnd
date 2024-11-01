@@ -13,7 +13,6 @@ import OverviewProvider, {
 } from "./sales-overview/overview-provider";
 import { SalesGeneralOverview } from "./sales-overview/sales-general-overview";
 import { SalesItemsOverview } from "./sales-overview/sales-items-overview";
-import SalesOverviewHeader from "./sales-overview/sales-overview-header";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./sales-overview/production/item-prod-view";
 import { SalesShippingOverview } from "./sales-overview/sales-shipping-overview";
