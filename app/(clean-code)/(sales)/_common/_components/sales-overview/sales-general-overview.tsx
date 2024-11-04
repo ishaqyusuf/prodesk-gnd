@@ -46,8 +46,8 @@ export function SalesGeneralOverview({}) {
                 />
                 <div className="grid py-4 grid-cols-2 px-4 sm:px-8 gap-4">
                     {[item.addressData.billing, item.addressData.shipping].map(
-                        (address) => (
-                            <div className="text-sm" key={address.id}>
+                        (address, index) => (
+                            <div className="text-sm" key={index}>
                                 <div>
                                     <Label>{address.title}</Label>
                                 </div>

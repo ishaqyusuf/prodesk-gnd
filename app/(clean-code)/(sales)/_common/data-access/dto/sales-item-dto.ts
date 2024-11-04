@@ -27,6 +27,7 @@ interface Analytics {
 }
 export interface LineItemOverview {
     salesItemId;
+    swing?;
     orderId;
     doorItemId?;
     title: string;
@@ -178,6 +179,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     items.push(
                         itemAnalytics(
                             {
+                                size: _door.dimension,
+                                swing: _door.swing,
                                 hasSwing: !isBifold,
                                 orderId: data.id,
                                 salesItemId: gItem.id,
@@ -230,6 +233,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 items.push(
                     itemAnalytics(
                         {
+                            swing: gItem.swing,
                             orderId: data.id,
                             salesItemId: gItem.id,
                             title: gItem.description,

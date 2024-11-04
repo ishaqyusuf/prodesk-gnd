@@ -38,6 +38,13 @@ export function ItemProdView({}) {
 
                     <AssignForm />
                     <div className="">
+                        {item.assignments.length ? (
+                            <div className="my-2 mt-4">
+                                <Label>Assignments</Label>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                         {item.assignments.map((assignment) => (
                             <Assignment
                                 key={assignment.id}
@@ -63,7 +70,7 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
         mainCtx.refresh();
     }
     return (
-        <div key={assignment.id}>
+        <div className="bg-white" key={assignment.id}>
             <div>
                 <div className="flex items-center gap-4">
                     <div className="p-2">

@@ -84,8 +84,24 @@ export function ShippingOverview({}) {
                 <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
                     <div className="p-4 sm:p-8">
                         {ctx.items?.map(({ item, qty, deliveries }, index) => (
-                            <div key={index}>
-                                <div className="">{item.title}</div>
+                            <div
+                                className="border-b p-2 bg-white rounded"
+                                key={index}
+                            >
+                                <div className="flex">
+                                    <span className="text-sm font-semibold">
+                                        {item.title}{" "}
+                                    </span>
+                                    <div className="flex-1"></div>
+                                    <Badge
+                                        value={item.swing}
+                                        variant="secondary"
+                                    />
+                                    <Badge
+                                        value={item.size}
+                                        variant="secondary"
+                                    />
+                                </div>
                                 <div>
                                     {qty.rh || qty.lh ? (
                                         <>

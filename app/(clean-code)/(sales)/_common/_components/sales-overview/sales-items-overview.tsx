@@ -30,7 +30,7 @@ export function SalesItemsOverview({}) {
     }, []);
     return (
         <div>
-            <Button onClick={() => ctx.load()}>Refresh</Button>
+            {/* <Button onClick={() => ctx.load()}>Refresh</Button> */}
             {ctx.overview?.itemGroup?.map((grp, id) => (
                 <div
                     className="text-sm sborder my-1.5 srounded-lg sshadow-sm group mx-4 sm:mx-8"
@@ -38,9 +38,9 @@ export function SalesItemsOverview({}) {
                 >
                     <SectionTitle title={grp.sectionTitle}>
                         <div className="flex space-x-4 opacity-0 group-hover:opacity-100">
-                            <Button size="sm" className="h-8" variant="outline">
+                            {/* <Button size="sm" className="h-8" variant="outline">
                                 Production
-                            </Button>
+                            </Button> */}
                             {grp.style?.length && (
                                 <Button
                                     onClick={() => toggleDetail(id)}
@@ -117,7 +117,7 @@ export function LineItem({ className = null, item, onClick }: LineItemProps) {
 export function Details({ group, show }: { show; group: ItemGroupType }) {
     if (!show) return null;
     return (
-        <div className="grid sm:grid-cols-2 sm:gap-4 sm:-mx-8">
+        <div className="grid ssm:grid-cols-2 sm:gap-2 sm:-mx-8">
             {group.style.map((style, id) => (
                 <DataLine key={id} {...style} />
             ))}

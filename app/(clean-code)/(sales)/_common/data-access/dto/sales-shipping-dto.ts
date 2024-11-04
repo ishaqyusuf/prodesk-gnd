@@ -62,6 +62,8 @@ export function salesShippingDto(
                 });
                 return {
                     hasSwing: item.hasSwing,
+                    swing: item.swing,
+                    size: item.size,
                     id: item.salesItemId,
                     uid: `${item.salesItemId}-${uid}`,
                     section: grp.sectionTitle,

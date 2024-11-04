@@ -80,7 +80,7 @@ function AssignmentForm({}) {
     const workers = useEffectLoader(getSalesProdWorkersAsSelectOption);
     return (
         <Form {...ctx.form}>
-            <div className="border rounded-lg">
+            <div className="border rounded-lg bg-white mt-4">
                 <div className="grid p-4 sm:grid-cols-2 gap-4 items-end">
                     <ControlledSelect
                         size="sm"

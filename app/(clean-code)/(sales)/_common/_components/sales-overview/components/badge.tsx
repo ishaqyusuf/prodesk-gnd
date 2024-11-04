@@ -9,7 +9,7 @@ interface Props {
 }
 export default function Badge({
     value,
-    variant,
+    variant = "default",
     alwayShow,
     prefix,
     suffix,
