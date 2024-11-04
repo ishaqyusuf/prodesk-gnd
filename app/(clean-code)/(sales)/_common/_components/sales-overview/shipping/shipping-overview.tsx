@@ -18,12 +18,13 @@ const useShippingForm = (): Ctx => {
     const ctx = useItemProdViewContext();
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
-    if (context?.id == slug) return context;
+    // if (context?.id == slug) return context;
     return useShippingFormCtx(ctx);
 };
 const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
     // const ctx = useItemProdViewContext();
     // if (_) return _;
+    if (context) return context as typeof resp;
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
     const shippingOverview = mainCtx.overview?.shipping;
