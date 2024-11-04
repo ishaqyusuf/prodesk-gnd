@@ -39,6 +39,7 @@ export interface LineItemOverview {
     analytics?: {
         success: Analytics;
         pending: Analytics;
+        produceable: boolean;
         info?: {
             title;
             text;
@@ -281,10 +282,7 @@ function itemAnalytics(
     deliverable = true
 ) {
     if (produceable || deliverable) {
-        data.analytics = {
-            success: {},
-            pending: {},
-        };
+        data.analytics = { produceable, success: {}, pending: {} };
         const { analytics, totalQty } = data;
         const dynamicKey = data.totalQty.lh ? "lh" : "qty";
         if (produceable) {

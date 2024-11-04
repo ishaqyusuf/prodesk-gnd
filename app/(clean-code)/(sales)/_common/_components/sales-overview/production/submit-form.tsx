@@ -37,7 +37,7 @@ export default function SubmitProductionForm({ assignment }: Props) {
             if (!data.lhQty && !data.qty && !data.rhQty)
                 throw Error("Select valid qty");
             if (item.hasSwing) data.qty = sum([data.lhQty, data.rhQty]);
-            await submitAssignmentUseCase(data);
+            await submitAssignmentUseCase(data, item.analytics.produceable);
             toast.success("Submitted");
             mainCtx.refresh();
         } catch (error) {

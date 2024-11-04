@@ -55,19 +55,25 @@ export async function getItemAssignmentFormUseCase(item: LineItemOverview) {
         note: "",
     } satisfies Prisma.OrderItemProductionAssignmentsCreateInput;
 }
-export async function createItemAssignmentUseCase(data: ItemAssignmentForm) {
-    await createItemAssignmentDta(data);
+export async function createItemAssignmentUseCase(
+    data: ItemAssignmentForm,
+    produceable
+) {
+    await createItemAssignmentDta(data, produceable);
     // await _revalidate('sales')
     revalidatePath("/sales-book/orders");
 }
 export type AssignmentSubmitForm = OrderProductionSubmissions;
-export async function submitAssignmentUseCase(data: AssignmentSubmitForm) {
+export async function submitAssignmentUseCase(
+    data: AssignmentSubmitForm,
+    produceable
+) {
     // data.
-    await submitAssignmentDta(data);
+    await submitAssignmentDta(data, produceable);
 }
-export async function deleteAssignmentUseCase(id) {
-    await deleteAssignmentDta(id);
+export async function deleteAssignmentUseCase(id, produceable) {
+    await deleteAssignmentDta(id, produceable);
 }
-export async function deleteAssignmentSubmissionUseCase(id) {
-    await deleteAssignmentSubmissionDta(id);
+export async function deleteAssignmentSubmissionUseCase(id, produceable) {
+    await deleteAssignmentSubmissionDta(id, produceable);
 }

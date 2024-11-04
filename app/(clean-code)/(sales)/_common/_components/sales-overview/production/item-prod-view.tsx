@@ -55,7 +55,10 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
     const { mainCtx, item } = ctx;
     const [showSubmit, setShowSubmit] = useState(false);
     async function deleteAssignment() {
-        await deleteAssignmentUseCase(assignment.id);
+        await deleteAssignmentUseCase(
+            assignment.id,
+            item.analytics.produceable
+        );
         toast.success("Deleted");
         mainCtx.refresh();
     }
@@ -146,7 +149,10 @@ function AssignmentSubmissionLine({
 }) {
     const ctx = useItemProdViewContext();
     async function _deleteSubmission() {
-        await deleteAssignmentSubmissionUseCase(submission.id);
+        await deleteAssignmentSubmissionUseCase(
+            submission.id,
+            ctx.item.analytics.produceable
+        );
         toast.error("Deleted");
         ctx.mainCtx.refresh();
     }

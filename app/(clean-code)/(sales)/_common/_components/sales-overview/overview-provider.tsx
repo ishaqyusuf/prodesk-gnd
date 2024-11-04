@@ -7,7 +7,7 @@ import {
 } from "../../use-case/sales-item-use-case";
 
 interface Props {}
-type TabItems = "itemView" | "makePayment" | "createShipping";
+type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
 type TabData = {
     payload?;
     payloadSlug?;
@@ -57,6 +57,12 @@ export const useOverviewContext = (item: SalesItemProp) => {
         refresh,
         openItemTab,
         createShipping,
+        viewShipping(slug) {
+            setTabData({
+                slug: "shippingView",
+                payloadSlug: slug,
+            });
+        },
         dataKey,
         tabData,
         setTabData,

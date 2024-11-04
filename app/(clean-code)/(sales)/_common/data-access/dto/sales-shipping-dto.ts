@@ -1,6 +1,6 @@
 import { assign, padStart } from "lodash";
 import { GetFullSalesDataDta } from "../sales-dta";
-import { qtyDiff, SalesOverviewDto } from "./sales-item-dto";
+import { Qty, qtyDiff, SalesOverviewDto } from "./sales-item-dto";
 import { sum } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 
@@ -47,14 +47,14 @@ export function salesShippingDto(
                             .filter((s) => s.qty.total > 0);
                     })
                     .flat();
-                let deliverableQty = !analytics.pending.production?.total
+
+                let deliverableQty = !analytics.produceable
                     ? qtyDiff(
                           analytics.pending.delivery,
                           analytics.success.delivery,
                           true
                       )
                     : deliverableSubmissions[0]?.qty || {};
-                // console.log(deliverableQty);
 
                 deliverableSubmissions?.map((s, i) => {
                     if (i > 0)

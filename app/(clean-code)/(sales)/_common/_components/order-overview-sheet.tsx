@@ -19,6 +19,7 @@ import { ItemProdView } from "./sales-overview/production/item-prod-view";
 import { ShippingForm } from "./sales-overview/shipping/shipping-form";
 import { cn } from "@/lib/utils";
 import { SalesShippingOverview } from "./sales-overview/shipping/sales-shipping-overview";
+import { ShippingOverview } from "./sales-overview/shipping/shipping-overview";
 
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
@@ -80,6 +81,8 @@ function SecondaryTab({}) {
                 return <ItemProdView />;
             case "createShipping":
                 return <ShippingForm />;
+            case "shippingView":
+                return <ShippingOverview />;
         }
     }
     return (
