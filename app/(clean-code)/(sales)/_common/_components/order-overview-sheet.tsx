@@ -18,7 +18,7 @@ import { ItemProdView } from "./sales-overview/production/item-prod-view";
 
 import { ShippingForm } from "./sales-overview/shipping/shipping-form";
 import { cn } from "@/lib/utils";
-import { SalesShippingOverview } from "./sales-overview/shipping/sales-shipping-overview";
+import { SalesShippingTab } from "./sales-overview/shipping/sales-shippings-tab";
 import { ShippingOverview } from "./sales-overview/shipping/shipping-overview";
 
 export default function OrderOverviewSheet({}) {
@@ -65,7 +65,7 @@ function PrimaryTab() {
                         <SalesItemsOverview />
                     </TabsContent>
                     <TabsContent className="" value="shipping">
-                        <SalesShippingOverview />
+                        <SalesShippingTab />
                     </TabsContent>
                 </ScrollArea>
             </Tabs>

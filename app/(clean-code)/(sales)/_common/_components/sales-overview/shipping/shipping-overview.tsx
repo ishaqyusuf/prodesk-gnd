@@ -20,32 +20,44 @@ import Button from "@/components/common/button";
 import { toast } from "sonner";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { Label } from "@/components/ui/label";
-
+let context = null;
+const useShippingForm = (): ReturnType<typeof useShippingFormCtx> => {
+    const ctx = useItemProdViewContext();
+    const { mainCtx, item, payload } = ctx;
+    const slug = mainCtx.tabData?.payloadSlug;
+    if (context?.id == slug) return context;
+    return useShippingFormCtx();
+};
 const useShippingFormCtx = () => {
     const ctx = useItemProdViewContext();
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
+
     const shipping = mainCtx.overview?.shipping?.list?.find(
         (ls) => ls.id == slug
     );
-    return {
+    const resp = {
         shipping,
+        id: slug,
         mainCtx,
     };
+    context = resp;
+    return resp;
 };
 const ShippingFormCtx = createContext<ReturnType<typeof useShippingFormCtx>>(
     null as any
 );
 
 export function ShippingOverview({}) {
-    const ctx = useShippingFormCtx();
-    const { mainCtx } = ctx;
+    const ctx = useShippingForm();
+    const { mainCtx, shipping } = ctx;
     return (
         <ShippingFormCtx.Provider value={ctx}>
             <SecondaryTabSheet
-                title="Create Shipping"
+                title={shipping.title}
                 onBack={() => mainCtx.setTabData(null)}
             ></SecondaryTabSheet>
+            <div className=""></div>
         </ShippingFormCtx.Provider>
     );
 }

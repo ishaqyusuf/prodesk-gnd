@@ -17,7 +17,7 @@ export type ItemAssignment = ItemType["assignments"][number];
 export type ItemAssignmentSubmission = ItemAssignment["submissions"][number];
 type PillsType = ItemType["pills"];
 type AnalyticsType = ItemType["analytics"];
-export function SalesShippingOverview({}) {
+export function SalesShippingTab({}) {
     const ctx = useSalesOverview();
     const [showDetails, setShowDetails] = useState({});
     function toggleDetail(id) {
@@ -59,7 +59,13 @@ export function SalesShippingOverview({}) {
             <Table>
                 <TableBody>
                     {ctx.overview?.shipping?.list?.map((ls) => (
-                        <TableRow className="cursor-pointer" key={ls.id}>
+                        <TableRow
+                            className="cursor-pointer"
+                            key={ls.id}
+                            onClick={() => {
+                                ctx.viewShipping(ls.id);
+                            }}
+                        >
                             <TableCell>{ls.date}</TableCell>
                             <TableCell>{ls.title}</TableCell>
                             <TableCell>

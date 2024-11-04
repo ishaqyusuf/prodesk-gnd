@@ -35,7 +35,7 @@ function useAssignmentCtx() {
     async function save() {
         const formData = form.getValues();
         // console.log(formData);
-        await createItemAssignmentUseCase(formData);
+        await createItemAssignmentUseCase(formData, item.analytics.produceable);
         toast.success("Created!");
         ctx.mainCtx.refresh();
     }
