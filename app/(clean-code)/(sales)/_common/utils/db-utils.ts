@@ -133,10 +133,12 @@ const AssignmentsInclude = {
     include: {
         assignedTo: true,
         submissions: {
-            include: {
-                itemDeliveries: true,
-            },
             ...excludeDeleted,
+            include: {
+                itemDeliveries: {
+                    ...excludeDeleted,
+                },
+            },
         },
     },
 } satisfies

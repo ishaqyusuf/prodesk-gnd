@@ -52,6 +52,7 @@ const Context = createContext<ReturnType<typeof useAssignmentCtx>>(null as any);
 export function AssignForm({}) {
     const ctx = useAssignmentCtx();
     const { item, setAssignMode, assignMode, pending } = ctx;
+
     return (
         <Context.Provider value={ctx}>
             <Button
@@ -60,7 +61,10 @@ export function AssignForm({}) {
                 }}
                 disabled={pending?.total == 0}
                 variant="default"
-                className={cn("w-full", assignMode && "hidden")}
+                className={cn(
+                    "w-full",
+                    assignMode || (!pending.total && "hidden")
+                )}
             >
                 <Icons.add className="w-5 h-5 mr-2" />
                 <span>Assign</span>

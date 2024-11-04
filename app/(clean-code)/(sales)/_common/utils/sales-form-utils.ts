@@ -136,7 +136,7 @@ function updateSalesComponentPriceQty(
         form?: DykeFormReturn;
     }
 ) {}
-const ctx = {
+const salesFormUtils = {
     salesProfileChanged,
     salesProfileCost,
     baseProfileCost,
@@ -145,4 +145,5 @@ const ctx = {
         updateQty: updateSalesComponentPriceQty,
     },
 };
-export default ctx;
+const ctx = salesFormUtils;
+export default salesFormUtils;

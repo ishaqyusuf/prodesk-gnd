@@ -1246,6 +1246,7 @@ model OrderDelivery {
     items        OrderItemDelivery[]
     driverId     Int?
     createdById  Int?
+    status       String?
     meta         Json?               @db.Json
     createdAt    DateTime?           @default(now()) @db.Timestamp(0)
     updatedAt    DateTime            @updatedAt

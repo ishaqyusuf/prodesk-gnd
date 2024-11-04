@@ -5,17 +5,21 @@ import {
 } from "../production/use-hooks";
 import { Badge } from "@/components/ui/badge";
 import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { createContext, useContext, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import NumberPicker from "@/components/(clean-code)/custom/controlled/number-picker";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+    createSalesDispatchUseCase,
     SalesDispatchForm,
     salesDispatchFormUseCase,
 } from "../../../use-case/sales-dispatch-use-case";
 import { cn } from "@/lib/utils";
+import Button from "@/components/common/button";
+import { toast } from "sonner";
+import ControlledSelect from "@/components/common/controls/controlled-select";
+import { Label } from "@/components/ui/label";
 
 const useShippingFormCtx = () => {
     const ctx = useItemProdViewContext();
@@ -26,6 +30,7 @@ const useShippingFormCtx = () => {
     useEffect(() => {
         salesDispatchFormUseCase(mainCtx.overview?.shipping).then((resp) => {
             form.reset(resp);
+            console.log(resp);
         });
     }, []);
 
@@ -47,17 +52,31 @@ export function ShippingForm({}) {
     function toggleAllAvailble() {
         const sels = {};
         if (!watchToggle) {
+            const selections = form.getValues("selection");
             dispatchables
                 ?.filter((d) => d.deliverable)
                 .map((d) => {
                     sels[d.uid] = {
-                        selected: true,
-                        available: d.deliverable,
+                        ...(selections?.[d.uid] || {}),
+                        itemId: d.id,
+                        selected: !selections?.[d.uid]?.selected,
                     };
                 });
         }
         form.setValue("selection", sels);
         form.setValue("toggleAll", !watchToggle);
+    }
+    async function createDispatch() {
+        const data = form.getValues();
+        if (!data.delivery.deliveryMode) {
+            toast.error("Select Delivery Mode");
+            return;
+        }
+        createSalesDispatchUseCase(data).then((resp) => {
+            toast.success("Shipping created");
+            ctx.mainCtx.refresh();
+            // ctx.mainCtx.
+        });
     }
     return (
         <ShippingFormCtx.Provider value={ctx}>
@@ -65,26 +84,38 @@ export function ShippingForm({}) {
                 title="Create Shipping"
                 onBack={() => mainCtx.setTabData(null)}
             ></SecondaryTabSheet>
-            <div className="border-b flex p-4 gap-4">
-                <div className="flex-1"></div>
-                <Button
-                    onClick={toggleAllAvailble}
-                    size="sm"
-                    variant={watchToggle ? "secondary" : "ghost"}
-                >
-                    Mark All Available
-                </Button>
-                <Button size="sm">Create</Button>
-            </div>
-            <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
-                <div className="p-4 sm:p-8">
-                    <Form {...form}>
+            <Form {...form}>
+                <div className="border-b flex p-4 gap-4">
+                    <div className="flex items-center gap-2">
+                        <Label>Dispatch Mode</Label>
+                        <ControlledSelect
+                            control={form.control}
+                            options={["delivery", "pickup"]}
+                            name="delivery.deliveryMode"
+                            className="w-28"
+                            size="sm"
+                        />
+                    </div>
+                    <div className="flex-1"></div>
+                    <Button
+                        onClick={toggleAllAvailble}
+                        size="sm"
+                        variant={watchToggle ? "secondary" : "ghost"}
+                    >
+                        Mark All
+                    </Button>
+                    <Button onClick={createDispatch} size="sm">
+                        Create
+                    </Button>
+                </div>
+                <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
+                    <div className="p-4 sm:p-8">
                         {dispatchables?.map((item) => (
                             <ShippingItemLine item={item} key={item.id} />
                         ))}
-                    </Form>
-                </div>
-            </ScrollArea>
+                    </div>
+                </ScrollArea>{" "}
+            </Form>
         </ShippingFormCtx.Provider>
     );
 }
@@ -106,9 +137,10 @@ function ShippingItemLine({
                 onClick={() => {
                     const val = !itemForm?.selected;
                     form.setValue(`selection.${item.uid}.selected`, val);
-                    if (val && !itemForm?.available) {
+                    form.setValue(`selection.${item.uid}.itemId`, item.id);
+                    if (val && !itemForm?.deliveryQty) {
                         form.setValue(
-                            `selection.${item.uid}.available`,
+                            `selection.${item.uid}.deliveryQty`,
                             deliverableQty
                         );
                     }
@@ -148,7 +180,7 @@ function ShippingItemLine({
                                 }`}
                                 size="sm"
                                 control={form.control}
-                                name={`selection.${item.uid}.available.${
+                                name={`selection.${item.uid}.deliveryQty.${
                                     item.hasSwing ? "lh" : "qty"
                                 }`}
                                 length={deliverableQty.lh || deliverableQty.qty}
@@ -163,7 +195,7 @@ function ShippingItemLine({
                                 }`}
                                 size="sm"
                                 control={form.control}
-                                name={`selection.${item.uid}.available.rh`}
+                                name={`selection.${item.uid}.deliveryQty.rh`}
                                 length={deliverableQty.rh}
                             />
                         ) : (

@@ -76,9 +76,10 @@ export async function updateSalesProgressDta(
         await generateMissingStatsDta(salesId);
         return;
     }
-    if (!total) total = stat.total;
-    if (!score) score = stat.score;
+    if (total == null) total = stat.total;
+    if (score == null) score = stat.score;
     score = score + plusScore - minusScore;
+    console.log({ score });
 
     await prisma.salesStat.update({
         where: {

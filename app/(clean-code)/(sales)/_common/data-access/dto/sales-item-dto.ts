@@ -326,9 +326,13 @@ function itemAnalytics(
             };
         }
         analytics.pending = {
-            assignment: qtyDiff(totalQty, analytics.success.assignment),
+            assignment: produceable
+                ? qtyDiff(totalQty, analytics.success.assignment)
+                : {},
             delivery: qtyDiff(totalQty, analytics.success.delivery),
-            production: qtyDiff(totalQty, analytics.success.production),
+            production: produceable
+                ? qtyDiff(totalQty, analytics.success.production)
+                : {},
         };
         function registerInfo(text, key) {
             if (!analytics.info) analytics.info = [];

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { useSalesOverview } from "./overview-provider";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { GetSalesOverview } from "../../use-case/sales-item-use-case";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { cn } from "@/lib/utils";
+import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
+import { useSalesOverview } from "../overview-provider";
+import { Table, TableBody, TableRow } from "@/components/ui/table";
+import { TableCell } from "@/app/_components/data-table/table-cells";
+import StatusBadge from "@/components/_v1/status-badge";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -42,11 +45,32 @@ export function SalesShippingOverview({}) {
                     </Button>
                 </div>
             ) : (
-                <></>
+                <div className="flex">
+                    <div className="flex-1"></div>
+                    <Button
+                        onClick={() => {
+                            ctx.createShipping();
+                        }}
+                    >
+                        Create Shipping
+                    </Button>
+                </div>
             )}
-            {ctx.overview?.shipping?.list?.map((ls) => (
-                <div key={ls.id}></div>
-            ))}
+            <Table>
+                <TableBody>
+                    {ctx.overview?.shipping?.list?.map((ls) => (
+                        <TableRow className="cursor-pointer" key={ls.id}>
+                            <TableCell>{ls.date}</TableCell>
+                            <TableCell>{ls.title}</TableCell>
+                            <TableCell>
+                                <StatusBadge
+                                    status={ls.status || "In Progress"}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </div>
     );
 }

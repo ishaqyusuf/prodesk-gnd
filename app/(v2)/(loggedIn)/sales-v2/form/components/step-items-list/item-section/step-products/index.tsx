@@ -6,7 +6,10 @@ import { getStepProduct } from "../../../../_action/get-dyke-step-product";
 
 import { Icons } from "@/components/_v1/icons";
 
-import useStepItems, { StepItemCtx } from "../../../../_hooks/use-step-items";
+import useStepItems, {
+    StepItemCtx,
+    useStepItemCtx,
+} from "../../../../_hooks/use-step-items";
 import { StepProduct } from "./product";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
@@ -34,6 +37,7 @@ import StepMenu from "./step-trigger";
 import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
 import Button from "@/components/common/button";
 import { createCustomDykeStepUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/dyke-steps-use-case";
+import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 export interface StepProductProps extends DykeItemStepSectionProps {
     stepActionNodeId;
     // rowIndex;
@@ -119,9 +123,6 @@ StepProductProps) {
                             <div className="size-full rounded-md bg-primary/10" />
                         }
                     >
-                        {/* <Hider hide="dealer">
-                    <Header />
-                </Hider> */}
                         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                             {components
                                 ?.filter(
@@ -136,13 +137,11 @@ StepProductProps) {
                                     >
                                         <Card className="border-none flex flex-col h-full bg-red-50">
                                             <StepProduct
-                                                products={components}
                                                 className={cn(
                                                     "relative border-muted-foreground/10  borno group",
                                                     !sortMode &&
                                                         "hover:border-muted-foreground"
                                                 )}
-                                                stepForm={stepForm}
                                                 isMultiSection={isMultiSection}
                                                 select={selectProduct}
                                                 loadingStep={ctx.loadingStep}
@@ -150,10 +149,8 @@ StepProductProps) {
                                                 deleteStepItem={() =>
                                                     deleteStepItemModal([item])
                                                 }
-                                                setStepProducts={setComponents}
                                                 openStepForm={openStepForm}
                                                 isRoot={stepCtx.isRoot}
-                                                stepIndex={stepIndex}
                                             />
                                         </Card>
                                     </SortableItem>
@@ -206,21 +203,6 @@ StepProductProps) {
                                                 ? stepForm.item.value
                                                 : ""
                                         }
-                                        onProceed={async (value) => {
-                                            selectProduct(true, {
-                                                custom: true,
-                                                product: {
-                                                    title: value,
-                                                    meta: {
-                                                        custom: true,
-                                                    },
-                                                },
-                                                dykeStepId: stepForm.step.id,
-                                                _metaData: {
-                                                    price: 0,
-                                                },
-                                            } as any);
-                                        }}
                                     />
                                 </>
                             )}
@@ -257,7 +239,7 @@ StepProductProps) {
         </StepItemCtx.Provider>
     );
 }
-function CustomInput({ onProceed, currentValue }) {
+function CustomInput({ currentValue }) {
     const inputForm = useForm({
         defaultValues: {
             value: currentValue,
@@ -265,14 +247,31 @@ function CustomInput({ onProceed, currentValue }) {
         },
     });
     const ctx = useLegacyDykeFormStep();
+    const stepCtx = useStepItemCtx();
     async function createCustom() {
         const formData = inputForm.getValues();
-        const prod = await createCustomDykeStepUseCase({
+        const resp = await createCustomDykeStepUseCase({
             price: formData.price,
             dependenciesUid: ctx.dependenciesUid,
             dykeStepId: ctx.step.step.id,
             title: formData.value,
         });
+        stepCtx.selectProduct(true, {
+            custom: true,
+            ...resp.prod,
+            product: {
+                ...resp.prod.product,
+            },
+            _metaData: formData.price
+                ? {
+                      basePrice: formData.price,
+                      price: salesFormUtils.salesProfileCost(
+                          ctx.mainCtx.form,
+                          formData.price
+                      ),
+                  }
+                : {},
+        } as any);
         // ctx.
         //  const value = inputForm.getValues("value")?.trim();
         //  if (!value) toast.error("Invalid value");

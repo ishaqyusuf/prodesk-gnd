@@ -44,13 +44,13 @@ interface Props {
     loadingStep;
     isMultiSection;
     isRoot;
-    stepForm: DykeStep;
-    stepIndex;
+    // stepForm: DykeStep;
+    // stepIndex;
     openStepForm;
-    setStepProducts;
+    // setStepProducts;
     deleteStepItem;
     className?: string;
-    products;
+    // products;
 }
 export function StepProduct({
     item,
@@ -58,17 +58,22 @@ export function StepProduct({
     loadingStep,
     isMultiSection,
     deleteStepItem,
-    stepForm,
-    stepIndex,
+    // stepForm,
+    // stepIndex,
     openStepForm,
-    setStepProducts,
+    // setStepProducts,
     className,
     isRoot,
-    products,
-}: Props) {
+}: // products,
+Props) {
     const ctx = useDykeItemCtx();
     const formCtx = useDykeCtx();
     const stepCtx = useLegacyDykeFormStep();
+    const {
+        components: products,
+        setComponents: setStepProducts,
+        step: stepForm,
+    } = stepCtx;
     const selected = isMultiSection
         ? ctx.multi.watchItemSelected(safeFormText(item.product.title))
         : false;
@@ -87,19 +92,6 @@ export function StepProduct({
     const [price, setPrice] = useState();
     const [saving, startSaving] = useTransition();
     const { dependencies, dependenciesUid } = stepCtx;
-    // const dependecies = ctx.formStepArray
-    //     .map((s) => ({
-    //         uid: s.step.uid,
-    //         label: s.step.title,
-    //         value: s.item.value,
-    //         prodUid: s.item.prodUid,
-    //     }))
-    //     .filter(
-    //         (_, i) =>
-    //             i < stepIndex && stepForm.step.meta?.priceDepencies?.[_.uid]
-    //     );
-    // const uids = dependecies.map((s) => s.prodUid);
-    // const dependenciesUid = uids.length ? uids.join("-") : null;
     async function savePrice() {
         startSaving(async () => {
             // console.log(item.uid);
@@ -110,13 +102,7 @@ export function StepProduct({
                 dependenciesUid,
             });
             stepCtx.reloadComponents();
-            // setStepProducts((prods) => {
-            //     return [...prods].map((prod, index) => {
-            //         if (prod.uid == item.uid)
-            //             prod._metaData.price = Number(price);
-            //         return prod;
-            //     });
-            // });
+
             menuOpenChange(false);
         });
     }

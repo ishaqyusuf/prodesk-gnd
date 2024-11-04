@@ -2,6 +2,7 @@ import { assign, padStart } from "lodash";
 import { GetFullSalesDataDta } from "../sales-dta";
 import { qtyDiff, SalesOverviewDto } from "./sales-item-dto";
 import { sum } from "@/lib/utils";
+import { formatDate } from "@/lib/use-day";
 
 export type SalesShippingDto = ReturnType<typeof salesShippingDto>;
 export function salesShippingDto(
@@ -16,14 +17,20 @@ export function salesShippingDto(
                 const analytics = item.analytics;
                 const pendingDelivery = analytics.pending.delivery.total;
                 const totalDelivered = analytics.success.delivery.total;
-                const totalProd = analytics.success.production.total;
-                const deliverable = totalProd - totalDelivered;
+                const totalProd = analytics.success.production?.total || 0;
+                const deliverable =
+                    (analytics.pending.production
+                        ? totalProd
+                        : totalDelivered + pendingDelivery) - totalDelivered;
                 const assignments = item.assignments;
                 const deliverableSubmissions = assignments
                     .map((assignment) => {
                         return assignment.submissions
                             .map((sub) => {
+                                // console.log(sub.)
                                 let pendingDelivery = sub.qty;
+                                // console.log(pendingDelivery);
+
                                 assignment.deliveries
                                     .filter((d) => d.submissionId == sub.id)
                                     .map((s) => {
@@ -40,7 +47,15 @@ export function salesShippingDto(
                             .filter((s) => s.qty.total > 0);
                     })
                     .flat();
-                let deliverableQty = deliverableSubmissions[0]?.qty || {};
+                let deliverableQty = !analytics.pending.production?.total
+                    ? qtyDiff(
+                          analytics.pending.delivery,
+                          analytics.success.delivery,
+                          true
+                      )
+                    : deliverableSubmissions[0]?.qty || {};
+                // console.log(deliverableQty);
+
                 deliverableSubmissions?.map((s, i) => {
                     if (i > 0)
                         deliverableQty = qtyDiff(deliverableQty, s, true);
@@ -58,6 +73,7 @@ export function salesShippingDto(
                     deliverable,
                     deliverableSubmissions,
                     deliverableQty,
+                    assignments,
                 };
             });
         })
@@ -66,11 +82,14 @@ export function salesShippingDto(
         const totalDeliveries = sum(d.items.map((i) => i.qty));
         return {
             id: d.id,
+            date: formatDate(d.createdAt),
             title: `#DISPATCH-${padStart(d.id.toString(), 4, "0")}`,
             score: totalDeliveries,
             total: dispatchStat.total,
+            status: d.status,
         };
     });
+
     return {
         list: deliveries,
         dispatchableItemList,

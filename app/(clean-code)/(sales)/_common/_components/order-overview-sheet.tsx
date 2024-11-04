@@ -15,9 +15,10 @@ import { SalesGeneralOverview } from "./sales-overview/sales-general-overview";
 import { SalesItemsOverview } from "./sales-overview/sales-items-overview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./sales-overview/production/item-prod-view";
-import { SalesShippingOverview } from "./sales-overview/sales-shipping-overview";
+
 import { ShippingForm } from "./sales-overview/shipping/shipping-form";
 import { cn } from "@/lib/utils";
+import { SalesShippingOverview } from "./sales-overview/shipping/sales-shipping-overview";
 
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();

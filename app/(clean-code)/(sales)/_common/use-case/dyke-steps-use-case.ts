@@ -9,5 +9,5 @@ interface Props {
     dependenciesUid;
 }
 export async function createCustomDykeStepUseCase(data: Props) {
-    await createCustomStepProductDta(data);
+    return await createCustomStepProductDta(data);
 }

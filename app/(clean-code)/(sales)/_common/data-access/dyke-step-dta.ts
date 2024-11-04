@@ -95,7 +95,9 @@ export async function findCustomStepProductDta(title) {
                 title,
             },
         },
-        include: {},
+        include: {
+            product: true,
+        },
     });
     return stepProd;
 }
