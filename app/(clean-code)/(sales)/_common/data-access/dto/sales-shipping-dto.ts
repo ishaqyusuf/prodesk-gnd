@@ -80,6 +80,18 @@ export function salesShippingDto(
         .flat();
     let deliveries = data.deliveries.map((d) => {
         const totalDeliveries = sum(d.items.map((i) => i.qty));
+        const items = d.items.map((dItem) => {
+            return {
+                id: dItem.id,
+                itemId: dItem.orderItemId,
+                qty: {
+                    lh: dItem.lhQty,
+                    rh: dItem.rhQty,
+                    qty: dItem.lhQty || dItem.rhQty ? null : dItem.qty,
+                    total: dItem.qty,
+                } as Qty,
+            };
+        });
         return {
             id: d.id,
             date: formatDate(d.createdAt),
@@ -87,6 +99,7 @@ export function salesShippingDto(
             score: totalDeliveries,
             total: dispatchStat.total,
             status: d.status,
+            items,
         };
     });
 

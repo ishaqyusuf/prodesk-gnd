@@ -62,7 +62,12 @@ interface TableSheetHeaderProps {
     titleClassName?;
     title;
 }
-export function SecondaryTabSheet({ titleClassName = "", title, onBack }) {
+export function SecondaryTabSheet({
+    titleClassName = "",
+    title,
+    onBack,
+    children = null,
+}) {
     return (
         <SheetHeader className="border-b p-4">
             <div className="flex gap-2">
@@ -75,6 +80,7 @@ export function SecondaryTabSheet({ titleClassName = "", title, onBack }) {
                     {title}
                 </SheetTitle>
                 <div className="flex items-center gap-1 h-7">
+                    {children}
                     <Separator orientation="vertical" className="mx-1" />
 
                     <Button

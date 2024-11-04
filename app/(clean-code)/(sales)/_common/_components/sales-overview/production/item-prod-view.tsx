@@ -26,7 +26,7 @@ export function ItemProdView({}) {
     const { mainCtx, item } = ctx;
     return (
         <ItemProdViewContext.Provider value={ctx}>
-            <div className="w-screen sm:w-[70vw] md:w-[60vw] lg:w-[600px] flex flex-col transition-all duration-300 ease-in-out">
+            <div className="secondary-tab flex flex-col">
                 <SecondaryTabSheet
                     title={`${item?.title}`}
                     onBack={() => mainCtx.setTabData(null)}

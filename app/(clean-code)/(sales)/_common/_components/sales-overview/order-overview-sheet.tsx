@@ -3,24 +3,22 @@ import TableItemOverviewSheet, {
 } from "@/components/(clean-code)/data-table/item-overview-sheet";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { motion, AnimatePresence } from "framer-motion";
-import { SalesItemProp } from "./orders-page-cells";
+import { SalesItemProp } from "../orders-page-cells";
 
 import { _modal } from "@/components/common/modal/provider";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import OverviewProvider, {
-    useSalesOverview,
-} from "./sales-overview/overview-provider";
-import { SalesGeneralOverview } from "./sales-overview/sales-general-overview";
-import { SalesItemsOverview } from "./sales-overview/sales-items-overview";
+import OverviewProvider, { useSalesOverview } from "./overview-provider";
+import { SalesGeneralOverview } from "./sales-general-overview";
+import { SalesItemsOverview } from "./sales-items-overview";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ItemProdView } from "./sales-overview/production/item-prod-view";
+import { ItemProdView } from "./production/item-prod-view";
 
-import { ShippingForm } from "./sales-overview/shipping/shipping-form";
+import { ShippingForm } from "./shipping/shipping-form";
 import { cn } from "@/lib/utils";
-import { SalesShippingTab } from "./sales-overview/shipping/sales-shippings-tab";
-import { ShippingOverview } from "./sales-overview/shipping/shipping-overview";
-
+import { SalesShippingTab } from "./shipping/sales-shippings-tab";
+import { ShippingOverview } from "./shipping/shipping-overview";
+import "./style.css";
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;

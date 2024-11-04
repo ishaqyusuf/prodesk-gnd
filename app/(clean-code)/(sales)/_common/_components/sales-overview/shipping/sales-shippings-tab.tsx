@@ -10,6 +10,7 @@ import { useSalesOverview } from "../overview-provider";
 import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import StatusBadge from "@/components/_v1/status-badge";
+import { Icons } from "@/components/_v1/icons";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -45,14 +46,16 @@ export function SalesShippingTab({}) {
                     </Button>
                 </div>
             ) : (
-                <div className="flex">
+                <div className="flex p-2 sm:px-4 border-b">
                     <div className="flex-1"></div>
                     <Button
                         onClick={() => {
                             ctx.createShipping();
                         }}
+                        size="sm"
                     >
-                        Create Shipping
+                        <Icons.add className="w-4 h-4 mr-2" />
+                        <span>Create</span>
                     </Button>
                 </div>
             )}

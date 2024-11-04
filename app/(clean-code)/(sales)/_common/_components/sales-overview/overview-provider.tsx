@@ -66,6 +66,9 @@ export const useOverviewContext = (item: SalesItemProp) => {
         dataKey,
         tabData,
         setTabData,
+        closeSecondaryTab() {
+            setTabData(null);
+        },
         overview,
         load,
         item,

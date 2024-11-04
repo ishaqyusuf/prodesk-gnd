@@ -1,0 +1,3 @@
+.secondary-tab {
+    @apply w-screen sm:w-[70vw] md:w-[60vw] lg:w-[600px];
+}
