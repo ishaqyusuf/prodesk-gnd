@@ -9,17 +9,21 @@ import Button from "@/components/common/button";
 
 import { Icons } from "@/components/_v1/icons";
 import { toast } from "sonner";
+import { qtyDiff } from "../../../data-access/dto/sales-item-dto";
+import Badge from "../components/badge";
+
 let context = null;
-const useShippingForm = (): ReturnType<typeof useShippingFormCtx> => {
+type Ctx = ReturnType<typeof useShippingFormCtx>;
+const useShippingForm = (): Ctx => {
     const ctx = useItemProdViewContext();
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
-    // if (context?.id == slug) return context;
-    return useShippingFormCtx(context?.id == slug ? context : null);
+    if (context?.id == slug) return context;
+    return useShippingFormCtx(ctx);
 };
-const useShippingFormCtx = (_) => {
-    const ctx = useItemProdViewContext();
-    if (_) return _;
+const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
+    // const ctx = useItemProdViewContext();
+    // if (_) return _;
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
     const shippingOverview = mainCtx.overview?.shipping;
@@ -31,11 +35,26 @@ const useShippingFormCtx = (_) => {
         mainCtx.closeSecondaryTab();
         return null;
     }
-    let items = shippingOverview.dispatchableItemList.map((item) => {
-        const deliveries = shipping.items.filter((i) => i.itemId == item.id);
-    });
+    let items = shippingOverview.dispatchableItemList
+        .map((item) => {
+            const deliveries = shipping.items.filter(
+                (i) => i.itemId == item.id
+            );
+            const [d1, d2, ...rest] = deliveries;
+            let qty = d2 ? qtyDiff(d1.qty, d2.qty, true) : d1?.qty;
+            rest?.map((r) => {
+                qty = qtyDiff(qty, r.qty, true);
+            });
+            return {
+                item,
+                deliveries,
+                qty,
+            };
+        })
+        .filter((data) => data.qty?.total);
     const resp = {
         shipping,
+        items,
         id: slug,
         mainCtx,
     };
@@ -62,7 +81,35 @@ export function ShippingOverview({}) {
                     </Button>
                 </SecondaryTabSheet>
                 <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
-                    <div className="p-4 sm:p-8"></div>
+                    <div className="p-4 sm:p-8">
+                        {ctx.items?.map(({ item, qty, deliveries }, index) => (
+                            <div key={index}>
+                                <div className="">{item.title}</div>
+                                <div>
+                                    {qty.rh || qty.lh ? (
+                                        <>
+                                            <Badge
+                                                variant="secondary"
+                                                suffix="RH"
+                                                value={qty.rh}
+                                            />
+                                            <Badge
+                                                variant="secondary"
+                                                suffix="LH"
+                                                value={qty.lh}
+                                            />
+                                        </>
+                                    ) : (
+                                        <Badge
+                                            variant="secondary"
+                                            prefix="Qty"
+                                            value={qty.qty}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </ScrollArea>
             </div>
         </ShippingFormCtx.Provider>

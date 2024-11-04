@@ -5,7 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { cn } from "@/lib/utils";
 import { ICustomer } from "@/types/customers";
 import { useAppSelector } from "@/store";
-import { Table, TableBody, TableCell, TableRow } from "../../ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "../../ui/table";
 import {
     Cell,
     PrimaryCellContent,
@@ -28,6 +35,13 @@ export default function RecentSalesCard({ className }: Props) {
             </CardHeader>
             <CardContent className="">
                 <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Order</TableHead>
+                            <TableHead>Payment</TableHead>
+                            <TableHead>P.O</TableHead>
+                        </TableRow>
+                    </TableHeader>
                     <TableBody>
                         {customer?.salesOrders?.map((order, key) => (
                             <TableRow key={key}>
@@ -49,6 +63,9 @@ export default function RecentSalesCard({ className }: Props) {
                                     <div>
                                         <OrderInvoiceCell order={order} />
                                     </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div>{order.meta?.po}</div>
                                 </TableCell>
                                 <OrderRowAction row={order} />
                             </TableRow>
