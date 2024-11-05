@@ -65,7 +65,7 @@ function _Table({}) {
     return (
         <div
             // className="sm:border sm:rounded-lg"
-            className="flex w-full min-h-screen h-full flex-col sm:flex-row"
+            className="flex w-full min-h-screen h-full flex-col sm:flex-row bg-white rounded-lg shadow border"
         >
             <Table>
                 <TableHeader className={cn("")}>

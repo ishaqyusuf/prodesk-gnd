@@ -11,6 +11,7 @@ import {
     AssignmentSubmitForm,
     submitAssignmentUseCase,
 } from "../../../use-case/sales-prod.use-case";
+import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 interface Props {
     assignment: ItemAssignment;
@@ -31,6 +32,7 @@ export default function SubmitProductionForm({ assignment }: Props) {
     });
     const pending = assignment.pending;
     const hasBothSide = pending.lh && pending.rh;
+
     async function __sumbit() {
         try {
             const data = form.getValues();

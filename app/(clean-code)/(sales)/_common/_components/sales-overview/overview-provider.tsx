@@ -5,6 +5,7 @@ import {
     getSalesItemOverviewUseCase,
     GetSalesOverview,
 } from "../../use-case/sales-item-use-case";
+import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
@@ -34,8 +35,11 @@ export const useOverviewContext = (item: SalesItemProp) => {
             }
         }
     }, [overview]);
+    const ctx = useInifinityDataTable();
+
     async function refresh() {
         await load();
+        ctx.refresh.activate();
     }
     function openItemTab(groupIndex, itemIndex) {
         const payload = overview?.itemGroup?.[groupIndex];

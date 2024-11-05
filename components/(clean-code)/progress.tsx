@@ -1,4 +1,4 @@
-import { statusColor } from "@/lib/status-badge";
+import { Colors, statusColor } from "@/lib/status-badge";
 import { cn } from "@/lib/utils";
 
 interface ProgressBaseProps {
@@ -15,9 +15,10 @@ function ProgressBase({ children, className }: ProgressBaseProps) {
 interface StatusProps {
     noDot?: boolean;
     children;
+    color?: Colors;
 }
-function Status({ children, noDot }: StatusProps) {
-    const _color = statusColor(children);
+function Status({ children, noDot, color }: StatusProps) {
+    const _color = color || statusColor(children);
     return (
         <div className="inline-flex items-center gap-2 font-semibold">
             {!noDot && (

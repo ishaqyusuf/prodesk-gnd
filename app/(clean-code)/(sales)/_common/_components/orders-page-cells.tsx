@@ -86,11 +86,31 @@ function SalesRep({ item }: ItemProps) {
         </TCell>
     );
 }
-function Status({ item }: ItemProps) {
+function Production({ item }: ItemProps) {
     return (
         <TCell>
             <Progress>
-                <Progress.Status>{item.status.status}</Progress.Status>
+                <Progress.Status>
+                    {item.status.production?.scoreStatus ||
+                        item.status.production?.status}
+                </Progress.Status>
+            </Progress>
+        </TCell>
+    );
+}
+function Delivery({ item }: ItemProps) {
+    return (
+        <TCell>
+            <Progress>
+                <Progress.Status
+                    color={
+                        item.status.delivery?.color ||
+                        item.status.delivery?.color
+                    }
+                >
+                    {item.status.delivery?.scoreStatus ||
+                        item.status.delivery?.status}
+                </Progress.Status>
                 <TCell.Secondary>{/* {item.status.date} */}</TCell.Secondary>
             </Progress>
         </TCell>
@@ -101,37 +121,9 @@ function Dispatch({ item }: ItemProps) {
     const { theme } = useTheme();
     return (
         <TCell>
-            <Progress.Status>pickup</Progress.Status>
-        </TCell>
-    );
-    return (
-        <TCell>
-            <Menu
-                Trigger={
-                    <Button
-                        size="sm"
-                        className="h-auto py-1"
-                        variant={theme == "dark" ? "outline" : "secondary"}
-                    >
-                        <Progress>
-                            <Progress.Status>pickup</Progress.Status>
-                            <TCell.Secondary>{item.salesDate}</TCell.Secondary>
-                        </Progress>
-                    </Button>
-                }
-            >
-                <Menu.Item
-                    onClick={(e) => {
-                        e.preventDefault();
-                    }}
-                >
-                    About Delivery
-                </Menu.Item>
-                <Menu.Separator />
-                <Menu.Label>Change Delivery</Menu.Label>
-                <Menu.Item icon="pickup">Delivery</Menu.Item>
-                <Menu.Item icon="delivery">Pickup</Menu.Item>
-            </Menu>
+            <Progress.Status>
+                {item.deliveryOption || "Not set"}
+            </Progress.Status>
         </TCell>
     );
 }
@@ -182,7 +174,8 @@ export let Cells = {
     SalesRep,
     Invoice,
     Date,
-    Status,
+    Production,
+    Delivery,
     Dispatch,
     CustomerPhone,
     InvoicePending,

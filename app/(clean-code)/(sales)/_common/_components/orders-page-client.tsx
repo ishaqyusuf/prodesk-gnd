@@ -31,7 +31,8 @@ export default function OrdersPageClient({}: Props) {
                 ctx.Column("Invoice", "invoice", Cells.Invoice),
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
-                ctx.Column("Status", "status", Cells.Status),
+                ctx.Column("Production", "production", Cells.Production),
+                ctx.Column("Delivery", "delivery", Cells.Delivery),
             ];
         },
         checkable: true,
@@ -52,7 +53,7 @@ export default function OrdersPageClient({}: Props) {
         <div>
             <DataTable.Infinity {...table.props}>
                 <div className="flex justify-between">
-                    <div className="w-1/3">
+                    <div className="w-1/2">
                         <DataTableFilterCommand />
                     </div>
                     <DataTableInfinityToolbar />

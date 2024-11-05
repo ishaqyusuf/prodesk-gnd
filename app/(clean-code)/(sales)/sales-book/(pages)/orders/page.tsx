@@ -13,7 +13,7 @@ export default async function SalesBookPage({ searchParams }) {
         dataOptions(search, getSalesOrderInfinityListUseCase)
     );
     return (
-        <FPage title="Orders">
+        <FPage className="" title="Orders">
             <OrdersPageClient />
         </FPage>
     );

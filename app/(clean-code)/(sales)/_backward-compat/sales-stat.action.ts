@@ -1,14 +1,32 @@
 "use server";
 
 import { prisma } from "@/db";
-import { SalesIncludeAll } from "../_common/utils/db-utils";
+import {
+    SalesIncludeAll,
+    SalesOverviewIncludes,
+} from "../_common/utils/db-utils";
 import { TypedSalesStat } from "../types";
-import { GetFullSalesDataDta } from "../_common/data-access/sales-dta";
 import { percent, sum } from "@/lib/utils";
-import { statStatus } from "../_common/utils/sales-utils";
-import { OrderItemProductionAssignments } from "@prisma/client";
+import { createSaleStat, statStatus } from "../_common/utils/sales-utils";
+import { OrderItemProductionAssignments, Prisma } from "@prisma/client";
 import { AsyncFnType } from "../../type";
+import { typedFullSale } from "../_common/data-access/sales-dta";
+import { salesOverviewDto } from "../_common/data-access/dto/sales-item-dto";
+import { lastId } from "@/lib/nextId";
+import dayjs from "dayjs";
 
+async function loadSalesOverviews() {
+    const sales = await prisma.salesOrders.findMany({
+        where: {
+            type: "order",
+            stat: {
+                none: {},
+            },
+        },
+        include: SalesOverviewIncludes,
+    });
+    return sales;
+}
 async function loadSales() {
     const sales = await prisma.salesOrders.findMany({
         where: {
@@ -35,7 +53,7 @@ export async function salesStatisticsAction() {
         r.stats.map((stat) => {
             stat.salesId = s.id;
             stat.percentage = percent(stat.score, stat.total);
-            stat.status = statStatus(stat.percentage);
+            stat.status = statStatus(stat as any).status;
             stats.push(stat);
         });
         if (r.deliveryStats.length)
@@ -89,11 +107,17 @@ function productionStats(order: LoadedSales[number]) {
         order.deliveredAt || order.status?.toLowerCase() == "delivered";
     const prodId = order.producer?.id;
     order.items.map((item) => {
-        function registerAssignment(totalQty, salesDoorId?) {
+        function registerAssignment(
+            totalQty,
+            salesDoorId?,
+            { lhQty = null, rhQty = null } = {}
+        ) {
             resp.assignments.push({
                 itemId: item.id,
                 orderId: order.id,
                 qtyAssigned: totalQty,
+                lhQty,
+                rhQty,
                 assignedToId: prodId,
                 assignedById: 1,
                 salesDoorId,
@@ -120,7 +144,7 @@ function productionStats(order: LoadedSales[number]) {
                 }
                 item.salesDoors.map(({ id, totalQty, lhQty, rhQty }) => {
                     console.log({ totalQty, lhQty, rhQty });
-                    registerAssignment(totalQty, id);
+                    registerAssignment(totalQty, id, { lhQty, rhQty });
                 });
             }
         }
@@ -177,4 +201,175 @@ function productionStats(order: LoadedSales[number]) {
         },
     ];
     return resp;
+}
+export async function salesStatUpgrade() {
+    const sales = await loadSalesOverviews();
+    const data = {
+        stats: [] as Partial<TypedSalesStat>[],
+        submissions: [] as Prisma.OrderProductionSubmissionsCreateManyInput[],
+        assignments:
+            [] as Prisma.OrderItemProductionAssignmentsCreateManyInput[],
+        deliveries: [] as Prisma.OrderDeliveryCreateManyInput[],
+        deliveryItems: [] as Prisma.OrderItemDeliveryCreateManyInput[],
+    };
+    const typedSales = sales.map((s) => ({
+        ...salesOverviewDto(typedFullSale(s)),
+        raw: s,
+    }));
+    let lastAssignmentId = await lastId(prisma.orderItemProductionAssignments);
+    let lastSubmitId = await lastId(prisma.orderProductionSubmissions);
+    let lastDeliveryId = await lastId(prisma.orderDelivery);
+    let lastdeliverItemId = await lastId(prisma.orderItemDelivery);
+    typedSales.map((sale) => {
+        const dd = dayjs()
+            .subtract(30, "days")
+            .diff(sale.raw.createdAt, "days");
+        const producer = sale.raw?.producer;
+        const producerId = producer?.id;
+        const deliveredAt = sale.raw.deliveredAt;
+        const statData = {
+            produceable: 0,
+            deliverable: 0,
+            assigned: 0,
+            delivered: 0,
+            produced: 0,
+        };
+        sale.itemGroup.map((grp) => {
+            grp?.items?.map((item) => {
+                // const analytics = item.analytics
+                const { pending, success, produceable } = item.analytics || {};
+                statData.deliverable += sum([
+                    pending.delivery?.total,
+                    success?.delivery?.total,
+                ]);
+                statData.produceable += sum([
+                    pending.assignment?.total,
+                    success?.assignment?.total,
+                ]);
+                function createAssignment({
+                    qtyAssigned,
+                    salesDoorId = null,
+                    lhQty = null,
+                    rhQty = null,
+                    produceable,
+                }) {
+                    const id = ++lastAssignmentId;
+                    const qty = sum([lhQty, rhQty]) || qtyAssigned;
+                    if (produceable) {
+                        statData.assigned += qty;
+                        statData.produced += qty;
+                    }
+                    data.assignments.push({
+                        id,
+                        rhQty,
+                        lhQty,
+                        assignedById: 1,
+                        itemId: item.salesItemId,
+                        orderId: item.orderId,
+                        assignedToId: producerId,
+                        dueDate: sale.raw.prodDueDate,
+                        salesDoorId,
+                        qtyAssigned,
+                    });
+                    const submissionId = ++lastSubmitId;
+                    data.submissions.push({
+                        id: submissionId,
+                        qty: qtyAssigned,
+                        rhQty,
+                        lhQty,
+                        assignmentId: id,
+                        salesOrderId: item.orderId,
+                        salesOrderItemId: item.salesItemId,
+                    });
+                    const deliveryId = ++lastDeliveryId;
+                    data.deliveries.push({
+                        id: deliveryId,
+                        deliveryMode: sale.raw?.deliveryOption || "unknown",
+                        salesOrderId: item.orderId,
+                        createdById: 1,
+                        status: "completed",
+                    });
+                    const deliveryItemId = ++lastdeliverItemId;
+                    data.deliveryItems.push({
+                        id: deliveryItemId,
+                        orderItemId: item.salesItemId,
+                        orderDeliveryId: deliveryId,
+                        lhQty,
+                        rhQty,
+                        qty: qtyAssigned,
+                        orderId: item.orderId,
+                        orderProductionSubmissionId: submissionId,
+                    });
+                }
+                if (producerId && !item.assignments?.length) {
+                    if (pending.assignment?.total) {
+                        createAssignment({
+                            lhQty: pending.assignment.lh,
+                            rhQty: pending.assignment.rh,
+                            qtyAssigned: pending.assignment.total,
+                            salesDoorId: item.doorItemId,
+                            produceable,
+                        });
+                    }
+                } else {
+                    // if (dd > 0) {
+                    //     if (
+                    //         !item.assignments?.length &&
+                    //         pending.assignment?.total
+                    //     ) {
+                    //         console.log("...");
+                    //     }
+                    // }
+                }
+                statData.produced += success?.production?.total || 0;
+                statData.delivered += success.delivery?.total || 0;
+                statData.assigned += success.assignment?.total || 0;
+
+                if (item.assignments.length) {
+                    if (!pending.production?.total) {
+                        console.log("COMPLETED");
+                    }
+                }
+            });
+            // if (deliveredAt) {
+            //     const assignments = sale.itemGroup
+            //         .map((grp) => {
+            //             grp?.items
+            //                 ?.map((item) => {
+            //                     return data.assignments.filter(
+            //                         (a) => a.itemId == item.salesItemId
+            //                     );
+            //                 })
+            //                 .flat();
+            //         })
+            //         .flat();
+            //     console.log(assignments.length);
+            // }
+        });
+        data.stats.push(
+            createSaleStat(
+                "dispatch",
+                statData.delivered,
+                statData.deliverable,
+                sale.raw.id
+            )
+        );
+        data.stats.push(
+            createSaleStat(
+                "prod",
+                statData.produced,
+                statData.produceable,
+                sale.raw.id
+            )
+        );
+        data.stats.push(
+            createSaleStat(
+                "prodAssignment",
+                statData.produceable,
+                statData.assigned,
+                sale.raw.id
+            )
+        );
+    });
+    return data;
 }

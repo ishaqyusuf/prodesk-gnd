@@ -3,6 +3,7 @@ import { SalesStatType } from "../../../types";
 import { GetFullSalesDataDta } from "../sales-dta";
 import { salesItemGroupOverviewDto } from "./sales-item-dto";
 import { statStatus } from "../../utils/sales-utils";
+import { Colors } from "@/lib/status-badge";
 
 type ItemGroup = ReturnType<typeof salesItemGroupOverviewDto>;
 export function salesItemsStatsDto(
@@ -55,13 +56,10 @@ export function statToKeyValueDto(dataStats: SalesStat[]) {
 }
 export function overallStatus(dataStats: SalesStat[]) {
     const sk = statToKeyValueDto(dataStats);
-    const overallPercentage =
-        sk.prodAssignment?.percentage +
-        sk.prod?.percentage +
-        sk.dispatch?.percentage;
-    let percentage = overallPercentage > 0 ? overallPercentage / 3 : 0;
     return {
-        percentage,
-        status: statStatus(percentage),
+        production: statStatus(sk.prod),
+        assignment: statStatus(sk.prodAssignment),
+        payment: statStatus(sk.payment),
+        delivery: statStatus(sk.dispatch),
     };
 }

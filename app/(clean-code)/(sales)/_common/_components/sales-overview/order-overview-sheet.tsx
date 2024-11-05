@@ -55,7 +55,7 @@ function PrimaryTab() {
                     <TabsTrigger value="payments">Payments</TabsTrigger>
                     <TabsTrigger value="shipping">Shipping</TabsTrigger>
                 </TabsList>
-                <ScrollArea className="h-[80vh]">
+                <ScrollArea className="h-[80vh] overflow-auto pb-16">
                     <TabsContent value="general">
                         <SalesGeneralOverview />
                     </TabsContent>

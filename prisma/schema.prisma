@@ -1972,3 +1972,10 @@ model ExportConfig {
 
     @@index([createdById])
 }
+
+model SearchParameters {
+    id    Int    @unique @default(autoincrement())
+    page  String
+    key   String
+    value String
+}

@@ -60,6 +60,10 @@ export interface LineItemOverview {
         deliveries: { id; qty: Qty; date; deliveryId; submissionId }[];
         submissions: { id; qty: Qty; date }[];
         pending: Qty;
+        _: {
+            qtyAssigned;
+            qtySubmitted;
+        };
     }[];
 }
 type Item = GetFullSalesDataDta["items"][number];
@@ -68,6 +72,7 @@ export type LineAssignment = LineItemOverview["assignments"][number];
 export type SalesOverviewDto = ReturnType<typeof salesOverviewDto>;
 export function salesOverviewDto(data: GetFullSalesDataDta) {
     const itemGroup = salesItemGroupOverviewDto(data);
+    // itemGroup.
     const stat = salesItemsStatsDto(data, itemGroup);
     return {
         itemGroup,
@@ -285,8 +290,8 @@ function itemAnalytics(
     produceable = true,
     deliverable = true
 ) {
+    data.analytics = { produceable, success: {}, pending: {} };
     if (produceable || deliverable) {
-        data.analytics = { produceable, success: {}, pending: {} };
         const { analytics, totalQty } = data;
         const dynamicKey = data.totalQty.lh ? "lh" : "qty";
         if (produceable) {

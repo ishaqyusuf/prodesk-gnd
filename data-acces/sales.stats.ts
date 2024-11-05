@@ -1,5 +1,6 @@
 "use server";
 
+import { statStatus } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 import {
     SalesStatStatus,
     TypedSalesStat,
@@ -95,20 +96,11 @@ export async function updateSalesStat(id) {
               ),
     });
 }
-function status(percentage): SalesStatStatus {
-    switch (percentage) {
-        case percentage == 0:
-            return "pending";
-        case percentage == 100:
-            return "completed";
-        default:
-            return "in progress";
-    }
-}
+
 export async function saveStat(data: Partial<TypedSalesStat>) {
     const { id, salesId, ...rest } = data;
     rest.percentage = (rest.score / rest.total) * 100 || 0;
-    data.status = status(rest.percentage);
+    data.status = statStatus(rest as any).status;
     if (id)
         await prisma.salesStat.update({
             where: { id },

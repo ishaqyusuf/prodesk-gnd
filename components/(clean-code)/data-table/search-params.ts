@@ -54,8 +54,14 @@ export const searchParamsParser = {
     start: parseAsInteger.withDefault(0),
     // // REQUIRED FOR SELECTION
     uuid: parseAsString,
-
     customer: parseAsString,
+    address: parseAsString,
+    productionAssignment: parseAsString,
+    status: parseAsString,
+    delivery: parseAsString,
+    production: parseAsString,
+    invoice: parseAsString,
+    rep: parseAsString,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);

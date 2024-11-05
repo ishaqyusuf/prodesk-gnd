@@ -30,6 +30,7 @@ import { Percentile } from "@/lib/request/percentile";
 import { inDateRange, arrSome } from "@/lib/table/filterfns";
 import { dataOptions } from "./query-options";
 import { TableProps } from "./use-table-compose";
+import { generateRandomString } from "@/lib/utils";
 
 export function useInfiniteDataTable({
     columns,
@@ -41,10 +42,11 @@ export function useInfiniteDataTable({
     serverAction,
     ...props
 }: TableProps) {
-    const [search] = useQueryStates(searchParamsParser);
-    const { data, isFetching, isLoading, fetchNextPage } = useInfiniteQuery(
-        dataOptions(search, serverAction)
-    );
+    // const [search] = useQueryStates(searchParamsParser);
+    const [search, setSearch] = useQueryStates(searchParamsParser);
+    const { data, isFetching, isLoading, fetchNextPage, refetch } =
+        useInfiniteQuery(dataOptions(search, serverAction));
+
     const { sort, start, size, uuid, ...filter } = search;
     const defaultColumnFilters = Object.entries(filter)
         .map(([key, value]) => ({
@@ -119,7 +121,6 @@ export function useInfiniteDataTable({
     );
     const topBarRef = React.useRef<HTMLDivElement>(null);
     const [topBarHeight, setTopBarHeight] = React.useState(0);
-    const [_, setSearch] = useQueryStates(searchParamsParser);
 
     React.useEffect(() => {
         const observer = new ResizeObserver(() => {
@@ -135,7 +136,7 @@ export function useInfiniteDataTable({
         observer.observe(topBar);
         return () => observer.unobserve(topBar);
     }, [topBarRef]);
-
+    const [refreshToken, setRefreshToken] = React.useState(null);
     React.useEffect(() => {
         if (typeof window === "undefined") return;
 
@@ -237,7 +238,17 @@ export function useInfiniteDataTable({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowSelection, selectedRow]);
     return {
+        refresh: {
+            init() {
+                if (refreshToken) refetch();
+                setRefreshToken(null);
+            },
+            activate() {
+                if (!refreshToken) setRefreshToken(generateRandomString());
+            },
+        },
         table,
+        searchQuery: search,
         filterFields,
         columns,
         ...props,

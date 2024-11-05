@@ -102,7 +102,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             },
             {} as Record<string, unknown>
         );
-        console.log({ inputValue, paramState: searchParams });
+        // console.log({ inputValue, paramState: searchParams });
         if (searchParams.success && !inputValue?.endsWith(" ")) {
             // console.log(searchParams.data);
 
@@ -110,7 +110,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                 const value =
                     searchParams.data[key as keyof typeof searchParams.data];
                 const col = table.getColumn(key);
-                // console.log({ key, col: col ? true : false });
+                // console.log({ key, value, col: col ? true : false });
                 col?.setFilterValue(value);
             }
             const currentFiltersToReset = currentEnabledFilters.filter(

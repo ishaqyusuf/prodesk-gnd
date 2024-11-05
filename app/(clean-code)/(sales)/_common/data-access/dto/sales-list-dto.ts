@@ -60,6 +60,7 @@ function commonListData(data: Item) {
         isBusiness: data.customer?.businessName,
         salesRep: data.salesRep?.name,
         poNo: meta?.po,
+        deliveryOption: data?.deliveryOption,
         customerPhone:
             data.shippingAddress?.phoneNo ||
             data.billingAddress?.phoneNo ||

@@ -20,6 +20,7 @@ import Button from "@/components/common/button";
 import { toast } from "sonner";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { Label } from "@/components/ui/label";
+import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 const useShippingFormCtx = () => {
     const ctx = useItemProdViewContext();
@@ -30,7 +31,6 @@ const useShippingFormCtx = () => {
     useEffect(() => {
         salesDispatchFormUseCase(mainCtx.overview?.shipping).then((resp) => {
             form.reset(resp);
-            console.log(resp);
         });
     }, []);
 
@@ -66,15 +66,18 @@ export function ShippingForm({}) {
         form.setValue("selection", sels);
         form.setValue("toggleAll", !watchToggle);
     }
+
     async function createDispatch() {
         const data = form.getValues();
         if (!data.delivery.deliveryMode) {
             toast.error("Select Delivery Mode");
             return;
         }
+
         createSalesDispatchUseCase(data).then((resp) => {
             toast.success("Shipping created");
             ctx.mainCtx.refresh();
+
             // ctx.mainCtx.
         });
     }
@@ -110,7 +113,7 @@ export function ShippingForm({}) {
                         </Button>
                     </div>
                     <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
-                        <div className="p-4 sm:p-8">
+                        <div className="p-4">
                             {dispatchables?.map((item) => (
                                 <ShippingItemLine item={item} key={item.id} />
                             ))}
@@ -132,7 +135,7 @@ function ShippingItemLine({
     const deliverableQty = item.deliverableQty;
     const pending = item.analytics.pending;
     return (
-        <div className="flex flex-col border-b">
+        <div className="flex flex-col border-b bg-white">
             <Button
                 className="flex-1 h-auto"
                 variant={itemForm?.selected ? "secondary" : "ghost"}

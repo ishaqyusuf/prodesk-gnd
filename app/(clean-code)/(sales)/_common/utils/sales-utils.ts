@@ -1,5 +1,6 @@
-import { DykeSteps } from "@prisma/client";
-import { SalesStatStatus } from "../../types";
+import { DykeSteps, SalesStat } from "@prisma/client";
+import { SalesStatStatus, SalesStatType } from "../../types";
+import { Colors } from "@/lib/status-badge";
 
 export function inToFt(_in) {
     let _ft = _in;
@@ -28,12 +29,47 @@ export function ftToIn(h) {
         .filter(Boolean);
     return `${+_in + +ft * 12}in`;
 }
-
-export function statStatus(percentage): SalesStatStatus {
-    if (percentage === 0) return "pending";
-    if (percentage > 0 && percentage < 100) return "in progress";
-    if (percentage === 100) return "completed";
-    return "unknown";
+export function createSaleStat(type: SalesStatType, score, total, salesId) {
+    const percentage = (score / total) * 100 || 0;
+    return {
+        type,
+        score,
+        total,
+        salesId,
+        percentage,
+    };
+}
+export function statStatus(stat: SalesStat): {
+    color: Colors;
+    status: SalesStatStatus;
+    scoreStatus: string;
+} {
+    const { percentage, score, total } = stat || {};
+    let scoreStatus = "";
+    if (score > 0 && score != total) scoreStatus = `${score}/${total}`;
+    if (percentage === 0)
+        return {
+            color: "warmGray",
+            status: "pending",
+            scoreStatus,
+        };
+    if (percentage > 0 && percentage < 100)
+        return {
+            color: "rose",
+            status: "in progress",
+            scoreStatus,
+        };
+    if (percentage === 100)
+        return {
+            status: "completed",
+            color: "green",
+            scoreStatus,
+        };
+    return {
+        color: "stone",
+        status: "unknown",
+        scoreStatus,
+    };
 }
 
 const DontShowComponents = [

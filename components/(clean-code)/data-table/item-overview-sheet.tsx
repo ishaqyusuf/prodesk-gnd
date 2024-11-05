@@ -42,7 +42,9 @@ Props) {
     return (
         <Sheet
             open={!!selectedRowKey}
-            onOpenChange={() => table.toggleAllRowsSelected(false)}
+            onOpenChange={(e) => {
+                table.toggleAllRowsSelected(false);
+            }}
         >
             <SheetContent
                 hideClose

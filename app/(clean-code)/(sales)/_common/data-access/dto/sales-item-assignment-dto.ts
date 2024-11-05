@@ -57,6 +57,10 @@ export function salesItemAssignmentsDto(
             ),
             qty,
             pending: qtyDiff(qty, submitted),
+            _: {
+                qtyAssigned: d.qtyAssigned,
+                qtySubmitted: d.qtyCompleted,
+            },
         };
         // _data.pendingQty = _data.qty.total - _data.submitted.total;
         assignments.push(_data);

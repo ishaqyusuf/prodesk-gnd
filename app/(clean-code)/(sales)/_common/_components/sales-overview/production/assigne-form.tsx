@@ -16,6 +16,10 @@ import {
     ItemAssignmentForm,
 } from "../../../use-case/sales-prod.use-case";
 import { toast } from "sonner";
+import {
+    useDataTableContext,
+    useInifinityDataTable,
+} from "@/components/(clean-code)/data-table/use-data-table";
 
 function useAssignmentCtx() {
     const ctx = useItemProdView();
@@ -32,10 +36,12 @@ function useAssignmentCtx() {
             });
         }
     }, [assignMode]);
+
     async function save() {
         const formData = form.getValues();
         // console.log(formData);
         await createItemAssignmentUseCase(formData, item.analytics.produceable);
+
         toast.success("Created!");
         ctx.mainCtx.refresh();
     }
