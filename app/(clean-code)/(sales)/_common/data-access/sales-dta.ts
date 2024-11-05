@@ -117,7 +117,7 @@ export async function getSalesItemOverviewDta(slug, type, retries = 0) {
         shipping: salesShippingDto(overview, data),
         retries,
     };
-    if ((await statMismatchDta(resp)) || retries < 1) {
+    if ((await statMismatchDta(resp)) && retries < 1) {
         return await getSalesItemOverviewDta(slug, type, retries + 1);
     }
     return resp;
