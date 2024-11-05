@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSalesOverview } from "./overview-provider";
+import { useSalesOverview } from "../overview-provider";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { GetSalesOverview } from "../../use-case/sales-item-use-case";
+import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
@@ -65,10 +65,13 @@ export function SalesItemsOverview({}) {
                                     ctx.tabData?.meta?.groupIndex == id &&
                                     ctx.tabData?.payloadSlug == itemId
                                     ? "bg-muted-foreground/10"
-                                    : "hover:bg-muted-foreground/10 cursor-pointer"
+                                    : item.analytics?.produceable
+                                    ? "hover:bg-muted-foreground/10 cursor-pointer"
+                                    : null
                             )}
                             onClick={() => {
-                                ctx.openItemTab(id, itemId);
+                                if (item.analytics?.produceable)
+                                    ctx.openItemTab(id, itemId);
                             }}
                             item={item}
                         />

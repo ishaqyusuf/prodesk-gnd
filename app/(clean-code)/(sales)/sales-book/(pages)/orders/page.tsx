@@ -4,9 +4,14 @@ import { getSalesOrderInfinityListUseCase } from "../../../_common/use-case/sale
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { getQueryClient } from "@/providers/get-query-client";
 import { dataOptions } from "@/components/(clean-code)/data-table/query-options";
+import { redirect } from "next/navigation";
 
 export default async function SalesBookPage({ searchParams }) {
     // const promise = getSalesOrderListUseCase(searchParams);
+    if (Object.keys(searchParams).length == 0)
+        redirect("/sales-book/orders?digest=");
+    // console.log(searchParams);
+
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
     await queryClient.prefetchInfiniteQuery(

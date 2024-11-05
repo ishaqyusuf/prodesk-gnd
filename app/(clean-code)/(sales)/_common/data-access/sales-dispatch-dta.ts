@@ -113,9 +113,9 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                 }
                 deliverableSubmissions.map((sub) => {
                     const qtyRem = qtyDiff(qty, sub.qty, false);
-                    console.log(qtyRem);
-                    console.log(sub.qty);
-                    console.log(qty);
+                    // console.log(qtyRem);
+                    // console.log(sub.qty);
+                    // console.log(qty);
 
                     updateHandleQty(sub.qty, qtyRem, sub.subId);
                 });

@@ -9,8 +9,8 @@ import { _modal } from "@/components/common/modal/provider";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OverviewProvider, { useSalesOverview } from "./overview-provider";
-import { SalesGeneralOverview } from "./sales-general-overview";
-import { SalesItemsOverview } from "./sales-items-overview";
+import { SalesGeneralOverview } from "./general/sales-general-overview";
+import { SalesItemsOverview } from "./items-view/sales-items-overview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./production/item-prod-view";
 
@@ -55,7 +55,7 @@ function PrimaryTab() {
                     <TabsTrigger value="payments">Payments</TabsTrigger>
                     <TabsTrigger value="shipping">Shipping</TabsTrigger>
                 </TabsList>
-                <ScrollArea className="h-[80vh] overflow-auto pb-16">
+                <ScrollArea className="h-[85vh] overflow-auto mb-16">
                     <TabsContent value="general">
                         <SalesGeneralOverview />
                     </TabsContent>
