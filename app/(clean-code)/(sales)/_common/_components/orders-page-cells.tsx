@@ -90,7 +90,12 @@ function Production({ item }: ItemProps) {
     return (
         <TCell>
             <Progress>
-                <Progress.Status>
+                <Progress.Status
+                    color={
+                        item.status.production?.color ||
+                        item.status.production?.color
+                    }
+                >
                     {item.status.production?.scoreStatus ||
                         item.status.production?.status}
                 </Progress.Status>

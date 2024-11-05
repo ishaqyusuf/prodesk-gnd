@@ -18,6 +18,12 @@ export const salesFilterFields = [
         value: "status",
     },
     {
+        label: "P.O",
+        type: "input",
+        value: "po",
+        options: [],
+    },
+    {
         label: "Delivery",
         type: "checkbox",
         value: "delivery",

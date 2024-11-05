@@ -28,7 +28,8 @@ export type SalesStatStatus =
     | "pending"
     | "in progress"
     | "completed"
-    | "unknown";
+    | "unknown"
+    | "N/A";
 export type TypedSalesStat = Omit<SalesStat, "status" | "type" | "id"> & {
     type: SalesStatType;
     id?: number;
