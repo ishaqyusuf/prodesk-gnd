@@ -24,6 +24,7 @@ export default function OrdersPageClient({}: Props) {
             return [
                 ctx.Column("Date", "date", Cells.Date),
                 ctx.Column("Order #", "orderId", Cells.Order),
+                ctx.Column("P.O", "po", Cells.Po),
                 ctx.Column("Customer", "customer", Cells.Customer),
                 ctx.Column("Phone", "phone", Cells.CustomerPhone),
                 ctx.Column("Address", "address", Cells.Address),
@@ -32,7 +33,6 @@ export default function OrdersPageClient({}: Props) {
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
                 ctx.Column("Production", "production", Cells.Production),
-                ctx.Column("P.O", "po", Cells.Po),
                 ctx.Column("Delivery", "delivery", Cells.Delivery),
             ];
         },

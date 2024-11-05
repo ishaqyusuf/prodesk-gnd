@@ -47,10 +47,17 @@ export function statStatus(stat: SalesStat): {
     const { percentage, score, total } = stat || {};
     let scoreStatus = "";
     if (score > 0 && score != total) scoreStatus = `${score}/${total}`;
-    if (percentage === 0)
+
+    if (percentage === 0 && total > 0)
         return {
             color: "warmGray",
             status: "pending",
+            scoreStatus,
+        };
+    if (percentage == 0)
+        return {
+            color: "amber",
+            status: "N/A" as any,
             scoreStatus,
         };
     if (percentage > 0 && percentage < 100)
