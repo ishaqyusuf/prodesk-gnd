@@ -75,6 +75,7 @@ export function salesOverviewDto(data: GetFullSalesDataDta) {
     // itemGroup.
     const stat = salesItemsStatsDto(data, itemGroup);
     return {
+        id: data.id,
         itemGroup,
         stat,
     };

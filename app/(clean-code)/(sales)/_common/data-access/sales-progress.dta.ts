@@ -83,7 +83,6 @@ export async function updateSalesProgressDta(
     if (total == null) total = stat.total;
     if (score == null) score = stat.score;
     score = score + plusScore - minusScore;
-    console.log({ score });
 
     await prisma.salesStat.update({
         where: {
@@ -109,5 +108,36 @@ function statMeta(total, score) {
     };
 }
 export async function statMismatchDta(overview: GetSalesItemOverviewDta) {
-    return false;
+    const { calculatedStats, salesStatByKey } = overview.stat;
+    let mismatch = false;
+    Object.entries(calculatedStats).map(([k, d]) => {
+        if (
+            salesStatByKey?.[k]?.score != d?.score ||
+            salesStatByKey?.[k]?.total != d?.total
+        ) {
+            mismatch = true;
+        }
+    });
+    if (mismatch) {
+        await Promise.all(
+            Object.entries(calculatedStats).map(async ([k, d]) => {
+                const sysd = salesStatByKey?.[k];
+                if (sysd?.id) {
+                    await updateSalesProgressDta(overview.id, k as any, {
+                        total: d.total,
+                        score: d.score,
+                        id: sysd.id,
+                    });
+                } else {
+                    await createSalesProgressDta(
+                        overview.id,
+                        k as any,
+                        d.total,
+                        d.score
+                    );
+                }
+            })
+        );
+    }
+    return mismatch;
 }

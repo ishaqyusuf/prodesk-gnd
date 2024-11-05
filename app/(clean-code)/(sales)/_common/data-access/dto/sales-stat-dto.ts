@@ -44,6 +44,8 @@ export function calculatedStatsDto(
             populate("dispatch", pending.delivery, success.delivery);
         });
     });
+    console.log(cs);
+
     return cs;
 }
 export function statToKeyValueDto(dataStats: SalesStat[]) {

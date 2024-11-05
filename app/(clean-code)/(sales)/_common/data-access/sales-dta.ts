@@ -118,7 +118,10 @@ export async function getSalesItemOverviewDta(slug, type, retries = 0) {
         retries,
     };
     if ((await statMismatchDta(resp)) && retries < 1) {
+        console.log("mismatch");
         return await getSalesItemOverviewDta(slug, type, retries + 1);
     }
+    if (retries > 0) console.log("mismatch fixed");
+    else console.log("no mismatch");
     return resp;
 }

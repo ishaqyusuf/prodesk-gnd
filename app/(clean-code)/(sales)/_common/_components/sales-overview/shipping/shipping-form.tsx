@@ -87,6 +87,7 @@ export function ShippingForm({}) {
                     title="Create Shipping"
                     onBack={() => mainCtx.setTabData(null)}
                 ></SecondaryTabSheet>
+                {/* <ScrollArea className="w-[600px] h-[80vh] flex flex-col"> */}
                 <Form {...form}>
                     <div className="border-b flex p-4 gap-4">
                         <div className="flex items-center gap-2">
@@ -111,7 +112,7 @@ export function ShippingForm({}) {
                             Create
                         </Button>
                     </div>
-                    <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
+                    <ScrollArea className="w-[600px] h-[65vh] flex flex-col">
                         <div className="p-4">
                             {dispatchables?.map((item) => (
                                 <ShippingItemLine item={item} key={item.id} />
@@ -119,6 +120,7 @@ export function ShippingForm({}) {
                         </div>
                     </ScrollArea>
                 </Form>
+                {/* </ScrollArea> */}
             </div>
         </ShippingFormCtx.Provider>
     );
@@ -136,7 +138,7 @@ function ShippingItemLine({
     return (
         <div className="flex flex-col border-b bg-white">
             <Button
-                className="flex-1 h-auto"
+                className="flex-1 h-auto justify-start"
                 variant={itemForm?.selected ? "secondary" : "ghost"}
                 onClick={() => {
                     const val = !itemForm?.selected;
