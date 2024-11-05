@@ -6,5 +6,5 @@ interface SearchPage {
     value: string;
 }
 export async function createSearchParamDta(page: SearchPage) {
-    await prisma.searchParameters.create(data);
+    await prisma.searchParameters.create(page as any);
 }
