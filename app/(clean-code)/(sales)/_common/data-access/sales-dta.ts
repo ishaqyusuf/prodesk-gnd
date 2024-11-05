@@ -19,6 +19,7 @@ import {
     salesOverviewDto,
 } from "./dto/sales-item-dto";
 import { salesShippingDto } from "./dto/sales-shipping-dto";
+import { statMismatchDta } from "./sales-progress.dta";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
@@ -107,13 +108,17 @@ export function typedFullSale(sale: AsyncFnType<typeof getFullSaleById>) {
 export type GetSalesItemOverviewDta = AsyncFnType<
     typeof getSalesItemOverviewDta
 >;
-export async function getSalesItemOverviewDta(slug, type) {
+export async function getSalesItemOverviewDta(slug, type, retries = 0) {
     const sale = await getFullSaleBySlugType(slug, type);
     const data = typedFullSale(sale);
     const overview = salesOverviewDto(data);
-    return {
-        // itemGroup: resp,
+    const resp = {
         ...overview,
         shipping: salesShippingDto(overview, data),
+        retries,
     };
+    if ((await statMismatchDta(resp)) || retries < 1) {
+        return await getSalesItemOverviewDta(slug, type, retries + 1);
+    }
+    return resp;
 }

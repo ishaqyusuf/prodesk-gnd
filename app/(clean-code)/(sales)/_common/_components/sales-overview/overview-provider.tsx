@@ -62,6 +62,9 @@ export const useOverviewContext = (item: SalesItemProp) => {
         setTabData(null);
         setPrimaryTab("general");
     }
+    useEffect(() => {
+        setTabData(null);
+    }, [primaryTab]);
     return {
         refresh,
         primaryTab,

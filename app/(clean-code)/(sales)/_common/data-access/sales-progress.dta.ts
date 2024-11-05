@@ -2,7 +2,11 @@ import { prisma } from "@/db";
 import { SalesStatType } from "../../types";
 import { percent } from "@/lib/utils";
 import { statStatus } from "../utils/sales-utils";
-import { getFullSaleById, typedFullSale } from "./sales-dta";
+import {
+    getFullSaleById,
+    GetSalesItemOverviewDta,
+    typedFullSale,
+} from "./sales-dta";
 import { salesOverviewDto } from "./dto/sales-item-dto";
 
 export async function initSalesProgressDta(id) {}
@@ -103,4 +107,7 @@ function statMeta(total, score) {
         percentage,
         status: status.status,
     };
+}
+export async function statMismatchDta(overview: GetSalesItemOverviewDta) {
+    return false;
 }
