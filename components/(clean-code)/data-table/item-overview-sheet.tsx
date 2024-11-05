@@ -33,7 +33,7 @@ export default function TableItemOverviewSheet({
 }: // title,
 // titleClassName,
 Props) {
-    const { table, selectedRow } = useInifinityDataTable();
+    const { table, selectedRow, refresh } = useInifinityDataTable();
 
     const selectedRowKey =
         Object.keys(table.getState().rowSelection)?.[0] || undefined;
@@ -43,6 +43,9 @@ Props) {
         <Sheet
             open={!!selectedRowKey}
             onOpenChange={(e) => {
+                console.log(e);
+                if (!e) refresh.init();
+
                 table.toggleAllRowsSelected(false);
             }}
         >
@@ -63,6 +66,7 @@ Props) {
 interface TableSheetHeaderProps {
     titleClassName?;
     title;
+    rowChanged?;
 }
 export function SecondaryTabSheet({
     titleClassName = "",
@@ -102,6 +106,7 @@ export function SecondaryTabSheet({
 export function TableSheetHeader({
     titleClassName,
     title,
+    rowChanged,
 }: TableSheetHeaderProps) {
     const { table, selectedRow } = useInifinityDataTable();
     const selectedRowKey =
@@ -121,11 +126,17 @@ export function TableSheetHeader({
         [index, table]
     );
     const onPrev = React.useCallback(() => {
-        if (prevId) table.setRowSelection({ [prevId]: true });
+        if (prevId) {
+            table.setRowSelection({ [prevId]: true });
+            rowChanged?.();
+        }
     }, [prevId, table]);
 
     const onNext = React.useCallback(() => {
-        if (nextId) table.setRowSelection({ [nextId]: true });
+        if (nextId) {
+            table.setRowSelection({ [nextId]: true });
+            rowChanged?.();
+        }
     }, [nextId, table]);
 
     React.useEffect(() => {

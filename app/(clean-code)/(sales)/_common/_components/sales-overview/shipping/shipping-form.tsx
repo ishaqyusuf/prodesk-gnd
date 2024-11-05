@@ -73,7 +73,6 @@ export function ShippingForm({}) {
             toast.error("Select Delivery Mode");
             return;
         }
-
         createSalesDispatchUseCase(data).then((resp) => {
             toast.success("Shipping created");
             ctx.mainCtx.refresh();

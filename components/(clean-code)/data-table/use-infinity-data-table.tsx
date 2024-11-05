@@ -31,6 +31,7 @@ import { inDateRange, arrSome } from "@/lib/table/filterfns";
 import { dataOptions } from "./query-options";
 import { TableProps } from "./use-table-compose";
 import { generateRandomString } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function useInfiniteDataTable({
     columns,
@@ -240,7 +241,10 @@ export function useInfiniteDataTable({
     return {
         refresh: {
             init() {
-                if (refreshToken) refetch();
+                if (refreshToken) {
+                    refetch();
+                    toast.success("List updated!");
+                }
                 setRefreshToken(null);
             },
             activate() {

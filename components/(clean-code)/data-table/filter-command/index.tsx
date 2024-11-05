@@ -291,7 +291,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             </CommandGroup>
                             <CommandSeparator />
                             <CommandGroup heading="Query">
-                                {filterFields?.map((field) => {
+                                {filterFields?.map((field, findex) => {
                                     if (typeof field.value !== "string") {
                                         return null;
                                     }
@@ -319,38 +319,41 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                         ?.reverse()[0];
                                     return (
                                         <>
-                                            {!optionExists && createWord && (
-                                                <CommandItem
-                                                    key={`${currentWord}`}
-                                                    value={currentWord}
-                                                    onMouseDown={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                    }}
-                                                    onSelect={(value) => {
-                                                        setInputValue(
-                                                            (prev) => {
-                                                                const input = `${value}${SEPARATOR}`;
+                                            {!optionExists &&
+                                                createWord &&
+                                                findex == 0 && (
+                                                    <CommandItem
+                                                        key={`${currentWord}`}
+                                                        value={currentWord}
+                                                        onMouseDown={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                        }}
+                                                        onSelect={(value) => {
+                                                            setInputValue(
+                                                                (prev) => {
+                                                                    const input = `${value}${SEPARATOR}`;
 
-                                                                return prev.includes(
-                                                                    input
-                                                                )
-                                                                    ? prev
-                                                                    : `${prev}${SEPARATOR}`.trim();
-                                                            }
-                                                        );
-                                                        setCurrentWord("");
-                                                        setTimeout(() => {
-                                                            setOpen(false);
-                                                        }, 500);
-                                                        // Optionally, you can add logic here to handle adding this new option to the options array if needed
-                                                    }}
-                                                >
-                                                    Click Enter to search {'"'}
-                                                    {createWord}
-                                                    {'"'}
-                                                </CommandItem>
-                                            )}
+                                                                    return prev.includes(
+                                                                        input
+                                                                    )
+                                                                        ? prev
+                                                                        : `${prev}${SEPARATOR}`.trim();
+                                                                }
+                                                            );
+                                                            setCurrentWord("");
+                                                            setTimeout(() => {
+                                                                setOpen(false);
+                                                            }, 500);
+                                                            // Optionally, you can add logic here to handle adding this new option to the options array if needed
+                                                        }}
+                                                    >
+                                                        Click Enter to search{" "}
+                                                        {'"'}
+                                                        {createWord}
+                                                        {'"'}
+                                                    </CommandItem>
+                                                )}
                                             {/* Render existing options */}
                                             {options.map((optionValue) => {
                                                 return (
@@ -485,14 +488,14 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                     orientation="vertical"
                                     className="my-auto h-3"
                                 />
-                                <span>
+                                {/* <span>
                                     Union:{" "}
                                     <Kbd variant="outline">regions:a,b</Kbd>
                                 </span>
                                 <span>
                                     Range:{" "}
                                     <Kbd variant="outline">p95:59-340</Kbd>
-                                </span>
+                                </span> */}
                             </div>
                             {lastSearches.length ? (
                                 <button

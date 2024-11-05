@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { SalesItemStatus } from "../sales-item-status";
 
 export function SalesGeneralOverview({}) {
-    const { item } = useSalesOverview();
+    const { item, overview } = useSalesOverview();
     return (
         <>
             <dl>
@@ -69,15 +69,24 @@ export function SalesGeneralOverview({}) {
                 </div>
                 <div className="px-4 sm:px-8">
                     <SalesItemStatus
-                        status={item.stats.prodAssignment}
+                        status={
+                            overview?.stat?.calculatedStats?.prodAssignment ||
+                            item.stats.prodAssignment
+                        }
                         title="Assigned"
                     />
                     <SalesItemStatus
-                        status={item.stats.prod}
+                        status={
+                            overview?.stat?.calculatedStats?.prod ||
+                            item.stats.prod
+                        }
                         title="Production Completed"
                     />
                     <SalesItemStatus
-                        status={item.stats.dispatch}
+                        status={
+                            overview?.stat?.calculatedStats?.dispatch ||
+                            item.stats.dispatch
+                        }
                         title="Delivered"
                     />
                 </div>

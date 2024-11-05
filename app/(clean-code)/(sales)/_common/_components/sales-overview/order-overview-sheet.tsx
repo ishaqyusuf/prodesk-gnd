@@ -37,6 +37,7 @@ export default function OrderOverviewSheet({}) {
 }
 function PrimaryTab() {
     const ctx = useSalesOverview();
+
     return (
         <div
             className={cn(
@@ -44,8 +45,11 @@ function PrimaryTab() {
                 ctx.tabData && "hidden lg:block"
             )}
         >
-            <TableSheetHeader title={ctx.item?.orderId} />
-            <Tabs defaultValue="general">
+            <TableSheetHeader
+                title={`${ctx.item?.orderId} | ${ctx.item?.displayName}`}
+                rowChanged={ctx.rowChanged}
+            />
+            <Tabs value={ctx.primaryTab} onValueChange={ctx.setPrimaryTab}>
                 <TabsList className="w-full">
                     <TabsTrigger value="general">General</TabsTrigger>
                     <TabsTrigger value="items">Items</TabsTrigger>
@@ -55,7 +59,7 @@ function PrimaryTab() {
                     <TabsTrigger value="payments">Payments</TabsTrigger>
                     <TabsTrigger value="shipping">Shipping</TabsTrigger>
                 </TabsList>
-                <ScrollArea className="h-[85vh] overflow-auto mb-16">
+                <ScrollArea className="h-[85vh] pb-28">
                     <TabsContent value="general">
                         <SalesGeneralOverview />
                     </TabsContent>

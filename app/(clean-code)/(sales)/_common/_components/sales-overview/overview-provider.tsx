@@ -57,8 +57,16 @@ export const useOverviewContext = (item: SalesItemProp) => {
             slug: "createShipping",
         });
     }
+    const [primaryTab, setPrimaryTab] = useState("general");
+    function rowChanged() {
+        setTabData(null);
+        setPrimaryTab("general");
+    }
     return {
         refresh,
+        primaryTab,
+        setPrimaryTab,
+        rowChanged,
         openItemTab,
         createShipping,
         viewShipping(slug) {
