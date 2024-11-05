@@ -151,6 +151,15 @@ function Invoice({ item }: ItemProps) {
         </TCell>
     );
 }
+function Po({ item }: ItemProps) {
+    const invoice = item.invoice;
+    if (!item.poNo) return null;
+    return (
+        <TCell>
+            <div>{item.poNo}</div>
+        </TCell>
+    );
+}
 function InvoicePending({ item }: ItemProps) {
     const invoice = item.invoice;
     const { theme } = useTheme();
@@ -169,6 +178,7 @@ function InvoicePending({ item }: ItemProps) {
 }
 export let Cells = {
     Order,
+    Po,
     Customer,
     Address,
     SalesRep,

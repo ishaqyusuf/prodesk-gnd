@@ -74,7 +74,7 @@ export function ShippingOverview({}) {
             <div className="secondary-tab flex flex-col">
                 <SecondaryTabSheet
                     title={shipping.title}
-                    onBack={() => mainCtx.setTabData(null)}
+                    onBack={() => mainCtx.closeSecondaryTab()}
                 >
                     <Button size="sm" className="h-8">
                         <Icons.print className="w-4 h-4 mr-2" />

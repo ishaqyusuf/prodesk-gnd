@@ -85,7 +85,7 @@ export function ShippingForm({}) {
             <div className="flex flex-col secondary-tab">
                 <SecondaryTabSheet
                     title="Create Shipping"
-                    onBack={() => mainCtx.setTabData(null)}
+                    onBack={() => mainCtx.closeSecondaryTab()}
                 ></SecondaryTabSheet>
                 {/* <ScrollArea className="w-[600px] h-[80vh] flex flex-col"> */}
                 <Form {...form}>
