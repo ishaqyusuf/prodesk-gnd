@@ -3,7 +3,7 @@ import {
     ItemAssignment,
     ItemAssignmentSubmission,
     LineItem,
-} from "../items-view/sales-items-overview";
+} from "../components/item-vie/sales-items-overview";
 import { Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
 import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-overview-sheet";

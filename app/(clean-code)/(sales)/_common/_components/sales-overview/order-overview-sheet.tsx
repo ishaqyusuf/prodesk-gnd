@@ -10,7 +10,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OverviewProvider, { useSalesOverview } from "./overview-provider";
 import { SalesGeneralOverview } from "./general/sales-general-overview";
-import { SalesItemsOverview } from "./items-view/sales-items-overview";
+import { SalesItemsOverview } from "./components/item-vie/sales-items-overview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./production/item-prod-view";
 

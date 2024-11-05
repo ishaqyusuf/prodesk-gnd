@@ -1,5 +1,5 @@
 import Button from "@/components/common/button";
-import { ItemAssignment } from "../items-view/sales-items-overview";
+import { ItemAssignment } from "../components/item-vie/sales-items-overview";
 import { useForm } from "react-hook-form";
 import { useItemProdViewContext } from "./use-hooks";
 import { Form } from "@/components/ui/form";

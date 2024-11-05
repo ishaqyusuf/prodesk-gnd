@@ -1974,11 +1974,25 @@ model ExportConfig {
 }
 
 model SearchParameters {
-    id    Int    @unique @default(autoincrement())
     page  String
     key   String
     value String
 
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime? @db.Timestamp(0)
+
+    @@id(name: "uid", [page, key, value])
+}
+
+model PageTabs {
+    id        Int       @unique @default(autoincrement())
+    page      String
+    userId    Int
+    private   Boolean?  @default(true)
+    default   Boolean?  @default(false)
+    title     String
+    query     String
     createdAt DateTime? @default(now()) @db.Timestamp(0)
     updatedAt DateTime? @updatedAt
     deletedAt DateTime? @db.Timestamp(0)

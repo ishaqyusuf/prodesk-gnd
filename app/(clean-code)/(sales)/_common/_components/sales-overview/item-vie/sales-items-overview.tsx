@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSalesOverview } from "../overview-provider";
+import { useSalesOverview } from "../../overview-provider";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
+import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
