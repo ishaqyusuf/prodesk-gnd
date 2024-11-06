@@ -57,7 +57,9 @@ export default function ConfirmBtn({
             className={cn(
                 className,
                 size == "icon" && "h-8 w-8 p-0",
-                trash && "text-red-500 hover:text-red-600"
+                variant != "destructive" &&
+                    trash &&
+                    "text-red-500 hover:text-red-600"
             )}
             {...props}
         >

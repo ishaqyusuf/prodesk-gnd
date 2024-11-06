@@ -5,12 +5,12 @@ import { createContext } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import Button from "@/components/common/button";
-
 import { Icons } from "@/components/_v1/icons";
 import { toast } from "sonner";
 import { qtyDiff } from "../../../data-access/dto/sales-item-dto";
 import Badge from "../components/badge";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 let context = null;
 type Ctx = ReturnType<typeof useShippingFormCtx>;
@@ -79,9 +79,14 @@ export function ShippingOverview({}) {
                         context = null;
                     }}
                 >
-                    <Button size="sm" className="h-8">
-                        <Icons.print className="w-4 h-4 mr-2" />
-                        <span>Print</span>
+                    <Button asChild size="sm" className="h-8">
+                        <Link
+                            href={`/printer/sales?slugs=${mainCtx.overview.orderId}&mode=packing list&dispatchId=${shipping.id}`}
+                            target="_blank"
+                        >
+                            <Icons.print className="w-4 h-4 mr-2" />
+                            <span>Print</span>
+                        </Link>
                     </Button>
                 </SecondaryTabSheet>
                 <ScrollArea

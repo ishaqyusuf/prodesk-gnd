@@ -57,6 +57,7 @@ function commonListData(data: Item) {
         address:
             data.shippingAddress?.address1 || data.billingAddress?.address1,
         displayName: data.customer?.businessName || data?.shippingAddress?.name,
+        customerId: data.customer?.id,
         isBusiness: data.customer?.businessName,
         salesRep: data.salesRep?.name,
         poNo: meta?.po,

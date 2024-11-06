@@ -13,6 +13,7 @@ export interface SalesPrintProps {
         preview?: boolean;
         pdf: boolean;
         deletedAt?;
+        dispatchId?;
     };
 }
 export default async function PrintOrderPage({
@@ -32,6 +33,7 @@ export default async function PrintOrderPage({
                 action: getSalesPrintData(slug, {
                     ...searchParams,
                     mode: "packing list",
+                    dispatchId: searchParams.dispatchId,
                 }),
             })
         );

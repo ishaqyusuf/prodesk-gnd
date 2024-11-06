@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { SalesShippingTab } from "./shipping/sales-shippings-tab";
 import { ShippingOverview } from "./shipping/shipping-overview";
 import "./style.css";
+import ActionFooter from "./action-footer";
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
@@ -53,13 +54,13 @@ function PrimaryTab() {
                 <TabsList className="w-full">
                     <TabsTrigger value="general">General</TabsTrigger>
                     <TabsTrigger value="items">Items</TabsTrigger>
-                    {/* <TabsTrigger value="production">
-                                    Production
-                                </TabsTrigger> */}
                     <TabsTrigger value="payments">Payments</TabsTrigger>
                     <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                    <TabsTrigger value="notifications">
+                        Notification
+                    </TabsTrigger>
                 </TabsList>
-                <ScrollArea className="o-scrollable-content-area-tabbed">
+                <ScrollArea className="o-scrollable-content-area-tabbed relative">
                     <TabsContent value="general">
                         <SalesGeneralOverview />
                     </TabsContent>
@@ -69,6 +70,7 @@ function PrimaryTab() {
                     <TabsContent className="" value="shipping">
                         <SalesShippingTab />
                     </TabsContent>
+                    <ActionFooter />
                 </ScrollArea>
             </Tabs>
         </div>

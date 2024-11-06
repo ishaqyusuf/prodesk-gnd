@@ -187,23 +187,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
         (state) => state.orderItemComponent?.showMockup
     );
     const mockPercent = form.watch("meta.mockupPercentage");
-    // return (
-    //     <>
-    //         <div className="w-1/2">
-    //             {mockPercent}
-    //             <AutoComplete
-    //                 options={data.ctx.items}
-    //                 uppercase
-    //                 value={mockPercent}
-    //                 itemText={"description"}
-    //                 itemValue={"description"}
-    //                 onSelect={(e) => {
-    //                     // form.setValue("meta.mockupPercentage", e.title);
-    //                 }}
-    //             />
-    //         </div>
-    //     </>
-    // );
+
     return (
         <FormProvider {...form}>
             <RenderForm {...form}>

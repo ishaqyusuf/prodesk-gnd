@@ -18,13 +18,28 @@ import salesData, {
     SalesTaxes,
 } from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 
-type PrintData = { order: ViewSaleType } & ReturnType<typeof composeSalesItems>;
+type PrintData = {
+    order: ViewSaleType;
+    isEstimate?: boolean;
+    isProd?: boolean;
+    isPacking?: boolean;
+    isOrder?: boolean;
+    query?: SalesPrintProps["searchParams"];
+} & ReturnType<typeof composeSalesItems>;
 
 type PrintStyles = "base" | "lg-bold";
 export function composePrint(
     data: PrintData,
     query: SalesPrintProps["searchParams"]
 ) {
+    data = {
+        ...data,
+        query,
+        isEstimate: query.mode == "quote",
+        isProd: query.mode == "production",
+        isPacking: query.mode == "packing list",
+        isOrder: query.mode == "order",
+    };
     const printData = {
         isEstimate: query.mode == "quote",
         isProd: query.mode == "production",
@@ -127,7 +142,7 @@ function shelfItemsTable(
                 ),
             ]
         );
-    if (isPacking) res.cells.push(_cell<T>("Shipped Qty", "packing", 3));
+    if (isPacking) res.cells.push(_cell<T>("Fulfilment", "packing", 3));
     const newResp = data.order.items
         .filter((item) => item.shelfItems.length)
         .map((item) => {
@@ -201,10 +216,36 @@ function _cell<T>(
 ) {
     return { title, cell, colSpan, style, cellStyle };
 }
+function packingInfo(data: PrintData, itemId, doorId?) {
+    const deliveryId = data.query.dispatchId;
+    if (!data.isPacking || !deliveryId) return null;
+    const deliveries = data.order.deliveries;
+    const deliv = deliveries.find((d) => (d.id = deliveryId));
+    let items =
+        deliveryId == "all"
+            ? deliveries?.map((d) => d.items).flat()
+            : deliv?.items;
+    if (!items) return "N/A";
+    const filtered = items.filter((item) =>
+        item.orderItemId == itemId && doorId
+            ? item.submission?.assignment?.salesDoorId == doorId
+            : undefined
+    );
+    if (!filtered?.length) return "N/A";
+    const sumLh = sum(filtered, "lhQty");
+    const sumRh = sum(filtered, "rhQty");
+    const sumQty = sum(filtered, "qty");
+    let texts = [];
+    if (sumLh) texts.push(`${sumLh} LH`);
+    if (sumRh) texts.push(`${sumRh} RH`);
+    if (!sumLh && !sumRh && sumQty) texts.push(`${sumQty}`);
+    return texts.join(` & `);
+}
 function getDoorsTable(
     { isProd, isPacking, isOrder, isEstimate },
     data: PrintData
 ) {
+    const deliveries = data.order.deliveries;
     const price = !isProd && !isPacking;
 
     const dt = {
@@ -332,7 +373,15 @@ function getDoorsTable(
                     );
                 }
                 if (isPacking)
-                    res.cells.push(_cell("Shipped Qty", "packing", 3));
+                    res.cells.push(
+                        _cell(
+                            "Shipped Qty",
+                            "packing",
+                            3,
+                            { position: "center" },
+                            { position: "center", font: "bold" }
+                        )
+                    );
 
                 const details =
                     is.moulding || is.bifold
@@ -389,7 +438,7 @@ function getDoorsTable(
                             case "rhQty":
                                 return door?.[cell as any];
                             case "packing":
-                                return null;
+                                return packingInfo(data, m.id, door?.id);
                         }
                         return lines.length + 1;
                     };

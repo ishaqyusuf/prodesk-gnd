@@ -191,6 +191,23 @@ const SalesIncludes = {
     salesRep: true,
     productions: true,
     payments: true,
+    deliveries: {
+        include: {
+            items: {
+                include: {
+                    submission: {
+                        select: {
+                            assignment: {
+                                select: {
+                                    salesDoorId: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
     taxes: {
         where: {
             deletedAt: null,

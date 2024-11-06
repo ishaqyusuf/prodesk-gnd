@@ -5,13 +5,51 @@ import { Progress } from "@/components/(clean-code)/progress";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Label } from "@/components/ui/label";
 import { SalesItemStatus } from "../sales-item-status";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function SalesGeneralOverview({}) {
     const { item, overview } = useSalesOverview();
     return (
         <>
             <dl>
-                <DataLine label="Order Id" value={item.orderId} />
+                <DataLine
+                    label="Order Id"
+                    value={
+                        <div className="inline-flex gap-2 items-center">
+                            <span>{item.orderId}</span>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-6"
+                                asChild
+                            >
+                                <Link
+                                    href={`/sales-v2/form/order/${item.orderId}`}
+                                    className="inline-flex gap-2"
+                                    target="_blank"
+                                >
+                                    <span>Edit</span>
+                                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                                </Link>
+                            </Button>
+                        </div>
+                    }
+                />
+                <DataLine
+                    label="Customer"
+                    value={
+                        <Link
+                            href={`/sales/customer/${item.customerId}`}
+                            target="_blank"
+                            className="inline-flex gap-2 items-center hover:underline"
+                        >
+                            <span>{item.displayName}</span>
+                            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        </Link>
+                    }
+                />
                 {/* <DataLine label="Customer Name" value={item.displayName} />
                 <DataLine label="Customer Phone" value={item.customerPhone} />
                 <DataLine label="Customer Address" value={item.address} /> */}
