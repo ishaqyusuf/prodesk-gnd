@@ -227,9 +227,10 @@ function packingInfo(data: PrintData, itemId, doorId?) {
             : deliv?.items;
     if (!items) return "N/A";
     const filtered = items.filter((item) =>
-        item.orderItemId == itemId && doorId
-            ? item.submission?.assignment?.salesDoorId == doorId
-            : undefined
+        doorId
+            ? item.submission?.assignment?.salesDoorId == doorId &&
+              item.orderItemId == itemId
+            : item.orderItemId == itemId
     );
     if (!filtered?.length) return "N/A";
     const sumLh = sum(filtered, "lhQty");
@@ -605,7 +606,13 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
                         ),
                     ]
                 );
-            if (isPacking) cells.push(styled("", "", {}));
+            if (isPacking)
+                cells.push(
+                    styled(packingInfo(data, item.id), "", {
+                        font: "bold",
+                        position: "center",
+                    })
+                );
             return {
                 id: item.id,
                 total: item.total,

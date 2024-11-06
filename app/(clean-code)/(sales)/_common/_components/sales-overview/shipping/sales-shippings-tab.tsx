@@ -11,6 +11,7 @@ import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 import StatusBadge from "@/components/_v1/status-badge";
 import { Icons } from "@/components/_v1/icons";
+import Link from "next/link";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -46,13 +47,23 @@ export function SalesShippingTab({}) {
                     </Button>
                 </div>
             ) : (
-                <div className="flex p-2 sm:px-4 border-b">
+                <div className="flex p-2 sm:px-4 gap-4 border-b">
                     <div className="flex-1"></div>
+                    <Button variant="ghost" asChild size="sm" className="h-8">
+                        <Link
+                            href={`/printer/sales?slugs=${ctx?.overview?.orderId}&mode=packing list&dispatchId=all`}
+                            target="_blank"
+                        >
+                            <Icons.print className="w-4 h-4 mr-2" />
+                            <span>Print All</span>
+                        </Link>
+                    </Button>
                     <Button
                         onClick={() => {
                             ctx.createShipping();
                         }}
                         size="sm"
+                        className="h-8"
                     >
                         <Icons.add className="w-4 h-4 mr-2" />
                         <span>Create</span>
