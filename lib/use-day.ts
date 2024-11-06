@@ -19,7 +19,7 @@ export function timeAgo(date, format: DateFormats = "MM/DD/YY") {
     const tAgo = d.fromNow();
     const daysDiff = dayjs().diff(d, "days");
 
-    if (tAgo == "a day ago") return "yesterday";
+    // if (tAgo == "a day ago") return "yesterday";
     if (daysDiff > 1) return formatDate(date, format);
     return tAgo;
 }

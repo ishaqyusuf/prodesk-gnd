@@ -73,12 +73,14 @@ export function ShippingForm({}) {
             toast.error("Select Delivery Mode");
             return;
         }
-        createSalesDispatchUseCase(data).then((resp) => {
-            toast.success("Shipping created");
-            ctx.mainCtx.refresh();
-
-            // ctx.mainCtx.
-        });
+        createSalesDispatchUseCase(data)
+            .then((resp) => {
+                toast.success("Shipping created");
+                ctx.mainCtx.refresh();
+            })
+            .catch((e) => {
+                if (e instanceof Error) toast.error(e.message);
+            });
     }
     return (
         <ShippingFormCtx.Provider value={ctx}>
@@ -157,13 +159,13 @@ function ShippingItemLine({
                         <span className="text-sm">{item.title}</span>
                         <div>
                             <Badge variant="secondary" className="font-mono">
-                                Delivered: {item.totalDelivered}
+                                Fulfilled: {item.totalDelivered}
                             </Badge>
                             <Badge variant="secondary" className="font-mono">
                                 Pending: {item.pendingDelivery}
                             </Badge>
                             <Badge variant="secondary" className="font-mono">
-                                Available: {item.deliverable}
+                                Available: {item.deliverableQty?.total}
                             </Badge>
                         </div>
                     </div>

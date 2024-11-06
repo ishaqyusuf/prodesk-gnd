@@ -55,131 +55,132 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
     // await updateSalesProgressDta(orderId, "dispatch", {
     //     score: 0,
     // });
+    const __items = Object.values(data.selection).filter((s) => s.selected);
+    if (__items.length == 0)
+        throw new Error("Select atleast one item to create a shipping");
     const dispatch = await prisma.orderDelivery.create({
         data: data.delivery,
     });
     const deliveries = await Promise.all(
-        Object.values(data.selection)
-            .filter((s) => s.selected)
-            .map(async (selection) => {
-                const dispItem = {
-                    orderId,
-                    orderItemId: selection.itemId,
-                    orderDeliveryId: dispatch.id,
-                } satisfies CreateManyDeliveryItem;
-                const { analytics, deliverableSubmissions, assignments } =
-                    data.shipping.dispatchableItemList.find(
-                        (item) => item.id == selection.itemId
-                    );
-                let qty = selection.deliveryQty; //{lh:10,rh:5}
-                // qty.
-                const hasHandle = qty.lh || qty.rh;
-                const createManyData: CreateManyDeliveryItem[] = [];
-                function updateHandleQty(sub, res, subId?) {
-                    let resp: CreateManyDeliveryItem | undefined = null;
-                    function updateItemDelivery(key, value) {
-                        if (!resp)
-                            resp = {
-                                ...dispItem,
-                            };
-                        resp[key] = value;
-                    }
-                    (!hasHandle ? ["qty"] : ["lh", "rh"]).map((handl) => {
-                        const key = hasHandle ? `${handl}Qty` : "qty";
-                        const q = res[handl];
-                        const subQ = sub[handl];
-                        if (!qty[handl]) return;
-                        console.log(q);
-
-                        if (q <= 0) {
-                            updateItemDelivery(key, qty[handl]);
-                            qty[handl] = 0;
-                            qty.total = 0;
-                        } else {
-                            qty[handl] -= subQ;
-                            qty.total -= subQ;
-                            updateItemDelivery(key, subQ);
-                        }
-                        // console.log(qty);
-                    });
-                    if (resp && subId) resp.orderProductionSubmissionId = subId;
-
-                    if (resp) {
-                        if (hasHandle) resp.qty = sum([resp.lhQty, resp.rhQty]);
-                        console.log(resp);
-
-                        createManyData.push(resp);
-                    }
+        __items.map(async (selection) => {
+            const dispItem = {
+                orderId,
+                orderItemId: selection.itemId,
+                orderDeliveryId: dispatch.id,
+            } satisfies CreateManyDeliveryItem;
+            const { analytics, deliverableSubmissions, assignments } =
+                data.shipping.dispatchableItemList.find(
+                    (item) => item.id == selection.itemId
+                );
+            let qty = selection.deliveryQty; //{lh:10,rh:5}
+            // qty.
+            const hasHandle = qty.lh || qty.rh;
+            const createManyData: CreateManyDeliveryItem[] = [];
+            function updateHandleQty(sub, res, subId?) {
+                let resp: CreateManyDeliveryItem | undefined = null;
+                function updateItemDelivery(key, value) {
+                    if (!resp)
+                        resp = {
+                            ...dispItem,
+                        };
+                    resp[key] = value;
                 }
-                deliverableSubmissions.map((sub) => {
-                    const qtyRem = qtyDiff(qty, sub.qty, false);
-                    // console.log(qtyRem);
-                    // console.log(sub.qty);
-                    // console.log(qty);
+                (!hasHandle ? ["qty"] : ["lh", "rh"]).map((handl) => {
+                    const key = hasHandle ? `${handl}Qty` : "qty";
+                    const q = res[handl];
+                    const subQ = sub[handl];
+                    if (!qty[handl]) return;
+                    console.log(q);
 
-                    updateHandleQty(sub.qty, qtyRem, sub.subId);
+                    if (q <= 0) {
+                        updateItemDelivery(key, qty[handl]);
+                        qty[handl] = 0;
+                        qty.total = 0;
+                    } else {
+                        qty[handl] -= subQ;
+                        qty.total -= subQ;
+                        updateItemDelivery(key, subQ);
+                    }
+                    // console.log(qty);
                 });
-                // console.log({
-                //     qty,
-                //     createManyData,
-                // });
-                // return { qty, createManyData };
-                if (qty.total > 0) {
-                    const assignment = await quickCreateAssignmentDta({
-                        produceable: false,
-                        qty,
-                        itemId: selection.itemId,
-                        orderId: data.delivery.order.connect.id,
-                    });
-                    const submission = await submitAssignmentDta(
-                        {
-                            qty: qty.total,
-                            rhQty: qty.rh,
-                            lhQty: qty.lh,
-                            assignment: {
-                                connect: {
-                                    id: assignment.id,
-                                },
-                            },
-                            item: {
-                                connect: {
-                                    id: assignment.itemId,
-                                },
-                            },
-                            order: {
-                                connect: {
-                                    id: assignment.orderId,
-                                },
+                if (resp && subId) resp.orderProductionSubmissionId = subId;
+
+                if (resp) {
+                    if (hasHandle) resp.qty = sum([resp.lhQty, resp.rhQty]);
+                    console.log(resp);
+
+                    createManyData.push(resp);
+                }
+            }
+            deliverableSubmissions.map((sub) => {
+                const qtyRem = qtyDiff(qty, sub.qty, false);
+                // console.log(qtyRem);
+                // console.log(sub.qty);
+                // console.log(qty);
+
+                updateHandleQty(sub.qty, qtyRem, sub.subId);
+            });
+            // console.log({
+            //     qty,
+            //     createManyData,
+            // });
+            // return { qty, createManyData };
+            if (qty.total > 0) {
+                const assignment = await quickCreateAssignmentDta({
+                    produceable: false,
+                    qty,
+                    itemId: selection.itemId,
+                    orderId: data.delivery.order.connect.id,
+                });
+                const submission = await submitAssignmentDta(
+                    {
+                        qty: qty.total,
+                        rhQty: qty.rh,
+                        lhQty: qty.lh,
+                        assignment: {
+                            connect: {
+                                id: assignment.id,
                             },
                         },
-                        false
-                    );
-                    const subQty = {
-                        lh: submission.lhQty,
-                        rh: submission.rhQty,
-                        qty: hasHandle ? 0 : submission.qty,
-                        total: submission.qty,
-                    };
-                    const qtyRem = qtyDiff(qty, subQty, false);
-                    updateHandleQty(subQty, qtyRem, submission.id);
-                }
+                        item: {
+                            connect: {
+                                id: assignment.itemId,
+                            },
+                        },
+                        order: {
+                            connect: {
+                                id: assignment.orderId,
+                            },
+                        },
+                    },
+                    false
+                );
+                const subQty = {
+                    lh: submission.lhQty,
+                    rh: submission.rhQty,
+                    qty: hasHandle ? 0 : submission.qty,
+                    total: submission.qty,
+                };
+                const qtyRem = qtyDiff(qty, subQty, false);
+                updateHandleQty(subQty, qtyRem, submission.id);
+            }
+            // return;
+            if (createManyData.length) {
+                const totalQty = sum(createManyData.map((s) => s.qty));
+                console.log(totalQty);
                 // return;
-                if (createManyData.length) {
-                    const totalQty = sum(createManyData.map((s) => s.qty));
-                    console.log(totalQty);
-                    // return;
-                    await prisma.orderItemDelivery.createMany({
-                        data: createManyData,
-                    });
-                    await updateSalesProgressDta(
-                        dispatch.salesOrderId,
-                        "dispatch",
-                        {
-                            plusScore: totalQty,
-                        }
-                    );
-                }
-            })
+                await prisma.orderItemDelivery.createMany({
+                    data: createManyData,
+                });
+                await updateSalesProgressDta(
+                    dispatch.salesOrderId,
+                    "dispatch",
+                    {
+                        plusScore: totalQty,
+                    }
+                );
+            }
+        })
     );
     return {
         dispatch,
