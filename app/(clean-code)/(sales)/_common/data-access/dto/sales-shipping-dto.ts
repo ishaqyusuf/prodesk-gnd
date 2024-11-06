@@ -83,6 +83,8 @@ export function salesShippingDto(
     let deliveries = data.deliveries.map((d) => {
         const totalDeliveries = sum(d.items.map((i) => i.qty));
         const items = d.items.map((dItem) => {
+            // console.log(dItem);
+
             return {
                 id: dItem.id,
                 itemId: dItem.orderItemId,

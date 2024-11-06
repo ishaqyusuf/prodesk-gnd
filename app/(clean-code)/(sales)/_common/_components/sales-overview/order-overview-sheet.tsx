@@ -42,7 +42,7 @@ function PrimaryTab() {
         <div
             className={cn(
                 "w-[60vw] lg:w-[600px]",
-                ctx.tabData && "hidden lg:block"
+                ctx.tabData && "hidden xl:block"
             )}
         >
             <TableSheetHeader
@@ -59,7 +59,7 @@ function PrimaryTab() {
                     <TabsTrigger value="payments">Payments</TabsTrigger>
                     <TabsTrigger value="shipping">Shipping</TabsTrigger>
                 </TabsList>
-                <ScrollArea className="h-[85vh] pb-28">
+                <ScrollArea className="o-scrollable-content-area-tabbed">
                     <TabsContent value="general">
                         <SalesGeneralOverview />
                     </TabsContent>

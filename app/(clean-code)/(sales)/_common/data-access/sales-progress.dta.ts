@@ -123,12 +123,14 @@ export async function statMismatchDta(overview: GetSalesItemOverviewDta) {
             Object.entries(calculatedStats).map(async ([k, d]) => {
                 const sysd = salesStatByKey?.[k];
                 if (sysd?.id) {
+                    console.log(sysd.id);
                     await updateSalesProgressDta(overview.id, k as any, {
                         total: d.total,
                         score: d.score,
                         id: sysd.id,
                     });
                 } else {
+                    console.log(k);
                     await createSalesProgressDta(
                         overview.id,
                         k as any,

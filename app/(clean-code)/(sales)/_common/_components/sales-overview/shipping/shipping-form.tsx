@@ -90,38 +90,43 @@ export function ShippingForm({}) {
                     onBack={() => mainCtx.closeSecondaryTab()}
                 ></SecondaryTabSheet>
                 {/* <ScrollArea className="w-[600px] h-[80vh] flex flex-col"> */}
-                <Form {...form}>
-                    <div className="border-b flex p-4 gap-4">
-                        <div className="flex items-center gap-2">
-                            <Label>Dispatch Mode</Label>
-                            <ControlledSelect
-                                control={form.control}
-                                options={["delivery", "pickup"]}
-                                name="delivery.deliveryMode"
-                                className="w-28"
+                <ScrollArea className="o-scrollable-content-area ">
+                    <Form {...form}>
+                        <div className="border-b flex p-4 gap-4">
+                            <div className="flex items-center gap-2">
+                                <Label>Dispatch Mode</Label>
+                                <ControlledSelect
+                                    control={form.control}
+                                    options={["delivery", "pickup"]}
+                                    name="delivery.deliveryMode"
+                                    className="w-28"
+                                    size="sm"
+                                />
+                            </div>
+                            <div className="flex-1"></div>
+                            <Button
+                                onClick={toggleAllAvailble}
                                 size="sm"
-                            />
+                                variant={watchToggle ? "secondary" : "ghost"}
+                            >
+                                Mark All
+                            </Button>
+                            <Button onClick={createDispatch} size="sm">
+                                Create
+                            </Button>
                         </div>
-                        <div className="flex-1"></div>
-                        <Button
-                            onClick={toggleAllAvailble}
-                            size="sm"
-                            variant={watchToggle ? "secondary" : "ghost"}
-                        >
-                            Mark All
-                        </Button>
-                        <Button onClick={createDispatch} size="sm">
-                            Create
-                        </Button>
-                    </div>
-                    <ScrollArea className="w-[600px] h-[65vh] flex flex-col">
-                        <div className="p-4">
-                            {dispatchables?.map((item) => (
-                                <ShippingItemLine item={item} key={item.id} />
-                            ))}
-                        </div>
-                    </ScrollArea>
-                </Form>
+                        <ScrollArea className="w-[600px] h-[65vh] flex flex-col">
+                            <div className="p-4">
+                                {dispatchables?.map((item) => (
+                                    <ShippingItemLine
+                                        item={item}
+                                        key={item.id}
+                                    />
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </Form>
+                </ScrollArea>
                 {/* </ScrollArea> */}
             </div>
         </ShippingFormCtx.Provider>

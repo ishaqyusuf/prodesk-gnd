@@ -16,15 +16,14 @@ let context = null;
 type Ctx = ReturnType<typeof useShippingFormCtx>;
 const useShippingForm = (): Ctx => {
     const ctx = useItemProdViewContext();
-    const { mainCtx, item, payload } = ctx;
-    const slug = mainCtx.tabData?.payloadSlug;
-    // if (context?.id == slug) return context;
+
     return useShippingFormCtx(ctx);
 };
 const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
     // const ctx = useItemProdViewContext();
     // if (_) return _;
-    if (context) return context as typeof resp;
+    if (context?.id == ctx?.mainCtx?.tabData?.payloadSlug)
+        return context as typeof resp;
     const { mainCtx, item, payload } = ctx;
     const slug = mainCtx.tabData?.payloadSlug;
     const shippingOverview = mainCtx.overview?.shipping;
@@ -34,6 +33,7 @@ const useShippingFormCtx = (ctx: ReturnType<typeof useItemProdViewContext>) => {
     if (!shipping) {
         toast.error("Shipping not found");
         mainCtx.closeSecondaryTab();
+        context = null;
         return null;
     }
     let items = shippingOverview.dispatchableItemList
@@ -74,14 +74,20 @@ export function ShippingOverview({}) {
             <div className="secondary-tab flex flex-col">
                 <SecondaryTabSheet
                     title={shipping.title}
-                    onBack={() => mainCtx.closeSecondaryTab()}
+                    onBack={() => {
+                        mainCtx.closeSecondaryTab();
+                        context = null;
+                    }}
                 >
                     <Button size="sm" className="h-8">
                         <Icons.print className="w-4 h-4 mr-2" />
                         <span>Print</span>
                     </Button>
                 </SecondaryTabSheet>
-                <ScrollArea className="w-[600px] h-[80vh] flex flex-col">
+                <ScrollArea
+                    // className="w-[600px] h-[80vh] flex flex-col"
+                    className="o-scrollable-content-area"
+                >
                     <div className="p-4 sm:p-8">
                         {ctx.items?.map(({ item, qty, deliveries }, index) => (
                             <div

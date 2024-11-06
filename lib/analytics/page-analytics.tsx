@@ -39,7 +39,7 @@ export default function PageAnalytics() {
         // });
 
         if (!last || data?.path != last.path || (same && !sameRoot)) {
-            console.log("PASSED", data);
+            // console.log("PASSED", data);
             (async () => {
                 await registerPageAnayltic(data.path, data.searchParams);
             })();

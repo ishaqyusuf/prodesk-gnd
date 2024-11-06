@@ -57,7 +57,7 @@ export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
     // const dataStats = data.stat;
     const k: { [k in SalesStatType]: SalesStat } = {} as any;
     dataStats?.map(({ score, percentage, total, ...rest }) => {
-        if (rest) {
+        if (reset) {
             score = percentage = total = 0;
         }
         k[rest.type] = {

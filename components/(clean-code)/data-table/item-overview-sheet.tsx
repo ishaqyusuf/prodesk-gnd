@@ -22,7 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/_v1/icons";
 import { cva, VariantProps } from "class-variance-authority";
 import { PrimitiveDivProps } from "@radix-ui/react-tabs";
-
+import "./overview-sheet-style.css";
 interface Props {
     // title?: string;
     // titleClassName?: string;
@@ -49,10 +49,7 @@ Props) {
                 table.toggleAllRowsSelected(false);
             }}
         >
-            <SheetContent
-                hideClose
-                className="sm:max-w-none w-auto overflow-y-autos overflow-hidden p-0 sm:m-8 sm:rounded-xl h-auto"
-            >
+            <SheetContent hideClose className="overview-sheet-content">
                 <SheetDescription className="sr-only">
                     Selected row details
                 </SheetDescription>
@@ -75,7 +72,7 @@ export function SecondaryTabSheet({
     children = null,
 }) {
     return (
-        <SheetHeader className="border-b p-4">
+        <SheetHeader className=" overview-sheet-header">
             <div className="flex gap-2">
                 <SheetTitle
                     className={cn(
@@ -157,7 +154,7 @@ export function TableSheetHeader({
         return () => document.removeEventListener("keydown", down);
     }, [selectedRowKey, onNext, onPrev]);
     return (
-        <SheetHeader className="sticky top-0 border-b bg-background p-4">
+        <SheetHeader className="sticky top-0 bg-background   overview-sheet-header">
             <div className="flex items-center justify-between gap-2">
                 <SheetTitle
                     className={cn(titleClassName, "text-left truncate")}

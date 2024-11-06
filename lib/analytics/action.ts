@@ -4,6 +4,7 @@ import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 
 export async function registerPageAnayltic(url, searchParams) {
+    return;
     const authId = await userId();
 
     await prisma.pageView.create({

@@ -20,6 +20,7 @@ import {
 } from "../../../use-case/sales-prod.use-case";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function ItemProdView({}) {
     const ctx = useItemProdViewContext();
@@ -31,28 +32,30 @@ export function ItemProdView({}) {
                     title={`${item?.title}`}
                     onBack={() => mainCtx.setTabData(null)}
                 />
-                <div className="p-4 sm:p-8">
-                    <div className={cn("")}>
-                        <LineItem item={item} />
-                    </div>
+                <ScrollArea className="o-scrollable-content-area ">
+                    <div className="p-4 sm:p-8">
+                        <div className={cn("")}>
+                            <LineItem item={item} />
+                        </div>
 
-                    <AssignForm />
-                    <div className="">
-                        {item.assignments.length ? (
-                            <div className="my-2 mt-4">
-                                <Label>Assignments</Label>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                        {item.assignments.map((assignment) => (
-                            <Assignment
-                                key={assignment.id}
-                                assignment={assignment}
-                            />
-                        ))}
+                        <AssignForm />
+                        <div className="">
+                            {item.assignments.length ? (
+                                <div className="my-2 mt-4">
+                                    <Label>Assignments</Label>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                            {item.assignments.map((assignment) => (
+                                <Assignment
+                                    key={assignment.id}
+                                    assignment={assignment}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </ScrollArea>
             </div>
         </ItemProdViewContext.Provider>
     );
