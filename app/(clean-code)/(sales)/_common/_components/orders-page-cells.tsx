@@ -157,8 +157,7 @@ function Invoice({ item }: ItemProps) {
     );
 }
 function Po({ item }: ItemProps) {
-    const invoice = item.invoice;
-    if (!item.poNo) return null;
+    // if (!item.poNo) return null;
     return (
         <TCell>
             <div>{item.poNo}</div>

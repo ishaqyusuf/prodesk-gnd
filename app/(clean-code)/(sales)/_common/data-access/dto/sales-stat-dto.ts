@@ -12,6 +12,8 @@ export function salesItemsStatsDto(
 ) {
     const dataStats = statToKeyValueDto(data.stat);
     const calculatedStats = calculatedStatsDto(itemGroup, data);
+    console.log(calculatedStats?.dispatch);
+
     return {
         salesStatByKey: dataStats,
         calculatedStats,
@@ -22,7 +24,7 @@ export function calculatedStatsDto(
     itemGroup: ItemGroup,
     data: GetFullSalesDataDta
 ) {
-    const cs = statToKeyValueDto(data.stat);
+    const cs = statToKeyValueDto(data.stat, true);
     function populate(type: SalesStatType, pending, success) {
         if (!cs[type])
             cs[type] = {
@@ -35,24 +37,35 @@ export function calculatedStatsDto(
         const totalSuccess = success?.total || 0;
         cs[type].score += totalSuccess;
         cs[type].total += totalPending + totalSuccess;
+        cs[type].percentage = (cs[type].score / cs[type].total) * 100 || 0;
     }
-    itemGroup.map((grp) => {
+    itemGroup.map((grp, grpIndex) => {
+        // console.log(grp.items.length, grpIndex);
+
         grp.items?.map((item) => {
             const { pending, success } = item.analytics;
+
             populate("prodAssignment", pending.assignment, success.assignment);
             populate("prod", pending.production, success.production);
             populate("dispatch", pending.delivery, success.delivery);
         });
     });
-    console.log(cs);
 
     return cs;
 }
-export function statToKeyValueDto(dataStats: SalesStat[]) {
+export function statToKeyValueDto(dataStats: SalesStat[], reset = false) {
     // const dataStats = data.stat;
     const k: { [k in SalesStatType]: SalesStat } = {} as any;
-    dataStats?.map((d) => {
-        k[d.type] = d;
+    dataStats?.map(({ score, percentage, total, ...rest }) => {
+        if (rest) {
+            score = percentage = total = 0;
+        }
+        k[rest.type] = {
+            ...rest,
+            score,
+            percentage,
+            total,
+        };
     });
     return k;
 }

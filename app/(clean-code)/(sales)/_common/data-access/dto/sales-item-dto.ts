@@ -94,6 +94,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
     data.items = data.items?.sort(sortSalesItems);
     const filteredItems = data.items.filter(filter);
     const itemGroup = filteredItems.map((item, fItemIndex) => {
+        console.log(fItemIndex);
+
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
         );
@@ -270,6 +272,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 );
             }
         });
+        console.log(items.length);
+        console.log(groupedItems.length);
 
         return {
             sectionTitle:
@@ -278,6 +282,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             style: componentStyle(item),
         };
     });
+    console.log(itemGroup[0].items.length);
+
     return itemGroup;
 }
 function starredTitle(title: string) {
@@ -357,7 +363,7 @@ function itemAnalytics(
             registerInfo("Assigned", "assignment");
             registerInfo("Completed", "production");
         }
-        if (deliverable) registerInfo("Delivered", "delivery");
+        if (deliverable) registerInfo("Fulfilled", "delivery");
     }
     data.assignments = salesItemAssignmentsDto(data, assignments);
     return data;

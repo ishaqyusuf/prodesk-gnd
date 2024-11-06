@@ -87,7 +87,7 @@ export function SalesGeneralOverview({}) {
                             overview?.stat?.calculatedStats?.dispatch ||
                             item.stats.dispatch
                         }
-                        title="Delivered"
+                        title="Fulfilled"
                     />
                 </div>
             </dl>
