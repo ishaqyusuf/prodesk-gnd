@@ -34,7 +34,7 @@ export async function getSalesEmailDta(salesId): Promise<EmailData> {
             },
         },
     });
-    const resp = {
+    const resp: EmailData = {
         attachables: ["sale invoice"],
         email: sale.customer.email,
         fallbackEmail: sale.billingAddress.email,
