@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { sum } from "@/lib/utils";
 import { OrderProductionSubmissions } from "@prisma/client";
 import { GetOrderAssignmentData } from "./get-order-assignment-data";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 type Props =
     GetOrderAssignmentData["doorGroups"][0]["salesDoors"][0]["assignments"][0];
@@ -11,6 +12,10 @@ type Props =
 export async function serverDate(date) {
     // dayjs.locale(ILOca)
     return date;
+}
+export async function __revalidateProductions() {
+    await _revalidate("orders");
+    await _revalidate("sales-production-2");
 }
 export async function _deleteAssignment(data: Props) {
     const isLeft = data.__report.handle == "LH";

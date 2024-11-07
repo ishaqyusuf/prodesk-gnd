@@ -50,6 +50,7 @@ function getSalesOrderStatus(stats: SalesStat[]) {
 function commonListData(data: Item) {
     const meta = (data.meta || {}) as any as SalesMeta;
     return {
+        id: data.id,
         orderId: data.orderId,
         uuid: data.orderId,
         isDyke: data.isDyke,
@@ -57,6 +58,7 @@ function commonListData(data: Item) {
         address:
             data.shippingAddress?.address1 || data.billingAddress?.address1,
         displayName: data.customer?.businessName || data?.shippingAddress?.name,
+        email: data.customer?.email,
         customerId: data.customer?.id,
         isBusiness: data.customer?.businessName,
         salesRep: data.salesRep?.name,

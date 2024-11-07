@@ -20,6 +20,7 @@ import { SalesShippingTab } from "./shipping/sales-shippings-tab";
 import { ShippingOverview } from "./shipping/shipping-overview";
 import "./style.css";
 import ActionFooter from "./action-footer";
+import NotificationTab from "./notification";
 export default function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
@@ -69,6 +70,9 @@ function PrimaryTab() {
                     </TabsContent>
                     <TabsContent className="" value="shipping">
                         <SalesShippingTab />
+                    </TabsContent>
+                    <TabsContent className="" value="notifications">
+                        <NotificationTab />
                     </TabsContent>
                     <ActionFooter />
                 </ScrollArea>

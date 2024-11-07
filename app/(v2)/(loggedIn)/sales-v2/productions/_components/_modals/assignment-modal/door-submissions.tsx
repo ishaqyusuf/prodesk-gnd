@@ -12,6 +12,7 @@ import { useAssignmentData } from ".";
 
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import {
+    __revalidateProductions,
     _deleteAssignment,
     _deleteAssignmentSubmission,
     _deleteAssignmentSubmissions,
@@ -19,6 +20,7 @@ import {
 import { useAssignment } from "./use-assignment";
 
 import { TableCol } from "@/components/common/data-table/table-cells";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 interface Props {
     groupIndex;
@@ -45,6 +47,7 @@ export default function DoorSubmissions({ doorIndex, groupIndex }: Props) {
     async function deleteSubmission(submission) {
         await _deleteAssignmentSubmission(submission.id);
         modal.open(data.data.id);
+        await __revalidateProductions();
     }
     return (
         <div className="mx-4 ml-10">
@@ -65,7 +68,7 @@ export default function DoorSubmissions({ doorIndex, groupIndex }: Props) {
                                 {!data.data.isProd ? (
                                     <></>
                                 ) : (
-                                    <p>{submission.assignedTo.name}</p>
+                                    <p>{submission.assignedTo?.name}</p>
                                 )}
                                 <TableCol.Date>
                                     {submission.createdAt}

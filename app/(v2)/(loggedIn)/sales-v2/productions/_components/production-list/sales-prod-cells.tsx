@@ -118,7 +118,7 @@ function AssignedTo({ item }: Props) {
                                     key={user.id}
                                 >
                                     <span className="line-clamp-2 whitespace-nowrap max-w-[80px]">
-                                        {user.assignedTo.name}
+                                        {user.assignedTo?.name}
                                     </span>
                                 </Badge>
                             ))}

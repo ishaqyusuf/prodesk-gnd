@@ -592,10 +592,27 @@ model Inbox {
     body      String    @db.Text()
     meta      Json?     @db.Json
     sentAt    DateTime? @db.Timestamp(0)
+    deletedAt DateTime? @db.Timestamp(0)
     createdAt DateTime? @default(now()) @db.Timestamp(0)
-    sender    Users     @relation(fields: [senderId], references: [id])
+    updatedAt DateTime? @updatedAt
+
+    sender      Users              @relation(fields: [senderId], references: [id])
+    attachments InboxAttachments[]
 
     @@index([senderId])
+}
+
+model InboxAttachments {
+    id        Int       @unique @default(autoincrement())
+    url       String
+    title     String
+    inboxId   Int
+    deletedAt DateTime? @db.Timestamp(0)
+    createdAt DateTime? @default(now()) @db.Timestamp(0)
+    updatedAt DateTime? @updatedAt
+    inbox     Inbox     @relation(fields: [inboxId], references: [id])
+
+    @@index([inboxId])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

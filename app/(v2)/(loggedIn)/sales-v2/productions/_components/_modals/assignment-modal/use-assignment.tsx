@@ -1,6 +1,7 @@
 import { useModal } from "@/components/common/modal/provider";
 import AssignmentModal, { useAssignmentData } from ".";
 import { getOrderAssignmentData } from "./_action/get-order-assignment-data";
+import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 interface Props {
     // prod?: boolean;
@@ -20,7 +21,9 @@ export function useAssignment({ type }: Props = {}) {
 
         modal.openModal(<AssignmentModal order={data} />);
     }
+
     return {
+        async revalidate() {},
         open,
         refresh() {
             open(data.data.id);

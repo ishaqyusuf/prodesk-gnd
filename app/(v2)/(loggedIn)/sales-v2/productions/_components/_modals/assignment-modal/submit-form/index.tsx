@@ -24,7 +24,7 @@ import { useAssignment } from "../use-assignment";
 import { OrderProductionSubmissions } from "@prisma/client";
 import ControlledInput from "@/components/common/controls/controlled-input";
 
-import { _submitProduction } from "../_action/actions";
+import { __revalidateProductions, _submitProduction } from "../_action/actions";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 
@@ -86,6 +86,7 @@ export default function SubmitDoorProduction({
             onOpenChange(false);
             toast.success("Submitted successfully");
             modal.open(data.data.id);
+            await __revalidateProductions();
         });
     }
 

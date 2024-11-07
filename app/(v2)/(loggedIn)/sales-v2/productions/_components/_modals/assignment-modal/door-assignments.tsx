@@ -11,7 +11,11 @@ import {
 import { useAssignmentData } from ".";
 
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { _changeAssignmentDueDate, _deleteAssignment } from "./_action/actions";
+import {
+    __revalidateProductions,
+    _changeAssignmentDueDate,
+    _deleteAssignment,
+} from "./_action/actions";
 import { useAssignment } from "./use-assignment";
 import SubmitDoorProduction from "./submit-form";
 import { TableCol } from "@/components/common/data-table/table-cells";
@@ -39,6 +43,7 @@ export default function DoorAssignments({ doorIndex, groupIndex }: Props) {
     async function deleteAssignment(assignment) {
         await _deleteAssignment(assignment);
         modal.open(data.data.id);
+        await __revalidateProductions();
     }
     return (
         <div className="">
@@ -134,6 +139,7 @@ function DueDate({ assignment }) {
         setDueDate(e);
         await _changeAssignmentDueDate(assignment.id, e);
         toast.success("Date Changed");
+        await __revalidateProductions();
     }
     if (data.data.isProd)
         return <TableCol.Date>{assignment.dueDate}</TableCol.Date>;
