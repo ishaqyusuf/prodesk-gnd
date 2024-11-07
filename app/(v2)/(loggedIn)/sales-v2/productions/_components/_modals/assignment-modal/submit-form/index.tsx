@@ -77,10 +77,6 @@ export default function SubmitDoorProduction({
                 toast.success("Invalid qty");
                 return;
             }
-            // _data.lhQty = Number(_data.lhQty) || null;
-            // _data.rhQty = Number(_data.rhQty) || null;
-            // console.log(_data);
-            // return;
 
             await _submitProduction(_data);
             onOpenChange(false);

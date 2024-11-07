@@ -8,6 +8,7 @@ export interface EmailData {
     email: string;
     fallbackEmail?: string;
     name: string;
+    noEmail?: boolean;
 }
 export async function getSalesEmailDta(salesId): Promise<EmailData> {
     const sale = await prisma.salesOrders.findFirstOrThrow({
