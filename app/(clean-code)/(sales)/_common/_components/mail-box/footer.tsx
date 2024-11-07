@@ -5,7 +5,7 @@ import ControlledSelect from "@/components/common/controls/controlled-select";
 import Button from "@/components/common/button";
 
 export function MailboxFooter({}) {
-    const { form } = useMailbox();
+    const { form, data } = useMailbox();
     return (
         <Form {...form}>
             <div className="absolute w-full bottom-0 z-10 border-t bg-white p-2 flex-col flex gap-4 sm:p-4">
@@ -31,7 +31,9 @@ export function MailboxFooter({}) {
                         ]}
                     />
                     <div className="flex-1"></div>
-                    <Button size="sm">Send</Button>
+                    <Button disabled={data?.noEmail} size="sm">
+                        Send
+                    </Button>
                 </div>
             </div>
         </Form>

@@ -4,6 +4,7 @@ import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { OrderItemProductionAssignments } from "@prisma/client";
 import { math, sum } from "@/lib/utils";
+import { updateSalesProgressDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-progress.dta";
 
 export async function createProdAssignment(
     data: Partial<OrderItemProductionAssignments>[],
@@ -24,6 +25,9 @@ export async function createProdAssignment(
             d.dueDate = prodDueDate;
             return d;
         }) as any,
+    });
+    await updateSalesProgressDta(data[0].orderId, "prodAssignment", {
+        plusScore: score,
     });
     // console.log("SUCCESS");
     // if (!productionStatusId) {

@@ -33,12 +33,15 @@ export async function getSalesEmailDta(salesId): Promise<EmailData> {
             },
         },
     });
-    return {
+    const resp = {
         attachables: ["sale invoice"],
         email: sale.customer.email,
         fallbackEmail: sale.billingAddress.email,
         name: sale.customer.businessName || sale.customer.name,
+        noEmail: false,
     };
+    resp.noEmail = !resp.email && !resp.fallbackEmail;
+    return resp;
 }
 export async function inboxDta(type: EmailData["type"], salesId) {
     const inbox = await prisma.inbox.findMany({

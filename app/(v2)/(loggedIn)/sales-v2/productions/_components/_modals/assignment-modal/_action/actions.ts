@@ -5,6 +5,7 @@ import { sum } from "@/lib/utils";
 import { OrderProductionSubmissions } from "@prisma/client";
 import { GetOrderAssignmentData } from "./get-order-assignment-data";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
+import { updateSalesProgressDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-progress.dta";
 
 type Props =
     GetOrderAssignmentData["doorGroups"][0]["salesDoors"][0]["assignments"][0];
@@ -30,11 +31,14 @@ export async function _deleteAssignment(data: Props) {
         updateData[k] = 0;
     }
 
-    await prisma.orderItemProductionAssignments.update({
+    const assignment = await prisma.orderItemProductionAssignments.update({
         where: { id: data.id },
         data: {
             ...updateData,
         },
+    });
+    await updateSalesProgressDta(assignment.orderId, "prodAssignment", {
+        minusScore: assignment?.qtyAssigned,
     });
     await _deleteAssignmentSubmissions(data.id, k);
 }
@@ -49,7 +53,7 @@ export async function _changeAssignmentDueDate(assignmentId, date) {
     });
 }
 export async function _deleteAssignmentSubmission(submissionId) {
-    const submissions = await prisma.orderProductionSubmissions.updateMany({
+    const submission = await prisma.orderProductionSubmissions.update({
         where: {
             id: submissionId,
             deletedAt: null,
@@ -58,36 +62,15 @@ export async function _deleteAssignmentSubmission(submissionId) {
             deletedAt: new Date(),
         },
     });
-    // await prisma.orderProductionSubmissions.updateMany({
-    //     where: {
-    //         assignmentId,
-    //         [k]: {
-    //             gt: 0,
-    //         },
-    //     },
-    //     data: {
-    //         deletedAt: new Date(),
-    //     },
-    // });
-    // const salesOrderId = submissions[0]?.salesOrderId;
-    // const totalQty = await sum(submissions, "qty");
-    // await prisma.salesProductionStatus.update({
-    //     where: {
-    //         orderId: salesOrderId as any,
-    //     },
-    //     data: {
-    //         score: {
-    //             decrement: totalQty,
-    //         },
-    //     },
-    // });
+    const qty = submission?.qty;
+    await updateSalesProgressDta(submission?.salesOrderId, "prod", {
+        minusScore: qty,
+    });
 }
 export async function _deleteAssignmentSubmissions(
     assignmentId,
     k: "rhQty" | "lhQty"
 ) {
-    console.log(assignmentId, k);
-
     const submissions = await prisma.orderProductionSubmissions.findMany({
         where: {
             assignmentId,
@@ -110,16 +93,9 @@ export async function _deleteAssignmentSubmissions(
     });
     const salesOrderId = submissions[0]?.salesOrderId;
     const totalQty = await sum(submissions, "qty");
-    // await prisma.salesProductionStatus.update({
-    //     where: {
-    //         orderId: salesOrderId as any,
-    //     },
-    //     data: {
-    //         score: {
-    //             decrement: totalQty,
-    //         },
-    //     },
-    // });
+    await updateSalesProgressDta(salesOrderId, "prodAssignment", {
+        minusScore: totalQty,
+    });
 }
 export async function _submitProduction(
     data: Partial<OrderProductionSubmissions>
@@ -131,16 +107,6 @@ export async function _submitProduction(
             ...(data as any),
         },
     });
-    // await prisma.salesProductionStatus.update({
-    //     where: {
-    //         orderId: data.salesOrderId as any,
-    //     },
-    //     data: {
-    //         score: {
-    //             increment: data.qty,
-    //         },
-    //     },
-    // });
     await prisma.orderItemProductionAssignments.update({
         where: { id: data.assignmentId as any },
         data: {
@@ -148,5 +114,8 @@ export async function _submitProduction(
                 increment: qty,
             },
         },
+    });
+    await updateSalesProgressDta(data.salesOrderId, "prod", {
+        plusScore: qty,
     });
 }
