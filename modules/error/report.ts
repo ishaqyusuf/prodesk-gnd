@@ -3,7 +3,7 @@
 import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 
-export type ErrorTags = "pdf" | "chromium-aws" | "browser-instance";
+export type ErrorTags = "pdf" | "chromium-aws" | "browserless";
 export type ErrorStatus = "severe" | "moderate" | "other";
 export async function logError(
     error,
@@ -35,6 +35,7 @@ export async function logError(
         data: {
             meta: {},
             status,
+            title,
             data,
             description,
             tags: {

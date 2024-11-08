@@ -1,3 +1,4 @@
+"use server";
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { logError } from "../error/report";
 import { env } from "@/env.mjs";
@@ -54,32 +55,49 @@ async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
         });
         return pdf;
     } catch (error) {
-        await logError(error, "severe", ["chromium-aws", "pdf"]);
+        await logError(error, "Unable to generate pdf", "severe", [
+            "chromium-aws",
+            "pdf",
+        ]);
         throw Error("Error generating PDF with chrome-aws-lamba", error);
     }
 }
 async function initChromium() {
-    const puppeteer = require("puppeteer-core");
-    const chromium = require("chrome-aws-lambda");
-    const browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-    });
-    const page = await browser.newPage();
-    return {
-        page,
-        browser,
-    };
+    try {
+        const puppeteer = require("puppeteer-core");
+        const chromium = require("chrome-aws-lambda");
+        const browser = await puppeteer.launch({
+            args: chromium.args,
+            executablePath: await chromium.executablePath,
+            headless: chromium.headless,
+        });
+        const page = await browser.newPage();
+        return {
+            page,
+            browser,
+        };
+    } catch (error) {
+        await logError(error, "Unable to initializing chromium", "severe", [
+            "chromium-aws",
+        ]);
+        throw Error("Error initializing chromium", error);
+    }
 }
 async function initBrowserless() {
-    const puppeteer = require("puppeteer-core");
-    const browser = await puppeteer.connect({
-        browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
-    });
-    const page = await browser.newPage();
-    return {
-        page,
-        browser,
-    };
+    try {
+        const puppeteer = require("puppeteer-core");
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
+        });
+        const page = await browser.newPage();
+        return {
+            page,
+            browser,
+        };
+    } catch (error) {
+        await logError(error, "Unable to initializing browserless", "severe", [
+            "browserless",
+        ]);
+        throw Error("Error initializing browserless", error);
+    }
 }
