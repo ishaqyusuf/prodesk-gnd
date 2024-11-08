@@ -44,6 +44,7 @@ interface Props<T> {
     transformValue?(value?);
     size?: "sm" | "default" | "xs";
     listMode?: boolean;
+    prefix?;
 }
 export default function ControlledSelect<
     TFieldValues extends FieldValues = FieldValues,
@@ -51,6 +52,7 @@ export default function ControlledSelect<
     TOptionType = any
 >({
     label,
+    prefix,
     placeholder,
     options = [],
     loader,
@@ -134,7 +136,17 @@ export default function ControlledSelect<
                                 <SelectTrigger
                                     className={cn(size == "sm" && "h-8")}
                                 >
-                                    <SelectValue placeholder={placeholder} />
+                                    <div className="inline-flex gap-1">
+                                        {prefix && (
+                                            <span className="text-muted-foreground">
+                                                {prefix}
+                                                {": "}
+                                            </span>
+                                        )}
+                                        <SelectValue
+                                            placeholder={placeholder}
+                                        ></SelectValue>
+                                    </div>
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[40vh] overflow-auto">
                                     {(loader ? list : options)?.map(

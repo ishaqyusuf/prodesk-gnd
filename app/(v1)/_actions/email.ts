@@ -21,7 +21,6 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
     const trs = transformEmail(data.subject, data.body, data.data);
     // const u = await _dbUser();
     const isProd = __isProd;
-    console.log({ isProd, ...data });
     let attachments = [];
     if (data.attachOrder && isProd && download) {
         try {

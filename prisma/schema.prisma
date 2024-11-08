@@ -52,16 +52,17 @@ model AddressBooks {
 }
 
 model ErrorLog {
-    id        Int            @unique @default(autoincrement())
-    userId    Int
-    slug      String         @unique
-    meta      Json           @db.Json
-    status    String
-    deletedAt DateTime?      @db.Timestamp(0)
-    createdAt DateTime?      @default(now()) @db.Timestamp(0)
-    updatedAt DateTime?      @updatedAt
-    Users     Users          @relation(fields: [userId], references: [id])
-    tags      ErrorLogTags[]
+    id          Int            @unique @default(autoincrement())
+    userId      Int
+    description String?
+    data        String?
+    meta        Json           @db.Json
+    status      String
+    deletedAt   DateTime?      @db.Timestamp(0)
+    createdAt   DateTime?      @default(now()) @db.Timestamp(0)
+    updatedAt   DateTime?      @updatedAt
+    Users       Users          @relation(fields: [userId], references: [id])
+    tags        ErrorLogTags[]
 
     @@index([userId])
 }
@@ -79,7 +80,7 @@ model ErrorLogTags {
 
 model ErrorTags {
     id           Int            @unique @default(autoincrement())
-    name         String
+    name         String         @unique
     errorLogTags ErrorLogTags[]
 }
 

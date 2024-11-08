@@ -4,6 +4,8 @@ import {
     getSalesEmailUseCase,
 } from "../../use-case/sales-email-use-case";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 // let ctx = null;
 
@@ -17,8 +19,14 @@ export const useMailboxContext = (id, type) => {
     const [data, setData] = useState<GetSalesEmail>({} as any);
     // if (ctx?.id == id) return ctx as typeof resp;
     const form = useForm({
+        resolver: zodResolver(
+            z.object({
+                body: z.string(),
+                attachment: z.string(),
+            })
+        ),
         defaultValues: {
-            email: "",
+            body: "",
             attachment: "",
         },
     });
@@ -36,6 +44,11 @@ export const useMailboxContext = (id, type) => {
                     },
                 };
             });
+        },
+        async sendEmail() {
+            const t = form.trigger();
+            if (t) {
+            }
         },
     };
     return resp;
