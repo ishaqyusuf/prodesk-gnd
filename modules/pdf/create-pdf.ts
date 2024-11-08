@@ -24,7 +24,7 @@ export async function createPdf(props: Props) {
     if (!validList?.length) {
         return {};
     }
-    const ctx = await initChromium();
+    const ctx = await initBrowserless();
     const pdfs = await Promise.all(
         validList?.map(async (ls) => {
             try {
@@ -42,7 +42,7 @@ export async function createPdf(props: Props) {
     await ctx.browser.close();
     return pdfs;
 }
-type Ctx = AsyncFnType<typeof initChromium>;
+type Ctx = AsyncFnType<typeof initBrowserless>;
 async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
     try {
         await ctx.page.goto(pageData.url, {
@@ -63,25 +63,25 @@ async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
     }
 }
 async function initChromium() {
-    try {
-        const puppeteer = require("puppeteer-core");
-        const chromium = require("chrome-aws-lambda");
-        const browser = await puppeteer.launch({
-            args: chromium.args,
-            executablePath: await chromium.executablePath,
-            headless: chromium.headless,
-        });
-        const page = await browser.newPage();
-        return {
-            page,
-            browser,
-        };
-    } catch (error) {
-        await logError(error, "Unable to initializing chromium", "severe", [
-            "chromium-aws",
-        ]);
-        throw Error("Error initializing chromium", error);
-    }
+    // try {
+    //     const puppeteer = require("puppeteer-core");
+    //     const chromium = require("chrome-aws-lambda");
+    //     const browser = await puppeteer.launch({
+    //         args: chromium.args,
+    //         executablePath: await chromium.executablePath,
+    //         headless: chromium.headless,
+    //     });
+    //     const page = await browser.newPage();
+    //     return {
+    //         page,
+    //         browser,
+    //     };
+    // } catch (error) {
+    //     await logError(error, "Unable to initializing chromium", "severe", [
+    //         "chromium-aws",
+    //     ]);
+    //     throw Error("Error initializing chromium", error);
+    // }
 }
 async function initBrowserless() {
     try {
