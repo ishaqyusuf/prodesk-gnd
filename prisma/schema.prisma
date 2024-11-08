@@ -54,6 +54,7 @@ model AddressBooks {
 model ErrorLog {
     id          Int            @unique @default(autoincrement())
     userId      Int
+    title       String?
     description String?
     data        String?
     meta        Json           @db.Json

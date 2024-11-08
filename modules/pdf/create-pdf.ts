@@ -1,5 +1,6 @@
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { logError } from "../error/report";
+import { env } from "@/env.mjs";
 
 interface Props {
     list: {
@@ -23,6 +24,22 @@ export async function createPdf(props: Props) {
         return {};
     }
     const ctx = await initChromium();
+    const pdfs = await Promise.all(
+        validList?.map(async (ls) => {
+            try {
+                return {
+                    pdf: await printPage(ctx, ls),
+                };
+            } catch (error) {
+                return {
+                    error: error.message,
+                    pdf: null,
+                };
+            }
+        })
+    );
+    await ctx.browser.close();
+    return pdfs;
 }
 type Ctx = AsyncFnType<typeof initChromium>;
 async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
@@ -52,5 +69,17 @@ async function initChromium() {
     const page = await browser.newPage();
     return {
         page,
+        browser,
+    };
+}
+async function initBrowserless() {
+    const puppeteer = require("puppeteer-core");
+    const browser = await puppeteer.connect({
+        browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
+    });
+    const page = await browser.newPage();
+    return {
+        page,
+        browser,
     };
 }
