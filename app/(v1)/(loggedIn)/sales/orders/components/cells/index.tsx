@@ -1,6 +1,5 @@
 import { SalesTableItem } from "../orders-table-shell";
 import SalesFlag from "./sales-flag";
-import { NewspaperIcon, SparklesIcon } from "lucide-react";
 import StatusBadge from "@/components/_v1/status-badge";
 import { updateDeliveryModeDac } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-delivery-mode.dac";
 import { toast } from "sonner";
