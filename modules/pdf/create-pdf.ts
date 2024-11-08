@@ -50,7 +50,7 @@ async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
         });
         await ctx.page.emulateMediaType("print");
         const pdf = await ctx.page.pdf({
-            format: "A4",
+            format: "Letter",
             printBackground: true,
         });
         return pdf;
