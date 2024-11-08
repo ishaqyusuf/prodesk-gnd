@@ -25,6 +25,18 @@ export const useMailboxContext = (id, type) => {
     const resp = {
         ...data,
         form,
+        updateEmail(email) {
+            setData((d) => {
+                return {
+                    ...d,
+                    data: {
+                        ...d.data,
+                        email,
+                        noEmail: false,
+                    },
+                };
+            });
+        },
     };
     return resp;
 };

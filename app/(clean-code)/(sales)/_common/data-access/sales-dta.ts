@@ -122,3 +122,13 @@ export async function getSalesItemOverviewDta(slug, type, retries = 0) {
     }
     return resp;
 }
+export async function getSalesCustomerIdDta(id) {
+    return (
+        await prisma.salesOrders.findFirstOrThrow({
+            where: { id },
+            select: {
+                customerId: true,
+            },
+        })
+    )?.customerId;
+}

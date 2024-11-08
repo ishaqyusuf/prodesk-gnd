@@ -1,5 +1,6 @@
 import { MailData } from "../../use-case/sales-email-use-case";
 import { MailboxProvider, useMailboxContext } from "./context";
+import EmailForm from "./email-form";
 import { MailboxFooter } from "./footer";
 import MailboxHeader from "./header";
 import MailboxInbox from "./inbox";
@@ -18,6 +19,7 @@ export default function MailBox(props: Props) {
                     <>
                         <MailboxHeader />
                         <MailboxInbox />
+                        <EmailForm />
                         <MailboxFooter />
                     </>
                 ) : (

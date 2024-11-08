@@ -7,6 +7,8 @@ import {
     inboxDta,
     userEmailProfileDta,
 } from "../data-access/sales-mail";
+import { updateCustomerEmailDta } from "../data-access/customer";
+import { getSalesCustomerIdDta } from "../data-access/sales-dta";
 
 export type GetSalesEmail = AsyncFnType<typeof getSalesEmailUseCase>;
 export type MailData = EmailData;
@@ -21,4 +23,8 @@ export async function getSalesEmailUseCase(id, type: EmailData["type"]) {
         id,
         type,
     };
+}
+export async function setSalesCustomerEmailUseCase(id, email) {
+    const customerId = await getSalesCustomerIdDta(id);
+    await updateCustomerEmailDta(customerId, email);
 }

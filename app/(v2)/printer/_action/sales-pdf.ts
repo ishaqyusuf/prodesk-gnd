@@ -17,7 +17,7 @@ async function geenrate(query: SalesPrintProps["searchParams"]) {
         browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
     });
     page = await browser.newPage();
-    console.log(query);
+    // console.log(query);
     url = `${env.NEXT_PUBLIC_APP_URL}/printer/sales?${QueryString.stringify(
         query
     )}`;
