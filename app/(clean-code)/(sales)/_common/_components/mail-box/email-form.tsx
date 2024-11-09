@@ -22,11 +22,13 @@ export default function EmailForm({}) {
     });
     async function _saveEmail() {
         const email = form.getValues().email;
+
         const t = await form.trigger();
         if (t) {
             await setSalesCustomerEmailUseCase(ctx.id, email);
             toast.success("Saved");
             ctx.updateEmail(email);
+        } else {
         }
     }
     if (!ctx.data?.noEmail) return null;

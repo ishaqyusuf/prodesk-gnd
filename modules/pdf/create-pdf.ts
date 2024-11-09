@@ -22,25 +22,38 @@ export type PdfConfig = {
 export async function createPdf(props: Props) {
     const validList = props.list?.filter((l) => l.url);
     if (!validList?.length) {
-        return {};
+        return [];
     }
-    const ctx = await initBrowserless();
-    const pdfs = await Promise.all(
-        validList?.map(async (ls) => {
-            try {
-                return {
-                    pdf: await printPage(ctx, ls),
-                };
-            } catch (error) {
-                return {
-                    error: error.message,
-                    pdf: null,
-                };
-            }
-        })
-    );
-    await ctx.browser.close();
-    return pdfs;
+    let ctx;
+    try {
+        ctx = await initBrowserless();
+        const pdfs = await Promise.all(
+            validList?.map(async (ls) => {
+                try {
+                    const pdf = await printPage(ctx, ls);
+                    console.log("ALHAMDULILLAH");
+
+                    return {
+                        pdf,
+                    };
+                } catch (error) {
+                    return {
+                        error: error.message,
+                        pdf: null,
+                    };
+                }
+            })
+        );
+        await ctx?.browser?.close();
+        return pdfs;
+    } catch (error) {
+        await ctx?.browser?.close();
+        return [
+            {
+                error: error.message,
+            },
+        ];
+    }
 }
 type Ctx = AsyncFnType<typeof initBrowserless>;
 async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
@@ -59,7 +72,8 @@ async function printPage(ctx: Ctx, pageData: Props["list"][number]) {
             "chromium-aws",
             "pdf",
         ]);
-        throw Error("Error generating PDF with chrome-aws-lamba", error);
+        throw Error(error);
+        // throw Error("Error generating PDF with chrome-aws-lamba", error);
     }
 }
 async function initChromium() {

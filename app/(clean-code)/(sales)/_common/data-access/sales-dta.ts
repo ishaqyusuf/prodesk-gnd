@@ -24,6 +24,7 @@ import { statMismatchDta } from "./sales-progress.dta";
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
     dealerId?;
+    id?;
 }
 export type GetSalesQuotesDta = AsyncFnType<typeof getSalesQuotesDta>;
 export async function getSalesQuotesDta(query: GetSalesListQuery) {
@@ -58,6 +59,12 @@ export async function getSalesListDta(query: GetSalesListQuery) {
         pageInfo,
         data,
     };
+}
+export async function getSalesListDataByIdDta(id) {
+    const data = await getSalesListDta({
+        id,
+    });
+    return data.data?.[0];
 }
 export type GetFullSalesDataDta = AsyncFnType<typeof typedFullSale>;
 export async function getFullSaleById(id) {

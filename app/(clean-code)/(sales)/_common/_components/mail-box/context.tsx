@@ -6,6 +6,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { sendEmail } from "@/modules/email/send";
+import { toast } from "sonner";
 
 // let ctx = null;
 
@@ -27,6 +29,7 @@ export const useMailboxContext = (id, type) => {
         ),
         defaultValues: {
             body: "",
+            subject: "",
             attachment: "",
         },
     });
@@ -45,9 +48,29 @@ export const useMailboxContext = (id, type) => {
                 };
             });
         },
-        async sendEmail() {
-            const t = form.trigger();
+        async __sendEmail() {
+            const t = await form.trigger();
             if (t) {
+                const dta = form.getValues();
+                const resp = await sendEmail({
+                    body: dta.body,
+                    attachments: [dta.attachment]
+                        ?.map((a) => {
+                            const findA = data.data?.attachables?.find(
+                                (_a) => _a.label == (a as any)
+                            );
+
+                            return {
+                                url: findA?.url,
+                                fileName: "x.pdf",
+                            };
+                        })
+                        ?.filter((s) => s.url),
+                    subject: data.subject,
+                    data: data.composeData,
+                });
+                console.log(resp);
+                if (resp?.error) toast?.error(resp?.error);
             }
         },
     };

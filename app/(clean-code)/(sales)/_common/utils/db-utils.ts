@@ -29,6 +29,17 @@ export function whereSales(query: GetSalesListQuery) {
     whereAnd.push({
         type: query._type,
     });
+    const keys = Object.keys(query) as (keyof GetSalesListQuery)[];
+    keys.map((k) => {
+        if (!query?.[k]) return;
+        switch (k) {
+            case "id":
+                whereAnd.push({
+                    id: query.id,
+                });
+                break;
+        }
+    });
     const where: Prisma.SalesOrdersWhereInput =
         whereAnd.length > 1
             ? {

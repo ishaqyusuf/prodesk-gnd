@@ -5,7 +5,7 @@ import ControlledSelect from "@/components/common/controls/controlled-select";
 import Button from "@/components/common/button";
 
 export function MailboxFooter({}) {
-    const { form, data, sendEmail } = useMailbox();
+    const { form, data, __sendEmail } = useMailbox();
     return (
         <Form {...form}>
             <div className="absolute w-full bottom-0 z-10 border-t bg-white p-2 flex-col flex gap-4 sm:p-4">
@@ -26,16 +26,17 @@ export function MailboxFooter({}) {
                         prefix="Attachment"
                         control={form.control}
                         placeholder={"Attachment"}
+                        valueKey={"label" as any}
+                        titleKey={"label" as any}
                         options={[
                             // "Payment Invoice",
-                            "None",
-                            "Sales",
-                            "Quote",
+                            { label: "None" },
+                            ...data.attachables,
                         ]}
                     />
                     <div className="flex-1"></div>
                     <Button
-                        onClick={sendEmail}
+                        onClick={__sendEmail}
                         disabled={data?.noEmail}
                         size="sm"
                     >
