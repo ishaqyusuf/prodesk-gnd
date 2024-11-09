@@ -22,6 +22,7 @@ export async function sendEmail(props: EmailProps) {
     console.log(hasError);
     if (hasError)
         return {
+            props,
             error: errors?.map((e) => e.error).join("\n"), //"Unable to process attachment",
         };
 
