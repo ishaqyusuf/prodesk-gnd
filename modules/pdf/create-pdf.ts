@@ -2,6 +2,8 @@
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { logError } from "../error/report";
 import { env } from "@/env.mjs";
+import { uploadPDFToCloudinary } from "../cloudinary";
+import { generateRandomString } from "@/lib/utils";
 
 interface Props {
     list: {
@@ -33,9 +35,20 @@ export async function createPdf(props: Props) {
                     const pdf = await printPage(ctx, ls);
                     console.log("ALHAMDULILLAH");
 
-                    return {
+                    const resp = {
                         pdf,
+                        _cloudinary: {},
                     };
+                    try {
+                        const r = await uploadPDFToCloudinary(
+                            pdf,
+                            generateRandomString()
+                        );
+                        resp._cloudinary = { r };
+                    } catch (error) {
+                        resp._cloudinary = { error };
+                    }
+                    return resp;
                 } catch (error) {
                     return {
                         error: error.message,
@@ -100,13 +113,13 @@ async function initChromium() {
 async function initBrowserless() {
     try {
         const puppeteer = require("puppeteer-core");
-        // const browser = await puppeteer.connect({
-        //     browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
-        // });
-        const browser = await puppeteer.launch({
-            headless: true,
-            // args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
         });
+        // const browser = await puppeteer.launch({
+        //     headless: true,
+        //     // args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        // });
         const page = await browser.newPage();
         return {
             page,

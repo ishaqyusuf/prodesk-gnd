@@ -71,6 +71,7 @@ export const useMailboxContext = (id, type) => {
                 });
                 console.log(resp);
                 if (resp?.error) toast?.error(resp?.error);
+                if (resp?.success) toast.success(resp.success);
             }
         },
     };
