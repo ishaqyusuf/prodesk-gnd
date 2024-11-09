@@ -69,7 +69,7 @@ export const useMailboxContext = (id, type) => {
                     subject: data.subject,
                     data: data.composeData,
                 });
-                console.log(dta);
+                console.log(resp);
                 if (resp?.error) toast?.error(resp?.error);
             }
         },

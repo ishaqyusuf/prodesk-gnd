@@ -100,8 +100,12 @@ async function initChromium() {
 async function initBrowserless() {
     try {
         const puppeteer = require("puppeteer-core");
-        const browser = await puppeteer.connect({
-            browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
+        // const browser = await puppeteer.connect({
+        //     browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BLESS_TOKEN}`,
+        // });
+        const browser = await puppeteer.launch({
+            headless: true,
+            // args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
         const page = await browser.newPage();
         return {
