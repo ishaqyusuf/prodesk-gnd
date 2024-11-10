@@ -1,3 +1,4 @@
+import { UploadApiResponse } from "cloudinary";
 import { cloudinary } from "./lib";
 
 export async function uploadPDFToCloudinary(buffer: Buffer, public_id: string) {
@@ -17,12 +18,12 @@ export async function uploadPDFToCloudinary(buffer: Buffer, public_id: string) {
         //         return result;
         //     }
         // );
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<UploadApiResponse>((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 { resource_type: "raw", public_id, format: "pdf" },
                 (error, result) => {
                     if (result) {
-                        resolve(result.secure_url);
+                        resolve(result);
                     } else {
                         reject(error);
                     }

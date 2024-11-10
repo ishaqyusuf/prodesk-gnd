@@ -33,7 +33,6 @@ export async function createPdf(props: Props) {
             validList?.map(async (ls) => {
                 try {
                     const pdf = await printPage(ctx, ls);
-                    console.log("ALHAMDULILLAH");
 
                     const resp = {
                         pdf,
