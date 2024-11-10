@@ -19,7 +19,7 @@ function makeQueryClient() {
         },
     });
 }
-
+//
 let browserQueryClient: QueryClient | undefined = undefined;
 
 export function getQueryClient() {
@@ -35,4 +35,3 @@ export function getQueryClient() {
         return browserQueryClient;
     }
 }
-
