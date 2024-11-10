@@ -16,20 +16,20 @@ const AppProvider = ({ children }) => {
     const queryClient = getQueryClient();
     return (
         <SessionProvider>
-            <Provider store={store}>
-                <ThemeProvider attribute="class" defaultTheme="light">
-                    <CommandProvider>
-                        <ModalProvider>
-                            <NavContext.Provider value={useNavCtx()}>
-                                <QueryClientProvider client={queryClient}>
+            <QueryClientProvider client={queryClient}>
+                <Provider store={store}>
+                    <ThemeProvider attribute="class" defaultTheme="light">
+                        <CommandProvider>
+                            <ModalProvider>
+                                <NavContext.Provider value={useNavCtx()}>
                                     {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                                     {children}
-                                </QueryClientProvider>
-                            </NavContext.Provider>
-                        </ModalProvider>
-                    </CommandProvider>
-                </ThemeProvider>
-            </Provider>
+                                </NavContext.Provider>
+                            </ModalProvider>
+                        </CommandProvider>
+                    </ThemeProvider>
+                </Provider>
+            </QueryClientProvider>
         </SessionProvider>
     );
 };
