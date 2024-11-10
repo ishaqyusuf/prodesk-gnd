@@ -84,6 +84,6 @@ export async function userEmailProfileDta(type: EmailData["type"]) {
     const userId = auth.id;
 
     return {
-        from: `${auth.name}<${auth.email}>`,
+        from: `${auth.name}<${auth.email?.split("@")[0]}@gndprodesk.com>`,
     };
 }

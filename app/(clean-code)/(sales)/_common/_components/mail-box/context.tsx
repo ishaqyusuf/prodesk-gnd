@@ -54,6 +54,8 @@ export const useMailboxContext = (id, type) => {
                 const dta = form.getValues();
                 const resp = await sendEmail({
                     body: dta.body,
+                    from: data.sendProfile?.from,
+                    to: data.data.email || data.data.fallbackEmail,
                     attachments: [dta.attachment]
                         ?.map((a) => {
                             const findA = data.data?.attachables?.find(
