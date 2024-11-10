@@ -25,6 +25,7 @@ export async function sendEmail(props: EmailProps) {
             props,
             error: errors?.map((e) => e.error).join("\n"), //"Unable to process attachment",
         };
+
     return {
         success: "Attachment created",
         attachments,

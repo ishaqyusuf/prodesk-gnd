@@ -17,8 +17,6 @@ interface Props {
     // promise;
 }
 export default function OrdersPageClient({}: Props) {
-    // const resp: GetSalesOrdersDta = use(promise);
-
     const table = useTableCompose({
         cells(ctx) {
             return [

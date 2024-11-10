@@ -9,6 +9,7 @@ interface Props {
     list: {
         url?;
         pdfConfig?: PdfConfig;
+        fileName?;
     }[];
 }
 export type PdfConfig = {
@@ -36,16 +37,19 @@ export async function createPdf(props: Props) {
 
                     const resp = {
                         pdf,
-                        _cloudinary: {},
+                        cloudinary: null,
+                        cloudinaryError: null,
+                        // _cloudinary: {},
                     };
                     try {
                         const r = await uploadPDFToCloudinary(
                             pdf,
-                            generateRandomString()
+                            ls.fileName || generateRandomString()
                         );
-                        resp._cloudinary = { r };
+                        resp.cloudinary = r;
+                        // r.url
                     } catch (error) {
-                        resp._cloudinary = { error };
+                        resp.cloudinaryError = error;
                     }
                     return resp;
                 } catch (error) {

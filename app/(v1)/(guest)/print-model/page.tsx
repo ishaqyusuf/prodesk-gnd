@@ -2,7 +2,6 @@ import HomePrinter from "@/components/_v1/print/home/home-printer";
 import OrderPrinter from "@/components/_v1/print/order/order-printer";
 
 export default async function PrintSalesPage({ searchParams }) {
-    // console.log(searchParams);
     return (
         <HomePrinter
             {...searchParams}
