@@ -5,6 +5,7 @@ import { EmailProps } from "./send";
 export async function processAttachments(props: EmailProps) {
     let attachments: {
         pdf?;
+        pdfURI?;
         error?;
         cloudinary?: UploadApiResponse;
         cloudinaryError?: UploadApiErrorResponse;

@@ -19,7 +19,6 @@ export interface EmailProps {
 }
 export async function sendEmail(props: EmailProps) {
     const { subject, body } = transformEmail(props);
-    console.log(">>>>>");
     const attachments = await processAttachments(props);
     const errors = attachments?.filter((a) => a.error);
     const hasError = errors?.length;
@@ -52,12 +51,13 @@ export async function sendEmail(props: EmailProps) {
         subject: subject,
         reply_to: props.replyTo,
         attachments: attachments?.map((a) => ({
-            filename: a.cloudinary?.public_id,
-            content: a.pdf,
+            filename: a.cloudinary?.public_id?.split("/")[1],
+            content: a.pdfURI,
         })),
     });
     return {
         // message: mail.data.id,
+        // mail: mail,
         error: mail.error ? mail.error.message : null,
         success: !mail.error ? `Sent` : null,
         // success: "Attachment created",
