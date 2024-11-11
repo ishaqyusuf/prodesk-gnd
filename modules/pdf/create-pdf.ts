@@ -46,7 +46,7 @@ export async function createPdf(props: Props) {
                         const r = await uploadPDFToCloudinary(
                             pdf,
                             ls.fileName || generateRandomString(),
-                            "sales-orders"
+                            ls.fileName
                         );
                         resp.cloudinary = r;
                         // r.url
