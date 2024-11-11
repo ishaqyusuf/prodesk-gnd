@@ -36,7 +36,7 @@ export function MailboxFooter({}) {
                     />
                     <div className="flex-1"></div>
                     <Button
-                        onClick={__sendEmail}
+                        action={__sendEmail}
                         disabled={data?.noEmail}
                         size="sm"
                     >

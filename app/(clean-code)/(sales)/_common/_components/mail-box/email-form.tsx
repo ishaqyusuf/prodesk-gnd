@@ -43,7 +43,7 @@ export default function EmailForm({}) {
                         label="Email"
                     />
                     <div className="flex justify-end">
-                        <Button onClick={_saveEmail}>Save</Button>
+                        <Button action={_saveEmail}>Save</Button>
                     </div>
                 </div>
             </div>

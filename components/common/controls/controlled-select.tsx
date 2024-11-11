@@ -144,6 +144,7 @@ export default function ControlledSelect<
                                             </span>
                                         )}
                                         <SelectValue
+                                            className="whitespace-nowrap"
                                             placeholder={placeholder}
                                         ></SelectValue>
                                     </div>

@@ -308,7 +308,7 @@ export default function AutoComplete({
                                     "py-2 px-3 shadow-sm flex flex-col cursor-default",
                                     uppercase && "uppercase"
                                 )}
-                                key={vi.key}
+                                key={index}
                                 {...getItemProps({
                                     item: items[vi.index],
                                     index,
