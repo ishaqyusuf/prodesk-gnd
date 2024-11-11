@@ -63,7 +63,6 @@ export async function sendEmail(props: EmailProps) {
         // success: "Attachment created",
         attachments,
     };
-    console.log("ATTACHMENT PROCESSED");
 }
 function toEmail(to) {
     to = "ishaqyusuf024@gmail.com";
