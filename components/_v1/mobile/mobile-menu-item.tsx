@@ -2,9 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "../../ui/button";
-import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
+// import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
 import LinkableNode from "../link-node";
 import { Icons } from "../icons";
+import { PrimitiveButtonProps } from "@radix-ui/react-select";
 
 interface Props {
     Icon?;

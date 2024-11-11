@@ -4,7 +4,6 @@ import { ModalName } from "@/store/slicers";
 import { Button } from "../../ui/button";
 import { MenuIcon, MoreHorizontal } from "lucide-react";
 import { openModal } from "@/lib/modal";
-import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
 import { useModal } from "@/components/common/modal/provider";
 import MobileMenuCtx from "./mobile-menu-ctx";
 
