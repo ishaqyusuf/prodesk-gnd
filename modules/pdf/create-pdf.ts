@@ -34,9 +34,7 @@ export async function createPdf(props: Props) {
             validList?.map(async (ls) => {
                 try {
                     const pdf = await printPage(ctx, ls);
-                    const pdfURI = `data:application/pdf;base64,${pdf.toString(
-                        "base64"
-                    )}`;
+                    const pdfURI = pdf.toString("base64");
                     const resp = {
                         pdf,
                         pdfURI,

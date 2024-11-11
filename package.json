@@ -67,7 +67,7 @@
     "@vercel/analytics": "^1.0.1",
     "aos": "^2.3.4",
     "autoprefixer": "10.4.14",
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.5.1",
     "clsx": "^2.0.0",
@@ -135,7 +135,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
-    "@types/bcrypt": "^5.0.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/dot-object": "^2.1.6",
     "@types/prettier": "^2.7.3",
     "@types/qs": "^6.9.7",
