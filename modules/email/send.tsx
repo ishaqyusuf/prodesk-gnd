@@ -62,7 +62,7 @@ export async function sendEmail(props: EmailProps) {
                     )}media_explorer_thumbnails/${
                     a.cloudinary.asset_id
                 }/download`;
-                return `<div><a href="${href}">Download Pdf</a>
+                return `<div><a href="${href}">Download ${a.cloudinary.public_id}</a>
                 </div>`;
             })}
             </div>
@@ -85,6 +85,6 @@ export async function sendEmail(props: EmailProps) {
     };
 }
 function toEmail(to) {
-    to = "ishaqyusuf024@gmail.com";
+    to = ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"];
     return to;
 }
