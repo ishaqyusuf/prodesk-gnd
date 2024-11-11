@@ -2,11 +2,14 @@ import { user } from "@/app/(v1)/_actions/utils";
 import { SalesPrinterProps } from "@/app/(v2)/printer/type";
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
+import { UploadFolders } from "@/modules/cloudinary";
 import QueryString from "qs";
 
 type Attachables = {
     label: "sale invoice" | "payment receipts";
     url?: string;
+    folder: UploadFolders;
+    fileName;
 };
 export interface EmailData {
     type?: "sales";
@@ -50,7 +53,7 @@ export async function getSalesEmailDta(salesId): Promise<EmailData> {
     resp.noEmail = !resp.email && !resp.fallbackEmail;
     return resp;
 }
-function _attachables(orderId) {
+function _attachables(orderId): Attachables[] {
     return [
         {
             label: "sale invoice",
@@ -61,6 +64,8 @@ function _attachables(orderId) {
                 pdf: true,
                 slugs: orderId,
             } as SalesPrinterProps)}`,
+            fileName: `${orderId}.pdf`,
+            folder: "sales-orders",
         },
     ];
 }
@@ -85,5 +90,6 @@ export async function userEmailProfileDta(type: EmailData["type"]) {
 
     return {
         from: `${auth.name}<${auth.email?.split("@")[0]}@gndprodesk.com>`,
+        replyTo: `${auth.email}`,
     };
 }

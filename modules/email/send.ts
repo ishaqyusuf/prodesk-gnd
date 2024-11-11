@@ -9,6 +9,7 @@ export interface EmailProps {
     data;
     body;
     from;
+    replyTo;
     to;
     attachments?: {
         url?: string;
@@ -33,9 +34,9 @@ export async function sendEmail(props: EmailProps) {
         to: toEmail(props.to),
         html: body,
         subject: subject,
+        reply_to: props.replyTo,
         attachments: attachments?.map((a) => ({
             filename: a.cloudinary?.public_id,
-            // path: a.cloudinary.url,
             content: a.pdf,
         })),
     });

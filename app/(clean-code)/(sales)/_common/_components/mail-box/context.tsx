@@ -54,6 +54,7 @@ export const useMailboxContext = (id, type) => {
                 const dta = form.getValues();
                 const resp = await sendEmail({
                     body: dta.body,
+                    replyTo: data.sendProfile.replyTo,
                     from: data.sendProfile?.from,
                     to: data.data.email || data.data.fallbackEmail,
                     attachments: [dta.attachment]
@@ -64,14 +65,14 @@ export const useMailboxContext = (id, type) => {
 
                             return {
                                 url: findA?.url,
-                                fileName: "x.pdf",
+                                fileName: findA.fileName,
                             };
                         })
                         ?.filter((s) => s.url),
                     subject: data.subject,
                     data: data.composeData,
                 });
-                console.log(resp);
+                // console.log(resp);
                 if (resp?.error) toast?.error(resp?.error);
                 if (resp?.success) toast.success(resp.success);
             }
