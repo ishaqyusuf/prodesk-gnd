@@ -3,7 +3,7 @@
 import { resend } from "@/lib/resend";
 import { processAttachments } from "./attachments";
 import { transformEmail } from "./transform";
-
+// import {  } from "react-email";
 export interface EmailProps {
     subject;
     data;
@@ -48,13 +48,29 @@ export async function sendEmail(props: EmailProps) {
     const mail = await resend.emails.send({
         from: props.from,
         to,
-        html: body,
+        // html: ReactEmail.,
+        // react:,
+        html: `
+            <div>${body}</div>
+            <div>
+            ${attachments.map(
+                (a) => {
+                    const href = `${a.cloudinary.secure_url
+                    ?.split("raw")
+                    [0]}/media_explorer_thumbnails/${a.cloudinary.asset_id}/download`
+                    return  `<div><a href=`${href}`>Download Pdf</a>
+                </div>`
+                }
+            )}
+            </div>
+        `,
         subject: subject,
         reply_to: props.replyTo,
-        attachments: attachments?.map((a) => ({
-            filename: a.cloudinary?.public_id?.split("/")[1],
-            content: a.pdfURI,
-        })),
+        // attachments: attachments?.map((a) => ({
+        //     filename: a.cloudinary?.public_id?.split("/")[1],
+        //     content: a.pdf?.toString("base64"),
+        //     // encoding
+        // })),
     });
     return {
         // message: mail.data.id,
