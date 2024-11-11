@@ -10,7 +10,7 @@ import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn, uniqueBy } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 import { Label } from "../ui/label";
 
 interface Props {

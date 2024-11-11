@@ -9,7 +9,7 @@ import { formatDate } from "@/lib/use-day";
 
 import { Info, Trash } from "lucide-react";
 import LinkableNode from "../link-node";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 import { Badge } from "../../ui/badge";
 import { getBadgeColor } from "@/lib/status-badge";
 import { Progressor, getProgress } from "@/lib/status";

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 import Link from "next/link";
 
 export default function LinkableNode({

@@ -29,9 +29,25 @@ export async function sendEmail(props: EmailProps) {
             props,
             error: errors?.map((e) => e.error).join("\n"), //"Unable to process attachment",
         };
+    const to = toEmail(props.to);
+    if (Array.isArray(to)) {
+        const batchMail = await resend.batch.send(
+            to?.map((t) => ({
+                to: t,
+                from: props.from,
+                html: body,
+                subject,
+                reply_to: props.replyTo,
+                attachments: attachments?.map((a) => ({
+                    filename: a.cloudinary?.public_id,
+                    content: a.pdf,
+                })),
+            }))
+        );
+    }
     const mail = await resend.emails.send({
         from: props.from,
-        to: toEmail(props.to),
+        to,
         html: body,
         subject: subject,
         reply_to: props.replyTo,

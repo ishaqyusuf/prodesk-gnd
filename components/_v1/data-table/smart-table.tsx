@@ -12,7 +12,7 @@ import { cn, labelValue } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { Badge } from "../../ui/badge";
 import { getBadgeColor } from "@/lib/status-badge";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 
 export function SmartTable<T>(data) {
     type IColumn = ColumnDef<T, unknown>;

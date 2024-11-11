@@ -21,7 +21,7 @@ import { Kbd } from "../kbd";
 import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/_v1/icons";
 import { cva, VariantProps } from "class-variance-authority";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 import "./overview-sheet-style.css";
 interface Props {
     // title?: string;

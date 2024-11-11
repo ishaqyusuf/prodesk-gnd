@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 
 export function Info({
     label,

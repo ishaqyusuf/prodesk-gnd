@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useCombobox } from "downshift";
 import { Label } from "../../ui/label";
-import { PrimitiveDivProps } from "@radix-ui/react-tabs";
+import { PrimitiveDivProps } from "@radix-ui/react-select";
 import { cn, uniqueBy } from "@/lib/utils";
 import { Input } from "../../ui/input";
 import { useVirtualizer } from "@tanstack/react-virtual";
