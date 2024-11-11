@@ -2,9 +2,9 @@
 
 import { authOptions } from "@/lib/auth-options";
 import { getServerSession } from "next-auth";
-import bcrypt from "bcrypt";
 import { prisma } from "@/db";
 import { IUser } from "@/types/hrm";
+import { hash } from "bcrypt-ts";
 export async function serverSession() {
     const data = await getServerSession(authOptions);
     if (!data) throw new Error();
@@ -54,7 +54,7 @@ export async function streamlineMeta(meta: any = null) {
     return _streamline(meta);
 }
 export async function hashPassword(pwrd) {
-    return await bcrypt.hash(pwrd, 10);
+    return await hash(pwrd, 10);
 }
 export async function sessionIsDealerMode() {
     const s = await serverSession();

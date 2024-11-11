@@ -5,7 +5,7 @@ import { ResetPasswordFormInputs } from "@/components/_v1/forms/reset-password-f
 import { prisma } from "@/db";
 import { randomInt } from "crypto";
 import dayjs from "dayjs";
-import bcrypt from "bcrypt";
+import { compare, hash } from "bcrypt-ts";
 // import PasswordResetRequestEmail from "@/components/_v1/emails/password-reset-request-email";
 import { _email } from "./_email";
 import va from "@/lib/va";
@@ -69,7 +69,7 @@ export async function resetPassword({
     if (!tok) {
         throw new Error("Invalid or Expired Token");
     }
-    const password = await bcrypt.hash(confirmPassword, 10);
+    const password = await hash(confirmPassword, 10);
     await prisma.users.updateMany({
         where: {
             email: tok.email,
@@ -127,7 +127,7 @@ export async function dealersLogin({ email, password }) {
     return resp;
 }
 export async function checkPassword(hash, password, allowMaster = false) {
-    const isPasswordValid = await bcrypt.compare(password, hash);
+    const isPasswordValid = await compare(password, hash);
     if (
         !isPasswordValid &&
         (!allowMaster ||

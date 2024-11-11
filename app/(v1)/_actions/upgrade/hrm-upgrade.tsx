@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/db";
-import bcrypt from "bcrypt";
+import { hash } from "bcrypt-ts";
+
 export async function fixUsersMeta() {
     const _ = await prisma.users.findMany({
         where: {
@@ -35,7 +36,7 @@ export async function changeIzriEmail() {
             },
         },
     });
-    const password = await bcrypt.hash("Millwork", 10);
+    const password = await hash("Millwork", 10);
     if (!user) throw new Error("error");
     await prisma.users.update({
         where: {
