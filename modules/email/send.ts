@@ -34,8 +34,9 @@ export async function sendEmail(props: EmailProps) {
         html: body,
         subject: subject,
         attachments: attachments?.map((a) => ({
-            filename: a.cloudinary?.original_filename,
-            path: a.cloudinary.url,
+            filename: a.cloudinary?.public_id,
+            // path: a.cloudinary.url,
+            content: a.pdf,
         })),
     });
     return {
