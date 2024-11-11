@@ -56,7 +56,7 @@ export async function sendEmail(props: EmailProps) {
             ${attachments.map((a) => {
                 const href = `${
                     a.cloudinary.secure_url?.split("raw")[0]
-                }/media_explorer_thumbnails/${a.cloudinary.asset_id}/download`;
+                }media_explorer_thumbnails/${a.cloudinary.asset_id}/download`;
                 return `<div><a href="${href}">Download Pdf</a>
                 </div>`;
             })}
