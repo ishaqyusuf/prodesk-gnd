@@ -16,6 +16,7 @@ export async function processAttachments(props: EmailProps) {
             list: props.attachments?.map((a) => ({
                 url: a.url,
                 fileName: a.fileName,
+                folder: a.folder,
             })),
         })) as any;
     }

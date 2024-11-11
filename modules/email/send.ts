@@ -14,6 +14,7 @@ export interface EmailProps {
     attachments?: {
         url?: string;
         fileName?: string;
+        folder?: string;
     }[];
     attachmentLink?: boolean;
 }

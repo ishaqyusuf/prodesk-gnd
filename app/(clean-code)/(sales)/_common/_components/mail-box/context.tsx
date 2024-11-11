@@ -64,6 +64,7 @@ export const useMailboxContext = (id, type) => {
                             );
 
                             return {
+                                folder: findA.folder,
                                 url: findA?.url,
                                 fileName: findA.fileName,
                             };

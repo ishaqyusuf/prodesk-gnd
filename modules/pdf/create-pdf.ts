@@ -10,6 +10,7 @@ interface Props {
         url?;
         pdfConfig?: PdfConfig;
         fileName?;
+        folder?;
     }[];
 }
 export type PdfConfig = {
@@ -46,7 +47,7 @@ export async function createPdf(props: Props) {
                         const r = await uploadPDFToCloudinary(
                             pdf,
                             ls.fileName || generateRandomString(),
-                            ls.fileName
+                            ls.folder
                         );
                         resp.cloudinary = r;
                         // r.url
