@@ -10,7 +10,13 @@ export async function uploadPDFToCloudinary(
     try {
         return new Promise<UploadApiResponse>((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: "raw", public_id, format: "pdf", folder },
+                {
+                    resource_type: "raw",
+                    public_id,
+                    format: "pdf",
+                    folder,
+                    overwrite: true,
+                },
                 (error, result) => {
                     if (result) {
                         resolve(result);
