@@ -63,6 +63,12 @@ export default function OrderPrinter({
         if (!printer) return;
         if (printer.pdf) {
             console.log(printer);
+            // const resp = await fetch(
+            //     `/api/download-sales-pdf?mode=${
+            //         printer.mode
+            //     }&ids=${printer.ids?.join(",")}`
+            // );
+
             const pdf = await printSalesPdf(
                 printer.mode,
                 printer.ids?.join(",")
@@ -72,7 +78,7 @@ export default function OrderPrinter({
             const link = document.createElement("a");
             link.href = pdf.uri;
             link.download = pdf.fileName; // [printer.ids.join(","), ".pdf"].join("");
-            // document.body.appendChild(link);
+            document.body.appendChild(link);
             link.click();
             dispatchSlice("printOrders", null);
             toast.success("Pdf Exported!.");

@@ -163,7 +163,6 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     setTab("processingPayment");
                 } else {
                 }
-                // console.log("PROCESSING PAYMENT>");
             } else {
                 await notify("PAYMENT_LINK_CREATED", {
                     customerName:

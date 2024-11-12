@@ -6,8 +6,8 @@ import { getQueryClient } from "@/providers/get-query-client";
 import { dataOptions } from "@/components/(clean-code)/data-table/query-options";
 import { redirect } from "next/navigation";
 import { __isProd } from "@/lib/is-prod-server";
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
+// export const revalidate = 0;
+// export const dynamic = "force-dynamic";
 export default async function SalesBookPage({ searchParams }) {
     // const promise = getSalesOrderListUseCase(searchParams);
     // if (Object.keys(searchParams).length == 0 && __isProd)

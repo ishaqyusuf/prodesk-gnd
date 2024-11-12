@@ -8,7 +8,7 @@ type SalesPrintModes =
     | "invoice";
 export async function printSalesPdf(mode: SalesPrintModes, ids) {
     const pdf = await _generateSalesPdf(mode, ids);
-    const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
+    const pdfDataUri = `data:application/pdf;base64,${pdf}`;
     const orders = await prisma.salesOrders.findMany({
         where: {
             deletedAt: null,
@@ -26,6 +26,7 @@ export async function printSalesPdf(mode: SalesPrintModes, ids) {
     return {
         fileName: [orders.map((o) => o.orderId).join("&"), ".pdf"].join(""),
         uri: pdfDataUri,
+        pdf,
     };
 }
 export async function _generateSalesPdf(mode: SalesPrintModes, ids) {
