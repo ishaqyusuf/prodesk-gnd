@@ -146,16 +146,23 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 });
                 return;
             }
-            if (resp.id && data.type == "terminal") {
-                form.setValue("salesCheckoutId", resp.salesCheckoutId);
-                form.setValue("paymentId", resp.paymentId);
-                form.setValue("terminalStatus", "processing");
-                form.setValue("modalTitle", "Processing Payment");
-                form.setValue(
-                    "modalSubtitle",
-                    "Swipe your card to finalize payment"
-                );
-                setTab("processingPayment");
+            if (resp?.error) {
+                toast?.error(resp?.error);
+                return;
+            }
+            if (data.type == "terminal") {
+                if (resp.salesCheckoutId) {
+                    form.setValue("salesCheckoutId", resp.salesCheckoutId);
+                    form.setValue("paymentId", resp.paymentId);
+                    form.setValue("terminalStatus", "processing");
+                    form.setValue("modalTitle", "Processing Payment");
+                    form.setValue(
+                        "modalSubtitle",
+                        "Swipe your card to finalize payment"
+                    );
+                    setTab("processingPayment");
+                } else {
+                }
                 // console.log("PROCESSING PAYMENT>");
             } else {
                 await notify("PAYMENT_LINK_CREATED", {
@@ -166,11 +173,14 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     email: data.email,
                 });
                 toast.success("Created");
-            }
-            if (order.dealerMode) {
-                if (resp.paymentUrl) openLink(resp.paymentUrl, {}, true);
-                else {
-                    toast.message("Check email for payment link or try again");
+
+                if (order.dealerMode) {
+                    if (resp.paymentUrl) openLink(resp.paymentUrl, {}, true);
+                    else {
+                        toast.message(
+                            "Check email for payment link or try again"
+                        );
+                    }
                 }
             }
         } catch (error) {

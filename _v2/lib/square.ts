@@ -122,7 +122,7 @@ async function errorHandler(fn): Promise<{
         }
         console.log(error);
 
-        return { error: "Unable to complete" };
+        return { error: error?.message };
     }
 }
 export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
