@@ -345,7 +345,7 @@ function TerminalComponents({}) {
         //  ); form.setValue("modalTitle", "Payment Failed");
         await cancelTerminalPayment(salesCheckoutId);
         modal.close();
-        toast.success("Payment Cancelled");
+        toast.error("Payment Cancelled");
         // form.setValue("modalSubtitle", "Payment has been cancelled.");
         // ctx.setTab("paymentProcessFailed");
     }
