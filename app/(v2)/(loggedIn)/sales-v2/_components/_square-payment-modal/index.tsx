@@ -112,6 +112,8 @@ export default function SquarePaymentModal({ id }: { id: number }) {
     }
 
     async function createPayment() {
+        // setTab("processingPayment");
+        // return;
         try {
             const data = order.dealerMode
                 ? defaultFormData()
@@ -143,6 +145,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 });
                 return;
             }
+            console.log({ resp, data });
             if (resp.id && data.type == "terminal") {
                 form.setValue("salesCheckoutId", resp.salesCheckoutId);
                 form.setValue("paymentId", resp.paymentId);
@@ -153,6 +156,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     "Swipe your card to finalize payment"
                 );
                 setTab("processingPayment");
+                console.log("PROCESSING PAYMENT>");
             } else {
                 await notify("PAYMENT_LINK_CREATED", {
                     customerName:
