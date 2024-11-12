@@ -102,7 +102,7 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
         ...checkout,
         paymentId: checkout.id,
         salesCheckoutId: salesCheckout.id,
-        squareError: res?.result?.errors,
+        squareError: res,
     };
 }
 async function errorHandler(fn): Promise<{
@@ -248,7 +248,10 @@ export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
                 },
             },
         });
-        res = s;
+        res = {
+            res: s.result,
+            statusCode: s.statusCode,
+        };
         if (s.result.errors.length) throw s.result;
 
         const checkoutId = s.result.checkout.id;

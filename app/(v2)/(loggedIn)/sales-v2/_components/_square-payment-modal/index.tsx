@@ -132,7 +132,9 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             }
             let resp = await createSalesPayment(data as any);
             const paymentLink = resp.paymentUrl;
-            console.log(resp?.squareError);
+            console.log({
+                squareError: resp?.squareError,
+            });
             if (resp?.errors) {
                 resp.errors.map((e) => {
                     toast.error(e.detail, {
@@ -151,6 +153,15 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     "Swipe your card to finalize payment"
                 );
                 setTab("processingPayment");
+            } else {
+                await notify("PAYMENT_LINK_CREATED", {
+                    customerName:
+                        order.customer.businessName || order.customer.name,
+                    paymentLink,
+                    orderId: order.orderId,
+                    email: data.email,
+                });
+                toast.success("Created");
             }
             if (order.dealerMode) {
                 if (resp.paymentUrl) openLink(resp.paymentUrl, {}, true);
@@ -158,14 +169,6 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     toast.message("Check email for payment link or try again");
                 }
             }
-            await notify("PAYMENT_LINK_CREATED", {
-                customerName:
-                    order.customer.businessName || order.customer.name,
-                paymentLink,
-                orderId: order.orderId,
-                email: data.email,
-            });
-            toast.success("Created");
         } catch (error) {
             // console.log(error);
             if (error instanceof Error) toast.error(error.message);
