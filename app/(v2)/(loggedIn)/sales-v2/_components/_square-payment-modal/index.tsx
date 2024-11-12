@@ -134,10 +134,10 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             }
             let resp = await createSalesPayment(data as any);
             const paymentLink = resp.paymentUrl;
-            console.log({
-                squareError: resp?.squareError,
-            });
-            if (resp?.errors) {
+            // console.log({
+            //     squareError: resp?.squareError,
+            // });
+            if (resp?.errors?.length) {
                 resp.errors.map((e) => {
                     toast.error(e.detail, {
                         description: e.field,
@@ -145,7 +145,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 });
                 return;
             }
-            console.log({ resp, data });
+            // console.log({ resp, data });
             if (resp.id && data.type == "terminal") {
                 form.setValue("salesCheckoutId", resp.salesCheckoutId);
                 form.setValue("paymentId", resp.paymentId);
@@ -156,7 +156,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     "Swipe your card to finalize payment"
                 );
                 setTab("processingPayment");
-                console.log("PROCESSING PAYMENT>");
+                // console.log("PROCESSING PAYMENT>");
             } else {
                 await notify("PAYMENT_LINK_CREATED", {
                     customerName:
