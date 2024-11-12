@@ -122,13 +122,13 @@ async function errorHandler(fn): Promise<{
         }
         console.log(error);
 
-        return { error: error?.message };
+        return { error: `${error?.message} ERROR!` };
     }
 }
 export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
         const redirectUrl = `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/square-payment-response/${data.salesCheckoutId}`;
-        const quickPay = !data.items.length || data.grandTotal != data.amount;
+        const quickPay = !data.items?.length || data.grandTotal != data.amount;
         console.log({ quickPay });
         const resp = await client.checkoutApi.createPaymentLink({
             idempotencyKey: new Date().toISOString(),
