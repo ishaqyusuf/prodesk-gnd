@@ -137,6 +137,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
             // console.log({
             //     squareError: resp?.squareError,
             // });
+            console.log({ resp, data });
             if (resp?.errors?.length) {
                 resp.errors.map((e) => {
                     toast.error(e.detail, {
@@ -145,7 +146,6 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                 });
                 return;
             }
-            // console.log({ resp, data });
             if (resp.id && data.type == "terminal") {
                 form.setValue("salesCheckoutId", resp.salesCheckoutId);
                 form.setValue("paymentId", resp.paymentId);
