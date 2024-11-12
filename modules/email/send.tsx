@@ -67,7 +67,7 @@ export async function sendEmail(props: EmailProps) {
                   // html: ReactEmail.,
                   // react:,
                   html,
-                  subject: subject,
+                  subject,
                   reply_to: props.replyTo,
 
                   // attachments: attachments?.map((a) => ({
@@ -88,5 +88,5 @@ export async function sendEmail(props: EmailProps) {
 }
 function toEmail(to) {
     // to = ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"];
-    return [to, , "ishaqyusuf024@gmail.com"];
+    return [to, "ishaqyusuf024@gmail.com"];
 }
