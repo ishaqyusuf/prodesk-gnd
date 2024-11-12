@@ -191,11 +191,7 @@ export default function SquarePaymentModal({ id }: { id: number }) {
         >
             <Modal.Content>
                 <Modal.Header title={modalTitle} subtitle={modalSubtitle} />
-                <Tabs
-                    defaultValue={tab}
-                    value={tab}
-                    onValueChange={setTab as any}
-                >
+                <Tabs value={tab} onValueChange={setTab as any}>
                     <TabsList className="hidden">
                         <TabsTrigger value="main"></TabsTrigger>
                         <TabsTrigger value="paymentLinkForm"></TabsTrigger>
