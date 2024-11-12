@@ -32,7 +32,6 @@ export async function printSalesPdf(mode: SalesPrintModes, ids) {
 export async function _generateSalesPdf(mode: SalesPrintModes, ids) {
     let browser, page, url;
     const puppeteer = require("puppeteer-core");
-    console.log("printing......");
     browser = await puppeteer.connect({
         browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`,
     });

@@ -8,6 +8,7 @@ export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
     return {
         uri: pdfDataUri,
+        pdf: pdf,
     };
 }
 async function geenrate(query: SalesPrintProps["searchParams"]) {
