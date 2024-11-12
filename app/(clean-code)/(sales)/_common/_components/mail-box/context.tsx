@@ -52,7 +52,7 @@ export const useMailboxContext = (id, type) => {
             const t = await form.trigger();
             if (t) {
                 const dta = form.getValues();
-                dta.subject = data.sendProfile.subject;
+                const subject = data.sendProfile.subject;
                 const resp = await sendEmail({
                     body: dta.body,
                     replyTo: data.sendProfile.replyTo,
@@ -71,7 +71,7 @@ export const useMailboxContext = (id, type) => {
                             };
                         })
                         ?.filter((s) => s.url),
-                    subject: data.subject,
+                    subject,
                     data: data.composeData,
                 });
                 console.log(resp);
