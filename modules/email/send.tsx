@@ -30,27 +30,7 @@ export async function sendEmail(props: EmailProps) {
             error: errors?.map((e) => e.error).join("\n"), //"Unable to process attachment",
         };
     const to = toEmail(props.to);
-
-    const batchMail = Array.isArray(to)
-        ? await resend.batch.send(
-              to?.map((t) => ({
-                  to: t,
-                  from: props.from,
-                  html: body,
-                  subject,
-                  reply_to: props.replyTo,
-                  attachments: attachments?.map((a) => ({
-                      filename: a.cloudinary?.public_id,
-                      content: a.pdf,
-                  })),
-              }))
-          )
-        : await resend.emails.send({
-              from: props.from,
-              to,
-              // html: ReactEmail.,
-              // react:,
-              html: `
+    const html = `
             <div>${body}</div>
             <div>
             ${attachments.map((a) => {
@@ -66,9 +46,30 @@ export async function sendEmail(props: EmailProps) {
                 </div>`;
             })}
             </div>
-        `,
+        `;
+    const batchMail = Array.isArray(to)
+        ? await resend.batch.send(
+              to?.map((t) => ({
+                  to: t,
+                  from: props.from,
+                  html,
+                  subject,
+                  reply_to: props.replyTo,
+                  //   attachments: attachments?.map((a) => ({
+                  //       filename: a.cloudinary?.public_id,
+                  //       content: a.pdf,
+                  //   })),
+              }))
+          )
+        : await resend.emails.send({
+              from: props.from,
+              to,
+              // html: ReactEmail.,
+              // react:,
+              html,
               subject: subject,
               reply_to: props.replyTo,
+
               // attachments: attachments?.map((a) => ({
               //     filename: a.cloudinary?.public_id?.split("/")[1],
               //     content: a.pdf?.toString("base64"),
