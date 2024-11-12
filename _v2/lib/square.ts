@@ -252,7 +252,7 @@ export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
             res: s.result,
             statusCode: s.statusCode,
         };
-        if (s.result.errors.length) throw s.result;
+        // if (s.result.errors.length) throw s.result;
 
         const checkoutId = s.result.checkout.id;
         // s.result.checkout.orderId
