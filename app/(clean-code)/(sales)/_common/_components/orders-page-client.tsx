@@ -12,11 +12,16 @@ import { getSalesOrderInfinityListUseCase } from "../use-case/sales-list-use-cas
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import OrderOverviewSheet from "./sales-overview/order-overview-sheet";
+import { useEffect } from "react";
 
 interface Props {
     // promise;
+    searchParams;
 }
-export default function OrdersPageClient({}: Props) {
+export default function OrdersPageClient({ searchParams }: Props) {
+    useEffect(() => {
+        console.log(searchParams);
+    }, []);
     const table = useTableCompose({
         cells(ctx) {
             return [

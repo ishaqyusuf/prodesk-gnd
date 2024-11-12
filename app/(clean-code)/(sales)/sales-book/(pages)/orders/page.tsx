@@ -10,8 +10,8 @@ export const revalidate = 0;
 export const dynamic = "force-dynamic";
 export default async function SalesBookPage({ searchParams }) {
     // const promise = getSalesOrderListUseCase(searchParams);
-    if (Object.keys(searchParams).length == 0 && __isProd)
-        redirect("/sales-book/orders?digest=");
+    // if (Object.keys(searchParams).length == 0 && __isProd)
+    //     redirect("/sales-book/orders?digest=");
 
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
@@ -20,7 +20,7 @@ export default async function SalesBookPage({ searchParams }) {
     );
     return (
         <FPage className="" title="Orders">
-            <OrdersPageClient />
+            <OrdersPageClient searchParams={searchParams} />
         </FPage>
     );
 }
