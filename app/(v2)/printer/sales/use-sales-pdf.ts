@@ -8,15 +8,16 @@ import QueryString from "qs";
 export default function useSalesPdf() {
     async function print(query: SalesPrintProps["searchParams"]) {
         // console.log(query);
-        // QueryString.stringify(query)
-        const resp = await fetch(
-            `/api/download-sales-pdf?${QueryString.stringify(query)}`
-        );
-        // const pdf = await salesPdf(query);
-        // const link = document.createElement("a");
-        // link.href = pdf.uri;
-        // link.download = `${query.slugs}.pdf`;
-        // link.click();
+        // console.log(QueryString.stringify(query));
+
+        // const resp = await fetch(
+        //     `/api/download-sales-pdf?${QueryString.stringify(query)}`
+        // );
+        const pdf = await salesPdf(query);
+        const link = document.createElement("a");
+        link.href = pdf.url;
+        link.download = `${query.slugs}.pdf`;
+        link.click();
         toast.success("Pdf Exported!.");
     }
     return {

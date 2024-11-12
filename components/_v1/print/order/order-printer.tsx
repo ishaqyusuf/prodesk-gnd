@@ -63,12 +63,12 @@ export default function OrderPrinter({
         if (!printer) return;
         if (printer.pdf) {
             console.log(printer);
-            const resp = await fetch(
-                `/api/download-sales-pdf?mode=${
-                    printer.mode
-                }&ids=${printer.ids?.join(",")}`
-            );
-            return;
+            // const resp = await fetch(
+            //     `/api/download-sales-pdf?mode=${
+            //         printer.mode
+            //     }&ids=${printer.ids?.join(",")}`
+            // );
+            // return;
 
             const pdf = await printSalesPdf(
                 printer.mode,

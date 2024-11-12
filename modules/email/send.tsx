@@ -33,14 +33,7 @@ export async function sendEmail(props: EmailProps) {
             <div>${body}</div>
             <div>
             ${attachments.map((a) => {
-                const href = `${a.cloudinary.secure_url
-                    ?.split("raw")[0]
-                    ?.replace(
-                        "res.",
-                        "res-console."
-                    )}media_explorer_thumbnails/${
-                    a.cloudinary.asset_id
-                }/download`;
+                const href = `${a.cloudinary.downloadUrl}`;
                 return `<div><a href="${href}">Download ${a.cloudinary.public_id}</a>
                 </div>`;
             })}

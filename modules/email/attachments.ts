@@ -7,7 +7,7 @@ export async function processAttachments(props: EmailProps) {
         pdf?;
         pdfURI?;
         error?;
-        cloudinary?: UploadApiResponse;
+        cloudinary?: UploadApiResponse & { downloadUrl?: String };
         cloudinaryError?: UploadApiErrorResponse;
     }[] = [];
     if (props.attachmentLink) return attachments;
