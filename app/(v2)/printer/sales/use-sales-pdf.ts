@@ -10,7 +10,7 @@ export default function useSalesPdf() {
         // console.log(query);
         // QueryString.stringify(query)
         const resp = await fetch(
-            `/api/download-sales-pdf?mode=${QueryString.stringify(query)}`
+            `/api/download-sales-pdf?${QueryString.stringify(query)}`
         );
         // const pdf = await salesPdf(query);
         // const link = document.createElement("a");
