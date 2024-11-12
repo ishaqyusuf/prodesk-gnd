@@ -102,6 +102,7 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
         ...checkout,
         paymentId: checkout.id,
         salesCheckoutId: salesCheckout.id,
+        squareError: res?.result?.errors,
     };
 }
 async function errorHandler(fn): Promise<{
@@ -221,12 +222,9 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
 //         console.error("Error refreshing token:", error);
 //     }
 // };
+let res;
 export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
     return await errorHandler(async () => {
-        // client.devicesApi.listDevices
-        // const accessToken = await refreshAccessToken(env.SANBOX_ACCESS_TOKEN);
-        // console.log({ accessToken });
-
         const s = await client.terminalApi.createTerminalCheckout({
             // deviceId: process.env.SQUARE_TERMINAL_DEVICE_ID,
             idempotencyKey: data.salesCheckoutId, // Unique identifier for each transaction
@@ -250,6 +248,9 @@ export async function ceateTerminalCheckout(data: CreateSalesPaymentProps) {
                 },
             },
         });
+        res = s;
+        if (s.result.errors.length) throw s.result;
+
         const checkoutId = s.result.checkout.id;
         // s.result.checkout.orderId
         return {
