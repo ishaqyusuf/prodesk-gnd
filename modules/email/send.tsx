@@ -3,7 +3,6 @@
 import { resend } from "@/lib/resend";
 import { processAttachments } from "./attachments";
 import { transformEmail } from "./transform";
-// import {  } from "react-email";
 export interface EmailProps {
     subject;
     data;
@@ -47,35 +46,36 @@ export async function sendEmail(props: EmailProps) {
             })}
             </div>
         `;
-    const batchMail = Array.isArray(to)
-        ? await resend.batch.send(
-              to?.map((t) => ({
-                  to: t,
+    const batchMail =
+        to?.length > 1
+            ? await resend.batch.send(
+                  to?.map((t) => ({
+                      to: t,
+                      from: props.from,
+                      html,
+                      subject,
+                      reply_to: props.replyTo,
+                      //   attachments: attachments?.map((a) => ({
+                      //       filename: a.cloudinary?.public_id,
+                      //       content: a.pdf,
+                      //   })),
+                  }))
+              )
+            : await resend.emails.send({
                   from: props.from,
+                  to: to[0],
+                  // html: ReactEmail.,
+                  // react:,
                   html,
-                  subject,
+                  subject: subject,
                   reply_to: props.replyTo,
-                  //   attachments: attachments?.map((a) => ({
-                  //       filename: a.cloudinary?.public_id,
-                  //       content: a.pdf,
-                  //   })),
-              }))
-          )
-        : await resend.emails.send({
-              from: props.from,
-              to,
-              // html: ReactEmail.,
-              // react:,
-              html,
-              subject: subject,
-              reply_to: props.replyTo,
 
-              // attachments: attachments?.map((a) => ({
-              //     filename: a.cloudinary?.public_id?.split("/")[1],
-              //     content: a.pdf?.toString("base64"),
-              //     // encoding
-              // })),
-          });
+                  // attachments: attachments?.map((a) => ({
+                  //     filename: a.cloudinary?.public_id?.split("/")[1],
+                  //     content: a.pdf?.toString("base64"),
+                  //     // encoding
+                  // })),
+              });
 
     return {
         // message: mail.data.id,
@@ -88,5 +88,5 @@ export async function sendEmail(props: EmailProps) {
 }
 function toEmail(to) {
     // to = ["ishaqyusuf024@gmail.com", "pcruz321@gmail.com"];
-    return [to, "ishaqyusuf024@gmail.com"];
+    return [to, , "ishaqyusuf024@gmail.com"];
 }
