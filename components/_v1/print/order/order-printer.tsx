@@ -69,7 +69,6 @@ export default function OrderPrinter({
             //     }&ids=${printer.ids?.join(",")}`
             // );
             // return;
-
             const pdf = await printSalesPdf(
                 printer.mode,
                 printer.ids?.join(",")

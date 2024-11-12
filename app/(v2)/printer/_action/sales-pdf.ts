@@ -6,15 +6,15 @@ import { uploadPDFToCloudinary } from "@/modules/cloudinary";
 
 export async function salesPdf(query: SalesPrintProps["searchParams"]) {
     const pdf = await geenrate(query);
-    const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
+    // const pdfDataUri = `data:application/pdf;base64,${pdf.toString("base64")}`;
     const cloudinary = await uploadPDFToCloudinary(
         pdf,
         `${query.slugs}.pdf`,
         "sales-orders"
     );
     return {
-        uri: pdfDataUri,
-        pdf: pdf,
+        // uri: pdfDataUri,
+        // pdf: pdf,
         url: cloudinary.downloadUrl,
         // url: cloudinary.
     };

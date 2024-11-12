@@ -40,11 +40,11 @@ export async function sendMessage(data: EmailProps, download?: DownloadProps) {
                 <a href="gnd-prodesk.vercel.app/download/${download.path}/ptok-${token}/${download.slug}" >Download</a>
                 `;
             // throw new Error("pdf not generated.");
-            if (pdf)
-                attachments.push({
-                    content: pdf.uri,
-                    filename: `${data.data.orderId}.pdf`,
-                });
+            // if (pdf)
+            //     attachments.push({
+            //         content: pdf.uri,
+            //         filename: `${data.data.orderId}.pdf`,
+            //     });
         } catch (error) {
             if (error instanceof Error) console.log(error.message);
             throw Error("Unable to generate pdf");
