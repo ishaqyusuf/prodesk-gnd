@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { Label } from "@/components/ui/label";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { Icons } from "@/components/_v1/icons";
+import { CheckCircle2Icon } from "lucide-react";
 
 const useShippingFormCtx = () => {
     const ctx = useItemProdViewContext();
@@ -144,10 +146,18 @@ function ShippingItemLine({
     const pending = item.analytics.pending;
     return (
         <div className="flex flex-col border-b bg-white">
-            <Button
-                className="flex-1 h-auto justify-start"
-                variant={itemForm?.selected ? "secondary" : "ghost"}
+            <div
+                className={cn(
+                    "flex-1 h-auto w-full justify-start cursor-pointer p-2",
+                    itemForm?.selected
+                        ? "bg-muted-foreground/5"
+                        : "hover:bg-muted-foreground/10"
+                )}
                 onClick={() => {
+                    if (!deliverableQty.total) {
+                        toast.error("No deliverable qty");
+                        return;
+                    }
                     const val = !itemForm?.selected;
                     form.setValue(`selection.${item.uid}.selected`, val);
                     form.setValue(`selection.${item.uid}.itemId`, item.id);
@@ -174,8 +184,19 @@ function ShippingItemLine({
                             </Badge>
                         </div>
                     </div>
+                    <div className="flex-1"></div>
+                    {itemForm?.selected ? (
+                        <CheckCircle2Icon
+                            className={cn(
+                                "w-4 h-4",
+                                itemForm?.selected && "text-green-500"
+                            )}
+                        />
+                    ) : (
+                        <></>
+                    )}
                 </div>
-            </Button>
+            </div>
             {itemForm?.selected && (
                 <div>
                     {/* {JSON.stringify(item.analytics)} */}
