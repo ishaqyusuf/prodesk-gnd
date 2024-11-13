@@ -77,6 +77,7 @@ export function parseSearchQuery(query) {
 export const excludeDeleted = {
     where: { deletedAt: null },
 };
+export const notDeleted = excludeDeleted;
 
 export const SalesListInclude = {
     producer: true,

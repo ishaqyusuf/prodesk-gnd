@@ -10,6 +10,7 @@ import {
     submitAssignmentDta,
 } from "./sales-prod.dta";
 import { updateSalesProgressDta } from "./sales-progress.dta";
+import { excludeDeleted } from "../utils/db-utils";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export async function getSalesDispatchFormDta(shipping: SalesShippingDto) {
@@ -42,19 +43,35 @@ export async function getSalesDispatchFormDta(shipping: SalesShippingDto) {
     };
 }
 type CreateManyDeliveryItem = Prisma.OrderItemDeliveryCreateManyInput;
+export async function deleteSalesDispatchDta(id) {
+    const d = await prisma.orderDelivery.update({
+        where: { id },
+        data: {
+            deletedAt: new Date(),
+        },
+        include: {
+            items: {
+                ...excludeDeleted,
+            },
+        },
+    });
+    let totalQty = sum(
+        d.items.map((item) => sum([item.lhQty, item.rhQty]) || item.qty)
+    );
+    await prisma.orderItemDelivery.updateMany({
+        where: {
+            orderDeliveryId: d.id,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+    await updateSalesProgressDta(d.salesOrderId, "dispatch", {
+        minusScore: totalQty,
+    });
+}
 export async function createSalesDispatchDta(data: SalesDispatchFormData) {
     const orderId = data.delivery.order.connect.id;
-    // await prisma.orderDelivery.updateMany({
-    //     where: { salesOrderId: orderId },
-    //     data: { deletedAt: new Date() },
-    // });
-    // await prisma.orderItemDelivery.updateMany({
-    //     where: { orderId },
-    //     data: { deletedAt: new Date() },
-    // });
-    // await updateSalesProgressDta(orderId, "dispatch", {
-    //     score: 0,
-    // });
     const __items = Object.values(data.selection).filter((s) => s.selected);
     if (__items.length == 0)
         throw new Error("Select atleast one item to create a shipping");

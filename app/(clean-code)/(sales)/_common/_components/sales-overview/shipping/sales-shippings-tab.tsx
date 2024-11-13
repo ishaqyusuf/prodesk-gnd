@@ -12,6 +12,10 @@ import { TableCell } from "@/app/_components/data-table/table-cells";
 import StatusBadge from "@/components/_v1/status-badge";
 import { Icons } from "@/components/_v1/icons";
 import Link from "next/link";
+import { SalesShippingDto } from "../../../data-access/dto/sales-shipping-dto";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { deleteSalesDispatchUseCase } from "../../../use-case/sales-dispatch-use-case";
+import { toast } from "sonner";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -73,25 +77,38 @@ export function SalesShippingTab({}) {
             <Table>
                 <TableBody>
                     {ctx.overview?.shipping?.list?.map((ls) => (
-                        <TableRow
-                            className="cursor-pointer"
-                            key={ls.id}
-                            onClick={() => {
-                                ctx.viewShipping(ls.id);
-                            }}
-                        >
-                            <TableCell>{ls.date}</TableCell>
-                            <TableCell>{ls.title}</TableCell>
-                            <TableCell>
-                                <StatusBadge
-                                    status={ls.status || "In Progress"}
-                                />
-                            </TableCell>
-                        </TableRow>
+                        <ShippingRow shipping={ls} key={ls.id} />
                     ))}
                 </TableBody>
             </Table>
         </div>
+    );
+}
+function ShippingRow({
+    shipping,
+}: {
+    shipping: SalesShippingDto["list"][number];
+}) {
+    const ctx = useSalesOverview();
+    function openShipping() {
+        ctx.viewShipping(shipping.id);
+    }
+    async function _deleteShipping() {
+        await deleteSalesDispatchUseCase(shipping.id);
+        ctx.refresh();
+        toast.error("Deleted");
+    }
+    return (
+        <TableRow className="cursor-pointer">
+            <TableCell onClick={openShipping}>{shipping.date}</TableCell>
+            <TableCell onClick={openShipping}>{shipping.title}</TableCell>
+            <TableCell onClick={openShipping}>
+                <StatusBadge status={shipping.status || "In Progress"} />
+            </TableCell>
+            <TableCell onClick={(e) => e.preventDefault()}>
+                <ConfirmBtn onClick={_deleteShipping} trash size="icon" />
+            </TableCell>
+        </TableRow>
     );
 }
 interface LineItemProps {
