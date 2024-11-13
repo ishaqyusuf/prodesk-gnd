@@ -220,19 +220,28 @@ function packingInfo(data: PrintData, itemId, doorId?) {
     const deliveryId = data.query.dispatchId;
     if (!data.isPacking || !deliveryId) return null;
     const deliveries = data.order.deliveries;
-    const deliv = deliveries.find((d) => (d.id = deliveryId));
+    const deliv = deliveries.find((d) => d.id == deliveryId);
     let items =
         deliveryId == "all"
             ? deliveries?.map((d) => d.items).flat()
             : deliv?.items;
     if (!items) return "N/A";
-    const filtered = items.filter((item) =>
-        doorId
-            ? item.submission?.assignment?.salesDoorId == doorId &&
-              item.orderItemId == itemId
-            : item.orderItemId == itemId
+    const filtered = items.filter(
+        (item) =>
+            ((doorId
+                ? item.submission?.assignment?.salesDoorId == doorId &&
+                  item.orderItemId == itemId
+                : item.orderItemId == itemId) &&
+                item.orderDeliveryId == deliveryId) ||
+            deliveryId == "all"
     );
-    if (!filtered?.length) return "N/A";
+    if (!filtered?.length) return `N/A`;
+    // return `N/A - ${items.length}-  ${items
+    //     // .filter((d) => d.orderDeliveryId == deliveryId)
+    //     .map((d) => d.orderDeliveryId)
+    //     .join(",")} | ${deliveries.map((d) => d.items.length).join(",")} | ${
+    //     deliveries.filter((d) => d.deletedAt).length
+    // }`;
     const sumLh = sum(filtered, "lhQty");
     const sumRh = sum(filtered, "rhQty");
     const sumQty = sum(filtered, "qty");
