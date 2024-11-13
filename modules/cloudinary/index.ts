@@ -7,7 +7,7 @@ export function generateDownloadLink(publicId) {
     const downloadUrl = cloudinary.url(publicId, {
         resource_type: "raw",
         secure: true,
-        flags: "attachment",
+        // flags: "attachment",
     });
     return downloadUrl;
 }
