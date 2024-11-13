@@ -3,6 +3,14 @@ import { cloudinary } from "./lib";
 
 export type UploadFolders = "sales-orders" | "contractor-document" | "dyke";
 
+export function generateDownloadLink(publicId) {
+    const downloadUrl = cloudinary.url(publicId, {
+        resource_type: "raw",
+        secure: true,
+        flags: "attachment",
+    });
+    return downloadUrl;
+}
 export async function uploadPDFToCloudinary(
     buffer: Buffer,
     public_id: string,
@@ -31,7 +39,9 @@ export async function uploadPDFToCloudinary(
                                 //     )}media_explorer_thumbnails/${
                                 //     result.asset_id
                                 // }/download`,
-                                downloadUrl: result.secure_url,
+                                downloadUrl: generateDownloadLink(
+                                    result.public_id
+                                ),
                             });
                         } else {
                             reject(error);
