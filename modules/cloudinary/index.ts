@@ -22,14 +22,15 @@ export async function uploadPDFToCloudinary(
                         if (result) {
                             resolve({
                                 ...result,
-                                downloadUrl: `${result.secure_url
-                                    ?.split("raw")[0]
-                                    ?.replace(
-                                        "res.",
-                                        "res-console."
-                                    )}media_explorer_thumbnails/${
-                                    result.asset_id
-                                }/download`,
+                                // downloadUrl: `${result.secure_url
+                                //     ?.split("raw")[0]
+                                //     ?.replace(
+                                //         "res.",
+                                //         "res-console."
+                                //     )}media_explorer_thumbnails/${
+                                //     result.asset_id
+                                // }/download`,
+                                downloadUrl: result.secure_url,
                             });
                         } else {
                             reject(error);
