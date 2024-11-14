@@ -16,12 +16,13 @@ import { useEffect } from "react";
 
 interface Props {
     // promise;
+    filterFields;
     searchParams;
 }
-export default function OrdersPageClient({ searchParams }: Props) {
-    useEffect(() => {
-        console.log(searchParams);
-    }, []);
+export default function OrdersPageClient({
+    searchParams,
+    filterFields,
+}: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -42,7 +43,7 @@ export default function OrdersPageClient({ searchParams }: Props) {
         checkable: true,
         filterCells: ["_q"],
         schema: salesSearchSchema,
-        filterFields: salesFilterFields,
+        filterFields,
         serverAction: getSalesOrderInfinityListUseCase,
         cellVariants: {
             size: "sm",

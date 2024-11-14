@@ -9,6 +9,8 @@ export const salesSearchSchema = z.object({
     delivery: z.string().optional(),
     orderId: z.string().optional(),
     po: z.string().optional(),
+    phone: z.string().optional(),
+    rep: z.string().optional(),
 });
 
 export const salesFilterFields = [
@@ -23,8 +25,14 @@ export const salesFilterFields = [
         value: "po",
         options: [],
     },
+    {
+        label: "Phone",
+        type: "input",
+        value: "phone",
+        options: [],
+    },
     // filterFields.address,
-    // filterFields.customerName,
+    filterFields.customerName,
     // {
     //     label: "status",
     //     type: "input",
@@ -66,10 +74,10 @@ export const salesFilterFields = [
     //         value,
     //     })),
     // },
-    // {
-    //     label: "Sales Rep",
-    //     type: "checkbox",
-    //     value: "rep",
-    //     options: [],
-    // },
+    {
+        label: "Sales Rep",
+        type: "checkbox",
+        value: "rep",
+        options: [],
+    },
 ] satisfies DataTableFilterField<any>[];

@@ -6,6 +6,9 @@ import { __isProd } from "@/lib/is-prod-server";
 import { getQueryClient } from "@/providers/get-query-client";
 import { dataOptions } from "@/components/(clean-code)/data-table/query-options";
 import { getSalesOrderInfinityListUseCase } from "../../../_common/use-case/sales-list-use-case";
+import { composeFilter } from "@/components/(clean-code)/data-table/filter-compose";
+import { salesFilterFields } from "../../../_common/_schema/base-order-schema";
+import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-page-query-data";
 // export const revalidate = 0;
 // export const dynamic = "force-dynamic";
 export default async function SalesBookPage({ searchParams }) {
@@ -17,9 +20,16 @@ export default async function SalesBookPage({ searchParams }) {
     await queryClient.prefetchInfiniteQuery(
         dataOptions(search, getSalesOrderInfinityListUseCase)
     );
+    const filterFields = composeFilter(
+        salesFilterFields,
+        await getSalesPageQueryDataDta()
+    );
     return (
         <FPage className="" title="Orders">
-            <OrdersPageClient searchParams={searchParams} />
+            <OrdersPageClient
+                filterFields={filterFields}
+                searchParams={searchParams}
+            />
         </FPage>
     );
 }
