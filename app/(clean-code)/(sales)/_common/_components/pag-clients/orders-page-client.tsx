@@ -25,7 +25,7 @@ export default function OrdersPageClient({
     filterFields,
     filterOptions,
 }: Props) {
-    console.log(filterFields);
+    console.log({ filterFields });
     console.log({ filterOptions });
 
     const table = useTableCompose({

@@ -17,8 +17,11 @@ export async function getSalesPageQueryDataDta() {
             //     gte: dayjs().add(5,'hour')
             // }
         },
+        orderBy: {
+            createdAt: "desc",
+        },
     });
-    if (pageCache) return pageCache?.meta as any;
+    if (pageCache?.meta) return pageCache?.meta as any;
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order" as SalesType,
