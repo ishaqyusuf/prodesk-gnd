@@ -59,7 +59,7 @@ function Infinity({ children, ...props }: { children } & TableProps) {
     const ctx = useInfiniteDataTable(props);
     // const router = useRouter();
     const path = usePathname();
-    useEffectAfterMount(() => {
+    useEffect(() => {
         console.log("REVALIDATING>>>>");
         __revalidatePath(path).then((res) => {
             console.log(`REVALIDATED: ${path}`);
