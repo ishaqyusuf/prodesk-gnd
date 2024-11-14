@@ -62,6 +62,7 @@ export const searchParamsParser = {
     production: parseAsString,
     invoice: parseAsString,
     rep: parseAsString,
+    orderId: parseAsString,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);

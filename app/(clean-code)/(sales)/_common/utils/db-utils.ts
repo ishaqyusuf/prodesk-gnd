@@ -38,6 +38,13 @@ export function whereSales(query: GetSalesListQuery) {
                     id: query.id,
                 });
                 break;
+            case "orderId":
+                whereAnd.push({
+                    orderId: {
+                        contains: query.orderId,
+                    },
+                });
+                break;
         }
     });
     const where: Prisma.SalesOrdersWhereInput =

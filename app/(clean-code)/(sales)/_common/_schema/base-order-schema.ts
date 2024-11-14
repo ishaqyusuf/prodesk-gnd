@@ -7,9 +7,16 @@ export const salesSearchSchema = z.object({
     address: z.string().optional(),
     customer: z.string().optional(),
     delivery: z.string().optional(),
+    orderId: z.string().optional(),
+    po: z.string().optional(),
 });
 
 export const salesFilterFields = [
+    {
+        label: "order no",
+        type: "input",
+        value: "orderId",
+    },
     filterFields.address,
     filterFields.customerName,
     {
