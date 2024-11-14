@@ -107,8 +107,9 @@ export function useInfiniteDataTable({
         []
     );
     React.useEffect(() => {
+        console.log("REFETCHING>>>>>>>>!");
         refetch();
-        console.log("REFRETCH");
+        console.log("REFRETCHED!>>>>>>");
     }, []);
     const [columnVisibility, setColumnVisibility] =
         useLocalStorage<VisibilityState>("data-table-visibility", {
