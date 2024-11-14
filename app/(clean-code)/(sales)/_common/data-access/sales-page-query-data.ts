@@ -1,4 +1,5 @@
 import { prisma } from "@/db";
+import { SalesType } from "../../types";
 const type = "sales-page-setting";
 
 export async function truncateSalesPageDataDta() {
@@ -20,7 +21,7 @@ export async function getSalesPageQueryDataDta() {
     if (pageCache) return pageCache?.meta as any;
     const sales = await prisma.salesOrders.findMany({
         where: {
-            type: "sale",
+            type: "order" as SalesType,
         },
         select: {
             orderId: true,

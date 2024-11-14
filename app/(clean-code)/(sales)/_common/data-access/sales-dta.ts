@@ -26,6 +26,7 @@ export interface GetSalesListQuery extends PageBaseQuery {
     po?;
     customer?;
     phone?;
+    rep?;
 }
 export type GetSalesQuotesDta = AsyncFnType<typeof getSalesQuotesDta>;
 export async function getSalesQuotesDta(query: GetSalesListQuery) {

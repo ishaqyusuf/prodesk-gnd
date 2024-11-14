@@ -20,15 +20,14 @@ export default async function SalesBookPage({ searchParams }) {
     await queryClient.prefetchInfiniteQuery(
         dataOptions(search, getSalesOrderInfinityListUseCase)
     );
-    const filterFields = composeFilter(
-        salesFilterFields,
-        await getSalesPageQueryDataDta()
-    );
+    const filterOptions = await getSalesPageQueryDataDta();
+    const filterFields = composeFilter(salesFilterFields, filterOptions);
     return (
         <FPage className="" title="Orders">
             <OrdersPageClient
                 filterFields={filterFields}
                 searchParams={searchParams}
+                filterOptions={filterOptions}
             />
         </FPage>
     );

@@ -79,6 +79,12 @@ export function whereSales(query: GetSalesListQuery) {
                 whereAnd.push({
                     OR: [{ customer: { phoneNo: { contains: query.phone } } }],
                 });
+            case "rep":
+                whereAnd.push({
+                    salesRep: {
+                        name: query.rep,
+                    },
+                });
         }
     });
     const where: Prisma.SalesOrdersWhereInput =

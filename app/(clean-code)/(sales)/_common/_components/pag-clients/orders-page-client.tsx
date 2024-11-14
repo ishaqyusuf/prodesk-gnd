@@ -18,11 +18,16 @@ interface Props {
     // promise;
     filterFields;
     searchParams;
+    filterOptions?;
 }
 export default function OrdersPageClient({
     searchParams,
     filterFields,
+    filterOptions,
 }: Props) {
+    console.log(filterFields);
+    console.log({ filterOptions });
+
     const table = useTableCompose({
         cells(ctx) {
             return [
