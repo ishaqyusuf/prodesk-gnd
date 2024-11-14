@@ -24,7 +24,9 @@ import { LoaderCircle } from "lucide-react";
 import { formatCompactNumber } from "@/lib/format";
 import { TableProps } from "./use-table-compose";
 import { env } from "@/env.mjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { __revalidatePath } from "@/app/(v1)/_actions/_revalidate";
+import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -55,11 +57,11 @@ BaseProps<TData, TValue>) {
 }
 function Infinity({ children, ...props }: { children } & TableProps) {
     const ctx = useInfiniteDataTable(props);
-    const router = useRouter();
-    useEffect(() => {
-        // if (env.NEXT_PUBLIC_NODE_ENV == "production") {
-        router.refresh();
-        console.log("REFRESHED");
+    // const router = useRouter();
+    const path = usePathname();
+    useEffectAfterMount(() => {
+        __revalidatePath(path);
+        console.log(path);
         // }
     }, []);
     return (

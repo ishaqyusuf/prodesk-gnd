@@ -2,16 +2,16 @@
 
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
 import { DataTable } from "@/components/(clean-code)/data-table";
-import { Cells } from "./orders-page-cells";
+import { Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import {
     salesFilterFields,
     salesSearchSchema,
-} from "../_schema/base-order-schema";
-import { getSalesOrderInfinityListUseCase } from "../use-case/sales-list-use-case";
+} from "../../_schema/base-order-schema";
+import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-case";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import OrderOverviewSheet from "./sales-overview/order-overview-sheet";
+import OrderOverviewSheet from "../sales-overview/order-overview-sheet";
 import { useEffect } from "react";
 
 interface Props {
