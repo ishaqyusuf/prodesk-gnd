@@ -17,14 +17,16 @@ export default async function SalesBookPage({ searchParams }) {
     // redirect("/sales-book/orders?digest=");
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
+    const queryKey = "orders-page";
     await queryClient.prefetchInfiniteQuery(
-        dataOptions(search, getSalesOrderInfinityListUseCase)
+        dataOptions(search, getSalesOrderInfinityListUseCase, queryKey)
     );
     const filterOptions = await getSalesPageQueryDataDta();
     const filterFields = composeFilter(salesFilterFields, filterOptions);
     return (
         <FPage className="" title="Orders">
             <OrdersPageClient
+                queryKey={queryKey}
                 filterFields={filterFields}
                 searchParams={searchParams}
                 filterOptions={filterOptions}

@@ -21,7 +21,7 @@ export async function getSalesPageQueryDataDta() {
             createdAt: "desc",
         },
     });
-    if (pageCache?.meta) return pageCache?.meta as any;
+    // if (pageCache?.meta) return pageCache?.meta as any;
     const sales = await prisma.salesOrders.findMany({
         where: {
             type: "order" as SalesType,
@@ -55,11 +55,13 @@ export async function getSalesPageQueryDataDta() {
         orderId: sales.map((s) => s.orderId),
         phone: [
             ...new Set(
-                sales.map((s) =>
-                    [s.customer?.phoneNo, s.billingAddress?.phoneNo]
-                        .flat()
-                        .filter(Boolean)
-                )
+                sales
+                    .map((s) => [
+                        s.customer?.phoneNo,
+                        s.billingAddress?.phoneNo,
+                    ])
+                    .flat()
+                    .filter(Boolean)
             ),
         ],
         customer: [

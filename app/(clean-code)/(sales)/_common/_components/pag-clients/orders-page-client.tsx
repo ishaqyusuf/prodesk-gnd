@@ -19,11 +19,13 @@ interface Props {
     filterFields;
     searchParams;
     filterOptions?;
+    queryKey;
 }
 export default function OrdersPageClient({
     searchParams,
     filterFields,
     filterOptions,
+    queryKey,
 }: Props) {
     console.log({ filterFields });
     console.log({ filterOptions });
@@ -61,7 +63,7 @@ export default function OrdersPageClient({
     });
     return (
         <div>
-            <DataTable.Infinity queryKey="orders-page" {...table.props}>
+            <DataTable.Infinity queryKey={queryKey} {...table.props}>
                 <div className="flex justify-between">
                     <div className="w-1/2">
                         <DataTableFilterCommand />

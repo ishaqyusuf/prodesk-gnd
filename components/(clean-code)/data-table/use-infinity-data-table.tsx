@@ -1,7 +1,6 @@
 "use client";
 
 import type {
-    ColumnDef,
     ColumnFiltersState,
     RowSelectionState,
     SortingState,
@@ -21,12 +20,8 @@ import * as React from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useQueryStates } from "nuqs";
 import { searchParamsParser } from "./search-params";
-import {
-    useInfiniteQuery,
-    type FetchNextPageOptions,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { Percentile } from "@/lib/request/percentile";
 import { inDateRange, arrSome } from "@/lib/table/filterfns";
 import { dataOptions } from "./query-options";
 import { TableProps } from "./use-table-compose";
@@ -71,28 +66,6 @@ export function useInfiniteDataTable({
     const filterFields = React.useMemo(
         () =>
             __filterFields.map((field) => {
-                // if (
-                //     field.value === "latency" ||
-                //     field.value === "timing.dns" ||
-                //     field.value === "timing.connection" ||
-                //     field.value === "timing.tls" ||
-                //     field.value === "timing.ttfb" ||
-                //     field.value === "timing.transfer" ||
-                //     field.value === "status"
-                // ) {
-                //     field.options =
-                //         totalFilters?.[field.value].map((value) => ({
-                //             label: `${value}`,
-                //             value,
-                //         })) ?? field.options;
-                // }
-                // if (field.value === "host" || field.value === "pathname") {
-                //     field.options =
-                //         totalFilters?.[field.value].map((value) => ({
-                //             label: `${value}`,
-                //             value,
-                //         })) ?? field.options;
-                // }
                 return field;
             }),
         [totalFilters]
@@ -104,7 +77,7 @@ export function useInfiniteDataTable({
     const [rowSelection, setRowSelection] =
         React.useState<RowSelectionState>(defaultRowSelection);
     const [columnOrder, setColumnOrder] = useLocalStorage<string[]>(
-        "data-table-column-order",
+        `${queryKey}-data-table-column-order`,
         []
     );
     React.useEffect(() => {
@@ -113,16 +86,12 @@ export function useInfiniteDataTable({
         console.log("REFRETCHED!>>>>>>");
     }, []);
     const [columnVisibility, setColumnVisibility] =
-        useLocalStorage<VisibilityState>("data-table-visibility", {
-            // uuid: false,
-            // "timing.dns": false,
-            // "timing.connection": false,
-            // "timing.tls": false,
-            // "timing.ttfb": false,
-            // "timing.transfer": false,
-        });
+        useLocalStorage<VisibilityState>(
+            `${queryKey}-data-table-visibility`,
+            {}
+        );
     const [controlsOpen, setControlsOpen] = useLocalStorage(
-        "data-table-controls",
+        `${queryKey}-data-table-controls`,
         true
     );
     const topBarRef = React.useRef<HTMLDivElement>(null);

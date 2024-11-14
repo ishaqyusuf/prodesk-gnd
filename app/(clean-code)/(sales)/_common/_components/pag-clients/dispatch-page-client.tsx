@@ -11,8 +11,10 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import DispatchOverviewSheet from "../overviews/dispatch-overview-sheet";
 
-interface Props {}
-export default function DispatchPageClient({}: Props) {
+interface Props {
+    queryKey?;
+}
+export default function DispatchPageClient({ queryKey }: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [];
@@ -29,7 +31,7 @@ export default function DispatchPageClient({}: Props) {
 
     return (
         <div>
-            <DataTable.Infinity {...table.props}>
+            <DataTable.Infinity queryKey={queryKey} {...table.props}>
                 <div className="flex justify-between">
                     <div className="w-1/2">
                         <DataTableFilterCommand />
