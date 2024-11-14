@@ -317,41 +317,38 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                         ?.reverse()[0];
                                     return (
                                         <>
-                                            {!optionExists &&
-                                                createWord &&
-                                                findex == 0 && (
-                                                    <CommandItem
-                                                        key={`${currentWord}`}
-                                                        value={currentWord}
-                                                        onMouseDown={(e) => {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onSelect={(value) => {
-                                                            setInputValue(
-                                                                (prev) => {
-                                                                    const input = `${value}${SEPARATOR}`;
+                                            {!optionExists && createWord && (
+                                                <CommandItem
+                                                    key={`${currentWord}`}
+                                                    value={currentWord}
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onSelect={(value) => {
+                                                        setInputValue(
+                                                            (prev) => {
+                                                                const input = `${value}${SEPARATOR}`;
 
-                                                                    return prev.includes(
-                                                                        input
-                                                                    )
-                                                                        ? prev
-                                                                        : `${prev}${SEPARATOR}`.trim();
-                                                                }
-                                                            );
-                                                            setCurrentWord("");
-                                                            setTimeout(() => {
-                                                                setOpen(false);
-                                                            }, 500);
-                                                            // Optionally, you can add logic here to handle adding this new option to the options array if needed
-                                                        }}
-                                                    >
-                                                        Click Enter to search{" "}
-                                                        {'"'}
-                                                        {createWord}
-                                                        {'"'}
-                                                    </CommandItem>
-                                                )}
+                                                                return prev.includes(
+                                                                    input
+                                                                )
+                                                                    ? prev
+                                                                    : `${prev}${SEPARATOR}`.trim();
+                                                            }
+                                                        );
+                                                        setCurrentWord("");
+                                                        setTimeout(() => {
+                                                            setOpen(false);
+                                                        }, 500);
+                                                        // Optionally, you can add logic here to handle adding this new option to the options array if needed
+                                                    }}
+                                                >
+                                                    Click Enter to search {'"'}
+                                                    {createWord}
+                                                    {'"'}
+                                                </CommandItem>
+                                            )}
                                             {/* Render existing options */}
                                             {options.map((optionValue) => {
                                                 return (
