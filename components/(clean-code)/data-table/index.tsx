@@ -55,7 +55,7 @@ BaseProps<TData, TValue>) {
         </dataTableContext.Provider>
     );
 }
-function Infinity({ children, ...props }: { children } & TableProps) {
+function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTable(props);
     // const router = useRouter();
     const path = usePathname();

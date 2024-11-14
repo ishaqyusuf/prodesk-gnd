@@ -41,12 +41,13 @@ export function useInfiniteDataTable({
     defaultRowSelection = {},
     filterFields: __filterFields,
     serverAction,
+    queryKey,
     ...props
-}: TableProps) {
+}: TableProps & { queryKey }) {
     // const [search] = useQueryStates(searchParamsParser);
     const [search, setSearch] = useQueryStates(searchParamsParser);
     const { data, isFetching, isLoading, fetchNextPage, refetch } =
-        useInfiniteQuery(dataOptions(search, serverAction));
+        useInfiniteQuery(dataOptions(search, serverAction, queryKey));
 
     const { sort, start, size, uuid, ...filter } = search;
     const defaultColumnFilters = Object.entries(filter)

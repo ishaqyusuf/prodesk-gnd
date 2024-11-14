@@ -11,13 +11,14 @@ export type InfiniteQueryMeta = {
     currentPercentiles: Record<Percentile, number>;
 };
 
-export const dataOptions = (search: SearchParamsType, serverAction) => {
+export const dataOptions = (
+    search: SearchParamsType,
+    serverAction,
+    queryKey
+) => {
     console.log("INIT INFINITY");
     return infiniteQueryOptions({
-        queryKey: [
-            "data-table",
-            searchParamsSerializer({ ...search, uuid: null }),
-        ], // remove uuid as it would otherwise retrigger a fetch
+        queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
             const start = (pageParam as number) * search.size;
             // console.log({ start });

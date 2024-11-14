@@ -61,7 +61,7 @@ export default function OrdersPageClient({
     });
     return (
         <div>
-            <DataTable.Infinity {...table.props}>
+            <DataTable.Infinity queryKey="orders-page" {...table.props}>
                 <div className="flex justify-between">
                     <div className="w-1/2">
                         <DataTableFilterCommand />
