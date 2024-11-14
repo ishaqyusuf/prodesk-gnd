@@ -12,6 +12,7 @@ export type InfiniteQueryMeta = {
 };
 
 export const dataOptions = (search: SearchParamsType, serverAction) => {
+    console.log("INIT INFINITY");
     return infiniteQueryOptions({
         queryKey: [
             "data-table",
