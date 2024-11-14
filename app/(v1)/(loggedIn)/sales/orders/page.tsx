@@ -15,6 +15,10 @@ import CopyFn from "./components/copy-fn";
 import OrdersTable from "./components/orders-table";
 import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import dayjs from "dayjs";
+import Portal from "@/components/_v1/portal";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export const metadata: Metadata = {
     title: "Sales Orders",
@@ -37,7 +41,13 @@ export default async function SalesOrdersPage({ searchParams }) {
                     <BreadLink isFirst title="Sales" />
                     <BreadLink isLast title="Orders" />
                 </Breadcrumbs>
-
+                <Portal nodeId={"actionNav"}>
+                    <div>
+                        <NewFeatureBtn href="/sales-book/orders">
+                            New Site
+                        </NewFeatureBtn>
+                    </div>
+                </Portal>
                 <CopyFn />
                 <OrdersTable searchParams={searchParams} promise={response} />
                 <OrderPrinter />

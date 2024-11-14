@@ -51,6 +51,7 @@ export default function SiteHeader({ nav }: { nav: ISidebar }) {
                     {/* <Breadcrumbs segments={navs} /> */}
                 </div>
                 <div className="flex-1" />
+                <div className="inline-flex gap-4" id="actionNav"></div>
                 <Notifications />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
