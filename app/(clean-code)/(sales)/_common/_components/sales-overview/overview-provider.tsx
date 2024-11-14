@@ -21,12 +21,14 @@ export const OverviewContext = createContext<
 export const useOverviewContext = (item: SalesItemProp) => {
     const dataKey = generateRandomString();
     const [overview, setOverview] = useState<GetSalesOverview>();
+
     async function load() {
         setOverview(await getSalesItemOverviewUseCase(item.slug, item.type));
     }
     const [tabData, setTabData] = useState<TabData>(null);
 
     useEffect(() => {
+        console.log(overview);
         if (tabData) {
             switch (tabData.slug) {
                 case "itemView":

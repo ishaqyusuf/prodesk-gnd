@@ -8,6 +8,7 @@ export function generateDownloadLink(publicId) {
         resource_type: "raw",
         secure: true,
         flags: "attachment",
+        type: "upload",
     });
     return downloadUrl;
 }

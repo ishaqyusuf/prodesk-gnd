@@ -97,6 +97,8 @@ export async function updateSalesProgressDta(
 }
 function statMeta(total, score) {
     const percentage = percent(score, total);
+    console.log({ percentage });
+
     const status = statStatus({
         total,
         score,

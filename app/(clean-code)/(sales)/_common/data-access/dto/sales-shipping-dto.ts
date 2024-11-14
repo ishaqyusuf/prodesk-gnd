@@ -15,14 +15,15 @@ export function salesShippingDto(
         ?.map((grp) => {
             return grp?.items?.map((item, uid) => {
                 const analytics = item.analytics;
-                const pendingDelivery = analytics.pending.delivery.total;
-                const totalDelivered = analytics.success.delivery.total;
+                const pendingDelivery = analytics.pending.delivery?.total;
+                const totalDelivered = analytics.success.delivery?.total;
                 const totalProd = analytics.success.production?.total || 0;
                 const deliverable =
                     (analytics.pending.production
                         ? totalProd
                         : totalDelivered + pendingDelivery) - totalDelivered;
                 const assignments = item.assignments;
+
                 const deliverableSubmissions = assignments
                     .map((assignment) => {
                         return assignment.submissions

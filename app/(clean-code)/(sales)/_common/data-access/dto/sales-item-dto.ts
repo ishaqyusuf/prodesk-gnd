@@ -95,8 +95,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
     data.items = data.items?.sort(sortSalesItems);
     const filteredItems = data.items.filter(filter);
     const itemGroup = filteredItems.map((item, fItemIndex) => {
-        console.log(fItemIndex);
-
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
         );
@@ -231,7 +229,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             total: gItem.total,
                             pills,
                         },
-                        [],
+                        gItem.assignments,
                         false
                     )
                 );
@@ -273,8 +271,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                 );
             }
         });
-        console.log(items.length);
-        console.log(groupedItems.length);
 
         return {
             sectionTitle:
@@ -283,7 +279,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             style: componentStyle(item),
         };
     });
-    console.log(itemGroup[0].items.length);
 
     return itemGroup;
 }
@@ -299,6 +294,9 @@ function itemAnalytics(
     deliverable = true
 ) {
     data.analytics = { produceable, success: {}, pending: {} };
+    if (!produceable) {
+        console.log("NOT PRODUCEABLE", assignments.length);
+    }
     if (produceable || deliverable) {
         const { analytics, totalQty } = data;
         const dynamicKey = data.totalQty.lh ? "lh" : "qty";
@@ -372,10 +370,10 @@ function itemAnalytics(
 export function qtyDiff(rh: Qty, lh: Qty, add = false): Qty {
     const mult = add ? 1 : -1;
     return {
-        lh: sum([rh.lh, (lh?.lh || 0) * mult]),
-        rh: sum([rh.rh, (lh?.rh || 0) * mult]),
-        total: sum([rh.total, (lh?.total || 0) * mult]),
-        qty: sum([rh.qty, (lh?.qty || 0) * mult]),
+        lh: sum([rh?.lh, (lh?.lh || 0) * mult]),
+        rh: sum([rh?.rh, (lh?.rh || 0) * mult]),
+        total: sum([rh?.total, (lh?.total || 0) * mult]),
+        qty: sum([rh?.qty, (lh?.qty || 0) * mult]),
     };
 }
 

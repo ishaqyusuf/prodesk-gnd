@@ -79,6 +79,7 @@ export function ShippingForm({}) {
             .then((resp) => {
                 toast.success("Shipping created");
                 ctx.mainCtx.refresh();
+                ctx.mainCtx.closeSecondaryTab();
             })
             .catch((e) => {
                 if (e instanceof Error) toast.error(e.message);

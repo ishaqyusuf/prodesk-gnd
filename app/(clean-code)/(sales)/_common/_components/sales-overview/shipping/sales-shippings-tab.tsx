@@ -39,6 +39,11 @@ export function SalesShippingTab({}) {
     }, []);
     return (
         <div>
+            <div className="">
+                <div>
+                    {/* {ctx.overview?.shipping?.dispatchableItemList} */}
+                </div>
+            </div>
             {ctx.overview?.shipping?.list?.length == 0 ? (
                 <div className="min-h-[70vh] gap-4 flex flex-col items-center justify-center">
                     <p className="text-muted-foreground">No shipping yet</p>

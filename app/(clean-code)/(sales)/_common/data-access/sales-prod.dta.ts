@@ -13,7 +13,7 @@ export async function createItemAssignmentDta(
     data: Prisma.OrderItemProductionAssignmentsCreateInput,
     produceable
 ) {
-    data.qtyAssigned = sum([data.lhQty, data.rhQty]);
+    if (!data.qtyAssigned) data.qtyAssigned = sum([data.lhQty, data.rhQty]);
     if (!data.assignedTo?.connect?.id) data.assignedTo = undefined;
 
     const assignment = await prisma.orderItemProductionAssignments.create({
