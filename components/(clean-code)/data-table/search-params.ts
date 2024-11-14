@@ -63,6 +63,7 @@ export const searchParamsParser = {
     invoice: parseAsString,
     rep: parseAsString,
     orderId: parseAsString,
+    po: parseAsString,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);

@@ -45,6 +45,15 @@ export function whereSales(query: GetSalesListQuery) {
                     },
                 });
                 break;
+            case "po":
+                whereAnd.push({
+                    meta: {
+                        path: "$.po",
+                        // equals: query.po,
+                        string_contains: query.po,
+                    },
+                });
+                break;
         }
     });
     const where: Prisma.SalesOrdersWhereInput =

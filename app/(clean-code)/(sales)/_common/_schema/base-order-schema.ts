@@ -17,57 +17,59 @@ export const salesFilterFields = [
         type: "input",
         value: "orderId",
     },
-    filterFields.address,
-    filterFields.customerName,
-    {
-        label: "status",
-        type: "input",
-        value: "status",
-    },
     {
         label: "P.O",
         type: "input",
         value: "po",
         options: [],
     },
-    {
-        label: "Delivery",
-        type: "checkbox",
-        value: "delivery",
-        options: ["delivered", "pending delivery", "backorder", "late"].map(
-            (value) => ({ label: value, value })
-        ),
-    },
-    {
-        label: "Production Assignment",
-        type: "checkbox",
-        value: "productionAssignment",
-        options: ["not assigned", "part assigned", "all assigned"].map(
-            (value) => ({ label: value, value })
-        ),
-    },
-    {
-        label: "Production",
-        type: "checkbox",
-        value: "production",
-        options: ["pending", "in progress", "completed"].map((value) => ({
-            label: value,
-            value,
-        })),
-    },
-    {
-        label: "Invoice",
-        type: "checkbox",
-        value: "invoice",
-        options: ["paid", "pending", "late", "part-paid"].map((value) => ({
-            label: value,
-            value,
-        })),
-    },
-    {
-        label: "Sales Rep",
-        type: "checkbox",
-        value: "rep",
-        options: [],
-    },
+    // filterFields.address,
+    // filterFields.customerName,
+    // {
+    //     label: "status",
+    //     type: "input",
+    //     value: "status",
+    // },
+    // {
+
+    // {
+    //     label: "Delivery",
+    //     type: "checkbox",
+    //     value: "delivery",
+    //     options: ["delivered", "pending delivery", "backorder", "late"].map(
+    //         (value) => ({ label: value, value })
+    //     ),
+    // },
+    // {
+    //     label: "Production Assignment",
+    //     type: "checkbox",
+    //     value: "productionAssignment",
+    //     options: ["not assigned", "part assigned", "all assigned"].map(
+    //         (value) => ({ label: value, value })
+    //     ),
+    // },
+    // {
+    //     label: "Production",
+    //     type: "checkbox",
+    //     value: "production",
+    //     options: ["pending", "in progress", "completed"].map((value) => ({
+    //         label: value,
+    //         value,
+    //     })),
+    // },
+    // {
+    //     label: "Invoice",
+    //     type: "checkbox",
+    //     value: "invoice",
+    //     options: ["paid", "pending", "late", "part-paid"].map((value) => ({
+    //         label: value,
+    //         value,
+    //     })),
+    // },
+    // {
+    //     label: "Sales Rep",
+    //     type: "checkbox",
+    //     value: "rep",
+    //     options: [],
+    // },
 ] satisfies DataTableFilterField<any>[];

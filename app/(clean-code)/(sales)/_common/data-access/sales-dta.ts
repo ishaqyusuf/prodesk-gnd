@@ -14,12 +14,8 @@ import {
     whereSales,
 } from "../utils/db-utils";
 import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
-import {
-    salesItemGroupOverviewDto,
-    salesOverviewDto,
-} from "./dto/sales-item-dto";
+import { salesOverviewDto } from "./dto/sales-item-dto";
 import { salesShippingDto } from "./dto/sales-shipping-dto";
-import { statMismatchDta } from "./sales-progress.dta";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
