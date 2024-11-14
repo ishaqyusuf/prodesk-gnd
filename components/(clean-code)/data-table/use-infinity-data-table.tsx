@@ -106,7 +106,10 @@ export function useInfiniteDataTable({
         "data-table-column-order",
         []
     );
-
+    React.useEffect(() => {
+        refetch();
+        console.log("REFRETCH");
+    }, []);
     const [columnVisibility, setColumnVisibility] =
         useLocalStorage<VisibilityState>("data-table-visibility", {
             // uuid: false,
