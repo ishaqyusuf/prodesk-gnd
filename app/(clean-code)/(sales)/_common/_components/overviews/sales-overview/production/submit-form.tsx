@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import {
     AssignmentSubmitForm,
     submitAssignmentUseCase,
-} from "../../../use-case/sales-prod.use-case";
+} from "../../../../use-case/sales-prod.use-case";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 interface Props {

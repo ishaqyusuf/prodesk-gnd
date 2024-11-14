@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { cn } from "@/lib/utils";
-import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
+import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
 import { useSalesOverview } from "../overview-provider";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];

@@ -11,7 +11,7 @@ import {
 import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-case";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
-import OrderOverviewSheet from "../sales-overview/order-overview-sheet";
+import OrderOverviewSheet from "../overviews/sales-overview/order-overview-sheet";
 import { useEffect } from "react";
 
 interface Props {

@@ -3,7 +3,7 @@ import TableItemOverviewSheet, {
 } from "@/components/(clean-code)/data-table/item-overview-sheet";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { motion, AnimatePresence } from "framer-motion";
-import { SalesItemProp } from "../orders-page-cells";
+import { SalesItemProp } from "../../orders-page-cells";
 
 import { _modal } from "@/components/common/modal/provider";
 

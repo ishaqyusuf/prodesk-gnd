@@ -4,7 +4,7 @@ import {
     useItemProdViewContext,
 } from "../production/use-hooks";
 import { Badge } from "@/components/ui/badge";
-import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
+import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
 import { useForm } from "react-hook-form";
 import { createContext, useContext, useEffect } from "react";
 import { Form } from "@/components/ui/form";
@@ -14,7 +14,7 @@ import {
     createSalesDispatchUseCase,
     SalesDispatchForm,
     salesDispatchFormUseCase,
-} from "../../../use-case/sales-dispatch-use-case";
+} from "../../../../use-case/sales-dispatch-use-case";
 import { cn } from "@/lib/utils";
 import Button from "@/components/common/button";
 import { toast } from "sonner";

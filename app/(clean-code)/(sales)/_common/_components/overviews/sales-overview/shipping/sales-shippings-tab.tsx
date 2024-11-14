@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
-import { useSalesOverview } from "../../overview-provider";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { cn } from "@/lib/utils";
+import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
+import { useSalesOverview } from "../overview-provider";
+import { Table, TableBody, TableRow } from "@/components/ui/table";
+import { TableCell } from "@/app/_components/data-table/table-cells";
+import StatusBadge from "@/components/_v1/status-badge";
+import { Icons } from "@/components/_v1/icons";
+import Link from "next/link";
+import { SalesShippingDto } from "../../../../data-access/dto/sales-shipping-dto";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { deleteSalesDispatchUseCase } from "../../../../use-case/sales-dispatch-use-case";
+import { toast } from "sonner";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -14,7 +23,7 @@ export type ItemAssignment = ItemType["assignments"][number];
 export type ItemAssignmentSubmission = ItemAssignment["submissions"][number];
 type PillsType = ItemType["pills"];
 type AnalyticsType = ItemType["analytics"];
-export function SalesItemsOverview({}) {
+export function SalesShippingTab({}) {
     const ctx = useSalesOverview();
     const [showDetails, setShowDetails] = useState({});
     function toggleDetail(id) {
@@ -30,55 +39,81 @@ export function SalesItemsOverview({}) {
     }, []);
     return (
         <div>
-            {/* <Button onClick={() => ctx.load()}>Refresh</Button> */}
-            {ctx.overview?.itemGroup?.map((grp, id) => (
-                <div
-                    className="text-sm sborder my-1.5 srounded-lg sshadow-sm group mx-4 sm:mx-8"
-                    key={id}
-                >
-                    <SectionTitle title={grp.sectionTitle}>
-                        <div className="flex space-x-4 opacity-0 group-hover:opacity-100">
-                            {/* <Button size="sm" className="h-8" variant="outline">
-                                Production
-                            </Button> */}
-                            {grp.style?.length && (
-                                <Button
-                                    onClick={() => toggleDetail(id)}
-                                    size="sm"
-                                    className="h-8 "
-                                    variant={
-                                        showDetails[id] ? "ghost" : "default"
-                                    }
-                                >
-                                    {showDetails[id] ? "Hide" : "Components"}
-                                </Button>
-                            )}
-                        </div>
-                    </SectionTitle>
-                    <Details show={showDetails[id]} group={grp} />
-                    {grp.items.map((item, itemId) => (
-                        <LineItem
-                            key={itemId}
-                            className={cn(
-                                "",
-                                ctx.tabData?.slug == "itemView" &&
-                                    ctx.tabData?.meta?.groupIndex == id &&
-                                    ctx.tabData?.payloadSlug == itemId
-                                    ? "bg-muted-foreground/10"
-                                    : item.analytics?.produceable
-                                    ? "hover:bg-muted-foreground/10 cursor-pointer"
-                                    : null
-                            )}
-                            onClick={() => {
-                                if (item.analytics?.produceable)
-                                    ctx.openItemTab(id, itemId);
-                            }}
-                            item={item}
-                        />
-                    ))}
+            <div className="">
+                <div>
+                    {/* {ctx.overview?.shipping?.dispatchableItemList} */}
                 </div>
-            ))}
+            </div>
+            {ctx.overview?.shipping?.list?.length == 0 ? (
+                <div className="min-h-[70vh] gap-4 flex flex-col items-center justify-center">
+                    <p className="text-muted-foreground">No shipping yet</p>
+                    <Button
+                        onClick={() => {
+                            ctx.createShipping();
+                        }}
+                    >
+                        Create Shipping
+                    </Button>
+                </div>
+            ) : (
+                <div className="flex p-2 sm:px-4 gap-4 border-b">
+                    <div className="flex-1"></div>
+                    <Button variant="ghost" asChild size="sm" className="h-8">
+                        <Link
+                            href={`/printer/sales?slugs=${ctx?.overview?.orderId}&mode=packing list&dispatchId=all`}
+                            target="_blank"
+                        >
+                            <Icons.print className="w-4 h-4 mr-2" />
+                            <span>Print All</span>
+                        </Link>
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            ctx.createShipping();
+                        }}
+                        size="sm"
+                        className="h-8"
+                    >
+                        <Icons.add className="w-4 h-4 mr-2" />
+                        <span>Create</span>
+                    </Button>
+                </div>
+            )}
+            <Table>
+                <TableBody>
+                    {ctx.overview?.shipping?.list?.map((ls) => (
+                        <ShippingRow shipping={ls} key={ls.id} />
+                    ))}
+                </TableBody>
+            </Table>
         </div>
+    );
+}
+function ShippingRow({
+    shipping,
+}: {
+    shipping: SalesShippingDto["list"][number];
+}) {
+    const ctx = useSalesOverview();
+    function openShipping() {
+        ctx.viewShipping(shipping.id);
+    }
+    async function _deleteShipping() {
+        await deleteSalesDispatchUseCase(shipping.id);
+        ctx.refresh();
+        toast.error("Deleted");
+    }
+    return (
+        <TableRow className="cursor-pointer">
+            <TableCell onClick={openShipping}>{shipping.date}</TableCell>
+            <TableCell onClick={openShipping}>{shipping.title}</TableCell>
+            <TableCell onClick={openShipping}>
+                <StatusBadge status={shipping.status || "In Progress"} />
+            </TableCell>
+            <TableCell onClick={(e) => e.preventDefault()}>
+                <ConfirmBtn onClick={_deleteShipping} trash size="icon" />
+            </TableCell>
+        </TableRow>
     );
 }
 interface LineItemProps {
@@ -120,7 +155,7 @@ export function LineItem({ className = null, item, onClick }: LineItemProps) {
 export function Details({ group, show }: { show; group: ItemGroupType }) {
     if (!show) return null;
     return (
-        <div className="grid ssm:grid-cols-2 sm:gap-2 sm:-mx-8">
+        <div className="grid sm:grid-cols-2 sm:gap-4 sm:-mx-8">
             {group.style.map((style, id) => (
                 <DataLine key={id} {...style} />
             ))}

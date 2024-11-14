@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { SalesItemProp } from "../orders-page-cells";
+import { SalesItemProp } from "../../orders-page-cells";
 import { generateRandomString } from "@/lib/utils";
 import {
     getSalesItemOverviewUseCase,
     GetSalesOverview,
-} from "../../use-case/sales-item-use-case";
+} from "../../../use-case/sales-item-use-case";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 interface Props {}
