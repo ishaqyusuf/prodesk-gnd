@@ -15,7 +15,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination";
 import { TableCellProps } from "./table-cells";
 import { useInfiniteDataTable } from "./use-infinity-data-table";
@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { formatCompactNumber } from "@/lib/format";
 import { TableProps } from "./use-table-compose";
+import { env } from "@/env.mjs";
+import { useRouter } from "next/navigation";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -53,7 +55,13 @@ BaseProps<TData, TValue>) {
 }
 function Infinity({ children, ...props }: { children } & TableProps) {
     const ctx = useInfiniteDataTable(props);
-
+    const router = useRouter();
+    useEffect(() => {
+        // if (env.NEXT_PUBLIC_NODE_ENV == "production") {
+        router.refresh();
+        console.log("REFRESHED");
+        // }
+    }, []);
     return (
         <dataTableContext.Provider value={ctx}>
             <div className="w-full space-y-3 overflow-auto">{children}</div>
