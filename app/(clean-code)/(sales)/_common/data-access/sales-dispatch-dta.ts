@@ -2,7 +2,7 @@ import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 import { SalesShippingDto } from "./dto/sales-shipping-dto";
 import { Prisma } from "@prisma/client";
-import { AsyncFnType } from "@/app/(clean-code)/type";
+import { AsyncFnType, PageBaseQuery } from "@/app/(clean-code)/type";
 import { Qty, qtyDiff } from "./dto/sales-item-dto";
 import { sum } from "@/lib/utils";
 import {
@@ -13,6 +13,8 @@ import { updateSalesProgressDta } from "./sales-progress.dta";
 import { excludeDeleted } from "../utils/db-utils";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
+export interface GetSalesDispatchListQuery extends PageBaseQuery {}
+export async function getSalesDispatchDta(query: GetSalesDispatchListQuery) {}
 export async function getSalesDispatchFormDta(shipping: SalesShippingDto) {
     return {
         toggleAll: false,
