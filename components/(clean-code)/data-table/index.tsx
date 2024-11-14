@@ -60,6 +60,7 @@ function Infinity({ children, ...props }: { children } & TableProps) {
     // const router = useRouter();
     const path = usePathname();
     useEffectAfterMount(() => {
+        console.log("REVALIDATING>>>>");
         __revalidatePath(path).then((res) => {
             console.log(`REVALIDATED: ${path}`);
         });
