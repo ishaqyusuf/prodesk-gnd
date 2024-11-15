@@ -455,7 +455,7 @@ function TaxForm({}) {
                                     Create new
                                 </SelectItem>
                                 {taxForm?.listArray?.fields?.map((t) => (
-                                    <SelectItem key={t.id} value={t.taxCode}>
+                                    <SelectItem key={t._id} value={t.taxCode}>
                                         {t.title}
                                     </SelectItem>
                                 ))}
