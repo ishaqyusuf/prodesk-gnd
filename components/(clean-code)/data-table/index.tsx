@@ -59,13 +59,6 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTable(props);
     // const router = useRouter();
     const path = usePathname();
-    useEffect(() => {
-        console.log("REVALIDATING>>>>");
-        __revalidatePath(path).then((res) => {
-            console.log(`REVALIDATED: ${path}`);
-        });
-        // }
-    }, []);
     return (
         <dataTableContext.Provider value={ctx}>
             <div className="w-full space-y-3 overflow-auto">{children}</div>
@@ -77,7 +70,7 @@ function _Table({}) {
     return (
         <div
             // className="sm:border sm:rounded-lg"
-            className="flex w-full min-h-screen h-full flex-col sm:flex-row bg-white rounded-lg shadow border"
+            className="flex w-full smin-h-screen sh-full flex-col sm:flex-row bg-white rounded-lg shadow border"
         >
             <Table>
                 <TableHeader className={cn("")}>

@@ -18,6 +18,7 @@ export const dataOptions = (
     return infiniteQueryOptions({
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
+            console.log("QUERYING>>>>>>>>>");
             const start = (pageParam as number) * search.size;
             return await serverAction({ ...search, start });
         },

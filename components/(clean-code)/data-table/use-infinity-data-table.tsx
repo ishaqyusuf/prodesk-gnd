@@ -80,13 +80,7 @@ export function useInfiniteDataTable({
         `${queryKey}-data-table-column-order`,
         []
     );
-    React.useEffect(() => {
-        console.log("REFETCHING>>>>>>>>!");
-        setTimeout(() => {
-            refetch();
-            console.log("REFRETCHED!>>>>>>");
-        }, 1000);
-    }, []);
+
     const [columnVisibility, setColumnVisibility] =
         useLocalStorage<VisibilityState>(
             `${queryKey}-data-table-visibility`,
