@@ -12,7 +12,10 @@ import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import OrderOverviewSheet from "../overviews/sales-overview/order-overview-sheet";
-import { useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
+import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { toast } from "sonner";
 
 interface Props {
     // promise;
@@ -70,6 +73,8 @@ export default function OrdersPageClient({
                     </div>
                     <DataTableInfinityToolbar />
                 </div>
+                {/* </DataTable.Infinity */}
+                <Debug />
                 {/* <TableToolbar>
                     <TableToolbar.Search placeholder="sales" />
                 </TableToolbar> */}
@@ -78,5 +83,19 @@ export default function OrdersPageClient({
                 <OrderOverviewSheet />
             </DataTable.Infinity>
         </div>
+    );
+}
+function Debug() {
+    const ctx = useInifinityDataTable();
+
+    return (
+        <Button
+            onClick={() => {
+                ctx.refetch();
+                toast.success("REFRESHING>>>");
+            }}
+        >
+            Debug
+        </Button>
     );
 }

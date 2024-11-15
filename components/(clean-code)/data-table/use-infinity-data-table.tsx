@@ -209,6 +209,7 @@ export function useInfiniteDataTable({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowSelection, selectedRow]);
     return {
+        refetch,
         refresh: {
             init() {
                 if (refreshToken) {
