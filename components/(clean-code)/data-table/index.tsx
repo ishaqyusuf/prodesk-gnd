@@ -23,10 +23,9 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { formatCompactNumber } from "@/lib/format";
 import { TableProps } from "./use-table-compose";
-import { env } from "@/env.mjs";
-import { usePathname, useRouter } from "next/navigation";
+
+import { usePathname } from "next/navigation";
 import { __revalidatePath } from "@/app/(v1)/_actions/_revalidate";
-import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
