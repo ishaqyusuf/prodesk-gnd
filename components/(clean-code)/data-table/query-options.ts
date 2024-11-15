@@ -2,7 +2,6 @@
 import { SearchParamsType, searchParamsSerializer } from "./search-params";
 import { infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
 import { Percentile } from "@/lib/request/percentile";
-import { MakeArray } from "@/types/type";
 
 export type InfiniteQueryMeta = {
     totalRowCount: number;
