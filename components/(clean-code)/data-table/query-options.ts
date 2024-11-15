@@ -16,24 +16,11 @@ export const dataOptions = (
     serverAction,
     queryKey
 ) => {
-    console.log("INIT INFINITY");
     return infiniteQueryOptions({
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
             const start = (pageParam as number) * search.size;
-            // console.log({ start });
-            // const serialize = searchParamsSerializer({ ...search, start });
-            const q = await serverAction({ ...search, start });
-            console.log("QUERY FN>>>");
-            console.log(q);
-            return q;
-            // const response = await fetch(`/infinite/api${serialize}`);
-            // return response.json() as Promise<{
-            //     // data: ColumnSchema[];
-            //     // meta: InfiniteQueryMeta;
-            //     data: any[];
-            //     meta: any;
-            // }>;
+            return await serverAction({ ...search, start });
         },
         initialPageParam: 0,
         getNextPageParam: (_lastGroup, groups) => groups.length,

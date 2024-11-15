@@ -3,6 +3,7 @@ import { searchParamsCache } from "@/components/(clean-code)/data-table/search-p
 import { GetSalesListQuery, getSalesOrdersDta } from "../data-access/sales-dta";
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { deepCopy } from "@/lib/deep-copy";
+import { unstable_noStore } from "next/cache";
 
 export type GetSalesOrderList = AsyncFnType<typeof getSalesOrderListUseCase>;
 export type GetSalesOrderListItem = GetSalesOrderList["data"][number];
@@ -15,7 +16,7 @@ export async function getSalesOrderListUseCase(query: GetSalesListQuery) {
 export async function getSalesOrderInfinityListUseCase(query) {
     // const search = searchParamsCache.parse(query);
     // query._type = "order";
-
+    unstable_noStore();
     query = {
         ...query,
         _type: "order",
