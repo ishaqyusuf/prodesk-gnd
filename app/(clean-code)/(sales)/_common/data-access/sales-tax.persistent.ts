@@ -8,8 +8,10 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
     const taxForm = data._taxForm;
     const taxList = Object.values(taxForm.taxByCode);
     const selectTaxes = taxList.filter((s) => s.selected);
+    // console.log({ selectTaxes });
+
     const existingTaxIds = selectTaxes?.map((i) => i.data.id).filter(Boolean);
-    if (existingTaxIds.length && salesId)
+    if (salesId)
         await prisma.salesTaxes.updateMany({
             where: {
                 id: { notIn: existingTaxIds },
@@ -39,6 +41,8 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
             ...data,
             salesId,
         }));
+    console.log(newTaxes.length, "NEW TAXES");
+
     if (newTaxes.length)
         await prisma.salesTaxes.createMany({ data: newTaxes as any });
 }
@@ -61,7 +65,7 @@ export async function createSalesTax(tax: Taxes) {
     });
 }
 export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
-    const taxList = await getWithDeletedTaxList();
+    const taxList = await getTaxList();
     const taxByCode: {
         [code in string]: {
             data: Partial<SalesTaxes>;
@@ -82,7 +86,7 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
         const isDefault = !orderId && tl.taxCode == taxCode;
         if (tx || !tl.deletedAt || isDefault) {
             const selected = tx != null || isDefault;
-            // console.log({ selected, t: tl.title });
+            console.log({ selected, t: tl.title, deleted: tl.deletedAt });
 
             taxByCode[tl.taxCode] = {
                 selected,

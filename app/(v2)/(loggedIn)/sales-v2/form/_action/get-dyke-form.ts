@@ -187,7 +187,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
 
     if (goodUntil && typeof goodUntil != "string")
         goodUntil = dayjs(goodUntil).toISOString();
-    // console.log({ goodUntil });
+    console.log({ goodUntil });
 
     const newOrderForm: Partial<OrderType> = {
         type,

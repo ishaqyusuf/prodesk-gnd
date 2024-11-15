@@ -11,10 +11,7 @@ const adapter = new PrismaPg(pool);
 export const prisma =
     globalForPrisma.prisma ||
     new PrismaClient({
-        log:
-            env.NODE_ENV === "development"
-                ? ["query", "error", "warn"]
-                : ["error"],
+        log: env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
     }).$extends({
         query: {
             $allModels: {

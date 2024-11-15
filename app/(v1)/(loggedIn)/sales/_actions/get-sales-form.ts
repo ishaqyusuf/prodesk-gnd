@@ -87,7 +87,6 @@ export async function salesFormData(dyke = false) {
         },
     });
     const meta: ISalesSettingMeta = setting?.meta as any;
-    console.log(meta.dyke);
 
     if (!meta.dyke)
         meta.dyke = {
@@ -100,7 +99,8 @@ export async function salesFormData(dyke = false) {
     ).map((profile) => {
         let goodUntil: any = null;
         const goodDays = profile.meta?.goodUntil;
-        if (goodDays > 0) goodUntil = dayjs().add(goodDays, "days");
+        if (goodDays > 0)
+            goodUntil = dayjs().add(goodDays, "days").toISOString();
         return {
             label: profile.title,
             value: profile.title,
