@@ -13,23 +13,20 @@ import { NavContext, useNavCtx } from "./layouts/site-nav";
 import { ThemeProvider } from "next-themes";
 import { getQueryClient } from "@/providers/get-query-client";
 const AppProvider = ({ children }) => {
-    const queryClient = getQueryClient();
     return (
         <SessionProvider>
-            <QueryClientProvider client={queryClient}>
-                <Provider store={store}>
-                    <ThemeProvider attribute="class" defaultTheme="light">
-                        <CommandProvider>
-                            <ModalProvider>
-                                <NavContext.Provider value={useNavCtx()}>
-                                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-                                    {children}
-                                </NavContext.Provider>
-                            </ModalProvider>
-                        </CommandProvider>
-                    </ThemeProvider>
-                </Provider>
-            </QueryClientProvider>
+            <Provider store={store}>
+                <ThemeProvider attribute="class" defaultTheme="light">
+                    <CommandProvider>
+                        <ModalProvider>
+                            <NavContext.Provider value={useNavCtx()}>
+                                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                                {children}
+                            </NavContext.Provider>
+                        </ModalProvider>
+                    </CommandProvider>
+                </ThemeProvider>
+            </Provider>
         </SessionProvider>
     );
 };

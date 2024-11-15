@@ -4,18 +4,11 @@ import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
-import {
-    salesFilterFields,
-    salesSearchSchema,
-} from "../../_schema/base-order-schema";
+import { salesSearchSchema } from "../../_schema/base-order-schema";
 import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-case";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import OrderOverviewSheet from "../overviews/sales-overview/order-overview-sheet";
-
-import { Button } from "@/components/ui/button";
-import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
-import { toast } from "sonner";
 
 interface Props {
     // promise;
@@ -74,7 +67,7 @@ export default function OrdersPageClient({
                     <DataTableInfinityToolbar />
                 </div>
                 {/* </DataTable.Infinity */}
-                <Debug />
+
                 {/* <TableToolbar>
                     <TableToolbar.Search placeholder="sales" />
                 </TableToolbar> */}
@@ -83,19 +76,5 @@ export default function OrdersPageClient({
                 <OrderOverviewSheet />
             </DataTable.Infinity>
         </div>
-    );
-}
-function Debug() {
-    const ctx = useInifinityDataTable();
-
-    return (
-        <Button
-            onClick={() => {
-                ctx.refetch();
-                toast.success("REFRESHING>>>");
-            }}
-        >
-            Debug
-        </Button>
     );
 }

@@ -2,7 +2,6 @@
 import { SearchParamsType, searchParamsSerializer } from "./search-params";
 import { infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
 import { Percentile } from "@/lib/request/percentile";
-import { unstable_noStore } from "next/cache";
 
 export type InfiniteQueryMeta = {
     totalRowCount: number;
@@ -19,7 +18,6 @@ export const dataOptions = (
     return infiniteQueryOptions({
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
-            unstable_noStore();
             console.log(
                 "QUERYING>>>>>>>>>",
                 serverAction ? "yes" : "no action"
