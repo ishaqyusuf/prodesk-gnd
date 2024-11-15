@@ -679,15 +679,16 @@ function printFooter(data: PrintData, notPrintable) {
                 }
             });
     } else {
-        taxLines.push(
-            styled(
-                `Tax (${data.order.taxPercentage}%)`,
-                formatCurrency.format(data.order.tax || 0),
-                {
-                    font: "bold",
-                }
-            )
-        );
+        if (data.order.tax)
+            taxLines.push(
+                styled(
+                    `Tax (${data.order.taxPercentage}%)`,
+                    formatCurrency.format(data.order.tax || 0),
+                    {
+                        font: "bold",
+                    }
+                )
+            );
     }
     return {
         lines: [

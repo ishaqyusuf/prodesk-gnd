@@ -8,32 +8,17 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
     const taxForm = data._taxForm;
     const taxList = Object.values(taxForm.taxByCode);
     const selectTaxes = taxList.filter((s) => s.selected);
-    // const removedTaxesId = taxList
-    //     .filter((t) => !t.selected && t?.data?.id)
-    //     .map((t) => t.data.id);
-    // if (removedTaxesId.length)
-    // await prisma.salesTaxes.updateMany({
-    //     where: {
-    //         OR: [
-    //             {
-    //                 id: { in: removedTaxesId },
-    //             },
-    //             {
-    //                 taxCode: {
-    //                     in: ["A", "B"],
-    //                 },
-    //             },
-    //             {
-    //                 taxConfig: {
-    //                     is: null,
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     data: {
-    //         deletedAt: new Date(),
-    //     },
-    // });
+    const existingTaxIds = selectTaxes?.map((i) => i.data.id).filter(Boolean);
+    if (existingTaxIds.length && salesId)
+        await prisma.salesTaxes.updateMany({
+            where: {
+                id: { notIn: existingTaxIds },
+                salesId,
+            },
+            data: {
+                deletedAt: new Date(),
+            },
+        });
     const updateTaxList = selectTaxes.filter((s) => s.data.id);
     const newTaxList = selectTaxes.filter((t) => !t.data?.id);
     await Promise.all(
@@ -56,33 +41,6 @@ export async function saveSalesTaxDta(data: DykeForm, salesId) {
         }));
     if (newTaxes.length)
         await prisma.salesTaxes.createMany({ data: newTaxes as any });
-    // const taxes = Object.values(data.taxByCode);
-
-    // await prisma.salesTaxes.createMany({
-    //     data: taxes
-    //         .filter((t) => !t.id)
-    //         .map((t) => ({
-    //             salesId,
-    //             taxCode: t.taxCode,
-    //             taxxable: t.taxxable ?? 0,
-    //             tax: t.tax,
-    //         })),
-    // });
-    // await Promise.all(
-    //     taxes
-    //         .filter((t) => t.id)
-    //         .map(async (tax) => {
-    //             await prisma.salesTaxes.update({
-    //                 where: { id: tax.id },
-    //                 data: {
-    //                     salesId,
-    //                     taxCode: tax.taxCode,
-    //                     taxxable: tax.taxxable ?? 0,
-    //                     tax: tax.tax,
-    //                 },
-    //             });
-    //         })
-    // );
 }
 
 export async function getTaxList() {

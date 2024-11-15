@@ -50,11 +50,11 @@ const defaultValues = {
 };
 type ICtx = typeof defaultValues & {
     taxForm?: {
-        listArray?: UseFieldArrayReturn<DykeForm, "_taxForm.taxList", "id">;
+        listArray?: UseFieldArrayReturn<DykeForm, "_taxForm.taxList", "_id">;
         selectionArray?: UseFieldArrayReturn<
             DykeForm,
             "_taxForm.selection",
-            "id"
+            "_id"
         >;
         taxSelect;
         setTaxSelect;
