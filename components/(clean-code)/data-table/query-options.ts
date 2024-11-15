@@ -18,12 +18,17 @@ export const dataOptions = (
     return infiniteQueryOptions({
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
-            console.log(
-                "QUERYING>>>>>>>>>",
-                serverAction ? "yes" : "no action"
-            );
+            // console.log(
+            //     "QUERYING>>>>>>>>>",
+            //     serverAction ? "yes" : "no action"
+            // );
             const start = (pageParam as number) * search.size;
-            return await serverAction({ ...search, start });
+            const serialize = searchParamsSerializer({ ...search, start });
+            const response = await fetch(
+                `/api/infinite/sales-orders${serialize}`
+            );
+            return response.json();
+            // return await serverAction({ ...search, start });
         },
         initialPageParam: 0,
         getNextPageParam: (_lastGroup, groups) => groups.length,
