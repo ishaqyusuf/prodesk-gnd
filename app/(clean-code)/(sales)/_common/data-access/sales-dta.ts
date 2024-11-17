@@ -38,7 +38,7 @@ export async function getSalesQuotesDta(query: GetSalesListQuery) {
     };
 }
 export type GetSalesOrdersDta = AsyncFnType<typeof getSalesOrdersDta>;
-export async function getSalesOrdersDta(query: GetSalesListQuery) {
+export async function getSalesOrdersDta(query: GetSalesListQuery, code = null) {
     unstable_noStore();
     const resp = await getSalesListDta(query);
 

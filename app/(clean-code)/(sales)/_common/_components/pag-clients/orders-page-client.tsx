@@ -47,7 +47,6 @@ export default function OrdersPageClient({
         filterCells: ["_q"],
         schema: salesSearchSchema,
         filterFields,
-        serverAction: getSalesOrderInfinityListUseCase,
         cellVariants: {
             size: "sm",
         },

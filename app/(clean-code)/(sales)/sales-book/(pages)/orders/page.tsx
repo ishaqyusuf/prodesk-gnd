@@ -17,10 +17,8 @@ export default async function SalesBookPage({ searchParams }) {
     // redirect("/sales-book/orders?digest=");
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const queryKey = "orders-page";
-    await queryClient.prefetchInfiniteQuery(
-        dataOptions(search, getSalesOrderInfinityListUseCase, queryKey)
-    );
+    const queryKey = "sales-orders";
+    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     const filterOptions = await getSalesPageQueryDataDta();
     const filterFields = composeFilter(salesFilterFields, filterOptions);
     return (

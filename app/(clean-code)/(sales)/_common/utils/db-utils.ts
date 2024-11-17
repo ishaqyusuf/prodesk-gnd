@@ -6,7 +6,12 @@ import {
     anyDateQuery,
     withDeleted,
 } from "@/app/(clean-code)/_common/utils/db-utils";
+import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
+export function whereDispatch(query: GetSalesDispatchListQuery) {
+    const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
 
+    return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
+}
 export function whereSales(query: GetSalesListQuery) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
     if (query.withTrashed) whereAnd.push(withDeleted);

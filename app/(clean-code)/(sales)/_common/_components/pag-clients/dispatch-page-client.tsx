@@ -22,7 +22,6 @@ export default function DispatchPageClient({ queryKey }: Props) {
         checkable: true,
         schema: dispatchSearchSchema,
         filterFields: dispatchFilterFields,
-        serverAction: getSalesDispatchListUseCase,
         cellVariants: {
             size: "sm",
         },

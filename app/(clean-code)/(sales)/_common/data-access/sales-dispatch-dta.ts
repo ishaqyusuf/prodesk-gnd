@@ -10,11 +10,19 @@ import {
     submitAssignmentDta,
 } from "./sales-prod.dta";
 import { updateSalesProgressDta } from "./sales-progress.dta";
-import { excludeDeleted } from "../utils/db-utils";
+import { excludeDeleted, whereDispatch } from "../utils/db-utils";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export interface GetSalesDispatchListQuery extends PageBaseQuery {}
-export async function getSalesDispatchDta(query: GetSalesDispatchListQuery) {}
+export async function getSalesDispatchDta(
+    query: GetSalesDispatchListQuery,
+    tok
+) {
+    const where = whereDispatch(query);
+    const data = await prisma.orderDelivery;
+}
+export async function initDispatchQuery(searchParams) {}
+
 export async function getSalesDispatchFormDta(shipping: SalesShippingDto) {
     return {
         toggleAll: false,
