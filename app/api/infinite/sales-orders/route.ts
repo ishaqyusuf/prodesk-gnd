@@ -39,7 +39,5 @@ export async function GET(req: NextRequest) {
     //     },
     // };
     // return Response.json(d1);
-    return Response.json(
-        await getSalesOrdersDta(search, generateRandomString())
-    );
+    return Response.json(await getSalesOrdersDta(search));
 }

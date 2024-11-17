@@ -1,4 +1,5 @@
 export function formatCompactNumber(value: number) {
+    if (!value) return null;
     if (value >= 100 && value < 1000) {
         return value.toString(); // Keep the number as is if it's in the hundreds
     } else if (value >= 1000 && value < 1000000) {
@@ -9,4 +10,3 @@ export function formatCompactNumber(value: number) {
         return value.toString(); // Optionally handle numbers less than 100 if needed
     }
 }
-

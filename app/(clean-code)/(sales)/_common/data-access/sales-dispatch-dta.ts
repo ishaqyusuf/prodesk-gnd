@@ -16,7 +16,7 @@ export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export interface GetSalesDispatchListQuery extends PageBaseQuery {}
 export async function getSalesDispatchDta(
     query: GetSalesDispatchListQuery,
-    tok
+    tok = null
 ) {
     const where = whereDispatch(query);
     const data = await prisma.orderDelivery;
