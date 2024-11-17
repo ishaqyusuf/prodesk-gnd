@@ -10,14 +10,25 @@ import { DataTable } from "@/components/(clean-code)/data-table";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import DispatchOverviewSheet from "../overviews/dispatch-overview-sheet";
+import { OrderCells } from "../orders-page-cells";
+import { DispatchCells } from "../dispatch-page-cells";
 
 interface Props {
     queryKey?;
 }
-export default function DispatchPageClient({ queryKey }: Props) {
+export default function DeliveryPageClient({ queryKey }: Props) {
     const table = useTableCompose({
         cells(ctx) {
-            return [];
+            return [
+                ctx.Column("Date", "date", OrderCells.Date),
+                ctx.Column("Order #", "orderId", OrderCells.Order),
+                ctx.Column("Customer", "customer", OrderCells.Customer),
+                ctx.Column("Phone", "phone", OrderCells.CustomerPhone),
+                ctx.Column("Address", "address", OrderCells.Address),
+                ctx.Column("Rep", "rep", OrderCells.SalesRep),
+                ctx.Column("Status", "status", DispatchCells.Status),
+                ctx.Column("Progress", "progress", DispatchCells.Progress),
+            ];
         },
         checkable: true,
         schema: dispatchSearchSchema,

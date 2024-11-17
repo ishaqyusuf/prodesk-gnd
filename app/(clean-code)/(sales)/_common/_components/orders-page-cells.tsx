@@ -180,7 +180,7 @@ function InvoicePending({ item }: ItemProps) {
         </TCell>
     );
 }
-export let Cells = {
+export let OrderCells = {
     Order,
     Po,
     Customer,

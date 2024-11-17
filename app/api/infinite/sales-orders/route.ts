@@ -1,16 +1,5 @@
-import { salesOrderDto } from "@/app/(clean-code)/(sales)/_common/data-access/dto/sales-list-dto";
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
-import {
-    SalesListInclude,
-    whereSales,
-} from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
-import {
-    getPageInfo,
-    pageQueryFilter,
-} from "@/app/(clean-code)/_common/utils/db-utils";
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
-import { prisma } from "@/db";
-import { generateRandomString } from "@/lib/utils";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

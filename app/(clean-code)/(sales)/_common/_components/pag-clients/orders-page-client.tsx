@@ -2,7 +2,7 @@
 
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
 import { DataTable } from "@/components/(clean-code)/data-table";
-import { Cells } from "../orders-page-cells";
+import { OrderCells as Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import { salesSearchSchema } from "../../_schema/base-order-schema";
 import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-case";
@@ -40,7 +40,7 @@ export default function OrdersPageClient({
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
                 ctx.Column("Production", "production", Cells.Production),
-                ctx.Column("Delivery", "delivery", Cells.Delivery),
+                // ctx.Column("Delivery", "delivery", Cells.Delivery),
             ];
         },
         checkable: true,
