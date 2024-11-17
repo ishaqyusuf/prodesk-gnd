@@ -56,6 +56,7 @@ export const searchParamsParser = {
     orderId: parseAsString,
     po: parseAsString,
     phone: parseAsString,
+    pk: parseAsString,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
