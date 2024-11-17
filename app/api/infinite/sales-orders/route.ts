@@ -1,5 +1,8 @@
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
+
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
+import { generateRandomString } from "@/lib/utils";
+
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -7,7 +10,7 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const search = searchParamsCache.parse({
         ...Object.fromEntries(_search),
-        // pk: generateRandomString(),
+        pk: generateRandomString(),
     });
     // search.pk = generateRandomString();
     // const where = whereSales(search);

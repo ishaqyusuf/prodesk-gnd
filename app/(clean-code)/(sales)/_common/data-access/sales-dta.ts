@@ -17,7 +17,7 @@ import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
 import { salesOverviewDto } from "./dto/sales-item-dto";
 import { salesShippingDto } from "./dto/sales-shipping-dto";
 import { statMismatchDta } from "./sales-progress.dta";
-import { unstable_noStore } from "next/cache";
+// import { unstable_noStore } from "next/cache";
 
 export interface GetSalesListQuery extends PageBaseQuery {
     _type?: SalesType;
@@ -38,8 +38,8 @@ export async function getSalesQuotesDta(query: GetSalesListQuery) {
     };
 }
 export type GetSalesOrdersDta = AsyncFnType<typeof getSalesOrdersDta>;
-export async function getSalesOrdersDta(query: GetSalesListQuery, code = null) {
-    unstable_noStore();
+export async function getSalesOrdersDta(query: GetSalesListQuery) {
+    // unstable_noStore();
     const resp = await getSalesListDta(query);
 
     return {

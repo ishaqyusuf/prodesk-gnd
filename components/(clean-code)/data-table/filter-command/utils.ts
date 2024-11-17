@@ -134,6 +134,8 @@ export function getFilterValue({
      * @example input [filter, query] = ["name", "api"]
      */
     const [filter, query] = currentWord.toLowerCase().split(":");
+    // console.log({ filter, query });
+
     if (query && value.startsWith(`${filter}:`)) {
         if (query.includes(ARRAY_DELIMITER)) {
             /**
@@ -168,6 +170,8 @@ export function getFilterValue({
             return 0;
         }
         const rawValue = value.toLowerCase().replace(`${filter}:`, "");
+        // console.log({ query });
+
         if (rawValue.includes(query)) return 1;
     }
     return 0;

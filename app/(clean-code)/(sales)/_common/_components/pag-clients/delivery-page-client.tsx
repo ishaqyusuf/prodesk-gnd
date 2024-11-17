@@ -12,6 +12,7 @@ import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/i
 import DispatchOverviewSheet from "../overviews/dispatch-overview-sheet";
 import { OrderCells } from "../orders-page-cells";
 import { DispatchCells } from "../dispatch-page-cells";
+import InfiniteScrollCommand from "@/components/(clean-code)/data-table/filter-command/inifnity-filter";
 
 interface Props {
     queryKey?;
