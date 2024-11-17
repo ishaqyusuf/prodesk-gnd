@@ -7,7 +7,7 @@ import DispatchPageClient from "../../../_common/_components/pag-clients/dispatc
 export default async function DispatchPage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const queryKey = "sales-dispatch";
+    const queryKey = "sales-delivery";
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
         <FPage className="" title="Dispatch">

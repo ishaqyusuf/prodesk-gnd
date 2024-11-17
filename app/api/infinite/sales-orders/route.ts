@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const search = searchParamsCache.parse({
         ...Object.fromEntries(_search),
-        pk: generateRandomString(),
+        // pk: generateRandomString(),
     });
     // search.pk = generateRandomString();
     // const where = whereSales(search);
