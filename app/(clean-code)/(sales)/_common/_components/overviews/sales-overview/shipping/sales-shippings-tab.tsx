@@ -35,7 +35,11 @@ export function SalesShippingTab({}) {
         });
     }
     useEffect(() => {
-        ctx.load();
+        if (ctx.loader.loadId == null) {
+            ctx.loader.refresh();
+            ctx.openShipping();
+        }
+        // ctx.load();
     }, []);
     return (
         <div>

@@ -10,7 +10,10 @@ export type SalesDispatchListDto = ReturnType<typeof salesDispatchListDto>;
 export function salesDispatchListDto(data: SalesDispatchListItem) {
     return {
         orderDate: data.order.createdAt,
-        orderId: data.order.orderId,
+        order: {
+            orderId: data.order.orderId,
+            id: data.order.id,
+        },
         dispatchDate: data.createdAt,
         dispatchId: data.id,
         uuid: data.id,
@@ -25,7 +28,11 @@ export function salesDispatchListDto(data: SalesDispatchListItem) {
                 data.order.customer?.businessName || data.order.customer?.name,
             // name: data.order.
         },
+        title: dispatchTitle(data.id),
     };
+}
+function dispatchTitle(id) {
+    return `#DISPATCH-${padStart(id.toString(), 4, "0")}`;
 }
 export type SalesShippingDto = ReturnType<typeof salesShippingDto>;
 export function salesShippingDto(
@@ -123,7 +130,7 @@ export function salesShippingDto(
         return {
             id: d.id,
             date: formatDate(d.createdAt),
-            title: `#DISPATCH-${padStart(d.id.toString(), 4, "0")}`,
+            title: dispatchTitle(d.id),
             score: totalDeliveries,
             total: dispatchStat.total,
             status: d.status,

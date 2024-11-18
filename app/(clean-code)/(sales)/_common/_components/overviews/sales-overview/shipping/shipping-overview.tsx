@@ -68,6 +68,7 @@ const ShippingFormCtx = createContext<ReturnType<typeof useShippingFormCtx>>(
 
 export function ShippingOverview({}) {
     const ctx = useShippingForm();
+    if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
     return (
         <ShippingFormCtx.Provider value={ctx}>

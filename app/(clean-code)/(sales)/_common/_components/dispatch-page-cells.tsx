@@ -19,7 +19,7 @@ function Date({ item }: ItemProps) {
 function Order({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Primary>{item.orderId}</TCell.Primary>
+            <TCell.Primary>{item.order.orderId}</TCell.Primary>
         </TCell>
     );
 }

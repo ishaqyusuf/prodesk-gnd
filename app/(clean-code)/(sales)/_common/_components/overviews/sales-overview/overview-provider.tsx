@@ -6,9 +6,19 @@ import {
     GetSalesOverview,
 } from "../../../use-case/sales-item-use-case";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { SalesDispatchListDto } from "../../../data-access/dto/sales-shipping-dto";
+import { getSalesListByIdUseCase } from "../../../use-case/sales-list-use-case";
+import { toast } from "sonner";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
+export type PrimaryTabs =
+    | "general"
+    | "items"
+    | "payments"
+    | "shipping"
+    | "notifications";
+export type PageType = "pickup" | "delivery" | "quote" | "sales";
 type TabData = {
     payload?;
     payloadSlug?;
@@ -18,13 +28,24 @@ type TabData = {
 export const OverviewContext = createContext<
     ReturnType<typeof useOverviewContext>
 >(null as any);
-export const useOverviewContext = (item: SalesItemProp) => {
+export const useOverviewContext = (_item: SalesItemProp) => {
+    const [item, setItem] = useState(_item);
     const dataKey = generateRandomString();
     const [overview, setOverview] = useState<GetSalesOverview>();
 
     async function load() {
-        setOverview(await getSalesItemOverviewUseCase(item.slug, item.type));
+        const resp = await getSalesItemOverviewUseCase(item.slug, item.type);
+        setOverview(resp);
+        return resp;
     }
+    const [loadId, setLoadId] = useState(null);
+    const [loadedId, setLoadedId] = useState(null);
+    useEffect(() => {
+        if (loadId != loadedId && loadId != null)
+            load().then((resp) => {
+                setLoadedId(loadId);
+            });
+    }, [loadId, loadedId]);
     const [tabData, setTabData] = useState<TabData>(null);
 
     useEffect(() => {
@@ -59,7 +80,9 @@ export const useOverviewContext = (item: SalesItemProp) => {
             slug: "createShipping",
         });
     }
-    const [primaryTab, setPrimaryTab] = useState("general");
+    const [primaryTab, setPrimaryTab] = useState<PrimaryTabs>("general");
+    const [page, setPage] = useState<PageType>("sales");
+    const [pageData, setPageData] = useState(null);
     function rowChanged() {
         setTabData(null);
         setPrimaryTab("general");
@@ -67,7 +90,17 @@ export const useOverviewContext = (item: SalesItemProp) => {
     useEffect(() => {
         setTabData(null);
     }, [primaryTab]);
-    return {
+    function openShipping() {
+        setTimeout(() => {
+            if ((pageData && page == "delivery") || page == "pickup") {
+                const pd: SalesDispatchListDto = pageData as any;
+                __ctx.viewShipping(pd.dispatchId);
+                console.log("OPENING SHIPPING>>>");
+            }
+        }, 500);
+    }
+    const __ctx = {
+        openShipping,
         refresh,
         primaryTab,
         setPrimaryTab,
@@ -89,10 +122,25 @@ export const useOverviewContext = (item: SalesItemProp) => {
         overview,
         load,
         item,
+        setItem,
+        page,
+        setPage,
+        pageData,
+        setPageData,
+        loader: {
+            loadId,
+            loadedId,
+            setLoadId,
+            setLoadedId,
+            refresh() {
+                setLoadId(generateRandomString());
+            },
+        },
     };
+    return __ctx;
 };
 export const useSalesOverview = () => useContext(OverviewContext);
-export default function OverviewProvider({
+export function OverviewProvider({
     children,
     item,
 }: {
@@ -100,6 +148,39 @@ export default function OverviewProvider({
     item: SalesItemProp;
 }) {
     const value = useOverviewContext(item);
+    return (
+        <OverviewContext.Provider value={value}>
+            {children}
+        </OverviewContext.Provider>
+    );
+}
+export function DispatchOverviewProvider({
+    children,
+    item,
+}: {
+    children;
+    item: SalesDispatchListDto;
+}) {
+    const value = useOverviewContext(null);
+    const [ready, setReady] = useState(false);
+    useEffect(() => {
+        value.setPage("delivery");
+        value.setPageData(item);
+        getSalesListByIdUseCase(item.order.id)
+            .then((result) => {
+                console.log(result);
+
+                value.setItem(result);
+                setTimeout(() => {
+                    value.setPrimaryTab("shipping");
+                    setReady(true);
+                }, 500);
+            })
+            .catch((e) => {
+                toast.error(e.message);
+            });
+    }, []);
+    if (!ready) return null;
     return (
         <OverviewContext.Provider value={value}>
             {children}

@@ -12,7 +12,14 @@ export async function getSalesOrderListUseCase(query: GetSalesListQuery) {
     const list = await getSalesOrdersDta(query);
     return list;
 }
-
+export async function getSalesListByIdUseCase(id) {
+    const data = await getSalesOrderListUseCase({
+        id,
+    });
+    const res = data?.data?.[0];
+    if (!res) throw new Error("Not found");
+    return res;
+}
 export async function getSalesOrderInfinityListUseCase(query) {
     // const search = searchParamsCache.parse(query);
     // query._type = "order";

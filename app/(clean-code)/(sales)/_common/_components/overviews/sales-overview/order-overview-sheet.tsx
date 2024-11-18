@@ -8,7 +8,11 @@ import { SalesItemProp } from "../../orders-page-cells";
 import { _modal } from "@/components/common/modal/provider";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import OverviewProvider, { useSalesOverview } from "./overview-provider";
+import {
+    useSalesOverview,
+    OverviewProvider,
+    DispatchOverviewProvider,
+} from "./overview-provider";
 import { SalesGeneralOverview } from "./general/sales-general-overview";
 import { SalesItemsOverview } from "./components/item-vie/sales-items-overview";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,7 +25,8 @@ import { ShippingOverview } from "./shipping/shipping-overview";
 import "./style.css";
 import ActionFooter from "./action-footer";
 import NotificationTab from "./notification";
-export default function OrderOverviewSheet({}) {
+import { SalesDispatchListDto } from "../../../data-access/dto/sales-shipping-dto";
+export function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
     if (!item) return;
@@ -30,10 +35,24 @@ export default function OrderOverviewSheet({}) {
             <OverviewProvider item={item}>
                 <div className="flex">
                     <SecondaryTab />
-
                     <PrimaryTab />
                 </div>
             </OverviewProvider>
+        </TableItemOverviewSheet>
+    );
+}
+export function DispatchOverviewSheet({}) {
+    const { table, selectedRow } = useInifinityDataTable();
+    const item: SalesDispatchListDto = selectedRow?.original as any;
+    if (!item) return;
+    return (
+        <TableItemOverviewSheet>
+            <DispatchOverviewProvider item={item}>
+                <div className="flex">
+                    <SecondaryTab />
+                    <PrimaryTab />
+                </div>
+            </DispatchOverviewProvider>
         </TableItemOverviewSheet>
     );
 }
@@ -51,7 +70,10 @@ function PrimaryTab() {
                 title={`${ctx.item?.orderId} | ${ctx.item?.displayName}`}
                 rowChanged={ctx.rowChanged}
             />
-            <Tabs value={ctx.primaryTab} onValueChange={ctx.setPrimaryTab}>
+            <Tabs
+                value={ctx.primaryTab}
+                onValueChange={ctx.setPrimaryTab as any}
+            >
                 <TabsList className="w-full">
                     <TabsTrigger value="general">General</TabsTrigger>
                     <TabsTrigger value="items">Items</TabsTrigger>
