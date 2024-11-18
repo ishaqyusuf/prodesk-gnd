@@ -128,6 +128,7 @@ export function ShippingOverview({}) {
                             >
                                 {dispatchStatusList.map((status) => (
                                     <Menu.Item
+                                        key={status}
                                         onClick={() => updateProgress(status)}
                                     >
                                         <Progress.Status>
