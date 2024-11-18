@@ -14,6 +14,8 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/(clean-code)/progress";
 import { Menu } from "@/components/(clean-code)/menu";
+import { dispatchStatusList } from "../../../../utils/contants";
+import { updateDispatchStatusUseCase } from "../../../../use-case/sales-dispatch-use-case";
 
 let context = null;
 type Ctx = ReturnType<typeof useShippingFormCtx>;
@@ -73,7 +75,19 @@ export function ShippingOverview({}) {
     const ctx = useShippingForm();
     if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
-    async function updateProgress(progress) {}
+    async function updateProgress(progress) {
+        try {
+            const resp = await updateDispatchStatusUseCase(
+                shipping.id,
+                progress
+            );
+            toast.success("Dispatch updated");
+            ctx.mainCtx.refresh();
+            // ctx.mainCtx.rowChanged();
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
     return (
         <ShippingFormCtx.Provider value={ctx}>
             <div className="secondary-tab flex flex-col">
@@ -112,10 +126,19 @@ export function ShippingOverview({}) {
                                     </Button>
                                 }
                             >
-                                <Menu.Item>Queue</Menu.Item>
+                                {dispatchStatusList.map((status) => (
+                                    <Menu.Item
+                                        onClick={() => updateProgress(status)}
+                                    >
+                                        <Progress.Status>
+                                            {status}
+                                        </Progress.Status>
+                                    </Menu.Item>
+                                ))}
+                                {/* <Menu.Item>Queue</Menu.Item>
                                 <Menu.Item>In Progress</Menu.Item>
                                 <Menu.Item>Completed</Menu.Item>
-                                <Menu.Item>Cancelled</Menu.Item>
+                                <Menu.Item>Cancelled</Menu.Item> */}
                             </Menu>
                         </div>
                     </div>

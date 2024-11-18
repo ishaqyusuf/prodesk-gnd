@@ -4,6 +4,7 @@ import { Qty, qtyDiff, SalesOverviewDto } from "./sales-item-dto";
 import { sum } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { GetSalesDispatchListDta } from "../sales-dispatch-dta";
+import { SalesDispatchStatus } from "../../../types";
 
 export type SalesDispatchListItem = GetSalesDispatchListDta["data"][number];
 export type SalesDispatchListDto = ReturnType<typeof salesDispatchListDto>;
@@ -17,7 +18,7 @@ export function salesDispatchListDto(data: SalesDispatchListItem) {
         dispatchDate: data.createdAt,
         dispatchId: data.id,
         uuid: data.id,
-        status: data.status,
+        status: data.status as SalesDispatchStatus,
         salesRep: data.order.salesRep.name,
         shipping: {
             address: data.order.shippingAddress.address1,

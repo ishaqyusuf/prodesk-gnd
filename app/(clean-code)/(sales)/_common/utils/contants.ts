@@ -19,8 +19,9 @@ export const filterFields = {
 };
 export const SEPARATOR = ` &`;
 
-export const DispatchStatus: SalesDispatchStatus[] = [
+export const dispatchStatusList: SalesDispatchStatus[] = [
     "queue",
     "in progress",
+    "cancelled",
     "completed",
 ];

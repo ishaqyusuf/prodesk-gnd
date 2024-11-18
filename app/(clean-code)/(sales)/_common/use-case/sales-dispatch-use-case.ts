@@ -7,6 +7,8 @@ import {
     getSalesDispatchListDta,
     getSalesDispatchFormDta,
     SalesDispatchFormData,
+    getDispatchStatusDta,
+    updateSalesDispatchStatusDta,
 } from "../data-access/sales-dispatch-dta";
 
 export type GetSalesDispatchList = AsyncFnType<
@@ -24,4 +26,8 @@ export async function createSalesDispatchUseCase(data: SalesDispatchForm) {
 }
 export async function deleteSalesDispatchUseCase(id) {
     return await deleteSalesDispatchDta(id);
+}
+export async function updateDispatchStatusUseCase(id, status) {
+    const currentStatus = await getDispatchStatusDta(id);
+    const resp = await updateSalesDispatchStatusDta(id, status, currentStatus);
 }

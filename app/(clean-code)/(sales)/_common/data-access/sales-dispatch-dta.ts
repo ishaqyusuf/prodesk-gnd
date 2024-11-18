@@ -19,7 +19,7 @@ import {
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { DispatchListInclude } from "../utils/db/dispatch";
-import { SalesDispatchStatus } from "../../types";
+import { SalesDispatchStatus, SalesStatType } from "../../types";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export interface GetSalesDispatchListQuery extends PageBaseQuery {}
@@ -30,7 +30,15 @@ export async function getSalesDispatchDta(query: GetSalesDispatchListQuery) {
         data: resp.data.map(salesDispatchListDto),
     };
 }
-
+export async function getDispatchStatusDta(id): Promise<SalesDispatchStatus> {
+    return (
+        ((
+            await prisma.orderDelivery.findUnique({
+                where: { id },
+            })
+        )?.status as any) || "queue"
+    );
+}
 export type GetSalesDispatchListDta = AsyncFnType<
     typeof getSalesDispatchListDta
 >;
@@ -119,6 +127,50 @@ export async function deleteSalesDispatchDta(id) {
             minusScore: totalQty,
         }
     );
+}
+export async function updateSalesDispatchStatusDta(
+    id,
+    status: SalesDispatchStatus,
+    oldStatus: SalesDispatchStatus
+) {
+    const dispatch = await prisma.orderDelivery.update({
+        where: { id },
+        data: {
+            status,
+        },
+        include: {
+            items: {
+                select: {
+                    qty: true,
+                },
+            },
+        },
+    });
+    const oldStatType = getSalesStatTypeByDispatch(oldStatus);
+    const newStatType = getSalesStatTypeByDispatch(status);
+    const score = sum(dispatch.items.map((s) => s.qty));
+    if (oldStatType)
+        await updateSalesProgressDta(dispatch.salesOrderId, oldStatType, {
+            minusScore: score,
+        });
+    if (newStatType)
+        await updateSalesProgressDta(dispatch.salesOrderId, newStatType, {
+            plusScore: score,
+        });
+}
+function getSalesStatTypeByDispatch(
+    status: SalesDispatchStatus
+): SalesStatType {
+    switch (status) {
+        case "cancelled":
+            return null;
+        case "in progress":
+            return "dispatchTransit";
+        case "completed":
+            return "dispatch";
+        default:
+            return "dispatchQueue";
+    }
 }
 export async function createSalesDispatchDta(data: SalesDispatchFormData) {
     const orderId = data.delivery.order.connect.id;
