@@ -11,6 +11,9 @@ import { qtyDiff } from "../../../../data-access/dto/sales-item-dto";
 import Badge from "../components/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/(clean-code)/progress";
+import { Menu } from "@/components/(clean-code)/menu";
 
 let context = null;
 type Ctx = ReturnType<typeof useShippingFormCtx>;
@@ -70,6 +73,7 @@ export function ShippingOverview({}) {
     const ctx = useShippingForm();
     if (!ctx || !ctx?.shipping?.id) return null;
     const { mainCtx, shipping } = ctx;
+    async function updateProgress(progress) {}
     return (
         <ShippingFormCtx.Provider value={ctx}>
             <div className="secondary-tab flex flex-col">
@@ -94,7 +98,28 @@ export function ShippingOverview({}) {
                     // className="w-[600px] h-[80vh] flex flex-col"
                     className="o-scrollable-content-area"
                 >
-                    <div className="p-4 sm:p-8">
+                    <div className="p-4 border-b">
+                        <div className="">
+                            <Menu
+                                Trigger={
+                                    <Button variant="outline">
+                                        <div className="flex gap-2 items-center">
+                                            <Label>Status:</Label>
+                                            <Progress.Status>
+                                                {shipping.status || "queue"}
+                                            </Progress.Status>
+                                        </div>
+                                    </Button>
+                                }
+                            >
+                                <Menu.Item>Queue</Menu.Item>
+                                <Menu.Item>In Progress</Menu.Item>
+                                <Menu.Item>Completed</Menu.Item>
+                                <Menu.Item>Cancelled</Menu.Item>
+                            </Menu>
+                        </div>
+                    </div>
+                    <div className="px-4 sm:p-8s">
                         {ctx.items?.map(({ item, qty, deliveries }, index) => (
                             <div
                                 className="border-b p-2 bg-white rounded"

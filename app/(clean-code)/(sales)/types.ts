@@ -30,7 +30,11 @@ export type SalesStatType =
     | "prodAssignment"
     | "prod"
     | "dispatchQueue";
-export type SalesDispatchStatus = "queue" | "in progress" | "completed";
+export type SalesDispatchStatus =
+    | "queue"
+    | "in progress"
+    | "completed"
+    | "cancelled";
 export type SalesStatStatus =
     | "pending"
     | "in progress"

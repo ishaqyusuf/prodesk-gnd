@@ -1,4 +1,5 @@
 import { DataTableFilterField } from "@/components/(clean-code)/data-table/type";
+import { SalesDispatchStatus } from "../../types";
 
 export const filterFields = {
     customerName: {
@@ -17,3 +18,9 @@ export const filterFields = {
     [key in string]: DataTableFilterField<any>;
 };
 export const SEPARATOR = ` &`;
+
+export const DispatchStatus: SalesDispatchStatus[] = [
+    "queue",
+    "in progress",
+    "completed",
+];
