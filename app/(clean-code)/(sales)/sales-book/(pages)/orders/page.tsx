@@ -1,5 +1,5 @@
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
-import OrdersPageClient from "../../../_common/_components/pag-clients/orders-page-client";
+import OrdersPageClient from "../../../_common/_components/page-clients/orders-page-client";
 
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { __isProd } from "@/lib/is-prod-server";

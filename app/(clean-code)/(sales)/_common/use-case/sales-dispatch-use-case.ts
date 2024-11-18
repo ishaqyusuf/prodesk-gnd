@@ -4,7 +4,7 @@ import { AsyncFnType } from "@/app/(clean-code)/type";
 import {
     createSalesDispatchDta,
     deleteSalesDispatchDta,
-    getSalesDispatchDta,
+    getSalesDispatchListDta,
     getSalesDispatchFormDta,
     SalesDispatchFormData,
 } from "../data-access/sales-dispatch-dta";
@@ -13,7 +13,7 @@ export type GetSalesDispatchList = AsyncFnType<
     typeof getSalesDispatchListUseCase
 >;
 export async function getSalesDispatchListUseCase(query) {
-    return await getSalesDispatchDta(query);
+    return await getSalesDispatchListDta(query);
 }
 export type SalesDispatchForm = SalesDispatchFormData;
 export async function salesDispatchFormUseCase(shipping) {

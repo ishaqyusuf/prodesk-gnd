@@ -23,7 +23,14 @@ export type DykeStepTitles =
 export type DykeStepTitleKv = Partial<{
     [title in Partial<DykeStepTitles>]: DykeStepTitles;
 }>;
-export type SalesStatType = "dispatch" | "payment" | "prodAssignment" | "prod";
+export type SalesStatType =
+    | "dispatch"
+    | "dispatchTransit"
+    | "payment"
+    | "prodAssignment"
+    | "prod"
+    | "dispatchQueue";
+export type SalesDispatchStatus = "queue" | "in progress" | "completed";
 export type SalesStatStatus =
     | "pending"
     | "in progress"

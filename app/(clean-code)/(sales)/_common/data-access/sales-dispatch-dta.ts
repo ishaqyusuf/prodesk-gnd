@@ -1,6 +1,9 @@
 import { userId } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
-import { SalesShippingDto } from "./dto/sales-shipping-dto";
+import {
+    salesDispatchListDto,
+    SalesShippingDto,
+} from "./dto/sales-shipping-dto";
 import { Prisma } from "@prisma/client";
 import { AsyncFnType, PageBaseQuery } from "@/app/(clean-code)/type";
 import { Qty, qtyDiff } from "./dto/sales-item-dto";
@@ -11,14 +14,28 @@ import {
 } from "./sales-prod.dta";
 import { updateSalesProgressDta } from "./sales-progress.dta";
 import { excludeDeleted, whereDispatch } from "../utils/db-utils";
-import { pageQueryFilter } from "@/app/(clean-code)/_common/utils/db-utils";
+import {
+    getPageInfo,
+    pageQueryFilter,
+} from "@/app/(clean-code)/_common/utils/db-utils";
 import { DispatchListInclude } from "../utils/db/dispatch";
+import { SalesDispatchStatus } from "../../types";
 
 export type SalesDispatchFormData = AsyncFnType<typeof getSalesDispatchFormDta>;
 export interface GetSalesDispatchListQuery extends PageBaseQuery {}
-export async function getSalesDispatchDta(
-    query: GetSalesDispatchListQuery,
-    tok = null
+export async function getSalesDispatchDta(query: GetSalesDispatchListQuery) {
+    const resp = await getSalesDispatchListDta(query);
+    return {
+        ...resp,
+        data: resp.data.map(salesDispatchListDto),
+    };
+}
+
+export type GetSalesDispatchListDta = AsyncFnType<
+    typeof getSalesDispatchListDta
+>;
+export async function getSalesDispatchListDta(
+    query: GetSalesDispatchListQuery
 ) {
     const where = whereDispatch(query);
     const data = await prisma.orderDelivery.findMany({
@@ -26,6 +43,12 @@ export async function getSalesDispatchDta(
         ...pageQueryFilter(query),
         include: DispatchListInclude,
     });
+    const pageInfo = await getPageInfo(query, where, prisma.orderDelivery);
+    return {
+        pageCount: pageInfo.pageCount,
+        pageInfo,
+        data,
+    };
 }
 export async function initDispatchQuery(searchParams) {}
 
@@ -35,6 +58,7 @@ export async function getSalesDispatchFormDta(shipping: SalesShippingDto) {
         shipping,
         delivery: {
             deliveryMode: shipping.deliveryMode,
+            status: "queue" as SalesDispatchStatus,
             createdBy: {
                 connect: {
                     id: await userId(),
@@ -82,9 +106,19 @@ export async function deleteSalesDispatchDta(id) {
             deletedAt: new Date(),
         },
     });
-    await updateSalesProgressDta(d.salesOrderId, "dispatch", {
-        minusScore: totalQty,
-    });
+    const status: SalesDispatchStatus = d.status as any;
+    // if(status ==)
+    await updateSalesProgressDta(
+        d.salesOrderId,
+        status == "completed"
+            ? "dispatch"
+            : status == "in progress"
+            ? "dispatchTransit"
+            : "dispatchQueue",
+        {
+            minusScore: totalQty,
+        }
+    );
 }
 export async function createSalesDispatchDta(data: SalesDispatchFormData) {
     const orderId = data.delivery.order.connect.id;
@@ -127,7 +161,6 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                     const q = res[handl];
                     const subQ = sub[handl];
                     if (!qty[handl]) return;
-                    console.log({ q });
 
                     if (q <= 0) {
                         updateItemDelivery(key, qty[handl]);
@@ -144,14 +177,12 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
 
                 if (resp) {
                     if (hasHandle) resp.qty = sum([resp.lhQty, resp.rhQty]);
-                    console.log({ resp });
 
                     createManyData.push(resp);
                 }
             }
             deliverableSubmissions.map((sub) => {
                 const qtyRem = qtyDiff(qty, sub.qty, false);
-                console.log({ qty, subQty: sub.qty });
 
                 updateHandleQty(sub.qty, qtyRem, sub.subId);
             });
@@ -207,7 +238,7 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                 });
                 await updateSalesProgressDta(
                     dispatch.salesOrderId,
-                    "dispatch",
+                    "dispatchQueue",
                     {
                         plusScore: totalQty,
                     }
