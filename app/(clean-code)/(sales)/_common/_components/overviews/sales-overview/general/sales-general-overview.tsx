@@ -64,27 +64,34 @@ export function SalesGeneralOverview({}) {
                         />
                     }
                 />
-                <DataLine
-                    label="Paid"
-                    value={
-                        <TCell.Money
-                            className="font-mono"
-                            value={item.invoice.paid}
+                {item.isQuote ? (
+                    <></>
+                ) : (
+                    <>
+                        <DataLine
+                            label="Paid"
+                            value={
+                                <TCell.Money
+                                    className="font-mono"
+                                    value={item.invoice.paid}
+                                />
+                            }
                         />
-                    }
-                />
-                <DataLine
-                    label="Pending"
-                    value={
-                        <TCell.Money
-                            className="font-mono"
-                            value={item.invoice.pending}
+                        <DataLine
+                            label="Pending"
+                            value={
+                                <TCell.Money
+                                    className="font-mono"
+                                    value={item.invoice.pending}
+                                />
+                            }
                         />
-                    }
-                />
+                    </>
+                )}
                 <div className="grid py-4 grid-cols-2 px-4 sm:px-8 gap-4">
-                    {[item.addressData.billing, item.addressData.shipping].map(
-                        (address, index) => (
+                    {[item?.addressData?.billing, item?.addressData?.shipping]
+                        .filter(Boolean)
+                        .map((address, index) => (
                             <div className="text-sm" key={index}>
                                 <div>
                                     <Label>{address.title}</Label>
@@ -102,32 +109,36 @@ export function SalesGeneralOverview({}) {
                                     value={address.address}
                                 />
                             </div>
-                        )
-                    )}
+                        ))}
                 </div>
-                <div className="px-4 sm:px-8">
-                    <SalesItemStatus
-                        status={
-                            overview?.stat?.calculatedStats?.prodAssignment ||
-                            item.stats.prodAssignment
-                        }
-                        title="Assigned"
-                    />
-                    <SalesItemStatus
-                        status={
-                            overview?.stat?.calculatedStats?.prod ||
-                            item.stats.prod
-                        }
-                        title="Production Completed"
-                    />
-                    <SalesItemStatus
-                        status={
-                            overview?.stat?.calculatedStats?.dispatch ||
-                            item.stats.dispatch
-                        }
-                        title="Fulfilled"
-                    />
-                </div>
+                {item.isQuote ? (
+                    <></>
+                ) : (
+                    <div className="px-4 sm:px-8">
+                        <SalesItemStatus
+                            status={
+                                overview?.stat?.calculatedStats
+                                    ?.prodAssignment ||
+                                item.stats.prodAssignment
+                            }
+                            title="Assigned"
+                        />
+                        <SalesItemStatus
+                            status={
+                                overview?.stat?.calculatedStats?.prod ||
+                                item.stats.prod
+                            }
+                            title="Production Completed"
+                        />
+                        <SalesItemStatus
+                            status={
+                                overview?.stat?.calculatedStats?.dispatch ||
+                                item.stats.dispatch
+                            }
+                            title="Fulfilled"
+                        />
+                    </div>
+                )}
             </dl>
         </>
     );

@@ -105,7 +105,7 @@ export function LineItem({ className = null, item, onClick }: LineItemProps) {
                     <div className="flex-1"></div>
                 </div>
             </div>
-            {item.analytics?.info && (
+            {item.analytics?.info && !ctx.item.isQuote && (
                 <div className="mt-1 flex justify-between border-t text-xs uppercase font-semibold text-muted-foreground">
                     {item.analytics?.info?.map((info, k) => (
                         <div className="text-start p-2 font-mono px-4" key={k}>

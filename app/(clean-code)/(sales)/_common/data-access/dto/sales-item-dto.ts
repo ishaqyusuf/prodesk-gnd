@@ -103,6 +103,7 @@ export function salesOverviewDto(data: GetFullSalesDataDta) {
 }
 
 export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
+    const isQuote = data.type == "quote";
     function filter(item: Item, itemIndex) {
         if (data.isDyke) {
             return (
@@ -221,6 +222,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             _door.productions,
                             {
                                 deliveries: data.deliveries,
+                                isQuote,
                             }
                         )
                     );
@@ -256,6 +258,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         {
                             produceable: false,
                             deliveries: data.deliveries,
+                            isQuote,
                         }
                     )
                 );
@@ -295,6 +298,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             produceable: prodDel,
                             deliverable: prodDel,
                             deliveries: data.deliveries,
+                            isQuote,
                         }
                     )
                 );
@@ -323,10 +327,12 @@ function itemAnalytics(
         produceable = true,
         deliverable = true,
         deliveries,
-    }: { produceable?; deliverable?; deliveries? }
+        isQuote,
+    }: { produceable?; deliverable?; deliveries?; isQuote?: boolean }
 ) {
     // produceable = true,
     // deliverable = true
+    if (isQuote) produceable = deliverable = false;
     data.analytics = {
         produceable,
         success: {},
