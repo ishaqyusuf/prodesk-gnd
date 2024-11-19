@@ -12,12 +12,9 @@ import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-pag
 // export const revalidate = 0;
 // export const dynamic = "force-dynamic";
 export default async function SalesBookPage({ searchParams }) {
-    // const promise = getSalesOrderListUseCase(searchParams);
-    // if (Object.keys(searchParams).length == 0 && __isProd)
-    // redirect("/sales-book/orders?digest=");
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const queryKey = "sales-orders";
+    const queryKey = "orders";
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     const filterOptions = await getSalesPageQueryDataDta();
     const filterFields = composeFilter(salesFilterFields, filterOptions);

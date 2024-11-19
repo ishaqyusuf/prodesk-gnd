@@ -72,6 +72,7 @@ function commonListData(data: Item) {
         links: salesLinks(data),
         shippingId: data.shippingAddressId,
         type: data.type as SalesType,
+        isQuote: (data.type as SalesType) == "quote",
         invoice: {
             total: data.grandTotal,
             paid: data.grandTotal - data.amountDue,

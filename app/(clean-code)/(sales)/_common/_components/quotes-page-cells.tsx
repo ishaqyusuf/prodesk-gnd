@@ -1,15 +1,12 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
-import { GetSalesOrdersDta } from "../data-access/sales-dta";
+import { GetSalesQuotesDta } from "../data-access/sales-dta";
 import { cn } from "@/lib/utils";
 import { useTRContext } from "@/components/(clean-code)/data-table/use-data-table";
-import { Progress } from "@/components/(clean-code)/progress";
-import { Menu } from "@/components/(clean-code)/menu";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
 
 export interface ItemProps {
-    item: GetSalesOrdersDta["data"][number];
+    item: GetSalesQuotesDta["data"][number];
 }
 export type SalesItemProp = ItemProps["item"];
 function Date({ item }: ItemProps) {
@@ -86,73 +83,13 @@ function SalesRep({ item }: ItemProps) {
         </TCell>
     );
 }
-function Production({ item }: ItemProps) {
-    return (
-        <TCell>
-            <Progress>
-                <Progress.Status
-                    color={
-                        item.status.production?.color ||
-                        item.status.production?.color
-                    }
-                >
-                    {item.status.production?.scoreStatus ||
-                        item.status.production?.status}
-                </Progress.Status>
-            </Progress>
-        </TCell>
-    );
-}
-function Delivery({ item }: ItemProps) {
-    return (
-        <TCell>
-            <Progress>
-                <Progress.Status
-                    color={
-                        item.status.delivery?.color ||
-                        item.status.delivery?.color
-                    }
-                >
-                    {item.status.delivery?.scoreStatus ||
-                        item.status.delivery?.status}
-                </Progress.Status>
-                <TCell.Secondary>{/* {item.status.date} */}</TCell.Secondary>
-            </Progress>
-        </TCell>
-    );
-}
-function Dispatch({ item }: ItemProps) {
-    //  const []
-    const { theme } = useTheme();
-    return (
-        <TCell>
-            <Progress.Status>
-                {item.deliveryOption || "Not set"}
-            </Progress.Status>
-        </TCell>
-    );
-}
+
 function Invoice({ item }: ItemProps) {
     const invoice = item.invoice;
     const { theme } = useTheme();
     return (
-        <TCell align="right">
+        <TCell>
             <TCell.Money value={invoice.total} className={cn("font-mono")} />
-
-            {/* <TCell.Primary>
-                    <TCell.Money
-                        value={invoice.pending}
-                        className={cn(
-                            "hidden",
-                            invoice.pending &&
-                                invoice.pending != invoice.total &&
-                                "  text-green-700/70 ",
-                            invoice.pending &&
-                                invoice.pending != invoice.total &&
-                                "  text-red-700/70 block"
-                        )}
-                    />
-                </TCell.Primary> */}
         </TCell>
     );
 }
@@ -174,13 +111,13 @@ function InvoicePending({ item }: ItemProps) {
                 className={cn(
                     "text-muted-foreground font-mono font-medium",
 
-                    invoice.pending && " text-red-700/70"
+                    invoice.pending && "  text-red-700/70"
                 )}
             />
         </TCell>
     );
 }
-export let OrderCells = {
+export let QuotesCell = {
     Order,
     Po,
     Customer,
@@ -188,9 +125,6 @@ export let OrderCells = {
     SalesRep,
     Invoice,
     Date,
-    Production,
-    Delivery,
-    Dispatch,
     CustomerPhone,
     InvoicePending,
 };

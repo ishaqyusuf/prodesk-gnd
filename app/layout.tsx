@@ -18,7 +18,7 @@ import PageAnalytics from "@/lib/analytics/page-analytics";
 import { Suspense } from "react";
 import { __isProd } from "@/lib/is-prod-server";
 import { ReactQueryProvider } from "@/providers/react-query";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata: Metadata = {
     title: "GND-PRODESK",
     description: "home page",
@@ -36,6 +36,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <ReactQueryProvider>
+                <SpeedInsights />
                 <body>
                     <div className="print:hidden">
                         <AppProvider>

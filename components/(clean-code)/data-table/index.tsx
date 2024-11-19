@@ -152,7 +152,6 @@ function LoadMore() {
         columns,
         totalRowsFetched,
         filterRows,
-
         isFetching,
         totalRows,
         fetchNextPage,
@@ -160,8 +159,6 @@ function LoadMore() {
     } = useInifinityDataTable();
     return (
         <div className="flex justify-center">
-            {/* {JSON.stringify({ totalRows, totalRowsFetched, filterRows })} */}
-
             {totalRows > totalRowsFetched ||
             !table.getCoreRowModel().rows?.length ? (
                 <Button

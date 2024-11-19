@@ -26,7 +26,7 @@ export function SalesGeneralOverview({}) {
                                 asChild
                             >
                                 <Link
-                                    href={`/sales-v2/form/order/${item.orderId}`}
+                                    href={`/sales-v2/form/${item.type}/${item.orderId}`}
                                     className="inline-flex gap-2"
                                     target="_blank"
                                 >

@@ -77,8 +77,14 @@ function PrimaryTab() {
                 <TabsList className="w-full">
                     <TabsTrigger value="general">General</TabsTrigger>
                     <TabsTrigger value="items">Items</TabsTrigger>
-                    <TabsTrigger value="payments">Payments</TabsTrigger>
-                    <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                    {ctx.item?.isQuote ? (
+                        <>
+                            <TabsTrigger value="payments">Payments</TabsTrigger>
+                            <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     <TabsTrigger value="notifications">
                         Notification
                     </TabsTrigger>
