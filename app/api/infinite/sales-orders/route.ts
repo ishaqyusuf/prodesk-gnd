@@ -1,4 +1,5 @@
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
+import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
 import { generateRandomString } from "@/lib/utils";
@@ -10,8 +11,10 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const search = searchParamsCache.parse({
         ...Object.fromEntries(_search),
-        pk: generateRandomString(),
+        // pk: generateRandomString(),
+        salesType: "order" as SalesType,
     });
+
     // search.pk = generateRandomString();
     // const where = whereSales(search);
     // const data = await prisma.salesOrders.findMany({

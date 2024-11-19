@@ -2,6 +2,7 @@ import {
     createParser,
     createSearchParamsCache,
     createSerializer,
+    parseAsBoolean,
     parseAsInteger,
     parseAsString,
     type inferParserType,
@@ -57,6 +58,12 @@ export const searchParamsParser = {
     po: parseAsString,
     phone: parseAsString,
     pk: parseAsString,
+    salesType: parseAsString,
+    withTrashed: parseAsBoolean,
+    trashedOnly: parseAsBoolean,
+    dealerId: parseAsInteger,
+    _q: parseAsString,
+    id: parseAsInteger,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);

@@ -2057,6 +2057,7 @@ model PageTabs {
     userId    Int
     private   Boolean?  @default(true)
     default   Boolean?  @default(false)
+    tabIndex  Int?
     title     String
     query     String
     createdAt DateTime? @default(now()) @db.Timestamp(0)

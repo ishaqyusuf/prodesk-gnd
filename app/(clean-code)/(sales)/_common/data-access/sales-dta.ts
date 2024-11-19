@@ -17,6 +17,7 @@ import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
 import { salesOverviewDto } from "./dto/sales-item-dto";
 import { salesShippingDto } from "./dto/sales-shipping-dto";
 import { statMismatchDta } from "./sales-progress.dta";
+import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 // import { unstable_noStore } from "next/cache";
 
 export interface GetSalesListQuery extends PageBaseQuery {
@@ -30,7 +31,7 @@ export interface GetSalesListQuery extends PageBaseQuery {
     rep?;
 }
 export type GetSalesQuotesDta = AsyncFnType<typeof getSalesQuotesDta>;
-export async function getSalesQuotesDta(query: GetSalesListQuery) {
+export async function getSalesQuotesDta(query: SearchParamsType) {
     const resp = await getSalesListDta(query);
     return {
         ...resp,
@@ -38,8 +39,7 @@ export async function getSalesQuotesDta(query: GetSalesListQuery) {
     };
 }
 export type GetSalesOrdersDta = AsyncFnType<typeof getSalesOrdersDta>;
-export async function getSalesOrdersDta(query: GetSalesListQuery) {
-    // unstable_noStore();
+export async function getSalesOrdersDta(query: SearchParamsType) {
     const resp = await getSalesListDta(query);
 
     return {
@@ -49,7 +49,7 @@ export async function getSalesOrdersDta(query: GetSalesListQuery) {
 }
 
 export type GetSalesListDta = AsyncFnType<typeof getSalesListDta>;
-export async function getSalesListDta(query: GetSalesListQuery) {
+export async function getSalesListDta(query: Partial<SearchParamsType>) {
     const where = whereSales(query);
 
     const data = await prisma.salesOrders.findMany({

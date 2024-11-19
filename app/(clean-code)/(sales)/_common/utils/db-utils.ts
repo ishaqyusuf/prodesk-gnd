@@ -7,12 +7,13 @@ import {
     withDeleted,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
+import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
 export function whereDispatch(query: GetSalesDispatchListQuery) {
     const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
 
     return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
 }
-export function whereSales(query: GetSalesListQuery) {
+export function whereSales(query: Partial<SearchParamsType>) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
     if (query.withTrashed) whereAnd.push(withDeleted);
     if (query.trashedOnly)
@@ -32,7 +33,7 @@ export function whereSales(query: GetSalesListQuery) {
             },
         });
     whereAnd.push({
-        type: query._type,
+        type: query.salesType,
     });
     const keys = Object.keys(query) as (keyof GetSalesListQuery)[];
     keys.map((k) => {
