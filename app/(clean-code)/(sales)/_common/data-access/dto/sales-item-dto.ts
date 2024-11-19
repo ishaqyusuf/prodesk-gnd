@@ -7,6 +7,8 @@ import {
 } from "../../utils/sales-utils";
 import { salesItemAssignmentsDto } from "./sales-item-assignment-dto";
 import { salesItemsStatsDto } from "./sales-stat-dto";
+import { deliveryBreakdownDto } from "./sales-shipping-dto";
+import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
 
 interface Pill {
     label?: string;
@@ -25,6 +27,22 @@ interface Analytics {
     production?: Qty;
     delivery?: Qty;
 }
+export type DeliveryBreakdown = {
+    status?: {
+        queue?: Qty;
+        inProgress?: Qty;
+        delivered?: Qty;
+    };
+    pending?: Qty;
+    totalDeliverable?: number;
+    totalDeliveries?: number;
+    percentage?: {
+        queue?: number;
+        inProgress?: number;
+        delivered?: number;
+        pending?: number;
+    };
+};
 export interface LineItemOverview {
     salesItemId;
     swing?;
@@ -41,6 +59,7 @@ export interface LineItemOverview {
         success: Analytics;
         pending: Analytics;
         produceable: boolean;
+        deliveryBreakdown: DeliveryBreakdown;
         info?: {
             title;
             text;
@@ -68,6 +87,7 @@ export interface LineItemOverview {
 }
 type Item = GetFullSalesDataDta["items"][number];
 export type Assignments = Item["assignments"];
+export type FullSalesDeliveries = GetFullSalesDataDta["deliveries"];
 export type LineAssignment = LineItemOverview["assignments"][number];
 export type SalesOverviewDto = ReturnType<typeof salesOverviewDto>;
 export function salesOverviewDto(data: GetFullSalesDataDta) {
@@ -198,7 +218,10 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                                 total: _door.lineTotal,
                                 pills,
                             },
-                            _door.productions
+                            _door.productions,
+                            {
+                                deliveries: data.deliveries,
+                            }
                         )
                     );
                 });
@@ -230,7 +253,10 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             pills,
                         },
                         gItem.assignments,
-                        false
+                        {
+                            produceable: false,
+                            deliveries: data.deliveries,
+                        }
                     )
                 );
             } else {
@@ -265,8 +291,11 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             ],
                         },
                         gItem.assignments,
-                        prodDel,
-                        prodDel
+                        {
+                            produceable: prodDel,
+                            deliverable: prodDel,
+                            deliveries: data.deliveries,
+                        }
                     )
                 );
             }
@@ -290,10 +319,24 @@ function starredTitle(title: string) {
 function itemAnalytics(
     data: LineItemOverview,
     assignments: Assignments,
-    produceable = true,
-    deliverable = true
+    {
+        produceable = true,
+        deliverable = true,
+        deliveries,
+    }: { produceable?; deliverable?; deliveries? }
 ) {
-    data.analytics = { produceable, success: {}, pending: {} };
+    // produceable = true,
+    // deliverable = true
+    data.analytics = {
+        produceable,
+        success: {},
+        pending: {},
+        deliveryBreakdown: deliveryBreakdownDto(
+            deliveries,
+            assignments,
+            deliverable ? data.totalQty.total : 0
+        ),
+    };
     if (!produceable) {
         console.log("NOT PRODUCEABLE", assignments.length);
     }
@@ -342,7 +385,9 @@ function itemAnalytics(
             assignment: produceable
                 ? qtyDiff(totalQty, analytics.success.assignment)
                 : {},
-            delivery: qtyDiff(totalQty, analytics.success.delivery),
+            delivery: deliverable
+                ? {}
+                : qtyDiff(totalQty, analytics.success.delivery),
             production: produceable
                 ? qtyDiff(totalQty, analytics.success.production)
                 : {},
@@ -364,6 +409,7 @@ function itemAnalytics(
         }
         if (deliverable) registerInfo("Fulfilled", "delivery");
     }
+
     data.assignments = salesItemAssignmentsDto(data, assignments);
     return data;
 }

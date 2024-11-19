@@ -1,10 +1,18 @@
 import { assign, padStart } from "lodash";
 import { GetFullSalesDataDta } from "../sales-dta";
-import { Qty, qtyDiff, SalesOverviewDto } from "./sales-item-dto";
+import {
+    Assignments,
+    DeliveryBreakdown,
+    FullSalesDeliveries,
+    Qty,
+    qtyDiff,
+    SalesOverviewDto,
+} from "./sales-item-dto";
 import { sum } from "@/lib/utils";
 import { formatDate } from "@/lib/use-day";
 import { GetSalesDispatchListDta } from "../sales-dispatch-dta";
 import { SalesDispatchStatus } from "../../../types";
+import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
 
 export type SalesDispatchListItem = GetSalesDispatchListDta["data"][number];
 export type SalesDispatchListDto = ReturnType<typeof salesDispatchListDto>;
@@ -145,4 +153,55 @@ export function salesShippingDto(
         deliveryMode: data.deliveryOption,
         orderId: data.id,
     };
+}
+export function deliveriesByStatus(
+    items: { qty; status: SalesDispatchStatus }[]
+): DeliveryBreakdown {
+    const resp: DeliveryBreakdown = {
+        status: {
+            delivered: { total: 0 },
+            inProgress: { total: 0 },
+            queue: { total: 0 },
+        },
+    };
+    items.map(({ status, qty }) => {
+        switch (status) {
+            case "completed":
+                resp.status.delivered.total += qty;
+                break;
+            case "in progress":
+                resp.status.inProgress.total += qty;
+                break;
+            case "cancelled":
+                break;
+            default:
+                resp.status.queue.total += qty;
+        }
+    });
+    return resp;
+}
+export function deliveryBreakdownDto(
+    deliveries: FullSalesDeliveries,
+    assignments?: Assignments,
+    totalDeliverables?
+): DeliveryBreakdown {
+    const deliveryItems = assignments
+        ? assignments
+              ?.map((a) => a.submissions?.map((s) => s.itemDeliveries).flat())
+              .flat()
+        : deliveries.map((d) => d.items.flat()).flat();
+    const deliveryByStat = deliveriesByStatus(
+        deliveryItems.map((item) => {
+            const status = (deliveries.find((d) => d.id == item.orderDeliveryId)
+                ?.status || "queue") as SalesDispatchStatus;
+            return {
+                status,
+                qty: item.qty,
+            };
+        })
+    );
+    return calculateDeliveryBreakdownPercentage(
+        deliveryByStat,
+        totalDeliverables
+    );
 }

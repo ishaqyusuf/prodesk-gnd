@@ -4,6 +4,7 @@ import { GetFullSalesDataDta } from "../sales-dta";
 import { salesItemGroupOverviewDto } from "./sales-item-dto";
 import { statStatus } from "../../utils/sales-utils";
 import { Colors } from "@/lib/status-badge";
+import { overallDeliveryBreakdown } from "../../utils/dispatch-utils";
 
 type ItemGroup = ReturnType<typeof salesItemGroupOverviewDto>;
 export function salesItemsStatsDto(
@@ -12,11 +13,19 @@ export function salesItemsStatsDto(
 ) {
     const dataStats = statToKeyValueDto(data.stat);
     const calculatedStats = calculatedStatsDto(itemGroup, data);
-    console.log(calculatedStats?.dispatch);
 
     return {
         salesStatByKey: dataStats,
         calculatedStats,
+        deliveryBreakdown: overallDeliveryBreakdown(
+            itemGroup
+                .map((item) =>
+                    item.items
+                        ?.map((it) => it.analytics.deliveryBreakdown)
+                        .flat()
+                )
+                .flat()
+        ),
     };
 }
 
