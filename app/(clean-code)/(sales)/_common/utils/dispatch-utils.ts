@@ -23,10 +23,10 @@ export function calculateDeliveryBreakdownPercentage(
     return bd;
 }
 export function overallDeliveryBreakdown(dbs: DeliveryBreakdown[]) {
-    let db: DeliveryBreakdown = {};
+    let bd: DeliveryBreakdown = {};
     const dbsFiltered = dbs.filter((d) => d.totalDeliverable > 0);
     if (dbsFiltered.length) {
-        db = {
+        bd = {
             totalDeliverable: sum(dbsFiltered.map((d) => d.totalDeliverable)),
             totalDeliveries: sum(dbsFiltered.map((d) => d.totalDeliveries)),
             pending: {
@@ -44,6 +44,13 @@ export function overallDeliveryBreakdown(dbs: DeliveryBreakdown[]) {
                 },
             },
         };
+        let totalDeliverables = bd.totalDeliverable;
+        bd.percentage = {
+            delivered: percent(bd.status.delivered.qty, totalDeliverables),
+            inProgress: percent(bd.status.inProgress.qty, totalDeliverables),
+            queue: percent(bd.status.queue.qty, totalDeliverables),
+            pending: percent(bd.pending.qty, totalDeliverables),
+        };
     }
-    return db;
+    return bd;
 }
