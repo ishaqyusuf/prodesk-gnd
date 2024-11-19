@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { filterFields } from "../utils/contants";
+import {
+    DISPATCH_FILTER_OPTIONS,
+    filterFields,
+    INVOICE_FILTER_OPTIONS,
+    PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
+    PRODUCTION_FILTER_OPTIONS,
+} from "../utils/contants";
 import { DataTableFilterField } from "@/components/(clean-code)/data-table/type";
 
 export const salesSearchSchema = z.object({
@@ -11,7 +17,18 @@ export const salesSearchSchema = z.object({
     po: z.string().optional(),
     phone: z.string().optional(),
     rep: z.string().optional(),
+    "dispatch.status": z.string().optional(),
+    "production.assignment": z.string().optional(),
+    production: z.string().optional(),
+    invoice: z.string().optional(),
 });
+export type SalesFilterKeys = keyof typeof salesSearchSchema._type;
+export const staticOrderFilters: Partial<{ [k in SalesFilterKeys]: any }> = {
+    invoice: INVOICE_FILTER_OPTIONS,
+    "dispatch.status": DISPATCH_FILTER_OPTIONS,
+    production: PRODUCTION_FILTER_OPTIONS,
+    "production.assignment": PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
+};
 
 export const salesFilterFields = [
     {
@@ -31,53 +48,35 @@ export const salesFilterFields = [
         value: "phone",
         options: [],
     },
-
     filterFields.customerName,
-    // {
-    //     label: "status",
-    //     type: "input",
-    //     value: "status",
-    // },
-    // {
-
-    // {
-    //     label: "Delivery",
-    //     type: "checkbox",
-    //     value: "delivery",
-    //     options: ["delivered", "pending delivery", "backorder", "late"].map(
-    //         (value) => ({ label: value, value })
-    //     ),
-    // },
-    // {
-    //     label: "Production Assignment",
-    //     type: "checkbox",
-    //     value: "productionAssignment",
-    //     options: ["not assigned", "part assigned", "all assigned"].map(
-    //         (value) => ({ label: value, value })
-    //     ),
-    // },
-    // {
-    //     label: "Production",
-    //     type: "checkbox",
-    //     value: "production",
-    //     options: ["pending", "in progress", "completed"].map((value) => ({
-    //         label: value,
-    //         value,
-    //     })),
-    // },
-    // {
-    //     label: "Invoice",
-    //     type: "checkbox",
-    //     value: "invoice",
-    //     options: ["paid", "pending", "late", "part-paid"].map((value) => ({
-    //         label: value,
-    //         value,
-    //     })),
-    // },
+    {
+        label: "Dispatch Status",
+        type: "checkbox",
+        value: "dispatch.status",
+        options: [],
+    },
+    {
+        label: "Production Assignment",
+        type: "checkbox",
+        value: "production.assignment",
+        options: [],
+    },
+    {
+        label: "Production",
+        type: "checkbox",
+        value: "production",
+        options: [],
+    },
+    {
+        label: "Invoice",
+        type: "checkbox",
+        value: "invoice",
+        options: [],
+    },
     {
         label: "Sales Rep",
         type: "checkbox",
-        value: "rep",
+        value: "sales.rep",
         options: [],
     },
 ] satisfies DataTableFilterField<any>[];

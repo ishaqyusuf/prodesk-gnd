@@ -1,6 +1,6 @@
-export function composeFilter(filters, data) {
-    return filters?.map((filter) => {
-        const filterData = data?.[filter?.value];
+export function composeFilter(filters, data, extras?) {
+    const f = filters?.map((filter) => {
+        const filterData = data?.[filter?.value] || extras?.[filter?.value];
         if (filterData) {
             filter.options = filterData.map((value) => ({
                 value,
@@ -9,4 +9,7 @@ export function composeFilter(filters, data) {
         }
         return filter;
     });
+    console.log({ f });
+
+    return f;
 }

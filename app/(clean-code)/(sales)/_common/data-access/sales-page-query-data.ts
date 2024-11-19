@@ -81,7 +81,9 @@ export async function getSalesPageQueryDataDta() {
                 )
             ),
         ],
-        rep: [...new Set(sales.map((s) => s.salesRep?.name)?.filter(Boolean))],
+        "sales.rep": [
+            ...new Set(sales.map((s) => s.salesRep?.name)?.filter(Boolean)),
+        ],
         po: [...new Set(sales.map((s) => (s.meta as any)?.po).filter(Boolean))],
     };
     const eId = pageCache[0]?.id;

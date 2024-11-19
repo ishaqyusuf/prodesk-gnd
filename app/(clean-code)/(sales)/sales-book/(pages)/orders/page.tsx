@@ -5,9 +5,12 @@ import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { __isProd } from "@/lib/is-prod-server";
 import { getQueryClient } from "@/providers/get-query-client";
 import { dataOptions } from "@/components/(clean-code)/data-table/query-options";
-import { getSalesOrderInfinityListUseCase } from "../../../_common/use-case/sales-list-use-case";
+
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-compose";
-import { salesFilterFields } from "../../../_common/_schema/base-order-schema";
+import {
+    salesFilterFields,
+    staticOrderFilters,
+} from "../../../_common/_schema/base-order-schema";
 import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-page-query-data";
 // export const revalidate = 0;
 // export const dynamic = "force-dynamic";
@@ -17,7 +20,11 @@ export default async function SalesBookPage({ searchParams }) {
     const queryKey = "orders";
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     const filterOptions = await getSalesPageQueryDataDta();
-    const filterFields = composeFilter(salesFilterFields, filterOptions);
+    const filterFields = composeFilter(
+        salesFilterFields,
+        filterOptions,
+        staticOrderFilters
+    );
     return (
         <FPage className="" title="Orders">
             <OrdersPageClient

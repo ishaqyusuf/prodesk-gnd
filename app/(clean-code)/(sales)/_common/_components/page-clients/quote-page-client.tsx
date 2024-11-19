@@ -14,13 +14,11 @@ interface Props {
     // promise;
     filterFields;
     searchParams;
-    filterOptions?;
     queryKey;
 }
 export default function QuotesPageClient({
     searchParams,
     filterFields,
-    filterOptions,
     queryKey,
 }: Props) {
     const table = useTableCompose({
