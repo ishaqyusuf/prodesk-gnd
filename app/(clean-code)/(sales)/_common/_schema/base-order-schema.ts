@@ -31,7 +31,7 @@ export const salesFilterFields = [
         value: "phone",
         options: [],
     },
-    // filterFields.address,
+
     filterFields.customerName,
     // {
     //     label: "status",

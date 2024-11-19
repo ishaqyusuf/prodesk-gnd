@@ -10,7 +10,7 @@ export async function truncateSalesPageDataDta() {
     });
 }
 export async function getSalesPageQueryDataDta() {
-    const pageCache = await prisma.settings.findFirst({
+    const pageCache = await prisma.settings.findMany({
         where: {
             type,
             // createdAt: {
@@ -21,6 +21,14 @@ export async function getSalesPageQueryDataDta() {
             createdAt: "desc",
         },
     });
+    if (pageCache.length > 1)
+        await prisma.settings.deleteMany({
+            where: {
+                id: {
+                    in: pageCache.filter((p, i) => i > 0).map((p, i) => p.id),
+                },
+            },
+        });
     // if (pageCache?.meta) return pageCache?.meta as any;
     const sales = await prisma.salesOrders.findMany({
         where: {
@@ -76,11 +84,16 @@ export async function getSalesPageQueryDataDta() {
         rep: [...new Set(sales.map((s) => s.salesRep?.name)?.filter(Boolean))],
         po: [...new Set(sales.map((s) => (s.meta as any)?.po).filter(Boolean))],
     };
-    await prisma.settings.create({
-        data: {
+    const eId = pageCache[0]?.id;
+    await prisma.settings.upsert({
+        create: {
             type,
             meta: result,
         },
+        update: {
+            meta: result,
+        },
+        where: { id: eId },
     });
     return result;
 }
