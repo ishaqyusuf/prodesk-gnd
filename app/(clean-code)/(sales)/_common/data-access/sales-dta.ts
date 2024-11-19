@@ -62,6 +62,9 @@ export async function getSalesListDta(query: Partial<SearchParamsType>) {
         pageCount: pageInfo.pageCount,
         pageInfo,
         data,
+        meta: {
+            totalRowCount: pageInfo.totalItems,
+        },
     };
 }
 export async function getSalesListDataByIdDta(id) {
