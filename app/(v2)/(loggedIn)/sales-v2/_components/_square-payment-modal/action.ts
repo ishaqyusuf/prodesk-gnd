@@ -43,7 +43,7 @@ export async function getSalesPaymentData(id) {
                     quantity: item.qty?.toString(),
                     // itemType: ,
                     basePriceMoney: {
-                        amount: Math.ceil(item.rate * 100) as any,
+                        amount: Math.round(item.rate * 100) as any,
                         currency: "USD",
                     },
                 });
@@ -81,7 +81,7 @@ async function getDykeLineItems(slug) {
                         quantity: md.qty?.toString(),
                         // itemType: dt,
                         basePriceMoney: {
-                            amount: Math.ceil(md.rate * 100) as any,
+                            amount: Math.round(md.rate * 100) as any,
                             currency: "USD",
                         },
                     });
@@ -92,7 +92,7 @@ async function getDykeLineItems(slug) {
                         quantity: md.qty?.toString(),
                         // itemType: dt,
                         basePriceMoney: {
-                            amount: Math.ceil(md.rate * 100) as any,
+                            amount: Math.round(md.rate * 100) as any,
                             currency: "USD",
                         },
                     });
@@ -109,7 +109,7 @@ async function getDykeLineItems(slug) {
                             )?.toString(),
                             // itemType: dt,
                             basePriceMoney: {
-                                amount: Math.ceil(door.unitPrice * 100) as any,
+                                amount: Math.round(door.unitPrice * 100) as any,
                                 currency: "USD",
                             },
                         });

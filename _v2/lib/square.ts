@@ -139,7 +139,7 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
                       name:
                           data.description || `payment for ${data.orderIdStr}`,
                       priceMoney: {
-                          amount: BigInt(Math.ceil(data.amount * 100)),
+                          amount: BigInt(Math.round(data.amount * 100)),
                           currency: "USD",
                       },
                   },
@@ -173,9 +173,10 @@ export async function createSalesPaymentLink(data: CreateSalesPaymentProps) {
                       lineItems: data.items
                           ?.filter((i) => i.basePriceMoney.amount)
                           ?.map((item) => {
-                              item.basePriceMoney.amount = BigInt(
-                                  item.basePriceMoney.amount
-                              );
+                              if (typeof item.basePriceMoney.amount != "bigint")
+                                  item.basePriceMoney.amount = BigInt(
+                                      Math.round(item.basePriceMoney.amount)
+                                  );
                               return item;
                           }),
                   },
