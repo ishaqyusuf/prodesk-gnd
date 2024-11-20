@@ -9,6 +9,9 @@ import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/i
 import { _modal } from "@/components/common/modal/provider";
 import { OrderOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
 import { QuotesCell } from "../quotes-page-cells";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
+import Link from "next/link";
 
 interface Props {
     // promise;
@@ -49,6 +52,15 @@ export default function QuotesPageClient({
     });
     return (
         <div>
+            <div className="flex justify-between mb-2 -mt-4">
+                <div className="flex-1"></div>
+                <Button asChild size="sm">
+                    <Link href="/sales-v2/form/quote?fromPage=new">
+                        <Icons.add className="w-4 h-4 mr-2" />
+                        <span>New</span>
+                    </Link>
+                </Button>
+            </div>
             <DataTable.Infinity queryKey={queryKey} {...table.props}>
                 <div className="flex justify-between">
                     <div className="w-1/2">
