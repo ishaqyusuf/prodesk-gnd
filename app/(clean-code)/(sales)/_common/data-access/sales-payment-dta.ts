@@ -3,7 +3,11 @@ import { SalesPaymentStatus, SalesPaymentType, SalesType } from "../../types";
 import { formatDate } from "@/lib/use-day";
 import { whereNotTrashed } from "@/app/(clean-code)/_common/utils/db-utils";
 import { userId } from "@/app/(v1)/_actions/utils";
-import { getSquareDevices, getTerminalPaymentStatus } from "@/modules/square";
+import {
+    cancelSquareTerminalPayment,
+    getSquareDevices,
+    getTerminalPaymentStatus,
+} from "@/modules/square";
 
 export async function getSalesPaymentDta(id) {
     const order = await prisma.salesOrders.findFirstOrThrow({
@@ -201,4 +205,14 @@ export async function salesPaymentSuccessDta({
             customerId,
         },
     });
+}
+export async function cancelSalesPaymentCheckoutDta(id) {
+    const sc = await prisma.salesCheckout.update({
+        where: { id },
+        // include: {order:true}
+        data: {
+            status: "cancelled" as SalesPaymentStatus,
+        },
+    });
+    await cancelSquareTerminalPayment(sc.paymentId);
 }

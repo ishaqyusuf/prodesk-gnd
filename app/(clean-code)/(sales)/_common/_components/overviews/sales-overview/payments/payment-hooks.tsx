@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { cancelSalesPaymentCheckoutDta } from "../../../../data-access/sales-payment-dta";
 
 export const usePayment = () => {
     return usePaymentContext();
@@ -98,25 +99,55 @@ const usePaymentContext = () => {
                     });
                     if (resp.error) toast.error(resp.error);
                     else {
-                        let retryCount = 0;
                         async function terminalPaymentStatus() {
-                            if (inProgress) {
-                                //
-                                return new Promise((resolve, reject) => {
-                                    setTimeout(async () => {
+                            //
+                            return new Promise(async (resolve, reject) => {
+                                const timeout = setTimeout(async () => {
+                                    if (inProgress) {
+                                        await cancelSalesPaymentCheckoutDta(
+                                            resp.resp.salesPayment.id
+                                        );
+                                        reject(
+                                            "Payment status check timed out"
+                                        );
+                                        setInProgress(false);
+                                    }
+                                }, 10000);
+                                while (true && inProgress) {
+                                    if (inProgress) {
                                         const status =
                                             await checkTerminalPaymentStatusUseCase(
                                                 resp.resp.salesPayment.id
                                             );
-                                    }, 2000);
-                                });
-                            }
+
+                                        if (status.success) {
+                                            clearTimeout(timeout);
+                                            resolve(status.success);
+                                            form.setValue(
+                                                "paymentMethod",
+                                                null
+                                            );
+                                            break;
+                                        }
+                                        if (status.error) {
+                                            clearTimeout(timeout);
+                                            reject(status.error);
+                                            break;
+                                        }
+                                        await new Promise((r) =>
+                                            setTimeout(r, 2000)
+                                        );
+                                    }
+                                }
+                            });
                         }
                         toast.promise(terminalPaymentStatus, {
                             loading: "Waiting for payment...",
                             action: {
                                 label: "Cancel",
-                                onClick: () => {},
+                                onClick: () => {
+                                    setInProgress(true);
+                                },
                             },
                             success(data) {
                                 return `${data}`;

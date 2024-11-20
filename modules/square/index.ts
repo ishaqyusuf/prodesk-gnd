@@ -86,3 +86,6 @@ export async function getTerminalPaymentStatus(terminalId) {
         tip: tip > 0 ? tip / 100 : 0,
     };
 }
+export async function cancelSquareTerminalPayment(paymentId) {
+    await client.terminalApi.cancelTerminalCheckout(paymentId);
+}
