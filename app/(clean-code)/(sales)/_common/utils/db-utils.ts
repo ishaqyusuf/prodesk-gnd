@@ -88,7 +88,7 @@ export function whereSales(query: Partial<SearchParamsType>) {
             case "rep":
                 whereAnd.push({
                     salesRep: {
-                        name: query.rep,
+                        name: query["sales.rep"],
                     },
                 });
         }

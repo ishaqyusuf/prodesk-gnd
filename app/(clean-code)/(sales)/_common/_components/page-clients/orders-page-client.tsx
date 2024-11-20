@@ -9,6 +9,9 @@ import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import { OrderOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/_v1/icons";
 
 interface Props {
     // promise;
@@ -55,6 +58,15 @@ export default function OrdersPageClient({
     });
     return (
         <div>
+            <div className="flex justify-between mb-2 -mt-4">
+                <div className="flex-1"></div>
+                <Button asChild size="sm">
+                    <Link href="/sales-v2/form/order?fromPage=new">
+                        <Icons.add className="w-4 h-4 mr-2" />
+                        <span>New</span>
+                    </Link>
+                </Button>
+            </div>
             <DataTable.Infinity queryKey={queryKey} {...table.props}>
                 <div className="flex justify-between">
                     <div className="w-1/2">

@@ -10,6 +10,16 @@ export function anyDateQuery() {
 export const withDeleted = {
     OR: [{ deletedAt: null }, { deletedAt: { not: null } }],
 };
+export const whereTrashed = {
+    where: {
+        deletedAt: {},
+    },
+};
+export const whereNotTrashed = {
+    where: {
+        deletedAt: null,
+    },
+};
 export async function getPageInfo(input, where, model) {
     const { page = 1, perPage = 20 } = input;
     const skip = (page - 1) * Number(perPage);

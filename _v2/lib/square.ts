@@ -1,4 +1,5 @@
 "use server";
+import { userId } from "@/app/(v1)/_actions/utils";
 import { CheckoutStatus } from "@/app/(v2)/(loggedIn)/sales-v2/_components/_square-payment-modal/action";
 import { prisma } from "@/db";
 import { env } from "@/env.mjs";
@@ -77,6 +78,8 @@ export async function createSalesPayment(data: CreateSalesPaymentProps) {
             paymentType: `square_${data.type}`,
             status: "no-status",
             orderId: data.orderId,
+            terminalId: data.deviceId,
+            userId: await userId(),
             meta: {
                 email: data.email,
                 phone: data.phone,

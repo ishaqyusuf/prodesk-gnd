@@ -16,6 +16,7 @@ const StatusColorMap: { [key: string]: Colors } = {
     queued: "orange",
     completed: "green",
     available: "green",
+    success: "green",
     started: "blue",
     scheduled: "blue",
     incomplete: "orange",

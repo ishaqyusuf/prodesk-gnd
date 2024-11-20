@@ -26,6 +26,7 @@ import "./style.css";
 import ActionFooter from "./action-footer";
 import NotificationTab from "./notification";
 import { SalesDispatchListDto } from "../../../data-access/dto/sales-shipping-dto";
+import { PaymentTab } from "./payments/payment-tab";
 export function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
@@ -95,6 +96,9 @@ function PrimaryTab() {
                     </TabsContent>
                     <TabsContent className="" value="items">
                         <SalesItemsOverview />
+                    </TabsContent>
+                    <TabsContent className="" value="payments">
+                        <PaymentTab />
                     </TabsContent>
                     <TabsContent className="" value="shipping">
                         <SalesShippingTab />
