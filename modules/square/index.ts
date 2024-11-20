@@ -3,6 +3,12 @@ import { Client, Environment } from "square";
 import { errorHandler } from "../error/handler";
 import { squareSalesPaymentCreatedDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-payment-dta";
 
+export type TerminalCheckoutStatus =
+    | "PENDING"
+    | "IN_PROGRESS"
+    | "CANCEL_REQUESTED"
+    | "CANCELED"
+    | "COMPLETED";
 let devMode = env.NODE_ENV != "production";
 devMode = false;
 const SQUARE_LOCATION_ID = devMode
@@ -69,4 +75,14 @@ export async function createTerminalCheckout({
             ),
         };
     });
+}
+export async function getTerminalPaymentStatus(terminalId) {
+    const payment = await client.terminalApi.getTerminalCheckout(terminalId);
+    const paymentStatus = payment.result.checkout
+        .status as TerminalCheckoutStatus;
+    const tip = Number(payment.result.checkout.tipMoney.amount);
+    return {
+        status: paymentStatus,
+        tip: tip > 0 ? tip / 100 : 0,
+    };
 }

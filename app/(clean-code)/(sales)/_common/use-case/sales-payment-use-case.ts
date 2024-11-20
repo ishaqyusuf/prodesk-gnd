@@ -2,6 +2,7 @@
 
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import {
+    checkTerminalPaymentStatusDta,
     createSalesPaymentDta,
     CreateSalesPaymentProps,
     getPaymentTerminalsDta,
@@ -34,4 +35,8 @@ export async function createTerminalPaymentUseCase(data: CreatePayment) {
     data.terminal.idempotencyKey = salesPayment.id;
     const terminalCheckout = await createTerminalCheckout(data.terminal);
     return terminalCheckout;
+}
+export async function checkTerminalPaymentStatusUseCase(id) {
+    const s = await checkTerminalPaymentStatusDta(id);
+    return s;
 }

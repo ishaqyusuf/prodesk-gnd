@@ -3,7 +3,7 @@ import { SalesPaymentStatus, SalesPaymentType, SalesType } from "../../types";
 import { formatDate } from "@/lib/use-day";
 import { whereNotTrashed } from "@/app/(clean-code)/_common/utils/db-utils";
 import { userId } from "@/app/(v1)/_actions/utils";
-import { getSquareDevices } from "@/modules/square";
+import { getSquareDevices, getTerminalPaymentStatus } from "@/modules/square";
 
 export async function getSalesPaymentDta(id) {
     const order = await prisma.salesOrders.findFirstOrThrow({
@@ -113,4 +113,92 @@ export async function squareSalesPaymentCreatedDta(
         },
     });
     return result;
+}
+async function updateSalesPaymentStatusDta(id, status: SalesPaymentStatus) {
+    await prisma.salesCheckout.update({
+        where: { id },
+        data: {
+            status,
+        },
+    });
+}
+async function updateSalesPaymentTipDta(id, tip) {
+    await prisma.salesCheckout.update({
+        where: { id },
+        data: {
+            tip,
+        },
+    });
+}
+export async function checkTerminalPaymentStatusDta(id) {
+    const s = await prisma.salesCheckout.findUnique({
+        where: { id },
+        select: {
+            status: true,
+            id: true,
+            terminalId: true,
+            amount: true,
+            orderId: true,
+
+            order: {
+                select: {
+                    customerId: true,
+                    amountDue: true,
+                },
+            },
+        },
+    });
+    const checkoutStatus: SalesPaymentStatus = s.status as any;
+    const { status, tip } = await getTerminalPaymentStatus(s.terminalId);
+    if (status != "PENDING") {
+        switch (status) {
+            case "COMPLETED":
+                if (checkoutStatus != "success") {
+                    if (tip) await updateSalesPaymentTipDta(id, tip);
+                    await salesPaymentSuccessDta({
+                        checkoutId: s.id,
+                        amount: s.amount,
+                        tip,
+                        orderId: s.orderId,
+                        customerId: s.order.customerId,
+                        amountDue: s.order.amountDue,
+                    });
+                }
+                return {
+                    success: "payment received",
+                };
+                break;
+            default:
+                return {
+                    error: status,
+                };
+        }
+        return null;
+    }
+}
+export async function salesPaymentSuccessDta({
+    checkoutId,
+    amount,
+    tip,
+    orderId,
+    customerId,
+    amountDue,
+}) {
+    await updateSalesPaymentStatusDta(checkoutId, "success");
+    await prisma.salesOrders.update({
+        where: { id: orderId },
+        data: {
+            amountDue: amountDue - amount,
+        },
+    });
+    return await prisma.salesPayments.create({
+        data: {
+            orderId,
+            amount,
+            tip,
+            meta: {},
+            status: "success",
+            customerId,
+        },
+    });
 }

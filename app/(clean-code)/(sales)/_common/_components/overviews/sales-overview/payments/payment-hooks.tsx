@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSalesOverview } from "../overview-provider";
 import {
+    checkTerminalPaymentStatusUseCase,
+    createTerminalPaymentUseCase,
     GetPaymentTerminals,
     getPaymentTerminalsUseCase,
     GetSalesPayment,
@@ -38,6 +40,7 @@ const usePaymentContext = () => {
         "paymentMethod",
         "terminal.devices",
     ]);
+    const isTerminal = () => paymentMethod == "terminal";
     useEffect(() => {
         getSalesPaymentUseCase(orderId)
             .then((result) => {
@@ -49,6 +52,7 @@ const usePaymentContext = () => {
                 toast.error(e.message);
             });
     }, []);
+    const [inProgress, setInProgress] = useState(false);
     const resp = {
         orderId,
         terminals,
@@ -71,17 +75,60 @@ const usePaymentContext = () => {
             form.setValue("paymentMethod", null);
         },
         async terminalCheckout() {
-            form.trigger().then((e) => {
-                const data = form.getValues();
-                if (e) {
-                    if (!data.deviceId && data.paymentMethod == "terminal") {
-                        form.setError("deviceId", {});
-                        return;
-                    }
-                    if (data.paymentMethod == "terminal") {
+            const e = await form.trigger(); //.then((e) => {
+            const formData = form.getValues();
+            if (e) {
+                if (!formData.deviceId && isTerminal()) {
+                    form.setError("deviceId", {});
+                    return;
+                }
+                if (isTerminal()) {
+                    setInProgress(true);
+                    const resp = await createTerminalPaymentUseCase({
+                        salesPayment: {
+                            amount: Number(formData.amount),
+                            orderId,
+                            paymentType: "square_terminal",
+                        },
+                        terminal: {
+                            amount: Number(formData.amount),
+                            deviceId: formData.deviceId,
+                            allowTipping: formData.enableTip,
+                        },
+                    });
+                    if (resp.error) toast.error(resp.error);
+                    else {
+                        let retryCount = 0;
+                        async function terminalPaymentStatus() {
+                            if (inProgress) {
+                                //
+                                return new Promise((resolve, reject) => {
+                                    setTimeout(async () => {
+                                        const status =
+                                            await checkTerminalPaymentStatusUseCase(
+                                                resp.resp.salesPayment.id
+                                            );
+                                    }, 2000);
+                                });
+                            }
+                        }
+                        toast.promise(terminalPaymentStatus, {
+                            loading: "Waiting for payment...",
+                            action: {
+                                label: "Cancel",
+                                onClick: () => {},
+                            },
+                            success(data) {
+                                return `${data}`;
+                            },
+                            error(data) {
+                                return data;
+                            },
+                        });
                     }
                 }
-            });
+            }
+            // });
         },
     };
 
