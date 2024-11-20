@@ -176,4 +176,8 @@ export interface HousePackageToolSettings {
 }
 
 export type SalesPaymentType = "square_terminal" | "square_link";
-export type SalesPaymentStatus = "pending" | "success" | "cancelled";
+export type SalesPaymentStatus =
+    | "created"
+    | "pending"
+    | "success"
+    | "cancelled";

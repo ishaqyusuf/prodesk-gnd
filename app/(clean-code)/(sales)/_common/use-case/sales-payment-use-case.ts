@@ -2,9 +2,15 @@
 
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import {
+    createSalesPaymentDta,
+    CreateSalesPaymentProps,
     getPaymentTerminalsDta,
     getSalesPaymentDta,
 } from "../data-access/sales-payment-dta";
+import {
+    createTerminalCheckout,
+    CreateTerminalCheckoutProps,
+} from "@/modules/square";
 
 export type GetSalesPayment = AsyncFnType<typeof getSalesPaymentUseCase>;
 export async function getSalesPaymentUseCase(id) {
@@ -17,4 +23,15 @@ export type GetPaymentTerminals = AsyncFnType<
 export async function getPaymentTerminalsUseCase() {
     const resp = await getPaymentTerminalsDta();
     return resp;
+}
+interface CreatePayment {
+    salesPayment: CreateSalesPaymentProps;
+    terminal?: CreateTerminalCheckoutProps;
+}
+export async function createTerminalPaymentUseCase(data: CreatePayment) {
+    const salesPayment = await createSalesPaymentDta(data.salesPayment);
+
+    data.terminal.idempotencyKey = salesPayment.id;
+    const terminalCheckout = await createTerminalCheckout(data.terminal);
+    return terminalCheckout;
 }

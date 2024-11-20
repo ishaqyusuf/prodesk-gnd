@@ -1,5 +1,7 @@
 import { env } from "@/env.mjs";
 import { Client, Environment } from "square";
+import { errorHandler } from "../error/handler";
+import { squareSalesPaymentCreatedDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-payment-dta";
 
 let devMode = env.NODE_ENV != "production";
 devMode = false;
@@ -29,4 +31,42 @@ export async function getSquareDevices() {
         console.log(error);
     }
 }
-export async function createTerminalSalesPayment({ deviceId }) {}
+export interface CreateTerminalCheckoutProps {
+    deviceId;
+    allowTipping?: boolean;
+    amount;
+    idempotencyKey?;
+}
+export async function createTerminalCheckout({
+    deviceId,
+    idempotencyKey,
+    amount,
+    allowTipping,
+}: CreateTerminalCheckoutProps) {
+    return await errorHandler(async () => {
+        const terminal = await client.terminalApi.createTerminalCheckout({
+            idempotencyKey,
+            checkout: {
+                amountMoney: {
+                    amount: BigInt(Number(amount) * 100),
+                    currency: "USD",
+                },
+                deviceOptions: {
+                    deviceId,
+                    tipSettings: {
+                        allowTipping,
+                    },
+                },
+            },
+        });
+        return {
+            id: terminal.result.checkout.id,
+            squareOrderId: terminal.result.checkout.orderId,
+            salesPayment: await squareSalesPaymentCreatedDta(
+                idempotencyKey,
+                terminal.result.checkout.id,
+                terminal.result.checkout.orderId
+            ),
+        };
+    });
+}

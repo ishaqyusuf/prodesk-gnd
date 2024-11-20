@@ -63,7 +63,7 @@ export async function getPaymentTerminalsDta() {
         lastUsed: devices.find((d) => d.value == lastPayment?.terminalId),
     };
 }
-interface CreateSalesPaymentProps {
+export interface CreateSalesPaymentProps {
     amount;
     paymentType: SalesPaymentType;
     status?: SalesPaymentStatus;
@@ -75,12 +75,13 @@ interface CreateSalesPaymentProps {
 export async function createSalesPaymentDta({
     amount,
     paymentType,
-    status = "pending",
+    status,
     terminalId,
     orderId,
     email,
     phone,
 }: CreateSalesPaymentProps) {
+    status = "created";
     const checkout = await prisma.salesCheckout.create({
         data: {
             amount: Number(amount),
@@ -92,4 +93,24 @@ export async function createSalesPaymentDta({
             meta: { email, phone },
         },
     });
+    return {
+        id: checkout.id,
+    };
+}
+export async function squareSalesPaymentCreatedDta(
+    id,
+    paymentId,
+    squareOrderId
+) {
+    const result = await prisma.salesCheckout.update({
+        where: { id },
+        data: {
+            status: "pending" as SalesPaymentStatus,
+            paymentId,
+            meta: {
+                squareOrderId,
+            },
+        },
+    });
+    return result;
 }
