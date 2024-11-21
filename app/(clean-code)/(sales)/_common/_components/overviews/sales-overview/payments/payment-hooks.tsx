@@ -45,6 +45,9 @@ const usePaymentContext = () => {
     ]);
     const isTerminal = () => paymentMethod == "terminal";
     useEffect(() => {
+        load();
+    }, []);
+    async function load() {
         getSalesPaymentUseCase(orderId)
             .then((result) => {
                 setData(result);
@@ -54,7 +57,7 @@ const usePaymentContext = () => {
             .catch((e) => {
                 toast.error(e.message);
             });
-    }, []);
+    }
     // const [waitingForPayment, setWaitingForPayment] = useState(false);
     useEffect(() => {
         checkPayment();
