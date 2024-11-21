@@ -145,7 +145,7 @@ export function PaymentTab({}) {
                                     variant="destructive"
                                     disabled={ctx.inProgress}
                                     onClick={() => {
-                                        ctx.cancelPayment();
+                                        ctx.closePaymentForm();
                                     }}
                                 >
                                     Cancel

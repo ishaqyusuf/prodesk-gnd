@@ -34,6 +34,7 @@ const usePaymentContext = () => {
             deviceId: null,
             enableTip: false,
             terminal: null as GetPaymentTerminals,
+            checkoutId: null,
         },
     });
 
@@ -47,7 +48,7 @@ const usePaymentContext = () => {
             .then((result) => {
                 setData(result);
                 setReady(true);
-                resp.orderId = orderId;
+                _ctx.orderId = orderId;
             })
             .catch((e) => {
                 toast.error(e.message);
@@ -56,7 +57,7 @@ const usePaymentContext = () => {
     // const [inProgress, setInProgress] = useState(false);
     const [isLoading, startTransition] = useTransition();
     const [waitingForPayment, setWaitingForPayment] = useState(false);
-    const resp = {
+    const _ctx = {
         orderId,
         terminals,
         ready,
@@ -76,17 +77,25 @@ const usePaymentContext = () => {
             form.setValue("paymentMethod", pm);
             form.clearErrors();
         },
-        cancelPayment() {
-            form.setValue("paymentMethod", null);
+        closePaymentForm() {
+            // form.setValue("paymentMethod", null);
+            form.reset({});
+            setWaitingForPayment(false);
         },
-        cancelTerminalPayment() {
+        async cancelTerminalPayment() {
+            await cancelSalesPaymentCheckoutUseCase(
+                form.getValues("checkoutId")
+            );
+            form.reset({});
             setWaitingForPayment(false);
         },
         async terminalCheckout() {
+            const e = await form.trigger(); //.then((e) => {
+            const formData = form.getValues();
             startTransition(async () => {
-                const e = await form.trigger(); //.then((e) => {
-                const formData = form.getValues();
                 if (e) {
+                    console.log(formData);
+
                     if (!formData.deviceId && isTerminal()) {
                         form.setError("deviceId", {});
                         return;
@@ -107,43 +116,38 @@ const usePaymentContext = () => {
 
                         if (resp.error) toast.error(resp.error);
                         else {
+                            form.setValue(
+                                "checkoutId",
+                                resp.resp.salesPayment.id
+                            );
                             setWaitingForPayment(true);
                             const timeout = setTimeout(async () => {
                                 if (waitingForPayment) {
-                                    await cancelSalesPaymentCheckoutUseCase(
-                                        resp.resp.salesPayment.id
-                                    );
                                     toast.error(
                                         "Payment status check timed out"
                                     );
-                                    // setInProgress(false);
-                                    setWaitingForPayment(false);
+                                    _ctx.cancelTerminalPayment();
                                 }
                             }, 10000);
-                            await new Promise((r) => setTimeout(r, 2000));
-                            while (
-                                true &&
-                                waitingForPayment &&
-                                resp.resp.salesPayment.id
-                            ) {
+                            while (true && waitingForPayment) {
+                                await new Promise((r) => setTimeout(r, 2000));
+                                if (!waitingForPayment) break;
                                 const status =
                                     await checkTerminalPaymentStatusUseCase(
                                         resp.resp.salesPayment.id
                                     );
                                 if (status.success) {
                                     clearTimeout(timeout);
-                                    form.setValue("paymentMethod", null);
-                                    setWaitingForPayment(false);
+                                    _ctx.closePaymentForm();
                                     toast.success(status.success);
                                     break;
                                 }
                                 if (status.error) {
                                     clearTimeout(timeout);
                                     toast.error(status.error);
-                                    setWaitingForPayment(false);
+                                    _ctx.cancelTerminalPayment();
                                     break;
                                 }
-                                await new Promise((r) => setTimeout(r, 2000));
                             }
                         }
                     }
@@ -153,5 +157,5 @@ const usePaymentContext = () => {
         },
     };
 
-    return resp;
+    return _ctx;
 };
