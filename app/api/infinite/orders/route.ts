@@ -1,7 +1,10 @@
 import { getSalesOrdersDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
-import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
+import {
+    FilterParams,
+    searchParamsCache,
+} from "@/components/(clean-code)/data-table/search-params";
 import { generateRandomString } from "@/lib/utils";
 
 import { NextRequest } from "next/server";
@@ -13,7 +16,7 @@ export async function GET(req: NextRequest) {
         ...Object.fromEntries(_search),
         // pk: generateRandomString(),
         "sales.type": "order" as SalesType,
-    });
+    } as FilterParams);
 
     // search.pk = generateRandomString();
     // const where = whereSales(search);

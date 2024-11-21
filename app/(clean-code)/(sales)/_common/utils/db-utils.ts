@@ -9,6 +9,7 @@ import {
 import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
 import {
     FilterKeys,
+    FilterParams,
     SearchParamsType,
 } from "@/components/(clean-code)/data-table/search-params";
 export function whereDispatch(query: GetSalesDispatchListQuery) {
@@ -16,7 +17,7 @@ export function whereDispatch(query: GetSalesDispatchListQuery) {
 
     return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
 }
-export function whereSales(query: Partial<SearchParamsType>) {
+export function whereSales(query: FilterParams) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
     if (query["with.trashed"]) whereAnd.push(withDeleted);
     if (query["trashed.only"])
@@ -50,7 +51,7 @@ export function whereSales(query: Partial<SearchParamsType>) {
             case "order.no":
                 whereAnd.push({
                     orderId: {
-                        contains: query["order.no"] as any,
+                        contains: query["order.no"],
                     },
                 });
                 break;
@@ -59,7 +60,7 @@ export function whereSales(query: Partial<SearchParamsType>) {
                     meta: {
                         path: "$.po",
                         // equals: query.po,
-                        string_contains: query.po as any,
+                        string_contains: query.po,
                     },
                 });
                 break;
@@ -69,21 +70,21 @@ export function whereSales(query: Partial<SearchParamsType>) {
                         {
                             customer: {
                                 name: {
-                                    contains: query["customer.name"] as any,
+                                    contains: query["customer.name"],
                                 },
                             },
                         },
                         {
                             customer: {
                                 businessName: {
-                                    contains: query["customer.name"] as any,
+                                    contains: query["customer.name"],
                                 },
                             },
                         },
                         {
                             billingAddress: {
                                 name: {
-                                    contains: query["customer.name"] as any,
+                                    contains: query["customer.name"],
                                 },
                             },
                         },
@@ -95,7 +96,7 @@ export function whereSales(query: Partial<SearchParamsType>) {
                     OR: [
                         {
                             customer: {
-                                phoneNo: { contains: query.phone as any },
+                                phoneNo: { contains: query.phone },
                             },
                         },
                     ],

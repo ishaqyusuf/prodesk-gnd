@@ -34,6 +34,7 @@ type SpecialFilters =
     | "trashed.only"
     | "_q";
 export type FilterKeys = keyof typeof searchSchema._type;
+export type FilterParams = { [id in SearchParamsKeys]: any };
 export type SearchParamsKeys = SpecialFilters | FilterKeys;
 export const searchParamsParser: {
     [k in SearchParamsKeys]: any;
