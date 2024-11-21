@@ -1,4 +1,3 @@
-import { DataTableFilterField } from "@/components/(clean-code)/data-table/type";
 import { SalesDispatchStatus } from "../../types";
 import {
     filterCol,

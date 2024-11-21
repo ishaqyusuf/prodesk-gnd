@@ -7,7 +7,10 @@ import {
     withDeleted,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
-import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
+import {
+    FilterKeys,
+    SearchParamsType,
+} from "@/components/(clean-code)/data-table/search-params";
 export function whereDispatch(query: GetSalesDispatchListQuery) {
     const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
 
@@ -15,8 +18,8 @@ export function whereDispatch(query: GetSalesDispatchListQuery) {
 }
 export function whereSales(query: Partial<SearchParamsType>) {
     const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
-    if (query.withTrashed) whereAnd.push(withDeleted);
-    if (query.trashedOnly)
+    if (query["with.trashed"]) whereAnd.push(withDeleted);
+    if (query["trashed.only"])
         whereAnd.push({
             deletedAt: anyDateQuery(),
         });
@@ -24,18 +27,18 @@ export function whereSales(query: Partial<SearchParamsType>) {
     if (q) {
         const parsedQ = parseSearchQuery(q);
     }
-    if (query.dealerId)
+    if (query["dealer.id"])
         whereAnd.push({
             customer: {
                 auth: {
-                    id: query.dealerId,
+                    id: query["dealer.id"],
                 },
             },
         });
     whereAnd.push({
-        type: query.salesType,
+        type: query["sales.type"],
     });
-    const keys = Object.keys(query) as (keyof GetSalesListQuery)[];
+    const keys = Object.keys(query) as FilterKeys[];
     keys.map((k) => {
         if (!query?.[k]) return;
         switch (k) {
@@ -44,10 +47,10 @@ export function whereSales(query: Partial<SearchParamsType>) {
                     id: query.id,
                 });
                 break;
-            case "orderId":
+            case "order.no":
                 whereAnd.push({
                     orderId: {
-                        contains: query.orderId,
+                        contains: query["order.no"] as any,
                     },
                 });
                 break;
@@ -56,26 +59,32 @@ export function whereSales(query: Partial<SearchParamsType>) {
                     meta: {
                         path: "$.po",
                         // equals: query.po,
-                        string_contains: query.po,
+                        string_contains: query.po as any,
                     },
                 });
                 break;
-            case "customer":
+            case "customer.name":
                 whereAnd.push({
                     OR: [
                         {
                             customer: {
-                                name: { contains: query.customer },
+                                name: {
+                                    contains: query["customer.name"] as any,
+                                },
                             },
                         },
                         {
                             customer: {
-                                businessName: { contains: query.customer },
+                                businessName: {
+                                    contains: query["customer.name"] as any,
+                                },
                             },
                         },
                         {
                             billingAddress: {
-                                name: { contains: query.customer },
+                                name: {
+                                    contains: query["customer.name"] as any,
+                                },
                             },
                         },
                     ],
@@ -83,9 +92,15 @@ export function whereSales(query: Partial<SearchParamsType>) {
                 break;
             case "phone":
                 whereAnd.push({
-                    OR: [{ customer: { phoneNo: { contains: query.phone } } }],
+                    OR: [
+                        {
+                            customer: {
+                                phoneNo: { contains: query.phone as any },
+                            },
+                        },
+                    ],
                 });
-            case "rep":
+            case "sales.rep":
                 whereAnd.push({
                     salesRep: {
                         name: query["sales.rep"],
