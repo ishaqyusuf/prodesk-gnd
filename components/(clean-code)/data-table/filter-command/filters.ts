@@ -77,6 +77,13 @@ export const composeFilter = (
     };
 };
 
-export const undotFilterKey = (k) => {
-    return k?.split(".")?.join("_");
-};
+const undotFilterKey = (k) => k?.split(".")?.join("_");
+const dotFilterKey = (k) => k?.split("_")?.join(".");
+export const __findFilterField = (field, filter) =>
+    undotFilterKey(field.value) == undotFilterKey(filter.id);
+
+export const __getTableCol = (table, key) =>
+    table.getColumn(dotFilterKey(key)) || table.getColumn(undotFilterKey(key));
+export const __filterKeyInSearch = (id, data) =>
+    dotFilterKey(id) in data || undotFilterKey(id) in data;
+// export const __transformInputValue = (inputValue)

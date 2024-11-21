@@ -8,9 +8,14 @@ import {
 } from "@/lib/delimiters";
 import { DataTableFilterField } from "./type";
 import { SEPARATOR } from "@/app/(clean-code)/(sales)/_common/utils/contants";
+import {
+    __filterKeyInSearch,
+    __findFilterField,
+} from "./filter-command/filters";
 
 export function deserialize<T extends z.AnyZodObject>(schema: T) {
     const castToSchema = z.preprocess((val) => {
+        // console.log({ val });
         if (typeof val !== "string") return val;
         return val
             .trim()
@@ -18,7 +23,7 @@ export function deserialize<T extends z.AnyZodObject>(schema: T) {
             .reduce((prev, curr) => {
                 const [name, value] = curr.split(":");
                 if (!value || !name) return prev;
-                prev[name] = value;
+                prev[name?.split("_")?.join(".")] = value;
                 return prev;
             }, {} as Record<string, unknown>);
     }, schema);
@@ -43,31 +48,43 @@ export function serializeColumFilters<TData>(
     columnFilters: ColumnFiltersState,
     filterFields?: DataTableFilterField<TData>[]
 ) {
-    return columnFilters.reduce((prev, curr) => {
+    // columnFilters = columnFilters?.map((f) => {
+    //     // console.log("|||||", f.value);
+    //     // f.value = f.value);
+    //     // f.id = f.id?.split("_")?.join(".");
+    //     return f;
+    // });
+    const res = columnFilters.reduce((prev, curr) => {
         const { type, commandDisabled } = filterFields?.find(
-            (field) => curr.id === field.value
+            (field) => __findFilterField(field, curr) //curr.id === field.value
         ) || { commandDisabled: true }; // if column filter is not found, disable the command by default
-
-        if (commandDisabled) return prev;
-
+        // const id = curr.id?.split("_")?.join(".");
+        // if (commandDisabled) {
+        //     console.log("ERRR", curr);
+        //     return prev;
+        // }
+        // console.log({ curr });
+        const currId = curr.id?.split("_")?.join(".");
         if (Array.isArray(curr.value)) {
             if (type === "slider") {
-                return `${prev}${curr.id}:${curr.value.join(
+                return `${prev}${currId}:${curr.value.join(
                     SLIDER_DELIMITER
                 )}${SEPARATOR}`;
             }
             if (type === "checkbox") {
-                return `${prev}${curr.id}:${curr.value.join(
+                return `${prev}${currId}:${curr.value.join(
                     ARRAY_DELIMITER
                 )}${SEPARATOR}`;
             }
             if (type === "timerange") {
-                return `${prev}${curr.id}:${curr.value.join(
+                return `${prev}${currId}:${curr.value.join(
                     RANGE_DELIMITER
                 )}${SEPARATOR}`;
             }
         }
 
-        return `${prev}${curr.id}:${curr.value}${SEPARATOR}`;
+        return `${prev}${currId}:${curr.value}${SEPARATOR}`;
     }, "");
+    // console.log({ res });
+    return Array.from(new Set(res?.split(SEPARATOR))).join(SEPARATOR);
 }

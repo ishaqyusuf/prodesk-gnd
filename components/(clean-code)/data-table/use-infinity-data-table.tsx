@@ -27,6 +27,7 @@ import { dataOptions } from "./query-options";
 import { TableProps } from "./use-table-compose";
 import { generateRandomString } from "@/lib/utils";
 import { toast } from "sonner";
+import { __findFilterField } from "./filter-command/filters";
 
 export function useInfiniteDataTable({
     columns,
@@ -169,18 +170,21 @@ export function useInfiniteDataTable({
 
     React.useEffect(() => {
         const columnFiltersWithNullable = filterFields.map((field) => {
-            const filterValue = columnFilters.find(
-                (filter) => filter.id === field.value
+            const filterValue = columnFilters.find((filter) =>
+                __findFilterField(field, filter)
             );
             if (!filterValue) return { id: field.value, value: null };
-            return { id: field.value, value: filterValue.value };
+
+            return {
+                id: field.value,
+                value: filterValue.value,
+            };
         });
 
         const search = columnFiltersWithNullable.reduce((prev, curr) => {
             prev[curr.id as string] = curr.value;
             return prev;
         }, {} as Record<string, unknown>);
-        console.log({ search });
 
         setSearch(search);
         // eslint-disable-next-line react-hooks/exhaustive-deps

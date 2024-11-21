@@ -33,7 +33,11 @@ import { useDataTableContext } from "../use-data-table";
 import { SEPARATOR } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { searchSchema } from "../search-params";
-import { undotFilterKey } from "./filters";
+import {
+    __filterKeyInSearch,
+    __getTableCol,
+    __findFilterField,
+} from "./filters";
 
 // FIXME: there is an issue on cmdk if I wanna only set a single slider value...
 
@@ -81,14 +85,14 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
         const searchParams = deserialize(searchSchema)(inputValue);
         const currentFilters = table.getState().columnFilters;
         const currentEnabledFilters = currentFilters.filter((filter) => {
-            const field = _filterFields?.find(
-                (field) => field.value === filter.id
+            const field = _filterFields?.find((field) =>
+                __findFilterField(field, filter)
             );
             return !field?.commandDisabled;
         });
         const currentDisabledFilters = currentFilters.filter((filter) => {
-            const field = _filterFields?.find(
-                (field) => field.value === filter.id
+            const field = _filterFields?.find((field) =>
+                __findFilterField(field, filter)
             );
             return field?.commandDisabled;
         });
@@ -100,32 +104,30 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             },
             {} as Record<string, unknown>
         );
-        // console.log({ inputValue, paramState: searchParams });
         if (searchParams.success && !inputValue?.endsWith(" ")) {
             for (const key of Object.keys(searchParams.data)) {
                 const value =
                     searchParams.data[key as keyof typeof searchParams.data];
-                const col = table.getColumn(undotFilterKey(key));
-                // const col = table
-                //     .getAllColumns()
-                //     .find((column) => column.id === undotFilterKey(key));
-                // console.log(table.getAllColumns().map((c) => c.id));
+                const col = __getTableCol(table, key);
 
-                console.log({ key, value, col: col ? true : false });
                 col?.setFilterValue(value);
             }
+            console.log({
+                data: searchParams.data,
+                currentEnabledFilters,
+            });
             const currentFiltersToReset = currentEnabledFilters.filter(
                 (filter) => {
-                    return !(filter.id in searchParams.data);
+                    return !__filterKeyInSearch(filter.id, searchParams.data);
+                    // return !(dotFilterKey(filter.id) in searchParams.data);
                 }
             );
             for (const filter of currentFiltersToReset) {
-                console.log(filter.id);
+                console.log("reset", filter.id);
 
                 table.getColumn(filter.id)?.setFilterValue(undefined);
             }
         } else {
-            console.log("NOT SUCCESSFUL", inputValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValue, open, currentWord]);
@@ -133,7 +135,14 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
     useEffect(() => {
         // REMINDER: only update the input value if the command is closed (avoids jumps while open)
         if (!open) {
-            setInputValue(serializeColumFilters(columnFilters, filterFields));
+            // const _colFilters = columnFilters?.map((f) => {
+            //     f.id = f.id?.split("_")?.join(".");
+            //     return f;
+            // });
+            const ser = serializeColumFilters(columnFilters, filterFields);
+            console.log({ ser, columnFilters, filterFields });
+
+            setInputValue(ser);
         }
     }, [columnFilters, filterFields, open]);
 
@@ -232,7 +241,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             value,
                             caretPosition,
                         });
-                        // console.log({ word });
 
                         setCurrentWord(word);
                     }}
