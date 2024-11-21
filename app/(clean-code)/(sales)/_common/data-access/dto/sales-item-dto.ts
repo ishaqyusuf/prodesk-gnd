@@ -403,9 +403,9 @@ function itemAnalytics(
             const suc = analytics.success?.[key]?.total;
             const pen = analytics.pending?.[key]?.total;
             analytics.info.push({
-                text: `${text}: ${suc}/${suc + pen}`,
+                text: `${text}: ${suc}/${sum([suc, pen])}`,
                 title: text,
-                total: suc + pen,
+                total: sum([suc, pen]),
                 value: suc,
             });
         }
