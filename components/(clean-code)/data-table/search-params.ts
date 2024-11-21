@@ -97,4 +97,4 @@ export const searchSchema = z.object({
 });
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);
-export type SearchParamsType = inferParserType<typeof searchParamsParser>;
+export type SearchParamsType = FilterParams; // inferParserType<typeof searchParamsParser>;

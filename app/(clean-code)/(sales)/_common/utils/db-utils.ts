@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import salesData from "./sales-data";
 import { ftToIn } from "./sales-utils";
-import { GetSalesListQuery } from "../data-access/sales-dta";
 import {
     anyDateQuery,
     withDeleted,
@@ -10,11 +9,9 @@ import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
 import {
     FilterKeys,
     FilterParams,
-    SearchParamsType,
 } from "@/components/(clean-code)/data-table/search-params";
 export function whereDispatch(query: GetSalesDispatchListQuery) {
     const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
-
     return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
 }
 export function whereSales(query: FilterParams) {
