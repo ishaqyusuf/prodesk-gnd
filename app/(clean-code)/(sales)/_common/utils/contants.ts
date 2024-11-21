@@ -57,4 +57,8 @@ export const __filters: Filters = {
         fields: [],
         options: {},
     },
+    ["sales-delivery"]: {
+        fields: [],
+        options: {},
+    },
 };

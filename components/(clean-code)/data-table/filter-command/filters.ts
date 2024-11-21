@@ -2,7 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { FilterKeys } from "../search-params";
 import { DataTableFilterField } from "../type";
 
-export const queryKeys = ["orders", "quotes"] as const;
+export const queryKeys = ["orders", "quotes", "sales-delivery"] as const;
 export type QueryKeys = (typeof queryKeys)[number];
 export type Filters = Partial<{
     [id in QueryKeys]: Partial<{

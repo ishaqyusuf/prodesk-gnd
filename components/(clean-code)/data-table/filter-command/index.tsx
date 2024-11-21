@@ -49,12 +49,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
     // filterFields: _filterFields,
     isLoading,
 }: DataTableFilterCommandProps<TData, TSchema>) {
-    const {
-        table,
-        filterFields: _filterFields,
-
-        columns,
-    } = useDataTableContext();
+    const { table, filterFields: _filterFields } = useDataTableContext();
     const columnFilters = table.getState().columnFilters;
     const inputRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState<boolean>(false);

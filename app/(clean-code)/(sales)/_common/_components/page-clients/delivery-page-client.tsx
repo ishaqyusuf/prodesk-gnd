@@ -1,23 +1,19 @@
 "use client";
 
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
-import {
-    dispatchFilterFields,
-    dispatchSearchSchema,
-} from "../../_schema/dispatch-search-schema";
 
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 
-import { OrderCells } from "../orders-page-cells";
 import { DispatchCells } from "../dispatch-page-cells";
 import { DispatchOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
 
 interface Props {
     queryKey?;
+    filterFields;
 }
-export default function DeliveryPageClient({ queryKey }: Props) {
+export default function DeliveryPageClient({ queryKey, filterFields }: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -37,8 +33,7 @@ export default function DeliveryPageClient({ queryKey }: Props) {
             ];
         },
         checkable: true,
-        schema: dispatchSearchSchema,
-        filterFields: dispatchFilterFields,
+        filterFields,
         cellVariants: {
             size: "sm",
         },

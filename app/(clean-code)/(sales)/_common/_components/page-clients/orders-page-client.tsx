@@ -37,7 +37,6 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
             ];
         },
         checkable: true,
-        // filterCells: ["_q", "dispatch.status"],
         filterFields,
         cellVariants: {
             size: "sm",
