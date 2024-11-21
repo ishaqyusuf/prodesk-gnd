@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const search = searchParamsCache.parse({
         ...Object.fromEntries(_search),
         // pk: generateRandomString(),
-        salesType: "order" as SalesType,
+        "sales.type": "order" as SalesType,
     });
 
     // search.pk = generateRandomString();
