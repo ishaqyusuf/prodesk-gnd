@@ -10,11 +10,7 @@ export type InfiniteQueryMeta = {
     currentPercentiles: Record<Percentile, number>;
 };
 
-export const dataOptions = (
-    search: SearchParamsType,
-
-    queryKey
-) => {
+export const dataOptions = (search, queryKey) => {
     return infiniteQueryOptions({
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         queryFn: async ({ pageParam = 0 }) => {
