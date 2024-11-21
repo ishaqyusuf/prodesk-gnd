@@ -20,6 +20,7 @@ import { env } from "@/env.mjs";
 import { Dot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/common/button";
+import { Label } from "@/components/ui/label";
 
 export function PaymentTab({}) {
     const ctx = usePayment();
@@ -79,7 +80,12 @@ export function PaymentTab({}) {
             {ctx.paymentMethod == "terminal" && (
                 <Form {...ctx.form}>
                     <div className="flex sm:justify-end right-0 m-4 sm:m-8 sm:mb-16  absolute bottom-0 mb-16">
-                        <Card className="shadow-xl">
+                        <Card
+                            className={cn(
+                                "shadow-xl",
+                                ctx.waitingForPayment && "hidden"
+                            )}
+                        >
                             <CardHeader className="bg-muted p-4">
                                 Terminal Checkout
                             </CardHeader>
@@ -91,11 +97,13 @@ export function PaymentTab({}) {
                                     size="sm"
                                     label={"Amount"}
                                     prefix="$"
+                                    disabled={ctx.inProgress}
                                 />
                                 <ControlledSelect
                                     options={ctx.terminals || []}
                                     control={ctx.form.control}
                                     size="sm"
+                                    disabled={ctx.inProgress}
                                     name="deviceId"
                                     SelectItem={({ option }) => (
                                         <SelectItem
@@ -126,6 +134,7 @@ export function PaymentTab({}) {
                             </CardContent>
                             <CardFooter className="flex gap-4">
                                 <ControlledCheckbox
+                                    disabled={ctx.inProgress}
                                     switchInput
                                     control={ctx.form.control}
                                     name="enableTip"
@@ -134,17 +143,44 @@ export function PaymentTab({}) {
                                 <Button
                                     size="sm"
                                     variant="destructive"
+                                    disabled={ctx.inProgress}
                                     onClick={() => {
                                         ctx.cancelPayment();
                                     }}
                                 >
                                     Cancel
                                 </Button>
-                                <Button action={ctx.terminalCheckout} size="sm">
+                                <Button
+                                    disabled={ctx.inProgress}
+                                    action={ctx.terminalCheckout}
+                                    size="sm"
+                                >
                                     Proceed
                                 </Button>
                             </CardFooter>
                         </Card>
+                        <div
+                            className={cn(
+                                "hidden",
+                                ctx.waitingForPayment &&
+                                    "block border shadow-sm rounded p-2"
+                            )}
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2">
+                                    <Icons.spinner className="h-4 w-4 animate-spin" />
+                                    <Label>Waiting for payment...</Label>
+                                </div>
+                                <div className="flex-1"></div>
+                                <Button
+                                    variant="destructive"
+                                    className="h-6 p-2 text-xs"
+                                    onClick={ctx.cancelTerminalPayment}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </Form>
             )}

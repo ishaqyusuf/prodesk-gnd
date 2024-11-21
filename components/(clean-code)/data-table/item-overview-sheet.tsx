@@ -41,6 +41,7 @@ Props) {
     if (!selectedRowKey || !selectedRow) return null;
     return (
         <Sheet
+            // modal={false}
             open={!!selectedRowKey}
             onOpenChange={(e) => {
                 console.log(e);

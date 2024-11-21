@@ -38,6 +38,7 @@ export default async function RootLayout({
             <ReactQueryProvider>
                 <SpeedInsights />
                 <body>
+                    <Toaster />
                     <div className="print:hidden">
                         <AppProvider>
                             {children}
@@ -54,7 +55,7 @@ export default async function RootLayout({
                         >
                             <Upgrader />
                         </div>
-                        <Toaster />
+
                         <Analytics />
                         <TailwindIndicator />
                         {prodDB && !__isProd && (

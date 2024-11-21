@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useSalesOverview } from "../overview-provider";
 import {
+    cancelSalesPaymentCheckoutUseCase,
     checkTerminalPaymentStatusUseCase,
     createTerminalPaymentUseCase,
     GetPaymentTerminals,
@@ -12,7 +13,6 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { cancelSalesPaymentCheckoutDta } from "../../../../data-access/sales-payment-dta";
 
 export const usePayment = () => {
     return usePaymentContext();
@@ -53,12 +53,16 @@ const usePaymentContext = () => {
                 toast.error(e.message);
             });
     }, []);
-    const [inProgress, setInProgress] = useState(false);
+    // const [inProgress, setInProgress] = useState(false);
+    const [isLoading, startTransition] = useTransition();
+    const [waitingForPayment, setWaitingForPayment] = useState(false);
     const resp = {
         orderId,
         terminals,
         ready,
         data,
+        inProgress: isLoading,
+        waitingForPayment,
         form,
         paymentMethod,
         async createPayment(pm) {
@@ -75,90 +79,76 @@ const usePaymentContext = () => {
         cancelPayment() {
             form.setValue("paymentMethod", null);
         },
+        cancelTerminalPayment() {
+            setWaitingForPayment(false);
+        },
         async terminalCheckout() {
-            const e = await form.trigger(); //.then((e) => {
-            const formData = form.getValues();
-            if (e) {
-                if (!formData.deviceId && isTerminal()) {
-                    form.setError("deviceId", {});
-                    return;
-                }
-                if (isTerminal()) {
-                    setInProgress(true);
-                    const resp = await createTerminalPaymentUseCase({
-                        salesPayment: {
-                            amount: Number(formData.amount),
-                            orderId,
-                            paymentType: "square_terminal",
-                        },
-                        terminal: {
-                            amount: Number(formData.amount),
-                            deviceId: formData.deviceId,
-                            allowTipping: formData.enableTip,
-                        },
-                    });
-                    if (resp.error) toast.error(resp.error);
-                    else {
-                        async function terminalPaymentStatus() {
-                            //
-                            return new Promise(async (resolve, reject) => {
-                                const timeout = setTimeout(async () => {
-                                    if (inProgress) {
-                                        await cancelSalesPaymentCheckoutDta(
-                                            resp.resp.salesPayment.id
-                                        );
-                                        reject(
-                                            "Payment status check timed out"
-                                        );
-                                        setInProgress(false);
-                                    }
-                                }, 10000);
-                                while (true && inProgress) {
-                                    if (inProgress) {
-                                        const status =
-                                            await checkTerminalPaymentStatusUseCase(
-                                                resp.resp.salesPayment.id
-                                            );
-
-                                        if (status.success) {
-                                            clearTimeout(timeout);
-                                            resolve(status.success);
-                                            form.setValue(
-                                                "paymentMethod",
-                                                null
-                                            );
-                                            break;
-                                        }
-                                        if (status.error) {
-                                            clearTimeout(timeout);
-                                            reject(status.error);
-                                            break;
-                                        }
-                                        await new Promise((r) =>
-                                            setTimeout(r, 2000)
-                                        );
-                                    }
-                                }
-                            });
-                        }
-                        toast.promise(terminalPaymentStatus, {
-                            loading: "Waiting for payment...",
-                            action: {
-                                label: "Cancel",
-                                onClick: () => {
-                                    setInProgress(true);
-                                },
+            startTransition(async () => {
+                const e = await form.trigger(); //.then((e) => {
+                const formData = form.getValues();
+                if (e) {
+                    if (!formData.deviceId && isTerminal()) {
+                        form.setError("deviceId", {});
+                        return;
+                    }
+                    if (isTerminal()) {
+                        const resp = await createTerminalPaymentUseCase({
+                            salesPayment: {
+                                amount: Number(formData.amount),
+                                orderId,
+                                paymentType: "square_terminal",
                             },
-                            success(data) {
-                                return `${data}`;
-                            },
-                            error(data) {
-                                return data;
+                            terminal: {
+                                amount: Number(formData.amount),
+                                deviceId: formData.deviceId,
+                                allowTipping: formData.enableTip,
                             },
                         });
+
+                        if (resp.error) toast.error(resp.error);
+                        else {
+                            setWaitingForPayment(true);
+                            const timeout = setTimeout(async () => {
+                                if (waitingForPayment) {
+                                    await cancelSalesPaymentCheckoutUseCase(
+                                        resp.resp.salesPayment.id
+                                    );
+                                    toast.error(
+                                        "Payment status check timed out"
+                                    );
+                                    // setInProgress(false);
+                                    setWaitingForPayment(false);
+                                }
+                            }, 10000);
+                            await new Promise((r) => setTimeout(r, 2000));
+                            while (
+                                true &&
+                                waitingForPayment &&
+                                resp.resp.salesPayment.id
+                            ) {
+                                const status =
+                                    await checkTerminalPaymentStatusUseCase(
+                                        resp.resp.salesPayment.id
+                                    );
+                                if (status.success) {
+                                    clearTimeout(timeout);
+                                    form.setValue("paymentMethod", null);
+                                    setWaitingForPayment(false);
+                                    toast.success(status.success);
+                                    break;
+                                }
+                                if (status.error) {
+                                    clearTimeout(timeout);
+                                    toast.error(status.error);
+                                    setWaitingForPayment(false);
+                                    break;
+                                }
+                                await new Promise((r) => setTimeout(r, 2000));
+                            }
+                        }
                     }
                 }
-            }
+            });
             // });
         },
     };

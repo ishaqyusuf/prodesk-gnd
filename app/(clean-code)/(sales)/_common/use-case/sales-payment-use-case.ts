@@ -2,6 +2,7 @@
 
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import {
+    cancelSalesPaymentCheckoutDta,
     checkTerminalPaymentStatusDta,
     createSalesPaymentDta,
     CreateSalesPaymentProps,
@@ -39,4 +40,7 @@ export async function createTerminalPaymentUseCase(data: CreatePayment) {
 export async function checkTerminalPaymentStatusUseCase(id) {
     const s = await checkTerminalPaymentStatusDta(id);
     return s;
+}
+export async function cancelSalesPaymentCheckoutUseCase(id) {
+    return await cancelSalesPaymentCheckoutDta(id);
 }
