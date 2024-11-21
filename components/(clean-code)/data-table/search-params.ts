@@ -34,7 +34,6 @@ type SpecialFilters =
     | "trashed.only"
     | "_q";
 export type FilterKeys = keyof typeof searchSchema._type;
-export type FilterParams = { [id in SearchParamsKeys]: any };
 export type SearchParamsKeys = SpecialFilters | FilterKeys;
 export const searchParamsParser: {
     [k in SearchParamsKeys]: any;
@@ -80,7 +79,7 @@ export const searchParamsParser: {
     id: parseAsInteger,
 };
 export const searchSchema = z.object({
-    id: z.string().optional(),
+    id: z.number().optional(),
     status: z.string().optional(),
     address: z.string().optional(),
     "customer.name": z.string().optional(),
@@ -92,9 +91,15 @@ export const searchSchema = z.object({
     production: z.string().optional(),
     invoice: z.string().optional(),
     "sales.rep": z.string().optional(),
-    "sales.type": z.string().optional(),
-    "dealer.id": z.string().optional(),
+    "sales.type": z.enum(["order", "quote"]).optional(),
+    "dealer.id": z.number().optional(),
 });
 export const searchParamsCache = createSearchParamsCache(searchParamsParser);
 export const searchParamsSerializer = createSerializer(searchParamsParser);
-export type SearchParamsType = FilterParams; // inferParserType<typeof searchParamsParser>;
+export type SearchParamsType = Partial<
+    z.infer<typeof searchSchema> & {
+        [id in SpecialFilters]: any;
+    }
+>; //FilterParams; // inferParserType<typeof searchParamsParser>;
+
+export type FilterParams = SearchParamsType;

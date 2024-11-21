@@ -4,7 +4,11 @@ import {
 } from "@/app/(clean-code)/(sales)/_common/data-access/sales-dta";
 import { SalesType } from "@/app/(clean-code)/(sales)/types";
 
-import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
+import {
+    FilterParams,
+    searchParamsCache,
+    SearchParamsType,
+} from "@/components/(clean-code)/data-table/search-params";
 import { generateRandomString } from "@/lib/utils";
 
 import { NextRequest } from "next/server";
@@ -12,11 +16,12 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
     const _search: Map<string, string> = new Map();
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
-    const search = searchParamsCache.parse({
-        ...Object.fromEntries(_search),
+    const _ = {
+        // ...Object.fromEntries(_search as any),
         // pk: generateRandomString(),
-        salesType: "quote" as SalesType,
-    });
+        "sales.type": "order",
+    } as SearchParamsType;
+    const search = searchParamsCache.parse(_ as any);
 
     // search.pk = generateRandomString();
     // const where = whereSales(search);
@@ -37,5 +42,5 @@ export async function GET(req: NextRequest) {
     //     },
     // };
     // return Response.json(d1);
-    return Response.json(await getSalesQuotesDta(search));
+    return Response.json(await getSalesQuotesDta(search as any));
 }

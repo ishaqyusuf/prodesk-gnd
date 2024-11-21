@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         ...Object.fromEntries(_search),
         // pk: generateRandomString(),
         // delivery: "delivery" as DeliveryOption,
-    } as FilterParams);
+    });
 
-    return Response.json(await getSalesDispatchDta(search));
+    return Response.json(await getSalesDispatchDta(search as any));
 }
