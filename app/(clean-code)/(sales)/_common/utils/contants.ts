@@ -45,7 +45,15 @@ export const __filters: Filters = {
             filterFields.invoice,
             filterFields["sales.rep"],
         ],
-        filterColumns: [filterCol("order.no")],
+        filterColumns: [
+            filterCol("order.no"),
+            filterCol("customer.name"),
+            filterCol("dispatch.status"),
+            filterCol("production.assignment"),
+            filterCol("production"),
+            filterCol("invoice"),
+            filterCol("sales.rep"),
+        ],
         options: {
             invoice: INVOICE_FILTER_OPTIONS,
             "dispatch.status": DISPATCH_FILTER_OPTIONS,

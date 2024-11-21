@@ -18,7 +18,7 @@ const columnHelper = createColumnHelper<any>();
 export function filterCol(name: FilterKeys): FilterColumn {
     return columnHelper.accessor(name, {
         header: null,
-        // meta: { isHidden: true },
+        meta: { isHidden: true },
         enableColumnFilter: true,
         // isVisible: false,
 
@@ -75,4 +75,8 @@ export const composeFilter = (
         queryKey,
         filterFields: f,
     };
+};
+
+export const undotFilterKey = (k) => {
+    return k?.split(".")?.join("_");
 };

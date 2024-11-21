@@ -33,7 +33,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
                 ctx.Column("Production", "production", Cells.Production),
-                // ...__filters.orders.filterColumns,
+                ...__filters.orders.filterColumns,
             ];
         },
         checkable: true,

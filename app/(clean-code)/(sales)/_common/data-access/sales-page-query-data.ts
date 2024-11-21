@@ -1,5 +1,6 @@
 import { prisma } from "@/db";
 import { SalesType } from "../../types";
+import { FilterKeys } from "@/components/(clean-code)/data-table/search-params";
 const type = "sales-page-setting";
 
 export async function truncateSalesPageDataDta() {
@@ -59,8 +60,8 @@ export async function getSalesPageQueryDataDta() {
             },
         },
     });
-    const result = {
-        orderId: sales.map((s) => s.orderId),
+    const result: Partial<{ [k in FilterKeys]: any }> = {
+        "order.no": sales.map((s) => s.orderId),
         phone: [
             ...new Set(
                 sales
@@ -72,7 +73,7 @@ export async function getSalesPageQueryDataDta() {
                     .filter(Boolean)
             ),
         ],
-        customer: [
+        "customer.name": [
             ...new Set(
                 sales.map((s) =>
                     [s.customer?.name, s.customer?.businessName]

@@ -47,7 +47,8 @@ export function DataTableViewOptions<TData>({
                 .filter(
                     (column) =>
                         typeof column.accessorFn !== "undefined" &&
-                        column.getCanHide()
+                        column.getCanHide() &&
+                        !(column?.columnDef?.meta as any)?.isHidden
                 )
                 .sort((a, b) => {
                     return (

@@ -33,6 +33,7 @@ import { useDataTableContext } from "../use-data-table";
 import { SEPARATOR } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { searchSchema } from "../search-params";
+import { undotFilterKey } from "./filters";
 
 // FIXME: there is an issue on cmdk if I wanna only set a single slider value...
 
@@ -104,8 +105,13 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             for (const key of Object.keys(searchParams.data)) {
                 const value =
                     searchParams.data[key as keyof typeof searchParams.data];
-                const col = table.getColumn(key);
-                // console.log({ key, value, col: col ? true : false });
+                const col = table.getColumn(undotFilterKey(key));
+                // const col = table
+                //     .getAllColumns()
+                //     .find((column) => column.id === undotFilterKey(key));
+                // console.log(table.getAllColumns().map((c) => c.id));
+
+                console.log({ key, value, col: col ? true : false });
                 col?.setFilterValue(value);
             }
             const currentFiltersToReset = currentEnabledFilters.filter(
