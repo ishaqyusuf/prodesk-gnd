@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { __filters } from "../../utils/contants";
+import QueryTab from "@/app/(clean-code)/_common/query-tab";
 
 interface Props {
     // promise;
@@ -50,6 +51,9 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
     return (
         <div>
             <div className="flex justify-between mb-2 -mt-4">
+                <div className="">
+                    <QueryTab page="orders" />
+                </div>
                 <div className="flex-1"></div>
                 <Button asChild size="sm">
                     <Link href="/sales-v2/form/order?fromPage=new">
