@@ -4,7 +4,7 @@ import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-
 import { DataTable } from "@/components/(clean-code)/data-table";
 
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
-import { salesSearchSchema } from "../../_schema/base-order-schema";
+
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import { OrderOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
@@ -38,8 +38,6 @@ export default function QuotesPageClient({
             ];
         },
         checkable: true,
-        filterCells: ["_q"],
-        schema: salesSearchSchema,
         filterFields,
         cellVariants: {
             size: "sm",

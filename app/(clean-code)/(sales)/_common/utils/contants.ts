@@ -1,6 +1,7 @@
 import { DataTableFilterField } from "@/components/(clean-code)/data-table/type";
 import { SalesDispatchStatus } from "../../types";
 import {
+    filterCol,
     filterFields,
     Filters,
 } from "@/components/(clean-code)/data-table/filter-command/filters";
@@ -44,11 +45,16 @@ export const __filters: Filters = {
             filterFields.invoice,
             filterFields["sales.rep"],
         ],
+        filterColumns: [filterCol("order.no")],
         options: {
             invoice: INVOICE_FILTER_OPTIONS,
             "dispatch.status": DISPATCH_FILTER_OPTIONS,
             production: PRODUCTION_FILTER_OPTIONS,
             "production.assignment": PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
         },
+    },
+    quotes: {
+        fields: [],
+        options: {},
     },
 };

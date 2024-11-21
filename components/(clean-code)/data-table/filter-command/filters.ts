@@ -1,3 +1,4 @@
+import { createColumnHelper } from "@tanstack/react-table";
 import { FilterKeys } from "../search-params";
 import { DataTableFilterField } from "../type";
 
@@ -9,9 +10,21 @@ export type Filters = Partial<{
         options: Partial<{
             [id in FilterKeys]: any;
         }>;
+        filterColumns: FilterColumn[];
     }>;
 }>;
+type FilterColumn = ReturnType<typeof columnHelper.accessor>;
+const columnHelper = createColumnHelper<any>();
+export function filterCol(name: FilterKeys): FilterColumn {
+    return columnHelper.accessor(name, {
+        header: null,
+        // meta: { isHidden: true },
+        enableColumnFilter: true,
+        // isVisible: false,
 
+        cell: () => null,
+    });
+}
 function filterField(
     value: FilterKeys,
     type: "checkbox" | "input" = "input",
@@ -34,6 +47,13 @@ export const filterFields: Partial<{
     ...filterField("customer.name"),
     ...filterField("address"),
     ...filterField("order.no"),
+    ...filterField("po"),
+    ...filterField("phone"),
+    ...filterField("dispatch.status", "checkbox"),
+    ...filterField("production.assignment", "checkbox"),
+    ...filterField("production", "checkbox"),
+    ...filterField("invoice", "checkbox"),
+    ...filterField("sales.rep", "checkbox"),
 };
 export const composeFilter = (
     queryKey: QueryKeys,

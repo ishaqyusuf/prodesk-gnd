@@ -11,6 +11,7 @@ import { OrderOverviewSheet } from "../overviews/sales-overview/order-overview-s
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { __filters } from "../../utils/contants";
 
 interface Props {
     // promise;
@@ -22,7 +23,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
         cells(ctx) {
             return [
                 ctx.Column("Date", "date", Cells.Date),
-                ctx.Column("Order #", "orderId", Cells.Order),
+                ctx.Column("Order #", "order.no", Cells.Order),
                 ctx.Column("P.O", "po", Cells.Po),
                 ctx.Column("Customer", "customer", Cells.Customer),
                 ctx.Column("Phone", "phone", Cells.CustomerPhone),
@@ -32,11 +33,11 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
                 ctx.Column("Production", "production", Cells.Production),
-                // ctx.Column("Delivery", "delivery", Cells.Delivery),
+                // ...__filters.orders.filterColumns,
             ];
         },
         checkable: true,
-        filterCells: ["_q", "dispatch.status"],
+        // filterCells: ["_q", "dispatch.status"],
         filterFields,
         cellVariants: {
             size: "sm",

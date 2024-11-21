@@ -68,17 +68,6 @@ export function useTableCompose<T>(props: Props<T>) {
             return {
                 id: "action",
                 cell: ({ cell }) => <Column item={cell.row.original} />,
-                //  props.v2 ? (
-                //      <TableCell>
-                //          <div className="flex justify-end items-center space-x-2">
-                //              <Column item={cell.row.original} />
-                //          </div>
-                //      </TableCell>
-                //  ) : (
-                //      <div className="flex justify-end items-center space-x-2">
-                //          <Column item={cell.row.original} />
-                //      </div>
-                //  ),
             };
         },
     };

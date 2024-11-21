@@ -2,13 +2,9 @@ import { dataOptions } from "@/components/(clean-code)/data-table/query-options"
 import { searchParamsCache } from "@/components/(clean-code)/data-table/search-params";
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { getQueryClient } from "@/providers/get-query-client";
-import {
-    salesFilterFields,
-    staticOrderFilters,
-} from "../../../_common/_schema/base-order-schema";
 
 import QuotesPageClient from "../../../_common/_components/page-clients/quote-page-client";
-import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-page-query-data";
+
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { __filters } from "../../../_common/utils/contants";
 

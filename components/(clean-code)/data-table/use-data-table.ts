@@ -111,6 +111,7 @@ export function useDataTable({
             rowSelection,
             columnFilters,
         },
+
         pageCount: pageCount ?? -1,
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
