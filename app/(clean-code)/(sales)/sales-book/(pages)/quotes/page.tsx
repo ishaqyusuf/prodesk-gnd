@@ -6,22 +6,21 @@ import {
     salesFilterFields,
     staticOrderFilters,
 } from "../../../_common/_schema/base-order-schema";
-import { composeFilter } from "@/components/(clean-code)/data-table/filter-compose";
+
 import QuotesPageClient from "../../../_common/_components/page-clients/quote-page-client";
 import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-page-query-data";
+import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
+import { __filters } from "../../../_common/utils/contants";
 
 export default async function SalesBookQuotePage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const queryKey = "quotes";
-    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
-    const filterOptions = await getSalesPageQueryDataDta();
-    const filterFields = composeFilter(
-        salesFilterFields,
-        filterOptions,
-        staticOrderFilters
+    const { queryKey, filterFields } = composeFilter(
+        "quotes",
+        __filters.quotes
     );
-    // const filterFields = await composeOrderFilter();
+    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
+
     return (
         <FPage title="Quotes">
             <QuotesPageClient

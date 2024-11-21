@@ -18,8 +18,6 @@ import { __filters } from "../../../_common/utils/contants";
 export default async function SalesBookPage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    // const queryKey = "orders";
-    // const filterOptions = await getSalesPageQueryDataDta();
     const { queryKey, filterFields } = composeFilter(
         "orders",
         __filters.orders,
