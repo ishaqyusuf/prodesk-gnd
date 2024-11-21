@@ -105,6 +105,7 @@ const usePaymentContext = () => {
                             salesPayment: {
                                 amount: Number(formData.amount),
                                 orderId,
+                                terminalId: formData.deviceId,
                                 paymentType: "square_terminal",
                             },
                             terminal: {
@@ -129,20 +130,29 @@ const usePaymentContext = () => {
                                     _ctx.cancelTerminalPayment();
                                 }
                             }, 10000);
-                            while (true && waitingForPayment) {
+                            let checkWaiting = 0;
+                            while (true) {
                                 await new Promise((r) => setTimeout(r, 2000));
-                                if (!waitingForPayment) break;
+                                if (!waitingForPayment) {
+                                    checkWaiting++;
+                                    if (checkWaiting > 1) {
+                                        _ctx.closePaymentForm();
+                                        toast.error("Something went wrong");
+                                        break;
+                                    }
+                                }
                                 const status =
                                     await checkTerminalPaymentStatusUseCase(
                                         resp.resp.salesPayment.id
                                     );
-                                if (status.success) {
+                                console.log({ status });
+                                if (status?.success) {
                                     clearTimeout(timeout);
                                     _ctx.closePaymentForm();
                                     toast.success(status.success);
                                     break;
                                 }
-                                if (status.error) {
+                                if (status?.error) {
                                     clearTimeout(timeout);
                                     toast.error(status.error);
                                     _ctx.cancelTerminalPayment();

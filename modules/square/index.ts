@@ -76,11 +76,11 @@ export async function createTerminalCheckout({
         };
     });
 }
-export async function getTerminalPaymentStatus(terminalId) {
-    const payment = await client.terminalApi.getTerminalCheckout(terminalId);
+export async function getTerminalPaymentStatus(checkoutId) {
+    const payment = await client.terminalApi.getTerminalCheckout(checkoutId);
     const paymentStatus = payment.result.checkout
         .status as TerminalCheckoutStatus;
-    const tip = Number(payment.result.checkout.tipMoney.amount);
+    const tip = Number(payment.result.checkout.tipMoney?.amount);
     return {
         status: paymentStatus,
         tip: tip > 0 ? tip / 100 : 0,

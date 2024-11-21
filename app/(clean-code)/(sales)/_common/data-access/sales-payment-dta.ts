@@ -71,7 +71,7 @@ export interface CreateSalesPaymentProps {
     amount;
     paymentType: SalesPaymentType;
     status?: SalesPaymentStatus;
-    terminalId?: string;
+    terminalId: string;
     email?: string;
     phone?: string;
     orderId;
@@ -143,7 +143,7 @@ export async function checkTerminalPaymentStatusDta(id) {
             terminalId: true,
             amount: true,
             orderId: true,
-
+            paymentId: true,
             order: {
                 select: {
                     customerId: true,
@@ -153,7 +153,7 @@ export async function checkTerminalPaymentStatusDta(id) {
         },
     });
     const checkoutStatus: SalesPaymentStatus = s.status as any;
-    const { status, tip } = await getTerminalPaymentStatus(s.terminalId);
+    const { status, tip } = await getTerminalPaymentStatus(s.paymentId);
     if (status != "PENDING") {
         switch (status) {
             case "COMPLETED":
