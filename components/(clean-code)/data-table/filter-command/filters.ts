@@ -64,10 +64,12 @@ export const composeFilter = (
         const filterData =
             loadedFilters?.[filter?.value] || options?.[filter?.value];
         if (filterData) {
-            filter.options = filterData.map((value) => ({
-                value,
-                label: value,
-            }));
+            filter.options = filterData
+                .map((value) => ({
+                    value,
+                    label: value,
+                }))
+                .filter((a, b) => b < 10);
         }
         return filter;
     });

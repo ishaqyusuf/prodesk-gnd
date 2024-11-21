@@ -60,7 +60,9 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const path = usePathname();
     return (
         <dataTableContext.Provider value={ctx}>
-            <div className="w-full space-y-3 overflow-auto">{children}</div>
+            <div className="w-full space-y-3 overflow-auto min-h-[80vh] ">
+                {children}
+            </div>
         </dataTableContext.Provider>
     );
 }
@@ -69,17 +71,17 @@ function _Table({}) {
     return (
         <div
             // className="sm:border sm:rounded-lg"
-            className="flex w-full smin-h-screen sh-full flex-col sm:flex-row bg-white rounded-lg shadow border"
+            className="flex w-full smin-h-screen sh-full flex-col sm:flex-row  rounded-lg shadow border"
         >
             <Table>
                 <TableHeader className={cn("")}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
+                            {headerGroup.headers.map((header, index) => {
                                 if (!header.id.includes("_"))
                                     return (
                                         <TableHead
-                                            key={header.id}
+                                            key={`${header.id}_${index}`}
                                             className="whitespace-nowrap"
                                         >
                                             {header.isPlaceholder
@@ -122,15 +124,14 @@ function Tr({ row }: TrProps) {
     return (
         <TableRow
             className={cn("")}
-            key={row.id}
             onClick={() => row.toggleSelected()}
             data-state={row.getIsSelected() && "selected"}
         >
             {row
                 .getVisibleCells()
-                .map((cell) =>
+                .map((cell, index) =>
                     cell.id.includes("__") ? null : (
-                        <Fragment key={cell.id}>
+                        <Fragment key={`${cell.id}_cell_${index}`}>
                             {flexRender(
                                 cell.column.columnDef.cell,
                                 cell.getContext()

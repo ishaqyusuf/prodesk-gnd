@@ -162,7 +162,16 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             inputRef?.current?.focus();
         }
     }, [open]);
-
+    const [currentFilter, setCurrentFilter] = useState(null);
+    useEffect(() => {
+        setCurrentFilter(
+            currentWord
+                ?.split(SEPARATOR)
+                ?.reverse()?.[0]
+                ?.split(":")?.[0]
+                ?.trim()
+        );
+    }, [currentWord]);
     return (
         <div>
             {/* <div>
@@ -304,8 +313,11 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                     if (typeof field.value !== "string") {
                                         return null;
                                     }
+
                                     if (
-                                        !currentWord.includes(`${field.value}:`)
+                                        currentFilter != field.value
+                                        // !currentWord.includes(`${field.value}:`)
+                                        // currentWord?.split(':')?.reverse()
                                     ) {
                                         return null;
                                     }
