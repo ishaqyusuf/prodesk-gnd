@@ -4,8 +4,7 @@ import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-
 import { DataTable } from "@/components/(clean-code)/data-table";
 import { OrderCells as Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
-import { salesSearchSchema } from "../../_schema/base-order-schema";
-import { getSalesOrderInfinityListUseCase } from "../../use-case/sales-list-use-case";
+
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 import { _modal } from "@/components/common/modal/provider";
 import { OrderOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
@@ -16,16 +15,9 @@ import { Icons } from "@/components/_v1/icons";
 interface Props {
     // promise;
     filterFields;
-    searchParams;
-    filterOptions?;
     queryKey;
 }
-export default function OrdersPageClient({
-    searchParams,
-    filterFields,
-    filterOptions,
-    queryKey,
-}: Props) {
+export default function OrdersPageClient({ filterFields, queryKey }: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -44,8 +36,7 @@ export default function OrdersPageClient({
             ];
         },
         checkable: true,
-        filterCells: ["_q"],
-        schema: salesSearchSchema,
+        filterCells: ["_q", "dispatch.status"],
         filterFields,
         cellVariants: {
             size: "sm",

@@ -1,7 +1,6 @@
 import { z } from "zod";
 import {
     DISPATCH_FILTER_OPTIONS,
-    filterFields,
     INVOICE_FILTER_OPTIONS,
     PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
     PRODUCTION_FILTER_OPTIONS,
@@ -48,7 +47,6 @@ export const salesFilterFields = [
         value: "phone",
         options: [],
     },
-    filterFields.customerName,
     {
         label: "Dispatch Status",
         type: "checkbox",

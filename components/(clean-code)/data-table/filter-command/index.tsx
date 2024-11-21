@@ -32,6 +32,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useDataTableContext } from "../use-data-table";
 import { SEPARATOR } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { searchSchema } from "../search-params";
 
 // FIXME: there is an issue on cmdk if I wanna only set a single slider value...
 
@@ -51,7 +52,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
     const {
         table,
         filterFields: _filterFields,
-        schema,
+
         columns,
     } = useDataTableContext();
     const columnFilters = table.getState().columnFilters;
@@ -81,7 +82,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
         if (inputValue.trim() === "" && !open) return;
 
         // FIXME: that stuff is BAD!
-        const searchParams = deserialize(schema)(inputValue);
+        const searchParams = deserialize(searchSchema)(inputValue);
         const currentFilters = table.getState().columnFilters;
         const currentEnabledFilters = currentFilters.filter((filter) => {
             const field = _filterFields?.find(

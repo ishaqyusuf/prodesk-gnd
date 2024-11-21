@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TableCellProps } from "./table-cells";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
+import { SearchParamsKeys } from "./search-params";
 
 interface ColumnArgs {
     noTitle?: boolean;
@@ -30,12 +31,12 @@ interface Props<T> {
     snDate?: string;
     snTitle?: string;
     checkable?: boolean;
-    filterCells?: string[];
+    filterCells?: SearchParamsKeys[];
     pageCount?;
     cellVariants?: TableCellProps;
     v2?: boolean;
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[];
-    schema;
+
     filterFields;
     serverAction?;
     passThroughProps: {
@@ -113,7 +114,7 @@ export function useTableCompose<T>(props: Props<T>) {
             pageCount: props?.pageCount,
             cellVariants: props.cellVariants,
             addFilterCol,
-            schema: props.schema,
+
             filterFields: props.filterFields,
             serverAction: props.serverAction,
             ...props.passThroughProps,

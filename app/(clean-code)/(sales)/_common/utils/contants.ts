@@ -1,22 +1,10 @@
 import { DataTableFilterField } from "@/components/(clean-code)/data-table/type";
 import { SalesDispatchStatus } from "../../types";
+import {
+    filterFields,
+    Filters,
+} from "@/components/(clean-code)/data-table/filter-command/filters";
 
-export const filterFields = {
-    customerName: {
-        label: "Customer Name",
-        type: "input",
-        value: "customer",
-        options: [],
-    },
-    address: {
-        label: "Address",
-        type: "input",
-        value: "address",
-        options: [],
-    },
-} satisfies {
-    [key in string]: DataTableFilterField<any>;
-};
 export const SEPARATOR = ` &`;
 
 export const dispatchStatusList: SalesDispatchStatus[] = [
@@ -43,3 +31,24 @@ export const DISPATCH_FILTER_OPTIONS = [
     "backorder",
     "late",
 ];
+export const __filters: Filters = {
+    orders: {
+        fields: [
+            filterFields["order.no"],
+            filterFields.po,
+            filterFields.phone,
+            filterFields["customer.name"],
+            filterFields["dispatch.status"],
+            filterFields["production.assignment"],
+            filterFields.production,
+            filterFields.invoice,
+            filterFields["sales.rep"],
+        ],
+        options: {
+            invoice: INVOICE_FILTER_OPTIONS,
+            "dispatch.status": DISPATCH_FILTER_OPTIONS,
+            production: PRODUCTION_FILTER_OPTIONS,
+            "production.assignment": PRODUCTION_ASSIGNMENT_FILTER_OPTIONS,
+        },
+    },
+};

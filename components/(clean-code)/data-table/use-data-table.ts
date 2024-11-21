@@ -40,7 +40,7 @@ export function useDataTable({
     pageCount,
     cellVariants,
     addFilterCol,
-    schema,
+
     filterFields,
 }) {
     const [rowSelection, setRowSelection] = React.useState({});
@@ -232,6 +232,5 @@ export function useDataTable({
         cellVariants,
         addFilterCol,
         filterFields,
-        schema,
     };
 }
