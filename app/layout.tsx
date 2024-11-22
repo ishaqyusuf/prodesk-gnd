@@ -45,9 +45,9 @@ export default async function RootLayout({
                             <div className="print:hidden">
                                 <AppProvider>
                                     {children}
-                                    <Suspense>
-                                        <PageAnalytics />
-                                    </Suspense>
+                                    {/* <Suspense> */}
+                                    <PageAnalytics />
+                                    {/* </Suspense> */}
                                 </AppProvider>
                                 <div
                                     className={cn(
