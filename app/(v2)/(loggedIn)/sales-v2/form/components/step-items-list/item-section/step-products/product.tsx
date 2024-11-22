@@ -31,15 +31,16 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { PlaceholderImage } from "@/components/placeholder-image";
 import { Dot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useProdBatchAction } from "../../../../_hooks/use-prod-batch-action";
+
 import DoorMenuOption from "./door-menu-option";
 
 import { Button } from "@/components/ui/button";
 import Img from "@/components/(clean-code)/img";
 import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
 import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { Checkbox } from "@/components/ui/checkbox";
 interface Props {
-    item: IStepProducts[number];
+    item: IStepProducts[number] & { _selected: boolean };
     select;
     loadingStep;
     isMultiSection;
@@ -50,6 +51,7 @@ interface Props {
     // setStepProducts;
     deleteStepItem;
     className?: string;
+    itemIndex;
     // products;
 }
 export function StepProduct({
@@ -64,6 +66,7 @@ export function StepProduct({
     // setStepProducts,
     className,
     isRoot,
+    itemIndex,
 }: // products,
 Props) {
     const ctx = useDykeItemCtx();
@@ -92,6 +95,7 @@ Props) {
     const [price, setPrice] = useState();
     const [saving, startSaving] = useTransition();
     const { dependencies, dependenciesUid } = stepCtx;
+
     async function savePrice() {
         startSaving(async () => {
             // console.log(item.uid);
@@ -111,7 +115,6 @@ Props) {
         setPrice(item._metaData.basePrice);
         setEditPrice(true);
     };
-    const batchCtx = useProdBatchAction();
     function Content({ onClick }) {
         return (
             <>
@@ -171,6 +174,8 @@ Props) {
         );
     }
     const [showProceed, setShowProceed] = useState(false);
+    // const [selected,]
+    // const [] =
 
     useEffect(() => {
         if (showProceed) {
@@ -184,10 +189,11 @@ Props) {
             <>
                 <Content
                     onClick={() => {
-                        if (stepCtx.selections) {
-                            stepCtx.toggleProduct(item);
+                        if (stepCtx?.hasSelection) {
+                            stepCtx.toggleSelection(item, itemIndex);
                             return;
                         }
+
                         setShowProceed(true);
                         if (!loadingStep && !menuOpen) select(selected, item);
                     }}
@@ -218,12 +224,14 @@ Props) {
             )}
         >
             {/* {formCtx.superAdmin && <batchCtx.CheckBox uid={item.uid} />} */}
-
+            {/* <div>{JSON.stringify(stepCtx.selections || {})}</div> */}
             <div
                 className={cn(
-                    (!menuOpen || stepCtx.selections) && "hidden",
-                    "absolute top-0 right-0  rounded-lg shadow-xl -m-4 bg-white z-20",
-                    !formCtx.superAdmin ? "hidden" : "group-hover:flex"
+                    !menuOpen && "hidden",
+                    stepCtx.hasSelection || !formCtx.superAdmin
+                        ? ""
+                        : "absolute top-0 right-0  rounded-lg shadow-xl -m-4 bg-white z-20 group-hover:flex"
+                    // !formCtx.superAdmin ? "hidden" : "group-hover:flex"
                 )}
             >
                 <Menu open={menuOpen} onOpenChanged={menuOpenChange}>
@@ -272,7 +280,7 @@ Props) {
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
-                                    stepCtx.toggleProduct(item);
+                                    stepCtx.toggleSelection(item, itemIndex);
                                 }}
                                 Icon={Icons.check}
                             >
@@ -306,11 +314,12 @@ Props) {
             </div>
             <div
                 className={cn(
-                    !stepCtx.selections?.[item.id]?.selected && "hidden",
-                    "absolute top-0 right-0 bg-white"
+                    !stepCtx?.hasSelection && "hidden",
+                    "absolute top-0 left-0 bg-white"
                 )}
             >
-                <Icons.check className="text-green-600 w-4 h-4" />
+                <Checkbox checked={stepCtx.selections?.[item.uid]?.selected} />
+                {/* <Icons.check className="text-green-600 w-4 h-4" /> */}
             </div>
             <span className="sr-only">
                 {isRoot
@@ -322,8 +331,8 @@ Props) {
             ) : (
                 <Content
                     onClick={() => {
-                        if (stepCtx.selections) {
-                            stepCtx.toggleProduct(item);
+                        if (stepCtx?.hasSelection) {
+                            stepCtx.toggleSelection(item, itemIndex);
                             return;
                         }
                         if (!loadingStep && !menuOpen) select(selected, item);

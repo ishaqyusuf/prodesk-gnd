@@ -60,7 +60,7 @@ async function loadComponents(
     );
     stepCtx.setComponents(allComponents);
     stepCtx.setFilteredComponents(
-        allComponents.filter((s) => !s._metaData.hidden)
+        allComponents.filter((s) => !s._metaData.hidden && !s.custom)
     );
     stepCtx.setDeletedComponents(
         allComponents.filter((s) => s._metaData.hidden)

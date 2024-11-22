@@ -157,11 +157,8 @@ export function useLegacyDykeFormItemContext(rowIndex) {
     };
     return _;
 }
-
 export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [step, setStep] = useState(_step);
-    const [selections, setSelections] = useState(null);
-
     const ctx = useLegacyDykeForm();
     const itemCtx = useLegacyDykeFormItem();
     const priceRefresher = ctx.form.watch(
@@ -191,14 +188,13 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const updateComponent = useDykeComponentStore(
         (state) => state.updateComponent
     );
-    const [filteredComponents, setFilteredComponents] = useState<IStepProducts>(
-        []
-    );
+    type Product = IStepProducts[number] & {
+        _selected?: boolean;
+    };
+    const [filteredComponents, setFilteredComponents] = useState<Product[]>([]);
 
-    const [components, setComponents] = useState<IStepProducts>([]);
-    const [deletedComponents, setDeletedComponents] = useState<IStepProducts>(
-        []
-    );
+    const [components, setComponents] = useState<Product[]>([]);
+    const [deletedComponents, setDeletedComponents] = useState<Product[]>([]);
     // const [_components,_setComponents] = use
     const [loading, startLoading] = useTransition();
 
@@ -248,21 +244,17 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         allowCustom,
         enableSearch,
     };
+    const [selections, setSelections] = useState({});
+    const [hasSelection, setHasSelection] = useState(false);
+    const [selectCount, setSelectCount] = useState(0);
+    useEffect(() => {
+        const sel = Object.values(selections)
+            ?.map((a) => (a as any).selected)
+            ?.filter(Boolean)?.length;
+        setSelectCount(sel);
+        setHasSelection(sel > 0);
+    }, [selections]);
     const stepCtx = {
-        selections,
-        cancelSelection() {
-            setSelections(null);
-        },
-        toggleProduct(item) {
-            setSelections((prev) => {
-                let a = prev || {};
-                a[item.id] = {
-                    selected: !a?.[item.id]?.selected,
-                    item,
-                };
-                return a;
-            });
-        },
         dependenciesUid,
         dependencies,
         deletedComponents,
@@ -286,13 +278,31 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         // itemArray: ctx.itemArray,
         rowIndex: itemCtx.rowIndex,
         step,
-        components,
+        components: filteredComponents,
         setComponents,
         stepIndex,
         isRoot: step.step.title == "Item Type",
         isDoor: step.step.title == "Door",
         isMoulding: step.step.title == "Moulding",
         watch,
+        selections,
+        hasSelection,
+        selectCount,
+        cancelSelection() {
+            setSelectCount(0);
+            setSelections({});
+            setHasSelection(false);
+        },
+        toggleSelection(item, index) {
+            setSelections((e) => {
+                const s = { ...e };
+                s[item.uid] = {
+                    item,
+                    selected: !s[item.uid]?.selected,
+                };
+                return s;
+            });
+        },
     };
 
     return stepCtx;
