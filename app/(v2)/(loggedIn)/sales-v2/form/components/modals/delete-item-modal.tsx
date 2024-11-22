@@ -61,6 +61,12 @@ export default function DeleteItemModal({
                         if (b) {
                             stateDeps[a] = true;
                             delete stepItemMeta.show?.[a];
+                            Object.entries(stepItemMeta.show || {}).map(
+                                ([k, v]) => {
+                                    if (k?.includes(a))
+                                        delete stepItemMeta.show?.[k];
+                                }
+                            );
                         }
                     }
                 );

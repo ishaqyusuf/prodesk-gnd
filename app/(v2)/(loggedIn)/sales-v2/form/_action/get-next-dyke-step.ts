@@ -144,6 +144,8 @@ function hiddenSteps(title, doorType: DykeDoorType) {
         "casing 1x4 setup",
         "--jamb stop",
         "rip jamb",
+        "jamb size",
+        "jamb species",
     ].includes(title?.toLowerCase());
     if (doorType == "Moulding") {
     }

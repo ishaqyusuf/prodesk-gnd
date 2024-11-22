@@ -150,7 +150,10 @@ export function useLegacyDykeFormItemContext(rowIndex) {
                 return `${rootPath}.${componentsPath}.${title}.${size}.${path}`;
             },
         },
-        get: {},
+        get: {
+            uid: () => ctx.form.getValues(`${_.getPath.item("uid")}` as any),
+            // cacheKey
+        },
     };
     return _;
 }

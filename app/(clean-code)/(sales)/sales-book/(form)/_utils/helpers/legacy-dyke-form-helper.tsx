@@ -34,7 +34,9 @@ async function loadComponents(
     stepCtx: LegacyDykeFormStepType,
     ignoreCache = false
 ) {
-    const title = helpers.step.getStepTitle(stepCtx);
+    const title = `${helpers.step.getStepTitle(
+        stepCtx
+    )}-${stepCtx.itemCtx.get.uid()}`;
     const storedComponents = storeComponentsByTitle[title];
     const props: LoadStepComponentsProps = {};
     const resp = {
