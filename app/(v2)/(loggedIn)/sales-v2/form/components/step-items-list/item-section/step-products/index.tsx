@@ -124,34 +124,38 @@ StepProductProps) {
                         }
                     >
                         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                            {components.map((item, i) => (
-                                <SortableItem
-                                    key={item.id}
-                                    value={item.id}
-                                    asTrigger={sortMode}
-                                    asChild
-                                >
-                                    <Card className="border-none flex flex-col h-full bg-red-50">
-                                        <StepProduct
-                                            className={cn(
-                                                "relative border-muted-foreground/10  borno group",
-                                                !sortMode &&
-                                                    "hover:border-muted-foreground"
-                                            )}
-                                            isMultiSection={isMultiSection}
-                                            select={selectProduct}
-                                            loadingStep={ctx.loadingStep}
-                                            item={item as any}
-                                            itemIndex={i}
-                                            deleteStepItem={() =>
-                                                deleteStepItemModal([item])
-                                            }
-                                            openStepForm={openStepForm}
-                                            isRoot={stepCtx.isRoot}
-                                        />
-                                    </Card>
-                                </SortableItem>
-                            ))}
+                            {components
+                                ?.filter(
+                                    (s) => !s.custom && !s._metaData?.hidden
+                                )
+                                .map((item, i) => (
+                                    <SortableItem
+                                        key={item.id}
+                                        value={item.id}
+                                        asTrigger={sortMode}
+                                        asChild
+                                    >
+                                        <Card className="border-none flex flex-col h-full bg-red-50">
+                                            <StepProduct
+                                                className={cn(
+                                                    "relative border-muted-foreground/10  borno group",
+                                                    !sortMode &&
+                                                        "hover:border-muted-foreground"
+                                                )}
+                                                isMultiSection={isMultiSection}
+                                                select={selectProduct}
+                                                loadingStep={ctx.loadingStep}
+                                                item={item as any}
+                                                itemIndex={i}
+                                                deleteStepItem={() =>
+                                                    deleteStepItemModal([item])
+                                                }
+                                                openStepForm={openStepForm}
+                                                isRoot={stepCtx.isRoot}
+                                            />
+                                        </Card>
+                                    </SortableItem>
+                                ))}
                             {allowAdd && dykeCtx.superAdmin && (
                                 <div className="p-4">
                                     <button
