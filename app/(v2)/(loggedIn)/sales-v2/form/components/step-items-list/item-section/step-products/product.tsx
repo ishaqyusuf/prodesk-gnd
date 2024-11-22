@@ -184,6 +184,10 @@ Props) {
             <>
                 <Content
                     onClick={() => {
+                        if (stepCtx.selections) {
+                            stepCtx.toggleProduct(item);
+                            return;
+                        }
                         setShowProceed(true);
                         if (!loadingStep && !menuOpen) select(selected, item);
                     }}
@@ -217,7 +221,7 @@ Props) {
 
             <div
                 className={cn(
-                    !menuOpen && "hidden",
+                    (!menuOpen || stepCtx.selections) && "hidden",
                     "absolute top-0 right-0  rounded-lg shadow-xl -m-4 bg-white z-20",
                     !formCtx.superAdmin ? "hidden" : "group-hover:flex"
                 )}
@@ -266,6 +270,14 @@ Props) {
                             >
                                 Edit
                             </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    stepCtx.toggleProduct(item);
+                                }}
+                                Icon={Icons.check}
+                            >
+                                Select
+                            </MenuItem>
 
                             {stepForm.step.title == "Door" ? (
                                 <DoorMenuOption
@@ -292,7 +304,14 @@ Props) {
                     )}
                 </Menu>
             </div>
-
+            <div
+                className={cn(
+                    !stepCtx.selections?.[item.id]?.selected && "hidden",
+                    "absolute top-0 right-0 bg-white"
+                )}
+            >
+                <Icons.check className="text-green-600 w-4 h-4" />
+            </div>
             <span className="sr-only">
                 {isRoot
                     ? item.product?.value || item.product.title
@@ -303,6 +322,10 @@ Props) {
             ) : (
                 <Content
                     onClick={() => {
+                        if (stepCtx.selections) {
+                            stepCtx.toggleProduct(item);
+                            return;
+                        }
                         if (!loadingStep && !menuOpen) select(selected, item);
                     }}
                 />

@@ -36,39 +36,41 @@ export default async function RootLayout({
     // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
-            <QueryTabProvider>
-                <ReactQueryProvider>
-                    <SpeedInsights />
-                    <body>
-                        <Toaster />
-                        <div className="print:hidden">
-                            <AppProvider>
-                                {children}
-                                <Suspense>
-                                    <PageAnalytics />
-                                </Suspense>
-                            </AppProvider>
-                            <div
-                                className={cn(
-                                    __isProd
-                                        ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
-                                        : "fixed bottom-0 right-0 mb-2"
-                                )}
-                            >
-                                <Upgrader />
-                            </div>
-
-                            <Analytics />
-                            <TailwindIndicator />
-                            {prodDB && !__isProd && (
-                                <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
-                                    Production Database
+            <Suspense>
+                <QueryTabProvider>
+                    <ReactQueryProvider>
+                        <SpeedInsights />
+                        <body>
+                            <Toaster />
+                            <div className="print:hidden">
+                                <AppProvider>
+                                    {children}
+                                    <Suspense>
+                                        <PageAnalytics />
+                                    </Suspense>
+                                </AppProvider>
+                                <div
+                                    className={cn(
+                                        __isProd
+                                            ? "fixed z-[9999] bottom-0 left-0 opacity-0 w-5 h-5 overflow-hidden"
+                                            : "fixed bottom-0 right-0 mb-2"
+                                    )}
+                                >
+                                    <Upgrader />
                                 </div>
-                            )}
-                        </div>
-                    </body>
-                </ReactQueryProvider>
-            </QueryTabProvider>
+
+                                <Analytics />
+                                <TailwindIndicator />
+                                {prodDB && !__isProd && (
+                                    <div className="fixed bg-red-500 text-sm left-0 flex justify-center right-0  text-white top-0 z-[999]">
+                                        Production Database
+                                    </div>
+                                )}
+                            </div>
+                        </body>
+                    </ReactQueryProvider>
+                </QueryTabProvider>
+            </Suspense>
         </html>
     );
 }

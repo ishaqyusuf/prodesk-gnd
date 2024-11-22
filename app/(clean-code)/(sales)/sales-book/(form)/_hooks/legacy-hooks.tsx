@@ -160,6 +160,8 @@ export function useLegacyDykeFormItemContext(rowIndex) {
 
 export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
     const [step, setStep] = useState(_step);
+    const [selections, setSelections] = useState(null);
+
     const ctx = useLegacyDykeForm();
     const itemCtx = useLegacyDykeFormItem();
     const priceRefresher = ctx.form.watch(
@@ -247,6 +249,20 @@ export function useLegacyDykeFormStepContext(stepIndex, _step: DykeStep) {
         enableSearch,
     };
     const stepCtx = {
+        selections,
+        cancelSelection() {
+            setSelections(null);
+        },
+        toggleProduct(item) {
+            setSelections((prev) => {
+                let a = prev || {};
+                a[item.id] = {
+                    selected: !a?.[item.id]?.selected,
+                    item,
+                };
+                return a;
+            });
+        },
         dependenciesUid,
         dependencies,
         deletedComponents,
