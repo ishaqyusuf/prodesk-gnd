@@ -3,9 +3,10 @@ import { Icons } from "@/components/_v1/icons";
 import { Label } from "@/components/ui/label";
 
 import { useModal } from "@/components/common/modal/provider";
-import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+
 import { Button } from "@/components/ui/button";
 import { useStepItemCtx } from "./use-step-items";
+import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 
 export function BatchSelectionAction() {
     const _ctx = useLegacyDykeFormStep();

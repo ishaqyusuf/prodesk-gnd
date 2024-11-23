@@ -16,7 +16,7 @@ import ComponentDepsModal from "./component-deps-modal";
 import { cn, generateRandomString } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Search } from "@/components/(clean-code)/search";
-import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { useStepComponentModal } from "./use-step-component-modal";
 import RenderForm from "@/_v2/components/common/render-form";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";

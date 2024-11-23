@@ -31,7 +31,7 @@ import { initStepComponents } from "../components/step-items-list/item-section/s
 import { generateRandomString } from "@/lib/utils";
 import DeleteItemModal from "../components/modals/delete-item-modal";
 import { useModal } from "@/components/common/modal/provider";
-import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import StepComponentModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/step-component-modal/step-component-modal";
 
 export const StepItemCtx = createContext<ReturnType<typeof useStepItems>>(

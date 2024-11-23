@@ -1,5 +1,5 @@
 import Modal from "@/components/common/modal";
-import { LegacyDoorHPTType } from "../../_hooks/legacy-hooks";
+import { LegacyDoorHPTType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import Button from "@/components/common/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ProductImage } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/product";

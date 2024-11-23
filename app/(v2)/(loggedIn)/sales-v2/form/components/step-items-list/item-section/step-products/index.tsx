@@ -27,8 +27,7 @@ import { BatchSelectionAction } from "../../../../_hooks/use-prod-batch-action";
 import {
     LegacyDykeFormStepContext,
     useLegacyDykeFormStep,
-    useLegacyDykeFormStepContext,
-} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import RestoreComponentsModal from "../../../modals/restore-modal";
 import { ArchiveRestoreIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -38,6 +37,7 @@ import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/hel
 import Button from "@/components/common/button";
 import { createCustomDykeStepUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/dyke-steps-use-case";
 import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
+import { useLegacyDykeFormStepContext } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 export interface StepProductProps extends DykeItemStepSectionProps {
     stepActionNodeId;
     // rowIndex;
@@ -125,9 +125,9 @@ StepProductProps) {
                     >
                         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                             {components
-                                ?.filter(
-                                    (s) => !s.custom && !s._metaData?.hidden
-                                )
+                                // ?.filter(
+                                //     (s) => !s.custom && !s._metaData?.hidden
+                                // )
                                 .map((item, i) => (
                                     <SortableItem
                                         key={item.id}

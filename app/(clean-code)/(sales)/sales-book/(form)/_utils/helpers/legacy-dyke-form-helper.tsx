@@ -1,10 +1,8 @@
 import { LoadStepComponentsProps } from "@/app/(clean-code)/(sales)/_common/data-access/step-components.persistent";
 import { DykeDoorType } from "../../../../types";
 import { IDykeComponentStore } from "../../_hooks/data-store";
-import {
-    LegacyDykeFormItemType,
-    LegacyDykeFormStepType,
-} from "../../_hooks/legacy-hooks";
+import { LegacyDykeFormItemType } from "../../_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { getStepComponents } from "../../_actions/steps.action";
 import { initStepComponents } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/init-step-components";
 import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
@@ -37,6 +35,7 @@ async function loadComponents(
     const title = `${helpers.step.getStepTitle(
         stepCtx
     )}-${stepCtx.itemCtx.get.uid()}`;
+    // console.log({ title });
     const storedComponents = storeComponentsByTitle[title];
     const props: LoadStepComponentsProps = {};
     const resp = {
@@ -58,6 +57,7 @@ async function loadComponents(
         stepCtx,
         resp.data
     );
+    console.log({ allComponents });
     stepCtx.setComponents(allComponents);
     stepCtx.setFilteredComponents(
         allComponents.filter((s) => !s._metaData.hidden && !s.custom)

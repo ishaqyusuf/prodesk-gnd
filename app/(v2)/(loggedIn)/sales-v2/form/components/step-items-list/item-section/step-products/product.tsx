@@ -37,8 +37,8 @@ import DoorMenuOption from "./door-menu-option";
 import { Button } from "@/components/ui/button";
 import Img from "@/components/(clean-code)/img";
 import stepHelpers from "@/app/(clean-code)/(sales)/sales-book/(form)/_utils/helpers/step-helper";
-import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 interface Props {
     item: IStepProducts[number] & { _selected: boolean };
     select;

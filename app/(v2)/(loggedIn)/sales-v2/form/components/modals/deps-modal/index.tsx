@@ -13,7 +13,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 
-import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { saveDykeMeta } from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal/action";
 
 interface Props {

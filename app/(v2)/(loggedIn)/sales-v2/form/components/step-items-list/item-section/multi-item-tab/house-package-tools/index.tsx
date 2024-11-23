@@ -20,7 +20,7 @@ import { useDykeCtx } from "../../../../../_hooks/form-context";
 import {
     LegacyDoorHPTContext,
     useLegacyDoorHPTContext,
-} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+} from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import DoorsModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/doors-modal";
 export default function HousePackageTool({ componentTitle }) {
     const ctx = useDykeCtx();

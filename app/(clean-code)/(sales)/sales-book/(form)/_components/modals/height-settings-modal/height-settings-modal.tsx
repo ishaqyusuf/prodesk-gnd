@@ -1,5 +1,5 @@
 import Modal from "@/components/common/modal";
-import { LegacyDykeFormStepType } from "../../../_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { useHeightSettingCtx } from "./ctx";
 
 interface Props {

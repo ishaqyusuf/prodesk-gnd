@@ -17,7 +17,7 @@ import { useModal } from "@/components/common/modal/provider";
 import { _deleteStepItem } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/_actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { LegacyDykeFormStepType } from "../../../_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import stepHelpers, { StepProduct } from "../../../_utils/helpers/step-helper";
 
 interface Props {

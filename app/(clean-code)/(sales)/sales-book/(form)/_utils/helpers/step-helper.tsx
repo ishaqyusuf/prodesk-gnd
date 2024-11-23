@@ -1,5 +1,5 @@
 import { IStepProducts } from "@/app/(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
-import { LegacyDykeFormStepType } from "../../_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { generateRandomString } from "@/lib/utils";
 import { _modal } from "@/components/common/modal/provider";
 import ComponentDepsModal from "../../_components/modals/step-component-modal/component-deps-modal";

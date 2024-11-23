@@ -1,4 +1,3 @@
-import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 import Portal from "@/components/_v1/portal";
 import { _modal } from "@/components/common/modal/provider";
 import { useState } from "react";
@@ -14,6 +13,7 @@ import DependenciesModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_com
 import RestoreComponentsModal from "../../../modals/restore-modal";
 import { updateDykeStepMeta } from "../../../../_action/dyke-step-setting";
 import HeightSettingsModal from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/height-settings-modal/height-settings-modal";
+import { useLegacyDykeFormStep } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 
 export default function StepMenu({ stepActionNodeId }) {
     const stepCtx = useLegacyDykeFormStep();

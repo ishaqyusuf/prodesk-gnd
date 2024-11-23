@@ -16,7 +16,7 @@ import { Form } from "@/components/ui/form";
 import { saveStepProduct } from "../../_action/save-step-product";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
+import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 
 interface Props {
     // products: IStepProducts;
