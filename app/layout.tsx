@@ -20,6 +20,7 @@ import { __isProd } from "@/lib/is-prod-server";
 import { ReactQueryProvider } from "@/providers/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
+import { ThemeProvider } from "next-themes";
 export const metadata: Metadata = {
     title: "GND-PRODESK",
     description: "home page",
@@ -32,8 +33,6 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const prodDB = env.DATABASE_URL?.includes("pscale");
-    // if (dayjs().minute() > 12) throw new Error("digest error");
-    // await sendMsg("+2348186877306", "Hello Ishaq");
     return (
         <html lang="en">
             {/* <Suspense> */}
@@ -46,6 +45,7 @@ export default async function RootLayout({
                             <Suspense>
                                 <QueryTabProvider>
                                     {children}
+
                                     <PageAnalytics />
                                 </QueryTabProvider>
                             </Suspense>
