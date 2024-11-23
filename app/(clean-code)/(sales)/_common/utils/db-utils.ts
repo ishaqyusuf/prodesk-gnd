@@ -332,7 +332,7 @@ export const SalesOverviewIncludes = {
     // itemDeliveries: excludeDeleted,
 } satisfies Prisma.SalesOrdersInclude;
 
-export const dykeFormIncludes = (restoreQuery, includeStepPriceCount) =>
+export const dykeFormIncludes = (restoreQuery) =>
     ({
         items: {
             where: {
@@ -367,6 +367,90 @@ export const dykeFormIncludes = (restoreQuery, includeStepPriceCount) =>
                             },
                         },
                         doors: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                        door: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                        molding: {
+                            where: {
+                                ...restoreQuery,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        payments: true,
+        salesRep: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+        taxes: {
+            where: {
+                deletedAt: null,
+            },
+        },
+        customer: true,
+        shippingAddress: true,
+        billingAddress: true,
+    } satisfies Prisma.SalesOrdersInclude);
+export const includeStepPriceCount = {
+    select: {
+        priceSystem: {
+            where: {
+                deletedAt: null,
+            },
+        },
+    },
+};
+export const SalesBookFormIncludes = (restoreQuery) =>
+    ({
+        salesProfile: true,
+        items: {
+            where: {},
+            include: {
+                formSteps: {
+                    where: {
+                        ...withDeleted,
+                        // ...restoreQuery,
+                    },
+
+                    include: {
+                        priceData: true,
+                        step: {
+                            include: {
+                                _count: includeStepPriceCount,
+                            },
+                        },
+                    },
+                },
+                shelfItems: {
+                    where: {
+                        ...restoreQuery,
+                    },
+                },
+                housePackageTool: {
+                    // where: {
+                    //     ...restoreQuery
+                    // },
+                    include: {
+                        priceData: true,
+                        stepProduct: {
+                            include: {
+                                door: true,
+                            },
+                        },
+                        doors: {
+                            include: {
+                                priceData: true,
+                            },
                             where: {
                                 ...restoreQuery,
                             },

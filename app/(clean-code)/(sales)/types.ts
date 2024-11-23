@@ -1,4 +1,11 @@
-import { AddressBooks, SalesOrders, SalesStat, Taxes } from "@prisma/client";
+import {
+    AddressBooks,
+    ComponentPrice,
+    DykeSalesDoors,
+    SalesOrders,
+    SalesStat,
+    Taxes,
+} from "@prisma/client";
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { FieldPath } from "react-hook-form";
 export type SalesType = "order" | "quote";
@@ -181,3 +188,40 @@ export type SalesPaymentStatus =
     | "pending"
     | "success"
     | "cancelled";
+export type TypedDykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
+    meta: DykeSalesDoorMeta;
+    priceData?: Partial<ComponentPrice>;
+};
+export interface DykeSalesDoorMeta {
+    _doorPrice: number | null;
+}
+export interface HousePackageToolMeta {
+    priceTags?: {
+        moulding?: {
+            price?: number | undefined;
+            basePrice?: number | undefined;
+            addon?: number | undefined;
+        };
+        components?: number | undefined;
+        doorSizePriceTag?: { [size in string]: number };
+    };
+}
+export interface StepComponentMeta {
+    stepSequence?: { id?: number }[];
+    deleted?: { [uid in string]: boolean };
+    show?: { [uid in string]: boolean };
+}
+export interface DykeProductMeta {
+    svg;
+    url;
+    sortIndex?;
+    priced?: boolean;
+    mouldingSpecies: { [id in string]: boolean };
+    doorPrice?: { [size in string]: number };
+}
+export interface DykeFormStepMeta {
+    hidden?: boolean;
+}
+export interface ShelfItemMeta {
+    categoryIds: number[];
+}

@@ -1,5 +1,5 @@
 import { DykeSteps, SalesStat } from "@prisma/client";
-import { SalesStatStatus, SalesStatType } from "../../types";
+import { DykeDoorType, SalesStatStatus, SalesStatType } from "../../types";
 import { Colors } from "@/lib/status-badge";
 
 export function inToFt(_in) {
@@ -98,4 +98,22 @@ export function itemLineIndex(line) {
 }
 export function sortSalesItems(a, b) {
     return itemLineIndex(a) - itemLineIndex(b);
+}
+export function isComponentType(type: DykeDoorType) {
+    const resp = {
+        slab: type == "Door Slabs Only",
+        bifold: type == "Bifold",
+        service: type == "Services",
+        garage: type == "Garage",
+        shelf: type == "Shelf Items",
+        exterior: type == "Exterior",
+        interior: type == "Interior",
+        moulding: type == "Moulding",
+        hasSwing: false,
+        multiHandles: false,
+    };
+    resp.hasSwing = resp.garage;
+    resp.multiHandles = resp.interior || resp.exterior || resp.garage;
+    // resp.interior || resp.exterior || resp.garage || !type;
+    return resp;
 }

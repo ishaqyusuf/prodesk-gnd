@@ -33,8 +33,8 @@ import { isComponentType } from "../../overview/is-component-type";
 import { includeStepPriceCount } from "../../dyke-utils";
 
 import { salesTaxForm } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
-import { ComponentPrice } from "@prisma/client";
 import { withDeleted } from "@/app/(clean-code)/_common/utils/db-utils";
+import { SalesBookFormIncludes } from "@/app/(clean-code)/(sales)/_common/utils/db-utils";
 
 export async function getDykeFormAction(type: ISalesType, slug, query?) {
     const restore = query?.restore == "true";
@@ -64,88 +64,14 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         : {
               deletedAt: null,
           };
+    const Includes = SalesBookFormIncludes(restoreQuery);
 
     const order = await prisma.salesOrders.findFirst({
         where: {
             orderId: slug || "",
             isDyke: true,
         },
-        include: {
-            salesProfile: true,
-            items: {
-                where: {
-                    ...restoreQuery,
-                },
-                include: {
-                    formSteps: {
-                        where: {
-                            ...withDeleted,
-                            // ...restoreQuery,
-                        },
-
-                        include: {
-                            priceData: true,
-                            step: {
-                                include: {
-                                    _count: includeStepPriceCount,
-                                },
-                            },
-                        },
-                    },
-                    shelfItems: {
-                        where: {
-                            ...restoreQuery,
-                        },
-                    },
-                    housePackageTool: {
-                        // where: {
-                        //     ...restoreQuery
-                        // },
-                        include: {
-                            priceData: true,
-                            stepProduct: {
-                                include: {
-                                    door: true,
-                                },
-                            },
-                            doors: {
-                                include: {
-                                    priceData: true,
-                                },
-                                where: {
-                                    ...restoreQuery,
-                                },
-                            },
-                            door: {
-                                where: {
-                                    ...restoreQuery,
-                                },
-                            },
-                            molding: {
-                                where: {
-                                    ...restoreQuery,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            payments: true,
-            salesRep: {
-                select: {
-                    id: true,
-                    name: true,
-                },
-            },
-            taxes: {
-                where: {
-                    deletedAt: null,
-                },
-            },
-            customer: true,
-            shippingAddress: true,
-            billingAddress: true,
-        },
+        include: Includes,
     });
     // console.log(order.items.length);
 

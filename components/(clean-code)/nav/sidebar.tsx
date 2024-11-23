@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { useSidebarToggle } from "../../../app/(clean-code)/_common/hooks/use-sidebar-toggle";
 import { useStore } from "../../../app/(clean-code)/_common/hooks/use-store";
 import { SidebarToggle } from "./sidebar-toggle";
-import { PanelsTopLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Menu from "./menu";
@@ -30,7 +29,8 @@ export function Sidebar() {
                             ? "translate-x-1"
                             : "translate-x-0"
                     )}
-                    variant="link"
+                    variant="ghost"
+                    asChild
                 >
                     <Link href="/dashboard" className="flex items-center gap-2">
                         {/* <PanelsTopLeft className="w-6 h-6 mr-1" />

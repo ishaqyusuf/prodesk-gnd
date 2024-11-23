@@ -9,8 +9,13 @@ import {
 import { MenuIcon, PanelsTopLeft } from "lucide-react";
 import Link from "next/link";
 import Menu from "./menu";
+import { useStore } from "@/app/(clean-code)/_common/hooks/use-store";
+import { useSidebarToggle } from "@/app/(clean-code)/_common/hooks/use-sidebar-toggle";
+import { Icons } from "@/components/_v1/icons";
+import { cn } from "@/lib/utils";
 
 export function SheetMenu() {
+    const sidebar = useStore(useSidebarToggle, (state) => state);
     return (
         <Sheet>
             <SheetTrigger className="lg:hidden" asChild>
@@ -21,23 +26,32 @@ export function SheetMenu() {
             <SheetContent
                 className="sm:w-72 px-3 h-full flex flex-col"
                 side="left"
+                aria-describedby={undefined}
             >
                 <SheetHeader>
-                    <Button
-                        className="flex justify-center items-center pb-2 pt-1"
-                        variant="link"
-                        asChild
-                    >
-                        <Link
-                            href="/dashboard"
-                            className="flex items-center gap-2"
+                    <SheetTitle className="w-full" asChild>
+                        <Button
+                            className={cn(
+                                "transition-transform ease-in-out duration-300 mb-1",
+                                sidebar?.isOpen === false
+                                    ? "translate-x-1"
+                                    : "translate-x-0"
+                            )}
+                            variant="ghost"
+                            asChild
                         >
-                            <PanelsTopLeft className="w-6 h-6 mr-1" />
-                            <SheetTitle className="font-bold text-lg">
-                                Brand
-                            </SheetTitle>
-                        </Link>
-                    </Button>
+                            <Link
+                                href="/dashboard"
+                                className="flex items-center gap-2"
+                            >
+                                {!sidebar?.isOpen ? (
+                                    <Icons.logo />
+                                ) : (
+                                    <Icons.logoLg />
+                                )}
+                            </Link>
+                        </Button>
+                    </SheetTitle>
                 </SheetHeader>
                 <Menu isOpen />
             </SheetContent>
