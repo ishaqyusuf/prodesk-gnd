@@ -14,7 +14,7 @@ import {
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 import { dealerSession } from "@/app/(v1)/_actions/utils";
 import { saveSalesTaxDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-tax.persistent";
-import { saveSalesComponentPricing } from "@/app/(clean-code)/(sales)/_common/data-access/sales-form-dta";
+import { saveSalesComponentPricingDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-form-dta";
 
 export async function saveDykeSales(data: DykeForm) {
     const dealerMode = await dealerSession();
@@ -427,7 +427,7 @@ export async function saveDykeSales(data: DykeForm) {
             );
             await saveSalesTaxDta(data, order.id);
 
-            await saveSalesComponentPricing(createPrices, order.id);
+            await saveSalesComponentPricingDta(createPrices, order.id);
             return { order, createHpts };
         };
     // const resp = await prisma.$transaction(tx, {

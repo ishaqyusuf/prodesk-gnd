@@ -14,11 +14,11 @@ export function transformStepProducts(
         };
     let prodMeta: DykeProductMeta =
         prod.product?.meta || prod.door?.meta || ({} as any);
-    if (prod.door)
-        prodMeta = {
-            // ...findDoorSvg(prod.door.title, prod.door.img),
-            ...prodMeta,
-        };
+    // if (prod.door)
+    //     prodMeta = {
+    //         // ...findDoorSvg(prod.door.title, prod.door.img),
+    //         ...prodMeta,
+    //     };
     return {
         ...prod,
         meta,

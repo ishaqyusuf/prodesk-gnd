@@ -1,13 +1,16 @@
 import {
     AddressBooks,
     ComponentPrice,
+    DykeDoors,
     DykeSalesDoors,
+    DykeStepProducts,
     SalesOrders,
     SalesStat,
     Taxes,
 } from "@prisma/client";
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { FieldPath } from "react-hook-form";
+import { GetSalesBookForm } from "./_common/use-case/sales-book-form-use-case";
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type DykeStepTitles =
@@ -224,4 +227,92 @@ export interface DykeFormStepMeta {
 }
 export interface ShelfItemMeta {
     categoryIds: number[];
+}
+
+export type DykeStepProduct = Omit<DykeStepProducts, "meta"> & {
+    meta: StepComponentMeta;
+    door?: Omit<DykeDoors, "meta"> & {
+        meta: DykeProductMeta;
+    };
+    product?: Omit<DykeDoors, "meta"> & {
+        meta: DykeProductMeta;
+    };
+    metaData: {
+        price?: number;
+        hidden?: boolean;
+        basePrice?: boolean;
+        isDoor?: boolean;
+    };
+}; //Awaited<ReturnType<typeof getStepProduct>>;
+export interface MultiSalesFormItem {
+    components: {
+        [doorTitle in string]: {
+            checked?: boolean;
+
+            _componentsTotalPrice?: number | null;
+            _mouldingPriceTag?: number | null;
+            mouldingPriceData?: Partial<ComponentPrice>;
+            toolId?;
+            itemId?;
+            qty: number | null;
+            doorQty: number | null;
+            unitPrice: number | null;
+            totalPrice: number | null;
+            hptId: number | null;
+            swing?: string | null;
+            tax?: boolean;
+            production?: boolean;
+            description?: string;
+            doorTotalPrice: number | null;
+            stepProductId?: number | null;
+            stepProduct?: DykeStepProducts;
+            heights: {
+                [dim in string]: {
+                    checked?: boolean;
+                    dim?: string;
+                    width?: string;
+                };
+            };
+            _doorForm: {
+                [dim in string]: DykeSalesDoor & { priceData: ComponentPrice };
+            };
+            uid?;
+            priceTags?: HousePackageToolMeta["priceTags"];
+        };
+    };
+    uid?: string;
+    multiDyke?: boolean;
+    primary?: boolean;
+    rowIndex?;
+}
+export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
+    meta: DykeSalesDoorMeta;
+    priceData?: Partial<ComponentPrice>;
+};
+export interface SalesFormZusData {
+    data: GetSalesBookForm;
+    sequence: {
+        formItem: string[];
+        stepComponent: { [itemUid in string]: string[] };
+        multiComponent: { [itemUid in string]: string[] };
+    };
+    kvFormItem: {
+        [itemUid in string]: {
+            id?: number;
+            uid?: string;
+            collapsed?: boolean;
+        };
+    };
+    kvMultiComponent: {
+        [itemUid in string]: {};
+    };
+    kvStepComponent: {
+        [id in string]: {
+            //id: "itemUid-stepUid"
+            title?: string;
+            value?: string;
+            price?: number;
+            stepFormId?: number;
+        };
+    };
 }

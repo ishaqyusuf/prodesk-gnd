@@ -100,6 +100,8 @@ export const Icons = {
     X: Cross2Icon,
     calendar: Calendar,
     dollarSign: DollarSign,
+    Logo: () => <Image alt="" src={logo2} width={48} height={48} />,
+    LogoLg: () => <Image alt="" src={logo2} width={120} />,
     logoLg: ({ width = 120 }) => (
         <Link href="/">
             <Image alt="" src={logo2} width={width} />
