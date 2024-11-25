@@ -14,7 +14,7 @@ import { salesTaxForm } from "./sales-tax.persistent";
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import dayjs from "dayjs";
 import { ComponentPrice } from "@prisma/client";
-import { getSalesFormStep } from "./sales-form-step-dta";
+import { getSalesFormStepByIdDta } from "./sales-form-step-dta";
 
 export interface GetSalesBookFormDataProps {
     type: SalesType;
@@ -81,7 +81,7 @@ export async function createSalesBookFormDataDta(
             items: [
                 {
                     meta: {},
-                    formSteps: [(await getSalesFormStep(1)) as any],
+                    formSteps: [(await getSalesFormStepByIdDta(1)) as any],
                     shelfItems: [],
                 } as any,
             ],

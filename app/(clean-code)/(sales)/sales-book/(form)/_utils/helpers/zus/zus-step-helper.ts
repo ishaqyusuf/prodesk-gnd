@@ -1,4 +1,7 @@
-import { getStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import {
+    getNextStepUseCase,
+    getStepComponentsUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { zhItemUidFromStepUid } from "./zus-form-helper";
 
@@ -38,11 +41,11 @@ export async function zhSelectStepComponent({
         (c) => c.id == id
     );
     const itemUid = zhItemUidFromStepUid(stepUid);
-    const data = zus.kvStepForm[stepUid] || {};
-    data.value = component.title;
+    const stepData = zus.kvStepForm[stepUid] || {};
+    stepData.value = component.title;
     // data.componentUid = component.uid;
-    data.price = component.price;
-    data.stepId = component.stepId;
+    stepData.price = component.price;
+    stepData.stepId = component.stepId;
     const formData = zus.kvFormItem[itemUid];
     formData.currentStepUid = null;
     zus.update("kvFormItem", {
@@ -51,11 +54,22 @@ export async function zhSelectStepComponent({
     });
     zus.update("kvStepForm", {
         ...zus.kvStepForm,
-        [stepUid]: data,
+        [stepUid]: stepData,
+    });
+    await zhNextStepComponent({
+        zus,
+        stepUid,
+        nextStepId: component.nextStepId,
     });
     console.log("component selected");
 }
 export async function zhNextStepComponent({
     zus,
     stepUid,
-}: LoadStepComponentsProps) {}
+    nextStepId,
+}: LoadStepComponentsProps & { nextStepId }) {
+    const resp = await getNextStepUseCase({
+        nextStepId,
+    });
+    console.log(resp);
+}

@@ -34,14 +34,14 @@ export async function getNextDykeStepAction(
             doorType,
             step.value
         );
+
         if (customStep) return [..._steps, customStep];
     }
     const { stepValueId, rootStepValueId, prevStepValueId } = step;
 
-    console.log(step);
-    console.log({ nextStepId, stepValueId, t: step.title });
     if (!nextStepId) {
         // const path = await prisma.
+        console.log("NO NEXT STEP");
         let nextSteps = await prisma.dykeSteps.findMany({
             where: {
                 title: {
@@ -57,6 +57,7 @@ export async function getNextDykeStepAction(
         // console.log(nextSteps);
 
         if (!nextSteps.length && step.title == "Door Species") {
+            console.log("SPECIE NO STEP");
             nextSteps = await prisma.dykeSteps.findMany({
                 where: {
                     value: {
@@ -84,10 +85,13 @@ export async function getNextDykeStepAction(
                     (product?.title && s.value?.endsWith(product.title)) ||
                     (s.title == "Hand" && s.id == 22)
             )[0];
+            console.log("MATCHED STEP>>>", matchedStep?.id);
             if (matchedStep) nextStepId = matchedStep.id;
         }
     }
     if (nextStepId) {
+        console.log("NEXT STEP", nextStepId);
+
         const stepForm = await getStepForm(nextStepId);
         const stepProd = stepForm.step?.stepProducts?.[0];
         if (!isCustomStep(stepForm.step?.title, doorType)) {

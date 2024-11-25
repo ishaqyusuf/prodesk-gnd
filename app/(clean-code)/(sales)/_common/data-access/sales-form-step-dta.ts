@@ -3,15 +3,17 @@ import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { prisma } from "@/db";
 import { ComponentPrice, DykeStepForm, Prisma } from "@prisma/client";
 import { DykeFormStepMeta, StepComponentMeta } from "../../types";
+import { notDeleted } from "../utils/db-utils";
 
 export type GetStepDta = AsyncFnType<typeof getStepDta>;
-export async function getSalesFormStep(id) {
+export async function getSalesFormStepByIdDta(id) {
     const step = await prisma.dykeSteps.findUnique({
         where: {
             id,
         },
         include: {
             stepProducts: {
+                where: notDeleted.where,
                 include: {
                     product: true,
                 },
@@ -111,4 +113,43 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             stepId,
         };
     });
+}
+
+interface ValidateNextStepIdProps {
+    nextStepId;
+}
+export async function validateNextStepIdDta({}: ValidateNextStepIdProps) {}
+export type GetStepsForRoutingProps = AsyncFnType<typeof getStepsForRoutingDta>;
+export async function getStepsForRoutingDta() {
+    const steps = await prisma.dykeSteps.findMany({
+        select: {
+            id: true,
+            uid: true,
+            title: true,
+            stepValueId: true,
+            prevStepValueId: true,
+            rootStepValueId: true,
+            stepProducts: {
+                where: notDeleted.where,
+                select: {
+                    // nextStepId: true,
+                    dykeStepId: true,
+                    uid: true,
+                    custom: true,
+                    product: {
+                        select: {
+                            title: true,
+                            value: true,
+                        },
+                    },
+                    door: {
+                        select: {
+                            title: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    return steps;
 }

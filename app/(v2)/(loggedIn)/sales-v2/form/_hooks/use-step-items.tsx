@@ -273,7 +273,7 @@ export default function useStepItems(stepCtx: LegacyDykeFormStepType) {
                 [],
                 doorType
             );
-            // console.log({ nextSteps, nextStepId });
+            console.log({ nextSteps, nextStepId });
             if (nextSteps?.length) {
                 const currentNextStep = item.formStepArray[stepIndex + 1];
                 if (currentNextStep) {

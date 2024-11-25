@@ -49,6 +49,9 @@ export async function initStepComponents(
                 : hasShow
                 ? !showThis
                 : isHidden;
+        if (doorSection) {
+            product._metaData.hidden = product.deletedAt != null;
+        }
         return product;
     });
     return stepProducts;

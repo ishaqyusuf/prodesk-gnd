@@ -7,7 +7,11 @@ import {
     getDykeStepTitlesDta,
 } from "../data-access/dyke-steps.persistent";
 import { updateStepComponentDta } from "../data-access/step-components.persistent";
-import { getStepComponentsDta } from "../data-access/sales-form-step-dta";
+import {
+    getSalesFormStepByIdDta,
+    getStepComponentsDta,
+} from "../data-access/sales-form-step-dta";
+import { SalesFormZusData } from "../../types";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -35,4 +39,22 @@ export async function sortStepComponentsUseCase(components) {
 }
 export async function getStepComponentsUseCase(stepTitle, stepId) {
     return await getStepComponentsDta(stepTitle, stepId);
+}
+interface GetNextStepProps {
+    nextStepId;
+    // currentStepTitle;
+}
+export async function getNextStepUseCase({
+    nextStepId,
+}: GetNextStepProps): Promise<SalesFormZusData["kvStepForm"][number]> {
+    const step = await getSalesFormStepByIdDta(nextStepId);
+    return {
+        title: step.step.title,
+        value: "",
+        price: null,
+        stepFormId: null,
+        stepId: step.step.id,
+        isHpt: false,
+        isService: false,
+    };
 }

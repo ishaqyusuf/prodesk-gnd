@@ -57,7 +57,6 @@ async function loadComponents(
         stepCtx,
         resp.data
     );
-    console.log({ allComponents });
     stepCtx.setComponents(allComponents);
     stepCtx.setFilteredComponents(
         allComponents.filter((s) => !s._metaData.hidden && !s.custom)
