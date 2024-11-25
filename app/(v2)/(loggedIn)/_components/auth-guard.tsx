@@ -36,7 +36,6 @@ export default function AuthGuard({
                 ? v.some((p) => session?.can?.[p])
                 : session?.can?.[v];
         const fn = permissionType == "every" ? can?.every(gn) : can?.some(gn);
-        console.log(can?.length);
 
         let res = !can?.length ? true : fn;
         if (permissionType == "none") res = !res;
@@ -48,10 +47,8 @@ export default function AuthGuard({
             (permission && rolePermission) || session?.role.name == "Admin";
         setVisible(_visible);
         if (!_visible) {
-            console.log("REDIRECTED!!!");
             redirect("/");
         }
-        // console.log("____||}}}}");
     }, []);
 
     return <div className={cn(className)}>{visible && children}</div>;

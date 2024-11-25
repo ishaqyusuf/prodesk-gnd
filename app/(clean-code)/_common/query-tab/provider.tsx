@@ -33,9 +33,7 @@ export const useQueryTabContext = () => {
     }
     const searchParams = useSearchParams();
 
-    useEffect(() => {
-        console.log(searchParams);
-    }, [searchParams]);
+    useEffect(() => {}, [searchParams]);
     useEffect(() => {
         setPageData(initialize(page));
     }, [page]);

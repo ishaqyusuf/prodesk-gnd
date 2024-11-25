@@ -11,6 +11,7 @@ import {
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { FieldPath } from "react-hook-form";
 import { GetSalesBookForm } from "./_common/use-case/sales-book-form-use-case";
+import { GetStepComponents } from "./_common/data-access/sales-form-step-dta";
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type DykeStepTitles =
@@ -144,6 +145,9 @@ export interface StepComponentMeta {
     stepSequence?: { id?: number }[];
     deleted?: { [uid in string]: boolean };
     show?: { [uid in string]: boolean };
+    variation?: {
+        v?: any;
+    };
 }
 export interface DykeProductMeta {
     svg;
@@ -301,18 +305,30 @@ export interface SalesFormZusData {
             id?: number;
             uid?: string;
             collapsed?: boolean;
+            currentStepUid?: string;
+            title?: string;
         };
     };
     kvMultiComponent: {
         [itemUid in string]: {};
     };
-    kvStepComponent: {
+    kvFilteredStepComponentList: {
+        [stepItemUid in string]: GetStepComponents;
+    };
+    kvStepComponentList: {
+        [stepUid in string]: GetStepComponents;
+    };
+    kvStepForm: {
         [id in string]: {
             //id: "itemUid-stepUid"
             title?: string;
             value?: string;
             price?: number;
             stepFormId?: number;
+            // componentUid?: string;
+            stepId?: number;
+            isHpt?: boolean;
+            isService?: boolean;
         };
     };
 }

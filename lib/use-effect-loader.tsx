@@ -23,8 +23,7 @@ export default function useEffectLoader<T extends (...args: any) => any>(
     async function load(r = false) {
         if (!fn) return;
         const res = await fn();
-        console.log(">>LOADING", res);
-        console.log("....");
+
         (fn as any)()?.then((res) => {
             setData(res);
             setReady(true);

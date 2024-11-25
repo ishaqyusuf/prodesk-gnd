@@ -1,26 +1,81 @@
 import { Button } from "@/components/ui/button";
-import { useFormDataStore } from "../_hooks/form-data-store";
-import { StepForm } from "./step-form";
-import { generateRandomString } from "@/lib/utils";
+import { useFormDataStore } from "../_common/_stores/form-data-store";
+import { StepSection } from "./step-section";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
+import { useEffect } from "react";
 
 interface Props {
     uid?: string;
 }
 export default function ItemSection({ uid }: Props) {
     const zus = useFormDataStore();
+    const zItem = zus?.kvFormItem?.[uid];
     return (
         <div>
-            <div className="">{uid}</div>
-            {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
-                <StepForm key={stepUid} stepUid={stepUid} />
-            ))}
-            <Button
-                onClick={() => {
-                    zus.newStep(uid, generateRandomString(4));
+            <Collapsible
+                open={!zItem.collapsed}
+                onOpenChange={(e) => {
+                    zus.toggleItem(uid);
                 }}
             >
-                New Step
+                <ItemSectionHeader uid={uid} />
+                <div className="flex">
+                    <div className="flex-1 flex flex-col">
+                        {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
+                            <StepSection key={stepUid} stepUid={stepUid} />
+                        ))}
+                    </div>
+                    <div className="hidden lg:w-1/5 lg:block"></div>
+                </div>
+            </Collapsible>
+        </div>
+    );
+}
+function ItemSectionHeader({ uid }) {
+    const zus = useFormDataStore();
+    const index = zus.sequence.formItem.indexOf(uid);
+    const placeholder = `Item ${index + 1}`;
+    const formItem = zus?.kvFormItem?.[uid];
+
+    return (
+        <div className="flex bg-accent items-center gap-4 p-2 px-4">
+            <CollapsibleTrigger asChild className="flex-1">
+                <div
+                    className="flex "
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    <Input
+                        value={formItem?.title}
+                        onChange={(e) => {
+                            zus.updateFormItem(uid, "title", e.target.value);
+                        }}
+                        className="h-8"
+                        placeholder={placeholder}
+                    />
+                </div>
+            </CollapsibleTrigger>
+            <Button
+                onClick={() => {
+                    zus.updateFormItem(uid, "collapsed", !formItem.collapsed);
+                }}
+                className="h-8"
+                size="sm"
+                variant={formItem?.collapsed ? "default" : "secondary"}
+            >
+                {formItem.collapsed ? "Expand" : "Collapse"}
             </Button>
+            <ConfirmBtn
+                trash
+                size="icon"
+                onClick={async () => {
+                    await zhDeleteItem(zus, uid, index);
+                }}
+            />
         </div>
     );
 }

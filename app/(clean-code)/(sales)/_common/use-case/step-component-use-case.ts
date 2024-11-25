@@ -7,6 +7,7 @@ import {
     getDykeStepTitlesDta,
 } from "../data-access/dyke-steps.persistent";
 import { updateStepComponentDta } from "../data-access/step-components.persistent";
+import { getStepComponentsDta } from "../data-access/sales-form-step-dta";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -31,4 +32,7 @@ export async function sortStepComponentsUseCase(components) {
             await updateStepComponentDta(c.id, data);
         })
     );
+}
+export async function getStepComponentsUseCase(stepTitle, stepId) {
+    return await getStepComponentsDta(stepTitle, stepId);
 }
