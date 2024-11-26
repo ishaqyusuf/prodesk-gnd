@@ -103,13 +103,13 @@ export async function getStepComponentsDta(stepTitle, stepId) {
     return stepComponents.map((component) => {
         const { door, product } = component;
         return {
-            nextStepId: component.nextStepId,
+            // nextStepId: component.nextStepId,
             uid: component.uid,
             id: component.id,
             title: door?.title || product?.title,
             img: product?.img || door?.img,
             variation: component?.meta?.variation || {},
-            price: 4.5,
+            price: null,
             stepId,
         };
     });

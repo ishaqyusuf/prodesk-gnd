@@ -307,6 +307,7 @@ export interface SalesFormZusData {
             collapsed?: boolean;
             currentStepUid?: string;
             title?: string;
+            routeUid?: string;
         };
     };
     kvMultiComponent: {

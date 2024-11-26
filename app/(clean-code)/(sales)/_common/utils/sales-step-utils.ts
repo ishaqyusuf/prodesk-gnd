@@ -2,30 +2,24 @@ import { DykeDoorType, DykeStepTitleKv, DykeStepTitles } from "../../types";
 import { LoadSalesFormData } from "../data-access/sales-form-settings.dta";
 import { GetStepsForRoutingProps } from "../data-access/sales-form-step-dta";
 
-let routes: {
-    [itemTypeUid in string]: {
-        title: DykeDoorType;
-        routes: {
-            [routeUid in string]: {
-                stepId;
-                title;
-                uid;
-                hidden?: boolean;
-            };
-        };
-    };
-} = {};
 export function composeStepRouting(fdata: LoadSalesFormData) {
     const sectionKeys = Object.keys(fdata.setting?.data?.route || [])?.map(
         (uid) => ({ uid })
     );
-    const stepsByKey: { [uid in string]: (typeof fdata.steps)[number] } = {};
+    const stepsByKey: { [uid in string]: { id; title; uid } } = {};
     // fdata.rootStep
     const rootComponentsByKey: {
-        [uid in string]: (typeof fdata.rootStep.stepProducts)[number];
+        [uid in string]: { id?; title; uid };
     } = {};
     fdata.rootStep.stepProducts.map((s) => {
-        rootComponentsByKey[s.uid] = s;
+        rootComponentsByKey[s.uid] = {
+            uid: s.uid,
+            title: s.product.title,
+        };
+    });
+    fdata.steps.map((step) => {
+        const { stepProducts, id, title, uid, ...rest } = step;
+        stepsByKey[step.uid] = { id, title, uid };
     });
     const composedRouter = { ...(fdata.setting?.data?.route || {}) };
     Object.keys(composedRouter).map((routeKey) => {

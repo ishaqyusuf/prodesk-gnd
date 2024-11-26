@@ -108,7 +108,7 @@ function RouteSection({ uid }) {
                         <CardTitle>
                             {
                                 ctx.salesSetting?.rootComponentsByKey?.[uid]
-                                    ?.product?.title
+                                    ?.title
                             }
                         </CardTitle>
                         <CardDescription>Compose Step Sequence</CardDescription>
