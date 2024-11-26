@@ -330,6 +330,10 @@ export interface SalesFormZusData {
             stepId?: number;
             isHpt?: boolean;
             isService?: boolean;
+            _stepAction?: {
+                selection: { [uid in string]: boolean };
+                selectionCount?: number;
+            };
         };
     };
 }

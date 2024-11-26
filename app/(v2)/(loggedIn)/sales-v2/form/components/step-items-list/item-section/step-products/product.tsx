@@ -301,7 +301,6 @@ Props) {
                                     Change Price
                                 </MenuItem>
                             )}
-
                             <DeleteRowAction
                                 menu
                                 noToast

@@ -8,6 +8,7 @@ import {
 } from "../data-access/dyke-steps.persistent";
 import { updateStepComponentDta } from "../data-access/step-components.persistent";
 import {
+    deleteStepProductsByUidDta,
     getSalesFormStepByIdDta,
     getStepComponentsDta,
 } from "../data-access/sales-form-step-dta";
@@ -57,4 +58,7 @@ export async function getNextStepUseCase({
         isHpt: false,
         isService: false,
     };
+}
+export async function deleteStepProductsUseCase(uids: string[]) {
+    return await deleteStepProductsByUidDta(uids);
 }

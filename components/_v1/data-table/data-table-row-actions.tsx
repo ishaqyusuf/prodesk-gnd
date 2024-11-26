@@ -167,13 +167,14 @@ export function ActionButton({
         );
 }
 interface DeleteRowActionProps {
-    row: any;
+    row?: any;
     action;
     deleteKey?;
     menu?: boolean;
     disabled?: boolean;
     noRefresh?: boolean;
     noToast?: boolean;
+    loadingText?: string;
 }
 
 export const EditRowAction = typedMemo(
@@ -230,6 +231,7 @@ export const DeleteRowAction = typedMemo(
         deleteKey = "id",
         disabled,
         noToast,
+        loadingText,
     }: DeleteRowActionProps) => {
         const [isPending, startTransition] = useTransition();
         const router = useRouter();
@@ -247,20 +249,20 @@ export const DeleteRowAction = typedMemo(
             startTransition(async () => {
                 if (noToast) {
                     if (action) {
-                        await action(row[deleteKey]);
+                        await action(row?.[deleteKey]);
                         if (!noRefresh) router.refresh();
                     }
                 } else
                     toast.promise(
                         async () => {
                             if (action) {
-                                await action(row[deleteKey]);
+                                await action(row?.[deleteKey]);
                                 if (!noRefresh) router.refresh();
                             }
                             // revalidatePath("");
                         },
                         {
-                            loading: `Deleting ${row.type} #${row.orderId}`,
+                            loading: loadingText || `Deleting...`,
                             success(data) {
                                 return "Deleted Successfully";
                             },

@@ -13,7 +13,7 @@ import { formatMoney } from "@/lib/use-number";
 import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
-import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
+import DevOnly from "@/_v2/components/common/dev-only";
 
 interface Props {
     stepUid?;
@@ -39,9 +39,7 @@ export function StepSection({ stepUid }: Props) {
             );
         return (
             <Content>
-                {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
-                    <ComponentsStep key={stepUid} stepUid={stepUid} />
-                ))}
+                <ComponentsStep key={stepUid} stepUid={stepUid} />
             </Content>
         );
     }
@@ -67,22 +65,23 @@ export function StepSection({ stepUid }: Props) {
             }, 300);
         }, []);
         return (
-            <CollapsibleContent className="flex p-8 border">
+            <CollapsibleContent className="flex">
                 <motion.div
                     ref={elementRef}
                     // initial={{ opacity: 0 }}
                     // animate={{ opacity: isVisible ? 1 : 0 }}
                     transition={{ duration: 1 }}
                     style={{}}
+                    className="w-full"
                 >
-                    <div className="flex-1 flex flex-col">{children}</div>
+                    {children}
                 </motion.div>
             </CollapsibleContent>
         );
     }
     return (
         <div>
-            <div className="mx-4">
+            <div className="">
                 <Collapsible open={zItem.currentStepUid == stepUid}>
                     <StepSectionHeader stepUid={stepUid} />
                     <Render />
@@ -96,21 +95,29 @@ function StepSectionHeader({ stepUid }) {
     const stepForm = zus?.kvStepForm?.[stepUid];
     return (
         <CollapsibleTrigger asChild>
-            <div className="">
+            <div className="border">
                 <button
-                    className="flex  w-full p-1 px-4 border space-x-2 items-center text-sm uppercase"
+                    className="flex h-8 w-full p-1 gap-4 px-4  space-x-2 items-center text-sm uppercase hover:bg-muted-foreground/20"
                     onClick={(e) => {
                         e.preventDefault();
                         zus.toggleStep(stepUid);
                     }}
                 >
-                    <Label>{stepForm?.title}:</Label>
+                    <Label>{stepForm?.title}</Label>
+                    <div className="flex-1"></div>
                     <span className="font-mono">{stepForm.value}</span>
                     {stepForm.price && (
                         <Badge variant="destructive" className="h-5 px-1">
                             ${formatMoney(stepForm.price)}
                         </Badge>
                     )}
+                    <div className="">
+                        <DevOnly>
+                            <span>{stepUid}</span>
+                            <span>-</span>
+                            <span>{stepForm?.stepId}</span>
+                        </DevOnly>
+                    </div>
                 </button>
             </div>
         </CollapsibleTrigger>

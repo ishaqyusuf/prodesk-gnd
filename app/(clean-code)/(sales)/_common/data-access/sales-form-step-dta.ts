@@ -81,6 +81,7 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             });
         }
     }
+
     const stepComponents = (
         await prisma.dykeStepProducts.findMany({
             where: wheres?.length > 1 ? { AND: wheres } : wheres[0],
@@ -100,6 +101,8 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             meta: a.meta as any as StepComponentMeta,
         };
     });
+    // console.log({ wheres, count: stepComponents.length });
+
     return stepComponents.map((component) => {
         const { door, product } = component;
         return {
@@ -213,4 +216,16 @@ export async function fixStepsDta() {
     //         s.stepProducts.map((p) => `${p.id}. ${p.product.title}`)
     //     )
     // );
+}
+export async function deleteStepProductsByUidDta(uids: string[]) {
+    await prisma.dykeStepProducts.updateMany({
+        where: {
+            uid: {
+                in: uids,
+            },
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
 }

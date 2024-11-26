@@ -1,9 +1,11 @@
 import {
+    deleteStepProductsUseCase,
     getNextStepUseCase,
     getStepComponentsUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { zhItemUidFromStepUid } from "./zus-form-helper";
+import { toast } from "sonner";
 
 interface LoadStepComponentsProps {
     stepUid: string;
@@ -15,20 +17,24 @@ export async function zhLoadStepComponents({
 }: LoadStepComponentsProps) {
     const stepData = zus.kvStepForm?.[stepUid];
     const [uid, _stepUid] = stepUid?.split("-");
-    const stepComponents = zus.kvFilteredStepComponentList[stepUid];
+    const stepComponents = zus.kvStepComponentList[_stepUid];
+
     if (!stepComponents) {
         const components = await getStepComponentsUseCase(
             stepData.title,
             stepData.stepId
         );
-
-        const data = {
-            ...zus.kvFilteredStepComponentList,
-            [stepUid]: components,
-        };
-        zus.update("kvFilteredStepComponentList", data);
+        console.log({
+            components,
+        });
+        // const data = {
+        //     ...zus.kvFilteredStepComponentList,
+        //     [stepUid]: components,
+        // };
+        zus.dotUpdate(`kvStepComponentList.${_stepUid}`, components);
+        // zus.update("kvFilteredStepComponentList", data);
+        zusFilterStepComponents(stepUid, zus);
     }
-    console.log("LOAED>>", stepUid);
 }
 export async function zhSelectStepComponent({
     zus,
@@ -110,22 +116,100 @@ export function zhNextRoute({
     const nextRouteUid =
         route[rootUid].route?.[isRoot ? rootUid : componentStepUid];
     const nextRoute = zus.data.salesSetting.stepsByKey[nextRouteUid];
-    console.log({
-        setting: zus.data.salesSetting,
-        nextRoute,
-        rootUid,
-    });
-    console.log(nextRoute);
+    const nextStepUid = `${itemUid}-${nextRoute.uid}`;
+    let stepForm = zus.kvStepForm[nextStepUid] || {};
+    stepForm.title = nextRoute.title;
+    stepForm.stepId = nextRoute.id;
+    stepForm.value = stepForm.value || "";
+    stepForm._stepAction = {
+        selection: {},
+        selectionCount: 0,
+    };
+    const stepSq = zus.sequence.stepComponent[itemUid];
+    const prevStepIndex = stepSq.indexOf(stepUid);
+    const prevNextStepUid = stepSq[prevStepIndex + 1];
+    if (prevNextStepUid && prevNextStepUid != nextStepUid) {
+        stepSq.splice(prevStepIndex + 2);
+    }
+    if (prevNextStepUid != nextStepUid) stepSq.push(nextStepUid);
+    zus.dotUpdate(`kvStepForm.${nextStepUid}`, stepForm);
+    zus.dotUpdate(`sequence.stepComponent.${itemUid}`, stepSq);
+    console.log({ stepForm, stepSq });
+
+    zus.toggleStep(nextStepUid);
 }
-// export class StepHelperClass {
-//     // stepUid: string;
-//     // zus: ZusSales;
-//     itemUid;
-//     constructor(public stepUid, public zus: ZusSales) {
-//         const [itemUid] = stepUid?.split("-");
-//         this.itemUid = itemUid;
-//     }
-//     public get isRoot() {
-//         return "";
-//     }
-// }
+export function zusFilterStepComponents(stepUid, zus: ZusSales) {
+    const [uid, _stepUid] = stepUid?.split("-");
+    const stepComponents = zus.kvStepComponentList[_stepUid];
+    // TODO: FILTER STEP, ADD PRICE, SET VISIBILITY ETC.
+    zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, stepComponents);
+}
+
+export function zusToggleComponentSelect({
+    stepUid,
+    zus,
+    productUid,
+}: LoadStepComponentsProps & {
+    productUid;
+}) {
+    const stepAction = zus.kvStepForm[stepUid]?._stepAction;
+    const state = !stepAction?.selection?.[productUid];
+    const currentCount = (stepAction?.selectionCount || 0) + (state ? 1 : -1);
+
+    zus.dotUpdate(
+        `kvStepForm.${stepUid}._stepAction.selection.${productUid}`,
+        state
+    );
+    zus.dotUpdate(
+        `kvStepForm.${stepUid}._stepAction.selectionCount`,
+        currentCount
+    );
+}
+export async function zusDeleteProducts({
+    stepUid,
+    zus,
+    productUid,
+    selection,
+}: LoadStepComponentsProps & { productUid?: string; selection?: boolean }) {
+    let uids = [productUid]?.filter(Boolean);
+    const [uid, _stepUid] = stepUid?.split("-");
+    let _actionForm = zus.kvStepForm[stepUid]?._stepAction;
+    if (selection) {
+        uids = Object.keys(_actionForm?.selection || {}).filter(
+            (k) => _actionForm?.selection?.[k]
+        );
+    }
+    if (uids.length) {
+        await deleteStepProductsUseCase(uids);
+        toast.message("Deleted.");
+    }
+    if (selection) {
+        _actionForm = {
+            selection: {},
+            selectionCount: 0,
+        };
+        zus.dotUpdate(`kvStepForm.${stepUid}._actionForm`, _actionForm);
+    }
+    const filterComponents = zus.kvFilteredStepComponentList[stepUid];
+    zus.dotUpdate(
+        `kvFilteredStepComponentList.${stepUid}`,
+        filterComponents?.filter((c) => uids.every((u) => u != c.uid))
+    );
+    const stepComponents = zus.kvStepComponentList[_stepUid];
+    zus.dotUpdate(
+        `kvStepComponentList.${_stepUid}`,
+        stepComponents?.filter((c) => uids.every((u) => u != c.uid))
+    );
+}
+export class StepHelperClass {
+    // stepUid: string;
+    // zus: ZusSales;
+    itemUid;
+    constructor(public stepUid, public zus: ZusSales) {
+        const [itemUid] = stepUid?.split("-");
+        this.itemUid = itemUid;
+    }
+    public get isRoot() {
+        return "";
+    }
+}

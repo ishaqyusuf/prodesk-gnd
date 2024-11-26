@@ -2,6 +2,9 @@ import { create } from "zustand";
 
 import { SalesFormZusData } from "../../../../types";
 import { stepActions } from "./step-action";
+import { FieldPath } from "react-hook-form";
+import { toDotNotation } from "@/lib/utils";
+import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
 type SalesFormZusAction = ReturnType<typeof fns>;
 export type SalesFormSet = (
@@ -27,6 +30,14 @@ function fns(set: SalesFormSet) {
                 const newState = { ...state };
                 newState.kvFormItem[itemUid].collapsed =
                     !newState.kvFormItem[itemUid].collapsed;
+                return newState;
+            }),
+        dotUpdate: (k: FieldPath<SalesFormZusData>, stepSq) =>
+            set((state) => {
+                const newState = {
+                    ...state,
+                };
+                dotObject.set(k, stepSq, newState);
                 return newState;
             }),
         update: (k: keyof SalesFormZusData, value) =>

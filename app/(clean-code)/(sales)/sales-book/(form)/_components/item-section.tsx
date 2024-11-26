@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import { StepSection } from "./step-section";
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
@@ -14,7 +18,7 @@ export default function ItemSection({ uid }: Props) {
     const zus = useFormDataStore();
     const zItem = zus?.kvFormItem?.[uid];
     return (
-        <div>
+        <div className="mt-[100vh] mb-[50vh]">
             <Collapsible
                 open={!zItem.collapsed}
                 onOpenChange={(e) => {
@@ -22,14 +26,14 @@ export default function ItemSection({ uid }: Props) {
                 }}
             >
                 <ItemSectionHeader uid={uid} />
-                <div className="flex">
-                    <div className="flex-1 flex flex-col">
+                <CollapsibleContent className="flex border">
+                    <div className="flex-1 flex flex-col lg:border-r ">
                         {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
                             <StepSection key={stepUid} stepUid={stepUid} />
                         ))}
                     </div>
                     <div className="hidden lg:w-1/5 lg:block"></div>
-                </div>
+                </CollapsibleContent>
             </Collapsible>
         </div>
     );
