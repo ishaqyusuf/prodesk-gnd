@@ -7,14 +7,17 @@ import {
     getTransformedSalesBookFormDataDta,
 } from "../data-access/sales-form-dta";
 import { composeStepRouting } from "../utils/sales-step-utils";
-import { getStepsForRoutingDta } from "../data-access/sales-form-step-dta";
+import {
+    loadSalesFormData,
+    saveSalesSettingData,
+} from "../data-access/sales-form-settings.dta";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
     const result = await getTransformedSalesBookFormDataDta(data);
     return {
         ...result,
-        stepRoute: composeStepRouting(await getStepsForRoutingDta()),
+        salesSetting: composeStepRouting(await loadSalesFormData()),
     };
 }
 export async function createSalesBookFormUseCase(
@@ -24,6 +27,9 @@ export async function createSalesBookFormUseCase(
     // return salesFormZustand(resp);
     return {
         ...resp,
-        stepRoute: composeStepRouting(await getStepsForRoutingDta()),
+        salesSetting: composeStepRouting(await loadSalesFormData()),
     };
+}
+export async function saveSalesSettingUseCase(meta) {
+    await saveSalesSettingData(meta);
 }

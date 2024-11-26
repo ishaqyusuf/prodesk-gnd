@@ -332,3 +332,17 @@ export interface SalesFormZusData {
         };
     };
 }
+export type SalesSettingsMeta = {
+    route: {
+        [primaryRouteUid in string]: {
+            routeSequence: { uid: string }[];
+            externalRouteSequence: { uid: string }[][];
+            route?: {
+                [stepUid in string]: string;
+            };
+            externalRoute?: {
+                [stepUid in string]: string;
+            };
+        };
+    };
+};

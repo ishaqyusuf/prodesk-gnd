@@ -5,6 +5,7 @@ import { GetSalesBookForm } from "../../../_common/use-case/sales-book-form-use-
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 import ItemSection from "./item-section";
+import { FormHeader } from "./form-header";
 
 interface FormClientProps {
     data: GetSalesBookForm;
@@ -17,6 +18,7 @@ export function FormClient({ data }: FormClientProps) {
     }, []);
     return (
         <div>
+            <FormHeader />
             {zus.sequence?.formItem?.map((uid) => (
                 <ItemSection key={uid} uid={uid} />
             ))}

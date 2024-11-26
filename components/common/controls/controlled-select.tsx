@@ -28,6 +28,7 @@ import {
     CommandInput,
     CommandItem,
 } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props<T> {
     label?;
@@ -149,27 +150,37 @@ export default function ControlledSelect<
                                         ></SelectValue>
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="max-h-[40vh] overflow-auto">
-                                    {(loader ? list : options)?.map(
-                                        (option, index) =>
-                                            SelItem ? (
-                                                <SelItem
-                                                    option={option}
-                                                    key={index}
-                                                />
-                                            ) : (
-                                                <SelectItem
-                                                    key={index}
-                                                    value={itemValue(option)}
-                                                >
-                                                    {Item ? (
-                                                        <Item option={option} />
-                                                    ) : (
-                                                        <>{itemText(option)}</>
-                                                    )}
-                                                </SelectItem>
-                                            )
-                                    )}
+                                <SelectContent className="">
+                                    <ScrollArea className="max-h-[40vh] overflow-auto">
+                                        {(loader ? list : options)?.map(
+                                            (option, index) =>
+                                                SelItem ? (
+                                                    <SelItem
+                                                        option={option}
+                                                        key={index}
+                                                    />
+                                                ) : (
+                                                    <SelectItem
+                                                        key={index}
+                                                        value={itemValue(
+                                                            option
+                                                        )}
+                                                    >
+                                                        {Item ? (
+                                                            <Item
+                                                                option={option}
+                                                            />
+                                                        ) : (
+                                                            <>
+                                                                {itemText(
+                                                                    option
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </SelectItem>
+                                                )
+                                        )}
+                                    </ScrollArea>
                                 </SelectContent>
                             </Select>
                         )}

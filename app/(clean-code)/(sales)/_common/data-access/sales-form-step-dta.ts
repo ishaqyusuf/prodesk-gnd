@@ -121,6 +121,8 @@ interface ValidateNextStepIdProps {
 export async function validateNextStepIdDta({}: ValidateNextStepIdProps) {}
 export type GetStepsForRoutingProps = AsyncFnType<typeof getStepsForRoutingDta>;
 export async function getStepsForRoutingDta() {
+    await fixStepsDta();
+    // return [];
     const steps = await prisma.dykeSteps.findMany({
         select: {
             id: true,
@@ -133,6 +135,7 @@ export async function getStepsForRoutingDta() {
                 where: notDeleted.where,
                 select: {
                     // nextStepId: true,
+                    nextStepId: true,
                     dykeStepId: true,
                     uid: true,
                     custom: true,
@@ -151,5 +154,63 @@ export async function getStepsForRoutingDta() {
             },
         },
     });
-    return steps;
+    return steps
+        .filter((d, i) => {
+            const f1 = steps.findIndex((a) => a.title == d.title) == i;
+            if (d.title == "Door Type") return d.id == 41;
+            return f1;
+        })
+        .filter((a) => a.title)
+        .filter((a) => !a.title.includes("--"))
+        .sort((a, b) => a.title.localeCompare(b.title));
+}
+export async function fixStepsDta() {
+    const stepprod = await prisma.dykeSteps.findMany({
+        where: {
+            stepProducts: {
+                some: {
+                    product: {
+                        title: "Wood Stile & Rail",
+                    },
+                },
+            },
+        },
+        include: {
+            stepProducts: {
+                where: {
+                    product: {
+                        title: "Wood Stile & Rail",
+                    },
+                },
+                include: {
+                    product: true,
+                },
+            },
+        },
+    });
+    const species = await prisma.dykeSteps.findFirst({
+        where: {
+            title: "Door Species",
+        },
+    });
+    // console.log(species);
+    await prisma.dykeStepProducts.updateMany({
+        where: {
+            id: {
+                in: stepprod
+                    .map((s) => s.stepProducts.map((s) => s.id).flat())
+                    .flat(),
+            },
+        },
+        data: {
+            nextStepId: species.id,
+        },
+    });
+    // console.log(
+    //     ">",
+    //     stepprod.length,
+    //     stepprod.map((s) =>
+    //         s.stepProducts.map((p) => `${p.id}. ${p.product.title}`)
+    //     )
+    // );
 }

@@ -102,6 +102,7 @@ function Content({ children, size, ...props }: ContentProps) {
 
     return (
         <Content
+            aria-describedby=""
             {...props}
             className={cn(
                 contentVariants({ size }),
