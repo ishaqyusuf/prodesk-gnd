@@ -1,7 +1,7 @@
 "use client";
 
 import { Info, MoreHorizontal, Trash } from "lucide-react";
-import { Button, buttonVariants } from "../../ui/button";
+import { Button, ButtonProps, buttonVariants } from "../../ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -26,7 +26,6 @@ import { cn } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { VariantProps } from "class-variance-authority";
 import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
-import { PrimitiveButtonProps } from "@radix-ui/react-select";
 
 export function RowActionCell({ children }: { children? }) {
     return (
@@ -150,7 +149,7 @@ export function ActionButton({
     label,
     className,
     ...props
-}: PrimitiveButtonProps & {
+}: ButtonProps & {
     Icon?;
     label?;
 }) {
@@ -178,11 +177,7 @@ interface DeleteRowActionProps {
 }
 
 export const EditRowAction = typedMemo(
-    ({
-        onClick,
-        menu,
-        disabled,
-    }: { menu?: boolean } & PrimitiveButtonProps) => {
+    ({ onClick, menu, disabled }: { menu?: boolean } & ButtonProps) => {
         const [isPending, startTransition] = useTransition();
         const router = useRouter();
 

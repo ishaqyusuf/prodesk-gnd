@@ -2,7 +2,7 @@ import AuthGuard from "@/app/(v2)/(loggedIn)/_components/auth-guard";
 import { cn } from "@/lib/utils";
 import { ICan } from "@/types/auth";
 import FTitle from "./f-page-title";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 
 export type AuthPermissions = (keyof ICan | (keyof ICan)[])[];
 interface Props extends PrimitiveDivProps {

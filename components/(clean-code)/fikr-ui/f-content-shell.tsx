@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 
 interface Props extends PrimitiveDivProps {}
 export default function FContentShell({ children, className }: Props) {

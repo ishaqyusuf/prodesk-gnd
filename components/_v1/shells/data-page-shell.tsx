@@ -2,7 +2,7 @@
 
 import { DataPageContext } from "@/lib/data-page-context";
 import { cn } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 import React from "react";
 
 export function DataPageShell<T>({

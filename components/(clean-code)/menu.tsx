@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 import { VariantProps } from "class-variance-authority";
 
 import { Button, buttonVariants } from "@/components/ui/button";

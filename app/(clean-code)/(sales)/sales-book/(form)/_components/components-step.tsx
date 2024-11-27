@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle, Info, Variable } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
+import { zhEditComponentVisibility } from "../_utils/helpers/zus/zus-component-helper";
 
 interface Props {
     stepUid;
@@ -121,6 +122,9 @@ function Component({ component, stepUid }: { component; stepUid }) {
             productUid: component.uid,
         });
     }
+    function editVisibility() {
+        zhEditComponentVisibility(stepUid, component.uid);
+    }
     function selectComponent() {
         if (_stepAction.selectionCount) {
             zusToggleComponentSelect({
@@ -174,8 +178,11 @@ function Component({ component, stepUid }: { component; stepUid }) {
                             SubMenu={
                                 <>
                                     <Menu.Item Icon={Info}>Details</Menu.Item>
-                                    <Menu.Item Icon={Variable}>
-                                        Category
+                                    <Menu.Item
+                                        onClick={editVisibility}
+                                        Icon={Variable}
+                                    >
+                                        Visibility
                                     </Menu.Item>
                                     <Menu.Item Icon={Icons.dollar}>
                                         Price

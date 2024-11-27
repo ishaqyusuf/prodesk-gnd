@@ -69,17 +69,17 @@ export default function ControlledSelect<
     listMode,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
-    const [list, setList] = useState<any>([]);
-    useEffect(() => {
-        setList(options || []);
-        // console.log(options?.length);
-    }, [options]);
+    const [list, setList] = useState<any>(options || []);
+    // useEffect(() => {
+    //     setList(options || []);
+    //     // console.log(options?.length);
+    // }, [options]);
     useEffect(() => {
         if (loader) {
             (async () => {
                 const ls = await loader();
+
                 setList(ls);
-                console.log(ls);
             })();
         }
     }, []);
@@ -216,17 +216,11 @@ export function ControlledCombox({
                             !field?.value && "text-muted-foreground"
                         )}
                     >
-                        {/* {field.value
-                    ? data.find(
-                        (sel) => sel. === field.value
-                      )?.label
-                    : "Select language"} */}
-                        {/* <span>{options.length}</span> */}
                         <span className="">
                             {field?.value
                                 ? itemText(
-                                      options.find(
-                                          (o) => itemValue(o) == field?.value
+                                      options?.find(
+                                          (o) => itemValue?.(o) == field?.value
                                       )
                                   )
                                 : placeholder}
@@ -247,7 +241,7 @@ export function ControlledCombox({
                     />
                     <CommandEmpty>Nothing to display.</CommandEmpty>
                     <CommandGroup className="max-h-[35vh] overflow-auto">
-                        {options?.map((opt, index) => (
+                        {(options || [])?.map((opt, index) => (
                             <CommandItem
                                 value={itemValue(opt)}
                                 key={index}

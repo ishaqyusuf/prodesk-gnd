@@ -25,7 +25,7 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import Btn from "@/components/_v1/btn";
 import { Icons } from "@/components/_v1/icons";
 import { useFormContext } from "react-hook-form";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 
 function BaseModal({
     children,

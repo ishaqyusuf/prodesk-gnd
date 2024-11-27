@@ -9,7 +9,7 @@ import { Button } from "../../ui/button";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 import { timeout } from "@/lib/timeout";
 
 export default function TabbedLayout({

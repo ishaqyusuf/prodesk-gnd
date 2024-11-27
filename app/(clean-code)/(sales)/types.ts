@@ -145,9 +145,13 @@ export interface StepComponentMeta {
     stepSequence?: { id?: number }[];
     deleted?: { [uid in string]: boolean };
     show?: { [uid in string]: boolean };
-    variation?: {
-        v?: any;
-    };
+    variations?: {
+        rules: {
+            stepUid: string;
+            operator: "is" | "isNot";
+            componentsUid: string[];
+        }[];
+    }[];
 }
 export interface DykeProductMeta {
     svg;

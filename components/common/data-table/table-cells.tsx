@@ -10,7 +10,7 @@ import { MenuItem } from "../../_v1/data-table/data-table-row-actions";
 import { DropdownMenuShortcut } from "../../ui/dropdown-menu";
 import Link from "next/link";
 import ProgressStatus from "@/components/_v1/progress-status";
-import { PrimitiveDivProps } from "@radix-ui/react-select";
+import { PrimitiveDivProps } from "@/types/type";
 
 interface Props {
     children?;

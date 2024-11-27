@@ -1,11 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Button } from "../../ui/button";
-// import { PrimitiveButtonProps } from "@radix-ui/react-dropdown-menu";
+import { Button, ButtonProps } from "../../ui/button";
 import LinkableNode from "../link-node";
 import { Icons } from "../icons";
-import { PrimitiveButtonProps } from "@radix-ui/react-select";
 
 interface Props {
     Icon?;
@@ -24,7 +22,7 @@ export function MobileOption({
     label,
     more,
     ...props
-}: Props & PrimitiveButtonProps) {
+}: Props & ButtonProps) {
     // const Node =
     return (
         <Button

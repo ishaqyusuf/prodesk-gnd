@@ -111,7 +111,7 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             id: component.id,
             title: door?.title || product?.title,
             img: product?.img || door?.img,
-            variation: component?.meta?.variation || {},
+            variations: component?.meta?.variations || [],
             price: null,
             stepId,
         };
