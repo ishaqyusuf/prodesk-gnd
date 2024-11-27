@@ -11,6 +11,12 @@ export function zhEditComponentVariant(stepUid, componentsUid) {
         />
     );
 }
+export function zhClearSelection(itemStepUid, zus: ZusSales) {
+    zus.dotUpdate(`kvStepForm.${itemStepUid}._stepAction`, {
+        selection: {},
+        selectCount: 0,
+    });
+}
 export function zhComponentVariantUpdated(
     itemStepUid,
     componentsUid: string[],
@@ -19,10 +25,8 @@ export function zhComponentVariantUpdated(
 ) {
     const [itemUid, stepUid] = itemStepUid.split("-");
     const stepComponents = zus.kvStepComponentList[stepUid];
-    zus.dotUpdate(`kvStepForm.${itemStepUid}._stepAction`, {
-        selection: {},
-        selectCount: 0,
-    });
+    zhClearSelection(itemStepUid, zus);
+
     zus.dotUpdate(
         `kvStepComponentList.${stepUid}`,
         stepComponents.map((sp) => {
@@ -30,14 +34,14 @@ export function zhComponentVariantUpdated(
             return sp;
         })
     );
-    Object.entries(zus.kvFilteredStepComponentList).map(([k, val]) => {
-        if (k?.endsWith(stepUid)) {
-            zus.dotUpdate(
-                `kvFilteredStepComponentList.${k}`,
-                zusFilterStepComponents(k, zus)
-            );
-        }
-    });
+    // Object.entries(zus.kvFilteredStepComponentList).map(([k, val]) => {
+    //     if (k?.endsWith(stepUid)) {
+    //         zus.dotUpdate(
+    //             `kvFilteredStepComponentList.${k}`,
+    //             zusFilterStepComponents(k, zus)
+    //         );
+    //     }
+    // });
 
     // update filtered variants
 }

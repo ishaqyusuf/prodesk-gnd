@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { SalesFormZusData } from "../../../../types";
 import { stepActions } from "./step-action";
 import { FieldPath } from "react-hook-form";
-import { toDotNotation } from "@/lib/utils";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
 type SalesFormZusAction = ReturnType<typeof fns>;

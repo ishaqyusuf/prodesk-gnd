@@ -15,16 +15,19 @@ import { cn } from "@/lib/utils";
 import { CheckCircle, Info, Variable } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
-import { zhEditComponentVariant } from "../_utils/helpers/zus/zus-component-helper";
+import {
+    zhClearSelection,
+    zhEditComponentVariant,
+} from "../_utils/helpers/zus/zus-component-helper";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { ComponentImg } from "./component-img";
 
 interface Props {
     stepUid;
 }
 function Step({ stepUid }: Props) {
     const zus = useFormDataStore();
-    const components = zus.kvFilteredStepComponentList[stepUid];
-    const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
     const actionRef = useRef<HTMLDivElement>(null);
     const [isFixed, setIsFixed] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -70,13 +73,13 @@ function Step({ stepUid }: Props) {
 
     const [fixedOffset, setFixedOffset] = useState(0);
 
-    const props = { stepUid, actionRef, isFixed, fixedOffset };
+    const props = { stepUid, items, actionRef, isFixed, fixedOffset };
     return (
         <ScrollArea
             ref={containerRef}
-            className="p-4 h-full max-h-[70vh] relative"
+            className="p-4 pb-20 h-full max-h-[80vh] relative"
         >
-            <div>ITEMS: {items?.length}</div>
+            {/* <div>ITEMS: {items?.length}</div> */}
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                 {items?.map((component) => (
                     <Component
@@ -90,7 +93,13 @@ function Step({ stepUid }: Props) {
         </ScrollArea>
     );
 }
-export function FloatingAction({ stepUid, actionRef, isFixed, fixedOffset }) {
+export function FloatingAction({
+    stepUid,
+    items,
+    actionRef,
+    isFixed,
+    fixedOffset,
+}) {
     const zus = useFormDataStore();
     const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
     async function batchDeleteAction() {
@@ -109,34 +118,60 @@ export function FloatingAction({ stepUid, actionRef, isFixed, fixedOffset }) {
     }
     return (
         <>
-            {_stepAction?.selectionCount ? (
-                <div
-                    ref={actionRef}
-                    style={isFixed ? { left: `${fixedOffset}px` } : {}}
-                    className={cn(
-                        isFixed
-                            ? "fixed bottom-4 left-1/2 transform -translate-x-1/2"
-                            : "absolute bottom-4 left-1/2 transform -translate-x-1/2",
-                        "bg-white"
+            <div
+                ref={actionRef}
+                style={isFixed ? { left: `${fixedOffset}px` } : {}}
+                className={cn(
+                    isFixed
+                        ? "fixed bottom-4 left-1/2 transform -translate-x-1/2"
+                        : "absolute bottom-4 left-1/2 transform -translate-x-1/2",
+                    "bg-white"
+                )}
+            >
+                <div className="flex border shadow gap-4 p-2 rounded-lg items-center px-4">
+                    {_stepAction?.selectionCount ? (
+                        <>
+                            <span className="uppercase font-mono font-semibold text-sm">
+                                {_stepAction.selectionCount} selected
+                            </span>
+                            <Menu label={"Batch Action"}>
+                                <Menu.Item onClick={editVisibility} icon="edit">
+                                    Edit Visibility
+                                </Menu.Item>
+                                <DeleteRowAction
+                                    menu
+                                    // loadingText="Delete"
+                                    action={batchDeleteAction}
+                                />
+                            </Menu>
+                            <Button
+                                onClick={() => {
+                                    zhClearSelection(stepUid, zus);
+                                }}
+                                size="sm"
+                                className="h-7 text-sm"
+                                variant="secondary"
+                            >
+                                Unmark all
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <span className="uppercase font-mono font-semibold text-sm">
+                                {items?.length} components
+                            </span>
+                            <Menu label={"Step Option"} Icon={Icons.settings}>
+                                <Menu.Item
+                                    onClick={editVisibility}
+                                    icon="settings"
+                                >
+                                    Edit Visibility
+                                </Menu.Item>
+                            </Menu>
+                        </>
                     )}
-                >
-                    <div className="flex border shadow gap-4 p-2 rounded-lg items-center px-4">
-                        <span className="uppercase font-mono font-semibold text-sm">
-                            {_stepAction.selectionCount} selected
-                        </span>
-                        <Menu label={"Batch Action"}>
-                            <Menu.Item onClick={editVisibility} icon="edit">
-                                Edit Visibility
-                            </Menu.Item>
-                            <DeleteRowAction
-                                menu
-                                // loadingText="Delete"
-                                action={batchDeleteAction}
-                            />
-                        </Menu>
-                    </div>
                 </div>
-            ) : null}
+            </div>
         </>
     );
 }
@@ -171,14 +206,25 @@ function Component({ component, stepUid }: { component; stepUid }) {
         });
     }
     return (
-        <div className="relative p-2 group" key={component.uid}>
+        <div
+            className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group"
+            key={component.uid}
+        >
             <button
-                className="border w-full rounded-lg"
+                className="border  h-full hover:bg-white w-full rounded-lg"
                 onClick={selectComponent}
             >
-                <Label className="font-mono truncate uppercase">
-                    {component.title}
-                </Label>
+                <div className="flex h-full flex-col">
+                    <div className="flex-1">
+                        <ComponentImg aspectRatio={4 / 2} src={component.img} />
+                    </div>
+                    <div className="p-2 border-t">
+                        <Label className="font-mono uppercase">
+                            {component.title}
+                        </Label>
+                    </div>
+                </div>
+                {/* <div>{component.img}</div> */}
             </button>
             <div
                 className={cn(
