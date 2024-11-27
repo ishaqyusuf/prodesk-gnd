@@ -8,6 +8,7 @@ import { Icons } from "@/components/_v1/icons";
 import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 
 interface Props {
     stepUid;
@@ -54,7 +55,7 @@ export default function ComponentVisibilityModal({
 
     return (
         <Context.Provider value={ctx}>
-            <Modal.Content>
+            <Modal.Content size="lg">
                 <Modal.Header
                     title={"Edit Component Visibility"}
                     subtitle={
@@ -114,22 +115,48 @@ function RuleComponent({ index }) {
         });
     }
     return (
-        <div>
+        <div className="flex flex-col gap-2 overflow-y-auto py-0.5 pr-1">
             {rulesArray?.fields?.map((field, fieldIndex) => (
                 <div className="flex items-center gap-2" key={fieldIndex}>
                     <div className="min-w-[4.5rem] text-center">
                         <span className="text-sm text-muted-foreground">
                             {fieldIndex == 0 ? "Where" : "and"}
                         </span>
+                    </div>
+                    <ComboxBox
+                        options={[
+                            { value: "1", label: "Hello" },
+                            { value: "2", label: "Hi" },
+                        ]}
+                        control={ctx.form.control}
+                        name={`variations.${index}.rules.${fieldIndex}.stepUid`}
+                    />
+                    <div className="min-w-[5rem]">
+                        <ControlledSelect
+                            control={ctx.form.control}
+                            name={`variations.${index}.rules.${fieldIndex}.operator`}
+                            size="sm"
+                            options={["is", "isNot"]}
+                        />
+                    </div>
+                    <div className="flex-1">
                         <ComboxBox
+                            maxSelection={999}
                             options={[
                                 { value: "1", label: "Hello" },
                                 { value: "2", label: "Hi" },
                             ]}
                             control={ctx.form.control}
-                            name={`variations.${index}.rules.${fieldIndex}.stepUid`}
+                            name={`variations.${index}.rules.${fieldIndex}.componentsUid`}
                         />
                     </div>
+                    <ConfirmBtn
+                        onClick={(e) => {
+                            rulesArray.remove(fieldIndex);
+                        }}
+                        trash
+                        size="icon"
+                    />
                 </div>
             ))}
             <div className="flex justify-end">
