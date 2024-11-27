@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
-import { useEffect } from "react";
+import ItemSideView from "./item-side-view";
 
 interface Props {
     uid?: string;
@@ -18,7 +18,7 @@ export default function ItemSection({ uid }: Props) {
     const zus = useFormDataStore();
     const zItem = zus?.kvFormItem?.[uid];
     return (
-        <div className="mt-[100vh] mb-[50vh]">
+        <div className="">
             <Collapsible
                 open={!zItem.collapsed}
                 onOpenChange={(e) => {
@@ -27,12 +27,12 @@ export default function ItemSection({ uid }: Props) {
             >
                 <ItemSectionHeader uid={uid} />
                 <CollapsibleContent className="flex border">
-                    <div className="flex-1 flex flex-col lg:border-r ">
+                    <div className="flex-1 flex flex-col ">
                         {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
                             <StepSection key={stepUid} stepUid={stepUid} />
                         ))}
                     </div>
-                    <div className="hidden lg:w-1/5 lg:block"></div>
+                    <ItemSideView itemUid={uid} />
                 </CollapsibleContent>
             </Collapsible>
         </div>

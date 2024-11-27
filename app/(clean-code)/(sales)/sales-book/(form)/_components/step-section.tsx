@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
+import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
 
 interface Props {
     stepUid?;
@@ -100,7 +101,7 @@ function StepSectionHeader({ stepUid }) {
                     className="flex h-8 w-full p-1 gap-4 px-4  space-x-2 items-center text-sm uppercase hover:bg-muted-foreground/20"
                     onClick={(e) => {
                         e.preventDefault();
-                        zus.toggleStep(stepUid);
+                        zhtoggleStep(stepUid, zus);
                     }}
                 >
                     <Label>{stepForm?.title}</Label>
@@ -113,6 +114,8 @@ function StepSectionHeader({ stepUid }) {
                     )}
                     <div className="">
                         <DevOnly>
+                            <span>{stepForm?.componentUid}</span>
+                            <span>|</span>
                             <span>{stepUid}</span>
                             <span>-</span>
                             <span>{stepForm?.stepId}</span>

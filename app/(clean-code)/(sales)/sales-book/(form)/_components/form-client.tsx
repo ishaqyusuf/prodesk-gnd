@@ -17,7 +17,7 @@ export function FormClient({ data }: FormClientProps) {
         zus.init(zhInitializeState(data));
     }, []);
     return (
-        <div>
+        <div className="mb-28">
             <FormHeader />
             {zus.sequence?.formItem?.map((uid) => (
                 <ItemSection key={uid} uid={uid} />

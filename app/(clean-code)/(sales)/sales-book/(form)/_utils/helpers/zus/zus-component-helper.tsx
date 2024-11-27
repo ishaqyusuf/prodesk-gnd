@@ -3,29 +3,45 @@ import ComponentVariantModal from "../../../_components/modals/component-visibil
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { zusFilterStepComponents } from "./zus-step-helper";
 
-export function zhEditComponentVariant(stepUid, componentUid) {
+export function zhEditComponentVariant(stepUid, componentsUid) {
     _modal.openModal(
-        <ComponentVariantModal stepUid={stepUid} componentUid={componentUid} />
+        <ComponentVariantModal
+            stepUid={stepUid}
+            componentsUid={componentsUid}
+        />
     );
 }
 export function zhComponentVariantUpdated(
     itemStepUid,
-    componentUid,
+    componentsUid: string[],
     variation,
     zus: ZusSales
 ) {
     const [itemUid, stepUid] = itemStepUid.split("-");
     const stepComponents = zus.kvStepComponentList[stepUid];
+    zus.dotUpdate(`kvStepForm.${itemStepUid}._stepAction`, {
+        selection: {},
+        selectCount: 0,
+    });
     zus.dotUpdate(
         `kvStepComponentList.${stepUid}`,
         stepComponents.map((sp) => {
-            if (sp.uid == componentUid) sp.variations = variation;
+            if (componentsUid.includes(sp.uid)) sp.variations = variation;
             return sp;
         })
     );
-    zusFilterStepComponents(itemStepUid, zus);
+    Object.entries(zus.kvFilteredStepComponentList).map(([k, val]) => {
+        if (k?.endsWith(stepUid)) {
+            zus.dotUpdate(
+                `kvFilteredStepComponentList.${k}`,
+                zusFilterStepComponents(k, zus)
+            );
+        }
+    });
+
     // update filtered variants
 }
+
 export function zhGetComponentVariantData(
     itemStepUid,
     componentUid,

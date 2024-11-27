@@ -18,34 +18,30 @@ export async function zhLoadStepComponents({
     const stepData = zus.kvStepForm?.[stepUid];
     const [uid, _stepUid] = stepUid?.split("-");
     const stepComponents = zus.kvStepComponentList[_stepUid];
-
+    const filteredComponents = zus.kvFilteredStepComponentList[stepUid];
     if (!stepComponents) {
         const components = await getStepComponentsUseCase(
             stepData.title,
             stepData.stepId
         );
-        console.log({
-            components,
-        });
-        // const data = {
-        //     ...zus.kvFilteredStepComponentList,
-        //     [stepUid]: components,
-        // };
+
         zus.dotUpdate(`kvStepComponentList.${_stepUid}`, components);
-        // zus.update("kvFilteredStepComponentList", data);
-        zusFilterStepComponents(stepUid, zus);
+        return zusFilterStepComponents(stepUid, zus);
+    } else if (!filteredComponents) {
+        console.log("RELOADING FILTERED COMPONENTS");
+        return zusFilterStepComponents(stepUid, zus);
     }
+    return filteredComponents;
 }
 export async function zhSelectStepComponent({
     zus,
     stepUid,
     id,
+    component,
 }: LoadStepComponentsProps & {
     id: number;
+    component;
 }) {
-    const component = zus.kvFilteredStepComponentList[stepUid]?.find(
-        (c) => c.id == id
-    );
     const itemUid = zhItemUidFromStepUid(stepUid);
     let stepData = zus.kvStepForm[stepUid];
     stepData.componentUid = component.uid;
@@ -67,34 +63,17 @@ export async function zhSelectStepComponent({
         ...zus.kvStepForm,
         [stepUid]: stepData,
     });
-    setTimeout(async () => {
-        await zhNextStepComponent({
+    setTimeout(() => {
+        zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
+        console.log("filtered cleared", stepUid);
+
+        zhNextRoute({
             zus,
             stepUid,
             isRoot: isRoot != null,
         });
     }, 200);
 }
-export async function zhNextStepComponent({
-    zus,
-    stepUid,
-    isRoot,
-}: LoadStepComponentsProps & { isRoot }) {
-    const nextRoute = zhNextRoute({ zus, stepUid, isRoot });
-    // const resp = await getNextStepUseCase({
-    //     nextStepId,
-    // });
-    // console.log(resp);
-}
-export function getRoute({
-    zus,
-    componentUid,
-    stepUid,
-}: {
-    zus: ZusSales;
-    componentUid?;
-    stepUid;
-}) {}
 export function componentIsRoot({
     zus,
     componentUid,
@@ -112,10 +91,16 @@ export function zhNextRoute({
     const route = zus.data.salesSetting.composedRouter;
     const [itemUid, componentStepUid] = stepUid?.split("-");
     const itemForm = zus.kvFormItem[itemUid];
+    // zus.sequence
     const rootUid = itemForm.routeUid;
     const nextRouteUid =
-        route[rootUid].route?.[isRoot ? rootUid : componentStepUid];
+        route[rootUid]?.route?.[isRoot ? rootUid : componentStepUid];
     const nextRoute = zus.data.salesSetting.stepsByKey[nextRouteUid];
+
+    if (!nextRoute) {
+        toast.error("This Form Step Sequence has no next step.");
+        return;
+    }
     const nextStepUid = `${itemUid}-${nextRoute.uid}`;
     let stepForm = zus.kvStepForm[nextStepUid] || {
         componentUid: null,
@@ -130,26 +115,36 @@ export function zhNextRoute({
     const stepSq = zus.sequence.stepComponent[itemUid];
     const prevStepIndex = stepSq.indexOf(stepUid);
     const prevNextStepUid = stepSq[prevStepIndex + 1];
-    if (prevNextStepUid && prevNextStepUid != nextStepUid) {
-        stepSq.splice(prevStepIndex + 2);
+    if (prevNextStepUid) {
+        if (prevNextStepUid != nextStepUid) {
+            stepSq.splice(prevStepIndex + 1, stepSq.length - prevStepIndex - 1);
+            stepSq.push(nextStepUid);
+        } else {
+            // console.log("MATCHED NEXT STEP");
+        }
+        // if (prevNextStepUid != nextStepUid)
+    } else {
+        // console.log("FRESH NEXT STEP");
+        stepSq.push(nextStepUid);
     }
-    if (prevNextStepUid != nextStepUid) stepSq.push(nextStepUid);
+    console.log({ prevStepIndex, nextStepUid, stepSq });
+
     zus.dotUpdate(`kvStepForm.${nextStepUid}`, stepForm);
     zus.dotUpdate(`sequence.stepComponent.${itemUid}`, stepSq);
-    console.log({ stepForm, stepSq });
-
     zus.toggleStep(nextStepUid);
 }
 export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
     const [uid, stepUid] = itemStepUid?.split("-");
-    const stepComponents = zus.kvStepComponentList[stepUid].filter((c) => {
+    const filteredComponents = zus.kvStepComponentList[stepUid]?.filter((c) => {
         if (c.variations?.length)
             return c.variations.some((v) => {
                 const rules = v.rules;
+
                 return rules.every(
                     ({ componentsUid, operator, stepUid: __stepUid }) => {
                         const selectedComponentUid =
-                            zus.kvStepForm[`${uid}-stepUid`]?.componentUid;
+                            zus.kvStepForm[`${uid}-${__stepUid}`]?.componentUid;
+
                         return (
                             !componentsUid?.length ||
                             (operator == "is"
@@ -166,7 +161,12 @@ export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
         return true;
     });
     // TODO: FILTER STEP, ADD PRICE, SET VISIBILITY ETC.
-    zus.dotUpdate(`kvFilteredStepComponentList.${itemStepUid}`, stepComponents);
+    // console.log(`FILTERED`,)
+    // zus.dotUpdate(
+    //     `kvFilteredStepComponentList.${itemStepUid}`,
+    //     filteredComponents
+    // );
+    return filteredComponents;
 }
 
 export function zusToggleComponentSelect({
@@ -224,6 +224,18 @@ export async function zusDeleteComponents({
         `kvStepComponentList.${_stepUid}`,
         stepComponents?.filter((c) => uids.every((u) => u != c.uid))
     );
+}
+export function zhtoggleStep(stepUid, zus: ZusSales) {
+    const [itemUid] = stepUid?.split("-");
+    const currentStepUid = zus.kvFormItem[itemUid]?.currentStepUid;
+    zus.toggleStep(stepUid);
+    const cleareUid = currentStepUid == stepUid ? stepUid : currentStepUid;
+    if (cleareUid) {
+        setTimeout(() => {
+            zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
+            console.log("filtered cleared", stepUid);
+        }, 200);
+    }
 }
 export class StepHelperClass {
     // stepUid: string;

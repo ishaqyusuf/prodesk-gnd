@@ -16,15 +16,18 @@ import {
 import { saveComponentVariantUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface Props {
     stepUid;
-    componentUid;
+    componentsUid;
 }
 
 const Context = createContext<ReturnType<typeof useInitContext>>(null);
 const useCtx = () => useContext(Context);
-export function useInitContext(stepUid, componentUid) {
+export function useInitContext(stepUid, componentsUid) {
+    const [componentUid, ...rest] = componentsUid;
     const zus = useFormDataStore();
     const [itemUid, cStepUid] = stepUid.split("-");
     const component = zus.kvStepComponentList[cStepUid]?.find(
@@ -43,10 +46,10 @@ export function useInitContext(stepUid, componentUid) {
     });
     async function save() {
         const formData = form.getValues("variations");
-        await saveComponentVariantUseCase(componentUid, formData);
+        await saveComponentVariantUseCase(componentsUid, formData);
         _modal.close();
         toast.success("Component Visibility Updated.");
-        zhComponentVariantUpdated(stepUid, componentUid, formData, zus);
+        zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
     }
     function addRule() {
         varArray.append({
@@ -60,13 +63,14 @@ export function useInitContext(stepUid, componentUid) {
         form,
         save,
         addRule,
+        componentsUid,
     };
 }
 export default function ComponentVariantModal({
     stepUid,
-    componentUid,
+    componentsUid,
 }: Props) {
-    const ctx = useInitContext(stepUid, componentUid);
+    const ctx = useInitContext(stepUid, componentsUid);
 
     return (
         <Context.Provider value={ctx}>
@@ -111,6 +115,16 @@ export default function ComponentVariantModal({
                         </Button>
                     </div>
                 </Form>
+                {ctx.componentsUid?.length > 1 ? (
+                    <Alert variant="destructive">
+                        <AlertCircle className="size-4" />
+                        <AlertTitle>Warning</AlertTitle>
+                        <AlertDescription>
+                            Editing multiple components visibility will override
+                            any visibility settings on the selected components.
+                        </AlertDescription>
+                    </Alert>
+                ) : null}
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />
             </Modal.Content>
         </Context.Provider>
@@ -128,6 +142,22 @@ function RuleComponent({ index }) {
             operator: "is",
             stepUid: null,
         });
+    }
+    function ComponentInput({ fieldIndex }) {
+        const stepUid = ctx.form.watch(
+            `variations.${index}.rules.${fieldIndex}.stepUid`
+        );
+        return (
+            <ComboxBox
+                maxSelection={999}
+                options={ctx.data?.componentsByStepUid[stepUid] || []}
+                labelKey="title"
+                valueKey="uid"
+                className="w-full"
+                control={ctx.form.control}
+                name={`variations.${index}.rules.${fieldIndex}.componentsUid`}
+            />
+        );
     }
     return (
         <div className="flex flex-col gap-2 overflow-y-auto py-0.5 pr-1">
@@ -154,21 +184,7 @@ function RuleComponent({ index }) {
                         />
                     </div>
                     <div className="flex-1">
-                        <ComboxBox
-                            maxSelection={999}
-                            options={
-                                ctx.data?.componentsByStepUid[
-                                    ctx.form.getValues(
-                                        `variations.${index}.rules.${fieldIndex}.stepUid`
-                                    )
-                                ] || []
-                            }
-                            labelKey="title"
-                            valueKey="uid"
-                            className="w-full"
-                            control={ctx.form.control}
-                            name={`variations.${index}.rules.${fieldIndex}.componentsUid`}
-                        />
+                        <ComponentInput fieldIndex={fieldIndex} />
                     </div>
                     <ConfirmBtn
                         onClick={(e) => {

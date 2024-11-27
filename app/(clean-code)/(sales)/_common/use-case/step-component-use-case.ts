@@ -65,10 +65,20 @@ export async function getNextStepUseCase({
 export async function deleteStepComponentsUseCase(uids: string[]) {
     return await deleteStepProductsByUidDta(uids);
 }
-export async function saveComponentVariantUseCase(uid, variants) {
-    const [product] = await getStepComponentsMetaByUidDta([uid]);
-    if (!product.meta) product.meta = {};
-    product.meta.variations = variants;
-    const resp = await updateStepComponentMetaDta(product.id, product.meta);
-    return resp;
+export async function saveComponentVariantUseCase(uids, variants) {
+    const products = await getStepComponentsMetaByUidDta(uids);
+    await Promise.all(
+        products.map(async (product) => {
+            if (!product.meta) product.meta = {};
+            product.meta.variations = variants;
+            const resp = await updateStepComponentMetaDta(
+                product.id,
+                product.meta
+            );
+        })
+    );
+    return {
+        variants,
+        uids,
+    };
 }

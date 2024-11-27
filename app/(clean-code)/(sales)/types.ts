@@ -312,6 +312,9 @@ export interface SalesFormZusData {
             currentStepUid?: string;
             title?: string;
             routeUid?: string;
+            sideView?: {
+                img?: string;
+            }[];
         };
     };
     kvMultiComponent: {

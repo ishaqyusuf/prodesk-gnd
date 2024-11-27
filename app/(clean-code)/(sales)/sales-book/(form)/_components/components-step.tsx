@@ -4,6 +4,7 @@ import {
     zhLoadStepComponents,
     zhSelectStepComponent,
     zusDeleteComponents,
+    zusFilterStepComponents,
     zusToggleComponentSelect,
 } from "../_utils/helpers/zus/zus-step-helper";
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
@@ -15,6 +16,7 @@ import { CheckCircle, Info, Variable } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { zhEditComponentVariant } from "../_utils/helpers/zus/zus-component-helper";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props {
     stepUid;
@@ -26,6 +28,15 @@ function Step({ stepUid }: Props) {
     const actionRef = useRef<HTMLDivElement>(null);
     const [isFixed, setIsFixed] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [items, setItems] = useState(zusFilterStepComponents(stepUid, zus));
+    useEffectAfterMount(() => {
+        zhLoadStepComponents({
+            stepUid,
+            zus,
+        }).then((res) => {
+            // console.log("RESULT", stepUid, res);
+        });
+    }, []);
     useEffect(() => {
         const handleScroll = () => {
             if (containerRef.current) {
@@ -57,24 +68,17 @@ function Step({ stepUid }: Props) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [isFixed]);
 
-    useEffectAfterMount(() => {
-        zhLoadStepComponents({
-            stepUid,
-            zus,
-        }).then(() => {});
-    }, []);
     const [fixedOffset, setFixedOffset] = useState(0);
-    async function batchDeleteAction() {
-        await zusDeleteComponents({
-            zus,
-            stepUid,
-            selection: true,
-        });
-    }
+
+    const props = { stepUid, actionRef, isFixed, fixedOffset };
     return (
-        <div ref={containerRef} className="p-4 relative pb-24">
+        <ScrollArea
+            ref={containerRef}
+            className="p-4 h-full max-h-[70vh] relative"
+        >
+            <div>ITEMS: {items?.length}</div>
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                {components?.map((component) => (
+                {items?.map((component) => (
                     <Component
                         key={component.uid}
                         component={component}
@@ -82,7 +86,30 @@ function Step({ stepUid }: Props) {
                     />
                 ))}
             </div>
-            {_stepAction?.selectionCount && (
+            <FloatingAction {...props} />
+        </ScrollArea>
+    );
+}
+export function FloatingAction({ stepUid, actionRef, isFixed, fixedOffset }) {
+    const zus = useFormDataStore();
+    const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
+    async function batchDeleteAction() {
+        await zusDeleteComponents({
+            zus,
+            stepUid,
+            selection: true,
+        });
+    }
+    async function editVisibility() {
+        const ls = [];
+        Object.entries(_stepAction?.selection).map(([a, b]) => {
+            if (b) ls.push(a);
+        });
+        zhEditComponentVariant(stepUid, ls);
+    }
+    return (
+        <>
+            {_stepAction?.selectionCount ? (
                 <div
                     ref={actionRef}
                     style={isFixed ? { left: `${fixedOffset}px` } : {}}
@@ -98,7 +125,9 @@ function Step({ stepUid }: Props) {
                             {_stepAction.selectionCount} selected
                         </span>
                         <Menu label={"Batch Action"}>
-                            <Menu.Item></Menu.Item>{" "}
+                            <Menu.Item onClick={editVisibility} icon="edit">
+                                Edit Visibility
+                            </Menu.Item>
                             <DeleteRowAction
                                 menu
                                 // loadingText="Delete"
@@ -107,8 +136,8 @@ function Step({ stepUid }: Props) {
                         </Menu>
                     </div>
                 </div>
-            )}
-        </div>
+            ) : null}
+        </>
     );
 }
 function Component({ component, stepUid }: { component; stepUid }) {
@@ -123,7 +152,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
         });
     }
     function editVisibility() {
-        zhEditComponentVariant(stepUid, component.uid);
+        zhEditComponentVariant(stepUid, [component.uid]);
     }
     function selectComponent() {
         if (_stepAction.selectionCount) {
@@ -138,6 +167,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
             stepUid,
             zus,
             id: component.id,
+            component,
         });
     }
     return (
@@ -146,7 +176,9 @@ function Component({ component, stepUid }: { component; stepUid }) {
                 className="border w-full rounded-lg"
                 onClick={selectComponent}
             >
-                <Label>{component.title}</Label>
+                <Label className="font-mono truncate uppercase">
+                    {component.title}
+                </Label>
             </button>
             <div
                 className={cn(
