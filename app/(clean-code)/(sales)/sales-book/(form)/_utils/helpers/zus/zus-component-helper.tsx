@@ -22,6 +22,7 @@ export function zhComponentVariantUpdated(
             return sp;
         })
     );
+    // update filtered variants
 }
 export function zhGetComponentVariantData(
     itemStepUid,
