@@ -229,3 +229,22 @@ export async function deleteStepProductsByUidDta(uids: string[]) {
         },
     });
 }
+export async function getStepComponentsMetaByUidDta(uids: string[]) {
+    return (
+        await prisma.dykeStepProducts.findMany({
+            where: {
+                uid: { in: uids },
+            },
+            select: {
+                id: true,
+                meta: true,
+            },
+        })
+    ).map(({ id, meta }) => ({ id, meta: meta as StepComponentMeta }));
+}
+export async function updateStepComponentMetaDta(id, meta) {
+    const data = await prisma.dykeStepProducts.update({
+        where: { id },
+        data: { meta },
+    });
+}

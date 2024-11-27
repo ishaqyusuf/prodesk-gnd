@@ -6,7 +6,17 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     const sectionKeys = Object.keys(fdata.setting?.data?.route || [])?.map(
         (uid) => ({ uid })
     );
-    const stepsByKey: { [uid in string]: { id; title; uid } } = {};
+    const stepsByKey: {
+        [uid in string]: {
+            id;
+            title;
+            uid;
+            components: {
+                uid: string;
+                title: string;
+            }[];
+        };
+    } = {};
     // fdata.rootStep
     const rootComponentsByKey: {
         [uid in string]: { id?; title; uid };
@@ -17,9 +27,17 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
             title: s.product.title,
         };
     });
-    fdata.steps.map((step) => {
+    [...fdata.steps, fdata.rootStep].map((step) => {
         const { stepProducts, id, title, uid, ...rest } = step;
-        stepsByKey[step.uid] = { id, title, uid };
+        stepsByKey[step.uid] = {
+            id,
+            title,
+            uid,
+            components: stepProducts?.map((p) => ({
+                title: p.product?.title || p.door?.title,
+                uid: p.uid,
+            })),
+        };
     });
     const composedRouter = { ...(fdata.setting?.data?.route || {}) };
     Object.keys(composedRouter).map((routeKey) => {

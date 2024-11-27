@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle, Info, Variable } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
-import { zhEditComponentVisibility } from "../_utils/helpers/zus/zus-component-helper";
+import { zhEditComponentVariant } from "../_utils/helpers/zus/zus-component-helper";
 
 interface Props {
     stepUid;
@@ -123,7 +123,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
         });
     }
     function editVisibility() {
-        zhEditComponentVisibility(stepUid, component.uid);
+        zhEditComponentVariant(stepUid, component.uid);
     }
     function selectComponent() {
         if (_stepAction.selectionCount) {

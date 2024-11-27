@@ -9,6 +9,13 @@ import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
+import {
+    zhComponentVariantUpdated,
+    zhGetComponentVariantData,
+} from "../../../_utils/helpers/zus/zus-component-helper";
+import { saveComponentVariantUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import { _modal } from "@/components/common/modal/provider";
+import { toast } from "sonner";
 
 interface Props {
     stepUid;
@@ -23,6 +30,7 @@ export function useInitContext(stepUid, componentUid) {
     const component = zus.kvStepComponentList[cStepUid]?.find(
         (p) => p.uid == componentUid
     );
+    const data = zhGetComponentVariantData(stepUid, componentUid, zus);
     const step = zus.kvStepForm[stepUid];
     const form = useForm({
         defaultValues: {
@@ -33,7 +41,13 @@ export function useInitContext(stepUid, componentUid) {
         control: form.control,
         name: "variations",
     });
-    async function save() {}
+    async function save() {
+        const formData = form.getValues("variations");
+        await saveComponentVariantUseCase(componentUid, formData);
+        _modal.close();
+        toast.success("Component Visibility Updated.");
+        zhComponentVariantUpdated(stepUid, componentUid, formData, zus);
+    }
     function addRule() {
         varArray.append({
             rules: [{ componentsUid: [], stepUid: null, operator: "is" }],
@@ -41,13 +55,14 @@ export function useInitContext(stepUid, componentUid) {
     }
     return {
         varArray,
+        data,
         step,
         form,
         save,
         addRule,
     };
 }
-export default function ComponentVisibilityModal({
+export default function ComponentVariantModal({
     stepUid,
     componentUid,
 }: Props) {
@@ -124,10 +139,9 @@ function RuleComponent({ index }) {
                         </span>
                     </div>
                     <ComboxBox
-                        options={[
-                            { value: "1", label: "Hello" },
-                            { value: "2", label: "Hi" },
-                        ]}
+                        options={ctx.data?.steps}
+                        labelKey="title"
+                        valueKey="uid"
                         control={ctx.form.control}
                         name={`variations.${index}.rules.${fieldIndex}.stepUid`}
                     />
@@ -142,10 +156,16 @@ function RuleComponent({ index }) {
                     <div className="flex-1">
                         <ComboxBox
                             maxSelection={999}
-                            options={[
-                                { value: "1", label: "Hello" },
-                                { value: "2", label: "Hi" },
-                            ]}
+                            options={
+                                ctx.data?.componentsByStepUid[
+                                    ctx.form.getValues(
+                                        `variations.${index}.rules.${fieldIndex}.stepUid`
+                                    )
+                                ] || []
+                            }
+                            labelKey="title"
+                            valueKey="uid"
+                            className="w-full"
                             control={ctx.form.control}
                             name={`variations.${index}.rules.${fieldIndex}.componentsUid`}
                         />
@@ -160,7 +180,11 @@ function RuleComponent({ index }) {
                 </div>
             ))}
             <div className="flex justify-end">
-                <Button onClick={addRuleFilter} className="h-7 text-xs">
+                <Button
+                    disabled={rulesArray.fields.length == ctx.data.stepsCount}
+                    onClick={addRuleFilter}
+                    className="h-7 text-xs"
+                >
                     <Icons.add className="w-4 h-4 mr-2" />
                     <span>Add Filter</span>
                 </Button>

@@ -21,16 +21,22 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { cva } from "class-variance-authority";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
+export const comboBoxVariants = cva("", {
+    variants: {
+        container: {},
+    },
+});
 interface Props<T> {
     label?;
     options?: (T | { label: string; value: string })[];
     labelKey?: keyof (T & { label: string; value: string });
     valueKey?: keyof (T & { label: string; value: string });
-    className?;
+    className?: string;
     maxSelection?;
     placeholder?: string;
 }
@@ -83,20 +89,18 @@ export function ComboxBox<
                     onOpenChange(false);
                 };
                 return (
-                    <FormItem className={cn(className, "mx-1")}>
+                    <FormItem className={cn("mx-1")}>
                         {label && <FormLabel>{label}</FormLabel>}
                         <Popover modal open={open} onOpenChange={onOpenChange}>
                             <PopoverTrigger asChild>
                                 <FormControl>
                                     <div
-                                        id="1"
-                                        aria-controls="lorem"
-                                        role="combobox"
                                         className={cn(
                                             buttonVariants({
                                                 variant: "outline",
                                             }),
-                                            "h-8 w-32 justify-between gap-4 flex rounded focus:outline-none focus:ring-1 focus:ring-ring focus-visible:ring-0 items-center"
+                                            "h-8 w-32 justify-between gap-4 flex rounded focus:outline-none focus:ring-1 focus:ring-ring focus-visible:ring-0 items-center",
+                                            className
                                         )}
                                         aria-label="Select filter field"
                                     >
@@ -178,9 +182,15 @@ export function ComboxBox<
                                     </div>
                                 </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent align="start" className="w-40 p-0">
+                            <PopoverContent
+                                align="start"
+                                className={cn("min-w-40 p-0")}
+                            >
                                 <Command>
-                                    <CommandInput placeholder="Search fields..." />
+                                    <CommandInput
+                                        placeholder="Search fields..."
+                                        className={cn("")}
+                                    />
                                     <CommandList>
                                         <CommandEmpty>
                                             No fields found.
