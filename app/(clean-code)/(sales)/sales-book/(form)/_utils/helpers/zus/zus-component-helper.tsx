@@ -1,6 +1,7 @@
 import { _modal } from "@/components/common/modal/provider";
 import ComponentVariantModal from "../../../_components/modals/component-visibility-modal";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
+import { zusFilterStepComponents } from "./zus-step-helper";
 
 export function zhEditComponentVariant(stepUid, componentUid) {
     _modal.openModal(
@@ -22,6 +23,7 @@ export function zhComponentVariantUpdated(
             return sp;
         })
     );
+    zusFilterStepComponents(itemStepUid, zus);
     // update filtered variants
 }
 export function zhGetComponentVariantData(

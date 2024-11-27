@@ -332,6 +332,7 @@ export interface SalesFormZusData {
             stepFormId?: number;
             // componentUid?: string;
             stepId?: number;
+            componentUid: string;
             isHpt?: boolean;
             isService?: boolean;
             _stepAction?: {

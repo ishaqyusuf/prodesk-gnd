@@ -32,6 +32,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
             // fs.
             const suid = `${uid}-${fs.step.uid}`;
             resp.kvStepForm[suid] = {
+                componentUid: fs.item?.prodUid,
                 title: fs.step.title,
                 value: fs.item?.value,
                 price: fs.item?.price,

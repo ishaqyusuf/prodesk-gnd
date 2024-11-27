@@ -3,7 +3,7 @@ import { useFormDataStore } from "../_common/_stores/form-data-store";
 import {
     zhLoadStepComponents,
     zhSelectStepComponent,
-    zusDeleteProducts,
+    zusDeleteComponents,
     zusToggleComponentSelect,
 } from "../_utils/helpers/zus/zus-step-helper";
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
@@ -65,7 +65,7 @@ function Step({ stepUid }: Props) {
     }, []);
     const [fixedOffset, setFixedOffset] = useState(0);
     async function batchDeleteAction() {
-        await zusDeleteProducts({
+        await zusDeleteComponents({
             zus,
             stepUid,
             selection: true,
@@ -116,7 +116,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
     const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
     const [open, setOpen] = useState(false);
     async function deleteStepItem() {
-        await zusDeleteProducts({
+        await zusDeleteComponents({
             zus,
             stepUid,
             productUid: component.uid,

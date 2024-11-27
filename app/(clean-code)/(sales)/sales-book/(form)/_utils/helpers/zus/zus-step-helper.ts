@@ -1,5 +1,5 @@
 import {
-    deleteStepProductsUseCase,
+    deleteStepComponentsUseCase,
     getNextStepUseCase,
     getStepComponentsUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
@@ -47,9 +47,9 @@ export async function zhSelectStepComponent({
         (c) => c.id == id
     );
     const itemUid = zhItemUidFromStepUid(stepUid);
-    const stepData = zus.kvStepForm[stepUid] || {};
+    let stepData = zus.kvStepForm[stepUid];
+    stepData.componentUid = component.uid;
     stepData.value = component.title;
-    // data.componentUid = component.uid;
     stepData.price = component.price;
     stepData.stepId = component.stepId;
 
@@ -117,7 +117,9 @@ export function zhNextRoute({
         route[rootUid].route?.[isRoot ? rootUid : componentStepUid];
     const nextRoute = zus.data.salesSetting.stepsByKey[nextRouteUid];
     const nextStepUid = `${itemUid}-${nextRoute.uid}`;
-    let stepForm = zus.kvStepForm[nextStepUid] || {};
+    let stepForm = zus.kvStepForm[nextStepUid] || {
+        componentUid: null,
+    };
     stepForm.title = nextRoute.title;
     stepForm.stepId = nextRoute.id;
     stepForm.value = stepForm.value || "";
@@ -138,11 +140,33 @@ export function zhNextRoute({
 
     zus.toggleStep(nextStepUid);
 }
-export function zusFilterStepComponents(stepUid, zus: ZusSales) {
-    const [uid, _stepUid] = stepUid?.split("-");
-    const stepComponents = zus.kvStepComponentList[_stepUid];
+export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
+    const [uid, stepUid] = itemStepUid?.split("-");
+    const stepComponents = zus.kvStepComponentList[stepUid].filter((c) => {
+        if (c.variations?.length)
+            return c.variations.some((v) => {
+                const rules = v.rules;
+                return rules.every(
+                    ({ componentsUid, operator, stepUid: __stepUid }) => {
+                        const selectedComponentUid =
+                            zus.kvStepForm[`${uid}-stepUid`]?.componentUid;
+                        return (
+                            !componentsUid?.length ||
+                            (operator == "is"
+                                ? componentsUid?.some(
+                                      (a) => a == selectedComponentUid
+                                  )
+                                : componentsUid?.every(
+                                      (a) => a != selectedComponentUid
+                                  ))
+                        );
+                    }
+                );
+            });
+        return true;
+    });
     // TODO: FILTER STEP, ADD PRICE, SET VISIBILITY ETC.
-    zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, stepComponents);
+    zus.dotUpdate(`kvFilteredStepComponentList.${itemStepUid}`, stepComponents);
 }
 
 export function zusToggleComponentSelect({
@@ -165,7 +189,7 @@ export function zusToggleComponentSelect({
         currentCount
     );
 }
-export async function zusDeleteProducts({
+export async function zusDeleteComponents({
     stepUid,
     zus,
     productUid,
@@ -180,7 +204,7 @@ export async function zusDeleteProducts({
         );
     }
     if (uids.length) {
-        await deleteStepProductsUseCase(uids);
+        await deleteStepComponentsUseCase(uids);
         toast.message("Deleted.");
     }
     if (selection) {

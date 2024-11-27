@@ -52,6 +52,7 @@ export async function getNextStepUseCase({
 }: GetNextStepProps): Promise<SalesFormZusData["kvStepForm"][number]> {
     const step = await getSalesFormStepByIdDta(nextStepId);
     return {
+        componentUid: null,
         title: step.step.title,
         value: "",
         price: null,
@@ -61,7 +62,7 @@ export async function getNextStepUseCase({
         isService: false,
     };
 }
-export async function deleteStepProductsUseCase(uids: string[]) {
+export async function deleteStepComponentsUseCase(uids: string[]) {
     return await deleteStepProductsByUidDta(uids);
 }
 export async function saveComponentVariantUseCase(uid, variants) {
