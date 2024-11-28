@@ -10,7 +10,7 @@ import {
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CheckCircle, Info, Variable } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
@@ -31,7 +31,8 @@ function Step({ stepUid }: Props) {
     const actionRef = useRef<HTMLDivElement>(null);
     const [isFixed, setIsFixed] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [items, setItems] = useState(zusFilterStepComponents(stepUid, zus));
+    const allItems = zusFilterStepComponents(stepUid, zus);
+    const [items, setItems] = useState(allItems);
     useEffectAfterMount(() => {
         zhLoadStepComponents({
             stepUid,
@@ -72,12 +73,12 @@ function Step({ stepUid }: Props) {
     }, [isFixed]);
 
     const [fixedOffset, setFixedOffset] = useState(0);
-
-    const props = { stepUid, items, actionRef, isFixed, fixedOffset };
+    const searchFn = useCallback(() => {}, []);
+    const props = { stepUid, items, actionRef, isFixed, fixedOffset, searchFn };
     return (
         <ScrollArea
             ref={containerRef}
-            className="p-4 pb-20 h-full max-h-[80vh] relative"
+            className="p-4 pb-20 h-full smax-h-[80vh] relative"
         >
             {/* <div>ITEMS: {items?.length}</div> */}
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
@@ -93,13 +94,7 @@ function Step({ stepUid }: Props) {
         </ScrollArea>
     );
 }
-export function FloatingAction({
-    stepUid,
-    items,
-    actionRef,
-    isFixed,
-    fixedOffset,
-}) {
+function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
     const zus = useFormDataStore();
     const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
     async function batchDeleteAction() {
@@ -177,7 +172,8 @@ export function FloatingAction({
 }
 function Component({ component, stepUid }: { component; stepUid }) {
     const zus = useFormDataStore();
-    const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
+    const stepForm = zus.kvStepForm[stepUid];
+    const _stepAction = stepForm?._stepAction;
     const [open, setOpen] = useState(false);
     async function deleteStepItem() {
         await zusDeleteComponents({
@@ -189,7 +185,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
     function editVisibility() {
         zhEditComponentVariant(stepUid, [component.uid]);
     }
-    function selectComponent() {
+    const selectComponent = useCallback(() => {
         if (_stepAction.selectionCount) {
             zusToggleComponentSelect({
                 stepUid,
@@ -204,28 +200,40 @@ function Component({ component, stepUid }: { component; stepUid }) {
             id: component.id,
             component,
         });
-    }
+    }, []);
+
     return (
         <div
-            className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group"
+            className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group "
             key={component.uid}
         >
             <button
-                className="border  h-full hover:bg-white w-full rounded-lg"
+                className={cn(
+                    "border  h-full hover:bg-white  w-full rounded-lg overflow-hidden",
+                    stepForm?.componentUid == component.uid
+                        ? "border-muted-foreground"
+                        : "hover:border-muted-foreground"
+                )}
                 onClick={selectComponent}
             >
                 <div className="flex h-full flex-col">
                     <div className="flex-1">
                         <ComponentImg aspectRatio={4 / 2} src={component.img} />
                     </div>
-                    <div className="p-2 border-t">
-                        <Label className="font-mono uppercase">
-                            {component.title}
-                        </Label>
+                    <div className="p-2 border-t font-mono inline-flex text-sm justify-between">
+                        <Label className=" uppercase">{component.title}</Label>
+                        {component.price && (
+                            <span className="">${component.price} </span>
+                        )}
                     </div>
                 </div>
                 {/* <div>{component.img}</div> */}
             </button>
+            {component.productCode ? (
+                <div className="absolute -rotate-90 -translate-y-1/2 text-sm font-mono uppercase tracking-wider font-semibold text-muted-foreground transform top-1/2">
+                    {component.productCode}
+                </div>
+            ) : null}
             <div
                 className={cn(
                     _stepAction?.selectionCount

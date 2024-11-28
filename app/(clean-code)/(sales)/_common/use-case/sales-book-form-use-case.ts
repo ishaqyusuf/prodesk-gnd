@@ -11,24 +11,31 @@ import {
     loadSalesFormData,
     saveSalesSettingData,
 } from "../data-access/sales-form-settings.dta";
+import { composeSalesPricing } from "../utils/sales-pricing-utils";
+import { getPricingListDta } from "../data-access/sales-pricing-dta";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
     const result = await getTransformedSalesBookFormDataDta(data);
+    return await composeBookForm(result);
+}
+async function composeBookForm<T>(data: T) {
     return {
-        ...result,
+        ...data,
         salesSetting: composeStepRouting(await loadSalesFormData()),
+        pricing: composeSalesPricing(await getPricingListDta()),
     };
 }
 export async function createSalesBookFormUseCase(
     data: GetSalesBookFormDataProps
 ) {
     const resp = await createSalesBookFormDataDta(data);
+    return await composeBookForm(resp);
     // return salesFormZustand(resp);
-    return {
-        ...resp,
-        salesSetting: composeStepRouting(await loadSalesFormData()),
-    };
+    // return {
+    //     ...resp,
+    //     salesSetting: composeStepRouting(await loadSalesFormData()),
+    // };
 }
 export async function saveSalesSettingUseCase(meta) {
     await saveSalesSettingData(meta);

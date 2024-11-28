@@ -114,6 +114,7 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             variations: component?.meta?.variations || [],
             price: null,
             stepId,
+            productCode: component.productCode,
         };
     });
 }

@@ -26,7 +26,7 @@ export default function ItemSection({ uid }: Props) {
                 }}
             >
                 <ItemSectionHeader uid={uid} />
-                <CollapsibleContent className="flex border">
+                <CollapsibleContent className="flex border overflow-auto max-h-[120vh]">
                     <div className="flex-1 flex flex-col ">
                         {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
                             <StepSection key={stepUid} stepUid={stepUid} />
