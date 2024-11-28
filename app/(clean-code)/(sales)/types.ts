@@ -297,6 +297,9 @@ export type DykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
     meta: DykeSalesDoorMeta;
     priceData?: Partial<ComponentPrice>;
 };
+export type StepMeta = {
+    stepPricingDeps: string[];
+};
 export interface SalesFormZusData {
     data: GetSalesBookForm;
     sequence: {
@@ -333,7 +336,6 @@ export interface SalesFormZusData {
             value?: string;
             price?: number;
             stepFormId?: number;
-            // componentUid?: string;
             stepId?: number;
             componentUid: string;
             isHpt?: boolean;
@@ -342,6 +344,7 @@ export interface SalesFormZusData {
                 selection: { [uid in string]: boolean };
                 selectionCount?: number;
             };
+            meta: StepMeta;
         };
     };
 }

@@ -30,6 +30,14 @@ export function zhInitializeState(data: GetSalesBookForm) {
         resp.sequence.stepComponent[uid] = [];
         item.formStepArray.map((fs) => {
             // fs.
+            const stepMeta = fs.step.meta;
+            if (!stepMeta.stepPricingDeps) {
+                stepMeta.stepPricingDeps = Object.entries(
+                    stepMeta.priceDepencies || {}
+                )
+                    ?.map(([k, v]) => (v ? k : null))
+                    .filter(Boolean);
+            }
             const suid = `${uid}-${fs.step.uid}`;
             resp.kvStepForm[suid] = {
                 componentUid: fs.item?.prodUid,
@@ -42,6 +50,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     selection: {},
                     selectionCount: 0,
                 },
+                meta: stepMeta as any,
                 // componentUid: fs.item.prodUid,
                 // nextStepId: fs.step.stepValueId
             };

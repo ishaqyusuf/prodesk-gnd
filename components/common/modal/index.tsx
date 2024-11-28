@@ -149,7 +149,11 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
                             {Icon && <Icon className="w-4 h-4 mr-4" />}
                             {title && <Title>{title}</Title>}
                         </div>
-                        {subtitle && <Subtitle>{subtitle}</Subtitle>}
+                        {subtitle && (
+                            <Subtitle className="whitespace-normal">
+                                {subtitle}
+                            </Subtitle>
+                        )}
                     </div>
                 </div>
                 {children}

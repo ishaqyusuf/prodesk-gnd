@@ -10,10 +10,12 @@ import {
     SalesItemMeta,
     ShelfItemMeta,
     StepComponentMeta,
+    StepMeta,
     TypedDykeSalesDoor,
 } from "../../../types";
 import { inToFt, isComponentType } from "../../utils/sales-utils";
 import { generateRandomString, safeFormText, sum } from "@/lib/utils";
+import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 
 type SalesFormData = AsyncFnType<typeof getSalesBookFormDataDta>;
 type SalesFormItems = AsyncFnType<typeof typedSalesBookFormItems>;
@@ -82,7 +84,8 @@ export function typedSalesBookFormItems(data: SalesFormData) {
 
                     step: {
                         ...item.step,
-                        meta: item.step.meta || {},
+                        meta: (item.step.meta || {}) as any as DykeStepMeta &
+                            StepMeta,
                     },
                 }))
                 .filter(

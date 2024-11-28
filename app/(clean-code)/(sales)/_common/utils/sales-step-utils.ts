@@ -1,4 +1,9 @@
-import { DykeDoorType, DykeStepTitleKv, DykeStepTitles } from "../../types";
+import {
+    DykeDoorType,
+    DykeStepTitleKv,
+    DykeStepTitles,
+    StepMeta,
+} from "../../types";
 import { LoadSalesFormData } from "../data-access/sales-form-settings.dta";
 import { GetStepsForRoutingProps } from "../data-access/sales-form-step-dta";
 
@@ -11,6 +16,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
             id;
             title;
             uid;
+            meta: StepMeta;
             components: {
                 uid: string;
                 title: string;
@@ -30,6 +36,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     [...fdata.steps, fdata.rootStep].map((step) => {
         const { stepProducts, id, title, uid, ...rest } = step;
         stepsByKey[step.uid] = {
+            meta: step.meta as any,
             id,
             title,
             uid,

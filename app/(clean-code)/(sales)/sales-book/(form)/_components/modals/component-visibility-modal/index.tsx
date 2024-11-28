@@ -33,7 +33,8 @@ export function useInitContext(stepUid, componentsUid) {
     const component = zus.kvStepComponentList[cStepUid]?.find(
         (p) => p.uid == componentUid
     );
-    const data = zhGetComponentVariantData(stepUid, componentUid, zus);
+    const data = zhGetComponentVariantData(stepUid, zus);
+    console.log({ data });
     const step = zus.kvStepForm[stepUid];
     const form = useForm({
         defaultValues: {

@@ -135,6 +135,7 @@ export async function getStepsForRoutingDta() {
             stepValueId: true,
             prevStepValueId: true,
             rootStepValueId: true,
+            meta: true,
             stepProducts: {
                 where: notDeleted.where,
                 select: {
@@ -248,4 +249,11 @@ export async function updateStepComponentMetaDta(id, meta) {
         where: { id },
         data: { meta },
     });
+}
+export async function updateStepMetaDta(id, meta) {
+    const data = await prisma.dykeSteps.update({
+        where: { id },
+        data: { meta },
+    });
+    return data;
 }

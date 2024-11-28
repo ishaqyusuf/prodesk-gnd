@@ -2,14 +2,18 @@ import { _modal } from "@/components/common/modal/provider";
 import ComponentVariantModal from "../../../_components/modals/component-visibility-modal";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { zusFilterStepComponents } from "./zus-step-helper";
+import StepPricingModal from "../../../_components/modals/step-pricing-modal";
 
 export function zhEditComponentVariant(stepUid, componentsUid) {
     _modal.openModal(
         <ComponentVariantModal
-            stepUid={stepUid}
             componentsUid={componentsUid}
+            stepUid={stepUid}
         />
     );
+}
+export function zhEditPricing(stepUid) {
+    _modal.openModal(<StepPricingModal stepUid={stepUid} />);
 }
 export function zhClearSelection(itemStepUid, zus: ZusSales) {
     zus.dotUpdate(`kvStepForm.${itemStepUid}._stepAction`, {
@@ -45,12 +49,29 @@ export function zhComponentVariantUpdated(
 
     // update filtered variants
 }
+export function zhGetStepDependables(itemStepUid, zus: ZusSales) {
+    const [itemUid, stepUid] = itemStepUid?.split("-");
+    const sequence = zus.sequence.stepComponent?.[itemUid];
+    const index = sequence?.indexOf(itemStepUid);
+    const data = {
+        steps: [],
+    };
+    sequence
+        .filter((s, i) => i < index)
+        .map((s) => {
+            const [_, currentStepUid] = s.split("-");
+            const stepData = zus.data.salesSetting.stepsByKey?.[currentStepUid];
 
-export function zhGetComponentVariantData(
-    itemStepUid,
-    componentUid,
-    zus: ZusSales
-) {
+            if (stepData) {
+                data.steps.push({
+                    uid: currentStepUid,
+                    title: stepData.title,
+                });
+            }
+        });
+    return data;
+}
+export function zhGetComponentVariantData(itemStepUid, zus: ZusSales) {
     const [itemUid, stepUid] = itemStepUid?.split("-");
     const sequence = zus.sequence.stepComponent?.[itemUid];
     const index = sequence?.indexOf(itemStepUid);

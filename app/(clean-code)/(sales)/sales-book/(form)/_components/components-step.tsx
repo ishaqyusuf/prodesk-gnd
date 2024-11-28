@@ -18,6 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
     zhClearSelection,
     zhEditComponentVariant,
+    zhEditPricing,
 } from "../_utils/helpers/zus/zus-component-helper";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,7 @@ function Step({ stepUid }: Props) {
             stepUid,
             zus,
         }).then((res) => {
-            // console.log("RESULT", stepUid, res);
+            console.log("RESULT", stepUid, res);
         });
     }, []);
     useEffect(() => {
@@ -130,9 +131,6 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
                                 {_stepAction.selectionCount} selected
                             </span>
                             <Menu label={"Batch Action"}>
-                                <Menu.Item onClick={editVisibility} icon="edit">
-                                    Edit Visibility
-                                </Menu.Item>
                                 <DeleteRowAction
                                     menu
                                     // loadingText="Delete"
@@ -156,11 +154,19 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
                                 {items?.length} components
                             </span>
                             <Menu label={"Step Option"} Icon={Icons.settings}>
-                                <Menu.Item
+                                {/* <Menu.Item
                                     onClick={editVisibility}
                                     icon="settings"
                                 >
                                     Edit Visibility
+                                </Menu.Item> */}
+                                <Menu.Item
+                                    onClick={() => {
+                                        zhEditPricing(stepUid);
+                                    }}
+                                    icon="dollar"
+                                >
+                                    Pricing
                                 </Menu.Item>
                             </Menu>
                         </>

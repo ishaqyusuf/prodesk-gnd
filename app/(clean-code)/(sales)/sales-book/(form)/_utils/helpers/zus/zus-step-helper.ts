@@ -1,6 +1,5 @@
 import {
     deleteStepComponentsUseCase,
-    getNextStepUseCase,
     getStepComponentsUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
@@ -102,9 +101,12 @@ export function zhNextRoute({
         return;
     }
     const nextStepUid = `${itemUid}-${nextRoute.uid}`;
-    let stepForm = zus.kvStepForm[nextStepUid] || {
-        componentUid: null,
-    };
+    let stepForm = zus.kvStepForm[nextStepUid];
+    if (!stepForm)
+        stepForm = {
+            componentUid: null,
+            meta: nextRoute.meta,
+        };
     stepForm.title = nextRoute.title;
     stepForm.stepId = nextRoute.id;
     stepForm.value = stepForm.value || "";

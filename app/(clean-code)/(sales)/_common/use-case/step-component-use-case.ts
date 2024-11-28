@@ -13,6 +13,7 @@ import {
     getStepComponentsDta,
     getStepComponentsMetaByUidDta,
     updateStepComponentMetaDta,
+    updateStepMetaDta,
 } from "../data-access/sales-form-step-dta";
 import { SalesFormZusData } from "../../types";
 
@@ -60,6 +61,7 @@ export async function getNextStepUseCase({
         stepId: step.step.id,
         isHpt: false,
         isService: false,
+        meta: step.step.meta as any,
     };
 }
 export async function deleteStepComponentsUseCase(uids: string[]) {
@@ -81,4 +83,7 @@ export async function saveComponentVariantUseCase(uids, variants) {
         variants,
         uids,
     };
+}
+export async function updateStepMetaUseCase(id, meta) {
+    return await updateStepMetaDta(id, meta);
 }
