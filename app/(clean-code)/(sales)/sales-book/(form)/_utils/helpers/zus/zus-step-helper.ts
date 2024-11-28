@@ -5,6 +5,7 @@ import {
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { zhItemUidFromStepUid } from "./zus-form-helper";
 import { toast } from "sonner";
+import { StepHelperClass } from "./zus-helper-class";
 
 interface LoadStepComponentsProps {
     stepUid: string;
@@ -137,32 +138,17 @@ export function zhNextRoute({
 }
 export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
     const [uid, stepUid] = itemStepUid?.split("-");
-    const filteredComponents = zus.kvStepComponentList[stepUid]?.filter((c) => {
-        if (c.variations?.length)
-            return c.variations.some((v) => {
-                const rules = v.rules;
+    const cls = new StepHelperClass(itemStepUid, zus);
+    const filteredComponents = zus.kvStepComponentList[stepUid]
+        // ?.filter(cls.isComponentVisible)
+        ?.map((component) => {
+            component._metaData.visible = cls.isComponentVisible(component);
+            component.price = cls.getComponentPrice(component.uid);
 
-                return rules.every(
-                    ({ componentsUid, operator, stepUid: __stepUid }) => {
-                        const selectedComponentUid =
-                            zus.kvStepForm[`${uid}-${__stepUid}`]?.componentUid;
-
-                        return (
-                            !componentsUid?.length ||
-                            (operator == "is"
-                                ? componentsUid?.some(
-                                      (a) => a == selectedComponentUid
-                                  )
-                                : componentsUid?.every(
-                                      (a) => a != selectedComponentUid
-                                  ))
-                        );
-                    }
-                );
-            });
-        return true;
-    });
+            return component;
+        });
     // TODO: FILTER STEP, ADD PRICE, SET VISIBILITY ETC.
+
     // console.log(`FILTERED`,)
     // zus.dotUpdate(
     //     `kvFilteredStepComponentList.${itemStepUid}`,
@@ -237,17 +223,5 @@ export function zhtoggleStep(stepUid, zus: ZusSales) {
             zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
             console.log("filtered cleared", stepUid);
         }, 200);
-    }
-}
-export class StepHelperClass {
-    // stepUid: string;
-    // zus: ZusSales;
-    itemUid;
-    constructor(public stepUid, public zus: ZusSales) {
-        const [itemUid] = stepUid?.split("-");
-        this.itemUid = itemUid;
-    }
-    public get isRoot() {
-        return "";
     }
 }

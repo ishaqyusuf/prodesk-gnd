@@ -115,6 +115,10 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             price: null,
             stepId,
             productCode: component.productCode,
+            _metaData: {
+                custom: component.custom,
+                visible: false,
+            },
         };
     });
 }

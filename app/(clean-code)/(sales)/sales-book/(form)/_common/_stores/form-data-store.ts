@@ -5,6 +5,7 @@ import { stepActions } from "./step-action";
 import { FieldPath } from "react-hook-form";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
+export type ZusComponent = ZusSales["kvStepComponentList"][number][number];
 type SalesFormZusAction = ReturnType<typeof fns>;
 export type SalesFormSet = (
     update: (state: SalesFormZusData) => Partial<SalesFormZusData>

@@ -1,26 +1,16 @@
 import Modal from "@/components/common/modal";
 import { useFormDataStore } from "../../../_common/_stores/form-data-store";
-import { createContext, useContext, useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/_v1/icons";
+import { createContext, useContext } from "react";
+import { useForm } from "react-hook-form";
+
 import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
-import ConfirmBtn from "@/components/_v1/confirm-btn";
-import {
-    zhComponentVariantUpdated,
-    zhGetComponentVariantData,
-} from "../../../_utils/helpers/zus/zus-component-helper";
-import {
-    saveComponentVariantUseCase,
-    updateStepMetaUseCase,
-} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+
+import { zhGetComponentVariantData } from "../../../_utils/helpers/zus/zus-component-helper";
+import { updateStepMetaUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 interface Props {
     stepUid;
@@ -37,6 +27,7 @@ export function useInitContext(itemStepUid) {
 
     const data = zhGetComponentVariantData(itemStepUid, zus);
     const stepList = data.steps;
+
     const form = useForm({
         defaultValues: {
             meta: step?.meta,
@@ -103,6 +94,7 @@ export default function StepPricingModal({ stepUid }: Props) {
                     {ctx.pricingOption == "Multi Pricing" ? (
                         <ComboxBox
                             maxSelection={999}
+                            maxStack={5}
                             options={ctx.stepList}
                             labelKey="title"
                             valueKey="uid"

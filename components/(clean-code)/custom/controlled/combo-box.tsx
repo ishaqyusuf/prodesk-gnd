@@ -39,6 +39,7 @@ interface Props<T> {
     className?: string;
     maxSelection?;
     placeholder?: string;
+    maxStack?;
 }
 
 export function ComboxBox<
@@ -52,6 +53,7 @@ export function ComboxBox<
     className,
     maxSelection = 1,
     placeholder,
+    maxStack = 2,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     const filterFields = props.options;
@@ -134,7 +136,7 @@ export function ComboxBox<
                                                         </Badge>
                                                         <div className="hidden min-w-0 gap-1 lg:flex">
                                                             {selectedValues.size >
-                                                            2 ? (
+                                                            maxStack ? (
                                                                 <Badge
                                                                     variant="secondary"
                                                                     className="rounded-sm px-1 font-normal"

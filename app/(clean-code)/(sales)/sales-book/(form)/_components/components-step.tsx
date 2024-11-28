@@ -35,10 +35,12 @@ function Step({ stepUid }: Props) {
     const allItems = zusFilterStepComponents(stepUid, zus);
     const [items, setItems] = useState(allItems);
     useEffectAfterMount(() => {
+        console.log("LOADING>>>>");
         zhLoadStepComponents({
             stepUid,
             zus,
         }).then((res) => {
+            setItems(res);
             console.log("RESULT", stepUid, res);
         });
     }, []);
@@ -83,13 +85,15 @@ function Step({ stepUid }: Props) {
         >
             {/* <div>ITEMS: {items?.length}</div> */}
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                {items?.map((component) => (
-                    <Component
-                        key={component.uid}
-                        component={component}
-                        stepUid={stepUid}
-                    />
-                ))}
+                {items
+                    ?.filter((s) => !s._metaData?.custom)
+                    ?.map((component) => (
+                        <Component
+                            key={component.uid}
+                            component={component}
+                            stepUid={stepUid}
+                        />
+                    ))}
             </div>
             <FloatingAction {...props} />
         </ScrollArea>

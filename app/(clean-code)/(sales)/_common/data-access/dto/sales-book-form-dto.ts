@@ -16,6 +16,7 @@ import {
 import { inToFt, isComponentType } from "../../utils/sales-utils";
 import { generateRandomString, safeFormText, sum } from "@/lib/utils";
 import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
+import { transformSalesStepMeta } from "./sales-step-dto";
 
 type SalesFormData = AsyncFnType<typeof getSalesBookFormDataDta>;
 type SalesFormItems = AsyncFnType<typeof typedSalesBookFormItems>;
@@ -124,7 +125,7 @@ export function transformSalesBookFormItem(
                     multiItem.sectionPrice || shelfItemArray.sectionPrice,
                 priceReferesher: null,
                 formStepArray: formSteps.map(({ step, ...rest }) => ({
-                    step,
+                    step: transformSalesStepMeta(step),
                     item: rest,
                 })),
                 item: {

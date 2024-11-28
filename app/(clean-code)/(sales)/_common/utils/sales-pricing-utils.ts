@@ -18,4 +18,5 @@ export function composeSalesPricing(data: GetPricingList) {
             price: pricing.price,
         };
     });
+    return priceData;
 }

@@ -4,6 +4,7 @@ import {
     DykeStepTitles,
     StepMeta,
 } from "../../types";
+import { transformSalesStepMeta } from "../data-access/dto/sales-step-dto";
 import { LoadSalesFormData } from "../data-access/sales-form-settings.dta";
 import { GetStepsForRoutingProps } from "../data-access/sales-form-step-dta";
 
@@ -36,7 +37,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     [...fdata.steps, fdata.rootStep].map((step) => {
         const { stepProducts, id, title, uid, ...rest } = step;
         stepsByKey[step.uid] = {
-            meta: step.meta as any,
+            meta: transformSalesStepMeta(rest)?.meta,
             id,
             title,
             uid,
