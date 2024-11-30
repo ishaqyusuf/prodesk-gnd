@@ -1,6 +1,7 @@
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
+import { DykeProductMeta } from "../../types";
 
 export type GetPricingList = AsyncFnType<typeof getPricingListDta>;
 export async function getPricingListDta(
@@ -51,4 +52,49 @@ export async function saveComponentPricingsDta(
     return {
         status: "success",
     };
+}
+export async function saveHarvestedDta(ls) {
+    return await prisma.dykePricingSystem.createMany({
+        data: ls,
+    });
+}
+export async function harvestSalesPricingDta() {
+    const steps = await prisma.dykeStepProducts.findMany({
+        where: {
+            door: {
+                deletedAt: null,
+            },
+        },
+        select: {
+            uid: true,
+            dykeStepId: true,
+            door: {
+                select: {
+                    meta: true,
+                },
+            },
+        },
+    });
+    const res = steps
+        .map((s) => {
+            return {
+                uid: s.uid,
+                stepId: s.dykeStepId,
+                doorPrice: (s?.door?.meta as any as DykeProductMeta)?.doorPrice,
+            };
+        })
+        .filter((s) => s.doorPrice);
+    const inserts: Prisma.DykePricingSystemCreateManyInput[] = [];
+    res.map((r) => {
+        Object.entries(r.doorPrice).map(([dependenciesUid, price]) => {
+            if (price)
+                inserts.push({
+                    price,
+                    dependenciesUid,
+                    dykeStepId: r.stepId,
+                    stepProductUid: r.uid,
+                });
+        });
+    });
+    return inserts;
 }

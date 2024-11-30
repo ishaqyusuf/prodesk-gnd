@@ -16,6 +16,10 @@ import {
     updateStepMetaDta,
 } from "../data-access/sales-form-step-dta";
 import { SalesFormZusData } from "../../types";
+import {
+    harvestSalesPricingDta,
+    saveHarvestedDta,
+} from "../data-access/sales-pricing-dta";
 
 export async function getMouldingSpeciesUseCase() {
     return await getDykeStepProductTitles("Specie");
@@ -87,4 +91,12 @@ export async function saveComponentVariantUseCase(uids, variants) {
 // export async function saveDoorSizeVariants
 export async function updateStepMetaUseCase(id, meta) {
     return await updateStepMetaDta(id, meta);
+}
+export async function harvestDoorPricingUseCase() {
+    const val = await harvestSalesPricingDta();
+    return val;
+}
+export async function saveHarvestedDoorPricingUseCase(ls) {
+    const val = await saveHarvestedDta(ls);
+    return val;
 }

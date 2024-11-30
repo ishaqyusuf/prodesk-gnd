@@ -326,6 +326,9 @@ export interface SalesFormZusData {
             sideView?: {
                 img?: string;
             }[];
+            doorSizes?: {
+                size: string;
+            }[];
         };
     };
     kvMultiComponent: {
