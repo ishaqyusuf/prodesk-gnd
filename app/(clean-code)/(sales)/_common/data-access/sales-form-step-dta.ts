@@ -148,6 +148,7 @@ export async function getStepsForRoutingDta() {
                     dykeStepId: true,
                     uid: true,
                     custom: true,
+                    meta: true,
                     product: {
                         select: {
                             title: true,
@@ -171,7 +172,18 @@ export async function getStepsForRoutingDta() {
         })
         .filter((a) => a.title)
         .filter((a) => !a.title.includes("--"))
-        .sort((a, b) => a.title.localeCompare(b.title));
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map((data) => {
+            return {
+                ...data,
+                stepProducts: data.stepProducts?.map((prod) => {
+                    return {
+                        ...prod,
+                        meta: (prod.meta || {}) as StepComponentMeta,
+                    };
+                }),
+            };
+        });
 }
 export async function fixStepsDta() {
     const stepprod = await prisma.dykeSteps.findMany({

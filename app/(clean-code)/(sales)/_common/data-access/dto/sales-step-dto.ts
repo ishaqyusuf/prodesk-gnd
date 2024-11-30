@@ -5,8 +5,8 @@ export function transformSalesStepMeta<T>(step: T) {
     let stepMeta = (step as any).meta as StepMeta;
     if (!stepMeta) stepMeta = {} as any;
 
-    if (!stepMeta.stepPricingDeps) {
-        stepMeta.stepPricingDeps = Object.entries(
+    if (!stepMeta.priceStepDeps) {
+        stepMeta.priceStepDeps = Object.entries(
             (stepMeta as any).priceDepencies || {}
         )
             ?.map(([k, v]) => (v ? k : null))

@@ -15,23 +15,8 @@ export async function zhLoadStepComponents({
     zus,
     stepUid,
 }: LoadStepComponentsProps) {
-    const stepData = zus.kvStepForm?.[stepUid];
-    const [uid, _stepUid] = stepUid?.split("-");
-    const stepComponents = zus.kvStepComponentList[_stepUid];
-    const filteredComponents = zus.kvFilteredStepComponentList[stepUid];
-    if (!stepComponents) {
-        const components = await getStepComponentsUseCase(
-            stepData.title,
-            stepData.stepId
-        );
-
-        zus.dotUpdate(`kvStepComponentList.${_stepUid}`, components);
-        return zusFilterStepComponents(stepUid, zus);
-    } else if (!filteredComponents) {
-        console.log("RELOADING FILTERED COMPONENTS");
-        return zusFilterStepComponents(stepUid, zus);
-    }
-    return filteredComponents;
+    const cls = new StepHelperClass(stepUid, zus);
+    return await cls.fetchStepComponents();
 }
 export async function zhSelectStepComponent({
     zus,

@@ -1,16 +1,16 @@
 import Modal from "@/components/common/modal";
 import { useFormDataStore } from "../../../_common/_stores/form-data-store";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 
-import { zhGetComponentVariantData } from "../../../_utils/helpers/zus/zus-component-helper";
 import { updateStepMetaUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
+import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 
 interface Props {
     stepUid;
@@ -22,34 +22,33 @@ const pricingOptions = ["Single Pricing", "Multi Pricing"] as const;
 type PricingOption = (typeof pricingOptions)[number];
 export function useInitContext(itemStepUid) {
     const zus = useFormDataStore();
-    const [itemUid, stepUid] = itemStepUid.split("-");
-    const step = zus.kvStepForm[itemStepUid];
+    const cls = useMemo(() => {
+        return new StepHelperClass(itemStepUid, zus);
+    }, [itemStepUid, zus]);
 
-    const data = zhGetComponentVariantData(itemStepUid, zus);
+    const step = cls.getStepForm();
+    const data = cls.getComponentVariantData();
+
     const stepList = data.steps;
 
     const form = useForm({
         defaultValues: {
             meta: step?.meta,
             pricingOption:
-                step?.meta?.stepPricingDeps?.length > 0
+                step?.meta?.priceStepDeps?.length > 0
                     ? "Multi Pricing"
                     : ("Single Pricing" as PricingOption),
         },
     });
     const pricingOption = form.watch("pricingOption");
-    // const varArray = useFieldArray({
-    //     control: form.control,
-    //     name: "variations",
-    // });
+
     async function save() {
         const { meta } = form.getValues();
-        console.log(meta);
 
         if (pricingOption == "Single Pricing") {
-            meta.stepPricingDeps = [];
+            meta.priceStepDeps = [];
         } else {
-            if (meta.stepPricingDeps?.length == 0 || !meta.stepPricingDeps) {
+            if (meta.priceStepDeps?.length == 0 || !meta.priceStepDeps) {
                 toast.error(
                     `Multi Pricing requires atleast one price dependencies.`
                 );
@@ -57,11 +56,9 @@ export function useInitContext(itemStepUid) {
             }
         }
         const resp = await updateStepMetaUseCase(step?.stepId, meta);
-        console.log({ resp });
 
         _modal.close();
         toast.success("Pricing Updated.");
-        // zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
     }
 
     return {
@@ -73,7 +70,6 @@ export function useInitContext(itemStepUid) {
 }
 export default function StepPricingModal({ stepUid }: Props) {
     const ctx = useInitContext(stepUid);
-
     return (
         <Context.Provider value={ctx}>
             <Modal.Content>
@@ -102,7 +98,7 @@ export default function StepPricingModal({ stepUid }: Props) {
                             placeholder="Select Steps"
                             label={"Pricing Steps Dependencies"}
                             control={ctx.form.control}
-                            name={`meta.stepPricingDeps`}
+                            name={`meta.priceStepDeps`}
                         />
                     ) : null}
                 </Form>

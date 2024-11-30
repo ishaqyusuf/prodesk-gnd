@@ -10,47 +10,47 @@ import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { zhComponentVariantUpdated } from "../../../_utils/helpers/zus/zus-component-helper";
-import { saveComponentVariantUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import {
+    saveComponentVariantUseCase,
+    updateStepMetaUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { Label } from "@/components/ui/label";
+import { widthList } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 
 interface Props {
-    stepUid;
-    componentsUid;
+    cls: StepHelperClass;
 }
 
 const Context = createContext<ReturnType<typeof useInitContext>>(null);
 const useCtx = () => useContext(Context);
-export function useInitContext(stepUid, componentsUid) {
-    const [componentUid, ...rest] = componentsUid;
+export function useInitContext(cls: StepHelperClass) {
     const zus = useFormDataStore();
-    const cls = useMemo(() => {
-        console.log("COMPONENT VISIBILITY MODAL CLS INITIALIZED");
-        return new ComponentHelperClass(stepUid, zus, componentUid);
-    }, [stepUid, componentUid, zus, stepUid]);
-    const [itemUid, cStepUid] = stepUid.split("-");
-
-    const component = cls.component;
+    const variations = cls.getStepForm().meta?.doorSizeVariation;
     const data = cls.getComponentVariantData();
     const step = cls.getStepForm(); // zus.kvStepForm[stepUid];
     const form = useForm({
         defaultValues: {
-            variations: component?.variations,
+            meta: step.meta,
         },
     });
     const varArray = useFieldArray({
         control: form.control,
-        name: "variations",
+        name: "meta.doorSizeVariation",
     });
     async function save() {
-        const formData = form.getValues("variations");
-        await saveComponentVariantUseCase(componentsUid, formData);
+        const resp = await updateStepMetaUseCase(
+            step.stepId,
+            form.getValues("meta")
+        );
         _modal.close();
-        toast.success("Component Visibility Updated.");
-        zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
+        toast.success("Door Heights saved.");
+        cls.updateStepForm({ meta: form.getValues("meta") });
+        // zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
     }
     function addRule() {
         varArray.append({
@@ -64,22 +64,18 @@ export function useInitContext(stepUid, componentsUid) {
         form,
         save,
         addRule,
-        componentsUid,
     };
 }
-export default function ComponentVariantModal({
-    stepUid,
-    componentsUid,
-}: Props) {
-    const ctx = useInitContext(stepUid, componentsUid);
+export default function DoorSizeModal({ cls }: Props) {
+    const ctx = useInitContext(cls);
 
     return (
         <Context.Provider value={ctx}>
             <Modal.Content size="lg">
                 <Modal.Header
-                    title={"Edit Component Visibility"}
+                    title={"Door Size Variations"}
                     subtitle={
-                        "Add rules to make component show only when rules are met."
+                        "Add door size variations rules and selected widths for each composed rule"
                     }
                 />
                 <Form {...ctx.form}>
@@ -116,16 +112,7 @@ export default function ComponentVariantModal({
                         </Button>
                     </div>
                 </Form>
-                {ctx.componentsUid?.length > 1 ? (
-                    <Alert variant="destructive">
-                        <AlertCircle className="size-4" />
-                        <AlertTitle>Warning</AlertTitle>
-                        <AlertDescription>
-                            Editing multiple components visibility will override
-                            any visibility settings on the selected components.
-                        </AlertDescription>
-                    </Alert>
-                ) : null}
+
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />
             </Modal.Content>
         </Context.Provider>
@@ -135,7 +122,7 @@ function RuleComponent({ index }) {
     const ctx = useCtx();
     const rulesArray = useFieldArray({
         control: ctx.form.control,
-        name: `variations.${index}.rules`,
+        name: `meta.doorSizeVariation.${index}.rules`,
     });
     function addRuleFilter() {
         rulesArray.append({
@@ -146,7 +133,7 @@ function RuleComponent({ index }) {
     }
     function ComponentInput({ fieldIndex }) {
         const stepUid = ctx.form.watch(
-            `variations.${index}.rules.${fieldIndex}.stepUid`
+            `meta.doorSizeVariation.${index}.rules.${fieldIndex}.stepUid`
         );
         return (
             <ComboxBox
@@ -156,12 +143,12 @@ function RuleComponent({ index }) {
                 valueKey="uid"
                 className="w-full"
                 control={ctx.form.control}
-                name={`variations.${index}.rules.${fieldIndex}.componentsUid`}
+                name={`meta.doorSizeVariation.${index}.rules.${fieldIndex}.componentsUid`}
             />
         );
     }
     return (
-        <div className="flex flex-col gap-2 overflow-y-auto py-0.5 pr-1">
+        <div className="flex flex-col gap-2 border rounded overflow-y-auto p-2">
             {rulesArray?.fields?.map((field, fieldIndex) => (
                 <div className="flex items-center gap-2" key={fieldIndex}>
                     <div className="min-w-[4.5rem] text-center">
@@ -174,12 +161,12 @@ function RuleComponent({ index }) {
                         labelKey="title"
                         valueKey="uid"
                         control={ctx.form.control}
-                        name={`variations.${index}.rules.${fieldIndex}.stepUid`}
+                        name={`meta.doorSizeVariation.${index}.rules.${fieldIndex}.stepUid`}
                     />
                     <div className="min-w-[5rem]">
                         <ControlledSelect
                             control={ctx.form.control}
-                            name={`variations.${index}.rules.${fieldIndex}.operator`}
+                            name={`meta.doorSizeVariation.${index}.rules.${fieldIndex}.operator`}
                             size="sm"
                             options={["is", "isNot"]}
                         />
@@ -205,6 +192,22 @@ function RuleComponent({ index }) {
                     <Icons.add className="w-4 h-4 mr-2" />
                     <span>Add Filter</span>
                 </Button>
+            </div>
+            <div className="border-t">
+                <Label>Width List</Label>
+                <ComboxBox
+                    maxSelection={999}
+                    maxStack={15}
+                    options={widthList.map((label) => ({
+                        label,
+                        value: label,
+                    }))}
+                    // labelKey="title"
+                    // valueKey="uid"
+                    className="w-full"
+                    control={ctx.form.control}
+                    name={`meta.doorSizeVariation.${index}.widthList`}
+                />
             </div>
         </div>
     );

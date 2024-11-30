@@ -1,5 +1,8 @@
 import { Label } from "@/components/ui/label";
-import { useFormDataStore } from "../_common/_stores/form-data-store";
+import {
+    useFormDataStore,
+    ZusComponent,
+} from "../_common/_stores/form-data-store";
 import {
     zhLoadStepComponents,
     zhSelectStepComponent,
@@ -10,9 +13,17 @@ import {
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Info, Variable } from "lucide-react";
+import {
+    CheckCircle,
+    Eye,
+    Filter,
+    Info,
+    MinusCircle,
+    ShowerHead,
+    Variable,
+} from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -23,25 +34,44 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ComponentImg } from "./component-img";
+import {
+    ComponentHelperClass,
+    StepHelperClass,
+} from "../_utils/helpers/zus/zus-helper-class";
+import { openEditComponentPrice } from "./modals/component-price-modal";
+import { Badge } from "@/components/ui/badge";
+import DoorSizeModal from "./modals/door-size-modal";
+import { _modal } from "@/components/common/modal/provider";
 
 interface Props {
     stepUid;
 }
-function Step({ stepUid }: Props) {
+export function useStepContext(stepUid) {
+    const [selectionState, setSelectionState] = useState({
+        uids: {},
+        count: 0,
+    });
     const zus = useFormDataStore();
     const actionRef = useRef<HTMLDivElement>(null);
     const [isFixed, setIsFixed] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const allItems = zusFilterStepComponents(stepUid, zus);
     const [items, setItems] = useState(allItems);
+
+    const cls = useMemo(() => {
+        const cl = new StepHelperClass(stepUid, zus);
+
+        console.log("STEP CLASS LOADING>>>");
+        return cl;
+    }, [stepUid, zus]);
+    // cls.resetSelector(selectionState, setSelectionState);
     useEffectAfterMount(() => {
-        console.log("LOADING>>>>");
         zhLoadStepComponents({
             stepUid,
             zus,
         }).then((res) => {
             setItems(res);
-            console.log("RESULT", stepUid, res);
+            console.log("RESULT", stepUid, res?.length);
         });
     }, []);
     useEffect(() => {
@@ -78,6 +108,43 @@ function Step({ stepUid }: Props) {
     const [fixedOffset, setFixedOffset] = useState(0);
     const searchFn = useCallback(() => {}, []);
     const props = { stepUid, items, actionRef, isFixed, fixedOffset, searchFn };
+    return {
+        items,
+        containerRef,
+        cls,
+        props,
+        stepUid,
+        clearSelection() {
+            setSelectionState({
+                uids: {},
+                count: 0,
+            });
+        },
+        toggleComponent(componentUid) {
+            setSelectionState((current) => {
+                const state = !current.uids?.[componentUid];
+                const count = current.count + (state ? 1 : -1);
+                const resp = {
+                    uids: {
+                        ...current?.uids,
+                        [componentUid]: state,
+                    },
+                    count,
+                };
+
+                return resp;
+            });
+        },
+        actionRef,
+        isFixed,
+        fixedOffset,
+        selectionState,
+    };
+}
+function Step({ stepUid }: Props) {
+    const ctx = useStepContext(stepUid);
+    const { items, containerRef, cls, props } = ctx;
+
     return (
         <ScrollArea
             ref={containerRef}
@@ -87,34 +154,39 @@ function Step({ stepUid }: Props) {
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                 {items
                     ?.filter((s) => !s._metaData?.custom)
+                    ?.filter((a) => a._metaData.visible)
                     ?.map((component) => (
                         <Component
+                            ctx={ctx}
                             key={component.uid}
                             component={component}
-                            stepUid={stepUid}
                         />
                     ))}
             </div>
-            <FloatingAction {...props} />
+            <FloatingAction ctx={ctx} />
         </ScrollArea>
     );
 }
-function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
+function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
+    const { stepUid, items, actionRef, isFixed, fixedOffset, selectionState } =
+        ctx;
+    const isDoor = ctx.cls.isDoor();
     const zus = useFormDataStore();
-    const _stepAction = zus.kvStepForm[stepUid]?._stepAction;
     async function batchDeleteAction() {
         await zusDeleteComponents({
             zus,
             stepUid,
             selection: true,
         });
+        ctx.clearSelection();
     }
     async function editVisibility() {
         const ls = [];
-        Object.entries(_stepAction?.selection).map(([a, b]) => {
+        Object.entries(selectionState?.uids).map(([a, b]) => {
             if (b) ls.push(a);
         });
         zhEditComponentVariant(stepUid, ls);
+        ctx.clearSelection();
     }
     return (
         <>
@@ -129,12 +201,18 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
                 )}
             >
                 <div className="flex border shadow gap-4 p-2 rounded-lg items-center px-4">
-                    {_stepAction?.selectionCount ? (
+                    {selectionState?.count ? (
                         <>
                             <span className="uppercase font-mono font-semibold text-sm">
-                                {_stepAction.selectionCount} selected
+                                {selectionState?.count} selected
                             </span>
                             <Menu label={"Batch Action"}>
+                                <Menu.Item
+                                    onClick={editVisibility}
+                                    icon="settings"
+                                >
+                                    Edit Visibility
+                                </Menu.Item>
                                 <DeleteRowAction
                                     menu
                                     // loadingText="Delete"
@@ -143,7 +221,7 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
                             </Menu>
                             <Button
                                 onClick={() => {
-                                    zhClearSelection(stepUid, zus);
+                                    ctx.clearSelection();
                                 }}
                                 size="sm"
                                 className="h-7 text-sm"
@@ -158,20 +236,32 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
                                 {items?.length} components
                             </span>
                             <Menu label={"Step Option"} Icon={Icons.settings}>
-                                {/* <Menu.Item
-                                    onClick={editVisibility}
-                                    icon="settings"
-                                >
-                                    Edit Visibility
-                                </Menu.Item> */}
-                                <Menu.Item
-                                    onClick={() => {
-                                        zhEditPricing(stepUid);
-                                    }}
-                                    icon="dollar"
-                                >
-                                    Pricing
-                                </Menu.Item>
+                                {isDoor ? (
+                                    <>
+                                        <Menu.Item
+                                            onClick={() => {
+                                                _modal.openModal(
+                                                    <DoorSizeModal
+                                                        cls={ctx.cls}
+                                                    />
+                                                );
+                                            }}
+                                        >
+                                            Door Size Variants
+                                        </Menu.Item>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Menu.Item
+                                            onClick={() => {
+                                                zhEditPricing(stepUid);
+                                            }}
+                                            icon="dollar"
+                                        >
+                                            Pricing
+                                        </Menu.Item>
+                                    </>
+                                )}
                             </Menu>
                         </>
                     )}
@@ -180,11 +270,23 @@ function FloatingAction({ stepUid, items, actionRef, isFixed, fixedOffset }) {
         </>
     );
 }
-function Component({ component, stepUid }: { component; stepUid }) {
+function Component({
+    component,
+    ctx,
+}: {
+    component: ZusComponent;
+    ctx: ReturnType<typeof useStepContext>;
+}) {
+    const { stepUid } = ctx;
     const zus = useFormDataStore();
     const stepForm = zus.kvStepForm[stepUid];
-    const _stepAction = stepForm?._stepAction;
+    // const _stepAction = stepForm?._stepAction;
+    const selectState = ctx.selectionState;
     const [open, setOpen] = useState(false);
+    const cls = useMemo(
+        () => new ComponentHelperClass(stepUid, zus, component?.uid, component),
+        [zus, component]
+    );
     async function deleteStepItem() {
         await zusDeleteComponents({
             zus,
@@ -195,13 +297,13 @@ function Component({ component, stepUid }: { component; stepUid }) {
     function editVisibility() {
         zhEditComponentVariant(stepUid, [component.uid]);
     }
+    const editPrice = useCallback(() => {
+        openEditComponentPrice(cls);
+    }, [stepUid, component, zus]);
+
     const selectComponent = useCallback(() => {
-        if (_stepAction.selectionCount) {
-            zusToggleComponentSelect({
-                stepUid,
-                zus,
-                productUid: component.uid,
-            });
+        if (selectState.count) {
+            ctx.toggleComponent(component.uid);
             return;
         }
         zhSelectStepComponent({
@@ -210,7 +312,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
             id: component.id,
             component,
         });
-    }, []);
+    }, [selectState]);
 
     return (
         <div
@@ -233,12 +335,23 @@ function Component({ component, stepUid }: { component; stepUid }) {
                     <div className="p-2 border-t font-mono inline-flex text-sm justify-between">
                         <Label className=" uppercase">{component.title}</Label>
                         {component.price && (
-                            <span className="">${component.price} </span>
+                            <Badge className="h-5 px-1" variant="destructive">
+                                ${component.price}{" "}
+                            </Badge>
                         )}
                     </div>
                 </div>
                 {/* <div>{component.img}</div> */}
             </button>
+            {/* {cls.getStepForm()?.meta?.stepPricingDeps?. } */}
+            <div className="absolute m-2">
+                {component?.variations?.length ? (
+                    <Filter className="w-4 h-4 text-muted-foreground/70" />
+                ) : (
+                    <></>
+                    // <MinusCircle className="w-4 h-4 text-muted-foreground/70" />
+                )}
+            </div>
             {component.productCode ? (
                 <div className="absolute -rotate-90 -translate-y-1/2 text-sm font-mono uppercase tracking-wider font-semibold text-muted-foreground transform top-1/2">
                     {component.productCode}
@@ -246,15 +359,13 @@ function Component({ component, stepUid }: { component; stepUid }) {
             ) : null}
             <div
                 className={cn(
-                    _stepAction?.selectionCount
+                    selectState?.count
                         ? "flex absolute m-4 top-0 left-0"
                         : "hidden"
                 )}
             >
                 <div className="">
-                    <Checkbox
-                        checked={_stepAction?.selection?.[component.uid]}
-                    />
+                    <Checkbox checked={selectState?.uids?.[component.uid]} />
                 </div>
             </div>
             <div
@@ -262,7 +373,7 @@ function Component({ component, stepUid }: { component; stepUid }) {
                     "absolute top-0 right-0",
                     open
                         ? ""
-                        : _stepAction?.selectionCount
+                        : selectState?.count
                         ? "hidden"
                         : "hidden group-hover:flex bg-white"
                 )}
@@ -280,7 +391,10 @@ function Component({ component, stepUid }: { component; stepUid }) {
                                     >
                                         Visibility
                                     </Menu.Item>
-                                    <Menu.Item Icon={Icons.dollar}>
+                                    <Menu.Item
+                                        onClick={editPrice}
+                                        Icon={Icons.dollar}
+                                    >
                                         Price
                                     </Menu.Item>
                                 </>
@@ -290,11 +404,12 @@ function Component({ component, stepUid }: { component; stepUid }) {
                         </Menu.Item>
                         <Menu.Item
                             onClick={() => {
-                                zusToggleComponentSelect({
-                                    stepUid,
-                                    zus,
-                                    productUid: component.uid,
-                                });
+                                // zusToggleComponentSelect({
+                                //     stepUid,
+                                //     zus,
+                                //     productUid: component.uid,
+                                // });
+                                ctx.toggleComponent(component.uid);
                             }}
                             Icon={CheckCircle}
                         >

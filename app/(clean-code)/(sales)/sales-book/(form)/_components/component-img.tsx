@@ -35,7 +35,7 @@ export function ComponentImg({
                         src={`${env.NEXT_PUBLIC_CLOUDINARY_BASE_URL}/dyke/${src}`}
                         alt={alt}
                         className="object-contain"
-                        // sizes="(min-width: 1024px) 10vw"
+                        sizes="(min-width: 1024px) 10vw"
                         fill
                         loading="lazy"
                     />

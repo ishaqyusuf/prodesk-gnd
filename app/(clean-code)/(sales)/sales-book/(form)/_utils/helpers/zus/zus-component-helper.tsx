@@ -1,12 +1,7 @@
 import { _modal } from "@/components/common/modal/provider";
 import ComponentVariantModal from "../../../_components/modals/component-visibility-modal";
-import {
-    ZusComponent,
-    ZusSales,
-} from "../../../_common/_stores/form-data-store";
-import { zusFilterStepComponents } from "./zus-step-helper";
+import { ZusSales } from "../../../_common/_stores/form-data-store";
 import StepPricingModal from "../../../_components/modals/step-pricing-modal";
-import { ComponentHelperClass } from "./zus-helper-class";
 
 export function zhEditComponentVariant(stepUid, componentsUid) {
     _modal.openModal(
@@ -16,6 +11,7 @@ export function zhEditComponentVariant(stepUid, componentsUid) {
         />
     );
 }
+
 export function zhEditPricing(stepUid) {
     _modal.openModal(<StepPricingModal stepUid={stepUid} />);
 }

@@ -84,6 +84,7 @@ export async function saveComponentVariantUseCase(uids, variants) {
         uids,
     };
 }
+// export async function saveDoorSizeVariants
 export async function updateStepMetaUseCase(id, meta) {
     return await updateStepMetaDta(id, meta);
 }

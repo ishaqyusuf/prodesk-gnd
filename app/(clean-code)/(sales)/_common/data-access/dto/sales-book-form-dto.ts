@@ -134,7 +134,7 @@ export function transformSalesBookFormItem(
                     shelfItemArray: shelfItemArray.shelfItemArray,
                 },
                 uid: generateRandomString(4),
-                stepSequence: getStepSequence(item, data),
+                stepSequence: getItemStepSequence(item, data),
             };
         });
 
@@ -145,7 +145,10 @@ export function transformSalesBookFormItem(
           )
         : itemArray;
 }
-function getStepSequence(item: SalesFormItems[number], data: SalesFormData) {
+function getItemStepSequence(
+    item: SalesFormItems[number],
+    data: SalesFormData
+) {
     const stepSequence: {
         [uid in string]: StepComponentMeta["stepSequence"];
     } = {};

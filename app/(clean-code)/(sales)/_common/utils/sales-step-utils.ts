@@ -26,12 +26,13 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     } = {};
     // fdata.rootStep
     const rootComponentsByKey: {
-        [uid in string]: { id?; title; uid };
+        [uid in string]: { id?; title; uid; stepUid? };
     } = {};
     fdata.rootStep.stepProducts.map((s) => {
         rootComponentsByKey[s.uid] = {
             uid: s.uid,
             title: s.product.title,
+            stepUid: fdata.rootStep.uid,
         };
     });
     [...fdata.steps, fdata.rootStep].map((step) => {
@@ -44,6 +45,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
             components: stepProducts?.map((p) => ({
                 title: p.product?.title || p.door?.title,
                 uid: p.uid,
+                variations: p.meta?.variations || [],
             })),
         };
     });

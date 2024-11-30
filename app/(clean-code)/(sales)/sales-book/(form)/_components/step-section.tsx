@@ -115,7 +115,7 @@ function StepSectionHeader({ stepUid }) {
                     <div className="">
                         <DevOnly>
                             <span>{stepForm?.componentUid}</span>
-                            <span>|</span>
+                            <span>--</span>
                             <span>{stepUid}</span>
                             <span>-</span>
                             <span>{stepForm?.stepId}</span>

@@ -1,7 +1,11 @@
+import { getStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import {
     ZusComponent,
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
+import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
+import { _modal } from "@/components/common/modal/provider";
+import DoorSizeModal from "../../../_components/modals/door-size-modal";
 
 export class StepHelperClass {
     stepUid: string;
@@ -11,17 +15,37 @@ export class StepHelperClass {
         this.itemUid = itemUid;
         this.stepUid = stepUid;
     }
-    public get getStepIndex() {
-        const sequence = this.zus.sequence.stepComponent?.[this.itemUid];
-        const index = sequence?.indexOf(this.itemStepUid);
+    public isDoor() {
+        return this.getStepForm().title == "Door";
+    }
+
+    public getStepIndex() {
+        const index = this.getItemStepSequence()?.indexOf(this.itemStepUid);
         return index;
     }
-    public get getStepForm() {
+    public getItemStepSequence() {
+        const sequence = this.zus.sequence.stepComponent?.[this.itemUid];
+        return sequence;
+    }
+    public getStepSequence() {
+        return this.getItemStepSequence()
+            ?.map((s) => s.split("-")?.[1])
+            .filter(Boolean);
+    }
+    public getStepForm() {
         return this.zus.kvStepForm[this.itemStepUid];
     }
-    public get getStepPriceDeps() {
-        const stepForm = this.getStepForm;
-        return stepForm?.meta?.stepPricingDeps || [];
+    public updateStepForm(data) {
+        Object.entries(data).map(([k, v]) => {
+            this.zus.dotUpdate(`kvStepForm.${this.itemStepUid}.${k}`, v);
+        });
+    }
+    public findStepForm(stepUid) {
+        return this.zus.kvStepForm[`${this.itemUid}-${this.stepUid}`];
+    }
+    public getStepPriceDeps() {
+        const stepForm = this.getStepForm();
+        return stepForm?.meta?.priceStepDeps || [];
     }
     public stepValueUids(stepUids: string[]) {
         // const uidStacks = [];
@@ -37,13 +61,25 @@ export class StepHelperClass {
         const pricings = this.zus.data.pricing[componentUid];
         return pricings;
     }
+    public getVisibleComponents() {
+        // const ls = this.getStepComponents;
+        // if (ls) return this.filterStepComponents(ls);
+        const sets =
+            this.zus.data.salesSetting?.stepsByKey?.[this.stepUid]?.components;
+        if (sets?.length) {
+            console.log("FILTERING SETS LENGTH");
+            return this.filterStepComponents(sets as any);
+        }
+        console.log("NOT FOUND");
+        return [];
+    }
     public getComponentPrice(componentUid) {
-        const priceDeps = this.getStepPriceDeps;
+        const priceDeps = this.getStepPriceDeps();
         const componentPricings = this.getComponentPricings(componentUid);
         const stepUids = this.stepValueUids(priceDeps);
-        if (componentPricings) {
-            console.log({ priceDeps, componentPricings, stepUids });
-        }
+        // if (componentPricings) {
+        //     console.log({ priceDeps, componentPricings, stepUids });
+        // }
         if (!priceDeps.length) {
             return componentPricings?.[componentUid]?.price || null;
         }
@@ -53,7 +89,6 @@ export class StepHelperClass {
         if (c.variations?.length)
             return c.variations.some((v) => {
                 const rules = v.rules;
-
                 return rules.every(
                     ({ componentsUid, operator, stepUid: __stepUid }) => {
                         const selectedComponentUid =
@@ -75,7 +110,132 @@ export class StepHelperClass {
             });
         return true;
     }
+    public get getStepComponents() {
+        return this.zus.kvStepComponentList?.[this.stepUid];
+    }
+    public getComponentVariantData() {
+        const sequence = this.getItemStepSequence();
+
+        const index = sequence?.indexOf(this.itemStepUid);
+        const data: {
+            steps: { uid: string; title: string }[];
+            componentsByStepUid: {
+                [stepUid in string]: {
+                    uid: string;
+                    title: string;
+                }[];
+            };
+            stepsCount: number;
+        } = {
+            steps: [],
+            componentsByStepUid: {},
+            stepsCount: 0,
+        };
+        sequence
+            .filter((s, i) => i < index)
+            .map((s) => {
+                const [_, currentStepUid] = s.split("-");
+                const stepData =
+                    this.zus.data.salesSetting.stepsByKey?.[currentStepUid];
+
+                if (stepData) {
+                    data.stepsCount++;
+                    data.steps.push({
+                        uid: currentStepUid,
+                        title: stepData.title,
+                    });
+                    data.componentsByStepUid[currentStepUid] =
+                        stepData.components || [];
+                }
+            });
+
+        return data;
+    }
+    public async fetchStepComponents(reload = false) {
+        const stepData = this.getStepForm();
+        const ls = this.getStepComponents;
+        // if (ls) return ls;
+        const components = ls
+            ? ls
+            : await getStepComponentsUseCase(stepData.title, stepData.stepId);
+        if (!ls)
+            this.zus.dotUpdate(
+                `kvStepComponentList.${this.stepUid}`,
+                components
+            );
+        return this.filterStepComponents(components);
+    }
+    public getAllVisibleComponents() {
+        const itemStepsUids = this.getItemStepSequence();
+        return itemStepsUids
+            .map((itemStepUid) => {
+                const [itemUid, stepUid] = itemStepUid.split("-");
+                const rootStep = this.rootStepFromUid(stepUid);
+                const itemStepCls = new StepHelperClass(itemStepUid, this.zus);
+                const components = itemStepCls.getVisibleComponents();
+                return components;
+            })
+            .flat()
+            ?.filter((a) => a._metaData?.visible);
+    }
+    public filterStepComponents(components: ZusComponent[]) {
+        const filteredComponents = components
+            // ?.filter(cls.isComponentVisible)
+            ?.map((component) => {
+                if (!component._metaData) component._metaData = {} as any;
+                component._metaData.visible =
+                    this.isComponentVisible(component);
+                component.price = this.getComponentPrice(component.uid);
+                return component;
+            });
+        return filteredComponents;
+    }
+    public rootStepFromUid(stepUid) {
+        const mainStep = Object.values(
+            this.zus.data.salesSetting.rootComponentsByKey
+        )?.find((s) => s.stepUid == stepUid);
+        return mainStep;
+    }
+    public selectorState: {
+        state: {
+            uids: {};
+            count: number;
+        };
+        setState: any;
+    } = {
+        state: null,
+        setState: null,
+    };
+    public resetSelector(state, setState) {
+        // this.selection = { count: 0, selection: {} };
+        this.selectorState = {
+            state,
+            setState,
+        };
+        setState({
+            uids: {},
+            count: 0,
+        });
+        return this;
+    }
+    public toggleComponent(componentUid) {
+        this.selectorState.setState?.((current) => {
+            const state = !current.uids?.[componentUid];
+            const count = current.count + state ? 1 : -1;
+            const resp = {
+                uids: {
+                    ...current?.uids,
+                    [componentUid]: state,
+                },
+                count,
+            };
+            console.log(resp);
+
+            return resp;
+        });
+    }
 }
+
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
         itemStepUid,
@@ -87,24 +247,132 @@ export class ComponentHelperClass extends StepHelperClass {
     }
     public get getComponent() {
         if (this.component) return this.component;
+        return this.zus.kvStepComponentList[this.stepUid]?.find(
+            (c) => c.uid == this.componentUid
+        );
         // this.component = load component
-        return this.component;
+        // return this.component;
     }
-    // public get getComponentPricings() {
-    //     const pricings = this.zus.data.pricing[this.componentUid];
-    //     return pricings;
-    // }
-    // public get getComponentPrice() {
-    //     const priceDeps = this.getStepPriceDeps;
+    public getComponentPriceModel() {
+        const priceDeps = this.getStepPriceDeps();
+        const stepSeqs = this.getItemStepSequence();
 
-    //     const componentPricings = this.getComponentPricings;
-    //     const stepUids = this.stepValueUids(priceDeps);
-    //     if (componentPricings) {
-    //         console.log({ priceDeps, componentPricings, stepUids });
-    //     }
-    //     if (!priceDeps.length) {
-    //         return componentPricings?.[this.componentUid]?.price || null;
-    //     }
-    //     return componentPricings?.[stepUids]?.price || null;
-    // }
+        const matchedSteps = priceDeps
+            ?.map((dep) => {
+                const [itemUid, stepUid] =
+                    stepSeqs?.find((s) => s.endsWith(`-${dep}`))?.split("-") ||
+                    [];
+                return stepUid;
+            })
+            .filter(Boolean);
+        const componentUid = this.componentUid;
+        const componentPricings = this.getComponentPricings(componentUid);
+        const form = {
+            pricing: componentPricings,
+            priceVariants: [] as {
+                path: string;
+                title: string[];
+            }[],
+        };
+
+        if (!matchedSteps?.length) {
+            form.priceVariants.push({
+                path: `${this.componentUid}.${this.componentUid}`,
+                title: ["Default Price"],
+            });
+        } else {
+            // console.log(this.zus.data.salesSetting?.rootComponentsByKey);
+            const ms = matchedSteps.map((stepUid) => {
+                const components =
+                    this.zus.data.salesSetting?.stepsByKey?.[stepUid]
+                        ?.components;
+                return components
+                    .filter((c) => {
+                        const mainStep = this.rootStepFromUid(stepUid);
+                        if (mainStep) {
+                            const stepSeq = this.getItemStepSequence()?.[0];
+                            const rootCUid =
+                                this.zus.kvStepForm[stepSeq]?.componentUid;
+                            return c.uid == rootCUid;
+                        }
+                        return true;
+                    })
+                    .map((c) => ({
+                        ...c,
+                        stepUid,
+                    }))
+                    .filter(Boolean);
+            });
+            const combs = getCombinations(ms);
+            // console.log({ ms });
+            // console.log(this.getItemStepSequence());
+
+            const visibleComponents = this.getAllVisibleComponents();
+            const visibleComponentsUID = visibleComponents.map((a) => a.uid);
+            const filteredCombs = combs.filter((a) => {
+                return a.uidStack.every((u) =>
+                    visibleComponentsUID.includes(u)
+                );
+            });
+            form.priceVariants = filteredCombs?.map((fc) => {
+                const path = fc.uidStack?.join("-");
+                if (!form.pricing[path])
+                    form.pricing[path] = {
+                        price: "",
+                        id: null,
+                    };
+                return {
+                    path,
+                    title: fc.titleStack,
+                };
+            });
+            console.log({ filteredCombs, combs, visibleComponents });
+        }
+        return form;
+    }
+    public async fetchUpdatedPrice() {
+        const priceData = await getPricingByUidUseCase(this.componentUid);
+        Object.entries(priceData).map(([k, d]) =>
+            this.zus.dotUpdate(`data.pricing.${k}`, d)
+        );
+    }
+}
+function getCombinations(
+    arr: { title: string; uid: string; stepUid: string }[][]
+) {
+    // : { titleStack: string[]; uidStack: string[] }[]
+
+    const result: {
+        titleStack: string[];
+        uidStack: string[];
+        stepUidStack: string[];
+    }[] = [];
+
+    function backtrack(
+        titleStack: string[],
+        uidStack: string[],
+        stepUidStack: string[],
+        index: number
+    ) {
+        if (index === arr.length) {
+            result.push({
+                titleStack: [...titleStack],
+                uidStack: [...uidStack],
+                stepUidStack: [...stepUidStack],
+            });
+            return;
+        }
+        for (const item of arr[index]) {
+            titleStack.push(item.title);
+            uidStack.push(item.uid);
+            stepUidStack.push(item.stepUid);
+            backtrack(titleStack, uidStack, stepUidStack, index + 1);
+            titleStack.pop();
+            uidStack.pop();
+            stepUidStack.pop();
+        }
+    }
+
+    backtrack([], [], [], 0);
+    return result;
 }
