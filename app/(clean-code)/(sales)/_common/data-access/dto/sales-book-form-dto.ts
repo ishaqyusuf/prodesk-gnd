@@ -105,6 +105,8 @@ export function transformSalesBookFormItem(
     data: SalesFormData,
     items: SalesFormItems
 ) {
+    // console.log(items.length);
+
     const itemArray = (items || [null])
         .filter((item) => {
             if (item?.multiDykeUid) return item?.multiDyke;

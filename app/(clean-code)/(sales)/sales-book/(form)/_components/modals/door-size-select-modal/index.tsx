@@ -22,8 +22,8 @@ const Context = createContext<ReturnType<typeof useInitContext>>(null);
 const useCtx = () => useContext(Context);
 const pricingOptions = ["Single Pricing", "Multi Pricing"] as const;
 type PricingOption = (typeof pricingOptions)[number];
-export function openDoorPriceModal(cls: ComponentHelperClass) {
-    _modal.openModal(<DoorPriceModal cls={cls} />);
+export function openDoorSizeSelectModal(cls: ComponentHelperClass) {
+    _modal.openModal(<DoorSizeSelectModal cls={cls} />);
 }
 export function useInitContext(cls: ComponentHelperClass) {
     const priceModel = cls.getDoorPriceModel();
@@ -63,7 +63,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         sizeList: priceModel.sizeList,
     };
 }
-export default function DoorPriceModal({ cls }: Props) {
+export default function DoorSizeSelectModal({ cls }: Props) {
     const ctx = useInitContext(cls);
 
     return (

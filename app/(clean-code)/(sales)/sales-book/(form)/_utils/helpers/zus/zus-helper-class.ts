@@ -7,6 +7,7 @@ import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-c
 import { _modal } from "@/components/common/modal/provider";
 import DoorSizeModal from "../../../_components/modals/door-size-modal";
 import { zhHarvestDoorSizes } from "./zus-form-helper";
+import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -22,7 +23,12 @@ export class StepHelperClass {
     public isDoor() {
         return this.getStepForm().title == "Door";
     }
-
+    public isMoulding() {
+        return this.getStepForm().title == "Moulding";
+    }
+    public isMultiSelect() {
+        return this.isDoor() || this.isMoulding();
+    }
     public getStepIndex() {
         const index = this.getItemStepSequence()?.indexOf(this.itemStepUid);
         return index;
@@ -35,6 +41,9 @@ export class StepHelperClass {
         return this.getItemStepSequence()
             ?.map((s) => s.split("-")?.[1])
             .filter(Boolean);
+    }
+    public getItemForm() {
+        return this.zus.kvFormItem[this.itemUid];
     }
     public getStepForm() {
         return this.zus.kvStepForm[this.itemStepUid];
@@ -378,6 +387,44 @@ export class ComponentHelperClass extends StepHelperClass {
         Object.entries(priceData).map(([k, d]) =>
             this.zus.dotUpdate(`data.pricing.${k}`, d)
         );
+    }
+    public selectComponent() {
+        const isMulti = this.isMultiSelect();
+        let groupItem = this.getItemForm()?.groupItem;
+        if (!groupItem)
+            groupItem = {
+                itemIds: [],
+                form: {},
+            };
+
+        if (this.isDoor()) {
+            openDoorSizeSelectModal(this);
+        } else if (this.isMoulding()) {
+            if (!groupItem.form?.[this.componentUid])
+                groupItem.form[this.componentUid] = {
+                    selected: true,
+                    meta: {
+                        description: this.component?.title,
+                        taxxable: false,
+                        produceable: false,
+                    },
+                    qty: {
+                        rh: "",
+                        lh: "",
+                        total: 1,
+                    },
+                    addon: "",
+                    swing: "",
+                };
+            else {
+                groupItem.form[this.componentUid].selected =
+                    !groupItem.form?.[this.componentUid].selected;
+            }
+            groupItem.itemIds = Object.entries(groupItem.form)
+                .filter(([uid, data]) => data.selected)
+                .map(([uid, data]) => uid);
+        } else {
+        }
     }
 }
 function getCombinations(

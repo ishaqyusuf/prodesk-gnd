@@ -5,6 +5,7 @@ import {
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
 import { StepHelperClass } from "./zus-helper-class";
+import { generateRandomString } from "@/lib/utils";
 export function zhInitializeState(data: GetSalesBookForm) {
     const resp: SalesFormZusData = {
         data,
@@ -19,8 +20,11 @@ export function zhInitializeState(data: GetSalesBookForm) {
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
     };
+    console.log(data.itemArray.length);
     data.itemArray.map((item) => {
-        const uid = item.uid;
+        const uid = generateRandomString(4);
+        console.log(uid);
+
         resp.sequence.formItem.push(uid);
         resp.kvFormItem[uid] = {
             collapsed: !item.expanded,
@@ -30,9 +34,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
         };
         resp.sequence.stepComponent[uid] = [];
         item.formStepArray.map((fs) => {
-            // fs.
             const stepMeta = fs.step.meta;
-
             const suid = `${uid}-${fs.step.uid}`;
             resp.kvStepForm[suid] = {
                 componentUid: fs.item?.prodUid,
@@ -46,15 +48,39 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     selectionCount: 0,
                 },
                 meta: stepMeta as any,
-                // componentUid: fs.item.prodUid,
-                // nextStepId: fs.step.stepValueId
             };
-            if (stepMeta.doorSizeVariation) {
-            }
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
         });
-        // item.multiComponent.components;
+        // resp.kvFormItem[uid].groupItem
+        Object.entries(item.multiComponent.components).map(([id, data]) => {
+            if (!resp.kvFormItem[uid].groupItem)
+                resp.kvFormItem[uid].groupItem = {
+                    componentsBasePrice: 0,
+                    componentsSalesPrice: 0,
+                    itemIds: [],
+                    totalBasePrice: 0,
+                    totalSalesPrice: 0,
+                    form: {},
+                };
+            const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
+            if (data._doorForm)
+                Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
+                    doorForm.casingPrice;
+                    const formId = `${stepProdUid}-${dimIn}`;
+                    resp.kvFormItem[uid].groupItem.form[formId] = {
+                        salesPrice: doorForm.jambSizePrice,
+                        addon: doorForm.doorPrice,
+                        swing: doorForm.swing,
+                        qty: {
+                            lh: doorForm.lhQty,
+                            rh: doorForm.rhQty,
+                            total: doorForm.totalQty,
+                        },
+                    } as any;
+                });
+        });
+        // item.multiComponent.components?.map()
         // zhHarvestDoorSizes(resp, uid);
     });
     return resp;

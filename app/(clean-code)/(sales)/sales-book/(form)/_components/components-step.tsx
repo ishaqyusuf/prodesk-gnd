@@ -40,6 +40,7 @@ import DoorSizeModal from "./modals/door-size-modal";
 import { _modal } from "@/components/common/modal/provider";
 import { openDoorPriceModal } from "./modals/door-price-modal";
 import { openComponentVariantModal } from "./modals/component-visibility-modal";
+import { openDoorSizeSelectModal } from "./modals/door-size-select-modal";
 
 interface Props {
     stepUid;
@@ -311,13 +312,17 @@ function Component({
             ctx.toggleComponent(component.uid);
             return;
         }
+        // if (cls.isDoor()) {
+        //     openDoorSizeSelectModal
+        //     return;
+        // }
         zhSelectStepComponent({
             stepUid,
             zus,
             id: component.id,
             component,
         });
-    }, [selectState]);
+    }, [selectState, cls]);
 
     return (
         <div

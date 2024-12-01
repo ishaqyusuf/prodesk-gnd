@@ -327,14 +327,34 @@ export interface SalesFormZusData {
             sideView?: {
                 img?: string;
             }[];
-            multiSelectData?: {
+            groupItem?: {
+                componentsBasePrice?: number;
+                componentsSalesPrice?: number;
+                totalBasePrice?: number;
+                totalSalesPrice?: number;
+                itemIds: string[];
                 form: {
                     [id in string]: {
-                        // id for door = `${stepProdUid}-${size}`
-                        // id for moudlings = `${stepProdUid}`
-                        qty: number;
-                        basePrice: number;
-                        hptId: number;
+                        selected: boolean;
+                        // id for door = `${componentUid}-${size}`
+                        // id for moulding = `${componentUid}`
+                        // id for services = random
+                        meta: {
+                            description: string;
+                            taxxable: Boolean;
+                            produceable: Boolean;
+                        };
+                        qty: {
+                            rh: number | string;
+                            lh: number | string;
+                            total: number | string;
+                        };
+                        basePrice?: number;
+                        salesPrice?: number;
+                        totalSalesPrice?: number;
+                        addon: number | string;
+                        hptId?: number;
+                        swing: string;
                         // imgUrl: string;
                     };
                 };

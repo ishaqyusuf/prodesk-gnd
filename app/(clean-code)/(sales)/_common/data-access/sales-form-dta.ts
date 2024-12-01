@@ -13,7 +13,7 @@ import { salesFormData } from "@/app/(v1)/(loggedIn)/sales/_actions/get-sales-fo
 import { salesTaxForm } from "./sales-tax.persistent";
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import dayjs from "dayjs";
-import { ComponentPrice } from "@prisma/client";
+import { ComponentPrice, Prisma } from "@prisma/client";
 import { getSalesFormStepByIdDta } from "./sales-form-step-dta";
 
 export interface GetSalesBookFormDataProps {
@@ -26,13 +26,20 @@ export interface GetSalesBookFormDataProps {
 type GetSalesBookFormDataDta = AsyncFnType<typeof getSalesBookFormDataDta>;
 export async function getSalesBookFormDataDta(data: GetSalesBookFormDataProps) {
     // const where = {}
+    const where: Prisma.SalesOrdersWhereInput = {
+        isDyke: true,
+    };
+    if (data.id) where.id = data.id;
+    else if (data.slug) where.slug = data.slug;
+    else {
+        throw new Error("Invalid operation");
+    }
+
     const order = await prisma.salesOrders.findFirst({
-        where: {
-            isDyke: true,
-            [data.id ? "id" : "slug"]: data.id || data.slug,
-        },
+        where,
         include: SalesBookFormIncludes({}),
     });
+
     const stepComponents = await getFormStepComponentsDta(
         order.items
             .map((item) => item.formSteps.map((fs) => fs.prodUid))
