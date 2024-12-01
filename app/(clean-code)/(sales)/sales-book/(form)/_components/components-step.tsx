@@ -58,13 +58,10 @@ export function useStepContext(stepUid) {
 
     const cls = useMemo(() => {
         const cl = new StepHelperClass(stepUid, zus);
-
-        console.log("STEP CLASS LOADING>>>");
         return cl;
     }, [stepUid, zus]);
     // cls.resetSelector(selectionState, setSelectionState);
     useEffectAfterMount(() => {
-        console.log("LOADING STEP C");
         zhLoadStepComponents({
             stepUid,
             zus,
