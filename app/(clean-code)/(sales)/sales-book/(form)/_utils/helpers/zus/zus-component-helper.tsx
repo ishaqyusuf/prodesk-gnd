@@ -3,15 +3,6 @@ import ComponentVariantModal from "../../../_components/modals/component-visibil
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import StepPricingModal from "../../../_components/modals/step-pricing-modal";
 
-export function zhEditComponentVariant(stepUid, componentsUid) {
-    _modal.openModal(
-        <ComponentVariantModal
-            componentsUid={componentsUid}
-            stepUid={stepUid}
-        />
-    );
-}
-
 export function zhEditPricing(stepUid) {
     _modal.openModal(<StepPricingModal stepUid={stepUid} />);
 }

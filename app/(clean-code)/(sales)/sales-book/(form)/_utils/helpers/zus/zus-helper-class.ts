@@ -6,7 +6,11 @@ import {
 import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import DoorSizeModal from "../../../_components/modals/door-size-modal";
-
+import { zhHarvestDoorSizes } from "./zus-form-helper";
+interface Filters {
+    stepUid?;
+    stepTitle?;
+}
 export class StepHelperClass {
     stepUid: string;
     itemUid;
@@ -58,6 +62,7 @@ export class StepHelperClass {
             .join("-");
     }
     public getComponentPricings(componentUid) {
+        // if(!component)componentUid = this.
         const pricings = this.zus.data.pricing[componentUid];
         return pricings;
     }
@@ -165,16 +170,29 @@ export class StepHelperClass {
             );
         return this.filterStepComponents(components);
     }
-    public getAllVisibleComponents() {
+
+    public getAllVisibleComponents(filter?: Filters) {
         const itemStepsUids = this.getItemStepSequence();
         return itemStepsUids
+
             .map((itemStepUid) => {
                 const [itemUid, stepUid] = itemStepUid.split("-");
-                const rootStep = this.rootStepFromUid(stepUid);
+                // const rootStep = this.rootStepFromUid(stepUid);
                 const itemStepCls = new StepHelperClass(itemStepUid, this.zus);
                 const components = itemStepCls.getVisibleComponents();
-                return components;
+                const stepForm = itemStepCls.getStepForm();
+                return {
+                    stepTitle: stepForm.title,
+                    stepUid: itemStepCls.stepUid,
+                    components,
+                };
             })
+            .filter((a) => {
+                if (filter.stepTitle) return a.stepTitle == filter.stepTitle;
+                if (filter.stepUid) return a.stepUid == filter.stepUid;
+                return true;
+            })
+            .map((a) => a.components)
             .flat()
             ?.filter((a) => a._metaData?.visible);
     }
@@ -252,6 +270,31 @@ export class ComponentHelperClass extends StepHelperClass {
         );
         // this.component = load component
         // return this.component;
+    }
+    public getDoorPriceModel() {
+        const sizeList = zhHarvestDoorSizes(this.zus, this.itemUid);
+        const formData = {
+            priceVariants: {} as {
+                [size in string]: {
+                    id?: number;
+                    price?: number;
+                };
+            },
+            stepProductUid: this.componentUid,
+            dykeStepId: this.getStepForm().stepId,
+        };
+        const stepProdPricings = this.getComponentPricings(this.componentUid);
+
+        sizeList.map((sl) => {
+            formData.priceVariants[sl.size] = stepProdPricings[sl.size] || {
+                id: null,
+                price: "",
+            };
+        });
+        return {
+            formData,
+            sizeList,
+        };
     }
     public getComponentPriceModel() {
         const priceDeps = this.getStepPriceDeps();
@@ -341,7 +384,6 @@ function getCombinations(
     arr: { title: string; uid: string; stepUid: string }[][]
 ) {
     // : { titleStack: string[]; uidStack: string[] }[]
-
     const result: {
         titleStack: string[];
         uidStack: string[];

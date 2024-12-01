@@ -18,20 +18,29 @@ import { AlertCircle } from "lucide-react";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 
 interface Props {
-    stepUid;
+    cls: ComponentHelperClass;
     componentsUid;
 }
 
 const Context = createContext<ReturnType<typeof useInitContext>>(null);
 const useCtx = () => useContext(Context);
-export function useInitContext(stepUid, componentsUid) {
+export function openComponentVariantModal(
+    cls: ComponentHelperClass,
+    componentsUid
+) {
+    _modal.openModal(
+        <ComponentVariantModal componentsUid={componentsUid} cls={cls} />
+    );
+}
+export function useInitContext(cls: ComponentHelperClass, componentsUid) {
     const [componentUid, ...rest] = componentsUid;
+    const stepUid = cls.stepUid;
     const zus = useFormDataStore();
-    const cls = useMemo(() => {
-        console.log("COMPONENT VISIBILITY MODAL CLS INITIALIZED");
-        return new ComponentHelperClass(stepUid, zus, componentUid);
-    }, [stepUid, componentUid, zus, stepUid]);
-    const [itemUid, cStepUid] = stepUid.split("-");
+    // const cls = useMemo(() => {
+    //     console.log("COMPONENT VISIBILITY MODAL CLS INITIALIZED");
+    //     return new ComponentHelperClass(stepUid, zus, componentUid);
+    // }, [stepUid, componentUid, zus, stepUid]);
+    // const [itemUid, cStepUid] = stepUid.split("-");
 
     const component = cls.component;
     const data = cls.getComponentVariantData();
@@ -67,11 +76,8 @@ export function useInitContext(stepUid, componentsUid) {
         componentsUid,
     };
 }
-export default function ComponentVariantModal({
-    stepUid,
-    componentsUid,
-}: Props) {
-    const ctx = useInitContext(stepUid, componentsUid);
+export default function ComponentVariantModal({ cls, componentsUid }: Props) {
+    const ctx = useInitContext(cls, componentsUid);
 
     return (
         <Context.Provider value={ctx}>

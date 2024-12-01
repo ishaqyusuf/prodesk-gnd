@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface Props<T> {
     label?: string;
@@ -19,6 +20,7 @@ interface Props<T> {
     list?: boolean;
     size?: "sm" | "default" | "xs";
     prefix?: string;
+    tabIndex?;
     // defaultValue?:boolean
 }
 export default function ControlledInput<
@@ -33,6 +35,7 @@ export default function ControlledInput<
     type,
     list,
     prefix,
+    tabIndex,
     size = "default",
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
@@ -57,17 +60,18 @@ export default function ControlledInput<
                             )}
                         >
                             {prefix && (
-                                <Button
-                                    type="button"
-                                    size={size as any}
-                                    variant={"outline"}
-                                    className={size == "sm" && "h-8"}
+                                <div
+                                    className={cn(
+                                        size == "sm" && "",
+                                        "sbg-muted-foreground/50 text-sm px-1 h-full"
+                                    )}
                                 >
                                     {prefix}
-                                </Button>
+                                </div>
                             )}
                             {type == "textarea" ? (
                                 <Textarea
+                                    tabIndex={tabIndex}
                                     placeholder={placeholder}
                                     className={cn(
                                         fieldState.error && "border-red-400"
@@ -82,6 +86,7 @@ export default function ControlledInput<
                                 />
                             ) : (
                                 <Input
+                                    tabIndex={tabIndex}
                                     type={type}
                                     placeholder={placeholder}
                                     // {...field}

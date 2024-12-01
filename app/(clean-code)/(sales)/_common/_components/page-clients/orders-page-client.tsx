@@ -56,7 +56,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                 </div>
                 <div className="flex-1"></div>
                 <Button asChild size="sm">
-                    <Link href="/sales-v2/form/order?fromPage=new">
+                    <Link href="/sales-book/create-order">
                         <Icons.add className="w-4 h-4 mr-2" />
                         <span>New</span>
                     </Link>

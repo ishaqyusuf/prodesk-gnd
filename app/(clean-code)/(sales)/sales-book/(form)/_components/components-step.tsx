@@ -26,11 +26,7 @@ import {
 } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    zhClearSelection,
-    zhEditComponentVariant,
-    zhEditPricing,
-} from "../_utils/helpers/zus/zus-component-helper";
+import { zhEditPricing } from "../_utils/helpers/zus/zus-component-helper";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ComponentImg } from "./component-img";
@@ -42,6 +38,8 @@ import { openEditComponentPrice } from "./modals/component-price-modal";
 import { Badge } from "@/components/ui/badge";
 import DoorSizeModal from "./modals/door-size-modal";
 import { _modal } from "@/components/common/modal/provider";
+import { openDoorPriceModal } from "./modals/door-price-modal";
+import { openComponentVariantModal } from "./modals/component-visibility-modal";
 
 interface Props {
     stepUid;
@@ -172,22 +170,28 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
         ctx;
     const isDoor = ctx.cls.isDoor();
     const zus = useFormDataStore();
-    async function batchDeleteAction() {
-        await zusDeleteComponents({
+
+    const batchDeleteAction = useCallback(() => {
+        zusDeleteComponents({
             zus,
             stepUid,
             selection: true,
+        }).then((c) => {
+            ctx.clearSelection();
         });
-        ctx.clearSelection();
-    }
-    async function editVisibility() {
+    }, [selectionState, zus, stepUid]);
+    const editVisibility = useCallback(() => {
         const ls = [];
         Object.entries(selectionState?.uids).map(([a, b]) => {
             if (b) ls.push(a);
         });
-        zhEditComponentVariant(stepUid, ls);
+        openComponentVariantModal(
+            new ComponentHelperClass(stepUid, zus, ls[0]),
+            ls
+        );
         ctx.clearSelection();
-    }
+    }, [selectionState, zus, stepUid]);
+
     return (
         <>
             <div
@@ -294,13 +298,16 @@ function Component({
             productUid: component.uid,
         });
     }
-    function editVisibility() {
-        zhEditComponentVariant(stepUid, [component.uid]);
-    }
+
+    const editVisibility = useCallback(() => {
+        openComponentVariantModal(cls, [component.uid]);
+    }, [stepUid, component, zus]);
     const editPrice = useCallback(() => {
         openEditComponentPrice(cls);
     }, [stepUid, component, zus]);
-
+    const editDoorPrice = useCallback(() => {
+        openDoorPriceModal(cls);
+    }, [stepUid, component, zus]);
     const selectComponent = useCallback(() => {
         if (selectState.count) {
             ctx.toggleComponent(component.uid);
@@ -392,7 +399,11 @@ function Component({
                                         Visibility
                                     </Menu.Item>
                                     <Menu.Item
-                                        onClick={editPrice}
+                                        onClick={
+                                            cls.isDoor
+                                                ? editDoorPrice
+                                                : editPrice
+                                        }
                                         Icon={Icons.dollar}
                                     >
                                         Price

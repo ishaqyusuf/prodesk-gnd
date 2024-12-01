@@ -1,8 +1,5 @@
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
-import {
-    createSalesBookFormUseCase,
-    getSalesBookFormUseCase,
-} from "../../../_common/use-case/sales-book-form-use-case";
+import { createSalesBookFormUseCase } from "../../../_common/use-case/sales-book-form-use-case";
 import { FormClient } from "../_components/form-client";
 
 export default async function CreateOrderPage({}) {
