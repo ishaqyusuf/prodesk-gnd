@@ -8,6 +8,7 @@ export function useEffectAfterMount(fn, deps: any[] = []) {
             isMounted.current = true;
             return;
         }
+        console.log("AFTER MOUNT");
         fn();
     }, deps);
 }
