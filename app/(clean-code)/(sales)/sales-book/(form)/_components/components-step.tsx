@@ -64,6 +64,7 @@ export function useStepContext(stepUid) {
     }, [stepUid, zus]);
     // cls.resetSelector(selectionState, setSelectionState);
     useEffectAfterMount(() => {
+        console.log("LOADING STEP C");
         zhLoadStepComponents({
             stepUid,
             zus,
