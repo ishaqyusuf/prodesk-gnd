@@ -5,6 +5,7 @@ export function useEffectAfterMount(fn, deps: any[] = []) {
 
     useEffect(() => {
         if (!isMounted.current) {
+            console.log("BEFORE MOUNT");
             isMounted.current = true;
             return;
         }
