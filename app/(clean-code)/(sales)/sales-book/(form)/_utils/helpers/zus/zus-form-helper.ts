@@ -54,6 +54,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
         });
+        item.multiComponent.components;
         // zhHarvestDoorSizes(resp, uid);
     });
     return resp;

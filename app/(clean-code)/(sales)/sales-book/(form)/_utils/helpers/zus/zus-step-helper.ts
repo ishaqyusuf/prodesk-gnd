@@ -15,6 +15,7 @@ export async function zhLoadStepComponents({
     zus,
     stepUid,
 }: LoadStepComponentsProps) {
+    console.log("LOADING STEP COMPONENTS");
     const cls = new StepHelperClass(stepUid, zus);
     return await cls.fetchStepComponents();
 }

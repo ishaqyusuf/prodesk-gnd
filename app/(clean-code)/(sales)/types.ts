@@ -315,6 +315,7 @@ export interface SalesFormZusData {
         stepComponent: { [itemUid in string]: string[] };
         multiComponent: { [itemUid in string]: string[] };
     };
+
     kvFormItem: {
         [itemUid in string]: {
             id?: number;
@@ -326,9 +327,18 @@ export interface SalesFormZusData {
             sideView?: {
                 img?: string;
             }[];
-            doorSizes?: {
-                size: string;
-            }[];
+            multiSelectData?: {
+                form: {
+                    [id in string]: {
+                        // id for door = `${stepProdUid}-${size}`
+                        // id for moudlings = `${stepProdUid}`
+                        qty: number;
+                        basePrice: number;
+                        hptId: number;
+                        // imgUrl: string;
+                    };
+                };
+            };
         };
     };
     kvMultiComponent: {
