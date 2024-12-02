@@ -13,7 +13,6 @@ export function useSettingsContext() {
             data: salesSetting,
         },
     });
-    console.log(salesSetting.composedRouter);
     const arr = useFieldArray({
         control: form.control,
         name: "data.sectionKeys",
@@ -23,6 +22,11 @@ export function useSettingsContext() {
         form.setValue(`data.setting.data.route.${uid}`, {
             routeSequence: [{ uid: "" }],
             externalRouteSequence: [],
+            config: {
+                noHandle: false,
+                hasSwing: false,
+                addonQty: false,
+            },
         });
         arr.append({
             uid,

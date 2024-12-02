@@ -52,6 +52,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
     const composedRouter = { ...(fdata.setting?.data?.route || {}) };
     Object.keys(composedRouter).map((routeKey) => {
         composedRouter[routeKey].route = {};
+
         let crk = routeKey;
         composedRouter[routeKey].routeSequence?.map((s) => {
             composedRouter[routeKey].route[crk] = s.uid;

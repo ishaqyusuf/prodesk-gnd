@@ -33,6 +33,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
 
 export default function FormSettingsModal({}) {
     const value = useSettingsContext();
@@ -126,6 +127,22 @@ function RouteSection({ uid }) {
                 </CardHeader>
             </div>
             <CardContent>
+                <div className="grid gap-4 pb-4">
+                    <ControlledCheckbox
+                        switchInput
+                        control={ctx.form.control}
+                        name={`data.setting.data.route.${uid}.config.noHandle`}
+                        label="Single Handle Mode"
+                        description="Turn on if this section does not have the Lh and Rh attribute"
+                    />
+                    <ControlledCheckbox
+                        switchInput
+                        control={ctx.form.control}
+                        name={`data.setting.data.route.${uid}.config.hasSwing`}
+                        label="Swing Input"
+                        description="Turn on if this section does not have swing attribute"
+                    />
+                </div>
                 <Sortable
                     value={arr.fields}
                     onMove={({ activeIndex, overIndex }) =>

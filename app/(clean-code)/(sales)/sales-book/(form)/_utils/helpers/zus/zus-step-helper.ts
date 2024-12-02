@@ -1,9 +1,5 @@
-import {
-    deleteStepComponentsUseCase,
-    getStepComponentsUseCase,
-} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import { deleteStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
-import { zhItemUidFromStepUid } from "./zus-form-helper";
 import { toast } from "sonner";
 import { StepHelperClass } from "./zus-helper-class";
 
@@ -18,16 +14,6 @@ export async function zhLoadStepComponents({
     // console.log("LOADING STEP COMPONENTS");
     const cls = new StepHelperClass(stepUid, zus);
     return await cls.fetchStepComponents();
-}
-
-export function componentIsRoot({
-    zus,
-    componentUid,
-}: {
-    componentUid;
-    zus: ZusSales;
-}) {
-    const route = zus.data.salesSetting.composedRouter;
 }
 
 export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {

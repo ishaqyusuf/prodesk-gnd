@@ -340,7 +340,7 @@ export class ComponentHelperClass extends StepHelperClass {
         // return this.component;
     }
     public getDoorPriceModel() {
-        const sizeList = zhHarvestDoorSizes(this.zus, this.itemUid);
+        const { sizeList, height } = zhHarvestDoorSizes(this.zus, this.itemUid);
         const formData = {
             priceVariants: {} as {
                 [size in string]: {
@@ -362,6 +362,7 @@ export class ComponentHelperClass extends StepHelperClass {
         return {
             formData,
             sizeList,
+            height,
         };
     }
     public getComponentPriceModel() {
@@ -450,11 +451,11 @@ export class ComponentHelperClass extends StepHelperClass {
     public selectComponent() {
         const isMulti = this.isMultiSelect();
         let groupItem = this.getItemForm()?.groupItem;
-        if (!groupItem)
-            groupItem = {
-                itemIds: [],
-                form: {},
-            };
+        // if (!groupItem)
+        //     groupItem = {
+        //         itemIds: [],
+        //         form: {},
+        //     };
 
         if (this.isDoor()) {
             openDoorSizeSelectModal(this);
@@ -488,7 +489,7 @@ export class ComponentHelperClass extends StepHelperClass {
             stepData = {
                 ...stepData,
                 componentUid: this.componentUid,
-                value: component.price,
+                value: component.title,
                 stepId: component.stepId,
                 price: component.price,
             };

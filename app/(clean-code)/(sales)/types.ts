@@ -328,11 +328,22 @@ export interface SalesFormZusData {
                 img?: string;
             }[];
             groupItem?: {
-                componentsBasePrice?: number;
-                componentsSalesPrice?: number;
-                totalBasePrice?: number;
-                totalSalesPrice?: number;
+                pricing?: {
+                    components?: {
+                        basePrice?: number;
+                        salesPrice?: number;
+                    };
+                    total?: {
+                        basePrice?: number;
+                        salesPrice?: number;
+                    };
+                };
+                // componentsBasePrice?: number;
+                // componentsSalesPrice?: number;
+                // totalBasePrice?: number;
+                // totalSalesPrice?: number;
                 itemIds: string[];
+                stepUid: string;
                 form: {
                     [id in string]: {
                         selected: boolean;
@@ -399,6 +410,11 @@ export type SalesSettingsMeta = {
             };
             externalRoute?: {
                 [stepUid in string]: string;
+            };
+            config: {
+                noHandle?: boolean;
+                hasSwing?: boolean;
+                addonQty?: boolean;
             };
         };
     };

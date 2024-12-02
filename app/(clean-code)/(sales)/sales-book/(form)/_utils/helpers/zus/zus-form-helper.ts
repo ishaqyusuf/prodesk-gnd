@@ -54,16 +54,16 @@ export function zhInitializeState(data: GetSalesBookForm) {
         });
         // resp.kvFormItem[uid].groupItem
         Object.entries(item.multiComponent.components).map(([id, data]) => {
+            const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
             if (!resp.kvFormItem[uid].groupItem)
                 resp.kvFormItem[uid].groupItem = {
-                    componentsBasePrice: 0,
-                    componentsSalesPrice: 0,
+                    // componentsBasePrice: 0,
+                    // componentsSalesPrice: 0,
+                    pricing: {},
                     itemIds: [],
-                    totalBasePrice: 0,
-                    totalSalesPrice: 0,
                     form: {},
+                    stepUid: stepProdUid,
                 };
-            const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
             if (data._doorForm)
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     doorForm.casingPrice;
@@ -142,7 +142,10 @@ export function zhHarvestDoorSizes(data: SalesFormZusData, itemUid) {
             });
         });
     });
-    return sizeList;
+    return {
+        sizeList,
+        height: stepCls.getStepForm()?.value,
+    };
 }
 export async function zhDeleteItem(zus: ZusSales, uid, index) {
     zus.removeItem(uid, index);
