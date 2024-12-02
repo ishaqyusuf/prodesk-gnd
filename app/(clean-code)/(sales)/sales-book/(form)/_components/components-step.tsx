@@ -312,10 +312,12 @@ function Component({
             ctx.toggleComponent(component.uid);
             return;
         }
-        // if (cls.isDoor()) {
-        //     openDoorSizeSelectModal
-        //     return;
-        // }
+        cls.selectComponent();
+        return;
+        if (cls.isDoor()) {
+            openDoorSizeSelectModal;
+            return;
+        }
         zhSelectStepComponent({
             stepUid,
             zus,

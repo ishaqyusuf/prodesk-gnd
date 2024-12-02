@@ -2,10 +2,12 @@ import { create } from "zustand";
 
 import { SalesFormZusData } from "../../../../types";
 import { stepActions } from "./step-action";
-import { FieldPath } from "react-hook-form";
+import { FieldPath, FieldPathValue } from "react-hook-form";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
 export type ZusComponent = ZusSales["kvStepComponentList"][number][number];
+export type ZusStepFormData = ZusSales["kvStepForm"][number];
+export type ZusItemFormData = ZusSales["kvFormItem"][number];
 type SalesFormZusAction = ReturnType<typeof fns>;
 export type SalesFormSet = (
     update: (state: SalesFormZusData) => Partial<SalesFormZusData>
@@ -32,7 +34,10 @@ function fns(set: SalesFormSet) {
                     !newState.kvFormItem[itemUid].collapsed;
                 return newState;
             }),
-        dotUpdate: (k: FieldPath<SalesFormZusData>, stepSq) =>
+        dotUpdate: <K extends FieldPath<SalesFormZusData>>(
+            k: K,
+            stepSq //: FieldPathValue<SalesFormZusData, K>
+        ) =>
             set((state) => {
                 const newState = {
                     ...state,

@@ -1,22 +1,29 @@
 import { getStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import {
     ZusComponent,
+    ZusItemFormData,
     ZusSales,
+    ZusStepFormData,
 } from "../../../_common/_stores/form-data-store";
 import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import DoorSizeModal from "../../../_components/modals/door-size-modal";
 import { zhHarvestDoorSizes } from "./zus-form-helper";
 import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal";
+import { FieldPath, FieldPathValue } from "react-hook-form";
+import { SettingsClass } from "./zus-settings-class";
+import { toast } from "sonner";
+import { LetterCaseLowercaseIcon } from "@radix-ui/react-icons";
 interface Filters {
     stepUid?;
     stepTitle?;
 }
-export class StepHelperClass {
+export class StepHelperClass extends SettingsClass {
     stepUid: string;
     itemUid;
     constructor(public itemStepUid, public zus: ZusSales) {
         const [itemUid, stepUid] = itemStepUid?.split("-");
+        super(itemStepUid, zus, itemUid, stepUid);
         this.itemUid = itemUid;
         this.stepUid = stepUid;
     }
@@ -50,7 +57,7 @@ export class StepHelperClass {
     }
     public updateStepForm(data) {
         Object.entries(data).map(([k, v]) => {
-            this.zus.dotUpdate(`kvStepForm.${this.itemStepUid}.${k}`, v);
+            this.zus.dotUpdate(`kvStepForm.${this.itemStepUid}.${k}` as any, v);
         });
     }
     public findStepForm(stepUid) {
@@ -261,8 +268,60 @@ export class StepHelperClass {
             return resp;
         });
     }
+    public saveStepForm(data: ZusStepFormData) {
+        this.zus.dotUpdate(`kvStepForm.${this.itemStepUid}`, data);
+    }
+    public saveItemForm(data: ZusItemFormData) {
+        this.zus.dotUpdate(`kvFormItem.${this.itemUid}`, data);
+    }
+    public dotUpdateItemForm<K extends FieldPath<ZusItemFormData>>(
+        k: K,
+        value: FieldPathValue<ZusItemFormData, K>
+    ) {
+        this.zus.dotUpdate(`kvFormItem.${this.itemUid}.${k}`, value as any);
+    }
+    public updateNextStepSequence(nextStepUid, stepForm) {
+        const stepSq = this.getItemStepSequence();
+        const prevStepIndex = stepSq.indexOf(this.itemStepUid);
+        const prevNextStepUid = stepSq[prevStepIndex + 1];
+        if (prevNextStepUid) {
+            if (prevNextStepUid != nextStepUid) {
+                stepSq.splice(
+                    prevStepIndex + 1,
+                    stepSq.length - prevStepIndex - 1
+                );
+                stepSq.push(nextStepUid);
+            }
+        } else {
+            stepSq.push(nextStepUid);
+        }
+        this.zus.dotUpdate(`kvStepForm.${nextStepUid}`, stepForm);
+        this.zus.dotUpdate(`sequence.stepComponent.${this.itemUid}`, stepSq);
+        this.zus.toggleStep(nextStepUid);
+    }
+    public nextStep(isRoot) {
+        const nrs = this.getNextRouteFromSettings(this.getItemForm(), isRoot);
+        if (!nrs.nextRoute) {
+            toast.error("This Form Step Sequence has no next step.");
+            return;
+        }
+        let { nextStepForm, nextRoute, nextStepUid } = nrs;
+        if (!nextStepForm) {
+            nextStepForm = {
+                componentUid: null,
+                meta: nextRoute.meta,
+            };
+        }
+        nextStepForm.title = nextRoute.title;
+        nextStepForm.stepId = nextRoute.id;
+        nextStepForm.value = nextStepForm.value || "";
+        nextStepForm._stepAction = {
+            selection: {},
+            selectionCount: 0,
+        };
+        this.updateNextStepSequence(nextStepUid, nextStepForm);
+    }
 }
-
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
         itemStepUid,
@@ -424,9 +483,31 @@ export class ComponentHelperClass extends StepHelperClass {
                 .filter(([uid, data]) => data.selected)
                 .map(([uid, data]) => uid);
         } else {
+            let stepData = this.getStepForm();
+            const component = this.component;
+            stepData = {
+                ...stepData,
+                componentUid: this.componentUid,
+                value: component.price,
+                stepId: component.stepId,
+                price: component.price,
+            };
+            this.saveStepForm(stepData);
+            this.dotUpdateItemForm("currentStepUid", null);
+            const isRoot = this.componentIsRoot();
+            if (isRoot) {
+                this.dotUpdateItemForm("routeUid", this.componentUid);
+            }
+            this.nextStep(isRoot);
         }
     }
+    public componentIsRoot() {
+        const route = this.zus.data.salesSetting.composedRouter;
+        const isRoot = route[this.componentUid];
+        return isRoot;
+    }
 }
+
 function getCombinations(
     arr: { title: string; uid: string; stepUid: string }[][]
 ) {

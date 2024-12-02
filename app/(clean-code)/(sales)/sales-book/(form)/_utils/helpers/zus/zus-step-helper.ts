@@ -50,9 +50,7 @@ export async function zhSelectStepComponent({
         [stepUid]: stepData,
     });
     setTimeout(() => {
-        zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
-        console.log("filtered cleared", stepUid);
-
+        // zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
         zhNextRoute({
             zus,
             stepUid,
@@ -71,16 +69,15 @@ export function componentIsRoot({
 }
 export function zhNextRoute({
     zus,
-    stepUid,
+    stepUid: itemStepUid,
     isRoot,
 }: LoadStepComponentsProps & { isRoot }) {
     const route = zus.data.salesSetting.composedRouter;
-    const [itemUid, componentStepUid] = stepUid?.split("-");
+    const [itemUid, stepUid] = itemStepUid?.split("-");
     const itemForm = zus.kvFormItem[itemUid];
     // zus.sequence
     const rootUid = itemForm.routeUid;
-    const nextRouteUid =
-        route[rootUid]?.route?.[isRoot ? rootUid : componentStepUid];
+    const nextRouteUid = route[rootUid]?.route?.[isRoot ? rootUid : stepUid];
     const nextRoute = zus.data.salesSetting.stepsByKey[nextRouteUid];
 
     if (!nextRoute) {
@@ -102,7 +99,7 @@ export function zhNextRoute({
         selectionCount: 0,
     };
     const stepSq = zus.sequence.stepComponent[itemUid];
-    const prevStepIndex = stepSq.indexOf(stepUid);
+    const prevStepIndex = stepSq.indexOf(itemStepUid);
     const prevNextStepUid = stepSq[prevStepIndex + 1];
     if (prevNextStepUid) {
         if (prevNextStepUid != nextStepUid) {
