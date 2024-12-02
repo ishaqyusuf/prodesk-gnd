@@ -5,7 +5,6 @@ import {
 } from "../_common/_stores/form-data-store";
 import {
     zhLoadStepComponents,
-    zhSelectStepComponent,
     zusDeleteComponents,
     zusFilterStepComponents,
     zusToggleComponentSelect,
@@ -313,17 +312,6 @@ function Component({
             return;
         }
         cls.selectComponent();
-        return;
-        if (cls.isDoor()) {
-            openDoorSizeSelectModal;
-            return;
-        }
-        zhSelectStepComponent({
-            stepUid,
-            zus,
-            id: component.id,
-            component,
-        });
     }, [selectState, cls]);
 
     return (
