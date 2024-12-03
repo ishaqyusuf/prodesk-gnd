@@ -23,19 +23,14 @@ export async function getComponentPricingListByUidDta(stepProductUid) {
         stepProductUid,
     });
 }
-export async function saveComponentPricingsDta(
-    data: Prisma.DykePricingSystemCreateManyInput[]
+export async function updateComponentPricingsDta(
+    data: Partial<Prisma.DykePricingSystemCreateManyInput>[]
 ) {
-    const newData = data.filter((a) => !a.id).map(({ id, ...rest }) => rest);
-
-    if (newData.length) {
-        const resp = await prisma.dykePricingSystem.createMany({
-            data: newData,
-        });
-    }
     const updateByPrice: { [price in string]: number[] } = {};
-    data.filter((d) => d.id).map((p) => {
-        const k = !p.price ? "del" : p.price;
+    const deleteIds = [];
+    data.map((p) => {
+        const k = p.price;
+        if (!k) deleteIds.push(p.id);
         if (updateByPrice[k]) updateByPrice[k].push(p.id);
         else updateByPrice[k] = [p.id];
     });
@@ -49,6 +44,27 @@ export async function saveComponentPricingsDta(
             });
         })
     );
+    if (deleteIds.length)
+        await prisma.dykePricingSystem.updateMany({
+            where: { id: { in: deleteIds } },
+            data: {
+                deletedAt: new Date(),
+            },
+        });
+}
+export async function saveComponentPricingsDta(
+    data: Prisma.DykePricingSystemCreateManyInput[]
+) {
+    const newData = data
+        .filter((a) => !a.id && a.price)
+        .map(({ id, ...rest }) => rest);
+
+    if (newData.length) {
+        const resp = await prisma.dykePricingSystem.createMany({
+            data: newData,
+        });
+    }
+    await updateComponentPricingsDta(data.filter((d) => d.id));
     return {
         status: "success",
     };

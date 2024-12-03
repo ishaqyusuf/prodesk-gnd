@@ -170,6 +170,9 @@ interface FooterProps {
     cancelText?: string;
     cancelVariant?: ButtonProps["variant"];
     submitVariant?: ButtonProps["variant"];
+    size?: ButtonProps["size"];
+    className?;
+    // cancel?: ButtonProps["size"];
 }
 function Footer({
     children,
@@ -177,21 +180,24 @@ function Footer({
     onCancel,
     submitText = "Submit",
     cancelBtn,
+    size = "lg",
     cancelText = "Cancel",
     cancelVariant = "secondary",
     submitVariant = "default",
+    className,
 }: FooterProps) {
     const isModal = _modal?.data?.type == "modal";
     const [Footer] = isModal ? [DialogFooter] : [SheetFooter];
     const form = useFormContext();
     return (
-        <Footer className="flex space-x-4">
+        <Footer className={cn("flex shadow-lgs space-x-4", className)}>
             {children}
             {(onSubmit || cancelBtn) && (
                 <div className="flex justify-end space-x-4">
                     {cancelBtn && (
                         <Button
                             variant={cancelVariant}
+                            size={size}
                             onClick={() => {
                                 onCancel ? onCancel(_modal) : _modal?.close();
                             }}
@@ -203,6 +209,7 @@ function Footer({
                         <Btn
                             variant={submitVariant}
                             isLoading={_modal?.loading}
+                            size={size}
                             onClick={async () => {
                                 if (form) {
                                     const resp = await form.trigger();

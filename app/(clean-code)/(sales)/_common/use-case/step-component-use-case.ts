@@ -100,3 +100,6 @@ export async function saveHarvestedDoorPricingUseCase(ls) {
     const val = await saveHarvestedDta(ls);
     return val;
 }
+export async function saveComponentRedirectUidUseCase(id, redirectUid) {
+    await updateStepComponentDta(id, { redirectUid });
+}

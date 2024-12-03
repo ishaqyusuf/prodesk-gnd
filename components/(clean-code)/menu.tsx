@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IconKeys, Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "../ui/scroll-area";
 
 type MenuItemProps = {
     link?;
@@ -108,7 +109,11 @@ function Item({
                     )}
                     {children}
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>{SubMenu}</DropdownMenuSubContent>
+                <DropdownMenuSubContent>
+                    <ScrollArea className="max-h-[50vh] overflow-auto">
+                        {SubMenu}
+                    </ScrollArea>
+                </DropdownMenuSubContent>
             </DropdownMenuSub>
         );
     const Frag = () => (

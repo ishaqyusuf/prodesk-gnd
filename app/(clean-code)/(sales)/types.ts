@@ -338,6 +338,11 @@ export interface SalesFormZusData {
                         salesPrice?: number;
                     };
                 };
+                qty: {
+                    rh: number | string;
+                    lh: number | string;
+                    total: number | string;
+                };
                 // componentsBasePrice?: number;
                 // componentsSalesPrice?: number;
                 // totalBasePrice?: number;

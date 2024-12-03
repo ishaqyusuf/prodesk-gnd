@@ -7,7 +7,6 @@ import {
     zhLoadStepComponents,
     zusDeleteComponents,
     zusFilterStepComponents,
-    zusToggleComponentSelect,
 } from "../_utils/helpers/zus/zus-step-helper";
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 import { Menu } from "@/components/(clean-code)/menu";
@@ -16,11 +15,9 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
     CheckCircle,
-    Eye,
+    ExternalLink,
     Filter,
     Info,
-    MinusCircle,
-    ShowerHead,
     Variable,
 } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
@@ -39,7 +36,6 @@ import DoorSizeModal from "./modals/door-size-modal";
 import { _modal } from "@/components/common/modal/provider";
 import { openDoorPriceModal } from "./modals/door-price-modal";
 import { openComponentVariantModal } from "./modals/component-visibility-modal";
-import { openDoorSizeSelectModal } from "./modals/door-size-select-modal";
 
 interface Props {
     stepUid;
@@ -177,7 +173,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
         }).then((c) => {
             ctx.clearSelection();
         });
-    }, [selectionState, zus, stepUid]);
+    }, [zus, stepUid, ctx]);
     const editVisibility = useCallback(() => {
         const ls = [];
         Object.entries(selectionState?.uids).map(([a, b]) => {
@@ -188,8 +184,8 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
             ls
         );
         ctx.clearSelection();
-    }, [selectionState, zus, stepUid]);
-
+    }, [selectionState, zus, stepUid, ctx]);
+    const hasSelections = useMemo(() => ctx.cls.hasSelections(), [ctx.cls]);
     return (
         <>
             <div
@@ -265,6 +261,18 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                     </>
                                 )}
                             </Menu>
+                            {hasSelections && (
+                                <>
+                                    <Button
+                                        onClick={() => {
+                                            ctx.cls.nextStep();
+                                        }}
+                                        size="sm"
+                                    >
+                                        Proceed
+                                    </Button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
@@ -285,10 +293,17 @@ function Component({
     // const _stepAction = stepForm?._stepAction;
     const selectState = ctx.selectionState;
     const [open, setOpen] = useState(false);
-    const cls = useMemo(
-        () => new ComponentHelperClass(stepUid, zus, component?.uid, component),
-        [zus, component]
-    );
+    const { cls } = useMemo(() => {
+        const cls = new ComponentHelperClass(
+            stepUid,
+            zus,
+            component?.uid,
+            component
+        );
+        return {
+            cls,
+        };
+    }, [zus, component, stepUid]);
     async function deleteStepItem() {
         await zusDeleteComponents({
             zus,
@@ -299,31 +314,36 @@ function Component({
 
     const editVisibility = useCallback(() => {
         openComponentVariantModal(cls, [component.uid]);
-    }, [stepUid, component, zus]);
+    }, [cls, component]);
     const editPrice = useCallback(() => {
         openEditComponentPrice(cls);
-    }, [stepUid, component, zus]);
+    }, [cls]);
     const editDoorPrice = useCallback(() => {
         openDoorPriceModal(cls);
-    }, [stepUid, component, zus]);
+    }, [cls]);
     const selectComponent = useCallback(() => {
         if (selectState.count) {
             ctx.toggleComponent(component.uid);
             return;
         }
         cls.selectComponent();
-    }, [selectState, cls]);
+    }, [selectState, cls, component, ctx]);
+    const multiSelect = cls.isMultiSelect();
 
     return (
         <div
             className="relative p-2 min-h-[25vh] xl:min-h-[40vh] flex flex-col group "
             key={component.uid}
         >
+            {/* {multiSelect &&
+                cls.multiSelected() &&
+                cls.getMultiSelectData()?.length} */}
             <button
                 className={cn(
                     "border  h-full hover:bg-white  w-full rounded-lg overflow-hidden",
-                    stepForm?.componentUid == component.uid
-                        ? "border-muted-foreground"
+                    (multiSelect && cls.multiSelected()) ||
+                        stepForm?.componentUid == component.uid
+                        ? "border-muted-foreground bg-white"
                         : "hover:border-muted-foreground"
                 )}
                 onClick={selectComponent}
@@ -419,11 +439,40 @@ function Component({
                         >
                             Select
                         </Menu.Item>
+                        <RedirectMenuItem cls={cls} />
                         <DeleteRowAction menu action={deleteStepItem} />
                     </Menu>
                 </div>
             </div>
         </div>
+    );
+}
+function RedirectMenuItem({ cls }: { cls: ComponentHelperClass }) {
+    const { redirectRoutes } = useMemo(() => {
+        return {
+            redirectRoutes: cls.getRedirectableRoutes(),
+        };
+    }, [cls]);
+    console.log("REDIRECT MENU");
+    return (
+        <Menu.Item
+            Icon={ExternalLink}
+            disabled={!redirectRoutes?.length}
+            SubMenu={
+                <>
+                    {redirectRoutes?.map((r) => (
+                        <Menu.Item
+                            onClick={() => cls.saveComponentRedirect(r.uid)}
+                            key={r.uid}
+                        >
+                            {r.title}
+                        </Menu.Item>
+                    ))}
+                </>
+            }
+        >
+            Redirect
+        </Menu.Item>
     );
 }
 export const ComponentsStep = Step; // memo(Step);

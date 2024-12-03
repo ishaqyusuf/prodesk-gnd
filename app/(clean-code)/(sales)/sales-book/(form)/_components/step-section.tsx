@@ -10,11 +10,12 @@ import { ComponentsStep } from "./components-step";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { formatMoney } from "@/lib/use-number";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
+import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
 
 interface Props {
     stepUid?;
@@ -94,6 +95,16 @@ export function StepSection({ stepUid }: Props) {
 function StepSectionHeader({ stepUid }) {
     const zus = useFormDataStore();
     const stepForm = zus?.kvStepForm?.[stepUid];
+    //   const cls = useMemo(() => ctx.cls.hasSelections(), [ctx.cls]);
+    const { cls, ...stat } = useMemo(() => {
+        const cls = new StepHelperClass(stepUid, zus);
+        return {
+            cls,
+            hasSelection: cls.hasSelections(),
+            selectionCount: cls.getTotalSelectionsCount(),
+            selectionQty: cls.getTotalSelectionsQty(),
+        };
+    }, [stepUid, zus]);
     return (
         <CollapsibleTrigger asChild>
             <div className="border">
@@ -111,6 +122,16 @@ function StepSectionHeader({ stepUid }) {
                         <Badge variant="destructive" className="h-5 px-1">
                             ${formatMoney(stepForm.price)}
                         </Badge>
+                    )}
+                    {stat.hasSelection && (
+                        <>
+                            <Badge variant="destructive" className="h-5 px-1">
+                                selection: {stat.selectionCount}
+                            </Badge>
+                            <Badge variant="destructive" className="h-5 px-1">
+                                qty: {stat.selectionQty}
+                            </Badge>
+                        </>
                     )}
                     <div className="">
                         <DevOnly>

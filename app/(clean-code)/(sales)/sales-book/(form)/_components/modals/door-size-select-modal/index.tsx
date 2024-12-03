@@ -1,6 +1,6 @@
 import Modal from "@/components/common/modal";
 
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
@@ -11,7 +11,10 @@ import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-cla
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ControlledInput from "@/components/common/controls/controlled-input";
-import { saveComponentPricingUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
+import {
+    saveComponentPricingUseCase,
+    updateComponentPricingUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { Label } from "@/components/ui/label";
 import {
     Table,
@@ -22,108 +25,45 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import { cn, toNumber } from "@/lib/utils";
+import Money from "@/components/_v1/money";
+import AdminControl from "../../admin-control";
+
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { DoorSizeSelectContext, useCtx, useInitContext } from "./ctx";
+
 interface Props {
     cls: ComponentHelperClass;
 }
 
-const Context = createContext<ReturnType<typeof useInitContext>>(null);
-const useCtx = () => useContext(Context);
 const pricingOptions = ["Single Pricing", "Multi Pricing"] as const;
 type PricingOption = (typeof pricingOptions)[number];
-export function openDoorSizeSelectModal(cls: ComponentHelperClass) {
-    _modal.openModal(<DoorSizeSelectModal cls={cls} />);
-}
-export function useInitContext(cls: ComponentHelperClass) {
-    const priceModel = cls.getDoorPriceModel();
-    console.log(priceModel);
 
-    const sizeList = priceModel.sizeList.filter(
-        (s) => s.height == priceModel.height
-    );
-    let groupItem = cls.getItemForm().groupItem;
-    // if(!groupItem)
-    // {
-    //     groupItem = {
-    //         itemIds: [],
-    //         stepUid: cls.stepUid
-    //     },
-    //     form: {
-
-    //     }
-    // }
-    const componentUid = cls.componentUid;
-    const selections: {
-        [id in string]: {
-            salesPrice: number | string;
-            basePrice: number;
-            swing: string;
-            qty: {
-                lh: number | string;
-                rh: number | string;
-                total: number | string;
-            };
-        };
-    } = {};
-    console.log({ sizeList });
-    const sList = sizeList.map((sl) => {
-        const path = `${componentUid}-${sl.size}`;
-        const sizeData = groupItem?.form?.[path];
-        selections[path] = {
-            salesPrice: sizeData?.salesPrice || "",
-            basePrice: sizeData?.basePrice,
-            swing: sizeData?.swing || "",
-            qty: {
-                lh: sizeData?.qty?.lh || "",
-                rh: sizeData?.qty?.rh || "",
-                total: sizeData?.qty?.total || "",
-            },
-        };
-        return {
-            path,
-            ...sl,
-        };
-    });
-    const form = useForm({
-        defaultValues: {
-            selections,
-        },
-    });
-    async function save() {
-        const data = form.getValues();
-        const oldPv = priceModel.formData.priceVariants;
-        // const priceUpdate = await saveComponentPricingUseCase(
-        //     Object.entries(data.priceVariants)
-        //         .filter(([k, val]) => {
-        //             const prevPrice = oldPv?.[k]?.price;
-        //             return val?.price != prevPrice;
-        //         })
-        //         .map(([dependenciesUid, _data]) => ({
-        //             id: _data.id,
-        //             price: _data.price ? Number(_data.price) : null,
-        //             dependenciesUid,
-        //             dykeStepId: data.dykeStepId,
-        //             stepProductUid: data.stepProductUid,
-        //         }))
-        // );
-        // await cls.fetchUpdatedPrice();
-        // _modal.close();
-        // toast.success("Pricing Updated.");
-    }
-
-    return {
-        form,
-        // priceModel: memoied.priceModel,
-        cls,
-        save,
-        sizeList: sList,
-    };
-}
 export default function DoorSizeSelectModal({ cls }: Props) {
     const ctx = useInitContext(cls);
-
+    const config = ctx.routeConfig;
     return (
-        <Context.Provider value={ctx}>
-            <Modal.Content>
+        <DoorSizeSelectContext.Provider value={ctx}>
+            <Modal.Content
+                size={config.hasSwing || !config.noHandle ? "lg" : "md"}
+            >
                 <Modal.Header
                     title={ctx.cls?.getComponent?.title || "Component Price"}
                     subtitle={"Edit door size price"}
@@ -138,10 +78,17 @@ export default function DoorSizeSelectModal({ cls }: Props) {
                                 <TableRow>
                                     <TableHead>Size</TableHead>
                                     <TableHead>Price</TableHead>
-                                    <TableHead>Swing</TableHead>
-                                    <TableHead>RH</TableHead>
-                                    <TableHead>LH</TableHead>
-                                    <TableHead>Qty</TableHead>
+                                    {config.hasSwing && (
+                                        <TableHead>Swing</TableHead>
+                                    )}
+                                    {config.noHandle ? (
+                                        <TableHead>Qty</TableHead>
+                                    ) : (
+                                        <>
+                                            <TableHead>LH</TableHead>
+                                            <TableHead>RH</TableHead>
+                                        </>
+                                    )}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -152,37 +99,188 @@ export default function DoorSizeSelectModal({ cls }: Props) {
                         </Table>
                     </ScrollArea>
                 </Form>
-                <Modal.Footer submitText="Save" onSubmit={ctx.save} />
+                <Modal.Footer
+                    className={""}
+                    submitText="Pick More"
+                    size="sm"
+                    onSubmit={ctx.pickMore}
+                >
+                    <Button
+                        onClick={ctx.removeSelection}
+                        variant="destructive"
+                        size="sm"
+                    >
+                        Remove Selection
+                    </Button>
+                    <div className="flex-1"></div>
+                    <Button
+                        onClick={ctx.nextStep}
+                        variant="secondary"
+                        size="sm"
+                    >
+                        Next Step
+                    </Button>
+                </Modal.Footer>
             </Modal.Content>
-        </Context.Provider>
+        </DoorSizeSelectContext.Provider>
     );
 }
 function Row({ variant }) {
     const ctx = useCtx();
-    const [salesPrice, basePrice] = ctx.form.watch([
+    const config = ctx.routeConfig;
+    const [salesPrice, basePrice, selected] = ctx.form.watch([
         `selections.${variant.path}.salesPrice`,
         `selections.${variant.path}.basePrice`,
+        `selections.${variant.path}.selected`,
     ]);
     return (
-        <TableRow>
-            <TableCell>
-                <Label>{variant.size}</Label>
+        <TableRow className={cn()}>
+            <TableCell className="">
+                <Label className="whitespace-nowrap">{variant.size}</Label>
             </TableCell>
-            <TableCell>{}</TableCell>
-            {/* <div className="flex-1">
-                                            <Label className="">
-                                                {variant.size}
-                                            </Label>
-                                        </div>
-                                        <div className="w-28">
-                                            <ControlledInput
-                                                prefix="$"
-                                                tabIndex={index + 50}
-                                                control={ctx.form.control}
-                                                size="sm"
-                                                name={`selections.${variant.path}.qty.total`}
-                                            />
-                                        </div> */}
+            <TableCell>
+                <AdminControl fallback={<Money value={salesPrice} />}>
+                    <PriceCell
+                        salesPrice={salesPrice}
+                        basePrice={basePrice}
+                        variant={variant}
+                    />
+                </AdminControl>
+            </TableCell>
+            {config.hasSwing && (
+                <TableCell>
+                    <ControlledInput
+                        control={ctx.form.control}
+                        size="sm"
+                        name={`selections.${variant.path}.swing`}
+                    />
+                </TableCell>
+            )}
+            {config.noHandle ? (
+                <TableCell className="w-28">
+                    <ControlledInput
+                        type="number"
+                        control={ctx.form.control}
+                        size="sm"
+                        name={`selections.${variant.path}.qty.total`}
+                    />
+                </TableCell>
+            ) : (
+                <>
+                    <TableCell className="w-28">
+                        <ControlledInput
+                            type="number"
+                            control={ctx.form.control}
+                            size="sm"
+                            name={`selections.${variant.path}.qty.lh`}
+                        />
+                    </TableCell>
+                    <TableCell className="w-28">
+                        <ControlledInput
+                            type="number"
+                            control={ctx.form.control}
+                            size="sm"
+                            name={`selections.${variant.path}.qty.rh`}
+                        />
+                    </TableCell>
+                </>
+            )}
         </TableRow>
+    );
+}
+function PriceCell({ salesPrice, basePrice, variant }) {
+    const ctx = useCtx();
+    return (
+        <Popover>
+            <PopoverTrigger>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                onClick={() => {
+                                    ctx.togglePriceForm(variant.size);
+                                }}
+                                size="sm"
+                                className="h-8"
+                                variant={salesPrice ? "default" : "destructive"}
+                            >
+                                {salesPrice ? (
+                                    <Money value={salesPrice} />
+                                ) : (
+                                    <>Add Price</>
+                                )}
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Click to edit price</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </PopoverTrigger>
+            <PopoverContent
+                onClick={(e) => {
+                    e.preventDefault();
+                }}
+            >
+                <PriceControl
+                    salesPrice={salesPrice}
+                    basePrice={basePrice}
+                    variant={variant}
+                />
+            </PopoverContent>
+        </Popover>
+    );
+}
+function PriceControl({ salesPrice, basePrice, variant }) {
+    const form = useForm({
+        defaultValues: {
+            price: basePrice || "",
+        },
+    });
+    const ctx = useCtx();
+    async function updatePrice() {
+        let price = form.getValues("price");
+        price = price ? Number(price) : null;
+        const data = ctx.priceModel?.formData?.priceVariants?.[variant.size];
+        if (data?.id)
+            await updateComponentPricingUseCase([
+                {
+                    id: data.id,
+                    price,
+                },
+            ]);
+        else {
+            await saveComponentPricingUseCase([
+                {
+                    id: data.id,
+                    price,
+                    dependenciesUid: variant.size,
+                    dykeStepId: ctx.priceModel?.formData.dykeStepId,
+                    stepProductUid: ctx.priceModel?.formData.stepProductUid,
+                },
+            ]);
+        }
+        await ctx.cls.fetchUpdatedPrice();
+        toast.success("Pricing Updated.");
+        ctx.priceChanged(variant.size, price);
+    }
+    return (
+        <Form {...form}>
+            <CardHeader>
+                <CardTitle>Edit Price</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ControlledInput
+                    size="sm"
+                    control={form.control}
+                    name="price"
+                    label="Price"
+                    prefix="$"
+                />
+            </CardContent>
+            <CardFooter className="flex justify-end">
+                <Button onClick={updatePrice}>Save</Button>
+            </CardFooter>
+        </Form>
     );
 }

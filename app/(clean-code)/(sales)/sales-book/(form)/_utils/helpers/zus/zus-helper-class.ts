@@ -9,11 +9,11 @@ import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-c
 import { _modal } from "@/components/common/modal/provider";
 import DoorSizeModal from "../../../_components/modals/door-size-modal";
 import { zhHarvestDoorSizes } from "./zus-form-helper";
-import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal";
+
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
-import { LetterCaseLowercaseIcon } from "@radix-ui/react-icons";
+import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal/open-modal";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -35,6 +35,15 @@ export class StepHelperClass extends SettingsClass {
     }
     public isMultiSelect() {
         return this.isDoor() || this.isMoulding();
+    }
+    public getTotalSelectionsCount() {
+        return this.getItemForm()?.groupItem?.itemIds?.length;
+    }
+    public getTotalSelectionsQty() {
+        return this.getItemForm()?.groupItem?.qty?.total;
+    }
+    public hasSelections() {
+        return this.getTotalSelectionsQty() && this.isMultiSelect();
     }
     public getStepIndex() {
         const index = this.getItemStepSequence()?.indexOf(this.itemStepUid);
@@ -299,7 +308,7 @@ export class StepHelperClass extends SettingsClass {
         this.zus.dotUpdate(`sequence.stepComponent.${this.itemUid}`, stepSq);
         this.zus.toggleStep(nextStepUid);
     }
-    public nextStep(isRoot) {
+    public nextStep(isRoot = false) {
         const nrs = this.getNextRouteFromSettings(this.getItemForm(), isRoot);
         if (!nrs.nextRoute) {
             toast.error("This Form Step Sequence has no next step.");
@@ -450,16 +459,23 @@ export class ComponentHelperClass extends StepHelperClass {
     }
     public selectComponent() {
         const isMulti = this.isMultiSelect();
-        let groupItem = this.getItemForm()?.groupItem;
-        // if (!groupItem)
-        //     groupItem = {
-        //         itemIds: [],
-        //         form: {},
-        //     };
 
         if (this.isDoor()) {
             openDoorSizeSelectModal(this);
         } else if (this.isMoulding()) {
+            let groupItem = this.getItemForm()?.groupItem;
+            if (!groupItem)
+                groupItem = {
+                    pricing: {},
+                    itemIds: [],
+                    form: {},
+                    stepUid: "stepProdUid",
+                    qty: {
+                        lh: 0,
+                        rh: 0,
+                        total: 0,
+                    },
+                };
             if (!groupItem.form?.[this.componentUid])
                 groupItem.form[this.componentUid] = {
                     selected: true,
@@ -483,6 +499,8 @@ export class ComponentHelperClass extends StepHelperClass {
             groupItem.itemIds = Object.entries(groupItem.form)
                 .filter(([uid, data]) => data.selected)
                 .map(([uid, data]) => uid);
+
+            this.dotUpdateItemForm("groupItem", groupItem);
         } else {
             let stepData = this.getStepForm();
             const component = this.component;
@@ -504,9 +522,18 @@ export class ComponentHelperClass extends StepHelperClass {
     }
     public componentIsRoot() {
         const route = this.zus.data.salesSetting.composedRouter;
-        const isRoot = route[this.componentUid];
+        const isRoot = route[this.componentUid] != null;
         return isRoot;
     }
+    public getMultiSelectData() {
+        return Object.entries(this.getItemForm()?.groupItem?.form || {})
+            ?.filter(([uid, data]) => uid?.startsWith(`${this.componentUid}-`))
+            .map(([uid, data]) => data);
+    }
+    public multiSelected() {
+        return this.getMultiSelectData().length > 0;
+    }
+    public async saveComponentRedirect(uid) {}
 }
 
 function getCombinations(

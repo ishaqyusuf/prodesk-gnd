@@ -63,6 +63,11 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     itemIds: [],
                     form: {},
                     stepUid: stepProdUid,
+                    qty: {
+                        lh: 0,
+                        rh: 0,
+                        total: 0,
+                    },
                 };
             if (data._doorForm)
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {

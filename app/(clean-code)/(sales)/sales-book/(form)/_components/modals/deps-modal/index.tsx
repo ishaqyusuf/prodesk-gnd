@@ -52,6 +52,7 @@ export default function DependenciesModal({ settingKey, stepCtx }: Props) {
         stepCtx.updateStep(stepForm);
         _modal.close();
     }
+
     return (
         <Form {..._form}>
             <Modal.Content size="sm">
