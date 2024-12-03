@@ -17,10 +17,12 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
             id;
             title;
             uid;
+
             meta: StepMeta;
             components: {
                 uid: string;
                 title: string;
+                redirectUid: string;
             }[];
         };
     } = {};
@@ -46,6 +48,7 @@ export function composeStepRouting(fdata: LoadSalesFormData) {
                 title: p.product?.title || p.door?.title,
                 uid: p.uid,
                 variations: p.meta?.variations || [],
+                redirectUid: p.redirectUid,
             })),
         };
     });

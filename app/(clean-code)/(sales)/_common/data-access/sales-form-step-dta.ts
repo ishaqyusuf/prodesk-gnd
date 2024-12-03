@@ -115,6 +115,7 @@ export async function getStepComponentsDta(stepTitle, stepId) {
             price: null,
             stepId,
             productCode: component.productCode,
+            redirectUid: component.redirectUid,
             _metaData: {
                 custom: component.custom,
                 visible: false,
@@ -144,6 +145,7 @@ export async function getStepsForRoutingDta() {
                 where: notDeleted.where,
                 select: {
                     // nextStepId: true,
+                    redirectUid: true,
                     nextStepId: true,
                     dykeStepId: true,
                     uid: true,

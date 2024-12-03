@@ -1,4 +1,7 @@
-import { getStepComponentsUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import {
+    getStepComponentsUseCase,
+    saveComponentRedirectUidUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import {
     ZusComponent,
     ZusItemFormData,
@@ -142,6 +145,15 @@ export class StepHelperClass extends SettingsClass {
     }
     public get getStepComponents() {
         return this.zus.kvStepComponentList?.[this.stepUid];
+    }
+    public updateStepComponent(data) {
+        this.zus.dotUpdate(
+            `kvStepComponentList.${this.stepUid}`,
+            this.getStepComponents?.map((c) => {
+                if (c.uid == data.uid) return data;
+                return c;
+            })
+        );
     }
     public getComponentVariantData() {
         const sequence = this.getItemStepSequence();
@@ -308,8 +320,12 @@ export class StepHelperClass extends SettingsClass {
         this.zus.dotUpdate(`sequence.stepComponent.${this.itemUid}`, stepSq);
         this.zus.toggleStep(nextStepUid);
     }
-    public nextStep(isRoot = false) {
-        const nrs = this.getNextRouteFromSettings(this.getItemForm(), isRoot);
+    public nextStep(isRoot = false, redirectUid = null) {
+        const nrs = this.getNextRouteFromSettings(
+            this.getItemForm(),
+            isRoot,
+            redirectUid
+        );
         if (!nrs.nextRoute) {
             toast.error("This Form Step Sequence has no next step.");
             return;
@@ -339,7 +355,10 @@ export class ComponentHelperClass extends StepHelperClass {
         public component?: ZusComponent
     ) {
         super(itemStepUid, zus);
+        this.redirectUid = this.getComponent?.redirectUid;
     }
+    public redirectUid;
+
     public get getComponent() {
         if (this.component) return this.component;
         return this.zus.kvStepComponentList[this.stepUid]?.find(
@@ -517,7 +536,7 @@ export class ComponentHelperClass extends StepHelperClass {
             if (isRoot) {
                 this.dotUpdateItemForm("routeUid", this.componentUid);
             }
-            this.nextStep(isRoot);
+            this.nextStep(isRoot, this.redirectUid);
         }
     }
     public componentIsRoot() {
@@ -533,7 +552,14 @@ export class ComponentHelperClass extends StepHelperClass {
     public multiSelected() {
         return this.getMultiSelectData().length > 0;
     }
-    public async saveComponentRedirect(uid) {}
+    public async saveComponentRedirect(redirectUid) {
+        await saveComponentRedirectUidUseCase(this.component.id, redirectUid);
+        toast.success("Saved");
+        this.updateStepComponent({
+            ...this.component,
+            redirectUid,
+        });
+    }
 }
 
 function getCombinations(

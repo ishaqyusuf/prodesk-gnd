@@ -379,13 +379,14 @@ function Component({
             ) : null}
             <div
                 className={cn(
-                    selectState?.count
-                        ? "flex absolute m-4 top-0 left-0"
-                        : "hidden"
+                    "flex items-center absolute m-4 gap-2 top-0 left-0"
                 )}
             >
-                <div className="">
+                <div className={cn(selectState?.count ? "" : "hidden")}>
                     <Checkbox checked={selectState?.uids?.[component.uid]} />
+                </div>
+                <div className={cn(!component.redirectUid && "hidden")}>
+                    <ExternalLink className="w-4 text-muted-foreground h-4" />
                 </div>
             </div>
             <div

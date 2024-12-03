@@ -82,11 +82,11 @@ export async function zusDeleteComponents({
         };
         zus.dotUpdate(`kvStepForm.${stepUid}._actionForm`, _actionForm);
     }
-    const filterComponents = zus.kvFilteredStepComponentList[stepUid];
-    zus.dotUpdate(
-        `kvFilteredStepComponentList.${stepUid}`,
-        filterComponents?.filter((c) => uids.every((u) => u != c.uid))
-    );
+    // const filterComponents = zus.kvFilteredStepComponentList[stepUid];
+    // zus.dotUpdate(
+    //     `kvFilteredStepComponentList.${stepUid}`,
+    //     filterComponents?.filter((c) => uids.every((u) => u != c.uid))
+    // );
     const stepComponents = zus.kvStepComponentList[_stepUid];
     zus.dotUpdate(
         `kvStepComponentList.${_stepUid}`,
