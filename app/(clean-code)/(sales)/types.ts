@@ -397,10 +397,7 @@ export interface SalesFormZusData {
             componentUid: string;
             isHpt?: boolean;
             isService?: boolean;
-            _stepAction?: {
-                selection: { [uid in string]: boolean };
-                selectionCount?: number;
-            };
+
             meta?: StepMeta;
         };
     };

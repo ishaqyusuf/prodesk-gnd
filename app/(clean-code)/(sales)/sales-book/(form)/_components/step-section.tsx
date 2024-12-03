@@ -4,9 +4,9 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
-import HousePackageTool from "./house-package-tool";
+import HousePackageTool from "./hpt-step";
 import ServiceStep from "./service-step";
-import { ComponentsStep } from "./components-step";
+import { ComponentsStep } from "./step-components";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { formatMoney } from "@/lib/use-number";
@@ -30,7 +30,7 @@ export function StepSection({ stepUid }: Props) {
         if (stepForm?.isHpt)
             return (
                 <Content>
-                    <HousePackageTool stepUid={stepUid} />
+                    <HousePackageTool itemStepUid={stepUid} />
                 </Content>
             );
         if (stepForm?.isService)

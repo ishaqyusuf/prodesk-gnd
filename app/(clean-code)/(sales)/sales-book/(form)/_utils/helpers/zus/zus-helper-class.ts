@@ -350,10 +350,7 @@ export class StepHelperClass extends SettingsClass {
         nextStepForm.title = nextRoute.title;
         nextStepForm.stepId = nextRoute.id;
         nextStepForm.value = nextStepForm.value || "";
-        nextStepForm._stepAction = {
-            selection: {},
-            selectionCount: 0,
-        };
+
         this.updateNextStepSequence(nextStepUid, nextStepForm);
     }
 }

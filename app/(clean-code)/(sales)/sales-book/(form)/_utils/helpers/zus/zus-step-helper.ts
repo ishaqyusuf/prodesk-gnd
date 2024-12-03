@@ -37,56 +37,19 @@ export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
     return filteredComponents;
 }
 
-export function zusToggleComponentSelect({
-    stepUid,
-    zus,
-    productUid,
-}: LoadStepComponentsProps & {
-    productUid;
-}) {
-    const stepAction = zus.kvStepForm[stepUid]?._stepAction;
-    const state = !stepAction?.selection?.[productUid];
-    const currentCount = (stepAction?.selectionCount || 0) + (state ? 1 : -1);
-
-    zus.dotUpdate(
-        `kvStepForm.${stepUid}._stepAction.selection.${productUid}`,
-        state
-    );
-    zus.dotUpdate(
-        `kvStepForm.${stepUid}._stepAction.selectionCount`,
-        currentCount
-    );
-}
 export async function zusDeleteComponents({
     stepUid,
     zus,
     productUid,
     selection,
-}: LoadStepComponentsProps & { productUid?: string; selection?: boolean }) {
-    let uids = [productUid]?.filter(Boolean);
+}: LoadStepComponentsProps & { productUid: string[]; selection?: boolean }) {
+    let uids = productUid?.filter(Boolean);
     const [uid, _stepUid] = stepUid?.split("-");
-    let _actionForm = zus.kvStepForm[stepUid]?._stepAction;
-    if (selection) {
-        uids = Object.keys(_actionForm?.selection || {}).filter(
-            (k) => _actionForm?.selection?.[k]
-        );
-    }
+
     if (uids.length) {
         await deleteStepComponentsUseCase(uids);
         toast.message("Deleted.");
     }
-    if (selection) {
-        _actionForm = {
-            selection: {},
-            selectionCount: 0,
-        };
-        zus.dotUpdate(`kvStepForm.${stepUid}._actionForm`, _actionForm);
-    }
-    // const filterComponents = zus.kvFilteredStepComponentList[stepUid];
-    // zus.dotUpdate(
-    //     `kvFilteredStepComponentList.${stepUid}`,
-    //     filterComponents?.filter((c) => uids.every((u) => u != c.uid))
-    // );
     const stepComponents = zus.kvStepComponentList[_stepUid];
     zus.dotUpdate(
         `kvStepComponentList.${_stepUid}`,

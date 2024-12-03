@@ -96,4 +96,7 @@ export class SettingsClass {
             stepsByKey
         );
     }
+    public getComponentFromSettings(uid) {
+        // return this.zus.data.salesSetting
+    }
 }

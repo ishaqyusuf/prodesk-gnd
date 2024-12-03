@@ -43,10 +43,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 price: fs.item?.price,
                 stepFormId: fs.item.id,
                 stepId: fs.step.id,
-                _stepAction: {
-                    selection: {},
-                    selectionCount: 0,
-                },
+
                 meta: stepMeta as any,
             };
             resp.sequence.stepComponent[uid].push(suid);

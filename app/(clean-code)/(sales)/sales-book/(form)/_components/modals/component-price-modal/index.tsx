@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { saveComponentPricingUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Props {
     cls: ComponentHelperClass;
@@ -69,7 +70,6 @@ export function useInitContext(cls: ComponentHelperClass) {
 }
 export default function ComponentPriceModal({ cls }: Props) {
     const ctx = useInitContext(cls);
-
     return (
         <Context.Provider value={ctx}>
             <Modal.Content>
@@ -78,39 +78,63 @@ export default function ComponentPriceModal({ cls }: Props) {
                     subtitle={"Edit component price"}
                 />
                 <Form {...ctx.form}>
-                    <ScrollArea className="max-h-[50vh]">
-                        {ctx.priceModel?.priceVariants?.map(
-                            (variant, index) => (
-                                <div
-                                    key={index}
-                                    className="flex gap-4 items-center border-b py-2"
-                                >
-                                    <div className="flex-1">
-                                        {variant?.title?.map((title) => (
-                                            <Badge
-                                                className=""
-                                                variant="outline"
-                                                key={title}
-                                            >
-                                                {title}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                    <div className="w-28">
-                                        <ControlledInput
-                                            prefix="$"
-                                            control={ctx.form.control}
-                                            size="sm"
-                                            name={`pricing.${variant.path}.price`}
-                                        />
-                                    </div>
-                                </div>
-                            )
-                        )}
-                    </ScrollArea>
+                    {ctx.priceModel?.priceVariants?.length > 7 ? (
+                        <>
+                            <Tabs>
+                                <TabsList>
+                                    <TabsTrigger value="priceList">
+                                        Price List
+                                    </TabsTrigger>
+                                    <TabsTrigger value="groupPricing">
+                                        Grouped Pricing
+                                    </TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="priceList">
+                                    <MainTab />
+                                </TabsContent>
+                                <TabsContent value="groupPricing">
+                                    <GroupPriceTab />
+                                </TabsContent>
+                            </Tabs>
+                        </>
+                    ) : (
+                        <MainTab />
+                    )}
                 </Form>
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />
             </Modal.Content>
         </Context.Provider>
+    );
+}
+function GroupPriceTab({}) {
+    return <></>;
+}
+function MainTab({}) {
+    const ctx = useCtx();
+    return (
+        <ScrollArea className="max-h-[50vh]">
+            {ctx.priceModel?.priceVariants?.map((variant, index) => (
+                <div
+                    key={index}
+                    className="flex gap-4 items-center border-b py-2"
+                >
+                    <div className="flex-1">
+                        {variant?.title?.map((title) => (
+                            <Badge className="" variant="outline" key={title}>
+                                {title}
+                            </Badge>
+                        ))}
+                    </div>
+                    <div className="w-28">
+                        <ControlledInput
+                            prefix="$"
+                            control={ctx.form.control}
+                            size="sm"
+                            name={`pricing.${variant.path}.price`}
+                        />
+                    </div>
+                </div>
+            ))}
+        </ScrollArea>
     );
 }

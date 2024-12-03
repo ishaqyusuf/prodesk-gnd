@@ -164,24 +164,26 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
         ctx;
     const isDoor = ctx.cls.isDoor();
     const zus = useFormDataStore();
-
+    const selectionUids = () =>
+        Object.entries(selectionState?.uids)
+            .filter(([a, b]) => {
+                return b;
+            })
+            .map(([a, b]) => b) as string[];
     const batchDeleteAction = useCallback(() => {
         zusDeleteComponents({
             zus,
             stepUid,
-            selection: true,
+            productUid: selectionUids(),
         }).then((c) => {
             ctx.clearSelection();
         });
     }, [zus, stepUid, ctx]);
     const editVisibility = useCallback(() => {
-        const ls = [];
-        Object.entries(selectionState?.uids).map(([a, b]) => {
-            if (b) ls.push(a);
-        });
+        const uids = selectionUids();
         openComponentVariantModal(
-            new ComponentHelperClass(stepUid, zus, ls[0]),
-            ls
+            new ComponentHelperClass(stepUid, zus, uids[0]),
+            uids
         );
         ctx.clearSelection();
     }, [selectionState, zus, stepUid, ctx]);
@@ -290,7 +292,7 @@ function Component({
     const { stepUid } = ctx;
     const zus = useFormDataStore();
     const stepForm = zus.kvStepForm[stepUid];
-    // const _stepAction = stepForm?._stepAction;
+
     const selectState = ctx.selectionState;
     const [open, setOpen] = useState(false);
     const { cls } = useMemo(() => {
@@ -308,7 +310,7 @@ function Component({
         await zusDeleteComponents({
             zus,
             stepUid,
-            productUid: component.uid,
+            productUid: [component.uid],
         });
     }
 
