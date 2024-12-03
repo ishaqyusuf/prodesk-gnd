@@ -464,6 +464,13 @@ function RedirectMenuItem({ cls }: { cls: ComponentHelperClass }) {
             disabled={!redirectRoutes?.length}
             SubMenu={
                 <>
+                    {cls.redirectUid && (
+                        <Menu.Item
+                            onClick={() => cls.saveComponentRedirect(null)}
+                        >
+                            Cancel Redirect
+                        </Menu.Item>
+                    )}
                     {redirectRoutes?.map((r) => (
                         <Menu.Item
                             onClick={() => cls.saveComponentRedirect(r.uid)}

@@ -45,7 +45,7 @@ function ItemSectionHeader({ uid }) {
     const formItem = zus?.kvFormItem?.[uid];
 
     return (
-        <div className="flex bg-accent items-center gap-4 p-2 px-4">
+        <div className="flex   border items-center gap-4 p-2 px-4">
             <CollapsibleTrigger asChild className="flex-1">
                 <div
                     className="flex "

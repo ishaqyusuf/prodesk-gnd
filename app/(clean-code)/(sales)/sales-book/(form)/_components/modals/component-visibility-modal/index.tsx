@@ -55,7 +55,9 @@ export function useInitContext(cls: ComponentHelperClass, componentsUid) {
         name: "variations",
     });
     async function save() {
-        const formData = form.getValues("variations");
+        const formData = form
+            .getValues("variations")
+            .filter((c) => c.rules.length);
         await saveComponentVariantUseCase(componentsUid, formData);
         _modal.close();
         toast.success("Component Visibility Updated.");

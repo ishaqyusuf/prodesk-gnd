@@ -107,9 +107,9 @@ function StepSectionHeader({ stepUid }) {
     }, [stepUid, zus]);
     return (
         <CollapsibleTrigger asChild>
-            <div className="border">
+            <div className="border border-muted-foreground/20">
                 <button
-                    className="flex h-8 w-full p-1 gap-4 px-4  space-x-2 items-center text-sm uppercase hover:bg-muted-foreground/20"
+                    className="flex h-8 w-full p-1 gap-4 px-4  space-x-2 items-center text-sm uppercase bg-muted-foreground/5 hover:bg-muted-foreground/20"
                     onClick={(e) => {
                         e.preventDefault();
                         zhtoggleStep(stepUid, zus);
