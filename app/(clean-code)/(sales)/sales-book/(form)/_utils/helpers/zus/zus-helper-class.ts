@@ -235,8 +235,8 @@ export class StepHelperClass extends SettingsClass {
                 };
             })
             .filter((a) => {
-                if (filter.stepTitle) return a.stepTitle == filter.stepTitle;
-                if (filter.stepUid) return a.stepUid == filter.stepUid;
+                if (filter?.stepTitle) return a.stepTitle == filter.stepTitle;
+                if (filter?.stepUid) return a.stepUid == filter.stepUid;
                 return true;
             })
             .map((a) => a.components)

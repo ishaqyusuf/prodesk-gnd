@@ -417,7 +417,7 @@ function Component({
                                     </Menu.Item>
                                     <Menu.Item
                                         onClick={
-                                            cls.isDoor
+                                            cls.isDoor()
                                                 ? editDoorPrice
                                                 : editPrice
                                         }
