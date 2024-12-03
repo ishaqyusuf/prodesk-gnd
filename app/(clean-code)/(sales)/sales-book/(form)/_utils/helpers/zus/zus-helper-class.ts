@@ -155,6 +155,16 @@ export class StepHelperClass extends SettingsClass {
             })
         );
     }
+    public updateStepComponentVariants(variations, componentUids: string[]) {
+        this.zus.dotUpdate(
+            `kvStepComponentList.${this.stepUid}`,
+            this.getStepComponents?.map((c) => {
+                if (componentUids.includes(c.uid)) c.variations = variations;
+
+                return c;
+            })
+        );
+    }
     public getComponentVariantData() {
         const sequence = this.getItemStepSequence();
 

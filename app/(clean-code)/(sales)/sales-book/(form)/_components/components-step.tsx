@@ -364,14 +364,14 @@ function Component({
                 {/* <div>{component.img}</div> */}
             </button>
             {/* {cls.getStepForm()?.meta?.stepPricingDeps?. } */}
-            <div className="absolute m-2">
+            {/* <div className="absolute m-2">
                 {component?.variations?.length ? (
                     <Filter className="w-4 h-4 text-muted-foreground/70" />
                 ) : (
                     <></>
                     // <MinusCircle className="w-4 h-4 text-muted-foreground/70" />
                 )}
-            </div>
+            </div> */}
             {component.productCode ? (
                 <div className="absolute -rotate-90 -translate-y-1/2 text-sm font-mono uppercase tracking-wider font-semibold text-muted-foreground transform top-1/2">
                     {component.productCode}
@@ -385,8 +385,11 @@ function Component({
                 <div className={cn(selectState?.count ? "" : "hidden")}>
                     <Checkbox checked={selectState?.uids?.[component.uid]} />
                 </div>
+                <div className={cn(!component?.variations?.length && "hidden")}>
+                    <Filter className="w-4 h-4 text-muted-foreground/70" />
+                </div>
                 <div className={cn(!component.redirectUid && "hidden")}>
-                    <ExternalLink className="w-4 text-muted-foreground h-4" />
+                    <ExternalLink className="w-4 text-muted-foreground/70 h-4" />
                 </div>
             </div>
             <div
@@ -454,7 +457,7 @@ function RedirectMenuItem({ cls }: { cls: ComponentHelperClass }) {
             redirectRoutes: cls.getRedirectableRoutes(),
         };
     }, [cls]);
-    console.log("REDIRECT MENU");
+
     return (
         <Menu.Item
             Icon={ExternalLink}

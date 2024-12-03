@@ -9,11 +9,7 @@ import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { zhComponentVariantUpdated } from "../../../_utils/helpers/zus/zus-component-helper";
-import {
-    saveComponentVariantUseCase,
-    updateStepMetaUseCase,
-} from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
+import { updateStepMetaUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -50,7 +46,6 @@ export function useInitContext(cls: StepHelperClass) {
         _modal.close();
         toast.success("Door Heights saved.");
         cls.updateStepForm({ meta: form.getValues("meta") });
-        // zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
     }
     function addRule() {
         varArray.append({

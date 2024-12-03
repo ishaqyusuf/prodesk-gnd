@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import ControlledSelect from "@/components/common/controls/controlled-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { zhComponentVariantUpdated } from "../../../_utils/helpers/zus/zus-component-helper";
+
 import { saveComponentVariantUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import { _modal } from "@/components/common/modal/provider";
 import { toast } from "sonner";
@@ -59,7 +59,7 @@ export function useInitContext(cls: ComponentHelperClass, componentsUid) {
         await saveComponentVariantUseCase(componentsUid, formData);
         _modal.close();
         toast.success("Component Visibility Updated.");
-        zhComponentVariantUpdated(stepUid, componentsUid, formData, zus);
+        cls.updateStepComponentVariants(formData, componentsUid);
     }
     function addRule() {
         varArray.append({
