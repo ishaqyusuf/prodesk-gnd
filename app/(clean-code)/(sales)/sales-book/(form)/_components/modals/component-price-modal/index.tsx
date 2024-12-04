@@ -29,7 +29,7 @@ export function useInitContext(cls: ComponentHelperClass) {
     const zus = useFormDataStore();
     const memoied = useMemo(() => {
         const step = cls.getStepForm();
-        const priceModel = cls.getComponentPriceModel();
+        const priceModel = cls.getComponentPriceModel(cls.componentUid);
         return {
             step,
             priceModel,

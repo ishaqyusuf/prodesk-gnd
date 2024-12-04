@@ -389,29 +389,16 @@ export class StepHelperClass extends SettingsClass {
             heightSizeList: sizeList?.filter((s) => s.height == height),
         };
     }
-}
-export class ComponentHelperClass extends StepHelperClass {
-    constructor(
-        itemStepUid,
-        zus: ZusSales,
-        public componentUid,
-        public component?: ZusComponent
-    ) {
-        super(itemStepUid, zus);
-        this.redirectUid = this.getComponent?.redirectUid;
+    public getCurrentComponentPricingModel(componentUid) {
+        const pm = this.getComponentPriceModel(componentUid);
+        const variant = pm.priceVariants.find((s) => s.current);
+        const pricing = pm.pricing[variant.path];
+        return {
+            variant,
+            pricing,
+        };
     }
-    public redirectUid;
-
-    public get getComponent() {
-        if (this.component) return this.component;
-        return this.zus.kvStepComponentList[this.stepUid]?.find(
-            (c) => c.uid == this.componentUid
-        );
-        // this.component = load component
-        // return this.component;
-    }
-
-    public getComponentPriceModel() {
+    public getComponentPriceModel(componentUid) {
         const priceDeps = this.getStepPriceDeps();
         const stepSeqs = this.getItemStepSequence();
 
@@ -423,19 +410,20 @@ export class ComponentHelperClass extends StepHelperClass {
                 return stepUid;
             })
             .filter(Boolean);
-        const componentUid = this.componentUid;
+        // const componentUid = this.componentUid;
         const componentPricings = this.getComponentPricings(componentUid);
         const form = {
             pricing: componentPricings,
             priceVariants: [] as {
                 path: string;
                 title: string[];
+                current?: boolean;
             }[],
         };
 
         if (!matchedSteps?.length) {
             form.priceVariants.push({
-                path: `${this.componentUid}.${this.componentUid}`,
+                path: `${componentUid}.${componentUid}`,
                 title: ["Default Price"],
             });
         } else {
@@ -472,8 +460,15 @@ export class ComponentHelperClass extends StepHelperClass {
                     visibleComponentsUID.includes(u)
                 );
             });
+            const kvstepforms = this.zus.kvStepForm;
             form.priceVariants = filteredCombs?.map((fc) => {
                 const path = fc.uidStack?.join("-");
+                let current = fc.uidStack.every(
+                    (u, i) =>
+                        kvstepforms[`${this.itemUid}-${fc.stepUidStack[i]}`]
+                            ?.componentUid == u
+                );
+
                 if (!form.pricing[path])
                     form.pricing[path] = {
                         price: "",
@@ -482,12 +477,38 @@ export class ComponentHelperClass extends StepHelperClass {
                 return {
                     path,
                     title: fc.titleStack,
+                    current,
                 };
             });
             console.log({ filteredCombs, combs, visibleComponents });
+            // console.log({
+            //     currents: form.priceVariants.filter((c) => c.current),
+            // });
         }
         return form;
     }
+}
+export class ComponentHelperClass extends StepHelperClass {
+    constructor(
+        itemStepUid,
+        zus: ZusSales,
+        public componentUid,
+        public component?: ZusComponent
+    ) {
+        super(itemStepUid, zus);
+        this.redirectUid = this.getComponent?.redirectUid;
+    }
+    public redirectUid;
+
+    public get getComponent() {
+        if (this.component) return this.component;
+        return this.zus.kvStepComponentList[this.stepUid]?.find(
+            (c) => c.uid == this.componentUid
+        );
+        // this.component = load component
+        // return this.component;
+    }
+
     public async fetchUpdatedPrice() {
         const priceData = await getPricingByUidUseCase(this.componentUid);
         Object.entries(priceData).map(([k, d]) =>
