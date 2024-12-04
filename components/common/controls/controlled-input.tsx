@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { InputHTMLAttributes } from "react";
 
 interface Props<T> {
     label?: string;
@@ -21,6 +22,7 @@ interface Props<T> {
     size?: "sm" | "default" | "xs";
     prefix?: string;
     tabIndex?;
+    inputProps?: InputHTMLAttributes<HTMLInputElement>;
     // defaultValue?:boolean
 }
 export default function ControlledInput<
@@ -37,6 +39,7 @@ export default function ControlledInput<
     prefix,
     tabIndex,
     size = "default",
+    inputProps,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     return (
@@ -51,7 +54,7 @@ export default function ControlledInput<
                             {label}
                         </FormLabel>
                     )}
-                    <FormControl>
+                    <FormControl {...inputProps}>
                         <div
                             className={cn(
                                 (suffix || prefix) &&
@@ -91,6 +94,7 @@ export default function ControlledInput<
                                     placeholder={placeholder}
                                     // {...field}
                                     // value={""}
+                                    {...inputProps}
                                     className={cn(
                                         fieldState.error && "border-red-400",
                                         size == "sm" && "h-8"

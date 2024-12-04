@@ -30,6 +30,9 @@ export class StepHelperClass extends SettingsClass {
         this.itemUid = itemUid;
         this.stepUid = stepUid;
     }
+    public isHtp() {
+        return this.getStepForm().title == "House Package Tool";
+    }
     public isDoor() {
         return this.getStepForm().title == "Door";
     }
@@ -55,6 +58,12 @@ export class StepHelperClass extends SettingsClass {
     public getItemStepSequence() {
         const sequence = this.zus.sequence.stepComponent?.[this.itemUid];
         return sequence;
+    }
+    public getItemStepForms() {
+        const sequence = this.getItemStepSequence();
+        return Object.entries(this.zus.kvStepForm)
+            .filter(([k, data]) => sequence.includes(k))
+            .map(([k, data]) => data);
     }
     public getStepSequence() {
         return this.getItemStepSequence()
@@ -353,6 +362,33 @@ export class StepHelperClass extends SettingsClass {
 
         this.updateNextStepSequence(nextStepUid, nextStepForm);
     }
+    public getDoorPriceModel(componentUid) {
+        const { sizeList, height } = zhHarvestDoorSizes(this.zus, this.itemUid);
+        const formData = {
+            priceVariants: {} as {
+                [size in string]: {
+                    id?: number;
+                    price?: number;
+                };
+            },
+            stepProductUid: componentUid,
+            dykeStepId: this.getStepForm().stepId,
+        };
+        const stepProdPricings = this.getComponentPricings(componentUid);
+
+        sizeList.map((sl) => {
+            formData.priceVariants[sl.size] = stepProdPricings[sl.size] || {
+                id: null,
+                price: "",
+            };
+        });
+        return {
+            formData,
+            sizeList,
+            height,
+            heightSizeList: sizeList?.filter((s) => s.height == height),
+        };
+    }
 }
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
@@ -374,32 +410,7 @@ export class ComponentHelperClass extends StepHelperClass {
         // this.component = load component
         // return this.component;
     }
-    public getDoorPriceModel() {
-        const { sizeList, height } = zhHarvestDoorSizes(this.zus, this.itemUid);
-        const formData = {
-            priceVariants: {} as {
-                [size in string]: {
-                    id?: number;
-                    price?: number;
-                };
-            },
-            stepProductUid: this.componentUid,
-            dykeStepId: this.getStepForm().stepId,
-        };
-        const stepProdPricings = this.getComponentPricings(this.componentUid);
 
-        sizeList.map((sl) => {
-            formData.priceVariants[sl.size] = stepProdPricings[sl.size] || {
-                id: null,
-                price: "",
-            };
-        });
-        return {
-            formData,
-            sizeList,
-            height,
-        };
-    }
     public getComponentPriceModel() {
         const priceDeps = this.getStepPriceDeps();
         const stepSeqs = this.getItemStepSequence();

@@ -2,35 +2,38 @@ import { IconKeys, Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 
-interface Props {
+interface Props
+    extends React.HTMLAttributes<HTMLDivElement>,
+        VariantProps<typeof variants> {
     label?: string;
     value?;
     children?;
 }
-const variants = cva("", {
+const variants = cva("flex  border-b text-sm justify-between items-center", {
     variants: {
         layout: {
             flex: "flex py-2 border-b",
             col: "flex-col",
         },
+        size: {
+            sm: "gap-2 py-1 px-2",
+            default: "gap-4 py-2 px-4 sm:px-8",
+        },
     },
     defaultVariants: {
         layout: "flex",
+        size: "default",
     },
 });
 function DlBase({
     label,
     value,
     children,
+    className,
     ...props
 }: Props & VariantProps<typeof variants>) {
     return (
-        <div
-            className={cn(
-                "flex gap-4 py-2 px-4 sm:px-8 border-b text-sm justify-between items-center",
-                variants(props)
-            )}
-        >
+        <div className={cn(variants(props), className)}>
             <dt className="text-muted-foreground">{label}</dt>
             <dt className="">{value}</dt>
         </div>
@@ -41,6 +44,7 @@ function Icon({
     value,
     children,
     icon,
+    className,
     ...props
 }: Props & VariantProps<typeof variants> & { icon: IconKeys }) {
     const Ico = Icons[icon];

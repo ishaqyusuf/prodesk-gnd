@@ -25,9 +25,12 @@ export function StepSection({ stepUid }: Props) {
     const stepForm = zus?.kvStepForm?.[stepUid];
     const [uid] = stepUid?.split("-");
     const zItem = zus?.kvFormItem?.[uid];
-
+    const cls = useMemo(() => {
+        const cls = new StepHelperClass(stepUid, zus);
+        return cls;
+    }, [stepUid, zus]);
     function Render() {
-        if (stepForm?.isHpt)
+        if (cls?.isHtp())
             return (
                 <Content>
                     <HousePackageTool itemStepUid={stepUid} />

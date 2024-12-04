@@ -13,11 +13,9 @@ export const DoorSizeSelectContext =
 
 export function useInitContext(cls: ComponentHelperClass) {
     const memoied = useMemo(() => {
-        const priceModel = cls.getDoorPriceModel();
+        const priceModel = cls.getDoorPriceModel(cls.componentUid);
 
-        const sizeList = priceModel.sizeList.filter(
-            (s) => s.height == priceModel.height
-        );
+        const sizeList = priceModel.heightSizeList;
         let groupItem = cls.getItemForm().groupItem;
         const routeConfig = cls.getRouteConfig();
 

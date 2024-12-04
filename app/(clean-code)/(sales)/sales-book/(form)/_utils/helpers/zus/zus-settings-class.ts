@@ -96,7 +96,9 @@ export class SettingsClass {
             stepsByKey
         );
     }
-    public getComponentFromSettings(uid) {
-        // return this.zus.data.salesSetting
+    public getComponentFromSettingsByStepId(stepId, uid) {
+        return Object.entries(this.zus.data.salesSetting.stepsByKey)
+            .find(([stepUid, data]) => data.id == stepId)?.[1]
+            ?.components?.find((c) => c.uid == uid);
     }
 }

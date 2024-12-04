@@ -328,6 +328,9 @@ export interface SalesFormZusData {
                 img?: string;
             }[];
             groupItem?: {
+                _?: {
+                    tabUid?: string;
+                };
                 pricing?: {
                     components?: {
                         basePrice?: number;

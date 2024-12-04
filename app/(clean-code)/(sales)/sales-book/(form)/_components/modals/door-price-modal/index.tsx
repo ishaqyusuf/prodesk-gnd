@@ -26,7 +26,7 @@ export function openDoorPriceModal(cls: ComponentHelperClass) {
     _modal.openModal(<DoorPriceModal cls={cls} />);
 }
 export function useInitContext(cls: ComponentHelperClass) {
-    const priceModel = cls.getDoorPriceModel();
+    const priceModel = cls.getDoorPriceModel(cls.componentUid);
 
     const form = useForm({
         defaultValues: {
