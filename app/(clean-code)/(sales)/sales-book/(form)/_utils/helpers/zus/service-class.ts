@@ -23,6 +23,8 @@ export class ServiceClass extends GroupFormClass {
     }
     public addServiceLine() {
         const uid = generateRandomString(5);
+        console.log(uid);
+
         const itemForm = this.getItemForm();
         const itemsUids = itemForm.groupItem.itemIds;
         itemsUids.push(uid);

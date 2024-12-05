@@ -55,12 +55,8 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {ctx.lines?.map((m, index) => (
-                            <MouldingRow
-                                sn={index + 1}
-                                data={m}
-                                key={m.itemUid}
-                            />
+                        {ctx.itemIds?.map((m, index) => (
+                            <MouldingRow sn={index + 1} lineUid={m} key={m} />
                         ))}
                     </TableBody>
                     <TableFooter className="bg-accent">
@@ -82,34 +78,12 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
         </>
     );
 }
-function MouldingRow({
-    data,
-    sn,
-}: {
-    sn;
-    data: ReturnType<ServiceClass["getServiceLineForm"]>["lines"][number];
-}) {
+function MouldingRow({ lineUid, sn }: { sn; lineUid }) {
     const ctx = useCtx();
-    const mfd = ctx.itemForm?.groupItem?.form?.[data.itemUid];
-    const form = useForm({
-        defaultValues: mfd,
-    });
-    const watchForm = form.watch();
-    const inputProps: InputHTMLAttributes<HTMLInputElement> = {
-        onBlur: async (e) => {
-            await new Promise((res) => {
-                ctx.ctx.updateGroupItemForm(data.itemUid, watchForm);
-                setTimeout(() => {
-                    res(true);
-                }, 200);
-            });
-        },
-    };
-    // useEffect(() => {
-    //     console.log("><>>>>>>.");
-    // }, [watchForm.meta?.produceable, watchForm?.meta?.taxxable]);
+    const mfd = ctx.itemForm?.groupItem?.form?.[lineUid];
+
     return (
-        <Form {...form}>
+        <>
             <TableRow className={cn(!mfd?.selected && "hidden")}>
                 <TableCell className="font-mono">{sn}.</TableCell>
                 <TableCell className="font-mono font-medium text-sm">
@@ -117,42 +91,31 @@ function MouldingRow({
                         defaultValue={mfd?.meta?.description}
                         onChange={(e) => {
                             ctx.ctx.dotUpdateGroupItemFormPath(
-                                data.itemUid,
+                                lineUid,
                                 "meta.description",
                                 e.target.value
                             );
                         }}
                     />
-                    {/* <ControlledInput
-                        size="sm"
-                        control={form.control}
-                        name="meta.description"
-                        inputProps={inputProps}
-                    /> */}
                 </TableCell>
                 <TableCell>
                     <Switch
                         defaultChecked={mfd?.meta?.taxxable}
                         onCheckedChange={(e) => {
                             ctx.ctx.dotUpdateGroupItemFormPath(
-                                data.itemUid,
+                                lineUid,
                                 "meta.taxxable",
                                 e
                             );
                         }}
                     />
-                    {/* <ControlledCheckbox
-                        switchInput
-                        control={form.control}
-                        name="meta.taxxable"
-                    /> */}
                 </TableCell>
                 <TableCell>
                     <Switch
                         defaultChecked={mfd?.meta?.produceable}
                         onCheckedChange={(e) => {
                             ctx.ctx.dotUpdateGroupItemFormPath(
-                                data.itemUid,
+                                lineUid,
                                 "meta.produceable",
                                 e
                             );
@@ -160,22 +123,30 @@ function MouldingRow({
                     />
                 </TableCell>
                 <TableCell>
-                    <ControlledInput
-                        size="sm"
+                    <Input
                         type="number"
-                        control={form.control}
-                        name="qty.total"
-                        inputProps={inputProps}
+                        defaultValue={mfd?.qty?.total}
+                        onChange={(e) => {
+                            ctx.ctx.dotUpdateGroupItemFormPath(
+                                lineUid,
+                                "qty.total",
+                                +e.target.value
+                            );
+                        }}
                     />
                 </TableCell>
 
                 <TableCell>
-                    <ControlledInput
+                    <Input
                         type="number"
-                        size="sm"
-                        control={form.control}
-                        name="addon"
-                        inputProps={inputProps}
+                        defaultValue={mfd?.addon}
+                        onChange={(e) => {
+                            ctx.ctx.dotUpdateGroupItemFormPath(
+                                lineUid,
+                                "addon",
+                                +e.target.value
+                            );
+                        }}
                     />
                 </TableCell>
                 <TableCell>
@@ -184,13 +155,13 @@ function MouldingRow({
                 <TableCell align="right">
                     <ConfirmBtn
                         onClick={() => {
-                            ctx.ctx.removeGroupItem(data.itemUid);
+                            ctx.ctx.removeGroupItem(lineUid);
                         }}
                         trash
                         size="icon"
                     />
                 </TableCell>
             </TableRow>
-        </Form>
+        </>
     );
 }
