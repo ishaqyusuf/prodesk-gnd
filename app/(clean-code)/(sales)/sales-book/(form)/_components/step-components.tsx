@@ -346,7 +346,7 @@ function Component({
                     (multiSelect && cls.multiSelected()) ||
                         stepForm?.componentUid == component.uid
                         ? "border-muted-foreground bg-white"
-                        : "hover:border-muted-foreground"
+                        : "hover:border-muted-foreground/50"
                 )}
                 onClick={selectComponent}
             >

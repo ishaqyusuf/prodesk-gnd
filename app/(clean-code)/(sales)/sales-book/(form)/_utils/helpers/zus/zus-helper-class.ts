@@ -402,7 +402,7 @@ export class StepHelperClass extends SettingsClass {
         const pm = this.getComponentPriceModel(componentUid);
         console.log({ pm });
         const variant = pm.priceVariants.find((s) => s.current);
-        const pricing = pm.pricing[variant?.path];
+        const pricing = pm?.pricing?.[variant?.path];
         console.log({ pm, variant, pricing });
         return {
             variant,
