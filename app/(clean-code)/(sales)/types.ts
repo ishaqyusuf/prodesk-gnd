@@ -361,13 +361,13 @@ export interface SalesFormZusData {
                         // id for services = random
                         meta: {
                             description: string;
-                            taxxable: Boolean;
-                            produceable: Boolean;
+                            taxxable: boolean;
+                            produceable: boolean;
                         };
                         qty: {
-                            rh: number | string;
-                            lh: number | string;
-                            total: number | string;
+                            rh?: number | string;
+                            lh?: number | string;
+                            total?: number | string;
                         };
                         basePrice?: number;
                         salesPrice?: number;
@@ -399,9 +399,6 @@ export interface SalesFormZusData {
             stepFormId?: number;
             stepId?: number;
             componentUid: string;
-            isHpt?: boolean;
-            isService?: boolean;
-
             meta?: StepMeta;
         };
     };

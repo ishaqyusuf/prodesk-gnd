@@ -63,8 +63,6 @@ export async function getNextStepUseCase({
         price: null,
         stepFormId: null,
         stepId: step.step.id,
-        isHpt: false,
-        isService: false,
         meta: step.step.meta as any,
     };
 }

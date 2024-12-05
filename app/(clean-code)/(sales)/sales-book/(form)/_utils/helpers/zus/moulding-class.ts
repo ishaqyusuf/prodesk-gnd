@@ -7,7 +7,6 @@ export class MouldingClass extends GroupFormClass {
         super(itemStepUid, zus);
     }
     public getMouldingStepForm() {
-        console.log(this.zus.kvStepForm);
         return Object.entries(this.zus.kvStepForm).filter(
             ([uid, data]) =>
                 uid.startsWith(`${this.itemUid}-`) && data.title == "Moulding"

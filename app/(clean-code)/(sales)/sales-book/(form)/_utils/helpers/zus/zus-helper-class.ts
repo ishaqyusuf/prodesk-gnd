@@ -42,6 +42,12 @@ export class StepHelperClass extends SettingsClass {
     public isMoulding() {
         return this.getStepForm().title == "Moulding";
     }
+    public isServiceLineItem() {
+        return (
+            this.getItemForm().groupItem?.type != "MOULDING" &&
+            this.isLineItem()
+        );
+    }
     public isMouldingLineItem() {
         return (
             this.getItemForm().groupItem?.type == "MOULDING" &&

@@ -5,7 +5,6 @@ import {
 } from "@/components/ui/collapsible";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import HousePackageTool from "./hpt-step";
-import ServiceStep from "./service-step";
 import { ComponentsStep } from "./step-components";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +15,8 @@ import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
 import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
-import { c } from "nuqs/dist/serializer-DjSGvhZt";
 import MouldingLineItem from "./moulding-step";
+import ServiceLineItem from "./service-step";
 
 interface Props {
     stepUid?;
@@ -44,10 +43,10 @@ export function StepSection({ stepUid }: Props) {
                     <MouldingLineItem itemStepUid={stepUid} />
                 </Content>
             );
-        if (stepForm?.isService)
+        if (cls?.isServiceLineItem())
             return (
                 <Content>
-                    <ServiceStep stepUid={stepUid} />
+                    <ServiceLineItem itemStepUid={stepUid} />
                 </Content>
             );
         return (
