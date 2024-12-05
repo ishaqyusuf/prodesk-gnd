@@ -36,8 +36,17 @@ export class StepHelperClass extends SettingsClass {
     public isDoor() {
         return this.getStepForm().title == "Door";
     }
+    public isLineItem() {
+        return this.getStepForm().title == "Line Item";
+    }
     public isMoulding() {
         return this.getStepForm().title == "Moulding";
+    }
+    public isMouldingLineItem() {
+        return (
+            this.getItemForm().groupItem?.type == "MOULDING" &&
+            this.isLineItem()
+        );
     }
     public isMultiSelect() {
         return this.isDoor() || this.isMoulding();
@@ -391,12 +400,27 @@ export class StepHelperClass extends SettingsClass {
     }
     public getCurrentComponentPricingModel(componentUid) {
         const pm = this.getComponentPriceModel(componentUid);
+        console.log({ pm });
         const variant = pm.priceVariants.find((s) => s.current);
-        const pricing = pm.pricing[variant.path];
+        const pricing = pm.pricing[variant?.path];
+        console.log({ pm, variant, pricing });
         return {
             variant,
             pricing,
         };
+    }
+    public getPricedSteps() {
+        // const itemForm = this.getItemForm();
+        const itemSteps = this.getItemStepForms();
+        return itemSteps
+            .map((step) => {
+                return {
+                    title: step.title,
+                    price: step.price,
+                    value: step.value,
+                };
+            })
+            .filter((p) => p.price);
     }
     public getComponentPriceModel(componentUid) {
         const priceDeps = this.getStepPriceDeps();
@@ -423,8 +447,10 @@ export class StepHelperClass extends SettingsClass {
 
         if (!matchedSteps?.length) {
             form.priceVariants.push({
-                path: `${componentUid}.${componentUid}`,
+                // path: `${componentUid}.${componentUid}`,
+                path: componentUid,
                 title: ["Default Price"],
+                current: true,
             });
         } else {
             // console.log(this.zus.data.salesSetting?.rootComponentsByKey);
@@ -525,6 +551,7 @@ export class ComponentHelperClass extends StepHelperClass {
             if (!groupItem)
                 groupItem = {
                     pricing: {},
+                    type: "MOULDING",
                     itemIds: [],
                     form: {},
                     stepUid: "stepProdUid",
@@ -557,7 +584,7 @@ export class ComponentHelperClass extends StepHelperClass {
             groupItem.itemIds = Object.entries(groupItem.form)
                 .filter(([uid, data]) => data.selected)
                 .map(([uid, data]) => uid);
-
+            groupItem.qty.total = groupItem.itemIds?.length;
             this.dotUpdateItemForm("groupItem", groupItem);
         } else {
             let stepData = this.getStepForm();
@@ -585,11 +612,11 @@ export class ComponentHelperClass extends StepHelperClass {
     }
     public getMultiSelectData() {
         return Object.entries(this.getItemForm()?.groupItem?.form || {})
-            ?.filter(([uid, data]) => uid?.startsWith(`${this.componentUid}-`))
+            ?.filter(([uid, data]) => uid?.startsWith(`${this.componentUid}`))
             .map(([uid, data]) => data);
     }
     public multiSelected() {
-        return this.getMultiSelectData().length > 0;
+        return this.getMultiSelectData()?.some((s) => s.selected);
     }
     public async saveComponentRedirect(redirectUid) {
         await saveComponentRedirectUidUseCase(this.component.id, redirectUid);

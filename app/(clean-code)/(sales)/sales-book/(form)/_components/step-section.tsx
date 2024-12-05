@@ -16,6 +16,8 @@ import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
 import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
+import { c } from "nuqs/dist/serializer-DjSGvhZt";
+import MouldingLineItem from "./moulding-step";
 
 interface Props {
     stepUid?;
@@ -34,6 +36,12 @@ export function StepSection({ stepUid }: Props) {
             return (
                 <Content>
                     <HousePackageTool itemStepUid={stepUid} />
+                </Content>
+            );
+        if (cls.isMouldingLineItem())
+            return (
+                <Content>
+                    <MouldingLineItem itemStepUid={stepUid} />
                 </Content>
             );
         if (stepForm?.isService)

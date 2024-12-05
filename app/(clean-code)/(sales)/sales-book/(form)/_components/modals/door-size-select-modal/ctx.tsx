@@ -67,6 +67,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         if (!groupItem && !clear) {
             // if (clear) return;
             groupItem = {
+                type: "HPT",
                 form: {},
                 itemIds: [],
                 stepUid: cls.stepUid,

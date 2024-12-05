@@ -263,7 +263,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                     </>
                                 )}
                             </Menu>
-                            {hasSelections && (
+                            {!hasSelections || (
                                 <>
                                     <Button
                                         onClick={() => {

@@ -1,7 +1,8 @@
 import { ZusSales } from "../../../_common/_stores/form-data-store";
+import { GroupFormClass } from "./group-form-class";
 import { StepHelperClass } from "./zus-helper-class";
 
-export class HptClass extends StepHelperClass {
+export class MouldingClass extends GroupFormClass {
     constructor(public itemStepUid, public zus: ZusSales) {
         super(itemStepUid, zus);
     }
@@ -23,6 +24,7 @@ export class HptClass extends StepHelperClass {
                     basePrice: priceModel?.pricing,
                 };
             }),
+            pricedSteps: this.getPricedSteps(),
         };
         return resp;
     }

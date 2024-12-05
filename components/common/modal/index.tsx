@@ -130,8 +130,8 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
         : [SheetHeader, SheetTitle, SheetDescription];
     const Icon = Icons[icon] || undefined;
     return (
-        <Header>
-            <div className="flex">
+        <Header className="">
+            <div className="flex flex-1">
                 <div className={cn(onBack && "flex sm:space-x-4")}>
                     {onBack && (
                         <div>
@@ -144,10 +144,12 @@ function Header({ title, icon, subtitle, onBack, children }: HeaderProps) {
                             </Button>
                         </div>
                     )}
-                    <div className="flex-1 whitespace-nowrap flex-col justify-start">
+                    <div className="flex-1 flex-col justify-start">
                         <div className="flex items-center">
                             {Icon && <Icon className="w-4 h-4 mr-4" />}
-                            {title && <Title>{title}</Title>}
+                            {title && (
+                                <Title className="line-clamp-1">{title}</Title>
+                            )}
                         </div>
                         {subtitle && (
                             <Subtitle className="whitespace-normal">

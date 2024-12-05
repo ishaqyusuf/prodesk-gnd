@@ -139,7 +139,7 @@ function DoorSizeRow({ size }: { size }) {
     const inputProps: InputHTMLAttributes<HTMLInputElement> = {
         onBlur: async (e) => {
             await new Promise((res) => {
-                ctx.ctx.updateSizeForm(size.path, watchForm);
+                ctx.ctx.updateGroupItemForm(size.path, watchForm);
                 setTimeout(() => {
                     res(true);
                 }, 200);
@@ -158,6 +158,7 @@ function DoorSizeRow({ size }: { size }) {
                     <TableCell>
                         <ControlledInput
                             type="number"
+                            size="sm"
                             control={form.control}
                             name="qty.total"
                             inputProps={inputProps}
@@ -242,7 +243,7 @@ function DoorSizeRow({ size }: { size }) {
                 <TableCell align="right">
                     <ConfirmBtn
                         onClick={() => {
-                            ctx.ctx.removeHeight(size.path);
+                            ctx.ctx.removeGroupItem(size.path);
                         }}
                         trash
                         size="icon"

@@ -331,6 +331,7 @@ export interface SalesFormZusData {
                 _?: {
                     tabUid?: string;
                 };
+                type: "MOULDING" | "HPT" | "SERVICE";
                 pricing?: {
                     components?: {
                         basePrice?: number;
