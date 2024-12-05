@@ -26,6 +26,7 @@ import ControlledInput from "@/components/common/controls/controlled-input";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { Label } from "@/components/ui/label";
 import { MoneyBadge } from "@/components/(clean-code)/money-badge";
+import { LineInput } from "../line-input";
 
 interface Props {
     itemStepUid;
@@ -133,124 +134,102 @@ function DoorSizeRow({ size }: { size }) {
     const lineUid = size.path;
     const ctx = useCtx();
     const sizeForm = ctx.itemForm?.groupItem.form[size.path];
-    const form = useForm({
-        defaultValues: sizeForm,
-    });
-    const watchForm = form.watch();
-    const inputProps: InputHTMLAttributes<HTMLInputElement> = {
-        onBlur: async (e) => {
-            await new Promise((res) => {
-                ctx.ctx.updateGroupItemForm(size.path, watchForm);
-                setTimeout(() => {
-                    res(true);
-                }, 200);
-            });
-        },
-    };
 
     return (
-        <Form {...form}>
-            <TableRow className={cn(!size.selected && "hidden")}>
-                <TableCell className="font-mono font-semibold text-sm">
-                    {size.title}
+        <TableRow className={cn(!size.selected && "hidden")}>
+            <TableCell className="font-mono font-semibold text-sm">
+                {size.title}
+            </TableCell>
+            {ctx.config.hasSwing && <TableCell>Swing</TableCell>}
+            {ctx.config.noHandle ? (
+                <TableCell>
+                    <LineInput
+                        cls={ctx.ctx}
+                        name="qty.total"
+                        lineUid={lineUid}
+                        type="number"
+                    />
                 </TableCell>
-                {ctx.config.hasSwing && <TableCell>Swing</TableCell>}
-                {ctx.config.noHandle ? (
-                    <TableCell>
-                        <ControlledInput
+            ) : (
+                <>
+                    <TableCell className="">
+                        <LineInput
+                            cls={ctx.ctx}
+                            name="qty.lh"
+                            lineUid={lineUid}
                             type="number"
-                            size="sm"
-                            control={form.control}
-                            name="qty.total"
-                            inputProps={inputProps}
                         />
                     </TableCell>
-                ) : (
-                    <>
-                        <TableCell className="">
-                            <ControlledInput
-                                size="sm"
-                                type="number"
-                                control={form.control}
-                                name="qty.lh"
-                                inputProps={inputProps}
-                            />
-                        </TableCell>
-                        <TableCell className="">
-                            <ControlledInput
-                                type="number"
-                                size="sm"
-                                control={form.control}
-                                name="qty.rh"
-                                inputProps={inputProps}
-                            />
-                        </TableCell>
-                    </>
-                )}
-                <TableCell className="">
-                    <Menu
-                        noSize
-                        Icon={null}
-                        label={<Money value={sizeForm?.totalSalesPrice} />}
-                    >
-                        <div className="p-2 min-w-[300px]">
-                            <div>
-                                <Label>Price Summary</Label>
-                            </div>
-                            <dl>
-                                {ctx.pricedSteps?.map((step) => (
-                                    <DataLine
-                                        size="sm"
-                                        key={step.title}
-                                        label={step.title}
-                                        value={
-                                            <div className="flex gap-4 items-center justify-end">
-                                                <span>{step.value}</span>
-                                                <MoneyBadge>
-                                                    {step.price}
-                                                </MoneyBadge>
-                                            </div>
-                                        }
-                                    />
-                                ))}
+                    <TableCell className="">
+                        <LineInput
+                            cls={ctx.ctx}
+                            name="qty.rh"
+                            lineUid={lineUid}
+                            type="number"
+                        />
+                    </TableCell>
+                </>
+            )}
+            <TableCell className="">
+                <Menu
+                    noSize
+                    Icon={null}
+                    label={<Money value={sizeForm?.totalSalesPrice} />}
+                >
+                    <div className="p-2 min-w-[300px]">
+                        <div>
+                            <Label>Price Summary</Label>
+                        </div>
+                        <dl>
+                            {ctx.pricedSteps?.map((step) => (
                                 <DataLine
                                     size="sm"
-                                    label="Door"
+                                    key={step.title}
+                                    label={step.title}
                                     value={
                                         <div className="flex gap-4 items-center justify-end">
-                                            <span>{`${size.title}`}</span>
+                                            <span>{step.value}</span>
                                             <MoneyBadge>
-                                                {size.price}
+                                                {step.price}
                                             </MoneyBadge>
                                         </div>
                                     }
                                 />
-                            </dl>
-                        </div>
-                    </Menu>
-                </TableCell>
-                <TableCell>
-                    <ControlledInput
-                        type="number"
-                        size="sm"
-                        control={form.control}
-                        name="addon"
-                        inputProps={inputProps}
-                    />
-                </TableCell>
-                <TableCell>
-                    <Money value={sizeForm?.totalSalesPrice} />
-                </TableCell>
-                <TableCell align="right">
-                    <ConfirmBtn
-                        onClick={() => {
-                            ctx.ctx.removeGroupItem(size.path);
-                        }}
-                        trash
-                        size="icon"
-                    />
-                </TableCell>
-            </TableRow>
-        </Form>
+                            ))}
+                            <DataLine
+                                size="sm"
+                                label="Door"
+                                value={
+                                    <div className="flex gap-4 items-center justify-end">
+                                        <span>{`${size.title}`}</span>
+                                        <MoneyBadge>{size.price}</MoneyBadge>
+                                    </div>
+                                }
+                            />
+                        </dl>
+                    </div>
+                </Menu>
+            </TableCell>
+            <TableCell>
+                <LineInput
+                    cls={ctx.ctx}
+                    name="addon"
+                    lineUid={lineUid}
+                    type="number"
+                />
+            </TableCell>
+            <TableCell>
+                <Money value={sizeForm?.totalSalesPrice} />
+            </TableCell>
+            <TableCell align="right">
+                <ConfirmBtn
+                    onClick={() => {
+                        ctx.ctx.removeGroupItem(size.path);
+                    }}
+                    trash
+                    size="icon"
+                />
+            </TableCell>
+        </TableRow>
     );
 }

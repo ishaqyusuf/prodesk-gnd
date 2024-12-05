@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { Input, InputProps } from "@/components/ui/input";
 import {
     useFormDataStore,
     ZusGroupItemFormPath,
@@ -12,14 +12,24 @@ interface LineInputProps {
     name: FieldPath<ZusGroupItemFormPath>;
     cls: GroupFormClass;
 }
-export function LineInput({ lineUid, name, cls }: LineInputProps) {
+export function LineInput({
+    lineUid,
+    name,
+    cls,
+    ...props
+}: LineInputProps & InputProps) {
     // const state = useFormDataStore();
     const value = cls.dotGetGroupItemFormValue(lineUid, name);
     return (
         <Input
+            {...props}
             defaultValue={value as any}
             onChange={(e) => {
-                cls.dotUpdateGroupItemFormPath(lineUid, name, e.target.value);
+                cls.dotUpdateGroupItemFormPath(
+                    lineUid,
+                    name,
+                    props.type == "number" ? +e.target.value : e.target.value
+                );
             }}
         />
     );

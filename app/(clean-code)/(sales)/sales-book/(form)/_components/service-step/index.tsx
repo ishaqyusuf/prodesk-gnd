@@ -93,7 +93,6 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                         name="meta.description"
                         lineUid={lineUid}
                     />
-                    {/* {JSON.stringify(mfd)} */}
                 </TableCell>
                 <TableCell>
                     <LineSwitch
@@ -103,28 +102,18 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                     />
                 </TableCell>
                 <TableCell>
-                    <Switch
-                        defaultChecked={mfd?.meta?.produceable}
-                        onCheckedChange={(e) => {
-                            ctx.ctx.dotUpdateGroupItemFormPath(
-                                lineUid,
-                                "meta.produceable",
-                                e
-                            );
-                        }}
+                    <LineSwitch
+                        cls={ctx.ctx}
+                        name="meta.produceable"
+                        lineUid={lineUid}
                     />
                 </TableCell>
                 <TableCell>
-                    <Input
+                    <LineInput
+                        cls={ctx.ctx}
+                        name="qty.total"
+                        lineUid={lineUid}
                         type="number"
-                        defaultValue={mfd?.qty?.total}
-                        onChange={(e) => {
-                            ctx.ctx.dotUpdateGroupItemFormPath(
-                                lineUid,
-                                "qty.total",
-                                +e.target.value
-                            );
-                        }}
                     />
                 </TableCell>
 
