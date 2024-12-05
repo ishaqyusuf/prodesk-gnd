@@ -13,6 +13,12 @@ export default function PageClient({}) {
         store.setData({
             data: {
                 name: "Ishaq Yusuf",
+                stepSequence: {
+                    formItem: ["kv"],
+                    stepItem: {
+                        kv: ["seq"],
+                    },
+                },
                 kv: {
                     abc: {
                         name: "",
@@ -36,7 +42,9 @@ export default function PageClient({}) {
                         });
                     }}
                 />
-                <AbcClient uid="abc" />
+                {store.data.stepSequence.formItem?.map((s) => (
+                    <AbcClient uid={s} key={s} />
+                ))}
             </div>
         </div>
     );
@@ -44,21 +52,41 @@ export default function PageClient({}) {
 
 function AbcClient({ uid }) {
     const z = useZusStore();
+    const formItem = z.data?.kv?.[uid];
+    const sequence = useMemo(() => {
+        return z.data?.stepSequence?.stepItem?.[uid];
+    }, [z.data?.stepSequence?.stepItem?.[uid]]);
     const cls = useMemo(() => {
         console.log(">>>");
         return new ZusClass(uid, z);
     }, [uid]);
-
+    useEffect(() => {
+        console.log(">>>");
+    }, []);
     return (
         <div>
             <Label>BLE</Label>
             {cls.name}
             <Input
-                defaultValue={z.data.kv?.[uid].name}
+                defaultValue={z.data.kv?.[uid]?.name}
                 onChange={(e) => {
                     cls.storeName(e.target.value);
                 }}
             />
+            {sequence?.map((s) => (
+                <ExternalContent key={s} stepUid={s} />
+            ))}
         </div>
+    );
+}
+function ExternalContent({ stepUid }) {
+    useEffect(() => {
+        console.log(">>>");
+    }, []);
+    return (
+        <>
+            <div>STEP</div>
+            <span>{stepUid}</span>
+        </>
     );
 }

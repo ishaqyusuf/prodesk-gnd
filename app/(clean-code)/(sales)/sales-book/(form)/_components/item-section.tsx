@@ -42,16 +42,6 @@ export default function ItemSection({ uid }: Props) {
                     <ItemSideView itemUid={uid} />
                 </CollapsibleContent>
             </Collapsible>
-            <div className="flex mt-4 justify-end">
-                <Button
-                    onClick={() => {
-                        zhAddItem();
-                    }}
-                >
-                    <Icons.add className="w-4 h-4 mr-2" />
-                    <span>Add</span>
-                </Button>
-            </div>
         </div>
     );
 }

@@ -8,7 +8,7 @@ import HousePackageTool from "./hpt-step";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { formatMoney } from "@/lib/use-number";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
@@ -26,10 +26,21 @@ export function StepSection({ stepUid }: Props) {
     // const stepForm = zus?.kvStepForm?.[stepUid];
     const [uid] = stepUid?.split("-");
     const zItem = zus?.kvFormItem?.[uid];
-    const cls = useMemo(() => {
+    const { cls, Render, itemStepUid } = useMemo(() => {
         console.log(">>REFR");
         const cls = new StepHelperClass(stepUid);
-        return cls;
+        const ret = {
+            cls,
+            isHtp: cls.isHtp(),
+            isMouldingLineItem: cls.isMouldingLineItem(),
+            isServiceLineItem: cls.isServiceLineItem(),
+            Render: ComponentsSection as any,
+            itemStepUid: stepUid,
+        };
+        if (ret.isHtp) ret.Render = HousePackageTool;
+        else if (ret.isMouldingLineItem) ret.Render = MouldingLineItem;
+        else if (ret.isServiceLineItem) ret.Render = ServiceLineItem;
+        return ret;
     }, [
         stepUid,
         // , zus
@@ -37,78 +48,82 @@ export function StepSection({ stepUid }: Props) {
     useEffect(() => {
         console.log("REFRESHING>>>");
     }, []);
-    function Render() {
-        if (cls?.isHtp())
-            return (
-                <Content>
-                    <HousePackageTool itemStepUid={stepUid} />
-                </Content>
-            );
-        if (cls.isMouldingLineItem())
-            return (
-                <Content>
-                    <MouldingLineItem itemStepUid={stepUid} />
-                </Content>
-            );
-        if (cls?.isServiceLineItem())
-            return (
-                <Content>
-                    <ServiceLineItem itemStepUid={stepUid} />
-                </Content>
-            );
-        return (
-            <Content>
-                <ComponentsSection key={stepUid} stepUid={stepUid} />
-            </Content>
-        );
-    }
-    function Content({ children }) {
-        const { isVisible, elementRef } = useIsVisible({});
-        useEffect(() => {
-            setTimeout(() => {
-                if (!isVisible && elementRef.current) {
-                    const offset = -150; // Adjust this value to your desired offset
-                    const elementPosition =
-                        elementRef.current.getBoundingClientRect().top +
-                        window.scrollY;
-                    const offsetPosition = elementPosition + offset;
-                    // elementRef.current.scrollIntoView({
-                    //     behavior: "smooth",
-                    //     block: "start",
-                    // });
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                    });
-                }
-            }, 300);
-        }, []);
-        return (
-            <CollapsibleContent className="flex">
-                <motion.div
-                    ref={elementRef}
-                    // initial={{ opacity: 0 }}
-                    // animate={{ opacity: isVisible ? 1 : 0 }}
-                    transition={{ duration: 1 }}
-                    style={{}}
-                    className="w-full"
-                >
-                    {children}
-                </motion.div>
-            </CollapsibleContent>
-        );
-    }
+    // function Render() {
+    //     // if (ctx?.isHtp)
+    //     //     return (
+    //     //         <Content>
+    //     //             <HousePackageTool itemStepUid={stepUid} />
+    //     //         </Content>
+    //     //     );
+    //     // if (ctx.isMouldingLineItem)
+    //     //     return (
+    //     //         <Content>
+    //     //             <MouldingLineItem itemStepUid={stepUid} />
+    //     //         </Content>
+    //     //     );
+    //     // if (ctx?.isServiceLineItem)
+    //     //     return (
+    //     //         <Content>
+    //     //             <ServiceLineItem itemStepUid={stepUid} />
+    //     //         </Content>
+    //     //     );
+    //     return (
+    //         <Content>
+    //             <span></span>
+    //             {/* <ComponentsSection key={stepUid} stepUid={stepUid} /> */}
+    //         </Content>
+    //     );
+    // }
+
     return (
         <div>
             <div className="">
                 <Collapsible open={zItem.currentStepUid == stepUid}>
                     <StepSectionHeader stepUid={stepUid} />
-                    <Render />
+                    <CollapsibleContent className="flex">
+                        <Content>
+                            <Render itemStepUid={stepUid} />
+                        </Content>
+                    </CollapsibleContent>
                 </Collapsible>
             </div>
         </div>
     );
 }
+function Content({ children }) {
+    const { isVisible, elementRef } = useIsVisible({});
+    useEffect(() => {
+        setTimeout(() => {
+            console.log(">");
+            if (!isVisible && elementRef.current) {
+                const offset = -150; // Adjust this value to your desired offset
+                const elementPosition =
+                    elementRef.current.getBoundingClientRect().top +
+                    window.scrollY;
+                const offsetPosition = elementPosition + offset;
+                // elementRef.current.scrollIntoView({
+                //     behavior: "smooth",
+                //     block: "start",
+                // });
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth",
+                });
+            }
+        }, 300);
+    }, []);
+
+    return (
+        <motion.div
+            ref={elementRef}
+            transition={{ duration: 1 }}
+            className="w-full"
+        >
+            {children}
+        </motion.div>
+    );
+}
+
 function StepSectionHeader({ stepUid }) {
     const zus = useFormDataStore();
     const stepForm = zus?.kvStepForm?.[stepUid];
@@ -122,6 +137,9 @@ function StepSectionHeader({ stepUid }) {
             selectionQty: cls.getTotalSelectionsQty(),
         };
     }, [stepUid]);
+    useEffect(() => {
+        console.log(">,");
+    }, []);
     return (
         <CollapsibleTrigger asChild>
             <div className="border border-muted-foreground/20">

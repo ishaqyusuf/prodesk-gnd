@@ -1,6 +1,7 @@
 import { GetSalesBookForm } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import {
+    getFormState,
     useFormDataStore,
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
@@ -23,7 +24,6 @@ export function zhInitializeState(data: GetSalesBookForm) {
     console.log(data.itemArray.length);
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
-        console.log(uid);
 
         resp.sequence.formItem.push(uid);
         resp.kvFormItem[uid] = {
@@ -157,7 +157,30 @@ export function zhItemUidFromStepUid(stepUid) {
     return uid;
 }
 export function zhAddItem() {
-    const state = useFormDataStore.getState();
-
-    console.log(state);
+    const state = getFormState();
+    const uid = generateRandomString(4);
+    const _sequence = state.sequence;
+    _sequence.formItem.push(uid);
+    const kvFormItem = state.kvFormItem;
+    kvFormItem[uid] = {
+        collapsed: false,
+        uid,
+        id: null,
+        title: "",
+    };
+    const rootStep = state.data.salesSetting.rootStep;
+    const itemStepUid = `${uid}-${rootStep.uid}`;
+    const kvStepForm = state.kvStepForm;
+    kvStepForm[itemStepUid] = {
+        componentUid: "",
+        title: rootStep.title,
+        value: "",
+        meta: rootStep.meta,
+        stepId: rootStep.id,
+    };
+    kvFormItem[uid].currentStepUid = itemStepUid;
+    _sequence.stepComponent[uid] = [itemStepUid];
+    state.dotUpdate("sequence", _sequence);
+    state.dotUpdate("kvFormItem", kvFormItem);
+    state.dotUpdate("kvStepForm", kvStepForm);
 }

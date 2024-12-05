@@ -9,6 +9,10 @@ export type Zus = ZusData & ZusAction;
 const data = {
     data: {
         name: "",
+        stepSequence: {
+            formItem: [],
+            stepItem: {},
+        },
         kv: {
             abc: {
                 name: "",

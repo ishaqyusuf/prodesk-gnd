@@ -2,7 +2,7 @@ import { AsyncFnType } from "@/app/(clean-code)/type";
 import { DykeStepMeta } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { prisma } from "@/db";
 import { ComponentPrice, DykeStepForm, Prisma } from "@prisma/client";
-import { DykeFormStepMeta, StepComponentMeta } from "../../types";
+import { DykeFormStepMeta, StepComponentMeta, StepMeta } from "../../types";
 import { notDeleted } from "../utils/db-utils";
 
 export type GetStepDta = AsyncFnType<typeof getStepDta>;
@@ -130,7 +130,7 @@ interface ValidateNextStepIdProps {
 export async function validateNextStepIdDta({}: ValidateNextStepIdProps) {}
 export type GetStepsForRoutingProps = AsyncFnType<typeof getStepsForRoutingDta>;
 export async function getStepsForRoutingDta() {
-    await fixStepsDta();
+    // await fixStepsDta();
     // return [];
     const steps = await prisma.dykeSteps.findMany({
         select: {
@@ -178,6 +178,7 @@ export async function getStepsForRoutingDta() {
         .map((data) => {
             return {
                 ...data,
+                meta: data.meta as any as StepMeta,
                 stepProducts: data.stepProducts?.map((prod) => {
                     return {
                         ...prod,

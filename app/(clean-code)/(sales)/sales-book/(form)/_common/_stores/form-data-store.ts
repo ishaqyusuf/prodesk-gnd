@@ -85,3 +85,4 @@ export const useFormDataStore = create<ZusSales>((set) => ({
 
     ...fns(set),
 }));
+export const getFormState = () => useFormDataStore.getState();
