@@ -11,11 +11,14 @@ export class GroupFormClass extends StepHelperClass {
     constructor(public itemStepUid) {
         super(itemStepUid);
     }
-    public dotGetGroupItemForm<K extends FieldPath<ZusGroupItemFormPath>>(
-        path,
-        k: K
+    public dotGetGroupItemFormValue<K extends FieldPath<ZusGroupItemFormPath>>(
+        lineUid,
+        path: K
     ): FieldPathValue<ZusGroupItemFormPath, K> {
-        return this.getItemForm()?.groupItem?.form?.[path]?.[k as any];
+        return dotObject.pick(
+            path,
+            this.getItemForm()?.groupItem?.form?.[lineUid]
+        );
     }
     public dotUpdateGroupItemForm<K extends FieldPath<ZusGroupItemForm>>(
         path: K,
@@ -26,11 +29,12 @@ export class GroupFormClass extends StepHelperClass {
             value as any
         );
     }
+
     public dotUpdateGroupItemFormPath<
         K extends FieldPath<ZusGroupItemFormPath>
-    >(path, k: K, value: FieldPathValue<ZusGroupItemFormPath, K>) {
+    >(path, pathName: K, value: FieldPathValue<ZusGroupItemFormPath, K>) {
         this.zus.dotUpdate(
-            `kvFormItem.${this.itemUid}.groupItem.form.${path}.${k}`,
+            `kvFormItem.${this.itemUid}.groupItem.form.${path}.${pathName}`,
             value as any
         );
     }

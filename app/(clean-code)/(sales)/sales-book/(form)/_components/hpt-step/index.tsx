@@ -130,6 +130,7 @@ function DoorSizeTable({ door }) {
     );
 }
 function DoorSizeRow({ size }: { size }) {
+    const lineUid = size.path;
     const ctx = useCtx();
     const sizeForm = ctx.itemForm?.groupItem.form[size.path];
     const form = useForm({

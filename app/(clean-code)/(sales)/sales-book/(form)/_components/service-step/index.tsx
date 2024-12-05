@@ -26,6 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { Input } from "@/components/ui/input";
+import { LineInput, LineSwitch } from "../line-input";
 
 interface Props {
     itemStepUid;
@@ -56,7 +57,7 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
                     </TableHeader>
                     <TableBody>
                         {ctx.itemIds?.map((m, index) => (
-                            <MouldingRow sn={index + 1} lineUid={m} key={m} />
+                            <ServiceRow sn={index + 1} lineUid={m} key={m} />
                         ))}
                     </TableBody>
                     <TableFooter className="bg-accent">
@@ -78,7 +79,7 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
         </>
     );
 }
-function MouldingRow({ lineUid, sn }: { sn; lineUid }) {
+function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
     const ctx = useCtx();
     const mfd = ctx.itemForm?.groupItem?.form?.[lineUid];
 
@@ -87,27 +88,18 @@ function MouldingRow({ lineUid, sn }: { sn; lineUid }) {
             <TableRow className={cn(!mfd?.selected && "hidden")}>
                 <TableCell className="font-mono">{sn}.</TableCell>
                 <TableCell className="font-mono font-medium text-sm">
-                    <Input
-                        defaultValue={mfd?.meta?.description}
-                        onChange={(e) => {
-                            ctx.ctx.dotUpdateGroupItemFormPath(
-                                lineUid,
-                                "meta.description",
-                                e.target.value
-                            );
-                        }}
+                    <LineInput
+                        cls={ctx.ctx}
+                        name="meta.description"
+                        lineUid={lineUid}
                     />
+                    {/* {JSON.stringify(mfd)} */}
                 </TableCell>
                 <TableCell>
-                    <Switch
-                        defaultChecked={mfd?.meta?.taxxable}
-                        onCheckedChange={(e) => {
-                            ctx.ctx.dotUpdateGroupItemFormPath(
-                                lineUid,
-                                "meta.taxxable",
-                                e
-                            );
-                        }}
+                    <LineSwitch
+                        cls={ctx.ctx}
+                        name="meta.taxxable"
+                        lineUid={lineUid}
                     />
                 </TableCell>
                 <TableCell>

@@ -23,7 +23,7 @@ type PricingOption = (typeof pricingOptions)[number];
 export function useInitContext(itemStepUid) {
     const zus = useFormDataStore();
     const cls = useMemo(() => {
-        return new StepHelperClass(itemStepUid, zus);
+        return new StepHelperClass(itemStepUid);
     }, [itemStepUid, zus]);
 
     const step = cls.getStepForm();
