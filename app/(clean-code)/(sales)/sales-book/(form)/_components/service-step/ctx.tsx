@@ -10,9 +10,11 @@ export const useCtx = () => useContext(Context);
 
 export const useCreateContext = (itemStepUid) => {
     const zus = useFormDataStore();
-    const ctx = useMemo(() => {
-        const ctx = new ServiceClass(itemStepUid, zus);
-
+    useEffect(() => {
+        console.log(">");
+    }, []);
+    const ctx = new ServiceClass(itemStepUid);
+    const _ctx = useMemo(() => {
         const itemForm = ctx.getItemForm();
         return {
             zus,
@@ -22,10 +24,11 @@ export const useCreateContext = (itemStepUid) => {
         };
     }, [
         itemStepUid,
-        zus,
+        // zus,
         // itemStepUid, zus
     ]);
     return {
-        ...ctx,
+        ctx,
+        ..._ctx,
     };
 };

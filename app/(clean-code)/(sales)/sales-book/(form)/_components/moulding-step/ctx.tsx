@@ -10,7 +10,7 @@ export const useCtx = () => useContext(Context);
 export const useCreateContext = (itemStepUid) => {
     const zus = useFormDataStore();
     const ctx = useMemo(() => {
-        const ctx = new MouldingClass(itemStepUid, zus);
+        const ctx = new MouldingClass(itemStepUid);
 
         const itemForm = ctx.getItemForm();
         return {
@@ -28,4 +28,3 @@ export const useCreateContext = (itemStepUid) => {
         ...ctx,
     };
 };
-

@@ -12,13 +12,13 @@ export async function zhLoadStepComponents({
     stepUid,
 }: LoadStepComponentsProps) {
     // console.log("LOADING STEP COMPONENTS");
-    const cls = new StepHelperClass(stepUid, zus);
+    const cls = new StepHelperClass(stepUid);
     return await cls.fetchStepComponents();
 }
 
 export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
     const [uid, stepUid] = itemStepUid?.split("-");
-    const cls = new StepHelperClass(itemStepUid, zus);
+    const cls = new StepHelperClass(itemStepUid);
     const filteredComponents = zus.kvStepComponentList[stepUid]
         // ?.filter(cls.isComponentVisible)
         ?.map((component) => {

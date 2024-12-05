@@ -3,6 +3,7 @@ import {
     saveComponentRedirectUidUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import {
+    useFormDataStore,
     ZusComponent,
     ZusItemFormData,
     ZusSales,
@@ -24,12 +25,13 @@ interface Filters {
 export class StepHelperClass extends SettingsClass {
     stepUid: string;
     itemUid;
-    constructor(public itemStepUid, public zus: ZusSales) {
+    constructor(public itemStepUid) {
         const [itemUid, stepUid] = itemStepUid?.split("-");
-        super(itemStepUid, zus, itemUid, stepUid);
+        super(itemStepUid, itemUid, stepUid);
         this.itemUid = itemUid;
         this.stepUid = stepUid;
     }
+
     public isHtp() {
         return this.getStepForm().title == "House Package Tool";
     }
@@ -124,10 +126,8 @@ export class StepHelperClass extends SettingsClass {
         const sets =
             this.zus.data.salesSetting?.stepsByKey?.[this.stepUid]?.components;
         if (sets?.length) {
-            console.log("FILTERING SETS LENGTH");
             return this.filterStepComponents(sets as any);
         }
-        console.log("NOT FOUND");
         return [];
     }
     public getComponentPrice(componentUid) {
@@ -249,7 +249,7 @@ export class StepHelperClass extends SettingsClass {
             .map((itemStepUid) => {
                 const [itemUid, stepUid] = itemStepUid.split("-");
                 // const rootStep = this.rootStepFromUid(stepUid);
-                const itemStepCls = new StepHelperClass(itemStepUid, this.zus);
+                const itemStepCls = new StepHelperClass(itemStepUid);
                 const components = itemStepCls.getVisibleComponents();
                 const stepForm = itemStepCls.getStepForm();
                 return {
@@ -523,11 +523,11 @@ export class StepHelperClass extends SettingsClass {
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
         itemStepUid,
-        zus: ZusSales,
+        // zus: ZusSales,
         public componentUid,
         public component?: ZusComponent
     ) {
-        super(itemStepUid, zus);
+        super(itemStepUid);
         this.redirectUid = this.getComponent?.redirectUid;
     }
     public redirectUid;

@@ -3,8 +3,8 @@ import { GroupFormClass } from "./group-form-class";
 import { StepHelperClass } from "./zus-helper-class";
 
 export class MouldingClass extends GroupFormClass {
-    constructor(public itemStepUid, public zus: ZusSales) {
-        super(itemStepUid, zus);
+    constructor(public itemStepUid) {
+        super(itemStepUid);
     }
     public getMouldingStepForm() {
         return Object.entries(this.zus.kvStepForm).filter(

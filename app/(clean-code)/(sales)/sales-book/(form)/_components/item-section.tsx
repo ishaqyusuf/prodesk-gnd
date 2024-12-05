@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
+import { zhAddItem, zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
 import ItemSideView from "./item-side-view";
+import { useEffect, useMemo, useState } from "react";
+import { Icons } from "@/components/_v1/icons";
 
 interface Props {
     uid?: string;
@@ -17,6 +19,11 @@ interface Props {
 export default function ItemSection({ uid }: Props) {
     const zus = useFormDataStore();
     const zItem = zus?.kvFormItem?.[uid];
+
+    const sequence = useMemo(() => {
+        return zus.sequence?.stepComponent?.[uid];
+    }, [zus.sequence?.stepComponent?.[uid]]);
+
     return (
         <div className="">
             <Collapsible
@@ -28,13 +35,23 @@ export default function ItemSection({ uid }: Props) {
                 <ItemSectionHeader uid={uid} />
                 <CollapsibleContent className="flex border overflow-auto max-h-[120vh]">
                     <div className="flex-1 flex flex-col ">
-                        {zus.sequence?.stepComponent?.[uid]?.map((stepUid) => (
+                        {sequence?.map((stepUid) => (
                             <StepSection key={stepUid} stepUid={stepUid} />
                         ))}
                     </div>
                     <ItemSideView itemUid={uid} />
                 </CollapsibleContent>
             </Collapsible>
+            <div className="flex mt-4 justify-end">
+                <Button
+                    onClick={() => {
+                        zhAddItem();
+                    }}
+                >
+                    <Icons.add className="w-4 h-4 mr-2" />
+                    <span>Add</span>
+                </Button>
+            </div>
         </div>
     );
 }

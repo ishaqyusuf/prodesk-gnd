@@ -55,6 +55,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 resp.kvFormItem[uid].groupItem = {
                     // componentsBasePrice: 0,
                     // componentsSalesPrice: 0,
+                    type: "HPT",
                     pricing: {},
                     itemIds: [],
                     form: {},
@@ -125,7 +126,7 @@ export function zhHarvestDoorSizes(data: SalesFormZusData, itemUid) {
             };
         })
         .filter((c) => c.valid);
-    const stepCls = new StepHelperClass(heightStepUid, data as any);
+    const stepCls = new StepHelperClass(heightStepUid);
     const visibleComponents = stepCls.getVisibleComponents();
     const sizeList: {
         size: string;
@@ -154,4 +155,9 @@ export async function zhDeleteItem(zus: ZusSales, uid, index) {
 export function zhItemUidFromStepUid(stepUid) {
     const [uid] = stepUid?.split("-");
     return uid;
+}
+export function zhAddItem() {
+    const state = useFormDataStore.getState();
+
+    console.log(state);
 }

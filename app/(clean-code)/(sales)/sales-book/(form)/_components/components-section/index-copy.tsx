@@ -2,12 +2,12 @@ import { Label } from "@/components/ui/label";
 import {
     useFormDataStore,
     ZusComponent,
-} from "../_common/_stores/form-data-store";
+} from "../../_common/_stores/form-data-store";
 import {
     zhLoadStepComponents,
     zusDeleteComponents,
     zusFilterStepComponents,
-} from "../_utils/helpers/zus/zus-step-helper";
+} from "../../_utils/helpers/zus/zus-step-helper";
 import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
@@ -22,20 +22,20 @@ import {
 } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
-import { zhEditPricing } from "../_utils/helpers/zus/zus-component-helper";
+import { zhEditPricing } from "../../_utils/helpers/zus/zus-component-helper";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ComponentImg } from "./component-img";
+import { ComponentImg } from "../component-img";
 import {
     ComponentHelperClass,
     StepHelperClass,
-} from "../_utils/helpers/zus/zus-helper-class";
-import { openEditComponentPrice } from "./modals/component-price-modal";
+} from "../../_utils/helpers/zus/zus-helper-class";
+import { openEditComponentPrice } from "../modals/component-price-modal";
 import { Badge } from "@/components/ui/badge";
-import DoorSizeModal from "./modals/door-size-modal";
+import DoorSizeModal from "../modals/door-size-modal";
 import { _modal } from "@/components/common/modal/provider";
-import { openDoorPriceModal } from "./modals/door-price-modal";
-import { openComponentVariantModal } from "./modals/component-visibility-modal";
+import { openDoorPriceModal } from "../modals/door-price-modal";
+import { openComponentVariantModal } from "../modals/component-visibility-modal";
 
 interface Props {
     stepUid;
@@ -52,20 +52,24 @@ export function useStepContext(stepUid) {
     const allItems = zusFilterStepComponents(stepUid, zus);
     const [items, setItems] = useState(allItems);
 
-    const cls = useMemo(() => {
-        const cl = new StepHelperClass(stepUid, zus);
-        return cl;
-    }, [stepUid, zus]);
+    const cls = new StepHelperClass(stepUid);
+    // const cls = useMemo(() => {
+    //     return cl;
+    // }, [
+    //     stepUid,
+    //     // , zus
+    // ]);
     // cls.resetSelector(selectionState, setSelectionState);
-    useEffectAfterMount(() => {
-        zhLoadStepComponents({
-            stepUid,
-            zus,
-        }).then((res) => {
-            setItems(res);
-            console.log("RESULT", stepUid, res?.length);
-        });
-    }, []);
+    useEffect(() => {
+        console.log("STEPUID CHANGE");
+        // zhLoadStepComponents({
+        //     stepUid,
+        //     zus,
+        // }).then((res) => {
+        //     setItems(res);
+        //     console.log("RESULT", stepUid, res?.length);
+        // });
+    }, [stepUid]);
     useEffect(() => {
         const handleScroll = () => {
             if (containerRef.current) {
@@ -133,10 +137,10 @@ export function useStepContext(stepUid) {
         selectionState,
     };
 }
-function Step({ stepUid }: Props) {
+export function ComponentsSection({ stepUid }: Props) {
     const ctx = useStepContext(stepUid);
     const { items, containerRef, cls, props } = ctx;
-
+    return <></>;
     return (
         <ScrollArea
             ref={containerRef}
@@ -178,15 +182,15 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
         }).then((c) => {
             ctx.clearSelection();
         });
-    }, [zus, stepUid, ctx]);
+    }, [stepUid, ctx]);
     const editVisibility = useCallback(() => {
         const uids = selectionUids();
         openComponentVariantModal(
-            new ComponentHelperClass(stepUid, zus, uids[0]),
+            new ComponentHelperClass(stepUid, uids[0]),
             uids
         );
         ctx.clearSelection();
-    }, [selectionState, zus, stepUid, ctx]);
+    }, [selectionState, stepUid, ctx]);
     const hasSelections = useMemo(() => ctx.cls.hasSelections(), [ctx.cls]);
     return (
         <>
@@ -298,7 +302,6 @@ function Component({
     const { cls } = useMemo(() => {
         const cls = new ComponentHelperClass(
             stepUid,
-            zus,
             component?.uid,
             component
         );
@@ -488,4 +491,3 @@ function RedirectMenuItem({ cls }: { cls: ComponentHelperClass }) {
         </Menu.Item>
     );
 }
-export const ComponentsStep = Step; // memo(Step);

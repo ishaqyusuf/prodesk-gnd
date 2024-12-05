@@ -5,7 +5,6 @@ import {
 } from "@/components/ui/collapsible";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import HousePackageTool from "./hpt-step";
-import { ComponentsStep } from "./step-components";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { formatMoney } from "@/lib/use-number";
@@ -17,19 +16,27 @@ import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
 import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
 import MouldingLineItem from "./moulding-step";
 import ServiceLineItem from "./service-step";
+import { ComponentsSection } from "./components-section";
 
 interface Props {
     stepUid?;
 }
 export function StepSection({ stepUid }: Props) {
     const zus = useFormDataStore();
-    const stepForm = zus?.kvStepForm?.[stepUid];
+    // const stepForm = zus?.kvStepForm?.[stepUid];
     const [uid] = stepUid?.split("-");
     const zItem = zus?.kvFormItem?.[uid];
     const cls = useMemo(() => {
-        const cls = new StepHelperClass(stepUid, zus);
+        console.log(">>REFR");
+        const cls = new StepHelperClass(stepUid);
         return cls;
-    }, [stepUid, zus]);
+    }, [
+        stepUid,
+        // , zus
+    ]);
+    useEffect(() => {
+        console.log("REFRESHING>>>");
+    }, []);
     function Render() {
         if (cls?.isHtp())
             return (
@@ -51,7 +58,7 @@ export function StepSection({ stepUid }: Props) {
             );
         return (
             <Content>
-                <ComponentsStep key={stepUid} stepUid={stepUid} />
+                <ComponentsSection key={stepUid} stepUid={stepUid} />
             </Content>
         );
     }
@@ -107,14 +114,14 @@ function StepSectionHeader({ stepUid }) {
     const stepForm = zus?.kvStepForm?.[stepUid];
     //   const cls = useMemo(() => ctx.cls.hasSelections(), [ctx.cls]);
     const { cls, ...stat } = useMemo(() => {
-        const cls = new StepHelperClass(stepUid, zus);
+        const cls = new StepHelperClass(stepUid);
         return {
             cls,
             hasSelection: cls.hasSelections(),
             selectionCount: cls.getTotalSelectionsCount(),
             selectionQty: cls.getTotalSelectionsQty(),
         };
-    }, [stepUid, zus]);
+    }, [stepUid]);
     return (
         <CollapsibleTrigger asChild>
             <div className="border border-muted-foreground/20">

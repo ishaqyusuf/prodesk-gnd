@@ -25,6 +25,7 @@ import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip"
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
+import { Input } from "@/components/ui/input";
 
 interface Props {
     itemStepUid;
@@ -112,12 +113,22 @@ function MouldingRow({
             <TableRow className={cn(!mfd?.selected && "hidden")}>
                 <TableCell className="font-mono">{sn}.</TableCell>
                 <TableCell className="font-mono font-medium text-sm">
-                    <ControlledInput
+                    <Input
+                        defaultValue={mfd?.meta?.description}
+                        onChange={(e) => {
+                            ctx.ctx.dotUpdateGroupItemFormPath(
+                                data.itemUid,
+                                "meta.description",
+                                e.target.value
+                            );
+                        }}
+                    />
+                    {/* <ControlledInput
                         size="sm"
                         control={form.control}
                         name="meta.description"
                         inputProps={inputProps}
-                    />
+                    /> */}
                 </TableCell>
                 <TableCell>
                     <Switch

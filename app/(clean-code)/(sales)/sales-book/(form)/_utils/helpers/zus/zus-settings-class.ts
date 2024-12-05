@@ -1,4 +1,5 @@
 import {
+    useFormDataStore,
     ZusItemFormData,
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
@@ -6,10 +7,13 @@ import {
 export class SettingsClass {
     constructor(
         public itemStepUid,
-        public zus: ZusSales,
+        // public zus: ZusSales,
         public itemUid,
         public stepUid
     ) {}
+    public get zus(): ZusSales {
+        return useFormDataStore.getState();
+    }
     public composeNextRoute(
         itemForm: ZusItemFormData,
         redirectUid,

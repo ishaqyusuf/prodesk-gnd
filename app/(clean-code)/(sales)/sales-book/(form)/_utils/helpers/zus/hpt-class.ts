@@ -5,8 +5,8 @@ type SizeForm = ReturnType<
     HptClass["getHptForm"]
 >["doors"][number]["sizeList"][number];
 export class HptClass extends GroupFormClass {
-    constructor(public itemStepUid, public zus: ZusSales) {
-        super(itemStepUid, zus);
+    constructor(public itemStepUid) {
+        super(itemStepUid);
     }
     public getDoorStepForm() {
         console.log(this.zus.kvStepForm);

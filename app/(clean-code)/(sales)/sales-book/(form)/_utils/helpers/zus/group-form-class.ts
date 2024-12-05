@@ -8,8 +8,8 @@ import { StepHelperClass } from "./zus-helper-class";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 
 export class GroupFormClass extends StepHelperClass {
-    constructor(public itemStepUid, public zus: ZusSales) {
-        super(itemStepUid, zus);
+    constructor(public itemStepUid) {
+        super(itemStepUid);
     }
     public dotGetGroupItemForm<K extends FieldPath<ZusGroupItemFormPath>>(
         path,

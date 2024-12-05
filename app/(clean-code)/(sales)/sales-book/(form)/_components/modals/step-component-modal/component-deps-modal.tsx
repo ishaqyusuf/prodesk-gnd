@@ -1,19 +1,11 @@
 import Modal from "@/components/common/modal";
 import { Form } from "@/components/ui/form";
-import { useForm, UseFormReturn } from "react-hook-form";
-import {
-    DykeForm,
-    DykeStep,
-} from "../../../../../../../(v2)/(loggedIn)/sales-v2/type";
+import { useForm } from "react-hook-form";
+
 import { useEffect, useState } from "react";
-import { IStepProducts } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
-import {
-    getDykeStepState,
-    getFormSteps,
-} from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/init-step-components";
+
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import { useModal } from "@/components/common/modal/provider";
 import { _deleteStepItem } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/_actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
