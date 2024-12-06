@@ -1,25 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormDataStore } from "../../_common/_stores/form-data-store";
-import {
-    zhLoadStepComponents,
-    zusFilterStepComponents,
-} from "../../_utils/helpers/zus/zus-step-helper";
+
 import { StepHelperClass } from "../../_utils/helpers/zus/zus-helper-class";
+import { useSticky } from "../../_hooks/use-sticky";
 
 export function useStepContext(stepUid) {
     const [selectionState, setSelectionState] = useState({
         uids: {},
         count: 0,
     });
+    const _items = useFormDataStore().kvFilteredStepComponentList?.[stepUid];
     const zus = useFormDataStore();
-    const actionRef = useRef<HTMLDivElement>(null);
-    const [isFixed, setIsFixed] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const allItems = zusFilterStepComponents(stepUid, zus);
-    const [items, setItems] = useState(allItems);
+    // const allItems = zusFilterStepComponents(stepUid, zus);
+    // const [items, setItems] = useState(allItems);
+    const [items, setItems] = useState([]);
 
     const cls = useMemo(() => {
         const cls = new StepHelperClass(stepUid);
+
+        // console.log("LOADED");
+        //   cls.fetchStepComponents().then((res) => {
+        //       setItems(res);
+        //       console.log("RESULT", stepUid, res?.length);
+        //   });
         return cls;
     }, [
         stepUid,
@@ -27,59 +30,24 @@ export function useStepContext(stepUid) {
     ]);
     // cls.resetSelector(selectionState, setSelectionState);
     useEffect(() => {
-        console.log("STEPUID CHANGE");
-        zhLoadStepComponents({
-            stepUid,
-            zus,
-        }).then((res) => {
-            setItems(res);
-            console.log("RESULT", stepUid, res?.length);
-        });
+        // console.log("STEPUID CHANGE");
+        // cls.fetchStepComponents().then((res) => {
+        //     setItems(res);
+        //     console.log("RESULT", stepUid, res?.length);
+        // });
+        cls.refreshStepComponentsData();
     }, [stepUid]);
-    useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                const containerRect =
-                    containerRef.current.getBoundingClientRect();
-                const containerBottomVisible =
-                    containerRect.bottom > 0 &&
-                    containerRect.bottom <= window.innerHeight;
-                const containerPartiallyVisible =
-                    containerRect.top < window.innerHeight &&
-                    containerRect.bottom > 0;
-
-                const shouldBeFixed =
-                    !containerBottomVisible && containerPartiallyVisible;
-                if (shouldBeFixed && !isFixed) {
-                    const containerCenter =
-                        containerRect.left + containerRect.width / 2;
-                    setFixedOffset(containerCenter);
-                }
-                if (shouldBeFixed !== isFixed) {
-                    setIsFixed(shouldBeFixed);
-                }
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        handleScroll(); // Trigger on mount to set the initial state
-
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [isFixed]);
-
-    const [fixedOffset, setFixedOffset] = useState(0);
-    // const searchFn = useCallback(() => {}, []);
+    const sticky = useSticky((bv, pv, { top, bottom }) => !bv && pv);
     const props = {
         stepUid,
         items,
-        actionRef,
-        isFixed,
-        fixedOffset,
+        sticky,
+
         // searchFn
     };
     return {
-        items,
-        containerRef,
+        items: _items || [],
+        sticky,
         cls,
         props,
         stepUid,
@@ -104,9 +72,7 @@ export function useStepContext(stepUid) {
                 return resp;
             });
         },
-        actionRef,
-        isFixed,
-        fixedOffset,
+
         selectionState,
     };
 }

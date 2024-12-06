@@ -22,7 +22,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         const componentUid = cls.componentUid;
         const selections: {
             [id in string]: {
-                salesPrice: number | string;
+                salesPrice: number;
                 basePrice: number;
                 swing: string;
                 qty: {
@@ -37,7 +37,7 @@ export function useInitContext(cls: ComponentHelperClass) {
             const sizeData = groupItem?.form?.[path];
             const basePrice =
                 priceModel?.formData?.priceVariants?.[sl.size]?.price;
-            let salesPrice = basePrice;
+            let salesPrice = cls.calculateSales(basePrice);
             selections[path] = {
                 salesPrice,
                 basePrice,
@@ -106,6 +106,8 @@ export function useInitContext(cls: ComponentHelperClass) {
                         swing: data.swing,
                         qty: data.qty,
                         selected: true,
+                        salesPrice: data?.salesPrice,
+                        basePrice: data?.basePrice,
                     };
                 } else {
                     delete groupItem.form[uid];
@@ -123,7 +125,6 @@ export function useInitContext(cls: ComponentHelperClass) {
             });
         }
         cls.dotUpdateItemForm("groupItem", groupItem);
-        console.log(groupItem);
         return groupItem;
     }
     function removeSelection() {
@@ -148,7 +149,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         );
         form.setValue(
             `selections.${cls.componentUid}-${size}.salesPrice`,
-            price
+            cls.calculateSales(price)
         );
     }
 
@@ -156,7 +157,6 @@ export function useInitContext(cls: ComponentHelperClass) {
         form,
         priceChanged,
         removeSelection,
-        // priceModel: memoied.priceModel,
         cls,
         priceModel,
         nextStep,

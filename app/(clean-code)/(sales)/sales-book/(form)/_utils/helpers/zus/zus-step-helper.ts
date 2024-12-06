@@ -7,35 +7,6 @@ interface LoadStepComponentsProps {
     stepUid: string;
     zus: ZusSales;
 }
-export async function zhLoadStepComponents({
-    zus,
-    stepUid,
-}: LoadStepComponentsProps) {
-    // console.log("LOADING STEP COMPONENTS");
-    const cls = new StepHelperClass(stepUid);
-    return await cls.fetchStepComponents();
-}
-
-export function zusFilterStepComponents(itemStepUid, zus: ZusSales) {
-    const [uid, stepUid] = itemStepUid?.split("-");
-    const cls = new StepHelperClass(itemStepUid);
-    const filteredComponents = zus.kvStepComponentList[stepUid]
-        // ?.filter(cls.isComponentVisible)
-        ?.map((component) => {
-            component._metaData.visible = cls.isComponentVisible(component);
-            component.price = cls.getComponentPrice(component.uid);
-
-            return component;
-        });
-    // TODO: FILTER STEP, ADD PRICE, SET VISIBILITY ETC.
-
-    // console.log(`FILTERED`,)
-    // zus.dotUpdate(
-    //     `kvFilteredStepComponentList.${itemStepUid}`,
-    //     filteredComponents
-    // );
-    return filteredComponents;
-}
 
 export async function zusDeleteComponents({
     stepUid,

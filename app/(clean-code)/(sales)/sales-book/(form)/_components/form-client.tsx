@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { GetSalesBookForm } from "../../../_common/use-case/sales-book-form-use-case";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import {
@@ -10,12 +10,11 @@ import {
 import ItemSection from "./item-section";
 import { FormHeader } from "./form-header";
 import { Button } from "@/components/ui/button";
-import {
-    harvestDoorPricingUseCase,
-    saveHarvestedDoorPricingUseCase,
-} from "../../../_common/use-case/step-component-use-case";
-import { toast } from "sonner";
+
 import { Icons } from "@/components/_v1/icons";
+import { useSticky } from "../_hooks/use-sticky";
+import { FormDataPage } from "./data-page";
+import { cn } from "@/lib/utils";
 
 interface FormClientProps {
     data: GetSalesBookForm;
@@ -26,22 +25,33 @@ export function FormClient({ data }: FormClientProps) {
     useEffect(() => {
         zus.init(zhInitializeState(data));
     }, []);
-
+    const sticky = useSticky((bv, pv, { top, bottom }) => top < 100);
     return (
         <div className="mb-28">
-            <FormHeader />
-            {zus.sequence?.formItem?.map((uid) => (
-                <ItemSection key={uid} uid={uid} />
-            ))}
-            <div className="flex mt-4 justify-end">
-                <Button
-                    onClick={() => {
-                        zhAddItem();
-                    }}
-                >
-                    <Icons.add className="w-4 h-4 mr-2" />
-                    <span>Add</span>
-                </Button>
+            <FormHeader sticky={sticky} />
+            <div
+                ref={sticky.containerRef}
+                className={cn(sticky.isFixed && "mt-10")}
+            >
+                {zus.currentTab == "info" ? (
+                    <FormDataPage />
+                ) : (
+                    <>
+                        {zus.sequence?.formItem?.map((uid) => (
+                            <ItemSection key={uid} uid={uid} />
+                        ))}
+                        <div className="flex mt-4 justify-end">
+                            <Button
+                                onClick={() => {
+                                    zhAddItem();
+                                }}
+                            >
+                                <Icons.add className="w-4 h-4 mr-2" />
+                                <span>Add</span>
+                            </Button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

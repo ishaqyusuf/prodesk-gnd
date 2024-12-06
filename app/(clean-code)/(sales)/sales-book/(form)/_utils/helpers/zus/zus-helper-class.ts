@@ -11,7 +11,6 @@ import {
 } from "../../../_common/_stores/form-data-store";
 import { getPricingByUidUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { _modal } from "@/components/common/modal/provider";
-import DoorSizeModal from "../../../_components/modals/door-size-modal";
 import { zhHarvestDoorSizes } from "./zus-form-helper";
 
 import { FieldPath, FieldPathValue } from "react-hook-form";
@@ -25,9 +24,9 @@ interface Filters {
 export class StepHelperClass extends SettingsClass {
     stepUid: string;
     itemUid;
-    constructor(public itemStepUid) {
+    constructor(public itemStepUid, public staticZus?: ZusSales) {
         const [itemUid, stepUid] = itemStepUid?.split("-");
-        super(itemStepUid, itemUid, stepUid);
+        super(itemStepUid, itemUid, stepUid, staticZus);
         this.itemUid = itemUid;
         this.stepUid = stepUid;
     }
@@ -170,6 +169,9 @@ export class StepHelperClass extends SettingsClass {
     public get getStepComponents() {
         return this.zus.kvStepComponentList?.[this.stepUid];
     }
+    public get getStepFilteredComponents() {
+        return this.zus.kvFilteredStepComponentList?.[this.itemStepUid];
+    }
     public updateStepComponent(data) {
         this.zus.dotUpdate(
             `kvStepComponentList.${this.stepUid}`,
@@ -227,14 +229,27 @@ export class StepHelperClass extends SettingsClass {
 
         return data;
     }
+    public refreshStepComponentsData() {
+        this.fetchStepComponents().then((result) => {
+            this.zus.dotUpdate(
+                `kvFilteredStepComponentList.${this.itemStepUid}`,
+                result
+            );
+        });
+    }
+    public loadStepComponents(reload = false) {}
     public async fetchStepComponents(reload = false) {
         const stepData = this.getStepForm();
         const ls = this.getStepComponents;
         // if (ls) return ls;
-        const components = ls
-            ? ls
-            : await getStepComponentsUseCase(stepData.title, stepData.stepId);
-        if (!ls)
+        const components =
+            ls?.length && !reload
+                ? ls
+                : await getStepComponentsUseCase(
+                      stepData.title,
+                      stepData.stepId
+                  );
+        if (!ls?.length || reload)
             this.zus.dotUpdate(
                 `kvStepComponentList.${this.stepUid}`,
                 components
@@ -274,7 +289,8 @@ export class StepHelperClass extends SettingsClass {
                 if (!component._metaData) component._metaData = {} as any;
                 component._metaData.visible =
                     this.isComponentVisible(component);
-                component.price = this.getComponentPrice(component.uid);
+                component.basePrice = this.getComponentPrice(component.uid);
+                component.salesPrice = this.calculateSales(component.basePrice);
                 return component;
             });
         return filteredComponents;
@@ -546,6 +562,7 @@ export class ComponentHelperClass extends StepHelperClass {
         Object.entries(priceData).map(([k, d]) =>
             this.zus.dotUpdate(`data.pricing.${k}`, d)
         );
+        this.refreshStepComponentsData();
     }
     public selectComponent() {
         const isMulti = this.isMultiSelect();
@@ -600,7 +617,7 @@ export class ComponentHelperClass extends StepHelperClass {
                 componentUid: this.componentUid,
                 value: component.title,
                 stepId: component.stepId,
-                price: component.price,
+                price: component.salesPrice,
             };
             this.saveStepForm(stepData);
             this.dotUpdateItemForm("currentStepUid", null);

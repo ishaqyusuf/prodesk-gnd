@@ -8,10 +8,9 @@ import {
 } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import { zhAddItem, zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
+import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
 import ItemSideView from "./item-side-view";
-import { useEffect, useMemo, useState } from "react";
-import { Icons } from "@/components/_v1/icons";
+import { useMemo } from "react";
 
 interface Props {
     uid?: string;

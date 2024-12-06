@@ -202,7 +202,9 @@ function DoorSizeRow({ size }: { size }) {
                                 value={
                                     <div className="flex gap-4 items-center justify-end">
                                         <span>{`${size.title}`}</span>
-                                        <MoneyBadge>{size.price}</MoneyBadge>
+                                        <MoneyBadge>
+                                            {sizeForm?.salesPrice}
+                                        </MoneyBadge>
                                     </div>
                                 }
                             />

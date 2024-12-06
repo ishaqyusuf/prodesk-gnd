@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ControlledInput from "@/components/common/controls/controlled-input";
 import { saveComponentPricingUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 interface Props {
     cls: ComponentHelperClass;
@@ -91,12 +92,14 @@ export default function ComponentPriceModal({ cls }: Props) {
                                         Grouped Pricing
                                     </TabsTrigger>
                                 </TabsList>
-                                <TabsContent value="priceList">
-                                    <MainTab />
-                                </TabsContent>
-                                <TabsContent value="groupPricing">
-                                    <GroupPriceTab />
-                                </TabsContent>
+                                <ScrollArea className="max-h-[50vh]">
+                                    <TabsContent value="priceList">
+                                        <MainTab />
+                                    </TabsContent>
+                                    <TabsContent value="groupPricing">
+                                        <GroupPriceTab />
+                                    </TabsContent>
+                                </ScrollArea>
                             </Tabs>
                         </>
                     ) : (
@@ -114,11 +117,14 @@ function GroupPriceTab({}) {
 function MainTab({}) {
     const ctx = useCtx();
     return (
-        <ScrollArea className="max-h-[50vh]">
+        <>
             {ctx.priceModel?.priceVariants?.map((variant, index) => (
                 <div
                     key={index}
-                    className="flex gap-4 items-center border-b py-2"
+                    className={cn(
+                        "flex gap-4 items-center border-b py-2",
+                        variant.current && "bg-emerald-50"
+                    )}
                 >
                     <div className="flex-1">
                         {variant?.title?.map((title) => (
@@ -137,6 +143,6 @@ function MainTab({}) {
                     </div>
                 </div>
             ))}
-        </ScrollArea>
+        </>
     );
 }

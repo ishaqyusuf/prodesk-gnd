@@ -48,32 +48,6 @@ export function StepSection({ stepUid }: Props) {
     useEffect(() => {
         console.log("REFRESHING>>>");
     }, []);
-    // function Render() {
-    //     // if (ctx?.isHtp)
-    //     //     return (
-    //     //         <Content>
-    //     //             <HousePackageTool itemStepUid={stepUid} />
-    //     //         </Content>
-    //     //     );
-    //     // if (ctx.isMouldingLineItem)
-    //     //     return (
-    //     //         <Content>
-    //     //             <MouldingLineItem itemStepUid={stepUid} />
-    //     //         </Content>
-    //     //     );
-    //     // if (ctx?.isServiceLineItem)
-    //     //     return (
-    //     //         <Content>
-    //     //             <ServiceLineItem itemStepUid={stepUid} />
-    //     //         </Content>
-    //     //     );
-    //     return (
-    //         <Content>
-    //             <span></span>
-    //             {/* <ComponentsSection key={stepUid} stepUid={stepUid} /> */}
-    //         </Content>
-    //     );
-    // }
 
     return (
         <div>

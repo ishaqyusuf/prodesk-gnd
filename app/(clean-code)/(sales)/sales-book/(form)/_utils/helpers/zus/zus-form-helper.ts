@@ -7,7 +7,12 @@ import {
 } from "../../../_common/_stores/form-data-store";
 import { StepHelperClass } from "./zus-helper-class";
 import { generateRandomString } from "@/lib/utils";
+import { formatMoney } from "@/lib/use-number";
 export function zhInitializeState(data: GetSalesBookForm) {
+    const profile = data.salesProfile || data.data?.defaultProfile;
+    const salesMultiplier = profile?.coefficient
+        ? formatMoney(1 / profile.coefficient)
+        : 1;
     const resp: SalesFormZusData = {
         data,
         sequence: {
@@ -20,8 +25,43 @@ export function zhInitializeState(data: GetSalesBookForm) {
         kvStepForm: {},
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
+        metaData: {
+            salesMultiplier,
+            deliveryMode: data.order.deliveryOption as any,
+            po: data.order?.meta?.po,
+            qb: data.order?.meta?.qb,
+            salesProfileId: profile?.id,
+            customer: {
+                id: data.customer?.id,
+                businessName: data?.customer?.businessName,
+                name: data?.customer?.name,
+            },
+            samesAddress: data.billingAddress?.id == data.shippingAddress?.id,
+            billing: {
+                id: data.billingAddress?.id,
+                address1: data.billingAddress?.address1,
+                city: data.billingAddress?.city,
+                state: data.billingAddress?.state,
+                primaryPhone: data.billingAddress?.phoneNo,
+                secondaryPhone: data.billingAddress?.phoneNo2,
+                email: data.billingAddress?.email,
+                name: data.billingAddress?.name,
+                zipCode: data.billingAddress?.meta?.zip_code,
+            },
+            shipping: {
+                id: data.shippingAddress?.id,
+                address1: data.shippingAddress?.address1,
+                city: data.shippingAddress?.city,
+                state: data.shippingAddress?.state,
+                primaryPhone: data.shippingAddress?.phoneNo,
+                secondaryPhone: data.shippingAddress?.phoneNo2,
+                email: data.shippingAddress?.email,
+                name: data.shippingAddress?.name,
+                zipCode: data.shippingAddress?.meta?.zip_code,
+            },
+        },
     };
-    console.log(data.itemArray.length);
+
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
 
@@ -85,6 +125,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
         // item.multiComponent.components?.map()
         // zhHarvestDoorSizes(resp, uid);
     });
+
     return resp;
 }
 export function zhHarvestDoorSizes(data: SalesFormZusData, itemUid) {

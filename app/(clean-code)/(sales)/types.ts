@@ -308,14 +308,42 @@ export type StepMeta = {
         widthList?: string[];
     }[];
 };
+interface AddressForm {
+    id?: number;
+    name: string;
+    email: string;
+    primaryPhone: string;
+    secondaryPhone: string;
+    address1: string;
+    city: string;
+    state: string;
+    zipCode: string;
+}
 export interface SalesFormZusData {
+    currentTab?: "invoice" | "info";
     data: GetSalesBookForm;
     sequence: {
         formItem: string[];
         stepComponent: { [itemUid in string]: string[] };
         multiComponent: { [itemUid in string]: string[] };
     };
-
+    metaData?: {
+        salesProfileId?: number;
+        salesMultiplier?: number;
+        qb?: string;
+        po?: string;
+        samesAddress?: boolean;
+        deliveryMode: DeliveryOption;
+        billing?: AddressForm;
+        shipping?: AddressForm;
+        customer: {
+            id?: number;
+            businessName?: string;
+            name?: string;
+            phone?: string;
+            isBusiness?: boolean;
+        };
+    };
     kvFormItem: {
         [itemUid in string]: {
             id?: number;

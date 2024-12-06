@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface Props<T> {
+export interface ControlledSelectProps<T> {
     label?;
     placeholder?;
     options?: T[];
@@ -68,7 +68,8 @@ export default function ControlledSelect<
     size = "default",
     listMode,
     ...props
-}: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
+}: Partial<ControllerProps<TFieldValues, TName>> &
+    ControlledSelectProps<TOptionType>) {
     const [list, setList] = useState<any>(options || []);
     // useEffect(() => {
     //     setList(options || []);

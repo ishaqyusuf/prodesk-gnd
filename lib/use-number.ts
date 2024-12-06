@@ -26,3 +26,4 @@ export function numeric<T>(cells: (keyof T)[], data) {
     return data;
 }
 
+// export function 2dp()

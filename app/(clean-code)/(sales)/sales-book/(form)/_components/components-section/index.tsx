@@ -3,12 +3,7 @@ import {
     useFormDataStore,
     ZusComponent,
 } from "../../_common/_stores/form-data-store";
-import {
-    zhLoadStepComponents,
-    zusDeleteComponents,
-    zusFilterStepComponents,
-} from "../../_utils/helpers/zus/zus-step-helper";
-import { useEffectAfterMount } from "@/hooks/use-effect-after-mount";
+import { zusDeleteComponents } from "../../_utils/helpers/zus/zus-step-helper";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -44,10 +39,10 @@ interface Props {
 
 export function ComponentsSection({ itemStepUid }: Props) {
     const ctx = useStepContext(itemStepUid);
-    const { items, containerRef, cls, props } = ctx;
+    const { items, sticky, cls, props } = ctx;
     return (
         <ScrollArea
-            ref={containerRef}
+            ref={sticky.containerRef}
             className="p-4 pb-20 h-full smax-h-[80vh] relative"
         >
             {/* <div>ITEMS: {items?.length}</div> */}
@@ -69,8 +64,12 @@ export function ComponentsSection({ itemStepUid }: Props) {
 }
 
 function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
-    const { stepUid, items, actionRef, isFixed, fixedOffset, selectionState } =
-        ctx;
+    const {
+        stepUid,
+        items,
+        sticky: { actionRef, isFixed, fixedOffset },
+        selectionState,
+    } = ctx;
     const isDoor = ctx.cls.isDoor();
     const zus = useFormDataStore();
     const selectionUids = () =>
@@ -264,9 +263,9 @@ function Component({
                     </div>
                     <div className="p-2 border-t font-mono inline-flex text-sm justify-between">
                         <Label className=" uppercase">{component.title}</Label>
-                        {component.price && (
+                        {component.salesPrice && (
                             <Badge className="h-5 px-1" variant="destructive">
-                                ${component.price}{" "}
+                                ${component.salesPrice}
                             </Badge>
                         )}
                     </div>

@@ -1,18 +1,59 @@
+import { FieldPath, FieldPathValue } from "react-hook-form";
 import {
     useFormDataStore,
     ZusItemFormData,
     ZusSales,
 } from "../../../_common/_stores/form-data-store";
+import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
+import { formatMoney, toFixed } from "@/lib/use-number";
 
 export class SettingsClass {
     constructor(
-        public itemStepUid,
+        public itemStepUid?,
         // public zus: ZusSales,
-        public itemUid,
-        public stepUid
+        public itemUid?,
+        public stepUid?,
+        public staticZus?: ZusSales
     ) {}
+
+    public salesProfiles() {
+        const profiles = this.dotGet("data.data.profiles");
+        return profiles.map(({ id, coefficient, defaultProfile, title }) => ({
+            id,
+            coefficient,
+            defaultProfile,
+            title,
+        }));
+    }
+    public currentProfile() {
+        return this.salesProfiles().find(
+            (profile) => profile.id == this.dotGet("metaData.salesProfileId")
+        );
+    }
+    public dotGet<K extends FieldPath<ZusSales>>(
+        path: K
+    ): FieldPathValue<ZusSales, K> {
+        return dotObject.pick(path, this.zus);
+    }
+    public get salesMultiplier() {
+        return this.dotGet("metaData.salesMultiplier") || 1;
+    }
+    public calculateSales(price) {
+        if (!price) return price;
+        return formatMoney(price * this.salesMultiplier);
+    }
+    public calculateCost(sales) {
+        return formatMoney(sales / this.salesMultiplier);
+    }
+    public salesProfileChanged() {
+        const profile = this.currentProfile();
+        const multiplier = profile.coefficient
+            ? formatMoney(1 / profile.coefficient)
+            : 1;
+        this.zus.dotUpdate("metaData.salesMultiplier", multiplier);
+    }
     public get zus(): ZusSales {
-        return useFormDataStore.getState();
+        return this.staticZus || useFormDataStore.getState();
     }
     public composeNextRoute(
         itemForm: ZusItemFormData,

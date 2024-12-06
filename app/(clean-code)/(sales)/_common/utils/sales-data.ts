@@ -1,3 +1,4 @@
+import { textValue } from "@/lib/utils";
 import { DykeDoorType } from "../../types";
 
 const salesTaxes = [
@@ -15,4 +16,14 @@ export default {
     productionDoorTypes: ["Garage", "Interior", "Exterior"] as DykeDoorType[],
     salesTaxes,
     salesTaxByCode,
+    deliveryModes: [
+        textValue("Pickup", "pickup"),
+        textValue("Delivery", "delivery"),
+    ],
+    paymentTerms: [
+        textValue("None"),
+        textValue("Net10"),
+        textValue("Net20"),
+        textValue("Net30"),
+    ],
 };

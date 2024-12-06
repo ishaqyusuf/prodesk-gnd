@@ -4,7 +4,12 @@ import {
     user,
     userId,
 } from "@/app/(v1)/_actions/utils";
-import { SalesMeta, SalesType, StepComponentMeta } from "../../types";
+import {
+    AddressBookMeta,
+    SalesMeta,
+    SalesType,
+    StepComponentMeta,
+} from "../../types";
 import { getLoggedInDealerAccountDta } from "./sales-dealer-dta";
 import { prisma } from "@/db";
 import { SalesBookFormIncludes } from "../utils/db-utils";
@@ -117,8 +122,15 @@ async function formatForm(data: GetSalesBookFormDataDta) {
         dealerMode: await dealerSession(),
         superAdmin: (await userId()) == 1,
         adminMode: true,
-        shippingAddress: data.order.shippingAddress,
-        billingAddress: data.order.billingAddress,
+
+        shippingAddress: {
+            ...data?.order?.billingAddress,
+            meta: data?.order?.billingAddress?.meta as any as AddressBookMeta,
+        },
+        billingAddress: {
+            ...data?.order?.billingAddress,
+            meta: data?.order?.billingAddress?.meta as any as AddressBookMeta,
+        },
         salesProfile: data.order.salesProfile,
         data: ctx,
         _taxForm,

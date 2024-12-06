@@ -37,9 +37,10 @@ function fns(set: SalesFormSet) {
                     !newState.kvFormItem[itemUid].collapsed;
                 return newState;
             }),
+
         dotUpdate: <K extends FieldPath<SalesFormZusData>>(
             k: K,
-            stepSq //: FieldPathValue<SalesFormZusData, K>
+            stepSq: FieldPathValue<SalesFormZusData, K>
         ) =>
             set((state) => {
                 const newState = {
@@ -74,15 +75,10 @@ function fns(set: SalesFormSet) {
         ...stepActions(set),
     };
 }
-export const useFormDataStore = create<ZusSales>((set) => ({
-    data: null as any,
-    kvFormItem: null as any,
-    kvStepForm: null as any,
-    sequence: null as any,
-    kvMultiComponent: null as any,
-    kvFilteredStepComponentList: {},
-    kvStepComponentList: {},
-
-    ...fns(set),
-}));
+export const useFormDataStore = create<ZusSales>(
+    (set) =>
+        ({
+            ...fns(set),
+        } as any)
+);
 export const getFormState = () => useFormDataStore.getState();
