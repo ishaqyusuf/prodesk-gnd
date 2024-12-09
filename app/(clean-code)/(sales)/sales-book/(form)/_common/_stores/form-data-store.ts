@@ -40,7 +40,7 @@ function fns(set: SalesFormSet) {
 
         dotUpdate: <K extends FieldPath<SalesFormZusData>>(
             k: K,
-            stepSq: FieldPathValue<SalesFormZusData, K>
+            stepSq //: FieldPathValue<SalesFormZusData, K>
         ) =>
             set((state) => {
                 const newState = {

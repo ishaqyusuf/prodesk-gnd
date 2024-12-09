@@ -241,7 +241,7 @@ export class StepHelperClass extends SettingsClass {
     public async fetchStepComponents(reload = false) {
         const stepData = this.getStepForm();
         const ls = this.getStepComponents;
-        // if (ls) return ls;
+
         const components =
             ls?.length && !reload
                 ? ls
@@ -285,12 +285,13 @@ export class StepHelperClass extends SettingsClass {
     public filterStepComponents(components: ZusComponent[]) {
         const filteredComponents = components
             // ?.filter(cls.isComponentVisible)
-            ?.map((component) => {
+            ?.map((component, index) => {
                 if (!component._metaData) component._metaData = {} as any;
                 component._metaData.visible =
                     this.isComponentVisible(component);
                 component.basePrice = this.getComponentPrice(component.uid);
                 component.salesPrice = this.calculateSales(component.basePrice);
+
                 return component;
             });
         return filteredComponents;
@@ -351,16 +352,26 @@ export class StepHelperClass extends SettingsClass {
     ) {
         this.zus.dotUpdate(`kvFormItem.${this.itemUid}.${k}`, value as any);
     }
+    public deleteStepsForm(itemStepsUid: string[]) {
+        if (itemStepsUid?.length) {
+            const newData = {};
+            Object.entries(this.zus.kvStepForm)
+                .filter(([a, b]) => !itemStepsUid?.includes(a))
+                .map(([a, b]) => (newData[a] = b));
+            this.zus.dotUpdate(`kvStepForm`, newData);
+        }
+    }
     public updateNextStepSequence(nextStepUid, stepForm) {
         const stepSq = this.getItemStepSequence();
         const prevStepIndex = stepSq.indexOf(this.itemStepUid);
         const prevNextStepUid = stepSq[prevStepIndex + 1];
         if (prevNextStepUid) {
             if (prevNextStepUid != nextStepUid) {
-                stepSq.splice(
+                const rems = stepSq.splice(
                     prevStepIndex + 1,
                     stepSq.length - prevStepIndex - 1
                 );
+                this.deleteStepsForm(rems);
                 stepSq.push(nextStepUid);
             }
         } else {
@@ -438,7 +449,7 @@ export class StepHelperClass extends SettingsClass {
             .map((step) => {
                 return {
                     title: step.title,
-                    price: step.price,
+                    price: step.salesPrice,
                     value: step.value,
                 };
             })
@@ -597,7 +608,15 @@ export class ComponentHelperClass extends StepHelperClass {
                         lh: "",
                         total: 1,
                     },
-                    addon: "",
+                    // addon: "",
+                    pricing: {
+                        addon: "",
+                        customPrice: "",
+                        itemPrice: {
+                            salesPrice: this.component.salesPrice,
+                            basePrice: this.component.basePrice,
+                        },
+                    },
                     swing: "",
                 };
             else {
@@ -609,6 +628,9 @@ export class ComponentHelperClass extends StepHelperClass {
                 .map(([uid, data]) => uid);
             groupItem.qty.total = groupItem.itemIds?.length;
             this.dotUpdateItemForm("groupItem", groupItem);
+            // this.getNextRouteFromSettings;
+            this.updateComponentCost();
+            this.updateGroupedCost();
         } else {
             let stepData = this.getStepForm();
             const component = this.component;
@@ -617,7 +639,8 @@ export class ComponentHelperClass extends StepHelperClass {
                 componentUid: this.componentUid,
                 value: component.title,
                 stepId: component.stepId,
-                price: component.salesPrice,
+                salesPrice: component.salesPrice,
+                basePrice: component.basePrice,
             };
             this.saveStepForm(stepData);
             this.dotUpdateItemForm("currentStepUid", null);
@@ -626,6 +649,7 @@ export class ComponentHelperClass extends StepHelperClass {
                 this.dotUpdateItemForm("routeUid", this.componentUid);
             }
             this.nextStep(isRoot, this.redirectUid);
+            this.updateComponentCost();
         }
     }
     public componentIsRoot() {

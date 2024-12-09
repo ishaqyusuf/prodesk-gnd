@@ -212,7 +212,7 @@ function Component({
         return {
             cls,
         };
-    }, [zus, component, stepUid]);
+    }, [component, stepUid]);
     async function deleteStepItem() {
         await zusDeleteComponents({
             zus,

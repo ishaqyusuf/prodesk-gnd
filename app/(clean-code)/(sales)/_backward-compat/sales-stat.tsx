@@ -1,5 +1,5 @@
 import { Menu } from "../../../../components/(clean-code)/menu";
-import { salesStatisticsAction, salesStatUpgrade } from "./sales-stat.action";
+import { salesStatUpgrade } from "./sales-stat.action";
 
 export default function SalesStat({}) {
     async function _salesStatistics() {

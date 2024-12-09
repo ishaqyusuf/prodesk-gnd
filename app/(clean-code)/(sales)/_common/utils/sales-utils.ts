@@ -3,6 +3,7 @@ import { DykeDoorType, SalesStatStatus, SalesStatType } from "../../types";
 import { Colors } from "@/lib/status-badge";
 
 export function inToFt(_in) {
+    if (_in.includes("-")) return _in;
     let _ft = _in;
     const duo = _ft.split("x");
     if (duo.length == 2) {

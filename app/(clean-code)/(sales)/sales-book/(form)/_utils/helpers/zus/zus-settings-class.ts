@@ -6,15 +6,19 @@ import {
 } from "../../../_common/_stores/form-data-store";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 import { formatMoney, toFixed } from "@/lib/use-number";
+import { CostingClass } from "./costing-class";
 
-export class SettingsClass {
+export class SettingsClass extends CostingClass {
     constructor(
         public itemStepUid?,
         // public zus: ZusSales,
         public itemUid?,
         public stepUid?,
         public staticZus?: ZusSales
-    ) {}
+    ) {
+        super();
+        this.setting = this;
+    }
 
     public salesProfiles() {
         const profiles = this.dotGet("data.data.profiles");
@@ -25,6 +29,7 @@ export class SettingsClass {
             title,
         }));
     }
+
     public currentProfile() {
         return this.salesProfiles().find(
             (profile) => profile.id == this.dotGet("metaData.salesProfileId")
@@ -35,23 +40,7 @@ export class SettingsClass {
     ): FieldPathValue<ZusSales, K> {
         return dotObject.pick(path, this.zus);
     }
-    public get salesMultiplier() {
-        return this.dotGet("metaData.salesMultiplier") || 1;
-    }
-    public calculateSales(price) {
-        if (!price) return price;
-        return formatMoney(price * this.salesMultiplier);
-    }
-    public calculateCost(sales) {
-        return formatMoney(sales / this.salesMultiplier);
-    }
-    public salesProfileChanged() {
-        const profile = this.currentProfile();
-        const multiplier = profile.coefficient
-            ? formatMoney(1 / profile.coefficient)
-            : 1;
-        this.zus.dotUpdate("metaData.salesMultiplier", multiplier);
-    }
+
     public get zus(): ZusSales {
         return this.staticZus || useFormDataStore.getState();
     }

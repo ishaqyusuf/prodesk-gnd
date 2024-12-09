@@ -12,7 +12,7 @@ export function FormDataPage({}) {
     const zus = useFormDataStore();
     const setting = useMemo(() => new SettingsClass(), []);
     const profiles = setting.salesProfiles();
-
+    const taxList = setting.taxList();
     return (
         <div className="lg:max-w-5xl xl:max-w-4xl">
             <div className="grid p-4 grid-cols-2 gap-4 sm:gap-6">
@@ -43,7 +43,33 @@ export function FormDataPage({}) {
                         valueKey="value"
                     />
                 </div>
-
+                <Select
+                    label="Tax Profile"
+                    name="metaData.pricing.taxCode"
+                    options={taxList}
+                    titleKey="title"
+                    valueKey="taxCode"
+                    onSelect={(e) => {
+                        setting.taxCodeChanged();
+                    }}
+                />
+                <Select
+                    label="Payment Method"
+                    name="metaData.paymentMethod"
+                    options={salesData.paymentOptions}
+                />
+                {/* <div className="col-span-2"></div> */}
+                <Input
+                    label="Sales Discount ($)"
+                    type="number"
+                    name="metaData.pricing.discount"
+                />
+                <Input
+                    label="Labor Cost ($)"
+                    type="number"
+                    name="metaData.pricing.labour"
+                />
+                <div className="col-span-2 border-b"></div>
                 <AddressForm addressType="billing" />
                 <AddressForm addressType="shipping" />
             </div>

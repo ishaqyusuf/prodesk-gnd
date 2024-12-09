@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 
 import { _modal } from "@/components/common/modal/provider";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
-import DoorSizeSelectModal from ".";
 
 export const useCtx = () => useContext(DoorSizeSelectContext);
 export const DoorSizeSelectContext =
@@ -93,10 +92,8 @@ export function useInitContext(cls: ComponentHelperClass) {
                 console.log(data);
                 const selected = !data.qty.total == false;
                 if (selected && !clear) {
-                    //selected
                     groupItem.itemIds.push(uid);
                     groupItem.form[uid] = {
-                        addon: "",
                         meta: {
                             description: "",
                             produceable: false,
@@ -106,8 +103,15 @@ export function useInitContext(cls: ComponentHelperClass) {
                         swing: data.swing,
                         qty: data.qty,
                         selected: true,
-                        salesPrice: data?.salesPrice,
-                        basePrice: data?.basePrice,
+                        pricing: {
+                            addon: "",
+                            customPrice: "",
+                            ...(groupItem.form[uid]?.pricing || {}),
+                            itemPrice: {
+                                salesPrice: data?.salesPrice,
+                                basePrice: data?.basePrice,
+                            },
+                        },
                     };
                 } else {
                     delete groupItem.form[uid];
@@ -125,6 +129,8 @@ export function useInitContext(cls: ComponentHelperClass) {
             });
         }
         cls.dotUpdateItemForm("groupItem", groupItem);
+        cls.updateComponentCost();
+        cls.updateGroupedCost();
         return groupItem;
     }
     function removeSelection() {

@@ -22,6 +22,7 @@ export function LineInput({
     const value = cls.dotGetGroupItemFormValue(lineUid, name);
     return (
         <Input
+            className="h-8"
             {...props}
             defaultValue={value as any}
             onChange={(e) => {

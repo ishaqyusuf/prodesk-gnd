@@ -4,6 +4,8 @@ import { Menu } from "../../../../components/(clean-code)/menu";
 import { Icons } from "@/components/_v1/icons";
 import SalesStat from "./sales-stat";
 import DevOnly from "@/_v2/components/common/dev-only";
+import HtpDoors from "./hpt-doors";
+import DoorPriceHarvest from "./door-price-harvest";
 
 export default function BackwardCompat({}) {
     return (
@@ -11,6 +13,8 @@ export default function BackwardCompat({}) {
             <Portal nodeId={"navRightSlot"}>
                 <Menu Icon={Icons.X}>
                     <SalesStat />
+                    <HtpDoors />
+                    <DoorPriceHarvest />
                 </Menu>
             </Portal>
         </DevOnly>

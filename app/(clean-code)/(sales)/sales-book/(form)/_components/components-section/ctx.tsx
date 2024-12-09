@@ -10,37 +10,21 @@ export function useStepContext(stepUid) {
         count: 0,
     });
     const _items = useFormDataStore().kvFilteredStepComponentList?.[stepUid];
-    const zus = useFormDataStore();
-    // const allItems = zusFilterStepComponents(stepUid, zus);
-    // const [items, setItems] = useState(allItems);
-    const [items, setItems] = useState([]);
-
+    const salesMultiplier = useFormDataStore(
+        (s) => s.metaData?.salesMultiplier
+    );
     const cls = useMemo(() => {
         const cls = new StepHelperClass(stepUid);
 
-        // console.log("LOADED");
-        //   cls.fetchStepComponents().then((res) => {
-        //       setItems(res);
-        //       console.log("RESULT", stepUid, res?.length);
-        //   });
         return cls;
-    }, [
-        stepUid,
-        // , zus
-    ]);
-    // cls.resetSelector(selectionState, setSelectionState);
-    useEffect(() => {
-        // console.log("STEPUID CHANGE");
-        // cls.fetchStepComponents().then((res) => {
-        //     setItems(res);
-        //     console.log("RESULT", stepUid, res?.length);
-        // });
-        cls.refreshStepComponentsData();
     }, [stepUid]);
+    useEffect(() => {
+        cls.refreshStepComponentsData();
+    }, [cls, salesMultiplier]);
     const sticky = useSticky((bv, pv, { top, bottom }) => !bv && pv);
     const props = {
         stepUid,
-        items,
+        items: _items,
         sticky,
 
         // searchFn

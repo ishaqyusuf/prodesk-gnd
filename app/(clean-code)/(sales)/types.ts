@@ -205,6 +205,7 @@ export type TypedDykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
 };
 export interface DykeSalesDoorMeta {
     _doorPrice: number | null;
+    overridePrice?: number | string;
 }
 export interface HousePackageToolMeta {
     priceTags?: {
@@ -327,6 +328,7 @@ export interface SalesFormZusData {
         stepComponent: { [itemUid in string]: string[] };
         multiComponent: { [itemUid in string]: string[] };
     };
+    formStatus: "ready" | "loading" | "saving";
     metaData?: {
         salesProfileId?: number;
         salesMultiplier?: number;
@@ -342,6 +344,16 @@ export interface SalesFormZusData {
             name?: string;
             phone?: string;
             isBusiness?: boolean;
+        };
+        paymentMethod: SalesPaymentOptions;
+        pricing: {
+            subTotal?: number;
+            discount?: number | string;
+            labour?: number | string;
+            taxCode?: string;
+            taxValue?: number;
+            taxId?: number;
+            ccc?: number;
         };
     };
     kvFormItem: {
@@ -359,7 +371,7 @@ export interface SalesFormZusData {
                 _?: {
                     tabUid?: string;
                 };
-                type: "MOULDING" | "HPT" | "SERVICE";
+                type?: "MOULDING" | "HPT" | "SERVICE";
                 pricing?: {
                     components?: {
                         basePrice?: number;
@@ -371,16 +383,16 @@ export interface SalesFormZusData {
                     };
                 };
                 qty: {
-                    rh: number | string;
-                    lh: number | string;
-                    total: number | string;
+                    rh?: number;
+                    lh?: number;
+                    total?: number;
                 };
                 // componentsBasePrice?: number;
                 // componentsSalesPrice?: number;
                 // totalBasePrice?: number;
                 // totalSalesPrice?: number;
                 itemIds: string[];
-                stepUid: string;
+                stepUid?: string;
                 form: {
                     [id in string]: {
                         selected: boolean;
@@ -388,21 +400,31 @@ export interface SalesFormZusData {
                         // id for moulding = `${componentUid}`
                         // id for services = random
                         meta: {
-                            description: string;
-                            taxxable: boolean;
-                            produceable: boolean;
+                            description?: string;
+                            taxxable?: boolean;
+                            produceable?: boolean;
                         };
                         qty: {
                             rh?: number | string;
                             lh?: number | string;
                             total?: number | string;
                         };
-                        basePrice?: number;
-                        salesPrice?: number;
-                        totalSalesPrice?: number;
-                        addon: number | string;
+                        // basePrice?: number;
+                        pricing?: {
+                            itemPrice: {
+                                basePrice?: number;
+                                salesPrice?: number;
+                            };
+                            customPrice?: number | string;
+                            estimatedComponentPrice?: number | string;
+                            unitPrice?: number;
+                            totalPrice?: number;
+                            addon: number | string;
+                        };
+                        // totalSalesPrice?: number;
                         hptId?: number;
                         swing: string;
+                        // customPrice?: number | string;
                         // imgUrl: string;
                     };
                 };
@@ -423,7 +445,8 @@ export interface SalesFormZusData {
             //id: "itemUid-stepUid"
             title?: string;
             value?: string;
-            price?: number;
+            salesPrice?: number;
+            basePrice?: number;
             stepFormId?: number;
             stepId?: number;
             componentUid: string;

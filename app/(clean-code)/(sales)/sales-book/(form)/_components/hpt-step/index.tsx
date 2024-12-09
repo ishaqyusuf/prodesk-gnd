@@ -40,8 +40,9 @@ export default function HousePackageTool({ itemStepUid }: Props) {
                 <Tabs
                     onValueChange={(e) => {
                         ctx.ctx.tabChanged(e);
+                        // ctx.setTab(e);
                     }}
-                    defaultValue={ctx.tabUid}
+                    value={ctx.ctx.tabUid}
                 >
                     <TabsList>
                         {ctx.doors?.map((door) => (
@@ -174,7 +175,14 @@ function DoorSizeRow({ size }: { size }) {
                 <Menu
                     noSize
                     Icon={null}
-                    label={<Money value={sizeForm?.totalSalesPrice} />}
+                    label={
+                        <Money
+                            value={
+                                sizeForm?.pricing?.customPrice ||
+                                sizeForm?.pricing?.estimatedComponentPrice
+                            }
+                        />
+                    }
                 >
                     <div className="p-2 min-w-[300px]">
                         <div>
@@ -203,7 +211,10 @@ function DoorSizeRow({ size }: { size }) {
                                     <div className="flex gap-4 items-center justify-end">
                                         <span>{`${size.title}`}</span>
                                         <MoneyBadge>
-                                            {sizeForm?.salesPrice}
+                                            {
+                                                sizeForm?.pricing?.itemPrice
+                                                    ?.salesPrice
+                                            }
                                         </MoneyBadge>
                                     </div>
                                 }
@@ -215,13 +226,13 @@ function DoorSizeRow({ size }: { size }) {
             <TableCell>
                 <LineInput
                     cls={ctx.ctx}
-                    name="addon"
+                    name="pricing.addon"
                     lineUid={lineUid}
                     type="number"
                 />
             </TableCell>
             <TableCell>
-                <Money value={sizeForm?.totalSalesPrice} />
+                <Money value={sizeForm?.pricing?.totalPrice} />
             </TableCell>
             <TableCell align="right">
                 <ConfirmBtn

@@ -32,10 +32,4 @@ export function zhtoggleStep(stepUid, zus: ZusSales) {
     const currentStepUid = zus.kvFormItem[itemUid]?.currentStepUid;
     zus.toggleStep(stepUid);
     const cleareUid = currentStepUid == stepUid ? stepUid : currentStepUid;
-    if (cleareUid) {
-        setTimeout(() => {
-            zus.dotUpdate(`kvFilteredStepComponentList.${stepUid}`, null);
-            console.log("filtered cleared", stepUid);
-        }, 200);
-    }
 }
