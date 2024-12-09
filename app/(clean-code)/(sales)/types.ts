@@ -411,7 +411,7 @@ export interface SalesFormZusData {
                         };
                         // basePrice?: number;
                         pricing?: {
-                            itemPrice: {
+                            itemPrice?: {
                                 basePrice?: number;
                                 salesPrice?: number;
                             };

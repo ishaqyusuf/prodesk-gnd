@@ -15,6 +15,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useSticky } from "../_hooks/use-sticky";
 import { FormDataPage } from "./data-page";
 import { cn } from "@/lib/utils";
+import { FormFooter } from "./form-footer";
 
 interface FormClientProps {
     data: GetSalesBookForm;
@@ -26,6 +27,7 @@ export function FormClient({ data }: FormClientProps) {
         zus.init(zhInitializeState(data));
     }, []);
     const sticky = useSticky((bv, pv, { top, bottom }) => top < 100);
+    const footerSticky = useSticky((bv, pv, { top, bottom }) => top < 100);
     if (!zus.formStatus) return <></>;
     return (
         <div className="mb-28 bg-white">
@@ -43,6 +45,7 @@ export function FormClient({ data }: FormClientProps) {
                     <FormDataPage />
                 </div>
                 <div
+                    ref={footerSticky.containerRef}
                     className={cn(
                         zus.currentTab == "info" &&
                             "opacity-0 h-0 z-0 w-0 overflow-hidden"
@@ -63,6 +66,7 @@ export function FormClient({ data }: FormClientProps) {
                     </div>
                 </div>
             </div>
+            <FormFooter sticky={sticky} />
         </div>
     );
 }

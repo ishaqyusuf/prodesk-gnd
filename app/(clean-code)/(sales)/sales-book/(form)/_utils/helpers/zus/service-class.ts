@@ -30,7 +30,10 @@ export class ServiceClass extends GroupFormClass {
         itemsUids.push(uid);
         this.dotUpdateItemForm("groupItem.itemIds", itemsUids);
         this.dotUpdateGroupItemForm(uid, {
-            addon: "",
+            // addon: "",
+            pricing: {
+                addon: "",
+            },
             meta: {
                 description: "",
                 produceable: false,
