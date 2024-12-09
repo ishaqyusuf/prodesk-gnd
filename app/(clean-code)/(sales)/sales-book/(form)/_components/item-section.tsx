@@ -24,9 +24,9 @@ export default function ItemSection({ uid }: Props) {
     }, [zus.sequence?.stepComponent?.[uid]]);
 
     return (
-        <div className="">
+        <div className="mb-2 sm:mb-4 bg-background rounded-lg">
             <Collapsible
-                open={!zItem.collapsed}
+                open
                 onOpenChange={(e) => {
                     zus.toggleItem(uid);
                 }}
@@ -34,8 +34,13 @@ export default function ItemSection({ uid }: Props) {
                 <ItemSectionHeader uid={uid} />
                 <CollapsibleContent className="flex border overflow-auto max-h-[120vh]">
                     <div className="flex-1 flex flex-col ">
-                        {sequence?.map((stepUid) => (
-                            <StepSection key={stepUid} stepUid={stepUid} />
+                        {sequence?.map((stepUid, index) => (
+                            <StepSection
+                                isFirst={index == 0}
+                                isLast={sequence?.length - 1 == index}
+                                key={stepUid}
+                                stepUid={stepUid}
+                            />
                         ))}
                     </div>
                     <ItemSideView itemUid={uid} />

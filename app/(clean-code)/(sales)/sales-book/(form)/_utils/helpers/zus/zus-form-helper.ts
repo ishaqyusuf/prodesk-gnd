@@ -44,6 +44,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 discount: data.order?.meta?.discount,
                 labour: data.order?.meta?.labor_cost,
                 taxValue: data.order?.tax,
+                taxCode: tax?.taxCode,
                 ccc: data.order?.meta?.ccc,
                 subTotal: data.order?.subTotal,
                 grandTotal: data.order?.grandTotal,
@@ -84,9 +85,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
         },
         formStatus: "ready",
     };
-
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
+        console.log({ item });
 
         resp.sequence.formItem.push(uid);
         resp.kvFormItem[uid] = {
@@ -96,8 +97,10 @@ export function zhInitializeState(data: GetSalesBookForm) {
             title: "",
         };
         resp.sequence.stepComponent[uid] = [];
-        let doorStepUid, mouldingStepUid;
-        item.formStepArray.map((fs) => {
+        // let doorStepUid, mouldingComponentUid;
+
+        item.formStepArray.map((fs, i) => {
+            // console.log(i);
             // if (fs.step.title == "Door") doorStepUid = fs.step.uid;
             const stepMeta = fs.step.meta;
             const suid = `${uid}-${fs.step.uid}`;
@@ -111,6 +114,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 stepId: fs.step.id,
                 meta: stepMeta as any,
             };
+
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
         });
@@ -139,28 +143,41 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 },
             };
         // resp.kvFormItem[uid].groupItem
+        function pushItemId(itemId) {
+            resp.kvFormItem[uid].groupItem.itemIds?.push(itemId);
+        }
+        type GroupType = (typeof resp.kvFormItem)[""]["groupItem"];
+        function setType(type: GroupType["type"]) {
+            resp.kvFormItem[uid].groupItem.type = type;
+        }
+
+        function addFormItem(formId, formData: GroupType["form"][""]) {
+            resp.kvFormItem[uid].groupItem.form[formId] = formData;
+        }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
             const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
-            console.log({ spid: data.stepProduct?.uid, stepProdUid });
-            if (data._doorForm) {
-                resp.kvFormItem[uid].groupItem.type = "HPT";
+            const doorCount = Object.keys(data._doorForm).length;
+            if (doorCount) {
+                setType("HPT");
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
-                    resp.kvFormItem[uid].groupItem.itemIds?.push(formId);
-
-                    resp.kvFormItem[uid].groupItem.form[formId] = {
+                    pushItemId(formId);
+                    addFormItem(formId, {
                         pricing: {
                             itemPrice: {
                                 salesPrice: doorForm.jambSizePrice,
-                                basePrice: doorForm.jambSizePrice,
+                                basePrice: basePrice(doorForm.jambSizePrice),
                             },
                             estimatedComponentPrice: doorForm.jambSizePrice,
                             customPrice: doorForm?.meta?.overridePrice,
-                            unitPrice: doorForm.jambSizePrice,
-                            totalPrice: doorForm.jambSizePrice,
+                            // unitPrice: doorForm.jambSizePrice,
+                            // totalPrice: doorForm.jambSizePrice,
                             addon: doorForm.doorPrice,
                         },
-                        meta: {},
+                        meta: {
+                            salesItemId: doorForm.salesOrderItemId,
+                        },
+                        hptId: doorForm.housePackageToolId,
                         selected: true,
                         swing: doorForm.swing,
                         qty: {
@@ -168,7 +185,59 @@ export function zhInitializeState(data: GetSalesBookForm) {
                             rh: doorForm.rhQty,
                             total: doorForm.totalQty,
                         },
-                    };
+                    });
+                });
+            } else if (item.item?.housePackageTool?.molding) {
+                const formId = `${stepProdUid}`;
+                pushItemId(formId);
+                console.log({ stepProdUid });
+                console.log({
+                    m: item.item?.housePackageTool?.molding,
+                    md: data,
+                });
+                setType("MOULDING");
+                addFormItem(formId, {
+                    hptId: data.hptId,
+                    selected: true,
+                    meta: {},
+                    qty: {
+                        total: data.qty,
+                    },
+                    pricing: {
+                        customPrice: data.priceTags?.moulding?.overridePrice,
+                        itemPrice: {
+                            basePrice: data.priceTags?.moulding?.basePrice,
+                            salesPrice: data.priceTags?.moulding?.price,
+                        },
+                        estimatedComponentPrice:
+                            data.priceTags?.moulding?.price,
+                        addon: data.priceTags?.moulding?.addon,
+                    },
+                });
+            } else {
+                //
+                console.log(data);
+                const formId = `${data.uid}`;
+                pushItemId(formId);
+                setType("SERVICE");
+                addFormItem(formId, {
+                    pricing: {
+                        itemPrice: {},
+                        estimatedComponentPrice: data.unitPrice,
+                        customPrice: data.unitPrice,
+                        addon: 0,
+                    },
+                    selected: true,
+
+                    qty: {
+                        total: data.qty,
+                    },
+                    meta: {
+                        description: data.description,
+                        produceable: data.production,
+                        taxxable: data.tax,
+                        salesItemId: data.itemId,
+                    },
                 });
             }
         });

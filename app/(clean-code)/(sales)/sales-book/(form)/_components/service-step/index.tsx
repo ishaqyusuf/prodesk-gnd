@@ -25,23 +25,25 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
     return (
         <>
             <Context.Provider value={ctx}>
-                <Table className="p-4 text-xs font-medium">
+                <Table className="p-4 text-xs table-fixed font-medium">
                     <TableHeader>
                         <TableRow className="uppercase">
-                            <TableHead>Sn.</TableHead>
-                            <TableHead>Description</TableHead>
-                            <TableHead className="w-24">Tax</TableHead>
-                            <TableHead className="">
+                            <TableHead className="w-10">Sn.</TableHead>
+                            <TableHead className="w-full">
+                                Description
+                            </TableHead>
+                            <TableHead className="w-16">Tax</TableHead>
+                            <TableHead className="w-16">
                                 <TextWithTooltip
                                     text={"Production"}
                                     className="w-16"
                                 ></TextWithTooltip>
                             </TableHead>
                             <TableHead className="w-28">Qty</TableHead>
-                            <TableHead className="w-32">Unit Price</TableHead>
+                            <TableHead className="w-28">Unit Price</TableHead>
 
-                            <TableHead className="w-32">Line Total</TableHead>
-                            <TableHead className="w-20"></TableHead>
+                            <TableHead className="w-28">Line Total</TableHead>
+                            <TableHead className="w-16"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -73,6 +75,7 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
     const mfd = ctx.itemForm?.groupItem?.form?.[lineUid];
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
+        ctx.ctx.calculateTotalPrice();
     };
     return (
         <>
@@ -113,7 +116,7 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                 <TableCell>
                     <LineInput
                         cls={ctx.ctx}
-                        name="pricing.addon"
+                        name="pricing.customPrice"
                         lineUid={lineUid}
                         type="number"
                         valueChanged={valueChanged}

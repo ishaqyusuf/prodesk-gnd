@@ -68,23 +68,25 @@ function DoorSizeTable({ door }) {
     const ctx = useCtx();
 
     return (
-        <Table className="p-4 text-xs font-medium">
+        <Table className="p-4 text-xs font-medium table-fixed">
             <TableHeader>
                 <TableRow className="uppercase">
-                    <TableHead>Size</TableHead>
-                    {ctx.config.hasSwing && <TableHead>Swing</TableHead>}
+                    <TableHead className="w-full">Size</TableHead>
+                    {ctx.config.hasSwing && (
+                        <TableHead className="w-28">Swing</TableHead>
+                    )}
                     {ctx.config.noHandle ? (
-                        <TableHead className="w-32">Swing</TableHead>
+                        <TableHead className="w-28">Qty</TableHead>
                     ) : (
                         <>
                             <TableHead className="w-28">Lh</TableHead>
                             <TableHead className="w-28">Rh</TableHead>
                         </>
                     )}
-                    <TableHead className="w-32">Estimate</TableHead>
-                    <TableHead className="w-32">Addon/Qty</TableHead>
-                    <TableHead className="w-32">Line Total</TableHead>
-                    <TableHead className="w-32"></TableHead>
+                    <TableHead className="w-28">Estimate</TableHead>
+                    <TableHead className="w-28">Addon/Qty</TableHead>
+                    <TableHead className="w-28">Line Total</TableHead>
+                    <TableHead className="w-16"></TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>

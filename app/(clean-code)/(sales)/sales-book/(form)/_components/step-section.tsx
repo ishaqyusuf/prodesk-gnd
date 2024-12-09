@@ -19,8 +19,10 @@ import { ComponentsSection } from "./components-section";
 
 interface Props {
     stepUid?;
+    isFirst;
+    isLast;
 }
-export function StepSection({ stepUid }: Props) {
+export function StepSection({ stepUid, isFirst, isLast }: Props) {
     const zus = useFormDataStore();
     // const stepForm = zus?.kvStepForm?.[stepUid];
     const [uid] = stepUid?.split("-");
@@ -44,20 +46,21 @@ export function StepSection({ stepUid }: Props) {
         // , zus
     ]);
 
-    return (
-        <div>
-            <div className="">
-                <Collapsible open={zItem.currentStepUid == stepUid}>
-                    <StepSectionHeader cls={cls} />
-                    <CollapsibleContent className="flex">
-                        <Content>
-                            <Render itemStepUid={stepUid} />
-                        </Content>
-                    </CollapsibleContent>
-                </Collapsible>
+    if (!zItem.collapsed || (zItem.collapsed && (isFirst || isLast)))
+        return (
+            <div>
+                <div className="">
+                    <Collapsible open={zItem.currentStepUid == stepUid}>
+                        <StepSectionHeader cls={cls} />
+                        <CollapsibleContent className="flex">
+                            <Content>
+                                <Render itemStepUid={stepUid} />
+                            </Content>
+                        </CollapsibleContent>
+                    </Collapsible>
+                </div>
             </div>
-        </div>
-    );
+        );
 }
 function Content({ children }) {
     const { isVisible, elementRef } = useIsVisible({});

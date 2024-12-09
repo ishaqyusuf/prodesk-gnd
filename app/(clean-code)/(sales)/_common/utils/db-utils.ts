@@ -466,6 +466,9 @@ export const SalesBookFormIncludes = (restoreQuery) =>
                             where: {
                                 ...restoreQuery,
                             },
+                            // include: {
+                            //     stepProducts: true,
+                            // },
                         },
                     },
                 },

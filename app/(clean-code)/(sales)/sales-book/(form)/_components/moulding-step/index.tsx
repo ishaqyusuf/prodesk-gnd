@@ -9,9 +9,8 @@ import {
 import { Context, useCreateContext, useCtx } from "./ctx";
 import { MouldingClass } from "../../_utils/helpers/zus/moulding-class";
 import { useForm } from "react-hook-form";
-import { InputHTMLAttributes } from "react";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+
 import { MoneyBadge } from "@/components/(clean-code)/money-badge";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { Menu } from "@/components/(clean-code)/menu";
@@ -29,16 +28,16 @@ export default function MouldingLineItem({ itemStepUid }: Props) {
     return (
         <>
             <Context.Provider value={ctx}>
-                <Table className="p-4 text-xs font-medium">
+                <Table className="p-4 text-xs table-fixed font-medium">
                     <TableHeader>
                         <TableRow className="uppercase">
-                            <TableHead>Sn.</TableHead>
-                            <TableHead>Moulding</TableHead>
-                            <TableHead className="w-32">Qty</TableHead>
-                            <TableHead className="w-32">Estimate</TableHead>
-                            <TableHead className="w-32">Addon/Qty</TableHead>
-                            <TableHead className="w-32">Line Total</TableHead>
-                            <TableHead className="w-32"></TableHead>
+                            <TableHead className="w-10">Sn.</TableHead>
+                            <TableHead className="w-full">Moulding</TableHead>
+                            <TableHead className="w-28">Qty</TableHead>
+                            <TableHead className="w-28">Estimate</TableHead>
+                            <TableHead className="w-28">Addon/Qty</TableHead>
+                            <TableHead className="w-28">Line Total</TableHead>
+                            <TableHead className="w-16"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

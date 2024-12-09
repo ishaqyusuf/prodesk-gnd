@@ -231,7 +231,7 @@ export function addPercentage(value, percentage) {
     return value + (value || 0) * ((percentage || 100) / 100);
 }
 export function percentageValue(value, percent) {
-    if (!percent || !value) return value || 0;
+    if (!percent || !value) return 0;
     return formatMoney(((value || 0) * percent) / 100);
 }
 export function percent(score, total, def = 0) {

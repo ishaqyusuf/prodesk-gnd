@@ -57,6 +57,9 @@ export function FormDataPage({}) {
                     label="Payment Method"
                     name="metaData.paymentMethod"
                     options={salesData.paymentOptions}
+                    onSelect={(e) => {
+                        setting.calculateTotalPrice();
+                    }}
                 />
                 {/* <div className="col-span-2"></div> */}
                 <Input

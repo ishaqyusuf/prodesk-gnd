@@ -151,21 +151,20 @@ export class CostingClass {
             ...data.metaData.pricing,
             ...overrides,
         };
-        console.log(estimate);
 
         const taxProfile = this.currentTaxProfile();
         estimate.taxValue = percentageValue(
             estimate.taxxable,
             taxProfile.percentage
         );
-        estimate.grandTotal = formatMoney(
-            sum([
-                estimate.subTotal,
-                estimate.taxxable,
-                estimate.labour,
-                estimate.ccc,
-            ]) - Number(estimate.discount || 0)
-        );
+        // console.log(estimate);
+        const subGrandTot =
+            sum([estimate.subTotal, estimate.taxValue, estimate.labour]) -
+            Number(estimate.discount || 0);
+        if (data.metaData.paymentMethod == "Credit Card") {
+            estimate.ccc = percentageValue(subGrandTot, 3);
+        } else estimate.ccc = 0;
+        estimate.grandTotal = formatMoney(subGrandTot + (estimate.ccc || 0));
         if (this.setting?.staticZus)
             this.setting.staticZus.metaData.pricing = estimate;
         else this.setting.zus.dotUpdate("metaData.pricing", estimate);
@@ -185,6 +184,7 @@ export class CostingClass {
                 const price = Number(formData.pricing?.totalPrice || 0);
                 const taxxable =
                     !isService || (isService && formData.meta.taxxable);
+                // console.log({ formData });
                 estimate.subTotal += price;
                 if (taxxable) estimate.taxxable += price;
             });
@@ -200,9 +200,6 @@ export class CostingClass {
             (tax) =>
                 tax.taxCode == this.setting.dotGet("metaData.pricing.taxCode")
         );
-        // const taxProfile = this.currentTaxProfile();
-        // console.log(taxProfile);
-        this.calculateTotalPrice();
         this.setting?.zus.dotUpdate("metaData.tax", taxProfile);
         this.calculateTotalPrice();
     }

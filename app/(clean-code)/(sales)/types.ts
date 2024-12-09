@@ -214,6 +214,7 @@ export interface HousePackageToolMeta {
             price?: number | undefined;
             basePrice?: number | undefined;
             addon?: number | undefined;
+            overridePrice?: number | undefined;
         };
         components?: number | undefined;
         doorSizePriceTag?: { [size in string]: number };
@@ -410,6 +411,7 @@ export interface SalesFormZusData {
                             description?: string;
                             taxxable?: boolean;
                             produceable?: boolean;
+                            salesItemId?;
                         };
                         qty: {
                             rh?: number | string;
@@ -430,7 +432,7 @@ export interface SalesFormZusData {
                         };
                         // totalSalesPrice?: number;
                         hptId?: number;
-                        swing: string;
+                        swing?: string;
                         // customPrice?: number | string;
                         // imgUrl: string;
                     };

@@ -306,11 +306,7 @@ export function transformMultiDykeItem(
                 toolId: isMoulding
                     ? getMouldingId()
                     : item.housePackageTool?.dykeDoorId,
-                _doorForm:
-                    item.housePackageTool?._doorForm ||
-                    ({
-                        priceData: {},
-                    } as any),
+                _doorForm: item.housePackageTool?._doorForm || ({} as any),
                 hptId: item.housePackageTool?.id as any,
                 mouldingPriceData:
                     item?.housePackageTool?.priceData || ({} as any),
