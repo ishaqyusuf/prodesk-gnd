@@ -414,7 +414,9 @@ export const SalesBookFormIncludes = (restoreQuery) =>
     ({
         salesProfile: true,
         items: {
-            where: {},
+            where: {
+                deletedAt: null,
+            },
             include: {
                 formSteps: {
                     where: {

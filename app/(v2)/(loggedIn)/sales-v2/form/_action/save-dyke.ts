@@ -39,6 +39,21 @@ export async function saveDykeSales(data: DykeForm) {
                 if (!id) return undefined;
                 return { connect: { id } };
             }
+            // if (data.order.id) {
+            //     await prisma.salesOrderItems.updateMany({
+            //         where: {
+            //             salesOrderId: data.order.id,
+            //             id: {
+            //                 notIn: data.itemArray
+            //                     ?.filter((i) => i.item?.id)
+            //                     .map((i) => i.item.id),
+            //             },
+            //         },
+            //         data: {
+            //             deletedAt: new Date(),
+            //         },
+            //     });
+            // }
             const order = data.order.id
                 ? await prisma.salesOrders.update({
                       where: { id: data.order.id },
