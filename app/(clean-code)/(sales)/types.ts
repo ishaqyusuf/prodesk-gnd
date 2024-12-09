@@ -6,6 +6,7 @@ import {
     DykeStepProducts,
     SalesOrders,
     SalesStat,
+    SalesTaxes,
     Taxes,
 } from "@prisma/client";
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
@@ -320,6 +321,19 @@ interface AddressForm {
     state: string;
     zipCode: string;
 }
+export interface PricingMetaData {
+    subTotal?: number;
+    grandTotal?: number;
+    paid?: number;
+    pending?: number;
+    discount?: number | string;
+    labour?: number | string;
+    taxCode?: string;
+    taxxable?: number;
+    taxValue?: number;
+    taxId?: number;
+    ccc?: number;
+}
 export interface SalesFormZusData {
     currentTab?: "invoice" | "info";
     data: GetSalesBookForm;
@@ -346,15 +360,8 @@ export interface SalesFormZusData {
             isBusiness?: boolean;
         };
         paymentMethod: SalesPaymentOptions;
-        pricing: {
-            subTotal?: number;
-            discount?: number | string;
-            labour?: number | string;
-            taxCode?: string;
-            taxValue?: number;
-            taxId?: number;
-            ccc?: number;
-        };
+        pricing: PricingMetaData;
+        tax?: Taxes;
     };
     kvFormItem: {
         [itemUid in string]: {

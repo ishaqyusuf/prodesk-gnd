@@ -6,10 +6,11 @@ export const useSticky = (
         bottomVisible,
         partiallyVisible,
         anchors: { top: number; bottom?: number }
-    ) => boolean
+    ) => boolean,
+    defaultFixed = false
 ) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [isFixed, setIsFixed] = useState(false);
+    const [isFixed, setIsFixed] = useState(defaultFixed);
     const [fixedOffset, setFixedOffset] = useState(0);
     const actionRef = useRef<HTMLDivElement>(null);
 

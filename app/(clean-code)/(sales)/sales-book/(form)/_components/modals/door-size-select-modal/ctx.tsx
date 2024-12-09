@@ -64,7 +64,6 @@ export function useInitContext(cls: ComponentHelperClass) {
         const data = form.getValues();
         let groupItem = cls.getItemForm().groupItem;
         if (!groupItem && !clear) {
-            // if (clear) return;
             groupItem = {
                 type: "HPT",
                 form: {},
@@ -135,6 +134,7 @@ export function useInitContext(cls: ComponentHelperClass) {
         cls.dotUpdateItemForm("groupItem", groupItem);
         cls.updateComponentCost();
         cls.updateGroupedCost();
+        cls.calculateTotalPrice();
         return groupItem;
     }
     function removeSelection() {

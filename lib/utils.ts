@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import slugify from "slugify";
 
 import { toast } from "sonner";
+import { formatMoney } from "./use-number";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -228,6 +229,10 @@ export function truthy<T>(condition, _true: T[] = [], _false: T[] = []): any {
 }
 export function addPercentage(value, percentage) {
     return value + (value || 0) * ((percentage || 100) / 100);
+}
+export function percentageValue(value, percent) {
+    if (!percent || !value) return value || 0;
+    return formatMoney(((value || 0) * percent) / 100);
 }
 export function percent(score, total, def = 0) {
     if (!score || !total) return def;

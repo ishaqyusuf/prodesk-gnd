@@ -103,7 +103,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                 style={isFixed ? { left: `${fixedOffset}px` } : {}}
                 className={cn(
                     isFixed
-                        ? "fixed bottom-4 left-1/2 transform -translate-x-1/2"
+                        ? "fixed bottom-12 left-1/2 transform -translate-x-1/2"
                         : "absolute bottom-4 left-1/2 transform -translate-x-1/2",
                     "bg-white"
                 )}

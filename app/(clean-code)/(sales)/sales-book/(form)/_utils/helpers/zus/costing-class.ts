@@ -2,7 +2,8 @@ import { formatMoney } from "@/lib/use-number";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
-import { sum } from "@/lib/utils";
+import { addPercentage, percentageValue, sum } from "@/lib/utils";
+import { PricingMetaData } from "@/app/(clean-code)/(sales)/types";
 
 export class CostingClass {
     constructor(public setting?: SettingsClass) {}
@@ -23,17 +24,26 @@ export class CostingClass {
             ? formatMoney(1 / profile.coefficient)
             : 1;
         this.setting.zus.dotUpdate("metaData.salesMultiplier", multiplier);
+        // this.updateAllGroupedCost();
+        Object.entries(this.setting.zus.kvFormItem).map(([itemUid, data]) => {
+            this.updateComponentCost(itemUid, true);
+        });
+        // this.calculateTotalPrice();
         toast.success("Price updated");
     }
     public taxList() {
         return this.setting.dotGet("data._taxForm.taxList");
     }
-    public updateComponentCost() {
+    public updateComponentCost(
+        itemUid = this.setting.itemUid,
+        forceUpdate = false
+    ) {
         const data = this.setting.zus;
-        const itemForm = data.kvFormItem[this.setting.itemUid];
+        const itemForm = data.kvFormItem[itemUid];
+
         let totalBasePrice = 0;
         Object.entries(data.kvStepForm).map(([k, stepData]) => {
-            if (k.startsWith(`${this.setting.itemUid}-`)) {
+            if (k.startsWith(`${itemUid}-`)) {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
@@ -42,10 +52,11 @@ export class CostingClass {
             itemForm?.groupItem?.pricing?.components?.basePrice
         );
         if (
-            (totalBasePrice ||
+            ((totalBasePrice ||
                 itemForm?.groupItem?.pricing?.components?.basePrice) &&
-            itemForm?.groupItem?.pricing?.components?.basePrice !=
-                totalBasePrice
+                itemForm?.groupItem?.pricing?.components?.basePrice !=
+                    totalBasePrice) ||
+            forceUpdate
         ) {
             // update component price
             let groupItem = itemForm.groupItem;
@@ -68,23 +79,26 @@ export class CostingClass {
                     this.calculateSales(totalBasePrice);
             }
             Object.entries(groupItem.form).map(([uid, formData]) => {
+                formData.pricing.itemPrice.salesPrice = this.calculateSales(
+                    formData.pricing.itemPrice.basePrice
+                );
                 formData.pricing.estimatedComponentPrice = sum([
                     groupItem.pricing.components.salesPrice,
                     formData.pricing?.itemPrice?.salesPrice,
                 ]);
             });
             if (this.setting.staticZus) {
-                this.setting.staticZus.kvFormItem[
-                    this.setting.itemUid
-                ].groupItem = groupItem;
+                this.setting.staticZus.kvFormItem[itemUid].groupItem =
+                    groupItem;
             } else {
                 this.setting.zus.dotUpdate(
-                    `kvFormItem.${this.setting.itemUid}.groupItem`,
+                    `kvFormItem.${itemUid}.groupItem`,
                     groupItem
                 );
             }
             console.log(groupItem);
-            this.updateGroupedCost();
+            this.updateGroupedCost(itemUid);
+            this.calculateTotalPrice();
         }
         // this.calculateTotalPrice();
     }
@@ -129,21 +143,67 @@ export class CostingClass {
         Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {
             this.updateGroupedCost(itemUid);
         });
+        this.calculateTotalPrice();
+    }
+    public softCalculateTotalPrice(overrides: PricingMetaData = {}) {
+        const data = this.setting.zus;
+        const estimate = {
+            ...data.metaData.pricing,
+            ...overrides,
+        };
+        console.log(estimate);
+
+        const taxProfile = this.currentTaxProfile();
+        estimate.taxValue = percentageValue(
+            estimate.taxxable,
+            taxProfile.percentage
+        );
+        estimate.grandTotal = formatMoney(
+            sum([
+                estimate.subTotal,
+                estimate.taxxable,
+                estimate.labour,
+                estimate.ccc,
+            ]) - Number(estimate.discount || 0)
+        );
+        if (this.setting?.staticZus)
+            this.setting.staticZus.metaData.pricing = estimate;
+        else this.setting.zus.dotUpdate("metaData.pricing", estimate);
     }
     public calculateTotalPrice() {
-        const taxProfile = this.currentTaxProfile();
         const data = this.setting.zus;
-        Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {});
+        const estimate = {
+            subTotal: 0,
+            taxxable: 0,
+        };
+        Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {
+            //    const  itemData.groupItem.pricing.total.salesPrice
+            const groupItem = itemData.groupItem;
+            Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
+                // formData.meta
+                const isService = groupItem.type == "SERVICE";
+                const price = Number(formData.pricing?.totalPrice || 0);
+                const taxxable =
+                    !isService || (isService && formData.meta.taxxable);
+                estimate.subTotal += price;
+                if (taxxable) estimate.taxxable += price;
+            });
+        });
+
+        this.softCalculateTotalPrice(estimate);
     }
     public currentTaxProfile() {
-        return this.taxList().find(
+        return this.setting.zus.metaData?.tax;
+    }
+    public taxCodeChanged() {
+        const taxProfile = this.taxList().find(
             (tax) =>
                 tax.taxCode == this.setting.dotGet("metaData.pricing.taxCode")
         );
-    }
-    public taxCodeChanged() {
-        const taxProfile = this.currentTaxProfile();
+        // const taxProfile = this.currentTaxProfile();
         // console.log(taxProfile);
+        this.calculateTotalPrice();
+        this.setting?.zus.dotUpdate("metaData.tax", taxProfile);
         this.calculateTotalPrice();
     }
 }

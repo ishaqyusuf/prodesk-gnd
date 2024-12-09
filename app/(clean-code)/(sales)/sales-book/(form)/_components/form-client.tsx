@@ -26,8 +26,10 @@ export function FormClient({ data }: FormClientProps) {
     useEffect(() => {
         zus.init(zhInitializeState(data));
     }, []);
-    const sticky = useSticky((bv, pv, { top, bottom }) => top < 100);
-    const footerSticky = useSticky((bv, pv, { top, bottom }) => top < 100);
+    const sticky = useSticky((bv, pv, { top, bottom }) => {
+        return top < 100;
+    });
+
     if (!zus.formStatus) return <></>;
     return (
         <div className="mb-28 bg-white">
@@ -44,29 +46,18 @@ export function FormClient({ data }: FormClientProps) {
                 >
                     <FormDataPage />
                 </div>
-                <div
-                    ref={footerSticky.containerRef}
-                    className={cn(
-                        zus.currentTab == "info" &&
-                            "opacity-0 h-0 z-0 w-0 overflow-hidden"
-                    )}
-                >
-                    {zus.sequence?.formItem?.map((uid) => (
-                        <ItemSection key={uid} uid={uid} />
-                    ))}
-                    <div className="flex mt-4 justify-end">
-                        <Button
-                            onClick={() => {
-                                zhAddItem();
-                            }}
-                        >
-                            <Icons.add className="w-4 h-4 mr-2" />
-                            <span>Add</span>
-                        </Button>
-                    </div>
-                </div>
             </div>
-            <FormFooter sticky={sticky} />
+            <div
+                className={cn(
+                    zus.currentTab == "info" &&
+                        "opacity-0 h-0 z-0 w-0 overflow-hidden"
+                )}
+            >
+                {zus.sequence?.formItem?.map((uid) => (
+                    <ItemSection key={uid} uid={uid} />
+                ))}
+            </div>
+            <FormFooter />
         </div>
     );
 }

@@ -21,6 +21,10 @@ export function zhInitializeState(data: GetSalesBookForm) {
         if (!sp) return sp;
         return formatMoney(sp * salesMultiplier);
     }
+    const tax =
+        data._taxForm?.taxByCode?.[data._taxForm?.selection?.[0]?.taxCode]
+            ?._tax;
+
     const resp: SalesFormZusData = {
         data,
         sequence: {
@@ -34,10 +38,15 @@ export function zhInitializeState(data: GetSalesBookForm) {
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
         metaData: {
+            tax,
             paymentMethod: data.order?.meta?.payment_option,
             pricing: {
                 discount: data.order?.meta?.discount,
                 labour: data.order?.meta?.labor_cost,
+                taxValue: data.order?.tax,
+                ccc: data.order?.meta?.ccc,
+                subTotal: data.order?.subTotal,
+                grandTotal: data.order?.grandTotal,
             },
             salesMultiplier,
             deliveryMode: data.order.deliveryOption as any,
