@@ -11,11 +11,13 @@ interface LineInputProps {
     lineUid;
     name: FieldPath<ZusGroupItemFormPath>;
     cls: GroupFormClass;
+    valueChanged?;
 }
 export function LineInput({
     lineUid,
     name,
     cls,
+    valueChanged,
     ...props
 }: LineInputProps & InputProps) {
     // const state = useFormDataStore();
@@ -26,11 +28,11 @@ export function LineInput({
             {...props}
             defaultValue={value as any}
             onChange={(e) => {
-                cls.dotUpdateGroupItemFormPath(
-                    lineUid,
-                    name,
-                    props.type == "number" ? +e.target.value : e.target.value
-                );
+                const val =
+                    props.type == "number" ? +e.target.value : e.target.value;
+                cls.dotUpdateGroupItemFormPath(lineUid, name, val);
+
+                valueChanged?.(val);
             }}
         />
     );

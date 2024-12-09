@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 import { SalesFormZusData } from "../../../../types";
-import { stepActions } from "./step-action";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
@@ -51,7 +50,7 @@ function fns(set: SalesFormSet) {
             }),
         update: (k: keyof SalesFormZusData, value) =>
             set((state) => {
-                const newState = { ...state };
+                const newState: any = { ...state };
                 newState[k] = value;
 
                 return newState;
@@ -72,7 +71,6 @@ function fns(set: SalesFormSet) {
                 newState.sequence.formItem.splice(index, 1);
                 return newState;
             }),
-        ...stepActions(set),
     };
 }
 export const useFormDataStore = create<ZusSales>(

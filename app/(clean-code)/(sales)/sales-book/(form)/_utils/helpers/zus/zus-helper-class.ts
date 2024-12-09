@@ -17,6 +17,7 @@ import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
 import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal/open-modal";
+import { sum } from "@/lib/utils";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -379,7 +380,7 @@ export class StepHelperClass extends SettingsClass {
         }
         this.zus.dotUpdate(`kvStepForm.${nextStepUid}`, stepForm);
         this.zus.dotUpdate(`sequence.stepComponent.${this.itemUid}`, stepSq);
-        this.zus.toggleStep(nextStepUid);
+        this.toggleStep(nextStepUid);
     }
     public nextStep(isRoot = false, redirectUid = null) {
         const nrs = this.getNextRouteFromSettings(
@@ -546,6 +547,12 @@ export class StepHelperClass extends SettingsClass {
         }
         return form;
     }
+    public toggleStep(itemStepUid = this.itemStepUid) {
+        let currentStepUid = this.getItemForm()?.currentStepUid;
+        if (currentStepUid == itemStepUid) currentStepUid = null;
+        else currentStepUid = itemStepUid;
+        this.dotUpdateItemForm("currentStepUid", currentStepUid);
+    }
 }
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
@@ -577,7 +584,6 @@ export class ComponentHelperClass extends StepHelperClass {
     }
     public selectComponent() {
         const isMulti = this.isMultiSelect();
-
         if (this.isDoor()) {
             openDoorSizeSelectModal(this);
         } else if (this.isMoulding()) {
@@ -588,13 +594,14 @@ export class ComponentHelperClass extends StepHelperClass {
                     type: "MOULDING",
                     itemIds: [],
                     form: {},
-                    stepUid: "stepProdUid",
+                    stepUid: this.component.uid,
                     qty: {
                         lh: 0,
                         rh: 0,
                         total: 0,
                     },
                 };
+            else groupItem.type = "MOULDING";
             if (!groupItem.form?.[this.componentUid])
                 groupItem.form[this.componentUid] = {
                     selected: true,
@@ -612,6 +619,10 @@ export class ComponentHelperClass extends StepHelperClass {
                     pricing: {
                         addon: "",
                         customPrice: "",
+                        estimatedComponentPrice: sum([
+                            groupItem?.pricing?.components?.salesPrice,
+                            this.component.salesPrice,
+                        ]),
                         itemPrice: {
                             salesPrice: this.component.salesPrice,
                             basePrice: this.component.basePrice,
@@ -629,7 +640,8 @@ export class ComponentHelperClass extends StepHelperClass {
             groupItem.qty.total = groupItem.itemIds?.length;
             this.dotUpdateItemForm("groupItem", groupItem);
             // this.getNextRouteFromSettings;
-            this.updateComponentCost();
+            // this.updateComponentCost();
+            this.delistGroupForm();
             this.updateGroupedCost();
         } else {
             let stepData = this.getStepForm();
@@ -672,6 +684,38 @@ export class ComponentHelperClass extends StepHelperClass {
             ...this.component,
             redirectUid,
         });
+    }
+    public delistGroupForm() {
+        let groupItem = this.getItemForm()?.groupItem;
+        const components = this.getStepFilteredComponents;
+        const delistUids = [];
+        groupItem.qty = {
+            lh: 0,
+            rh: 0,
+            total: 0,
+        };
+        Object.entries(groupItem.form || {}).map(([uid, formData]) => {
+            const [itemUid] = uid?.split("-");
+            if (
+                components.every((s) => s.uid != itemUid) ||
+                !formData.selected
+            ) {
+                delistUids.push(uid);
+                delete groupItem?.form?.[uid];
+            } else {
+                groupItem.qty.lh += Number(formData?.qty?.lh) || 0;
+                groupItem.qty.rh += Number(formData?.qty?.rh) || 0;
+                groupItem.qty.total += Number(formData?.qty?.total) || 0;
+            }
+        });
+        if (delistUids.length) {
+            groupItem.itemIds = groupItem.itemIds?.filter(
+                (s) => !delistUids.includes(s)
+            );
+            this.dotUpdateItemForm("groupItem", groupItem);
+            this.updateComponentCost();
+            console.log(groupItem);
+        }
     }
 }
 

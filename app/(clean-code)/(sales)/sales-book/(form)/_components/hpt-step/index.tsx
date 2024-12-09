@@ -135,7 +135,13 @@ function DoorSizeRow({ size }: { size }) {
     const lineUid = size.path;
     const ctx = useCtx();
     const sizeForm = ctx.itemForm?.groupItem.form[size.path];
-
+    // useEffect(() => {
+    //     console.log("ADDON CHANGED>");
+    //     ctx.ctx.updateGroupedCost();
+    // }, [sizeForm?.pricing?.addon, sizeForm?.qty]);
+    const valueChanged = () => {
+        ctx.ctx.updateGroupedCost();
+    };
     return (
         <TableRow className={cn(!size.selected && "hidden")}>
             <TableCell className="font-mono font-semibold text-sm">
@@ -149,6 +155,7 @@ function DoorSizeRow({ size }: { size }) {
                         name="qty.total"
                         lineUid={lineUid}
                         type="number"
+                        valueChanged={valueChanged}
                     />
                 </TableCell>
             ) : (
@@ -159,6 +166,7 @@ function DoorSizeRow({ size }: { size }) {
                             name="qty.lh"
                             lineUid={lineUid}
                             type="number"
+                            valueChanged={valueChanged}
                         />
                     </TableCell>
                     <TableCell className="">
@@ -167,6 +175,7 @@ function DoorSizeRow({ size }: { size }) {
                             name="qty.rh"
                             lineUid={lineUid}
                             type="number"
+                            valueChanged={valueChanged}
                         />
                     </TableCell>
                 </>
@@ -229,6 +238,7 @@ function DoorSizeRow({ size }: { size }) {
                     name="pricing.addon"
                     lineUid={lineUid}
                     type="number"
+                    valueChanged={valueChanged}
                 />
             </TableCell>
             <TableCell>

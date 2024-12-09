@@ -111,6 +111,10 @@ export function useInitContext(cls: ComponentHelperClass) {
                                 salesPrice: data?.salesPrice,
                                 basePrice: data?.basePrice,
                             },
+                            estimatedComponentPrice: sum([
+                                groupItem?.pricing?.components?.salesPrice,
+                                data?.salesPrice,
+                            ]),
                         },
                     };
                 } else {

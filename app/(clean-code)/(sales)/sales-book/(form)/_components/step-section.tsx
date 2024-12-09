@@ -12,7 +12,6 @@ import { useEffect, useMemo, useRef } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
 import { motion } from "framer-motion";
 import DevOnly from "@/_v2/components/common/dev-only";
-import { zhtoggleStep } from "../_utils/helpers/zus/zus-step-helper";
 import { StepHelperClass } from "../_utils/helpers/zus/zus-helper-class";
 import MouldingLineItem from "./moulding-step";
 import ServiceLineItem from "./service-step";
@@ -110,7 +109,7 @@ function StepSectionHeader({ cls }: { cls: StepHelperClass }) {
                     className="flex h-8 w-full p-1 gap-4 px-4  space-x-2 items-center text-sm uppercase bg-muted-foreground/5 hover:bg-muted-foreground/20"
                     onClick={(e) => {
                         e.preventDefault();
-                        zhtoggleStep(cls.stepUid, zus);
+                        cls.toggleStep();
                     }}
                 >
                     <Label>{stepForm?.title}</Label>

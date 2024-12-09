@@ -37,8 +37,13 @@ export class CostingClass {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
+        console.log(
+            totalBasePrice,
+            itemForm?.groupItem?.pricing?.components?.basePrice
+        );
         if (
-            totalBasePrice &&
+            (totalBasePrice ||
+                itemForm?.groupItem?.pricing?.components?.basePrice) &&
             itemForm?.groupItem?.pricing?.components?.basePrice !=
                 totalBasePrice
         ) {
@@ -78,6 +83,8 @@ export class CostingClass {
                     groupItem
                 );
             }
+            console.log(groupItem);
+            this.updateGroupedCost();
         }
         // this.calculateTotalPrice();
     }
@@ -91,8 +98,9 @@ export class CostingClass {
             salesPrice: 0,
         };
         Object.entries(groupItem?.form).map(([uid, formData]) => {
-            if (!formData.qty?.total)
-                formData.qty.total = sum([formData.qty.lh, formData.qty.rh]);
+            const qty = sum([formData.qty.lh, formData.qty.rh]);
+            if (!formData.qty?.total || (qty && qty != formData.qty?.total))
+                formData.qty.total = qty;
             const priceList = [
                 formData.pricing?.customPrice ||
                     formData.pricing?.estimatedComponentPrice,
@@ -114,6 +122,7 @@ export class CostingClass {
                 groupItem
             );
         else staticData.kvFormItem[itemUid].groupItem = groupItem;
+        console.log(groupItem);
     }
     public updateAllGroupedCost() {
         const data = this.setting.zus;

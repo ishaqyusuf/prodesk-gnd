@@ -27,9 +27,3 @@ export async function zusDeleteComponents({
         stepComponents?.filter((c) => uids.every((u) => u != c.uid))
     );
 }
-export function zhtoggleStep(stepUid, zus: ZusSales) {
-    const [itemUid] = stepUid?.split("-");
-    const currentStepUid = zus.kvFormItem[itemUid]?.currentStepUid;
-    zus.toggleStep(stepUid);
-    const cleareUid = currentStepUid == stepUid ? stepUid : currentStepUid;
-}

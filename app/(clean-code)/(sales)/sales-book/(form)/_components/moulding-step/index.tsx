@@ -19,6 +19,7 @@ import Money from "@/components/_v1/money";
 import { Label } from "@/components/ui/label";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { cn } from "@/lib/utils";
+import { LineInput } from "../line-input";
 
 interface Props {
     itemStepUid;
@@ -64,6 +65,7 @@ function MouldingRow({
     const form = useForm({
         defaultValues: mfd,
     });
+    const lineUid = data.uid;
     const watchForm = form.watch();
     const inputProps: InputHTMLAttributes<HTMLInputElement> = {
         onBlur: async (e) => {
@@ -75,7 +77,9 @@ function MouldingRow({
             });
         },
     };
-
+    const valueChanged = () => {
+        ctx.ctx.updateGroupedCost();
+    };
     return (
         <Form {...form}>
             <TableRow className={cn(!mfd?.selected && "hidden")}>
@@ -84,19 +88,23 @@ function MouldingRow({
                     {data.title}
                 </TableCell>
                 <TableCell>
-                    <ControlledInput
-                        size="sm"
-                        type="number"
-                        control={form.control}
+                    <LineInput
+                        cls={ctx.ctx}
                         name="qty.total"
-                        inputProps={inputProps}
+                        lineUid={lineUid}
+                        type="number"
+                        valueChanged={valueChanged}
                     />
                 </TableCell>
                 <TableCell className="">
                     <Menu
                         noSize
                         Icon={null}
-                        label={<Money value={mfd?.totalSalesPrice} />}
+                        label={
+                            <Money
+                                value={mfd?.pricing?.estimatedComponentPrice}
+                            />
+                        }
                     >
                         <div className="p-2 min-w-[300px]">
                             <div>
@@ -135,16 +143,23 @@ function MouldingRow({
                     </Menu>
                 </TableCell>
                 <TableCell>
-                    <ControlledInput
+                    <LineInput
+                        cls={ctx.ctx}
+                        name="pricing.addon"
+                        lineUid={lineUid}
+                        type="number"
+                        valueChanged={valueChanged}
+                    />
+                    {/* <ControlledInput
                         type="number"
                         size="sm"
                         control={form.control}
-                        name="addon"
+                        name="pricing.addon"
                         inputProps={inputProps}
-                    />
+                    /> */}
                 </TableCell>
                 <TableCell>
-                    <Money value={mfd?.totalSalesPrice} />
+                    <Money value={mfd?.pricing?.totalPrice} />
                 </TableCell>
                 <TableCell align="right">
                     <ConfirmBtn
