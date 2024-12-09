@@ -37,7 +37,12 @@ export function LineInput({
         />
     );
 }
-export function LineSwitch({ lineUid, name, cls }: LineInputProps) {
+export function LineSwitch({
+    lineUid,
+    name,
+    cls,
+    valueChanged,
+}: LineInputProps) {
     const value = cls.dotGetGroupItemFormValue(lineUid, name);
 
     return (
@@ -46,6 +51,7 @@ export function LineSwitch({ lineUid, name, cls }: LineInputProps) {
                 defaultChecked={value as any}
                 onCheckedChange={(e) => {
                     cls.dotUpdateGroupItemFormPath(lineUid, name, e);
+                    valueChanged?.(e);
                 }}
             />
         </>

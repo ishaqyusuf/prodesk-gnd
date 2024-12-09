@@ -71,7 +71,9 @@ export default function ServiceLineItem({ itemStepUid }: Props) {
 function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
     const ctx = useCtx();
     const mfd = ctx.itemForm?.groupItem?.form?.[lineUid];
-
+    const valueChanged = () => {
+        ctx.ctx.updateGroupedCost();
+    };
     return (
         <>
             <TableRow className={cn(!mfd?.selected && "hidden")}>
@@ -88,6 +90,7 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                         cls={ctx.ctx}
                         name="meta.taxxable"
                         lineUid={lineUid}
+                        valueChanged={valueChanged}
                     />
                 </TableCell>
                 <TableCell>
@@ -103,24 +106,33 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                         name="qty.total"
                         lineUid={lineUid}
                         type="number"
+                        valueChanged={valueChanged}
                     />
                 </TableCell>
 
                 <TableCell>
-                    <Input
+                    <LineInput
+                        cls={ctx.ctx}
+                        name="pricing.addon"
+                        lineUid={lineUid}
+                        type="number"
+                        valueChanged={valueChanged}
+                    />
+                    {/* <Input
                         type="number"
                         defaultValue={mfd?.addon}
                         onChange={(e) => {
                             ctx.ctx.dotUpdateGroupItemFormPath(
                                 lineUid,
-                                "addon",
+                                "pricing.addon",
                                 +e.target.value
                             );
+                            valueChanged();
                         }}
-                    />
+                    /> */}
                 </TableCell>
                 <TableCell>
-                    <Money value={mfd?.totalSalesPrice} />
+                    <Money value={mfd?.pricing?.totalPrice} />
                 </TableCell>
                 <TableCell align="right">
                     <ConfirmBtn

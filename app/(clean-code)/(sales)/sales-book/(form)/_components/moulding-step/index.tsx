@@ -67,16 +67,7 @@ function MouldingRow({
     });
     const lineUid = data.uid;
     const watchForm = form.watch();
-    const inputProps: InputHTMLAttributes<HTMLInputElement> = {
-        onBlur: async (e) => {
-            await new Promise((res) => {
-                ctx.ctx.updateGroupItemForm(data.uid, watchForm);
-                setTimeout(() => {
-                    res(true);
-                }, 200);
-            });
-        },
-    };
+
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
     };
