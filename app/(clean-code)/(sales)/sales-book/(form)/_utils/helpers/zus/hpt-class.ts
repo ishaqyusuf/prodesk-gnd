@@ -58,6 +58,9 @@ export class HptClass extends GroupFormClass {
         console.log(resp.doors);
         return resp;
     }
+    public getStepProductUid() {
+        return this.getItemForm()?.groupItem?.doorStepProductId;
+    }
     public get tabUid() {
         return this.getItemForm()?.groupItem?._?.tabUid;
     }
@@ -106,6 +109,7 @@ export class HptClass extends GroupFormClass {
                 },
                 selected: true,
                 swing: "",
+                stepProductId: this.getStepProductUid(),
                 pricing: {
                     addon: "",
                     itemPrice: {
@@ -113,11 +117,11 @@ export class HptClass extends GroupFormClass {
                         salesPrice,
                     },
                     customPrice: "",
+                    componentPrice,
                     totalPrice: 0,
-                    unitPrice: formatMoney(
-                        estimatedComponentPrice + salesPrice
-                    ),
-                    estimatedComponentPrice,
+                    unitPrice: formatMoney(estimatedComponentPrice),
+
+                    // estimatedComponentPrice,
                 },
                 meta: {
                     description: "",

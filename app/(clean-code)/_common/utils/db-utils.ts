@@ -7,6 +7,12 @@ export function anyDateQuery() {
         lte: fixDbTime(dayjs()).toISOString(),
     };
 }
+export function isDay(date: dayjs.Dayjs) {
+    return {
+        gte: fixDbTime(date).toISOString(),
+        lte: fixDbTime(date, 23, 59, 59).toISOString(),
+    };
+}
 export const withDeleted = {
     OR: [{ deletedAt: null }, { deletedAt: { not: null } }],
 };

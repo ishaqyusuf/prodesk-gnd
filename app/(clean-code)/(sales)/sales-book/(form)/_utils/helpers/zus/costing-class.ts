@@ -32,7 +32,7 @@ export class CostingClass {
         toast.success("Price updated");
     }
     public taxList() {
-        return this.setting.dotGet("data._taxForm.taxList");
+        return this.setting.dotGet("_taxForm.taxList");
     }
     public updateComponentCost(
         itemUid = this.setting.itemUid,
@@ -62,6 +62,7 @@ export class CostingClass {
             let groupItem = itemForm.groupItem;
             if (!groupItem)
                 groupItem = {
+                    itemType: this.setting.getItemType(),
                     form: {},
                     itemIds: [],
                     qty: {},
@@ -82,7 +83,7 @@ export class CostingClass {
                 formData.pricing.itemPrice.salesPrice = this.calculateSales(
                     formData.pricing.itemPrice.basePrice
                 );
-                formData.pricing.estimatedComponentPrice = sum([
+                formData.pricing.unitPrice = sum([
                     groupItem.pricing.components.salesPrice,
                     formData.pricing?.itemPrice?.salesPrice,
                 ]);
@@ -117,8 +118,11 @@ export class CostingClass {
                 formData.qty.total = qty;
             const priceList = [
                 formData.pricing?.customPrice ||
-                    formData.pricing?.estimatedComponentPrice,
-                // groupItem?.pricing?.components?.salesPrice,
+                    // formData.pricing?.estimatedComponentPrice,
+                    sum([
+                        groupItem?.pricing?.components?.salesPrice,
+                        formData?.pricing?.itemPrice?.salesPrice,
+                    ]),
                 formData.pricing?.addon,
             ];
             const unitPrice = sum(priceList);

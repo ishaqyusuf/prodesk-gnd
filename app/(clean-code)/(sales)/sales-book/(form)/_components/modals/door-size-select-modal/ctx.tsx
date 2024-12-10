@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import { _modal } from "@/components/common/modal/provider";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
+import { formatMoney } from "@/lib/use-number";
 
 export const useCtx = () => useContext(DoorSizeSelectContext);
 export const DoorSizeSelectContext =
@@ -69,6 +70,7 @@ export function useInitContext(cls: ComponentHelperClass) {
                 form: {},
                 itemIds: [],
                 stepUid: cls.stepUid,
+                itemType: cls.getItemType(),
                 pricing: {},
                 qty: {
                     lh: 0,
@@ -77,6 +79,7 @@ export function useInitContext(cls: ComponentHelperClass) {
                 },
             };
         }
+        groupItem.doorStepProductId = cls.component.id;
         if (clear) groupItem = null as any;
         else {
             const _uids = Object.keys(data.selections);
@@ -93,6 +96,7 @@ export function useInitContext(cls: ComponentHelperClass) {
                 if (selected && !clear) {
                     groupItem.itemIds.push(uid);
                     groupItem.form[uid] = {
+                        stepProductId: cls.component.id,
                         meta: {
                             description: "",
                             produceable: false,
@@ -110,10 +114,12 @@ export function useInitContext(cls: ComponentHelperClass) {
                                 salesPrice: data?.salesPrice,
                                 basePrice: data?.basePrice,
                             },
-                            estimatedComponentPrice: sum([
-                                groupItem?.pricing?.components?.salesPrice,
-                                data?.salesPrice,
-                            ]),
+                            unitPrice: formatMoney(
+                                sum([
+                                    groupItem?.pricing?.components?.salesPrice,
+                                    data?.salesPrice,
+                                ])
+                            ),
                         },
                     };
                 } else {

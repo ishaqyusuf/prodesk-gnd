@@ -33,7 +33,12 @@ export default function Button({
             onClick={_action}
             {...props}
         >
-            <div className={cn("inline-flex", loading && "opacity-0")}>
+            <div
+                className={cn(
+                    "inline-flex items-center",
+                    loading && "opacity-0"
+                )}
+            >
                 {BtnIcon && (
                     <BtnIcon
                         className={cn(

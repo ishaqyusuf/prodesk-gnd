@@ -13,6 +13,8 @@ import {
 } from "../data-access/sales-form-settings.dta";
 import { composeSalesPricing } from "../utils/sales-pricing-utils";
 import { getPricingListDta } from "../data-access/sales-pricing-dta";
+import { SalesFormFields } from "../../types";
+import { saveSalesFormDta } from "../data-access/save-sales/index.dta";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
@@ -39,4 +41,10 @@ export async function createSalesBookFormUseCase(
 }
 export async function saveSalesSettingUseCase(meta) {
     await saveSalesSettingData(meta);
+}
+export async function saveFormUseCase(
+    data: SalesFormFields,
+    oldFormState?: SalesFormFields
+) {
+    return await saveSalesFormDta(data, oldFormState);
 }

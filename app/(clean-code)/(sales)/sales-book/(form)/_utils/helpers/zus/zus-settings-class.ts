@@ -21,7 +21,7 @@ export class SettingsClass extends CostingClass {
     }
 
     public salesProfiles() {
-        const profiles = this.dotGet("data.data.profiles");
+        const profiles = this.dotGet("profiles");
         return profiles.map(({ id, coefficient, defaultProfile, title }) => ({
             id,
             coefficient,
@@ -29,7 +29,12 @@ export class SettingsClass extends CostingClass {
             title,
         }));
     }
-
+    public getItemType() {
+        return Object.entries(this.zus.kvStepForm)?.find(
+            ([uid, data]) =>
+                uid?.startsWith(this.itemUid) && data.title == "Item Type"
+        )?.[1]?.value as any;
+    }
     public currentProfile() {
         return this.salesProfiles().find(
             (profile) => profile.id == this.dotGet("metaData.salesProfileId")

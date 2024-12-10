@@ -81,32 +81,31 @@ export type SalesPaymentOptions =
     | "COD"
     | "Zelle";
 export interface SalesItemMeta {
-    supplier;
-    supplyDate;
-    prehung_description;
-    prehung_information;
-    product_information;
-    product_description;
-    prehung_cost;
-    cost_price;
-    computed_rate;
-    sales_percentage;
-    tax: boolean;
-    door_qty_selector;
-    frame;
-    product_cost;
-    produced_qty: number | undefined | null;
-    casing;
-    hinge;
-    line_index;
+    // supplier;
+    // supplyDate;
+    // prehung_description;
+    // prehung_information;
+    // product_information;
+    // product_description;
+    // prehung_cost;
+    // cost_price;
+    // computed_rate;
+    // sales_percentage;
+    tax?: boolean;
+    // door_qty_selector;
+    // frame;
+    // product_cost;
+    // produced_qty: number | undefined | null;
+    // casing;
+    // hinge;
+    // line_index;
     lineIndex;
-    uid;
-    sales_margin;
-    manual_cost_price;
-    manual_rate;
+    // uid;
+    // sales_margin;
+    // manual_cost_price;
+    // manual_rate;
     doorType: DykeDoorType;
-
-    _dykeSizes: { [size in string]: boolean };
+    // _dykeSizes: { [size in string]: boolean };
     // _dykeMulti: { [item in string]: boolean };
 }
 export type SalesMeta = {
@@ -205,12 +204,13 @@ export type TypedDykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
     priceData?: Partial<ComponentPrice>;
 };
 export interface DykeSalesDoorMeta {
-    _doorPrice: number | null;
+    _doorPrice?: number | null;
     overridePrice?: number | string;
 }
 export interface HousePackageToolMeta {
     priceTags?: {
         moulding?: {
+            salesPrice?: number | undefined;
             price?: number | undefined;
             basePrice?: number | undefined;
             addon?: number | undefined;
@@ -335,8 +335,14 @@ export interface PricingMetaData {
     taxId?: number;
     ccc?: number;
 }
-interface SalesFormFields {
+export type PaymentTerms = "None" | "Net10" | "Net20" | "Net30";
+
+export interface SalesFormFields {
     metaData?: {
+        salesRepId;
+        type: SalesType;
+        id?: number;
+        salesId?: string;
         salesProfileId?: number;
         salesMultiplier?: number;
         qb?: string;
@@ -355,6 +361,10 @@ interface SalesFormFields {
         paymentMethod: SalesPaymentOptions;
         pricing: PricingMetaData;
         tax?: Taxes;
+        createdAt?;
+        paymentTerm?: PaymentTerms;
+        paymentDueDate?;
+        goodUntil?;
     };
     kvFormItem: {
         [itemUid in string]: {
@@ -371,7 +381,11 @@ interface SalesFormFields {
                 _?: {
                     tabUid?: string;
                 };
+                itemType: DykeDoorType;
                 type?: "MOULDING" | "HPT" | "SERVICE";
+                hptId?;
+                doorStepProductId?;
+                groupUid?;
                 pricing?: {
                     components?: {
                         basePrice?: number;
@@ -399,6 +413,7 @@ interface SalesFormFields {
                         // id for door = `${componentUid}-${size}`
                         // id for moulding = `${componentUid}`
                         // id for services = random
+                        primaryGroupItem?: boolean;
                         meta: {
                             description?: string;
                             taxxable?: boolean;
@@ -417,14 +432,18 @@ interface SalesFormFields {
                                 salesPrice?: number;
                             };
                             customPrice?: number | string;
-                            estimatedComponentPrice?: number | string;
+                            componentPrice?: number | string;
+                            // estimatedComponentPrice?: number | string;
                             unitPrice?: number;
                             totalPrice?: number;
                             addon: number | string;
                         };
                         // totalSalesPrice?: number;
                         hptId?: number;
+                        doorId?: number;
                         swing?: string;
+                        stepProductId?;
+                        mouldingProductId?;
                         // customPrice?: number | string;
                         // imgUrl: string;
                     };
@@ -448,19 +467,21 @@ interface SalesFormFields {
             meta?: StepMeta;
         };
     };
+    sequence: {
+        formItem: string[];
+        stepComponent: { [itemUid in string]: string[] };
+        multiComponent: { [itemUid in string]: string[] };
+    };
 }
 export interface SalesFormZusData extends SalesFormFields {
     currentTab?: "invoice" | "info";
     setting: GetSalesBookForm["salesSetting"];
     // data: GetSalesBookForm;
     pricing: GetSalesBookForm["pricing"];
-    sequence: {
-        formItem: string[];
-        stepComponent: { [itemUid in string]: string[] };
-        multiComponent: { [itemUid in string]: string[] };
-    };
-    formStatus: "ready" | "loading" | "saving";
+    _taxForm: GetSalesBookForm["_taxForm"];
+    profiles: GetSalesBookForm["data"]["profiles"];
 
+    formStatus: "ready" | "loading" | "saving";
     kvFilteredStepComponentList: {
         [stepItemUid in string]: GetStepComponents;
     };

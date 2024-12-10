@@ -588,6 +588,7 @@ export class ComponentHelperClass extends StepHelperClass {
             if (!groupItem)
                 groupItem = {
                     pricing: {},
+                    itemType: "Moulding",
                     type: "MOULDING",
                     itemIds: [],
                     form: {},
@@ -601,6 +602,8 @@ export class ComponentHelperClass extends StepHelperClass {
             else groupItem.type = "MOULDING";
             if (!groupItem.form?.[this.componentUid])
                 groupItem.form[this.componentUid] = {
+                    stepProductId: this.component.id,
+                    mouldingProductId: this.component.productId,
                     selected: true,
                     meta: {
                         description: this.component?.title,
@@ -616,7 +619,7 @@ export class ComponentHelperClass extends StepHelperClass {
                     pricing: {
                         addon: "",
                         customPrice: "",
-                        estimatedComponentPrice: sum([
+                        unitPrice: sum([
                             groupItem?.pricing?.components?.salesPrice,
                             this.component.salesPrice,
                         ]),

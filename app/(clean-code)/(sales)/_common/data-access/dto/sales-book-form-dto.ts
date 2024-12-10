@@ -255,19 +255,19 @@ export function transformMultiDykeItem(
 
         const isMoulding = item.housePackageTool?.moldingId != null;
 
-        let _dykeSizes: any = item.meta._dykeSizes;
-        if (!_dykeSizes) {
-            _dykeSizes = {};
-            item.housePackageTool?.doors?.map((door) => {
-                const dim = door.dimension?.replaceAll('"', "in");
-                _dykeSizes[dim] = {
-                    dim,
-                    dimFt: inToFt(door.dimension),
-                    width: inToFt(door.dimension.split(" x ")[0]),
-                    checked: true,
-                };
-            });
-        }
+        let _dykeSizes: any = {}; //item.meta._dykeSizes;
+        // if (!_dykeSizes) {
+        //     _dykeSizes = {};
+        //     item.housePackageTool?.doors?.map((door) => {
+        //         const dim = door.dimension?.replaceAll('"', "in");
+        //         _dykeSizes[dim] = {
+        //             dim,
+        //             dimFt: inToFt(door.dimension),
+        //             width: inToFt(door.dimension.split(" x ")[0]),
+        //             checked: true,
+        //         };
+        //     });
+        // }
         if (component) {
             const uid = generateRandomString(4);
             function getMouldingId() {
@@ -315,7 +315,6 @@ export function transformMultiDykeItem(
                 stepProductId: item.housePackageTool?.stepProductId,
                 stepProduct: item.housePackageTool?.stepProduct as any,
             });
-
             footerPrices[uid] = {
                 price: c.totalPrice || 0,
                 tax: c.tax,

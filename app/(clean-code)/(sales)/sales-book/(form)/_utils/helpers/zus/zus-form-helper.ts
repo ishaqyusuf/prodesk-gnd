@@ -29,6 +29,8 @@ export function zhInitializeState(data: GetSalesBookForm) {
         // data,
         setting: data.salesSetting,
         pricing: data.pricing,
+        profiles: data.data.profiles,
+        _taxForm: data._taxForm,
         sequence: {
             formItem: [],
             stepComponent: {},
@@ -40,7 +42,15 @@ export function zhInitializeState(data: GetSalesBookForm) {
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
         metaData: {
+            salesRepId: data.order?.salesRepId,
+            type: data.order?.type as any,
+            id: data.order?.id,
+            salesId: data.order?.orderId,
             tax,
+            createdAt: data.order?.createdAt,
+            paymentTerm: data.order?.paymentTerm as any,
+            paymentDueDate: data.order?.paymentDueDate,
+            goodUntil: data.order?.goodUntil,
             paymentMethod: data.order?.meta?.payment_option,
             pricing: {
                 discount: data.order?.meta?.discount,
@@ -50,6 +60,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 ccc: data.order?.meta?.ccc,
                 subTotal: data.order?.subTotal,
                 grandTotal: data.order?.grandTotal,
+                paid: data.paidAmount || 0,
             },
             salesMultiplier,
             deliveryMode: data.order.deliveryOption as any,
@@ -100,13 +111,13 @@ export function zhInitializeState(data: GetSalesBookForm) {
         };
         resp.sequence.stepComponent[uid] = [];
         // let doorStepUid, mouldingComponentUid;
-
+        let itemType;
         item.formStepArray.map((fs, i) => {
             // console.log(i);
             // if (fs.step.title == "Door") doorStepUid = fs.step.uid;
             const stepMeta = fs.step.meta;
             const suid = `${uid}-${fs.step.uid}`;
-            resp.kvStepForm[suid] = {
+            const stp = (resp.kvStepForm[suid] = {
                 componentUid: fs.item?.prodUid,
                 title: fs.step.title,
                 value: fs.item?.value,
@@ -115,8 +126,11 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 stepFormId: fs.item.id,
                 stepId: fs.step.id,
                 meta: stepMeta as any,
-            };
-
+            });
+            if (stp.title == "Item Type") {
+                itemType = stp.value;
+                console.log({ itemType });
+            }
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
         });
@@ -125,6 +139,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 // componentsBasePrice: 0,
                 // componentsSalesPrice: 0,
                 //  type: "HPT",
+                groupUid: item.multiComponent?.uid,
+
+                itemType,
                 pricing: {
                     components: {
                         basePrice: 0,
@@ -154,32 +171,41 @@ export function zhInitializeState(data: GetSalesBookForm) {
         }
 
         function addFormItem(formId, formData: GroupType["form"][""]) {
+            formData.primaryGroupItem =
+                formData.meta.salesItemId == item.item.id;
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
             const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
+            const stepProductId = item.item?.housePackageTool?.stepProduct?.id;
             const doorCount = Object.keys(data._doorForm).length;
             if (doorCount) {
                 setType("HPT");
+                resp.kvFormItem[uid].groupItem.hptId =
+                    item.item?.housePackageTool?.id;
+                resp.kvFormItem[uid].groupItem.doorStepProductId =
+                    stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
                     addFormItem(formId, {
+                        doorId: doorForm.id,
                         pricing: {
                             itemPrice: {
                                 salesPrice: doorForm.jambSizePrice,
                                 basePrice: basePrice(doorForm.jambSizePrice),
                             },
-                            estimatedComponentPrice: doorForm.jambSizePrice,
+                            unitPrice: doorForm.unitPrice,
                             customPrice: doorForm?.meta?.overridePrice,
                             // unitPrice: doorForm.jambSizePrice,
                             // totalPrice: doorForm.jambSizePrice,
                             addon: doorForm.doorPrice,
                         },
                         meta: {
-                            salesItemId: doorForm.salesOrderItemId,
+                            salesItemId: data.itemId,
                         },
                         hptId: doorForm.housePackageToolId,
+
                         selected: true,
                         swing: doorForm.swing,
                         qty: {
@@ -187,19 +213,21 @@ export function zhInitializeState(data: GetSalesBookForm) {
                             rh: doorForm.rhQty,
                             total: doorForm.totalQty,
                         },
+                        stepProductId,
                     });
                 });
-            } else if (item.item?.housePackageTool?.molding) {
-                const formId = `${stepProdUid}`;
+            } else if (item.item?.meta?.doorType == "Moulding") {
+                const formId = `${data.stepProduct?.uid}`;
                 pushItemId(formId);
-                console.log({ stepProdUid });
-                console.log({
-                    m: item.item?.housePackageTool?.molding,
-                    md: data,
-                });
+                // console.log({ formId });
+                // console.log({
+                //     m: item.item?.housePackageTool?.molding,
+                //     md: data,
+                // });
                 setType("MOULDING");
                 addFormItem(formId, {
                     hptId: data.hptId,
+                    mouldingProductId: data.stepProduct?.dykeProductId,
                     selected: true,
                     meta: {},
                     qty: {
@@ -209,12 +237,14 @@ export function zhInitializeState(data: GetSalesBookForm) {
                         customPrice: data.priceTags?.moulding?.overridePrice,
                         itemPrice: {
                             basePrice: data.priceTags?.moulding?.basePrice,
-                            salesPrice: data.priceTags?.moulding?.price,
+                            salesPrice:
+                                data.priceTags?.moulding?.salesPrice ||
+                                data.priceTags?.moulding?.price,
                         },
-                        estimatedComponentPrice:
-                            data.priceTags?.moulding?.price,
+                        unitPrice: data.priceTags?.moulding?.price,
                         addon: data.priceTags?.moulding?.addon,
                     },
+                    stepProductId: data.stepProduct?.id,
                 });
             } else {
                 //
@@ -225,7 +255,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 addFormItem(formId, {
                     pricing: {
                         itemPrice: {},
-                        estimatedComponentPrice: data.unitPrice,
+                        unitPrice: data.unitPrice,
                         customPrice: data.unitPrice,
                         addon: 0,
                     },
@@ -240,6 +270,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                         taxxable: data.tax,
                         salesItemId: data.itemId,
                     },
+                    stepProductId: null,
                 });
             }
         });
