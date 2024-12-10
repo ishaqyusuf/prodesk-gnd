@@ -26,7 +26,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
             ?._tax;
 
     const resp: SalesFormZusData = {
-        data,
+        // data,
+        setting: data.salesSetting,
+        pricing: data.pricing,
         sequence: {
             formItem: [],
             stepComponent: {},
@@ -335,7 +337,7 @@ export function zhAddItem() {
         id: null,
         title: "",
     };
-    const rootStep = state.data.salesSetting.rootStep;
+    const rootStep = state.setting.rootStep;
     const itemStepUid = `${uid}-${rootStep.uid}`;
     const kvStepForm = state.kvStepForm;
     kvStepForm[itemStepUid] = {

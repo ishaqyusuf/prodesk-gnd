@@ -117,14 +117,13 @@ export class StepHelperClass extends SettingsClass {
     }
     public getComponentPricings(componentUid) {
         // if(!component)componentUid = this.
-        const pricings = this.zus.data.pricing[componentUid];
+        const pricings = this.zus.pricing[componentUid];
         return pricings;
     }
     public getVisibleComponents() {
         // const ls = this.getStepComponents;
         // if (ls) return this.filterStepComponents(ls);
-        const sets =
-            this.zus.data.salesSetting?.stepsByKey?.[this.stepUid]?.components;
+        const sets = this.zus.setting?.stepsByKey?.[this.stepUid]?.components;
         if (sets?.length) {
             return this.filterStepComponents(sets as any);
         }
@@ -214,8 +213,7 @@ export class StepHelperClass extends SettingsClass {
             .filter((s, i) => i < index)
             .map((s) => {
                 const [_, currentStepUid] = s.split("-");
-                const stepData =
-                    this.zus.data.salesSetting.stepsByKey?.[currentStepUid];
+                const stepData = this.zus.setting.stepsByKey?.[currentStepUid];
 
                 if (stepData) {
                     data.stepsCount++;
@@ -299,7 +297,7 @@ export class StepHelperClass extends SettingsClass {
     }
     public rootStepFromUid(stepUid) {
         const mainStep = Object.values(
-            this.zus.data.salesSetting.rootComponentsByKey
+            this.zus.setting.rootComponentsByKey
         )?.find((s) => s.stepUid == stepUid);
         return mainStep;
     }
@@ -487,11 +485,10 @@ export class StepHelperClass extends SettingsClass {
                 current: true,
             });
         } else {
-            // console.log(this.zus.data.salesSetting?.rootComponentsByKey);
+            // console.log(this.zus.setting?.rootComponentsByKey);
             const ms = matchedSteps.map((stepUid) => {
                 const components =
-                    this.zus.data.salesSetting?.stepsByKey?.[stepUid]
-                        ?.components;
+                    this.zus.setting?.stepsByKey?.[stepUid]?.components;
                 return components
                     .filter((c) => {
                         const mainStep = this.rootStepFromUid(stepUid);
@@ -578,7 +575,7 @@ export class ComponentHelperClass extends StepHelperClass {
     public async fetchUpdatedPrice() {
         const priceData = await getPricingByUidUseCase(this.componentUid);
         Object.entries(priceData).map(([k, d]) =>
-            this.zus.dotUpdate(`data.pricing.${k}`, d)
+            this.zus.dotUpdate(`pricing.${k}`, d)
         );
         this.refreshStepComponentsData();
     }
@@ -665,7 +662,7 @@ export class ComponentHelperClass extends StepHelperClass {
         }
     }
     public componentIsRoot() {
-        const route = this.zus.data.salesSetting.composedRouter;
+        const route = this.zus.setting.composedRouter;
         const isRoot = route[this.componentUid] != null;
         return isRoot;
     }

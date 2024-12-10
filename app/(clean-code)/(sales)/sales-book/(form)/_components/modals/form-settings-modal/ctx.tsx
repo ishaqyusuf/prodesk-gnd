@@ -6,7 +6,7 @@ import { saveSalesSettingUseCase } from "@/app/(clean-code)/(sales)/_common/use-
 
 export function useSettingsContext() {
     const zus = useFormDataStore();
-    const salesSetting = zus.data?.salesSetting;
+    const salesSetting = zus?.setting;
 
     const form = useForm({
         defaultValues: {

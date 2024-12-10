@@ -50,11 +50,11 @@ export class SettingsClass extends CostingClass {
         isRoot,
         stepUid
     ) {
-        const route = this.zus.data.salesSetting.composedRouter;
+        const route = this.zus.setting.composedRouter;
         const rootUid = itemForm.routeUid;
         const nextRouteUid =
             redirectUid || route[rootUid]?.route?.[isRoot ? rootUid : stepUid];
-        const nextRoute = this.zus.data.salesSetting.stepsByKey[nextRouteUid];
+        const nextRoute = this.zus.setting.stepsByKey[nextRouteUid];
         const nextStepUid = `${this.itemUid}-${nextRoute?.uid}`;
 
         return {
@@ -93,7 +93,7 @@ export class SettingsClass extends CostingClass {
         return routeData;
     }
     public getRedirectableRoutes() {
-        const settings = this.zus.data.salesSetting;
+        const settings = this.zus.setting;
         const stepSequence = this.zus.sequence.stepComponent[this.itemUid]?.map(
             (s) => s.split("-")[1]
         );
@@ -110,7 +110,7 @@ export class SettingsClass extends CostingClass {
         return steps;
     }
     public getRouteConfig() {
-        const route = this.zus.data.salesSetting.composedRouter;
+        const route = this.zus.setting.composedRouter;
 
         const fItem = this.zus.sequence?.stepComponent?.[this.itemUid];
         const componentUid = this.zus.kvStepForm[fItem[0]]?.componentUid;
@@ -120,18 +120,15 @@ export class SettingsClass extends CostingClass {
         return config || {};
     }
     public updateComponentRedirectUid(componentUid, redirectUid) {
-        const stepsByKey = this.zus.data.salesSetting.stepsByKey[this.stepUid];
+        const stepsByKey = this.zus.setting.stepsByKey[this.stepUid];
         stepsByKey.components = stepsByKey.components.map((data) => {
             if (data.uid == componentUid) data.redirectUid = redirectUid;
             return data;
         });
-        this.zus.dotUpdate(
-            `data.salesSetting.stepsByKey.${this.stepUid}`,
-            stepsByKey
-        );
+        this.zus.dotUpdate(`setting.stepsByKey.${this.stepUid}`, stepsByKey);
     }
     public getComponentFromSettingsByStepId(stepId, uid) {
-        return Object.entries(this.zus.data.salesSetting.stepsByKey)
+        return Object.entries(this.zus.setting.stepsByKey)
             .find(([stepUid, data]) => data.id == stepId)?.[1]
             ?.components?.find((c) => c.uid == uid);
     }

@@ -335,15 +335,7 @@ export interface PricingMetaData {
     taxId?: number;
     ccc?: number;
 }
-export interface SalesFormZusData {
-    currentTab?: "invoice" | "info";
-    data: GetSalesBookForm;
-    sequence: {
-        formItem: string[];
-        stepComponent: { [itemUid in string]: string[] };
-        multiComponent: { [itemUid in string]: string[] };
-    };
-    formStatus: "ready" | "loading" | "saving";
+interface SalesFormFields {
     metaData?: {
         salesProfileId?: number;
         salesMultiplier?: number;
@@ -443,12 +435,6 @@ export interface SalesFormZusData {
     kvMultiComponent: {
         [itemUid in string]: {};
     };
-    kvFilteredStepComponentList: {
-        [stepItemUid in string]: GetStepComponents;
-    };
-    kvStepComponentList: {
-        [stepUid in string]: GetStepComponents;
-    };
     kvStepForm: {
         [id in string]: {
             //id: "itemUid-stepUid"
@@ -462,6 +448,26 @@ export interface SalesFormZusData {
             meta?: StepMeta;
         };
     };
+}
+export interface SalesFormZusData extends SalesFormFields {
+    currentTab?: "invoice" | "info";
+    setting: GetSalesBookForm["salesSetting"];
+    // data: GetSalesBookForm;
+    pricing: GetSalesBookForm["pricing"];
+    sequence: {
+        formItem: string[];
+        stepComponent: { [itemUid in string]: string[] };
+        multiComponent: { [itemUid in string]: string[] };
+    };
+    formStatus: "ready" | "loading" | "saving";
+
+    kvFilteredStepComponentList: {
+        [stepItemUid in string]: GetStepComponents;
+    };
+    kvStepComponentList: {
+        [stepUid in string]: GetStepComponents;
+    };
+    oldFormState?: SalesFormFields;
 }
 export type SalesSettingsMeta = {
     route: {

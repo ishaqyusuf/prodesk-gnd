@@ -18,7 +18,7 @@ export function zhGetStepDependables(itemStepUid, zus: ZusSales) {
         .filter((s, i) => i < index)
         .map((s) => {
             const [_, currentStepUid] = s.split("-");
-            const stepData = zus.data.salesSetting.stepsByKey?.[currentStepUid];
+            const stepData = zus.setting.stepsByKey?.[currentStepUid];
 
             if (stepData) {
                 data.steps.push({
@@ -52,7 +52,7 @@ export function zhGetComponentVariantData(itemStepUid, zus: ZusSales) {
         .filter((s, i) => i < index)
         .map((s) => {
             const [_, currentStepUid] = s.split("-");
-            const stepData = zus.data.salesSetting.stepsByKey?.[currentStepUid];
+            const stepData = zus.setting.stepsByKey?.[currentStepUid];
 
             if (stepData) {
                 data.stepsCount++;
