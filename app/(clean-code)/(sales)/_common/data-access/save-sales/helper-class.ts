@@ -12,7 +12,7 @@ import { formatMoney } from "@/lib/use-number";
 import { isEqual, isNaN } from "lodash";
 import { nextId } from "@/lib/nextId";
 import { prisma } from "@/db";
-import { isDay } from "@/app/(clean-code)/_common/utils/db-utils";
+import { isDay, isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -69,9 +69,9 @@ export class SaveSalesHelper {
                 id: md.id,
             };
         } else {
-            const { orderId, createdAt, id } = await this.generateOrderId(
-                md.type
-            );
+            const gord = await this.generateOrderId(md.type);
+            const { orderId, createdAt, id } = gord;
+            console.log(gord);
             // delete updateData.salesProfile;
             const { salesProfile, ...rest } = updateData;
             const createData = {
@@ -136,29 +136,31 @@ export class SaveSalesHelper {
         const now = dayjs();
         const createdAt = now.toISOString();
         const prefix = type == "order" ? "ord" : "quo";
+
+        const _createdAt = isMonth(now);
+        console.log(_createdAt);
+
         const id =
             (await prisma.salesOrders.count({
                 where: {
-                    createdAt: isDay(now),
+                    createdAt: _createdAt, //isDay(now),
                     orderId: {
                         startsWith: prefix,
                     },
                 },
             })) + 1;
-        // console.log({ id });
-
         // ORD-101124-01
         // ORD-111124-01
         // ORD-241111-01
         return {
-            id,
+            id: this.nextId("salesId"),
             prefix,
             createdAt,
             orderId: [
                 prefix,
                 // now.format('YY'),
                 now.format("YYMMDD"),
-                id?.toString()?.padStart(2, "0"),
+                id?.toString()?.padStart(3, "0"),
             ].join("-"),
         };
     }

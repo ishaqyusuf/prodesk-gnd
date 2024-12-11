@@ -14,4 +14,3 @@ export async function lastId(model, _default = 0, where?) {
         })
     )?.id || _default) as number;
 }
-// export async function slugModel()

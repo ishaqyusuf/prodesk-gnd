@@ -99,6 +99,11 @@ export class SaveSalesClass extends SaveSalesHelper {
         };
     }
     public async execute() {
+        this.nextIds.itemId = await nextId(prisma.salesOrderItems);
+        this.nextIds.hpt = await nextId(prisma.housePackageTools);
+        this.nextIds.salesDoor = await nextId(prisma.dykeSalesDoors);
+        this.nextIds.formStep = await nextId(prisma.dykeStepForm);
+        this.nextIds.salesId = await nextId(prisma.salesOrders);
         await this.generateSalesForm();
         await this.generateItemsForm();
         this.composeTax();
@@ -138,11 +143,17 @@ export class SaveSalesClass extends SaveSalesHelper {
                 this.data.orderTxIndex++;
             });
         data.map((dt) => {
+            const orderTx = dt.priority == 1;
+
             if (dt.update.length) {
                 dt.update
                     .filter((u) => u.data)
                     .map((u) => {
                         const table = this.getTable(dt.priority);
+                        if (!this.data.orderTxIndexFound) {
+                            this.data.orderTxIndex++;
+                            this.data.orderTxIndexFound = orderTx;
+                        }
                         txs.push(
                             table?.update({
                                 where: {
@@ -156,7 +167,6 @@ export class SaveSalesClass extends SaveSalesHelper {
             const createManyData = dt.create.map((d) => d.data).filter(Boolean);
             if (createManyData.length) {
                 const table = this.getTable(dt.priority);
-                const orderTx = dt.priority == 1;
                 if (!this.data.orderTxIndexFound) {
                     this.data.orderTxIndex++;
                     this.data.orderTxIndexFound = orderTx;
@@ -268,12 +278,9 @@ export class SaveSalesClass extends SaveSalesHelper {
         hpt: null,
         salesDoor: null,
         formStep: null,
+        salesId: null,
     };
     public async generateItemsForm() {
-        this.nextIds.itemId = await nextId(prisma.salesOrderItems);
-        this.nextIds.hpt = await nextId(prisma.housePackageTools);
-        this.nextIds.salesDoor = await nextId(prisma.dykeSalesDoors);
-        this.nextIds.formStep = await nextId(prisma.dykeStepForm);
         Object.entries(this.form.kvFormItem).map(([itemId, formItem]) => {
             if (!formItem?.groupItem?.groupUid)
                 formItem.groupItem.groupUid = generateRandomString(4);
