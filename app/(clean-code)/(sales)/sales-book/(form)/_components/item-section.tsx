@@ -11,6 +11,7 @@ import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { zhDeleteItem } from "../_utils/helpers/zus/zus-form-helper";
 import ItemSideView from "./item-side-view";
 import { useMemo } from "react";
+import { ItemClass } from "../_utils/helpers/zus/item-class";
 
 interface Props {
     uid?: string;
@@ -51,12 +52,15 @@ export default function ItemSection({ uid }: Props) {
 }
 function ItemSectionHeader({ uid }) {
     const zus = useFormDataStore();
-    const index = zus.sequence.formItem.indexOf(uid);
-    const placeholder = `Item ${index + 1}`;
-    const formItem = zus?.kvFormItem?.[uid];
+    const cls = useMemo(() => {
+        const cls = new ItemClass(uid);
+        return cls;
+    }, [uid]);
+    const placeholder = `Item ${cls.itemIndex + 1}`;
+    const formItem = cls.formItem;
 
     return (
-        <div className="flex   border items-center gap-4 p-2 px-4">
+        <div className="flex border items-center gap-4 p-2 px-4">
             <CollapsibleTrigger asChild className="flex-1">
                 <div
                     className="flex "
@@ -87,8 +91,8 @@ function ItemSectionHeader({ uid }) {
             <ConfirmBtn
                 trash
                 size="icon"
-                onClick={async () => {
-                    await zhDeleteItem(zus, uid, index);
+                onClick={() => {
+                    cls.deleteItem();
                 }}
             />
         </div>

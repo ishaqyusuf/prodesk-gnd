@@ -66,6 +66,7 @@ function MouldingRow({
 
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
+        ctx.ctx.calculateTotalPrice();
     };
     return (
         <TableRow className={cn(!mfd?.selected && "hidden")}>

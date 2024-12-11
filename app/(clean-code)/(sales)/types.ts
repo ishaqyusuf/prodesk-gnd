@@ -450,9 +450,7 @@ export interface SalesFormFields {
             };
         };
     };
-    kvMultiComponent: {
-        [itemUid in string]: {};
-    };
+
     kvStepForm: {
         [id in string]: {
             //id: "itemUid-stepUid"

@@ -143,6 +143,7 @@ function DoorSizeRow({ size }: { size }) {
     // }, [sizeForm?.pricing?.addon, sizeForm?.qty]);
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
+        ctx.ctx.calculateTotalPrice();
     };
     return (
         <TableRow className={cn(!size.selected && "hidden")}>

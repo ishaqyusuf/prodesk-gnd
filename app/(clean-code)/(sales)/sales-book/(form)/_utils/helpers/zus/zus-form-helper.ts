@@ -37,7 +37,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
             multiComponent: {},
         },
         kvFormItem: {},
-        kvMultiComponent: {},
+
         kvStepForm: {},
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
@@ -173,6 +173,10 @@ export function zhInitializeState(data: GetSalesBookForm) {
         function addFormItem(formId, formData: GroupType["form"][""]) {
             formData.primaryGroupItem =
                 formData.meta.salesItemId == item.item.id;
+            // console.log({
+            //     salesItemId: item.item.id,
+            // });
+
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
@@ -229,7 +233,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     hptId: data.hptId,
                     mouldingProductId: data.stepProduct?.dykeProductId,
                     selected: true,
-                    meta: {},
+                    meta: {
+                        salesItemId: data.itemId,
+                    },
                     qty: {
                         total: data.qty,
                     },

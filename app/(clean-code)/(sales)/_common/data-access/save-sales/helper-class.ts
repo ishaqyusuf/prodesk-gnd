@@ -125,6 +125,54 @@ export class SaveSalesHelper {
         if (isNaN(v)) return def;
         return v;
     }
+    public getUnusedIds() {
+        const oldData = this.ctx.oldFormState;
+
+        const idStack = {
+            itemIds: [],
+            stepFormIds: [],
+            hptIds: [],
+            salesDoorIds: [],
+        };
+        Object.values(oldData.kvFormItem).map((data) => {
+            idStack.itemIds.push(data.id);
+            idStack.hptIds.push(data.groupItem.hptId);
+            Object.values(data?.groupItem?.form || {}).map((f) => {
+                // f.doorId
+                idStack.salesDoorIds.push(f.doorId);
+            });
+        });
+        Object.values(oldData.kvStepForm)?.map((stepForm) => {
+            idStack.stepFormIds.push(stepForm.stepFormId);
+        });
+        this.ctx.data.idStack = idStack;
+        this.getDeleteIds(2, idStack.itemIds);
+        this.getDeleteIds(3, idStack.stepFormIds);
+        this.getDeleteIds(4, idStack.hptIds);
+        this.getDeleteIds(5, idStack.salesDoorIds);
+    }
+    public getDeleteIds(priority, idStack) {
+        const stacks = this.ctx.data.stacks;
+        const stackIds = stacks
+            .filter((s) => s.priority == priority)
+            ?.map((s) => s.updateId)
+            .filter(Boolean);
+        const deleteIds = idStack
+            ?.filter(Boolean)
+            ?.filter((s) => !stackIds.includes(s));
+        if (priority == 3) {
+            console.log({
+                stackIds,
+                idStack,
+                deleteIds,
+            });
+        }
+        if (deleteIds?.length)
+            this.ctx.data.deleteStacks.push({
+                ids: deleteIds,
+                priority,
+            });
+    }
 }
 type FormItem = SalesFormFields["kvFormItem"][""];
 type GroupItemForm = FormItem["groupItem"]["form"][""];

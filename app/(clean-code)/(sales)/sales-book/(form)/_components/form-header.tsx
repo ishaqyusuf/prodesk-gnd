@@ -20,7 +20,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     async function save() {
         const {
             kvFormItem,
-            kvMultiComponent,
             kvStepComponentList,
             kvStepForm,
             metaData,
@@ -29,7 +28,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         const resp = await saveFormUseCase(
             {
                 kvFormItem,
-                kvMultiComponent,
                 kvStepForm,
                 metaData,
                 sequence,

@@ -179,15 +179,13 @@ export class CostingClass {
             taxxable: 0,
         };
         Object.entries(data.kvFormItem).map(([itemUid, itemData]) => {
-            //    const  itemData.groupItem.pricing.total.salesPrice
             const groupItem = itemData.groupItem;
             Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
-                // formData.meta
+                if (!formData.selected) return;
                 const isService = groupItem.type == "SERVICE";
                 const price = Number(formData.pricing?.totalPrice || 0);
                 const taxxable =
                     !isService || (isService && formData.meta.taxxable);
-                // console.log({ formData });
                 estimate.subTotal += price;
                 if (taxxable) estimate.taxxable += price;
             });

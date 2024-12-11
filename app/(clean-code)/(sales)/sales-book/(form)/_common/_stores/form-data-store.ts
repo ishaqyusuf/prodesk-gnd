@@ -24,7 +24,7 @@ function fns(set: SalesFormSet) {
                     oldFormState: JSON.parse(
                         JSON.stringify({
                             kvFormItem: data.kvFormItem,
-                            kvMultiComponent: data.kvMultiComponent,
+
                             kvStepForm: data.kvStepForm,
                             metaData: data.metaData,
                         })

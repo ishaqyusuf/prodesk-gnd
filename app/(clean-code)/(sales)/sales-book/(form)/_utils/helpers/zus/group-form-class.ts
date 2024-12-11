@@ -42,6 +42,7 @@ export class GroupFormClass extends StepHelperClass {
     }
     public removeGroupItem(path) {
         this.dotUpdateGroupItemFormPath(path, "selected", false);
+        this.calculateTotalPrice();
     }
     public updateGroupItemForm(path, newData: ZusGroupItemFormPath) {
         const oldData = this.getGroupItemForm(path);
