@@ -550,6 +550,34 @@ export class StepHelperClass extends SettingsClass {
         else currentStepUid = itemStepUid;
         this.dotUpdateItemForm("currentStepUid", currentStepUid);
     }
+
+    public resetGroupItem(itemType) {
+        const itemForm = this.getItemForm();
+        const _itemType = itemForm.groupItem.itemType;
+        if (_itemType != itemType) {
+            const basePrice = "" as any;
+            const salesPrice = "" as any;
+            itemForm.groupItem = {
+                pricing: {
+                    components: {
+                        basePrice,
+                        salesPrice,
+                    },
+                    total: { basePrice, salesPrice },
+                },
+                itemIds: [],
+                itemType,
+                form: {},
+                qty: {
+                    lh: 0,
+                    rh: 0,
+                    total: 0,
+                },
+            };
+        }
+        console.log(itemForm);
+        this.saveItemForm(itemForm);
+    }
 }
 export class ComponentHelperClass extends StepHelperClass {
     constructor(
@@ -585,21 +613,23 @@ export class ComponentHelperClass extends StepHelperClass {
             openDoorSizeSelectModal(this);
         } else if (this.isMoulding()) {
             let groupItem = this.getItemForm()?.groupItem;
-            if (!groupItem)
-                groupItem = {
-                    pricing: {},
-                    itemType: "Moulding",
-                    type: "MOULDING",
-                    itemIds: [],
-                    form: {},
-                    stepUid: this.component.uid,
-                    qty: {
-                        lh: 0,
-                        rh: 0,
-                        total: 0,
-                    },
-                };
-            else groupItem.type = "MOULDING";
+            // if (!groupItem)
+            //     groupItem = {
+            //         pricing: {},
+            //         itemType: "Moulding",
+            //         type: "MOULDING",
+            //         itemIds: [],
+            //         form: {},
+            //         stepUid: this.component.uid,
+            //         qty: {
+            //             lh: 0,
+            //             rh: 0,
+            //             total: 0,
+            //         },
+            //     };
+            // else
+            groupItem.type = "MOULDING";
+            groupItem.stepUid = this.component.uid;
             if (!groupItem.form?.[this.componentUid])
                 groupItem.form[this.componentUid] = {
                     stepProductId: this.component.id,
@@ -654,6 +684,9 @@ export class ComponentHelperClass extends StepHelperClass {
                 salesPrice: component.salesPrice,
                 basePrice: component.basePrice,
             };
+            if (stepData.title == "Item Type") {
+                this.resetGroupItem(component.title);
+            }
             this.saveStepForm(stepData);
             this.dotUpdateItemForm("currentStepUid", null);
             const isRoot = this.componentIsRoot();

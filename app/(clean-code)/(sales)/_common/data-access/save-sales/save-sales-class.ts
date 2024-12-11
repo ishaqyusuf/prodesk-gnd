@@ -79,7 +79,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             prisma.dykeStepForm as any,
             prisma.housePackageTools as any,
             prisma.dykeSalesDoors as any,
-            prisma.salesTaxes,
+            prisma.salesTaxes as any,
         ][priority - 1];
     }
     public data: SaverData = {
@@ -109,6 +109,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.getUnusedIds();
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data;
+        // this.data.error = "BREAK";
         // return;
         // return data;
         const txs = [];
@@ -226,7 +227,6 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.data.stacks = [];
         const data = this.data;
         this.createStack(data.sales, 1);
-        this.createStack(data.tax, 6);
         data.items.map((item) => {
             this.createStack(item, 2);
             item.formValues?.map((fv) => {
@@ -239,6 +239,7 @@ export class SaveSalesClass extends SaveSalesHelper {
                 });
             }
         });
+        this.createStack(data.tax, 6);
     }
     public async generateSalesForm() {
         const saveData = await this.composeSalesForm(this.form);

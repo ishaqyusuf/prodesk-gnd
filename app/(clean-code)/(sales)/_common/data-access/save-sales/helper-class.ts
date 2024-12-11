@@ -88,6 +88,7 @@ export class SaveSalesHelper {
                         id: md.salesRepId,
                     },
                 },
+
                 salesProfile,
                 // customerProfileId: md.salesProfileId,
             } satisfies Prisma.SalesOrdersCreateInput;
@@ -134,13 +135,18 @@ export class SaveSalesHelper {
     public async generateOrderId(type: SalesType) {
         const now = dayjs();
         const createdAt = now.toISOString();
-        const prefix = type == "order" ? "ORD" : "QUO";
-        const id = await nextId(prisma.salesOrders, {
-            createdAt: isDay(now),
-            orderId: {
-                startsWith: prefix,
-            },
-        } as Prisma.SalesOrdersWhereInput);
+        const prefix = type == "order" ? "ord" : "quo";
+        const id =
+            (await prisma.salesOrders.count({
+                where: {
+                    createdAt: isDay(now),
+                    orderId: {
+                        startsWith: prefix,
+                    },
+                },
+            })) + 1;
+        // console.log({ id });
+
         // ORD-101124-01
         // ORD-111124-01
         // ORD-241111-01
