@@ -7,5 +7,5 @@ export async function saveSalesFormDta(
 ) {
     const worker = new SaveSalesClass(form, oldFormState);
     await worker.execute();
-    return worker.data;
+    return worker.result();
 }

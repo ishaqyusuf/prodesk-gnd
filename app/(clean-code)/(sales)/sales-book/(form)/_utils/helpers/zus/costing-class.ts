@@ -2,8 +2,9 @@ import { formatMoney } from "@/lib/use-number";
 import { ZusSales } from "../../../_common/_stores/form-data-store";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
-import { addPercentage, percentageValue, sum } from "@/lib/utils";
+import { addPercentage, dotArray, percentageValue, sum } from "@/lib/utils";
 import { PricingMetaData } from "@/app/(clean-code)/(sales)/types";
+import { dotObject, dotSet } from "@/app/(clean-code)/_common/utils/utils";
 
 export class CostingClass {
     constructor(public setting?: SettingsClass) {}
@@ -75,9 +76,16 @@ export class CostingClass {
                     },
                 };
             else {
-                groupItem.pricing.components.basePrice = totalBasePrice;
-                groupItem.pricing.components.salesPrice =
-                    this.calculateSales(totalBasePrice);
+                const ds = dotSet(groupItem);
+                // groupItem.pricing.components.basePrice = totalBasePrice;
+                // groupItem.pricing.components.salesPrice =
+                //     this.calculateSales(totalBasePrice);
+
+                ds.set("pricing.components.basePrice", totalBasePrice);
+                ds.set(
+                    "pricing.components.salesPrice",
+                    this.calculateSales(totalBasePrice)
+                );
             }
             Object.entries(groupItem.form).map(([uid, formData]) => {
                 formData.pricing.itemPrice.salesPrice = this.calculateSales(

@@ -1,16 +1,14 @@
 import { Label } from "@/components/ui/label";
 import { useFormDataStore } from "../../../_common/_stores/form-data-store";
-import { Input, LineSwitch, Select } from "../line-input";
+import { Input, LineSwitch } from "../line-input";
 import { useMemo } from "react";
 import { SettingsClass } from "../../../_utils/helpers/zus/zus-settings-class";
-import salesData from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 import { FieldPath } from "react-hook-form";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import { CustomerSearch } from "../customer-search";
 
 export function AddressTab({}) {
     const setting = useMemo(() => new SettingsClass(), []);
-
     return (
         <div className="lg:max-w-5xl xl:max-w-4xl">
             <div className="grid p-4 grid-cols-2 gap-4 sm:gap-6">

@@ -51,11 +51,13 @@ export class SaveSalesHelper {
             //     : undefined,
             isDyke: true,
             type: md.type,
-            salesProfile: {
-                connect: {
-                    id: md.salesProfileId,
-                },
-            },
+            salesProfile: md.salesProfileId
+                ? {
+                      connect: {
+                          id: md.salesProfileId,
+                      },
+                  }
+                : undefined,
         } satisfies Prisma.SalesOrdersUpdateInput;
 
         if (md.type == "order") {
@@ -80,9 +82,15 @@ export class SaveSalesHelper {
                 id,
                 createdAt,
                 isDyke: true,
-                salesRepId: md.salesRepId,
-                customerProfileId: md.salesProfileId,
-            } satisfies Prisma.SalesOrdersCreateManyInput;
+                // salesRepId: md.salesRepId,
+                salesRep: {
+                    connect: {
+                        id: md.salesRepId,
+                    },
+                },
+                salesProfile,
+                // customerProfileId: md.salesProfileId,
+            } satisfies Prisma.SalesOrdersCreateInput;
             return {
                 id: createData.id,
                 data: createData,

@@ -43,7 +43,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
         kvFilteredStepComponentList: {},
         kvStepComponentList: {},
         metaData: {
-            salesRepId: data.order?.salesRepId,
+            salesRepId: data.order?.salesRepId || data.order.salesRep?.id,
             type: data.order?.type as any,
             id: data.order?.id,
             salesId: data.order?.orderId,

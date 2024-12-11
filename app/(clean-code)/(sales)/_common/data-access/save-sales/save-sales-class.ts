@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, SalesOrders } from "@prisma/client";
 import { SalesFormFields, SalesMeta } from "../../../types";
 import { formatMoney } from "@/lib/use-number";
 import { SaveSalesHelper } from "./helper-class";
@@ -6,9 +6,11 @@ import { nextId } from "@/lib/nextId";
 import { prisma } from "@/db";
 import { ItemHelperClass } from "./item-helper-class";
 import { generateRandomString } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 export interface SaverData {
     tx?;
+    error?;
     idStack?: {
         itemIds: number[];
         stepFormIds: number[];
@@ -17,11 +19,14 @@ export interface SaverData {
     };
     sales?: { id?; data?; updateId? };
     deleteStacks?: { ids; priority }[];
+    orderTxIndex: number;
+    orderTxIndexFound?: boolean;
     tax?: {
         id?;
         data?;
         updateId?;
     };
+    result?;
     items?: {
         id?;
         data?;
@@ -49,6 +54,23 @@ export interface SaverData {
 export type HptData = SaverData["items"][number]["hpt"];
 
 export class SaveSalesClass extends SaveSalesHelper {
+    public result() {
+        const data = this.data;
+        if (data.error) {
+            return { data };
+        }
+        const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
+        const isUpdate = data.sales.data?.id == null;
+        const redirectTo = !isUpdate
+            ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
+            : null;
+        if (redirectTo) redirect(redirectTo);
+        return {
+            slug: salesResp.slug,
+            redirectTo,
+            data,
+        };
+    }
     public getTable(priority) {
         if (!priority) priority = 0;
         return [
@@ -60,7 +82,9 @@ export class SaveSalesClass extends SaveSalesHelper {
             prisma.salesTaxes,
         ][priority - 1];
     }
-    public data: SaverData = {};
+    public data: SaverData = {
+        orderTxIndex: -1,
+    };
     constructor(
         public form: SalesFormFields,
         public oldFormState?: SalesFormFields
@@ -69,6 +93,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.ctx = this;
         this.data = {
             items: [],
+            orderTxIndex: -1,
             deleteStacks: [],
             stacks: [],
         };
@@ -91,6 +116,14 @@ export class SaveSalesClass extends SaveSalesHelper {
             ?.filter((s) => s?.ids?.length)
             .map((s) => {
                 const table = this.getTable(s.priority);
+                // prisma.dykeStepForm.updateMany({
+                //     where: {
+                //         id: {in: []}
+                //     },
+                //     data: {
+                //         deletedAt: new Date()
+                //     }
+                // })
                 txs.push(
                     table.updateMany({
                         where: {
@@ -101,6 +134,7 @@ export class SaveSalesClass extends SaveSalesHelper {
                         },
                     })
                 );
+                this.data.orderTxIndex++;
             });
         data.map((dt) => {
             if (dt.update.length) {
@@ -121,14 +155,30 @@ export class SaveSalesClass extends SaveSalesHelper {
             const createManyData = dt.create.map((d) => d.data).filter(Boolean);
             if (createManyData.length) {
                 const table = this.getTable(dt.priority);
+                const orderTx = dt.priority == 1;
+                if (!this.data.orderTxIndexFound) {
+                    this.data.orderTxIndex++;
+                    this.data.orderTxIndexFound = orderTx;
+                }
+                // prisma.salesOrders
                 txs.push(
-                    table.createMany({
-                        data: createManyData,
-                    })
+                    orderTx
+                        ? table.create({
+                              data: createManyData[0],
+                          })
+                        : table.createMany({
+                              data: createManyData,
+                          })
                 );
             }
         });
-        await prisma.$transaction(txs);
+        try {
+            const transactions = await prisma.$transaction(txs);
+            this.data.result = transactions;
+        } catch (error) {
+            if (error instanceof Error) this.data.error = error.message;
+            else this.data.error = "ERROR";
+        }
     }
 
     public groupByPriorityAndId() {

@@ -71,9 +71,17 @@ export async function createSalesBookFormDataDta(
     let goodUntil = ctx.defaultProfile?.goodUntil;
     if (goodUntil && typeof goodUntil != "string")
         goodUntil = dayjs(goodUntil).toISOString();
+    const salesRep = dealer?.id
+        ? ({} as any)
+        : {
+              name: session.name,
+              id: session.id,
+          };
     const data: Partial<GetSalesBookFormDataDta> = {
         stepComponents: [],
         order: {
+            type: props.type,
+            salesRepId: salesRep?.id,
             isDyke: true,
             customerId: dealer?.dealerId,
             customerProfileId: ctx.defaultProfile?.id,
@@ -97,12 +105,7 @@ export async function createSalesBookFormDataDta(
                     shelfItems: [],
                 } as any,
             ],
-            salesRep: dealer?.id
-                ? ({} as any)
-                : {
-                      name: session.name,
-                      id: session.id,
-                  },
+            salesRep,
             createdAt: dayjs().toISOString() as any,
         },
     };

@@ -6,6 +6,7 @@ import { Sticky } from "../_hooks/use-sticky";
 import { cn } from "@/lib/utils";
 import { saveFormUseCase } from "../../../_common/use-case/sales-book-form-use-case";
 import Button from "@/components/common/button";
+import { toast } from "sonner";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -20,6 +21,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     }
     async function save() {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
+
         const resp = await saveFormUseCase(
             {
                 kvFormItem,
@@ -30,6 +32,11 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             zus.oldFormState
         );
         console.log({ resp, oldState: zus.oldFormState });
+        // if(resp.redirectTo)
+        if (resp.data?.error) toast.error(resp.data?.error);
+        else {
+            toast.success("Saved");
+        }
     }
     return (
         <div
