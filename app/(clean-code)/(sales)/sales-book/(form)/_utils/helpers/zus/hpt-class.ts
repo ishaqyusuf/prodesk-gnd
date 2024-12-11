@@ -120,8 +120,6 @@ export class HptClass extends GroupFormClass {
                     componentPrice,
                     totalPrice: 0,
                     unitPrice: formatMoney(estimatedComponentPrice),
-
-                    // estimatedComponentPrice,
                 },
                 meta: {
                     description: "",

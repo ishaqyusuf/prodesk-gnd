@@ -186,14 +186,7 @@ function DoorSizeRow({ size }: { size }) {
                 <Menu
                     noSize
                     Icon={null}
-                    label={
-                        <Money
-                            value={
-                                sizeForm?.pricing?.customPrice ||
-                                sizeForm?.pricing?.estimatedComponentPrice
-                            }
-                        />
-                    }
+                    label={<Money value={sizeForm?.pricing?.unitPrice} />}
                 >
                     <div className="p-2 min-w-[300px]">
                         <div>

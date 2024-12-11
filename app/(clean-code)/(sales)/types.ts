@@ -433,7 +433,6 @@ export interface SalesFormFields {
                             };
                             customPrice?: number | string;
                             componentPrice?: number | string;
-                            // estimatedComponentPrice?: number | string;
                             unitPrice?: number;
                             totalPrice?: number;
                             addon: number | string;

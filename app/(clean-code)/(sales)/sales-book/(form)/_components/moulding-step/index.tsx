@@ -61,106 +61,97 @@ function MouldingRow({
 }) {
     const ctx = useCtx();
     const mfd = ctx.itemForm?.groupItem?.form?.[data.uid];
-    const form = useForm({
-        defaultValues: mfd,
-    });
+
     const lineUid = data.uid;
-    const watchForm = form.watch();
 
     const valueChanged = () => {
         ctx.ctx.updateGroupedCost();
     };
     return (
-        <Form {...form}>
-            <TableRow className={cn(!mfd?.selected && "hidden")}>
-                <TableCell className="font-mono">{sn}.</TableCell>
-                <TableCell className="font-mono font-medium text-sm">
-                    {data.title}
-                </TableCell>
-                <TableCell>
-                    <LineInput
-                        cls={ctx.ctx}
-                        name="qty.total"
-                        lineUid={lineUid}
-                        type="number"
-                        valueChanged={valueChanged}
-                    />
-                </TableCell>
-                <TableCell className="">
-                    <Menu
-                        noSize
-                        Icon={null}
-                        label={
-                            <Money
-                                value={mfd?.pricing?.estimatedComponentPrice}
-                            />
-                        }
-                    >
-                        <div className="p-2 min-w-[300px]">
-                            <div>
-                                <Label>Price Summary</Label>
-                            </div>
-                            <dl>
-                                {ctx.pricedSteps?.map((step) => (
-                                    <DataLine
-                                        size="sm"
-                                        key={step.title}
-                                        label={step.title}
-                                        value={
-                                            <div className="flex gap-4 items-center justify-end">
-                                                <span>{step.value}</span>
-                                                <MoneyBadge>
-                                                    {step.price}
-                                                </MoneyBadge>
-                                            </div>
-                                        }
-                                    />
-                                ))}
+        <TableRow className={cn(!mfd?.selected && "hidden")}>
+            <TableCell className="font-mono">{sn}.</TableCell>
+            <TableCell className="font-mono font-medium text-sm">
+                {data.title}
+            </TableCell>
+            <TableCell>
+                <LineInput
+                    cls={ctx.ctx}
+                    name="qty.total"
+                    lineUid={lineUid}
+                    type="number"
+                    valueChanged={valueChanged}
+                />
+            </TableCell>
+            <TableCell className="">
+                <Menu
+                    noSize
+                    Icon={null}
+                    label={<Money value={mfd?.pricing?.unitPrice} />}
+                >
+                    <div className="p-2 min-w-[300px]">
+                        <div>
+                            <Label>Price Summary</Label>
+                        </div>
+                        <dl>
+                            {ctx.pricedSteps?.map((step) => (
                                 <DataLine
                                     size="sm"
-                                    label="Door"
+                                    key={step.title}
+                                    label={step.title}
                                     value={
                                         <div className="flex gap-4 items-center justify-end">
-                                            <span className="line-clamp-2 max-w-xs">{`${data.title}`}</span>
+                                            <span>{step.value}</span>
                                             <MoneyBadge>
-                                                {data.basePrice?.price}
+                                                {step.price}
                                             </MoneyBadge>
                                         </div>
                                     }
                                 />
-                            </dl>
-                        </div>
-                    </Menu>
-                </TableCell>
-                <TableCell>
-                    <LineInput
-                        cls={ctx.ctx}
-                        name="pricing.addon"
-                        lineUid={lineUid}
-                        type="number"
-                        valueChanged={valueChanged}
-                    />
-                    {/* <ControlledInput
+                            ))}
+                            <DataLine
+                                size="sm"
+                                label="Door"
+                                value={
+                                    <div className="flex gap-4 items-center justify-end">
+                                        <span className="line-clamp-2 max-w-xs">{`${data.title}`}</span>
+                                        <MoneyBadge>
+                                            {data.basePrice?.price}
+                                        </MoneyBadge>
+                                    </div>
+                                }
+                            />
+                        </dl>
+                    </div>
+                </Menu>
+            </TableCell>
+            <TableCell>
+                <LineInput
+                    cls={ctx.ctx}
+                    name="pricing.addon"
+                    lineUid={lineUid}
+                    type="number"
+                    valueChanged={valueChanged}
+                />
+                {/* <ControlledInput
                         type="number"
                         size="sm"
                         control={form.control}
                         name="pricing.addon"
                         inputProps={inputProps}
                     /> */}
-                </TableCell>
-                <TableCell>
-                    <Money value={mfd?.pricing?.totalPrice} />
-                </TableCell>
-                <TableCell align="right">
-                    <ConfirmBtn
-                        onClick={() => {
-                            ctx.ctx.removeGroupItem(data.uid);
-                        }}
-                        trash
-                        size="icon"
-                    />
-                </TableCell>
-            </TableRow>
-        </Form>
+            </TableCell>
+            <TableCell>
+                <Money value={mfd?.pricing?.totalPrice} />
+            </TableCell>
+            <TableCell align="right">
+                <ConfirmBtn
+                    onClick={() => {
+                        ctx.ctx.removeGroupItem(data.uid);
+                    }}
+                    trash
+                    size="icon"
+                />
+            </TableCell>
+        </TableRow>
     );
 }

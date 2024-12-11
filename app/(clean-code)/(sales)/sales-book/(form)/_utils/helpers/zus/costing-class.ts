@@ -118,7 +118,6 @@ export class CostingClass {
                 formData.qty.total = qty;
             const priceList = [
                 formData.pricing?.customPrice ||
-                    // formData.pricing?.estimatedComponentPrice,
                     sum([
                         groupItem?.pricing?.components?.salesPrice,
                         formData?.pricing?.itemPrice?.salesPrice,
