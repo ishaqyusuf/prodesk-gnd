@@ -11,9 +11,7 @@ export const useCtx = () => useContext(Context);
 export const useCreateContext = (itemStepUid) => {
     const [itemUid, stepUid] = itemStepUid?.split("-");
     const zus = useFormDataStore();
-    useEffect(() => {
-        console.log(">");
-    }, []);
+
     const itemIds = zus?.kvFormItem?.[itemUid]?.groupItem?.itemIds;
     const ctx = new ServiceClass(itemStepUid);
     const _ctx = useMemo(() => {

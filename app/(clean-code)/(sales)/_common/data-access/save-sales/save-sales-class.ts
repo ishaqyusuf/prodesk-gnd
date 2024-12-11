@@ -74,11 +74,26 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async saveData() {
         this.composeSaveStacks();
         this.getUnusedIds();
-        return;
+        // return;
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data.map(({ create, update }) => ({ create, update }));
         // return data;
         const txs = [];
+        this.data.deleteStacks
+            ?.filter((s) => s?.ids?.length)
+            .map((s) => {
+                const table = this.getTable(s.priority);
+                txs.push(
+                    table.updateMany({
+                        where: {
+                            id: { in: s.ids },
+                        },
+                        data: {
+                            deletedAt: new Date(),
+                        },
+                    })
+                );
+            });
         data.map((dt) => {
             if (dt.update.length) {
                 dt.update

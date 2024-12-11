@@ -23,7 +23,6 @@ export class ServiceClass extends GroupFormClass {
     }
     public addServiceLine() {
         const uid = generateRandomString(5);
-        console.log(uid);
 
         const itemForm = this.getItemForm();
         const itemsUids = itemForm.groupItem.itemIds;
@@ -33,6 +32,9 @@ export class ServiceClass extends GroupFormClass {
             // addon: "",
             pricing: {
                 addon: "",
+                customPrice: "",
+
+                totalPrice: 0,
             },
             meta: {
                 description: "",
@@ -64,6 +66,20 @@ export class ServiceClass extends GroupFormClass {
                     },
                     selected: true,
                     swing: "",
+                },
+            },
+            itemType: "Services",
+            qty: {
+                total: 0,
+            },
+            pricing: {
+                components: {
+                    basePrice: 0,
+                    salesPrice: 0,
+                },
+                total: {
+                    basePrice: 0,
+                    salesPrice: 0,
                 },
             },
         };

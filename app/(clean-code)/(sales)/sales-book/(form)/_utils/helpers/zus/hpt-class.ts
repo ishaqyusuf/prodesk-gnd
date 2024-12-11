@@ -10,7 +10,6 @@ export class HptClass extends GroupFormClass {
         super(itemStepUid);
     }
     public getDoorStepForm() {
-        console.log(this.zus.kvStepForm);
         return Object.entries(this.zus.kvStepForm).filter(
             ([uid, data]) =>
                 uid.startsWith(`${this.itemUid}-`) && data.title == "Door"
@@ -80,6 +79,7 @@ export class HptClass extends GroupFormClass {
             return component;
         });
     }
+
     public isDoorSelected(uid) {
         return this.getItemForm()?.groupItem?.form?.[uid]?.selected;
     }

@@ -55,4 +55,9 @@ export class GroupFormClass extends StepHelperClass {
             }
         }
     }
+    public get selectCount() {
+        return Object.values(this.getItemForm()?.groupItem?.form).filter(
+            (s) => s.selected
+        ).length;
+    }
 }

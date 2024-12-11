@@ -11,7 +11,7 @@ export const useCreateContext = (itemStepUid) => {
     const ctx = useMemo(() => {
         const ctx = new HptClass(itemStepUid);
         const itemForm = ctx.getItemForm();
-        console.log({ itemForm });
+
         return {
             zus,
             ctx,
@@ -26,7 +26,7 @@ export const useCreateContext = (itemStepUid) => {
     useEffect(() => {
         let tuid = ctx.ctx.tabUid;
         if (ctx.doors.every((s) => s.uid != ctx.ctx.tabUid)) {
-            console.log(ctx.doors?.[0]?.uid);
+            // console.log(ctx.doors?.[0]?.uid);
             tuid = ctx.doors?.[0]?.uid;
             ctx.ctx.dotUpdateItemForm(
                 "groupItem._.tabUid",

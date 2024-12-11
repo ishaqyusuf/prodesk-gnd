@@ -146,6 +146,7 @@ function MouldingRow({
             </TableCell>
             <TableCell align="right">
                 <ConfirmBtn
+                    disabled={ctx.ctx.selectCount == 1}
                     onClick={() => {
                         ctx.ctx.removeGroupItem(data.uid);
                     }}

@@ -112,7 +112,6 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                         valueChanged={valueChanged}
                     />
                 </TableCell>
-
                 <TableCell>
                     <LineInput
                         cls={ctx.ctx}
@@ -143,6 +142,7 @@ function ServiceRow({ lineUid, sn }: { sn; lineUid }) {
                             ctx.ctx.removeGroupItem(lineUid);
                         }}
                         trash
+                        disabled={ctx.ctx.selectCount == 1}
                         size="icon"
                     />
                 </TableCell>

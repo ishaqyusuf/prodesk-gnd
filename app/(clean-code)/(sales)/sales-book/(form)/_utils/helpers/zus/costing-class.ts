@@ -107,12 +107,26 @@ export class CostingClass {
         const data = this.setting.zus;
         const staticData = this.setting.staticZus;
         const itemForm = data.kvFormItem[itemUid];
-        const groupItem = itemForm.groupItem;
+        let groupItem = itemForm.groupItem;
+        console.log({ groupItem });
+        if (!groupItem.pricing)
+            groupItem.pricing = {
+                components: {
+                    basePrice: 0,
+                    salesPrice: 0,
+                },
+                total: {
+                    basePrice: 0,
+                    salesPrice: 0,
+                },
+            };
         groupItem.pricing.total = {
             basePrice: 0,
             salesPrice: 0,
         };
         Object.entries(groupItem?.form).map(([uid, formData]) => {
+            console.log(formData);
+
             const qty = sum([formData.qty.lh, formData.qty.rh]);
             if (!formData.qty?.total || (qty && qty != formData.qty?.total))
                 formData.qty.total = qty;

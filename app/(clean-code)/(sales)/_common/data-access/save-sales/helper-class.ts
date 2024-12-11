@@ -135,10 +135,10 @@ export class SaveSalesHelper {
             salesDoorIds: [],
         };
         Object.values(oldData.kvFormItem).map((data) => {
-            idStack.itemIds.push(data.id);
+            // Object.entries(data.groupItem?.form || )
             idStack.hptIds.push(data.groupItem.hptId);
             Object.values(data?.groupItem?.form || {}).map((f) => {
-                // f.doorId
+                idStack.itemIds.push(f.meta.salesItemId);
                 idStack.salesDoorIds.push(f.doorId);
             });
         });

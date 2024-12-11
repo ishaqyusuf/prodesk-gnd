@@ -146,7 +146,7 @@ function DoorSizeRow({ size }: { size }) {
         ctx.ctx.calculateTotalPrice();
     };
     return (
-        <TableRow className={cn(!size.selected && "hidden")}>
+        <TableRow className={cn(!sizeForm?.selected && "hidden")}>
             <TableCell className="font-mono font-semibold text-sm">
                 {size.title}
             </TableCell>
@@ -242,6 +242,7 @@ function DoorSizeRow({ size }: { size }) {
             </TableCell>
             <TableCell align="right">
                 <ConfirmBtn
+                    disabled={ctx.ctx.selectCount == 1}
                     onClick={() => {
                         ctx.ctx.removeGroupItem(size.path);
                     }}

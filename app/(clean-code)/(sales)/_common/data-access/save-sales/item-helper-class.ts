@@ -226,7 +226,7 @@ export class ItemHelperClass {
                 formValues: [],
             };
         }
-        this.generateItemFormSteps();
+        if (gf.primaryGroupItem) this.generateItemFormSteps();
         if (isMoulding) {
             const itemHtp: HptData = {
                 id: formItem.groupItem?.hptId,
