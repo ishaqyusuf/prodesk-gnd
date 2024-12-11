@@ -192,7 +192,7 @@ export class ItemHelperClass {
         const meta = {
             doorType: formItem.groupItem.itemType,
             lineIndex,
-            ...(!isMoulding
+            ...(isMoulding
                 ? {}
                 : {
                       tax: gf?.meta?.taxxable,

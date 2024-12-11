@@ -185,7 +185,6 @@ export class CostingClass {
             estimate.taxxable,
             taxProfile.percentage
         );
-        // console.log(estimate);
         const subGrandTot =
             sum([estimate.subTotal, estimate.taxValue, estimate.labour]) -
             Number(estimate.discount || 0);
@@ -225,12 +224,13 @@ export class CostingClass {
         const taxProfile = this.taxList().find(
             (tax) => tax.taxCode == this.setting.dotGet("metaData.tax.taxCode")
         );
-        this.setting?.zus.dotUpdate("metaData.tax.taxCode", taxProfile.taxCode);
+        // this.setting?.zus.dotUpdate("metaData.tax.taxCode", taxProfile.taxCode);
         this.setting?.zus.dotUpdate("metaData.tax.title", taxProfile.title);
         this.setting?.zus.dotUpdate(
             "metaData.tax.percentage",
             taxProfile.percentage
         );
+        // console.log(taxProfile);
         this.calculateTotalPrice();
     }
 }
