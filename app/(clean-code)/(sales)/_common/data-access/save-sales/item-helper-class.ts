@@ -46,11 +46,17 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
+            salesOrder: {
+                connect: {
+                    id: this.ctx.salesId,
+                },
+            },
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         if (!salesItemId) {
+            const { salesOrder: ___, ...rest } = updateData;
             const createData = {
-                ...updateData,
-                salesOrderId: this.ctx.data?.sales?.data?.id,
+                ...rest,
+                salesOrderId: this.ctx.salesId,
                 id: this.ctx.nextId("itemId"),
             } satisfies Prisma.SalesOrderItemsCreateManyInput;
             this.itemData = {
@@ -58,6 +64,7 @@ export class ItemHelperClass {
                 id: createData.id,
                 formValues: [],
             };
+            console.log(createData);
         } else {
             this.itemData = {
                 id: salesItemId,
@@ -66,6 +73,7 @@ export class ItemHelperClass {
                     ...updateData,
                 },
             };
+            console.log(updateData);
         }
         this.generateItemFormSteps();
         const itemHtp: HptData = {
@@ -82,11 +90,12 @@ export class ItemHelperClass {
                 id: this.ctx.nextId("hpt"),
                 ...updateHpt,
                 orderItemId: this.itemData.id,
-                salesOrderId: this.ctx.data.sales.id,
+                salesOrderId: this.ctx.salesId,
                 doorType: formItem.groupItem.itemType,
                 stepProductId: formItem.groupItem.doorStepProductId,
             } satisfies Prisma.HousePackageToolsCreateManyInput;
             itemHtp.data = hpt;
+            itemHtp.id = hpt.id;
         }
         Array.from(new Set(Object.keys(form).map((k) => k.split("-")[0]))).map(
             (stepUid) => {
@@ -122,17 +131,24 @@ export class ItemHelperClass {
                                 formData.pricing.totalPrice
                             ),
                             swing: formData.swing,
+                            housePackageTool: {
+                                connect: {
+                                    id: itemHtp.id,
+                                },
+                            },
                         } satisfies Prisma.DykeSalesDoorsUpdateInput;
                         if (formData.doorId) {
                             doorData.data = updateDoor;
                         } else {
+                            const { housePackageTool, ...rest } = updateDoor;
                             const createDoor = {
-                                ...updateDoor,
+                                ...rest,
                                 id: this.ctx.nextId("salesDoor"),
                                 housePackageToolId: itemHtp.id,
-                                salesOrderId: this.ctx.data.sales.id,
+                                salesOrderId: this.ctx.salesId,
                             } satisfies Prisma.DykeSalesDoorsCreateManyInput;
                             doorData.data = createDoor;
+                            doorData.id = createDoor.id;
                         }
                         itemHtp.doors.push(doorData);
                     });
@@ -164,7 +180,7 @@ export class ItemHelperClass {
                     ...updateData,
                     id: this.ctx.nextId("formStep"),
                     stepId: step.stepId,
-                    salesId: this.ctx.data.sales.id,
+                    salesId: this.ctx.salesId,
                     salesItemId: this.itemData.id,
                 } satisfies Prisma.DykeStepFormCreateManyInput;
                 this.itemData.formValues.push({
@@ -172,8 +188,6 @@ export class ItemHelperClass {
                     id: createData.id,
                 });
             } else {
-                console.log(step.stepFormId);
-
                 this.itemData.formValues.push({
                     data: updateData,
                     id: step.stepFormId,
@@ -198,7 +212,6 @@ export class ItemHelperClass {
                       tax: gf?.meta?.taxxable,
                   }),
         } satisfies SalesItemMeta;
-        console.log({ meta });
 
         const updateData = {
             meta,
@@ -213,13 +226,14 @@ export class ItemHelperClass {
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
             multiDyke: gf.primaryGroupItem,
+
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
 
         if (!gf.meta.salesItemId) {
             const createData = {
                 ...updateData,
-                salesOrderId: this.ctx.data?.sales?.id,
+                salesOrderId: this.ctx.salesId,
                 id: this.ctx.nextId("itemId"),
             } satisfies Prisma.SalesOrderItemsCreateManyInput;
             this.itemData = {
@@ -266,11 +280,12 @@ export class ItemHelperClass {
                     id: this.ctx.nextId("hpt"),
                     ...updateHpt,
                     orderItemId: this.itemData.id,
-                    salesOrderId: this.ctx.data.sales.id,
+                    salesOrderId: this.ctx.salesId,
                     doorType: formItem.groupItem.itemType,
                     stepProductId: formItem.groupItem.doorStepProductId,
                 } satisfies Prisma.HousePackageToolsCreateManyInput;
                 itemHtp.data = hpt;
+                itemHtp.id = hpt.id;
             }
         }
         //  if (this.itemData.hpt?.doors)

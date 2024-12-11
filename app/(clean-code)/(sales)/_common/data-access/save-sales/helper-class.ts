@@ -112,7 +112,7 @@ export class SaveSalesHelper {
         if (!form.metaData.tax.salesTaxId) {
             const createTax = {
                 taxCode: form.metaData.tax.taxCode,
-                salesId: this.ctx.data.sales.id,
+                salesId: this.ctx.salesId,
                 taxxable: form.metaData.pricing.taxxable,
                 tax: form.metaData.pricing.taxValue,
             } satisfies Prisma.SalesTaxesCreateManyInput;

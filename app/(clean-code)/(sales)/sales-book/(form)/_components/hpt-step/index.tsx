@@ -68,8 +68,8 @@ function DoorSizeTable({ door }) {
     const ctx = useCtx();
 
     return (
-        <Table className="p-4 text-xs font-medium table-fixed">
-            <TableHeader>
+        <Table className="p-4  font-medium table-fixed">
+            <TableHeader className="text-xs">
                 <TableRow className="uppercase">
                     <TableHead className="w-full">Size</TableHead>
                     {ctx.config.hasSwing && (

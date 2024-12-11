@@ -99,6 +99,8 @@ export function zhInitializeState(data: GetSalesBookForm) {
         },
         formStatus: "ready",
     };
+    console.log("MAIN DATA++++", data);
+
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
         console.log({ item });
@@ -184,6 +186,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
             const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
             const stepProductId = item.item?.housePackageTool?.stepProduct?.id;
             const doorCount = Object.keys(data._doorForm).length;
+
             if (doorCount) {
                 setType("HPT");
                 resp.kvFormItem[uid].groupItem.hptId =

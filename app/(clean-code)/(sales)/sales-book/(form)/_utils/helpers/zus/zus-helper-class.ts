@@ -553,7 +553,7 @@ export class StepHelperClass extends SettingsClass {
 
     public resetGroupItem(itemType) {
         const itemForm = this.getItemForm();
-        const _itemType = itemForm.groupItem.itemType;
+        const _itemType = itemForm.groupItem?.itemType;
         if (_itemType != itemType) {
             const basePrice = "" as any;
             const salesPrice = "" as any;

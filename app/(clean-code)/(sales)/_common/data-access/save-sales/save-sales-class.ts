@@ -7,6 +7,7 @@ import { prisma } from "@/db";
 import { ItemHelperClass } from "./item-helper-class";
 import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { timeout } from "@/lib/timeout";
 
 export interface SaverData {
     tx?;
@@ -71,15 +72,15 @@ export class SaveSalesClass extends SaveSalesHelper {
             data,
         };
     }
-    public getTable(priority) {
+    public getTable(priority, tx = prisma) {
         if (!priority) priority = 0;
         return [
-            prisma.salesOrders as any,
-            prisma.salesOrderItems as any,
-            prisma.dykeStepForm as any,
-            prisma.housePackageTools as any,
-            prisma.dykeSalesDoors as any,
-            prisma.salesTaxes as any,
+            tx.salesOrders as any,
+            tx.salesOrderItems as any,
+            tx.dykeStepForm as any,
+            tx.housePackageTools as any,
+            tx.dykeSalesDoors as any,
+            tx.salesTaxes as any,
         ][priority - 1];
     }
     public data: SaverData = {
@@ -107,7 +108,8 @@ export class SaveSalesClass extends SaveSalesHelper {
         await this.generateSalesForm();
         await this.generateItemsForm();
         this.composeTax();
-        await this.saveData();
+        // await this.saveData();
+        await this.saveData2();
     }
     public async saveData() {
         this.composeSaveStacks();
@@ -191,7 +193,103 @@ export class SaveSalesClass extends SaveSalesHelper {
             else this.data.error = "ERROR";
         }
     }
+    public async saveData2() {
+        this.composeSaveStacks();
+        this.getUnusedIds();
+        const data = Object.values(this.groupByPriorityAndId());
+        this.data.tx = data;
+        // this.data.error = "BREAK";
+        // return;
+        // return data;
+        try {
+            await prisma.$transaction((async (tx) => {
+                const txs = [];
+                function createTx(fn, data) {
+                    txs.push({
+                        tx: fn(data),
+                        data,
+                    });
+                }
+                this.data.deleteStacks
+                    ?.filter((s) => s?.ids?.length)
+                    .map((s) => {
+                        const table = this.getTable(s.priority, tx);
+                        createTx(table.updateMany, {
+                            where: {
+                                id: { in: s.ids },
+                            },
+                            data: {
+                                deletedAt: new Date(),
+                            },
+                        });
+                        this.data.orderTxIndex++;
+                    });
+                data.map((dt) => {
+                    const orderTx = dt.priority == 1;
 
+                    if (dt.update.length) {
+                        dt.update
+                            .filter((u) => u.data)
+                            .map((u) => {
+                                const table = this.getTable(dt.priority, tx);
+                                if (!this.data.orderTxIndexFound) {
+                                    this.data.orderTxIndex++;
+                                    this.data.orderTxIndexFound = orderTx;
+                                }
+                                createTx(table.update, {
+                                    where: {
+                                        id: u.id,
+                                    },
+                                    data: u.data,
+                                });
+                            });
+                    }
+                    const createManyData = dt.create
+                        .map((d) => d.data)
+                        .filter(Boolean);
+                    if (createManyData.length) {
+                        const table = this.getTable(dt.priority, tx);
+                        if (!this.data.orderTxIndexFound) {
+                            this.data.orderTxIndex++;
+                            this.data.orderTxIndexFound = orderTx;
+                        }
+                        // prisma.salesOrders
+                        if (orderTx)
+                            createTx(table.create, {
+                                data: createManyData[0],
+                            });
+                        else
+                            createTx(table.createMany, {
+                                data: createManyData,
+                            });
+                    }
+                });
+                try {
+                    const results = await Promise.all(
+                        txs.map(async (ts, index) => {
+                            await timeout(index * 50);
+                            console.log(index);
+                            const resp = await ts.tx;
+                            console.log(resp);
+                            return resp;
+                        })
+                    );
+                    this.data.result = results;
+                } catch (error) {
+                    // console.log(index, ts.data);
+                    throw error;
+                }
+                console.log(">>>>>");
+            }) as any);
+            // const transactions = await prisma.$transaction(
+            //     txs,
+            //     // Prisma.TransactionIsolationLevel.Serializable
+            // );
+        } catch (error) {
+            if (error instanceof Error) this.data.error = error.message;
+            else this.data.error = "ERROR";
+        }
+    }
     public groupByPriorityAndId() {
         return this.data.stacks.reduce<
             Record<
@@ -250,6 +348,9 @@ export class SaveSalesClass extends SaveSalesHelper {
             }
         });
         this.createStack(data.tax, 6);
+    }
+    public get salesId() {
+        return this.data.sales?.id || this.data.sales?.updateId;
     }
     public async generateSalesForm() {
         const saveData = await this.composeSalesForm(this.form);

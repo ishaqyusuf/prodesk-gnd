@@ -244,14 +244,17 @@ export function transformMultiDykeItem(
     });
     let sectionPrice = 0;
     _comps.map((item) => {
-        const component =
-            item.housePackageTool?.door ||
-            item.housePackageTool?.molding ||
-            (item.meta.doorType == "Services"
-                ? {
-                      title: generateRandomString(4),
-                  }
-                : null);
+        const component = item.housePackageTool?.doors?.length
+            ? {
+                  title: generateRandomString(4),
+              }
+            : item.housePackageTool?.door ||
+              item.housePackageTool?.molding ||
+              (item.meta.doorType == "Services"
+                  ? {
+                        title: generateRandomString(4),
+                    }
+                  : null);
 
         const isMoulding = item.housePackageTool?.moldingId != null;
 
