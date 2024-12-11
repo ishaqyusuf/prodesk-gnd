@@ -1,80 +1,21 @@
 import { Label } from "@/components/ui/label";
-import { useFormDataStore } from "../../_common/_stores/form-data-store";
-import { Input, LineSwitch, Select } from "./line-input";
+import { useFormDataStore } from "../../../_common/_stores/form-data-store";
+import { Input, LineSwitch, Select } from "../line-input";
 import { useMemo } from "react";
-import { SettingsClass } from "../../_utils/helpers/zus/zus-settings-class";
+import { SettingsClass } from "../../../_utils/helpers/zus/zus-settings-class";
 import salesData from "@/app/(clean-code)/(sales)/_common/utils/sales-data";
 import { FieldPath } from "react-hook-form";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
-import { CustomerSearch } from "./customer-search";
+import { CustomerSearch } from "../customer-search";
 
-export function FormDataPage({}) {
-    const zus = useFormDataStore();
+export function AddressTab({}) {
     const setting = useMemo(() => new SettingsClass(), []);
-    const profiles = setting.salesProfiles();
-    const taxList = setting.taxList();
+
     return (
         <div className="lg:max-w-5xl xl:max-w-4xl">
             <div className="grid p-4 grid-cols-2 gap-4 sm:gap-6">
-                <div className="">
-                    <Input label="Q.B Order #" name="metaData.qb" />
-                </div>
-                <div className="">
-                    <Input label="P.O No" name="metaData.po" />
-                </div>
-                <div className="">
-                    <Select
-                        label={"Profile"}
-                        onSelect={(e) => {
-                            setting.salesProfileChanged();
-                        }}
-                        name="metaData.salesProfileId"
-                        options={profiles}
-                        titleKey="title"
-                        valueKey="id"
-                    />
-                </div>
-                <div className="">
-                    <Select
-                        label="Delivery"
-                        name="metaData.deliveryMode"
-                        options={salesData.deliveryModes}
-                        titleKey="text"
-                        valueKey="value"
-                    />
-                </div>
-                <Select
-                    label="Tax Profile"
-                    name="metaData.tax.taxCode"
-                    options={taxList}
-                    titleKey="title"
-                    valueKey="taxCode"
-                    onSelect={(e) => {
-                        setting.taxCodeChanged();
-                    }}
-                />
-                <Select
-                    label="Payment Method"
-                    name="metaData.paymentMethod"
-                    options={salesData.paymentOptions}
-                    onSelect={(e) => {
-                        setting.calculateTotalPrice();
-                    }}
-                />
-                {/* <div className="col-span-2"></div> */}
-                <Input
-                    label="Sales Discount ($)"
-                    type="number"
-                    name="metaData.pricing.discount"
-                />
-                <Input
-                    label="Labor Cost ($)"
-                    type="number"
-                    name="metaData.pricing.labour"
-                />
-                {/* <div className="col-span-2 border-b"></div>
                 <AddressForm addressType="billing" />
-                <AddressForm addressType="shipping" /> */}
+                <AddressForm addressType="shipping" />
             </div>
         </div>
     );

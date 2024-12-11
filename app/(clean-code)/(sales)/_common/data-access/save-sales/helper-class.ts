@@ -89,6 +89,35 @@ export class SaveSalesHelper {
             };
         }
     }
+    public composeTax() {
+        const form = this.ctx.form;
+        const updateTax = {
+            tax: form.metaData.pricing.taxValue,
+            taxxable: form.metaData.pricing.taxxable,
+            taxConfig: {
+                connect: {
+                    taxCode: form.metaData.tax.taxCode,
+                },
+            },
+        } satisfies Prisma.SalesTaxesUpdateInput;
+        if (!form.metaData.tax.salesTaxId) {
+            const createTax = {
+                taxCode: form.metaData.tax.taxCode,
+                salesId: this.ctx.data.sales.id,
+                taxxable: form.metaData.pricing.taxxable,
+                tax: form.metaData.pricing.taxValue,
+            } satisfies Prisma.SalesTaxesCreateManyInput;
+            this.ctx.data.tax = {
+                data: createTax,
+            };
+        } else {
+            this.ctx.data.tax = {
+                data: updateTax,
+                updateId: form.metaData.tax.salesTaxId,
+                id: form.metaData.tax.salesTaxId,
+            };
+        }
+    }
     public compare(data1, data2) {
         const equals = isEqual(data1, data2);
         return equals;

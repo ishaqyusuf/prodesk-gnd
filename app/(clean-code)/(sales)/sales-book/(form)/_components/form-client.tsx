@@ -16,6 +16,7 @@ import { useSticky } from "../_hooks/use-sticky";
 import { FormDataPage } from "./data-page";
 import { cn } from "@/lib/utils";
 import { FormFooter } from "./form-footer";
+import { AddressTab } from "./data-page/address-tab";
 
 interface FormClientProps {
     data: GetSalesBookForm;
@@ -46,16 +47,35 @@ export function FormClient({ data }: FormClientProps) {
                 >
                     <FormDataPage />
                 </div>
-            </div>
-            <div
-                className={cn(
-                    zus.currentTab == "info" &&
-                        "opacity-0 h-0 z-0 w-0 overflow-hidden"
-                )}
-            >
-                {zus.sequence?.formItem?.map((uid) => (
-                    <ItemSection key={uid} uid={uid} />
-                ))}
+                <div
+                    className={cn(
+                        zus.currentTab != "address" &&
+                            "opacity-0 h-0 z-0 w-0 overflow-hidden"
+                    )}
+                >
+                    <AddressTab />
+                </div>
+
+                <div
+                    className={cn(
+                        !(zus.currentTab == "invoice" || !zus.currentTab) &&
+                            "opacity-0 h-0 z-0 w-0 overflow-hidden"
+                    )}
+                >
+                    {zus.sequence?.formItem?.map((uid) => (
+                        <ItemSection key={uid} uid={uid} />
+                    ))}
+                    <div className="flex mt-4 justify-end">
+                        <Button
+                            onClick={() => {
+                                zhAddItem();
+                            }}
+                        >
+                            <Icons.add className="w-4 h-4 mr-2" />
+                            <span>Add</span>
+                        </Button>
+                    </div>
+                </div>
             </div>
             <FormFooter />
         </div>

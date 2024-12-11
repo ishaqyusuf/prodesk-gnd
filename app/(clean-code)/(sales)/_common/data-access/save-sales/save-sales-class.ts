@@ -17,6 +17,11 @@ export interface SaverData {
     };
     sales?: { id?; data?; updateId? };
     deleteStacks?: { ids; priority }[];
+    tax?: {
+        id?;
+        data?;
+        updateId?;
+    };
     items?: {
         id?;
         data?;
@@ -52,6 +57,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             prisma.dykeStepForm as any,
             prisma.housePackageTools as any,
             prisma.dykeSalesDoors as any,
+            prisma.salesTaxes,
         ][priority - 1];
     }
     public data: SaverData = {};
@@ -70,6 +76,7 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async execute() {
         await this.generateSalesForm();
         await this.generateItemsForm();
+        this.composeTax();
         await this.saveData();
     }
     public async saveData() {
@@ -155,7 +162,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         }, {});
     }
 
-    public createStack(formData, table, priority) {
+    public createStack(formData, priority) {
         const id = formData.id;
         const isUpdate = !formData.data?.id;
         this.data.stacks.push({
@@ -168,16 +175,17 @@ export class SaveSalesClass extends SaveSalesHelper {
     public composeSaveStacks() {
         this.data.stacks = [];
         const data = this.data;
-        this.createStack(data.sales, prisma.salesOrders, 1);
+        this.createStack(data.sales, 1);
+        this.createStack(data.tax, 6);
         data.items.map((item) => {
-            this.createStack(item, prisma.salesOrderItems, 2);
+            this.createStack(item, 2);
             item.formValues?.map((fv) => {
-                this.createStack(fv, prisma.dykeStepForm, 3);
+                this.createStack(fv, 3);
             });
             if (item.hpt) {
-                this.createStack(item.hpt, prisma.housePackageTools, 4);
+                this.createStack(item.hpt, 4);
                 item.hpt.doors?.map((door) => {
-                    this.createStack(door, prisma.dykeSalesDoors, 5);
+                    this.createStack(door, 5);
                 });
             }
         });

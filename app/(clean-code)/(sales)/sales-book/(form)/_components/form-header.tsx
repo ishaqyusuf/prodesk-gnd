@@ -12,19 +12,14 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     const { isFixed, fixedOffset, containerRef } = sticky;
     const tabs = [
         { name: "invoice", title: "Invoice Builder", default: true },
-        { name: "info", title: "Sales Information" },
+        { name: "info", title: "Sales Info" },
+        { name: "address", title: "Address Info" },
     ];
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
     }
     async function save() {
-        const {
-            kvFormItem,
-            kvStepComponentList,
-            kvStepForm,
-            metaData,
-            sequence,
-        } = zus;
+        const { kvFormItem, kvStepForm, metaData, sequence } = zus;
         const resp = await saveFormUseCase(
             {
                 kvFormItem,

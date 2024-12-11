@@ -26,16 +26,6 @@ export function FormFooter() {
                 className="pb-16 flex flex-col gap-4"
                 ref={sticky.containerRef}
             >
-                <div className="flex mt-4 justify-end">
-                    <Button
-                        onClick={() => {
-                            zhAddItem();
-                        }}
-                    >
-                        <Icons.add className="w-4 h-4 mr-2" />
-                        <span>Add</span>
-                    </Button>
-                </div>
                 <div
                     style={
                         isFixed
@@ -59,7 +49,7 @@ export function FormFooter() {
                         "flex border-b items-center",
                         isFixed
                             ? "fixed sborder-2 border-muted-foreground/50 shadow-xl border-t  overflow-hidden srounded-full  bottom-0 bg-backgrounds z-10 h-12 px-4"
-                            : "justify-end"
+                            : "justify-end border-t"
                     )}
                 >
                     <div className="flex-1 bg-background flex h-full">

@@ -364,6 +364,7 @@ export interface SalesFormFields {
             salesTaxId?: string;
             taxCode?: string;
             percentage: number;
+            title: string;
         };
         createdAt?;
         paymentTerm?: PaymentTerms;
@@ -475,7 +476,7 @@ export interface SalesFormFields {
     };
 }
 export interface SalesFormZusData extends SalesFormFields {
-    currentTab?: "invoice" | "info";
+    currentTab?: "invoice" | "info" | "address";
     setting: GetSalesBookForm["salesSetting"];
     // data: GetSalesBookForm;
     pricing: GetSalesBookForm["pricing"];
