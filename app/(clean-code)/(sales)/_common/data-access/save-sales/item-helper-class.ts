@@ -153,11 +153,11 @@ export class ItemHelperClass {
                 qty: 1,
                 meta,
                 value: step.value,
-                sales: {
-                    connect: {
-                        id: this.ctx.data.sales.id,
-                    },
-                },
+                // sales: {
+                //     connect: {
+                //         id: this.ctx.data.sales.id,
+                //     },
+                // },
             } satisfies Prisma.DykeStepFormUpdateInput;
             if (!step.stepFormId) {
                 const createData = {
