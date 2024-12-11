@@ -15,7 +15,7 @@ export interface SaverData {
         hptIds: number[];
         salesDoorIds: number[];
     };
-    sales?: { id?; data? };
+    sales?: { id?; data?; updateId? };
     deleteStacks?: { ids; priority }[];
     items?: {
         id?;
@@ -45,6 +45,7 @@ export type HptData = SaverData["items"][number]["hpt"];
 
 export class SaveSalesClass extends SaveSalesHelper {
     public getTable(priority) {
+        if (!priority) priority = 0;
         return [
             prisma.salesOrders as any,
             prisma.salesOrderItems as any,
@@ -74,9 +75,9 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async saveData() {
         this.composeSaveStacks();
         this.getUnusedIds();
-        // return;
         const data = Object.values(this.groupByPriorityAndId());
-        this.data.tx = data.map(({ create, update }) => ({ create, update }));
+        this.data.tx = data;
+        // return;
         // return data;
         const txs = [];
         this.data.deleteStacks
@@ -110,18 +111,14 @@ export class SaveSalesClass extends SaveSalesHelper {
                         );
                     });
             }
-            if (dt.create.length) {
-                const createManyData = dt.create
-                    .map((d) => d.data)
-                    .filter(Boolean);
-                if (createManyData.length) {
-                    const table = this.getTable(dt.priority);
-                    txs.push(
-                        table.createMany({
-                            data: createManyData,
-                        })
-                    );
-                }
+            const createManyData = dt.create.map((d) => d.data).filter(Boolean);
+            if (createManyData.length) {
+                const table = this.getTable(dt.priority);
+                txs.push(
+                    table.createMany({
+                        data: createManyData,
+                    })
+                );
             }
         });
         await prisma.$transaction(txs);
@@ -146,8 +143,10 @@ export class SaveSalesClass extends SaveSalesHelper {
                     priority: stack.priority,
                 };
             // stack.table[stack.pr]
+            if (stack.priority == 1) console.log(stack);
+
             const sd = { id: stack.updateId, data: stack.data };
-            if (stack.id) {
+            if (sd.id) {
                 acc[stack.priority].update.push(sd); // Group under 'update' if id exists
             } else {
                 acc[stack.priority].create.push(sd); // Group under 'create' if id is undefined
@@ -196,7 +195,10 @@ export class SaveSalesClass extends SaveSalesHelper {
                     id: saveData.id,
                 };
             } else {
-                this.data.sales = saveData;
+                this.data.sales = {
+                    ...saveData,
+                    updateId: saveData.id,
+                };
             }
         } else {
             this.data.sales = saveData;

@@ -41,11 +41,27 @@ export class SaveSalesHelper {
             amountDue: formatMoney(md.pricing.grandTotal - md.pricing.paid),
             paymentDueDate: null,
             goodUntil: this.convertDate(md.goodUntil),
+            tax: md.pricing.taxValue,
+            // taxes: md.pricing.taxId
+            //     ? {
+            //           connect: {
+            //               id: md.pricing.taxId as any,
+            //           },
+            //       }
+            //     : undefined,
+            isDyke: true,
+            type: md.type,
+            salesProfile: {
+                connect: {
+                    id: md.salesProfileId,
+                },
+            },
         } satisfies Prisma.SalesOrdersUpdateInput;
+
         if (md.type == "order") {
             updateData.paymentDueDate = this.paymentDueDate(md);
         }
-        if (form.metaData.id) {
+        if (md.id) {
             return {
                 data: updateData,
                 id: md.id,
@@ -54,20 +70,19 @@ export class SaveSalesHelper {
             const { orderId, createdAt, id } = await this.generateOrderId(
                 md.type
             );
+            // delete updateData.salesProfile;
+            const { salesProfile, ...rest } = updateData;
             const createData = {
-                ...updateData,
+                ...rest,
                 status: "",
                 orderId,
                 slug: orderId,
                 id,
                 createdAt,
                 isDyke: true,
-                salesRep: {
-                    connect: {
-                        id: md.salesRepId,
-                    },
-                },
-            } satisfies Prisma.SalesOrdersCreateInput;
+                salesRepId: md.salesRepId,
+                customerProfileId: md.salesProfileId,
+            } satisfies Prisma.SalesOrdersCreateManyInput;
             return {
                 id: createData.id,
                 data: createData,

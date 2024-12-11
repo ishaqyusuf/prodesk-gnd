@@ -360,7 +360,11 @@ export interface SalesFormFields {
         };
         paymentMethod: SalesPaymentOptions;
         pricing: PricingMetaData;
-        tax?: Taxes;
+        tax?: {
+            salesTaxId?: string;
+            taxCode?: string;
+            percentage: number;
+        };
         createdAt?;
         paymentTerm?: PaymentTerms;
         paymentDueDate?;

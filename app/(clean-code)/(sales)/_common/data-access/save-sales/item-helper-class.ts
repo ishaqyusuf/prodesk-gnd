@@ -206,12 +206,13 @@ export class ItemHelperClass {
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
             multiDyke: gf.primaryGroupItem,
+            // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
 
         if (!gf.meta.salesItemId) {
             const createData = {
                 ...updateData,
-                salesOrderId: this.ctx.data?.sales?.data?.id,
+                salesOrderId: this.ctx.data?.sales?.id,
                 id: this.ctx.nextId("itemId"),
             } satisfies Prisma.SalesOrderItemsCreateManyInput;
             this.itemData = {

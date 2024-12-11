@@ -55,7 +55,10 @@ export class ServiceClass extends GroupFormClass {
             itemIds: [uid],
             form: {
                 [uid]: {
-                    addon: "",
+                    pricing: {
+                        addon: "",
+                        customPrice: "",
+                    },
                     meta: {
                         description: "",
                         produceable: false,

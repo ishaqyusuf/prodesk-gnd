@@ -77,6 +77,7 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
     const selection: (Pick<SalesTaxes, "taxCode" | "tax" | "deletedAt"> & {
         title: string;
         percentage;
+        salesTaxId?: string;
     })[] = [];
     const taxCostsByCode: { [code in string]: number } = {};
     // console.log(taxList);
@@ -99,6 +100,7 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
             };
             if (selected || isDefault) {
                 selection.push({
+                    salesTaxId: tx?.id,
                     tax: tx?.tax,
                     taxCode: tl?.taxCode,
                     deletedAt: tx?.deletedAt,

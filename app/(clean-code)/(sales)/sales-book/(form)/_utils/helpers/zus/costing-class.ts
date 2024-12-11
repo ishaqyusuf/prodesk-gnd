@@ -126,7 +126,10 @@ export class CostingClass {
         };
         Object.entries(groupItem?.form).map(([uid, formData]) => {
             console.log(formData);
-
+            // if (!formData.pricing)
+            //     formData.pricing = {
+            //         addon: "",
+            //     };
             const qty = sum([formData.qty.lh, formData.qty.rh]);
             if (!formData.qty?.total || (qty && qty != formData.qty?.total))
                 formData.qty.total = qty;
@@ -212,10 +215,13 @@ export class CostingClass {
     }
     public taxCodeChanged() {
         const taxProfile = this.taxList().find(
-            (tax) =>
-                tax.taxCode == this.setting.dotGet("metaData.pricing.taxCode")
+            (tax) => tax.taxCode == this.setting.dotGet("metaData.tax.taxCode")
         );
-        this.setting?.zus.dotUpdate("metaData.tax", taxProfile);
+        this.setting?.zus.dotUpdate("metaData.tax.taxCode", taxProfile.taxCode);
+        this.setting?.zus.dotUpdate(
+            "metaData.tax.percentage",
+            taxProfile.percentage
+        );
         this.calculateTotalPrice();
     }
 }

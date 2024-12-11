@@ -45,7 +45,7 @@ export function FormDataPage({}) {
                 </div>
                 <Select
                     label="Tax Profile"
-                    name="metaData.pricing.taxCode"
+                    name="metaData.tax.taxCode"
                     options={taxList}
                     titleKey="title"
                     valueKey="taxCode"
