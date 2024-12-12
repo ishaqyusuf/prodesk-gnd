@@ -217,28 +217,27 @@ model CommunityModelCost {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Customers {
-    id             Int     @unique @default(autoincrement())
+    id             Int             @unique @default(autoincrement())
     addressId      Int?
     customerTypeId Int?
-    slug           String? @unique @db.VarChar(255)
-    walletId       Int?    @unique
-    name           String  @db.VarChar(255)
-    businessName   String? @db.VarChar(255)
-    email          String? @db.VarChar(255)
-    phoneNo        String? @db.VarChar(255)
-    phoneNo2       String? @db.VarChar(255)
-    address        String? @db.Text
-    meta           Json?   @db.Json
-
-    deletedAt    DateTime?       @db.Timestamp(0)
-    createdAt    DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt    DateTime?       @updatedAt
-    salesOrders  SalesOrders[]
-    profile      CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
-    addressBooks AddressBooks[]  @relation(name: "addressBooks")
-    payments     SalesPayments[] @relation()
-    wallet       CustomerWallet?
-    auth         DealerAuth?
+    slug           String?         @unique @db.VarChar(255)
+    walletId       Int?            @unique
+    name           String          @db.VarChar(255)
+    businessName   String?         @db.VarChar(255)
+    email          String?         @db.VarChar(255)
+    phoneNo        String?         @db.VarChar(255)
+    phoneNo2       String?         @db.VarChar(255)
+    address        String?         @db.Text
+    meta           Json?           @db.Json
+    deletedAt      DateTime?       @db.Timestamp(0)
+    createdAt      DateTime?       @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime?       @updatedAt
+    salesOrders    SalesOrders[]
+    profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
+    addressBooks   AddressBooks[]  @relation(name: "addressBooks")
+    payments       SalesPayments[] @relation()
+    wallet         CustomerWallet?
+    auth           DealerAuth?
 
     @@index([createdAt, deletedAt, name, email, phoneNo])
     @@index([customerTypeId])

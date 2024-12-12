@@ -267,10 +267,8 @@ export class SaveSalesClass extends SaveSalesHelper {
                 try {
                     const results = await Promise.all(
                         txs.map(async (ts, index) => {
-                            await timeout(index * 50);
-                            console.log(index);
+                            await timeout(index * 20);
                             const resp = await ts.tx;
-                            console.log(resp);
                             return resp;
                         })
                     );
@@ -279,7 +277,6 @@ export class SaveSalesClass extends SaveSalesHelper {
                     // console.log(index, ts.data);
                     throw error;
                 }
-                console.log(">>>>>");
             }) as any);
             // const transactions = await prisma.$transaction(
             //     txs,

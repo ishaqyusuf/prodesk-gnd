@@ -10,9 +10,8 @@ import { SaveSalesClass } from "./save-sales-class";
 import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/lib/use-number";
 import { isEqual, isNaN } from "lodash";
-import { nextId } from "@/lib/nextId";
 import { prisma } from "@/db";
-import { isDay, isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
+import { isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -42,13 +41,6 @@ export class SaveSalesHelper {
             paymentDueDate: null,
             goodUntil: this.convertDate(md.goodUntil),
             tax: md.pricing.taxValue,
-            // taxes: md.pricing.taxId
-            //     ? {
-            //           connect: {
-            //               id: md.pricing.taxId as any,
-            //           },
-            //       }
-            //     : undefined,
             isDyke: true,
             type: md.type,
             salesProfile: md.salesProfileId

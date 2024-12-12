@@ -6,6 +6,7 @@ import SalesStat from "./sales-stat";
 import DevOnly from "@/_v2/components/common/dev-only";
 import HtpDoors from "./hpt-doors";
 import DoorPriceHarvest from "./door-price-harvest";
+import Customers from "./customers";
 
 export default function BackwardCompat({}) {
     return (
@@ -15,6 +16,7 @@ export default function BackwardCompat({}) {
                     <SalesStat />
                     <HtpDoors />
                     <DoorPriceHarvest />
+                    <Customers />
                 </Menu>
             </Portal>
         </DevOnly>
