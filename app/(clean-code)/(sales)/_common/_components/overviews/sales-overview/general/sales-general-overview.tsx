@@ -26,7 +26,7 @@ export function SalesGeneralOverview({}) {
                                 <Link
                                     href={
                                         item.isDyke
-                                            ? `/sales-v2/form/${item.type}/${item.orderId}`
+                                            ? `/sales-book/edit-${item.type}/${item.orderId}`
                                             : `/sales/edit/${item.type}/${item.orderId}`
                                     }
                                     className="inline-flex gap-2"

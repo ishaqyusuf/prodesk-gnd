@@ -237,7 +237,8 @@ export async function salesStatUpgrade() {
         sale.itemGroup.map((grp) => {
             grp?.items?.map((item) => {
                 // const analytics = item.analytics
-                const { pending, success, produceable } = item.analytics || {};
+                const { pending, success, control } = item.analytics || {};
+
                 statData.deliverable += sum([
                     pending.delivery?.total,
                     success?.delivery?.total,
@@ -308,7 +309,7 @@ export async function salesStatUpgrade() {
                             rhQty: pending.assignment.rh,
                             qtyAssigned: pending.assignment.total,
                             salesDoorId: item.doorItemId,
-                            produceable,
+                            produceable: control.produceable,
                         });
                     }
                 } else {
