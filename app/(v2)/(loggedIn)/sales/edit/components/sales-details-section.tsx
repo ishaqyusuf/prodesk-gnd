@@ -60,6 +60,12 @@ export default function SalesDetailsSection() {
                     name="meta.profileEstimate"
                 />
             </InfoLine>
+            <InfoLine label="P.O No">
+                <InputControl<ISalesForm>
+                    className="h-8 w-[150px] uppercase"
+                    name="meta.po"
+                />
+            </InfoLine>
             {ctx.isOrder && (
                 <>
                     <InfoLine label="Payment Term">
