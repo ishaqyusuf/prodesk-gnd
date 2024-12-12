@@ -3,7 +3,7 @@ import {
     ItemAssignment,
     ItemAssignmentSubmission,
     LineItem,
-} from "../components/item-vie/sales-items-overview";
+} from "../item-view/sales-items-overview";
 import { Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
 import { SecondaryTabSheet } from "@/components/(clean-code)/data-table/item-overview-sheet";
@@ -67,7 +67,7 @@ function Assignment({ assignment }: { assignment: ItemAssignment }) {
     async function deleteAssignment() {
         await deleteAssignmentUseCase(
             assignment.id,
-            item.analytics.produceable
+            item.analytics.control.produceable
         );
         toast.success("Deleted");
         mainCtx.refresh();
@@ -161,7 +161,7 @@ function AssignmentSubmissionLine({
     async function _deleteSubmission() {
         await deleteAssignmentSubmissionUseCase(
             submission.id,
-            ctx.item.analytics.produceable
+            ctx.item.analytics.control.produceable
         );
         toast.error("Deleted");
         ctx.mainCtx.refresh();

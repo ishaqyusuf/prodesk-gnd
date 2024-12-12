@@ -14,7 +14,7 @@ import {
     DispatchOverviewProvider,
 } from "./overview-provider";
 import { SalesGeneralOverview } from "./general/sales-general-overview";
-import { SalesItemsOverview } from "./components/item-vie/sales-items-overview";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ItemProdView } from "./production/item-prod-view";
 
@@ -27,6 +27,7 @@ import ActionFooter from "./action-footer";
 import NotificationTab from "./notification";
 import { SalesDispatchListDto } from "../../../data-access/dto/sales-shipping-dto";
 import { PaymentTab } from "./payments/payment-tab";
+import { SalesItemsOverview } from "./item-view/sales-items-overview";
 export function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInifinityDataTable();
     const item: SalesItemProp = selectedRow?.original as any;

@@ -36,25 +36,6 @@ export function SalesItemsOverview({}) {
                     className="text-sm sborder my-1.5 srounded-lg sshadow-sm group mx-4 sm:mx-8"
                     key={id}
                 >
-                    <SectionTitle title={grp.sectionTitle}>
-                        <div className="flex space-x-4 opacity-0 group-hover:opacity-100">
-                            {/* <Button size="sm" className="h-8" variant="outline">
-                                Production
-                            </Button> */}
-                            {grp.style?.length && (
-                                <Button
-                                    onClick={() => toggleDetail(id)}
-                                    size="sm"
-                                    className="h-8 "
-                                    variant={
-                                        showDetails[id] ? "ghost" : "default"
-                                    }
-                                >
-                                    {showDetails[id] ? "Hide" : "Components"}
-                                </Button>
-                            )}
-                        </div>
-                    </SectionTitle>
                     <Details show={showDetails[id]} group={grp} />
                     {grp.items.map((item, itemId) => (
                         <LineItem

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useSalesOverview } from "../overview-provider";
-import { ItemGroupType } from "../components/item-vie/sales-items-overview";
+import { ItemGroupType } from "../item-view/sales-items-overview";
 
 export function useItemProdViewContext() {
     const ctx = useSalesOverview();

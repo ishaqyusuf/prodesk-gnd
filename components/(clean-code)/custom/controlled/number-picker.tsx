@@ -5,6 +5,7 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 import { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
 interface Props<T> {
@@ -13,6 +14,7 @@ interface Props<T> {
     length;
     startIndex?: number;
     disabled?: boolean;
+    inline?: boolean;
 }
 export default function NumberPicker<
     TFieldValues extends FieldValues = FieldValues,
@@ -24,6 +26,7 @@ export default function NumberPicker<
     length,
     disabled,
     startIndex = 1,
+    inline,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> & Props<TOptionType>) {
     const inputs = Array(length)
@@ -33,31 +36,36 @@ export default function NumberPicker<
         <FormField
             {...(props as any)}
             render={({ field }) => (
-                <FormItem className="flex flex-col">
-                    <div className="flex items-center">
+                <FormItem
+                    className={cn(
+                        "flex",
+                        !inline ? "flex-col" : " items-center space-y-0 gap-2"
+                    )}
+                >
+                    <div className="flex items-center gap-2">
                         {label && <FormLabel>{label}</FormLabel>}
                         <div className="flex-1"></div>
 
                         <Button
                             disabled={field.value == null}
-                            variant="link"
+                            variant="outline"
                             size="sm"
                             onClick={() => {
                                 field.onChange(null);
                             }}
-                            className="h-7"
+                            className="h-8 font-mono uppercase"
                         >
                             Clear
                         </Button>
                     </div>
-                    <FormControl>
-                        <div className="flex gap-2s flex-wrap">
+                    <FormControl className="flex items-center">
+                        <div className="flex gap-2s flex-wrap items-center">
                             {disabled && !inputs.length ? (
                                 <Button disabled></Button>
                             ) : null}
                             {inputs.map((i) => (
                                 <Button
-                                    className="border-none rounded-none"
+                                    className="border-nones h-8 font-mono rounded-full text-xs font-bold"
                                     disabled={disabled}
                                     variant={
                                         (field.value || 0) >= i

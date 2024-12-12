@@ -1,5 +1,5 @@
 import Button from "@/components/common/button";
-import { ItemAssignment } from "../components/item-vie/sales-items-overview";
+import { ItemAssignment } from "../item-view/sales-items-overview";
 import { useForm } from "react-hook-form";
 import { useItemProdViewContext } from "./use-hooks";
 import { Form } from "@/components/ui/form";
@@ -11,7 +11,6 @@ import {
     AssignmentSubmitForm,
     submitAssignmentUseCase,
 } from "../../../../use-case/sales-prod.use-case";
-import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 
 interface Props {
     assignment: ItemAssignment;
@@ -39,7 +38,10 @@ export default function SubmitProductionForm({ assignment }: Props) {
             if (!data.lhQty && !data.qty && !data.rhQty)
                 throw Error("Select valid qty");
             if (item.hasSwing) data.qty = sum([data.lhQty, data.rhQty]);
-            await submitAssignmentUseCase(data, item.analytics.produceable);
+            await submitAssignmentUseCase(
+                data,
+                item.analytics.control.produceable
+            );
             toast.success("Submitted");
             mainCtx.refresh();
         } catch (error) {

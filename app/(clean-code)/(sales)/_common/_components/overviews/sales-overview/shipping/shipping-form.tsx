@@ -220,6 +220,7 @@ function ShippingItemLine({
                     >
                         {deliverableQty.lh || deliverableQty.qty ? (
                             <NumberPicker
+                                inline
                                 label={`Delivery Qty ${
                                     item.hasSwing ? "(LH)" : ""
                                 }`}
@@ -235,6 +236,7 @@ function ShippingItemLine({
                         )}
                         {deliverableQty.rh ? (
                             <NumberPicker
+                                inline
                                 label={`Delivery Qty ${
                                     item.hasSwing && "(RH)"
                                 }`}
