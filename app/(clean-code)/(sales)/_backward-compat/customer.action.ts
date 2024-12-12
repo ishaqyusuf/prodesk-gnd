@@ -13,32 +13,24 @@ export async function harvestCustomers() {
             name: true,
         },
     });
-    // group by phoneNo
-    // const groupedByPhoneNo = customers.reduce((acc, customer) => {
-    //     const phone = customer.phoneNo || "Unknown"; // Handle missing phoneNo
-    //     if (!acc[phone]) {
-    //         acc[phone] = [];
-    //     }
-    //     acc[phone].push(customer);
-    //     return acc;
-    // }, {});
     const grouped = customers.reduce((map, customer) => {
-        if (customer.phoneNo) {
-            if (!map.has(customer.phoneNo)) {
-                map.set(customer.phoneNo, []);
+        const trimmedPhone = customer.phoneNo?.trim();
+        if (trimmedPhone) {
+            if (!map.has(trimmedPhone)) {
+                map.set(trimmedPhone, []);
             }
-            map.get(customer.phoneNo).push(customer);
+            map.get(trimmedPhone).push(customer);
         }
         return map;
     }, new Map());
     const phoneWIthNames = {};
-    const filteredGroups = Array.from(grouped.entries());
-    filteredGroups
-        .filter(([phone, group]) => group.length > 1)
-        .map(([phone, group]) => {
-            phoneWIthNames[phone] = group.map((g) => g.name);
-            return group;
-        });
+    const filteredGroups = Array.from(grouped.entries()).filter(
+        ([phone, group]) => group.length > 1
+    );
+    filteredGroups.map(([phone, group]) => {
+        phoneWIthNames[phone] = group.map((g) => g.name);
+        return group;
+    });
     return { filteredGroups, phoneWIthNames };
 }
 export async function customerSynchronize(data) {

@@ -7,6 +7,7 @@ export default function Customers({}) {
     function woker() {
         harvestCustomers().then((list) => {
             console.log(list);
+            // return;
             chunker({
                 worker: customerSynchronize,
                 list: list.filteredGroups,
