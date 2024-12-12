@@ -22,6 +22,16 @@ export class SaveSalesHelper {
         const val = +md.paymentTerm?.toLowerCase()?.replace("net", null);
         return dayjs(md.createdAt).add(val, "days").toISOString();
     }
+    public createRel(newId, oldId) {
+        const resp: any = {};
+        if (oldId) {
+            if (oldId != newId && !newId) resp.disconnect = { id: oldId };
+        }
+        if (newId && newId != oldId) {
+            resp.connect = { id: newId };
+        }
+        return resp;
+    }
     public async composeSalesForm(form: SalesFormFields) {
         const md = form.metaData;
         const meta: Partial<SalesMeta> = {
@@ -33,6 +43,8 @@ export class SaveSalesHelper {
             payment_option: md.paymentMethod,
         };
         const sd = this.ctx.data;
+        console.log(sd);
+
         const updateData = {
             subTotal: md.pricing.subTotal,
             grandTotal: md.pricing.grandTotal,
@@ -52,37 +64,21 @@ export class SaveSalesHelper {
                       },
                   }
                 : undefined,
-            customer: {
-                connect: sd.customerId ? { id: sd.customerId } : undefined,
-                disconnect:
-                    md.cad != sd.customerId
-                        ? {
-                              id: md.cad,
-                          }
-                        : undefined,
-            },
-            billingAddress: {
-                connect: sd.billingAddressId
-                    ? { id: sd.billingAddressId }
-                    : undefined,
-                disconnect:
-                    md.bad != sd.billingAddressId
-                        ? {
-                              id: md.bad,
-                          }
-                        : undefined,
-            },
-            shippingAddress: {
-                connect: sd.shippingAddressId
-                    ? { id: sd.shippingAddressId }
-                    : undefined,
-                disconnect:
-                    md.sad != sd.shippingAddressId
-                        ? {
-                              id: md.sad,
-                          }
-                        : undefined,
-            },
+            customer: this.createRel(sd.customerId, md.cad),
+            billingAddress: this.createRel(sd.billingAddressId, md.bad),
+            shippingAddress: this.createRel(sd.shippingAddressId, md.sad),
+
+            // shippingAddress: {
+            //     connect: sd.shippingAddressId
+            //         ? { id: sd.shippingAddressId }
+            //         : undefined,
+            //     disconnect:
+            //         md.sad != sd.shippingAddressId
+            //             ? {
+            //                   id: md.sad,
+            //               }
+            //             : undefined,
+            // },
         } satisfies Prisma.SalesOrdersUpdateInput;
 
         if (md.type == "order") {

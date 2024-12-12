@@ -112,8 +112,8 @@ export class SaveSalesClass extends SaveSalesHelper {
         await this.generateSalesForm();
         await this.generateItemsForm();
         this.composeTax();
-        // await this.saveData();
-        await this.saveData2();
+        await this.saveData();
+        // await this.saveData2();
     }
     public async saveData() {
         this.composeSaveStacks();
@@ -160,6 +160,7 @@ export class SaveSalesClass extends SaveSalesHelper {
                             this.data.orderTxIndex++;
                             this.data.orderTxIndexFound = orderTx;
                         }
+
                         txs.push(
                             table?.update({
                                 where: {
@@ -356,6 +357,8 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async generateSalesForm() {
         const addrs = new AddressClass(this.ctx);
         await addrs.saveAddress();
+        console.log(this.ctx.data.customerId);
+
         const saveData = await this.composeSalesForm(this.form);
         // if (saveData.id) {
         //     // if (
@@ -375,6 +378,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         //     // }
         // } else {
         // if(saveData.id)
+        console.log(saveData);
 
         this.data.sales = saveData;
         // }

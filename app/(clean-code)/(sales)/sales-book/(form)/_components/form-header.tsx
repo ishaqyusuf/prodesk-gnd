@@ -44,6 +44,8 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             },
             zus.oldFormState
         );
+        console.log(resp);
+
         await refetchData();
         // if(resp.redirectTo)
         if (resp.data?.error) toast.error(resp.data?.error);
