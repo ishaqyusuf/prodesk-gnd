@@ -19,6 +19,9 @@ export interface SaverData {
         salesDoorIds: number[];
     };
     sales?: { id?; data?; updateId? };
+    customerId?;
+    billingAddressId?;
+    shippingAddressId?;
     deleteStacks?: { ids; priority }[];
     orderTxIndex: number;
     orderTxIndexFound?: boolean;

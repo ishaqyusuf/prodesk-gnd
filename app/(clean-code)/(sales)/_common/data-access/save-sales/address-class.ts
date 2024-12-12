@@ -2,13 +2,14 @@ import { isEqual } from "lodash";
 import { SaveSalesClass } from "./save-sales-class";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/db";
+import { AddressBookMeta } from "../../../types";
 export class AddressClass {
     constructor(public ctx: SaveSalesClass) {}
 
     public async saveAddress() {
         const data = this.checkAddressUpdate();
         if (data) {
-            const { billing, shipping, samesAddress, customer } = data;
+            const { billing, shipping, sameAddress, customer } = data;
             const customerData: Prisma.CustomersCreateManyInput = {
                 name: billing.name,
                 businessName: customer.businessName,
@@ -19,37 +20,90 @@ export class AddressClass {
             Object.entries(customerData).map(([k, v]) => {
                 if (!v) delete customerData[k];
             });
-            // const _customer = await prisma.customers.upsert({
-            //     where: {
-            //         phoneNo: customerData.phoneNo,
-            //     },
-            //     create: customerData,
-            //     update: customerData,
-            // });
-            //
+            if (Object.keys(customerData).length == 0) {
+                return;
+            }
+            const _customer = await prisma.customers.upsert({
+                where: {
+                    phoneNo: customerData.phoneNo,
+                },
+                create: customerData,
+                update: customerData,
+            });
+            const customerChanged = _customer.id != customer.id;
+            if (customerChanged) this.ctx.data.customerId = _customer.id;
+            await this.__saveAddress(billing, "billing");
+            await this.__saveAddress(shipping, "shipping");
         }
+    }
+    public get customerId() {
+        return this.ctx.data.customerId || this.ctx.form.metaData.customer.id;
+    }
+    public async __saveAddress(billing, address: "billing" | "shipping") {
+        if (this.sameAddress && address == "shipping") return;
+        const meta = {
+            zip_code: billing.zipCode,
+        } as AddressBookMeta;
+        const _billingData = {
+            address1: billing.address1,
+            phoneNo: billing.primaryPhone,
+            phoneNo2: billing.secondaryPhone,
+            city: billing.city,
+            state: billing.state,
+            meta: meta as any,
+            name: billing.name,
+            email: billing.email,
+            customer: this.customerId
+                ? {
+                      connect: { id: this.customerId },
+                  }
+                : undefined,
+        } satisfies Prisma.AddressBooksUpdateInput;
+        if (billing.id) {
+            const b = await prisma.addressBooks.update({
+                where: { id: billing.id },
+                data: {
+                    ..._billingData,
+                },
+            });
+            this.ctx.data[`${address}AddressId`] = b.id;
+            if (this.sameAddress && address == "billing")
+                this.ctx.data.shippingAddressId = b.id;
+        } else {
+            const b = await prisma.addressBooks.create({
+                data: {
+                    ..._billingData,
+                },
+            });
+            this.ctx.data[`${address}AddressId`] = b.id;
+            if (this.sameAddress && address == "billing")
+                this.ctx.data.shippingAddressId = b.id;
+        }
+    }
+    public get sameAddress() {
+        return this.ctx.form.metaData.sameAddress;
     }
     public checkAddressUpdate() {
         const oldForm = this.ctx.oldFormState.metaData;
         const form = this.ctx.form.metaData;
-        const { billing, shipping, samesAddress, customer } = form;
+        const { billing, shipping, sameAddress, customer } = form;
         if (
             !isEqual(
                 {
                     billing,
                     shipping,
-                    samesAddress,
+                    sameAddress,
                     customer,
                 },
                 {
                     billing: oldForm.billing,
                     shipping: oldForm.shipping,
-                    samesAddress: oldForm.samesAddress,
+                    sameAddress: oldForm.sameAddress,
                     customer: oldForm.customer,
                 }
             )
         ) {
-            return { billing, shipping, samesAddress, customer };
+            return { billing, shipping, sameAddress, customer };
         }
         return null;
         // const billing = form.metaData.billing;

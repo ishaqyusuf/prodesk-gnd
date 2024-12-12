@@ -12,6 +12,7 @@ import { formatMoney } from "@/lib/use-number";
 import { isEqual, isNaN } from "lodash";
 import { prisma } from "@/db";
 import { isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
+import { AddressClass } from "./address-class";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -22,6 +23,8 @@ export class SaveSalesHelper {
         return dayjs(md.createdAt).add(val, "days").toISOString();
     }
     public async composeSalesForm(form: SalesFormFields) {
+        const addrs = new AddressClass(this.ctx);
+        await addrs.saveAddress();
         const md = form.metaData;
         const meta: Partial<SalesMeta> = {
             ccc: md.pricing.ccc,
@@ -31,6 +34,7 @@ export class SaveSalesHelper {
             qb: md.qb,
             payment_option: md.paymentMethod,
         };
+        const sd = this.ctx.data;
         const updateData = {
             subTotal: md.pricing.subTotal,
             grandTotal: md.pricing.grandTotal,
@@ -47,6 +51,41 @@ export class SaveSalesHelper {
                 ? {
                       connect: {
                           id: md.salesProfileId,
+                      },
+                  }
+                : undefined,
+            customer: sd.customerId
+                ? {
+                      connect: {
+                          id: sd.customerId,
+                      },
+                  }
+                : md.cad
+                ? {
+                      disconnect: {
+                          id: md.cad,
+                      },
+                  }
+                : undefined,
+            billingAddress: sd.billingAddressId
+                ? {
+                      connect: { id: sd.billingAddressId },
+                  }
+                : md.bad
+                ? {
+                      disconnect: {
+                          id: md.bad,
+                      },
+                  }
+                : undefined,
+            shippingAddress: sd.shippingAddressId
+                ? {
+                      connect: { id: sd.shippingAddressId },
+                  }
+                : md.sad
+                ? {
+                      disconnect: {
+                          id: md.sad,
                       },
                   }
                 : undefined,

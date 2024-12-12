@@ -107,7 +107,7 @@ function AddressForm({ addressType }) {
     const zus = useFormDataStore();
 
     const isShipping = addressType == "shipping";
-    const sameAddress = zus.metaData?.samesAddress;
+    const sameAddress = zus.metaData?.sameAddress;
     const isBusiness = zus.metaData?.customer?.isBusiness;
     const namePrefix = isShipping && sameAddress ? "billing" : addressType;
     const disabled = isShipping && sameAddress;
@@ -121,7 +121,7 @@ function AddressForm({ addressType }) {
                     {isShipping ? (
                         <>
                             <Label>Same as Billing</Label>
-                            <LineSwitch name="metaData.samesAddress" />
+                            <LineSwitch name="metaData.sameAddress" />
                         </>
                     ) : (
                         <>

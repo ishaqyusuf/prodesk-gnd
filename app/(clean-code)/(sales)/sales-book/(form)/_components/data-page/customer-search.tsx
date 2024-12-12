@@ -30,7 +30,7 @@ export function CustomerSearch({ addressType }) {
     const [open, setOpen] = useState(false);
     const [result, setResult] = useState<AddressSearchType[]>([]);
     const zus = useFormDataStore();
-    const disabled = addressType == "shipping" && zus.metaData.samesAddress;
+    const disabled = addressType == "shipping" && zus.metaData.sameAddress;
     function selectAddress(address) {
         setOpen(false);
         getAddressFormUseCase(address.id).then((response) => {

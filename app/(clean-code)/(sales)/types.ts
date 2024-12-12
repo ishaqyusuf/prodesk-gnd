@@ -347,7 +347,7 @@ export interface SalesFormFields {
         salesMultiplier?: number;
         qb?: string;
         po?: string;
-        samesAddress?: boolean;
+        sameAddress?: boolean;
         deliveryMode: DeliveryOption;
         billing?: AddressForm;
         shipping?: AddressForm;
@@ -358,6 +358,9 @@ export interface SalesFormFields {
             phone?: string;
             isBusiness?: boolean;
         };
+        cad?: number;
+        bad?: number;
+        sad?: number;
         paymentMethod: SalesPaymentOptions;
         pricing: PricingMetaData;
         tax?: {
