@@ -138,7 +138,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
         );
         if (breakPointIndex < 0) breakPointIndex = data.items.length;
         //     -1;
-        console.log({ breakPointIndex });
+        // console.log({ breakPointIndex });
 
         function filterGroup(_item: Item, itemIndex) {
             if (data.isDyke)
