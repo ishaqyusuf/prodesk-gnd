@@ -133,9 +133,13 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
         );
-        const breakPointIndex = data.items.findIndex(
+        let breakPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex + 1]?.id
         );
+        if (breakPointIndex < 0) breakPointIndex = data.items.length;
+        //     -1;
+        console.log({ breakPointIndex });
+
         function filterGroup(_item: Item, itemIndex) {
             if (data.isDyke)
                 return (
@@ -152,6 +156,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
         }
 
         const groupedItems = data.items.filter(filterGroup);
+        console.log(groupedItems);
 
         const items: LineItemOverview[] = [];
         groupedItems?.map((gItem) => {
