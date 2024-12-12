@@ -2,6 +2,59 @@
 
 import { prisma } from "@/db";
 
+export async function uniqueables() {
+    const customers = await prisma.customers.findMany({
+        where: {},
+        select: {
+            id: true,
+            phoneNo: true,
+            phoneNo2: true,
+        },
+    });
+    const fakePhones = customers.filter((s) => s.phoneNo?.trim()?.length < 5);
+    await Promise.all(
+        fakePhones.map(async (ff) => {
+            await prisma.customers.updateMany({
+                where: { id: ff.id },
+                data: {
+                    phoneNo: null,
+                    phoneNo2: ff.phoneNo2 || ff.phoneNo,
+                },
+            });
+        })
+    );
+    return fakePhones;
+
+    return await prisma.customers.findMany({
+        where: {
+            uniquePhone: null,
+            phoneNo: {
+                not: null,
+            },
+            // phoneNo: "786-443-5066",
+        },
+        select: {
+            id: true,
+            phoneNo: true,
+        },
+    });
+}
+export async function updateUniques(data) {
+    await Promise.all(
+        data.map(async (d) => {
+            try {
+                await prisma.customers.update({
+                    where: { id: d.id },
+                    data: {
+                        uniquePhone: d.phoneNo,
+                    },
+                });
+            } catch (error) {
+                console.log(d);
+            }
+        })
+    );
+}
 export async function harvestCustomers() {
     const customers = await prisma.customers.findMany({
         where: {},

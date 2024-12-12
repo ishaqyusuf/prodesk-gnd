@@ -225,9 +225,8 @@ model Customers {
     name           String          @db.VarChar(255)
     businessName   String?         @db.VarChar(255)
     email          String?         @db.VarChar(255)
-    phoneNo        String?         @db.VarChar(255)
+    phoneNo        String?         @unique @db.VarChar(255)
     accountNo      String?         @unique @db.VarChar(255)
-    uniquePhone    String?         @unique @db.VarChar(255)
     phoneNo2       String?         @db.VarChar(255)
     address        String?         @db.Text
     meta           Json?           @db.Json
