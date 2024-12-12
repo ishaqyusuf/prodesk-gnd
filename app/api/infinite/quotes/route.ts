@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     const _ = {
         // ...Object.fromEntries(_search as any),
         // pk: generateRandomString(),
-        "sales.type": "order",
+        "sales.type": "quote",
     } as SearchParamsType;
     const search = searchParamsCache.parse(_ as any);
 
