@@ -42,7 +42,7 @@ export function Input({ name, label, ...props }: LineInputProps & InputProps) {
             <BaseInput
                 {...props}
                 className={cn("h-8", props.className)}
-                defaultValue={value as any}
+                value={value as any}
                 onChange={(e) => {
                     state.dotUpdate(
                         name,

@@ -222,7 +222,7 @@ model Customers {
     customerTypeId Int?
     slug           String?         @unique @db.VarChar(255)
     walletId       Int?            @unique
-    name           String          @db.VarChar(255)
+    name           String?         @db.VarChar(255)
     businessName   String?         @db.VarChar(255)
     email          String?         @db.VarChar(255)
     phoneNo        String?         @unique @db.VarChar(255)

@@ -8,6 +8,7 @@ import { ItemHelperClass } from "./item-helper-class";
 import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { timeout } from "@/lib/timeout";
+import { AddressClass } from "./address-class";
 
 export interface SaverData {
     tx?;
@@ -353,26 +354,30 @@ export class SaveSalesClass extends SaveSalesHelper {
         return this.data.sales?.id || this.data.sales?.updateId;
     }
     public async generateSalesForm() {
+        const addrs = new AddressClass(this.ctx);
+        await addrs.saveAddress();
         const saveData = await this.composeSalesForm(this.form);
-        if (saveData.id) {
-            if (
-                this.compare(
-                    saveData,
-                    await this.composeSalesForm(this.oldFormState)
-                )
-            ) {
-                this.data.sales = {
-                    id: saveData.id,
-                };
-            } else {
-                this.data.sales = {
-                    ...saveData,
-                    updateId: saveData.id,
-                };
-            }
-        } else {
-            this.data.sales = saveData;
-        }
+        // if (saveData.id) {
+        //     // if (
+        //     //     this.compare(
+        //     //         saveData,
+        //     //         await this.composeSalesForm(this.oldFormState)
+        //     //     )
+        //     // ) {
+        //         // this.data.sales = {
+        //         //     id: saveData.id,
+        //         // };
+        //     } else {
+        //         this.data.sales = {
+        //             ...saveData,
+        //             updateId: saveData.id,
+        //         };
+        //     // }
+        // } else {
+        // if(saveData.id)
+
+        this.data.sales = saveData;
+        // }
     }
     public nextIds = {
         itemId: null,

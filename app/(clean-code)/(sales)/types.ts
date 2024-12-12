@@ -311,7 +311,7 @@ export type StepMeta = {
         widthList?: string[];
     }[];
 };
-interface AddressForm {
+export interface AddressForm {
     id?: number;
     name: string;
     email: string;

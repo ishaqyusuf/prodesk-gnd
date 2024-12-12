@@ -19,7 +19,10 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { Search, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFormDataStore } from "../../_common/_stores/form-data-store";
-import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
+import {
+    AddressForm,
+    SalesFormZusData,
+} from "@/app/(clean-code)/(sales)/types";
 
 interface Props {
     addressType: string;
@@ -34,23 +37,25 @@ export function CustomerSearch({ addressType }) {
     function selectAddress(address) {
         setOpen(false);
         getAddressFormUseCase(address.id).then((response) => {
+            console.log({ response, addressType });
+
             zus.dotUpdate(
                 `metaData.${addressType}` as any,
                 {
                     address1: response.address1,
                     city: response.city,
-                    email: response.email,
-                    name: response.name,
-                    primaryPhone: response.phoneNo,
-                    secondaryPhone: response.phoneNo2,
-                    state: response.state,
-                    zipCode: response.meta?.zip_code,
+                    email: response.email || "",
+                    name: response.name || "",
+                    primaryPhone: response.phoneNo || "",
+                    secondaryPhone: response.phoneNo2 || "",
+                    state: response.state || "",
+                    zipCode: response.meta?.zip_code || "",
                     id: response.id,
-                } as SalesFormZusData["metaData"]["billing"]
+                } as AddressForm
             );
             zus.dotUpdate("metaData.customer", {
                 id: response?.customer?.id,
-                businessName: response?.customer?.businessName,
+                businessName: response?.customer?.businessName || "",
                 isBusiness: response?.customer?.businessName != null,
             });
         });

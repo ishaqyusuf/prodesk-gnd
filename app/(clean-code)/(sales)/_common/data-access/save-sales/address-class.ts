@@ -11,8 +11,11 @@ export class AddressClass {
         if (data) {
             const { billing, shipping, sameAddress, customer } = data;
             const customerData: Prisma.CustomersCreateManyInput = {
-                name: billing.name,
-                businessName: customer.businessName,
+                name: customer.isBusiness ? null : billing.name,
+                businessName: !customer.isBusiness
+                    ? null
+                    : customer.businessName,
+                // businessName: customer.businessName,
                 phoneNo: billing.primaryPhone,
                 phoneNo2: billing.secondaryPhone,
                 email: billing.email,
@@ -20,6 +23,7 @@ export class AddressClass {
             Object.entries(customerData).map(([k, v]) => {
                 if (!v) delete customerData[k];
             });
+
             if (Object.keys(customerData).length == 0) {
                 return;
             }
@@ -30,8 +34,14 @@ export class AddressClass {
                 create: customerData,
                 update: customerData,
             });
-            const customerChanged = _customer.id != customer.id;
-            if (customerChanged) this.ctx.data.customerId = _customer.id;
+            const customerChanged = _customer.id != this.ctx.form.metaData.cad;
+            if (customerChanged) {
+                this.ctx.data.customerId = _customer.id;
+                console.log({
+                    _customer,
+                    customer,
+                });
+            }
             await this.__saveAddress(billing, "billing");
             await this.__saveAddress(shipping, "shipping");
         }

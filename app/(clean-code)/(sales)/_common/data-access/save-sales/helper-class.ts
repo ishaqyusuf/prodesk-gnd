@@ -23,8 +23,6 @@ export class SaveSalesHelper {
         return dayjs(md.createdAt).add(val, "days").toISOString();
     }
     public async composeSalesForm(form: SalesFormFields) {
-        const addrs = new AddressClass(this.ctx);
-        await addrs.saveAddress();
         const md = form.metaData;
         const meta: Partial<SalesMeta> = {
             ccc: md.pricing.ccc,
@@ -54,50 +52,49 @@ export class SaveSalesHelper {
                       },
                   }
                 : undefined,
-            customer: sd.customerId
-                ? {
-                      connect: {
-                          id: sd.customerId,
-                      },
-                  }
-                : md.cad
-                ? {
-                      disconnect: {
-                          id: md.cad,
-                      },
-                  }
-                : undefined,
-            billingAddress: sd.billingAddressId
-                ? {
-                      connect: { id: sd.billingAddressId },
-                  }
-                : md.bad
-                ? {
-                      disconnect: {
-                          id: md.bad,
-                      },
-                  }
-                : undefined,
-            shippingAddress: sd.shippingAddressId
-                ? {
-                      connect: { id: sd.shippingAddressId },
-                  }
-                : md.sad
-                ? {
-                      disconnect: {
-                          id: md.sad,
-                      },
-                  }
-                : undefined,
+            customer: {
+                connect: sd.customerId ? { id: sd.customerId } : undefined,
+                disconnect:
+                    md.cad != sd.customerId
+                        ? {
+                              id: md.cad,
+                          }
+                        : undefined,
+            },
+            billingAddress: {
+                connect: sd.billingAddressId
+                    ? { id: sd.billingAddressId }
+                    : undefined,
+                disconnect:
+                    md.bad != sd.billingAddressId
+                        ? {
+                              id: md.bad,
+                          }
+                        : undefined,
+            },
+            shippingAddress: {
+                connect: sd.shippingAddressId
+                    ? { id: sd.shippingAddressId }
+                    : undefined,
+                disconnect:
+                    md.sad != sd.shippingAddressId
+                        ? {
+                              id: md.sad,
+                          }
+                        : undefined,
+            },
         } satisfies Prisma.SalesOrdersUpdateInput;
 
         if (md.type == "order") {
             updateData.paymentDueDate = this.paymentDueDate(md);
         }
         if (md.id) {
+            console.log(updateData);
+
             return {
                 data: updateData,
                 id: md.id,
+                updateId: md.id,
             };
         } else {
             const gord = await this.generateOrderId(md.type);
