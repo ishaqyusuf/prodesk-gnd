@@ -1,7 +1,5 @@
-import { Menu } from "@/components/(clean-code)/menu";
 import { useSalesOverview } from "../overview-provider";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
-import { Progress } from "@/components/(clean-code)/progress";
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Label } from "@/components/ui/label";
 import { SalesItemStatus } from "../sales-item-status";
@@ -26,7 +24,11 @@ export function SalesGeneralOverview({}) {
                                 asChild
                             >
                                 <Link
-                                    href={`/sales-v2/form/${item.type}/${item.orderId}`}
+                                    href={
+                                        item.isDyke
+                                            ? `/sales-v2/form/${item.type}/${item.orderId}`
+                                            : `/sales/edit/${item.type}/${item.orderId}`
+                                    }
                                     className="inline-flex gap-2"
                                     target="_blank"
                                 >

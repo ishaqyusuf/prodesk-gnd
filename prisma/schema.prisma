@@ -1159,6 +1159,7 @@ model SalesOrders {
     requests     DealerSalesRequest[]
     stat         SalesStat[]
     salesProfile CustomerTypes?       @relation(fields: [customerProfileId], references: [id])
+    itemControls SalesItemControl[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerProfileId])
@@ -1283,6 +1284,17 @@ model SalesOrderItems {
 
     @@index([createdAt, description, swing])
     @@index([salesOrderId], name: "idx_SalesOrderItems_on_salesOrderId")
+}
+
+model SalesItemControl {
+    uid         String       @unique // item-1, door-234
+    salesId     Int
+    produceable Boolean?
+    shippable   Boolean?
+    sales       SalesOrders? @relation(fields: [salesId], references: [id])
+
+    @@index([salesId])
+    @@index([uid])
 }
 
 // model OrderDeliveryProgress {
