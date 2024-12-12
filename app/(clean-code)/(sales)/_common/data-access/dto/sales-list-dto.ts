@@ -14,6 +14,7 @@ export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
     return {
         ...commonListData(data),
+
         stats: statToKeyValueDto(data.stat),
         status: overallStatus(data.stat),
         addressData: {
@@ -51,7 +52,7 @@ function commonListData(data: Item) {
     const meta = (data.meta || {}) as any as SalesMeta;
     return {
         id: data.id,
-        orderId: data.orderId,
+        orderId: data.orderId?.toUpperCase(),
         uuid: data.orderId,
         isDyke: data.isDyke,
         slug: data.slug,

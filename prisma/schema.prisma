@@ -49,6 +49,7 @@ model AddressBooks {
 
     @@index([createdAt, deletedAt, name, address1])
     @@index([customerId])
+    @@index([phoneNo])
 }
 
 model ErrorLog {
@@ -241,6 +242,7 @@ model Customers {
 
     @@index([createdAt, deletedAt, name, email, phoneNo])
     @@index([customerTypeId])
+    @@index([phoneNo])
 }
 
 model DealerAuth {

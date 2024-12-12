@@ -47,6 +47,7 @@ export async function getCustomersAction(query: IGetCustomerActionQuery) {
         orderBy: {
             name: "asc",
         },
+        distinct: ["phoneNo"],
         include: {
             profile: true,
             addressBooks: true,
@@ -152,10 +153,7 @@ export async function getCustomerAction(id) {
     customer._count.completedOrders = _customer.salesOrders?.filter(
         (s) => s.prodStatus == "Completed"
     ).length;
-    // customer.salesOrders = customer.salesOrders;
-    // .slice(
-    //   customer.salesOrders.length - 5
-    // );
+
     return { customer };
 }
 
