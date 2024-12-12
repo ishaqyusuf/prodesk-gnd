@@ -45,9 +45,7 @@ export async function updateUniques(data) {
             try {
                 await prisma.customers.update({
                     where: { id: d.id },
-                    data: {
-                        uniquePhone: d.phoneNo,
-                    },
+                    data: {},
                 });
             } catch (error) {
                 console.log(d);
