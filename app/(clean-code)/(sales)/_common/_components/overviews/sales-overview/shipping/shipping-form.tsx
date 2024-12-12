@@ -108,6 +108,14 @@ export function ShippingForm({}) {
                             </div>
                             <div className="flex-1"></div>
                             <Button
+                                onClick={() => {
+                                    ctx.mainCtx.refresh();
+                                }}
+                                size="sm"
+                            >
+                                Refresh
+                            </Button>
+                            <Button
                                 onClick={toggleAllAvailble}
                                 size="sm"
                                 variant={watchToggle ? "secondary" : "ghost"}
@@ -172,7 +180,9 @@ function ShippingItemLine({
             >
                 <div className="flex w-full justify-start text-start">
                     <div className="flex-col space-y-2">
-                        <span className="text-sm">{item.title}</span>
+                        <span className="text-sm uppercase font-mono">
+                            {item.title}
+                        </span>
                         <div>
                             <Badge variant="secondary" className="font-mono">
                                 Fulfilled: {item.totalDelivered}

@@ -91,7 +91,7 @@ export function useInitContext(cls: ComponentHelperClass) {
                 if (!data.qty.total && s) {
                     data.qty.total = s;
                 }
-                console.log(data);
+
                 const selected = !data.qty.total == false;
                 if (selected && !clear) {
                     groupItem.itemIds.push(uid);

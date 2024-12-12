@@ -71,8 +71,7 @@ export class SaveSalesHelper {
         } else {
             const gord = await this.generateOrderId(md.type);
             const { orderId, createdAt, id } = gord;
-            console.log(gord);
-            // delete updateData.salesProfile;
+
             const { salesProfile, ...rest } = updateData;
             const createData = {
                 ...rest,

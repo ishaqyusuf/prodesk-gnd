@@ -9,6 +9,7 @@ import { salesItemAssignmentsDto } from "./sales-item-assignment-dto";
 import { salesItemsStatsDto } from "./sales-stat-dto";
 import { deliveryBreakdownDto } from "./sales-shipping-dto";
 import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
+import { SalesItemControl } from "@prisma/client";
 
 interface Pill {
     label?: string;
@@ -58,7 +59,7 @@ export interface LineItemOverview {
     analytics?: {
         success: Analytics;
         pending: Analytics;
-        produceable: boolean;
+        control: SalesItemControl;
         deliveryBreakdown: DeliveryBreakdown;
         info?: {
             title;
@@ -115,6 +116,19 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
     }
     data.items = data.items?.sort(sortSalesItems);
     const filteredItems = data.items.filter(filter);
+    function itemControl(
+        uid,
+        def: { produceable: boolean; shippable: boolean }
+    ) {
+        let control = data.itemControls?.find((c) => c.uid == uid);
+        if (!control)
+            control = {
+                ...def,
+                uid,
+                salesId: data.id,
+            };
+        return control;
+    }
     const itemGroup = filteredItems.map((item, fItemIndex) => {
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
@@ -141,9 +155,15 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
 
         const items: LineItemOverview[] = [];
         groupedItems?.map((gItem) => {
-            const { doors, door, molding, doorType } =
-                gItem?.housePackageTool || {};
-            if (doors?.length && door) {
+            const {
+                doors,
+                door: od,
+                molding,
+                doorType,
+            } = gItem?.housePackageTool || {};
+            const doorTitle =
+                od?.title || gItem?.housePackageTool?.stepProduct?.door?.title;
+            if (doors?.length) {
                 doors?.map((_door) => {
                     const pills = [
                         createTextPill(
@@ -155,6 +175,11 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     let _totalQty;
                     let totalQty: Qty = {};
                     const isBifold = doorType == "Bifold";
+                    const controlUid = `door-${_door.id}-${_door.dimension}`;
+                    const control = itemControl(controlUid, {
+                        produceable: true,
+                        shippable: true,
+                    });
                     if (isBifold) {
                         pills.push(
                             createTextPill(
@@ -213,7 +238,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                                 orderId: data.id,
                                 salesItemId: gItem.id,
                                 doorItemId: _door.id,
-                                title: door.title,
+                                title: doorTitle,
                                 totalQty,
                                 rate: _door.unitPrice,
                                 total: _door.lineTotal,
@@ -221,6 +246,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                             },
                             _door.productions,
                             {
+                                control,
                                 deliveries: data.deliveries,
                                 isQuote,
                             }
@@ -228,6 +254,13 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     );
                 });
             } else if (molding) {
+                const control = itemControl(
+                    `molding-${gItem.id}-${molding.id}`,
+                    {
+                        produceable: false,
+                        shippable: true,
+                    }
+                );
                 const pills = [
                     createTextPill(`qty x ${gItem.qty}`, gItem.qty, "purple"),
                 ];
@@ -256,16 +289,20 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         },
                         gItem.assignments,
                         {
-                            produceable: false,
+                            control,
                             deliveries: data.deliveries,
                             isQuote,
                         }
                     )
                 );
             } else {
-                const prodDel =
+                const produceable =
                     gItem.dykeProduction ||
                     (!data.isDyke && gItem.swing != null);
+                const control = itemControl(`item-${gItem.id}`, {
+                    produceable,
+                    shippable: true,
+                });
                 items.push(
                     itemAnalytics(
                         {
@@ -295,8 +332,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         },
                         gItem.assignments,
                         {
-                            produceable: prodDel,
-                            deliverable: prodDel,
+                            control,
                             deliveries: data.deliveries,
                             isQuote,
                         }
@@ -324,23 +360,23 @@ function itemAnalytics(
     data: LineItemOverview,
     assignments: Assignments,
     {
-        produceable = true,
-        deliverable = true,
+        control,
         deliveries,
         isQuote,
-    }: { produceable?; deliverable?; deliveries?; isQuote?: boolean }
+    }: { control: SalesItemControl; deliveries?; isQuote?: boolean }
 ) {
     // produceable = true,
     // deliverable = true
-    if (isQuote) produceable = deliverable = false;
+    if (isQuote) control.produceable = control.shippable = false;
+    const { produceable, shippable: deliverable } = control;
     data.analytics = {
-        produceable,
+        control,
         success: {},
         pending: {},
         deliveryBreakdown: deliveryBreakdownDto(
             deliveries,
             assignments,
-            deliverable ? data.totalQty.total : 0
+            control.shippable ? data.totalQty.total : 0
         ),
     };
     if (!produceable) {
@@ -391,7 +427,7 @@ function itemAnalytics(
             assignment: produceable
                 ? qtyDiff(totalQty, analytics.success.assignment)
                 : {},
-            delivery: deliverable
+            delivery: !deliverable
                 ? {}
                 : qtyDiff(totalQty, analytics.success.delivery),
             production: produceable

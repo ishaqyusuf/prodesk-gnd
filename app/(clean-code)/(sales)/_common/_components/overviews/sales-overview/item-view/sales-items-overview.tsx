@@ -65,12 +65,12 @@ export function SalesItemsOverview({}) {
                                     ctx.tabData?.meta?.groupIndex == id &&
                                     ctx.tabData?.payloadSlug == itemId
                                     ? "bg-muted-foreground/10"
-                                    : item.analytics?.produceable
+                                    : item.analytics.control.produceable
                                     ? "hover:bg-muted-foreground/10 cursor-pointer"
                                     : null
                             )}
                             onClick={() => {
-                                if (item.analytics?.produceable)
+                                if (item.analytics.control.produceable)
                                     ctx.openItemTab(id, itemId);
                             }}
                             item={item}

@@ -54,6 +54,8 @@ export function salesShippingDto(
         ?.map((grp) => {
             return grp?.items?.map((item, uid) => {
                 const analytics = item.analytics;
+                // console.log(analytics);
+
                 const pendingDelivery = analytics.pending.delivery?.total;
                 const totalDelivered = analytics.success.delivery?.total;
                 const totalProd = analytics.success.production?.total || 0;
@@ -88,14 +90,14 @@ export function salesShippingDto(
                     })
                     .flat();
 
-                let deliverableQty = !analytics.produceable
+                let deliverableQty = !analytics.control.produceable
                     ? qtyDiff(
                           analytics.pending.delivery,
                           analytics.success.delivery,
                           true
                       )
                     : deliverableSubmissions[0]?.qty || {};
-
+                // console.log(deliverableQty);
                 deliverableSubmissions?.map((s, i) => {
                     if (i > 0)
                         deliverableQty = qtyDiff(deliverableQty, s, true);
@@ -185,6 +187,8 @@ export function deliveryBreakdownDto(
     assignments?: Assignments,
     totalDeliverables?
 ): DeliveryBreakdown {
+    console.log(totalDeliverables);
+
     const deliveryItems = assignments
         ? assignments
               ?.map((a) => a.submissions?.map((s) => s.itemDeliveries).flat())

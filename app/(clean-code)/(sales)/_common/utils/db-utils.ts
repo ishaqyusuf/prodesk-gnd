@@ -310,10 +310,16 @@ export const SalesOverviewIncludes = {
                         },
                     },
                     molding: excludeDeleted,
+                    stepProduct: {
+                        include: {
+                            door: true,
+                        },
+                    },
                 },
             },
         },
     },
+    itemControls: true,
     customer: excludeDeleted,
     shippingAddress: excludeDeleted,
     billingAddress: excludeDeleted,

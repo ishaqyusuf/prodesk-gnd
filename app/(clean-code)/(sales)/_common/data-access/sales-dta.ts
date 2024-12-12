@@ -86,7 +86,7 @@ export async function getFullSaleById(id) {
 export async function getFullSaleBySlugType(slug, type) {
     const sale = await prisma.salesOrders.findFirstOrThrow({
         where: {
-            slug,
+            OR: [{ slug }, { orderId: slug }],
             type,
         },
         include: SalesOverviewIncludes,

@@ -107,7 +107,6 @@ export class ItemHelperClass {
                     .map(([stepSizeUid, formData]) => {
                         const [_, ...dimensions] = stepSizeUid?.split("-");
                         const dimension = dimensions?.join("-");
-                        console.log(dimension);
 
                         const doorData: HptData["doors"][number] = {
                             id: formData.doorId,
@@ -137,6 +136,7 @@ export class ItemHelperClass {
                                 },
                             },
                         } satisfies Prisma.DykeSalesDoorsUpdateInput;
+
                         if (formData.doorId) {
                             doorData.data = updateDoor;
                         } else {

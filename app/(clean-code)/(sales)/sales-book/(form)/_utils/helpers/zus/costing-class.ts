@@ -1,5 +1,8 @@
 import { formatMoney } from "@/lib/use-number";
-import { ZusSales } from "../../../_common/_stores/form-data-store";
+import {
+    ZusGroupItem,
+    ZusSales,
+} from "../../../_common/_stores/form-data-store";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
 import { addPercentage, dotArray, percentageValue, sum } from "@/lib/utils";
@@ -48,10 +51,6 @@ export class CostingClass {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
-        console.log(
-            totalBasePrice,
-            itemForm?.groupItem?.pricing?.components?.basePrice
-        );
         if (
             ((totalBasePrice ||
                 itemForm?.groupItem?.pricing?.components?.basePrice) &&
@@ -77,46 +76,22 @@ export class CostingClass {
                 };
             else {
                 const ds = dotSet(groupItem);
-                // groupItem.pricing.components.basePrice = totalBasePrice;
-                // groupItem.pricing.components.salesPrice =
-                //     this.calculateSales(totalBasePrice);
-
                 ds.set("pricing.components.basePrice", totalBasePrice);
                 ds.set(
                     "pricing.components.salesPrice",
                     this.calculateSales(totalBasePrice)
                 );
             }
-            Object.entries(groupItem.form).map(([uid, formData]) => {
-                formData.pricing.itemPrice.salesPrice = this.calculateSales(
-                    formData.pricing.itemPrice.basePrice
-                );
-                formData.pricing.unitPrice = sum([
-                    groupItem.pricing.components.salesPrice,
-                    formData.pricing?.itemPrice?.salesPrice,
-                ]);
-            });
-            if (this.setting.staticZus) {
-                this.setting.staticZus.kvFormItem[itemUid].groupItem =
-                    groupItem;
-            } else {
-                this.setting.zus.dotUpdate(
-                    `kvFormItem.${itemUid}.groupItem`,
-                    groupItem
-                );
-            }
-            console.log(groupItem);
+            this.saveGroupItem(groupItem, itemUid);
             this.updateGroupedCost(itemUid);
             this.calculateTotalPrice();
         }
-        // this.calculateTotalPrice();
     }
     public updateGroupedCost(itemUid = this.setting.itemUid) {
         const data = this.setting.zus;
-        const staticData = this.setting.staticZus;
+
         const itemForm = data.kvFormItem[itemUid];
         let groupItem = itemForm.groupItem;
-        console.log({ groupItem });
         if (!groupItem.pricing)
             groupItem.pricing = {
                 components: {
@@ -128,43 +103,54 @@ export class CostingClass {
                     salesPrice: 0,
                 },
             };
+        this.estimateGroupPricing(groupItem, itemUid);
+    }
+    public estimateGroupPricing(
+        groupItem: ZusGroupItem,
+        itemUid = this.setting.itemUid
+    ) {
         groupItem.pricing.total = {
             basePrice: 0,
             salesPrice: 0,
         };
         Object.entries(groupItem?.form).map(([uid, formData]) => {
-            console.log(formData);
-            // if (!formData.pricing)
-            //     formData.pricing = {
-            //         addon: "",
-            //     };
             const qty = sum([formData.qty.lh, formData.qty.rh]);
             if (!formData.qty?.total || (qty && qty != formData.qty?.total))
                 formData.qty.total = qty;
-            const priceList = [
-                formData.pricing?.customPrice ||
-                    sum([
-                        groupItem?.pricing?.components?.salesPrice,
-                        formData?.pricing?.itemPrice?.salesPrice,
-                    ]),
-                formData.pricing?.addon,
-            ];
-            const unitPrice = sum(priceList);
-            const total = formatMoney(
-                sum(priceList) * Number(formData.qty.total)
-            );
-            formData.pricing.unitPrice = unitPrice;
-            formData.pricing.totalPrice = total;
-            console.log({ total, priceList });
-            if (formData.selected) groupItem.pricing.total.salesPrice += total;
+            this.getEstimatePricing(groupItem, formData);
         });
+        this.saveGroupItem(groupItem, itemUid);
+    }
+    public saveGroupItem(groupItem, itemUid) {
+        const staticData = this.setting.staticZus;
         if (!staticData)
             this.setting.zus.dotUpdate(
                 `kvFormItem.${itemUid}.groupItem`,
                 groupItem
             );
         else staticData.kvFormItem[itemUid].groupItem = groupItem;
-        console.log(groupItem);
+    }
+    public getEstimatePricing(groupItem, formData) {
+        const priceList = [
+            formData.pricing?.customPrice ||
+                sum([
+                    groupItem?.pricing?.components?.salesPrice,
+                    formData?.pricing?.itemPrice?.salesPrice,
+                ]),
+            formData.pricing?.addon,
+        ];
+        const unitPrice = sum(priceList);
+        const totalPrice = formatMoney(
+            sum(priceList) * Number(formData.qty.total)
+        );
+        formData.pricing.unitPrice = unitPrice;
+        formData.pricing.totalPrice = totalPrice;
+        if (formData.selected)
+            groupItem.pricing.total.salesPrice += formData.pricing.totalPrice;
+        return {
+            unitPrice,
+            totalPrice,
+        };
     }
     public updateAllGroupedCost() {
         const data = this.setting.zus;
