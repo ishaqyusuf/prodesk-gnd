@@ -615,26 +615,11 @@ export class ComponentHelperClass extends StepHelperClass {
         this.refreshStepComponentsData();
     }
     public selectComponent() {
-        const isMulti = this.isMultiSelect();
         if (this.isDoor()) {
             openDoorSizeSelectModal(this);
         } else if (this.isMoulding()) {
             let groupItem = this.getItemForm()?.groupItem;
-            // if (!groupItem)
-            //     groupItem = {
-            //         pricing: {},
-            //         itemType: "Moulding",
-            //         type: "MOULDING",
-            //         itemIds: [],
-            //         form: {},
-            //         stepUid: this.component.uid,
-            //         qty: {
-            //             lh: 0,
-            //             rh: 0,
-            //             total: 0,
-            //         },
-            //     };
-            // else
+
             groupItem.type = "MOULDING";
             groupItem.stepUid = this.component.uid;
             if (!groupItem.form?.[this.componentUid])
@@ -671,10 +656,13 @@ export class ComponentHelperClass extends StepHelperClass {
                 groupItem.form[this.componentUid].selected =
                     !groupItem.form?.[this.componentUid].selected;
             }
+
             groupItem.itemIds = Object.entries(groupItem.form)
                 .filter(([uid, data]) => data.selected)
                 .map(([uid, data]) => uid);
             groupItem.qty.total = groupItem.itemIds?.length;
+            console.log(groupItem.qty.total);
+
             this.dotUpdateItemForm("groupItem", groupItem);
             // this.getNextRouteFromSettings;
             // this.updateComponentCost();

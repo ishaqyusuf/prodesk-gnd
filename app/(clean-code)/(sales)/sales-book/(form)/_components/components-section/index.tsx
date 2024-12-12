@@ -86,6 +86,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
             productUid: selectionUids(),
         }).then((c) => {
             ctx.clearSelection();
+            ctx.cls.refreshStepComponentsData();
         });
     }, [stepUid, ctx]);
     const editVisibility = useCallback(() => {
@@ -106,7 +107,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                     isFixed
                         ? "fixed bottom-12 left-1/2 transform -translate-x-1/2"
                         : "absolute bottom-4 left-1/2 transform -translate-x-1/2",
-                    "bg-white"
+                    "bg-white z-10"
                 )}
             >
                 <div className="flex border shadow gap-4 p-2 rounded-lg items-center px-4">
@@ -220,6 +221,7 @@ function Component({
             stepUid,
             productUid: [component.uid],
         });
+        ctx.cls.refreshStepComponentsData();
     }
 
     const editVisibility = useCallback(() => {
