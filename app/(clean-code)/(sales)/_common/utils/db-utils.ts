@@ -10,6 +10,7 @@ import {
     FilterKeys,
     FilterParams,
 } from "@/components/(clean-code)/data-table/search-params";
+import { SalesStatType } from "../../types";
 export function whereDispatch(query: GetSalesDispatchListQuery) {
     const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
     return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
@@ -33,6 +34,33 @@ export function whereSales(query: FilterParams) {
                 },
             },
         });
+    const statType = (type: SalesStatType) => type;
+
+    if (query["dispatch.status"]) {
+        switch (query["dispatch.status"]) {
+            case "backorder":
+                whereAnd.push({
+                    stat: {
+                        some: {
+                            type: statType("dispatch"),
+                            AND: [
+                                {
+                                    percentage: {
+                                        gt: 0,
+                                    },
+                                },
+                                {
+                                    percentage: {
+                                        lt: 100,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
+                break;
+        }
+    }
     whereAnd.push({
         type: query["sales.type"],
     });

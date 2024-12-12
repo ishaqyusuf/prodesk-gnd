@@ -45,9 +45,9 @@ export async function getSalesEmailDta(salesId): Promise<EmailData> {
     });
     const resp: EmailData = {
         attachables: _attachables(sale.orderId) as any,
-        email: sale.customer.email,
+        email: sale.customer?.email,
         fallbackEmail: sale.billingAddress.email,
-        name: sale.customer.businessName || sale.customer.name,
+        name: sale.customer?.businessName || sale.customer?.name,
         noEmail: false,
     };
     resp.noEmail = !resp.email && !resp.fallbackEmail;

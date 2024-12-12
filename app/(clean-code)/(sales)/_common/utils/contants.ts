@@ -30,7 +30,7 @@ export const DISPATCH_FILTER_OPTIONS = [
     "pending delivery",
     "backorder",
     "late",
-];
+] as const;
 export const widthList = [
     "1-0",
     "1-4",

@@ -53,7 +53,6 @@ export function calculatedStatsDto(
 
         grp.items?.map((item) => {
             const { pending, success } = item.analytics;
-
             populate("prodAssignment", pending.assignment, success.assignment);
             populate("prod", pending.production, success.production);
             populate("dispatch", pending.delivery, success.delivery);

@@ -10,6 +10,7 @@ import {
 // Note: import from 'nuqs/server' to avoid the "use client" directive
 import { SORT_DELIMITER } from "@/lib/delimiters";
 import { z } from "zod";
+import { DISPATCH_FILTER_OPTIONS } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 // import { REGIONS } from "@/constants/region";
 // import { METHODS } from "@/constants/method";
 
@@ -86,7 +87,7 @@ export const searchSchema = z.object({
     "order.no": z.string().optional(),
     po: z.string().optional(),
     phone: z.string().optional(),
-    "dispatch.status": z.string().optional(),
+    "dispatch.status": z.enum(DISPATCH_FILTER_OPTIONS).optional(),
     "production.assignment": z.string().optional(),
     production: z.string().optional(),
     invoice: z.string().optional(),

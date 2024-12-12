@@ -38,7 +38,9 @@ export type DykeStepTitleKv = Partial<{
 export type SalesStatType =
     | "dispatch"
     | "dispatchTransit"
+    | "dispatchCancelled"
     | "payment"
+    | "backorder"
     | "prodAssignment"
     | "prod"
     | "dispatchQueue";

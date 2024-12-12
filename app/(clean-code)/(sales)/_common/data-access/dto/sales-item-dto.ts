@@ -10,6 +10,7 @@ import { salesItemsStatsDto } from "./sales-stat-dto";
 import { deliveryBreakdownDto } from "./sales-shipping-dto";
 import { calculateDeliveryBreakdownPercentage } from "../../utils/dispatch-utils";
 import { SalesItemControl } from "@prisma/client";
+import { SalesDispatchStatus } from "../../../types";
 
 interface Pill {
     label?: string;
@@ -33,6 +34,8 @@ export type DeliveryBreakdown = {
         queue?: Qty;
         inProgress?: Qty;
         delivered?: Qty;
+        cancelled?: Qty;
+        backorder?: Qty;
     };
     pending?: Qty;
     totalDeliverable?: number;
@@ -77,7 +80,14 @@ export interface LineItemOverview {
         qty: Qty;
         submitted: Qty;
         delivered: Qty;
-        deliveries: { id; qty: Qty; date; deliveryId; submissionId }[];
+        deliveries: {
+            id;
+            qty: Qty;
+            date;
+            deliveryId;
+            submissionId;
+            status: SalesDispatchStatus;
+        }[];
         submissions: { id; qty: Qty; date }[];
         pending: Qty;
         _: {

@@ -164,6 +164,7 @@ export function deliveriesByStatus(
             delivered: { total: 0 },
             inProgress: { total: 0 },
             queue: { total: 0 },
+            backorder: { total: 0 },
         },
     };
     items.map(({ status, qty }) => {
@@ -176,6 +177,7 @@ export function deliveriesByStatus(
                 break;
             case "cancelled":
                 break;
+
             default:
                 resp.status.queue.total += qty;
         }
