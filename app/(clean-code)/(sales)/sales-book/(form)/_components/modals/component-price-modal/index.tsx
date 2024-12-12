@@ -27,7 +27,6 @@ export function openEditComponentPrice(cls: ComponentHelperClass) {
     _modal.openModal(<ComponentPriceModal cls={cls} />);
 }
 export function useInitContext(cls: ComponentHelperClass) {
-    const zus = useFormDataStore();
     const memoied = useMemo(() => {
         const step = cls.getStepForm();
         const priceModel = cls.getComponentPriceModel(cls.componentUid);

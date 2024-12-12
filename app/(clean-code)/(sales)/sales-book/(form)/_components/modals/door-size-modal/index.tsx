@@ -45,7 +45,7 @@ export function useInitContext(cls: StepHelperClass) {
         );
         _modal.close();
         toast.success("Door Heights saved.");
-        cls.updateStepForm({ meta: form.getValues("meta") });
+        cls.updateStepFormMeta(form.getValues("meta"));
     }
     function addRule() {
         varArray.append({

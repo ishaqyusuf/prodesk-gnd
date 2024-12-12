@@ -20,11 +20,13 @@ const Context = createContext<ReturnType<typeof useInitContext>>(null);
 const useCtx = () => useContext(Context);
 const pricingOptions = ["Single Pricing", "Multi Pricing"] as const;
 type PricingOption = (typeof pricingOptions)[number];
+export function openStepPricingModal(stepUid) {
+    _modal.openModal(<StepPricingModal stepUid={stepUid} />);
+}
 export function useInitContext(itemStepUid) {
-    const zus = useFormDataStore();
     const cls = useMemo(() => {
         return new StepHelperClass(itemStepUid);
-    }, [itemStepUid, zus]);
+    }, [itemStepUid]);
 
     const step = cls.getStepForm();
     const data = cls.getComponentVariantData();
@@ -56,7 +58,8 @@ export function useInitContext(itemStepUid) {
             }
         }
         const resp = await updateStepMetaUseCase(step?.stepId, meta);
-
+        cls.updateStepFormMeta(meta);
+        cls.refreshStepComponentsData();
         _modal.close();
         toast.success("Pricing Updated.");
     }

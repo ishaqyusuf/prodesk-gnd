@@ -18,6 +18,7 @@ import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
 import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal/open-modal";
 import { sum } from "@/lib/utils";
+import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;
     stepTitle?;
@@ -93,7 +94,7 @@ export class StepHelperClass extends SettingsClass {
     public getStepForm() {
         return this.zus.kvStepForm[this.itemStepUid];
     }
-    public updateStepForm(data) {
+    public updateStepForm(data: ZusStepFormData) {
         Object.entries(data).map(([k, v]) => {
             this.zus.dotUpdate(`kvStepForm.${this.itemStepUid}.${k}` as any, v);
         });
@@ -350,6 +351,12 @@ export class StepHelperClass extends SettingsClass {
         value: FieldPathValue<ZusItemFormData, K>
     ) {
         this.zus.dotUpdate(`kvFormItem.${this.itemUid}.${k}`, value as any);
+    }
+    public updateStepFormMeta(meta) {
+        const step = this.getStepForm();
+        const d = dotSet(step);
+        d.set("meta", meta);
+        this.saveStepForm(step);
     }
     public deleteStepsForm(itemStepsUid: string[]) {
         if (itemStepsUid?.length) {

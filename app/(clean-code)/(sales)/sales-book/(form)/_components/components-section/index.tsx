@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
-import { zhEditPricing } from "../../_utils/helpers/zus/zus-component-helper";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ComponentImg } from "../component-img";
@@ -32,6 +32,7 @@ import { _modal } from "@/components/common/modal/provider";
 import { openDoorPriceModal } from "../modals/door-price-modal";
 import { openComponentVariantModal } from "../modals/component-visibility-modal";
 import { useStepContext } from "./ctx";
+import { openStepPricingModal } from "../modals/step-pricing-modal";
 
 interface Props {
     itemStepUid;
@@ -162,7 +163,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                     <>
                                         <Menu.Item
                                             onClick={() => {
-                                                zhEditPricing(stepUid);
+                                                openStepPricingModal(stepUid);
                                             }}
                                             icon="dollar"
                                         >
