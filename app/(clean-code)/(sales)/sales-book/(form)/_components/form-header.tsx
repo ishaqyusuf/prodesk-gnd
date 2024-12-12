@@ -4,9 +4,13 @@ import FormSettingsModal from "./modals/form-settings-modal";
 import { useFormDataStore } from "../_common/_stores/form-data-store";
 import { Sticky } from "../_hooks/use-sticky";
 import { cn } from "@/lib/utils";
-import { saveFormUseCase } from "../../../_common/use-case/sales-book-form-use-case";
+import {
+    getSalesBookFormUseCase,
+    saveFormUseCase,
+} from "../../../_common/use-case/sales-book-form-use-case";
 import Button from "@/components/common/button";
 import { toast } from "sonner";
+import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -18,6 +22,15 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     ];
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
+    }
+    async function refetchData() {
+        if (!zus.metaData.salesId) return;
+        const data = await getSalesBookFormUseCase({
+            type: zus.metaData.type,
+            slug: zus.metaData.salesId,
+        });
+
+        zus.init(zhInitializeState(data));
     }
     async function save() {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
@@ -31,7 +44,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             },
             zus.oldFormState
         );
-        console.log({ resp, oldState: zus.oldFormState });
+        await refetchData();
         // if(resp.redirectTo)
         if (resp.data?.error) toast.error(resp.data?.error);
         else {

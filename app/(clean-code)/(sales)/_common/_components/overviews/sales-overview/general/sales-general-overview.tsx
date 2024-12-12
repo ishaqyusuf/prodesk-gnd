@@ -43,7 +43,9 @@ export function SalesGeneralOverview({}) {
                     label="Customer"
                     value={
                         <Link
-                            href={`/sales/customer/${item.customerId}`}
+                            href={`/sales-book/customer/${
+                                item.customerPhone || item.customerId
+                            }`}
                             target="_blank"
                             className="inline-flex gap-2 items-center hover:underline"
                         >

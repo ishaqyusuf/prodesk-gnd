@@ -2,15 +2,15 @@ import { getSalesBookFormUseCase } from "@/app/(clean-code)/(sales)/_common/use-
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { FormClient } from "../../_components/form-client";
 
-export default async function CreateOrderPage({ params }) {
+export default async function EditQuotePage({ params }) {
     const data = await getSalesBookFormUseCase({
-        type: "order",
+        type: "quote",
         slug: params.slug,
     });
     return (
         <FPage
             className=""
-            title={`Edit Order | ${data.order.orderId?.toUpperCase()}`}
+            title={`Edit Quote | ${data.order.orderId?.toUpperCase()}`}
         >
             <FormClient data={data} />
         </FPage>

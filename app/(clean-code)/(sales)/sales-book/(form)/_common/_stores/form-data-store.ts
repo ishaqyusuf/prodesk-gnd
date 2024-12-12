@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { SalesFormZusData } from "../../../../types";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
+import { deepCopy } from "@/lib/deep-copy";
 export type ZusSales = SalesFormZusData & SalesFormZusAction;
 export type ZusComponent = ZusSales["kvStepComponentList"][number][number];
 export type ZusStepFormData = ZusSales["kvStepForm"][number];
@@ -16,19 +17,27 @@ export type SalesFormSet = (
 ) => void;
 function fns(set: SalesFormSet) {
     return {
+        initOldFormState: (data) =>
+            set((state) => {
+                return {
+                    ...state,
+                    oldFormState: deepCopy({
+                        kvFormItem: data.kvFormItem,
+                        kvStepForm: data.kvStepForm,
+                        metaData: data.metaData,
+                    }),
+                };
+            }),
         init: (data) =>
             set((state) => {
                 return {
                     ...state,
                     ...data,
-                    oldFormState: JSON.parse(
-                        JSON.stringify({
-                            kvFormItem: data.kvFormItem,
-
-                            kvStepForm: data.kvStepForm,
-                            metaData: data.metaData,
-                        })
-                    ),
+                    oldFormState: deepCopy({
+                        kvFormItem: data.kvFormItem,
+                        kvStepForm: data.kvStepForm,
+                        metaData: data.metaData,
+                    }),
                 };
             }),
         newStep: (itemUid, stepUid) =>
