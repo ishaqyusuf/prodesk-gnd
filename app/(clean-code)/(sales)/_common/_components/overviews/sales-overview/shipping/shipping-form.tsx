@@ -153,6 +153,7 @@ function ShippingItemLine({
     const itemForm = form.watch(`selection.${item.uid}`);
     const deliverableQty = item.deliverableQty;
     const pending = item.analytics.pending;
+    const hasHandle = deliverableQty.lh && deliverableQty.rh;
     return (
         <div className="flex flex-col border-b bg-white">
             <div
@@ -211,16 +212,10 @@ function ShippingItemLine({
             {itemForm?.selected && (
                 <div>
                     {/* {JSON.stringify(item.analytics)} */}
-                    <div
-                        className={cn(
-                            deliverableQty.lh &&
-                                deliverableQty.rh &&
-                                "grid grid-cols-2 gap-4"
-                        )}
-                    >
+                    <div className={cn(hasHandle && "grid grid-cols-2 gap-4")}>
                         {deliverableQty.lh || deliverableQty.qty ? (
                             <NumberPicker
-                                inline
+                                inline={!hasHandle}
                                 label={`Delivery Qty ${
                                     item.hasSwing ? "(LH)" : ""
                                 }`}
@@ -236,7 +231,7 @@ function ShippingItemLine({
                         )}
                         {deliverableQty.rh ? (
                             <NumberPicker
-                                inline
+                                inline={!hasHandle}
                                 label={`Delivery Qty ${
                                     item.hasSwing && "(RH)"
                                 }`}

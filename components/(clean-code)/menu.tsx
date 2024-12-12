@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import Link from "next/link";
 import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
 import { PrimitiveDivProps } from "@/types/type";
@@ -36,21 +36,29 @@ interface RowActionMoreMenuProps {
     Trigger?;
     noSize?: boolean;
     variant?: VariantProps<typeof buttonVariants>["variant"];
+    triggerSize?: VariantProps<typeof buttonVariants>["size"];
     open?;
     onOpenChanged?;
 }
-function BaseMenu({
-    children,
-    Icon = Icons.Menu,
-    label,
-    disabled,
-    Trigger,
-    noSize,
-    open,
-    onOpenChanged,
-    variant = "outline",
-}: RowActionMoreMenuProps) {
+function BaseMenu(
+    {
+        children,
+        Icon = Icons.Menu,
+        label,
+        disabled,
+        Trigger,
+        noSize,
+        open,
+        onOpenChanged,
+        triggerSize,
+        variant = "outline",
+    }: RowActionMoreMenuProps,
+    ref
+) {
     const [_open, _onOpenChanged] = useState(open);
+    useImperativeHandle(ref, () => ({
+        _onOpenChanged,
+    }));
     return (
         <DropdownMenu
             open={onOpenChanged ? open : _open}
@@ -71,7 +79,8 @@ function BaseMenu({
                             !label && "w-8 p-0",
                             variant == "default"
                                 ? "data-[state=open]:bg-muted-foreground"
-                                : "data-[state=open]:bg-muted"
+                                : "data-[state=open]:bg-muted",
+                            triggerSize == "sm" && "h-6 w-6"
                         )}
                     >
                         {Icon && <Icon className="h-4 w-4" />}
@@ -155,7 +164,7 @@ function LinkableNode({
         );
     return <div {...props}>{children}</div>;
 }
-export let Menu = Object.assign(BaseMenu, {
+export let Menu = Object.assign(forwardRef(BaseMenu), {
     Item,
     Label: DropdownMenuLabel,
     Separator: DropdownMenuSeparator,

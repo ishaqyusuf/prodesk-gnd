@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
@@ -7,6 +6,21 @@ import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { cn } from "@/lib/utils";
 import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
 import { useSalesOverview } from "../overview-provider";
+import { Menu } from "@/components/(clean-code)/menu";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import Button from "@/components/common/button";
+import { updateSalesItemControlUseCase } from "../../../../use-case/sales-item-control-use-case";
+import { toast } from "sonner";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];
 export type ItemType = ItemGroupType["items"][number];
@@ -69,12 +83,15 @@ interface LineItemProps {
 }
 export function LineItem({ className = null, item, onClick }: LineItemProps) {
     const ctx = useSalesOverview();
+    const menuRef = useRef(null);
+    const controlForm = useForm({
+        defaultValues: {
+            ...item.analytics.control,
+        },
+    });
     return (
-        <div
-            onClick={onClick}
-            className={cn("bg-white sm:rounded-lg my-3 border", className)}
-        >
-            <div className="py-2 px-4">
+        <div className={cn("bg-white sm:rounded-lg my-3 border", className)}>
+            <div onClick={onClick} className="py-2 px-4">
                 <div className="flex items-center">
                     <div className="flex-1 uppercase">{item.title}</div>
                     <div className="text-sm font-medium">
@@ -88,11 +105,68 @@ export function LineItem({ className = null, item, onClick }: LineItemProps) {
             </div>
             {item.analytics?.info && (
                 <div className="mt-1 flex justify-between border-t text-xs uppercase font-semibold text-muted-foreground">
-                    {item.analytics?.info?.map((info, k) => (
-                        <div className="text-start p-2 font-mono px-4" key={k}>
-                            {info.text}
-                        </div>
-                    ))}
+                    {/* <div className="flex1"></div> */}
+                    <div onClick={onClick} className="flex-1 flex justify-end">
+                        {item.analytics?.info?.map((info, k) => (
+                            <div className="w-1/3  p-2 font-mono px-4" key={k}>
+                                {info.text}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="p-1">
+                        <Menu ref={menuRef} triggerSize="sm">
+                            <Menu.Item
+                                SubMenu={
+                                    <Card className="min-w-[240px] border-0">
+                                        <CardHeader>
+                                            <CardTitle>Item Control</CardTitle>
+                                            <CardDescription>
+                                                Configure item behaviour
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="grid gap-4">
+                                            <Form {...controlForm}>
+                                                <ControlledCheckbox
+                                                    label="Production"
+                                                    control={
+                                                        controlForm.control
+                                                    }
+                                                    name="produceable"
+                                                />
+                                                <ControlledCheckbox
+                                                    control={
+                                                        controlForm.control
+                                                    }
+                                                    name="shippable"
+                                                    label="Shipping"
+                                                />
+                                            </Form>
+                                        </CardContent>
+                                        <CardFooter className="justify-end">
+                                            <Button
+                                                onClick={async () => {
+                                                    await updateSalesItemControlUseCase(
+                                                        controlForm.getValues()
+                                                    );
+                                                    ctx.refresh();
+                                                    toast.success(
+                                                        "Item Control Updated"
+                                                    );
+                                                    menuRef?.current?._onOpenChanged(
+                                                        false
+                                                    );
+                                                }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                }
+                            >
+                                Configure
+                            </Menu.Item>
+                        </Menu>
+                    </div>
                 </div>
             )}
         </div>
