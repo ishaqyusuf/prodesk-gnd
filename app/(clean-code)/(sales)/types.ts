@@ -37,13 +37,13 @@ export type DykeStepTitleKv = Partial<{
 }>;
 export type SalesStatType =
     | "dispatch"
-    | "dispatchTransit"
-    | "dispatchCancelled"
+    // | "dispatchTransit"
+    // | "dispatchCancelled"
     | "payment"
-    | "backorder"
+    // | "backorder"
     | "prodAssignment"
-    | "prod"
-    | "dispatchQueue";
+    | "prod";
+// | "dispatchQueue"
 export type SalesDispatchStatus =
     | "queue"
     | "in progress"

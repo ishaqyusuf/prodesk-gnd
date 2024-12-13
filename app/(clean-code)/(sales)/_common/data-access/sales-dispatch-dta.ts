@@ -117,17 +117,9 @@ export async function deleteSalesDispatchDta(id) {
     });
     const status: SalesDispatchStatus = d.status as any;
     // if(status ==)
-    await updateSalesProgressDta(
-        d.salesOrderId,
-        status == "completed"
-            ? "dispatch"
-            : status == "in progress"
-            ? "dispatchTransit"
-            : "dispatchQueue",
-        {
-            minusScore: totalQty,
-        }
-    );
+    await updateSalesProgressDta(d.salesOrderId, "dispatch", {
+        minusScore: totalQty,
+    });
 }
 export async function updateSalesDispatchStatusDta(
     id,
@@ -147,32 +139,19 @@ export async function updateSalesDispatchStatusDta(
             },
         },
     });
-    const oldStatType = getSalesStatTypeByDispatch(oldStatus);
-    const newStatType = getSalesStatTypeByDispatch(status);
+    // const oldStatType = getSalesStatTypeByDispatch(oldStatus);
+    // const newStatType = getSalesStatTypeByDispatch(status);
     const score = sum(dispatch.items.map((s) => s.qty));
-    if (oldStatType)
-        await updateSalesProgressDta(dispatch.salesOrderId, oldStatType, {
+    if (status == "cancelled")
+        await updateSalesProgressDta(dispatch.salesOrderId, "dispatch", {
             minusScore: score,
         });
-    if (newStatType)
-        await updateSalesProgressDta(dispatch.salesOrderId, newStatType, {
+    if (oldStatus == "cancelled" && status != oldStatus)
+        await updateSalesProgressDta(dispatch.salesOrderId, "dispatch", {
             plusScore: score,
         });
 }
-function getSalesStatTypeByDispatch(
-    status: SalesDispatchStatus
-): SalesStatType {
-    switch (status) {
-        case "cancelled":
-            return null;
-        case "in progress":
-            return "dispatchTransit";
-        case "completed":
-            return "dispatch";
-        default:
-            return "dispatchQueue";
-    }
-}
+
 export async function createSalesDispatchDta(data: SalesDispatchFormData) {
     const orderId = data.delivery.order.connect.id;
 
@@ -291,7 +270,7 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                 });
                 await updateSalesProgressDta(
                     dispatch.salesOrderId,
-                    "dispatchQueue",
+                    "dispatch",
                     {
                         plusScore: totalQty,
                     }
