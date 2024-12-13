@@ -15,8 +15,8 @@ export default function QueryTab({ page }: Props) {
     }, []);
     return (
         <div>
-            {qt.pageData?.links?.map((link) => (
-                <Button asChild>
+            {qt.pageData?.links?.map((link, index) => (
+                <Button asChild key={index}>
                     <Link href={""}></Link>
                 </Button>
             ))}

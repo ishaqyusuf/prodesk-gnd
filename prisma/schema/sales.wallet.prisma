@@ -28,3 +28,63 @@ model CustomerWallet {
 
     refunds Refunds[]
 }
+
+model SalesPayments {
+    id            Int                  @unique @default(autoincrement())
+    customerId    Int
+    transactionId Int?
+    orderId       Int
+    amount        Float
+    tip           Float?
+    meta          Json?                @db.Json
+    status        String? // success,pending,paid
+    deletedAt     DateTime?            @db.Timestamp(0)
+    createdAt     DateTime?            @default(now()) @db.Timestamp(0)
+    updatedAt     DateTime?            @updatedAt
+    order         SalesOrders          @relation(name: "salesPayment", fields: [orderId], references: [id], onDelete: Cascade)
+    checkout      SalesCheckout?
+    customer      Customers            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    transaction   CustomerTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+    commissions   SalesCommision[]
+
+    @@index([orderId])
+    @@index([customerId])
+    @@index([transactionId])
+}
+
+model SalesCheckout {
+    id              String            @id @default(cuid())
+    paymentId       String?           @unique
+    userId          Int?
+    status          String
+    paymentType     String
+    terminalId      String?
+    terminalName    String?
+    amount          Float
+    tip             Float?            @default(0)
+    orderId         Int
+    meta            Json?             @db.Json
+    deletedAt       DateTime?         @db.Timestamp(0)
+    createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime?         @updatedAt
+    order           SalesOrders       @relation(fields: [orderId], references: [id])
+    createdBy       Users?            @relation(fields: [userId], references: [id])
+    salesPaymentsId Int?              @unique
+    paymentSlip     SalesPayments?    @relation(fields: [salesPaymentsId], references: [id])
+    tenders         CheckoutTenders[]
+
+    @@index([orderId])
+}
+
+model CheckoutTenders {
+    id              String        @id @default(cuid())
+    tenderId        String
+    squarePaymentId String
+    squareOrderId   String
+    salesCheckoutId String
+    status          String
+    createdAt       DateTime?     @default(now()) @db.Timestamp(0)
+    checkout        SalesCheckout @relation(fields: [salesCheckoutId], references: [id])
+
+    @@index([salesCheckoutId])
+}

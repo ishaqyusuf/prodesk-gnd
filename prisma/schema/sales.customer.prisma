@@ -82,3 +82,19 @@ model CustomerTypes {
     customers Customers[]
     sales     SalesOrders[]
 }
+
+model DealerSalesRequest {
+    id           Int         @unique @default(autoincrement())
+    createdAt    DateTime?   @default(now()) @db.Timestamp(0)
+    updatedAt    DateTime?   @updatedAt
+    salesId      Int
+    request      String
+    status       String
+    deletedAt    DateTime?   @db.Timestamp(0)
+    approvedById Int?
+    sale         SalesOrders @relation(fields: [salesId], references: [id])
+    approvedBy   Users?      @relation(fields: [approvedById], references: [id])
+
+    @@index([salesId])
+    @@index([approvedById])
+}
