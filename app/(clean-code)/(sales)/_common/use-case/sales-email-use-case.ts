@@ -7,7 +7,7 @@ import {
     inboxDta,
     userEmailProfileDta,
 } from "../data-access/sales-mail";
-import { updateCustomerEmailDta } from "../data-access/customer";
+import { updateCustomerEmailDta } from "../data-access/customer.dta";
 import {
     getSalesCustomerIdDta,
     getSalesListDataByIdDta,
