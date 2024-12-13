@@ -41,6 +41,7 @@ export function salesItemAssignmentsDto(
                 date: del.createdAt,
                 deliveryId: del.orderDeliveryId,
                 submissionId: del.orderProductionSubmissionId,
+                status: "queue",
                 id: del.id,
                 qty: __qty(
                     del.lhQty,
