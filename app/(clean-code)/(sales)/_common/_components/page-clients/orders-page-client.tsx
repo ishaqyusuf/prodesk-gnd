@@ -50,7 +50,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
     });
     return (
         <div>
-            <div className="flex justify-between mb-2 -mt-4">
+            <div className="flex justify-between items-center mb-2 -mt-4">
                 <div className="">
                     <QueryTab page="orders" />
                 </div>

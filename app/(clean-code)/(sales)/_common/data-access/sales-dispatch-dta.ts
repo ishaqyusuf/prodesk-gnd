@@ -257,10 +257,13 @@ export async function createSalesDispatchDta(data: SalesDispatchFormData) {
                     total: submission.qty,
                 };
                 const qtyRem = qtyDiff(qty, subQty, false);
+                console.log({ assignment, submission });
 
                 updateHandleQty(subQty, qtyRem, submission.id);
             }
             // return;
+            console.log(createManyData);
+
             if (createManyData.length) {
                 const totalQty = sum(createManyData.map((s) => s.qty));
                 console.log({ createManyData });

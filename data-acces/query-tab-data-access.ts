@@ -6,12 +6,8 @@ export async function loadQueryTabsDta() {
     const tabs = await prisma.pageTabs.findMany({});
     return tabs.map((tab) => {
         return {
-            // ...tab,
-            id: tab.id,
-            query: tab.query,
-            tabIndex: tab.tabIndex,
+            ...tab,
             page: tab.page as SiteLinksPage,
-            title: tab.title,
         };
     });
 }

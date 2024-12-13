@@ -83,7 +83,7 @@ export async function updateSalesProgressDta(
     if (total == null) total = stat.total;
     if (score == null) score = stat.score;
     score = score + plusScore - minusScore;
-
+    // console.log({ score, type, plusScore, minusScore });
     await prisma.salesStat.update({
         where: {
             id: stat.id,
@@ -132,7 +132,6 @@ export async function statMismatchDta(overview: GetSalesItemOverviewDta) {
                         id: sysd.id,
                     });
                 } else {
-                    console.log(k);
                     await createSalesProgressDta(
                         overview.id,
                         k as any,

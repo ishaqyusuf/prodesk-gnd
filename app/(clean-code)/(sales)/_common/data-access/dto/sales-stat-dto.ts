@@ -5,6 +5,7 @@ import { salesItemGroupOverviewDto } from "./sales-item-dto";
 import { statStatus } from "../../utils/sales-utils";
 import { Colors } from "@/lib/status-badge";
 import { overallDeliveryBreakdown } from "../../utils/dispatch-utils";
+import { percent } from "@/lib/utils";
 
 type ItemGroup = ReturnType<typeof salesItemGroupOverviewDto>;
 export function salesItemsStatsDto(
@@ -46,7 +47,7 @@ export function calculatedStatsDto(
         const totalSuccess = success?.total || 0;
         cs[type].score += totalSuccess;
         cs[type].total += totalPending + totalSuccess;
-        cs[type].percentage = (cs[type].score / cs[type].total) * 100 || 0;
+        cs[type].percentage = percent(cs[type].score, cs[type].total);
     }
     itemGroup.map((grp, grpIndex) => {
         // console.log(grp.items.length, grpIndex);

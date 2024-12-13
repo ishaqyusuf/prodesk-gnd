@@ -5,7 +5,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { siteLinks, SiteLinksPage } from "./links";
 import { useSearchParams } from "next/navigation";
 import { useQueryTabStore } from "./data-store";
-
+import qs from "qs";
+import { isEqual } from "lodash";
+import { openQueryTab } from "./query-tab-form";
 export const QueryTabContext = createContext<QueryTab>(null as any);
 export type QueryTab = ReturnType<typeof useQueryTabContext>;
 export const useQueryTab = () => useContext(QueryTabContext);
@@ -32,16 +34,31 @@ export const useQueryTabContext = () => {
         };
     }
     const searchParams = useSearchParams();
-
-    useEffect(() => {}, [searchParams]);
+    const [newQuery, setNewQuery] = useState(null);
+    useEffect(() => {
+        const q = {};
+        searchParams.forEach((v, _q) => {
+            if (_q) q[_q] = v;
+        });
+        if (!pageData?.links?.some((s) => isEqual(qs.parse(s.query), q))) {
+            setNewQuery(q);
+        } else setNewQuery(null);
+    }, [searchParams]);
     useEffect(() => {
         setPageData(initialize(page));
     }, [page]);
-    return {
+    const ctx = {
         page,
         setPage,
+        newQuery,
         pageData,
+        createTab() {
+            openQueryTab(ctx, {
+                query: newQuery,
+            });
+        },
     };
+    return ctx;
 };
 export const QueryTabProvider = ({ children }) => {
     const value = useQueryTabContext();

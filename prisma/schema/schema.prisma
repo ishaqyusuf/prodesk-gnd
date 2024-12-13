@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex", "typedSql"]
+    previewFeatures = ["typedSql", "prismaSchemaFolder"]
     // previewFeatures = ["filteredRelationCount"]
 }
 
@@ -216,119 +216,8 @@ model CommunityModelCost {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model Customers {
-    id             Int             @unique @default(autoincrement())
-    addressId      Int?
-    customerTypeId Int?
-    slug           String?         @unique @db.VarChar(255)
-    walletId       Int?            @unique
-    name           String?         @db.VarChar(255)
-    businessName   String?         @db.VarChar(255)
-    email          String?         @db.VarChar(255)
-    phoneNo        String?         @unique @db.VarChar(255)
-    accountNo      String?         @unique @db.VarChar(255)
-    phoneNo2       String?         @db.VarChar(255)
-    address        String?         @db.Text
-    meta           Json?           @db.Json
-    deletedAt      DateTime?       @db.Timestamp(0)
-    createdAt      DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime?       @updatedAt
-    salesOrders    SalesOrders[]
-    profile        CustomerTypes?  @relation(fields: [customerTypeId], references: [id])
-    addressBooks   AddressBooks[]  @relation(name: "addressBooks")
-    payments       SalesPayments[] @relation()
-    wallet         CustomerWallet?
-    auth           DealerAuth?
-
-    @@index([createdAt, deletedAt, name, email, phoneNo])
-    @@index([customerTypeId])
-    @@index([phoneNo])
-}
-
-model DealerAuth {
-    id                       Int                   @unique @default(autoincrement())
-    dealerId                 Int                   @unique
-    createdAt                DateTime?             @default(now()) @db.Timestamp(0)
-    email                    String                @unique
-    password                 String?               @db.VarChar(255)
-    emailVerifiedAt          DateTime?             @db.Timestamp(0)
-    approvedAt               DateTime?             @db.Timestamp(0)
-    rejectedAt               DateTime?             @db.Timestamp(0)
-    restricted               Boolean?
-    updatedAt                DateTime?             @updatedAt
-    deletedAt                DateTime?             @db.Timestamp(0)
-    status                   String?
-    primaryBillingAddressId  Int?
-    primaryShippingAddressId Int?
-    dealer                   Customers             @relation(fields: [dealerId], references: [id])
-    statusHistory            DealerStatusHistory[]
-    token                    DealerToken[]
-    primaryBillingAddress    AddressBooks?         @relation(name: "primaryBillingAddress", fields: [primaryBillingAddressId], references: [id])
-    primaryShippingAddress   AddressBooks?         @relation(name: "primaryShippingAddress", fields: [primaryShippingAddressId], references: [id])
-}
-
-model DealerStatusHistory {
-    id        Int         @unique @default(autoincrement())
-    dealerId  Int
-    status    String // pending-approval, approved, rejected, restricted
-    authorId  Int
-    reason    String?     @db.LongText
-    createdAt DateTime?   @default(now()) @db.Timestamp(0)
-    deletedAt DateTime?   @db.Timestamp(0)
-    auth      DealerAuth? @relation(fields: [dealerId], references: [id])
-    author    Users       @relation(fields: [authorId], references: [id])
-}
-
-model DealerToken {
-    dealerId   Int
-    token      String      @unique
-    expiredAt  DateTime?   @db.Timestamp(0)
-    consumedAt DateTime?   @db.Timestamp(0)
-    deletedAt  DateTime?   @db.Timestamp(0)
-    auth       DealerAuth? @relation(fields: [dealerId], references: [id])
-}
-
-model CustomerWallet {
-    id           Int                   @unique @default(autoincrement())
-    balance      Float
-    meta         Json?                 @db.Json
-    customer     Customers             @relation(fields: [id], references: [walletId], onDelete: Cascade)
-    transactions CustomerTransaction[]
-    createdAt    DateTime?             @default(now()) @db.Timestamp(0)
-    updatedAt    DateTime?             @updatedAt
-    deletedAt    DateTime?             @db.Timestamp(0)
-}
-
-model CustomerTransaction {
-    id            Int             @unique @default(autoincrement())
-    authorId      Int
-    amount        Float
-    walletId      Int
-    description   String?         @db.LongText
-    meta          Json?           @db.Json
-    createdAt     DateTime?       @default(now()) @db.Timestamp(0)
-    updatedAt     DateTime?       @updatedAt
-    deletedAt     DateTime?       @db.Timestamp(0)
-    wallet        CustomerWallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
-    salesPayments SalesPayments[]
-
-    @@index([walletId])
-}
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model CustomerTypes {
-    id             Int       @unique @default(autoincrement())
-    title          String    @db.VarChar(255)
-    coefficient    Float?
-    defaultProfile Boolean?
-    meta           Json?     @db.Json
-    deletedAt      DateTime? @db.Timestamp(0)
-    createdAt      DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt      DateTime? @updatedAt
-
-    customers Customers[]
-    sales     SalesOrders[]
-}
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 
@@ -549,75 +438,6 @@ model Invoices {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model MailGrids {
-    id        Int                @unique @default(autoincrement())
-    title     String             @db.VarChar(255)
-    subject   String?            @db.VarChar(255)
-    html      String?            @db.Text
-    message   String?            @db.Text
-    design    String?            @db.LongText
-    fromName  String?            @db.VarChar(255)
-    fromEmail String?            @db.VarChar(255)
-    meta      Json?              @db.Json
-    status    String             @db.VarChar(255)
-    deletedAt DateTime?          @db.Timestamp(0)
-    createdAt DateTime?          @default(now()) @db.Timestamp(0)
-    updatedAt DateTime?          @updatedAt
-    slug      String?            @db.VarChar(255)
-    type      String?            @db.VarChar(255)
-    events    MailEventTrigger[]
-}
-
-model MailEventTrigger {
-    id         Int        @unique @default(autoincrement())
-    when       String
-    mailGridId Int?
-    authorId   Int
-    status     String //draft,active etc
-    mail       MailGrids? @relation(fields: [mailGridId], references: [id])
-    deletedAt  DateTime?  @db.Timestamp(0)
-    createdAt  DateTime?  @default(now()) @db.Timestamp(0)
-    updatedAt  DateTime?  @updatedAt
-    author     Users      @relation(fields: [authorId], references: [id])
-
-    @@index([mailGridId])
-    @@index([authorId])
-}
-
-model Inbox {
-    id        Int       @unique @default(autoincrement())
-    clientId  Int?
-    senderId  Int
-    parentId  Int?
-    subject   String?   @db.Text()
-    from      String    @db.Text()
-    to        String    @db.Text()
-    type      String    @db.Text()
-    body      String    @db.Text()
-    meta      Json?     @db.Json
-    sentAt    DateTime? @db.Timestamp(0)
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt DateTime? @updatedAt
-
-    sender      Users              @relation(fields: [senderId], references: [id])
-    attachments InboxAttachments[]
-
-    @@index([senderId])
-}
-
-model InboxAttachments {
-    id        Int       @unique @default(autoincrement())
-    url       String
-    title     String
-    inboxId   Int
-    deletedAt DateTime? @db.Timestamp(0)
-    createdAt DateTime? @default(now()) @db.Timestamp(0)
-    updatedAt DateTime? @updatedAt
-    inbox     Inbox     @relation(fields: [inboxId], references: [id])
-
-    @@index([inboxId])
-}
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model Migrations {
@@ -1139,6 +959,8 @@ model SalesOrders {
     customerProfileId Int?
     taxes             SalesTaxes[]
     checkouts         SalesCheckout[]
+    refunds           Refunds[]                        @relation(name: "salesRefunds")
+    refund            Refunds?                         @relation(name: "refund")
     customer          Customers?                       @relation(fields: [customerId], references: [id])
     items             SalesOrderItems[]
     shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
@@ -1157,11 +979,10 @@ model SalesOrders {
     deliveries        OrderDelivery[]
     assignments       OrderItemProductionAssignments[]
     pricings          ComponentPrice[]
-
-    requests     DealerSalesRequest[]
-    stat         SalesStat[]
-    salesProfile CustomerTypes?       @relation(fields: [customerProfileId], references: [id])
-    itemControls SalesItemControl[]
+    requests          DealerSalesRequest[]
+    stat              SalesStat[]
+    salesProfile      CustomerTypes?                   @relation(fields: [customerProfileId], references: [id])
+    itemControls      SalesItemControl[]
 
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerProfileId])
@@ -1173,6 +994,9 @@ model SalesOrders {
     @@index([pickupId])
 }
 
+// model Refunds {
+
+// }
 model SalesTaxes {
     id        String      @id @default(cuid())
     sale      SalesOrders @relation(fields: [salesId], references: [id])
