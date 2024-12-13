@@ -77,7 +77,14 @@ export function PaymentTab({}) {
                     ))}
                 </TableBody>
             </Table>
-            {ctx.paymentMethod == "terminal" && (
+            <TerminalPay ctx={ctx} />
+        </div>
+    );
+}
+export function TerminalPay({ ctx }) {
+    if (ctx.paymentMethod == "terminal")
+        return (
+            <div>
                 <Form {...ctx.form}>
                     <div className="flex sm:justify-end right-0 m-4 sm:m-8 sm:mb-16  absolute bottom-0 mb-16">
                         <Card
@@ -183,7 +190,7 @@ export function PaymentTab({}) {
                         </div>
                     </div>
                 </Form>
-            )}
-        </div>
-    );
+            </div>
+        );
+    return null;
 }

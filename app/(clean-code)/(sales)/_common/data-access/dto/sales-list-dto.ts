@@ -14,7 +14,7 @@ export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
     return {
         ...commonListData(data),
-
+        due: data.amountDue,
         stats: statToKeyValueDto(data.stat),
         status: overallStatus(data.stat),
         addressData: {
