@@ -11,6 +11,8 @@ import {
 import Button from "@/components/common/button";
 import { toast } from "sonner";
 import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -101,6 +103,18 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4">
+                {zus.metaData?.id && (
+                    <Link
+                        className={cn(
+                            buttonVariants({
+                                variant: "destructive",
+                            })
+                        )}
+                        href={`/sales-v2/form/${zus.metaData.type}/${zus.metaData.salesId}`}
+                    >
+                        Open In Old Version
+                    </Link>
+                )}
                 <Button
                     size="default"
                     icon="settings"
