@@ -50,7 +50,7 @@ export const sales = {
             ? `/sales-v2/overview/${row.type}/${row.slug}`
             : `/sales/${row.type}/${row.slug}`;
         const editHref = row.isDyke
-            ? `/sales-v2/form/${row.type}/${row.slug}`
+            ? `/sales-book/edit-${row.type}/${row.slug}`
             : `${_linkDir}/form`;
         const mb = optionBuilder;
         const prodCompleted = row?.prodStatus == "Completed";

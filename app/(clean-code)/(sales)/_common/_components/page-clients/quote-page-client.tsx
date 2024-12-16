@@ -53,7 +53,7 @@ export default function QuotesPageClient({
             <div className="flex justify-between mb-2 -mt-4">
                 <div className="flex-1"></div>
                 <Button asChild size="sm">
-                    <Link href="/sales-v2/form/quote?fromPage=new">
+                    <Link href="/sales-book/create-quote?fromPage=new">
                         <Icons.add className="w-4 h-4 mr-2" />
                         <span>New</span>
                     </Link>

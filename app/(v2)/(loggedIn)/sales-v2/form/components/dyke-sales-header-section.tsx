@@ -222,7 +222,7 @@ export default function HeaderSection({}) {
                                         }}
                                     />
                                     <MenuItem
-                                        href={`/sales-v2/form/${type}/${orderId}?restore=true`}
+                                        href={`/sales-book/edit-${type}/${orderId}?restore=true`}
                                         Icon={ArchiveRestore}
                                         className="bg-red-500 text-white"
                                     >

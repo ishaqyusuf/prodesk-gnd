@@ -30,7 +30,7 @@ export default function SaveErrorsModal() {
                                             order.meta?.data?.order?.orderId;
 
                                         openLink(
-                                            `/sales-v2/form/${
+                                            `/sales-book/edit-${
                                                 order.meta?.data?.order?.type
                                             }${orderId || ""}`,
                                             { errorId: order.errorId },

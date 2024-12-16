@@ -76,7 +76,7 @@ export function OrderRowAction(props: IOrderRowProps) {
                     Icon={Pen}
                     link={
                         row.isDyke
-                            ? `/sales-v2/form/${row.type}/${row.slug}`
+                            ? `/sales-book/edit-${row.type}/${row.slug}`
                             : `/sales/edit/${row.type}/${row.slug}`
                     }
                 >
@@ -346,7 +346,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     );
     function copyLink(as) {
         if (!props.row.isDyke) return null;
-        return `/sales-v2/form/${as}?copy=${props.row.slug}`;
+        return `/sales-book/edit-/${as}?copy=${props.row.slug}`;
     }
     return (
         <MenuItem

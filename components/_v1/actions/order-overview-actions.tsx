@@ -19,7 +19,7 @@ export default function OrderOverviewActions({ estimate }: Props) {
     const { data: order } = useDataPage<ISalesOrder>();
     // const _linkDir = `/sales/${order?.type || "order"}/${order.orderId}/form`;
     const _linkDir = order.isDyke
-        ? `/sales-v2/form/${order.type}/${order.slug}`
+        ? `/sales-book/edit-${order.type}/${order.slug}`
         : `/sales/edit/${order.type}/${order.slug}`;
     const prod = useAssignment();
     async function _restore() {

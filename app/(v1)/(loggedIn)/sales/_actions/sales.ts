@@ -252,7 +252,7 @@ export async function moveSales(id, type: ISalesType) {
 
     redirect(
         order.isDyke
-            ? `/sales-v2/form/${order.type}/${order.slug}`
+            ? `/sales-book/edit-${order.type}/${order.slug}`
             : `/sales/${type}/${order.slug}`
     );
     return order;
