@@ -72,6 +72,8 @@ export class HptClass extends GroupFormClass {
             new Set(itemForm.groupItem?.itemIds?.map((s) => s.split("-")[0]))
         );
         return selectionComponentUids.map((componentUid) => {
+            console.log(componentUid);
+
             const component = this.getComponentFromSettingsByStepId(
                 doorStep?.stepId,
                 componentUid

@@ -167,10 +167,9 @@ export class CostingClass {
         };
 
         const taxProfile = this.currentTaxProfile();
-        estimate.taxValue = percentageValue(
-            estimate.taxxable,
-            taxProfile.percentage
-        );
+        estimate.taxValue = taxProfile
+            ? percentageValue(estimate.taxxable, taxProfile.percentage)
+            : 0;
         const subGrandTot =
             sum([estimate.subTotal, estimate.taxValue, estimate.labour]) -
             Number(estimate.discount || 0);

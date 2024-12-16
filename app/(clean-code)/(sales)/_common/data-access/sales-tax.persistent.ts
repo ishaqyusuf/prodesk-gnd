@@ -65,6 +65,7 @@ export async function createSalesTax(tax: Taxes) {
     });
 }
 export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
+    console.log(taxes);
     const taxList = await getTaxList();
     const taxByCode: {
         [code in string]: {
@@ -87,7 +88,6 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
         const isDefault = !orderId && tl.taxCode == taxCode;
         if (tx || !tl.deletedAt || isDefault) {
             const selected = tx != null || isDefault;
-            console.log({ selected, t: tl.title, deleted: tl.deletedAt });
 
             taxByCode[tl.taxCode] = {
                 selected,
@@ -99,6 +99,8 @@ export async function salesTaxForm(taxes: SalesTaxes[], orderId?, taxCode?) {
                     } as any),
             };
             if (selected || isDefault) {
+                console.log("SELECTED");
+
                 selection.push({
                     salesTaxId: tx?.id,
                     tax: tx?.tax,

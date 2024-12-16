@@ -187,7 +187,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
-            const stepProdUid = item.item?.housePackageTool?.stepProduct?.uid;
+            const stepProdUid =
+                item.item?.housePackageTool?.stepProduct?.uid ||
+                item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
             const stepProductId = item.item?.housePackageTool?.stepProduct?.id;
             const doorCount = Object.keys(data._doorForm).length;
 
@@ -200,6 +202,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
+                    console.log(formId);
 
                     addFormItem(formId, {
                         doorId: doorForm.id,

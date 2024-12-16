@@ -489,6 +489,12 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
             };
         };
     } = {};
+    const _taxForm = await salesTaxForm(
+        taxes as any,
+        order?.id,
+        ctx?.defaultProfile?.meta?.taxCode
+    );
+    // console.log(_taxForm);
     return {
         salesRep: salesRep,
         customer,
@@ -504,11 +510,7 @@ export async function getDykeFormAction(type: ISalesType, slug, query?) {
         _rawData: { ...order, footer, formItem: itemArray },
         itemArray,
         data: ctx,
-        _taxForm: await salesTaxForm(
-            taxes as any,
-            order?.id,
-            ctx?.defaultProfile?.meta?.taxCode
-        ),
+        _taxForm,
         // taxes: taxes,
         // taxByCode: taxByCode(taxes),
         paidAmount,
