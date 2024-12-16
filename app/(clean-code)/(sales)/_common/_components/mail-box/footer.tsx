@@ -1,7 +1,7 @@
 import { Form } from "@/components/ui/form";
 import { useMailbox } from "./context";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormInput from "@/components/common/controls/form-input";
+import FormSelect from "@/components/common/controls/form-select";
 import Button from "@/components/common/button";
 
 export function MailboxFooter({}) {
@@ -9,7 +9,7 @@ export function MailboxFooter({}) {
     return (
         <Form {...form}>
             <div className="absolute w-full bottom-0 z-10 border-t bg-white p-2 flex-col flex gap-4 sm:p-4">
-                <ControlledInput
+                <FormInput
                     placeholder="type here"
                     type="textarea"
                     control={form.control}
@@ -17,9 +17,9 @@ export function MailboxFooter({}) {
                     className=""
                 />
                 <div className="flex">
-                    {/* <ControlledCheckbox control={form.control}
+                    {/* <FormCheckbox control={form.control}
                     name="attachment" /> */}
-                    <ControlledSelect
+                    <FormSelect
                         name="attachment"
                         size="sm"
                         className="w-48"

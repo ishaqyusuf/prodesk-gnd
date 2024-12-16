@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { useRouter } from "next/navigation";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { toast } from "sonner";
 import { createDealerPassword, VerifyToken } from "./action";
 import {
@@ -63,14 +63,14 @@ export default function ClientForm({ className, ...props }: SignInFormProps) {
                 }
                 className="grid gap-4"
             >
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="password"
                     type="password"
                     label="Password"
                 />
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="confirmPassword"

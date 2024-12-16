@@ -1,7 +1,7 @@
 "use client";
 
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormInput from "@/components/common/controls/form-input";
+import FormSelect from "@/components/common/controls/form-select";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
@@ -84,7 +84,7 @@ export function SendEmailTemplateSection() {
                     className="flex focus:outline-none items-end gap-2"
                     value="default"
                 >
-                    <ControlledSelect
+                    <FormSelect
                         control={form.control}
                         options={templates}
                         titleKey="title"
@@ -116,7 +116,7 @@ export function SendEmailTemplateSection() {
                     </div>
                 </TabsContent>
                 <TabsContent className="flex items-end gap-2" value="new">
-                    {/* <ControlledSelect
+                    {/* <FormSelect
                         control={form.control}
                         options={templates}
                         name="templateId"
@@ -125,7 +125,7 @@ export function SendEmailTemplateSection() {
                         className="flex-1"
                         label="Template"
                     /> */}
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="template.title"
                         className="flex-1"

@@ -28,7 +28,7 @@ import {
 import { toastArrayAction } from "@/lib/toast-util";
 import { useModal } from "@/components/common/modal/provider";
 import Modal from "@/components/common/modal";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
 
 export const useBuilderModal = () => {
@@ -141,13 +141,13 @@ export default function BuilderModal({
                 <div className="grid md:grid-cols-2 gap-4">
                     {type == "main" && (
                         <>
-                            <ControlledInput
+                            <FormInput
                                 className="col-span-2"
                                 control={form.control}
                                 name="name"
                                 label="Name"
                             />
-                            <ControlledInput
+                            <FormInput
                                 className="col-span-2"
                                 control={form.control}
                                 name="meta.address"

@@ -16,10 +16,10 @@ import {
 import { useDoorSizes } from "../../_hooks/use-door-size";
 import Money from "@/components/_v1/money";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { HousePackageToolMeta } from "@/types/sales";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { cn, sum } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import Button from "@/components/common/button";
@@ -218,7 +218,7 @@ export default function DoorSizeModal({
                                         </TableCell>
                                         {isType.garage && (
                                             <TableCell colSpan={3}>
-                                                <ControlledSelect
+                                                <FormSelect
                                                     size="sm"
                                                     options={[
                                                         "In Swing",
@@ -227,7 +227,7 @@ export default function DoorSizeModal({
                                                     control={_form.control}
                                                     name={`${size.dim}.swing`}
                                                 />
-                                                {/* <ControlledInput
+                                                {/* <FormInput
                                                     control={_form.control}
                                                     className="w-full"
                                                     name={`${size.dim}.swing`}
@@ -235,7 +235,7 @@ export default function DoorSizeModal({
                                             </TableCell>
                                         )}
                                         <TableCell colSpan={2}>
-                                            <ControlledInput
+                                            <FormInput
                                                 type="number"
                                                 size="sm"
                                                 className="w-full"
@@ -245,7 +245,7 @@ export default function DoorSizeModal({
                                         </TableCell>
                                         {isType.multiHandles && (
                                             <TableCell colSpan={2}>
-                                                <ControlledInput
+                                                <FormInput
                                                     size="sm"
                                                     type="number"
                                                     className="w-full"

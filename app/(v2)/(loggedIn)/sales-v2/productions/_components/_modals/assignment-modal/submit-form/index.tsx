@@ -22,7 +22,7 @@ import Btn from "@/components/_v1/btn";
 
 import { useAssignment } from "../use-assignment";
 import { OrderProductionSubmissions } from "@prisma/client";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 
 import { __revalidateProductions, _submitProduction } from "../_action/actions";
 import { toast } from "sonner";
@@ -146,7 +146,7 @@ export default function SubmitDoorProduction({
                                             ))}
                                     </div>
                                 </div>
-                                <ControlledInput
+                                <FormInput
                                     className="col-span-2"
                                     type="textarea"
                                     label="Note"

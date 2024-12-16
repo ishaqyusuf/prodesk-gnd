@@ -1,4 +1,4 @@
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Button } from "@/components/ui/button";
 import {
     FormControl,
@@ -33,7 +33,7 @@ export default function NumberPicker<
     const inputs = Array(length)
         .fill(null)
         ?.map((_, i) => startIndex + i);
-    // if (inputs.length > 10) return <ControlledInput {...(props as any)} />;
+    // if (inputs.length > 10) return <FormInput {...(props as any)} />;
     return (
         <FormField
             {...(props as any)}

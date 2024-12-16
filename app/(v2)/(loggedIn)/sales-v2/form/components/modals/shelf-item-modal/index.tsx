@@ -2,7 +2,7 @@ import Modal from "@/components/common/modal";
 import { useForm } from "react-hook-form";
 import { IDykeShelfProducts } from "../../../../type";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { _saveDykeShelfItemProduct } from "../../../_action/get-shelf-products.actions";
 import { useModal } from "@/components/common/modal/provider";
 
@@ -29,12 +29,12 @@ export default function ShelfItemModal({ prod, onCreate }: Props) {
             <Modal.Content>
                 <Modal.Header title="" />
                 <div className="grid gap-4">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="title"
                         label="Product Title"
                     />
-                    <ControlledInput
+                    <FormInput
                         type="number"
                         control={form.control}
                         name="unitPrice"

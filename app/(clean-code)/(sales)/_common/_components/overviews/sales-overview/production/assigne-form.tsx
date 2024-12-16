@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { getSalesProdWorkersAsSelectOption } from "../../../../use-case/sales-prod-workers-use-case";
 import useEffectLoader from "@/lib/use-effect-loader";
 import Button from "@/components/common/button";
@@ -91,7 +91,7 @@ function AssignmentForm({}) {
         <Form {...ctx.form}>
             <div className="border rounded-lg bg-white mt-4">
                 <div className="grid p-4 sm:grid-cols-2 gap-4 items-end">
-                    <ControlledSelect
+                    <FormSelect
                         size="sm"
                         options={workers?.data || []}
                         label={"Assign To"}

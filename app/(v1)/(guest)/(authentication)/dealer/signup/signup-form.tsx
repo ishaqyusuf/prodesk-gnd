@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { _useAsync } from "@/lib/use-async";
 import { useRouter } from "next/navigation";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { RegisterSchema, registerSchema } from "./validation";
 import { toast } from "sonner";
 import { signupDealerAction } from "./action";
@@ -40,32 +40,32 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="name"
                     label="Name"
                 />
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="businessName"
                     label="Company Name"
                 />
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="address"
                     label="Location"
                 />
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="email"
                         label="Email"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="phoneNo"
@@ -73,13 +73,13 @@ export default function SignupForm({ className, ...props }: SignInFormProps) {
                         prefix="+1"
                     />
 
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="state"
                         label="State"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="city"

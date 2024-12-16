@@ -13,7 +13,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Form } from "@/components/ui/form";
 
 export default function CustomerLoginPage() {
@@ -47,7 +47,7 @@ export default function CustomerLoginPage() {
                             <CardHeader />
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <ControlledInput
+                                    <FormInput
                                         label="Email"
                                         control={form.control}
                                         placeholder="m@example.com"
@@ -56,7 +56,7 @@ export default function CustomerLoginPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <ControlledInput
+                                    <FormInput
                                         control={form.control}
                                         name="password"
                                         type="password"

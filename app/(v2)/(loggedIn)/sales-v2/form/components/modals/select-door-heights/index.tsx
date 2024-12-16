@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 
 import { getDimensionSizeList } from "../../../../dimension-variants/_actions/get-size-list";
 import { Form } from "@/components/ui/form";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { useModal } from "@/components/common/modal/provider";
 import { cn, ftToIn, safeFormText } from "@/lib/utils";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { toast } from "sonner";
 import { _addSize } from "../../../../dimension-variants/_actions/add-size";
 import { IStepProducts } from "../../step-items-list/item-section/step-products";
@@ -212,7 +212,7 @@ export default function SelectDoorHeightsModal({
         }, [show]);
         return (
             <div className="flex border justify-between p-3 py-2 group items-start">
-                <ControlledCheckbox
+                <FormCheckbox
                     control={sizeForm.control}
                     name={`sizes.${size.dim}.checked` as any}
                     label={
@@ -275,7 +275,7 @@ export default function SelectDoorHeightsModal({
                     }
                 >
                     <div className="border-t pt-2">
-                        <ControlledInput
+                        <FormInput
                             control={sizeForm.control}
                             name="size"
                             label="Add Width (eg; 54in)"

@@ -1,11 +1,11 @@
 "use client";
 
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { FileUploader } from "@/components/common/file-uploader";
 
 import { IStepProducts } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { Icons } from "@/components/_v1/icons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ import { Search } from "@/components/(clean-code)/search";
 import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { useStepComponentModal } from "./use-step-component-modal";
 import RenderForm from "@/_v2/components/common/render-form";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 
 interface Props {
     item: IStepProducts[number];
@@ -75,7 +75,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                         <TabsContent value="general">
                             <div className="grid gap-4">
                                 {ctx.isRoot ? (
-                                    <ControlledInput
+                                    <FormInput
                                         control={form.control}
                                         size="sm"
                                         name="product.value"
@@ -83,7 +83,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                     />
                                 ) : (
                                     <>
-                                        <ControlledInput
+                                        <FormInput
                                             size="sm"
                                             control={form.control}
                                             name="product.title"
@@ -91,7 +91,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                         />
                                     </>
                                 )}
-                                <ControlledInput
+                                <FormInput
                                     control={form.control}
                                     size="sm"
                                     name="productCode"
@@ -100,7 +100,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                 {ctx.isMoulding && (
                                     <div className="grid grid-cols-2 gap-4">
                                         {species.map((s, i) => (
-                                            <ControlledCheckbox
+                                            <FormCheckbox
                                                 key={i}
                                                 label={s}
                                                 control={form.control}
@@ -153,7 +153,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                                     <div className="grid  grid-cols-4 gap-4">
                                                         {door.heights[h]?.map(
                                                             (size) => (
-                                                                <ControlledInput
+                                                                <FormInput
                                                                     key={size}
                                                                     size="sm"
                                                                     control={
@@ -172,7 +172,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                         </Tabs>
                                     </div>
                                 ) : (
-                                    <ControlledInput
+                                    <FormInput
                                         control={form.control}
                                         name="product.price"
                                         label="Base Price"
@@ -195,7 +195,7 @@ export default function StepComponentModal({ item, ctx }: Props) {
                                                 <Icons.chevronDown className="w-4 h-4" />
                                             </>
                                         )}
-                                        <ControlledSelect
+                                        <FormSelect
                                             control={form.control}
                                             listMode
                                             type="combo"

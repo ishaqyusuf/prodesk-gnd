@@ -1,8 +1,8 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { cn } from "@/lib/utils";
 import Money from "@/components/_v1/money";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import ItemPriceFinder from "../../item-price-finder";
 import {
     useMultiComponentItem,
@@ -32,7 +32,7 @@ export default function HousePackageSizeLineItem({
             <TableCell>{size.dimFt}</TableCell>
             {componentItem.isComponent.hasSwing && (
                 <TableCell className="">
-                    <ControlledSelect
+                    <FormSelect
                         size="sm"
                         options={["In Swing", "Out Swing"]}
                         control={form.control}
@@ -41,7 +41,7 @@ export default function HousePackageSizeLineItem({
                 </TableCell>
             )}
             <TableCell className="">
-                <ControlledInput
+                <FormInput
                     type="number"
                     list
                     className="w-[75px] sm:w-auto"
@@ -55,7 +55,7 @@ export default function HousePackageSizeLineItem({
             ) : (
                 <>
                     <TableCell>
-                        <ControlledInput
+                        <FormInput
                             size="sm"
                             type="number"
                             list
@@ -81,7 +81,7 @@ export default function HousePackageSizeLineItem({
                         {prices.map((p) => (
                             <div className="flex-1" key={p.title}>
                                 <div className="mx-1">
-                                    <ControlledInput
+                                    <FormInput
                                         size="sm"
                                         type="number"
                                         className={cn(

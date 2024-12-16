@@ -5,7 +5,7 @@ import { useItemProdViewContext } from "./use-hooks";
 import { Form } from "@/components/ui/form";
 import { cn, sum } from "@/lib/utils";
 import NumberPicker from "@/components/(clean-code)/custom/controlled/number-picker";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { toast } from "sonner";
 import {
     AssignmentSubmitForm,
@@ -74,7 +74,7 @@ export default function SubmitProductionForm({ assignment }: Props) {
                     ) : null}
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledInput
+                    <FormInput
                         type="textarea"
                         className="col-span-2"
                         control={form.control}

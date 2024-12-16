@@ -15,7 +15,7 @@ import {
 import useDykeItem, { IDykeItemFormContext } from "../../_hooks/use-dyke-item";
 import { cn, generateRandomString } from "@/lib/utils";
 import { _deleteDykeItem } from "../../_action/delete-item";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import {
     Menu,
     MenuItem,
@@ -98,7 +98,7 @@ function ItemHeader({ item }: ItemHeaderProps) {
                         e.preventDefault();
                     }}
                 >
-                    <ControlledInput
+                    <FormInput
                         className="w-full"
                         size="sm"
                         control={form.control}

@@ -9,7 +9,7 @@ import {
     getFormSteps,
 } from "../step-items-list/item-section/step-products/init-step-components";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { updateDykeStepProductMeta } from "../../_action/dyke-step-setting";
 import { useModal } from "@/components/common/modal/provider";
 import { _deleteStepItem } from "../step-items-list/item-section/step-products/_actions";
@@ -121,7 +121,7 @@ export default function DeleteItemModal({
                                     {deletables?.map((d, i) => (
                                         <TableRow key={i}>
                                             <TableCell>
-                                                <ControlledCheckbox
+                                                <FormCheckbox
                                                     control={form.control}
                                                     name={
                                                         `deletables.${d.key}` as any

@@ -2,12 +2,12 @@
 
 import { InfoLine } from "../../../sales/edit/components/sales-details-section";
 import { useDykeCtx, useDykeForm } from "../_hooks/form-context";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { useEffect, useState } from "react";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import salesData from "../../../sales/sales-data";
 import DateControl from "@/_v2/components/common/date-control";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import salesFormUtils from "@/app/(clean-code)/(sales)/_common/utils/sales-form-utils";
 import { useLegacyDykeForm } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy-hooks";
 
@@ -31,7 +31,7 @@ export default function SalesMetaData() {
                 <span>{form.getValues("salesRep.name")}</span>
             </InfoLine>
             <InfoLine label="Profile">
-                <ControlledSelect
+                <FormSelect
                     control={form.control}
                     size="sm"
                     className="min-w-[150px]"
@@ -42,14 +42,14 @@ export default function SalesMetaData() {
                 />
             </InfoLine>
             <InfoLine label="Q.B Order #">
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="order.meta.qb"
                 />
             </InfoLine>
             <InfoLine label="Delivery">
-                <ControlledSelect
+                <FormSelect
                     size="sm"
                     control={form.control}
                     className="min-w-[150px]"
@@ -58,7 +58,7 @@ export default function SalesMetaData() {
                 />
             </InfoLine>
             <InfoLine label="Mockup %">
-                <ControlledInput
+                <FormInput
                     control={form.control}
                     type="number"
                     size="sm"
@@ -68,7 +68,7 @@ export default function SalesMetaData() {
             {type == "order" ? (
                 <>
                     <InfoLine label="Payment Term">
-                        <ControlledSelect
+                        <FormSelect
                             control={form.control}
                             size="sm"
                             className="min-w-[150px]"
@@ -77,7 +77,7 @@ export default function SalesMetaData() {
                         />
                     </InfoLine>
                     <InfoLine label="P.O No.">
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             size="sm"
                             name="order.meta.po"
@@ -94,7 +94,7 @@ export default function SalesMetaData() {
             )}
             {/* <div className="grid grid-cols-2 gap-2 items-center xl:col-span-2"> */}
             {/* <InfoLine label="Tax">
-                <ControlledCheckbox
+                <FormCheckbox
                     switchInput
                     control={form.control}
                     className="h-8"
@@ -103,7 +103,7 @@ export default function SalesMetaData() {
             </InfoLine> */}
 
             {/* <InfoLine label="Component Price">
-                <ControlledCheckbox
+                <FormCheckbox
                     switchInput
                     className="h-8"
                     name="order.meta.calculatedPriceMode"
@@ -111,7 +111,7 @@ export default function SalesMetaData() {
             </InfoLine> */}
             {ctx.superAdmin && (
                 <InfoLine label="Price Admin">
-                    <ControlledCheckbox
+                    <FormCheckbox
                         switchInput
                         control={form.control}
                         className="h-8"

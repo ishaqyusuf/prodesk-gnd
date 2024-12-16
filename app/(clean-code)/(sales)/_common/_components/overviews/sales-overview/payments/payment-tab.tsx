@@ -6,15 +6,15 @@ import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { Progress } from "@/components/(clean-code)/progress";
 import { Menu } from "@/components/(clean-code)/menu";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormInput from "@/components/common/controls/form-input";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { SelectItem } from "@/components/ui/select";
 import { env } from "@/env.mjs";
 import { Dot } from "lucide-react";
@@ -97,7 +97,7 @@ export function TerminalPay({ ctx }) {
                                 Terminal Checkout
                             </CardHeader>
                             <CardContent className="grid gap-4">
-                                <ControlledInput
+                                <FormInput
                                     control={ctx.form.control}
                                     name="amount"
                                     type="number"
@@ -106,7 +106,7 @@ export function TerminalPay({ ctx }) {
                                     prefix="$"
                                     disabled={ctx.inProgress}
                                 />
-                                <ControlledSelect
+                                <FormSelect
                                     options={ctx.terminals || []}
                                     control={ctx.form.control}
                                     size="sm"
@@ -140,7 +140,7 @@ export function TerminalPay({ ctx }) {
                                 />
                             </CardContent>
                             <CardFooter className="flex gap-4">
-                                <ControlledCheckbox
+                                <FormCheckbox
                                     disabled={ctx.inProgress}
                                     switchInput
                                     control={ctx.form.control}

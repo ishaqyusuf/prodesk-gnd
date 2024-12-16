@@ -1,5 +1,5 @@
 import Money from "@/components/_v1/money";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -104,7 +104,7 @@ export default function PriceBreakDownCell({ sizeRow, componentItem }: Props) {
                                         ctx.dealerMode && "hidden"
                                     )}
                                 >
-                                    <ControlledInput
+                                    <FormInput
                                         control={form.control}
                                         label={"Edit Price"}
                                         type="number"

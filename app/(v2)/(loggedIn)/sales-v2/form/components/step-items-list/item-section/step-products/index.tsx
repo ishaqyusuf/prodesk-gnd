@@ -13,7 +13,7 @@ import useStepItems, {
 import { StepProduct } from "./product";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { useIsVisible } from "@/hooks/use-is-visible";
@@ -282,12 +282,12 @@ function CustomInput({ currentValue }) {
         <Form {...inputForm}>
             <div className="flex ">
                 <div className="flex flex-col gap-2">
-                    <ControlledInput
+                    <FormInput
                         name="value"
                         control={inputForm.control}
                         label="Custom"
                     />
-                    <ControlledInput
+                    <FormInput
                         name="price"
                         control={inputForm.control}
                         label="Price"

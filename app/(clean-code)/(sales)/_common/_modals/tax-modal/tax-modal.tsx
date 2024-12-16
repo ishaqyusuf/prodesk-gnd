@@ -1,4 +1,4 @@
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Modal from "@/components/common/modal";
 import { Form } from "@/components/ui/form";
 import { Taxes } from "@prisma/client";
@@ -25,13 +25,13 @@ export default function TaxModal({ onCreate }: Props) {
             <Modal.Header title={"Tax"} />
             <Form {...form}>
                 <div className="grid gap-2">
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         label="Title"
                         control={form.control}
                         name="title"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         label="Percentage"
                         control={form.control}

@@ -3,7 +3,7 @@ import { DykeForm } from "../../../../type";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { updateSettingsMeta } from "@/app/(v1)/_actions/settings";
@@ -70,7 +70,7 @@ export default function DykeSettingsModal({ form }: Props) {
                             </div>
                         ))}
                         <div className="w-28">
-                            <ControlledSelect
+                            <FormSelect
                                 control={form.control}
                                 type="combo"
                                 name={`data.settings.dyke.customInputSection._sectionSelect`}

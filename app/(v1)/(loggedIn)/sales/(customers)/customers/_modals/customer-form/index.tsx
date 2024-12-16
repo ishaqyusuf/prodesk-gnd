@@ -11,8 +11,8 @@ import {
 } from "@/app/(v1)/_actions/hrm/save-employee";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";
 
-import ControlledAutoComplete from "@/components/common/controls/controlled-auto-complete";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormAutoCompleteInput from "@/components/common/controls/form-auto-complete-input";
+import FormInput from "@/components/common/controls/form-input";
 
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { updateCustomerAction } from "../../../../_actions/customer.crud";
 import { ICustomer } from "@/types/customers";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { saveCustomer } from "../../../_actions/sales-customers";
 
 interface Props {
@@ -65,14 +65,14 @@ export default function CustomerFormModal({ defaultData }: Props) {
             <Modal.Content>
                 <Modal.Header title="Customer Form" />
                 <div className="grid gap-2 sm:grid-cols-2">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="businessName"
                         size="sm"
                         className="sm:col-span-2"
                         label="Business Name"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="name"
                         className="sm:col-span-2"
@@ -80,20 +80,20 @@ export default function CustomerFormModal({ defaultData }: Props) {
                         label="Name"
                     />
 
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="email"
                         size="sm"
                         label="Email"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="phoneNo"
                         size="sm"
                         label="Phone No"
                     />
 
-                    <ControlledSelect
+                    <FormSelect
                         className="sm:col-span-2"
                         control={form.control}
                         name="customerTypeId"
@@ -106,25 +106,25 @@ export default function CustomerFormModal({ defaultData }: Props) {
                             })),
                         ]}
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="primaryAddress.address1"
                         label="Address"
                         size="sm"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="primaryAddress.state"
                         label="State"
                         size="sm"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="primaryAddress.city"
                         label="City"
                         size="sm"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="primaryAddress.meta.zip_code"
                         label="Zip code"

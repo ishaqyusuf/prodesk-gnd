@@ -9,12 +9,12 @@ import {
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IDykeProduct } from "../_components/products-table";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormInput from "@/components/common/controls/form-input";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import Btn from "@/components/_v1/btn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { getDykeCategoriesList } from "../../_actions/dyke-categories-list";
 import { saveDykeProduct } from "../_actions/save-dyke-product";
 import { toast } from "sonner";
@@ -57,39 +57,39 @@ export default function EditProductModal({ data }: Props) {
                 </DialogTitle>
             </DialogHeader>
             <div className="grid gap-4">
-                <ControlledInput
+                <FormInput
                     control={form.control}
                     name="title"
                     label="Product Title"
                 />
-                <ControlledInput
+                <FormInput
                     control={form.control}
                     name="description"
                     type="textarea"
                     label="Product Description"
                 />
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="qty"
                         type="number"
                         label="Qty"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="price"
                         type="number"
                         label="Price"
                     />
 
-                    <ControlledSelect
+                    <FormSelect
                         control={form.control}
                         name="categoryId"
                         loader={getDykeCategoriesList}
                         label="Category"
                     />
                 </div>
-                <ControlledCheckbox
+                <FormCheckbox
                     control={form.control}
                     name="noteRequired"
                     label="Custom Input Required"

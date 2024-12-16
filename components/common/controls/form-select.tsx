@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export interface ControlledSelectProps<T> {
+export interface FormSelectProps<T> {
     label?;
     placeholder?;
     options?: T[];
@@ -47,7 +47,7 @@ export interface ControlledSelectProps<T> {
     listMode?: boolean;
     prefix?;
 }
-export default function ControlledSelect<
+export default function FormSelect<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
     TOptionType = any
@@ -69,7 +69,7 @@ export default function ControlledSelect<
     listMode,
     ...props
 }: Partial<ControllerProps<TFieldValues, TName>> &
-    ControlledSelectProps<TOptionType>) {
+    FormSelectProps<TOptionType>) {
     const [list, setList] = useState<any>(options || []);
     // useEffect(() => {
     //     setList(options || []);

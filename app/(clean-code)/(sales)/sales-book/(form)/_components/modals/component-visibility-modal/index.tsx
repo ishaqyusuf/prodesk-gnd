@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 
@@ -185,7 +185,7 @@ function RuleComponent({ index }) {
                         name={`variations.${index}.rules.${fieldIndex}.stepUid`}
                     />
                     <div className="min-w-[5rem]">
-                        <ControlledSelect
+                        <FormSelect
                             control={ctx.form.control}
                             name={`variations.${index}.rules.${fieldIndex}.operator`}
                             size="sm"

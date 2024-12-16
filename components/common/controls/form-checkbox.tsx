@@ -24,7 +24,7 @@ interface Props<T> {
     switchInput?: boolean;
     list?: boolean;
 }
-export default function ControlledCheckbox<
+export default function FormCheckbox<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
     TOptionType = any

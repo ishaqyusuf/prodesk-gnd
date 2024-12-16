@@ -3,7 +3,7 @@ import { useExportForm } from "./use-export";
 import { Form } from "@/components/ui/form";
 import { Table, TableBody, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { TableCell } from "@/app/_components/data-table/table-cells";
 
 interface Props {
@@ -23,7 +23,7 @@ export default function ExportModal({ type, config }: Props) {
                             {ctx.list?.map((ls, i) => (
                                 <TableRow key={i}>
                                     <TableCell>
-                                        <ControlledCheckbox
+                                        <FormCheckbox
                                             control={ctx.form.control}
                                             name={`exports.${ls.valueNode}`}
                                         />

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import { __filters } from "../../utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
+import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 
 interface Props {
     // promise;
@@ -50,11 +51,12 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
     });
     return (
         <div>
-            <div className="flex justify-between items-center mb-2 -mt-4">
+            <div className="flex justify-between items-end mb-2 gap-2">
                 <div className="">
                     <QueryTab page="orders" />
                 </div>
                 <div className="flex-1"></div>
+                <QueryTabAction />
                 <Button asChild size="sm">
                     <Link href="/sales-book/create-order">
                         <Icons.add className="w-4 h-4 mr-2" />

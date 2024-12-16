@@ -11,7 +11,7 @@ import {
     getFormSteps,
 } from "../step-items-list/item-section/step-products/init-step-components";
 import { useForm } from "react-hook-form";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { Form } from "@/components/ui/form";
 import { saveStepProduct } from "../../_action/save-step-product";
 import { toast } from "sonner";
@@ -99,7 +99,7 @@ export default function RestoreComponentsModal({
                 <div className="flex gap-4 flex-wrap">
                     {components?.map((d, i) => (
                         <div key={i}>
-                            <ControlledCheckbox
+                            <FormCheckbox
                                 control={form.control}
                                 name={`show.${d.key}` as any}
                                 label={d.steps.map((s) => s.value).join(" & ")}

@@ -46,15 +46,6 @@ export default function ActionFooter({}) {
                 Delete
             </ConfirmBtn>
             <Menu variant="outline">
-                {/* <Menu.Item
-                    SubMenu={
-                        <>
-                            <Menu.Item>Item Sub 1</Menu.Item>
-                        </>
-                    }
-                >
-                    Item 1
-                </Menu.Item> */}
                 <Menu.Item
                     icon="print"
                     onClick={() => {

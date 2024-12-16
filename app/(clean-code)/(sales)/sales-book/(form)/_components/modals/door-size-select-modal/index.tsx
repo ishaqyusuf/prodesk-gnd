@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import {
     saveComponentPricingUseCase,
     updateComponentPricingUseCase,
@@ -149,7 +149,7 @@ function Row({ variant }) {
             </TableCell>
             {config.hasSwing && (
                 <TableCell>
-                    <ControlledInput
+                    <FormInput
                         control={ctx.form.control}
                         size="sm"
                         name={`selections.${variant.path}.swing`}
@@ -158,7 +158,7 @@ function Row({ variant }) {
             )}
             {config.noHandle ? (
                 <TableCell className="w-28">
-                    <ControlledInput
+                    <FormInput
                         type="number"
                         control={ctx.form.control}
                         size="sm"
@@ -168,7 +168,7 @@ function Row({ variant }) {
             ) : (
                 <>
                     <TableCell className="w-28">
-                        <ControlledInput
+                        <FormInput
                             type="number"
                             control={ctx.form.control}
                             size="sm"
@@ -176,7 +176,7 @@ function Row({ variant }) {
                         />
                     </TableCell>
                     <TableCell className="w-28">
-                        <ControlledInput
+                        <FormInput
                             type="number"
                             control={ctx.form.control}
                             size="sm"
@@ -270,7 +270,7 @@ function PriceControl({ salesPrice, basePrice, variant }) {
                 <CardTitle>Edit Price</CardTitle>
             </CardHeader>
             <CardContent>
-                <ControlledInput
+                <FormInput
                     size="sm"
                     control={form.control}
                     name="price"

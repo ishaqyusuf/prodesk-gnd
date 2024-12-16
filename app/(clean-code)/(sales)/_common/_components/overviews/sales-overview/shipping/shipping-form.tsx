@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import Button from "@/components/common/button";
 import { toast } from "sonner";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { Label } from "@/components/ui/label";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { Icons } from "@/components/_v1/icons";
@@ -98,7 +98,7 @@ export function ShippingForm({}) {
                         <div className="border-b flex p-4 gap-4">
                             <div className="flex items-center gap-2">
                                 <Label>Dispatch Mode</Label>
-                                <ControlledSelect
+                                <FormSelect
                                     control={form.control}
                                     options={["delivery", "pickup"]}
                                     name="delivery.deliveryMode"

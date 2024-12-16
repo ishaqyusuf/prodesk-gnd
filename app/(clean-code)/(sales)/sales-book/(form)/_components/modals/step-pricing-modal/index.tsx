@@ -4,7 +4,7 @@ import { createContext, useContext, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { ComboxBox } from "@/components/(clean-code)/custom/controlled/combo-box";
 
 import { updateStepMetaUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
@@ -83,7 +83,7 @@ export default function StepPricingModal({ stepUid }: Props) {
                     }
                 />
                 <Form {...ctx.form}>
-                    <ControlledSelect
+                    <FormSelect
                         options={[...pricingOptions]}
                         name="pricingOption"
                         label={"Pricing Type"}

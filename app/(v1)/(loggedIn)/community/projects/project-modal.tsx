@@ -1,7 +1,7 @@
 import { useBuilders } from "@/_v2/hooks/use-static-data";
 import { saveProject } from "@/app/(v1)/_actions/community/projects";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormInput from "@/components/common/controls/form-input";
+import FormSelect from "@/components/common/controls/form-select";
 import Modal from "@/components/common/modal";
 import { ModalContextProps } from "@/components/common/modal/provider";
 import { Form } from "@/components/ui/form";
@@ -35,20 +35,20 @@ export default function ProjectModal({ data }: { data?: IProject }) {
                     title={data?.id ? "Edit Project" : "Create Project"}
                 />
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="title"
                         label="Project Name"
                         className="col-span-2"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="refNo"
                         label="Ref No."
                     />
-                    <ControlledSelect
+                    <FormSelect
                         options={builders.data || []}
                         label="Builder"
                         valueKey="id"
@@ -57,20 +57,20 @@ export default function ProjectModal({ data }: { data?: IProject }) {
                         name="builderId"
                         control={form.control}
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="address"
                         label="Address"
                         className="col-span-2"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="meta.supervisor.name"
                         label="Supervisor"
                     />
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         control={form.control}
                         name="meta.supervisor.email"

@@ -28,6 +28,7 @@ export async function user() {
 export async function userId() {
     return (await user())?.id;
 }
+export const authId = userId;
 export async function _dbUser() {
     return (await prisma.users.findUnique({
         where: { id: await userId() },

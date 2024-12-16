@@ -27,9 +27,9 @@ import {
     squarePaymentSuccessful,
 } from "@/_v2/lib/square";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormInput from "@/components/common/controls/form-input";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
+import FormSelect from "@/components/common/controls/form-select";
 import { SelectItem } from "@/components/ui/select";
 import { CheckCircle2Icon, Dot, Loader2Icon, XCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -236,47 +236,47 @@ export default function SquarePaymentModal({ id }: { id: number }) {
                     <TabsContent value="paymentLinkForm">
                         <Form {...form}>
                             <div className="grid grid-cols-2 gap-2">
-                                <ControlledInput
+                                <FormInput
                                     control={form.control}
                                     name="email"
                                     size="sm"
                                     label="Email"
                                 />
-                                <ControlledInput
+                                <FormInput
                                     control={form.control}
                                     size="sm"
                                     name="phone"
                                     label="Phone"
                                 />
-                                <ControlledInput
+                                <FormInput
                                     control={form.control}
                                     size="sm"
                                     className="col-span-2"
                                     name="address.addressLine1"
                                     label="Address"
                                 />
-                                <ControlledInput
+                                <FormInput
                                     control={form.control}
                                     size="sm"
                                     name="amount"
                                     label="Amount"
                                 />
                                 <div className="flex items-end mb-2">
-                                    <ControlledCheckbox
+                                    <FormCheckbox
                                         control={form.control}
                                         name="allowTip"
                                         switchInput
                                         label={"Enable Tip"}
                                     />
                                 </div>
-                                <ControlledSelect
+                                <FormSelect
                                     options={["terminal", "link"]}
                                     control={form.control}
                                     size="sm"
                                     name="type"
                                     label="Payment Method"
                                 />
-                                <ControlledSelect
+                                <FormSelect
                                     options={order.terminals || []}
                                     control={form.control}
                                     size="sm"

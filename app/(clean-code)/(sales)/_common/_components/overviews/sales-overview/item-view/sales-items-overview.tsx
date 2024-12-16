@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import Button from "@/components/common/button";
 import { updateSalesItemControlUseCase } from "../../../../use-case/sales-item-control-use-case";
 import { toast } from "sonner";
@@ -126,14 +126,14 @@ export function LineItem({ className = null, item, onClick }: LineItemProps) {
                                         </CardHeader>
                                         <CardContent className="grid gap-4">
                                             <Form {...controlForm}>
-                                                <ControlledCheckbox
+                                                <FormCheckbox
                                                     label="Production"
                                                     control={
                                                         controlForm.control
                                                     }
                                                     name="produceable"
                                                 />
-                                                <ControlledCheckbox
+                                                <FormCheckbox
                                                     control={
                                                         controlForm.control
                                                     }

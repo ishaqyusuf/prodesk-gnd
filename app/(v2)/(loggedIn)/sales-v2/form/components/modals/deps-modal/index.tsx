@@ -11,7 +11,7 @@ import { Form } from "@/components/ui/form";
 
 import { _modal } from "@/components/common/modal/provider";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 
 import { LegacyDykeFormStepType } from "@/app/(clean-code)/(sales)/sales-book/(form)/_hooks/legacy/use-dyke-form-step";
 import { saveDykeMeta } from "@/app/(clean-code)/(sales)/sales-book/(form)/_components/modals/deps-modal/action";
@@ -96,7 +96,7 @@ export default function DependenciesModal({
                         {steps.map((step) => (
                             <TableRow key={step.uid}>
                                 <TableCell>
-                                    <ControlledCheckbox
+                                    <FormCheckbox
                                         control={_form.control}
                                         name={`deps.${step.uid}` as any}
                                         label={step.title}

@@ -26,10 +26,10 @@ import {
 } from "@/components/ui/table";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Btn from "@/components/_v1/btn";
 import { useStaticProducers } from "@/_v2/hooks/use-static-data";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { cn } from "@/lib/utils";
 import { useValidateAssignment } from "./validate-assignment";
 import { createProdAssignment } from "../_action/create-assignment";
@@ -176,7 +176,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                         </CardHeader>
                         <CardContent className="sm:max-h-[50vh] overflow-auto">
                             <div className="grid sm:grid-cols-2 gap-4">
-                                <ControlledSelect
+                                <FormSelect
                                     control={form.control}
                                     options={prodUsers.data}
                                     titleKey={"name"}
@@ -221,7 +221,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                                                     className="flex items-end"
                                                     key={h.title}
                                                 >
-                                                    <ControlledInput
+                                                    <FormInput
                                                         disabled={
                                                             salesDoor.report
                                                                 ._unassigned[
@@ -284,7 +284,7 @@ export function SectionedItemAssignForm({ index, salesDoorIndex = -1 }: Props) {
                                                 {hands.map((h) => (
                                                     <TableCell key={h.title}>
                                                         <div className="flex space-x-2 items-center">
-                                                            <ControlledInput
+                                                            <FormInput
                                                                 disabled={
                                                                     salesDoor
                                                                         .report

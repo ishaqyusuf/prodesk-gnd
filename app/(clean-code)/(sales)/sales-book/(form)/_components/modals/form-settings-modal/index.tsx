@@ -13,7 +13,6 @@ import {
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Label } from "@/components/ui/label";
 import { Context, useSettings, useSettingsContext } from "./ctx";
 import { useFieldArray } from "react-hook-form";
 import {
@@ -24,7 +23,7 @@ import {
 
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import {
     Card,
@@ -33,7 +32,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 
 export default function FormSettingsModal({}) {
     const value = useSettingsContext();
@@ -128,14 +127,14 @@ function RouteSection({ uid }) {
             </div>
             <CardContent>
                 <div className="grid gap-4 pb-4">
-                    <ControlledCheckbox
+                    <FormCheckbox
                         switchInput
                         control={ctx.form.control}
                         name={`data.setting.data.route.${uid}.config.noHandle`}
                         label="Single Handle Mode"
                         description="Turn on if this section does not have the Lh and Rh attribute"
                     />
-                    <ControlledCheckbox
+                    <FormCheckbox
                         switchInput
                         control={ctx.form.control}
                         name={`data.setting.data.route.${uid}.config.hasSwing`}
@@ -166,7 +165,7 @@ function RouteSection({ uid }) {
                             >
                                 <div className="grid grid-cols-[1fr,auto,auto] items-center gap-2">
                                     {/* <div>{index}</div> */}
-                                    <ControlledSelect
+                                    <FormSelect
                                         size="sm"
                                         name={`data.setting.data.route.${uid}.routeSequence.${index}.uid`}
                                         titleKey="title"

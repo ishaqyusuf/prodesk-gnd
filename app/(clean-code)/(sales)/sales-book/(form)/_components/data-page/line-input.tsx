@@ -14,7 +14,7 @@ import { dotObject } from "@/app/(clean-code)/_common/utils/utils";
 import { SelectProps } from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ControlledSelectProps } from "@/components/common/controls/controlled-select";
+import { FormSelectProps } from "@/components/common/controls/form-select";
 import { Label } from "@/components/ui/label";
 
 interface LineInputProps {
@@ -64,7 +64,7 @@ export function Select<T>({
     SelectItem: SelItem,
     label,
     ...props
-}: LineInputProps & ControlledSelectProps<T>) {
+}: LineInputProps & FormSelectProps<T>) {
     const state = useFormDataStore();
     const value = getValue(name, state);
     function itemValue(option) {

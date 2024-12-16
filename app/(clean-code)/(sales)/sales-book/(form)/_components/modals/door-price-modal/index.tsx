@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { ComponentHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { saveComponentPricingUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-pricing-use-case";
 import { zhHarvestDoorSizes } from "../../../_utils/helpers/zus/zus-form-helper";
 
@@ -89,7 +89,7 @@ export default function DoorPriceModal({ cls }: Props) {
                                     </Badge>
                                 </div>
                                 <div className="w-28">
-                                    <ControlledInput
+                                    <FormInput
                                         prefix="$"
                                         tabIndex={index + 50}
                                         control={ctx.form.control}

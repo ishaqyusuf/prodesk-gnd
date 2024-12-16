@@ -4,11 +4,11 @@ import Modal from "@/components/common/modal";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 import { IDykeShelfProducts, IDykeShelfProductsForm } from "../../../type";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { useEffect, useState } from "react";
 import { DykeShelfCategories } from "@prisma/client";
 import { _getShelfCategories } from "../../../form/_action/get-shelf-categories";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 
 interface Props {
     data?: IDykeShelfProductsForm;
@@ -41,13 +41,13 @@ export default function ShelfItemFormModal({
                 <Modal.Header title="Shelf Item" />
                 <div className="grid gap-4 grid-cols-2">
                     <div className="col-span-2">
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             name="title"
                             label="Product Title"
                         />
                     </div>
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="unitPrice"
                         type="number"
@@ -88,7 +88,7 @@ function ShelfCategory({ index, fields, field }) {
 
     return (
         <div>
-            <ControlledSelect
+            <FormSelect
                 label={index == 0 ? "Category" : "Sub Category"}
                 control={form.control}
                 name={`_meta.categories.${index}.id`}

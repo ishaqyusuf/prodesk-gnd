@@ -22,7 +22,7 @@ import useEffectLoader from "@/lib/use-effect-loader";
 import { useForm } from "react-hook-form";
 import { staticCustomerProfilesAction } from "@/app/(v1)/(loggedIn)/sales/(customers)/_actions/sales-customer-profiles";
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 
 export function useDealerSheet() {
     const modal = useModal();
@@ -156,7 +156,7 @@ export default function DealerOverviewSheet({ dealer }: Props) {
                     <>
                         <div className={cn("mt-3")}>
                             <Form {...form}>
-                                <ControlledSelect
+                                <FormSelect
                                     label="Dealer Profile"
                                     control={form.control}
                                     name="profileId"

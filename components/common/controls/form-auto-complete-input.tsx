@@ -45,7 +45,7 @@ interface Props<T> {
     titleKey?: keyof T;
     onSelect?(selection: T);
 }
-export default function ControlledAutoComplete<
+export default function FormAutoCompleteInput<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
     TOptionType = any

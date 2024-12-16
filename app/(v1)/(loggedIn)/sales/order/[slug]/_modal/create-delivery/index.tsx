@@ -12,7 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { _submitDelivery } from "./submit-delivery";
 import { toast } from "sonner";
 import { _revalidate } from "@/app/(v1)/_actions/_revalidate";
@@ -100,7 +100,7 @@ export default function CreateDeliveryModal({ order }: Props) {
                                         {item.qty}
                                     </TableCell>
                                     <TableCell>
-                                        <ControlledInput
+                                        <FormInput
                                             control={form.control}
                                             name={
                                                 `deliveries.${item.id}.qty` as any

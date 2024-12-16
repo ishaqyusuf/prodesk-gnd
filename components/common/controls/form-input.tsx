@@ -25,7 +25,7 @@ interface Props<T> {
     inputProps?: InputHTMLAttributes<HTMLInputElement>;
     // defaultValue?:boolean
 }
-export default function ControlledInput<
+export default function FormInput<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
     TOptionType = any

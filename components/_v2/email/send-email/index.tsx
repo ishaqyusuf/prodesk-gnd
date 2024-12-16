@@ -1,6 +1,6 @@
 "use client";
 
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Modal from "@/components/common/modal";
 import Tiptap from "@/components/common/tip-tap";
 import { Form } from "@/components/ui/form";
@@ -129,12 +129,12 @@ export default function SendEmailSheet({ subtitle, data, download }: Props) {
                 <ScrollArea className="flex-1">
                     <div className="grid grid-cols-2 gap-4">
                         <SendEmailTemplateSection />
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             name="to"
                             label="To"
                         />
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             name="subject"
                             label="Subject"

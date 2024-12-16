@@ -11,9 +11,9 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { cn, generateRandomString } from "@/lib/utils";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import salesData from "../../../sales/sales-data";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Label } from "@/components/ui/label";
 import Money from "@/components/_v1/money";
 import { formatMoney } from "@/lib/use-number";
@@ -195,7 +195,7 @@ const Details = {
             <>
                 <TableHead className={cn()}>Payment</TableHead>
                 <CustomTableCell>
-                    <ControlledSelect
+                    <FormSelect
                         size="sm"
                         control={form.control}
                         className={cn("")}
@@ -215,7 +215,7 @@ const Details = {
             <>
                 <TableHead className={cn()}>Discount</TableHead>
                 <CustomTableCell>
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         type="number"
                         control={form.control}
@@ -232,7 +232,7 @@ const Details = {
             <>
                 <TableHead className={cn()}>Labour</TableHead>
                 <CustomTableCell>
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         type="number"
                         control={form.control}

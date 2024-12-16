@@ -1,6 +1,6 @@
 import { useCustomerProfiles } from "@/_v2/hooks/use-static-data";
-import ControlledInput from "@/components/common/controls/controlled-input";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormInput from "@/components/common/controls/form-input";
+import FormSelect from "@/components/common/controls/form-select";
 import {
     Form,
     FormControl,
@@ -39,19 +39,19 @@ export default function GeneralSettings({
             <Separator />
             <Form {...form}>
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledInput
+                    <FormInput
                         type="number"
                         control={form.control}
                         name="meta.tax_percentage"
                         label="Tax Percentage (%)"
                     />
-                    <ControlledInput
+                    <FormInput
                         type="number"
                         control={form.control}
                         name="meta.ccc"
                         label="C.C.C (%)"
                     />
-                    <ControlledSelect
+                    <FormSelect
                         options={[
                             { id: null, title: "None" },
                             ...(profiles?.data || []),

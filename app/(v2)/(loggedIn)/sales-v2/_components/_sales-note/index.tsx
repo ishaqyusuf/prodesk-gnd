@@ -7,13 +7,13 @@ import { TableCol } from "@/components/common/data-table/table-cells";
 import { formatDate } from "@/lib/use-day";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import { cn, labelValue, toLabelValue } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import StatusBadge from "@/components/_v1/status-badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Icons } from "@/components/_v1/icons";
 import { saveNote } from "./_actions/save-notes";
 import Btn from "@/components/_v1/btn";
@@ -81,13 +81,13 @@ export default function SalesNotes({
         <Form {...form}>
             <div className="grid gap-2 border-t my-4">
                 <div className="grid grid-cols-2 gap-4">
-                    <ControlledSelect
+                    <FormSelect
                         options={data.items}
                         name="progressableId"
                         control={form.control}
                         label={"Showing"}
                     />
-                    <ControlledSelect
+                    <FormSelect
                         options={toLabelValue([
                             "All Types",
                             ...data.progressTypes,
@@ -98,7 +98,7 @@ export default function SalesNotes({
                     />
                 </div>
                 <div className={cn(formMode ? "grid gap-4" : "hidden")}>
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="headline"
                         placeholder="Headline"

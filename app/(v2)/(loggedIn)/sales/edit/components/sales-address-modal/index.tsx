@@ -16,7 +16,7 @@ import { saveSalesAddressAction } from "../../../_actions/save-sales-address";
 import { usePathname } from "next/navigation";
 import { DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { updateSalesAddress } from "../../../_actions/update-sales-address";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { useModal } from "@/components/common/modal/provider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -216,7 +216,7 @@ function AddressForm({
             {formKey == "billingAddress" && (
                 <div className="col-span-2 grid grid-cols-4 gap-2">
                     <div className="col-span-3">
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             size="sm"
                             name="customer.businessName"
@@ -226,52 +226,52 @@ function AddressForm({
                 </div>
             )}
             <div className="col-span-2">
-                <ControlledInput
+                <FormInput
                     control={form.control}
                     size="sm"
                     name={`${formKey}.name`}
                     label="Name"
                 />
             </div>
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.phoneNo`}
                 label="Phone (Primary)"
             />
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.email`}
                 label="Email"
             />
             <div className="col-span-2">
-                <ControlledInput
+                <FormInput
                     control={form.control}
                     size="sm"
                     name={`${formKey}.address1`}
                     label="Address"
                 />
             </div>
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.phoneNo2`}
                 label="Phone (Secondary)"
             />
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.city`}
                 label="City"
             />
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.state`}
                 label="State"
             />
-            <ControlledInput
+            <FormInput
                 control={form.control}
                 size="sm"
                 name={`${formKey}.meta.zip_code`}

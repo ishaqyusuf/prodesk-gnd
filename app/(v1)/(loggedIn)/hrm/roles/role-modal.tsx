@@ -9,7 +9,7 @@ import {
 } from "./roles.actions";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { Form } from "@/components/ui/form";
 import { permissions } from "@/lib/data/role";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -53,7 +53,7 @@ export default function RoleModal({
                     title={defaultValues.roleId ? "Edit Role" : "Create Role"}
                 />
                 <div className="grid gap-4">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="name"
                         label="Role Title"

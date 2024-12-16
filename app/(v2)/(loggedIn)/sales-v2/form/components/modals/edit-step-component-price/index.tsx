@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { DykeForm } from "../../../../type";
 import { useModal } from "@/components/common/modal/provider";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -79,7 +79,7 @@ export default function EditStepComponentPrice(props: Props) {
                                         {item.product.title}
                                     </TableCell>
                                     <TableCell className="w-28">
-                                        <ControlledInput
+                                        <FormInput
                                             type="number"
                                             control={form.control}
                                             name={`stepProducts.${index}.product.price`}

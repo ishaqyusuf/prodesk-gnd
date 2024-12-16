@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import { _deleteStepItem } from "../../../../../../../(v2)/(loggedIn)/sales-v2/form/components/step-items-list/item-section/step-products/_actions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -88,7 +88,7 @@ Props) {
                             {components?.map((d, i) => (
                                 <TableRow key={i}>
                                     <TableCell>
-                                        <ControlledCheckbox
+                                        <FormCheckbox
                                             control={form.control}
                                             name={`show.${d.key}` as any}
                                             label={d.steps

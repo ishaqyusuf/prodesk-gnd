@@ -29,7 +29,7 @@ import { Icons } from "@/components/_v1/icons";
 import { useModal } from "@/components/common/modal/provider";
 import ShelfItemModal from "../../../modals/shelf-item-modal";
 import { toast } from "sonner";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 // import { ArrowDown } from "lucide-react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
@@ -385,7 +385,7 @@ function ShelfSelect({
     );
 
     // return (
-    //     <ControlledSelect
+    //     <FormSelect
     //         control={control}
     //         name={keyName}
     //         options={items}

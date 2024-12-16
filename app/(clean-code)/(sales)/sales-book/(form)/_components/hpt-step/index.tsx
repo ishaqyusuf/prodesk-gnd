@@ -22,7 +22,7 @@ import Money from "@/components/_v1/money";
 
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { Label } from "@/components/ui/label";
 import { MoneyBadge } from "@/components/(clean-code)/money-badge";

@@ -8,8 +8,8 @@ import {
 } from "@/app/(v1)/_actions/hrm/save-employee";
 import { staticRolesAction } from "@/app/(v1)/_actions/hrm/static-roles";
 
-import ControlledAutoComplete from "@/components/common/controls/controlled-auto-complete";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormAutoCompleteInput from "@/components/common/controls/form-auto-complete-input";
+import FormInput from "@/components/common/controls/form-input";
 
 import Modal from "@/components/common/modal";
 import { useModal } from "@/components/common/modal/provider";
@@ -56,28 +56,28 @@ export default function EmployeeForm({ defaultData }: Props) {
                 <Modal.Header title="Employee Form" />
 
                 <div className="grid gap-4">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="name"
                         label="Name"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="username"
                         label="Username"
                     />
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="email"
                         label="Email"
                     />
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <ControlledInput
+                        <FormInput
                             control={form.control}
                             name="phoneNo"
                             label="Phone No"
                         />
-                        <ControlledAutoComplete
+                        <FormAutoCompleteInput
                             loader={staticRolesAction}
                             control={form.control}
                             name="role.id"

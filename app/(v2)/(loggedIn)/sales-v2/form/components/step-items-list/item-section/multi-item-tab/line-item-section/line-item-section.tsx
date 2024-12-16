@@ -4,11 +4,11 @@ import {
     useDykeForm,
 } from "../../../../../_hooks/form-context";
 import { useContext } from "react";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Money from "@/components/_v1/money";
 import { useMultiComponentItem } from "../../../../../_hooks/use-multi-component-item";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
-import ControlledCheckbox from "@/components/common/controls/controlled-checkbox";
+import FormCheckbox from "@/components/common/controls/form-checkbox";
 import PriceBreakDownCell from "../price-breakdown-cell";
 
 interface Props {
@@ -33,7 +33,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 {isMoulding ? (
                     componentTitle
                 ) : (
-                    <ControlledInput
+                    <FormInput
                         size="sm"
                         list
                         control={form.control}
@@ -46,7 +46,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
             {item.isType.service && (
                 <>
                     <TableCell className="w-[50px]">
-                        <ControlledCheckbox
+                        <FormCheckbox
                             control={form.control}
                             switchInput
                             list
@@ -56,7 +56,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                         />
                     </TableCell>
                     <TableCell className="w-[50px]">
-                        <ControlledCheckbox
+                        <FormCheckbox
                             control={form.control}
                             switchInput
                             list
@@ -68,7 +68,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 </>
             )}
             <TableCell className="w-[150px]">
-                <ControlledInput
+                <FormInput
                     type="number"
                     list
                     size="sm"
@@ -82,7 +82,7 @@ export default function LineItemSection({ componentTitle, mdf }: Props) {
                 <PriceBreakDownCell componentItem={componentItem} />
             )}
             <TableCell className="w-[150px]">
-                <ControlledInput
+                <FormInput
                     type="number"
                     list
                     size="sm"

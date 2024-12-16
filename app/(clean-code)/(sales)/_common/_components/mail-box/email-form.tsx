@@ -1,7 +1,7 @@
 import { Form } from "@/components/ui/form";
 import { useMailbox } from "./context";
 import { useForm } from "react-hook-form";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Button from "@/components/common/button";
 import { setSalesCustomerEmailUseCase } from "../../use-case/sales-email-use-case";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +37,7 @@ export default function EmailForm({}) {
         <Form {...form}>
             <div className="flex justify-center py-10">
                 <div className="w-1/2 grid gap-4">
-                    <ControlledInput
+                    <FormInput
                         control={form.control}
                         name="email"
                         label="Email"

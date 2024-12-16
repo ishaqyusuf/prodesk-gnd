@@ -20,9 +20,9 @@ import Money from "@/components/_v1/money";
 import { TableCol } from "@/components/common/data-table/table-cells";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import ControlledSelect from "@/components/common/controls/controlled-select";
+import FormSelect from "@/components/common/controls/form-select";
 import salesData from "../../../sales/sales-data";
-import ControlledInput from "@/components/common/controls/controlled-input";
+import FormInput from "@/components/common/controls/form-input";
 import Btn from "@/components/_v1/btn";
 import { useTransition } from "react";
 import { cn } from "@/lib/utils";
@@ -211,7 +211,7 @@ export default function PaymentModal({
                 {showForm && (
                     <Form {...form}>
                         <div className="grid grid-cols-2 gap-4 border rounded p-2 mb-10">
-                            <ControlledSelect
+                            <FormSelect
                                 className="col-span-2"
                                 size="sm"
                                 label={"Payment Option"}
@@ -219,14 +219,14 @@ export default function PaymentModal({
                                 control={form.control}
                                 name="data.paymentOption"
                             />
-                            <ControlledInput
+                            <FormInput
                                 className=""
                                 size="sm"
                                 label={"Check No"}
                                 control={form.control}
                                 name="data.checkNo"
                             />
-                            <ControlledInput
+                            <FormInput
                                 className=""
                                 size="sm"
                                 label={"Amount"}
