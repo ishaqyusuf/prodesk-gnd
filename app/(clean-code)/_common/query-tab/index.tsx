@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Icons } from "@/components/_v1/icons";
 import { useQueryTabStore } from "./data-store";
+import { isEmpty } from "lodash";
 
 interface Props {
     page: SiteLinksPage;
@@ -30,7 +31,7 @@ export default function QueryTab({ page }: Props) {
                     <Link href={`?${link.query}`}>{link.title}</Link>
                 </Button>
             ))}
-            {store.pageInfo?.query && (
+            {!isEmpty(store.pageInfo?.query) && (
                 <Button
                     size="sm"
                     onClick={() => {
