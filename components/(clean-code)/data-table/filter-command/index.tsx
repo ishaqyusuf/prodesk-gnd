@@ -660,9 +660,18 @@ function InfinityScroll({
     RenderItem,
     filterKey,
 }) {
-    const fetchItems = ({ pageParam = 0, query = "" }) => {
-        console.log(queryKey);
+    const [searchQuery, setSearchQuery] = useState(filterQuery);
+    const debounceTimeout = 300; // 300ms debounce time
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setSearchQuery(filterQuery);
+        }, debounceTimeout);
 
+        return () => clearTimeout(handler);
+    }, [filterQuery]);
+    const fetchItems = ({ pageParam = 0, query = "" }) => {
+        // console.log(queryKey);
+        // console.log(options);
         const pageSize = 20;
         const filtered = query
             ? options.filter((item) =>
@@ -670,8 +679,7 @@ function InfinityScroll({
               )
             : options;
         const items = filtered.slice(pageParam, pageParam + pageSize);
-        console.log(items.length, options.length);
-
+        // console.log(items.length, options.length);
         return {
             items,
             nextPage: pageParam + pageSize,
@@ -686,7 +694,7 @@ function InfinityScroll({
     //     refetch();
     //     console.log({ filterQuery, filterKey });
     // }, [filterQuery]);
-    const queryKey = ["items", filterKey, filterQuery];
+    const queryKey = ["items", filterKey, searchQuery];
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
         useInfiniteQuery({

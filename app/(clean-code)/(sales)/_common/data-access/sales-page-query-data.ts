@@ -76,11 +76,13 @@ export async function getSalesPageQueryDataDta() {
         ],
         "customer.name": [
             ...new Set(
-                sales.map((s) =>
-                    [s.customer?.name, s.customer?.businessName]
-                        .flat()
-                        .filter(Boolean)
-                )
+                sales
+                    .map((s) =>
+                        [s.customer?.name, s.customer?.businessName]
+                            .flat()
+                            .filter(Boolean)
+                    )
+                    .flat()
             ),
         ],
         "sales.rep": [
