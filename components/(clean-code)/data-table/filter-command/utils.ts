@@ -24,6 +24,7 @@ export function getWordByCaretPosition({
     while (end < value.length && value[end] !== SEPARATOR) end++;
 
     const word = value.substring(start, end);
+
     return word;
 }
 
@@ -110,11 +111,13 @@ export function getFilterValue({
     value,
     search,
     currentWord,
+    currentFilter,
 }: {
     value: string;
     search: string;
     keywords?: string[] | undefined;
     currentWord: string;
+    currentFilter: string;
 }): number {
     /**
      * @example value "suggestion:public:true regions,ams,gru,fra"
@@ -135,7 +138,11 @@ export function getFilterValue({
      */
     const [filter, query] = currentWord.toLowerCase().split(":");
 
-    if (query && value.startsWith(`${filter}:`)) {
+    // console.log({ currentWord });
+    if (query && value.startsWith(`${currentFilter}:`)) {
+        // console.log(query);
+
+        return 1;
         if (query.includes(ARRAY_DELIMITER)) {
             /**
              * array of n elements
@@ -169,9 +176,14 @@ export function getFilterValue({
             return 0;
         }
         const rawValue = value.toLowerCase().replace(`${filter}:`, "");
-
-        if (rawValue.includes(query)) return 1;
+        console.log({ rawValue, query });
+        if (rawValue.includes(query)) {
+            console.log({ rawValue, query });
+            return 1;
+        } else {
+        }
     }
+
     return 0;
 }
 

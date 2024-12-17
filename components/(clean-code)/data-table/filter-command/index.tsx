@@ -209,7 +209,13 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                     open ? "visible" : "hidden"
                 )}
                 filter={(value, search, keywords) =>
-                    getFilterValue({ value, search, keywords, currentWord })
+                    getFilterValue({
+                        value,
+                        search,
+                        keywords,
+                        currentWord,
+                        currentFilter,
+                    })
                 }
                 // loop
             >
@@ -219,6 +225,62 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                     onValueChange={setInputValue}
                     onKeyDown={(e) => {
                         if (e.key === "Escape") inputRef?.current?.blur();
+                        if (e.key === "Backspace") {
+                            const caretPosition =
+                                inputRef?.current?.selectionStart || 0;
+                            const value = inputValue;
+                            // const word = getWordByCaretPosition({
+                            //     value,
+                            //     caretPosition,
+                            // });
+                            // console.log(word);
+                            if (value.endsWith("&")) {
+                                const precedingWordIndex = value.lastIndexOf(
+                                    " &",
+                                    caretPosition - 2
+                                );
+                                if (precedingWordIndex !== -1) {
+                                    const updatedValue =
+                                        value.slice(0, precedingWordIndex) +
+                                        value.slice(caretPosition);
+                                    setInputValue(updatedValue);
+                                    console.log(updatedValue);
+                                    console.log(currentWord);
+
+                                    setCurrentWord(
+                                        // updatedValue?.split(":")?.reverse()?.[0]
+                                        updatedValue
+                                    );
+                                    e.preventDefault(); // Prevent default backspace behavior
+                                }
+                            }
+                            if (value.endsWith(":")) {
+                                const lastColonIndex = value.lastIndexOf(
+                                    ":",
+                                    caretPosition - 1
+                                );
+                                const precedingWordIndex =
+                                    value.lastIndexOf(" ", lastColonIndex - 1) +
+                                        1 || 0;
+                                const isSeparatorBefore =
+                                    value[precedingWordIndex] === "&";
+                                // console.log({
+                                //     isSeparatorBefore,
+                                //     i: value[precedingWordIndex - 1],
+                                //     is: value[precedingWordIndex],
+                                //     value,
+                                // });
+
+                                const updatedValue = isSeparatorBefore
+                                    ? value.slice(0, precedingWordIndex + 1) +
+                                      value.slice(caretPosition)
+                                    : "" + value.slice(caretPosition);
+                                setInputValue(updatedValue);
+
+                                setCurrentWord("");
+                                e.preventDefault(); // Prevent default backspace behavior
+                            }
+                        }
                     }}
                     onBlur={() => {
                         setOpen(false);
@@ -246,10 +308,21 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                         const caretPosition =
                             e.currentTarget?.selectionStart || -1;
                         const value = e.currentTarget?.value || "";
+                        const filteredValue = value.replace(
+                            /[^a-zA-Z0-9,\-_.\s]/g,
+                            ""
+                        );
+                        if (filteredValue == value) {
+                            console.log(filteredValue);
+
+                            setInputValue(filteredValue);
+                            return;
+                        }
                         const word = getWordByCaretPosition({
                             value,
                             caretPosition,
                         });
+                        console.log(word);
 
                         setCurrentWord(word);
                     }}
@@ -314,11 +387,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                         return null;
                                     }
 
-                                    if (
-                                        currentFilter != field.value
-                                        // !currentWord.includes(`${field.value}:`)
-                                        // currentWord?.split(':')?.reverse()
-                                    ) {
+                                    if (currentFilter != field.value) {
                                         return null;
                                     }
 
@@ -337,13 +406,14 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                     );
                                     const createWord = currentWord
                                         ?.split(":")
-                                        ?.reverse()[0];
+                                        ?.reverse()?.[0];
+
                                     return (
                                         <>
                                             {!optionExists && createWord && (
                                                 <CommandItem
                                                     key={`${currentWord}`}
-                                                    value={currentWord}
+                                                    value={currentWord?.trim()}
                                                     onMouseDown={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
@@ -372,15 +442,10 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                                     {'"'}
                                                 </CommandItem>
                                             )}
-                                            {/* <CommandItem>
-                                                {currentWord}
-                                            </CommandItem> */}
+
                                             <InfinityScroll
-                                                filterQuery={
-                                                    currentWord
-                                                        ?.split(":")
-                                                        ?.reverse()?.[0]
-                                                }
+                                                filterQuery={createWord}
+                                                filterKey={currentFilter}
                                                 options={options}
                                                 valuePrefix={`${field.value}:`}
                                                 onMouseDown={(e) => {
@@ -416,6 +481,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                                                 {facetedValue?.get(
                                                                     optionValue
                                                                 )}
+                                                                sa
                                                             </span>
                                                         ) : null}
                                                     </>
@@ -592,8 +658,11 @@ function InfinityScroll({
     onMouseDown,
     onSelect,
     RenderItem,
+    filterKey,
 }) {
     const fetchItems = ({ pageParam = 0, query = "" }) => {
+        console.log(queryKey);
+
         const pageSize = 20;
         const filtered = query
             ? options.filter((item) =>
@@ -601,17 +670,29 @@ function InfinityScroll({
               )
             : options;
         const items = filtered.slice(pageParam, pageParam + pageSize);
+        console.log(items.length, options.length);
+
         return {
             items,
             nextPage: pageParam + pageSize,
             hasNextPage: pageParam + pageSize < filtered.length,
         };
     };
+    const fetchItemsMemoized = useMemo(
+        () => fetchItems,
+        [options, filterQuery]
+    );
+    // useEffect(() => {
+    //     refetch();
+    //     console.log({ filterQuery, filterKey });
+    // }, [filterQuery]);
+    const queryKey = ["items", filterKey, filterQuery];
+
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
         useInfiniteQuery({
-            queryKey: ["items", filterQuery],
+            queryKey,
             queryFn: ({ pageParam = 0 }) =>
-                fetchItems({ pageParam, query: filterQuery }),
+                fetchItemsMemoized({ pageParam, query: filterQuery }),
             initialPageParam: 0,
             // getNextPageParam: (lastPage) =>
             //     lastPage.hasNextPage ? lastPage.nextPage : undefined,

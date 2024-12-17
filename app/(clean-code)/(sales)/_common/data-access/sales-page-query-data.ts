@@ -11,6 +11,7 @@ export async function truncateSalesPageDataDta() {
     });
 }
 export async function getSalesPageQueryDataDta() {
+    // return {};
     const pageCache = await prisma.settings.findMany({
         where: {
             type,
@@ -98,5 +99,6 @@ export async function getSalesPageQueryDataDta() {
         },
         where: { id: eId },
     });
+
     return result;
 }
