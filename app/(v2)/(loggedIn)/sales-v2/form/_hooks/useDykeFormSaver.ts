@@ -57,6 +57,8 @@ export default function useDykeFormSaver(form) {
                         router.push(
                             data.dealerMode
                                 ? `/${resp.type}s`
+                                : type == "order"
+                                ? `/sales-book/${type}s`
                                 : `/sales/${type}s`
                         );
                         break;
@@ -65,7 +67,7 @@ export default function useDykeFormSaver(form) {
                             router.push(
                                 data.dealerMode
                                     ? `/sales-form/${resp.type}/${resp.slug}`
-                                    : `/sales-book/edit-${resp.type}/${resp.slug}`
+                                    : `/sales-v2/form/${resp.type}/${resp.slug}`
                             );
                         else await _revalidate("salesV2Form");
                         break;
@@ -73,7 +75,7 @@ export default function useDykeFormSaver(form) {
                         router.push(
                             data.dealerMode
                                 ? `/create-quote`
-                                : `/sales-book/edit-${resp.type}`
+                                : `/sales-book/create-${resp.type}`
                         );
                         break;
                 }

@@ -151,7 +151,7 @@ export default function SalesForm({ data, newTitle, slug }: Props) {
                     if (and == "close") router.push(`/sales/${type}s`);
                     else {
                         if (and == "new")
-                            router.push(`/sales/${type}/new/form`);
+                            router.push(`/sales-book/create-${type}`);
                         else {
                             if (slug != response.orderId)
                                 router.push(

@@ -27,7 +27,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         dayjs(zus.metaData.createdAt),
         "days"
     );
-
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
     }

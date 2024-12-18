@@ -15,7 +15,7 @@ interface Props {
 function _btns(type) {
     const btns = [
         { text: "Old", href: `/sales/edit/${type}/new` },
-        { text: "New", href: `/sales-book/edit-${type}` },
+        { text: "New", href: `/sales-book/create-${type}` },
     ];
     return btns;
 }
