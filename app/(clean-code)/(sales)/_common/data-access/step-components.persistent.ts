@@ -1,17 +1,22 @@
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { DykeProductMeta, StepComponentMeta } from "../../types";
+import {
+    DykeProductMeta,
+    StepComponentForm,
+    StepComponentMeta,
+} from "../../types";
 
 export interface LoadStepComponentsProps {
     stepId?: number;
     stepTitle?: "Door" | "Moulding";
+    id?;
 }
 export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const prods = await __getStepProducts(props);
     const resp = prods
         .filter((p) => p.product || p.door)
-        .map(transformStepProducts);
+        .map(transformStepProduct);
     if (resp.filter((s) => s.sortIndex >= 0).length)
         return resp.sort((a, b) => a.sortIndex - b.sortIndex);
     return resp;
@@ -32,6 +37,7 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
             },
         });
     }
+    if (props.id) wheres.push({ id: props.id });
     if (props.stepId)
         wheres.push({
             dykeStepId: props.stepId,
@@ -61,9 +67,10 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
     return stepProducts;
 }
 
-export function transformStepProducts(
-    prod: AsyncFnType<typeof __getStepProducts>[number]
+export function transformStepProduct(
+    _prod: AsyncFnType<typeof __getStepProducts>[number]
 ) {
+    const { door, product, ...prod } = _prod;
     let meta: StepComponentMeta = prod.meta as any;
     if (!prod.meta)
         meta = {
@@ -71,9 +78,8 @@ export function transformStepProducts(
             deleted: {},
             show: {},
         };
-    let prodMeta: DykeProductMeta =
-        prod.product?.meta || prod.door?.meta || ({} as any);
-    if (prod.door)
+    let prodMeta: DykeProductMeta = product?.meta || door?.meta || ({} as any);
+    if (door)
         prodMeta = {
             // ...findDoorSvg(prod.door.title, prod.door.img),
             ...prodMeta,
@@ -81,24 +87,24 @@ export function transformStepProducts(
     return {
         ...prod,
         meta,
-        door: prod.door
-            ? {
-                  ...prod.door,
-                  meta: prodMeta,
-              }
-            : undefined,
+        // door: prod.door
+        //     ? {
+        //           ...prod.door,
+        //           meta: prodMeta,
+        //       }
+        //     : undefined,
         isDoor: prod.doorId > 0,
-        product: prod.product
-            ? {
-                  ...prod.product,
-                  meta: prodMeta,
-              }
-            : {
-                  ...prod.door,
-                  value: prod.door.title,
-                  description: prod.door.title,
-                  meta: prodMeta,
-              },
+        // product: prod.product
+        //     ? {
+        //           ...prod.product,
+        //           meta: prodMeta,
+        //       }
+        //     : {
+        //           ...prod.door,
+        //           value: prod.door.title,
+        //           description: prod.door.title,
+        //           meta: prodMeta,
+        //       },
         _metaData: {
             price: null,
             hidden: false,
@@ -114,4 +120,38 @@ export async function updateStepComponentDta(id, data) {
             ...data,
         },
     });
+}
+export async function createStepComponentDta(data: StepComponentForm) {
+    const meta = {} satisfies StepComponentMeta;
+    const c = await prisma.dykeStepProducts.create({
+        data: {
+            custom: data.custom,
+            meta,
+            step: {
+                connect: { id: data.stepId },
+            },
+            door: data.isDoor
+                ? {
+                      create: {
+                          title: data.title,
+                          img: data.img,
+                      },
+                  }
+                : undefined,
+            product: data.isDoor
+                ? undefined
+                : {
+                      create: {
+                          title: data.title,
+                          value: data.title,
+                          img: data.img,
+                      },
+                  },
+        },
+        include: {
+            door: data.isDoor,
+            product: !data.isDoor,
+        },
+    });
+    const resp = transformStepProduct(c);
 }

@@ -232,13 +232,6 @@ export async function fixStepsDta() {
             nextStepId: species.id,
         },
     });
-    // console.log(
-    //     ">",
-    //     stepprod.length,
-    //     stepprod.map((s) =>
-    //         s.stepProducts.map((p) => `${p.id}. ${p.product.title}`)
-    //     )
-    // );
 }
 export async function deleteStepProductsByUidDta(uids: string[]) {
     await prisma.dykeStepProducts.updateMany({

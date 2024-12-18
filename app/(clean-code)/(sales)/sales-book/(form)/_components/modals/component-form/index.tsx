@@ -37,8 +37,9 @@ export function useInitContext(props: Props) {
     async function save() {
         const data = form.getValues();
         cls.refreshStepComponentsData();
+
         _modal.close();
-        toast.success("Pricing Updated.");
+        toast.success("Saved.");
     }
     return {
         form,

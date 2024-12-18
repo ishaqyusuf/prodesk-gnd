@@ -516,3 +516,11 @@ export type SalesSettingsMeta = {
         };
     };
 };
+export interface StepComponentForm {
+    title: string;
+    id?;
+    img: string;
+    stepId;
+    isDoor?: boolean;
+    custom?: boolean;
+}
