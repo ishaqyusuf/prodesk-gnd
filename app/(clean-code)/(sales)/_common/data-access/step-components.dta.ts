@@ -6,6 +6,7 @@ import {
     StepComponentForm,
     StepComponentMeta,
 } from "../../types";
+import { generateRandomString } from "@/lib/utils";
 
 export interface LoadStepComponentsProps {
     stepId?: number;
@@ -20,6 +21,8 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
         .map(transformStepProduct);
     // if (resp.filter((s) => s.sortIndex >= 0).length)
     //     return resp.sort((a, b) => a.sortIndex - b.sortIndex);
+    console.log(resp);
+
     return resp;
 }
 export async function __getStepProducts(props: LoadStepComponentsProps) {
@@ -68,10 +71,11 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
     if (props.stepId)
         return stepProducts.filter(
             (_, i) =>
-                stepProducts.findIndex(
-                    (p) =>
-                        p.dykeProductId == _.dykeProductId ||
-                        p.product?.title == _.product?.title
+                stepProducts.findIndex((p) =>
+                    p.name
+                        ? true
+                        : p.dykeProductId == _.dykeProductId ||
+                          p.product?.title == _.product?.title
                 ) == i
         );
     return stepProducts;
@@ -125,6 +129,7 @@ export async function createStepComponentDta(data: StepComponentForm) {
     const meta = {} satisfies StepComponentMeta;
     const c = await prisma.dykeStepProducts.create({
         data: {
+            uid: generateRandomString(5),
             custom: data.custom,
             meta,
             step: {

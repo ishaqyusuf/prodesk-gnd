@@ -65,6 +65,7 @@ export default function StepComponentFormModal(props: Props) {
                 <Modal.Header title={"Step Component"} subtitle={""} />
                 <Form {...ctx.form}>
                     <FormInput
+                        uppercase
                         control={ctx.form.control}
                         name="title"
                         label="Component Name"

@@ -22,6 +22,7 @@ interface Props<T> {
     size?: "sm" | "default" | "xs";
     prefix?: string;
     tabIndex?;
+    uppercase?: boolean;
     inputProps?: InputHTMLAttributes<HTMLInputElement>;
     // defaultValue?:boolean
 }
@@ -37,6 +38,7 @@ export default function FormInput<
     type,
     list,
     prefix,
+    uppercase,
     tabIndex,
     size = "default",
     inputProps,
@@ -96,6 +98,7 @@ export default function FormInput<
                                     // value={""}
                                     {...inputProps}
                                     className={cn(
+                                        uppercase && "uppercase",
                                         fieldState.error && "border-red-400",
                                         size == "sm" && "h-8"
                                     )}
