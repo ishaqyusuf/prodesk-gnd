@@ -19,6 +19,11 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const resp = prods
         // .filter((p) => p.product || p.door)
         .map(transformStepProduct);
+    const filtered = resp.filter(
+        (r, i) => resp.findIndex((s) => s.title == r.title) == i
+    );
+    console.log(filtered.length);
+    return filtered;
     // if (resp.filter((s) => s.sortIndex >= 0).length)
     //     return resp.sort((a, b) => a.sortIndex - b.sortIndex);
     console.log(resp);
@@ -70,23 +75,21 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
             },
         })
     ).sort((a, b) => {
-        if (!a.img || !a.product?.img || !a.door?.img) return 1; // `a` has no image, move it later
+        if (!a.img || !a.product?.img || !a.door?.img) return -1; // `a` has no image, move it later
         if (!b.img || !b.product?.img || !b.door?.img) return -1; // `b` has no image, move it later
         return 0; // Both have images, keep order
     });
     if (props.stepId) {
         console.log(stepProducts.length);
-        const filtered = stepProducts.filter((_, i) =>
-            _.name
-                ? true
-                : stepProducts.findIndex(
-                      (p) =>
-                          p.dykeProductId == _.dykeProductId ||
-                          p.product?.title == _.product?.title
-                  ) == i
-        );
-        console.log(filtered.length);
-        return filtered;
+        // const filtered = stepProducts.filter((_, i) =>
+        //     _.name
+        //         ? true
+        //         : stepProducts.findIndex(
+        //               (p) => p.dykeProductId == _.dykeProductId
+        //           ) == i
+        // );
+        console.log(stepProducts.length);
+        return stepProducts;
     }
     return stepProducts;
 }
