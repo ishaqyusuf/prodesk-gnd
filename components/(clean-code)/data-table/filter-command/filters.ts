@@ -54,6 +54,7 @@ export const filterFields: Partial<{
     ...filterField("production", "checkbox"),
     ...filterField("invoice", "checkbox"),
     ...filterField("sales.rep", "checkbox"),
+    ...filterField("search"),
 };
 export const composeFilter = (
     queryKey: QueryKeys,

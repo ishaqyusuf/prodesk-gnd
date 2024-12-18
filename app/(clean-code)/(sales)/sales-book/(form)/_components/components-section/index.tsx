@@ -79,7 +79,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
             .filter(([a, b]) => {
                 return b;
             })
-            .map(([a, b]) => b) as string[];
+            .map(([a, b]) => a) as string[];
     const batchDeleteAction = useCallback(() => {
         zusDeleteComponents({
             zus,
@@ -92,6 +92,8 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
     }, [stepUid, ctx]);
     const editVisibility = useCallback(() => {
         const uids = selectionUids();
+        console.log(uids);
+
         openComponentVariantModal(
             new ComponentHelperClass(stepUid, uids[0]),
             uids

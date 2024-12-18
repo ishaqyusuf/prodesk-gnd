@@ -62,6 +62,7 @@ export const searchParamsParser: {
     "customer.name": parseAsString,
     address: parseAsString,
     status: parseAsString,
+    search: parseAsString,
     "dispatch.status": parseAsString,
     production: parseAsString,
     invoice: parseAsString,
@@ -92,6 +93,7 @@ export const searchSchema = z.object({
     production: z.string().optional(),
     invoice: z.string().optional(),
     "sales.rep": z.string().optional(),
+    search: z.string().optional(),
     "sales.type": z.enum(["order", "quote"]).optional(),
     "dealer.id": z.number().optional(),
 });

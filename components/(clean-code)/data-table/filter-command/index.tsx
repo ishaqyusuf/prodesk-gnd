@@ -224,11 +224,29 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                     value={inputValue}
                     onValueChange={setInputValue}
                     onKeyDown={(e) => {
+                        const allowedKeys = /^[a-zA-Z0-9]*$/; // Alphanumeric characters
+                        const value = inputValue;
+                        // Allow control keys like Backspace, Tab, Arrow keys
+                        const controlKeys = [
+                            "Backspace",
+                            "Tab",
+                            "ArrowLeft",
+                            "ArrowRight",
+                            "ArrowUp",
+                            "ArrowDown",
+                        ];
+
+                        // Check if the key is not alphanumeric or a control key
+                        if (allowedKeys.test(e.key) && !value) {
+                            setInputValue(`search:${e.key}`);
+                            setCurrentWord(`search:${e.key}`);
+                            e.preventDefault(); // Block the input
+                        }
                         if (e.key === "Escape") inputRef?.current?.blur();
-                        if (e.key === "Backspace") {
+                        else if (e.key === "Backspace") {
                             const caretPosition =
                                 inputRef?.current?.selectionStart || 0;
-                            const value = inputValue;
+
                             // const word = getWordByCaretPosition({
                             //     value,
                             //     caretPosition,
@@ -244,13 +262,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                         value.slice(0, precedingWordIndex) +
                                         value.slice(caretPosition);
                                     setInputValue(updatedValue);
-                                    console.log(updatedValue);
-                                    console.log(currentWord);
-
-                                    setCurrentWord(
-                                        // updatedValue?.split(":")?.reverse()?.[0]
-                                        updatedValue
-                                    );
+                                    setCurrentWord(updatedValue);
                                     e.preventDefault(); // Prevent default backspace behavior
                                 }
                             }
@@ -312,6 +324,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             /[^a-zA-Z0-9,\-_.\s]/g,
                             ""
                         );
+
                         if (filteredValue == value) {
                             console.log(filteredValue);
 
@@ -322,7 +335,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                             value,
                             caretPosition,
                         });
-                        console.log(word);
 
                         setCurrentWord(word);
                     }}
