@@ -78,17 +78,17 @@ export function transformStepProduct(
             deleted: {},
             show: {},
         };
-    let prodMeta: DykeProductMeta = product?.meta || door?.meta || ({} as any);
-    if (door)
-        prodMeta = {
-            // ...findDoorSvg(prod.door.title, prod.door.img),
-            ...prodMeta,
-        };
+    // let prodMeta: DykeProductMeta = product?.meta || door?.meta || ({} as any);
+    // if (door)
+    //     prodMeta = {
+    //         // ...findDoorSvg(prod.door.title, prod.door.img),
+    //         ...prodMeta,
+    //     };
     return {
         uid: component.uid,
         id: component.id,
-        title: door?.title || product?.title,
-        img: product?.img || door?.img,
+        title: prod.name || door?.title || product?.title,
+        img: prod.img || product?.img || door?.img,
         productId: product?.id || door?.id,
         variations: meta?.variations || [],
         salesPrice: null,
@@ -120,28 +120,31 @@ export async function createStepComponentDta(data: StepComponentForm) {
             step: {
                 connect: { id: data.stepId },
             },
-            door: data.isDoor
-                ? {
-                      create: {
-                          title: data.title,
-                          img: data.img,
-                      },
-                  }
-                : undefined,
-            product: data.isDoor
-                ? undefined
-                : {
-                      create: {
-                          title: data.title,
-                          value: data.title,
-                          img: data.img,
-                      },
-                  },
+            img: data.img,
+            name: data.title,
+            // door: data.isDoor
+            //     ? {
+            //           create: {
+            //               title: data.title,
+            //               img: data.img,
+            //           },
+            //       }
+            //     : undefined,
+            // product: data.isDoor
+            //     ? undefined
+            //     : {
+            //           create: {
+            //               title: data.title,
+            //               value: data.title,
+            //               img: data.img,
+            //           },
+            //       },
         },
-        include: {
-            door: data.isDoor,
-            product: !data.isDoor,
-        },
+        // include: {
+        //     door: data.isDoor,
+        //     product: !data.isDoor,
+        // },
     });
-    const resp = transformStepProduct(c);
+    return c;
+    // const resp = transformStepProduct(c as any);
 }

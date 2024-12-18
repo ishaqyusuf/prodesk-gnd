@@ -230,7 +230,7 @@ function Component({
             stepUid,
             productUid: [component.uid],
         });
-        ctx.cls.refreshStepComponentsData();
+        ctx.cls.deleteComponent(component.id);
     }
 
     const editVisibility = useCallback(() => {

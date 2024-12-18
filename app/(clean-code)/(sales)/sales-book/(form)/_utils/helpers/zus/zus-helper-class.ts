@@ -194,7 +194,6 @@ export class StepHelperClass extends SettingsClass {
     }
     public getComponentVariantData() {
         const sequence = this.getItemStepSequence();
-
         const index = sequence?.indexOf(this.itemStepUid);
         const data: {
             steps: { uid: string; title: string }[];
@@ -237,7 +236,19 @@ export class StepHelperClass extends SettingsClass {
             );
         });
     }
-
+    public addStepComponent(component) {
+        this.zus.dotUpdate(`kvStepComponentList.${this.stepUid}`, [
+            component,
+            ...this.getStepComponents,
+        ]);
+        this.refreshStepComponentsData();
+    }
+    public deleteComponent(id) {
+        this.zus.dotUpdate(`kvStepComponentList.${this.stepUid}`, [
+            ...this.getStepComponents.filter((s) => s.id != id),
+        ]);
+        this.refreshStepComponentsData();
+    }
     public async fetchStepComponents(reload = false) {
         const stepData = this.getStepForm();
         const ls = this.getStepComponents;

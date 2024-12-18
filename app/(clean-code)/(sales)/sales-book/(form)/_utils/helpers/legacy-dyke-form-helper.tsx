@@ -1,4 +1,4 @@
-import { LoadStepComponentsProps } from "@/app/(clean-code)/(sales)/_common/data-access/step-components.persistent";
+import { LoadStepComponentsProps } from "@/app/(clean-code)/(sales)/_common/data-access/step-components.dta";
 import { DykeDoorType } from "../../../../types";
 import { IDykeComponentStore } from "../../_hooks/data-store";
 import { LegacyDykeFormItemType } from "../../_hooks/legacy-hooks";

@@ -12,7 +12,7 @@ import {
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { FieldPath } from "react-hook-form";
 import { GetSalesBookForm } from "./_common/use-case/sales-book-form-use-case";
-import { GetStepComponent } from "./_common/data-access/step-components.persistent";
+import { GetStepComponent } from "./_common/data-access/step-components.dta";
 
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
@@ -520,7 +520,7 @@ export type SalesSettingsMeta = {
 export interface StepComponentForm {
     title: string;
     id?;
-    img: string;
+    img?: string;
     stepId;
     isDoor?: boolean;
     custom?: boolean;

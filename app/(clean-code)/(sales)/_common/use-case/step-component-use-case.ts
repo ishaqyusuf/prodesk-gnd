@@ -7,9 +7,11 @@ import {
     getDykeStepTitlesDta,
 } from "../data-access/dyke-steps.persistent";
 import {
+    createStepComponentDta,
     loadStepComponentsDta,
+    transformStepProduct,
     updateStepComponentDta,
-} from "../data-access/step-components.persistent";
+} from "../data-access/step-components.dta";
 import {
     deleteStepProductsByUidDta,
     getSalesFormStepByIdDta,
@@ -17,7 +19,7 @@ import {
     updateStepComponentMetaDta,
     updateStepMetaDta,
 } from "../data-access/sales-form-step-dta";
-import { SalesFormZusData } from "../../types";
+import { SalesFormZusData, StepComponentForm } from "../../types";
 import {
     harvestSalesPricingDta,
     saveHarvestedDta,
@@ -104,4 +106,9 @@ export async function saveHarvestedDoorPricingUseCase(ls) {
 }
 export async function saveComponentRedirectUidUseCase(id, redirectUid) {
     await updateStepComponentDta(id, { redirectUid });
+}
+export async function createComponentUseCase(data: StepComponentForm) {
+    const c = await createStepComponentDta(data);
+    const resp = transformStepProduct(c as any);
+    return resp;
 }
