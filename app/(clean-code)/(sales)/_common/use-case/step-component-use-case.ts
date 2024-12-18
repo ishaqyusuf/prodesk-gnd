@@ -6,11 +6,13 @@ import {
     getDykeStepProductTitles,
     getDykeStepTitlesDta,
 } from "../data-access/dyke-steps.persistent";
-import { updateStepComponentDta } from "../data-access/step-components.persistent";
+import {
+    loadStepComponentsDta,
+    updateStepComponentDta,
+} from "../data-access/step-components.persistent";
 import {
     deleteStepProductsByUidDta,
     getSalesFormStepByIdDta,
-    getStepComponentsDta,
     getStepComponentsMetaByUidDta,
     updateStepComponentMetaDta,
     updateStepMetaDta,
@@ -46,7 +48,7 @@ export async function sortStepComponentsUseCase(components) {
     );
 }
 export async function getStepComponentsUseCase(stepTitle, stepId) {
-    return await getStepComponentsDta(stepTitle, stepId);
+    return await loadStepComponentsDta({ stepTitle, stepId });
 }
 interface GetNextStepProps {
     nextStepId;

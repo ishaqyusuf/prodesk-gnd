@@ -1,4 +1,3 @@
-import { Icons } from "@/components/_v1/icons";
 import { _modal } from "@/components/common/modal/provider";
 import FormSettingsModal from "./modals/form-settings-modal";
 import { useFormDataStore } from "../_common/_stores/form-data-store";

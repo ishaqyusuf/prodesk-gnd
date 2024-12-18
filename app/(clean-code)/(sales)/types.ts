@@ -12,7 +12,8 @@ import {
 import { DykeForm as OldDykeForm } from "@/app/(v2)/(loggedIn)/sales-v2/type";
 import { FieldPath } from "react-hook-form";
 import { GetSalesBookForm } from "./_common/use-case/sales-book-form-use-case";
-import { GetStepComponents } from "./_common/data-access/sales-form-step-dta";
+import { GetStepComponent } from "./_common/data-access/step-components.persistent";
+
 export type SalesType = "order" | "quote";
 export type SalesPriority = "Low" | "High" | "Medium" | "Non";
 export type DykeStepTitles =
@@ -490,10 +491,10 @@ export interface SalesFormZusData extends SalesFormFields {
 
     formStatus: "ready" | "loading" | "saving";
     kvFilteredStepComponentList: {
-        [stepItemUid in string]: GetStepComponents;
+        [stepItemUid in string]: GetStepComponent[];
     };
     kvStepComponentList: {
-        [stepUid in string]: GetStepComponents;
+        [stepUid in string]: GetStepComponent[];
     };
     oldFormState?: SalesFormFields;
 }

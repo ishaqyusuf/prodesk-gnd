@@ -17,8 +17,8 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const resp = prods
         .filter((p) => p.product || p.door)
         .map(transformStepProduct);
-    if (resp.filter((s) => s.sortIndex >= 0).length)
-        return resp.sort((a, b) => a.sortIndex - b.sortIndex);
+    // if (resp.filter((s) => s.sortIndex >= 0).length)
+    //     return resp.sort((a, b) => a.sortIndex - b.sortIndex);
     return resp;
 }
 export async function __getStepProducts(props: LoadStepComponentsProps) {
@@ -68,9 +68,9 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
 }
 
 export function transformStepProduct(
-    _prod: AsyncFnType<typeof __getStepProducts>[number]
+    component: AsyncFnType<typeof __getStepProducts>[number]
 ) {
-    const { door, product, ...prod } = _prod;
+    const { door, product, ...prod } = component;
     let meta: StepComponentMeta = prod.meta as any;
     if (!prod.meta)
         meta = {
@@ -85,34 +85,24 @@ export function transformStepProduct(
             ...prodMeta,
         };
     return {
-        ...prod,
-        meta,
-        // door: prod.door
-        //     ? {
-        //           ...prod.door,
-        //           meta: prodMeta,
-        //       }
-        //     : undefined,
-        isDoor: prod.doorId > 0,
-        // product: prod.product
-        //     ? {
-        //           ...prod.product,
-        //           meta: prodMeta,
-        //       }
-        //     : {
-        //           ...prod.door,
-        //           value: prod.door.title,
-        //           description: prod.door.title,
-        //           meta: prodMeta,
-        //       },
+        uid: component.uid,
+        id: component.id,
+        title: door?.title || product?.title,
+        img: product?.img || door?.img,
+        productId: product?.id || door?.id,
+        variations: meta?.variations || [],
+        salesPrice: null,
+        basePrice: null,
+        stepId: component.dykeStepId,
+        productCode: component.productCode,
+        redirectUid: component.redirectUid,
         _metaData: {
-            price: null,
-            hidden: false,
-            basePrice: null,
+            custom: component.custom,
+            visible: false,
         },
     };
 }
-
+export type GetStepComponent = ReturnType<typeof transformStepProduct>;
 export async function updateStepComponentDta(id, data) {
     return await prisma.dykeStepProducts.update({
         where: { id },
