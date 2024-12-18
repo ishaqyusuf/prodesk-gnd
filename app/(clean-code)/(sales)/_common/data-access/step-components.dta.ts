@@ -56,35 +56,35 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
     }
     if (props.id) wheres.push({ id: props.id });
 
-    const stepProducts = await prisma.dykeStepProducts.findMany({
-        where:
-            wheres.length == 0
-                ? wheres[0]
-                : {
-                      AND: wheres,
-                  },
-        include: {
-            door: props.stepTitle != null,
-            product: true,
-        },
+    const stepProducts = (
+        await prisma.dykeStepProducts.findMany({
+            where:
+                wheres.length == 0
+                    ? wheres[0]
+                    : {
+                          AND: wheres,
+                      },
+            include: {
+                door: props.stepTitle != null,
+                product: true,
+            },
+        })
+    ).sort((a, b) => {
+        if (!a.img || !a.product?.img || !a.door?.img) return 1; // `a` has no image, move it later
+        if (!b.img || !b.product?.img || !b.door?.img) return -1; // `b` has no image, move it later
+        return 0; // Both have images, keep order
     });
     if (props.stepId) {
         console.log(stepProducts.length);
-        const filtered = stepProducts
-            .sort((a, b) => {
-                if (!a.img) return 1; // `a` has no image, move it later
-                if (!b.img) return -1; // `b` has no image, move it later
-                return 0; // Both have images, keep order
-            })
-            .filter((_, i) =>
-                _.name
-                    ? true
-                    : stepProducts.findIndex(
-                          (p) =>
-                              p.dykeProductId == _.dykeProductId ||
-                              p.product?.title == _.product?.title
-                      ) == i
-            );
+        const filtered = stepProducts.filter((_, i) =>
+            _.name
+                ? true
+                : stepProducts.findIndex(
+                      (p) =>
+                          p.dykeProductId == _.dykeProductId ||
+                          p.product?.title == _.product?.title
+                  ) == i
+        );
         console.log(filtered.length);
         return filtered;
     }

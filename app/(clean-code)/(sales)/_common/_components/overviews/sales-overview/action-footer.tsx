@@ -54,7 +54,7 @@ export default function ActionFooter({}) {
                             {
                                 slugs: ctx.item?.slug,
                                 mode: "order",
-                                preview: true,
+                                preview: false,
                             },
                             true
                         );
