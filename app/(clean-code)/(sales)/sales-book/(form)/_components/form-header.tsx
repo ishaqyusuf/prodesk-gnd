@@ -23,12 +23,10 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         { name: "info", title: "Sales Info" },
         { name: "address", title: "Address Info" },
     ];
-    const isOld = dayjs().diff(
-        dayjs(zus.metaData.createdAt), //.subtract(10, "D"),
-
-        "D"
+    const isOld = dayjs("12/18/2024").diff(
+        dayjs(zus.metaData.createdAt),
+        "days"
     );
-    console.log(isOld);
 
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
@@ -111,7 +109,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4">
-                {zus.metaData?.id && (
+                {isOld > 0 && (
                     <Link
                         className={cn(
                             buttonVariants({
