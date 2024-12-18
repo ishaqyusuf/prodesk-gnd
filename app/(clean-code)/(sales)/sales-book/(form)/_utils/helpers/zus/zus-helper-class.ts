@@ -436,7 +436,7 @@ export class StepHelperClass extends SettingsClass {
         const stepProdPricings = this.getComponentPricings(componentUid);
 
         sizeList.map((sl) => {
-            formData.priceVariants[sl.size] = stepProdPricings[sl.size] || {
+            formData.priceVariants[sl.size] = stepProdPricings?.[sl.size] || {
                 id: null,
                 price: "",
             };

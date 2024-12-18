@@ -24,7 +24,6 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
 }
 export async function __getStepProducts(props: LoadStepComponentsProps) {
     const wheres: Prisma.DykeStepProductsWhereInput[] = [];
-    console.log(props);
 
     if (props.stepTitle == "Door")
         wheres.push({
