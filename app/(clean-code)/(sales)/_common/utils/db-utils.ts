@@ -22,9 +22,10 @@ export function whereSales(query: FilterParams) {
         whereAnd.push({
             deletedAt: anyDateQuery(),
         });
-    const q = query._q;
+    const q = query.search;
     if (q) {
-        const parsedQ = parseSearchQuery(q);
+        const searchQ = whereSearch(q);
+        if (searchQ) whereAnd.push(searchQ);
     }
     if (query["dealer.id"])
         whereAnd.push({
@@ -145,17 +146,24 @@ export function whereSales(query: FilterParams) {
 
     return where;
 }
-export function parseSearchQuery(query) {
-    if (!query) return null;
+export function parseSearchQuery(_query) {
+    let itemSearch = null;
+    if (_query?.startsWith("item:")) {
+        itemSearch = _query.split("item:")[1]?.trim();
+        // return {
+        //     itemSearch,
+        // };
+    }
+    if (!itemSearch) return null;
     const sizePattern = /\b(\d+-\d+)\s*x\s*(\d+-\d+)\b/;
-    const match = query.match(sizePattern);
+    const match = itemSearch.match(sizePattern);
 
     let size = "";
-    let otherQuery = query;
+    let otherQuery = itemSearch;
 
     if (match) {
         size = match[0];
-        otherQuery = query.replace(sizePattern, "").trim();
+        otherQuery = itemSearch.replace(sizePattern, "").trim();
     }
     const spl = size.trim().split(" ");
     if (size && spl.length == 3) {
@@ -165,8 +173,94 @@ export function parseSearchQuery(query) {
     return {
         size: size,
         otherQuery: otherQuery,
-        originalQuery: query,
+        originalQuery: itemSearch,
     };
+}
+function whereSearch(query): Prisma.SalesOrdersWhereInput | null {
+    const inputQ = { contains: query || undefined } as any;
+    const parsedQ = parseSearchQuery(query);
+    if (parsedQ) {
+        return {
+            items: {
+                some: {
+                    OR: [
+                        { description: query },
+                        { description: parsedQ.otherQuery },
+                        {
+                            salesDoors: {
+                                some: {
+                                    dimension: parsedQ.size
+                                        ? {
+                                              contains: parsedQ.size,
+                                          }
+                                        : undefined,
+                                },
+                            },
+                            housePackageTool: {
+                                OR: [
+                                    {
+                                        door: {
+                                            title: {
+                                                contains: parsedQ.otherQuery,
+                                            },
+                                        },
+                                    },
+                                    {
+                                        molding: {
+                                            title: {
+                                                contains: parsedQ.otherQuery,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+    }
+    if (query) {
+        return {
+            OR: [
+                { orderId: inputQ },
+                {
+                    customer: {
+                        OR: [
+                            {
+                                businessName: inputQ,
+                            },
+                            {
+                                name: inputQ,
+                            },
+                            {
+                                email: inputQ,
+                            },
+                            {
+                                phoneNo: inputQ,
+                            },
+                        ],
+                    },
+                },
+                {
+                    billingAddress: {
+                        OR: [
+                            { address1: inputQ },
+                            {
+                                phoneNo: inputQ,
+                            },
+                        ],
+                    },
+                },
+                {
+                    producer: {
+                        name: inputQ,
+                    },
+                },
+            ],
+        };
+    }
+    return null;
 }
 export const excludeDeleted = {
     where: { deletedAt: null },

@@ -1,11 +1,7 @@
 import { AsyncFnType } from "@/app/(clean-code)/type";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import {
-    DykeProductMeta,
-    StepComponentForm,
-    StepComponentMeta,
-} from "../../types";
+import { StepComponentForm, StepComponentMeta } from "../../types";
 import { generateRandomString } from "@/lib/utils";
 
 export interface LoadStepComponentsProps {
@@ -15,7 +11,6 @@ export interface LoadStepComponentsProps {
 }
 export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const prods = await __getStepProducts(props);
-
     const resp = prods
         // .filter((p) => p.product || p.door)
         .map(transformStepProduct);
@@ -61,24 +56,23 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
     }
     if (props.id) wheres.push({ id: props.id });
 
-    const stepProducts = (
-        await prisma.dykeStepProducts.findMany({
-            where:
-                wheres.length == 0
-                    ? wheres[0]
-                    : {
-                          AND: wheres,
-                      },
-            include: {
-                door: props.stepTitle != null,
-                product: true,
-            },
-        })
-    ).sort((a, b) => {
-        if (!a.img || !a.product?.img || !a.door?.img) return -1; // `a` has no image, move it later
-        if (!b.img || !b.product?.img || !b.door?.img) return -1; // `b` has no image, move it later
-        return 0; // Both have images, keep order
+    const stepProducts = await prisma.dykeStepProducts.findMany({
+        where:
+            wheres.length == 0
+                ? wheres[0]
+                : {
+                      AND: wheres,
+                  },
+        include: {
+            door: props.stepTitle != null,
+            product: true,
+        },
     });
+    // .sort((a, b) => {
+    //     if (!a.img || !a.product?.img || !a.door?.img) return -1; // `a` has no image, move it later
+    //     if (!b.img || !b.product?.img || !b.door?.img) return -1; // `b` has no image, move it later
+    //     return 0; // Both have images, keep order
+    // });
     if (props.stepId) {
         console.log(stepProducts.length);
         // const filtered = stepProducts.filter((_, i) =>

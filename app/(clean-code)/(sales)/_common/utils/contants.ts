@@ -61,6 +61,7 @@ export const __filters: Filters = {
             filterFields.production,
             filterFields.invoice,
             filterFields["sales.rep"],
+            filterFields.search,
         ],
         filterColumns: [
             filterCol("order.no"),
@@ -70,6 +71,7 @@ export const __filters: Filters = {
             filterCol("production"),
             filterCol("invoice"),
             filterCol("sales.rep"),
+            filterCol("search"),
         ],
         options: {
             invoice: INVOICE_FILTER_OPTIONS,

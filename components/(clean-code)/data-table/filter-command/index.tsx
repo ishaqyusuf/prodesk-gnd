@@ -140,7 +140,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
             //     return f;
             // });
             const ser = serializeColumFilters(columnFilters, filterFields);
-            console.log({ ser, columnFilters, filterFields });
+            // console.log({ ser, columnFilters, filterFields });
 
             setInputValue(ser);
         }
@@ -226,16 +226,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                     onKeyDown={(e) => {
                         const allowedKeys = /^[a-zA-Z0-9]*$/; // Alphanumeric characters
                         const value = inputValue;
-                        // Allow control keys like Backspace, Tab, Arrow keys
-                        const controlKeys = [
-                            "Backspace",
-                            "Tab",
-                            "ArrowLeft",
-                            "ArrowRight",
-                            "ArrowUp",
-                            "ArrowDown",
-                        ];
-
                         // Check if the key is not alphanumeric or a control key
                         if (allowedKeys.test(e.key) && !value) {
                             setInputValue(`search:${e.key}`);
@@ -246,12 +236,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                         else if (e.key === "Backspace") {
                             const caretPosition =
                                 inputRef?.current?.selectionStart || 0;
-
-                            // const word = getWordByCaretPosition({
-                            //     value,
-                            //     caretPosition,
-                            // });
-                            // console.log(word);
                             if (value.endsWith("&")) {
                                 const precedingWordIndex = value.lastIndexOf(
                                     " &",
@@ -419,7 +403,7 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                     const createWord = currentWord
                                         ?.split(":")
                                         ?.reverse()?.[0];
-
+                                    // console.log({ optionExists, createWord });
                                     return (
                                         <>
                                             {!optionExists && createWord && (
@@ -499,51 +483,6 @@ export function DataTableFilterCommand<TData, TSchema extends z.AnyZodObject>({
                                                     </>
                                                 )}
                                             />
-                                            {/* Render existing options */}
-                                            {[].map((optionValue) => {
-                                                return (
-                                                    <CommandItem
-                                                        key={`${String(
-                                                            field.value
-                                                        )}:${optionValue}`}
-                                                        value={`${String(
-                                                            field.value
-                                                        )}:${optionValue}`}
-                                                        onMouseDown={(e) => {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onSelect={(value) => {
-                                                            setInputValue(
-                                                                (prev) =>
-                                                                    replaceInputByFieldType(
-                                                                        {
-                                                                            prev,
-                                                                            currentWord,
-                                                                            optionValue,
-                                                                            value,
-                                                                            field,
-                                                                        }
-                                                                    )
-                                                            );
-                                                            setCurrentWord("");
-                                                        }}
-                                                    >
-                                                        {`${optionValue}`}
-                                                        {facetedValue?.has(
-                                                            optionValue
-                                                        ) ? (
-                                                            <span className="ml-auto font-mono text-muted-foreground">
-                                                                {facetedValue?.get(
-                                                                    optionValue
-                                                                )}
-                                                            </span>
-                                                        ) : null}
-                                                    </CommandItem>
-                                                );
-                                            })}
-
-                                            {/* Handle "create new" option if typed value does not exist in options */}
                                         </>
                                     );
                                 })}
