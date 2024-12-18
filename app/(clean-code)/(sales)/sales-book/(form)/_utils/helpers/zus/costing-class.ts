@@ -192,6 +192,8 @@ export class CostingClass {
             Object.entries(groupItem?.form || {}).map(([uid, formData]) => {
                 if (!formData.selected) return;
                 const isService = groupItem.type == "SERVICE";
+                // console.log(groupItem.type);
+
                 const price = Number(formData.pricing?.totalPrice || 0);
                 const taxxable =
                     !isService || (isService && formData.meta.taxxable);

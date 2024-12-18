@@ -139,6 +139,8 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             };
         return control;
     }
+    console.log(filteredItems?.length);
+
     const itemGroup = filteredItems.map((item, fItemIndex) => {
         const startPointIndex = data.items.findIndex(
             (fi) => fi.id == filteredItems[fItemIndex]?.id
@@ -154,7 +156,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             if (data.isDyke)
                 return (
                     _item.id == item.id ||
-                    (item.multiDyke && item.multiDyke == _item.multiDyke)
+                    (item.multiDyke && item.multiDykeUid == _item.multiDykeUid)
                 );
 
             return _item.qty &&
@@ -166,7 +168,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
         }
 
         const groupedItems = data.items.filter(filterGroup);
-        console.log(groupedItems);
+        console.log(groupedItems.length);
 
         const items: LineItemOverview[] = [];
         groupedItems?.map((gItem) => {
