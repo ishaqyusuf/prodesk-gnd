@@ -146,7 +146,13 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                     ) : (
                         <>
                             <span className="uppercase font-mono font-semibold text-sm">
-                                {items?.length} components
+                                {
+                                    items
+                                        ?.filter((s) => !s._metaData?.custom)
+                                        ?.filter((a) => a._metaData.visible)
+                                        ?.length
+                                }{" "}
+                                components
                             </span>
                             <Menu label={"Step Option"} Icon={Icons.settings}>
                                 {isDoor ? (
