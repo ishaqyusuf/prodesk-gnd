@@ -68,16 +68,26 @@ export async function __getStepProducts(props: LoadStepComponentsProps) {
             product: true,
         },
     });
-    if (props.stepId)
-        return stepProducts.filter(
-            (_, i) =>
-                stepProducts.findIndex((p) =>
-                    p.name
-                        ? true
-                        : p.dykeProductId == _.dykeProductId ||
-                          p.product?.title == _.product?.title
-                ) == i
-        );
+    if (props.stepId) {
+        console.log(stepProducts.length);
+        const filtered = stepProducts
+            .sort((a, b) => {
+                if (!a.img) return 1; // `a` has no image, move it later
+                if (!b.img) return -1; // `b` has no image, move it later
+                return 0; // Both have images, keep order
+            })
+            .filter((_, i) =>
+                _.name
+                    ? true
+                    : stepProducts.findIndex(
+                          (p) =>
+                              p.dykeProductId == _.dykeProductId ||
+                              p.product?.title == _.product?.title
+                      ) == i
+            );
+        console.log(filtered.length);
+        return filtered;
+    }
     return stepProducts;
 }
 

@@ -228,8 +228,8 @@ export class StepHelperClass extends SettingsClass {
 
         return data;
     }
-    public refreshStepComponentsData() {
-        this.fetchStepComponents().then((result) => {
+    public refreshStepComponentsData(reload = false) {
+        this.fetchStepComponents(reload).then((result) => {
             this.zus.dotUpdate(
                 `kvFilteredStepComponentList.${this.itemStepUid}`,
                 result

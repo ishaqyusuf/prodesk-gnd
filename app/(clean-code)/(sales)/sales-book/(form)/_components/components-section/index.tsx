@@ -181,6 +181,14 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                 >
                                     Component
                                 </Menu.Item>
+                                <Menu.Item
+                                    onClick={() => {
+                                        ctx.cls.refreshStepComponentsData(true);
+                                    }}
+                                    icon="add"
+                                >
+                                    Refresh
+                                </Menu.Item>
                             </Menu>
                             {!hasSelections || (
                                 <>
