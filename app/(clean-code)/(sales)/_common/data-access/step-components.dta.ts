@@ -14,8 +14,9 @@ export interface LoadStepComponentsProps {
 }
 export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
     const prods = await __getStepProducts(props);
+
     const resp = prods
-        .filter((p) => p.product || p.door)
+        // .filter((p) => p.product || p.door)
         .map(transformStepProduct);
     // if (resp.filter((s) => s.sortIndex >= 0).length)
     //     return resp.sort((a, b) => a.sortIndex - b.sortIndex);
@@ -23,25 +24,35 @@ export async function loadStepComponentsDta(props: LoadStepComponentsProps) {
 }
 export async function __getStepProducts(props: LoadStepComponentsProps) {
     const wheres: Prisma.DykeStepProductsWhereInput[] = [];
+    console.log(props);
+
     if (props.stepTitle == "Door")
         wheres.push({
-            door: { isNot: null },
-            deletedAt: {},
+            OR: [
+                { door: { isNot: null }, deletedAt: {} },
+                { dykeStepId: props.stepId },
+            ],
         });
     else if (props.stepTitle == "Moulding") {
         wheres.push({
-            product: {
-                category: {
-                    title: props.stepTitle,
+            OR: [
+                {
+                    product: {
+                        category: {
+                            title: props.stepTitle,
+                        },
+                    },
                 },
-            },
+                { dykeStepId: props.stepId },
+            ],
         });
+    } else {
+        if (props.stepId)
+            wheres.push({
+                dykeStepId: props.stepId,
+            });
     }
     if (props.id) wheres.push({ id: props.id });
-    if (props.stepId)
-        wheres.push({
-            dykeStepId: props.stepId,
-        });
 
     const stepProducts = await prisma.dykeStepProducts.findMany({
         where:
