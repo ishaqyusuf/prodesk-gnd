@@ -20,7 +20,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     const tabs = [
         { name: "invoice", title: "Invoice Builder", default: true },
         { name: "info", title: "Sales Info" },
-        { name: "address", title: "Address Info" },
+        { name: "address", title: "Customer Info" },
     ];
     const isOld = dayjs("12/18/2024").diff(
         dayjs(zus.metaData.createdAt),
