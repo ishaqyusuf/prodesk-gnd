@@ -68,6 +68,7 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
 }
 function _Table({}) {
     const { table, columns } = useDataTableContext();
+
     return (
         <div
             // className="sm:border sm:rounded-lg"
@@ -78,7 +79,7 @@ function _Table({}) {
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header, index) => {
-                                if (!header.id.includes("_"))
+                                if (!header.id.includes("__"))
                                     return (
                                         <TableHead
                                             key={`${header.id}_${index}`}
@@ -101,7 +102,9 @@ function _Table({}) {
                     {table.getRowModel().rows?.length ? (
                         table
                             .getRowModel()
-                            .rows.map((row) => <Tr key={row.id} row={row} />)
+                            .rows.map((row, index) => (
+                                <Tr rowIndex={index} key={row.id} row={row} />
+                            ))
                     ) : (
                         <TableRow>
                             <TableCell
@@ -118,9 +121,10 @@ function _Table({}) {
     );
 }
 interface TrProps {
+    rowIndex;
     row: TableRowModel;
 }
-function Tr({ row }: TrProps) {
+function Tr({ row, rowIndex }: TrProps) {
     return (
         <TableRow
             className={cn("")}

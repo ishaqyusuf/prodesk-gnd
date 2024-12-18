@@ -77,6 +77,8 @@ export function useInfiniteDataTable({
         React.useState<SortingState>(defaultColumnSorting);
     const [rowSelection, setRowSelection] =
         React.useState<RowSelectionState>(defaultRowSelection);
+    console.log(queryKey);
+
     const [columnOrder, setColumnOrder] = useLocalStorage<string[]>(
         `${queryKey}-data-table-column-order`,
         []

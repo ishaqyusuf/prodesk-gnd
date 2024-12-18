@@ -19,6 +19,7 @@ export function useLocalStorage<T>(
         // initialize
         if (typeof window !== "undefined") {
             const stored = getItemFromLocalStorage(key);
+            console.log(stored);
             if (stored !== null) setStoredValue(stored);
         }
     }, [key]);
@@ -44,4 +45,3 @@ export function useLocalStorage<T>(
 
     return [storedValue, setValue];
 }
-

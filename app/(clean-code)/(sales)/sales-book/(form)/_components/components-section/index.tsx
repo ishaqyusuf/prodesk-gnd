@@ -33,6 +33,7 @@ import { openDoorPriceModal } from "../modals/door-price-modal";
 import { openComponentVariantModal } from "../modals/component-visibility-modal";
 import { useStepContext } from "./ctx";
 import { openStepPricingModal } from "../modals/step-pricing-modal";
+import { openComponentModal } from "../modals/component-form";
 
 interface Props {
     itemStepUid;
@@ -172,6 +173,14 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                         </Menu.Item>
                                     </>
                                 )}
+                                <Menu.Item
+                                    onClick={() => {
+                                        openComponentModal(ctx.cls);
+                                    }}
+                                    icon="add"
+                                >
+                                    Component
+                                </Menu.Item>
                             </Menu>
                             {!hasSelections || (
                                 <>

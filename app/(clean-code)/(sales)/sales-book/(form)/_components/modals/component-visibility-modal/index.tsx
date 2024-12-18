@@ -62,6 +62,7 @@ export function useInitContext(cls: ComponentHelperClass, componentsUid) {
         _modal.close();
         toast.success("Component Visibility Updated.");
         cls.updateStepComponentVariants(formData, componentsUid);
+        cls.refreshStepComponentsData();
     }
     function addRule() {
         varArray.append({
