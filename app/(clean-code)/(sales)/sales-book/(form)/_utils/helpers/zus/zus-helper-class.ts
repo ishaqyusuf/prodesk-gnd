@@ -237,7 +237,7 @@ export class StepHelperClass extends SettingsClass {
             );
         });
     }
-    public loadStepComponents(reload = false) {}
+
     public async fetchStepComponents(reload = false) {
         const stepData = this.getStepForm();
         const ls = this.getStepComponents;

@@ -228,6 +228,7 @@ model DykeStepProducts {
     uid               String?             @unique
     productCode       String?
     name              String?
+    img               String?
     redirectUid       String?
     custom            Boolean?            @default(false)
     sortIndex         Int?

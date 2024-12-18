@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import dayjs from "dayjs";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -22,6 +23,13 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         { name: "info", title: "Sales Info" },
         { name: "address", title: "Address Info" },
     ];
+    const isOld = dayjs().diff(
+        dayjs(zus.metaData.createdAt), //.subtract(10, "D"),
+
+        "D"
+    );
+    console.log(isOld);
+
     function isActive(tab) {
         return (!zus.currentTab && tab.default) || zus.currentTab == tab.name;
     }
