@@ -144,13 +144,7 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                     ) : (
                         <>
                             <span className="uppercase font-mono font-semibold text-sm">
-                                {
-                                    items
-                                        ?.filter((s) => !s._metaData?.custom)
-                                        ?.filter((a) => a._metaData.visible)
-                                        ?.length
-                                }{" "}
-                                components
+                                {items?.length} components
                             </span>{" "}
                             <SearchBar ctx={ctx} />
                             <Menu Icon={Icons.menu}>
