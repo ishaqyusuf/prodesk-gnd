@@ -152,6 +152,7 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                                     Icon={Folder}
                                     SubMenu={ctx.tabs?.map((tb) => (
                                         <Menu.Item
+                                            key={tb.tab}
                                             shortCut={tb.count}
                                             Icon={tb.Icon}
                                             onClick={() => ctx.setTab(tb.tab)}
