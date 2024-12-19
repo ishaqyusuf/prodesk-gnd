@@ -89,7 +89,6 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
     }, [stepUid, ctx]);
     const editVisibility = useCallback(() => {
         const uids = selectionUids();
-        console.log(uids);
 
         openComponentVariantModal(
             new ComponentHelperClass(stepUid, uids[0]),
@@ -97,7 +96,7 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
         );
         ctx.clearSelection();
     }, [selectionState, stepUid, ctx]);
-    const hasSelections = useMemo(() => ctx.cls.hasSelections(), [ctx.cls]);
+    const hasSelections = ctx.cls.getItemForm()?.groupItem?.qty?.total > 0;
     return (
         <>
             <div

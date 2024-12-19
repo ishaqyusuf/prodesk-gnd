@@ -17,7 +17,7 @@ import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
 import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal/open-modal";
-import { sum } from "@/lib/utils";
+import { generateRandomString, sum } from "@/lib/utils";
 import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;
@@ -67,6 +67,7 @@ export class StepHelperClass extends SettingsClass {
         return this.getItemForm()?.groupItem?.qty?.total;
     }
     public hasSelections() {
+        console.log([this.getTotalSelectionsQty(), this.isMultiSelect()]);
         return this.getTotalSelectionsQty() && this.isMultiSelect();
     }
     public getStepIndex() {
@@ -294,7 +295,7 @@ export class StepHelperClass extends SettingsClass {
             .flat()
             ?.filter((a) => a._metaData?.visible);
     }
-
+    public selectionUid;
     public filterStepComponents(components: ZusComponent[]) {
         const filteredComponents = components
             // ?.filter(cls.isComponentVisible)
@@ -635,7 +636,6 @@ export class ComponentHelperClass extends StepHelperClass {
             openDoorSizeSelectModal(this);
         } else if (this.isMoulding()) {
             let groupItem = this.getItemForm()?.groupItem;
-
             groupItem.type = "MOULDING";
             groupItem.stepUid = this.component.uid;
             if (!groupItem.form?.[this.componentUid])
@@ -677,7 +677,6 @@ export class ComponentHelperClass extends StepHelperClass {
                 .filter(([uid, data]) => data.selected)
                 .map(([uid, data]) => uid);
             groupItem.qty.total = groupItem.itemIds?.length;
-            console.log(groupItem.qty.total);
 
             this.dotUpdateItemForm("groupItem", groupItem);
             // this.getNextRouteFromSettings;
@@ -687,6 +686,12 @@ export class ComponentHelperClass extends StepHelperClass {
         } else {
             let stepData = this.getStepForm();
             const component = this.component;
+            if (stepData.title == "Item Type") {
+                if (component.title == "Moulding") {
+                    this.dotUpdateItemForm("groupItem.type", "SERVICE");
+                    console.log("SERVICE>>>");
+                }
+            }
             stepData = {
                 ...stepData,
                 componentUid: this.componentUid,

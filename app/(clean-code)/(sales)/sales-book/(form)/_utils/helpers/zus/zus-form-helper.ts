@@ -181,13 +181,14 @@ export function zhInitializeState(data: GetSalesBookForm) {
         function addFormItem(formId, formData: GroupType["form"][""]) {
             formData.primaryGroupItem =
                 formData.meta.salesItemId == item.item.id;
-            // console.log({
-            //     salesItemId: item.item.id,
-            // });
 
+            resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
+            console.log({ formId, formData });
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
+            console.log(data);
+
             const stepProdUid =
                 item.item?.housePackageTool?.stepProduct?.uid ||
                 item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
@@ -266,8 +267,6 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     stepProductId: data.stepProduct?.id,
                 });
             } else {
-                //
-                console.log(data);
                 const formId = `${data.uid}`;
                 pushItemId(formId);
                 setType("SERVICE");
