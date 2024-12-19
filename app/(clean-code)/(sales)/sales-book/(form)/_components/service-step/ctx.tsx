@@ -14,6 +14,9 @@ export const useCreateContext = (itemStepUid) => {
 
     const itemIds = zus?.kvFormItem?.[itemUid]?.groupItem?.itemIds;
     const ctx = new ServiceClass(itemStepUid);
+    useEffect(() => {
+        ctx.dotUpdateItemForm("groupItem.type", "SERVICE");
+    }, []);
     const _ctx = useMemo(() => {
         const itemForm = ctx.getItemForm();
         return {
