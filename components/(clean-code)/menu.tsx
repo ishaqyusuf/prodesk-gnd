@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSeparator,
     DropdownMenuLabel,
+    DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { IconKeys, Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ type MenuItemProps = {
     href?;
     Icon?;
     SubMenu?;
+    shortCut?;
     _blank?: Boolean;
     icon?: IconKeys;
 } & DropdownMenuItemProps;
@@ -106,6 +108,7 @@ function Item({
     onClick,
     _blank,
     icon,
+    shortCut,
     ...props
 }: MenuItemProps) {
     if (!Icon && icon) Icon = Icons[icon];
@@ -134,6 +137,11 @@ function Item({
                 <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             )}
             {children}
+            {!!shortCut && (
+                <DropdownMenuShortcut className="ml-6">
+                    {shortCut}
+                </DropdownMenuShortcut>
+            )}
         </DropdownMenuItem>
     );
     if (link || href)

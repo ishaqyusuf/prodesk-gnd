@@ -13,6 +13,7 @@ import {
     CheckCircle,
     ExternalLink,
     Filter,
+    Folder,
     Info,
     Variable,
 } from "lucide-react";
@@ -48,16 +49,13 @@ export function ComponentsSection({ itemStepUid }: Props) {
         >
             {/* <div>ITEMS: {items?.length}</div> */}
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-                {items
-                    ?.filter((s) => !s._metaData?.custom)
-                    ?.filter((a) => a._metaData.visible)
-                    ?.map((component) => (
-                        <Component
-                            ctx={ctx}
-                            key={component.uid}
-                            component={component}
-                        />
-                    ))}
+                {items?.map((component) => (
+                    <Component
+                        ctx={ctx}
+                        key={component.uid}
+                        component={component}
+                    />
+                ))}
             </div>
             <FloatingAction ctx={ctx} />
         </ScrollArea>
@@ -156,6 +154,23 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                             </span>{" "}
                             <SearchBar ctx={ctx} />
                             <Menu Icon={Icons.menu}>
+                                <Menu.Item
+                                    Icon={Folder}
+                                    SubMenu={ctx.tabs?.map((tb) => (
+                                        <Menu.Item
+                                            shortCut={tb.count}
+                                            Icon={tb.Icon}
+                                            onClick={() => ctx.setTab(tb.tab)}
+                                            disabled={
+                                                !tb.count || tb.tab == ctx.tab
+                                            }
+                                        >
+                                            {tb.title}
+                                        </Menu.Item>
+                                    ))}
+                                >
+                                    Tabs
+                                </Menu.Item>
                                 <Menu.Item
                                     onClick={() => ctx.selectAll()}
                                     Icon={BoxSelect}
