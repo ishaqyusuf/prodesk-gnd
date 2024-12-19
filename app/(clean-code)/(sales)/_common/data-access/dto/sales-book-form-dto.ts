@@ -242,7 +242,7 @@ export function transformMultiDykeItem(
             return true;
         return false;
     });
-    // console.log(_comps.length);
+    console.log(_comps.length);
 
     let sectionPrice = 0;
     _comps.map((item) => {

@@ -182,7 +182,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
             formData.primaryGroupItem =
                 formData.meta.salesItemId == item.item.id;
 
-            resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
+            // resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
             console.log({ formId, formData });
         }
