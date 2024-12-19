@@ -58,7 +58,7 @@ export class HptClass extends GroupFormClass {
         return resp;
     }
     public getStepProductUid() {
-        return this.getItemForm()?.groupItem?.stepProductId;
+        return this.getItemForm()?.groupItem?.doorStepProductId;
     }
     public get tabUid() {
         return this.getItemForm()?.groupItem?._?.tabUid;

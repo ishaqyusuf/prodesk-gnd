@@ -39,6 +39,7 @@ export async function searchAddressDta(q = null) {
                     },
                 },
                 select: {
+                    salesProfile: true,
                     taxes: {
                         take: 1,
                         select: {
@@ -56,12 +57,17 @@ export async function searchAddressDta(q = null) {
     });
     return items.map((s) => {
         const { billingOrders, ...rest } = s;
-        const taxProfile = billingOrders?.[0]?.taxes?.[0]?.taxConfig;
+        const bo = billingOrders?.[0];
+        const taxProfile = bo?.taxes?.[0]?.taxConfig;
         return {
             ...rest,
             phoneAddress: [s.phoneNo, s.address1]?.filter(Boolean).join("   "),
             isBusiness: s.customer?.businessName != null,
             taxProfile,
+            salesProfile: {
+                id: bo?.salesProfile?.id,
+                name: bo?.salesProfile?.title,
+            },
         };
     });
 }

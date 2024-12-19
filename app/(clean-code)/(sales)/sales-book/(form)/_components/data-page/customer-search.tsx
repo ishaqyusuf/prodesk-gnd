@@ -90,18 +90,30 @@ export function CustomerSearch({ addressType }) {
                             placeholder="Search Address..."
                         />
                     </Command>
-                    <ScrollArea className="max-h-[30vh] max-w-[300px] overflow-auto">
+                    <ScrollArea className="max-h-[30vh] max-w-[400px] overflow-auto">
                         {result?.map((address, key) => (
                             <button
                                 key={key}
                                 onClick={() => selectAddress(address)}
-                                className="teamaspace-y-1 flex w-full flex-col items-start px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+                                className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground space-y-1"
                             >
-                                <Label className="whitespace-nowrap">
+                                <Label className="text-sm font-medium text-primary truncate">
                                     {address.name}
                                 </Label>
-                                <div className="text-muted-foreground text-sm  flex">
-                                    <span>{address.phoneAddress}</span>
+                                <div className="text-xs text-muted-foreground truncate">
+                                    {address.phoneAddress}
+                                </div>
+                                <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
+                                    {address.taxProfile?.title && (
+                                        <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
+                                            {address.taxProfile.title}
+                                        </span>
+                                    )}
+                                    {address.salesProfile?.name && (
+                                        <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
+                                            {address.salesProfile.name}
+                                        </span>
+                                    )}
                                 </div>
                             </button>
                         ))}
