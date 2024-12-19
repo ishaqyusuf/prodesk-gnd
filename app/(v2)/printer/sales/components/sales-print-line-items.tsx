@@ -11,14 +11,14 @@ export default function SalesPrintLineItems() {
     const { sale } = ctx;
     if (!sale.lineItems) return null;
     return (
-        <tr>
+        <tr className="uppercase">
             <td colSpan={16}>
                 <table className="table-fixed w-full">
                     <thead id="header">
                         <tr className="border bg-slate-100">
                             {sale.lineItems.heading.map((col) => (
                                 <th
-                                    className="border p-0.5"
+                                    className="border uppercase p-0.5"
                                     key={col.title}
                                     colSpan={col.colSpan}
                                 >
@@ -35,7 +35,7 @@ export default function SalesPrintLineItems() {
                             >
                                 {line.cells.map((cell, i) => (
                                     <td
-                                        className="border"
+                                        className="border uppercase"
                                         colSpan={cell.style.colSpan}
                                         key={i}
                                     >

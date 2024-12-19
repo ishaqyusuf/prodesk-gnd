@@ -12,7 +12,7 @@ export default function SalesPrintDoorItems({ index }) {
     if (!doors) return <></>;
 
     return (
-        <tr>
+        <tr className="uppercase">
             <td colSpan={16} className="">
                 {/* {sale.doorsTable.doors.map((dt, index) => ( */}
                 <table className="table-fixed w-full border">
