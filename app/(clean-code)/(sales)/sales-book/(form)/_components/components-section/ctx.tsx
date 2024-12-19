@@ -19,6 +19,18 @@ export function useStepContext(stepUid) {
     const [filteredComponents, setFilteredComponents] = useState<
         ZusComponent[]
     >([]);
+    function selectAll() {
+        setSelectionState((pre) => {
+            const uids = {};
+            filteredComponents.map((s) => (uids[s.uid] = true));
+            console.log(uids);
+
+            return {
+                uids,
+                count: filteredComponents.length,
+            };
+        });
+    }
     // const _items = useFormDataStore().kvFilteredStepComponentList?.[stepUid];
     const [q, setQ] = useState("");
     const db = useDebounce(q, 800);
@@ -83,8 +95,10 @@ export function useStepContext(stepUid) {
         sticky,
         // searchFn
     };
+
     return {
         tabComponents,
+        selectAll,
         q,
         setQ,
         items: filteredComponents || [],

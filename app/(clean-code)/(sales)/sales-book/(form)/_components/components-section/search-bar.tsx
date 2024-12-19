@@ -5,12 +5,11 @@ interface Props {
     ctx: UseStepContext;
 }
 export default function SearchBar({ ctx }: Props) {
-    // console.log(ctx.tabComponents);
-
     if (ctx.tabComponents?.length < 2) return null;
     return (
         <div>
             <Input
+                disabled={ctx.selectionState?.count > 0}
                 className="h-8"
                 placeholder="Search"
                 defaultValue={ctx.q}

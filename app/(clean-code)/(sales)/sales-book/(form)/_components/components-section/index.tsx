@@ -9,6 +9,7 @@ import { Icons } from "@/components/_v1/icons";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
+    BoxSelect,
     CheckCircle,
     ExternalLink,
     Filter,
@@ -118,7 +119,7 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                                 {selectionState?.count} selected
                             </span>
                             <SearchBar ctx={ctx} />
-                            <Menu label={"Batch Action"}>
+                            <Menu>
                                 <Menu.Item
                                     onClick={editVisibility}
                                     icon="settings"
@@ -154,10 +155,17 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                                 components
                             </span>{" "}
                             <SearchBar ctx={ctx} />
-                            <Menu label={"Step Option"} Icon={Icons.settings}>
+                            <Menu Icon={Icons.menu}>
+                                <Menu.Item
+                                    onClick={() => ctx.selectAll()}
+                                    Icon={BoxSelect}
+                                >
+                                    Select All
+                                </Menu.Item>
                                 {isDoor ? (
                                     <>
                                         <Menu.Item
+                                            icon="Export"
                                             onClick={() => {
                                                 _modal.openModal(
                                                     <DoorSizeModal
