@@ -80,8 +80,17 @@ function QuickPay({ onClose }) {
     const ctx = usePayment();
     const [ready, setIsReady] = useState(false);
     useEffect(() => {
+        console.log(ctx.data);
+        if (!ctx.data) return;
         ctx.form.setValue("paymentMethod", "terminal");
+        ctx.createPayment("terminal");
         setIsReady(true);
+    }, [ctx.data]);
+    useEffect(() => {
+        ctx.load().then((res) => {
+            // ctx.form.setValue("paymentMethod", "terminal");
+            // ctx.createPayment("terminal");
+        });
     }, []);
     useEffect(() => {
         setTimeout(() => {

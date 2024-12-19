@@ -53,6 +53,7 @@ const usePaymentContext = () => {
                 setData(result);
                 setReady(true);
                 _ctx.orderId = orderId;
+                console.log(result);
             })
             .catch((e) => {
                 toast.error(e.message);
@@ -63,7 +64,6 @@ const usePaymentContext = () => {
         checkPayment();
     }, [checkoutId]);
     async function checkPayment() {
-        console.log(">>>>", { checkoutId });
         if (!checkoutId) return;
         const timeout = setTimeout(async () => {
             if (checkoutId) {
@@ -103,6 +103,7 @@ const usePaymentContext = () => {
         terminals,
         ready,
         data,
+        load,
         inProgress: isLoading,
         waitingForPayment: checkoutId != null,
         form,
@@ -112,6 +113,7 @@ const usePaymentContext = () => {
             if (pm == "terminal") {
                 const terminal = await getPaymentTerminalsUseCase();
                 form.setValue("terminal", terminal);
+
                 form.setValue("deviceId", terminal?.lastUsed?.value);
             } else {
             }
