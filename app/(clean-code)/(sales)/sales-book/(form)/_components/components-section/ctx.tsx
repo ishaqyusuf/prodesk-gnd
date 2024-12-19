@@ -33,7 +33,7 @@ export function useStepContext(stepUid) {
     }
     // const _items = useFormDataStore().kvFilteredStepComponentList?.[stepUid];
     const [q, setQ] = useState("");
-    const db = useDebounce(q, 800);
+    const db = useDebounce(q, 300);
     const [tab, setTab] = useState<"main" | "custom" | "hidden">("main");
     useEffect(() => {
         setTabComponents(
