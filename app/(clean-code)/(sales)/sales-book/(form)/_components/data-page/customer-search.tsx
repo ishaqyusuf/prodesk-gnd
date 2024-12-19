@@ -17,13 +17,14 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Search, SearchIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormDataStore } from "../../_common/_stores/form-data-store";
 import {
     AddressForm,
     SalesFormZusData,
 } from "@/app/(clean-code)/(sales)/types";
 import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-access/sales-address-dta";
+import { SettingsClass } from "../../_utils/helpers/zus/zus-settings-class";
 
 interface Props {
     addressType: string;
@@ -35,6 +36,9 @@ export function CustomerSearch({ addressType }) {
     const [result, setResult] = useState<AddressSearchType[]>([]);
     const zus = useFormDataStore();
     const disabled = addressType == "shipping" && zus.metaData.sameAddress;
+    const setting = useMemo(() => {
+        return new SettingsClass();
+    }, []);
     function selectAddress(address: SearchAddressType) {
         console.log(address);
 
@@ -59,6 +63,20 @@ export function CustomerSearch({ addressType }) {
                 businessName: response?.customer?.businessName || "",
                 isBusiness: response?.customer?.businessName != null,
             });
+            if (address.salesProfile?.id) {
+                zus.dotUpdate(
+                    "metaData.salesProfileId",
+                    address.salesProfile?.id
+                );
+                setting.salesProfileChanged();
+            }
+            if (address.taxProfile?.taxCode) {
+                zus.dotUpdate(
+                    "metaData.tax.taxCode",
+                    address.taxProfile?.taxCode
+                );
+                setting.taxCodeChanged();
+            }
         });
     }
     useEffect(() => {
@@ -91,32 +109,34 @@ export function CustomerSearch({ addressType }) {
                         />
                     </Command>
                     <ScrollArea className="max-h-[30vh] max-w-[400px] overflow-auto">
-                        {result?.map((address, key) => (
-                            <button
-                                key={key}
-                                onClick={() => selectAddress(address)}
-                                className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground space-y-1"
-                            >
-                                <Label className="text-sm font-medium text-primary truncate">
-                                    {address.name}
-                                </Label>
-                                <div className="text-xs text-muted-foreground truncate">
-                                    {address.phoneAddress}
-                                </div>
-                                <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
-                                    {address.taxProfile?.title && (
-                                        <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
-                                            {address.taxProfile.title}
-                                        </span>
-                                    )}
-                                    {address.salesProfile?.name && (
-                                        <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
-                                            {address.salesProfile.name}
-                                        </span>
-                                    )}
-                                </div>
-                            </button>
-                        ))}
+                        <div className="divide-y">
+                            {result?.map((address, key) => (
+                                <button
+                                    key={key}
+                                    onClick={() => selectAddress(address)}
+                                    className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground space-y-1"
+                                >
+                                    <Label className="text-sm font-medium text-primary truncate">
+                                        {address.name}
+                                    </Label>
+                                    <div className="text-xs text-muted-foreground truncate">
+                                        {address.phoneAddress}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
+                                        {address.taxProfile?.title && (
+                                            <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
+                                                {address.taxProfile.title}
+                                            </span>
+                                        )}
+                                        {address.salesProfile?.name && (
+                                            <span className="px-1 py-0.5 bg-muted rounded text-muted-foreground">
+                                                {address.salesProfile.name}
+                                            </span>
+                                        )}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
                     </ScrollArea>
                 </PopoverContent>
             </Popover>
