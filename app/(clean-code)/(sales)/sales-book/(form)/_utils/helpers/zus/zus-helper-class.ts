@@ -679,10 +679,9 @@ export class ComponentHelperClass extends StepHelperClass {
             groupItem.qty.total = groupItem.itemIds?.length;
 
             this.dotUpdateItemForm("groupItem", groupItem);
-            // this.getNextRouteFromSettings;
-            // this.updateComponentCost();
             this.delistGroupForm();
             this.updateGroupedCost();
+            this.calculateTotalPrice();
         } else {
             let stepData = this.getStepForm();
             const component = this.component;

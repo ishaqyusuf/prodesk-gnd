@@ -251,8 +251,9 @@ export class ItemHelperClass {
         if (gf.primaryGroupItem) this.generateItemFormSteps();
         if (isMoulding) {
             const itemHtp: HptData = {
-                id: formItem.groupItem?.hptId,
+                id: gf.hptId,
             };
+
             const hptMeta = {
                 priceTags: {
                     moulding: {
@@ -287,6 +288,7 @@ export class ItemHelperClass {
                 } satisfies Prisma.HousePackageToolsCreateManyInput;
                 itemHtp.data = hpt;
                 itemHtp.id = hpt.id;
+                console.log("CREATE");
             }
             this.itemData.hpt = itemHtp;
         }

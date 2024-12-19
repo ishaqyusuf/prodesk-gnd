@@ -357,31 +357,10 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async generateSalesForm() {
         const addrs = new AddressClass(this.ctx);
         await addrs.saveAddress();
-        console.log(this.ctx.data.customerId);
 
         const saveData = await this.composeSalesForm(this.form);
-        // if (saveData.id) {
-        //     // if (
-        //     //     this.compare(
-        //     //         saveData,
-        //     //         await this.composeSalesForm(this.oldFormState)
-        //     //     )
-        //     // ) {
-        //         // this.data.sales = {
-        //         //     id: saveData.id,
-        //         // };
-        //     } else {
-        //         this.data.sales = {
-        //             ...saveData,
-        //             updateId: saveData.id,
-        //         };
-        //     // }
-        // } else {
-        // if(saveData.id)
-        console.log(saveData);
 
         this.data.sales = saveData;
-        // }
     }
     public nextIds = {
         itemId: null,

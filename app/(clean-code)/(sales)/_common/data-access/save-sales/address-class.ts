@@ -8,6 +8,8 @@ export class AddressClass {
 
     public async saveAddress() {
         const data = this.checkAddressUpdate();
+        console.log({ data });
+
         if (data) {
             const { billing, shipping, sameAddress, customer } = data;
             const customerData: Prisma.CustomersCreateManyInput = {

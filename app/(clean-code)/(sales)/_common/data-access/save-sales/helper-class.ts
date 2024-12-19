@@ -161,7 +161,6 @@ export class SaveSalesHelper {
         const prefix = type == "order" ? "ord" : "quo";
 
         const _createdAt = isMonth(now);
-        console.log(_createdAt);
 
         const id =
             (await prisma.salesOrders.count({

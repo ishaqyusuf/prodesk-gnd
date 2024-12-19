@@ -187,8 +187,6 @@ export function zhInitializeState(data: GetSalesBookForm) {
             console.log({ formId, formData });
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
-            console.log(data);
-
             const stepProdUid =
                 item.item?.housePackageTool?.stepProduct?.uid ||
                 item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
