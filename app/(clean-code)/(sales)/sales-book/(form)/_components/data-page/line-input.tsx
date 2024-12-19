@@ -89,7 +89,7 @@ export function Select<T>({
                     state.dotUpdate(name, e);
                     props.onSelect?.(e as any);
                 }}
-                defaultValue={value}
+                value={value}
             >
                 <SelectTrigger className={cn("h-8")}>
                     <div className="inline-flex gap-1">
