@@ -282,14 +282,16 @@ export class ItemHelperClass {
                     orderItemId: this.itemData.id,
                     salesOrderId: this.ctx.salesId,
                     doorType: formItem.groupItem.itemType,
-                    stepProductId: formItem.groupItem.doorStepProductId,
+                    stepProductId: gf.stepProductId,
+                    moldingId: gf.mouldingProductId,
                 } satisfies Prisma.HousePackageToolsCreateManyInput;
                 itemHtp.data = hpt;
                 itemHtp.id = hpt.id;
             }
+            this.itemData.hpt = itemHtp;
         }
         //  if (this.itemData.hpt?.doors)
         this.ctx.data.items.push(this.itemData);
-        console.log(this.itemData.id);
+        console.log(this.itemData);
     }
 }

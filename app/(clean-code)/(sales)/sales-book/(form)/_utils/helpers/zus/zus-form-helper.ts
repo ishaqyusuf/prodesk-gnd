@@ -108,7 +108,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
 
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
-        console.log({ item });
+        console.log({ mc: item.multiComponent });
 
         resp.sequence.formItem.push(uid);
         resp.kvFormItem[uid] = {
@@ -235,9 +235,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
                     });
                 });
             } else if (item.item?.meta?.doorType == "Moulding") {
-                const formId = `${data.stepProduct?.uid}`;
+                const formId = `${id}`;
                 pushItemId(formId);
-                // console.log({ formId });
+                // console.log({ formId, stepProdUid, id });
                 // console.log({
                 //     m: item.item?.housePackageTool?.molding,
                 //     md: data,

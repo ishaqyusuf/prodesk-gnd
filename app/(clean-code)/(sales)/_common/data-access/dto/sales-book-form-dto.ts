@@ -238,10 +238,12 @@ export function transformMultiDykeItem(
         if (item.id == itemData.id) {
             return true;
         }
-        if (itemData.multiDyke && itemData.multiDykeUid == item.multiDykeUid)
+        if (itemData.multiDyke || itemData.multiDykeUid == item.multiDykeUid)
             return true;
         return false;
     });
+    // console.log(_comps.length);
+
     let sectionPrice = 0;
     _comps.map((item) => {
         const component = item.housePackageTool?.doors?.length
@@ -249,12 +251,14 @@ export function transformMultiDykeItem(
                   title: generateRandomString(4),
               }
             : item.housePackageTool?.door ||
-              item.housePackageTool?.molding ||
-              (item.meta.doorType == "Services"
-                  ? {
-                        title: generateRandomString(4),
-                    }
-                  : null);
+              item.housePackageTool?.stepProduct?.uid
+            ? {
+                  title: item.housePackageTool?.stepProduct?.uid,
+              }
+            : {
+                  title: generateRandomString(4),
+              };
+        console.log(item.housePackageTool);
 
         const isMoulding = item.housePackageTool?.moldingId != null;
 

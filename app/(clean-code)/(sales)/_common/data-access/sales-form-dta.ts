@@ -44,7 +44,6 @@ export async function getSalesBookFormDataDta(data: GetSalesBookFormDataProps) {
         where,
         include: SalesBookFormIncludes({}),
     });
-    console.log(order.taxes);
 
     const stepComponents = await getFormStepComponentsDta(
         order.items
