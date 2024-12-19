@@ -8,7 +8,6 @@ import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
 import { CustomerSearch } from "../customer-search";
 
 export function AddressTab({}) {
-    const setting = useMemo(() => new SettingsClass(), []);
     return (
         <div className="lg:max-w-5xl xl:max-w-4xl">
             <div className="grid p-4 grid-cols-2 gap-4 sm:gap-10 lg:gap-16">

@@ -23,6 +23,7 @@ import {
     AddressForm,
     SalesFormZusData,
 } from "@/app/(clean-code)/(sales)/types";
+import { SearchAddressType } from "@/app/(clean-code)/(sales)/_common/data-access/sales-address-dta";
 
 interface Props {
     addressType: string;
@@ -34,11 +35,11 @@ export function CustomerSearch({ addressType }) {
     const [result, setResult] = useState<AddressSearchType[]>([]);
     const zus = useFormDataStore();
     const disabled = addressType == "shipping" && zus.metaData.sameAddress;
-    function selectAddress(address) {
+    function selectAddress(address: SearchAddressType) {
+        console.log(address);
+
         setOpen(false);
         getAddressFormUseCase(address.id).then((response) => {
-            console.log({ response, addressType });
-
             zus.dotUpdate(
                 `metaData.${addressType}` as any,
                 {

@@ -79,7 +79,7 @@ export function useInitContext(cls: ComponentHelperClass) {
                 },
             };
         }
-        groupItem.stepProductId = cls.component.id;
+        groupItem.doorStepProductId = cls.component.id;
         if (clear) groupItem = null as any;
         else {
             const _uids = Object.keys(data.selections);
