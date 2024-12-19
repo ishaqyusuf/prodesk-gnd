@@ -19,7 +19,7 @@ export class MouldingClass extends GroupFormClass {
 
         const resp = {
             mouldings: mouldings.map((m) => {
-                const priceModel = this.getCurrentComponentPricingModel(m.uid);
+                const priceModel = this.getCurrentComponentPricingModel(m?.uid);
                 return {
                     ...m,
                     basePrice: priceModel?.pricing,
@@ -35,6 +35,7 @@ export class MouldingClass extends GroupFormClass {
         const selectionComponentUids = Array.from(
             new Set(itemForm.groupItem?.itemIds?.map((s) => s))
         );
+
         return selectionComponentUids.map((componentUid) => {
             const component = this.getComponentFromSettingsByStepId(
                 mouldingStep?.stepId,
