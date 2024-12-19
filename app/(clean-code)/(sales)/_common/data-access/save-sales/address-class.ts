@@ -46,6 +46,12 @@ export class AddressClass {
             }
             await this.__saveAddress(billing, "billing");
             await this.__saveAddress(shipping, "shipping");
+        } else {
+            const form = this.ctx.form.metaData;
+            const { billing, shipping, sameAddress, customer } = form;
+
+            this.ctx.data.billingAddressId = billing?.id;
+            this.ctx.data.shippingAddressId = shipping?.id;
         }
     }
     public get customerId() {
