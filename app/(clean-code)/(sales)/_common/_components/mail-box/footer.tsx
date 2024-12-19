@@ -10,6 +10,12 @@ export function MailboxFooter({}) {
         <Form {...form}>
             <div className="absolute w-full bottom-0 z-10 border-t bg-white p-2 flex-col flex gap-4 sm:p-4">
                 <FormInput
+                    placeholder="Subject"
+                    control={form.control}
+                    name="subject"
+                    className=""
+                />
+                <FormInput
                     placeholder="type here"
                     type="textarea"
                     control={form.control}

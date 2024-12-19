@@ -85,8 +85,6 @@ export class SaveSalesHelper {
             updateData.paymentDueDate = this.paymentDueDate(md);
         }
         if (md.id) {
-            console.log(updateData);
-
             return {
                 data: updateData,
                 id: md.id,

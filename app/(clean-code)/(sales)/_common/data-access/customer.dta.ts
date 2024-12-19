@@ -2,6 +2,7 @@ import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
 
 export async function updateCustomerEmailDta(id, email) {
+    if (!id) throw new Error("Customer id is required");
     await prisma.customers.update({
         where: {
             id,

@@ -32,5 +32,6 @@ export async function getSalesEmailUseCase(id, type: EmailData["type"]) {
 }
 export async function setSalesCustomerEmailUseCase(id, email) {
     const customerId = await getSalesCustomerIdDta(id);
+
     await updateCustomerEmailDta(customerId, email);
 }

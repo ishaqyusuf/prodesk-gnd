@@ -53,7 +53,6 @@ const usePaymentContext = () => {
                 setData(result);
                 setReady(true);
                 _ctx.orderId = orderId;
-                console.log(result);
             })
             .catch((e) => {
                 toast.error(e.message);
@@ -81,7 +80,6 @@ const usePaymentContext = () => {
                 break;
             }
             const status = await checkTerminalPaymentStatusUseCase(checkoutId);
-            console.log({ status });
             if (status?.success) {
                 clearTimeout(timeout);
                 _ctx.closePaymentForm();
@@ -135,8 +133,6 @@ const usePaymentContext = () => {
             const formData = form.getValues();
             startTransition(async () => {
                 if (e) {
-                    console.log(formData);
-
                     if (!formData.deviceId && isTerminal()) {
                         form.setError("deviceId", {});
                         return;

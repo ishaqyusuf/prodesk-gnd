@@ -26,6 +26,7 @@ export default function EmailForm({}) {
         const t = await form.trigger();
         if (t) {
             await setSalesCustomerEmailUseCase(ctx.id, email);
+
             toast.success("Saved");
             ctx.updateEmail(email);
         } else {
