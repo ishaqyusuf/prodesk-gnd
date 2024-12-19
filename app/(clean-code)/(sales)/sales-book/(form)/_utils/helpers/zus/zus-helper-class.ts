@@ -544,7 +544,7 @@ export class StepHelperClass extends SettingsClass {
                         kvstepforms[`${this.itemUid}-${fc.stepUidStack[i]}`]
                             ?.componentUid == u
                 );
-
+                if (!form.pricing) form.pricing = {};
                 if (!form.pricing[path])
                     form.pricing[path] = {
                         price: "",

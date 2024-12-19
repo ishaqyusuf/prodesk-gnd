@@ -100,8 +100,8 @@ export function useStepContext(stepUid) {
             return filters.every((s) => s);
         });
         setFilteredComponents(_filtered);
-        console.log(_filtered);
-        console.log(stepComponents.length);
+        // console.log(_filtered);
+        // console.log(stepComponents.length);
     }, [stepComponents, db, tab]);
     const salesMultiplier = useFormDataStore(
         (s) => s.metaData?.salesMultiplier
