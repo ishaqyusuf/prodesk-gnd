@@ -21,19 +21,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ComponentImg } from "../component-img";
-import {
-    ComponentHelperClass,
-    StepHelperClass,
-} from "../../_utils/helpers/zus/zus-helper-class";
+import { ComponentHelperClass } from "../../_utils/helpers/zus/zus-helper-class";
 import { openEditComponentPrice } from "../modals/component-price-modal";
 import { Badge } from "@/components/ui/badge";
 import DoorSizeModal from "../modals/door-size-modal";
 import { _modal } from "@/components/common/modal/provider";
 import { openDoorPriceModal } from "../modals/door-price-modal";
 import { openComponentVariantModal } from "../modals/component-visibility-modal";
-import { useStepContext } from "./ctx";
+import { UseStepContext, useStepContext } from "./ctx";
 import { openStepPricingModal } from "../modals/step-pricing-modal";
 import { openComponentModal } from "../modals/component-form";
+import SearchBar from "./search-bar";
 
 interface Props {
     itemStepUid;
@@ -65,7 +63,7 @@ export function ComponentsSection({ itemStepUid }: Props) {
     );
 }
 
-function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
+function FloatingAction({ ctx }: { ctx: UseStepContext }) {
     const {
         stepUid,
         items,
@@ -119,6 +117,7 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                             <span className="uppercase font-mono font-semibold text-sm">
                                 {selectionState?.count} selected
                             </span>
+                            <SearchBar ctx={ctx} />
                             <Menu label={"Batch Action"}>
                                 <Menu.Item
                                     onClick={editVisibility}
@@ -153,7 +152,8 @@ function FloatingAction({ ctx }: { ctx: ReturnType<typeof useStepContext> }) {
                                         ?.length
                                 }{" "}
                                 components
-                            </span>
+                            </span>{" "}
+                            <SearchBar ctx={ctx} />
                             <Menu label={"Step Option"} Icon={Icons.settings}>
                                 {isDoor ? (
                                     <>
@@ -222,7 +222,7 @@ function Component({
     ctx,
 }: {
     component: ZusComponent;
-    ctx: ReturnType<typeof useStepContext>;
+    ctx: UseStepContext;
 }) {
     const { stepUid } = ctx;
     const zus = useFormDataStore();

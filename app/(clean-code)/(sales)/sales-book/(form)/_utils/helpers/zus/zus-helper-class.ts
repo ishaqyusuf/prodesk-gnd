@@ -293,6 +293,7 @@ export class StepHelperClass extends SettingsClass {
             .flat()
             ?.filter((a) => a._metaData?.visible);
     }
+
     public filterStepComponents(components: ZusComponent[]) {
         const filteredComponents = components
             // ?.filter(cls.isComponentVisible)
