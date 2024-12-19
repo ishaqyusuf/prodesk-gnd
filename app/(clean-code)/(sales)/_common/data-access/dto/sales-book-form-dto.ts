@@ -258,7 +258,6 @@ export function transformMultiDykeItem(
             : {
                   title: generateRandomString(4),
               };
-        console.log(item.housePackageTool);
 
         const isMoulding = item.housePackageTool?.moldingId != null;
 

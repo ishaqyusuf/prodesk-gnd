@@ -51,6 +51,8 @@ export class CostingClass {
                 totalBasePrice += stepData?.basePrice || 0;
             }
         });
+        console.log(totalBasePrice);
+
         if (
             ((totalBasePrice ||
                 itemForm?.groupItem?.pricing?.components?.basePrice) &&
@@ -82,6 +84,11 @@ export class CostingClass {
                     this.calculateSales(totalBasePrice)
                 );
             }
+            Object.entries(groupItem.form || {}).map(([k, kform]) => {
+                kform.pricing.itemPrice.salesPrice = this.calculateSales(
+                    kform.pricing.itemPrice.basePrice
+                );
+            });
             this.saveGroupItem(groupItem, itemUid);
             this.updateGroupedCost(itemUid);
             this.calculateTotalPrice();
@@ -139,6 +146,8 @@ export class CostingClass {
                 ]),
             formData.pricing?.addon,
         ];
+        console.log(priceList);
+
         const unitPrice = sum(priceList);
         const totalPrice = formatMoney(
             sum(priceList) * Number(formData.qty.total)

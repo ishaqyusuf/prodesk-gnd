@@ -15,7 +15,6 @@ export class MouldingClass extends GroupFormClass {
 
     public getMouldingLineItemForm() {
         const mouldings = this.getSelectedMouldings();
-        console.log(mouldings);
 
         const resp = {
             mouldings: mouldings.map((m) => {
