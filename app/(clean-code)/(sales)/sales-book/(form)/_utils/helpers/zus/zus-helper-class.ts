@@ -265,6 +265,7 @@ export class StepHelperClass extends SettingsClass {
                 `kvStepComponentList.${this.stepUid}`,
                 components
             );
+
         return this.filterStepComponents(components);
     }
 
@@ -306,6 +307,10 @@ export class StepHelperClass extends SettingsClass {
 
                 return component;
             });
+        this.zus.dotUpdate(
+            `kvFilteredStepComponentList.${this.itemStepUid}`,
+            filteredComponents
+        );
         return filteredComponents;
     }
     public rootStepFromUid(stepUid) {
@@ -504,7 +509,6 @@ export class StepHelperClass extends SettingsClass {
                 current: true,
             });
         } else {
-            // console.log(this.zus.setting?.rootComponentsByKey);
             const ms = matchedSteps.map((stepUid) => {
                 const components =
                     this.zus.setting?.stepsByKey?.[stepUid]?.components;
