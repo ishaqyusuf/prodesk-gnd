@@ -1,31 +1,27 @@
 import { GetSalesBookForm } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
-import {
-    getFormState,
-    ZusSales,
-} from "../../../_common/_stores/form-data-store";
+import { getFormState } from "../../../_common/_stores/form-data-store";
 import { StepHelperClass } from "./zus-helper-class";
 import { generateRandomString } from "@/lib/utils";
 import { formatMoney } from "@/lib/use-number";
 import { inToFt } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
 import { CostingClass } from "./costing-class";
 import { SettingsClass } from "./zus-settings-class";
-export function zhInitializeState(data: GetSalesBookForm) {
+export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     const profile = data.order?.id
         ? data.salesProfile
         : data.data?.defaultProfile;
     const salesMultiplier = profile?.coefficient
         ? formatMoney(1 / profile.coefficient)
         : 1;
+    // if (copy) {
+    //     data.order.id = data.order.slug = data.order.orderId = null;
+    // }
     function basePrice(sp) {
         if (!sp) return sp;
         return formatMoney(sp * salesMultiplier);
     }
     const selectedTax = data._taxForm?.selection?.[0];
-    // selectedTax.
-    // const tax =
-    //     data._taxForm?.taxByCode?.[data._taxForm?.selection?.[0]?.taxCode]
-    //         ?._tax;
 
     const resp: SalesFormZusData = {
         // data,
@@ -46,8 +42,8 @@ export function zhInitializeState(data: GetSalesBookForm) {
         metaData: {
             salesRepId: data.order?.salesRepId || data.order.salesRep?.id,
             type: data.order?.type as any,
-            id: data.order?.id,
-            salesId: data.order?.orderId,
+            id: copy ? null : data.order?.id,
+            salesId: copy ? null : data.order?.orderId,
             tax: selectedTax,
             createdAt: data.order?.createdAt,
             paymentTerm: data.order?.paymentTerm as any,
@@ -62,7 +58,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 ccc: data.order?.meta?.ccc,
                 subTotal: data.order?.subTotal,
                 grandTotal: data.order?.grandTotal,
-                paid: data.paidAmount || 0,
+                paid: copy ? 0 : data.paidAmount || 0,
             },
             salesMultiplier,
             deliveryMode: data.order.deliveryOption as any,
@@ -104,8 +100,6 @@ export function zhInitializeState(data: GetSalesBookForm) {
         },
         formStatus: "ready",
     };
-    console.log("MAIN DATA++++", data);
-
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
         console.log({ mc: item.multiComponent });
@@ -114,7 +108,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
         resp.kvFormItem[uid] = {
             collapsed: !item.expanded,
             uid,
-            id: item.item.id,
+            id: copy ? null : item.item.id,
             title: "",
         };
         resp.sequence.stepComponent[uid] = [];
@@ -131,7 +125,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 value: fs.item?.value,
                 salesPrice: fs.item?.price,
                 basePrice: fs.item?.basePrice || basePrice(fs.item?.price),
-                stepFormId: fs.item.id,
+                stepFormId: copy ? null : fs.item.id,
                 stepId: fs.step.id,
                 meta: stepMeta as any,
             });
@@ -195,14 +189,14 @@ export function zhInitializeState(data: GetSalesBookForm) {
 
             if (doorCount) {
                 setType("HPT");
-                resp.kvFormItem[uid].groupItem.hptId =
-                    item.item?.housePackageTool?.id;
+                resp.kvFormItem[uid].groupItem.hptId = copy
+                    ? null
+                    : item.item?.housePackageTool?.id;
                 resp.kvFormItem[uid].groupItem.doorStepProductId =
                     stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
-                    console.log(formId);
 
                     addFormItem(formId, {
                         doorId: doorForm.id,
@@ -218,9 +212,9 @@ export function zhInitializeState(data: GetSalesBookForm) {
                             addon: doorForm.doorPrice,
                         },
                         meta: {
-                            salesItemId: data.itemId,
+                            salesItemId: copy ? null : data.itemId,
                         },
-                        hptId: doorForm.housePackageToolId,
+                        hptId: copy ? null : doorForm.housePackageToolId,
 
                         selected: true,
                         swing: doorForm.swing,
@@ -242,11 +236,11 @@ export function zhInitializeState(data: GetSalesBookForm) {
                 // });
                 setType("MOULDING");
                 addFormItem(formId, {
-                    hptId: data.hptId,
+                    hptId: copy ? null : data.hptId,
                     mouldingProductId: data.stepProduct?.dykeProductId,
                     selected: true,
                     meta: {
-                        salesItemId: data.itemId,
+                        salesItemId: copy ? null : data.itemId,
                     },
                     qty: {
                         total: data.qty,
@@ -284,7 +278,7 @@ export function zhInitializeState(data: GetSalesBookForm) {
                         description: data.description,
                         produceable: data.production,
                         taxxable: data.tax,
-                        salesItemId: data.itemId,
+                        salesItemId: copy ? null : data.itemId,
                     },
                     stepProductId: null,
                 });
@@ -300,7 +294,6 @@ export function zhInitializeState(data: GetSalesBookForm) {
         new SettingsClass("", "", "", resp as any)
     );
     costCls.calculateTotalPrice();
-    console.log({ resp });
     return resp;
 }
 export function zhHarvestDoorSizes(data: SalesFormZusData, itemUid) {

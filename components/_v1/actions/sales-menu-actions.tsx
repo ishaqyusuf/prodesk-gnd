@@ -30,6 +30,7 @@ import SendEmailSheet from "@/components/_v2/email/send-email";
 
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { openLink } from "@/lib/open-link";
+import { copySalesUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -324,15 +325,16 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const _copyOrder = useCallback(
         async (as: ISalesType = "order") => {
             startTransition(async () => {
-                const _ = //props.row.isDyke
-                    // ? await //copyDykeSales(props.row.slug, as)
-                    // :
+                console.log(props.row);
 
-                    await copyOrderAction({
-                        orderId: props.row.orderId,
-                        as,
-                    });
-                // console.log(_);
+                const _ = props.row.isDyke
+                    ? await copySalesUseCase(props.row.slug, as)
+                    : await copyOrderAction({
+                          orderId: props.row.orderId,
+                          as,
+                      });
+                console.log(_.link);
+
                 if (_.link)
                     toast.success(`${as} copied successfully`, {
                         action: {
@@ -346,15 +348,13 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     );
     function copyLink(as) {
         if (!props.row.isDyke) return null;
-        return `/sales-book/edit-/${as}?copy=${props.row.slug}`;
+        return `/sales-book/create-${as}?copy=${props.row.slug}`;
     }
     return (
         <MenuItem
             SubMenu={
                 <>
                     <MenuItem
-                        _blank
-                        link={copyLink("quote")}
                         Icon={Icons.estimates}
                         onClick={() => {
                             _copyOrder("quote");
@@ -363,9 +363,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                         Quote
                     </MenuItem>
                     <MenuItem
-                        _blank
                         Icon={Icons.orders}
-                        link={copyLink("order")}
                         onClick={() => {
                             _copyOrder("order");
                         }}

@@ -34,6 +34,7 @@ import { UseStepContext, useStepContext } from "./ctx";
 import { openStepPricingModal } from "../modals/step-pricing-modal";
 import { openComponentModal } from "../modals/component-form";
 import SearchBar from "./search-bar";
+import { openDoorSizeSelectModal } from "../modals/door-size-select-modal/open-modal";
 
 interface Props {
     itemStepUid;
@@ -280,7 +281,8 @@ function Component({
             ctx.toggleComponent(component.uid);
             return;
         }
-        cls.selectComponent();
+        if (cls.isDoor()) openDoorSizeSelectModal(cls);
+        else cls.selectComponent();
     }, [selectState, cls, component, ctx]);
     const multiSelect = cls.isMultiSelect();
 

@@ -632,9 +632,7 @@ export class ComponentHelperClass extends StepHelperClass {
         this.refreshStepComponentsData();
     }
     public selectComponent() {
-        if (this.isDoor()) {
-            openDoorSizeSelectModal(this);
-        } else if (this.isMoulding()) {
+        if (this.isMoulding()) {
             let groupItem = this.getItemForm()?.groupItem;
             groupItem.type = "MOULDING";
             groupItem.stepUid = this.component.uid;

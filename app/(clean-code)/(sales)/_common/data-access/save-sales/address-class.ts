@@ -102,7 +102,7 @@ export class AddressClass {
         return this.ctx.form.metaData.sameAddress;
     }
     public checkAddressUpdate() {
-        const oldForm = this.ctx.oldFormState.metaData;
+        const oldForm = this.ctx.oldFormState?.metaData || ({} as any);
         const form = this.ctx.form.metaData;
         const { billing, shipping, sameAddress, customer } = form;
         if (

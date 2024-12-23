@@ -21,7 +21,6 @@ import { _updateProdQty } from "@/app/(v2)/(loggedIn)/sales/_data-access/update-
 import { redirect } from "next/navigation";
 import { getSales } from "@/data-acces/sales";
 import { isNewSales } from "@/app/(clean-code)/(sales)/_common/utils/sales-utils";
-import { copySalesUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 export async function getSalesOrder(query: SalesQueryParams) {
     query.type = "order";
@@ -143,7 +142,6 @@ export async function deleteOrderAction(id) {
     });
 }
 export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
-    if (isNewSales(orderId)) return copySalesUseCase(orderId, as);
     const items = [];
     const _cloneData: ISalesOrder = (await prisma.salesOrders.findFirst({
         where: {

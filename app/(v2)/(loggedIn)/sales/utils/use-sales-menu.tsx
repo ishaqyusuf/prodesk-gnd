@@ -70,7 +70,6 @@ export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
                 delivery,
                 !isEstimate ? "orders" : "quotes"
             );
-
             toast.success("Updated");
         }
     }

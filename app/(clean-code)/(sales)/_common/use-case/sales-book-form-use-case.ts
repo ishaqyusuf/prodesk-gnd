@@ -15,6 +15,7 @@ import { composeSalesPricing } from "../utils/sales-pricing-utils";
 import { getPricingListDta } from "../data-access/sales-pricing-dta";
 import { SalesFormFields } from "../../types";
 import { saveSalesFormDta } from "../data-access/save-sales/index.dta";
+import { zhInitializeState } from "../../sales-book/(form)/_utils/helpers/zus/zus-form-helper";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
@@ -44,9 +45,21 @@ export async function saveSalesSettingUseCase(meta) {
 }
 export async function saveFormUseCase(
     data: SalesFormFields,
-    oldFormState?: SalesFormFields
+    oldFormState?: SalesFormFields,
+    allowRedirect = true
 ) {
-    return await saveSalesFormDta(data, oldFormState);
+    if (!oldFormState)
+        oldFormState = {
+            kvFormItem: {},
+            kvStepForm: {},
+            sequence: {
+                formItem: [],
+                multiComponent: {},
+                stepComponent: {},
+            },
+            metaData: {} as any,
+        };
+    return await saveSalesFormDta(data, oldFormState, allowRedirect);
 }
 
 export async function copySalesUseCase(orderId, as) {
@@ -54,7 +67,23 @@ export async function copySalesUseCase(orderId, as) {
         slug: orderId,
     });
 
+    form.order.type = as;
+    const formData = zhInitializeState(form, true);
+    const { kvFormItem, kvStepForm, metaData, sequence } = formData;
+    console.log(formData.oldFormState);
+
+    const resp = await saveFormUseCase(
+        {
+            kvFormItem,
+            kvStepForm,
+            metaData,
+            sequence,
+        },
+        formData.oldFormState,
+        false
+    );
+
     return {
-        link: ``,
+        link: `/sales-book/edit-${as}/${resp.slug}`,
     };
 }
