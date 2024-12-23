@@ -48,3 +48,13 @@ export async function saveFormUseCase(
 ) {
     return await saveSalesFormDta(data, oldFormState);
 }
+
+export async function copySalesUseCase(orderId, as) {
+    const form = await getSalesBookFormUseCase({
+        slug: orderId,
+    });
+
+    return {
+        link: ``,
+    };
+}

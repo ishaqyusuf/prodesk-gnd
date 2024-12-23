@@ -9,3 +9,4 @@ export async function saveSalesFormDta(
     await worker.execute();
     return worker.result();
 }
+export async function copySalesDta(orderId, as) {}

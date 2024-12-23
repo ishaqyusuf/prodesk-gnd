@@ -16,11 +16,17 @@ export async function getSalesPayments(orderId) {
             payments: true,
             salesRepId: true,
             customerId: true,
+            billingAddress: {
+                select: {
+                    customerId: true,
+                },
+            },
         },
     });
 
     return {
         ...order,
+        customerId: order.customerId || order.billingAddress?.customerId,
         payments: order?.payments.map((payment) => {
             return {
                 ...payment,

@@ -25,6 +25,7 @@ import {
     DeleteRowAction,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
+import { copySalesUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 type Mode = "dealer" | "internal";
 export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
@@ -75,10 +76,12 @@ export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
     }
     const router = useRouter();
     const copyAs = async (as: ISalesType) => {
-        const resp = await copyOrderAction({
-            orderId: item.orderId,
-            as,
-        });
+        const resp = item.isDyke
+            ? await copySalesUseCase(item.orderId, as)
+            : await copyOrderAction({
+                  orderId: item.orderId,
+                  as,
+              });
         if (resp.link)
             toast.message(`${as} copied successfully`, {
                 action: {

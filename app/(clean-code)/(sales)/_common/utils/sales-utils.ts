@@ -118,3 +118,6 @@ export function isComponentType(type: DykeDoorType) {
     // resp.interior || resp.exterior || resp.garage || !type;
     return resp;
 }
+export function isNewSales(orderId) {
+    return ["quo-", "ord-"].some((a) => orderId?.toLowerCase()?.startsWith(a));
+}

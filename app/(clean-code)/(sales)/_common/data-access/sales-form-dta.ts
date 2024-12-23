@@ -22,7 +22,7 @@ import { ComponentPrice, Prisma } from "@prisma/client";
 import { getSalesFormStepByIdDta } from "./sales-form-step-dta";
 
 export interface GetSalesBookFormDataProps {
-    type: SalesType;
+    type?: SalesType;
     slug?: string;
     id?: number;
     restoreMode?: boolean;

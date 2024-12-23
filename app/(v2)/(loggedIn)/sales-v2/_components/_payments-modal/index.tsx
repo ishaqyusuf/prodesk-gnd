@@ -64,6 +64,8 @@ export default function PaymentModal({
         startTransition(async () => {
             const formData = form.getValues().data;
             const order = ctx.data;
+            // console.log(order);
+            // return;
             if (!order) return;
             const amountPaid = Number(formData.amount);
             const amountDue = (order.amountDue || 0) - amountPaid;
