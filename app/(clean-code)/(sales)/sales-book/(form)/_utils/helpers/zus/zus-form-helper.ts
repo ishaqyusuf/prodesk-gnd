@@ -22,6 +22,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         return formatMoney(sp * salesMultiplier);
     }
     const selectedTax = data._taxForm?.selection?.[0];
+    if (copy && selectedTax) selectedTax.salesTaxId = null;
 
     const resp: SalesFormZusData = {
         // data,

@@ -325,7 +325,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const _copyOrder = useCallback(
         async (as: ISalesType = "order") => {
             startTransition(async () => {
-                console.log(props.row);
+                console.log(as, props.row);
 
                 const _ = props.row.isDyke
                     ? await copySalesUseCase(props.row.slug, as)
@@ -339,7 +339,7 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
                     toast.success(`${as} copied successfully`, {
                         action: {
                             label: "Open",
-                            onClick: () => router.push(_.link),
+                            onClick: () => openLink(_.link, {}, true),
                         },
                     });
             });

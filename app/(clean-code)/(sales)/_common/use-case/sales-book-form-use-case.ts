@@ -69,8 +69,8 @@ export async function copySalesUseCase(orderId, as) {
 
     form.order.type = as;
     const formData = zhInitializeState(form, true);
+
     const { kvFormItem, kvStepForm, metaData, sequence } = formData;
-    console.log(formData.oldFormState);
 
     const resp = await saveFormUseCase(
         {
