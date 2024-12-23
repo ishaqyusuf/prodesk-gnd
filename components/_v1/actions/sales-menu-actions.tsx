@@ -30,7 +30,10 @@ import SendEmailSheet from "@/components/_v2/email/send-email";
 
 import { useAssignment } from "@/app/(v2)/(loggedIn)/sales-v2/productions/_components/_modals/assignment-modal/use-assignment";
 import { openLink } from "@/lib/open-link";
-import { copySalesUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
+import {
+    copySalesUseCase,
+    moveOrderUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 export interface IOrderRowProps {
     row: ISalesOrder;
@@ -148,7 +151,12 @@ export function OrderRowAction(props: IOrderRowProps) {
                 ) : (
                     <></>
                 )}
-                <MoveSalesMenuItem id={row.id} type={row.type} />
+                <MoveSalesMenuItem
+                    isDyke={row.isDyke}
+                    orderId={row.orderId}
+                    id={row.id}
+                    type={row.type}
+                />
 
                 <CopyOrderMenuAction row={row} />
                 <PrintOrderMenuAction link estimate={estimate} row={row} />
@@ -297,14 +305,16 @@ export const PrintOrderMenuAction = typedMemo(
         );
     }
 );
-export const MoveSalesMenuItem = ({ id, type }) => {
+export const MoveSalesMenuItem = ({ id, orderId, type, isDyke }) => {
     const estimate = type == "quote";
     async function moveEstimateToOrder() {
-        await moveSales(id, "order");
+        if (isDyke) await moveOrderUseCase(orderId, "order");
+        else await moveSales(id, "order");
         toast.message("Estimate moved to order");
         //  router.push(`/sales/order/${row.orderId}`);
     }
     async function moveToEstimate() {
+        if (isDyke) await moveOrderUseCase(orderId, "quote");
         await moveSales(id, "quote");
         toast.message("Order moved to quote");
         //  router.push(`/sales/quote/${row.orderId}`);
@@ -325,15 +335,12 @@ export const CopyOrderMenuAction = typedMemo((props: IOrderRowProps) => {
     const _copyOrder = useCallback(
         async (as: ISalesType = "order") => {
             startTransition(async () => {
-                console.log(as, props.row);
-
                 const _ = props.row.isDyke
                     ? await copySalesUseCase(props.row.slug, as)
                     : await copyOrderAction({
                           orderId: props.row.orderId,
                           as,
                       });
-                console.log(_.link);
 
                 if (_.link)
                     toast.success(`${as} copied successfully`, {

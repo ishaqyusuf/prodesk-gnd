@@ -16,6 +16,8 @@ import { getPricingListDta } from "../data-access/sales-pricing-dta";
 import { SalesFormFields } from "../../types";
 import { saveSalesFormDta } from "../data-access/save-sales/index.dta";
 import { zhInitializeState } from "../../sales-book/(form)/_utils/helpers/zus/zus-form-helper";
+import { deleteSaleUseCase } from "@/use-cases/sales";
+import { prisma } from "@/db";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
@@ -61,7 +63,18 @@ export async function saveFormUseCase(
         };
     return await saveSalesFormDta(data, oldFormState, allowRedirect);
 }
-
+export async function moveOrderUseCase(orderId, to) {
+    await copySalesUseCase(orderId, to);
+    // await deleteSaleUseCase()
+    await prisma.salesOrders.update({
+        where: {
+            orderId,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+}
 export async function copySalesUseCase(orderId, as) {
     const form = await getSalesBookFormUseCase({
         slug: orderId,

@@ -59,7 +59,7 @@ export interface SaverData {
 export type HptData = SaverData["items"][number]["hpt"];
 
 export class SaveSalesClass extends SaveSalesHelper {
-    public result(redirect) {
+    public result(__redirect) {
         const data = this.data;
         if (data.error) {
             return { data };
@@ -69,7 +69,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         const redirectTo = !isUpdate
             ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
             : null;
-        if (redirectTo && redirect) redirect(redirectTo);
+        if (redirectTo && __redirect) redirect(redirectTo);
         return {
             slug: salesResp.slug,
             redirectTo,

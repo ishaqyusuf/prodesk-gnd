@@ -199,7 +199,14 @@ export default function HeaderSection({}) {
                                     />
                                 </>
                             )}
-                            {id && <MoveSalesMenuItem id={id} type={type} />}
+                            {id && (
+                                <MoveSalesMenuItem
+                                    id={id}
+                                    type={type}
+                                    orderId={orderId}
+                                    isDyke={true}
+                                />
+                            )}
 
                             <MenuItem
                                 onClick={() => {

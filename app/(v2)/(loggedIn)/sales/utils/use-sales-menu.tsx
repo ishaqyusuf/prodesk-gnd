@@ -90,6 +90,8 @@ export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
             });
     };
     const moveTo = async (type: ISalesType) => {
+        console.log(type);
+        return;
         await moveSales(item.id, type);
         toast.message("Success");
     };
