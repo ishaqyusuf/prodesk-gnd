@@ -466,6 +466,11 @@ function getDoorsTable(
                         );
                     } else {
                         m.housePackageTool?.doors?.map((door, _doorI) => {
+                            const doorTitle =
+                                m.housePackageTool.stepProduct?.door?.title;
+                            const isPh = m.formSteps.find((s) =>
+                                s.value?.toLowerCase()?.startsWith("ph -")
+                            );
                             lines.push(
                                 res.cells.map((cell, _cellId) => {
                                     const ret = {
@@ -474,10 +479,7 @@ function getDoorsTable(
                                         value: getVal(
                                             cell.cell,
                                             door,
-                                            _doorI > 0
-                                                ? "as-above"
-                                                : m.housePackageTool?.door
-                                                      ?.title
+                                            isPh ? "PH - " : "" + doorTitle
                                         ),
                                     };
                                     return ret;

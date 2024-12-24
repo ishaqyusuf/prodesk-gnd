@@ -167,6 +167,11 @@ const SalesIncludes = {
             housePackageTool: {
                 where: { deletedAt: null },
                 include: {
+                    stepProduct: {
+                        include: {
+                            door: true,
+                        },
+                    },
                     casing: true,
                     door: {
                         where: {
