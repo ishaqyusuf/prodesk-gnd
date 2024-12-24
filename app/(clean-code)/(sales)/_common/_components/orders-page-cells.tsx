@@ -37,7 +37,7 @@ function Customer({ item }: ItemProps) {
             <TCell.Primary
                 className={cn(
                     item.isBusiness && "text-blue-700",
-                    "whitespace-nowrap"
+                    "whitespace-nowrap uppercase"
                 )}
             >
                 <TextWithTooltip
@@ -77,7 +77,7 @@ function Address({ item }: ItemProps) {
 function SalesRep({ item }: ItemProps) {
     return (
         <TCell>
-            <TCell.Secondary className="whitespace-nowrap">
+            <TCell.Secondary className="whitespace-nowrap uppercase">
                 <TextWithTooltip
                     className="max-w-[85px]"
                     text={item.salesRep}

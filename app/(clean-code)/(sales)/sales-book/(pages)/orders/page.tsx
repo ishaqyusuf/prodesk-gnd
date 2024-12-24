@@ -9,7 +9,13 @@ import { dataOptions } from "@/components/(clean-code)/data-table/query-options"
 import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-page-query-data";
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { __filters } from "../../../_common/utils/contants";
+import { constructMetadata } from "@/lib/(clean-code)/contruct-metadata";
 
+export async function generateMetadata({}) {
+    return constructMetadata({
+        title: `Sales Order - gndprodesk.com`,
+    });
+}
 export default async function SalesBookPage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
