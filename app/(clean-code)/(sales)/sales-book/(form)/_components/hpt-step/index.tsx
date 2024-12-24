@@ -84,7 +84,7 @@ function DoorSizeTable({ door }) {
                         </>
                     )}
                     <TableHead className="w-28">Estimate</TableHead>
-                    <TableHead className="w-28">Addon/Qty</TableHead>
+                    {/* <TableHead className="w-28">Addon/Qty</TableHead> */}
                     <TableHead className="w-28">Line Total</TableHead>
                     <TableHead className="w-16"></TableHead>
                 </TableRow>
@@ -226,6 +226,20 @@ function DoorSizeRow({ size }: { size }) {
                             />
                             <DataLine
                                 size="sm"
+                                label="Addon Price"
+                                value={
+                                    <LineInput
+                                        className="w-28"
+                                        cls={ctx.ctx}
+                                        name="pricing.addon"
+                                        lineUid={lineUid}
+                                        type="number"
+                                        valueChanged={valueChanged}
+                                    />
+                                }
+                            />
+                            <DataLine
+                                size="sm"
                                 label="Custom Price"
                                 value={
                                     <LineInput
@@ -242,7 +256,7 @@ function DoorSizeRow({ size }: { size }) {
                     </div>
                 </Menu>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
                 <LineInput
                     cls={ctx.ctx}
                     name="pricing.addon"
@@ -250,7 +264,7 @@ function DoorSizeRow({ size }: { size }) {
                     type="number"
                     valueChanged={valueChanged}
                 />
-            </TableCell>
+            </TableCell> */}
             <TableCell>
                 <Money value={sizeForm?.pricing?.totalPrice} />
             </TableCell>
