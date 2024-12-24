@@ -479,7 +479,7 @@ function getDoorsTable(
                                         value: getVal(
                                             cell.cell,
                                             door,
-                                            isPh ? "PH - " : "" + doorTitle
+                                            (isPh ? "PH - " : "") + doorTitle
                                         ),
                                     };
                                     return ret;
