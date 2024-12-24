@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { HOME_DOMAIN } from "./constants";
 
+const prod = process.env.NODE_ENV == "production";
 export function constructMetadata({
     title = `${process.env.NEXT_PUBLIC_APP_NAME} - Enterprice Management System`,
     description = `${process.env.NEXT_PUBLIC_APP_NAME} is the open-source link management platform for modern marketing teams to create marketing campaigns, link sharing features, and referral programs.`,
@@ -9,19 +10,20 @@ export function constructMetadata({
         {
             rel: "apple-touch-icon",
             sizes: "32x32",
-            url: "/apple-touch-icon.png",
+            url: `/apple-touch-icon${prod ? ".png" : ".dev.jpg"}`,
         },
         {
             rel: "icon",
             type: "image/png",
             sizes: "32x32",
-            url: "/favicon-32x32.png",
+
+            url: `/favicon-32x32{prod ? ".png" : ".dev.jpg"}`,
         },
         {
             rel: "icon",
             type: "image/png",
             sizes: "16x16",
-            url: "/favicon-16x16.png",
+            url: `/favicon-16x16${prod ? ".png" : ".dev.jpg"}`,
         },
     ],
     noIndex = false,
