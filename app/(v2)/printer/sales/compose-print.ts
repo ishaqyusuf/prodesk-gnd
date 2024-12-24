@@ -452,6 +452,7 @@ function getDoorsTable(
                         }
                         return lines.length + 1;
                     };
+                    if (is.moulding && !m.total) return;
                     if (is.moulding || is.service) {
                         lines.push(
                             res.cells.map((cell, _i) => {
@@ -493,30 +494,31 @@ function getDoorsTable(
                     sectionTitle: item.dykeDescription || item.meta.doorType,
                     details: details,
                     itemCells: res.cells,
-                    lines: true
-                        ? lines
-                        : (is.moulding
-                              ? []
-                              : item.housePackageTool?.doors
-                          )?.map((door, i) => {
-                              return res.cells.map((cell, _i) => {
-                                  const ret = {
-                                      style: cell.cellStyle,
-                                      colSpan: cell.colSpan,
-                                      value: door[cell.cell as any],
-                                  };
-                                  if (_i == 0) ret.value = i + 1;
-                                  const currency = ["Rate", "Total"].includes(
-                                      cell.title
-                                  );
-                                  if (ret.value && currency) {
-                                      ret.value = formatCurrency.format(
-                                          ret.value
-                                      );
-                                  }
-                                  return ret;
-                              });
-                          }),
+                    lines,
+                    // : true
+                    //     ? lines
+                    //     : (is.moulding
+                    //           ? []
+                    //           : item.housePackageTool?.doors
+                    //       )?.map((door, i) => {
+                    //           return res.cells.map((cell, _i) => {
+                    //               const ret = {
+                    //                   style: cell.cellStyle,
+                    //                   colSpan: cell.colSpan,
+                    //                   value: door[cell.cell as any],
+                    //               };
+                    //               if (_i == 0) ret.value = i + 1;
+                    //               const currency = ["Rate", "Total"].includes(
+                    //                   cell.title
+                    //               );
+                    //               if (ret.value && currency) {
+                    //                   ret.value = formatCurrency.format(
+                    //                       ret.value
+                    //                   );
+                    //               }
+                    //               return ret;
+                    //           });
+                    //       }),
                 };
             }),
     };
@@ -545,7 +547,6 @@ function lineItems(data: PrintData, { isProd, isPacking }) {
 
     const maxIndex = Math.max(...uids);
     const totalLines = maxIndex ? maxIndex + 1 : lineItems?.length;
-    console.log([totalLines, maxIndex, lineItems.length]);
 
     if (totalLines < 0) return null;
     const heading = [

@@ -667,8 +667,8 @@ export class ComponentHelperClass extends StepHelperClass {
                     swing: "",
                 };
             else {
-                groupItem.form[this.componentUid].selected =
-                    !groupItem.form?.[this.componentUid].selected;
+                const selected = (groupItem.form[this.componentUid].selected =
+                    !groupItem.form?.[this.componentUid].selected);
             }
 
             groupItem.itemIds = Object.entries(groupItem.form)

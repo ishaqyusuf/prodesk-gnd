@@ -1,5 +1,5 @@
 import { Prisma, SalesOrders } from "@prisma/client";
-import { SalesFormFields, SalesMeta } from "../../../types";
+import { SalesFormFields } from "../../../types";
 import { SaveSalesHelper } from "./helper-class";
 import { nextId } from "@/lib/nextId";
 import { prisma } from "@/db";
@@ -386,7 +386,11 @@ export class SaveSalesClass extends SaveSalesHelper {
                 if (index == 0 && groupItemFormId?.split("-")?.length > 2) {
                     itemCtx.generateDoorsItem();
                 } else {
-                    itemCtx.generateNonDoorItem(groupItemFormId, groupItemForm);
+                    if (groupItemForm.selected)
+                        itemCtx.generateNonDoorItem(
+                            groupItemFormId,
+                            groupItemForm
+                        );
                 }
             });
         });
