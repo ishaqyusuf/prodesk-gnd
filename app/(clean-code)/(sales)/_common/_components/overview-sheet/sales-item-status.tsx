@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
-import { GetSalesOrderListItem } from "../use-case/sales-list-use-case";
+
 import { Label } from "@/components/ui/label";
+import { GetSalesOrderListItem } from "../../use-case/sales-list-use-case";
 
 interface Props {
     status: GetSalesOrderListItem["stats"]["dispatch"];

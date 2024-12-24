@@ -8,6 +8,6 @@ FOLDER ARCHICTECTURE:
                     /edit-quote: page.tsx
                     /create-quote/[slug]: page.tsx
             (orders-module)
+            (quotes-module)
             (form-module)
             (overview-module)
-            
