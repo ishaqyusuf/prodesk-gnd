@@ -1,5 +1,8 @@
 import { GetSalesBookForm } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
-import { SalesFormZusData } from "@/app/(clean-code)/(sales)/types";
+import {
+    DykeDoorType,
+    SalesFormZusData,
+} from "@/app/(clean-code)/(sales)/types";
 import { getFormState } from "../../../_common/_stores/form-data-store";
 import { StepHelperClass } from "./zus-helper-class";
 import { generateRandomString } from "@/lib/utils";
@@ -114,7 +117,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         };
         resp.sequence.stepComponent[uid] = [];
         // let doorStepUid, mouldingComponentUid;
-        let itemType;
+        let itemType: DykeDoorType;
         item.formStepArray.map((fs, i) => {
             // console.log(i);
             // if (fs.step.title == "Door") doorStepUid = fs.step.uid;
@@ -131,8 +134,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 meta: stepMeta as any,
             });
             if (stp.title == "Item Type") {
-                itemType = stp.value;
-                console.log({ itemType });
+                itemType = stp.value as any;
             }
             resp.sequence.stepComponent[uid].push(suid);
             resp.kvFormItem[uid].currentStepUid = suid;
@@ -179,13 +181,14 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
 
             // resp.kvFormItem[uid].groupItem.itemIds.push(formId); //= formData;
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
-            console.log({ formId, formData });
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
+            const sp = item.item?.housePackageTool?.stepProduct;
             const stepProdUid =
-                item.item?.housePackageTool?.stepProduct?.uid ||
+                sp?.uid ||
                 item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
-            const stepProductId = item.item?.housePackageTool?.stepProduct?.id;
+            const stepProductId = sp?.id;
+
             const doorCount = Object.keys(data._doorForm).length;
 
             if (doorCount) {

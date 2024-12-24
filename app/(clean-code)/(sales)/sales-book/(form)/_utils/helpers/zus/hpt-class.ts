@@ -64,22 +64,21 @@ export class HptClass extends GroupFormClass {
         return this.getItemForm()?.groupItem?._?.tabUid;
     }
     public getSelectedDoors() {
-        console.log("GETTING SELECTED DOORS");
         const itemForm = this.getItemForm();
         const doorStep = this.getDoorStepForm();
 
         const selectionComponentUids = Array.from(
             new Set(itemForm.groupItem?.itemIds?.map((s) => s.split("-")[0]))
         );
-        return selectionComponentUids.map((componentUid) => {
-            console.log(componentUid, doorStep);
-
-            const component = this.getComponentFromSettingsByStepId(
-                doorStep?.stepId,
-                componentUid
-            );
-            return component;
-        });
+        return selectionComponentUids
+            .map((componentUid) => {
+                const component = this.getComponentFromSettingsByStepId(
+                    doorStep?.stepId,
+                    componentUid
+                );
+                return component;
+            })
+            .filter(Boolean);
     }
 
     public isDoorSelected(uid) {
