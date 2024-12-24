@@ -224,6 +224,20 @@ function DoorSizeRow({ size }: { size }) {
                                     </div>
                                 }
                             />
+                            <DataLine
+                                size="sm"
+                                label="Custom Price"
+                                value={
+                                    <LineInput
+                                        className="w-28"
+                                        cls={ctx.ctx}
+                                        name="pricing.customPrice"
+                                        lineUid={lineUid}
+                                        type="number"
+                                        valueChanged={valueChanged}
+                                    />
+                                }
+                            />
                         </dl>
                     </div>
                 </Menu>
