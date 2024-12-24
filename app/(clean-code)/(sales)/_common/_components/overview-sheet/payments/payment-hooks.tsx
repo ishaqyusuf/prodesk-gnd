@@ -8,7 +8,7 @@ import {
     getPaymentTerminalsUseCase,
     GetSalesPayment,
     getSalesPaymentUseCase,
-} from "../../../../use-case/sales-payment-use-case";
+} from "../../../use-case/sales-payment-use-case";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

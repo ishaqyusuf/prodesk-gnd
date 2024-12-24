@@ -3,7 +3,7 @@ import TableItemOverviewSheet, {
 } from "@/components/(clean-code)/data-table/item-overview-sheet";
 import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { motion, AnimatePresence } from "framer-motion";
-import { SalesItemProp } from "../../orders-page-cells";
+import { SalesItemProp } from "../orders-page-cells";
 
 import { _modal } from "@/components/common/modal/provider";
 
@@ -23,9 +23,9 @@ import { cn } from "@/lib/utils";
 import { SalesShippingTab } from "./shipping/sales-shippings-tab";
 import { ShippingOverview } from "./shipping/shipping-overview";
 import "./style.css";
-import ActionFooter from "./action-footer";
+import ActionFooter from "./footer/action-footer";
 import NotificationTab from "./notification";
-import { SalesDispatchListDto } from "../../../data-access/dto/sales-shipping-dto";
+import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { PaymentTab } from "./payments/payment-tab";
 import { SalesItemsOverview } from "./item-view/sales-items-overview";
 export function OrderOverviewSheet({}) {
@@ -69,7 +69,12 @@ function PrimaryTab() {
             )}
         >
             <TableSheetHeader
-                title={`${ctx.item?.orderId} | ${ctx.item?.displayName}`}
+                title={[
+                    ctx.item?.orderId,
+                    ctx.item?.displayName || ctx.item?.customerPhone,
+                ]
+                    ?.filter(Boolean)
+                    .join(" | ")}
                 rowChanged={ctx.rowChanged}
             />
             <Tabs

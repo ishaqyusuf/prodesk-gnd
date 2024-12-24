@@ -17,7 +17,7 @@ import { useState } from "react";
 import {
     deleteAssignmentSubmissionUseCase,
     deleteAssignmentUseCase,
-} from "../../../../use-case/sales-prod.use-case";
+} from "../../../use-case/sales-prod.use-case";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";

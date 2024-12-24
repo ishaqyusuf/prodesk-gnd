@@ -1,6 +1,5 @@
 import { Prisma, SalesOrders } from "@prisma/client";
 import { SalesFormFields, SalesMeta } from "../../../types";
-import { formatMoney } from "@/lib/use-number";
 import { SaveSalesHelper } from "./helper-class";
 import { nextId } from "@/lib/nextId";
 import { prisma } from "@/db";

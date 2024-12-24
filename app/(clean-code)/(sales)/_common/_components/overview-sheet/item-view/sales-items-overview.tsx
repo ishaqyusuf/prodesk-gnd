@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import Money from "@/components/_v1/money";
 import { DataLine } from "@/components/(clean-code)/data-table/Dl";
 import { cn } from "@/lib/utils";
-import { GetSalesOverview } from "../../../../use-case/sales-item-use-case";
+import { GetSalesOverview } from "../../../use-case/sales-item-use-case";
 import { useSalesOverview } from "../overview-provider";
 import { Menu } from "@/components/(clean-code)/menu";
 import {
@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormCheckbox from "@/components/common/controls/form-checkbox";
 import Button from "@/components/common/button";
-import { updateSalesItemControlUseCase } from "../../../../use-case/sales-item-control-use-case";
+import { updateSalesItemControlUseCase } from "../../../use-case/sales-item-control-use-case";
 import { toast } from "sonner";
 
 export type ItemGroupType = GetSalesOverview["itemGroup"][number];

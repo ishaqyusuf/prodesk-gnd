@@ -2,13 +2,15 @@ import { Menu } from "@/components/(clean-code)/menu";
 import ConfirmBtn from "@/components/_v1/confirm-btn";
 import { Icons } from "@/components/_v1/icons";
 import { Button } from "@/components/ui/button";
-import { useSalesOverview } from "./overview-provider";
+import { useSalesOverview } from "../overview-provider";
 import { toast } from "sonner";
 import Money from "@/components/_v1/money";
 import { useEffect, useState } from "react";
-import { usePayment } from "./payments/payment-hooks";
-import { TerminalPay } from "./payments/payment-tab";
+import { usePayment } from "../payments/payment-hooks";
+import { TerminalPay } from "../payments/payment-tab";
 import { openLink } from "@/lib/open-link";
+import { RefreshCcw } from "lucide-react";
+import { CopyAction } from "./copy.action";
 
 export default function ActionFooter({}) {
     const ctx = useSalesOverview();
@@ -28,7 +30,7 @@ export default function ActionFooter({}) {
                     setPay(true);
                 }}
                 disabled={!ctx.item.due || pay}
-                size="sm"
+                size="xs"
                 className="bg-green-600"
             >
                 <Icons.dollar className="w-4 h-4 mr-2" />
@@ -38,7 +40,7 @@ export default function ActionFooter({}) {
                 </span>
             </Button>
             <ConfirmBtn
-                size="sm"
+                size="xs"
                 Icon={Icons.trash}
                 trash
                 variant="destructive"
@@ -63,7 +65,7 @@ export default function ActionFooter({}) {
                     Print
                 </Menu.Item>
                 <Menu.Item
-                    icon="radix"
+                    Icon={RefreshCcw}
                     onClick={() => {
                         ctx.refresh().then((r) => {
                             toast.success("Refreshed");
@@ -72,6 +74,7 @@ export default function ActionFooter({}) {
                 >
                     Refresh
                 </Menu.Item>
+                <CopyAction />
             </Menu>
         </div>
     );
@@ -80,7 +83,7 @@ function QuickPay({ onClose }) {
     const ctx = usePayment();
     const [ready, setIsReady] = useState(false);
     useEffect(() => {
-        console.log(ctx.data);
+        // console.log(ctx.data);
         if (!ctx.data) return;
         ctx.form.setValue("paymentMethod", "terminal");
         ctx.createPayment("terminal");

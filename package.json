@@ -103,6 +103,7 @@
     "nuqs": "^1.20.0",
     "pg": "^8.11.5",
     "postcss": "^8.4.38",
+    "prisma-kysely": "^1.8.0",
     "puppeteer": "^23.7.1",
     "puppeteer-core": "^23.7.1",
     "qs": "^6.11.2",

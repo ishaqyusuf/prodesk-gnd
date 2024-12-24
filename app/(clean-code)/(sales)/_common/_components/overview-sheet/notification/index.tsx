@@ -1,6 +1,6 @@
 import { useSalesOverview } from "../overview-provider";
 
-import MailBox from "../../../mail-box";
+import MailBox from "../../mail-box";
 
 export default function NotificationTab() {
     const ctx = useSalesOverview();

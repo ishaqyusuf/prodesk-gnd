@@ -1,5 +1,5 @@
 import { Progress } from "@/components/ui/progress";
-import { GetSalesOrderListItem } from "../../../use-case/sales-list-use-case";
+import { GetSalesOrderListItem } from "../use-case/sales-list-use-case";
 import { Label } from "@/components/ui/label";
 
 interface Props {

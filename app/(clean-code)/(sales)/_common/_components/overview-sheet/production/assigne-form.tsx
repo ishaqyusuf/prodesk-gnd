@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormSelect from "@/components/common/controls/form-select";
-import { getSalesProdWorkersAsSelectOption } from "../../../../use-case/sales-prod-workers-use-case";
+import { getSalesProdWorkersAsSelectOption } from "../../../use-case/sales-prod-workers-use-case";
 import useEffectLoader from "@/lib/use-effect-loader";
 import Button from "@/components/common/button";
 import { DatePicker } from "@/components/(clean-code)/custom/controlled/date-picker";
@@ -14,7 +14,7 @@ import {
     createItemAssignmentUseCase,
     getItemAssignmentFormUseCase,
     ItemAssignmentForm,
-} from "../../../../use-case/sales-prod.use-case";
+} from "../../../use-case/sales-prod.use-case";
 import { toast } from "sonner";
 import {
     useDataTableContext,

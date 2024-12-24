@@ -7,7 +7,7 @@ import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/fil
 import { DataTableInfinityToolbar } from "@/components/(clean-code)/data-table/infinity/data-table-toolbar";
 
 import { DispatchCells } from "../dispatch-page-cells";
-import { DispatchOverviewSheet } from "../overviews/sales-overview/order-overview-sheet";
+import { DispatchOverviewSheet } from "../overview-sheet/order-overview-sheet";
 
 interface Props {
     queryKey?;

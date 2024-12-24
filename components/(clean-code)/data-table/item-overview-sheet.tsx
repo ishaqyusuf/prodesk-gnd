@@ -158,7 +158,10 @@ export function TableSheetHeader({
         <SheetHeader className="sticky top-0 bg-background   overview-sheet-header">
             <div className="flex items-center justify-between gap-2">
                 <SheetTitle
-                    className={cn(titleClassName, "text-left truncate")}
+                    className={cn(
+                        titleClassName,
+                        "text-left truncate uppercase"
+                    )}
                 >
                     {title}
                 </SheetTitle>
