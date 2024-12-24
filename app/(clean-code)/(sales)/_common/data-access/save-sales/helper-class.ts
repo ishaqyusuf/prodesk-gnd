@@ -43,7 +43,6 @@ export class SaveSalesHelper {
             payment_option: md.paymentMethod,
         };
         const sd = this.ctx.data;
-        console.log(sd);
 
         const updateData = {
             subTotal: md.pricing.subTotal,
@@ -240,13 +239,7 @@ export class SaveSalesHelper {
         const deleteIds = idStack
             ?.filter(Boolean)
             ?.filter((s) => !stackIds.includes(s));
-        if (priority == 3) {
-            console.log({
-                stackIds,
-                idStack,
-                deleteIds,
-            });
-        }
+
         if (deleteIds?.length)
             this.ctx.data.deleteStacks.push({
                 ids: deleteIds,

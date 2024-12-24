@@ -50,7 +50,6 @@ export class GroupFormClass extends StepHelperClass {
         const dotNewData = dotObject.dot(newData);
         for (const [key, value] of Object.entries(dotNewData)) {
             if (dotOldData[key] !== value) {
-                console.log(`updating: `, key, value, dotOldData[key]);
                 this.dotUpdateGroupItemFormPath(path, key as any, value);
             }
         }

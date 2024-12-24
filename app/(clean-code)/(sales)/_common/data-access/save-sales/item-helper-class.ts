@@ -73,7 +73,7 @@ export class ItemHelperClass {
                     ...updateData,
                 },
             };
-            console.log(updateData);
+            // console.log(updateData);
         }
         this.generateItemFormSteps();
         const itemHtp: HptData = {
@@ -169,15 +169,16 @@ export class ItemHelperClass {
                 qty: 1,
                 meta,
                 value: step.value,
-                // sales: {
-                //     connect: {
-                //         id: this.ctx.data.sales.id,
-                //     },
-                // },
+                salesOrderItem: {
+                    connect: {
+                        id: this.itemData.id,
+                    },
+                },
             } satisfies Prisma.DykeStepFormUpdateInput;
             if (!step.stepFormId) {
+                const { salesOrderItem, ...rest } = updateData;
                 const createData = {
-                    ...updateData,
+                    ...rest,
                     id: this.ctx.nextId("formStep"),
                     stepId: step.stepId,
                     salesId: this.ctx.salesId,
@@ -229,6 +230,11 @@ export class ItemHelperClass {
 
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
+        const { multiDykeUid, multiDyke, ...rest } = updateData;
+        console.log({
+            multiDyke,
+            multiDykeUid,
+        });
 
         if (!gf.meta.salesItemId) {
             const createData = {
@@ -294,6 +300,5 @@ export class ItemHelperClass {
         }
         //  if (this.itemData.hpt?.doors)
         this.ctx.data.items.push(this.itemData);
-        console.log(this.itemData);
     }
 }

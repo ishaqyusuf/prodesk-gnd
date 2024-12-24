@@ -112,7 +112,6 @@ export class SaveSalesClass extends SaveSalesHelper {
         await this.generateItemsForm();
         this.composeTax();
         await this.saveData();
-        // await this.saveData2();
     }
     public async saveData() {
         this.composeSaveStacks();
@@ -310,7 +309,6 @@ export class SaveSalesClass extends SaveSalesHelper {
                     priority: stack.priority,
                 };
             // stack.table[stack.pr]
-            if (stack.priority == 1) console.log(stack);
 
             const sd = { id: stack.updateId, data: stack.data };
             if (sd.id) {
@@ -386,11 +384,8 @@ export class SaveSalesClass extends SaveSalesHelper {
                 if (index == 0 && groupItemFormId?.split("-")?.length > 2) {
                     itemCtx.generateDoorsItem();
                 } else {
-                    if (groupItemForm.selected)
-                        itemCtx.generateNonDoorItem(
-                            groupItemFormId,
-                            groupItemForm
-                        );
+                    // if (groupItemForm.selected)
+                    itemCtx.generateNonDoorItem(groupItemFormId, groupItemForm);
                 }
             });
         });
