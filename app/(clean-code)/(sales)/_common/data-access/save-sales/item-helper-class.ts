@@ -231,11 +231,6 @@ export class ItemHelperClass {
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         const { multiDykeUid, multiDyke, ...rest } = updateData;
-        console.log({
-            multiDyke,
-            multiDykeUid,
-        });
-
         if (!gf.meta.salesItemId) {
             const createData = {
                 ...updateData,

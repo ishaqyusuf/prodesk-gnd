@@ -90,8 +90,8 @@ function DoorSizeTable({ door }) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {door.sizeList.map((sl) => (
-                    <DoorSizeRow size={sl} key={sl.path} />
+                {door.sizeList.map((sl, i) => (
+                    <DoorSizeRow size={sl} key={i} />
                 ))}
             </TableBody>
 

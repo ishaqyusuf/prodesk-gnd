@@ -39,7 +39,7 @@ export default function ItemSection({ uid }: Props) {
                             <StepSection
                                 isFirst={index == 0}
                                 isLast={sequence?.length - 1 == index}
-                                key={stepUid}
+                                key={index}
                                 stepUid={stepUid}
                             />
                         ))}
