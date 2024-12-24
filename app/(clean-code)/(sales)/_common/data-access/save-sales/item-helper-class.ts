@@ -64,7 +64,6 @@ export class ItemHelperClass {
                 id: createData.id,
                 formValues: [],
             };
-            console.log(createData);
         } else {
             this.itemData = {
                 id: salesItemId,
@@ -73,7 +72,6 @@ export class ItemHelperClass {
                     ...updateData,
                 },
             };
-            // console.log(updateData);
         }
         this.generateItemFormSteps();
         const itemHtp: HptData = {

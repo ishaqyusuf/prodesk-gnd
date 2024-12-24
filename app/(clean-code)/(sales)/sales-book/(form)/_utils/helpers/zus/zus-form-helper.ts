@@ -22,7 +22,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     // }
     function basePrice(sp) {
         if (!sp) return sp;
-        return formatMoney(sp * salesMultiplier);
+        return formatMoney(sp / salesMultiplier);
     }
     const selectedTax = data._taxForm?.selection?.[0];
     if (copy && selectedTax) selectedTax.salesTaxId = null;
@@ -202,6 +202,13 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
 
+                    // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    // console.log(
+                    //     "JSP",
+                    //     basePrice(doorForm.jambSizePrice),
+                    //     doorForm.jambSizePrice
+                    // );
+                    // console.log(">><<<<<<<<<<<<<<<<<<<<<<<<<<<");
                     addFormItem(formId, {
                         doorId: doorForm.id,
                         pricing: {
@@ -211,8 +218,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                             },
                             unitPrice: doorForm.unitPrice,
                             customPrice: doorForm?.meta?.overridePrice,
-                            // unitPrice: doorForm.jambSizePrice,
-                            // totalPrice: doorForm.jambSizePrice,
                             addon: doorForm.doorPrice,
                         },
                         meta: {

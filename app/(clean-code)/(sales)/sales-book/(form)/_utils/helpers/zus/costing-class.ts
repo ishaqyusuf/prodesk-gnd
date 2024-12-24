@@ -146,8 +146,6 @@ export class CostingClass {
                 ]),
             formData.pricing?.addon,
         ];
-        console.log(priceList);
-
         const unitPrice = sum(priceList);
         const totalPrice = formatMoney(
             sum(priceList) * Number(formData.qty.total)
