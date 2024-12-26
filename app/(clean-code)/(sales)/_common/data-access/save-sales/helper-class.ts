@@ -216,6 +216,7 @@ export class SaveSalesHelper {
         Object.values(oldData.kvFormItem).map((data) => {
             // Object.entries(data.groupItem?.form || )
             idStack.hptIds.push(data.groupItem.hptId);
+            if (data.id) idStack.itemIds.push(data.id);
             Object.values(data?.groupItem?.form || {}).map((f) => {
                 idStack.itemIds.push(f.meta.salesItemId);
                 idStack.salesDoorIds.push(f.doorId);

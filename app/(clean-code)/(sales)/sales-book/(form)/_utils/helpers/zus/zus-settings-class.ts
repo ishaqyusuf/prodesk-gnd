@@ -102,7 +102,7 @@ export class SettingsClass extends CostingClass {
         const stepSequence = this.zus.sequence.stepComponent[this.itemUid]?.map(
             (s) => s.split("-")[1]
         );
-        // console.log(stepSequence);
+
         const steps = settings.steps
             ?.filter((r) => {
                 return true;
@@ -111,7 +111,7 @@ export class SettingsClass extends CostingClass {
                 title: step.title,
                 uid: step.uid,
             }));
-        // console.log(steps);
+
         return steps;
     }
     public getRouteConfig() {
@@ -133,8 +133,6 @@ export class SettingsClass extends CostingClass {
         this.zus.dotUpdate(`setting.stepsByKey.${this.stepUid}`, stepsByKey);
     }
     public getComponentFromSettingsByStepId(stepId, uid) {
-        console.log(this.zus.setting.stepsByKey);
-
         const c = Object.entries(this.zus.setting.stepsByKey)
             .find(([stepUid, data]) => data.id == stepId)?.[1]
             ?.components?.find((c) => c.uid == uid);
@@ -143,7 +141,6 @@ export class SettingsClass extends CostingClass {
                 .map((s) => s.components)
                 .flat()
                 .find((s) => s.uid == uid);
-            console.log({ back, uid });
             return back;
         }
         return c;

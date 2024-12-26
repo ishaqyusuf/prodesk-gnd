@@ -53,6 +53,8 @@ export interface SaverData {
         data?;
         priority;
     }[];
+
+    reqData?;
 }
 
 export type HptData = SaverData["items"][number]["hpt"];
@@ -65,12 +67,13 @@ export class SaveSalesClass extends SaveSalesHelper {
         }
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
         const isUpdate = data.sales.data?.id == null;
-        const redirectTo = !isUpdate
-            ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
-            : null;
+        const redirectTo =
+            !isUpdate && salesResp
+                ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
+                : null;
         if (redirectTo && __redirect) redirect(redirectTo);
         return {
-            slug: salesResp.slug,
+            slug: salesResp?.slug,
             redirectTo,
             data,
         };
@@ -100,6 +103,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             orderTxIndex: -1,
             deleteStacks: [],
             stacks: [],
+            reqData: { form, oldFormState },
         };
     }
     public async execute() {
@@ -188,7 +192,11 @@ export class SaveSalesClass extends SaveSalesHelper {
                 );
             }
         });
+
         try {
+            // TODO: REMOVE
+            // if (data.filter((d) => d.priority == 2).length > 1) return;
+            if (this.form.metaData.debugMode) return;
             const transactions = await prisma.$transaction(txs);
             this.data.result = transactions;
         } catch (error) {
@@ -199,6 +207,7 @@ export class SaveSalesClass extends SaveSalesHelper {
     public async saveData2() {
         this.composeSaveStacks();
         this.getUnusedIds();
+        if (this.form.sequence?.formItem?.length <= 1) return;
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data;
         // this.data.error = "BREAK";
@@ -367,7 +376,9 @@ export class SaveSalesClass extends SaveSalesHelper {
         salesId: null,
     };
     public async generateItemsForm() {
-        Object.entries(this.form.kvFormItem).map(([itemId, formItem]) => {
+        // console.log(this.form.sequence.formItem);
+        this.form.sequence.formItem.map((itemId) => {
+            const formItem = this.form.kvFormItem[itemId];
             if (!formItem?.groupItem?.groupUid)
                 formItem.groupItem.groupUid = generateRandomString(4);
             const formEntries = Object.entries(

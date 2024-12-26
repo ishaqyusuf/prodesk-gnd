@@ -361,6 +361,7 @@ export interface SalesFormFields {
             phone?: string;
             isBusiness?: boolean;
         };
+        debugMode: boolean;
         cad?: number;
         bad?: number;
         sad?: number;

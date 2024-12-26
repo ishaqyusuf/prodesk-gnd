@@ -13,6 +13,9 @@ import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
+import DevOnly from "@/_v2/components/common/dev-only";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -50,14 +53,18 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             },
             zus.oldFormState
         );
-        console.log(resp);
-
-        await refetchData();
-        // if(resp.redirectTo)
-        if (resp.data?.error) toast.error(resp.data?.error);
-        else {
-            toast.success("Saved");
+        console.log({ resp });
+        // return;
+        if (!metaData.debugMode) {
+            await refetchData();
+            if (resp.data?.error) toast.error(resp.data?.error);
+            else {
+                toast.success("Saved");
+            }
+        } else {
+            toast.info("Debug mode");
         }
+        // if(resp.redirectTo)
     }
     return (
         <div
@@ -107,6 +114,15 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4">
+                <DevOnly>
+                    <Switch
+                        onCheckedChange={(e) => {
+                            zus.dotUpdate("metaData.debugMode", e);
+                        }}
+                        checked={zus.metaData.debugMode}
+                    />
+                    <Label>Debug</Label>
+                </DevOnly>
                 {isOld > 0 && (
                     <Link
                         className={cn(

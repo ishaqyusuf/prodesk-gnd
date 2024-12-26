@@ -36,6 +36,9 @@ export class ItemHelperClass {
         const lineIndex = this.getLineIndex();
         const form = this.groupItemForm();
         const formList = Object.values(form);
+        console.log({
+            form,
+        });
         const salesItemId = formList?.find((s) => s.meta?.salesItemId)?.meta
             ?.salesItemId;
 

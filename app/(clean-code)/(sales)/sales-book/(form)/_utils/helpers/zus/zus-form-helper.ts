@@ -44,6 +44,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         kvStepComponentList: {},
         currentTab: !data.order?.id ? "info" : "invoice",
         metaData: {
+            debugMode: false,
             salesRepId: data.order?.salesRepId || data.order.salesRep?.id,
             type: data.order?.type as any,
             id: copy ? null : data.order?.id,
@@ -104,17 +105,20 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         },
         formStatus: "ready",
     };
+    console.log({ itemArray: data.itemArray });
+
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
         console.log({ mc: item.multiComponent });
 
         resp.sequence.formItem.push(uid);
-        resp.kvFormItem[uid] = {
+        const __ = (resp.kvFormItem[uid] = {
             collapsed: !item.expanded,
             uid,
             id: copy ? null : item.item.id,
             title: "",
-        };
+        });
+
         resp.sequence.stepComponent[uid] = [];
         // let doorStepUid, mouldingComponentUid;
         let itemType: DykeDoorType;

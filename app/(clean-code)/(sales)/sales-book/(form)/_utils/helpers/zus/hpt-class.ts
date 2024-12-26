@@ -20,7 +20,6 @@ export class HptClass extends GroupFormClass {
     }
     public getHptForm() {
         const doors = this.getSelectedDoors();
-        console.log({ doors });
 
         const config = this.getRouteConfig();
         const itemForm = this.getItemForm();
@@ -28,13 +27,11 @@ export class HptClass extends GroupFormClass {
         const resp = {
             doors: doors.map((door) => {
                 const priceModel = this.getDoorPriceModel(door.uid);
-                console.log({ priceModel });
                 return {
                     ...door,
                     sizeList: priceModel.heightSizeList?.map((hsl) => {
                         const path = `${door.uid}-${hsl.size}`;
                         const selected = this.isDoorSelected(path);
-                        console.log({ path, selected });
                         return {
                             path,
                             title: hsl.size,
@@ -54,7 +51,7 @@ export class HptClass extends GroupFormClass {
         //     resp.tabUid = resp.doors?.[0]?.uid;
         //     this.dotUpdateItemForm("groupItem._.tabUid", resp.tabUid);
         // }
-        console.log(resp.doors);
+
         return resp;
     }
     public getStepProductUid() {
