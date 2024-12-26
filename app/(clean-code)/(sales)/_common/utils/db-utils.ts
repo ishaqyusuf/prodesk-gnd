@@ -541,6 +541,7 @@ export const includeStepPriceCount = {
 };
 export const SalesBookFormIncludes = (restoreQuery) =>
     ({
+        ...restoreQuery,
         salesProfile: true,
         items: {
             where: {

@@ -39,10 +39,17 @@ export async function getSalesBookFormDataDta(data: GetSalesBookFormDataProps) {
     else {
         throw new Error("Invalid operation");
     }
+    console.log(data);
 
     const order = await prisma.salesOrders.findFirst({
         where,
-        include: SalesBookFormIncludes({}),
+        include: SalesBookFormIncludes(
+            data.restoreMode
+                ? {
+                      deletedAt: {},
+                  }
+                : {}
+        ),
     });
 
     const stepComponents = await getFormStepComponentsDta(
