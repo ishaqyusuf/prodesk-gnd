@@ -34,7 +34,6 @@ export function composePrint(
 ) {
     data = {
         ...data,
-
         query,
         isEstimate: query.mode == "quote",
         isProd: query.mode == "production",
@@ -86,7 +85,6 @@ export function composePrint(
         });
     });
     orderedPrinting = orderedPrinting.sort((a, b) => a._index - b._index);
-
     return {
         ...ret,
         orderedPrinting,
@@ -336,9 +334,7 @@ function getDoorsTable(
                                       ? [
                                             _cell(
                                                 "Qty",
-                                                is.slab || is.bifold
-                                                    ? "lhQty"
-                                                    : "qty",
+                                                "qty",
                                                 2,
                                                 { position: "center" },
                                                 { position: "center" }
@@ -422,7 +418,7 @@ function getDoorsTable(
                             case "swing":
                                 return door?.swing;
                             case "qty":
-                                return m.qty || door.totalQty;
+                                return door.totalQty;
                             case "description":
                                 return m.description;
                             case "door":

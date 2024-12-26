@@ -137,6 +137,10 @@ function DoorSizeRow({ size }: { size }) {
     const lineUid = size.path;
     const ctx = useCtx();
     const sizeForm = ctx.itemForm?.groupItem.form[size.path];
+    if (sizeForm)
+        console.log({
+            sizeForm,
+        });
     // useEffect(() => {
     //     console.log("ADDON CHANGED>");
     //     ctx.ctx.updateGroupedCost();
