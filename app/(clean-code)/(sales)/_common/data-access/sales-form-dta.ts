@@ -20,6 +20,7 @@ import { AsyncFnType } from "@/app/(clean-code)/type";
 import dayjs from "dayjs";
 import { ComponentPrice, Prisma } from "@prisma/client";
 import { getSalesFormStepByIdDta } from "./sales-form-step-dta";
+import { whereTrashed } from "@/app/(clean-code)/_common/utils/db-utils";
 
 export interface GetSalesBookFormDataProps {
     type?: SalesType;
@@ -39,6 +40,7 @@ export async function getSalesBookFormDataDta(data: GetSalesBookFormDataProps) {
     else {
         throw new Error("Invalid operation");
     }
+    if (data.restoreMode) where.deletedAt = whereTrashed.where.deletedAt;
     console.log(data);
 
     const order = await prisma.salesOrders.findFirst({
