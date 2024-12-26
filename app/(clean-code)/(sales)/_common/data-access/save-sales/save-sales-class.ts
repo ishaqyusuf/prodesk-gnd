@@ -394,12 +394,16 @@ export class SaveSalesClass extends SaveSalesHelper {
             }
             formEntries.map(([groupItemFormId, groupItemForm], index) => {
                 const itemCtx = new ItemHelperClass(this, itemId);
+
+                console.log({ groupItemForm, groupItemFormId });
                 if (groupItemFormId?.split("-")?.length > 2) {
                     if (index == 0) {
                         console.log(itemId);
                         itemCtx.generateDoorsItem();
                     }
                 } else {
+                    console.log(groupItemForm);
+
                     itemCtx.generateNonDoorItem(
                         groupItemFormId,
                         groupItemForm,

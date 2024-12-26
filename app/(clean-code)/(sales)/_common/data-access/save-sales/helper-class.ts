@@ -13,6 +13,7 @@ import { isEqual, isNaN } from "lodash";
 import { prisma } from "@/db";
 import { isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
 import { AddressClass } from "./address-class";
+import { __isProd } from "@/lib/is-prod-server";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -155,7 +156,15 @@ export class SaveSalesHelper {
     public async generateOrderId(type: SalesType) {
         const now = dayjs();
         const createdAt = now.toISOString();
-        const prefix = type == "order" ? "ord" : "quo";
+        const isOrder = type == "order";
+        const prefix =
+            now.year() > 2024 || !__isProd
+                ? isOrder
+                    ? "s"
+                    : "q"
+                : isOrder
+                ? "ord"
+                : "quo";
 
         const _createdAt = isMonth(now);
 

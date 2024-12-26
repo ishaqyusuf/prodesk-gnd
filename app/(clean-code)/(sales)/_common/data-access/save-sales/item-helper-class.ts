@@ -103,6 +103,7 @@ export class ItemHelperClass {
                             uid.startsWith(stepUid) && formData.selected
                     )
                     .map(([stepSizeUid, formData]) => {
+                        // console.log(formData);
                         const [_, ...dimensions] = stepSizeUid?.split("-");
                         const dimension = dimensions?.join("-");
 

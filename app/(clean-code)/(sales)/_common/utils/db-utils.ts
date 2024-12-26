@@ -3,6 +3,7 @@ import salesData from "./sales-data";
 import { ftToIn } from "./sales-utils";
 import {
     anyDateQuery,
+    whereNotTrashed,
     withDeleted,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
@@ -548,7 +549,7 @@ export const SalesBookFormIncludes = (restoreQuery) =>
             include: {
                 formSteps: {
                     where: {
-                        ...withDeleted,
+                        // ...withDeleted,
                         // ...restoreQuery,
                     },
 
@@ -582,6 +583,7 @@ export const SalesBookFormIncludes = (restoreQuery) =>
                                 priceData: true,
                             },
                             where: {
+                                ...whereNotTrashed.where,
                                 ...restoreQuery,
                             },
                         },
