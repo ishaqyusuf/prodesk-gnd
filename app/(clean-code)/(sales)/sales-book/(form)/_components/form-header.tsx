@@ -45,6 +45,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     const searchParams = useSearchParams();
     async function save() {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
+        const restoreMode = searchParams.get("restoreMode") != null;
 
         const resp = await saveFormUseCase(
             {
@@ -55,7 +56,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             },
             zus.oldFormState,
             {
-                restoreMode: searchParams.get("restoreMode") != null,
+                restoreMode,
                 allowRedirect: true,
             }
         );

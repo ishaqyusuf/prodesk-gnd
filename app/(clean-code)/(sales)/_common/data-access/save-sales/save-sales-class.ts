@@ -72,7 +72,7 @@ export class SaveSalesClass extends SaveSalesHelper {
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
         const isUpdate = data.sales.data?.id == null;
         const redirectTo =
-            (!isUpdate && salesResp) || this.query?.restoreMode
+            (!isUpdate || this.query?.restoreMode) && salesResp
                 ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
                 : null;
         if (redirectTo && (__redirect || this.query?.restoreMode))
@@ -177,7 +177,10 @@ export class SaveSalesClass extends SaveSalesHelper {
                                 where: {
                                     id: u.id,
                                 },
-                                data: u.data,
+                                data: {
+                                    ...u.data,
+                                    deletedAt: null,
+                                },
                             })
                         );
                     });
