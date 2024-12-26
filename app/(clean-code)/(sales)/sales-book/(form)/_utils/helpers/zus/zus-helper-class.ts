@@ -67,7 +67,6 @@ export class StepHelperClass extends SettingsClass {
         return this.getItemForm()?.groupItem?.qty?.total;
     }
     public hasSelections() {
-        console.log([this.getTotalSelectionsQty(), this.isMultiSelect()]);
         return this.getTotalSelectionsQty() && this.isMultiSelect();
     }
     public getStepIndex() {
@@ -135,9 +134,7 @@ export class StepHelperClass extends SettingsClass {
         const priceDeps = this.getStepPriceDeps();
         const componentPricings = this.getComponentPricings(componentUid);
         const stepUids = this.stepValueUids(priceDeps);
-        // if (componentPricings) {
-        //     console.log({ priceDeps, componentPricings, stepUids });
-        // }
+
         if (!priceDeps.length) {
             return componentPricings?.[componentUid]?.price || null;
         }
@@ -353,7 +350,6 @@ export class StepHelperClass extends SettingsClass {
                 },
                 count,
             };
-            console.log(resp);
 
             return resp;
         });
@@ -460,10 +456,8 @@ export class StepHelperClass extends SettingsClass {
     }
     public getCurrentComponentPricingModel(componentUid) {
         const pm = this.getComponentPriceModel(componentUid);
-        console.log({ pm });
         const variant = pm.priceVariants.find((s) => s.current);
         const pricing = pm?.pricing?.[variant?.path];
-        console.log({ pm, variant, pricing });
         return {
             variant,
             pricing,
@@ -534,8 +528,6 @@ export class StepHelperClass extends SettingsClass {
                     .filter(Boolean);
             });
             const combs = getCombinations(ms);
-            // console.log({ ms });
-            // console.log(this.getItemStepSequence());
 
             const visibleComponents = this.getAllVisibleComponents();
             const visibleComponentsUID = visibleComponents.map((a) => a.uid);
@@ -564,10 +556,6 @@ export class StepHelperClass extends SettingsClass {
                     current,
                 };
             });
-            console.log({ filteredCombs, combs, visibleComponents });
-            // console.log({
-            //     currents: form.priceVariants.filter((c) => c.current),
-            // });
         }
         return form;
     }
@@ -602,7 +590,6 @@ export class StepHelperClass extends SettingsClass {
                 },
             };
         }
-        console.log(itemForm);
         this.saveItemForm(itemForm);
     }
 }
@@ -689,7 +676,6 @@ export class ComponentHelperClass extends StepHelperClass {
             if (stepData.title == "Item Type") {
                 if (component.title == "Moulding") {
                     this.dotUpdateItemForm("groupItem.type", "SERVICE");
-                    console.log("SERVICE>>>");
                 }
             }
             stepData = {
@@ -763,7 +749,6 @@ export class ComponentHelperClass extends StepHelperClass {
             );
             this.dotUpdateItemForm("groupItem", groupItem);
             this.updateComponentCost();
-            console.log(groupItem);
         }
     }
 }

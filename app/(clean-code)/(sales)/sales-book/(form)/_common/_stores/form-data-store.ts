@@ -30,7 +30,7 @@ function fns(set: SalesFormSet) {
             }),
         init: (data) =>
             set((state) => {
-                return {
+                let newData = {
                     ...state,
                     ...data,
                     oldFormState: deepCopy({
@@ -40,6 +40,8 @@ function fns(set: SalesFormSet) {
                         sequence: data.sequence,
                     }),
                 };
+                console.log({ newData });
+                return newData;
             }),
         newStep: (itemUid, stepUid) =>
             set((state) => {

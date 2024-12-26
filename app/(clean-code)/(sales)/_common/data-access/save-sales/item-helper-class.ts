@@ -12,7 +12,9 @@ export class ItemHelperClass {
     constructor(public ctx: SaveSalesClass, public formItemId) {}
     public itemData: SaverData["items"][number];
     public formItem(old = false) {
-        return this.workspace(old)?.kvFormItem[this.formItemId];
+        const fitem = this.workspace(old)?.kvFormItem[this.formItemId];
+
+        return fitem;
     }
 
     public workspace(old = false) {
@@ -38,8 +40,9 @@ export class ItemHelperClass {
         const form = this.groupItemForm();
         const formList = Object.values(form);
 
-        const salesItemId = formList?.find((s) => s.meta?.salesItemId)?.meta
-            ?.salesItemId;
+        // const salesItemId = formList?.find((s) => s.meta?.salesItemId)?.meta
+        // ?.salesItemId;
+        const salesItemId = formItem?.id;
 
         const meta = {
             doorType: formItem.groupItem.itemType,
@@ -141,13 +144,12 @@ export class ItemHelperClass {
         if (this.itemData.hpt?.doors?.length)
             this.ctx.data.items.push(this.itemData);
     }
-
     public generateItemFormSteps() {
         const steps = this.formSteps();
         steps.map((step) => {
             const updateData = this.composeStepUpdateData(step);
             if (!step.stepFormId) {
-                const { ...rest } = updateData;
+                const { salesOrderItem, ...rest } = updateData;
                 const createData = {
                     ...rest,
                     id: this.ctx.nextId("formStep"),
@@ -175,11 +177,11 @@ export class ItemHelperClass {
             qty: 1,
             meta,
             value: step.value,
-            // salesOrderItem: {
-            //     connect: {
-            //         id: this.itemData.id,
-            //     },
-            // },
+            salesOrderItem: {
+                connect: {
+                    id: this.itemData.id,
+                },
+            },
         } satisfies Prisma.DykeStepFormUpdateInput;
     }
     public composeSalesDoorUpdateData(formData, dimension) {
@@ -226,6 +228,7 @@ export class ItemHelperClass {
 
         if (formStep) {
             const updateData = this.composeStepUpdateData(formStep);
+            updateData.salesOrderItem.connect.id = formStep.salesOrderItemId;
             if (this.ctx.compare(data, updateData)) {
                 return _;
             }
@@ -235,7 +238,8 @@ export class ItemHelperClass {
     }
     public generateNonDoorItem(
         gfId,
-        gf: SalesFormFields["kvFormItem"][""]["groupItem"]["form"][""]
+        gf: SalesFormFields["kvFormItem"][""]["groupItem"]["form"][""],
+        primaryGroupItem
     ) {
         const lineIndex = this.getLineIndex();
         const formItem = this.formItem();
@@ -253,6 +257,7 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
+
             ...(isMoulding
                 ? {}
                 : {
@@ -263,7 +268,7 @@ export class ItemHelperClass {
             description: gf.meta.description,
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
-            multiDyke: gf.primaryGroupItem,
+            multiDyke: primaryGroupItem,
 
             // salesOrder
         } satisfies Prisma.SalesOrderItemsUpdateInput;
@@ -286,7 +291,7 @@ export class ItemHelperClass {
                 formValues: [],
             };
         }
-        if (gf.primaryGroupItem) this.generateItemFormSteps();
+        if (primaryGroupItem) this.generateItemFormSteps();
         if (isMoulding) {
             const itemHtp: HptData = {
                 id: gf.hptId,

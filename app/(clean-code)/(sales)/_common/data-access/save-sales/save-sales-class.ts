@@ -376,14 +376,16 @@ export class SaveSalesClass extends SaveSalesHelper {
         salesId: null,
     };
     public async generateItemsForm() {
-        // console.log(this.form.sequence.formItem);
+        console.log(this.form.sequence.formItem);
         this.form.sequence.formItem.map((itemId) => {
             const formItem = this.form.kvFormItem[itemId];
+            // formItem.uid
             if (!formItem?.groupItem?.groupUid)
                 formItem.groupItem.groupUid = generateRandomString(4);
             const formEntries = Object.entries(
                 formItem.groupItem.form || {}
             ).filter(([k, v]) => v.selected);
+            // console.log(formEntries);
             const primaryForm = formEntries.find(
                 ([k, v], i) => v.primaryGroupItem
             );
@@ -392,11 +394,17 @@ export class SaveSalesClass extends SaveSalesHelper {
             }
             formEntries.map(([groupItemFormId, groupItemForm], index) => {
                 const itemCtx = new ItemHelperClass(this, itemId);
-                if (index == 0 && groupItemFormId?.split("-")?.length > 2) {
-                    itemCtx.generateDoorsItem();
+                if (groupItemFormId?.split("-")?.length > 2) {
+                    if (index == 0) {
+                        console.log(itemId);
+                        itemCtx.generateDoorsItem();
+                    }
                 } else {
-                    // if (groupItemForm.selected)
-                    itemCtx.generateNonDoorItem(groupItemFormId, groupItemForm);
+                    itemCtx.generateNonDoorItem(
+                        groupItemFormId,
+                        groupItemForm,
+                        groupItemForm.primaryGroupItem
+                    );
                 }
             });
         });

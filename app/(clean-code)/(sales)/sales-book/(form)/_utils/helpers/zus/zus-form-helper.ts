@@ -20,6 +20,8 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
     // if (copy) {
     //     data.order.id = data.order.slug = data.order.orderId = null;
     // }
+    console.log({ data });
+
     function basePrice(sp) {
         if (!sp) return sp;
         return formatMoney(sp / salesMultiplier);
@@ -105,19 +107,19 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         },
         formStatus: "ready",
     };
-    console.log({ itemArray: data.itemArray });
+    // console.log({ itemArray: data.itemArray });
 
     data.itemArray.map((item) => {
         const uid = generateRandomString(4);
-        console.log({ mc: item.multiComponent });
+        // console.log({ mc: item.multiComponent });
 
         resp.sequence.formItem.push(uid);
-        const __ = (resp.kvFormItem[uid] = {
+        resp.kvFormItem[uid] = {
             collapsed: !item.expanded,
             uid,
             id: copy ? null : item.item.id,
             title: "",
-        });
+        };
 
         resp.sequence.stepComponent[uid] = [];
         // let doorStepUid, mouldingComponentUid;
@@ -136,6 +138,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 stepFormId: copy ? null : fs.item.id,
                 stepId: fs.step.id,
                 meta: stepMeta as any,
+                salesOrderItemId: item.item.id,
             });
             if (stp.title == "Item Type") {
                 itemType = stp.value as any;
@@ -204,7 +207,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
-                    console.log(doorForm);
+                    // console.log(doorForm);
 
                     pushItemId(formId);
 

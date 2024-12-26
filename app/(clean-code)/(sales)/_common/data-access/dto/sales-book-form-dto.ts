@@ -56,7 +56,7 @@ export function typedSalesBookFormItems(data: SalesFormData) {
                 d.priceData = {
                     salesUnitCost: d.jambSizePrice,
                 } as any;
-            // console.log(d.priceData);
+            console.log(dim);
 
             _doorForm[dim] = { ...d } as any;
             _doorFormDefaultValue[dim] = {
@@ -238,8 +238,9 @@ export function transformMultiDykeItem(
         if (item.id == itemData.id) {
             return true;
         }
-        if (itemData.multiDyke || itemData.multiDykeUid == item.multiDykeUid)
-            return true;
+        return item.multiDykeUid && itemData.multiDykeUid == item.multiDykeUid;
+        if (item.multiDyke && item.id != itemData.id) return false;
+        if (itemData.multiDykeUid == item.multiDykeUid) return true;
         return false;
     });
     console.log(_comps.length);
