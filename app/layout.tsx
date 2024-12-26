@@ -21,11 +21,13 @@ import { ReactQueryProvider } from "@/providers/react-query";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryTabProvider } from "./(clean-code)/_common/query-tab/provider";
 import { ThemeProvider } from "next-themes";
-export const metadata: Metadata = {
-    title: "GND-PRODESK",
-    description: "home page",
-};
+import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 
+export async function generateMetadata({}) {
+    return constructMetadata({
+        title: `GND Millwork - gndprodesk.com`,
+    });
+}
 // const inter = Inter({ subsets: ["latin"] });
 export default async function RootLayout({
     children,

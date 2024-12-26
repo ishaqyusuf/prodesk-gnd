@@ -34,6 +34,7 @@ export function composePrint(
 ) {
     data = {
         ...data,
+
         query,
         isEstimate: query.mode == "quote",
         isProd: query.mode == "production",
@@ -748,10 +749,14 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
     let h = {
         title: mode,
         lines: [
-            styled(isOrder ? "Order #" : "Quote #", order.orderId, {
-                font: "bold",
-                size: "lg",
-            }),
+            styled(
+                isOrder ? "Order #" : "Quote #",
+                order.orderId?.toUppercase(),
+                {
+                    font: "bold",
+                    size: "lg",
+                }
+            ),
             styled(
                 isOrder ? "Order Date" : "Quote Date",
                 formatDate(order.createdAt)
