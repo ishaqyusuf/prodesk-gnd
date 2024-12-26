@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import DevOnly from "@/_v2/components/common/dev-only";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useSearchParams } from "next/navigation";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
@@ -41,6 +42,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
 
         zus.init(zhInitializeState(data));
     }
+    const searchParams = useSearchParams();
     async function save() {
         const { kvFormItem, kvStepForm, metaData, sequence } = zus;
 
@@ -51,7 +53,11 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 metaData,
                 sequence,
             },
-            zus.oldFormState
+            zus.oldFormState,
+            {
+                restoreMode: searchParams.get("restoreMode") != null,
+                allowRedirect: true,
+            }
         );
         console.log({ resp });
         // return;

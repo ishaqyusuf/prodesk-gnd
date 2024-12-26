@@ -1,13 +1,13 @@
 import { SalesFormFields } from "../../../types";
-import { SaveSalesClass } from "./save-sales-class";
+import { SaveQuery, SaveSalesClass } from "./save-sales-class";
 
 export async function saveSalesFormDta(
     form: SalesFormFields,
     oldFormState?: SalesFormFields,
-    redirect = true
+    query?: SaveQuery
 ) {
-    const worker = new SaveSalesClass(form, oldFormState);
+    const worker = new SaveSalesClass(form, oldFormState, query);
     await worker.execute();
-    return worker.result(redirect);
+    return worker.result();
 }
 export async function copySalesDta(orderId, as) {}

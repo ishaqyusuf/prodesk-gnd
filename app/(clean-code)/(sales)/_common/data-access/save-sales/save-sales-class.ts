@@ -58,9 +58,13 @@ export interface SaverData {
 }
 
 export type HptData = SaverData["items"][number]["hpt"];
-
+export type SaveQuery = {
+    restoreMode: boolean;
+    allowRedirect: boolean;
+};
 export class SaveSalesClass extends SaveSalesHelper {
-    public result(__redirect) {
+    public result() {
+        let __redirect = this.query?.allowRedirect;
         const data = this.data;
         if (data.error) {
             return { data };
@@ -68,10 +72,11 @@ export class SaveSalesClass extends SaveSalesHelper {
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
         const isUpdate = data.sales.data?.id == null;
         const redirectTo =
-            !isUpdate && salesResp
+            (!isUpdate && salesResp) || this.query?.restoreMode
                 ? `/sales-book/edit-${this.form.metaData.type}/${salesResp.slug}`
                 : null;
-        if (redirectTo && __redirect) redirect(redirectTo);
+        if (redirectTo && (__redirect || this.query?.restoreMode))
+            redirect(redirectTo);
         return {
             slug: salesResp?.slug,
             redirectTo,
@@ -94,7 +99,8 @@ export class SaveSalesClass extends SaveSalesHelper {
     };
     constructor(
         public form: SalesFormFields,
-        public oldFormState?: SalesFormFields
+        public oldFormState?: SalesFormFields,
+        public query?: SaveQuery
     ) {
         super();
         this.ctx = this;
@@ -116,6 +122,9 @@ export class SaveSalesClass extends SaveSalesHelper {
         await this.generateItemsForm();
         this.composeTax();
         await this.saveData();
+    }
+    public get isRestoreMode() {
+        return this.query?.restoreMode;
     }
     public async saveData() {
         this.composeSaveStacks();

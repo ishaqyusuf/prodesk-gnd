@@ -209,6 +209,7 @@ export class ItemHelperClass {
         formUid,
         dimension
     ) {
+        if (this.ctx.isRestoreMode) return true;
         const group = this.groupItemForm(true);
         const formData = group?.[formUid];
         if (formData) {
@@ -218,7 +219,6 @@ export class ItemHelperClass {
             );
             return this.ctx.compare(data, updateDoor) ? false : true;
         }
-
         return true;
     }
 
@@ -227,7 +227,7 @@ export class ItemHelperClass {
         const fss = this.formSteps(true);
         const formStep = fss?.find((s) => s.stepFormId == id);
 
-        if (formStep) {
+        if (formStep && !this.ctx.isRestoreMode) {
             const updateData = this.composeStepUpdateData(formStep);
             updateData.salesOrderItem.connect.id = formStep.salesOrderItemId;
             if (this.ctx.compare(data, updateData)) {

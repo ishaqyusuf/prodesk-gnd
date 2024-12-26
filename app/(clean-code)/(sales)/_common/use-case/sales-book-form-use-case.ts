@@ -18,6 +18,7 @@ import { saveSalesFormDta } from "../data-access/save-sales/index.dta";
 import { zhInitializeState } from "../../sales-book/(form)/_utils/helpers/zus/zus-form-helper";
 import { deleteSaleUseCase } from "@/use-cases/sales";
 import { prisma } from "@/db";
+import { SaveQuery } from "../data-access/save-sales/save-sales-class";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
@@ -45,10 +46,12 @@ export async function createSalesBookFormUseCase(
 export async function saveSalesSettingUseCase(meta) {
     await saveSalesSettingData(meta);
 }
+
 export async function saveFormUseCase(
     data: SalesFormFields,
     oldFormState?: SalesFormFields,
-    allowRedirect = true
+    query?: SaveQuery
+    // allowRedirect = true
 ) {
     if (!oldFormState)
         oldFormState = {
@@ -61,7 +64,8 @@ export async function saveFormUseCase(
             },
             metaData: {} as any,
         };
-    return await saveSalesFormDta(data, oldFormState, allowRedirect);
+
+    return await saveSalesFormDta(data, oldFormState, query);
 }
 export async function moveOrderUseCase(orderId, to) {
     await copySalesUseCase(orderId, to);
@@ -93,7 +97,10 @@ export async function copySalesUseCase(orderId, as) {
             sequence,
         },
         formData.oldFormState,
-        false
+        {
+            restoreMode: false,
+            allowRedirect: false,
+        }
     );
 
     return {
