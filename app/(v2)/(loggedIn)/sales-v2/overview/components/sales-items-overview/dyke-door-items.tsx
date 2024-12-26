@@ -112,7 +112,9 @@ export default function DykeDoorItems() {
                                         <TableHead>{door.rhQty}</TableHead>
                                     </>
                                 ) : (
-                                    <TableCell>{door.lhQty}</TableCell>
+                                    <TableCell>
+                                        {door.lhQty || door.totalQty}
+                                    </TableCell>
                                 )}
 
                                 <TableCell>
