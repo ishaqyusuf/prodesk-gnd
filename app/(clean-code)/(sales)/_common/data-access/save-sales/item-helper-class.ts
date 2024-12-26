@@ -29,6 +29,7 @@ export class ItemHelperClass {
     public formSteps(old = false) {
         const ws = this.workspace(old);
         const stepSequence = ws.sequence?.stepComponent?.[this.formItemId];
+
         return stepSequence?.map((s) => ws.kvStepForm[s]);
     }
     public generateDoorsItem() {
@@ -36,9 +37,7 @@ export class ItemHelperClass {
         const lineIndex = this.getLineIndex();
         const form = this.groupItemForm();
         const formList = Object.values(form);
-        console.log({
-            form,
-        });
+
         const salesItemId = formList?.find((s) => s.meta?.salesItemId)?.meta
             ?.salesItemId;
 
@@ -49,14 +48,9 @@ export class ItemHelperClass {
 
         const updateData = {
             meta,
-            salesOrder: {
-                connect: {
-                    id: this.ctx.salesId,
-                },
-            },
         } satisfies Prisma.SalesOrderItemsUpdateInput;
         if (!salesItemId) {
-            const { salesOrder: ___, ...rest } = updateData;
+            const { ...rest } = updateData;
             const createData = {
                 ...rest,
                 salesOrderId: this.ctx.salesId,
@@ -112,41 +106,29 @@ export class ItemHelperClass {
                         const doorData: HptData["doors"][number] = {
                             id: formData.doorId,
                         };
-                        const updateDoor = {
-                            dimension,
-                            lhQty: this.ctx.safeInt(formData.qty.lh),
-                            rhQty: this.ctx.safeInt(formData.qty.rh),
-                            totalQty: this.ctx.safeInt(formData.qty.total),
-                            jambSizePrice: this.ctx.safeInt(
-                                formData.pricing.itemPrice.salesPrice
-                            ),
-                            doorPrice: this.ctx.safeInt(formData.pricing.addon),
-                            meta: {
-                                overridePrice: formData.pricing.customPrice,
-                            } satisfies DykeSalesDoorMeta,
-                            unitPrice: this.ctx.safeInt(
-                                formData.pricing.unitPrice
-                            ),
-                            lineTotal: this.ctx.safeInt(
-                                formData.pricing.totalPrice
-                            ),
-                            swing: formData.swing,
-                            housePackageTool: {
-                                connect: {
-                                    id: itemHtp.id,
-                                },
-                            },
-                        } satisfies Prisma.DykeSalesDoorsUpdateInput;
+                        const updateDoor = this.composeSalesDoorUpdateData(
+                            formData,
+                            dimension
+                        );
 
                         if (formData.doorId) {
-                            doorData.data = updateDoor;
+                            if (
+                                this.validateSalesDoorUpdate(
+                                    formData.doorId,
+                                    updateDoor,
+                                    stepSizeUid,
+                                    dimension
+                                )
+                            )
+                                doorData.data = updateDoor;
                         } else {
-                            const { housePackageTool, ...rest } = updateDoor;
+                            const { ...rest } = updateDoor;
                             const createDoor = {
                                 ...rest,
                                 id: this.ctx.nextId("salesDoor"),
                                 housePackageToolId: itemHtp.id,
                                 salesOrderId: this.ctx.salesId,
+                                salesOrderItemId: this.itemData.id,
                             } satisfies Prisma.DykeSalesDoorsCreateManyInput;
                             doorData.data = createDoor;
                             doorData.id = createDoor.id;
@@ -159,25 +141,13 @@ export class ItemHelperClass {
         if (this.itemData.hpt?.doors?.length)
             this.ctx.data.items.push(this.itemData);
     }
+
     public generateItemFormSteps() {
         const steps = this.formSteps();
         steps.map((step) => {
-            const meta = {} satisfies DykeFormStepMeta;
-            const updateData = {
-                basePrice: this.ctx.safeInt(step.basePrice),
-                price: this.ctx.safeInt(step.salesPrice),
-                prodUid: step.componentUid,
-                qty: 1,
-                meta,
-                value: step.value,
-                salesOrderItem: {
-                    connect: {
-                        id: this.itemData.id,
-                    },
-                },
-            } satisfies Prisma.DykeStepFormUpdateInput;
+            const updateData = this.composeStepUpdateData(step);
             if (!step.stepFormId) {
-                const { salesOrderItem, ...rest } = updateData;
+                const { ...rest } = updateData;
                 const createData = {
                     ...rest,
                     id: this.ctx.nextId("formStep"),
@@ -190,12 +160,78 @@ export class ItemHelperClass {
                     id: createData.id,
                 });
             } else {
-                this.itemData.formValues.push({
-                    data: updateData,
-                    id: step.stepFormId,
-                });
+                this.itemData.formValues.push(
+                    this.validateFormValueUpdate(step.stepFormId, updateData)
+                );
             }
         });
+    }
+    public composeStepUpdateData(step) {
+        const meta = {} satisfies DykeFormStepMeta;
+        return {
+            basePrice: this.ctx.safeInt(step.basePrice),
+            price: this.ctx.safeInt(step.salesPrice),
+            prodUid: step.componentUid,
+            qty: 1,
+            meta,
+            value: step.value,
+            // salesOrderItem: {
+            //     connect: {
+            //         id: this.itemData.id,
+            //     },
+            // },
+        } satisfies Prisma.DykeStepFormUpdateInput;
+    }
+    public composeSalesDoorUpdateData(formData, dimension) {
+        return {
+            dimension,
+            lhQty: this.ctx.safeInt(formData.qty.lh),
+            rhQty: this.ctx.safeInt(formData.qty.rh),
+            totalQty: this.ctx.safeInt(formData.qty.total),
+            jambSizePrice: this.ctx.safeInt(
+                formData.pricing.itemPrice.salesPrice
+            ),
+            doorPrice: this.ctx.safeInt(formData.pricing.addon),
+            meta: {
+                overridePrice: formData.pricing.customPrice,
+            } satisfies DykeSalesDoorMeta,
+            unitPrice: this.ctx.safeInt(formData.pricing.unitPrice),
+            lineTotal: this.ctx.safeInt(formData.pricing.totalPrice),
+            swing: formData.swing,
+        } satisfies Prisma.DykeSalesDoorsUpdateInput;
+    }
+    public validateSalesDoorUpdate(
+        id,
+        data: Prisma.DykeSalesDoorsUpdateInput,
+        formUid,
+        dimension
+    ) {
+        const group = this.groupItemForm(true);
+        const formData = group?.[formUid];
+        if (formData) {
+            const updateDoor = this.composeSalesDoorUpdateData(
+                formData,
+                dimension
+            );
+            return this.ctx.compare(data, updateDoor) ? false : true;
+        }
+
+        return true;
+    }
+
+    public validateFormValueUpdate(id, data: Prisma.DykeStepFormUpdateInput) {
+        const _: any = { id };
+        const fss = this.formSteps(true);
+        const formStep = fss?.find((s) => s.stepFormId == id);
+
+        if (formStep) {
+            const updateData = this.composeStepUpdateData(formStep);
+            if (this.ctx.compare(data, updateData)) {
+                return _;
+            }
+        }
+        _.data = data;
+        return _;
     }
     public generateNonDoorItem(
         gfId,

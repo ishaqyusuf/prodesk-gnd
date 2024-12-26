@@ -448,11 +448,14 @@ export class StepHelperClass extends SettingsClass {
                 price: "",
             };
         });
+        let filt = sizeList?.filter((s) => s.height == height);
         return {
             formData,
             sizeList,
             height,
-            heightSizeList: sizeList?.filter((s) => s.height == height),
+            heightSizeList: filt?.filter(
+                (a, i) => i == filt.findIndex((s) => s.size == a.size)
+            ),
         };
     }
     public getCurrentComponentPricingModel(componentUid) {

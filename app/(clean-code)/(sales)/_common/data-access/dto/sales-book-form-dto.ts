@@ -48,7 +48,7 @@ export function typedSalesBookFormItems(data: SalesFormData) {
         let _doorFormDefaultValue: {
             [dimension in string]: { id: number };
         } = {};
-        const isType = isComponentType(item.housePackageTool?.doorType as any);
+        // const isType = isComponentType(item.housePackageTool?.doorType as any);
         item.housePackageTool?.doors?.map((d) => {
             // if (d.rhQty && !isType.multiHandles) d.rhQty = 0;
             let dim = d.dimension?.replaceAll('"', "in");

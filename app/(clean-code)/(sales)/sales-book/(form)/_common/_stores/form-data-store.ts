@@ -37,6 +37,7 @@ function fns(set: SalesFormSet) {
                         kvFormItem: data.kvFormItem,
                         kvStepForm: data.kvStepForm,
                         metaData: data.metaData,
+                        sequence: data.sequence,
                     }),
                 };
             }),

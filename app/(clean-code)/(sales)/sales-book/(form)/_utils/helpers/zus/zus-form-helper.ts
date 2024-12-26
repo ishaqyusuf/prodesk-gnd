@@ -204,6 +204,8 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
+                    console.log(doorForm);
+
                     pushItemId(formId);
 
                     // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
