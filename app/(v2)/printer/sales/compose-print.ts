@@ -751,7 +751,7 @@ function heading({ mode, isOrder, order, isEstimate, isPacking }) {
         lines: [
             styled(
                 isOrder ? "Order #" : "Quote #",
-                order.orderId?.toUppercase(),
+                order.orderId?.toUpperCase(),
                 {
                     font: "bold",
                     size: "lg",
