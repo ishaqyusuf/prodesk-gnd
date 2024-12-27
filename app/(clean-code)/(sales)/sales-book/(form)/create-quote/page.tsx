@@ -6,6 +6,7 @@ export default async function CreateOrderPage({}) {
     const data = await createSalesBookFormUseCase({
         type: "quote",
     });
+    // console.log(data.order.type);
     return (
         <FPage className="" title="Create Quote">
             <FormClient data={data} />
