@@ -10,13 +10,13 @@ export type InfiniteQueryMeta = {
     currentPercentiles: Record<Percentile, number>;
 };
 
-export const dataOptions = (search, queryKey, rnd) => {
+export const dataOptions = (search, queryKey, rnd?) => {
     return infiniteQueryOptions({
         queryKey: [
             queryKey,
             rnd,
             searchParamsSerializer({ ...search, uuid: null }),
-        ], // remove uuid as it would otherwise retrigger a fetch
+        ].filter(Boolean), // remove uuid as it would otherwise retrigger a fetch
         // staleTime: 30 * 1000,
         // refetchInterval: 10 * 1000,
         // staleTime: 0,
