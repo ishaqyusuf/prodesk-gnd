@@ -100,6 +100,7 @@ export const useOverviewContext = (_item: SalesItemProp) => {
         }, 500);
     }
     const __ctx = {
+        refreshList: ctx?.refetch,
         closeModal() {
             ctx?.table?.toggleAllRowsSelected(false);
         },

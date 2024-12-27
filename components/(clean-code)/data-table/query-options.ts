@@ -18,6 +18,10 @@ export const dataOptions = (search, queryKey) => {
             const serialize = searchParamsSerializer({ ...search, start });
             const response = await fetch(
                 `/api/infinite/${queryKey}${serialize}`
+                // {
+                //     cache: {
+                //     }
+                // }
             );
             return response.json();
         },

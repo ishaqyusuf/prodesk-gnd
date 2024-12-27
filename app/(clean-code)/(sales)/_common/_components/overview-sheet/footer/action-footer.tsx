@@ -26,11 +26,13 @@ export default function ActionFooter({}) {
                 onClick={async () => {
                     const id = ctx.item.id;
                     await deleteSalesUseCase(id);
+                    ctx.refreshList?.();
                     toast("Deleted", {
                         action: {
                             label: "Undo",
                             onClick: async () => {
                                 await restoreDeleteUseCase(id);
+                                ctx.refreshList?.();
                             },
                         },
                     });

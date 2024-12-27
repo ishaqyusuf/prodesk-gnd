@@ -73,11 +73,6 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                         <DataTableInfinityToolbar />
                     </div>
                 </DataTable.Header>
-                {/* </DataTable.Infinity */}
-
-                {/* <TableToolbar>
-                    <TableToolbar.Search placeholder="sales" />
-                </TableToolbar> */}
                 <DataTable.Table />
                 <DataTable.LoadMore />
                 <OrderOverviewSheet />

@@ -61,7 +61,7 @@ function Header({ className, children }: { className?; children }) {
             className={cn(
                 className,
                 "flex flex-col",
-                "z-10 sticky top-[106px] p-4 sm:px-8s"
+                "z-10 sticky top-[108px] p-4 sm:px-8s"
             )}
             ref={ctx.topBarRef}
         >
@@ -97,7 +97,7 @@ function _Table({}) {
             <Table containerClassName={ctx.topBarHeight ? "overflow-clip" : ""}>
                 <TableHeader
                     className={ctx.topBarHeight ? "sticky bg-muted z-10" : ""}
-                    style={{ top: `${ctx.topBarHeight}px` }}
+                    style={{ top: `${ctx.topBarHeight - 13}px` }}
                 >
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>

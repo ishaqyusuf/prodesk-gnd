@@ -1,4 +1,5 @@
 export const siteLinks = {
-    orders: "/sales-books/orders",
+    orders: "/sales-book/orders",
+    quotes: "/sales-book/quotes",
 } as const;
 export type SiteLinksPage = keyof typeof siteLinks;

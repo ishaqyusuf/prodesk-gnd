@@ -12,6 +12,8 @@ import { QuotesCell } from "../quotes-page-cells";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/_v1/icons";
 import Link from "next/link";
+import QueryTab from "@/app/(clean-code)/_common/query-tab";
+import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 
 interface Props {
     // promise;
@@ -50,22 +52,28 @@ export default function QuotesPageClient({
     });
     return (
         <div>
-            <div className="flex justify-between mb-2 -mt-4">
-                <div className="flex-1"></div>
-                <Button asChild size="sm">
-                    <Link href="/sales-book/create-quote?fromPage=new">
-                        <Icons.add className="w-4 h-4 mr-2" />
-                        <span>New</span>
-                    </Link>
-                </Button>
-            </div>
             <DataTable.Infinity queryKey={queryKey} {...table.props}>
-                <div className="flex justify-between">
-                    <div className="w-1/2">
-                        <DataTableFilterCommand />
+                <DataTable.Header className="bg-white">
+                    <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
+                        <div className="">
+                            <QueryTab page="quotes" />
+                        </div>
+                        <div className="flex-1"></div>
+                        <QueryTabAction />
+                        <Button asChild size="sm">
+                            <Link href="/sales-book/create-order">
+                                <Icons.add className="w-4 h-4 mr-2" />
+                                <span>New</span>
+                            </Link>
+                        </Button>
                     </div>
-                    <DataTableInfinityToolbar />
-                </div>
+                    <div className="flex justify-between">
+                        <div className="w-1/2">
+                            <DataTableFilterCommand />
+                        </div>
+                        <DataTableInfinityToolbar />
+                    </div>
+                </DataTable.Header>
                 <DataTable.Table />
                 <DataTable.LoadMore />
                 <OrderOverviewSheet />
