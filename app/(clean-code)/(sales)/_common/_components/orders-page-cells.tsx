@@ -7,6 +7,7 @@ import { Menu } from "@/components/(clean-code)/menu";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
 
 export interface ItemProps {
     item: GetSalesOrdersDta["data"][number];
@@ -184,6 +185,7 @@ function InvoicePending({ item }: ItemProps) {
 function Action({ item }: ItemProps) {
     return (
         <>
+            <ConfirmBtn trash size="icon" variant="ghost" />
             {/* <div>a</div>
             <div>a</div> */}
         </>

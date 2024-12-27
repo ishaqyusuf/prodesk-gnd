@@ -77,7 +77,7 @@ export default function DoorSizeModal({ cls }: Props) {
                 <Form {...ctx.form}>
                     <ScrollArea
                         tabIndex={-1}
-                        className="max-h-[50vh] px-4 -mx-4"
+                        className="max-h-[50vh] bg-muted px-4  -mx-4"
                     >
                         {ctx.varArray.fields?.length == 0 ? (
                             <>
@@ -95,7 +95,7 @@ export default function DoorSizeModal({ cls }: Props) {
                                 </div>
                             </>
                         ) : (
-                            <div>
+                            <div className="gap-4 flex flex-col ">
                                 {ctx.varArray.fields?.map((field, index) => (
                                     <RuleComponent index={index} key={index} />
                                 ))}
@@ -149,7 +149,7 @@ function RuleComponent({ index }) {
         );
     }
     return (
-        <div className="flex flex-col gap-2 border rounded overflow-y-auto p-2">
+        <div className="flex flex-col gap-2 border rounded overflow-y-auto p-2 bg-white">
             {rulesArray?.fields?.map((field, fieldIndex) => (
                 <div className="flex items-center gap-2" key={fieldIndex}>
                     <div className="min-w-[4.5rem] text-center">

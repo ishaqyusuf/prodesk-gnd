@@ -45,7 +45,7 @@ export default function ConfirmBtn({
         ? Info
         : isPending
         ? Icons.spinner
-        : size == "icon"
+        : size == "icon" || trash
         ? Trash
         : Icon;
     return (
@@ -56,7 +56,9 @@ export default function ConfirmBtn({
             variant={variant}
             className={cn(
                 className,
-                size == "icon" && "h-8 w-8 p-0",
+                size == "icon" && "size-8 p-0",
+                size == "icon" && variant == "ghost" && "size-6",
+                size == "xs" && "h-6 w-6 p-0",
                 variant != "destructive" &&
                     trash &&
                     "text-red-500 hover:text-red-600"
@@ -65,9 +67,10 @@ export default function ConfirmBtn({
         >
             {Icone && (
                 <Icone
-                    className={`${
-                        isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"
-                    }`}
+                    className={cn(
+                        `${isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4"}`,
+                        size == "xs" && "size-3"
+                    )}
                 />
             )}
             {children && <div className={cn(Icone && "ml-2")}>{children}</div>}

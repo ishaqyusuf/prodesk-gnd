@@ -222,7 +222,10 @@ function Tr({ row, rowIndex }: TrProps) {
             {ctx.ActionCell && (
                 <TCell align="right">
                     <div className="flex justify-end gap-2 lg:gap-4">
-                        <ctx.ActionCell item={row} itemIndex={rowIndex} />
+                        <ctx.ActionCell
+                            item={row.original}
+                            itemIndex={rowIndex}
+                        />
                     </div>
                 </TCell>
             )}
