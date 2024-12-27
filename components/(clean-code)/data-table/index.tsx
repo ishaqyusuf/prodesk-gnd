@@ -4,7 +4,7 @@ import {
     TableRowModel,
     useDataTable,
     useDataTableContext,
-    useInifinityDataTable,
+    useInfiniteDataTable,
 } from "./use-data-table";
 import {
     Table,
@@ -17,8 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Fragment, useEffect } from "react";
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination";
-import { TableCellProps } from "./table-cells";
-import { useInfiniteDataTable } from "./use-infinity-data-table";
+import { TableCellProps, TCell } from "./table-cells";
+import { useInfiniteDataTableContext } from "./use-infinity-data-table";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { formatCompactNumber } from "@/lib/format";
@@ -26,6 +26,7 @@ import { TableProps } from "./use-table-compose";
 
 import { usePathname } from "next/navigation";
 import { __revalidatePath } from "@/app/(v1)/_actions/_revalidate";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -55,7 +56,7 @@ BaseProps<TData, TValue>) {
     );
 }
 function Header({ className, children }: { className?; children }) {
-    const ctx = useInifinityDataTable();
+    const ctx = useInfiniteDataTable();
     return (
         <div
             className={cn(
@@ -71,7 +72,7 @@ function Header({ className, children }: { className?; children }) {
 }
 
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
-    const ctx = useInfiniteDataTable(props);
+    const ctx = useInfiniteDataTableContext(props);
     // const router = useRouter();
     const path = usePathname();
     return (
@@ -85,8 +86,46 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
         </dataTableContext.Provider>
     );
 }
+function CheckboxHeader({}) {
+    const ctx = useInfiniteDataTable();
+    const { table } = ctx;
+    if (!ctx.checkable) return null;
+    return (
+        <TableHead className="w-12s px-2" align="left">
+            <Checkbox
+                checked={table.getIsAllPageRowsSelected()}
+                onCheckedChange={(value) => {
+                    const val = !!value;
+                    ctx.setCheckMode(val);
+                    table.toggleAllPageRowsSelected(val);
+                }}
+                aria-label="Select all"
+                className="translate-y-[2px]"
+            />
+        </TableHead>
+    );
+}
+function CheckboxRow({ row }) {
+    const ctx = useInfiniteDataTable();
+    const { table } = ctx;
+    if (!ctx.checkable) return null;
+    return (
+        <TCell align="center">
+            <Checkbox
+                checked={ctx.checkMode && row.getIsSelected()}
+                onCheckedChange={(value) => {
+                    const val = !!value;
+                    if (val) ctx.setCheckMode(val);
+                    row.toggleSelected(val);
+                }}
+                aria-label="Select row"
+                className="translate-y-[2px]s"
+            />
+        </TCell>
+    );
+}
 function _Table({}) {
-    const { table, columns, ...ctx } = useInifinityDataTable();
+    const { table, columns, ...ctx } = useInfiniteDataTable();
 
     return (
         <div
@@ -101,6 +140,7 @@ function _Table({}) {
                 >
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
+                            <CheckboxHeader />
                             {headerGroup.headers.map((header, index) => {
                                 if (!header.id.includes("__"))
                                     return (
@@ -154,6 +194,7 @@ function Tr({ row, rowIndex }: TrProps) {
             onClick={() => row.toggleSelected()}
             data-state={row.getIsSelected() && "selected"}
         >
+            <CheckboxRow row={row} />
             {row
                 .getVisibleCells()
                 .map((cell, index) =>
@@ -184,7 +225,7 @@ function LoadMore() {
         totalRows,
         fetchNextPage,
         isLoading,
-    } = useInifinityDataTable();
+    } = useInfiniteDataTable();
     return (
         <div className="flex justify-center">
             {totalRows > totalRowsFetched ||

@@ -11,7 +11,7 @@ import { LoaderCircle, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { DataTableViewOptions } from "./data-table-view-options";
 import { useEffect } from "react";
 import { Kbd } from "../../kbd";
-import { useInifinityDataTable } from "../use-data-table";
+import { useInfiniteDataTable } from "../use-data-table";
 
 interface DataTableToolbarProps<TData> {
     // table: Table<TData>;
@@ -33,7 +33,7 @@ DataTableToolbarProps<TData>) {
         setControlsOpen,
         controlsOpen,
         enableColumnOrdering,
-    } = useInifinityDataTable();
+    } = useInfiniteDataTable();
     const filters = table.getState().columnFilters;
 
     useEffect(() => {

@@ -45,6 +45,7 @@ interface Props<T> {
 }
 export type TableProps = ReturnType<typeof useTableCompose>["props"] & {
     defaultRowSelection?;
+    checkable?: boolean;
 };
 export function useTableCompose<T>(props: Props<T>) {
     const [dynamicCols, setDynamicCols] = useState([]);

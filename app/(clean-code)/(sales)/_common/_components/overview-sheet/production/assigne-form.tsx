@@ -18,7 +18,7 @@ import {
 import { toast } from "sonner";
 import {
     useDataTableContext,
-    useInifinityDataTable,
+    useInfiniteDataTable,
 } from "@/components/(clean-code)/data-table/use-data-table";
 
 function useAssignmentCtx() {

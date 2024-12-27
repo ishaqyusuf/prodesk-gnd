@@ -5,7 +5,7 @@ import {
     getSalesItemOverviewUseCase,
     GetSalesOverview,
 } from "../../use-case/sales-item-use-case";
-import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { getSalesListByIdUseCase } from "../../use-case/sales-list-use-case";
 import { toast } from "sonner";
@@ -58,7 +58,7 @@ export const useOverviewContext = (_item: SalesItemProp) => {
             }
         }
     }, [overview]);
-    const ctx = useInifinityDataTable();
+    const ctx = useInfiniteDataTable();
 
     async function refresh() {
         await load();

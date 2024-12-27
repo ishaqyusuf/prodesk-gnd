@@ -1,7 +1,7 @@
 import TableItemOverviewSheet, {
     TableSheetHeader,
 } from "@/components/(clean-code)/data-table/item-overview-sheet";
-import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { motion, AnimatePresence } from "framer-motion";
 import { SalesItemProp } from "../orders-page-cells";
 
@@ -29,7 +29,7 @@ import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { PaymentTab } from "./payments/payment-tab";
 import { SalesItemsOverview } from "./item-view/sales-items-overview";
 export function OrderOverviewSheet({}) {
-    const { table, selectedRow } = useInifinityDataTable();
+    const { table, selectedRow } = useInfiniteDataTable();
     const item: SalesItemProp = selectedRow?.original as any;
     if (!item) return;
     return (
@@ -44,7 +44,7 @@ export function OrderOverviewSheet({}) {
     );
 }
 export function DispatchOverviewSheet({}) {
-    const { table, selectedRow } = useInifinityDataTable();
+    const { table, selectedRow } = useInfiniteDataTable();
     const item: SalesDispatchListDto = selectedRow?.original as any;
     if (!item) return;
     return (

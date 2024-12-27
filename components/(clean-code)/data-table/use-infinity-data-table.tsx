@@ -29,14 +29,14 @@ import { generateRandomString } from "@/lib/utils";
 import { toast } from "sonner";
 import { __findFilterField } from "./filter-command/filters";
 
-export function useInfiniteDataTable({
+export function useInfiniteDataTableContext({
     columns,
     // data,
     // defaultColumnFilters = [],
     // defaultColumnSorting = [],
     defaultRowSelection = {},
     filterFields: __filterFields,
-
+    checkable,
     queryKey,
     ...props
 }: TableProps & { queryKey }) {
@@ -138,7 +138,7 @@ export function useInfiniteDataTable({
             columnOrder,
         },
         manualFiltering: true,
-        enableMultiRowSelection: false,
+        enableMultiRowSelection: checkable,
         // @ts-ignore FIXME: because it is not in the types
         getRowId: (row, index) => `${row?.uuid}` || `${index}`,
         onColumnVisibilityChange: setColumnVisibility,
@@ -196,15 +196,27 @@ export function useInfiniteDataTable({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sorting]);
 
+    const selectedRows = React.useMemo(() => {
+        const selectedRowKey = Object.keys(rowSelection);
+        return table
+            .getCoreRowModel()
+            .flatRows.filter((row) => selectedRowKey.includes(row.id));
+    }, [rowSelection, table]);
     const selectedRow = React.useMemo(() => {
         const selectedRowKey = Object.keys(rowSelection)?.[0];
         return table
             .getCoreRowModel()
             .flatRows.find((row) => row.id === selectedRowKey);
     }, [rowSelection, table]);
-
+    const [checkMode, setCheckMode] = React.useState(false);
     // FIXME: cannot share a uuid with the sheet details
     React.useEffect(() => {
+        if (checkMode) {
+            const checks = Object.keys(rowSelection).length > 0;
+            if (!checks) setCheckMode(checks);
+
+            return;
+        }
         if (Object.keys(rowSelection)?.length && !selectedRow) {
             setSearch({ uuid: null });
             setRowSelection({});
@@ -212,9 +224,13 @@ export function useInfiniteDataTable({
             setSearch({ uuid: Object.keys(rowSelection)?.[0] || null });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rowSelection, selectedRow]);
+    }, [rowSelection, selectedRow, checkMode]);
     return {
+        checkable,
         refetch,
+        checkMode,
+        selectedRows,
+        setCheckMode,
         topBarHeight,
         topBarRef,
         setTopBarHeight,

@@ -17,7 +17,7 @@ import {
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import qs from "qs";
 import React, { createContext, useContext } from "react";
-import { useInfiniteDataTable } from "./use-infinity-data-table";
+import { useInfiniteDataTableContext } from "./use-infinity-data-table";
 
 export const dataTableContext = createContext({});
 export const dataTableRowContext = createContext({});
@@ -28,8 +28,8 @@ export type TableRowModel = ReturnType<
 export const useDataTableContext = (): DataTableType =>
     useContext(dataTableContext) as any;
 
-type InfinityDataTableType = ReturnType<typeof useInfiniteDataTable>;
-export const useInifinityDataTable = (): InfinityDataTableType =>
+type InfinityDataTableType = ReturnType<typeof useInfiniteDataTableContext>;
+export const useInfiniteDataTable = (): InfinityDataTableType =>
     useContext(dataTableContext) as any;
 export const useTRContext = (): DataTableType =>
     useContext(dataTableRowContext) as any;

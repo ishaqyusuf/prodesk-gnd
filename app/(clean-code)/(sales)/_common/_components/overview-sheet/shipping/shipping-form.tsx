@@ -20,7 +20,7 @@ import Button from "@/components/common/button";
 import { toast } from "sonner";
 import FormSelect from "@/components/common/controls/form-select";
 import { Label } from "@/components/ui/label";
-import { useInifinityDataTable } from "@/components/(clean-code)/data-table/use-data-table";
+import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-data-table";
 import { Icons } from "@/components/_v1/icons";
 import { CheckCircle2Icon } from "lucide-react";
 

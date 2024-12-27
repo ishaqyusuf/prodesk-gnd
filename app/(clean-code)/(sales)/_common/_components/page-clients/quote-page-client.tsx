@@ -21,11 +21,7 @@ interface Props {
     searchParams;
     queryKey;
 }
-export default function QuotesPageClient({
-    searchParams,
-    filterFields,
-    queryKey,
-}: Props) {
+export default function QuotesPageClient({ filterFields, queryKey }: Props) {
     const table = useTableCompose({
         cells(ctx) {
             return [

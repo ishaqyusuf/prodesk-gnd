@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataTableContext, useInifinityDataTable } from "./use-data-table";
+import { useDataTableContext, useInfiniteDataTable } from "./use-data-table";
 import {
     Sheet,
     SheetClose,
@@ -33,12 +33,12 @@ export default function TableItemOverviewSheet({
 }: // title,
 // titleClassName,
 Props) {
-    const { table, selectedRow, refresh } = useInifinityDataTable();
+    const { table, selectedRow, refresh, checkMode } = useInfiniteDataTable();
 
     const selectedRowKey =
         Object.keys(table.getState().rowSelection)?.[0] || undefined;
 
-    if (!selectedRowKey || !selectedRow) return null;
+    if (!selectedRowKey || !selectedRow || checkMode) return null;
     return (
         <Sheet
             // modal={false}
@@ -106,7 +106,7 @@ export function TableSheetHeader({
     title,
     rowChanged,
 }: TableSheetHeaderProps) {
-    const { table, selectedRow } = useInifinityDataTable();
+    const { table, selectedRow } = useInfiniteDataTable();
     const selectedRowKey =
         Object.keys(table.getState().rowSelection)?.[0] || undefined;
 
