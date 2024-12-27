@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Fragment, useEffect } from "react";
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination";
-import { TableCellProps, TCell } from "./table-cells";
+import { cellVariants, TableCellProps, TCell } from "./table-cells";
 import { useInfiniteDataTableContext } from "./use-infinity-data-table";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
@@ -100,7 +100,7 @@ function CheckboxHeader({}) {
     const { table } = ctx;
     if (!ctx.checkable) return null;
     return (
-        <TableHead className="w-12s px-2" align="left">
+        <TableHead className={cn(cellVariants(ctx.cellVariants))} align="left">
             <Checkbox
                 checked={table.getIsAllPageRowsSelected()}
                 onCheckedChange={(value) => {
@@ -144,7 +144,9 @@ function _Table({}) {
         >
             <Table containerClassName={ctx.topBarHeight ? "overflow-clip" : ""}>
                 <TableHeader
-                    className={ctx.topBarHeight ? "sticky bg-muted z-10" : ""}
+                    className={cn(
+                        ctx.topBarHeight ? "sticky bg-muted z-10" : ""
+                    )}
                     style={{ top: `${ctx.topBarHeight - 13}px` }}
                 >
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -154,8 +156,11 @@ function _Table({}) {
                                 if (!header.id.includes("__"))
                                     return (
                                         <TableHead
+                                            className={cn(
+                                                cellVariants(ctx.cellVariants),
+                                                "whitespace-nowrap"
+                                            )}
                                             key={`${header.id}_${index}`}
-                                            className="whitespace-nowrap"
                                         >
                                             {header.isPlaceholder
                                                 ? null

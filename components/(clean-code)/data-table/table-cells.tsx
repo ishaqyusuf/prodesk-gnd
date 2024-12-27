@@ -20,7 +20,7 @@ interface Props {
     children?;
     className?: string;
 }
-const cellVariants = cva("", {
+export const cellVariants = cva("", {
     variants: {
         size: {
             default: "",
