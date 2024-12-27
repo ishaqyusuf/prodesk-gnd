@@ -7,11 +7,11 @@ import { IOrderPrintMode } from "@/types/sales";
 
 export interface SalesPrintProps {
     searchParams: {
-        slugs: string;
+        slugs?: string;
         mode: IOrderPrintMode;
         mockup?: "yes" | "no";
         preview?: boolean;
-        pdf: boolean;
+        pdf?: boolean;
         deletedAt?;
         dispatchId?;
     };
@@ -37,15 +37,16 @@ export default async function PrintOrderPage({
                 }),
             })
         );
-    const value: BasePrintProps = {
-        ...searchParams,
+    const value = {
+        // ...searchParams,
         preview: (searchParams.preview as any) == "true",
         pdf: (searchParams.pdf as any) == "true",
+        slugs: slugs,
     };
     // console.log({ value, searchParams });
 
     return (
-        <BasePrinter {...value} slugs={slugs}>
+        <BasePrinter {...value}>
             <OrderBasePrinter {...searchParams}>
                 {actions?.map((props, index) => (
                     <SalesPrintBlock

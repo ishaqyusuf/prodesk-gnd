@@ -167,29 +167,36 @@ export class SaveSalesHelper {
                 : "quo";
 
         const _createdAt = isMonth(now);
-
+        const np = prefix?.length == 1;
         const id =
             (await prisma.salesOrders.count({
                 where: {
                     createdAt: _createdAt, //isDay(now),
-                    orderId: {
-                        startsWith: prefix,
-                    },
+                    orderId: np
+                        ? {
+                              contains: `-${prefix}`,
+                          }
+                        : {
+                              startsWith: prefix,
+                          },
                 },
             })) + 1;
         // ORD-101124-01
-        // ORD-111124-01
-        // ORD-241111-01
+        // 2501-13-Q001
+        // 2429-08-Q001
+        const orderId = [
+            np ? null : prefix,
+            now.format(np ? "YYDD" : "YYMMDD"),
+            np ? now.format("MMM") : null,
+            np ? prefix : "" + id?.toString()?.padStart(3, "0"),
+        ]
+            .filter(Boolean)
+            .join("-");
         return {
             id: this.nextId("salesId"),
             prefix,
             createdAt,
-            orderId: [
-                prefix,
-                // now.format('YY'),
-                now.format("YYMMDD"),
-                id?.toString()?.padStart(3, "0"),
-            ].join("-"),
+            orderId,
         };
     }
     public convertDate(date) {
