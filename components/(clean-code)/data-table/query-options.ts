@@ -15,11 +15,13 @@ export const dataOptions = (search, queryKey) => {
         queryKey: [queryKey, searchParamsSerializer({ ...search, uuid: null })], // remove uuid as it would otherwise retrigger a fetch
         // staleTime: 30 * 1000,
         refetchInterval: 10 * 1000,
+        staleTime: 0,
         queryFn: async ({ pageParam = 0 }) => {
             const start = (pageParam as number) * search.size;
             const serialize = searchParamsSerializer({ ...search, start });
             const response = await fetch(
-                `/api/infinite/${queryKey}${serialize}`
+                `/api/infinite/${queryKey}${serialize}`,
+                { headers: { "Cache-Control": "no-cache" } }
             );
             return response.json();
         },

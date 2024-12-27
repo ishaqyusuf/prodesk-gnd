@@ -72,7 +72,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                         </Button>
                     </div>
                     <div className="flex justify-between">
-                        <div className="w-1/2">
+                        <div className="flex-1">
                             <DataTableFilterCommand />
                         </div>
                         <DataTableInfinityToolbar />
