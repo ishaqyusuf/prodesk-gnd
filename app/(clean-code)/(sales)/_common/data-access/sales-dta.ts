@@ -147,12 +147,20 @@ export async function getSalesCustomerIdDta(id) {
     )?.customerId;
 }
 export async function deleteSalesDta(id) {
-    await prisma.salesOrders.update({
+    return await prisma.salesOrders.update({
         where: {
             id,
         },
         data: {
             deletedAt: new Date(),
+        },
+    });
+}
+export async function restoreDeleteDta(id) {
+    return await prisma.salesOrders.update({
+        where: { id, deletedAt: {} },
+        data: {
+            deletedAt: null,
         },
     });
 }

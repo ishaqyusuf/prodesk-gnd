@@ -100,6 +100,9 @@ export const useOverviewContext = (_item: SalesItemProp) => {
         }, 500);
     }
     const __ctx = {
+        closeModal() {
+            ctx?.table?.toggleAllRowsSelected(false);
+        },
         openShipping,
         refresh,
         primaryTab,

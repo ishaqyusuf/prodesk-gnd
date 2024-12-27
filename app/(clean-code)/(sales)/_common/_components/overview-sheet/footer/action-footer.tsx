@@ -5,13 +5,17 @@ import { useSalesOverview } from "../overview-provider";
 import { toast } from "sonner";
 import { RefreshCcw } from "lucide-react";
 import { CopyAction } from "./copy.action";
-import { deleteSalesUseCase } from "../../../use-case/sales-use-case";
+import {
+    deleteSalesUseCase,
+    restoreDeleteUseCase,
+} from "../../../use-case/sales-use-case";
 import { MoveAction } from "./move.action";
 import { PrintAction } from "./print.action";
 import { PayAction } from "./pay.action";
 
 export default function ActionFooter({}) {
     const ctx = useSalesOverview();
+
     return (
         <div className="absolute flex gap-4 bottom-0 px-4 py-2 bg-white border-t sbg-muted w-full shadow-sm">
             <div className="flex-1"></div>
@@ -20,7 +24,17 @@ export default function ActionFooter({}) {
                 size="xs"
                 Icon={Icons.trash}
                 onClick={async () => {
-                    await deleteSalesUseCase(ctx.item.id);
+                    const id = ctx.item.id;
+                    await deleteSalesUseCase(id);
+                    toast("Deleted", {
+                        action: {
+                            label: "Undo",
+                            onClick: async () => {
+                                await restoreDeleteUseCase(id);
+                            },
+                        },
+                    });
+                    ctx.closeModal();
                 }}
                 trash
                 variant="destructive"
