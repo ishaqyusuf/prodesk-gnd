@@ -54,28 +54,51 @@ BaseProps<TData, TValue>) {
         </dataTableContext.Provider>
     );
 }
+function Header({ className, children }: { className?; children }) {
+    const ctx = useInifinityDataTable();
+    return (
+        <div
+            className={cn(
+                className,
+                "flex flex-col",
+                "z-10 sticky top-[106px] p-4 sm:px-8s"
+            )}
+            ref={ctx.topBarRef}
+        >
+            {children}
+        </div>
+    );
+}
+
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTable(props);
     // const router = useRouter();
     const path = usePathname();
     return (
         <dataTableContext.Provider value={ctx}>
-            <div className="w-full space-y-3 overflow-auto min-h-[80vh] ">
+            <div
+                // className="w-full space-y-3 overflow-auto min-h-[80vh]"
+                className="flex max-w-full flex-1 flex-col ssm:border-l border-border overflow-clip"
+            >
                 {children}
             </div>
         </dataTableContext.Provider>
     );
 }
 function _Table({}) {
-    const { table, columns } = useDataTableContext();
+    const { table, columns, ...ctx } = useInifinityDataTable();
 
     return (
         <div
             // className="sm:border sm:rounded-lg"
-            className="flex w-full smin-h-screen sh-full flex-col sm:flex-row  rounded-lg shadow border"
+            // className="flex w-full smin-h-screen sh-full flex-col sm:flex-row  rounded-lg shadow border z-0"
+            className="z-0"
         >
-            <Table>
-                <TableHeader className={cn("")}>
+            <Table containerClassName={ctx.topBarHeight ? "overflow-clip" : ""}>
+                <TableHeader
+                    className={ctx.topBarHeight ? "sticky bg-muted z-10" : ""}
+                    style={{ top: `${ctx.topBarHeight}px` }}
+                >
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header, index) => {
@@ -194,4 +217,5 @@ export let DataTable = Object.assign(BaseDataTable, {
     Footer,
     Infinity,
     LoadMore,
+    Header,
 });

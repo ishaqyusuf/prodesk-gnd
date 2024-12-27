@@ -219,7 +219,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     // );
                     // console.log(">><<<<<<<<<<<<<<<<<<<<<<<<<<<");
                     addFormItem(formId, {
-                        doorId: doorForm.id,
+                        doorId: copy ? null : doorForm.id,
                         pricing: {
                             itemPrice: {
                                 salesPrice: doorForm.jambSizePrice,

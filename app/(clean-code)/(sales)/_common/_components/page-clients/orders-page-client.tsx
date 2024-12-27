@@ -50,27 +50,29 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
         },
     });
     return (
-        <div>
-            <div className="flex justify-between items-end mb-2 gap-2">
-                <div className="">
-                    <QueryTab page="orders" />
-                </div>
-                <div className="flex-1"></div>
-                <QueryTabAction />
-                <Button asChild size="sm">
-                    <Link href="/sales-book/create-order">
-                        <Icons.add className="w-4 h-4 mr-2" />
-                        <span>New</span>
-                    </Link>
-                </Button>
-            </div>
+        <div className="bg-white">
             <DataTable.Infinity queryKey={queryKey} {...table.props}>
-                <div className="flex justify-between">
-                    <div className="w-1/2">
-                        <DataTableFilterCommand />
+                <DataTable.Header className="bg-white">
+                    <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
+                        <div className="">
+                            <QueryTab page="orders" />
+                        </div>
+                        <div className="flex-1"></div>
+                        <QueryTabAction />
+                        <Button asChild size="sm">
+                            <Link href="/sales-book/create-order">
+                                <Icons.add className="w-4 h-4 mr-2" />
+                                <span>New</span>
+                            </Link>
+                        </Button>
                     </div>
-                    <DataTableInfinityToolbar />
-                </div>
+                    <div className="flex justify-between">
+                        <div className="w-1/2">
+                            <DataTableFilterCommand />
+                        </div>
+                        <DataTableInfinityToolbar />
+                    </div>
+                </DataTable.Header>
                 {/* </DataTable.Infinity */}
 
                 {/* <TableToolbar>

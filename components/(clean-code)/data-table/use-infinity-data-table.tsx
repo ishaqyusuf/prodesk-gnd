@@ -99,7 +99,7 @@ export function useInfiniteDataTable({
         const observer = new ResizeObserver(() => {
             const rect = topBarRef.current?.getBoundingClientRect();
             if (rect) {
-                setTopBarHeight(rect.height);
+                setTopBarHeight(rect.bottom);
             }
         });
 
@@ -215,6 +215,9 @@ export function useInfiniteDataTable({
     }, [rowSelection, selectedRow]);
     return {
         refetch,
+        topBarHeight,
+        topBarRef,
+        setTopBarHeight,
         refresh: {
             init() {
                 if (refreshToken) {

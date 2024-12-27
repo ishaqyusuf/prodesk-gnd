@@ -146,3 +146,13 @@ export async function getSalesCustomerIdDta(id) {
         })
     )?.customerId;
 }
+export async function deleteSalesDta(id) {
+    await prisma.salesOrders.update({
+        where: {
+            id,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+}

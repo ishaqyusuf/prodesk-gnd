@@ -271,6 +271,11 @@ export const notDeleted = excludeDeleted;
 export const SalesListInclude = {
     producer: true,
     pickup: true,
+    deliveries: {
+        select: {
+            id: true,
+        },
+    },
     doors: {
         where: {
             deletedAt: null,

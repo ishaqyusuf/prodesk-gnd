@@ -15,6 +15,7 @@ export async function saveSalesFormDta(
     return worker.result();
 }
 export async function copySalesDta(orderId, as) {
+    return;
     const copy = await prisma.salesOrders.findFirstOrThrow({
         where: {
             orderId,
@@ -47,6 +48,7 @@ export async function copySalesDta(orderId, as) {
             salesRepId,
             subTotal,
             summary,
+            meta,
             taxPercentage,
         } = copy;
         const newOrderId = await new SaveSalesHelper().generateOrderId(as);
@@ -69,6 +71,7 @@ export async function copySalesDta(orderId, as) {
                 grandTotal,
                 billingAddressId,
                 isDyke,
+                meta,
                 items: {
                     createMany: {
                         data: copy.items.map(
@@ -98,6 +101,7 @@ export async function copySalesDta(orderId, as) {
                                     total,
                                     multiDyke,
                                     multiDykeUid,
+                                    dykeDescription: ri.dykeDescription,
                                 };
                             }
                         ),

@@ -9,11 +9,18 @@ import {
     SalesType,
 } from "../../../types";
 import { overallStatus, statToKeyValueDto } from "./sales-stat-dto";
+import { dispatchTitle } from "./sales-shipping-dto";
 
 export type Item = GetSalesListDta["data"][number];
 export function salesOrderDto(data: Item) {
     return {
         ...commonListData(data),
+        dispatchList: data.deliveries?.map((d) => {
+            return {
+                title: dispatchTitle(d.id),
+                id: d.id,
+            };
+        }),
         due: data.amountDue,
         stats: statToKeyValueDto(data.stat),
         status: overallStatus(data.stat),

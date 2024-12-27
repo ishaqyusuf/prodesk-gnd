@@ -13,7 +13,7 @@ import {
 } from "../data-access/sales-form-settings.dta";
 import { composeSalesPricing } from "../utils/sales-pricing-utils";
 import { getPricingListDta } from "../data-access/sales-pricing-dta";
-import { SalesFormFields } from "../../types";
+import { SalesFormFields, SalesType } from "../../types";
 import { saveSalesFormDta } from "../data-access/save-sales/index.dta";
 import { zhInitializeState } from "../../sales-book/(form)/_utils/helpers/zus/zus-form-helper";
 import { deleteSaleUseCase } from "@/use-cases/sales";
@@ -69,7 +69,6 @@ export async function saveFormUseCase(
 }
 export async function moveOrderUseCase(orderId, to) {
     await copySalesUseCase(orderId, to);
-    // await deleteSaleUseCase()
     await prisma.salesOrders.update({
         where: {
             orderId,
@@ -79,7 +78,7 @@ export async function moveOrderUseCase(orderId, to) {
         },
     });
 }
-export async function copySalesUseCase(orderId, as) {
+export async function copySalesUseCase(orderId, as: SalesType) {
     const form = await getSalesBookFormUseCase({
         slug: orderId,
     });

@@ -145,7 +145,7 @@ function _FPageTabs({ children, promise, tabs, port }: Props) {
     function Render() {
         return (
             <ctx.Provider value={_values}>
-                <FContentShell className="border-b flex-1 ">
+                <FContentShell className="border-b flex-1 fixed top-[56px] bg-white z-10 w-full">
                     {children}
                     {_tabList &&
                         _tabList?.map((tab) => (

@@ -40,8 +40,8 @@ export function salesDispatchListDto(data: SalesDispatchListItem) {
         title: dispatchTitle(data.id),
     };
 }
-function dispatchTitle(id) {
-    return `#DISPATCH-${padStart(id.toString(), 4, "0")}`;
+export function dispatchTitle(id, prefix = "#DISPATCH") {
+    return `${prefix}-${padStart(id.toString(), 4, "0")}`;
 }
 export type SalesShippingDto = ReturnType<typeof salesShippingDto>;
 export function salesShippingDto(
