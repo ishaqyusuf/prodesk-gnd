@@ -21,7 +21,7 @@ export default function ActionFooter({}) {
             <div className="flex-1"></div>
             <PayAction />
             <ConfirmBtn
-                size="xs"
+                size="icon"
                 Icon={Icons.trash}
                 onClick={async () => {
                     const id = ctx.item.id;
@@ -40,9 +40,7 @@ export default function ActionFooter({}) {
                 }}
                 trash
                 variant="destructive"
-            >
-                Delete
-            </ConfirmBtn>
+            />
             <Menu variant="outline">
                 <PrintAction />
                 <Menu.Item

@@ -23,18 +23,9 @@ import { useLoader } from "@/lib/use-loader";
 import { Edit2, MapPin, Phone, User } from "lucide-react";
 import * as React from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
-import {
-    AddressType,
-    IAddressBook,
-    ISalesAddressForm,
-    ISalesOrderForm,
-} from "@/types/sales";
+import { AddressType, ISalesAddressForm, ISalesOrderForm } from "@/types/sales";
 import Btn from "../btn";
-import AddressSearchPop from "../sales/address-search-pop";
-import {
-    findAddressAction,
-    saveAddressAction,
-} from "@/app/(v1)/(loggedIn)/sales/_actions/sales-address";
+import { findAddressAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales-address";
 import AutoComplete2 from "../auto-complete-tw";
 import { deepCopy } from "@/lib/deep-copy";
 import { ScrollArea } from "../../ui/scroll-area";

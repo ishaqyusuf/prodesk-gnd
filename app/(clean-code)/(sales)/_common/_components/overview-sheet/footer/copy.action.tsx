@@ -20,7 +20,7 @@ export function CopyAction({}) {
                   as,
               });
         if (result.link) {
-            await __revalidatePath(`/sales-book/${as}s`);
+            // await __revalidatePath(`/sales-book/${as}s`);
             toast.success(`Copied as ${as}`);
         } else {
             //

@@ -68,15 +68,18 @@ export async function saveFormUseCase(
     return await saveSalesFormDta(data, oldFormState, query);
 }
 export async function moveOrderUseCase(orderId, to) {
-    await copySalesUseCase(orderId, to);
-    await prisma.salesOrders.update({
-        where: {
-            orderId,
-        },
-        data: {
-            deletedAt: new Date(),
-        },
-    });
+    const resp = await copySalesUseCase(orderId, to);
+
+    if (!resp?.error)
+        await prisma.salesOrders.update({
+            where: {
+                orderId,
+            },
+            data: {
+                deletedAt: new Date(),
+            },
+        });
+    return resp;
 }
 export async function copySalesUseCase(orderId, as: SalesType) {
     const form = await getSalesBookFormUseCase({
@@ -103,6 +106,8 @@ export async function copySalesUseCase(orderId, as: SalesType) {
     );
 
     return {
+        error: resp.data?.error,
         link: `/sales-book/edit-${as}/${resp.slug}`,
+        data: resp,
     };
 }

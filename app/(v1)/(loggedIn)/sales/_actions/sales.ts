@@ -249,12 +249,10 @@ export async function moveSales(id, type: ISalesType) {
         status: title,
         headline: `${title} by ${(await user()).name}`,
     });
-    // _revalidate(type == "order" ? "orders" : "quotes");
-
-    redirect(
-        order.isDyke
-            ? `/sales-book/edit-${order.type}/${order.slug}`
-            : `/sales/${type}/${order.slug}`
-    );
+    // redirect(
+    //     order.isDyke
+    //         ? `/sales-book/edit-${order.type}/${order.slug}`
+    //         : `/sales/${type}/${order.slug}`
+    // );
     return order;
 }

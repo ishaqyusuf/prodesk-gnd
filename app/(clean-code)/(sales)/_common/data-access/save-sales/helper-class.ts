@@ -186,12 +186,15 @@ export class SaveSalesHelper {
         // 2429-08-Q001
         const orderId = [
             np ? null : prefix,
-            now.format(np ? "YYDD" : "YYMMDD"),
-            np ? now.format("MMM") : null,
-            np ? prefix : "" + id?.toString()?.padStart(3, "0"),
+            now.format(np ? "YYMM" : "YYMMDD"),
+            np ? now.format("DD") : null,
+            (np ? prefix : "") + id?.toString()?.padStart(3, "0"),
         ]
             .filter(Boolean)
-            .join("-");
+            .join("-")
+            ?.toUpperCase();
+        console.log(orderId);
+
         return {
             id: this.nextId("salesId"),
             prefix,

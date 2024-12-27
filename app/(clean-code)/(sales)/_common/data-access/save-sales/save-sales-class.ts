@@ -70,6 +70,8 @@ export class SaveSalesClass extends SaveSalesHelper {
             return { data };
         }
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
+        console.log(salesResp);
+
         const isUpdate = data.sales.data?.id == null;
         const redirectTo =
             (!isUpdate || this.query?.restoreMode) && salesResp
@@ -131,22 +133,14 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.getUnusedIds();
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data;
-        // this.data.error = "BREAK";
-        // return;
-        // return data;
+        console.log(this.data.sales.data?.slug);
+
         const txs = [];
         this.data.deleteStacks
             ?.filter((s) => s?.ids?.length)
             .map((s) => {
                 const table = this.getTable(s.priority);
-                // prisma.dykeStepForm.updateMany({
-                //     where: {
-                //         id: {in: []}
-                //     },
-                //     data: {
-                //         deletedAt: new Date()
-                //     }
-                // })
+
                 txs.push(
                     table.updateMany({
                         where: {

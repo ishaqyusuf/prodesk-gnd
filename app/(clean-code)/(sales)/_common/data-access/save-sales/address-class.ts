@@ -8,7 +8,6 @@ export class AddressClass {
 
     public async saveAddress() {
         const data = this.checkAddressUpdate();
-        console.log({ data });
 
         if (data) {
             const { billing, shipping, sameAddress, customer } = data;
@@ -37,12 +36,13 @@ export class AddressClass {
                 update: customerData,
             });
             const customerChanged = _customer.id != this.ctx.form.metaData.cad;
-            if (customerChanged) {
+            console.log(this.ctx.form.metaData.id);
+
+            if (
+                customerChanged ||
+                (_customer.id && !this.ctx.form.metaData.id)
+            ) {
                 this.ctx.data.customerId = _customer.id;
-                console.log({
-                    _customer,
-                    customer,
-                });
             }
             await this.__saveAddress(billing, "billing");
             await this.__saveAddress(shipping, "shipping");
