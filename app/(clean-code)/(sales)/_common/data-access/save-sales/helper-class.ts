@@ -121,16 +121,20 @@ export class SaveSalesHelper {
     }
     public composeTax() {
         const form = this.ctx.form;
+        const tax = form.metaData.tax;
+        if (!tax) return;
         const updateTax = {
             tax: form.metaData.pricing.taxValue,
             taxxable: form.metaData.pricing.taxxable,
-            taxConfig: {
-                connect: {
-                    taxCode: form.metaData.tax.taxCode,
-                },
-            },
+            taxConfig: tax
+                ? {
+                      connect: {
+                          taxCode: tax.taxCode,
+                      },
+                  }
+                : undefined,
         } satisfies Prisma.SalesTaxesUpdateInput;
-        if (!form.metaData.tax.salesTaxId) {
+        if (!tax?.salesTaxId && tax) {
             const createTax = {
                 taxCode: form.metaData.tax.taxCode,
                 salesId: this.ctx.salesId,

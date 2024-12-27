@@ -336,6 +336,7 @@ export class SaveSalesClass extends SaveSalesHelper {
     }
 
     public createStack(formData, priority) {
+        if (!formData) return;
         const id = formData.id;
         const isUpdate = !formData.data?.id;
         this.data.stacks.push({

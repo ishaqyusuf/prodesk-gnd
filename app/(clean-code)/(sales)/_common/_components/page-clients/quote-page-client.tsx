@@ -57,7 +57,7 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
                         <div className="flex-1"></div>
                         <QueryTabAction />
                         <Button asChild size="sm">
-                            <Link href="/sales-book/create-order">
+                            <Link href="/sales-book/create-quote">
                                 <Icons.add className="w-4 h-4 mr-2" />
                                 <span>New</span>
                             </Link>
