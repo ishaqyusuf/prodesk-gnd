@@ -86,6 +86,15 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
         </dataTableContext.Provider>
     );
 }
+function ActionHeader({}) {
+    const ctx = useInfiniteDataTable();
+    if (!ctx.ActionCell) return null;
+    return (
+        <TableHead className="w-12s px-2" align="right">
+            AA
+        </TableHead>
+    );
+}
 function CheckboxHeader({}) {
     const ctx = useInfiniteDataTable();
     const { table } = ctx;
@@ -158,6 +167,7 @@ function _Table({}) {
                                         </TableHead>
                                     );
                             })}
+                            <ActionHeader />
                         </TableRow>
                     ))}
                 </TableHeader>
@@ -188,6 +198,7 @@ interface TrProps {
     row: TableRowModel;
 }
 function Tr({ row, rowIndex }: TrProps) {
+    const ctx = useInfiniteDataTable();
     return (
         <TableRow
             className={cn("")}
@@ -208,6 +219,13 @@ function Tr({ row, rowIndex }: TrProps) {
                     )
                 )
                 .filter(Boolean)}
+            {ctx.ActionCell && (
+                <TCell align="right">
+                    <div className="flex justify-end gap-2 lg:gap-4">
+                        <ctx.ActionCell item={row} itemIndex={rowIndex} />
+                    </div>
+                </TCell>
+            )}
         </TableRow>
     );
 }

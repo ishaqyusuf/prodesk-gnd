@@ -17,6 +17,7 @@ import { AlertCircle } from "lucide-react";
 import { StepHelperClass } from "../../../_utils/helpers/zus/zus-helper-class";
 import { Label } from "@/components/ui/label";
 import { widthList } from "@/app/(clean-code)/(sales)/_common/utils/contants";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props {
     cls: StepHelperClass;
@@ -74,38 +75,43 @@ export default function DoorSizeModal({ cls }: Props) {
                     }
                 />
                 <Form {...ctx.form}>
-                    {ctx.varArray.fields?.length == 0 ? (
-                        <>
-                            <div className="">
-                                <span className="text-muted-foreground">
-                                    This component has not rules set, which
-                                    means it will always be visible in{" "}
-                                    <Badge
-                                        className="font-mono"
-                                        variant="outline"
-                                    >
-                                        {ctx.step?.title}
-                                    </Badge>
-                                </span>
+                    <ScrollArea
+                        tabIndex={-1}
+                        className="max-h-[50vh] px-4 -mx-4"
+                    >
+                        {ctx.varArray.fields?.length == 0 ? (
+                            <>
+                                <div className="">
+                                    <span className="text-muted-foreground">
+                                        This component has not rules set, which
+                                        means it will always be visible in{" "}
+                                        <Badge
+                                            className="font-mono"
+                                            variant="outline"
+                                        >
+                                            {ctx.step?.title}
+                                        </Badge>
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <div>
+                                {ctx.varArray.fields?.map((field, index) => (
+                                    <RuleComponent index={index} key={index} />
+                                ))}
                             </div>
-                        </>
-                    ) : (
-                        <div>
-                            {ctx.varArray.fields?.map((field, index) => (
-                                <RuleComponent index={index} key={index} />
-                            ))}
+                        )}
+                        <div className="mt-2">
+                            <Button
+                                onClick={ctx.addRule}
+                                size="sm"
+                                className="h-8 text-xs"
+                            >
+                                <Icons.add className="w-4 h-4 mr-2" />
+                                <span>Add Rule</span>
+                            </Button>
                         </div>
-                    )}
-                    <div className="mt-2">
-                        <Button
-                            onClick={ctx.addRule}
-                            size="sm"
-                            className="h-8 text-xs"
-                        >
-                            <Icons.add className="w-4 h-4 mr-2" />
-                            <span>Add Rule</span>
-                        </Button>
-                    </div>
+                    </ScrollArea>
                 </Form>
 
                 <Modal.Footer submitText="Save" onSubmit={ctx.save} />

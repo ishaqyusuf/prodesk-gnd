@@ -36,7 +36,6 @@ interface Props<T> {
     cellVariants?: TableCellProps;
     v2?: boolean;
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[];
-
     filterFields;
     serverAction?;
     passThroughProps: {
@@ -46,6 +45,7 @@ interface Props<T> {
 export type TableProps = ReturnType<typeof useTableCompose>["props"] & {
     defaultRowSelection?;
     checkable?: boolean;
+    ActionCell?;
 };
 export function useTableCompose<T>(props: Props<T>) {
     const [dynamicCols, setDynamicCols] = useState([]);

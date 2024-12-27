@@ -51,7 +51,12 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
     });
     return (
         <div className="bg-white">
-            <DataTable.Infinity checkable queryKey={queryKey} {...table.props}>
+            <DataTable.Infinity
+                checkable
+                ActionCell={Cells.Action}
+                queryKey={queryKey}
+                {...table.props}
+            >
                 <DataTable.Header className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">

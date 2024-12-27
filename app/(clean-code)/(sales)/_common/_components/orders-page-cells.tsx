@@ -10,6 +10,7 @@ import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip"
 
 export interface ItemProps {
     item: GetSalesOrdersDta["data"][number];
+    itemIndex?;
 }
 export type SalesItemProp = ItemProps["item"];
 function Date({ item }: ItemProps) {
@@ -180,7 +181,15 @@ function InvoicePending({ item }: ItemProps) {
         </TCell>
     );
 }
+function Action({ item }: ItemProps) {
+    return (
+        <>
+            <div>abs</div>
+        </>
+    );
+}
 export let OrderCells = {
+    Action,
     Order,
     Po,
     Customer,
