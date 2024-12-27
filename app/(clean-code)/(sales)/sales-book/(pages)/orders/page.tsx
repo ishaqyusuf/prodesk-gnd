@@ -10,6 +10,7 @@ import { getSalesPageQueryDataDta } from "../../../_common/data-access/sales-pag
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { __filters } from "../../../_common/utils/contants";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+import { generateRandomString } from "@/lib/utils";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -24,7 +25,8 @@ export default async function SalesBookPage({ searchParams }) {
         __filters.orders,
         await getSalesPageQueryDataDta()
     );
-    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
+    const rnd = generateRandomString();
+    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey, rnd));
     return (
         <FPage className="" title="Orders">
             <OrdersPageClient queryKey={queryKey} filterFields={filterFields} />
