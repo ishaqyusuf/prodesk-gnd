@@ -42,10 +42,19 @@ export function useInfiniteDataTableContext({
 }: TableProps & { queryKey }) {
     // const [search] = useQueryStates(searchParamsParser);
     const [search, setSearch] = useQueryStates(searchParamsParser);
-    const { data, isFetching, isLoading, fetchNextPage, refetch } =
-        useInfiniteQuery(dataOptions(search, queryKey));
+    const {
+        data,
+        isFetching,
+        isLoading,
+        fetchNextPage,
+        refetch,
+        isRefetching,
+        isPending,
+        isFetched,
+        dataUpdatedAt,
+    } = useInfiniteQuery(dataOptions(search, queryKey));
     React.useEffect(() => {
-        console.log("DATA01", data.pages?.[0]?.[0]);
+        console.log("DATA01", data?.pages?.[0]?.[0]);
     }, [data]);
     const { sort, start, size, uuid, ...filter } = search;
     const defaultColumnFilters = Object.entries(filter)
@@ -54,10 +63,11 @@ export function useInfiniteDataTableContext({
             value,
         }))
         .filter(({ value }) => value ?? undefined);
-    const flatData = React.useMemo(
-        () => data?.pages?.flatMap((page) => page.data ?? []) ?? [],
-        [data?.pages]
-    );
+    const flatData = React.useMemo(() => {
+        const result = data?.pages?.flatMap((page) => page.data ?? []) ?? [];
+        console.log("DATA01", data.pages?.[0]?.[0]);
+        return result;
+    }, [data?.pages]);
     const lastPage = data?.pages?.[data?.pages.length - 1];
     const totalRows = lastPage?.meta?.totalRowCount;
     const filterRows = lastPage?.meta?.filterRowCount;
