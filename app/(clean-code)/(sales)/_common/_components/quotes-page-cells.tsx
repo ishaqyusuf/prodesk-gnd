@@ -1,9 +1,15 @@
 import { TCell } from "@/components/(clean-code)/data-table/table-cells";
 import { GetSalesQuotesDta } from "../data-access/sales-dta";
 import { cn } from "@/lib/utils";
-import { useTRContext } from "@/components/(clean-code)/data-table/use-data-table";
+import {
+    useInfiniteDataTable,
+    useTRContext,
+} from "@/components/(clean-code)/data-table/use-data-table";
 import { useTheme } from "next-themes";
 import TextWithTooltip from "@/components/(clean-code)/custom/text-with-tooltip";
+import ConfirmBtn from "@/components/_v1/confirm-btn";
+import { deleteSalesUseCase } from "../use-case/sales-use-case";
+import { toast } from "sonner";
 
 export interface ItemProps {
     item: GetSalesQuotesDta["data"][number];
@@ -117,8 +123,28 @@ function InvoicePending({ item }: ItemProps) {
         </TCell>
     );
 }
+function Action({ item }: ItemProps) {
+    const ctx = useInfiniteDataTable();
+    return (
+        <>
+            <ConfirmBtn
+                onClick={async () => {
+                    await deleteSalesUseCase(item.id);
+                    ctx.refetch();
+                    toast.success("Deleted.");
+                }}
+                trash
+                size="icon"
+                variant="ghost"
+            />
+            {/* <div>a</div>
+            <div>a</div> */}
+        </>
+    );
+}
 export let QuotesCell = {
     Order,
+    Action,
     Po,
     Customer,
     Address,

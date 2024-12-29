@@ -44,7 +44,9 @@ export function useInfiniteDataTableContext({
     const [search, setSearch] = useQueryStates(searchParamsParser);
     const { data, isFetching, isLoading, fetchNextPage, refetch } =
         useInfiniteQuery(dataOptions(search, queryKey));
-
+    React.useEffect(() => {
+        console.log("DATA01", data.pages?.[0]?.[0]);
+    }, [data]);
     const { sort, start, size, uuid, ...filter } = search;
     const defaultColumnFilters = Object.entries(filter)
         .map(([key, value]) => ({

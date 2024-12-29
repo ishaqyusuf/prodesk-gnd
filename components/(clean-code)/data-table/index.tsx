@@ -90,7 +90,6 @@ function Header({ className, children }: { className?; children }) {
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTableContext(props);
 
-    const path = usePathname();
     return (
         <dataTableContext.Provider value={ctx}>
             <div

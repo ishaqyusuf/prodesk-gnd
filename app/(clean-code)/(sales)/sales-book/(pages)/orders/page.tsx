@@ -26,7 +26,7 @@ export default async function SalesBookPage({ searchParams }) {
         await getSalesPageQueryDataDta()
     );
     const rnd = generateRandomString();
-    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey, rnd));
+    await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
         <FPage className="" title="Orders">
             <OrdersPageClient queryKey={queryKey} filterFields={filterFields} />

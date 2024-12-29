@@ -31,6 +31,6 @@ export const dataOptions = (search, queryKey, rnd?) => {
         initialPageParam: 0,
         getNextPageParam: (_lastGroup, groups) => groups.length,
         refetchOnWindowFocus: false,
-        // placeholderData: keepPreviousData,
+        placeholderData: keepPreviousData,
     });
 };

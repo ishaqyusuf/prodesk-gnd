@@ -48,7 +48,11 @@ export default function QuotesPageClient({ filterFields, queryKey }: Props) {
     });
     return (
         <div>
-            <DataTable.Infinity queryKey={queryKey} {...table.props}>
+            <DataTable.Infinity
+                queryKey={queryKey}
+                {...table.props}
+                ActionCell={QuotesCell.Action}
+            >
                 <DataTable.Header className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
