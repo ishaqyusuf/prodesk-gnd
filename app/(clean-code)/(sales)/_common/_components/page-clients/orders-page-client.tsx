@@ -49,6 +49,7 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
             },
         },
     });
+
     return (
         <div className="bg-white">
             <DataTable.Infinity

@@ -73,6 +73,12 @@ function Header({ className, children }: { className?; children }) {
 
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTableContext(props);
+    // ctx.refetch
+    useEffect(() => {
+        console.log("REFETCHING QUERY");
+        ctx.refetch();
+        console.log("REFETCHED QUERY");
+    }, []);
     // const router = useRouter();
     const path = usePathname();
     return (
