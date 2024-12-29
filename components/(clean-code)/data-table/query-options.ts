@@ -14,7 +14,6 @@ export const dataOptions = (search, queryKey, rnd?) => {
     return infiniteQueryOptions({
         queryKey: [
             queryKey,
-            rnd,
             searchParamsSerializer({ ...search, uuid: null }),
         ].filter(Boolean), // remove uuid as it would otherwise retrigger a fetch
         // staleTime: 30 * 1000,
@@ -32,6 +31,6 @@ export const dataOptions = (search, queryKey, rnd?) => {
         initialPageParam: 0,
         getNextPageParam: (_lastGroup, groups) => groups.length,
         refetchOnWindowFocus: false,
-        placeholderData: keepPreviousData,
+        // placeholderData: keepPreviousData,
     });
 };
