@@ -13,29 +13,9 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value));
     const _ = {
         ...Object.fromEntries(_search),
-        // pk: generateRandomString(),
-        "sales.type": "order" as SalesType,
+        "sales.type": "order",
     } as FilterParams;
     const search = searchParamsCache.parse(_ as any);
 
-    // search.pk = generateRandomString();
-    // const where = whereSales(search);
-    // const data = await prisma.salesOrders.findMany({
-    //     where,
-    //     include: SalesListInclude,
-    //     ...pageQueryFilter(search),
-    // });
-    // const pageInfo = await getPageInfo(search, where, prisma.salesOrders);
-    // const d1 = {
-    //     // pageCount: pageInfo.pageCount,
-    //     // pageInfo,
-    //     data: data.map(salesOrderDto),
-    //     meta: {
-    //         totalFilters: {},
-    //         totalRowCount: pageInfo.pageCount,
-    //         filterRowCount: data?.length,
-    //     },
-    // };
-    // return Response.json(d1);
     return Response.json(await getSalesOrdersDta(search as any));
 }

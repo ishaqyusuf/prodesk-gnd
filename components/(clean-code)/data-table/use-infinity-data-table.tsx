@@ -53,9 +53,7 @@ export function useInfiniteDataTableContext({
         isFetched,
         dataUpdatedAt,
     } = useInfiniteQuery(dataOptions(search, queryKey));
-    React.useEffect(() => {
-        console.log("DATA01", data?.pages?.[0]?.[0]);
-    }, [data]);
+
     const { sort, start, size, uuid, ...filter } = search;
     const defaultColumnFilters = Object.entries(filter)
         .map(([key, value]) => ({
@@ -65,7 +63,7 @@ export function useInfiniteDataTableContext({
         .filter(({ value }) => value ?? undefined);
     const flatData = React.useMemo(() => {
         const result = data?.pages?.flatMap((page) => page.data ?? []) ?? [];
-        console.log("DATA01-MEMO", result?.[0]);
+        // return result.filter((a, i) => i < 1);
         return result;
     }, [data?.pages]);
     const lastPage = data?.pages?.[data?.pages.length - 1];

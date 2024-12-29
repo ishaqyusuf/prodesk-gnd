@@ -145,7 +145,7 @@ function _FPageTabs({ children, promise, tabs, port }: Props) {
     function Render() {
         return (
             <ctx.Provider value={_values}>
-                <FContentShell className="border-b flex-1 fixed top-[56px] bg-white z-10 w-full">
+                <FContentShell className="border-b flex-1 h-10 w-full">
                     {children}
                     {_tabList &&
                         _tabList?.map((tab) => (
@@ -209,7 +209,7 @@ function Tab(props: TabProps) {
                 ct.tabData?.[props.tabName || props.children]?.current
                     ? "border-b-2 border-blue-600 rounded-none"
                     : "text-muted-foreground",
-                "h-12"
+                "h-10"
             )}
             asChild
             disabled={ct.tabData?.[props.tabName || props.children]?.current}

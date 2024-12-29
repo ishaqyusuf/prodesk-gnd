@@ -27,6 +27,7 @@ import { TableProps } from "./use-table-compose";
 import { usePathname } from "next/navigation";
 import { __revalidatePath } from "@/app/(v1)/_actions/_revalidate";
 import { Checkbox } from "@/components/ui/checkbox";
+import DevOnly from "@/_v2/components/common/dev-only";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -62,27 +63,11 @@ function Header({ className, children }: { className?; children }) {
             className={cn(
                 className,
                 "flex flex-col",
-                "z-10 sticky top-[108px] p-4 sm:px-8s"
+                "z-10 sticky top-24 p-4 sm:px-8s"
             )}
             ref={ctx.topBarRef}
         >
             {children}
-            <div>
-                <Button
-                    onClick={() => {
-                        ctx.refetch()
-                            .then((e) => {
-                                console.log(e);
-                            })
-                            .catch((e) => {
-                                if (e instanceof Error)
-                                    console.error(e.message);
-                            });
-                    }}
-                >
-                    REFRESH
-                </Button>
-            </div>
         </div>
     );
 }
@@ -104,11 +89,7 @@ function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
 function ActionHeader({}) {
     const ctx = useInfiniteDataTable();
     if (!ctx.ActionCell) return null;
-    return (
-        <TableHead className="w-12s px-2" align="right">
-            AA
-        </TableHead>
-    );
+    return <TableHead className="w-12s px-2" align="right"></TableHead>;
 }
 function CheckboxHeader({}) {
     const ctx = useInfiniteDataTable();
@@ -157,12 +138,16 @@ function _Table({}) {
             // className="flex w-full smin-h-screen sh-full flex-col sm:flex-row  rounded-lg shadow border z-0"
             className="z-0"
         >
-            <Table containerClassName={ctx.topBarHeight ? "overflow-clip" : ""}>
+            <Table
+                containerClassName={
+                    ctx.topBarHeight ? "w-full overflow-clip" : ""
+                }
+            >
                 <TableHeader
                     className={cn(
                         ctx.topBarHeight ? "sticky bg-muted z-10" : ""
                     )}
-                    style={{ top: `${ctx.topBarHeight - 13}px` }}
+                    style={{ top: `${ctx.topBarHeight}px` }}
                 >
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
