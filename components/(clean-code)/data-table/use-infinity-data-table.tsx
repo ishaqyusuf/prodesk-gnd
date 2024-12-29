@@ -65,7 +65,7 @@ export function useInfiniteDataTableContext({
         .filter(({ value }) => value ?? undefined);
     const flatData = React.useMemo(() => {
         const result = data?.pages?.flatMap((page) => page.data ?? []) ?? [];
-        console.log("DATA01", data.pages?.[0]?.[0]);
+        console.log("DATA01-MEMO", result?.[0]);
         return result;
     }, [data?.pages]);
     const lastPage = data?.pages?.[data?.pages.length - 1];
