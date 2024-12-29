@@ -67,19 +67,29 @@ function Header({ className, children }: { className?; children }) {
             ref={ctx.topBarRef}
         >
             {children}
+            <div>
+                <Button
+                    onClick={() => {
+                        ctx.refetch()
+                            .then((e) => {
+                                console.log(e);
+                            })
+                            .catch((e) => {
+                                if (e instanceof Error)
+                                    console.error(e.message);
+                            });
+                    }}
+                >
+                    REFRESH
+                </Button>
+            </div>
         </div>
     );
 }
 
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTableContext(props);
-    // ctx.refetch
-    useEffect(() => {
-        console.log("REFETCHING QUERY");
-        ctx.refetch();
-        console.log("REFETCHED QUERY");
-    }, []);
-    // const router = useRouter();
+
     const path = usePathname();
     return (
         <dataTableContext.Provider value={ctx}>
