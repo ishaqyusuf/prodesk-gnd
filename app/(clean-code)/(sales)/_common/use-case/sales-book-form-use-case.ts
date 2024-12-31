@@ -69,6 +69,7 @@ export async function saveFormUseCase(
 }
 export async function moveOrderUseCase(orderId, to) {
     const resp = await copySalesUseCase(orderId, to);
+    console.log(resp.data?.slug);
 
     if (!resp?.error)
         await prisma.salesOrders.update({
@@ -90,7 +91,7 @@ export async function copySalesUseCase(orderId, as: SalesType) {
     const formData = zhInitializeState(form, true);
 
     const { kvFormItem, kvStepForm, metaData, sequence } = formData;
-
+    // console.log(metaData)
     const resp = await saveFormUseCase(
         {
             kvFormItem,
@@ -102,6 +103,7 @@ export async function copySalesUseCase(orderId, as: SalesType) {
         {
             restoreMode: false,
             allowRedirect: false,
+            copy: true,
         }
     );
 

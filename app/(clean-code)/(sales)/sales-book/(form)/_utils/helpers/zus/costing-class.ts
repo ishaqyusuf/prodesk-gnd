@@ -84,11 +84,12 @@ export class CostingClass {
                     this.calculateSales(totalBasePrice)
                 );
             }
-            Object.entries(groupItem.form || {}).map(([k, kform]) => {
-                kform.pricing.itemPrice.salesPrice = this.calculateSales(
-                    kform.pricing.itemPrice.basePrice
-                );
-            });
+            if (groupItem.form)
+                Object.entries(groupItem.form || {}).map(([k, kform]) => {
+                    kform.pricing.itemPrice.salesPrice = this.calculateSales(
+                        kform.pricing.itemPrice.basePrice
+                    );
+                });
             this.saveGroupItem(groupItem, itemUid);
             this.updateGroupedCost(itemUid);
             this.calculateTotalPrice();

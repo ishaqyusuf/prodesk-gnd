@@ -7,7 +7,13 @@ import QuotesPageClient from "../../../_common/_components/page-clients/quote-pa
 
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { __filters } from "../../../_common/utils/contants";
+import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 
+export async function generateMetadata({ params }) {
+    return constructMetadata({
+        title: `Quotes List - gndprodesk.com`,
+    });
+}
 export default async function SalesBookQuotePage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();

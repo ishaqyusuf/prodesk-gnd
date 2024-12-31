@@ -61,6 +61,7 @@ export type HptData = SaverData["items"][number]["hpt"];
 export type SaveQuery = {
     restoreMode: boolean;
     allowRedirect: boolean;
+    copy?: boolean;
 };
 export class SaveSalesClass extends SaveSalesHelper {
     public result() {

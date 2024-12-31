@@ -133,11 +133,7 @@ function _Table({}) {
     const { table, columns, ...ctx } = useInfiniteDataTable();
 
     return (
-        <div
-            // className="sm:border sm:rounded-lg"
-            // className="flex w-full smin-h-screen sh-full flex-col sm:flex-row  rounded-lg shadow border z-0"
-            className="z-0"
-        >
+        <div className="z-0">
             <Table
                 containerClassName={
                     ctx.topBarHeight ? "w-full overflow-clip" : ""

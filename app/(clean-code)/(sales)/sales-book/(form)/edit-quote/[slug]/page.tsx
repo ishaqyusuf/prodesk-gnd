@@ -2,7 +2,13 @@ import { getSalesBookFormUseCase } from "@/app/(clean-code)/(sales)/_common/use-
 import FPage from "@/components/(clean-code)/fikr-ui/f-page";
 import { FormClient } from "../../_components/form-client";
 import { prisma } from "@/db";
+import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 
+export async function generateMetadata({ params }) {
+    return constructMetadata({
+        title: `Edit Quote | ${params.slug} - gndprodesk.com`,
+    });
+}
 export default async function EditQuotePage({ params, searchParams }) {
     const s = await prisma.salesOrders.findFirst({
         where: {

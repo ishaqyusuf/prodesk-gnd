@@ -11,6 +11,12 @@ export class AddressClass {
 
         if (data) {
             const { billing, shipping, sameAddress, customer } = data;
+            if (this.ctx.query?.copy) {
+                this.ctx.data.billingAddressId = billing?.id;
+                this.ctx.data.shippingAddressId = shipping?.id;
+                this.ctx.data.customerId = customer?.id;
+                return;
+            }
             const customerData: Prisma.CustomersCreateManyInput = {
                 name: customer.isBusiness ? null : billing.name,
                 businessName: !customer.isBusiness
@@ -36,7 +42,6 @@ export class AddressClass {
                 update: customerData,
             });
             const customerChanged = _customer.id != this.ctx.form.metaData.cad;
-            console.log(this.ctx.form.metaData.id);
 
             if (
                 customerChanged ||
@@ -105,6 +110,7 @@ export class AddressClass {
         const oldForm = this.ctx.oldFormState?.metaData || ({} as any);
         const form = this.ctx.form.metaData;
         const { billing, shipping, sameAddress, customer } = form;
+        console.log({ billing, shipping, sameAddress });
         if (
             !isEqual(
                 {

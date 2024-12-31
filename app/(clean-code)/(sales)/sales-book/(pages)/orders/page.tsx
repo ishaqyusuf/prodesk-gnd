@@ -14,7 +14,7 @@ import { generateRandomString } from "@/lib/utils";
 
 export async function generateMetadata({}) {
     return constructMetadata({
-        title: `Sales Order - gndprodesk.com`,
+        title: `Sales List - gndprodesk.com`,
     });
 }
 export default async function SalesBookPage({ searchParams }) {

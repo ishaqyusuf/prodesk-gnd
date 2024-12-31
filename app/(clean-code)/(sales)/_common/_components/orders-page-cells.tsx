@@ -43,7 +43,7 @@ function Customer({ item }: ItemProps) {
                 )}
             >
                 <TextWithTooltip
-                    className="max-w-[100px]"
+                    className="max-w-[100px] xl:max-w-[200px]"
                     text={item.displayName || "-"}
                 />
             </TCell.Primary>
@@ -56,7 +56,7 @@ function CustomerPhone({ item }: ItemProps) {
         <TCell>
             <TCell.Secondary className="whitespace-nowrap">
                 <TextWithTooltip
-                    className="max-w-[85px]"
+                    className="max-w-[85px] xl:max-w-[120px]"
                     text={item.customerPhone || "-"}
                 />
             </TCell.Secondary>
@@ -69,7 +69,7 @@ function Address({ item }: ItemProps) {
         <TCell>
             <TCell.Secondary>
                 <TextWithTooltip
-                    className="max-w-[100px]"
+                    className="max-w-[100px] xl:max-w-[200px]"
                     text={item.address}
                 />
             </TCell.Secondary>
