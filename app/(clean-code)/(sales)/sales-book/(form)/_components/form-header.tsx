@@ -25,6 +25,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
         { name: "invoice", title: "Invoice Builder", default: true },
         { name: "info", title: "Sales Info" },
         { name: "address", title: "Customer Info" },
+        // { name: "info", title: "Customer Info" },
     ];
     const isOld = dayjs("12/18/2024").diff(
         dayjs(zus.metaData.createdAt),
@@ -111,7 +112,8 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                             "border-b-2  border-transparent rounded-none text-muted-foreground",
                             isActive(tab)
                                 ? "border-primary text-primary bg-muted"
-                                : ""
+                                : "",
+                            tab.name == "address" && "lg:hidden"
                         )}
                         variant="ghost"
                     >
@@ -121,15 +123,6 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
             </div>
             <div className="flex-1" />
             <div className="flex gap-4">
-                <DevOnly>
-                    <Switch
-                        onCheckedChange={(e) => {
-                            zus.dotUpdate("metaData.debugMode", e);
-                        }}
-                        checked={zus.metaData.debugMode}
-                    />
-                    <Label>Debug</Label>
-                </DevOnly>
                 {isOld > 0 && (
                     <Link
                         className={cn(

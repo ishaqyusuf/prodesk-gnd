@@ -37,14 +37,21 @@ export function FormClient({ data }: FormClientProps) {
             <FormHeader sticky={sticky} />
             <div
                 ref={sticky.containerRef}
-                className={cn(sticky.isFixed && "mt-10")}
+                className={cn(
+                    sticky.isFixed && "mt-10 xl:mt-24",
+                    "min-h-screen"
+                )}
             >
                 <div
                     className={cn(
                         zus.currentTab != "info" &&
-                            "opacity-0 h-0 z-0 w-0 overflow-hidden"
+                            "opacity-0 h-0 z-0 w-0 overflow-hidden",
+                        "lg:flex lg:gap-4"
                     )}
                 >
+                    <div className="w-2/3 hidden lg:block">
+                        <AddressTab />
+                    </div>
                     <FormDataPage />
                 </div>
                 <div

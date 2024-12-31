@@ -28,7 +28,7 @@ export class SaveSalesHelper {
         if (oldId) {
             if (oldId != newId && !newId) resp.disconnect = { id: oldId };
         }
-        if (newId && newId != oldId) {
+        if (newId && (newId != oldId || this.ctx?.query?.copy)) {
             resp.connect = { id: newId };
         }
         return resp;
@@ -44,6 +44,7 @@ export class SaveSalesHelper {
             payment_option: md.paymentMethod,
         };
         const sd = this.ctx.data;
+        console.log(sd.customerId);
 
         const updateData = {
             subTotal: md.pricing.subTotal,
@@ -80,6 +81,7 @@ export class SaveSalesHelper {
             //             : undefined,
             // },
         } satisfies Prisma.SalesOrdersUpdateInput;
+        console.log(updateData);
 
         if (md.type == "order") {
             updateData.paymentDueDate = this.paymentDueDate(md);
@@ -269,6 +271,46 @@ export class SaveSalesHelper {
                 ids: deleteIds,
                 priority,
             });
+    }
+    public groupByPriorityAndId() {
+        return this.ctx.data.stacks.reduce<
+            Record<
+                number,
+                {
+                    priority: any;
+                    update: { id?; data? }[];
+                    create: { id?; data? }[];
+                }
+            >
+        >((acc, stack) => {
+            if (!stack.priority) return acc; // Skip items without a priority
+            if (!acc[stack.priority])
+                acc[stack.priority] = {
+                    update: [],
+                    create: [],
+                    priority: stack.priority,
+                };
+            // stack.table[stack.pr]
+
+            const sd = { id: stack.updateId, data: stack.data };
+            if (sd.id) {
+                acc[stack.priority].update.push(sd); // Group under 'update' if id exists
+            } else {
+                acc[stack.priority].create.push(sd); // Group under 'create' if id is undefined
+            }
+            return acc;
+        }, {});
+    }
+    public createStack(formData, priority) {
+        if (!formData) return;
+        const id = formData.id;
+        const isUpdate = !formData.data?.id;
+        this.ctx.data.stacks.push({
+            priority,
+            id,
+            updateId: isUpdate ? id : null,
+            data: formData.data,
+        });
     }
 }
 type FormItem = SalesFormFields["kvFormItem"][""];

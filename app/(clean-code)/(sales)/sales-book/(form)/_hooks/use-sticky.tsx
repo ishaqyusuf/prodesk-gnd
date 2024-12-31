@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import throttle from "lodash.throttle"; // Install lodash if not already done: npm install lodash.throttle
 
 export type Sticky = ReturnType<typeof useSticky>;
 export const useSticky = (
@@ -15,7 +16,7 @@ export const useSticky = (
     const actionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = throttle(() => {
             if (containerRef.current) {
                 const containerRect =
                     containerRef.current.getBoundingClientRect();
@@ -25,7 +26,6 @@ export const useSticky = (
                 const containerPartiallyVisible =
                     containerRect.top < window.innerHeight &&
                     containerRect.bottom > 0;
-                // console.log()
                 const shouldBeFixed = fn(
                     containerBottomVisible,
                     containerPartiallyVisible,
@@ -40,17 +40,16 @@ export const useSticky = (
                         containerRect.left + containerRect.width / 2;
                     setFixedOffset(containerCenter);
                 }
-                if (shouldBeFixed !== isFixed) {
-                    setIsFixed(shouldBeFixed);
-                }
+
+                setIsFixed(shouldBeFixed);
             }
-        };
+        }, 500); // Adjust the throttle time as needed (e.g., 100ms)
 
         window.addEventListener("scroll", handleScroll);
         handleScroll(); // Trigger on mount to set the initial state
 
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [isFixed]);
+    }, []);
 
     return {
         containerRef,

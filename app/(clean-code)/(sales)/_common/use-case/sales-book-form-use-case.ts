@@ -71,15 +71,16 @@ export async function moveOrderUseCase(orderId, to) {
     const resp = await copySalesUseCase(orderId, to);
     console.log(resp.data?.slug);
 
-    if (!resp?.error)
-        await prisma.salesOrders.update({
-            where: {
-                orderId,
-            },
-            data: {
-                deletedAt: new Date(),
-            },
-        });
+    // return
+    // if (!resp?.error)
+    //     await prisma.salesOrders.update({
+    //         where: {
+    //             orderId,
+    //         },
+    //         data: {
+    //             deletedAt: new Date(),
+    //         },
+    //     });
     return resp;
 }
 export async function copySalesUseCase(orderId, as: SalesType) {

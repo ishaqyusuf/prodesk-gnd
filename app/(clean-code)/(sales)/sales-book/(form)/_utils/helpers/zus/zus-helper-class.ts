@@ -254,10 +254,12 @@ export class StepHelperClass extends SettingsClass {
         const components =
             ls?.length && !reload
                 ? ls
-                : await getStepComponentsUseCase(
+                : stepData
+                ? await getStepComponentsUseCase(
                       stepData.title,
                       stepData.stepId
-                  );
+                  )
+                : [];
         if (!ls?.length || reload)
             this.zus.dotUpdate(
                 `kvStepComponentList.${this.stepUid}`,

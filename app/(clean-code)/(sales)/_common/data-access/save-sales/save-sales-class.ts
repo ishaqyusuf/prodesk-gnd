@@ -71,7 +71,6 @@ export class SaveSalesClass extends SaveSalesHelper {
             return { data };
         }
         const salesResp = data.result?.[data.orderTxIndex] as SalesOrders;
-        console.log(salesResp);
 
         const isUpdate = data.sales.data?.id == null;
         const redirectTo =
@@ -134,7 +133,6 @@ export class SaveSalesClass extends SaveSalesHelper {
         this.getUnusedIds();
         const data = Object.values(this.groupByPriorityAndId());
         this.data.tx = data;
-        console.log(this.data.sales.data?.slug);
 
         const txs = [];
         this.data.deleteStacks
@@ -211,142 +209,7 @@ export class SaveSalesClass extends SaveSalesHelper {
             else this.data.error = "ERROR";
         }
     }
-    public async saveData2() {
-        this.composeSaveStacks();
-        this.getUnusedIds();
-        if (this.form.sequence?.formItem?.length <= 1) return;
-        const data = Object.values(this.groupByPriorityAndId());
-        this.data.tx = data;
-        // this.data.error = "BREAK";
-        // return;
-        // return data;
-        try {
-            await prisma.$transaction((async (tx) => {
-                const txs = [];
-                function createTx(fn, data) {
-                    txs.push({
-                        tx: fn(data),
-                        data,
-                    });
-                }
-                this.data.deleteStacks
-                    ?.filter((s) => s?.ids?.length)
-                    .map((s) => {
-                        const table = this.getTable(s.priority, tx);
-                        createTx(table.updateMany, {
-                            where: {
-                                id: { in: s.ids },
-                            },
-                            data: {
-                                deletedAt: new Date(),
-                            },
-                        });
-                        this.data.orderTxIndex++;
-                    });
-                data.map((dt) => {
-                    const orderTx = dt.priority == 1;
 
-                    if (dt.update.length) {
-                        dt.update
-                            .filter((u) => u.data)
-                            .map((u) => {
-                                const table = this.getTable(dt.priority, tx);
-                                if (!this.data.orderTxIndexFound) {
-                                    this.data.orderTxIndex++;
-                                    this.data.orderTxIndexFound = orderTx;
-                                }
-                                createTx(table.update, {
-                                    where: {
-                                        id: u.id,
-                                    },
-                                    data: u.data,
-                                });
-                            });
-                    }
-                    const createManyData = dt.create
-                        .map((d) => d.data)
-                        .filter(Boolean);
-                    if (createManyData.length) {
-                        const table = this.getTable(dt.priority, tx);
-                        if (!this.data.orderTxIndexFound) {
-                            this.data.orderTxIndex++;
-                            this.data.orderTxIndexFound = orderTx;
-                        }
-                        // prisma.salesOrders
-                        if (orderTx)
-                            createTx(table.create, {
-                                data: createManyData[0],
-                            });
-                        else
-                            createTx(table.createMany, {
-                                data: createManyData,
-                            });
-                    }
-                });
-                try {
-                    const results = await Promise.all(
-                        txs.map(async (ts, index) => {
-                            await timeout(index * 20);
-                            const resp = await ts.tx;
-                            return resp;
-                        })
-                    );
-                    this.data.result = results;
-                } catch (error) {
-                    // console.log(index, ts.data);
-                    throw error;
-                }
-            }) as any);
-            // const transactions = await prisma.$transaction(
-            //     txs,
-            //     // Prisma.TransactionIsolationLevel.Serializable
-            // );
-        } catch (error) {
-            if (error instanceof Error) this.data.error = error.message;
-            else this.data.error = "ERROR";
-        }
-    }
-    public groupByPriorityAndId() {
-        return this.data.stacks.reduce<
-            Record<
-                number,
-                {
-                    priority: any;
-                    update: { id?; data? }[];
-                    create: { id?; data? }[];
-                }
-            >
-        >((acc, stack) => {
-            if (!stack.priority) return acc; // Skip items without a priority
-            if (!acc[stack.priority])
-                acc[stack.priority] = {
-                    update: [],
-                    create: [],
-                    priority: stack.priority,
-                };
-            // stack.table[stack.pr]
-
-            const sd = { id: stack.updateId, data: stack.data };
-            if (sd.id) {
-                acc[stack.priority].update.push(sd); // Group under 'update' if id exists
-            } else {
-                acc[stack.priority].create.push(sd); // Group under 'create' if id is undefined
-            }
-            return acc;
-        }, {});
-    }
-
-    public createStack(formData, priority) {
-        if (!formData) return;
-        const id = formData.id;
-        const isUpdate = !formData.data?.id;
-        this.data.stacks.push({
-            priority,
-            id,
-            updateId: isUpdate ? id : null,
-            data: formData.data,
-        });
-    }
     public composeSaveStacks() {
         this.data.stacks = [];
         const data = this.data;

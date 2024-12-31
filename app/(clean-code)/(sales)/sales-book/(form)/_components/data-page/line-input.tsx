@@ -29,6 +29,7 @@ function getValue<K extends FieldPath<SalesFormZusData>>(
 }
 export function Input({ name, label, ...props }: LineInputProps & InputProps) {
     const state = useFormDataStore();
+
     const value = getValue(name, state);
     return (
         <div className={cn(label && "grid gap-2")}>
