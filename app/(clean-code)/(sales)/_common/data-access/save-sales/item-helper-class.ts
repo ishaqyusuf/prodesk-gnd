@@ -74,12 +74,15 @@ export class ItemHelperClass {
             };
         }
         this.generateItemFormSteps();
+
         const itemHtp: HptData = {
             id: formItem.groupItem?.hptId,
             doors: [],
         };
+        const hptId = itemHtp?.id || this.ctx.nextId("hpt");
         let stepProductId;
         const hptMeta = {} satisfies HousePackageToolMeta;
+
         Array.from(new Set(Object.keys(form).map((k) => k.split("-")[0]))).map(
             (stepUid) => {
                 Object.entries(form)
@@ -122,7 +125,7 @@ export class ItemHelperClass {
                             const createDoor = {
                                 ...rest,
                                 id: this.ctx.nextId("salesDoor"),
-                                housePackageToolId: itemHtp.id,
+                                housePackageToolId: hptId,
                                 salesOrderId: this.ctx.salesId,
                                 salesOrderItemId: this.itemData.id,
                                 stepProductId: formData.stepProductId.id,
@@ -152,7 +155,7 @@ export class ItemHelperClass {
         } else {
             const { stepProduct, ...createHtp } = updateHpt;
             const hpt = {
-                id: this.ctx.nextId("hpt"),
+                id: hptId,
                 ...createHtp,
                 orderItemId: this.itemData.id,
                 salesOrderId: this.ctx.salesId,
