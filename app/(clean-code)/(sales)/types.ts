@@ -453,7 +453,10 @@ export interface SalesFormFields {
                         hptId?: number;
                         doorId?: number;
                         swing?: string;
-                        stepProductId?;
+                        stepProductId?: {
+                            id?;
+                            fallbackId?;
+                        };
                         mouldingProductId?;
                         // customPrice?: number | string;
                         // imgUrl: string;

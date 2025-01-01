@@ -145,7 +145,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 itemType = stp.value as any;
             }
             if (stp.title == "Door") {
-                // console.log(stp);
                 fallBackDoorStepProd = Object.values(
                     data.salesSetting.stepsByKey
                 )
@@ -200,9 +199,14 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             resp.kvFormItem[uid].groupItem.form[formId] = formData;
         }
         Object.entries(item.multiComponent.components).map(([id, data]) => {
-            const sp =
-                item.item?.housePackageTool?.stepProduct ||
-                fallBackDoorStepProd;
+            let sp =
+                item.item?.housePackageTool?.stepProduct || data.stepProduct;
+            console.log(data.stepProduct);
+
+            if (!sp && fallBackDoorStepProd) {
+                sp = fallBackDoorStepProd;
+                console.log("FALL BACK", sp);
+            }
             const stepProdUid =
                 sp?.uid ||
                 item.item.housePackageTool?.door?.stepProducts?.[0]?.uid;
@@ -218,19 +222,10 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 resp.kvFormItem[uid].groupItem.doorStepProductId =
                     stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
+                    console.log(doorForm.stepProductId);
+
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
-                    // console.log(doorForm);
-
                     pushItemId(formId);
-
-                    // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    // console.log(
-                    //     "JSP",
-                    //     basePrice(doorForm.jambSizePrice),
-                    //     doorForm.jambSizePrice
-                    // );
-                    // console.log(">><<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                    console.log();
                     addFormItem(formId, {
                         doorId: copy ? null : doorForm.id,
                         pricing: {
@@ -246,7 +241,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                             salesItemId: copy ? null : data.itemId,
                         },
                         hptId: copy ? null : doorForm.housePackageToolId,
-
                         selected: true,
                         swing: doorForm.swing,
                         qty: {
@@ -254,7 +248,10 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                             rh: doorForm.rhQty,
                             total: doorForm.totalQty,
                         },
-                        stepProductId: doorForm.stepProductId,
+                        stepProductId: {
+                            id: doorForm.stepProductId,
+                            fallbackId: sp?.id,
+                        },
                     });
                 });
             } else if (item.item?.meta?.doorType == "Moulding") {
@@ -287,7 +284,9 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         unitPrice: data.priceTags?.moulding?.price,
                         addon: data.priceTags?.moulding?.addon,
                     },
-                    stepProductId: data.stepProduct?.id,
+                    stepProductId: {
+                        id: data.stepProduct?.id,
+                    },
                 });
             } else {
                 const formId = `${data.uid}`;

@@ -114,7 +114,9 @@ export class ItemHelperClass {
                         };
                         const updateDoor = this.composeSalesDoorUpdateData(
                             formData,
-                            dimension
+                            dimension,
+                            formData.stepProductId?.id ||
+                                formData.stepProductId.fallbackId
                         );
 
                         if (formData.doorId) {
@@ -128,17 +130,20 @@ export class ItemHelperClass {
                             )
                                 doorData.data = updateDoor;
                         } else {
-                            const { ...rest } = updateDoor;
+                            const { stepProduct, ...rest } = updateDoor;
                             const createDoor = {
                                 ...rest,
                                 id: this.ctx.nextId("salesDoor"),
                                 housePackageToolId: itemHtp.id,
                                 salesOrderId: this.ctx.salesId,
                                 salesOrderItemId: this.itemData.id,
+                                stepProductId: formData.stepProductId.id,
                             } satisfies Prisma.DykeSalesDoorsCreateManyInput;
                             doorData.data = createDoor;
                             doorData.id = createDoor.id;
                         }
+                        console.log(doorData);
+
                         itemHtp.doors.push(doorData);
                     });
                 this.itemData.hpt = itemHtp;
@@ -187,7 +192,7 @@ export class ItemHelperClass {
             },
         } satisfies Prisma.DykeStepFormUpdateInput;
     }
-    public composeSalesDoorUpdateData(formData, dimension) {
+    public composeSalesDoorUpdateData(formData, dimension, fid = null) {
         return {
             dimension,
             lhQty: this.ctx.safeInt(formData.qty.lh),
@@ -203,6 +208,11 @@ export class ItemHelperClass {
             unitPrice: this.ctx.safeInt(formData.pricing.unitPrice),
             lineTotal: this.ctx.safeInt(formData.pricing.totalPrice),
             swing: formData.swing,
+            stepProduct: {
+                connect: {
+                    id: fid || formData.stepProductId.id,
+                },
+            },
         } satisfies Prisma.DykeSalesDoorsUpdateInput;
     }
     public validateSalesDoorUpdate(
@@ -219,6 +229,8 @@ export class ItemHelperClass {
                 formData,
                 dimension
             );
+            console.log({ updateDoor, data });
+
             return this.ctx.compare(data, updateDoor) ? false : true;
         }
         return true;
@@ -329,7 +341,7 @@ export class ItemHelperClass {
                     orderItemId: this.itemData.id,
                     salesOrderId: this.ctx.salesId,
                     doorType: formItem.groupItem.itemType,
-                    stepProductId: gf.stepProductId,
+                    stepProductId: gf.stepProductId.id,
                     moldingId: gf.mouldingProductId,
                 } satisfies Prisma.HousePackageToolsCreateManyInput;
                 itemHtp.data = hpt;
