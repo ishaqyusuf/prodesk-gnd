@@ -85,6 +85,7 @@ export async function getStepsForRoutingDta() {
                     nextStepId: true,
                     dykeStepId: true,
                     uid: true,
+                    id: true,
                     custom: true,
                     meta: true,
                     product: {

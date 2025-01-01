@@ -1,4 +1,9 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
+import {
+    forwardRef,
+    useImperativeHandle,
+    useState,
+    useTransition,
+} from "react";
 import Link from "next/link";
 import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
 import { PrimitiveDivProps } from "@/types/type";
@@ -17,9 +22,11 @@ import {
     DropdownMenuLabel,
     DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
-import { IconKeys, Icons } from "@/components/_v1/icons";
+import { Icon, IconKeys, Icons } from "@/components/_v1/icons";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type MenuItemProps = {
     link?;
@@ -128,6 +135,7 @@ function Item({
                 </DropdownMenuSubContent>
             </DropdownMenuSub>
         );
+
     const Frag = () => (
         <DropdownMenuItem
             {...props}
@@ -138,7 +146,7 @@ function Item({
             )}
             {children}
             {!!shortCut && (
-                <DropdownMenuShortcut className="ml-6">
+                <DropdownMenuShortcut className="">
                     {shortCut}
                 </DropdownMenuShortcut>
             )}
@@ -172,8 +180,77 @@ function LinkableNode({
         );
     return <div {...props}>{children}</div>;
 }
+interface TrashProps {
+    action?;
+    children?;
+    loadingText?;
+    successText?;
+    errorText?;
+    variant?: "trash" | "primary";
+}
+function Trash({ action, children, ...props }: TrashProps) {
+    const [confirm, setConfirm] = useState(false);
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    return (
+        <DropdownMenuItem
+            onClick={(e) => {
+                e.preventDefault();
+                if (!confirm) {
+                    setConfirm(true);
+                    setTimeout(() => {
+                        setConfirm(false);
+                    }, 3000);
+                    return;
+                }
+                setConfirm(false);
+                startTransition(async () => {
+                    toast.promise(
+                        async () => {
+                            if (action) {
+                                await action();
+                                // if (!noRefresh)
+                                router.refresh();
+                            }
+                            // revalidatePath("");
+                        },
+                        {
+                            loading: props.loadingText || `Deleting...`,
+                            success(data) {
+                                return (
+                                    props.successText || "Deleted Successfully"
+                                );
+                            },
+                            error:
+                                props.errorText ||
+                                "Unable to completed Delete Action",
+                        }
+                    );
+                });
+            }}
+            className={cn(
+                (!props.variant || props.variant == "trash") &&
+                    "text-red-500 hover:text-red-600",
+                props.variant == "primary" && "",
+                "gap-2"
+            )}
+        >
+            <Icon
+                name={isPending ? "spinner" : confirm ? "warning" : "trash"}
+                variant="destructive"
+                className={cn(
+                    isPending ? "h-3.5 w-3.5 animate-spin" : "h-4 w-4",
+                    ""
+                )}
+            />
+            <span>{confirm ? "Sure?" : children}</span>
+            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+        </DropdownMenuItem>
+    );
+}
 export let Menu = Object.assign(forwardRef(BaseMenu), {
     Item,
     Label: DropdownMenuLabel,
     Separator: DropdownMenuSeparator,
+    Trash,
 });

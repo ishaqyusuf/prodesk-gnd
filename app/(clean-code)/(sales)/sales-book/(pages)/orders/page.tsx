@@ -11,6 +11,8 @@ import { composeFilter } from "@/components/(clean-code)/data-table/filter-comma
 import { __filters } from "../../../_common/utils/contants";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import { generateRandomString } from "@/lib/utils";
+import Portal from "@/components/_v1/portal";
+import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export async function generateMetadata({}) {
     return constructMetadata({
@@ -29,6 +31,9 @@ export default async function SalesBookPage({ searchParams }) {
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
         <FPage className="" title="Orders">
+            <Portal nodeId={"navRightSlot"}>
+                <NewFeatureBtn href="/sales/orders">Old Site</NewFeatureBtn>
+            </Portal>
             <OrdersPageClient queryKey={queryKey} filterFields={filterFields} />
         </FPage>
     );

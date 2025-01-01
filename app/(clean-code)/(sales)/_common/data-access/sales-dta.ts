@@ -146,6 +146,17 @@ export async function getSalesCustomerIdDta(id) {
         })
     )?.customerId;
 }
+export async function getSaleByOrderIdDta(orderId) {
+    return await prisma.salesOrders.findFirstOrThrow({
+        where: {
+            orderId,
+        },
+    });
+}
+export async function deleteSalesByOrderId(orderId) {
+    const data = await getSaleByOrderIdDta(orderId);
+    await deleteSalesDta(data.id);
+}
 export async function deleteSalesDta(id) {
     return await prisma.salesOrders.update({
         where: {

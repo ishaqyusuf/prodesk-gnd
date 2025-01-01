@@ -19,7 +19,7 @@ export function Navbar({ title }: NavbarProps) {
                 <div className="flex flex-1 items-center justify-end space-x-2">
                     {/* <ModeToggle /> */}
 
-                    <div className="mx-4" id="navRightSlot"></div>
+                    <div className="mx-4 flex gap-4" id="navRightSlot"></div>
                     <ModeToggle />
                     <UserNav />
                 </div>

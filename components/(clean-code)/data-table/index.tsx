@@ -28,6 +28,7 @@ import { usePathname } from "next/navigation";
 import { __revalidatePath } from "@/app/(v1)/_actions/_revalidate";
 import { Checkbox } from "@/components/ui/checkbox";
 import DevOnly from "@/_v2/components/common/dev-only";
+import { BatchAction } from "./infinity/batch-action";
 
 interface BaseProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -281,4 +282,5 @@ export let DataTable = Object.assign(BaseDataTable, {
     Infinity,
     LoadMore,
     Header,
+    BatchAction,
 });

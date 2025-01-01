@@ -3,7 +3,6 @@ import {
     saveComponentRedirectUidUseCase,
 } from "@/app/(clean-code)/(sales)/_common/use-case/step-component-use-case";
 import {
-    useFormDataStore,
     ZusComponent,
     ZusItemFormData,
     ZusSales,
@@ -16,8 +15,7 @@ import { zhHarvestDoorSizes } from "./zus-form-helper";
 import { FieldPath, FieldPathValue } from "react-hook-form";
 import { SettingsClass } from "./zus-settings-class";
 import { toast } from "sonner";
-import { openDoorSizeSelectModal } from "../../../_components/modals/door-size-select-modal/open-modal";
-import { generateRandomString, sum } from "@/lib/utils";
+import { sum } from "@/lib/utils";
 import { dotSet } from "@/app/(clean-code)/_common/utils/utils";
 interface Filters {
     stepUid?;

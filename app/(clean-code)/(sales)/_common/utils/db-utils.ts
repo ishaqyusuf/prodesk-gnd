@@ -586,6 +586,7 @@ export const SalesBookFormIncludes = (restoreQuery) =>
                         doors: {
                             include: {
                                 priceData: true,
+                                stepProduct: true,
                             },
                             where: {
                                 ...whereNotTrashed.where,

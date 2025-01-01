@@ -139,6 +139,7 @@ model DykeSalesDoors {
     salesOrderId       Int
     lineTotal          Float?                           @default(0)
     salesOrderItemId   Int?
+    stepProductId      Int?
     meta               Json?                            @db.Json
     createdAt          DateTime?                        @default(now()) @db.Timestamp(0)
     updatedAt          DateTime?                        @updatedAt
@@ -148,10 +149,12 @@ model DykeSalesDoors {
     order              SalesOrders?                     @relation(fields: [salesOrderId], references: [id])
     productions        OrderItemProductionAssignments[]
     priceData          ComponentPrice?                  @relation(fields: [priceId], references: [id], name: "door")
+    stepProduct        DykeStepProducts?                @relation(fields: [stepProductId], references: [id])
 
     @@index([housePackageToolId])
     @@index([salesOrderItemId])
     @@index([salesOrderId])
+    @@index([stepProductId])
 }
 
 model DykeStepForm {
@@ -243,6 +246,7 @@ model DykeStepProducts {
     deletedAt         DateTime?           @db.Timestamp(0)
     product           DykeProducts?       @relation(fields: [dykeProductId], references: [id])
     door              DykeDoors?          @relation(fields: [doorId], references: [id])
+    salesDoors        DykeSalesDoors[]
     step              DykeSteps           @relation(fields: [dykeStepId], references: [id])
 
     @@index([dykeStepId])

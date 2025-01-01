@@ -12,10 +12,6 @@ export class AddressClass {
         if (data) {
             const { billing, shipping, sameAddress, customer } = data;
             if (this.ctx.query?.copy) {
-                console.log({
-                    billing,
-                    customer,
-                });
                 this.ctx.data.billingAddressId = billing?.id;
                 this.ctx.data.shippingAddressId = shipping?.id;
                 this.ctx.data.customerId = customer?.id;

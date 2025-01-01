@@ -8,6 +8,8 @@ import QuotesPageClient from "../../../_common/_components/page-clients/quote-pa
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
 import { __filters } from "../../../_common/utils/contants";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
+import Portal from "@/components/_v1/portal";
+import NewFeatureBtn from "@/components/common/new-feature-btn";
 
 export async function generateMetadata({ params }) {
     return constructMetadata({
@@ -25,6 +27,9 @@ export default async function SalesBookQuotePage({ searchParams }) {
 
     return (
         <FPage title="Quotes">
+            <Portal nodeId={"navRightSlot"}>
+                <NewFeatureBtn href="/sales/quotes">Old Site</NewFeatureBtn>
+            </Portal>
             <QuotesPageClient
                 queryKey={queryKey}
                 filterFields={filterFields}

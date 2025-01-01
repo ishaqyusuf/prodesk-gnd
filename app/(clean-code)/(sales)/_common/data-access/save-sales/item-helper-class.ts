@@ -83,6 +83,8 @@ export class ItemHelperClass {
             meta: hptMeta,
         } satisfies Prisma.HousePackageToolsUpdateInput;
         if (itemHtp.id) {
+            //  itemHtp.data = ;
+            //  itemHtp.id = hpt.id;
         } else {
             const hpt = {
                 id: this.ctx.nextId("hpt"),

@@ -324,6 +324,7 @@ const iconVariants = cva("", {
         variant: {
             primary: "text-primary",
             muted: "text-muted-foreground",
+            destructive: "text-red-600",
         },
         size: {
             sm: "w-4 h-4",

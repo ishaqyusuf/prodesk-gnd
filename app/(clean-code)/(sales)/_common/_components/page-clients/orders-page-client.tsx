@@ -14,6 +14,8 @@ import { Icons } from "@/components/_v1/icons";
 import { __filters } from "../../utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
+import { Menu } from "@/components/(clean-code)/menu";
+import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 
 interface Props {
     // promise;
@@ -58,6 +60,11 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                 queryKey={queryKey}
                 {...table.props}
             >
+                <DataTable.BatchAction>
+                    <Menu>
+                        <Menu.Trash action={() => {}}>Delete</Menu.Trash>
+                    </Menu>
+                </DataTable.BatchAction>
                 <DataTable.Header className="bg-white">
                     <div className="flex justify-between items-end mb-2 gap-2 sm:sticky">
                         <div className="">
