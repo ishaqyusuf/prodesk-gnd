@@ -201,11 +201,10 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         Object.entries(item.multiComponent.components).map(([id, data]) => {
             let sp =
                 item.item?.housePackageTool?.stepProduct || data.stepProduct;
-            console.log(data.stepProduct);
 
             if (!sp && fallBackDoorStepProd) {
-                sp = fallBackDoorStepProd;
                 console.log("FALL BACK", sp);
+                sp = fallBackDoorStepProd;
             }
             const stepProdUid =
                 sp?.uid ||
@@ -222,6 +221,8 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 resp.kvFormItem[uid].groupItem.doorStepProductId =
                     stepProductId;
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
+                    // doorForm.stepProductId
+                    // doorForm.priceData
                     console.log(doorForm.stepProductId);
 
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;

@@ -205,6 +205,7 @@ export type SalesPaymentStatus =
 export type TypedDykeSalesDoor = Omit<DykeSalesDoors, "meta"> & {
     meta: DykeSalesDoorMeta;
     priceData?: Partial<ComponentPrice>;
+    stepProduct: DykeStepProduct;
 };
 export interface DykeSalesDoorMeta {
     _doorPrice?: number | null;

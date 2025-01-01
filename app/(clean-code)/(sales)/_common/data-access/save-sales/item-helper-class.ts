@@ -78,25 +78,8 @@ export class ItemHelperClass {
             id: formItem.groupItem?.hptId,
             doors: [],
         };
+        let stepProductId;
         const hptMeta = {} satisfies HousePackageToolMeta;
-        const updateHpt = {
-            meta: hptMeta,
-        } satisfies Prisma.HousePackageToolsUpdateInput;
-        if (itemHtp.id) {
-            //  itemHtp.data = ;
-            //  itemHtp.id = hpt.id;
-        } else {
-            const hpt = {
-                id: this.ctx.nextId("hpt"),
-                ...updateHpt,
-                orderItemId: this.itemData.id,
-                salesOrderId: this.ctx.salesId,
-                doorType: formItem.groupItem.itemType,
-                stepProductId: formItem.groupItem.doorStepProductId,
-            } satisfies Prisma.HousePackageToolsCreateManyInput;
-            itemHtp.data = hpt;
-            itemHtp.id = hpt.id;
-        }
         Array.from(new Set(Object.keys(form).map((k) => k.split("-")[0]))).map(
             (stepUid) => {
                 Object.entries(form)
@@ -106,6 +89,11 @@ export class ItemHelperClass {
                     )
                     .map(([stepSizeUid, formData]) => {
                         // console.log(formData);
+                        if (!stepProductId) {
+                            stepProductId =
+                                formData.stepProductId?.id ||
+                                formData.stepProductId?.fallbackId;
+                        }
                         const [_, ...dimensions] = stepSizeUid?.split("-");
                         const dimension = dimensions?.join("-");
 
@@ -149,6 +137,31 @@ export class ItemHelperClass {
                 this.itemData.hpt = itemHtp;
             }
         );
+        const updateHpt = {
+            meta: hptMeta,
+            stepProduct: {
+                connect: {
+                    id: stepProductId,
+                },
+            },
+        } satisfies Prisma.HousePackageToolsUpdateInput;
+
+        if (itemHtp.id) {
+            itemHtp.data = updateHpt;
+            //  itemHtp.id = hpt.id;
+        } else {
+            const hpt = {
+                id: this.ctx.nextId("hpt"),
+                ...updateHpt,
+                orderItemId: this.itemData.id,
+                salesOrderId: this.ctx.salesId,
+                doorType: formItem.groupItem.itemType,
+                stepProductId: formItem.groupItem.doorStepProductId,
+            } satisfies Prisma.HousePackageToolsCreateManyInput;
+            itemHtp.data = hpt;
+            itemHtp.id = hpt.id;
+        }
+
         if (this.itemData.hpt?.doors?.length)
             this.ctx.data.items.push(this.itemData);
     }
@@ -331,13 +344,19 @@ export class ItemHelperClass {
             } satisfies HousePackageToolMeta;
             const updateHpt = {
                 meta: hptMeta,
+                stepProduct: {
+                    connect: {
+                        id: gf.stepProductId?.id,
+                    },
+                },
             } satisfies Prisma.HousePackageToolsUpdateInput;
             if (itemHtp.id) {
                 itemHtp.data = updateHpt;
             } else {
+                const { stepProduct, ...createHtp } = updateHpt;
                 const hpt = {
                     id: this.ctx.nextId("hpt"),
-                    ...updateHpt,
+                    ...createHtp,
                     orderItemId: this.itemData.id,
                     salesOrderId: this.ctx.salesId,
                     doorType: formItem.groupItem.itemType,

@@ -628,7 +628,9 @@ export class ComponentHelperClass extends StepHelperClass {
             groupItem.stepUid = this.component.uid;
             if (!groupItem.form?.[this.componentUid])
                 groupItem.form[this.componentUid] = {
-                    stepProductId: this.component.id,
+                    stepProductId: {
+                        id: this.component.id,
+                    },
                     mouldingProductId: this.component.productId,
                     selected: true,
                     meta: {

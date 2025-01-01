@@ -56,6 +56,7 @@ export function typedSalesBookFormItems(data: SalesFormData) {
                 d.priceData = {
                     salesUnitCost: d.jambSizePrice,
                 } as any;
+            console.log(d.stepProduct);
 
             _doorForm[dim] = { ...d } as any;
             _doorFormDefaultValue[dim] = {
