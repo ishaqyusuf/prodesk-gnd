@@ -96,7 +96,9 @@ export function useInitContext(cls: ComponentHelperClass) {
                 if (selected && !clear) {
                     groupItem.itemIds.push(uid);
                     groupItem.form[uid] = {
-                        stepProductId: cls.component.id,
+                        stepProductId: {
+                            id: cls.component.id,
+                        },
                         meta: {
                             description: "",
                             produceable: false,
