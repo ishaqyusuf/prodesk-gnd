@@ -150,9 +150,10 @@ export class ItemHelperClass {
             itemHtp.data = updateHpt;
             //  itemHtp.id = hpt.id;
         } else {
+            const { stepProduct, ...createHtp } = updateHpt;
             const hpt = {
                 id: this.ctx.nextId("hpt"),
-                ...updateHpt,
+                ...createHtp,
                 orderItemId: this.itemData.id,
                 salesOrderId: this.ctx.salesId,
                 doorType: formItem.groupItem.itemType,
