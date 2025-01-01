@@ -1,4 +1,4 @@
-import { Prisma, SalesOrders } from "@prisma/client";
+import { SalesOrders } from "@prisma/client";
 import { SalesFormFields } from "../../../types";
 import { SaveSalesHelper } from "./helper-class";
 import { nextId } from "@/lib/nextId";
@@ -6,7 +6,6 @@ import { prisma } from "@/db";
 import { ItemHelperClass } from "./item-helper-class";
 import { generateRandomString } from "@/lib/utils";
 import { redirect } from "next/navigation";
-import { timeout } from "@/lib/timeout";
 import { AddressClass } from "./address-class";
 
 export interface SaverData {

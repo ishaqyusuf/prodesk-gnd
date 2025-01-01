@@ -14,6 +14,7 @@ import { prisma } from "@/db";
 import { isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
 import { AddressClass } from "./address-class";
 import { __isProd } from "@/lib/is-prod-server";
+import { generateRandomString } from "@/lib/utils";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -190,11 +191,16 @@ export class SaveSalesHelper {
         // ORD-101124-01
         // 2501-13-Q001
         // 2429-08-Q001
+        // 2501-01-Q001EA
+        // 2501-01-Q002AD
+        // 2501-01-Q004HJ
         const orderId = [
             np ? null : prefix,
             now.format(np ? "YYMM" : "YYMMDD"),
             np ? now.format("DD") : null,
-            (np ? prefix : "") + id?.toString()?.padStart(3, "0"),
+            (np ? prefix : "") +
+                id?.toString()?.padStart(3, "0") +
+                (np ? generateRandomString(2)?.toUpperCase() : ""),
         ]
             .filter(Boolean)
             .join("-")
