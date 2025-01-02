@@ -88,6 +88,7 @@ export class HptClass extends GroupFormClass {
 
     public addHeight(size: SizeForm) {
         const path = size.path;
+        const config = this.getRouteConfig();
         if (this.getGroupItemForm(path)) {
             this.dotUpdateGroupItemFormPath(path, "selected", true);
             this.dotUpdateGroupItemFormPath(path, "qty.lh", "");
@@ -123,6 +124,7 @@ export class HptClass extends GroupFormClass {
                     description: "",
                     produceable: true,
                     taxxable: true,
+                    noHandle: config?.noHandle,
                 },
             });
         }

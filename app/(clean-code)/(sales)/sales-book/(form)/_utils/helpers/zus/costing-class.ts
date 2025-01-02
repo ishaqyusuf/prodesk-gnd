@@ -122,9 +122,11 @@ export class CostingClass {
             salesPrice: 0,
         };
         Object.entries(groupItem?.form).map(([uid, formData]) => {
-            const qty = sum([formData.qty.lh, formData.qty.rh]);
-            if (!formData.qty?.total || (qty && qty != formData.qty?.total))
-                formData.qty.total = qty;
+            formData.meta.noHandle;
+            const qty = formData.meta.noHandle
+                ? formData.qty?.total
+                : sum([formData.qty.lh, formData.qty.rh]);
+            if (formData.meta.noHandle) formData.qty.total = qty;
             this.getEstimatePricing(groupItem, formData);
         });
         this.saveGroupItem(groupItem, itemUid);

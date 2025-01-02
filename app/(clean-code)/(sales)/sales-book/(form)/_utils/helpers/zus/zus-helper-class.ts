@@ -639,6 +639,7 @@ export class ComponentHelperClass extends StepHelperClass {
                         description: this.component?.title,
                         taxxable: false,
                         produceable: false,
+                        noHandle: this.getRouteConfig()?.noHandle,
                     },
                     qty: {
                         rh: "",

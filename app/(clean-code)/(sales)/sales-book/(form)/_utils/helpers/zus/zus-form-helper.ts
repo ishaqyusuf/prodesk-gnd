@@ -122,6 +122,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
         };
 
         resp.sequence.stepComponent[uid] = [];
+        let noHandle = true;
         // let doorStepUid, mouldingComponentUid;
         let itemType: DykeDoorType;
         let fallBackDoorStepProd;
@@ -143,6 +144,9 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
             });
             if (stp.title == "Item Type") {
                 itemType = stp.value as any;
+                noHandle =
+                    resp.setting.composedRouter[stp.componentUid]?.config
+                        ?.noHandle;
             }
             if (stp.title == "Door") {
                 fallBackDoorStepProd = Object.values(
@@ -223,7 +227,6 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 Object.entries(data._doorForm).map(([dimIn, doorForm]) => {
                     // doorForm.stepProductId
                     // doorForm.priceData
-                    console.log(doorForm.stepProductId);
 
                     const formId = `${stepProdUid}-${inToFt(dimIn)}`;
                     pushItemId(formId);
@@ -240,6 +243,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         },
                         meta: {
                             salesItemId: copy ? null : data.itemId,
+                            noHandle,
                         },
                         hptId: copy ? null : doorForm.housePackageToolId,
                         selected: true,
@@ -270,6 +274,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                     selected: true,
                     meta: {
                         salesItemId: copy ? null : data.itemId,
+                        noHandle,
                     },
                     qty: {
                         total: data.qty,
@@ -310,6 +315,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                         produceable: data.production,
                         taxxable: data.tax,
                         salesItemId: copy ? null : data.itemId,
+                        noHandle,
                     },
                     stepProductId: null,
                 });
