@@ -5,6 +5,7 @@ import { lastId, nextId } from "@/lib/nextId";
 import { ISalesOrder, ISalesOrderItem } from "@/types/sales";
 import dayjs from "dayjs";
 import { _validateOrderId } from "./validate-order-id.dac";
+import { generateSalesId } from "@/app/(clean-code)/(sales)/_common/data-access/save-sales/sales-id-dta";
 
 export async function _saveSales(
     _id,
@@ -29,9 +30,8 @@ export async function _saveSales(
         ..._order
     } = order;
     if (!slug && !orderId) {
-        const now = dayjs();
         let id = await nextId(prisma.salesOrders);
-        slug = orderId = [now.format("YY"), now.format("MMDD"), id].join("-");
+        slug = orderId = await generateSalesId(order.type);
         await _validateOrderId(orderId, id);
     } else {
         if (

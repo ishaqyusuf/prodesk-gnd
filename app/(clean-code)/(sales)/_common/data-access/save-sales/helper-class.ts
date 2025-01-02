@@ -1,20 +1,11 @@
 import dayjs from "dayjs";
-import {
-    DykeSalesDoorMeta,
-    SalesFormFields,
-    SalesItemMeta,
-    SalesMeta,
-    SalesType,
-} from "../../../types";
+import { SalesFormFields, SalesMeta } from "../../../types";
 import { SaveSalesClass } from "./save-sales-class";
 import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/lib/use-number";
 import { isEqual, isNaN } from "lodash";
-import { prisma } from "@/db";
-import { isMonth } from "@/app/(clean-code)/_common/utils/db-utils";
-import { AddressClass } from "./address-class";
 import { __isProd } from "@/lib/is-prod-server";
-import { generateRandomString } from "@/lib/utils";
+import { generateSalesId } from "./sales-id-dta";
 
 export class SaveSalesHelper {
     constructor(public ctx?: SaveSalesClass) {}
@@ -45,7 +36,6 @@ export class SaveSalesHelper {
             payment_option: md.paymentMethod,
         };
         const sd = this.ctx.data;
-        console.log(sd.customerId);
 
         const updateData = {
             subTotal: md.pricing.subTotal,
@@ -82,7 +72,6 @@ export class SaveSalesHelper {
             //             : undefined,
             // },
         } satisfies Prisma.SalesOrdersUpdateInput;
-        console.log(updateData);
 
         if (md.type == "order") {
             updateData.paymentDueDate = this.paymentDueDate(md);
@@ -94,8 +83,8 @@ export class SaveSalesHelper {
                 updateId: md.id,
             };
         } else {
-            const gord = await this.generateOrderId(md.type);
-            const { orderId, createdAt, id } = gord;
+            // const gord = await this.generateOrderId(md.type);
+            const orderId = await generateSalesId(md.type);
 
             const { salesProfile, ...rest } = updateData;
             const createData = {
@@ -103,8 +92,8 @@ export class SaveSalesHelper {
                 status: "",
                 orderId,
                 slug: orderId,
-                id,
-                createdAt,
+                id: this.ctx.nextIds.salesId,
+                // createdAt,
                 isDyke: true,
                 // salesRepId: md.salesRepId,
                 salesRep: {
@@ -160,60 +149,7 @@ export class SaveSalesHelper {
         return equals;
         // return data1 == data2;
     }
-    public async generateOrderId(type: SalesType) {
-        const now = dayjs();
-        const createdAt = now.toISOString();
-        const isOrder = type == "order";
-        const prefix =
-            now.year() > 2024 || !__isProd
-                ? isOrder
-                    ? "s"
-                    : "q"
-                : isOrder
-                ? "ord"
-                : "quo";
 
-        const _createdAt = isMonth(now);
-        const np = prefix?.length == 1;
-        const id =
-            (await prisma.salesOrders.count({
-                where: {
-                    createdAt: _createdAt, //isDay(now),
-                    orderId: np
-                        ? {
-                              contains: `-${prefix}`,
-                          }
-                        : {
-                              startsWith: prefix,
-                          },
-                },
-            })) + 1;
-        // ORD-101124-01
-        // 2501-13-Q001
-        // 2429-08-Q001
-        // 2501-01-Q001EA
-        // 2501-01-Q002AD
-        // 2501-01-Q004HJ
-        const orderId = [
-            np ? null : prefix,
-            now.format(np ? "YYMM" : "YYMMDD"),
-            np ? now.format("DD") : null,
-            (np ? prefix : "") +
-                id?.toString()?.padStart(3, "0") +
-                (np ? generateRandomString(2)?.toUpperCase() : ""),
-        ]
-            .filter(Boolean)
-            .join("-")
-            ?.toUpperCase();
-        console.log(orderId);
-
-        return {
-            id: this.nextId("salesId"),
-            prefix,
-            createdAt,
-            orderId,
-        };
-    }
     public convertDate(date) {
         if (date instanceof Date) return date.toISOString();
         // if (!date || typeof date == "string")

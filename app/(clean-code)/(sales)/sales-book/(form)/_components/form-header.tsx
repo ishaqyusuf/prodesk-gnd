@@ -13,17 +13,14 @@ import { zhInitializeState } from "../_utils/helpers/zus/zus-form-helper";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import dayjs from "dayjs";
-import DevOnly from "@/_v2/components/common/dev-only";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
 
 export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
-    const { isFixed, fixedOffset, containerRef } = sticky;
+    const { isFixed, containerRef } = sticky;
     const tabs = [
-        { name: "invoice", title: "Invoice Builder", default: true },
-        { name: "info", title: "Sales Info" },
+        { name: "invoice", title: "Invoice Builder" },
+        { name: "info", title: "Sales Info", default: true },
         { name: "address", title: "Customer Info" },
         // { name: "info", title: "Customer Info" },
     ];
@@ -61,7 +58,7 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
                 allowRedirect: true,
             }
         );
-        console.log({ resp });
+        // console.log({ resp });
         // return;
         if (!metaData.debugMode) {
             await refetchData();
