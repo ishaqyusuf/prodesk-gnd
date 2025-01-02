@@ -19,8 +19,8 @@ export function FormHeader({ sticky }: { sticky: Sticky }) {
     const zus = useFormDataStore();
     const { isFixed, containerRef } = sticky;
     const tabs = [
-        { name: "invoice", title: "Invoice Builder" },
         { name: "info", title: "Sales Info", default: true },
+        { name: "invoice", title: "Invoice Builder" },
         { name: "address", title: "Customer Info" },
         // { name: "info", title: "Customer Info" },
     ];
