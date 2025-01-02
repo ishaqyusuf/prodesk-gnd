@@ -29,19 +29,20 @@ export async function _saveSales(
         customerProfileId,
         ..._order
     } = order;
-    if (!slug && !orderId) {
+    if (!orderId) {
         let id = await nextId(prisma.salesOrders);
         slug = orderId = await generateSalesId(order.type);
         await _validateOrderId(orderId, id);
-    } else {
-        if (
-            slug?.endsWith("-") ||
-            slug.split("-")?.filter(Boolean).length != 3
-        ) {
-            const [y, m] = orderId.split("-");
-            orderId = slug = [y, m, _id].join("-");
-        }
     }
+    // else {
+    //     if (
+    //         slug?.endsWith("-") ||
+    //         slug.split("-")?.filter(Boolean).length != 3
+    //     ) {
+    //         const [y, m] = orderId.split("-");
+    //         orderId = slug = [y, m, _id].join("-");
+    //     }
+    // }
 
     const metadata = {
         createdAt: createdAt ? new Date(createdAt) : new Date(),

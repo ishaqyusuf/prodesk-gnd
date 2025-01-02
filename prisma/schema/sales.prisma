@@ -383,7 +383,7 @@ model SalesOrders {
     deletedAt         DateTime?                        @db.Timestamp(0)
     createdAt         DateTime?                        @default(now()) @db.Timestamp(0)
     updatedAt         DateTime?                        @updatedAt
-    orderId           String                           @unique @db.VarChar(255)
+    orderId           String                           @db.VarChar(255)
     slug              String                           @db.VarChar(255)
     type              String?                          @db.VarChar(255)
     goodUntil         DateTime?
@@ -430,6 +430,7 @@ model SalesOrders {
     salesProfile      CustomerTypes?                   @relation(fields: [customerProfileId], references: [id])
     itemControls      SalesItemControl[]
 
+    @@unique([orderId, type])
     @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
     @@index([customerProfileId])
     @@index([customerId])
