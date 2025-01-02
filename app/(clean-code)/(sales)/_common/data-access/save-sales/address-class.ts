@@ -87,8 +87,10 @@ export class AddressClass {
         if (billing.id) {
             const salesCount = await connectedSalesCountDta(
                 billing.id,
-                this.ctx.data.sales.updateId
+                this.ctx.form?.metaData?.id
             );
+            console.log({ salesCount });
+
             if (!salesCount) {
                 const b = await prisma.addressBooks.update({
                     where: { id: billing.id },

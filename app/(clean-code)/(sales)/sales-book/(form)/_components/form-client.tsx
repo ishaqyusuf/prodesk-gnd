@@ -45,6 +45,7 @@ export function FormClient({ data }: FormClientProps) {
                 <div
                     className={cn(
                         zus.currentTab != "info" &&
+                            zus.currentTab &&
                             "opacity-0 h-0 z-0 w-0 overflow-hidden",
                         "lg:flex lg:gap-4"
                     )}
@@ -65,7 +66,7 @@ export function FormClient({ data }: FormClientProps) {
 
                 <div
                     className={cn(
-                        !(zus.currentTab == "invoice" || !zus.currentTab) &&
+                        !(zus.currentTab == "invoice") &&
                             "opacity-0 h-0 z-0 w-0 overflow-hidden"
                     )}
                 >
