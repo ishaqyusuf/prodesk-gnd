@@ -139,14 +139,14 @@ export class CostingClass {
         else staticData.kvFormItem[itemUid].groupItem = groupItem;
     }
     public getEstimatePricing(groupItem, formData) {
-        const priceList = [
-            formData.pricing?.customPrice ||
-                sum([
-                    groupItem?.pricing?.components?.salesPrice,
-                    formData?.pricing?.itemPrice?.salesPrice,
-                ]),
-            formData.pricing?.addon,
-        ];
+        const pl =
+            formData.pricing?.customPrice == null
+                ? sum([
+                      groupItem?.pricing?.components?.salesPrice,
+                      formData?.pricing?.itemPrice?.salesPrice,
+                  ])
+                : formData.pricing?.customPrice;
+        const priceList = [pl, formData.pricing?.addon];
         const unitPrice = sum(priceList);
         const totalPrice = formatMoney(
             sum(priceList) * Number(formData.qty.total)
