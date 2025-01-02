@@ -43,6 +43,7 @@ interface Props {
 export function ComponentsSection({ itemStepUid }: Props) {
     const ctx = useStepContext(itemStepUid);
     const { items, sticky, cls, props } = ctx;
+
     return (
         <ScrollArea
             ref={sticky.containerRef}

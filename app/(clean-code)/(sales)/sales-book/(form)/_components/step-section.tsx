@@ -46,7 +46,10 @@ export function StepSection({ stepUid, isFirst, isLast }: Props) {
         // , zus
     ]);
 
-    if (!zItem.collapsed || (zItem.collapsed && (isFirst || isLast)))
+    if (
+        (!zItem.collapsed && zus.currentTab == "invoice") ||
+        (zItem.collapsed && (isFirst || isLast))
+    )
         return (
             <div>
                 <div className="">
