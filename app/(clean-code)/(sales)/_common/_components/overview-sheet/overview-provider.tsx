@@ -49,7 +49,6 @@ export const useOverviewContext = (_item: SalesItemProp) => {
     const [tabData, setTabData] = useState<TabData>(null);
 
     useEffect(() => {
-        console.log(overview);
         if (tabData) {
             switch (tabData.slug) {
                 case "itemView":

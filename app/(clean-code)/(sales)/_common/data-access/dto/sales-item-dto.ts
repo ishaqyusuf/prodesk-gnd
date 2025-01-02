@@ -139,7 +139,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
             };
         return control;
     }
-    console.log(filteredItems?.length);
 
     const itemGroup = filteredItems.map((item, fItemIndex) => {
         const startPointIndex = data.items.findIndex(
@@ -168,7 +167,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
         }
 
         const groupedItems = data.items.filter(filterGroup);
-        console.log(groupedItems.length);
 
         const items: LineItemOverview[] = [];
         groupedItems?.map((gItem) => {
@@ -198,14 +196,11 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         shippable: true,
                     });
                     if (isBifold) {
-                        pills.push(
-                            createTextPill(
-                                `Qty x ${_door.lhQty}`,
-                                _door.lhQty,
-                                "blue"
-                            )
-                        );
-                        _totalQty = _door.lhQty;
+                        let qty = _door.totalQty;
+                        console.log(qty);
+
+                        pills.push(createTextPill(`Qty x ${qty}`, qty, "blue"));
+                        _totalQty = qty;
                         totalQty = {
                             total: _totalQty,
                             qty: _totalQty,
