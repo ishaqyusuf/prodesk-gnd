@@ -1,3 +1,4 @@
+import { withDeleted } from "@/app/(clean-code)/_common/utils/db-utils";
 import { user } from "@/app/(v1)/_actions/utils";
 import { prisma } from "@/db";
 
@@ -10,6 +11,7 @@ export async function generateSalesId(type) {
     const count = await prisma.salesOrders.count({
         where: {
             deletedAt: {},
+            // ...withDeleted,
             type,
         },
     });
