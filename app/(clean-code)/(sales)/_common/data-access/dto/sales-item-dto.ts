@@ -195,7 +195,7 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                         produceable: true,
                         shippable: true,
                     });
-                    if (isBifold) {
+                    if (isBifold || (!_door.lhQty && !_door.rhQty)) {
                         let qty = _door.totalQty;
 
                         pills.push(createTextPill(`Qty x ${qty}`, qty, "blue"));
