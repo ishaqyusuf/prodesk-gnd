@@ -407,6 +407,8 @@ export class StepHelperClass extends SettingsClass {
             isRoot,
             redirectUid
         );
+        console.log(nrs);
+
         if (!nrs.nextRoute) {
             toast.error("This Form Step Sequence has no next step.");
             return;
@@ -694,9 +696,9 @@ export class ComponentHelperClass extends StepHelperClass {
             this.saveStepForm(stepData);
             this.dotUpdateItemForm("currentStepUid", null);
             const isRoot = this.componentIsRoot();
-            if (isRoot) {
-                this.dotUpdateItemForm("routeUid", this.componentUid);
-            }
+            // if (isRoot) {
+            //     this.dotUpdateItemForm("routeUid", this.componentUid);
+            // }
             this.nextStep(isRoot, this.redirectUid);
             this.updateComponentCost();
         }

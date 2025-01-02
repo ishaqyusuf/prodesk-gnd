@@ -468,7 +468,7 @@ export interface SalesFormFields {
     };
 
     kvStepForm: {
-        [id in string]: {
+        [stepItemUid in string]: {
             //id: "itemUid-stepUid"
             title?: string;
             value?: string;

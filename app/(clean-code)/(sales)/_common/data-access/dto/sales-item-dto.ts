@@ -197,7 +197,6 @@ export function salesItemGroupOverviewDto(data: GetFullSalesDataDta) {
                     });
                     if (isBifold) {
                         let qty = _door.totalQty;
-                        console.log(qty);
 
                         pills.push(createTextPill(`Qty x ${qty}`, qty, "blue"));
                         _totalQty = qty;

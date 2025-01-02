@@ -49,6 +49,10 @@ export class SettingsClass extends CostingClass {
     public get zus(): ZusSales {
         return this.staticZus || useFormDataStore.getState();
     }
+    public getRootUid() {
+        const rootStepUid = this.zus.sequence.stepComponent[this.itemUid]?.[0];
+        return this.zus.kvStepForm[rootStepUid]?.componentUid;
+    }
     public composeNextRoute(
         itemForm: ZusItemFormData,
         redirectUid,
@@ -56,7 +60,9 @@ export class SettingsClass extends CostingClass {
         stepUid
     ) {
         const route = this.zus.setting.composedRouter;
-        const rootUid = itemForm.routeUid;
+        const rootUid = this.getRootUid();
+        itemForm.routeUid;
+
         const nextRouteUid =
             redirectUid || route[rootUid]?.route?.[isRoot ? rootUid : stepUid];
         const nextRoute = this.zus.setting.stepsByKey[nextRouteUid];
@@ -79,12 +85,15 @@ export class SettingsClass extends CostingClass {
             isRoot,
             this.stepUid
         );
+
         if (!routeData.nextRoute) {
             const stepSequences =
                 this.zus.sequence.stepComponent?.[this.itemUid];
             const stepIndex = stepSequences?.indexOf(this.itemStepUid);
             for (let i = stepIndex - 1; i > 0; i--) {
                 const [_itemUid, _stepUid] = stepSequences[i]?.split("-");
+                console.log({ _itemUid, _stepUid });
+
                 const nx = this.composeNextRoute(
                     itemForm,
                     null,
