@@ -94,7 +94,7 @@ export function TerminalPay({ ctx }) {
                             )}
                         >
                             <CardHeader className="bg-muted p-4">
-                                Terminal Checkout
+                                Payment
                             </CardHeader>
                             <CardContent className="grid gap-4">
                                 <FormInput

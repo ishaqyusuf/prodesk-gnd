@@ -5,21 +5,39 @@ import { useEffect, useState } from "react";
 import { useSalesOverview } from "../overview-provider";
 import { usePayment } from "../payments/payment-hooks";
 import { TerminalPay } from "../payments/payment-tab";
+import { Menu } from "@/components/(clean-code)/menu";
 
 export function PayAction({}) {
     const ctx = useSalesOverview();
-    const [pay, setPay] = useState(false);
+    const [pay, setPay] = useState(null);
     if (ctx.item.type == "quote") return null;
     return (
         <>
             {pay && (
                 <QuickPay
+                    {...(pay || {})}
                     onClose={() => {
-                        setPay(false);
+                        setPay(null);
                     }}
                 />
             )}
-            <Button
+            <Menu
+                Icon={Icons.dollar}
+                variant="default"
+                label={`Pay $${ctx.item.due}`}
+                disabled={!ctx.item.due || pay}
+            >
+                <Menu.Item
+                    onClick={() => {
+                        setPay(true);
+                    }}
+                >
+                    Terminal
+                </Menu.Item>
+                <Menu.Item>Cash</Menu.Item>
+                <Menu.Item>Check</Menu.Item>
+            </Menu>
+            {/* <Button
                 onClick={() => {
                     setPay(true);
                 }}
@@ -32,7 +50,7 @@ export function PayAction({}) {
                 <span className="ml-1">
                     <Money value={ctx.item?.due} />
                 </span>
-            </Button>
+            </Button> */}
         </>
     );
 }

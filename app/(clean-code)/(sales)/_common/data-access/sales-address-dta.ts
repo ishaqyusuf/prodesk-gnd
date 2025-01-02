@@ -86,3 +86,19 @@ export async function getAddressFormDta(id) {
         meta: address.meta as any as AddressBookMeta,
     };
 }
+export async function connectedSalesCountDta(id, exceptId?) {
+    const count = await prisma.salesOrders.count({
+        where: {
+            id: exceptId ? { not: exceptId } : undefined,
+            OR: [
+                {
+                    billingAddressId: id,
+                },
+                {
+                    shippingAddressId: id,
+                },
+            ],
+        },
+    });
+    return count;
+}

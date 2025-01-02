@@ -3,6 +3,7 @@ import { SaveSalesClass } from "./save-sales-class";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/db";
 import { AddressBookMeta } from "../../../types";
+import { connectedSalesCountDta } from "../sales-address-dta";
 export class AddressClass {
     constructor(public ctx: SaveSalesClass) {}
 
@@ -82,26 +83,33 @@ export class AddressClass {
                   }
                 : undefined,
         } satisfies Prisma.AddressBooksUpdateInput;
+        let addressId;
         if (billing.id) {
-            const b = await prisma.addressBooks.update({
-                where: { id: billing.id },
-                data: {
-                    ..._billingData,
-                },
-            });
-            this.ctx.data[`${address}AddressId`] = b.id;
-            if (this.sameAddress && address == "billing")
-                this.ctx.data.shippingAddressId = b.id;
-        } else {
+            const salesCount = await connectedSalesCountDta(
+                billing.id,
+                this.ctx.data.sales.updateId
+            );
+            if (!salesCount) {
+                const b = await prisma.addressBooks.update({
+                    where: { id: billing.id },
+                    data: {
+                        ..._billingData,
+                    },
+                });
+                addressId = b.id;
+            }
+        }
+        if (!addressId) {
             const b = await prisma.addressBooks.create({
                 data: {
                     ..._billingData,
                 },
             });
-            this.ctx.data[`${address}AddressId`] = b.id;
-            if (this.sameAddress && address == "billing")
-                this.ctx.data.shippingAddressId = b.id;
+            addressId = b.id;
         }
+        this.ctx.data[`${address}AddressId`] = addressId;
+        if (this.sameAddress && address == "billing")
+            this.ctx.data.shippingAddressId = addressId;
     }
     public get sameAddress() {
         return this.ctx.form.metaData.sameAddress;
