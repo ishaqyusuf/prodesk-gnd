@@ -16,11 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
 
-export const usePayment = () => {
-    return usePaymentContext();
+export const usePayment = (ctx) => {
+    return usePaymentContext(ctx);
 };
-const usePaymentContext = () => {
-    const ctx = useSalesOverview();
+const usePaymentContext = (ctx) => {
+    // const ctx = useSalesOverview();
     const orderId = ctx.item.id;
     const [data, setData] = useState<GetSalesPayment>(null as any);
     const [ready, setReady] = useState(false);

@@ -26,7 +26,7 @@ import "./style.css";
 import ActionFooter from "./footer/action-footer";
 import NotificationTab from "./notification";
 import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
-import { PaymentTab } from "./payments/payment-tab";
+import { PaymentTab, TerminalPay } from "./payments/payment-tab";
 import { SalesItemsOverview } from "./item-view/sales-items-overview";
 export function OrderOverviewSheet({}) {
     const { table, selectedRow } = useInfiniteDataTable();
@@ -115,6 +115,7 @@ function PrimaryTab() {
                     <ActionFooter />
                 </ScrollArea>
             </Tabs>
+            <TerminalPay />
         </div>
     );
 }

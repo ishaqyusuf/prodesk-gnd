@@ -9,6 +9,7 @@ import { useInfiniteDataTable } from "@/components/(clean-code)/data-table/use-d
 import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { getSalesListByIdUseCase } from "../../use-case/sales-list-use-case";
 import { toast } from "sonner";
+import { usePayment } from "./payments/payment-hooks";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
@@ -98,6 +99,7 @@ export const useOverviewContext = (_item: SalesItemProp) => {
             }
         }, 500);
     }
+
     const __ctx = {
         refreshList: ctx?.refetch,
         closeModal() {
@@ -140,7 +142,11 @@ export const useOverviewContext = (_item: SalesItemProp) => {
             },
         },
     };
-    return __ctx;
+    const payCtx = usePayment(__ctx);
+    return {
+        ...__ctx,
+        payCtx,
+    };
 };
 export const useSalesOverview = () => useContext(OverviewContext);
 export function OverviewProvider({

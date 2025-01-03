@@ -110,7 +110,7 @@ export async function createSalesPaymentTransactionDta({
         data: {
             amount: amount,
             status: "created" as SalesPaymentStatus,
-            paymentMethod,
+            // paymentMethod,
             // transaction: {
             //     connect: { id: transactionId },
             // },

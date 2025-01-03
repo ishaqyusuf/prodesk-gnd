@@ -22,9 +22,10 @@ import { cn } from "@/lib/utils";
 import Button from "@/components/common/button";
 import { Label } from "@/components/ui/label";
 import { paymentMethods } from "../../../utils/contants";
+import { useSalesOverview } from "../overview-provider";
 
 export function PaymentTab({}) {
-    const ctx = usePayment();
+    const { payCtx: ctx } = useSalesOverview();
 
     if (!ctx.data) return <>Loading...</>;
     function PaymentBtn() {
@@ -78,12 +79,14 @@ export function PaymentTab({}) {
                     ))}
                 </TableBody>
             </Table>
-            <TerminalPay ctx={ctx} />
         </div>
     );
 }
-export function TerminalPay({ ctx }: { ctx: ReturnType<typeof usePayment> }) {
-    // if (ctx.paymentMethod == "terminal")
+export function TerminalPay() {
+    const { payCtx: ctx } = useSalesOverview();
+
+    if (!ctx.paymentMethod) return;
+
     return (
         <div>
             <Form {...ctx.form}>
@@ -222,5 +225,4 @@ export function TerminalPay({ ctx }: { ctx: ReturnType<typeof usePayment> }) {
             </Form>
         </div>
     );
-    return null;
 }
