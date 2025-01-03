@@ -78,12 +78,11 @@ export function PaymentTab({}) {
                     ))}
                 </TableBody>
             </Table>
-            <TerminalPay />
+            <TerminalPay ctx={ctx} />
         </div>
     );
 }
-export function TerminalPay({}) {
-    const ctx = usePayment();
+export function TerminalPay({ ctx }: { ctx: ReturnType<typeof usePayment> }) {
     // if (ctx.paymentMethod == "terminal")
     return (
         <div>
