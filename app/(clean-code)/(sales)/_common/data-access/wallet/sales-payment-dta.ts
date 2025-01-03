@@ -1,5 +1,9 @@
 import { prisma } from "@/db";
-import { SalesPaymentStatus, SalesPaymentType, SalesType } from "../../types";
+import {
+    SalesPaymentStatus,
+    SalesPaymentType,
+    SalesType,
+} from "../../../types";
 import { formatDate } from "@/lib/use-day";
 import { whereNotTrashed } from "@/app/(clean-code)/_common/utils/db-utils";
 import { userId } from "@/app/(v1)/_actions/utils";
@@ -199,6 +203,13 @@ export async function salesPaymentSuccessDta({
     return await prisma.salesPayments.create({
         data: {
             orderId,
+            // transaction: {
+            //     create: {
+            //         amount,
+            //         authorId: await userId(),
+            //         // walletId: null
+            //     }
+            // },
             amount,
             tip,
             meta: {},

@@ -116,6 +116,15 @@ export function TerminalPay({ ctx }: { ctx: ReturnType<typeof usePayment> }) {
                                 prefix="$"
                                 disabled={ctx.inProgress}
                             />
+                            {ctx.paymentMethod == "check" && (
+                                <FormInput
+                                    control={ctx.form.control}
+                                    name="checkNo"
+                                    size="sm"
+                                    label={"Check No."}
+                                    disabled={ctx.inProgress}
+                                />
+                            )}
                             {ctx.isTerminal() && (
                                 <>
                                     <FormSelect
@@ -176,7 +185,10 @@ export function TerminalPay({ ctx }: { ctx: ReturnType<typeof usePayment> }) {
                                 Cancel
                             </Button>
                             <Button
-                                disabled={ctx.inProgress}
+                                disabled={
+                                    ctx.inProgress ||
+                                    ctx.paymentMethod == "link"
+                                }
                                 action={ctx._pay}
                                 size="sm"
                             >

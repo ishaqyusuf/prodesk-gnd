@@ -8,7 +8,7 @@ import {
     CreateSalesPaymentProps,
     getPaymentTerminalsDta,
     getSalesPaymentDta,
-} from "../data-access/sales-payment-dta";
+} from "../data-access/wallet/sales-payment-dta";
 import {
     createTerminalCheckout,
     CreateTerminalCheckoutProps,

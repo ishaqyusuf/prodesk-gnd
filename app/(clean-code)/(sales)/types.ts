@@ -196,7 +196,14 @@ export interface HousePackageToolSettings {
     type: string;
     data: HousePackageToolSettingsMeta;
 }
-
+export type SalesTransaction = {
+    squarePaymentType?: SalesPaymentType;
+    squareTerminalId?: string;
+    paymentMode: PaymentMethods;
+    amount;
+    salesIds: string[];
+    accountNo: string;
+};
 export type SalesPaymentType = "square_terminal" | "square_link";
 export type SalesPaymentStatus =
     | "created"

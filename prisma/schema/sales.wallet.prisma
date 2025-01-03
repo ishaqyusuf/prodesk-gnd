@@ -1,14 +1,16 @@
 model CustomerTransaction {
     id            Int                  @unique @default(autoincrement())
     authorId      Int
+    status        String?
     amount        Float
-    walletId      Int
+    walletId      Int?
+    paymentMethod String?
     description   String?              @db.LongText
     meta          Json?                @db.Json
     createdAt     DateTime?            @default(now()) @db.Timestamp(0)
     updatedAt     DateTime?            @updatedAt
     deletedAt     DateTime?            @db.Timestamp(0)
-    wallet        CustomerWallet       @relation(fields: [walletId], references: [id], onDelete: Cascade)
+    wallet        CustomerWallet?      @relation(fields: [walletId], references: [id], onDelete: Cascade)
     salesPayments SalesPayments[]
     refundTx      RefundTransactions[]
 
@@ -20,7 +22,7 @@ model CustomerWallet {
     balance      Float
     accountNo    String?               @unique
     meta         Json?                 @db.Json
-    customer     Customers             @relation(fields: [id], references: [walletId], onDelete: Cascade)
+    customer     Customers?            @relation(fields: [id], references: [walletId], onDelete: Cascade)
     transactions CustomerTransaction[]
     createdAt    DateTime?             @default(now()) @db.Timestamp(0)
     updatedAt    DateTime?             @updatedAt

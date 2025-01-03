@@ -1,3 +1,79 @@
+model SalesOrders {
+    id                Int                              @unique @default(autoincrement())
+    title             String?                          @db.VarChar(255)
+    customerId        Int?
+    billingAddressId  Int?
+    shippingAddressId Int?
+    salesRepId        Int?
+    pickupId          Int?
+    prodId            Int?
+    isDyke            Boolean?                         @default(false)
+    summary           String?                          @db.Text
+    instruction       String?                          @db.Text
+    meta              Json?                            @db.Json
+    status            String?                          @db.VarChar(255)
+    inventoryStatus   String?                          @db.VarChar(255)
+    deletedAt         DateTime?                        @db.Timestamp(0)
+    createdAt         DateTime?                        @default(now()) @db.Timestamp(0)
+    updatedAt         DateTime?                        @updatedAt
+    orderId           String                           @db.VarChar(255)
+    slug              String                           @db.VarChar(255)
+    type              String?                          @db.VarChar(255)
+    goodUntil         DateTime?
+    paymentTerm       String?
+    prodQty           Float?
+    builtQty          Float?
+    subTotal          Float?
+    profitMargin      Float?
+    tax               Float?
+    taxPercentage     Float?
+    grandTotal        Float?
+    amountDue         Float?
+    invoiceStatus     String?                          @db.VarChar(255)
+    prodStatus        String?                          @db.VarChar(255)
+    prodDueDate       DateTime?                        @db.Timestamp(0)
+    paymentDueDate    DateTime?                        @db.Timestamp(0)
+    deliveredAt       DateTime?
+    deliveryOption    String?
+    customerProfileId Int?
+    taxes             SalesTaxes[]
+    checkouts         SalesCheckout[]
+    refunds           Refunds[]                        @relation(name: "salesRefunds")
+    refund            Refunds?                         @relation(name: "refund")
+    assignments       OrderItemProductionAssignments[]
+    billingAddress    AddressBooks?                    @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
+    commisions        SalesCommision[]
+    customer          Customers?                       @relation(fields: [customerId], references: [id])
+    deliveries        OrderDelivery[]
+    doors             DykeSalesDoors[]
+    formSteps         DykeStepForm[]
+    housePackageTools HousePackageTools[]
+    items             SalesOrderItems[]
+    itemControls      SalesItemControl[]
+    itemDeliveries    OrderItemDelivery[]
+    payments          SalesPayments[]                  @relation(name: "salesPayment")
+    pickup            SalesPickup?                     @relation(fields: [pickupId], references: [id])
+    pricings          ComponentPrice[]
+    producer          Users?                           @relation(name: "producer", fields: [prodId], references: [id])
+    productions       OrderProductionSubmissions[]
+    requests          DealerSalesRequest[]
+    salesProfile      CustomerTypes?                   @relation(fields: [customerProfileId], references: [id])
+    salesRep          Users?                           @relation(name: "salesRep", fields: [salesRepId], references: [id])
+    shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
+    stat              SalesStat[]
+    supplies          SalesItemSupply[]
+
+    @@unique([orderId, type])
+    @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
+    @@index([customerProfileId])
+    @@index([customerId])
+    @@index([shippingAddressId])
+    @@index([billingAddressId])
+    @@index([prodId])
+    @@index([salesRepId])
+    @@index([pickupId])
+}
+
 model SalesOrderItems {
     id                 Int                              @unique @default(autoincrement())
     description        String?                          @db.VarChar(300)
@@ -365,81 +441,6 @@ model DykeSalesError {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model SalesOrders {
-    id                Int                              @unique @default(autoincrement())
-    title             String?                          @db.VarChar(255)
-    customerId        Int?
-    billingAddressId  Int?
-    shippingAddressId Int?
-    salesRepId        Int?
-    pickupId          Int?
-    prodId            Int?
-    isDyke            Boolean?                         @default(false)
-    summary           String?                          @db.Text
-    instruction       String?                          @db.Text
-    meta              Json?                            @db.Json
-    status            String?                          @db.VarChar(255)
-    inventoryStatus   String?                          @db.VarChar(255)
-    deletedAt         DateTime?                        @db.Timestamp(0)
-    createdAt         DateTime?                        @default(now()) @db.Timestamp(0)
-    updatedAt         DateTime?                        @updatedAt
-    orderId           String                           @db.VarChar(255)
-    slug              String                           @db.VarChar(255)
-    type              String?                          @db.VarChar(255)
-    goodUntil         DateTime?
-    paymentTerm       String?
-    prodQty           Float?
-    builtQty          Float?
-    subTotal          Float?
-    profitMargin      Float?
-    tax               Float?
-    taxPercentage     Float?
-    grandTotal        Float?
-    amountDue         Float?
-    invoiceStatus     String?                          @db.VarChar(255)
-    prodStatus        String?                          @db.VarChar(255)
-    prodDueDate       DateTime?                        @db.Timestamp(0)
-    paymentDueDate    DateTime?                        @db.Timestamp(0)
-    deliveredAt       DateTime?
-    deliveryOption    String?
-    customerProfileId Int?
-    taxes             SalesTaxes[]
-    checkouts         SalesCheckout[]
-    refunds           Refunds[]                        @relation(name: "salesRefunds")
-    refund            Refunds?                         @relation(name: "refund")
-    customer          Customers?                       @relation(fields: [customerId], references: [id])
-    items             SalesOrderItems[]
-    shippingAddress   AddressBooks?                    @relation(name: "shippingAddress", fields: [shippingAddressId], references: [id])
-    billingAddress    AddressBooks?                    @relation(name: "billingAddress", fields: [billingAddressId], references: [id])
-    producer          Users?                           @relation(name: "producer", fields: [prodId], references: [id])
-    salesRep          Users?                           @relation(name: "salesRep", fields: [salesRepId], references: [id])
-    payments          SalesPayments[]                  @relation(name: "salesPayment")
-    productions       OrderProductionSubmissions[]
-    pickup            SalesPickup?                     @relation(fields: [pickupId], references: [id])
-    supplies          SalesItemSupply[]
-    commisions        SalesCommision[]
-    formSteps         DykeStepForm[]
-    housePackageTools HousePackageTools[]
-    doors             DykeSalesDoors[]
-    itemDeliveries    OrderItemDelivery[]
-    deliveries        OrderDelivery[]
-    assignments       OrderItemProductionAssignments[]
-    pricings          ComponentPrice[]
-    requests          DealerSalesRequest[]
-    stat              SalesStat[]
-    salesProfile      CustomerTypes?                   @relation(fields: [customerProfileId], references: [id])
-    itemControls      SalesItemControl[]
-
-    @@unique([orderId, type])
-    @@index([createdAt, deletedAt, orderId, grandTotal, prodId, type, prodDueDate])
-    @@index([customerProfileId])
-    @@index([customerId])
-    @@index([shippingAddressId])
-    @@index([billingAddressId])
-    @@index([prodId])
-    @@index([salesRepId])
-    @@index([pickupId])
-}
 
 // model Refunds {
 

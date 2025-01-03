@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 import { Client, Environment } from "square";
 import { errorHandler } from "../error/handler";
-import { squareSalesPaymentCreatedDta } from "@/app/(clean-code)/(sales)/_common/data-access/sales-payment-dta";
+import { squareSalesPaymentCreatedDta } from "@/app/(clean-code)/(sales)/_common/data-access/wallet/sales-payment-dta";
 
 export type TerminalCheckoutStatus =
     | "PENDING"

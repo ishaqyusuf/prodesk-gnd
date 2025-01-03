@@ -36,6 +36,7 @@ const usePaymentContext = () => {
             enableTip: false,
             terminal: null as GetPaymentTerminals,
             checkoutId: null,
+            checkNo: null,
         },
     });
 
@@ -100,11 +101,8 @@ const usePaymentContext = () => {
 
     useEffect(() => {
         if (paymentMethod == "terminal" && !terminals?.length) {
-            console.log("LOADING TERMINAL");
             getPaymentTerminalsUseCase()
                 .then((terminal) => {
-                    console.log(terminal);
-
                     form.setValue("terminal", terminal);
                     form.setValue("deviceId", terminal?.lastUsed?.value);
                 })
