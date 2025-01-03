@@ -21,6 +21,7 @@ import { Dot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/common/button";
 import { Label } from "@/components/ui/label";
+import { paymentMethods } from "../../../utils/contants";
 
 export function PaymentTab({}) {
     const ctx = usePayment();
@@ -77,69 +78,85 @@ export function PaymentTab({}) {
                     ))}
                 </TableBody>
             </Table>
-            <TerminalPay ctx={ctx} />
+            <TerminalPay />
         </div>
     );
 }
-export function TerminalPay({ ctx }) {
-    if (ctx.paymentMethod == "terminal")
-        return (
-            <div>
-                <Form {...ctx.form}>
-                    <div className="flex sm:justify-end right-0 m-4 sm:m-8 sm:mb-16  absolute bottom-0 mb-16">
-                        <Card
-                            className={cn(
-                                "shadow-xl",
-                                ctx.waitingForPayment && "hidden"
+export function TerminalPay({}) {
+    const ctx = usePayment();
+    // if (ctx.paymentMethod == "terminal")
+    return (
+        <div>
+            <Form {...ctx.form}>
+                <div className="flex sm:justify-end right-0 m-4 sm:m-8 sm:mb-16  absolute bottom-0 mb-16">
+                    <Card
+                        className={cn(
+                            "shadow-xl w-96",
+                            ctx.waitingForPayment && "hidden"
+                        )}
+                    >
+                        <CardHeader className="bg-muted p-4">
+                            Payment
+                        </CardHeader>
+                        <CardContent className="grid gap-4">
+                            <FormSelect
+                                size="sm"
+                                control={ctx.form.control}
+                                name="paymentMethod"
+                                options={paymentMethods}
+                                titleKey="label"
+                                valueKey="value"
+                                label="Payment Method"
+                            />
+                            <FormInput
+                                control={ctx.form.control}
+                                name="amount"
+                                type="number"
+                                size="sm"
+                                label={"Amount"}
+                                prefix="$"
+                                disabled={ctx.inProgress}
+                            />
+                            {ctx.isTerminal() && (
+                                <>
+                                    <FormSelect
+                                        options={ctx.terminals || []}
+                                        control={ctx.form.control}
+                                        size="sm"
+                                        disabled={ctx.inProgress}
+                                        name="deviceId"
+                                        SelectItem={({ option }) => (
+                                            <SelectItem
+                                                value={option.value}
+                                                disabled={
+                                                    env.NEXT_PUBLIC_NODE_ENV ==
+                                                    "production"
+                                                        ? option.status !=
+                                                          "PAIRED"
+                                                        : false
+                                                }
+                                                className=""
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <Dot
+                                                        className={cn(
+                                                            option.status ==
+                                                                "PAIRED"
+                                                                ? "text-green-500"
+                                                                : "text-red-600"
+                                                        )}
+                                                    />
+                                                    <span>{option.label}</span>
+                                                </div>
+                                            </SelectItem>
+                                        )}
+                                        label="Terminal"
+                                    />
+                                </>
                             )}
-                        >
-                            <CardHeader className="bg-muted p-4">
-                                Payment
-                            </CardHeader>
-                            <CardContent className="grid gap-4">
-                                <FormInput
-                                    control={ctx.form.control}
-                                    name="amount"
-                                    type="number"
-                                    size="sm"
-                                    label={"Amount"}
-                                    prefix="$"
-                                    disabled={ctx.inProgress}
-                                />
-                                <FormSelect
-                                    options={ctx.terminals || []}
-                                    control={ctx.form.control}
-                                    size="sm"
-                                    disabled={ctx.inProgress}
-                                    name="deviceId"
-                                    SelectItem={({ option }) => (
-                                        <SelectItem
-                                            value={option.value}
-                                            disabled={
-                                                env.NEXT_PUBLIC_NODE_ENV ==
-                                                "production"
-                                                    ? option.status != "PAIRED"
-                                                    : false
-                                            }
-                                            className=""
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <Dot
-                                                    className={cn(
-                                                        option.status ==
-                                                            "PAIRED"
-                                                            ? "text-green-500"
-                                                            : "text-red-600"
-                                                    )}
-                                                />
-                                                <span>{option.label}</span>
-                                            </div>
-                                        </SelectItem>
-                                    )}
-                                    label="Terminal"
-                                />
-                            </CardContent>
-                            <CardFooter className="flex gap-4">
+                        </CardContent>
+                        <CardFooter className="flex gap-4">
+                            {ctx.isTerminal() && (
                                 <FormCheckbox
                                     disabled={ctx.inProgress}
                                     switchInput
@@ -147,50 +164,52 @@ export function TerminalPay({ ctx }) {
                                     name="enableTip"
                                     label={"Enable Tip"}
                                 />
-                                <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    disabled={ctx.inProgress}
-                                    onClick={() => {
-                                        ctx.closePaymentForm();
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    disabled={ctx.inProgress}
-                                    action={ctx.terminalCheckout}
-                                    size="sm"
-                                >
-                                    Proceed
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                        <div
-                            className={cn(
-                                "hidden",
-                                ctx.waitingForPayment &&
-                                    "block border shadow-sm rounded p-2"
                             )}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <Icons.spinner className="h-4 w-4 animate-spin" />
-                                    <Label>Waiting for payment...</Label>
-                                </div>
-                                <div className="flex-1"></div>
-                                <Button
-                                    variant="destructive"
-                                    className="h-6 p-2 text-xs"
-                                    onClick={ctx.cancelTerminalPayment}
-                                >
-                                    Cancel
-                                </Button>
+                            <div className="flex-1"></div>
+                            <Button
+                                size="sm"
+                                variant="destructive"
+                                disabled={ctx.inProgress}
+                                onClick={() => {
+                                    ctx.closePaymentForm();
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                disabled={ctx.inProgress}
+                                action={ctx._pay}
+                                size="sm"
+                            >
+                                Proceed
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                    <div
+                        className={cn(
+                            "hidden",
+                            ctx.waitingForPayment &&
+                                "block border shadow-sm rounded p-2"
+                        )}
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <Icons.spinner className="h-4 w-4 animate-spin" />
+                                <Label>Waiting for payment...</Label>
                             </div>
+                            <div className="flex-1"></div>
+                            <Button
+                                variant="destructive"
+                                className="h-6 p-2 text-xs"
+                                onClick={ctx.cancelTerminalPayment}
+                            >
+                                Cancel
+                            </Button>
                         </div>
                     </div>
-                </Form>
-            </div>
-        );
+                </div>
+            </Form>
+        </div>
+    );
     return null;
 }

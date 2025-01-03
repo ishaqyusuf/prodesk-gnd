@@ -51,10 +51,11 @@ export async function getSalesPaymentDta(id) {
 }
 export async function getPaymentTerminalsDta() {
     const devices = await getSquareDevices();
+    if (!devices?.length) throw new Error("Unable to load payment devices");
     const lastPayment = await prisma.salesCheckout.findFirst({
         where: {
             terminalId: {
-                in: devices.map((d) => d.value),
+                in: devices?.map((d) => d.value),
             },
             userId: await userId(),
         },

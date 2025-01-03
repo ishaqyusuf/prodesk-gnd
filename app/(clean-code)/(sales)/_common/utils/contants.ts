@@ -1,4 +1,4 @@
-import { SalesDispatchStatus } from "../../types";
+import { PaymentMethods, SalesDispatchStatus } from "../../types";
 import {
     filterCol,
     filterFields,
@@ -89,3 +89,13 @@ export const __filters: Filters = {
         options: {},
     },
 };
+
+export const paymentMethods: {
+    label?: string;
+    value?: PaymentMethods;
+}[] = [
+    { label: "Terminal Payment", value: "terminal" },
+    { label: "Check", value: "check" },
+    { label: "Payment Link", value: "link" },
+    { label: "Cash", value: "cash" },
+];

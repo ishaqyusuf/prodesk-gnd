@@ -54,7 +54,7 @@ export function PayAction({}) {
                         });
                     }}
                 >
-                    Terminal
+                    Payment Link
                 </Menu.Item>
                 <Menu.Item
                     onClick={() => {
@@ -91,7 +91,7 @@ function QuickPay({ onClose, paymentMethod }: { onClose?; paymentMethod? }) {
         ctx.form.setValue("paymentMethod", paymentMethod);
         ctx.createPayment(paymentMethod);
         setIsReady(true);
-    }, [ctx.data]);
+    }, [ctx.data, paymentMethod]);
     useEffect(() => {
         ctx.load().then((res) => {
             // ctx.form.setValue("paymentMethod", "terminal");

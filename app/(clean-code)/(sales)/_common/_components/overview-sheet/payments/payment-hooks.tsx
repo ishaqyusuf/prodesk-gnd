@@ -97,16 +97,66 @@ const usePaymentContext = () => {
     }
     // const [inProgress, setInProgress] = useState(false);
     const [isLoading, startTransition] = useTransition();
-    async function loadTerminal() {
-        const terminal = await getPaymentTerminalsUseCase();
-        form.setValue("terminal", terminal);
-        form.setValue("deviceId", terminal?.lastUsed?.value);
-    }
+
     useEffect(() => {
-        if (paymentMethod == "terminal") loadTerminal();
-    }, [paymentMethod, terminals]);
+        if (paymentMethod == "terminal" && !terminals?.length) {
+            console.log("LOADING TERMINAL");
+            getPaymentTerminalsUseCase()
+                .then((terminal) => {
+                    console.log(terminal);
+
+                    form.setValue("terminal", terminal);
+                    form.setValue("deviceId", terminal?.lastUsed?.value);
+                })
+                .catch((e) => {
+                    toast.error(e.message);
+
+                    form.setError("paymentMethod", {
+                        message: e.message,
+                    });
+                });
+        }
+    }, [paymentMethod, terminals, form]);
+    async function _pay() {
+        if (isTerminal()) await terminalCheckout();
+    }
+    async function terminalCheckout() {
+        const e = await form.trigger(); //.then((e) => {
+        const formData = form.getValues();
+        startTransition(async () => {
+            if (e) {
+                if (!formData.deviceId && isTerminal()) {
+                    form.setError("deviceId", {});
+                    return;
+                }
+                if (isTerminal()) {
+                    const resp = await createTerminalPaymentUseCase({
+                        salesPayment: {
+                            amount: Number(formData.amount),
+                            orderId,
+                            terminalId: formData.deviceId,
+                            paymentType: "square_terminal",
+                        },
+                        terminal: {
+                            amount: Number(formData.amount),
+                            deviceId: formData.deviceId,
+                            allowTipping: formData.enableTip,
+                        },
+                    });
+
+                    if (resp.error) toast.error(resp.error);
+                    else {
+                        form.setValue("checkoutId", resp.resp.salesPayment.id);
+                        // setWaitingForPayment(true);
+                    }
+                }
+            }
+        });
+        // });
+    }
     const _ctx = {
         orderId,
+        _pay,
         terminals,
         ready,
         data,
@@ -114,6 +164,7 @@ const usePaymentContext = () => {
         inProgress: isLoading,
         waitingForPayment: checkoutId != null,
         form,
+        isTerminal,
         paymentMethod,
         async createPayment(pm) {
             form.setValue("amount", data.amountDue);
@@ -133,43 +184,7 @@ const usePaymentContext = () => {
             form.setValue("checkoutId", null);
             // setWaitingForPayment(false);
         },
-        async terminalCheckout() {
-            const e = await form.trigger(); //.then((e) => {
-            const formData = form.getValues();
-            startTransition(async () => {
-                if (e) {
-                    if (!formData.deviceId && isTerminal()) {
-                        form.setError("deviceId", {});
-                        return;
-                    }
-                    if (isTerminal()) {
-                        const resp = await createTerminalPaymentUseCase({
-                            salesPayment: {
-                                amount: Number(formData.amount),
-                                orderId,
-                                terminalId: formData.deviceId,
-                                paymentType: "square_terminal",
-                            },
-                            terminal: {
-                                amount: Number(formData.amount),
-                                deviceId: formData.deviceId,
-                                allowTipping: formData.enableTip,
-                            },
-                        });
-
-                        if (resp.error) toast.error(resp.error);
-                        else {
-                            form.setValue(
-                                "checkoutId",
-                                resp.resp.salesPayment.id
-                            );
-                            // setWaitingForPayment(true);
-                        }
-                    }
-                }
-            });
-            // });
-        },
+        terminalCheckout,
     };
 
     return _ctx;
