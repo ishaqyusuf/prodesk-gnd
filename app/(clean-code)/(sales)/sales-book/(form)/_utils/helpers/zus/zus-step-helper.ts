@@ -21,9 +21,9 @@ export async function zusDeleteComponents({
         await deleteStepComponentsUseCase(uids);
         toast.message("Deleted.");
     }
-    const stepComponents = zus.kvStepComponentList[_stepUid];
-    zus.dotUpdate(
-        `kvStepComponentList.${_stepUid}`,
-        stepComponents?.filter((c) => uids.every((u) => u != c.uid))
-    );
+    // const stepComponents = zus.kvStepComponentList[_stepUid];
+    // zus.dotUpdate(
+    //     `kvStepComponentList.${_stepUid}`,
+    //     stepComponents?.filter((c) => uids.every((u) => u != c.uid))
+    // );
 }

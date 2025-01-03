@@ -111,7 +111,7 @@ function MouldingRow({
                             ))}
                             <DataLine
                                 size="sm"
-                                label="Door"
+                                label="Moulding"
                                 value={
                                     <div className="flex gap-4 items-center justify-end">
                                         <span className="line-clamp-2 max-w-xs">{`${data.title}`}</span>

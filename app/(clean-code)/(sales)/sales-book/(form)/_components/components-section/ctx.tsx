@@ -7,7 +7,6 @@ import {
 import { StepHelperClass } from "../../_utils/helpers/zus/zus-helper-class";
 import { useSticky } from "../../_hooks/use-sticky";
 import { useDebounce } from "@/hooks/use-debounce";
-import { IconKeys } from "@/components/_v1/icons";
 import { Edit3, EyeOff, Layout } from "lucide-react";
 
 export type UseStepContext = ReturnType<typeof useStepContext>;
@@ -17,13 +16,16 @@ export function useStepContext(stepUid) {
         count: 0,
     });
     const [stepComponents, setStepComponents] = useState<ZusComponent[]>([]);
+    const [q, setQ] = useState("");
+    const db = useDebounce(q, 300);
+
     const [tabComponents, setTabComponents] = useState<ZusComponent[]>([]);
     const [filteredComponents, setFilteredComponents] = useState<
         ZusComponent[]
     >([]);
-    const [tabs, setTabs] = useState<
-        { title; count; Icon?; tab: typeof tab }[]
-    >([]);
+    // const [tabs, setTabs] = useState<
+    //     { title; count; Icon?; tab: typeof tab }[]
+    // >([]);
     function selectAll() {
         setSelectionState((pre) => {
             const uids = {};
@@ -37,35 +39,65 @@ export function useStepContext(stepUid) {
         });
     }
     // const _items = useFormDataStore().kvFilteredStepComponentList?.[stepUid];
-    const [q, setQ] = useState("");
-    const db = useDebounce(q, 300);
-    const [tab, setTab] = useState<"main" | "custom" | "hidden">("main");
-    useEffect(() => {
-        setTabs([
+    const tabs = useMemo(() => {
+        const tabCounts = {
+            main: stepComponents.filter(
+                (s) => s._metaData.visible && !s._metaData.custom
+            ).length,
+            custom: stepComponents.filter((s) => s._metaData.custom).length,
+            hidden: stepComponents.filter(
+                (s) => !s._metaData.visible && !s._metaData.custom
+            ).length,
+        };
+
+        return [
             {
                 title: "Default Components",
-                count: stepComponents?.filter(
-                    (s) => s._metaData.visible && !s._metaData.custom
-                ).length,
+                count: tabCounts.main,
                 Icon: Layout,
                 tab: "main",
             },
             {
                 title: "Custom Components",
-                count: stepComponents?.filter((s) => s._metaData.custom).length,
+                count: tabCounts.custom,
                 Icon: Edit3,
                 tab: "custom",
             },
             {
                 title: "Hidden Components",
-                count: stepComponents?.filter(
-                    (s) => !s._metaData.visible && !s._metaData.custom
-                ).length,
+                count: tabCounts.hidden,
                 Icon: EyeOff,
                 tab: "hidden",
             },
-        ]);
+        ];
     }, [stepComponents]);
+    const [tab, setTab] = useState<"main" | "custom" | "hidden">("main");
+    // useEffect(() => {
+    //     setTabs([
+    //         {
+    //             title: "Default Components",
+    //             count: stepComponents?.filter(
+    //                 (s) => s._metaData.visible && !s._metaData.custom
+    //             ).length,
+    //             Icon: Layout,
+    //             tab: "main",
+    //         },
+    //         {
+    //             title: "Custom Components",
+    //             count: stepComponents?.filter((s) => s._metaData.custom).length,
+    //             Icon: Edit3,
+    //             tab: "custom",
+    //         },
+    //         {
+    //             title: "Hidden Components",
+    //             count: stepComponents?.filter(
+    //                 (s) => !s._metaData.visible && !s._metaData.custom
+    //             ).length,
+    //             Icon: EyeOff,
+    //             tab: "hidden",
+    //         },
+    //     ]);
+    // }, [stepComponents]);
     useEffect(() => {
         setTabComponents(
             stepComponents.filter((s) => {
@@ -106,16 +138,11 @@ export function useStepContext(stepUid) {
     const salesMultiplier = useFormDataStore(
         (s) => s.metaData?.salesMultiplier
     );
-    const cls = useMemo(() => {
-        const cls = new StepHelperClass(stepUid);
-
-        return cls;
-    }, [stepUid]);
+    const stepHelper = useMemo(() => new StepHelperClass(stepUid), [stepUid]);
+    const zusStepComponents = stepHelper.getStepComponents;
     useEffect(() => {
-        cls.fetchStepComponents().then((result) => {
-            setStepComponents(result);
-        });
-    }, [salesMultiplier]);
+        stepHelper.fetchStepComponents().then(setStepComponents);
+    }, [salesMultiplier, zusStepComponents]);
     // useEffect(() => {
     //     cls.refreshStepComponentsData();
     // }, [cls, salesMultiplier]);
@@ -137,7 +164,7 @@ export function useStepContext(stepUid) {
         setQ,
         items: filteredComponents || [],
         sticky,
-        cls,
+        cls: stepHelper,
         props,
         stepUid,
         clearSelection() {

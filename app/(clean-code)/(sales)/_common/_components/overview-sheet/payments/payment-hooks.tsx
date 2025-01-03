@@ -102,7 +102,9 @@ const usePaymentContext = () => {
         form.setValue("terminal", terminal);
         form.setValue("deviceId", terminal?.lastUsed?.value);
     }
-    useEffect(() => {}, [paymentMethod, terminals]);
+    useEffect(() => {
+        if (paymentMethod == "terminal") loadTerminal();
+    }, [paymentMethod, terminals]);
     const _ctx = {
         orderId,
         terminals,
