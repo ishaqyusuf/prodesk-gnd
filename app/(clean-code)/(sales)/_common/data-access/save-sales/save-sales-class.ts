@@ -246,7 +246,6 @@ export class SaveSalesClass extends SaveSalesHelper {
         salesId: null,
     };
     public async generateItemsForm() {
-        console.log(this.form.sequence.formItem);
         this.form.sequence.formItem.map((itemId) => {
             const formItem = this.form.kvFormItem[itemId];
             // formItem.uid

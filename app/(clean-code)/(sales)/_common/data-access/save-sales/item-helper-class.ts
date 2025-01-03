@@ -298,6 +298,7 @@ export class ItemHelperClass {
             rate: this.ctx.safeInt(gf?.pricing?.unitPrice),
             total: this.ctx.safeInt(gf?.pricing?.totalPrice),
             description: gf.meta.description,
+            swing: gf.swing,
             qty: this.ctx.safeInt(gf.qty.total),
             multiDykeUid: formItem.groupItem.groupUid,
             multiDyke: primaryGroupItem,

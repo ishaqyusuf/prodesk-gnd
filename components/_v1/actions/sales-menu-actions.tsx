@@ -308,14 +308,14 @@ export const PrintOrderMenuAction = typedMemo(
 export const MoveSalesMenuItem = ({ id, orderId, type, isDyke }) => {
     const estimate = type == "quote";
     async function moveEstimateToOrder() {
-        if (isDyke) await moveOrderUseCase(orderId, "order");
-        else await moveSales(id, "order");
+        await moveOrderUseCase(orderId, "order");
+        // else await moveSales(id, "order");
         toast.message("Estimate moved to order");
         //  router.push(`/sales/order/${row.orderId}`);
     }
     async function moveToEstimate() {
-        if (isDyke) await moveOrderUseCase(orderId, "quote");
-        await moveSales(id, "quote");
+        await moveOrderUseCase(orderId, "quote");
+        // await moveSales(id, "quote");
         toast.message("Order moved to quote");
         //  router.push(`/sales/quote/${row.orderId}`);
     }

@@ -20,6 +20,7 @@ import { deleteSaleUseCase } from "@/use-cases/sales";
 import { prisma } from "@/db";
 import { SaveQuery } from "../data-access/save-sales/save-sales-class";
 import { deleteSalesByOrderId, deleteSalesDta } from "../data-access/sales-dta";
+import { copySalesDta } from "../data-access/save-sales/copy-sales-dta";
 
 export type GetSalesBookForm = AsyncFnType<typeof getSalesBookFormUseCase>;
 export async function getSalesBookFormUseCase(data: GetSalesBookFormDataProps) {
@@ -74,6 +75,15 @@ export async function moveOrderUseCase(orderId, to) {
     return resp;
 }
 export async function copySalesUseCase(orderId, as: SalesType) {
+    const resp2 = await copySalesDta(orderId, as);
+
+    return {
+        error: resp2?.error,
+        link: resp2?.isDyke ? `/sales-book/edit-${as}/${resp2.slug}` : ``,
+        data: resp2,
+    };
+    // return resp2;
+
     const form = await getSalesBookFormUseCase({
         slug: orderId,
     });

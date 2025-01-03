@@ -407,6 +407,7 @@ export const SalesIncludeAll = {
     stat: excludeDeleted,
     deliveries: excludeDeleted,
     itemDeliveries: excludeDeleted,
+    taxes: excludeDeleted,
 } satisfies Prisma.SalesOrdersInclude;
 export const SalesOverviewIncludes = {
     items: {
