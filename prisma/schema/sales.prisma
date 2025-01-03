@@ -378,7 +378,7 @@ model SalesOrders {
     summary           String?                          @db.Text
     instruction       String?                          @db.Text
     meta              Json?                            @db.Json
-    status            String                           @db.VarChar(255)
+    status            String?                          @db.VarChar(255)
     inventoryStatus   String?                          @db.VarChar(255)
     deletedAt         DateTime?                        @db.Timestamp(0)
     createdAt         DateTime?                        @default(now()) @db.Timestamp(0)

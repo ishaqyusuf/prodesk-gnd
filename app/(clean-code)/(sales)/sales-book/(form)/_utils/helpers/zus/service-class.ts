@@ -40,6 +40,7 @@ export class ServiceClass extends GroupFormClass {
                 description: "",
                 produceable: false,
                 taxxable: false,
+                noHandle: true,
             },
             qty: {
                 total: "",
