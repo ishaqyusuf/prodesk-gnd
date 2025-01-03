@@ -47,7 +47,7 @@ export function PrintAction({ pdf }: Props) {
     if (type == "quote")
         return (
             <Menu.Item
-                icon="print"
+                icon={pdf ? "pdf" : "print"}
                 onClick={() => {
                     print();
                 }}
@@ -104,7 +104,7 @@ export function PrintAction({ pdf }: Props) {
                 </>
             }
         >
-            Print
+            {pdf ? "PDF" : "Print"}
         </Menu.Item>
     );
 }
