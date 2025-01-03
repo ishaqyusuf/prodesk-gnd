@@ -50,7 +50,7 @@ export async function createTransactionDta(data: SalesTransaction) {
 export async function getSalesPendingPayments(salesIds) {
     const ls = await prisma.salesOrders.findMany({
         where: {
-            orderId: {
+            id: {
                 in: salesIds,
             },
         },

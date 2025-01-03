@@ -4,6 +4,7 @@ import {
     cancelSalesPaymentCheckoutUseCase,
     checkTerminalPaymentStatusUseCase,
     createTerminalPaymentUseCase,
+    createTransactionUseCase,
     GetPaymentTerminals,
     getPaymentTerminalsUseCase,
     GetSalesPayment,
@@ -117,6 +118,22 @@ const usePaymentContext = () => {
     }, [paymentMethod, terminals, form]);
     async function _pay() {
         if (isTerminal()) await terminalCheckout();
+        else {
+            try {
+                const formData = form.getValues();
+                const r = await createTransactionUseCase({
+                    accountNo: ctx.item.customerPhone,
+                    amount: +formData.amount,
+                    paymentMode: formData.paymentMethod,
+                    salesIds: [ctx.item.id],
+                });
+                _ctx.closePaymentForm();
+                toast.success("Payment Applied");
+            } catch (error) {
+                console.log(error.message);
+                toast.error(error.message);
+            }
+        }
     }
     async function terminalCheckout() {
         const e = await form.trigger(); //.then((e) => {

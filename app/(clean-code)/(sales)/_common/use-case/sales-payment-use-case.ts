@@ -13,6 +13,8 @@ import {
     createTerminalCheckout,
     CreateTerminalCheckoutProps,
 } from "@/modules/square";
+import { SalesTransaction } from "../../types";
+import { createTransactionDta } from "../data-access/wallet/transaction-dta";
 
 export type GetSalesPayment = AsyncFnType<typeof getSalesPaymentUseCase>;
 export async function getSalesPaymentUseCase(id) {
@@ -43,4 +45,8 @@ export async function checkTerminalPaymentStatusUseCase(id) {
 }
 export async function cancelSalesPaymentCheckoutUseCase(id) {
     return await cancelSalesPaymentCheckoutDta(id);
+}
+export async function createTransactionUseCase(data: SalesTransaction) {
+    if (!data.accountNo) throw new Error("Payment Requires customer phone.");
+    return await createTransactionDta(data);
 }

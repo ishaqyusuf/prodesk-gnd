@@ -201,7 +201,7 @@ export type SalesTransaction = {
     squareTerminalId?: string;
     paymentMode: PaymentMethods;
     amount;
-    salesIds: string[];
+    salesIds: Number[];
     accountNo: string;
 };
 export type SalesPaymentType = "square_terminal" | "square_link";
