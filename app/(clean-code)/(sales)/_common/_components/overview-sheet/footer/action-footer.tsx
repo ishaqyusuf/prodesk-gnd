@@ -43,6 +43,7 @@ export default function ActionFooter({}) {
             />
             <Menu variant="outline">
                 <PrintAction />
+                <PrintAction pdf />
                 <Menu.Item
                     Icon={RefreshCcw}
                     onClick={() => {
