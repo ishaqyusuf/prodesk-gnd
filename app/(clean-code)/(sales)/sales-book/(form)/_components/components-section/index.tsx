@@ -156,7 +156,9 @@ function FloatingAction({ ctx }: { ctx: UseStepContext }) {
                                             key={tb.tab}
                                             shortCut={tb.count}
                                             Icon={tb.Icon}
-                                            onClick={() => ctx.setTab(tb.tab)}
+                                            onClick={() =>
+                                                ctx.setTab(tb.tab as any)
+                                            }
                                             disabled={
                                                 !tb.count || tb.tab == ctx.tab
                                             }
