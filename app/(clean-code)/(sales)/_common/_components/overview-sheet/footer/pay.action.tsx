@@ -9,7 +9,9 @@ import { Menu } from "@/components/(clean-code)/menu";
 
 export function PayAction({}) {
     const ctx = useSalesOverview();
-    const [pay, setPay] = useState(null);
+    const [pay, setPay] = useState<{
+        paymentMethod?;
+    }>(null);
     if (ctx.item.type == "quote") return null;
     return (
         <>
@@ -25,17 +27,44 @@ export function PayAction({}) {
                 Icon={Icons.dollar}
                 variant="default"
                 label={`Pay $${ctx.item.due}`}
-                disabled={!ctx.item.due || pay}
+                disabled={!ctx.item.due || pay != null}
             >
                 <Menu.Item
                     onClick={() => {
-                        setPay(true);
+                        setPay({
+                            paymentMethod: "cash",
+                        });
+                    }}
+                >
+                    Cash
+                </Menu.Item>
+                <Menu.Item
+                    onClick={() => {
+                        setPay({
+                            paymentMethod: "check",
+                        });
+                    }}
+                >
+                    Check
+                </Menu.Item>
+                <Menu.Item
+                    onClick={() => {
+                        setPay({
+                            paymentMethod: "link",
+                        });
                     }}
                 >
                     Terminal
                 </Menu.Item>
-                <Menu.Item>Cash</Menu.Item>
-                <Menu.Item>Check</Menu.Item>
+                <Menu.Item
+                    onClick={() => {
+                        setPay({
+                            paymentMethod: "terminal",
+                        });
+                    }}
+                >
+                    Terminal
+                </Menu.Item>
             </Menu>
             {/* <Button
                 onClick={() => {
@@ -54,14 +83,13 @@ export function PayAction({}) {
         </>
     );
 }
-function QuickPay({ onClose }) {
+function QuickPay({ onClose, paymentMethod }: { onClose?; paymentMethod? }) {
     const ctx = usePayment();
     const [ready, setIsReady] = useState(false);
     useEffect(() => {
-        // console.log(ctx.data);
         if (!ctx.data) return;
-        ctx.form.setValue("paymentMethod", "terminal");
-        ctx.createPayment("terminal");
+        ctx.form.setValue("paymentMethod", paymentMethod);
+        ctx.createPayment(paymentMethod);
         setIsReady(true);
     }, [ctx.data]);
     useEffect(() => {

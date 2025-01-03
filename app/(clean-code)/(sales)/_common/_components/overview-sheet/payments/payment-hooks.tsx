@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { PaymentMethods } from "@/app/(clean-code)/(sales)/types";
 
 export const usePayment = () => {
     return usePaymentContext();
@@ -29,7 +30,7 @@ const usePaymentContext = () => {
             })
         ),
         defaultValues: {
-            paymentMethod: null as "terminal" | "link",
+            paymentMethod: null as PaymentMethods,
             amount: null,
             deviceId: null,
             enableTip: false,
@@ -96,6 +97,12 @@ const usePaymentContext = () => {
     }
     // const [inProgress, setInProgress] = useState(false);
     const [isLoading, startTransition] = useTransition();
+    async function loadTerminal() {
+        const terminal = await getPaymentTerminalsUseCase();
+        form.setValue("terminal", terminal);
+        form.setValue("deviceId", terminal?.lastUsed?.value);
+    }
+    useEffect(() => {}, [paymentMethod, terminals]);
     const _ctx = {
         orderId,
         terminals,
@@ -109,10 +116,6 @@ const usePaymentContext = () => {
         async createPayment(pm) {
             form.setValue("amount", data.amountDue);
             if (pm == "terminal") {
-                const terminal = await getPaymentTerminalsUseCase();
-                form.setValue("terminal", terminal);
-
-                form.setValue("deviceId", terminal?.lastUsed?.value);
             } else {
             }
             form.setValue("paymentMethod", pm);

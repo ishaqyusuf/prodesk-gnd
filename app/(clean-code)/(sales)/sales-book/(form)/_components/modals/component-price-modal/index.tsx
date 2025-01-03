@@ -91,7 +91,7 @@ export default function ComponentPriceModal({ cls }: Props) {
                                         Grouped Pricing
                                     </TabsTrigger>
                                 </TabsList>
-                                <ScrollArea className="max-h-[50vh]">
+                                <ScrollArea className="overflow-auto -mr-6 max-h-[50vh]">
                                     <TabsContent value="priceList">
                                         <MainTab />
                                     </TabsContent>
