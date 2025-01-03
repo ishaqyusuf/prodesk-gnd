@@ -21,15 +21,17 @@ export function PrintAction({}) {
             true
         );
     }
-    if (type == "quote") return;
-    <Menu.Item
-        icon="print"
-        onClick={() => {
-            print();
-        }}
-    >
-        Print
-    </Menu.Item>;
+    if (type == "quote")
+        return (
+            <Menu.Item
+                icon="print"
+                onClick={() => {
+                    print();
+                }}
+            >
+                Print
+            </Menu.Item>
+        );
     return (
         <Menu.Item
             icon="print"
