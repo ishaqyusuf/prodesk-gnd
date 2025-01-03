@@ -38,7 +38,6 @@ export function PrintAction({ pdf }: Props) {
                         return "Downloaded.";
                     },
                     error(data) {
-                        console.log(data);
                         return "Something went wrong";
                     },
                 }
