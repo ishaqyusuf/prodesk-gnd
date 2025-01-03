@@ -122,24 +122,6 @@ export async function deleteOrderAction(id) {
         },
     });
     return;
-    await prisma.orderProductionSubmissions.deleteMany({
-        where: {
-            salesOrderId: id,
-        },
-    });
-    await prisma.salesPayments.deleteMany({
-        where: {
-            orderId: id,
-        },
-    });
-    await prisma.salesOrderItems.deleteMany({
-        where: {
-            salesOrderId: id,
-        },
-    });
-    await prisma.salesOrders.deleteMany({
-        where: { id },
-    });
 }
 export async function copyOrderAction({ orderId, as }: CopyOrderActionProps) {
     const items = [];
