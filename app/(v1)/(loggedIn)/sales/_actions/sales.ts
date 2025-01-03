@@ -216,25 +216,3 @@ export async function salesPrintAction({
     });
     return sales;
 }
-export async function moveSales(id, type: ISalesType) {
-    const order = await prisma.salesOrders.update({
-        where: {
-            id,
-        },
-        data: {
-            type,
-        },
-    });
-    let title = `Moved to ${type}`;
-    await saveProgress("SalesOrder", id, {
-        type: "sales",
-        status: title,
-        headline: `${title} by ${(await user()).name}`,
-    });
-    // redirect(
-    //     order.isDyke
-    //         ? `/sales-book/edit-${order.type}/${order.slug}`
-    //         : `/sales/${type}/${order.slug}`
-    // );
-    return order;
-}

@@ -4,7 +4,6 @@ import { Menu } from "@/components/(clean-code)/menu";
 import { Move } from "lucide-react";
 import { moveOrderUseCase } from "../../../use-case/sales-book-form-use-case";
 import { toast } from "sonner";
-import { moveSales } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 
 export function MoveAction({}) {
     const ctx = useSalesOverview();
@@ -12,18 +11,15 @@ export function MoveAction({}) {
     const isDyke = ctx.item.isDyke;
     async function _moveSales() {
         const to = type == "order" ? "quote" : "order";
-        if (isDyke) {
-            const resp = await moveOrderUseCase(ctx.item.orderId, to);
-            if (resp.link && !resp.error) {
-            } else {
-                console.log(resp.error);
-                console.log(resp.data);
-                return;
-            }
+
+        const resp = await moveOrderUseCase(ctx.item.orderId, to);
+        if (resp.link && !resp.error) {
         } else {
-            const resp = await moveSales(ctx.item.id, to);
-            // toast.success("Moved");
+            console.log(resp.error);
+            console.log(resp.data);
+            return;
         }
+
         toast.success(`Moved to ${to}`, {});
         ctx.refreshList();
         ctx.closeModal();

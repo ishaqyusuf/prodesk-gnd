@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import {
     copyOrderAction,
     deleteOrderAction,
-    moveSales,
 } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
 import { Icons } from "../icons";
@@ -309,13 +308,13 @@ export const MoveSalesMenuItem = ({ id, orderId, type, isDyke }) => {
     const estimate = type == "quote";
     async function moveEstimateToOrder() {
         await moveOrderUseCase(orderId, "order");
-        // else await moveSales(id, "order");
+
         toast.message("Estimate moved to order");
         //  router.push(`/sales/order/${row.orderId}`);
     }
     async function moveToEstimate() {
         await moveOrderUseCase(orderId, "quote");
-        // await moveSales(id, "quote");
+
         toast.message("Order moved to quote");
         //  router.push(`/sales/quote/${row.orderId}`);
     }

@@ -1,9 +1,6 @@
 "use client";
 
-import {
-    copyOrderAction,
-    moveSales,
-} from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
+import { copyOrderAction } from "@/app/(v1)/(loggedIn)/sales/_actions/sales";
 import { toast } from "sonner";
 import { openEmailComposer, openModal } from "../modal";
 import { ISalesOrder, ISalesType, IOrderPrintMode } from "@/types/sales";
@@ -16,14 +13,17 @@ import optionBuilder from "../option-builder";
 import { Icons } from "@/components/_v1/icons";
 import { env } from "@/env.mjs";
 import QueryString from "qs";
+import { moveOrderUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 export const sales = {
     async move(order, to: ISalesType, router?) {
-        await moveSales(order.id, to);
+        const s = await moveOrderUseCase(order.orderId, to);
+
         toast.message(
             to == "quote" ? "Order moved to quote" : "Quote moved to order"
         );
-        router?.push(`/sales/${to}/${order.orderId}`);
+        if (s.error) toast.error(s.error);
+        else router?.push(s.link);
     },
     async copy(order, as: ISalesType = "order") {
         const _ = await copyOrderAction({

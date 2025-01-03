@@ -1,4 +1,3 @@
-import optionBuilder from "@/lib/option-builder";
 import { SalesTableItem } from "../../../../(v1)/(loggedIn)/sales/orders/components/orders-table-shell";
 import { IconKeys } from "@/components/_v1/icons";
 import { truthy } from "@/lib/utils";
@@ -12,7 +11,6 @@ import { IOrderPrintMode, ISalesType } from "@/types/sales";
 import {
     copyOrderAction,
     deleteOrderAction,
-    moveSales,
 } from "../../../../(v1)/(loggedIn)/sales/_actions/sales";
 import { useRouter } from "next/navigation";
 import { openLink } from "@/lib/open-link";
@@ -25,7 +23,10 @@ import {
     DeleteRowAction,
     MenuItem,
 } from "@/components/_v1/data-table/data-table-row-actions";
-import { copySalesUseCase } from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
+import {
+    copySalesUseCase,
+    moveOrderUseCase,
+} from "@/app/(clean-code)/(sales)/_common/use-case/sales-book-form-use-case";
 
 type Mode = "dealer" | "internal";
 export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
@@ -90,9 +91,8 @@ export function useSalesMenu(item: SalesTableItem, mode: Mode = "internal") {
             });
     };
     const moveTo = async (type: ISalesType) => {
-        console.log(type);
-        return;
-        await moveSales(item.id, type);
+        await moveOrderUseCase(item.orderId, type);
+
         toast.message("Success");
     };
     const moveToQuote = async () => await moveTo("quote");
