@@ -37,7 +37,7 @@ export async function copySalesDta(orderId, as) {
                     billingAddress: connectOr(sale.billingAddressId),
                     customer: connectOr(sale.customerId),
                     salesRep: connectOr(sale.salesRepId),
-                    amountDue: 0,
+                    amountDue: sale.grandTotal,
                     deliveryOption: sale.deliveryOption,
                     grandTotal: sale.grandTotal,
                     salesProfile: connectOr(sale.customerProfileId),
