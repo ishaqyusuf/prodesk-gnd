@@ -298,6 +298,7 @@ export function zhInitializeState(data: GetSalesBookForm, copy = false) {
                 const formId = `${data.uid}`;
                 pushItemId(formId);
                 setType("SERVICE");
+                console.log("SERVICE:", data);
                 addFormItem(formId, {
                     pricing: {
                         itemPrice: {},
