@@ -25,6 +25,7 @@ interface FormClientProps {
 export function FormClient({ data }: FormClientProps) {
     const zus = useFormDataStore();
     useEffect(() => {
+        console.log("RAW DATA", data);
         zus.init(zhInitializeState(data));
     }, []);
     const sticky = useSticky((bv, pv, { top, bottom }) => {
