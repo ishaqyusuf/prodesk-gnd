@@ -52,3 +52,48 @@ export async function saveCustomerDta(data: Prisma.CustomersCreateInput) {
 
     return customer;
 }
+export async function getCustomerDta(phoneNo) {
+    const customer = await prisma.customers.findFirst({
+        where: {
+            phoneNo,
+            OR: [{ name: { not: null } }, { businessName: { not: null } }],
+        },
+        select: {
+            name: true,
+            businessName: true,
+        },
+    });
+    return customer;
+}
+export async function getCustomerNameDta(phoneNo) {
+    const customer = await getCustomerDta(phoneNo);
+    return (customer?.businessName || customer?.name)?.toUpperCase();
+}
+export async function getCustomerOverview(phoneNo) {
+    const profile = await getCustomerDta(phoneNo);
+    const customerInfo = await getCustomerSalesInfo(phoneNo);
+}
+export async function getCustomerSalesInfo(phoneNo) {
+    const salesList = await prisma.salesOrders.findMany({
+        where: {
+            OR: [
+                {
+                    customer: { phoneNo },
+                },
+                {
+                    billingAddress: { phoneNo },
+                },
+                {
+                    shippingAddress: { phoneNo },
+                },
+            ],
+        },
+        select: {
+            id: true,
+            amountDue: true,
+            type: true,
+            orderId: true,
+            stat: true,
+        },
+    });
+}
