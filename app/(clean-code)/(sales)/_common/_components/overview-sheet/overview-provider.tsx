@@ -11,7 +11,9 @@ import { getSalesListByIdUseCase } from "../../use-case/sales-list-use-case";
 import { toast } from "sonner";
 import { usePayment } from "./payments/payment-hooks";
 import { _modal } from "@/components/common/modal/provider";
-import CustomerOverviewSheet from "../customer-overview-sheet";
+import CustomerOverviewSheet, {
+    openCustomerOverviewSheet,
+} from "../customer-overview-sheet";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
@@ -103,9 +105,7 @@ export const useOverviewContext = (_item: SalesItemProp) => {
     }
     function openCustomer() {
         __ctx.closeModal();
-        _modal.openSheet(
-            <CustomerOverviewSheet phoneNo={item.customerPhone} />
-        );
+        openCustomerOverviewSheet(item.customerPhone);
     }
     const __ctx = {
         refreshList: ctx?.refetch,

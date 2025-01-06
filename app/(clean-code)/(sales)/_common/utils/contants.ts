@@ -49,10 +49,16 @@ export const widthList = [
     "5-4",
     "6-0",
 ];
-export const __filters: Filters = {
+export const __filters = (): Filters => ({
     customers: {
-        fields: [],
-        filterColumns: [],
+        fields: [
+            filterFields["order.no"],
+            //
+        ],
+        filterColumns: [
+            filterCol("order.no"),
+            //
+        ],
     },
     orders: {
         fields: [
@@ -92,7 +98,7 @@ export const __filters: Filters = {
         fields: [],
         options: {},
     },
-};
+});
 
 export const paymentMethods: {
     label?: string;

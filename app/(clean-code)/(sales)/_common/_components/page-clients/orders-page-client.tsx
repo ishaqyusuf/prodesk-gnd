@@ -23,6 +23,7 @@ export default function OrdersPageClient({
     filterFields,
     queryKey,
 }: InfiniteDataTablePageProps) {
+    // const filters =
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -37,7 +38,7 @@ export default function OrdersPageClient({
                 ctx.Column("Pending", "pending", Cells.InvoicePending),
                 ctx.Column("Dispatch", "dispatch", Cells.Dispatch),
                 ctx.Column("Production", "production", Cells.Production),
-                ...__filters.orders.filterColumns,
+                ...__filters().orders.filterColumns,
             ];
         },
         filterFields,

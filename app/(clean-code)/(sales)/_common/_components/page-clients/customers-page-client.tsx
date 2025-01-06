@@ -15,7 +15,7 @@ export default function CustomersPageClient(props: InfiniteDataTablePageProps) {
         cells(ctx) {
             return [
                 ctx.Column("Name", "name", NameCell),
-                ...__filters.customers.filterColumns,
+                ...__filters().customers.filterColumns,
             ];
         },
         filterFields: props.filterFields,

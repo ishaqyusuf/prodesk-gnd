@@ -62,7 +62,7 @@ export const filterFields: Partial<{
     ...filterField("sales.rep", "checkbox"),
     ...filterField("search"),
 };
-const getFilter = (k) => __filters[k];
+const getFilter = (k) => __filters()[k];
 export const composeFilter = (queryKey: QueryKeys, loadedFilters?) => {
     const { fields, options } = getFilter(queryKey);
 

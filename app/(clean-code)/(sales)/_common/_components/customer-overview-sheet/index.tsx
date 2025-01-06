@@ -8,7 +8,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import SalesTab from "./sales-tab";
 import QuotesTab from "./quotes-tab";
 import PaymentsTab from "./payments-tab";
+import { _modal } from "@/components/common/modal/provider";
 
+export const openCustomerOverviewSheet = (phoneNo) =>
+    _modal.openSheet(<CustomerOverviewSheet phoneNo={phoneNo} />);
 export default function CustomerOverviewSheet({ phoneNo }) {
     const store = customerStore();
 

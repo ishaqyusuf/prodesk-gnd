@@ -6,7 +6,6 @@ import { getQueryClient } from "@/providers/get-query-client";
 import QuotesPageClient from "../../../_common/_components/page-clients/quote-page-client";
 
 import { composeFilter } from "@/components/(clean-code)/data-table/filter-command/filters";
-import { __filters } from "../../../_common/utils/contants";
 import { constructMetadata } from "@/lib/(clean-code)/construct-metadata";
 import Portal from "@/components/_v1/portal";
 import NewFeatureBtn from "@/components/common/new-feature-btn";
