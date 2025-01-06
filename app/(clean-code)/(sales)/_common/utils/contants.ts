@@ -52,11 +52,11 @@ export const widthList = [
 export const __filters = (): Filters => ({
     customers: {
         fields: [
-            filterFields["order.no"],
+            filterFields.search,
             //
         ],
         filterColumns: [
-            filterCol("order.no"),
+            filterCol("search"),
             //
         ],
     },
@@ -91,8 +91,14 @@ export const __filters = (): Filters => ({
         },
     },
     quotes: {
-        fields: [],
-        options: {},
+        fields: [
+            filterFields.search,
+            //
+        ],
+        filterColumns: [
+            filterCol("search"),
+            //
+        ],
     },
     ["sales-delivery"]: {
         fields: [],

@@ -14,7 +14,7 @@ export async function generateMetadata({}) {
 export default async function CustomersPage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const props = composeFilter("orders");
+    const props = composeFilter("customers");
 
     await queryClient.prefetchInfiniteQuery(
         dataOptions(search, props.queryKey)

@@ -64,7 +64,7 @@ function Header({ className, children }: { className?; children }) {
             className={cn(
                 className,
                 "flex flex-col",
-                "z-10 sticky top-24 p-4 sm:px-8s"
+                "z-10 sticky top-24   p-4 sm:px-8s"
             )}
             ref={ctx.topBarRef}
         >
@@ -100,10 +100,7 @@ function CheckboxHeader({}) {
     const { table } = ctx;
     if (!ctx.checkable) return null;
     return (
-        <TableHead
-            className={cn(cellVariants(ctx.cellVariants), "w-10")}
-            align="center"
-        >
+        <TableHead className={cn(cellVariants(ctx.cellVariants), "w-10")}>
             <Checkbox
                 checked={table.getIsAllPageRowsSelected()}
                 onCheckedChange={(value) => {
@@ -122,7 +119,7 @@ function CheckboxRow({ row }) {
     const { table } = ctx;
     if (!ctx.checkable) return null;
     return (
-        <TCell align="center" className="w-10">
+        <TCell align="center" className="w-10 px-2">
             <Checkbox
                 checked={ctx.checkMode && row.getIsSelected()}
                 onCheckedChange={(value) => {

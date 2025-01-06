@@ -10,7 +10,7 @@ import {
 import { SalesType } from "../../types";
 import { sum } from "@/lib/utils";
 
-export type CustomersQueryParams = Pick<SearchParamsType, "_q" | "address">;
+export type CustomersQueryParams = Pick<SearchParamsType, "search" | "address">;
 export type GetCustomersDta = AsyncFnType<typeof getCustomersDta>;
 
 export async function getCustomersDta(query: CustomersQueryParams) {
@@ -19,6 +19,10 @@ export async function getCustomersDta(query: CustomersQueryParams) {
     const data = await prisma.customers.findMany({
         where,
         ...pageQueryFilter(query),
+        distinct: "phoneNo",
+        orderBy: {
+            createdAt: "desc",
+        },
         include: {},
     });
     const pageInfo = await getPageInfo(query, where, prisma.customers);
