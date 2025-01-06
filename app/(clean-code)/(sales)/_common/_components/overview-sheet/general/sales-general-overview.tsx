@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export function SalesGeneralOverview({}) {
-    const { item, overview } = useSalesOverview();
+    const { item, overview, ...ctx } = useSalesOverview();
     return (
         <>
             <dl>
@@ -42,16 +42,26 @@ export function SalesGeneralOverview({}) {
                 <DataLine
                     label="Customer"
                     value={
-                        <Link
-                            href={`/sales-book/customer/${
-                                item.customerPhone || item.customerId
-                            }`}
-                            target="_blank"
-                            className="inline-flex gap-2 items-center hover:underline"
+                        <Button
+                            size="sm"
+                            disabled={!item.customerPhone}
+                            className="h-6"
+                            variant="destructive"
+                            onClick={ctx.openCustomer}
                         >
-                            <span>{item.displayName}</span>
-                            <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                        </Link>
+                            {item.displayName}
+                        </Button>
+
+                        // <Link
+                        //     href={`/sales-book/customer/${
+                        //         item.customerPhone || item.customerId
+                        //     }`}
+                        //     target="_blank"
+                        //     className="inline-flex gap-2 items-center hover:underline"
+                        // >
+                        //     <span>{item.displayName}</span>
+                        //     <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        // </Link>
                     }
                 />
                 {/* <DataLine label="Customer Name" value={item.displayName} />

@@ -7,6 +7,8 @@ import {
     getPageInfo,
     pageQueryFilter,
 } from "@/app/(clean-code)/_common/utils/db-utils";
+import { SalesType } from "../../types";
+import { sum } from "@/lib/utils";
 
 export type CustomersQueryParams = Pick<SearchParamsType, "_q" | "address">;
 export type GetCustomersDta = AsyncFnType<typeof getCustomersDta>;
@@ -52,7 +54,7 @@ export async function saveCustomerDta(data: Prisma.CustomersCreateInput) {
 
     return customer;
 }
-export async function getCustomerDta(phoneNo) {
+export async function getCustomerProfileDta(phoneNo) {
     const customer = await prisma.customers.findFirst({
         where: {
             phoneNo,
@@ -61,19 +63,24 @@ export async function getCustomerDta(phoneNo) {
         select: {
             name: true,
             businessName: true,
+            phoneNo: true,
         },
     });
-    return customer;
+    return {
+        displayName: customer.businessName || customer.name,
+        isBusiness: customer.businessName != null,
+        phoneNo: customer.phoneNo,
+    };
 }
 export async function getCustomerNameDta(phoneNo) {
-    const customer = await getCustomerDta(phoneNo);
-    return (customer?.businessName || customer?.name)?.toUpperCase();
+    const customer = await getCustomerProfileDta(phoneNo);
+    return customer?.displayName?.toUpperCase();
 }
-export async function getCustomerOverview(phoneNo) {
-    const profile = await getCustomerDta(phoneNo);
-    const customerInfo = await getCustomerSalesInfo(phoneNo);
+export async function getCustomerOverviewDta(phoneNo) {
+    const profile = await getCustomerProfileDta(phoneNo);
+    const customerInfo = await getCustomerSalesInfoDta(phoneNo);
 }
-export async function getCustomerSalesInfo(phoneNo) {
+export async function getCustomerSalesInfoDta(phoneNo) {
     const salesList = await prisma.salesOrders.findMany({
         where: {
             OR: [
@@ -94,6 +101,57 @@ export async function getCustomerSalesInfo(phoneNo) {
             type: true,
             orderId: true,
             stat: true,
+            grandTotal: true,
+            createdAt: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        // take: 20,
+    });
+    const orders = salesList.filter((a) => a.type == ("order" as SalesType));
+    const quotes = salesList.filter((a) => a.type == ("quote" as SalesType));
+    return {
+        quotes,
+        orders: orders.map((order) => {
+            return {
+                ...order,
+            };
+        }),
+    };
+}
+export async function getCustomerPaymentInfo(phoneNo) {
+    const orders = await prisma.salesOrders.findMany({
+        where: {
+            OR: [
+                {
+                    customer: { phoneNo },
+                },
+                {
+                    billingAddress: { phoneNo },
+                },
+                {
+                    shippingAddress: { phoneNo },
+                },
+            ],
+            type: "order" as SalesType,
+            amountDue: {
+                gt: 0,
+            },
+        },
+        select: {
+            id: true,
+            amountDue: true,
+            grandTotal: true,
+            type: true,
+            orderId: true,
+            stat: true,
         },
     });
+
+    const amountDue = sum(orders, "amountDue");
+    return {
+        amountDue,
+        orders,
+    };
 }

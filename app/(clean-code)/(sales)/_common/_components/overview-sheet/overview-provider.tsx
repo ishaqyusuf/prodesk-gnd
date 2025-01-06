@@ -10,6 +10,8 @@ import { SalesDispatchListDto } from "../../data-access/dto/sales-shipping-dto";
 import { getSalesListByIdUseCase } from "../../use-case/sales-list-use-case";
 import { toast } from "sonner";
 import { usePayment } from "./payments/payment-hooks";
+import { _modal } from "@/components/common/modal/provider";
+import CustomerOverviewSheet from "../customer-overview-sheet";
 
 interface Props {}
 type TabItems = "itemView" | "makePayment" | "createShipping" | "shippingView";
@@ -99,13 +101,19 @@ export const useOverviewContext = (_item: SalesItemProp) => {
             }
         }, 500);
     }
-
+    function openCustomer() {
+        __ctx.closeModal();
+        _modal.openSheet(
+            <CustomerOverviewSheet phoneNo={item.customerPhone} />
+        );
+    }
     const __ctx = {
         refreshList: ctx?.refetch,
         closeModal() {
             ctx?.table?.toggleAllRowsSelected(false);
         },
         openShipping,
+        openCustomer,
         refresh,
         primaryTab,
         setPrimaryTab,
