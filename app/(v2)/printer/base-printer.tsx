@@ -71,6 +71,7 @@ export default function BasePrinter({
     function getData(slug) {
         return form.getValues(slug);
     }
+    if (!document) return;
     return createPortal(
         <PrintCtx.Provider value={{ pageReady, getData }}>
             <div className="printly">
@@ -78,6 +79,6 @@ export default function BasePrinter({
                 <WaterMark />
             </div>
         </PrintCtx.Provider>,
-        document.body
+        document?.body
     );
 }

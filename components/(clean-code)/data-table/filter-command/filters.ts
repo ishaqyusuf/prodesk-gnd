@@ -1,8 +1,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { FilterKeys } from "../search-params";
 import { DataTableFilterField } from "../type";
+import { __filters } from "@/app/(clean-code)/(sales)/_common/utils/contants";
 
-export const queryKeys = ["orders", "quotes", "sales-delivery"] as const;
+export const queryKeys = [
+    "orders",
+    "quotes",
+    "sales-delivery",
+    "customers",
+] as const;
 export type QueryKeys = (typeof queryKeys)[number];
 export type Filters = Partial<{
     [id in QueryKeys]: Partial<{
@@ -56,11 +62,10 @@ export const filterFields: Partial<{
     ...filterField("sales.rep", "checkbox"),
     ...filterField("search"),
 };
-export const composeFilter = (
-    queryKey: QueryKeys,
-    { fields, options }: Filters["orders"],
-    loadedFilters?
-) => {
+const getFilter = (k) => __filters[k];
+export const composeFilter = (queryKey: QueryKeys, loadedFilters?) => {
+    const { fields, options } = getFilter(queryKey);
+
     const f = fields?.map((filter: any) => {
         const filterData =
             loadedFilters?.[filter?.value] || options?.[filter?.value];

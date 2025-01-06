@@ -24,10 +24,8 @@ export default async function SalesBookPage({ searchParams }) {
     const queryClient = getQueryClient();
     const { queryKey, filterFields } = composeFilter(
         "orders",
-        __filters.orders,
         await getSalesPageQueryDataDta()
     );
-    const rnd = generateRandomString();
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
     return (
         <FPage className="" title="Orders">

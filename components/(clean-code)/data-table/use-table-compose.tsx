@@ -38,7 +38,7 @@ interface Props<T> {
     cells: (ctx: CtxType<T>) => ColumnDef<T, unknown>[];
     filterFields;
     serverAction?;
-    passThroughProps: {
+    passThroughProps?: {
         itemClick?(item);
     };
 }

@@ -72,7 +72,10 @@ function Header({ className, children }: { className?; children }) {
         </div>
     );
 }
-
+export type InfiniteDataTablePageProps = {
+    filterFields;
+    queryKey;
+};
 function Infinity({ children, ...props }: { children; queryKey } & TableProps) {
     const ctx = useInfiniteDataTableContext(props);
 
@@ -97,7 +100,10 @@ function CheckboxHeader({}) {
     const { table } = ctx;
     if (!ctx.checkable) return null;
     return (
-        <TableHead className={cn(cellVariants(ctx.cellVariants))} align="left">
+        <TableHead
+            className={cn(cellVariants(ctx.cellVariants), "w-10")}
+            align="center"
+        >
             <Checkbox
                 checked={table.getIsAllPageRowsSelected()}
                 onCheckedChange={(value) => {
@@ -116,7 +122,7 @@ function CheckboxRow({ row }) {
     const { table } = ctx;
     if (!ctx.checkable) return null;
     return (
-        <TCell align="center">
+        <TCell align="center" className="w-10">
             <Checkbox
                 checked={ctx.checkMode && row.getIsSelected()}
                 onCheckedChange={(value) => {
@@ -125,7 +131,7 @@ function CheckboxRow({ row }) {
                     row.toggleSelected(val);
                 }}
                 aria-label="Select row"
-                className="translate-y-[2px]s"
+                className="translate-y-[2px]"
             />
         </TCell>
     );

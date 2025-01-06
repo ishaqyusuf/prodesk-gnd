@@ -19,10 +19,7 @@ export async function generateMetadata({ params }) {
 export default async function SalesBookQuotePage({ searchParams }) {
     const search = searchParamsCache.parse(searchParams);
     const queryClient = getQueryClient();
-    const { queryKey, filterFields } = composeFilter(
-        "quotes",
-        __filters.quotes
-    );
+    const { queryKey, filterFields } = composeFilter("quotes");
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
 
     return (

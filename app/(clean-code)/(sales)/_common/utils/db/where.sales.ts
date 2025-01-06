@@ -1,0 +1,251 @@
+import {
+    anyDateQuery,
+    withDeleted,
+} from "@/app/(clean-code)/_common/utils/db-utils";
+import {
+    FilterKeys,
+    FilterParams,
+} from "@/components/(clean-code)/data-table/search-params";
+import { Prisma } from "@prisma/client";
+import { composeQuery } from "../db-utils";
+import { SalesStatType } from "../../../types";
+import { ftToIn } from "../sales-utils";
+
+export function whereSales(query: FilterParams) {
+    const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
+    if (query["with.trashed"]) whereAnd.push(withDeleted);
+    if (query["trashed.only"])
+        whereAnd.push({
+            deletedAt: anyDateQuery(),
+        });
+    const q = query.search;
+    if (q) {
+        const searchQ = whereSearch(q);
+        if (searchQ) whereAnd.push(searchQ);
+    }
+    if (query["dealer.id"])
+        whereAnd.push({
+            customer: {
+                auth: {
+                    id: query["dealer.id"],
+                },
+            },
+        });
+    const statType = (type: SalesStatType) => type;
+
+    if (query["dispatch.status"]) {
+        switch (query["dispatch.status"]) {
+            case "backorder":
+                whereAnd.push({
+                    stat: {
+                        some: {
+                            type: statType("dispatch"),
+                            AND: [
+                                {
+                                    percentage: {
+                                        gt: 0,
+                                    },
+                                },
+                                {
+                                    percentage: {
+                                        lt: 100,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
+                break;
+        }
+    }
+    whereAnd.push({
+        type: query["sales.type"],
+    });
+    const keys = Object.keys(query) as FilterKeys[];
+    keys.map((k) => {
+        if (!query?.[k]) return;
+        switch (k) {
+            case "id":
+                whereAnd.push({
+                    id: query.id,
+                });
+                break;
+            case "order.no":
+                whereAnd.push({
+                    orderId: {
+                        contains: query["order.no"],
+                    },
+                });
+                break;
+            case "po":
+                whereAnd.push({
+                    meta: {
+                        path: "$.po",
+                        // equals: query.po,
+                        string_contains: query.po,
+                    },
+                });
+                break;
+            case "customer.name":
+                whereAnd.push({
+                    OR: [
+                        {
+                            customer: {
+                                name: {
+                                    contains: query["customer.name"],
+                                },
+                            },
+                        },
+                        {
+                            customer: {
+                                businessName: {
+                                    contains: query["customer.name"],
+                                },
+                            },
+                        },
+                        {
+                            billingAddress: {
+                                name: {
+                                    contains: query["customer.name"],
+                                },
+                            },
+                        },
+                    ],
+                });
+                break;
+            case "phone":
+                whereAnd.push({
+                    OR: [
+                        {
+                            customer: {
+                                phoneNo: { contains: query.phone },
+                            },
+                        },
+                    ],
+                });
+            case "sales.rep":
+                whereAnd.push({
+                    salesRep: {
+                        name: query["sales.rep"],
+                    },
+                });
+        }
+    });
+    return composeQuery(whereAnd);
+}
+function whereSearch(query): Prisma.SalesOrdersWhereInput | null {
+    const inputQ = { contains: query || undefined } as any;
+    const parsedQ = parseSearchQuery(query);
+    if (parsedQ) {
+        return {
+            items: {
+                some: {
+                    OR: [
+                        { description: query },
+                        { description: parsedQ.otherQuery },
+                        {
+                            salesDoors: {
+                                some: {
+                                    dimension: parsedQ.size
+                                        ? {
+                                              contains: parsedQ.size,
+                                          }
+                                        : undefined,
+                                },
+                            },
+                            housePackageTool: {
+                                OR: [
+                                    {
+                                        door: {
+                                            title: {
+                                                contains: parsedQ.otherQuery,
+                                            },
+                                        },
+                                    },
+                                    {
+                                        molding: {
+                                            title: {
+                                                contains: parsedQ.otherQuery,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+    }
+    if (query) {
+        return {
+            OR: [
+                { orderId: inputQ },
+                {
+                    customer: {
+                        OR: [
+                            {
+                                businessName: inputQ,
+                            },
+                            {
+                                name: inputQ,
+                            },
+                            {
+                                email: inputQ,
+                            },
+                            {
+                                phoneNo: inputQ,
+                            },
+                        ],
+                    },
+                },
+                {
+                    billingAddress: {
+                        OR: [
+                            { address1: inputQ },
+                            {
+                                phoneNo: inputQ,
+                            },
+                        ],
+                    },
+                },
+                {
+                    producer: {
+                        name: inputQ,
+                    },
+                },
+            ],
+        };
+    }
+    return null;
+}
+export function parseSearchQuery(_query) {
+    let itemSearch = null;
+    if (_query?.startsWith("item:")) {
+        itemSearch = _query.split("item:")[1]?.trim();
+        // return {
+        //     itemSearch,
+        // };
+    }
+    if (!itemSearch) return null;
+    const sizePattern = /\b(\d+-\d+)\s*x\s*(\d+-\d+)\b/;
+    const match = itemSearch.match(sizePattern);
+
+    let size = "";
+    let otherQuery = itemSearch;
+
+    if (match) {
+        size = match[0];
+        otherQuery = itemSearch.replace(sizePattern, "").trim();
+    }
+    const spl = size.trim().split(" ");
+    if (size && spl.length == 3) {
+        size = `${ftToIn(spl[0])} x ${ftToIn(spl[2])}`;
+    }
+
+    return {
+        size: size,
+        otherQuery: otherQuery,
+        originalQuery: itemSearch,
+    };
+}

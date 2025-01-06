@@ -8,16 +8,13 @@ import {
 } from "../../types";
 import { getPageInfo, pageQueryFilter } from "../../../_common/utils/db-utils";
 import { prisma } from "@/db";
-import {
-    SalesListInclude,
-    SalesOverviewIncludes,
-    whereSales,
-} from "../utils/db-utils";
+import { SalesListInclude, SalesOverviewIncludes } from "../utils/db-utils";
 import { salesOrderDto, salesQuoteDto } from "./dto/sales-list-dto";
 import { salesOverviewDto } from "./dto/sales-item-dto";
 import { salesShippingDto } from "./dto/sales-shipping-dto";
 import { statMismatchDta } from "./sales-progress.dta";
 import { SearchParamsType } from "@/components/(clean-code)/data-table/search-params";
+import { whereSales } from "../utils/db/where.sales";
 // import { unstable_noStore } from "next/cache";
 
 export interface GetSalesListQuery extends PageBaseQuery {

@@ -50,6 +50,10 @@ export const widthList = [
     "6-0",
 ];
 export const __filters: Filters = {
+    customers: {
+        fields: [],
+        filterColumns: [],
+    },
     orders: {
         fields: [
             filterFields["order.no"],

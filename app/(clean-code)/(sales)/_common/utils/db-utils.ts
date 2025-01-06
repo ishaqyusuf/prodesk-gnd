@@ -1,268 +1,96 @@
 import { Prisma } from "@prisma/client";
 import salesData from "./sales-data";
-import { ftToIn } from "./sales-utils";
 import {
-    anyDateQuery,
+    getPageInfo,
+    pageQueryFilter,
     whereNotTrashed,
-    withDeleted,
 } from "@/app/(clean-code)/_common/utils/db-utils";
 import { GetSalesDispatchListQuery } from "../data-access/sales-dispatch-dta";
-import {
-    FilterKeys,
-    FilterParams,
-} from "@/components/(clean-code)/data-table/search-params";
-import { SalesStatType } from "../../types";
+
 export function whereDispatch(query: GetSalesDispatchListQuery) {
     const whereAnd: Prisma.OrderDeliveryWhereInput[] = [];
     return whereAnd.length > 1 ? { AND: whereAnd } : whereAnd[0];
 }
-export function whereSales(query: FilterParams) {
-    const whereAnd: Prisma.SalesOrdersWhereInput[] = [];
-    if (query["with.trashed"]) whereAnd.push(withDeleted);
-    if (query["trashed.only"])
-        whereAnd.push({
-            deletedAt: anyDateQuery(),
-        });
-    const q = query.search;
-    if (q) {
-        const searchQ = whereSearch(q);
-        if (searchQ) whereAnd.push(searchQ);
-    }
-    if (query["dealer.id"])
-        whereAnd.push({
-            customer: {
-                auth: {
-                    id: query["dealer.id"],
-                },
-            },
-        });
-    const statType = (type: SalesStatType) => type;
 
-    if (query["dispatch.status"]) {
-        switch (query["dispatch.status"]) {
-            case "backorder":
-                whereAnd.push({
-                    stat: {
-                        some: {
-                            type: statType("dispatch"),
-                            AND: [
-                                {
-                                    percentage: {
-                                        gt: 0,
-                                    },
-                                },
-                                {
-                                    percentage: {
-                                        lt: 100,
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                });
-                break;
-        }
+export function composeQuery<T>(queries: T[]): T | undefined {
+    if (!Array.isArray(queries) || queries.length === 0) {
+        return undefined;
     }
-    whereAnd.push({
-        type: query["sales.type"],
-    });
-    const keys = Object.keys(query) as FilterKeys[];
-    keys.map((k) => {
-        if (!query?.[k]) return;
-        switch (k) {
-            case "id":
-                whereAnd.push({
-                    id: query.id,
-                });
-                break;
-            case "order.no":
-                whereAnd.push({
-                    orderId: {
-                        contains: query["order.no"],
-                    },
-                });
-                break;
-            case "po":
-                whereAnd.push({
-                    meta: {
-                        path: "$.po",
-                        // equals: query.po,
-                        string_contains: query.po,
-                    },
-                });
-                break;
-            case "customer.name":
-                whereAnd.push({
-                    OR: [
-                        {
-                            customer: {
-                                name: {
-                                    contains: query["customer.name"],
-                                },
-                            },
-                        },
-                        {
-                            customer: {
-                                businessName: {
-                                    contains: query["customer.name"],
-                                },
-                            },
-                        },
-                        {
-                            billingAddress: {
-                                name: {
-                                    contains: query["customer.name"],
-                                },
-                            },
-                        },
-                    ],
-                });
-                break;
-            case "phone":
-                whereAnd.push({
-                    OR: [
-                        {
-                            customer: {
-                                phoneNo: { contains: query.phone },
-                            },
-                        },
-                    ],
-                });
-            case "sales.rep":
-                whereAnd.push({
-                    salesRep: {
-                        name: query["sales.rep"],
-                    },
-                });
-        }
-    });
-    const where: Prisma.SalesOrdersWhereInput =
-        whereAnd.length > 1
-            ? {
-                  AND: whereAnd,
-              }
-            : {
-                  ...(whereAnd[0] || {}),
-              };
-
-    return where;
+    return queries.length > 1
+        ? ({
+              AND: queries,
+          } as T)
+        : queries[0];
 }
-export function parseSearchQuery(_query) {
-    let itemSearch = null;
-    if (_query?.startsWith("item:")) {
-        itemSearch = _query.split("item:")[1]?.trim();
-        // return {
-        //     itemSearch,
-        // };
+interface InfiniteListQueryProps<T> {
+    table: T;
+    where?;
+    query?;
+    whereFn?;
+}
+export async function infinitListQuery<T>(props: InfiniteListQueryProps<T>) {
+    if (!props.where && props.whereFn) props.where = props.whereFn(props.query);
+    interface ResponseProps<T1> {
+        data: T1[];
+        transform?(item: T1);
     }
-    if (!itemSearch) return null;
-    const sizePattern = /\b(\d+-\d+)\s*x\s*(\d+-\d+)\b/;
-    const match = itemSearch.match(sizePattern);
-
-    let size = "";
-    let otherQuery = itemSearch;
-
-    if (match) {
-        size = match[0];
-        otherQuery = itemSearch.replace(sizePattern, "").trim();
+    async function response<T1>({ data, transform }: ResponseProps<T1>) {
+        const pageInfo = await getPageInfo(
+            props.query,
+            props.where,
+            props.table
+        );
+        return {
+            pageCount: pageInfo?.pageCount,
+            pageInfo,
+            data: data.map(transform),
+            meta: {
+                totalRowCount: pageInfo.totalItems,
+            },
+        };
     }
-    const spl = size.trim().split(" ");
-    if (size && spl.length == 3) {
-        size = `${ftToIn(spl[0])} x ${ftToIn(spl[2])}`;
-    }
-
     return {
-        size: size,
-        otherQuery: otherQuery,
-        originalQuery: itemSearch,
+        table: props.table,
+        response,
+        ...props.table,
+        where: props.where,
+        pageFilters: pageQueryFilter(props.query),
     };
 }
-function whereSearch(query): Prisma.SalesOrdersWhereInput | null {
-    const inputQ = { contains: query || undefined } as any;
-    const parsedQ = parseSearchQuery(query);
-    if (parsedQ) {
-        return {
-            items: {
-                some: {
-                    OR: [
-                        { description: query },
-                        { description: parsedQ.otherQuery },
-                        {
-                            salesDoors: {
-                                some: {
-                                    dimension: parsedQ.size
-                                        ? {
-                                              contains: parsedQ.size,
-                                          }
-                                        : undefined,
-                                },
-                            },
-                            housePackageTool: {
-                                OR: [
-                                    {
-                                        door: {
-                                            title: {
-                                                contains: parsedQ.otherQuery,
-                                            },
-                                        },
-                                    },
-                                    {
-                                        molding: {
-                                            title: {
-                                                contains: parsedQ.otherQuery,
-                                            },
-                                        },
-                                    },
-                                ],
-                            },
-                        },
-                    ],
-                },
-            },
-        };
-    }
-    if (query) {
-        return {
-            OR: [
-                { orderId: inputQ },
-                {
-                    customer: {
-                        OR: [
-                            {
-                                businessName: inputQ,
-                            },
-                            {
-                                name: inputQ,
-                            },
-                            {
-                                email: inputQ,
-                            },
-                            {
-                                phoneNo: inputQ,
-                            },
-                        ],
-                    },
-                },
-                {
-                    billingAddress: {
-                        OR: [
-                            { address1: inputQ },
-                            {
-                                phoneNo: inputQ,
-                            },
-                        ],
-                    },
-                },
-                {
-                    producer: {
-                        name: inputQ,
-                    },
-                },
-            ],
-        };
-    }
-    return null;
-}
+// export async function infiniteListQuery<T, T1>({
+//     table,
+//     query,
+//     include,
+//     where,
+// }: {
+//     table: T;
+//     where;
+//     query: any;
+//     include: T1;
+// }) {
+//     const data = await (table).findMany({
+//         where,
+//         ...pageQueryFilter(query),
+//         include,
+//     });
+//     const pageInfo = await getPageInfo(query, {}, table);
+//     const response = {
+//         pageCount: pageInfo.pageCount,
+//         pageInfo,
+//         data,
+//     };
+//     function transform(
+//         fn: (item: (typeof data)[number]) => (typeof data)[number]
+//     ) {
+//         response.data = response.data?.map((item) => {
+//             return fn(item);
+//         });
+//     }
+//     return {
+//         response,
+//         transform,
+//     };
+// }
 export const excludeDeleted = {
     where: { deletedAt: null },
 };

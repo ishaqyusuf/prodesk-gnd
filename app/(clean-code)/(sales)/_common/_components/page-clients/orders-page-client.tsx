@@ -1,7 +1,10 @@
 "use client";
 
 import { useTableCompose } from "@/components/(clean-code)/data-table/use-table-compose";
-import { DataTable } from "@/components/(clean-code)/data-table";
+import {
+    DataTable,
+    InfiniteDataTablePageProps,
+} from "@/components/(clean-code)/data-table";
 import { OrderCells as Cells } from "../orders-page-cells";
 import { DataTableFilterCommand } from "@/components/(clean-code)/data-table/filter-command";
 
@@ -15,14 +18,11 @@ import { __filters } from "../../utils/contants";
 import QueryTab from "@/app/(clean-code)/_common/query-tab";
 import { QueryTabAction } from "@/app/(clean-code)/_common/query-tab/query-tab-edit";
 import { Menu } from "@/components/(clean-code)/menu";
-import { DeleteRowAction } from "@/components/_v1/data-table/data-table-row-actions";
 
-interface Props {
-    // promise;
-    filterFields;
-    queryKey;
-}
-export default function OrdersPageClient({ filterFields, queryKey }: Props) {
+export default function OrdersPageClient({
+    filterFields,
+    queryKey,
+}: InfiniteDataTablePageProps) {
     const table = useTableCompose({
         cells(ctx) {
             return [
@@ -40,7 +40,6 @@ export default function OrdersPageClient({ filterFields, queryKey }: Props) {
                 ...__filters.orders.filterColumns,
             ];
         },
-        checkable: true,
         filterFields,
         cellVariants: {
             size: "sm",

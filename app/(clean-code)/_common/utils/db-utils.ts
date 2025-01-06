@@ -48,6 +48,9 @@ export async function getPageInfo(input, where, model) {
         from,
         to: Math.min(skip + Number(perPage), count),
         perPage,
+        meta: {
+            totalRowCount: count,
+        },
     };
     return pageInfo;
 }

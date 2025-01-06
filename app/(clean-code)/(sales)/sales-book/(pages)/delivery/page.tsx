@@ -11,8 +11,7 @@ export default async function DispatchPage({ searchParams }) {
     const queryClient = getQueryClient();
     // const queryKey = "sales-delivery";
     const { queryKey, filterFields } = composeFilter(
-        "sales-delivery",
-        __filters["sales-delivery"]
+        "sales-delivery"
         //  await getSalesPageQueryDataDta()
     );
     await queryClient.prefetchInfiniteQuery(dataOptions(search, queryKey));
